@@ -11,7 +11,8 @@ import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
-import { resolveLanternLight } from './lantern-light-rules';
+import { LANTERN_MAX_LIT, resolveLanternLight } from './lantern-light-rules';
+import { comboHeatPerksActive, runComboHeatPerks } from './combo-heat-perks';
 import { hasRelic } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
@@ -223,17 +224,24 @@ export const createResolveBoardTurnTransition = ({
          * The lantern lights last, on the board the player will look at: after the pop has taken
          * what it takes and any drift has moved what it moves, so a lit face is where it will be.
          */
-        // The lantern hall lights every match; the Tallow Candle relic lights a floor's first one.
+        // The lantern hall lights every match; the Tallow Candle relic lights a floor's first one;
+        // the combo's afterglow lights one to three from Hot (`combo-heat-perks.ts`), on the heat
+        // the run carried into the turn.
         const candleLit = hasRelic(run, 'tallow_candle') && runNonNegativeInteger(sourceBoard.matchedPairs) === 0;
-        const lanternLit = hasMutator(run, 'lantern_light') || candleLit
-            ? resolveLanternLight({
-                  board: boardAfterDrift,
-                  matchedTileIds: [firstTile.id, secondTile.id],
-                  turnsThisFloor: progress.turnsThisFloor,
-                  runSeed: run.runSeed,
-                  rulesVersion: run.runRulesVersion
-              })
-            : [];
+        const heatPerks = runComboHeatPerks(run);
+        const lanternLights = hasMutator(run, 'lantern_light') || candleLit;
+        const lanternMax = lanternLights ? LANTERN_MAX_LIT : heatPerks.afterglow;
+        const lanternLit =
+            lanternMax > 0
+                ? resolveLanternLight({
+                      board: boardAfterDrift,
+                      matchedTileIds: [firstTile.id, secondTile.id],
+                      turnsThisFloor: progress.turnsThisFloor,
+                      runSeed: run.runSeed,
+                      rulesVersion: run.runRulesVersion,
+                      maxLit: lanternMax
+                  })
+                : [];
         const stats = normalizeSessionStats(run.stats);
         /*
          * The anchor (Anchor Chain): read on the board the player will look at next. A matched anchor
@@ -267,7 +275,9 @@ export const createResolveBoardTurnTransition = ({
             restlessDriftsThisFloor:
                 runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
             lanternLitTileIds: lanternLit,
-            lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLit.length > 0 ? 1 : 0),
+            // The lantern's own count: the afterglow is counted by the heat perks, not here.
+            lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLights && lanternLit.length > 0 ? 1 : 0),
+            heatPerkTurnsThisFloor: runNonNegativeInteger(run.heatPerkTurnsThisFloor) + (comboHeatPerksActive(heatPerks) ? 1 : 0),
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),

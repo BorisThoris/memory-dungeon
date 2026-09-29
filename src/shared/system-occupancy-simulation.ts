@@ -150,6 +150,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     /* The anchor (Gen 263): matches that claimed the marked pair. Floor-scoped; floor 5 of the cycle. */
     { id: 'anchorClaims', key: 'anchorClaimsThisFloor', label: 'The anchor pair was matched for an extra link', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     { id: 'lanternLights', key: 'lanternLightsThisFloor', label: 'A match lit the cards beside it', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
+    /* Heat perks (2026-09-30): matches resolved with the combo's afterglow, wider pop or longer reach on. Floor-scoped tally; the combo itself crosses floors. */
+    { id: 'heatPerkTurns', key: 'heatPerkTurnsThisFloor', label: 'A match was played with a heat perk on', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
     { id: 'skittishFlinches', key: 'skittishFlinchesThisFloor', label: 'Skittish cards flinched after a miss', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /*
      * The featured objective, uncounted since the census existed (Gen 216).

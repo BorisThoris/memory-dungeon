@@ -182,6 +182,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         skittishFlinchesThisFloor: 0,
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
+        heatPerkTurnsThisFloor: 0,
         shiftingSpotlightNonce: 0
     };
 

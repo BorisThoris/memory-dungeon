@@ -719,6 +719,19 @@
     letter-spacing: 0.1em;
 }
 
+/* What the fire buys on the board, or how far off it is; lit in the temper's colour once a perk is on. */
+.comboPerks {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--paper-muted, var(--paper));
+    opacity: 0.8;
+}
+
+.comboPerks[data-perks-active='true'] {
+    color: var(--combo-theme-color, var(--marker));
+    opacity: 1;
+}
+
 @keyframes comboBump {
     0% {
         transform: scale(1.35);

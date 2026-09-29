@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 61 as const;
+export const ENCYCLOPEDIA_VERSION = 62 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -453,6 +453,12 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
  * Floor bonuses, streak rewards, and optional rules that affect score — mirrors `finalizeLevel` / match resolution in `game.ts`.
  */
 export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'sys_combo_heat_perks',
+        title: 'Heat: what a hot combo changes',
+        description:
+            'Your **combo** carries from floor to floor until a miss, and past **Warm** (3) it gets hot: **Hot** at 6, **Blazing** at 10, **Inferno** at 16, **Legendary** at 25, and an **ascension** every 25 after. Heat changes the board, not just the room. **Afterglow**: from Hot, every match lights face-down cards touching it until your next flip - **one** at Hot, **two** at Blazing, **three** from Inferno - nothing spent, not a peek. **The wider pop**: from Blazing a break may take **one pair more** than its rung allows. **The longer reach**: from Inferno the first wave walks **a step further** along the clump. The heat you carry **into** a turn is what counts, and it buys **no misses**: a miss at any heat ends the combo and costs the bank the same.'
+    },
     {
         id: 'sys_floor_schedule_and_featured_objective',
         title: 'Floor schedule, featured objectives, and the objective streak',

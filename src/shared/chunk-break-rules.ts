@@ -1,6 +1,7 @@
 import type { BoardState, FindableKind, RunState, Tile } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { getChainTier, type ChainTier } from './chain-tier-rules';
+import { runComboHeatPerks } from './combo-heat-perks';
 import { runNonNegativeInteger } from './run-number-guards';
 import { calculateMatchScore } from './scoring-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -441,11 +442,13 @@ export const resolveChunkBreak = ({
     chain
 }: {
     board: BoardState;
-    run: Pick<RunState, 'floorCurioId'>;
+    run: Pick<RunState, 'floorCurioId'> & Partial<Pick<RunState, 'stats'>>;
     matchedTileIds: readonly string[];
     chain: number;
 }): ChunkBreakResult => {
     const tier = getChainTier(chain, board.pairCount);
+    // The heat the run carries into the turn lifts the cap and, from Inferno, the reach (`combo-heat-perks.ts`).
+    const perks = runComboHeatPerks(run);
     const nothing: ChunkBreakResult = {
         board,
         tier,
@@ -473,8 +476,8 @@ export const resolveChunkBreak = ({
     // leaves from off-screen and nothing is orphaned. Every card a wave takes seeds the next one,
     // and the reaction runs on until a wave takes nothing.
     let seeds: string[] = [...matchedTileIds];
-    const reach = breakClumpReach(tier);
-    const pairCap = breakPairCap(tier, board.floorArchetypeId);
+    const reach = breakClumpReach(tier) + perks.breakReachBonus;
+    const pairCap = breakPairCap(tier, board.floorArchetypeId) + perks.breakPairBonus;
     const bridgeClumps = breakBridgeClumps(tier);
     let bridgesLeft = bridgeClumps > 0 ? 1 : 0;
     const columns = getSafeBoardColumns(board);

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2805,
-    "codeFileCount": 1001,
-    "exportedSymbolCount": 3031,
+    "trackedFileCount": 2809,
+    "codeFileCount": 1004,
+    "exportedSymbolCount": 3038,
     "contentItemCount": 10,
-    "mechanicCount": 51,
-    "stateFieldCount": 92,
-    "relationshipCount": 7867
+    "mechanicCount": 52,
+    "stateFieldCount": 93,
+    "relationshipCount": 7913
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 515819,
-      "sha256": "786ee77b116e739d4317d1078a2f11654fc087a1ee66c852bae6cccaa10b61c8"
+      "bytes": 517264,
+      "sha256": "fdc1a5faca409dba8e4dec839b948a6a27551f13bc9347839af9227f658d10a9"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 17331,
-      "sha256": "7e6fefc8288ba346817a3207a1267e6df42aaa35e660fcfedbfbe17102aeaaa1"
+      "bytes": 20496,
+      "sha256": "fb0a5ac0c9807594dcf2c81be20c220fa60ddf6e88436390b5f721174f9d4cab"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 36281,
-      "sha256": "3f8fd93d0bd469ca4435be8d5bb5e613910a6fa713741e9bea2ee8f48dbd333d"
+      "bytes": 37598,
+      "sha256": "74c589129c5db8fb4b6391d98651e0c8c2bbc4f8b50ef864f082fc432d7fb809"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "432dd0e9087ed1df3c41cec4051a0d059f6afcc7b59d4ce0cc8c8c265d26cc9e"
+      "sha256": "418e443614a35e240dd28432c47b162c86a8010f77e8b26f64aad0b84a4a2e4e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4245,8 +4245,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32952,
-      "sha256": "98eecd621b77755606252ea3ef3b186c805a6437db549039ab1c954000d55cf4"
+      "bytes": 33005,
+      "sha256": "1c3ae3993d2ce08877bdbe80d46b8dfcad9850f4057b8581d054bd6b93f62134"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5181,8 +5181,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 16928,
-      "sha256": "c4c585ba25fed5842497884ea8183f49ffb7f54d30ae09a725dff2f12feaa1ec"
+      "bytes": 16977,
+      "sha256": "4997383c60337375ab8ac221c9995311bf5f52fda1b0c87c1ca46cb2e4995d7e"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5549,6 +5549,12 @@
       "category": "script",
       "bytes": 3001,
       "sha256": "398b236f390a3e1c3189c9f2bf53a11ad6883522a50b0539dd9e2b353598824b"
+    },
+    {
+      "path": "scripts/sim-pop-share.ts",
+      "category": "script",
+      "bytes": 4822,
+      "sha256": "923d7c6b74b49e76c68e7afa8f526ef41251824684051606d605a1dfb77de248"
     },
     {
       "path": "scripts/sim-pop.ts",
@@ -9783,20 +9789,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 46986,
-      "sha256": "dd76a51aab2c51331766356501f25852ac264e8dd5ce030d071e9dfcaf9b1630"
+      "bytes": 47336,
+      "sha256": "2de2f16e270d0f4f21de5632f655b182b67195e2d903bda4467fb51b633c8c32"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 33781,
-      "sha256": "d666ee85ef22327a7025748dce4b696c2f44bd3ea237895b41ded5c6292a8bd2"
+      "bytes": 34173,
+      "sha256": "d5b09ef83c3bc8292606a706f655cbe14c06206c22f6a16321f474aac246cfa5"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 39250,
-      "sha256": "ae67e3e7d7650ebb0239001270681f8a627ae8cdfb1599eac16cb6de99405425"
+      "bytes": 40016,
+      "sha256": "59b421d28caca1edc0fb2ed37c6a8ea4e8ab4d312895603d5ba47de733992654"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -11021,6 +11027,12 @@
       "category": "source",
       "bytes": 793,
       "sha256": "600f9feb9b9d161c2d1bd1598b841962e0de135d7cc30b8deb9bf4de7aea9595"
+    },
+    {
+      "path": "src/renderer/copy/comboHeatPerksCopy.ts",
+      "category": "source",
+      "bytes": 735,
+      "sha256": "f54d8300ea3210003384646d88d49643247f38855c8cfa086ab6eb4f7e5c8c2c"
     },
     {
       "path": "src/renderer/copy/diagnosticsSettings.ts",
@@ -12327,8 +12339,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 36577,
-      "sha256": "b11262cff97e7b1118bebe9a870fb3f61168a173729b682b423911b14ce70482"
+      "bytes": 37896,
+      "sha256": "03ce29a41a6c5cf897a76bc962a1fc9fcae333f50f3dffc21131a6985fc5a73c"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12543,8 +12555,8 @@
     {
       "path": "src/shared/board-turn-event-facts.ts",
       "category": "source",
-      "bytes": 11647,
-      "sha256": "b6d631cb3411ce1237d32bccb85609d894df7e0b870e31c7f4743da982d79549"
+      "bytes": 11896,
+      "sha256": "65b52eaed2d7d649484745f941c881b576a499353d027bfc536e156e1f06e407"
     },
     {
       "path": "src/shared/board-turn-feedback-boundary.test.ts",
@@ -12555,8 +12567,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 19219,
-      "sha256": "da0609f426e33dfb8eae379b3ce0e6fb256e75b2ce71b954dd0243ab17c25107"
+      "bytes": 19961,
+      "sha256": "7c988feffeb321498a3bde194b6cd2c070b9a8a25af335f8da5a26a40fd1c3db"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12687,8 +12699,8 @@
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 32446,
-      "sha256": "b81bfcb666f6f046c083c84958ed7515df14caceccb59dba37a13e240c73d0a2"
+      "bytes": 32740,
+      "sha256": "7c7f52f3f1e51ce3507e2ad2450fd41832f734b2bd4e1179ace0abf350f4b419"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -12725,6 +12737,18 @@
       "category": "source",
       "bytes": 5760,
       "sha256": "b130bce12b7cee8fcd18d8a070b1ce35b8f6eea5f074cb00f84ca443970614ce"
+    },
+    {
+      "path": "src/shared/combo-heat-perks.test.ts",
+      "category": "test",
+      "bytes": 3280,
+      "sha256": "3531e009482b168a670a325f4410b47801f53dd62815a1e18ba007cd91659d91"
+    },
+    {
+      "path": "src/shared/combo-heat-perks.ts",
+      "category": "source",
+      "bytes": 4579,
+      "sha256": "1dfb7996fbc0c368e6dcfe24dac8d4b63ed50f99cf884ab1530480124dac884f"
     },
     {
       "path": "src/shared/combo-heat-rules.test.ts",
@@ -12777,8 +12801,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 37318,
-      "sha256": "7ffc45649809ee85411feb41a1dd37468e62f31159ed31d9230296cfb97b2534"
+      "bytes": 37475,
+      "sha256": "1dfc34282c03bb08340e7b033b2ae70b2d68e692fdd03705008752ca954258f3"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13161,8 +13185,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 92157,
-      "sha256": "eebf9b77c554e7534cace8b985d70b23342d960c1b431c99ea9b1f10e08d5a68"
+      "bytes": 94646,
+      "sha256": "8856e119850f653fdcc7a39fe16dc8a8599aa3c9787d8e425c8c718ec0ae00fa"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13317,8 +13341,8 @@
     {
       "path": "src/shared/lantern-light-rules.ts",
       "category": "source",
-      "bytes": 2665,
-      "sha256": "c967eb7b2b3eb50964762aecf155ee16aa84062404aad19d054d6ac85715d6e1"
+      "bytes": 2902,
+      "sha256": "26865f24a000b80fefb9e913d40a93d6def15c0447abf08f0dd1ab5bffbe900d"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -13407,8 +13431,8 @@
     {
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
-      "bytes": 5620,
-      "sha256": "f8368704cda07545e8f9181d98b2fa08345b707d7b0ce5eb240ade1fbb90822e"
+      "bytes": 5698,
+      "sha256": "c2e68c2688cbb5a3ca07c8aa1e1eaf458e5c0d91b3da342ee5e8cc74a2549963"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -13443,8 +13467,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 37484,
-      "sha256": "92d36006402a7e574e9cb7e84a121b384984fc8258128115de6888e0bffcffdd"
+      "bytes": 38367,
+      "sha256": "4e51902e715516790ce9dd76f2331f3c28ce88a4396732c86e49b5eff41017ef"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13563,8 +13587,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 4118,
-      "sha256": "2a78ae972d65fa36aa5ae129f51df07a6b6b33c453c2e42b3edbb10179acc271"
+      "bytes": 4153,
+      "sha256": "ea4c87b99382039cbeee74c3cd44365c8152235ee713d1d7717d480eaecf3778"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -13905,8 +13929,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 8739,
-      "sha256": "7574df2a9b9c4a718c790556a535c8c54be92206dbba12bc61185dda95b23e37"
+      "bytes": 8774,
+      "sha256": "e6fb30fb037b6d6c8c32f66423c94d78423796104fb3323583661c1fe425288c"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -14019,8 +14043,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 7442,
-      "sha256": "75ba2a3aa4d3573be060ee05a9f610dcfaa42a4b1088760119ec1116634e6973"
+      "bytes": 7792,
+      "sha256": "de7273003037cb16a508d8a686686624ee74db5e58585fb2bb6276b7cd9dd575"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -14085,14 +14109,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 3453,
-      "sha256": "576c398be9e947a19ee0daae87554abea8a5016264f52abc1522d67c0ad4b65b"
+      "bytes": 3681,
+      "sha256": "539bc273b65dea73f497f74e5363240c7525571c7f190756405d7c2709eb3355"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 17185,
-      "sha256": "197774013f2a297b2477ee16922256f2dbf93a1ba4f5e9a435390a61017ca58b"
+      "bytes": 18090,
+      "sha256": "6211023191016368b8f1fcf62273d98eb26ed9e293689b9c5d8a2780b6b32440"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14349,8 +14373,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 59004,
-      "sha256": "496a51cbbd552f02cf19b25082e0363d40e226c1f9ce568e01924b8f0d5cdbc1"
+      "bytes": 59349,
+      "sha256": "2f9b7eda55bf55ba69255b0695ee606a0b6c3d770bea4e8e782e6d03dc8d9d6c"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -14361,8 +14385,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 51333,
-      "sha256": "7140061c008e028e0ad9a953474ba00aebcf3796bed92ab872044ce6cc00aecc"
+      "bytes": 52861,
+      "sha256": "a8c9a330bc311e1204614d18d02bc198e5d242054b95a02e109ef445e0f02733"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14385,8 +14409,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 69296,
-      "sha256": "fcc5251439daafb72251abac341174fe8169fea70151696c80ef06ac9b16fcf9"
+      "bytes": 72189,
+      "sha256": "eaec3e38889642e694b6cc9d815d402f81abbe3ac3e68561de1433212f51de23"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -20735,7 +20759,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 612,
+      "lineCount": 616,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -20750,13 +20774,14 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 737,
+      "lineCount": 747,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/copy/chainBeat.ts",
+        "file:src/renderer/copy/comboHeatPerksCopy.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/gameShellLayout.ts",
@@ -20765,6 +20790,7 @@
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -24304,6 +24330,22 @@
       ],
       "testedBy": [
         "file:src/renderer/copy/collectionStorageNote.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "path": "src/renderer/copy/comboHeatPerksCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 15,
+      "imports": [
+        "file:src/shared/combo-heat-perks.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/comboHeatPerksCopy.ts#comboHeatPerksLine"
+      ],
+      "testedBy": [
+        "file:src/shared/combo-heat-perks.test.ts"
       ]
     },
     {
@@ -28312,7 +28354,7 @@
       "path": "src/shared/board-turn-event-facts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 234,
+      "lineCount": 236,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -28346,11 +28388,12 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 437,
+      "lineCount": 447,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
+        "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gambit-match-rules.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -28801,10 +28844,11 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 621,
+      "lineCount": 624,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/scoring-rules.ts",
@@ -28972,6 +29016,44 @@
       ]
     },
     {
+      "id": "file:src/shared/combo-heat-perks.test.ts",
+      "path": "src/shared/combo-heat-perks.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 48,
+      "imports": [
+        "file:src/renderer/copy/comboHeatPerksCopy.ts",
+        "file:src/shared/combo-heat-perks.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/lantern-light-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/combo-heat-perks.ts",
+      "path": "src/shared/combo-heat-perks.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 79,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
+        "symbol:src/shared/combo-heat-perks.ts#comboHeatPerks",
+        "symbol:src/shared/combo-heat-perks.ts#ComboHeatPerks",
+        "symbol:src/shared/combo-heat-perks.ts#comboHeatPerksActive",
+        "symbol:src/shared/combo-heat-perks.ts#nextComboHeatPerkAt",
+        "symbol:src/shared/combo-heat-perks.ts#runComboHeatPerks"
+      ],
+      "testedBy": [
+        "file:src/shared/combo-heat-perks.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/combo-heat-rules.test.ts",
       "path": "src/shared/combo-heat-rules.test.ts",
       "layer": "shared",
@@ -29019,6 +29101,7 @@
       "testedBy": [
         "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
+        "file:src/shared/combo-heat-perks.test.ts",
         "file:src/shared/combo-heat-rules.test.ts",
         "file:src/shared/combo-heat-theme.test.ts"
       ]
@@ -29142,7 +29225,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 835,
+      "lineCount": 837,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -30823,7 +30906,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2759,
+      "lineCount": 2827,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -31237,7 +31320,7 @@
       "path": "src/shared/lantern-light-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 64,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -31248,6 +31331,7 @@
         "symbol:src/shared/lantern-light-rules.ts#resolveLanternLight"
       ],
       "testedBy": [
+        "file:src/shared/combo-heat-perks.test.ts",
         "file:src/shared/lantern-light-rules.test.ts"
       ]
     },
@@ -31512,7 +31596,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 99,
+      "lineCount": 100,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts"
@@ -31617,7 +31701,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 663,
+      "lineCount": 669,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32019,7 +32103,7 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 106,
+      "lineCount": 107,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/chain-carryover-rules.ts",
@@ -33091,7 +33175,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 210,
+      "lineCount": 211,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -33498,7 +33582,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 133,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -33682,7 +33766,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 56,
+      "lineCount": 58,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -33695,14 +33779,17 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 330,
+      "lineCount": 344,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
+        "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
         "file:src/shared/miss-bank.ts",
+        "file:src/shared/mutators.ts",
         "file:src/shared/rng.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/tile-identity.ts"
       ],
@@ -34592,7 +34679,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1103,
+      "lineCount": 1105,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -34659,7 +34746,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 562,
+      "lineCount": 570,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -34731,7 +34818,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1202,
+      "lineCount": 1243,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -39621,24 +39708,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 736,
-      "endLine": 736
+      "line": 746,
+      "endLine": 746
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 55,
-      "endLine": 85
+      "line": 57,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 42,
-      "endLine": 53
+      "line": 44,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -43775,6 +43862,14 @@
       "file": "src/renderer/copy/collectionStorageNote.ts",
       "line": 8,
       "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/copy/comboHeatPerksCopy.ts#comboHeatPerksLine",
+      "name": "comboHeatPerksLine",
+      "kind": "value",
+      "file": "src/renderer/copy/comboHeatPerksCopy.ts",
+      "line": 7,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
@@ -48174,47 +48269,47 @@
       "kind": "value",
       "file": "src/shared/board-turn-event-facts.ts",
       "line": 158,
-      "endLine": 233
+      "endLine": 235
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnExecutionContext",
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 72,
-      "endLine": 82
+      "line": 73,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 38,
-      "endLine": 43
+      "line": 39,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 51,
-      "endLine": 70
+      "line": 52,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 45,
-      "endLine": 49
+      "line": 46,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 104,
-      "endLine": 436
+      "line": 105,
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -48805,272 +48900,272 @@
       "name": "BOUNDED_BREAK_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 78,
-      "endLine": 78
+      "line": 79,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_BRIDGE_CLUMPS",
       "name": "BREAK_BRIDGE_CLUMPS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 196,
-      "endLine": 201
+      "line": 197,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_CLUMP_REACH",
       "name": "BREAK_CLUMP_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 101,
-      "endLine": 106
+      "line": 102,
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_DIAGONAL_TIERS",
       "name": "BREAK_DIAGONAL_TIERS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 163,
-      "endLine": 168
+      "line": 164,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREAK_PAIR_CAP",
       "name": "BREAK_PAIR_CAP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 124,
-      "endLine": 129
+      "line": 125,
+      "endLine": 130
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakBridgeClumps",
       "name": "breakBridgeClumps",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 203,
-      "endLine": 203
+      "line": 204,
+      "endLine": 204
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakClumpReach",
       "name": "breakClumpReach",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 143,
-      "endLine": 143
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakPairCap",
       "name": "breakPairCap",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 140,
-      "endLine": 141
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#breakWalksDiagonals",
       "name": "breakWalksDiagonals",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 170,
-      "endLine": 170
+      "line": 171,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#BREATHER_BREAK_PAIR_BONUS",
       "name": "BREATHER_BREAK_PAIR_BONUS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 138,
-      "endLine": 138
+      "line": 139,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CHAIN_MULT",
       "name": "CHAIN_MULT",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 213,
-      "endLine": 213
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
       "name": "chunkBreakMomentumPairs",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 391,
-      "endLine": 400
+      "line": 392,
+      "endLine": 401
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
       "name": "ChunkBreakResult",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 251,
-      "endLine": 267
+      "line": 252,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
       "name": "chunkBreakScore",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 375,
-      "endLine": 379
+      "line": 376,
+      "endLine": 380
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkScorePerPair",
       "name": "chunkScorePerPair",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 365,
-      "endLine": 365
+      "line": 366,
+      "endLine": 366
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_BREAK_REACH",
       "name": "CLEAN_BREAK_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 85,
-      "endLine": 85
+      "line": 86,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
       "name": "CLEAN_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 61,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#diagonalNeighbours",
       "name": "diagonalNeighbours",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 292,
-      "endLine": 303
+      "line": 293,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
       "name": "findSuitRegion",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 317,
-      "endLine": 358
+      "line": 318,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#orthogonalNeighbours",
       "name": "orthogonalNeighbours",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 281,
-      "endLine": 290
+      "line": 282,
+      "endLine": 291
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#POP_WAVES",
       "name": "POP_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#resolveChunkBreak",
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 437,
-      "endLine": 620
+      "line": 438,
+      "endLine": 623
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_WAVES",
       "name": "RIPPLE_MAX_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 215,
-      "endLine": 215
+      "line": 216,
+      "endLine": 216
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#rippleWaves",
       "name": "rippleWaves",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 245,
-      "endLine": 249
+      "line": 246,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_MAX_PAIRS",
       "name": "SEVERANCE_DROP_MAX_PAIRS",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 242,
-      "endLine": 242
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SEVERANCE_DROP_REACH",
       "name": "SEVERANCE_DROP_REACH",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 233,
-      "endLine": 233
+      "line": 234,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SHARP_WAVES",
       "name": "SHARP_WAVES",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 217,
-      "endLine": 217
+      "line": 218,
+      "endLine": 218
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#suitCanStillPop",
       "name": "suitCanStillPop",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 407,
-      "endLine": 435
+      "line": 408,
+      "endLine": 436
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
       "name": "SuitRegionOptions",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 305,
-      "endLine": 310
+      "line": 306,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "name": "tileCanBreakInChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 278,
-      "endLine": 279
+      "line": 279,
+      "endLine": 280
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
       "name": "tileIsPlainApartFromFindable",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 274,
-      "endLine": 275
+      "line": 275,
+      "endLine": 276
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_CAP",
       "name": "WAVE_MULT_CAP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 211,
-      "endLine": 211
+      "line": 212,
+      "endLine": 212
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#WAVE_MULT_STEP",
       "name": "WAVE_MULT_STEP",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 210,
-      "endLine": 210
+      "line": 211,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#waveMult",
       "name": "waveMult",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 361,
-      "endLine": 362
+      "line": 362,
+      "endLine": 363
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
@@ -49271,6 +49366,54 @@
       "file": "src/shared/color-vision.ts",
       "line": 70,
       "endLine": 83
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
+      "name": "COMBO_HEAT_PERKS",
+      "kind": "value",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 45,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#comboHeatPerks",
+      "name": "comboHeatPerks",
+      "kind": "value",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 54,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#ComboHeatPerks",
+      "name": "ComboHeatPerks",
+      "kind": "interface",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 35,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#comboHeatPerksActive",
+      "name": "comboHeatPerksActive",
+      "kind": "value",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 60,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#nextComboHeatPerkAt",
+      "name": "nextComboHeatPerkAt",
+      "kind": "value",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 68,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-perks.ts#runComboHeatPerks",
+      "name": "runComboHeatPerks",
+      "kind": "value",
+      "file": "src/shared/combo-heat-perks.ts",
+      "line": 64,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_ASCENSION_SPAN",
@@ -49677,16 +49820,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 712,
-      "endLine": 712
+      "line": 714,
+      "endLine": 714
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 782,
-      "endLine": 784
+      "line": 784,
+      "endLine": 786
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -49749,8 +49892,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 790,
-      "endLine": 795
+      "line": 792,
+      "endLine": 797
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -49781,8 +49924,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 808,
-      "endLine": 834
+      "line": 810,
+      "endLine": 836
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -50077,8 +50220,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 714,
-      "endLine": 727
+      "line": 716,
+      "endLine": 729
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -50149,16 +50292,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 798,
-      "endLine": 798
+      "line": 800,
+      "endLine": 800
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 801,
-      "endLine": 806
+      "line": 803,
+      "endLine": 808
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -50181,16 +50324,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 775,
-      "endLine": 779
+      "line": 777,
+      "endLine": 781
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 773,
-      "endLine": 773
+      "line": 775,
+      "endLine": 775
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -50205,8 +50348,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 734,
-      "endLine": 746
+      "line": 736,
+      "endLine": 748
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -50214,7 +50357,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 518,
-      "endLine": 710
+      "endLine": 712
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -50253,8 +50396,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 748,
-      "endLine": 767
+      "line": 750,
+      "endLine": 769
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -53366,7 +53509,7 @@
       "kind": "value",
       "file": "src/shared/lantern-light-rules.ts",
       "line": 28,
-      "endLine": 58
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#calculateFloorClearBonus",
@@ -53869,24 +54012,24 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 630,
-      "endLine": 648
+      "line": 636,
+      "endLine": 654
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 651,
-      "endLine": 662
+      "line": 657,
+      "endLine": 668
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 568,
-      "endLine": 627
+      "line": 574,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -53902,15 +54045,15 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 455,
-      "endLine": 516
+      "endLine": 522
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 521,
-      "endLine": 565
+      "line": 527,
+      "endLine": 571
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -54614,7 +54757,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
       "line": 22,
-      "endLine": 105
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
@@ -56054,7 +56197,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 50,
-      "endLine": 201
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -56069,8 +56212,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 203,
-      "endLine": 209
+      "line": 204,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -56909,48 +57052,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 86,
-      "endLine": 200
+      "line": 91,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 37,
-      "endLine": 42
+      "line": 40,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 24,
-      "endLine": 35
+      "line": 27,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 211,
-      "endLine": 329
+      "line": 222,
+      "endLine": 343
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 53,
-      "endLine": 69
+      "line": 56,
+      "endLine": 74
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 44,
-      "endLine": 51
+      "line": 47,
+      "endLine": 54
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -58181,120 +58324,120 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1081,
-      "endLine": 1084
+      "line": 1083,
+      "endLine": 1086
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 998,
-      "endLine": 1003
+      "line": 1000,
+      "endLine": 1005
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1039,
-      "endLine": 1079
+      "line": 1041,
+      "endLine": 1081
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1005,
-      "endLine": 1027
+      "line": 1007,
+      "endLine": 1029
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 965,
-      "endLine": 988
+      "line": 967,
+      "endLine": 990
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 795,
-      "endLine": 795
+      "line": 797,
+      "endLine": 797
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 421,
-      "endLine": 425
+      "line": 423,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 649,
-      "endLine": 667
+      "line": 651,
+      "endLine": 669
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 669,
-      "endLine": 783
+      "line": 671,
+      "endLine": 785
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 797,
-      "endLine": 842
+      "line": 799,
+      "endLine": 844
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 785,
-      "endLine": 793
+      "line": 787,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1086,
-      "endLine": 1102
+      "line": 1088,
+      "endLine": 1104
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 849,
-      "endLine": 869
+      "line": 851,
+      "endLine": 871
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 919,
-      "endLine": 939
+      "line": 921,
+      "endLine": 941
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 956,
-      "endLine": 956
+      "line": 958,
+      "endLine": 958
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -58302,7 +58445,7 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 123,
-      "endLine": 255
+      "endLine": 257
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
@@ -58317,24 +58460,24 @@
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 286,
-      "endLine": 298
+      "line": 288,
+      "endLine": 300
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 558,
-      "endLine": 561
+      "line": 566,
+      "endLine": 569
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 538,
-      "endLine": 543
+      "line": 546,
+      "endLine": 551
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -58342,7 +58485,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 526
+      "endLine": 534
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -58365,8 +58508,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 528,
-      "endLine": 529
+      "line": 536,
+      "endLine": 537
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -58381,16 +58524,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 552,
-      "endLine": 555
+      "line": 560,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 532,
-      "endLine": 535
+      "line": 540,
+      "endLine": 543
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -58477,32 +58620,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1117,
-      "endLine": 1177
+      "line": 1158,
+      "endLine": 1218
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 268,
-      "endLine": 1104
+      "line": 270,
+      "endLine": 1145
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1201,
-      "endLine": 1201
+      "line": 1242,
+      "endLine": 1242
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 123,
-      "endLine": 134
+      "line": 125,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -58510,39 +58653,39 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 44,
-      "endLine": 91
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1179,
-      "endLine": 1182
+      "line": 1220,
+      "endLine": 1223
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 116,
-      "endLine": 121
+      "line": 118,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 93,
-      "endLine": 114
+      "line": 95,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1184,
-      "endLine": 1199
+      "line": 1225,
+      "endLine": 1240
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -60039,7 +60182,7 @@
         },
         {
           "path": "src/shared/chunk-break-rules.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/shared/tile-suit-rules.ts",
@@ -60067,7 +60210,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 90
+          "line": 92
         }
       ],
       "tests": [
@@ -60093,7 +60236,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 70
+          "line": 71
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -60154,6 +60297,58 @@
       ]
     },
     {
+      "id": "mechanic:board.combo_heat_perks",
+      "mechanicId": "board.combo_heat_perks",
+      "label": "Heat Perks",
+      "kind": "board",
+      "role": "a_hot_combo_lights_cards_beside_a_match_widens_the_pop_and_lengthens_the_reach",
+      "evidence": [
+        {
+          "path": "src/shared/combo-heat-perks.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/chunk-break-rules.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/board-turn-transition.ts",
+          "line": 15
+        },
+        {
+          "path": "src/renderer/copy/comboHeatPerksCopy.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 5
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/combo-heat-perks.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 36
+        }
+      ],
+      "enables": [
+        "objective.floor_clear"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "heat-carried-into-the-turn",
+        "no-perk-touches-the-miss-bank",
+        "afterglow-capped-at-the-lantern"
+      ]
+    },
+    {
       "id": "mechanic:board.lantern_light",
       "mechanicId": "board.lantern_light",
       "label": "Lantern Light",
@@ -60205,7 +60400,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 16
+          "line": 17
         },
         {
           "path": "src/renderer/components/tileBoardPresentationState.ts",
@@ -60522,7 +60717,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 12
+          "line": 14
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -60544,7 +60739,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 19
+          "line": 20
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -60664,7 +60859,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -60904,7 +61099,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 9
+          "line": 11
         }
       ],
       "tests": [
@@ -62219,7 +62414,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 475
+          "line": 480
         }
       ],
       "tests": [
@@ -62258,7 +62453,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 475
+          "line": 480
         }
       ],
       "tests": [
@@ -62292,7 +62487,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 475
+          "line": 480
         }
       ],
       "tests": [
@@ -62326,7 +62521,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 475
+          "line": 480
         }
       ],
       "tests": [
@@ -62376,6 +62571,7 @@
       "id": "state:activeMutators",
       "name": "activeMutators",
       "readBy": [
+        "mechanic:board.combo_heat_perks",
         "mechanic:board.lantern_light",
         "mechanic:board.n_back_anchor",
         "mechanic:hazard.magpie_thief",
@@ -62501,6 +62697,7 @@
       "name": "currentStreak",
       "readBy": [
         "mechanic:board.chain_chunk_fever",
+        "mechanic:board.combo_heat_perks",
         "mechanic:economy.gold",
         "mechanic:economy.miss_bank"
       ],
@@ -62753,6 +62950,16 @@
       ]
     },
     {
+      "id": "state:heatPerkTurnsThisFloor",
+      "name": "heatPerkTurnsThisFloor",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:board.combo_heat_perks"
+      ]
+    },
+    {
       "id": "state:interactionTags",
       "name": "interactionTags",
       "readBy": [
@@ -62782,6 +62989,7 @@
         "mechanic:feedback.gameplay_hud"
       ],
       "writtenBy": [
+        "mechanic:board.combo_heat_perks",
         "mechanic:board.lantern_light"
       ]
     },
@@ -63074,6 +63282,7 @@
       "id": "state:relics",
       "name": "relics",
       "readBy": [
+        "mechanic:board.combo_heat_perks",
         "mechanic:economy.gold",
         "mechanic:economy.miss_bank",
         "mechanic:inventory.relics"
@@ -63269,6 +63478,7 @@
       "readBy": [
         "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
+        "mechanic:board.combo_heat_perks",
         "mechanic:board.lantern_light",
         "mechanic:board.n_back_anchor",
         "mechanic:board.wild_joker_tile",
@@ -63655,6 +63865,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "tier name, break pulse, style line, floor-clear recap"
+    },
+    {
+      "id": "displays:mechanic:board.combo_heat_perks->mechanic:feedback.gameplay_hud:the rail names the perks under the combo; lit faces show on the board",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the rail names the perks under the combo; lit faces show on the board"
     },
     {
       "id": "displays:mechanic:board.lantern_light->mechanic:feedback.gameplay_hud:lit faces show on the board",
@@ -70124,6 +70341,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/comboHeatPerksCopy.ts->symbol:src/renderer/copy/comboHeatPerksCopy.ts#comboHeatPerksLine",
+      "source": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "target": "symbol:src/renderer/copy/comboHeatPerksCopy.ts#comboHeatPerksLine",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/diagnosticsSettings.ts->symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
       "source": "file:src/renderer/copy/diagnosticsSettings.ts",
       "target": "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
@@ -74243,6 +74466,42 @@
       "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#simulateColorVision",
       "source": "file:src/shared/color-vision.ts",
       "target": "symbol:src/shared/color-vision.ts#simulateColorVision",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#comboHeatPerks",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#comboHeatPerks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#ComboHeatPerks",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#ComboHeatPerks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#comboHeatPerksActive",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#comboHeatPerksActive",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#nextComboHeatPerkAt",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#nextComboHeatPerkAt",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-perks.ts->symbol:src/shared/combo-heat-perks.ts#runComboHeatPerks",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "symbol:src/shared/combo-heat-perks.ts#runComboHeatPerks",
       "kind": "exports"
     },
     {
@@ -82439,6 +82698,36 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/shared/board-turn-transition.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/board-turn-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/shared/chunk-break-rules.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/shared/combo-heat-perks.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:board.lantern_light->file:src/renderer/copy/lanternLightBeat.ts",
       "source": "mechanic:board.lantern_light",
       "target": "file:src/renderer/copy/lanternLightBeat.ts",
@@ -87383,6 +87672,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/comboHeatPerksCopy.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
@@ -87428,6 +87723,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-tier-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/combo-heat-perks.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/combo-heat-perks.ts",
       "kind": "imports"
     },
     {
@@ -91037,6 +91338,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/comboHeatPerksCopy.ts->src/shared/combo-heat-perks.ts",
+      "source": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/floorClearChain.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/copy/floorClearChain.ts",
       "target": "file:src/shared/contracts.ts",
@@ -94427,6 +94734,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/combo-heat-perks.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/contracts.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/contracts.ts",
@@ -94985,6 +95298,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chunk-break-rules.ts->src/shared/combo-heat-perks.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chunk-break-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -95084,6 +95403,48 @@
       "id": "imports:src/shared/color-vision.test.ts->src/shared/color-vision.ts",
       "source": "file:src/shared/color-vision.test.ts",
       "target": "file:src/shared/color-vision.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.test.ts->src/renderer/copy/comboHeatPerksCopy.ts",
+      "source": "file:src/shared/combo-heat-perks.test.ts",
+      "target": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.test.ts->src/shared/combo-heat-perks.ts",
+      "source": "file:src/shared/combo-heat-perks.test.ts",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/shared/combo-heat-perks.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.test.ts->src/shared/lantern-light-rules.ts",
+      "source": "file:src/shared/combo-heat-perks.test.ts",
+      "target": "file:src/shared/lantern-light-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-perks.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -98927,6 +99288,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/combo-heat-perks.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/contracts.ts",
@@ -98945,9 +99312,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/mutators.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/mutators.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/rng.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -100795,6 +101174,20 @@
       "label": "removes cascaded pairs toward the clear, never the exit"
     },
     {
+      "id": "modifies:mechanic:board.combo_heat_perks->mechanic:board.chain_chunk_fever:lifts the break cap from Blazing and the reach from Inferno",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "lifts the break cap from Blazing and the reach from Inferno"
+    },
+    {
+      "id": "modifies:mechanic:board.combo_heat_perks->mechanic:board.lantern_light:the afterglow is the lantern's light on a shorter wick",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "mechanic:board.lantern_light",
+      "kind": "modifies",
+      "label": "the afterglow is the lantern's light on a shorter wick"
+    },
+    {
       "id": "modifies:mechanic:board.n_back_anchor->mechanic:board.chain_chunk_fever:a matched anchor adds a chain link",
       "source": "mechanic:board.n_back_anchor",
       "target": "mechanic:board.chain_chunk_fever",
@@ -101012,6 +101405,30 @@
     {
       "id": "reads:mechanic:board.cleanup->state:tileStates",
       "source": "mechanic:board.cleanup",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.combo_heat_perks->state:activeMutators",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "state:activeMutators",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.combo_heat_perks->state:currentStreak",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.combo_heat_perks->state:relics",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "state:relics",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.combo_heat_perks->state:tileStates",
+      "source": "mechanic:board.combo_heat_perks",
       "target": "state:tileStates",
       "kind": "reads"
     },
@@ -101343,6 +101760,12 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:heatPerkTurnsThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:heatPerkTurnsThisFloor",
       "kind": "reads"
     },
     {
@@ -102302,6 +102725,24 @@
       "id": "tested_by:mechanic:board.cleanup->file:src/shared/turn-match-board-cleanup-rules.test.ts",
       "source": "mechanic:board.cleanup",
       "target": "file:src/shared/turn-match-board-cleanup-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.combo_heat_perks->file:src/shared/combo-heat-perks.test.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.combo_heat_perks->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.combo_heat_perks->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -104633,6 +105074,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/copy/comboHeatPerksCopy.ts->file:src/shared/combo-heat-perks.test.ts",
+      "source": "file:src/renderer/copy/comboHeatPerksCopy.ts",
+      "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/copy/floorCurioBeat.ts->file:src/renderer/copy/floorCurioBeat.test.ts",
       "source": "file:src/renderer/copy/floorCurioBeat.ts",
       "target": "file:src/renderer/copy/floorCurioBeat.test.ts",
@@ -105875,6 +106322,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/combo-heat-perks.ts->file:src/shared/combo-heat-perks.test.ts",
+      "source": "file:src/shared/combo-heat-perks.ts",
+      "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/sceneMood.test.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/renderer/components/sceneMood.test.ts",
@@ -105884,6 +106337,12 @@
       "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/screenCallouts.test.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/renderer/components/screenCallouts.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/shared/combo-heat-perks.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/combo-heat-perks.test.ts",
       "kind": "tested_by"
     },
     {
@@ -107786,6 +108245,12 @@
       "id": "tested_by:src/shared/ipc-channels.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/lantern-light-rules.ts->file:src/shared/combo-heat-perks.test.ts",
+      "source": "file:src/shared/lantern-light-rules.ts",
+      "target": "file:src/shared/combo-heat-perks.test.ts",
       "kind": "tested_by"
     },
     {
@@ -109703,11 +110168,25 @@
       "kind": "tested_by"
     },
     {
+      "id": "triggers:mechanic:board.chain_chunk_fever->mechanic:board.combo_heat_perks:the combo's heat switches the perks on",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:board.combo_heat_perks",
+      "kind": "triggers",
+      "label": "the combo's heat switches the perks on"
+    },
+    {
       "id": "triggers:mechanic:board.chain_chunk_fever->mechanic:core.gameplay_commands:chunk facts on the board.turn_resolved event",
       "source": "mechanic:board.chain_chunk_fever",
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "chunk facts on the board.turn_resolved event"
+    },
+    {
+      "id": "triggers:mechanic:core.board_turn_resolution->mechanic:board.combo_heat_perks:a match at Hot or better lights the cards beside it",
+      "source": "mechanic:core.board_turn_resolution",
+      "target": "mechanic:board.combo_heat_perks",
+      "kind": "triggers",
+      "label": "a match at Hot or better lights the cards beside it"
     },
     {
       "id": "triggers:mechanic:core.board_turn_resolution->mechanic:board.lantern_light:a match lights the cards beside it",
@@ -109856,6 +110335,18 @@
       "id": "writes:mechanic:board.cleanup->state:tileStates",
       "source": "mechanic:board.cleanup",
       "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.combo_heat_perks->state:heatPerkTurnsThisFloor",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "state:heatPerkTurnsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.combo_heat_perks->state:lanternLitTileIds",
+      "source": "mechanic:board.combo_heat_perks",
+      "target": "state:lanternLitTileIds",
       "kind": "writes"
     },
     {

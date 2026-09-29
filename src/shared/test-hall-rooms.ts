@@ -75,6 +75,8 @@ export type TestHallRoomId =
     | 'sticky-fingers'
     | 'skittish'
     | 'lantern'
+    | 'heat-afterglow'
+    | 'heat-pop'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -816,6 +818,45 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                         : `lit ${r.lanternLitTileIds.join(',')}, peeks ${r.peekRevealedTileIds.length}`
             },
             { step: { do: 'flip', tileId: 'g-1' }, says: 'the next flip puts the light out', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `still lit ${r.lanternLitTileIds.join(',')}`) }
+        ]
+    },
+    {
+        id: 'heat-afterglow',
+        title: 'Afterglow',
+        mechanic: 'From a Hot combo, every match lights face-down cards beside it until the next flip: one at Hot, two at Blazing, three from Inferno. A miss puts the fire out.',
+        graphMechanicIds: ['board.combo_heat_perks', 'board.lantern_light'],
+        tryThis: 'You arrive with a combo of ten (Blazing). Match x in the middle: two faces beside it light. Miss once, then match g: nothing lights.',
+        build: () => room(['a:e b:m c:e d:m', 'e:b x:t x:t f:b', 'a:e b:m c:e d:m', 'e:b f:b g:m g:m'], { streak: 10 }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'x' },
+                says: 'at Blazing the match lights two cards beside it, no peek spent; the perks count the turn and the lantern does not',
+                expect: (r) =>
+                    r.lanternLitTileIds.length === 2 && r.peekRevealedTileIds.length === 0 && r.heatPerkTurnsThisFloor === 1 && r.lanternLightsThisFloor === 0 && r.stats.currentStreak === 11
+                        ? null
+                        : `lit ${r.lanternLitTileIds.length}, perk turns ${r.heatPerkTurnsThisFloor}, combo ${r.stats.currentStreak}`
+            },
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'a miss ends the combo, and with it the fire', expect: (r) => (r.stats.currentStreak === 0 && r.lanternLitTileIds.length === 0 ? null : `combo ${r.stats.currentStreak}, lit ${r.lanternLitTileIds.length}`) },
+            {
+                step: { do: 'match', pairKey: 'g' },
+                says: 'cold again, the next match lights nothing and the census does not count it',
+                expect: (r) => (r.lanternLitTileIds.length === 0 && r.heatPerkTurnsThisFloor === 1 ? null : `lit ${r.lanternLitTileIds.length}, perk turns ${r.heatPerkTurnsThisFloor}`)
+            }
+        ]
+    },
+    {
+        id: 'heat-pop',
+        title: 'The wider pop',
+        mechanic: 'From Blazing a break may take one pair more than its rung allows; from Inferno the first wave walks a step further.',
+        graphMechanicIds: ['board.combo_heat_perks', 'board.chain_chunk_fever'],
+        tryThis: 'One suit over the whole floor and a combo of ten. Match x at the bottom left: a Fever break takes four pairs, and Blazing lets it take a fifth.',
+        build: () => room(['a:e b:e c:e d:e', 'a:e b:e c:e d:e', 'x:e f:e g:e h:e', 'x:e f:e g:e h:e'], { streak: 10 }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'x' },
+                says: 'the break takes five pairs on top of the match: the Fever cap of four and one more for Blazing',
+                expect: (r) => (r.board?.matchedPairs === 6 && r.heatPerkTurnsThisFloor === 1 ? null : `matched ${r.board?.matchedPairs}, perk turns ${r.heatPerkTurnsThisFloor}`)
+            }
         ]
     },
     {

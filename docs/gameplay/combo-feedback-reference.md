@@ -198,14 +198,57 @@ losses, the money and the items, which is the whole list.
   the screen's edges, stepped so it reads as drawn, once on the way into the shop and once on the
   way out (`useSceneWipe`); the room changes underneath while the ink holds.
 
+## Round twelve: the fire changes the game (2026-09-30)
+
+The owner asked for the research to be pushed to its conclusion and for **gameplay itself to
+change with the combo**, which reverses one line below. What the leaders do once a streak is hot:
+
+- [NBA Jam](https://www.nba-live.com/ww-why-being-on-fire-was-so-cool-in-nba-jam/): three
+  baskets and the player is *on fire* - better accuracy, more speed, a backboard that shatters -
+  and one opposing basket puts it out. The hot player plays a different game, and the risk is what
+  makes it fair.
+- [Peggle](https://peggle.fandom.com/wiki/Game_Mechanics): clearing the orange pegs opens *Extreme
+  Fever*, pegs pay twenty times and the bottom of the board becomes score buckets. The board
+  itself changes at the top.
+- [Tetris Effect](https://blog.playstation.com/2018/06/25/tetris-effect-adds-a-new-strategic-layer-to-the-decades-old-game-and-it-works/):
+  the Zone stops time and lets the player clear more than four lines - a rule the base game
+  forbids - earned by playing well.
+- [Guitar Hero](https://guitarhero.fandom.com/wiki/Star_Power): Star Power doubles the multiplier
+  and makes the rock meter easier to fill; earned on the streak, spent by the player.
+- [Balatro](https://www.kokutech.com/blog/gamedev/design-patterns/power-fantasy/balatro) and
+  [Vampire Survivors](https://www.kokutech.com/blog/gamedev/design-patterns/power-fantasy/vampire-survivors):
+  the dogma of the compounding loop - each gain makes the next gain bigger, and the player can feel
+  the curve.
+
+The dogma, distilled: **the hot hand gets a different board, never a safer one**. Built as
+*heat perks* (`src/shared/combo-heat-perks.ts`), each one an existing rule turned up a notch,
+read off the combo the player carries *into* the turn:
+
+- **Afterglow** - from Hot every match lights face-down cards touching it until the next flip: one
+  at Hot, two at Blazing, three from Inferno (the lantern hall's light on a shorter wick, through
+  the same `resolveLanternLight` with a `maxLit`). Information is what a memory game's hot hand
+  should be made of.
+- **The wider pop** - from Blazing a break may take one pair over its rung's cap.
+- **The longer reach** - from Inferno the first wave walks a step further along the clump.
+- **Nothing for the bank.** Runs are punishing: a miss at Legendary costs what it costs at cold and
+  ends the combo. `yarn sim:survival` after: 10% misses median floor 37.5 (36 before the perks).
+
+Measured before the pop was widened (`yarn sim:pop-share`, perfect player, eight seeds, floors
+1-24): the player matched 0.38 of a floor's pairs by hand before the perks and 0.34 with them; the
+biggest break on a floor went from 0.34 of the board to 0.38. A second pair at Legendary read 0.33
+and 0.41 - the pop taking the board again - and was cut. The rail says what the fire buys under
+the combo ("Afterglow 2 · Pop +1", or "Fire at 6" while cold); the Codex has a topic (v62); the
+hall has two rooms (`heat-afterglow`, `heat-pop`); the soak checks the afterglow never lights
+more than the heat allows and requires the careful player to run hot.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is
   a miss, because the game is about remembering, and a memory does not expire between turns.
-- **Rank effects that change the rules.** The pool tables hand out power at high ranks. The heat
-  here is presentation only: what a break takes is still the floor's own rungs. Runs are meant to
-  be punishing (`docs/BALANCE_NOTES.md`), and a combo that made the game easier would undercut
-  the thing it celebrates.
+- **Rank effects that make the run safer.** Round twelve gave the heat rules of its own (the
+  afterglow, the wider pop, the reach), so this line narrowed: what the heat still never buys is
+  a miss. Runs are meant to be punishing (`docs/BALANCE_NOTES.md`), and a combo that shielded the
+  player from the miss that ends it would undercut the thing it celebrates.
 - **Stamps for small ranks.** Warm gets the HUD warming and nothing more; a stamp for three in a
   row is a stamp for nothing, and it would blunt the four that matter.
 

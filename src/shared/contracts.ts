@@ -705,6 +705,8 @@ export interface RunState {
     lanternLitTileIds: string[];
     /** `lantern_light`: matches this floor that lit at least one card. */
     lanternLightsThisFloor: number;
+    /** `combo_heat_perks`: matches this floor resolved with a heat perk on (afterglow, a wider pop, a longer reach). */
+    heatPerkTurnsThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

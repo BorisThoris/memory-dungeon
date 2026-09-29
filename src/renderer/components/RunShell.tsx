@@ -3,6 +3,8 @@ import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { comboHeatLevels, comboHeatThemeForSeed, comboStageLabel } from '../../shared/combo-heat-rules';
+import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
+import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
@@ -287,6 +289,9 @@ const RunShell = ({
     // Links the combo brought down the stairs: the whole ladder carries until a miss, and saying
     // how much of it arrived with the player is what makes a floor opening at Fever read as earned.
     const carried = Math.min(chain, runNonNegativeInteger(run.comboLinksCarried));
+    // What the heat changes about the board (`combo-heat-perks.ts`), or how far the next change is.
+    const perks = comboHeatPerks(chain);
+    const perksLine = comboHeatPerksLine(perks, nextComboHeatPerkAt(chain));
     // The ladder above the ladder: the combo's heat stage (`combo-heat-rules.ts`), which keeps the
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
@@ -588,6 +593,11 @@ const RunShell = ({
                                     {carried > 0 ? (
                                         <span className={styles.comboCarried} data-testid="hud-combo-carried">
                                             {`${carried} carried`}
+                                        </span>
+                                    ) : null}
+                                    {perksLine ? (
+                                        <span className={styles.comboPerks} data-perks-active={comboHeatPerksActive(perks) ? 'true' : 'false'} data-testid="hud-combo-perks">
+                                            {perksLine}
                                         </span>
                                     ) : null}
                                 </span>

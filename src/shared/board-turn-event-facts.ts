@@ -209,8 +209,10 @@ export const getBoardTurnAnnouncementFacts = (
         anchorClaimsBefore: runNonNegativeInteger(before.anchorClaimsThisFloor),
         anchorClaimsAfter: runNonNegativeInteger(after.anchorClaimsThisFloor),
         anchorMoved: after.nBackAnchorPairKey != null && after.nBackAnchorPairKey !== before.nBackAnchorPairKey,
+        // Lit by the lantern, the candle or the combo's afterglow: the lit set is always this turn's, since a flip clears it.
         lanternLitCount:
-            runNonNegativeInteger(after.lanternLightsThisFloor) > runNonNegativeInteger(before.lanternLightsThisFloor)
+            runNonNegativeInteger(after.lanternLightsThisFloor) > runNonNegativeInteger(before.lanternLightsThisFloor) ||
+            runNonNegativeInteger(after.heatPerkTurnsThisFloor) > runNonNegativeInteger(before.heatPerkTurnsThisFloor)
                 ? (Array.isArray(after.lanternLitTileIds) ? after.lanternLitTileIds.length : 0)
                 : 0,
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>

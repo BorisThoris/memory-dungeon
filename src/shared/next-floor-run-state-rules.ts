@@ -74,6 +74,7 @@ export const createNextFloorRunState = (
         skittishFlinchesThisFloor: 0,
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
+        heatPerkTurnsThisFloor: 0,
         // Pair keys repeat from floor to floor, so a carried anchor would mark a card on the wrong board.
         nBackAnchorPairKey: null,
         nBackMatchCounter: 0,

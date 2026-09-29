@@ -30,13 +30,16 @@ export const resolveLanternLight = ({
     matchedTileIds,
     turnsThisFloor,
     runSeed,
-    rulesVersion
+    rulesVersion,
+    maxLit = LANTERN_MAX_LIT
 }: {
     board: BoardState;
     matchedTileIds: readonly string[];
     turnsThisFloor: number;
     runSeed: number;
     rulesVersion: number;
+    /** How many faces to show: the lantern's cap, or the combo's afterglow (`combo-heat-perks.ts`). */
+    maxLit?: number;
 }): string[] => {
     const touching = new Set<number>();
     for (const id of matchedTileIds) {
@@ -47,10 +50,12 @@ export const resolveLanternLight = ({
         }
     }
     const pool = [...touching].sort((a, b) => a - b);
-    if (pool.length <= LANTERN_MAX_LIT) return pool.map((index) => board.tiles[index]!.id);
+    const cap = Math.max(0, Math.min(LANTERN_MAX_LIT, Math.floor(maxLit)));
+    if (cap === 0) return [];
+    if (pool.length <= cap) return pool.map((index) => board.tiles[index]!.id);
     const rng = createMulberry32(hashStringToSeed(`lantern:${runSeed}:${rulesVersion}:${board.level}:${turnsThisFloor}`));
     const lit: string[] = [];
-    while (lit.length < LANTERN_MAX_LIT && pool.length > 0) {
+    while (lit.length < cap && pool.length > 0) {
         const [index] = pool.splice(pickRngIndex(rng, pool.length), 1);
         lit.push(board.tiles[index!]!.id);
     }

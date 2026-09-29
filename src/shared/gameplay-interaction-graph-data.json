@@ -311,7 +311,8 @@
                 "skittishFlinchesThisFloor",
                 "lanternLitTileIds",
                 "lanternLightsThisFloor",
-                "anchorClaimsThisFloor"
+                "anchorClaimsThisFloor",
+                "heatPerkTurnsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1861,6 +1862,43 @@
                 "src/shared/n-back-anchor-rules.test.ts",
                 "src/shared/test-hall-rooms.test.ts"
             ]
+        },
+        {
+            "id": "board.combo_heat_perks",
+            "label": "Heat Perks",
+            "kind": "board",
+            "role": "a_hot_combo_lights_cards_beside_a_match_widens_the_pop_and_lengthens_the_reach",
+            "evidence": [
+                "src/shared/combo-heat-perks.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/copy/comboHeatPerksCopy.ts",
+                "src/renderer/components/RunShell.tsx"
+            ],
+            "reads": [
+                "currentStreak",
+                "tileStates",
+                "activeMutators",
+                "relics"
+            ],
+            "writes": [
+                "lanternLitTileIds",
+                "heatPerkTurnsThisFloor"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "heat-carried-into-the-turn",
+                "no-perk-touches-the-miss-bank",
+                "afterglow-capped-at-the-lantern"
+            ],
+            "tests": [
+                "src/shared/combo-heat-perks.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2733,6 +2771,36 @@
             "target": "board.lantern_light",
             "kind": "modifies",
             "label": "Tallow Candle lights the first match of every floor"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "board.combo_heat_perks",
+            "kind": "triggers",
+            "label": "the combo's heat switches the perks on"
+        },
+        {
+            "source": "board.combo_heat_perks",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "lifts the break cap from Blazing and the reach from Inferno"
+        },
+        {
+            "source": "board.combo_heat_perks",
+            "target": "board.lantern_light",
+            "kind": "modifies",
+            "label": "the afterglow is the lantern's light on a shorter wick"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.combo_heat_perks",
+            "kind": "triggers",
+            "label": "a match at Hot or better lights the cards beside it"
+        },
+        {
+            "source": "board.combo_heat_perks",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the rail names the perks under the combo; lit faces show on the board"
         }
     ],
     "coverage": {

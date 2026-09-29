@@ -3,6 +3,9 @@ import type { BoardState, RunState, Tile } from './contracts';
 import { inspectBoardFairness } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
+import { runComboHeatPerks } from './combo-heat-perks';
+import { hasMutator } from './mutators';
+import { hasRelic } from './run-relic-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
@@ -65,6 +68,8 @@ export interface SoakRunReport {
     relicsBought: number;
     /** Jokers spent: every fall in wildMatchesRemaining. */
     wildMatches: number;
+    /** Matches resolved with a heat perk on: every rise in heatPerkTurnsThisFloor. */
+    heatPerkTurns: number;
     violations: SoakViolation[];
 }
 
@@ -126,6 +131,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         ];
         const bad = fields.filter(([, value]) => !nonNegativeInteger(value));
         return bad.length === 0 ? null : bad.map(([name, value]) => `${name}=${String(value)}`).join(', ');
+    },
+    'the afterglow lights no more cards than the heat the run carried in allows': (before, run) => {
+        if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle')) return null;
+        const lit = Array.isArray(run.lanternLitTileIds) ? run.lanternLitTileIds.length : 0;
+        const allowed = runComboHeatPerks(before).afterglow;
+        return lit <= allowed ? null : `${lit} lit at a combo of ${before.stats.currentStreak}, which allows ${allowed}`;
     },
     'the miss bank never holds more than its cap': (_b, run) => {
         const left = missesLeft(run);
@@ -235,6 +246,7 @@ export const soakRun = ({
     let missesGranted = 0;
     let relicsBought = 0;
     let wildMatches = 0;
+    let heatPerkTurns = 0;
     let floorsCleared = 0;
 
     const act = (action: string, next: RunState): void => {
@@ -246,6 +258,7 @@ export const soakRun = ({
         missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
+        heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         run = next;
     };
 
@@ -324,6 +337,7 @@ export const soakRun = ({
         missesGranted,
         relicsBought,
         wildMatches,
+        heatPerkTurns,
         violations
     };
 };
