@@ -9,6 +9,8 @@ import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import type { SceneMood } from './sceneMood';
 import { StormBoltsOverlay } from './StormBoltsOverlay';
+import { GoldRain } from './GoldRain';
+import { useBeat } from './useSceneBeat';
 import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
 import { ringMotes } from './sceneSpriteClocks';
@@ -113,6 +115,10 @@ export function GameplayScene({
 }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
+    // The room's beats: a class held for the beat's length, keyed so one turn is one beat.
+    const hitting = useBeat(mood?.hitKey ?? null, 520);
+    const missing = useBeat(mood?.missKey ?? null, 700);
+    const frozen = useBeat(mood?.freezeKey ?? null, 900);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
     const still = effectTier === 'still';
     const alive = effectTier === 'full';
@@ -134,6 +140,11 @@ export function GameplayScene({
             data-combo-stage={comboStage}
             data-scene-plate={mood?.plate ?? 'dungeon'}
             data-scene-prismatic={mood?.prismatic ? 'true' : 'false'}
+            data-scene-hit={hitting && !still ? 'true' : 'false'}
+            data-scene-miss={missing && !still ? 'true' : 'false'}
+            data-scene-frozen={frozen && !still ? 'true' : 'false'}
+            data-scene-peril={mood?.peril ? 'true' : 'false'}
+            data-relics={(mood?.relics ?? []).join(' ')}
             data-still={still ? 'true' : 'false'}
             data-testid="gameplay-scene"
             ref={sceneRef}
@@ -152,6 +163,7 @@ export function GameplayScene({
                     '--scene-snow-glow': mood?.snowGlow ?? 0,
                     '--scene-storm': mood?.storm ?? 0,
                     '--scene-wet': mood?.wet ?? 0,
+                    '--scene-tempo': mood?.tempo ?? 1,
                     '--scene-grade-hue': `${mood?.hueDeg ?? 0}deg`,
                     '--scene-grade-saturate': mood?.saturate ?? 1,
                     '--scene-grade-brightness': mood?.brightness ?? 1,
@@ -207,6 +219,10 @@ export function GameplayScene({
                 {mood?.blackHoleKey && !still ? (
                     <div className={styles.blackHole} data-testid="gameplay-scene-black-hole" key={mood.blackHoleKey} />
                 ) : null}
+                {/* A payout: coins fall through the room, in front of the stone and behind the cards. */}
+                {mood?.goldRain && !still ? <GoldRain coins={mood.goldRain.coins} key={mood.goldRain.key} rainKey={mood.goldRain.key} /> : null}
+                {/* Peril: the bank is empty, and the room says so - a red edge and the torches low. */}
+                <div className={styles.peril} data-testid="gameplay-scene-peril" />
                 {/* Back from the void: the dungeon returns with one flash of the whole ring, like Fever's arrival. */}
                 {mood?.voidReturnKey && !still ? (
                     <div className={`${plate.layer} ${styles.layer} ${styles.feverArrival}`} data-testid="gameplay-scene-return" key={mood.voidReturnKey} style={bg(UI_ART.gameplaySceneGlowRing)} />
@@ -226,7 +242,7 @@ export function GameplayScene({
                     </div>
                 ) : null}
                 <div className={plate.things}>
-                    <SceneSprites comboHeat={comboHeat} embers={alive} heat={fill} imminent={imminent} set={flames} still={still} />
+                    <SceneSprites comboHeat={comboHeat} embers={alive} heat={fill} imminent={imminent} set={flames} still={still} tempo={mood?.tempo ?? 1} />
                     {alive ? (
                         <div className={styles.ringMotes}>
                             <SceneMotes

@@ -140,6 +140,50 @@ from `scripts/card-pipeline/scene-moods.zimage.manifest.json` at the dungeon's c
   on Descend, a receipt in a status line - and the wares sit above the trapdoor so a pad's d-pad
   walks up into them. On a phone the hotspots clamp to the screen's edges.
 
+## The room takes part (round nine): a deep dive into the arcade cabinets
+
+The brief: make the combo and the mechanics *affect the environment* the way the Chinese arcade
+and mobile titles do. What those games do, from the cabinets up:
+
+- **捕鱼达人 / Fishing Joy** (65M+ players; the arcade fishing cabinet as a phone game). The
+  whole sea is the reward system. A jackpot **rains gold coins across the screen** and the cabinet
+  flashes; a boss fish **arrives with a warning banner and the water darkens**; special creatures
+  fire **screen-wide events** - the bomb crab's explosion, the electric eel's chain lightning, the
+  **freeze that stops every fish** for a beat; a full power gauge hands you a laser that
+  annihilates everything; four progressive jackpots sit on rare catches. Nothing happens only on
+  the fish you shot - the cabinet takes part.
+- **开心消消乐 / Anipop** (the match-3 with 10,000+ levels). Fever is a **state the whole board
+  enters**: the background changes, the animals cheer, every clear is bigger, an announcer
+  escalates through the ranks of a combo (连消). A big cascade **shakes the whole frame and
+  zooms**, not just the tiles.
+- **合成大西瓜 / Suika**. The container is the tension: as it fills, the whole field shakes on a
+  big merge, and the chain merges are the dopamine - a single mechanic whose *feedback* is the
+  content.
+- **弹壳特攻队 / Survivor.io**. Power spikes fill the screen; a weapon evolution changes what the
+  arena looks like, not only your numbers.
+- **The pool tables** (already studied above): the streak sets the table on fire.
+
+The lesson, from all of them: **the environment is a participant, not a backdrop**. Every
+system - the combo, the losses, the money, the items - has a room reaction, the reactions stack,
+and the biggest of them are rare and whole-screen.
+
+Built as the room's beats (`sceneMood.ts`, every one derived from run state and keyed to the turn
+or the purchase that made it, so a restore replays none):
+
+| The cabinet does | The room does here |
+| --- | --- |
+| Gold rains on a jackpot | **Gold rain** (`GoldRain`): seeded SVG coins fall through the room on a floor's gold, on every purchase, and on every ascension - more the bigger the payout, more the higher the surge, half again with Deep Pockets |
+| The frame shakes and zooms on a big hit | **The hit**: the whole plate punches in on a Fever break or an ascension (`data-scene-hit`) |
+| The water darkens when you are losing | **The miss**: the room dims and the torches drop for a breath on every miss |
+| A boss arrives; the sea goes red | **Peril**: with the bank empty a red edge breathes and the torches burn low until a miss is banked |
+| The freeze stops every fish | **The freeze**: a frost stage reached stops the flames, sparks, motes and mist for a beat |
+| The cabinet speeds up in frenzy | **Tempo**: the surge past Legendary speeds the room's drift, mist, flames and runes (`--scene-tempo`) |
+| Your upgrades change the arena | **Relic fixtures**: Tallow Candle lights the torches hotter, Long Look brightens the ring's light, Gilded Chain turns the runes gold, Deep Pockets deepens the ring and the rain |
+
+With the earlier rounds - the temper's grade, frost's snow and ice, the storm's bolts and wet
+stone, the black hole and the void, the shop as a room - the room now answers the combo, the
+losses, the money and the items, which is the whole list.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

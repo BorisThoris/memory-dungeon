@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2794,
-    "codeFileCount": 992,
-    "exportedSymbolCount": 3013,
+    "trackedFileCount": 2798,
+    "codeFileCount": 995,
+    "exportedSymbolCount": 3019,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7824
+    "relationshipCount": 7835
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 12875,
-      "sha256": "b4eeaba2708ad185717e44b7a8cefd5dbc45f8db1bcef04186d4438b55287b9b"
+      "bytes": 16308,
+      "sha256": "64045f3b34f1e7e890826a6969d769668872cdf59c3328d5546492ba31ecf572"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "d402187db1d2306bc0e55bbaa705eed80fd77fd403c33c46ee7c9e18496f94fd"
+      "sha256": "f2fb6a144a739366d054eea414a98490f99af4a775b4b2313219d3864c95d6f3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4419,8 +4419,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 120843,
-      "sha256": "25ab360baf548d41a3aef139c832fa81d432d42961a2d923c232d8da02a0d045"
+      "bytes": 122377,
+      "sha256": "4edb5490cc3ede4798a0e4f66af8ae60b8227de427aad5a42c0c12b063650724"
     },
     {
       "path": "public/site.webmanifest",
@@ -9423,8 +9423,8 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 11944,
-      "sha256": "bb719e3240b1204da77b680ab315093bea346b842b43b3e5d68b357aa3cd0e9c"
+      "bytes": 15096,
+      "sha256": "d900c8caafe033047eaace9716eb3ce436421dc0f81892137232a6989a3194c6"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
@@ -9435,8 +9435,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 14691,
-      "sha256": "15dc843f395c0c5c8a06bd93d840fd1be1e09e894497e8f3909b948c57491473"
+      "bytes": 15876,
+      "sha256": "dfd6e07a06f48f46d39686dd40c4bc78126c2fdb5f6545e705a531f4ac4fd225"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9471,8 +9471,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 103638,
-      "sha256": "15a2f84cba2ab8d58871602542498ca6e17d077a265cb87d9a302225fb26a3d9"
+      "bytes": 104447,
+      "sha256": "d24a658402dc5281d8cf27edae60a281a37ffcbe12d2e9d3e3a504bf175b1064"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9497,6 +9497,24 @@
       "category": "source",
       "bytes": 1169,
       "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
+    },
+    {
+      "path": "src/renderer/components/GoldRain.module.css",
+      "category": "source",
+      "bytes": 1051,
+      "sha256": "7614e6cde6caa87e29833c7ffb45a0f30201e7ae51f70d90505be22089e3b74e"
+    },
+    {
+      "path": "src/renderer/components/GoldRain.test.tsx",
+      "category": "test",
+      "bytes": 1421,
+      "sha256": "1751cf2533e22881089d5c2ee014c1fd71a63e28f3592994a6aef6a3f29cf148"
+    },
+    {
+      "path": "src/renderer/components/GoldRain.tsx",
+      "category": "source",
+      "bytes": 3217,
+      "sha256": "5ab83b6af743f0454b818ba7f0dcf9c0d8ba6995ffb7c6e677fd5b80efe300ed"
     },
     {
       "path": "src/renderer/components/iceSheet.test.ts",
@@ -9801,14 +9819,14 @@
     {
       "path": "src/renderer/components/sceneMood.test.ts",
       "category": "test",
-      "bytes": 4850,
-      "sha256": "e7664ab7471412ffd904194d48027c1e137e017b2ceeb34b12b8eea4c75c0b34"
+      "bytes": 6726,
+      "sha256": "d740ae149cabe63a3ae7e7f026bbda22a10fbc27c1e74de0adc0ba64a5b7e2c2"
     },
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 6761,
-      "sha256": "e19cfd806fd43cbeb7e0f92e07ffa3b949b54791995395b7cff87e8d09d3c607"
+      "bytes": 9508,
+      "sha256": "f09efbe7ceaf798222b8f5ccb8fc763147bececc1465b8a4620704f3fab1e918"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -9849,8 +9867,8 @@
     {
       "path": "src/renderer/components/SceneSprites.tsx",
       "category": "source",
-      "bytes": 5843,
-      "sha256": "7f27fe139337e542f72b6d50f77ca58756dae9a5b4420edc3f466045f3256f4d"
+      "bytes": 6069,
+      "sha256": "78face0f3d1815e3365905c8ec54297fbc33f0d4dece3f8a9cbb22cc811ca1c7"
     },
     {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
@@ -9988,7 +10006,7 @@
       "path": "src/renderer/components/StoreVault.module.css",
       "category": "source",
       "bytes": 8680,
-      "sha256": "1351fb680f59f1f8fd4bb22bd1a23837451ac080cb736a0af6ee0d786745ad11"
+      "sha256": "9fa1f9c848fcb314c0b166bbf4e6611fe720e36f12afe98a2480e515d4789c13"
     },
     {
       "path": "src/renderer/components/StoreVault.test.tsx",
@@ -10835,6 +10853,12 @@
       "category": "source",
       "bytes": 2103,
       "sha256": "b6333c942d82f45d6f94742834677a871167f2574a4a7cd130e0b368000c5094"
+    },
+    {
+      "path": "src/renderer/components/useSceneBeat.ts",
+      "category": "source",
+      "bytes": 836,
+      "sha256": "644474c76c934cd2b606326e2af3c0e2589d9b6a4840bd8964e9d74a5baeec52"
     },
     {
       "path": "src/renderer/components/useTileBoardSceneImperativeHandle.ts",
@@ -19793,16 +19817,18 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 246,
+      "lineCount": 262,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/GoldRain.tsx",
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/components/SceneMotes.tsx",
         "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
         "file:src/renderer/components/StormBoltsOverlay.tsx",
+        "file:src/renderer/components/useSceneBeat.ts",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -19904,7 +19930,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2139,
+      "lineCount": 2152,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20049,6 +20075,38 @@
         "symbol:src/renderer/components/gameScreenStoreSelectors.ts#useGameScreenBoardVisualSettings"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GoldRain.test.tsx",
+      "path": "src/renderer/components/GoldRain.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 27,
+      "imports": [
+        "file:src/renderer/components/GoldRain.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GoldRain.tsx",
+      "path": "src/renderer/components/GoldRain.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 79,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+        "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+        "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
+        "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
+        "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GoldRain.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/iceSheet.test.ts",
@@ -20735,7 +20793,7 @@
       "path": "src/renderer/components/sceneMood.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 74,
+      "lineCount": 97,
       "imports": [
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -20750,7 +20808,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 137,
+      "lineCount": 186,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -20826,7 +20884,7 @@
       "path": "src/renderer/components/SceneSprites.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 127,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
@@ -23760,6 +23818,18 @@
       ],
       "exports": [
         "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/useSceneBeat.ts",
+      "path": "src/renderer/components/useSceneBeat.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 23,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/useSceneBeat.ts#useBeat"
       ],
       "testedBy": []
     },
@@ -38835,16 +38905,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 97,
-      "endLine": 245
+      "line": 99,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 60,
-      "endLine": 93
+      "line": 62,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -38923,8 +38993,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2138,
-      "endLine": 2138
+      "line": 2151,
+      "endLine": 2151
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -39013,6 +39083,46 @@
       "file": "src/renderer/components/gameScreenStoreSelectors.ts",
       "line": 5,
       "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+      "name": "buildGoldRain",
+      "kind": "value",
+      "file": "src/renderer/components/GoldRain.tsx",
+      "line": 29,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+      "name": "GOLD_RAIN_MAX_COINS",
+      "kind": "value",
+      "file": "src/renderer/components/GoldRain.tsx",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
+      "name": "GoldCoin",
+      "kind": "interface",
+      "file": "src/renderer/components/GoldRain.tsx",
+      "line": 21,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
+      "name": "GoldRain",
+      "kind": "function",
+      "file": "src/renderer/components/GoldRain.tsx",
+      "line": 45,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
+      "name": "GoldRainProps",
+      "kind": "interface",
+      "file": "src/renderer/components/GoldRain.tsx",
+      "line": 12,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
@@ -39443,24 +39553,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 63,
-      "endLine": 69
+      "line": 79,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 82,
-      "endLine": 127
+      "line": 98,
+      "endLine": 176
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 130,
-      "endLine": 136
+      "line": 179,
+      "endLine": 185
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
@@ -39468,7 +39578,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 25,
-      "endLine": 52
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -39483,8 +39593,8 @@
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 75,
-      "endLine": 80
+      "line": 91,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -39587,8 +39697,8 @@
       "name": "SceneSprites",
       "kind": "function",
       "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 56,
-      "endLine": 123
+      "line": 59,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
@@ -39596,7 +39706,7 @@
       "kind": "interface",
       "file": "src/renderer/components/SceneSprites.tsx",
       "line": 27,
-      "endLine": 38
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -43101,6 +43211,14 @@
       "file": "src/renderer/components/useGameScreenPowerTileHints.ts",
       "line": 17,
       "endLine": 71
+    },
+    {
+      "id": "symbol:src/renderer/components/useSceneBeat.ts#useBeat",
+      "name": "useBeat",
+      "kind": "value",
+      "file": "src/renderer/components/useSceneBeat.ts",
+      "line": 7,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/useTileBoardSceneImperativeHandle.ts#TileBoardSceneHandle",
@@ -66354,6 +66472,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldRain",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
       "source": "file:src/renderer/components/iceSheet.ts",
       "target": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
@@ -69417,6 +69565,12 @@
       "id": "exports:src/renderer/components/useGameScreenPowerTileHints.ts->symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
       "source": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "target": "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/useSceneBeat.ts->symbol:src/renderer/components/useSceneBeat.ts#useBeat",
+      "source": "file:src/renderer/components/useSceneBeat.ts",
+      "target": "symbol:src/renderer/components/useSceneBeat.ts#useBeat",
       "kind": "exports"
     },
     {
@@ -85575,6 +85729,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/GoldRain.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/GoldRain.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneMood.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/sceneMood.ts",
@@ -85602,6 +85762,12 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/StormBoltsOverlay.tsx",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/StormBoltsOverlay.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/useSceneBeat.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/useSceneBeat.ts",
       "kind": "imports"
     },
     {
@@ -86196,6 +86362,18 @@
       "id": "imports:src/renderer/components/gameScreenStoreSelectors.ts->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/gameScreenStoreSelectors.ts",
       "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GoldRain.test.tsx->src/renderer/components/GoldRain.tsx",
+      "source": "file:src/renderer/components/GoldRain.test.tsx",
+      "target": "file:src/renderer/components/GoldRain.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GoldRain.tsx->src/shared/rng.ts",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "file:src/shared/rng.ts",
       "kind": "imports"
     },
     {
@@ -103332,6 +103510,12 @@
       "id": "tested_by:src/renderer/components/gameScreenFeedback.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/GoldRain.tsx->file:src/renderer/components/GoldRain.test.tsx",
+      "source": "file:src/renderer/components/GoldRain.tsx",
+      "target": "file:src/renderer/components/GoldRain.test.tsx",
       "kind": "tested_by"
     },
     {

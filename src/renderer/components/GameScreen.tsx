@@ -1602,15 +1602,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
      * collapses it into the void for the floor, and the store stop is the merchant's vault.
      */
+    // What the run just paid: a floor's gold on its clear (keyed by the floor), or the last purchase.
+    const lastPurchase = purchaseCallouts[purchaseCallouts.length - 1] ?? null;
+    const scenePayout =
+        lastPurchase
+            ? { key: lastPurchase.key, gold: 6 }
+            : run.status === 'levelComplete' && (run.lastLevelResult?.goldEarned ?? 0) > 0
+              ? { key: `clear:${floorClearKey}`, gold: run.lastLevelResult?.goldEarned ?? 0 }
+              : null;
     const sceneMood = useMemo(
         () => deriveSceneMood({
             combo: run.stats.currentStreak,
             latestLoss: latestLossEvent,
+            latestTurn: latestTurnForPulse,
+            missesLeft: missesLeft(run),
+            payout: scenePayout,
             run,
             storeOpen: storeSheetOpen,
             temper: comboTemper
         }),
-        [run, storeSheetOpen, comboTemper, latestLossEvent]
+        // The payout is read by its key and gold; the object is rebuilt each render.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [run, storeSheetOpen, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
     );
     const gameplayShellInert =
         !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);

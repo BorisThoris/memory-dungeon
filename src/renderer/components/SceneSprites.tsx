@@ -35,25 +35,28 @@ export interface SceneSpritesProps {
     imminent?: boolean;
     /** The combo heat past the meter (`combo-heat-rules.ts`), 0..1. Ignored without `heat`. */
     comboHeat?: number;
+    /** The room's tempo (`sceneMood.tempo`): the flames and sparks run this much faster. */
+    tempo?: number;
 }
 
 const pct = (value: number): string => `${(value * 100).toFixed(3)}%`;
 
 /** Nothing at all when no run is behind the scene, so the CSS falls back to the painted flame. */
-const flameVars = (heat: number | null, imminent: boolean, comboHeat: number): CSSProperties => {
+const flameVars = (heat: number | null, imminent: boolean, comboHeat: number, tempo: number): CSSProperties => {
     if (heat === null) {
         return {};
     }
     const levels = sceneFlameLevels(heat, imminent, comboHeat);
+    const pace = Number.isFinite(tempo) && tempo > 0 ? tempo : 1;
     return {
-        '--flame-rate': levels.rate,
+        '--flame-rate': levels.rate * pace,
         '--flame-lift': levels.lift,
         '--flame-embers': levels.embers,
-        '--flame-ember-rate': levels.emberRate
+        '--flame-ember-rate': levels.emberRate * pace
     } as CSSProperties;
 };
 
-export function SceneSprites({ set, still, embers = false, heat = null, imminent = false, comboHeat = 0 }: SceneSpritesProps) {
+export function SceneSprites({ set, still, embers = false, heat = null, imminent = false, comboHeat = 0, tempo = 1 }: SceneSpritesProps) {
     return (
         <div
             className={styles.sprites}
@@ -61,7 +64,7 @@ export function SceneSprites({ set, still, embers = false, heat = null, imminent
             data-still={still ? 'true' : 'false'}
             data-testid="scene-sprites"
             data-flame-drawing={heat !== null && imminent ? 'true' : undefined}
-            style={flameVars(heat, imminent, comboHeat)}
+            style={flameVars(heat, imminent, comboHeat, tempo)}
         >
             {set.sprites.map((sprite, index) => {
                 const clock = sceneSpriteClocks(sprite, index);

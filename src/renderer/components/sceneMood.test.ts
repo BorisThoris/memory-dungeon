@@ -64,6 +64,29 @@ describe('what the room becomes', () => {
         expect(mood.ice).toBeGreaterThan(0);
     });
 
+    it('gives the room its beats: a hit on a Fever break or an ascension, a miss, a frost freeze, gold on a payout, peril on an empty bank', () => {
+        const base = { combo: 0, latestLoss: null, run: run(), storeOpen: false, temper: theme('ember') };
+        const quiet = deriveSceneMood(base);
+        expect(quiet).toMatchObject({ hitKey: null, missKey: null, freezeKey: null, goldRain: null, peril: false, tempo: 1, relics: [] });
+        const ascend = deriveSceneMood({ ...base, combo: 50, latestTurn: turn(49, 50, 'match') });
+        expect(ascend.hitKey).toMatch(/^hit:/);
+        expect(ascend.goldRain?.key).toMatch(/^ascend:/);
+        expect(ascend.goldRain?.coins).toBeGreaterThan(0);
+        expect(deriveSceneMood({ ...base, combo: 3, latestTurn: turn(2, 3, 'match') }).hitKey).toBeNull();
+        const miss = deriveSceneMood({ ...base, latestTurn: turn(4, 0, 'mismatch'), missesLeft: 0 });
+        expect(miss.missKey).toMatch(/^miss:/);
+        expect(miss.peril).toBe(true);
+        expect(deriveSceneMood({ ...base, missesLeft: 2 }).peril).toBe(false);
+        expect(deriveSceneMood({ ...base, temper: theme('frost'), combo: 6, latestTurn: turn(5, 6, 'match') }).freezeKey).toMatch(/^freeze:/);
+        expect(deriveSceneMood({ ...base, combo: 6, latestTurn: turn(5, 6, 'match') }).freezeKey).toBeNull();
+        const paid = deriveSceneMood({ ...base, payout: { key: 'clear:1', gold: 4 } });
+        expect(paid.goldRain).toEqual({ key: 'clear:1', coins: 12 });
+        const pockets = deriveSceneMood({ ...base, payout: { key: 'clear:1', gold: 4 }, run: { status: 'playing', board: { level: 4 }, relics: ['deep_pockets'] } as never });
+        expect(pockets.goldRain?.coins).toBeGreaterThan(12);
+        expect(pockets.relics).toEqual(['deep_pockets']);
+        expect(deriveSceneMood({ ...base, combo: 200 }).tempo).toBeGreaterThan(1);
+    });
+
     it('finds the latest miss on the journal', () => {
         expect(latestMissEvent([])).toBeNull();
         const first = turn(3, 0, 'mismatch');

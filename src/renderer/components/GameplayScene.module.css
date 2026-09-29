@@ -260,6 +260,126 @@
     }
 }
 
+/* ------------------------------------------------------------------ the room's beats */
+
+/* The hit: the whole room punches in and settles, the way the cabinet does on a jackpot. */
+.scene[data-scene-hit='true'] .plate {
+    animation: sceneHit 520ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes sceneHit {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    18% {
+        transform: translate(-50%, -50%) scale(1.045);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* The miss: the room darkens for a breath and the torches drop. */
+.scene[data-scene-miss='true'] .dungeonBase,
+.scene[data-scene-miss='true'] .altPlate[data-shown='true'] {
+    animation: sceneMissDim 700ms ease-out;
+}
+
+.scene[data-scene-miss='true'] .torchGlow {
+    animation: sceneGutter 700ms ease-out;
+}
+
+@keyframes sceneMissDim {
+    0% {
+        filter: brightness(1);
+    }
+
+    20% {
+        filter: brightness(0.45) saturate(0.6);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+/* The freeze: a frost stage reached stops the room for a beat - flames, sparks, motes, mist. */
+.scene[data-scene-frozen='true'] .things *,
+.scene[data-scene-frozen='true'] .mist *,
+.scene[data-scene-frozen='true'] .ringMotes * {
+    animation-play-state: paused !important;
+}
+
+/* Peril: the bank is empty. A red edge breathes and the torches burn low until a miss is banked. */
+.peril {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: inset 0 0 12vmin 3vmin rgba(210, 40, 40, 0.55);
+    transition: opacity 900ms ease;
+}
+
+.scene[data-scene-peril='true'] .peril {
+    opacity: 1;
+    animation: scenePeril 1.4s ease-in-out infinite alternate;
+}
+
+.scene[data-scene-peril='true'] .torchGlow,
+.scene[data-scene-peril='true'] .torchLightL,
+.scene[data-scene-peril='true'] .torchLightR {
+    opacity: 0.55;
+}
+
+@keyframes scenePeril {
+    from {
+        opacity: 0.55;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Tempo: the surge past Legendary speeds the room up - the drift, the mist, the runes' breath. */
+.scene[data-alive='true'] .plate {
+    animation-duration: calc(48s / var(--scene-tempo, 1));
+}
+
+.mistNear,
+.mistFar {
+    animation-duration: calc(34s / var(--scene-tempo, 1)), calc(51s / var(--scene-tempo, 1));
+}
+
+/* Relics light fixtures of the room for good: the run carries them, so the room shows them. */
+.scene[data-relics~='tallow_candle'] .torchGlow {
+    opacity: 1;
+    filter: brightness(1.25) saturate(1.2);
+}
+
+.scene[data-relics~='long_look'] .ringLight {
+    opacity: calc(var(--scene-ring-light, 0.55) * 1.35);
+}
+
+.scene[data-relics~='gilded_chain'] .runeGlow {
+    filter: hue-rotate(165deg) saturate(1.4) brightness(1.15);
+}
+
+.scene[data-relics~='deep_pockets'] .ringGlow {
+    filter: hue-rotate(calc(var(--scene-ring-hue, 0deg) - 20deg)) saturate(calc(var(--scene-ring-saturate, 1) * 1.15));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scene[data-scene-hit='true'] .plate,
+    .scene[data-scene-miss='true'] .dungeonBase,
+    .scene[data-scene-miss='true'] .torchGlow,
+    .scene[data-scene-peril='true'] .peril {
+        animation: none;
+    }
+}
+
 /* ------------------------------------------------------------------ the ring */
 .ringLight {
     opacity: var(--scene-ring-light, 0.55);

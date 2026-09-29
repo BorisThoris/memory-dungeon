@@ -1,5 +1,5 @@
-import type { RunState } from '../../shared/contracts';
-import { COMBO_HEAT_STAGE_FROM, comboHeat, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
+import type { RelicId, RunState } from '../../shared/contracts';
+import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 
 /**
@@ -49,6 +49,22 @@ export interface SceneMood {
     prismatic: boolean;
     /** The unbounded climb past Legendary (`comboSurge`): more bolts, more of everything, forever. */
     surge: number;
+    /**
+     * The room's beats (the arcade tables' cabinet reacting, 捕鱼达人's jackpots and boss warnings):
+     * a hit the whole room punches in on (a Fever break, an ascension), a miss the room darkens on,
+     * a frost stage-up the room freezes on, a payout it rains gold on. Keyed to the turn or purchase
+     * that made them, so a restore replays none.
+     */
+    hitKey: string | null;
+    missKey: string | null;
+    freezeKey: string | null;
+    goldRain: { key: string; coins: number } | null;
+    /** The bank is empty: the boss-warning state, held until a miss is banked again. */
+    peril: boolean;
+    /** How fast the room moves, 1 at rest, climbing with the surge: the frenzy tempo. */
+    tempo: number;
+    /** The relics on the run: each lights a fixture of the room for good. */
+    relics: readonly RelicId[];
 }
 
 const round = (value: number): number => Math.round(value * 1000) / 1000;
@@ -82,6 +98,9 @@ export const voidReturnKeyFor = (run: Pick<RunState, 'board' | 'status'>, latest
 export const deriveSceneMood = ({
     combo,
     latestLoss,
+    latestTurn = null,
+    missesLeft = null,
+    payout = null,
     run,
     storeOpen,
     temper
@@ -89,11 +108,34 @@ export const deriveSceneMood = ({
     combo: number;
     /** The latest miss on the journal, or null: the black hole reads it. */
     latestLoss: BoardTurnResolvedEvent | null;
-    run: Pick<RunState, 'board' | 'status'>;
+    /** The latest resolved turn, for the hits, the miss beat and the freeze. */
+    latestTurn?: BoardTurnResolvedEvent | null;
+    /** Misses the bank holds now, null without a bank: zero is peril. */
+    missesLeft?: number | null;
+    /** A payout to rain gold on (a floor clear, a purchase), keyed by what paid it. */
+    payout?: { key: string; gold: number } | null;
+    run: Pick<RunState, 'board' | 'status' | 'relics'>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
 }): SceneMood => {
     const heat = comboHeat(combo);
+    const surge = comboSurge(combo);
+    const relics = run.relics ?? [];
+    const turn = latestTurn;
+    const before = turn?.announcement.currentStreakBefore ?? 0;
+    const after = turn?.announcement.currentStreakAfter ?? 0;
+    const ascended = turn ? comboAscensionReached(before, after) !== null : false;
+    const feverBreak = turn ? turn.announcement.chainTierAfter === 'fever' && turn.announcement.chunkPairsBrokenAfter > turn.announcement.chunkPairsBrokenBefore : false;
+    const hitKey = turn && (ascended || feverBreak) ? `hit:${turn.eventId}` : null;
+    const missKey = turn && isMiss(turn) ? `miss:${turn.eventId}` : null;
+    const freezeKey = turn && temper.id === 'frost' && comboStageReached(before, after) ? `freeze:${turn.eventId}` : null;
+    // A payout rains its gold; an ascension rains on its own, and Deep Pockets makes every shower bigger.
+    const pocketed = relics.includes('deep_pockets') ? 1.6 : 1;
+    const goldRain = payout && payout.gold > 0
+        ? { key: payout.key, coins: Math.round(payout.gold * 3 * pocketed) }
+        : turn && ascended
+          ? { key: `ascend:${turn.eventId}`, coins: Math.round((18 + surge * 12) * pocketed) }
+          : null;
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
     const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : 'dungeon';
     // A frost run stays frozen through every room: the snow masks are per plate, the pane is the screen's.
@@ -122,7 +164,14 @@ export const deriveSceneMood = ({
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),
         brightness: round(graded ? (temper.id === 'frost' ? 1 + 0.12 * heat : 1 + 0.06 * heat) : plate === 'void' ? 0.85 : 1),
         prismatic: temper.id === 'prismatic' && graded && heat > 0,
-        surge: round(comboSurge(combo))
+        surge: round(surge),
+        hitKey,
+        missKey,
+        freezeKey,
+        goldRain,
+        peril: missesLeft === 0 && (run.status === 'playing' || run.status === 'resolving'),
+        tempo: round(1 + 0.35 * surge),
+        relics
     };
 };
 
