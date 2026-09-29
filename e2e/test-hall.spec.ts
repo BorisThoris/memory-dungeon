@@ -127,7 +127,12 @@ test.describe('The store stop, in the store-stop room', () => {
         // it does when the pointer or focus is on it (Gen 263's clipped descriptions cannot recur -
         // there is no body to clip - but a hotspot can still fall off a viewport, so each is checked).
         const viewport = page.viewportSize()!;
-        const ids = ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'];
+        // The stop stocks its shelves from the seed (rollStoreStock): a miss and, at the first stop, a bomb
+        // are always there; the rest of the shelves are what the roll put on them, and nothing else.
+        const ids = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.storeStock ?? []);
+        expect(ids).toContain('miss');
+        expect(ids).toContain('bomb');
+        expect(ids.length).toBeLessThan(8);
         for (const id of ids) {
             const buy = page.getByTestId(`store-buy-${id}`);
             await expect(buy).toBeVisible();
@@ -165,7 +170,9 @@ test.describe('The store stop on a phone', () => {
             const run = useAppStore.getState().run!;
             useAppStore.setState({ run: { ...run, gold: 100, missBank: [{ floor: 3, misses: 1 }] } });
         });
-        for (const id of ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'] as const) {
+        const stocked = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.storeStock ?? []);
+        expect(stocked.length).toBeGreaterThan(2);
+        for (const id of stocked) {
             const buy = page.getByTestId(`store-buy-${id}`);
             const viewport = page.viewportSize()!;
             const button = (await buy.boundingBox())!;
@@ -185,10 +192,11 @@ test.describe('The store stop on a phone', () => {
                 shuffles: run.shuffleCharges, relics: run.relics, gold: run.gold };
         });
         const bought = await inventory();
+        // Everything the stop stocked was bought, and only that: the bare shelves stay bare.
         expect(bought.bombs).toBe(2);
-        expect(bought.peeks).toBeGreaterThan(0);
-        expect(bought.shuffles).toBeGreaterThan(0);
-        expect(bought.relics).toEqual(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']);
+        if (stocked.includes('peek')) expect(bought.peeks).toBeGreaterThan(0);
+        if (stocked.includes('shuffle')) expect(bought.shuffles).toBeGreaterThan(0);
+        expect([...(bought.relics ?? [])].sort()).toEqual(stocked.filter((id) => !['miss', 'peek', 'shuffle', 'bomb'].includes(id)).sort());
         expect(bought.gold).toBeLessThan(100);
         await page.getByRole('button', { name: 'Descend' }).click();
         await expect.poll(async () => (await inventory()).level, { timeout: 30_000 }).toBe(4);

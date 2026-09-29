@@ -34,9 +34,12 @@ const DEVELOPER_DIAGNOSTIC = /(?:new (?:Error|TypeError|RangeError)\(|console\.(
  * Prose, roughly: several words, starting like a sentence, with a space and no code punctuation.
  * Two words is too loose (it catches labels like "Shop gold" that are legitimately inline).
  */
+/** SVG path data: capital-letter commands and numbers, which is five words starting with a capital and not a sentence. */
+const SVG_PATH_DATA = /^[MLHVCSQTAZmlhvcsqtaz][\d\s.,MLHVCSQTAZmlhvcsqtaz-]*$/u;
+
 const isProse = (text: string): boolean => {
     const trimmed = text.trim();
-    if (trimmed.length < 25 || LOOKS_LIKE_CODE.test(trimmed)) {
+    if (trimmed.length < 25 || LOOKS_LIKE_CODE.test(trimmed) || SVG_PATH_DATA.test(trimmed)) {
         return false;
     }
     const words = trimmed.split(/\s+/u);

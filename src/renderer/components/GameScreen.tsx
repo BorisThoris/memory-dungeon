@@ -126,6 +126,8 @@ import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStage
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
+import { SceneWipe } from './SceneWipe';
+import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
@@ -1602,6 +1604,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
      * collapses it into the void for the floor, and the store stop is the merchant's vault.
      */
+    // The wipe between rooms: once on the way into the shop, once on the way out (`useSceneWipe`).
+    const sceneWipe = useSceneWipe(storeSheetOpen ? 'shop' : 'dungeon');
     // What the run just paid: a floor's gold on its clear (keyed by the floor), or the last purchase.
     const lastPurchase = purchaseCallouts[purchaseCallouts.length - 1] ?? null;
     const scenePayout =
@@ -1673,6 +1677,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
+            {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
+            {sceneWipe ? <SceneWipe direction={sceneWipe.direction} key={sceneWipe.key} reduceMotion={reduceMotion} wipeKey={sceneWipe.key} /> : null}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
             {comboTemper.id === 'frost' ? (
                 <div

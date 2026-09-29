@@ -184,6 +184,20 @@ With the earlier rounds - the temper's grade, frost's snow and ice, the storm's 
 stone, the black hole and the void, the shop as a room - the room now answers the combo, the
 losses, the money and the items, which is the whole list.
 
+### Refinements (round eleven)
+
+- **The stop stocks its shelves.** `rollStoreStock(runSeed, floor, owned)`: a miss always, a bomb
+  always at the first stop, each other consumable in about two stops of three, two of the relics
+  not yet owned. Rolled as the stop opens and kept on the run (`storeStock`), so a shared seed
+  stocks the same shelves and a replay buys what was there. The vault draws only what is stocked
+  (`storeWareGlyphs.tsx`: coins, crystal, scales, bell, ledger, bottles, lanterns as small SVGs on
+  their spots); a bare shelf is a bare shelf.
+- **Less chrome on a ware.** The dashed rings are gone: a soft glint under the drawing, the
+  drawing lifts on hover or focus, a thin outline for the keyboard. The drawings are the wares.
+- **A wipe between rooms.** `SceneWipe`: a flipbook of six drawn frames of ink growing in from
+  the screen's edges, stepped so it reads as drawn, once on the way into the shop and once on the
+  way out (`useSceneWipe`); the room changes underneath while the ink holds.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

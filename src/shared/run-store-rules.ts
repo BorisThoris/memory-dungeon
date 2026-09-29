@@ -3,6 +3,7 @@ import type { RunState } from './contracts';
 import { grantMisses, missBankCap, missesLeft } from './miss-bank';
 import { hasRelic, isRelicId, RELICS, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 
 /**
  * The store, back - one mechanic, on its own, measured against the loop.
@@ -104,8 +105,36 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
 
 export type StoreRun = Pick<
     RunState,
-    'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics'
+    'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics' | 'storeStock'
 >;
+
+/**
+ * What a stop has on its shelves. Rolled once from the seed and the floor, so a shared run
+ * stocks the same shelves for everyone and a replay buys what was there:
+ *
+ * - a miss is always for sale: the bank is the run's life, and a stop that could not sell one
+ *   would be a stop the run could not afford to reach;
+ * - the first stop (floor 3) always has a bomb, because the starter bomb is spent by then;
+ * - of the other consumables, each is in about two stops of three;
+ * - of the relics not yet owned, two.
+ *
+ * The vault draws what is stocked and leaves the shelf bare for what is not (`StoreVault`), so
+ * the stops read as different rooms and a relic is something you find rather than pick.
+ */
+export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[]): StoreItemId[] => {
+    const rng = createMulberry32(hashStringToSeed(`store-stock:${Math.floor(runSeed)}:${Math.floor(floor)}`));
+    const stock: StoreItemId[] = ['miss'];
+    for (const id of ['peek', 'shuffle', 'bomb'] as const) {
+        if ((id === 'bomb' && floor <= STORE_STOP_EVERY_FLOORS) || rng() < 0.67) stock.push(id);
+    }
+    const relics = RELICS.map((relic) => relic.id).filter((id) => !owned.includes(id));
+    const picked = shuffleWithRng(rng, [...relics]).slice(0, 2).sort((a, b) => relics.indexOf(a) - relics.indexOf(b));
+    return [...stock, ...picked];
+};
+
+/** Whether the stop sells the item: everything, on a run stocked before stops were rolled. */
+export const isStocked = (run: Pick<RunState, 'storeStock'>, id: StoreItemId): boolean =>
+    run.storeStock === undefined || run.storeStock.includes(id);
 
 export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeInteger(run.gold ?? 0);
 
@@ -129,7 +158,7 @@ export interface StoreOfferRow {
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    STORE_ITEMS.map((item) => {
+    STORE_ITEMS.filter((item) => isStocked(run, item.id)).map((item) => {
         const price = storePrice(run, item.id);
         let blocked: StoreOfferRow['blocked'] = null;
         if (item.id === 'miss') {

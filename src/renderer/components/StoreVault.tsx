@@ -6,6 +6,7 @@ import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { STORE_HOTSPOTS, STORE_VAULT_ASPECT, storeHotspot } from './storeVaultLayout';
+import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './StoreVault.module.css';
 
 interface StoreVaultProps {
@@ -83,7 +84,8 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
             </div>
             <div className={styles.stage}>
                 <div className={styles.plate} data-testid="store-rows" ref={spotsRef} style={{ '--store-plate-aspect': STORE_VAULT_ASPECT } as CSSProperties}>
-                    {/* Descend first in the DOM (Tab from it reaches the wares), last on the floor. */}
+                    {/* Descend first in the DOM (Tab from it reaches the wares), last on the floor. Only
+                        what the stop stocked is here at all (`rollStoreStock`): a bare shelf is a bare shelf. */}
                     <button
                         className={`${styles.spot} ${styles.descend}`}
                         data-modal-initial-focus
@@ -93,10 +95,12 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                         style={spotStyle(descend.x, descend.y, descend.r)}
                         type="button"
                     >
-                        <span className={styles.ring} aria-hidden="true">
-                            <svg viewBox="0 0 100 100">
-                                <circle className={styles.ringOuter} cx="50" cy="50" r="46" />
-                                <circle className={styles.ringInner} cx="50" cy="50" r="34" />
+                        <span className={styles.glint} aria-hidden="true" />
+                        <span className={styles.ware} aria-hidden="true">
+                            <svg viewBox="0 0 40 40">
+                                <ellipse cx="20" cy="22" fill="#0b0810" rx="15" ry="9" stroke="#e8b96a" strokeWidth="1.2" />
+                                <path d="M8 20 L32 20" stroke="#e8b96a" strokeOpacity="0.7" strokeWidth="1" />
+                                <path d="M20 12 L20 30 M15 25 L20 30 L25 25" fill="none" stroke="#8fdcff" strokeWidth="1.8" />
                             </svg>
                         </span>
                         <span className={styles.chip} title={descend.object}>
@@ -127,11 +131,10 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                                 style={{ ...spotStyle(spot.x, spot.y, spot.r), '--spot-col': index % 3, '--spot-row': Math.floor(index / 3) } as CSSProperties}
                                 type="button"
                             >
-                                <span className={styles.ring} aria-hidden="true">
-                                    <svg viewBox="0 0 100 100">
-                                        <circle className={styles.ringOuter} cx="50" cy="50" r="46" />
-                                        <circle className={styles.ringInner} cx="50" cy="50" r="34" />
-                                    </svg>
+                                <span className={styles.glint} aria-hidden="true" />
+                                {/* The ware itself, drawn: it is on the shelf because the stop stocked it. */}
+                                <span className={styles.ware} aria-hidden="true" data-testid={`store-ware-${row.id}`}>
+                                    <svg viewBox="0 0 40 40">{storeWareGlyph(row.id)}</svg>
                                 </span>
                                 <span className={styles.chip}>
                                     <span className={styles.chipName}>{row.title}</span>

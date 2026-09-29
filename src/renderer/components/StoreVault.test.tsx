@@ -34,6 +34,8 @@ describe('the store as a place', () => {
         for (const spot of STORE_HOTSPOTS) {
             if (spot.id === 'descend') continue;
             const button = screen.getByTestId(`store-buy-${spot.id}`);
+            // The ware is drawn on its spot: a shelf with something on it.
+            expect(screen.getByTestId(`store-ware-${spot.id}`).querySelector('svg')).not.toBeNull();
             expect(button).toHaveAttribute('style', expect.stringContaining('--spot-x'));
             expect(button.getAttribute('aria-label')).toMatch(/^Buy .* for \d+ gold$|: owned$/);
         }
@@ -74,6 +76,17 @@ describe('the store as a place', () => {
         expect(longLook).toBeDisabled();
         expect(longLook).toHaveAttribute('data-blocked', 'owned');
         expect(document.activeElement).toBe(screen.getByTestId('store-descend'));
+    });
+
+    it('draws only what the stop stocked, and leaves the rest of the shelves bare', () => {
+        const run: RunState = { ...createNewRun(0), gold: 20, storeStock: ['miss', 'bomb', 'long_look'] };
+        render(<StoreVault floor={3} onBuy={() => false} onDescend={vi.fn()} run={run} />);
+        expect(screen.getByTestId('store-buy-miss')).toBeInTheDocument();
+        expect(screen.getByTestId('store-buy-bomb')).toBeInTheDocument();
+        expect(screen.getByTestId('store-buy-long_look')).toBeInTheDocument();
+        expect(screen.queryByTestId('store-buy-peek')).toBeNull();
+        expect(screen.queryByTestId('store-ware-peek')).toBeNull();
+        expect(screen.queryByTestId('store-buy-gilded_chain')).toBeNull();
     });
 
     it('descends on Escape and on the trapdoor', () => {

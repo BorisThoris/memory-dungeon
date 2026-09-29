@@ -13,7 +13,7 @@ import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
-import { floorClearGold, runGold } from './run-store-rules';
+import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -121,6 +121,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         },
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
+        // The stop's shelves are stocked as it opens, from the seed and the floor.
+        ...(isStoreStopFloor(board.level) ? { storeStock: rollStoreStock(run.runSeed, board.level, run.relics ?? []) } : {}),
         timerState: clearResolveState(run),
         lastLevelResult: { ...lastLevelResult, goldEarned, ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }) }
     };

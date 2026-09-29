@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2798,
-    "codeFileCount": 995,
-    "exportedSymbolCount": 3019,
+    "trackedFileCount": 2805,
+    "codeFileCount": 1001,
+    "exportedSymbolCount": 3031,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7835
+    "relationshipCount": 7867
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 16308,
-      "sha256": "64045f3b34f1e7e890826a6969d769668872cdf59c3328d5546492ba31ecf572"
+      "bytes": 17331,
+      "sha256": "7e6fefc8288ba346817a3207a1267e6df42aaa35e660fcfedbfbe17102aeaaa1"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "f2fb6a144a739366d054eea414a98490f99af4a775b4b2313219d3864c95d6f3"
+      "sha256": "432dd0e9087ed1df3c41cec4051a0d059f6afcc7b59d4ce0cc8c8c265d26cc9e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4011,8 +4011,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 13162,
-      "sha256": "2cab3db4a506c1a1fdc11cfb004b2bbd235d67cece21423be30240695ac47f37"
+      "bytes": 13831,
+      "sha256": "7a4b3d768429f5d7b28988b1a02904899ad451eae44e47bf9b8dbfec17fe5236"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -4419,8 +4419,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122377,
-      "sha256": "4edb5490cc3ede4798a0e4f66af8ae60b8227de427aad5a42c0c12b063650724"
+      "bytes": 122494,
+      "sha256": "6d2e629506ed812dabbc34defc258fa0cfdce753ce9448e95b7115e6ad1e583b"
     },
     {
       "path": "public/site.webmanifest",
@@ -5049,8 +5049,8 @@
     {
       "path": "scripts/copy-locality.ts",
       "category": "script",
-      "bytes": 4443,
-      "sha256": "807318626bccb6ee7a67444d2af618f53c1c8b9f59883e0bcef9ecae33bbe0be"
+      "bytes": 4679,
+      "sha256": "4843e544e9ffb0f27bc8aabe250dadaf593f4007c8d632cf78ea089818961454"
     },
     {
       "path": "scripts/css-custom-properties.ts",
@@ -9471,8 +9471,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 104447,
-      "sha256": "d24a658402dc5281d8cf27edae60a281a37ffcbe12d2e9d3e3a504bf175b1064"
+      "bytes": 104967,
+      "sha256": "18b2d92b4f23d81c524726722047c5df6f4ec2383fe87f62d0b90c747e7691b1"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9871,6 +9871,30 @@
       "sha256": "78face0f3d1815e3365905c8ec54297fbc33f0d4dece3f8a9cbb22cc811ca1c7"
     },
     {
+      "path": "src/renderer/components/SceneWipe.module.css",
+      "category": "source",
+      "bytes": 2581,
+      "sha256": "99816a08bafbc38203c54cf83d35ec06686101579fe6373330152c5ade2fc9fe"
+    },
+    {
+      "path": "src/renderer/components/SceneWipe.tsx",
+      "category": "source",
+      "bytes": 1389,
+      "sha256": "bb7e5721d73625b7ab27f589e380cd6bd446fa6d784b729c208d869a9d69cd4e"
+    },
+    {
+      "path": "src/renderer/components/sceneWipeFrames.test.tsx",
+      "category": "test",
+      "bytes": 2330,
+      "sha256": "93301f6b8808deef7114fe3d08c664d23a7524fe2d630bbf549d65854f6927da"
+    },
+    {
+      "path": "src/renderer/components/sceneWipeFrames.ts",
+      "category": "source",
+      "bytes": 2879,
+      "sha256": "eaf0b6a2b66f7c400d20e5f6d72a99c5ff48a630a5b81c346cddcfccaa2d1010"
+    },
+    {
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
       "category": "test",
       "bytes": 2168,
@@ -10005,26 +10029,32 @@
     {
       "path": "src/renderer/components/StoreVault.module.css",
       "category": "source",
-      "bytes": 8680,
-      "sha256": "9fa1f9c848fcb314c0b166bbf4e6611fe720e36f12afe98a2480e515d4789c13"
+      "bytes": 8599,
+      "sha256": "f7806761f889f0001777b4b063ff85c9fb73f968916719b820cda1527472237e"
     },
     {
       "path": "src/renderer/components/StoreVault.test.tsx",
       "category": "test",
-      "bytes": 4157,
-      "sha256": "bbdd5e3b542606a3796096b1e9aae56c7c2ac642649a3929dda8a993c4e7de98"
+      "bytes": 5071,
+      "sha256": "e0ca258543a0461896f629390a1084cd81321452ff1271f1ea928ca41d9c8b0b"
     },
     {
       "path": "src/renderer/components/StoreVault.tsx",
       "category": "source",
-      "bytes": 8264,
-      "sha256": "8b581a59b502d196fbf3f752849dd847fb9bcd7a773ad4d4f01959f0e1613e28"
+      "bytes": 8693,
+      "sha256": "9d2c445de2378170920341bb036c07367fb39d480e08c0751baa4f02b885f107"
     },
     {
       "path": "src/renderer/components/storeVaultLayout.ts",
       "category": "source",
       "bytes": 2421,
       "sha256": "966ef0760115b0899a962caabfd2966dcebaeb25db987ffd02bd0531cadbd1cb"
+    },
+    {
+      "path": "src/renderer/components/storeWareGlyphs.tsx",
+      "category": "source",
+      "bytes": 4651,
+      "sha256": "9604734e6cdb0bf992efe15bd08183e0731d9c83acda0bbed4e1aa52eefb4336"
     },
     {
       "path": "src/renderer/components/stormBolts.test.ts",
@@ -10859,6 +10889,12 @@
       "category": "source",
       "bytes": 836,
       "sha256": "644474c76c934cd2b606326e2af3c0e2589d9b6a4840bd8964e9d74a5baeec52"
+    },
+    {
+      "path": "src/renderer/components/useSceneWipe.ts",
+      "category": "source",
+      "bytes": 1201,
+      "sha256": "9fe3b2d0cad8b19faa8e6bb527761648c32edcf67a321f74e0a092b66afb8381"
     },
     {
       "path": "src/renderer/components/useTileBoardSceneImperativeHandle.ts",
@@ -12741,8 +12777,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 36990,
-      "sha256": "6bb4226eb8b40cd2f469c3803a2ce962901395b24eeea3642e882429c904c0e0"
+      "bytes": 37318,
+      "sha256": "7ffc45649809ee85411feb41a1dd37468e62f31159ed31d9230296cfb97b2534"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12909,8 +12945,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 6163,
-      "sha256": "808e12414b8ad3ed4a7a9a40a204865af411e28bb4cefdc9551df8688e3997d5"
+      "bytes": 6407,
+      "sha256": "f60244a5aee4ef470a4d85f46e9a92f4f9501038463251886bbb7dff8f927eb7"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -14067,8 +14103,8 @@
     {
       "path": "src/shared/run-store-rules.ts",
       "category": "source",
-      "bytes": 7146,
-      "sha256": "ca7e4deaa8f8af2e100d7526c5975bdaa510280d003c51dda9d4a2cf1436a9f5"
+      "bytes": 8918,
+      "sha256": "4849f78424e6e66f0b0c98675bdf17156c1d2e6d7a3134d6e90b1a94d35cc761"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -14291,6 +14327,12 @@
       "category": "source",
       "bytes": 1012,
       "sha256": "7f68e4a596ae1508c7a788d41aaea5c79c467a99ed96c85f14c27c14f31c79be"
+    },
+    {
+      "path": "src/shared/store-stock.test.ts",
+      "category": "test",
+      "bytes": 3396,
+      "sha256": "f21fbed6a60e33edbd3bb248fe97787d5c466f9dbbe0fc020a8088e2581074d3"
     },
     {
       "path": "src/shared/system-diagrams.test.ts",
@@ -19930,7 +19972,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2152,
+      "lineCount": 2158,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -19950,12 +19992,14 @@
         "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/components/sceneMood.ts",
+        "file:src/renderer/components/SceneWipe.tsx",
         "file:src/renderer/components/ScoreTermsLine.tsx",
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/components/StoreVault.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
+        "file:src/renderer/components/useSceneWipe.ts",
         "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/floorCurioBeat.ts",
         "file:src/renderer/copy/gameplayHints.ts",
@@ -20899,6 +20943,58 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/SceneWipe.tsx",
+      "path": "src/renderer/components/SceneWipe.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [
+        "file:src/renderer/components/sceneWipeFrames.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/SceneWipe.tsx#SCENE_WIPE_MS",
+        "symbol:src/renderer/components/SceneWipe.tsx#SceneWipe",
+        "symbol:src/renderer/components/SceneWipe.tsx#SceneWipeProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneWipeFrames.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "path": "src/renderer/components/sceneWipeFrames.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 44,
+      "imports": [
+        "file:src/renderer/components/SceneWipe.tsx",
+        "file:src/renderer/components/sceneWipeFrames.ts",
+        "file:src/renderer/components/useSceneWipe.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/sceneWipeFrames.ts",
+      "path": "src/renderer/components/sceneWipeFrames.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 60,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeBook",
+        "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeFrame",
+        "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_FRAMES",
+        "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_VIEWBOX",
+        "symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneWipeFrames.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/ScoreTermsLine.test.tsx",
       "path": "src/renderer/components/ScoreTermsLine.test.tsx",
       "layer": "renderer",
@@ -21252,7 +21348,7 @@
       "path": "src/renderer/components/StoreVault.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 88,
+      "lineCount": 101,
       "imports": [
         "file:src/renderer/components/StoreVault.tsx",
         "file:src/renderer/components/storeVaultLayout.ts",
@@ -21268,11 +21364,12 @@
       "path": "src/renderer/components/StoreVault.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
+      "lineCount": 164,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/components/storeVaultLayout.ts",
+        "file:src/renderer/components/storeWareGlyphs.tsx",
         "file:src/renderer/copy/storeSheet.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/shared/contracts.ts",
@@ -21303,6 +21400,20 @@
       "testedBy": [
         "file:src/renderer/components/StoreVault.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/storeWareGlyphs.tsx",
+      "path": "src/renderer/components/storeWareGlyphs.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 91,
+      "imports": [
+        "file:src/shared/run-store-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/stormBolts.test.ts",
@@ -23832,6 +23943,22 @@
         "symbol:src/renderer/components/useSceneBeat.ts#useBeat"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/useSceneWipe.ts",
+      "path": "src/renderer/components/useSceneWipe.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 26,
+      "imports": [
+        "file:src/renderer/components/SceneWipe.tsx"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/useSceneWipe.ts#useSceneWipe"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneWipeFrames.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/useTileBoardSceneImperativeHandle.ts",
@@ -29015,7 +29142,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 829,
+      "lineCount": 835,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -29697,7 +29824,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 128,
+      "lineCount": 130,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -29715,7 +29842,9 @@
       "exports": [
         "symbol:src/shared/floor-clear-transition.ts#finalizeLevel"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/shared/store-stock.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -30119,7 +30248,8 @@
         "file:src/shared/scoring-rules.test.ts",
         "file:src/shared/secondary-objective-rules.test.ts",
         "file:src/shared/secondary-objectives.test.ts",
-        "file:src/shared/softlock-fairness.test.ts"
+        "file:src/shared/softlock-fairness.test.ts",
+        "file:src/shared/store-stock.test.ts"
       ]
     },
     {
@@ -33608,11 +33738,12 @@
       "path": "src/shared/run-store-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 170,
+      "lineCount": 199,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/miss-bank.ts",
+        "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts"
       ],
@@ -33623,7 +33754,9 @@
         "symbol:src/shared/run-store-rules.ts#GOLD_FLOOR_CLEAR_BASE",
         "symbol:src/shared/run-store-rules.ts#GOLD_PER_TURN_UNDER_PAR",
         "symbol:src/shared/run-store-rules.ts#GOLD_UNDER_PAR_CAP",
+        "symbol:src/shared/run-store-rules.ts#isStocked",
         "symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
+        "symbol:src/shared/run-store-rules.ts#rollStoreStock",
         "symbol:src/shared/run-store-rules.ts#runGold",
         "symbol:src/shared/run-store-rules.ts#STORE_ITEMS",
         "symbol:src/shared/run-store-rules.ts#STORE_STOP_EVERY_FLOORS",
@@ -33638,7 +33771,8 @@
       "testedBy": [
         "file:src/renderer/components/StoreVault.test.tsx",
         "file:src/shared/run-relic-rules.test.ts",
-        "file:src/shared/run-store-rules.test.ts"
+        "file:src/shared/run-store-rules.test.ts",
+        "file:src/shared/store-stock.test.ts"
       ]
     },
     {
@@ -34416,6 +34550,20 @@
       "testedBy": [
         "file:src/shared/steam-partner-config.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/store-stock.test.ts",
+      "path": "src/shared/store-stock.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 52,
+      "imports": [
+        "file:src/shared/floor-clear-transition.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/run-store-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/system-diagrams.test.ts",
@@ -38993,40 +39141,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2151,
-      "endLine": 2151
+      "line": 2157,
+      "endLine": 2157
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 245,
-      "endLine": 245
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 243,
-      "endLine": 243
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 247,
-      "endLine": 247
+      "line": 249,
+      "endLine": 249
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 237,
-      "endLine": 237
+      "line": 239,
+      "endLine": 239
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -39709,6 +39857,70 @@
       "endLine": 40
     },
     {
+      "id": "symbol:src/renderer/components/SceneWipe.tsx#SCENE_WIPE_MS",
+      "name": "SCENE_WIPE_MS",
+      "kind": "value",
+      "file": "src/renderer/components/SceneWipe.tsx",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneWipe.tsx#SceneWipe",
+      "name": "SceneWipe",
+      "kind": "function",
+      "file": "src/renderer/components/SceneWipe.tsx",
+      "line": 18,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneWipe.tsx#SceneWipeProps",
+      "name": "SceneWipeProps",
+      "kind": "interface",
+      "file": "src/renderer/components/SceneWipe.tsx",
+      "line": 10,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeBook",
+      "name": "buildWipeBook",
+      "kind": "value",
+      "file": "src/renderer/components/sceneWipeFrames.ts",
+      "line": 59,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeFrame",
+      "name": "buildWipeFrame",
+      "kind": "value",
+      "file": "src/renderer/components/sceneWipeFrames.ts",
+      "line": 32,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_FRAMES",
+      "name": "WIPE_FRAMES",
+      "kind": "value",
+      "file": "src/renderer/components/sceneWipeFrames.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_VIEWBOX",
+      "name": "WIPE_VIEWBOX",
+      "kind": "value",
+      "file": "src/renderer/components/sceneWipeFrames.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob",
+      "name": "WipeBlob",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneWipeFrames.ts",
+      "line": 12,
+      "endLine": 15
+    },
+    {
       "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -40081,8 +40293,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StoreVault.tsx",
-      "line": 160,
-      "endLine": 160
+      "line": 163,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/components/storeVaultLayout.ts#STORE_HOTSPOTS",
@@ -40115,6 +40327,14 @@
       "file": "src/renderer/components/storeVaultLayout.ts",
       "line": 21,
       "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
+      "name": "storeWareGlyph",
+      "kind": "value",
+      "file": "src/renderer/components/storeWareGlyphs.tsx",
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
@@ -43219,6 +43439,14 @@
       "file": "src/renderer/components/useSceneBeat.ts",
       "line": 7,
       "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/useSceneWipe.ts#useSceneWipe",
+      "name": "useSceneWipe",
+      "kind": "value",
+      "file": "src/renderer/components/useSceneWipe.ts",
+      "line": 9,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/useTileBoardSceneImperativeHandle.ts#TileBoardSceneHandle",
@@ -49449,16 +49677,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 706,
-      "endLine": 706
+      "line": 712,
+      "endLine": 712
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 776,
-      "endLine": 778
+      "line": 782,
+      "endLine": 784
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -49521,8 +49749,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 784,
-      "endLine": 789
+      "line": 790,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -49553,8 +49781,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 802,
-      "endLine": 828
+      "line": 808,
+      "endLine": 834
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -49849,8 +50077,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 708,
-      "endLine": 721
+      "line": 714,
+      "endLine": 727
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -49921,16 +50149,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 792,
-      "endLine": 792
+      "line": 798,
+      "endLine": 798
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 795,
-      "endLine": 800
+      "line": 801,
+      "endLine": 806
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -49953,16 +50181,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 769,
-      "endLine": 773
+      "line": 775,
+      "endLine": 779
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 767,
-      "endLine": 767
+      "line": 773,
+      "endLine": 773
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -49977,8 +50205,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 728,
-      "endLine": 740
+      "line": 734,
+      "endLine": 746
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -49986,7 +50214,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 518,
-      "endLine": 704
+      "endLine": 710
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -50025,8 +50253,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 742,
-      "endLine": 761
+      "line": 748,
+      "endLine": 767
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -50658,7 +50886,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 18,
-      "endLine": 127
+      "endLine": 129
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -56729,136 +56957,152 @@
       "name": "buyStoreItem",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 146,
-      "endLine": 169
+      "line": 175,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#floorClearGold",
       "name": "floorClearGold",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 41,
-      "endLine": 44
+      "line": 42,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_BY_CLEAR_TIER",
       "name": "GOLD_BY_CLEAR_TIER",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_FLOOR_CLEAR_BASE",
       "name": "GOLD_FLOOR_CLEAR_BASE",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_PER_TURN_UNDER_PAR",
       "name": "GOLD_PER_TURN_UNDER_PAR",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#GOLD_UNDER_PAR_CAP",
       "name": "GOLD_UNDER_PAR_CAP",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 37,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/shared/run-store-rules.ts#isStocked",
+      "name": "isStocked",
+      "kind": "value",
+      "file": "src/shared/run-store-rules.ts",
+      "line": 136,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
       "name": "isStoreStopFloor",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 28,
-      "endLine": 31
+      "line": 29,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/run-store-rules.ts#rollStoreStock",
+      "name": "rollStoreStock",
+      "kind": "value",
+      "file": "src/shared/run-store-rules.ts",
+      "line": 124,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#runGold",
       "name": "runGold",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 110,
-      "endLine": 110
+      "line": 139,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#STORE_ITEMS",
       "name": "STORE_ITEMS",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 59,
-      "endLine": 103
+      "line": 60,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#STORE_STOP_EVERY_FLOORS",
       "name": "STORE_STOP_EVERY_FLOORS",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreItemDefinition",
       "name": "StoreItemDefinition",
       "kind": "interface",
       "file": "src/shared/run-store-rules.ts",
-      "line": 48,
-      "endLine": 57
+      "line": 49,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreItemId",
       "name": "StoreItemId",
       "kind": "type",
       "file": "src/shared/run-store-rules.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storeOffer",
       "name": "storeOffer",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 131,
-      "endLine": 143
+      "line": 160,
+      "endLine": 172
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreOfferRow",
       "name": "StoreOfferRow",
       "kind": "interface",
       "file": "src/shared/run-store-rules.ts",
-      "line": 120,
-      "endLine": 128
+      "line": 149,
+      "endLine": 157
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePrice",
       "name": "storePrice",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 115,
-      "endLine": 118
+      "line": 144,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePurchaseCount",
       "name": "storePurchaseCount",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 112,
-      "endLine": 113
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreRun",
       "name": "StoreRun",
       "kind": "type",
       "file": "src/shared/run-store-rules.ts",
-      "line": 105,
-      "endLine": 108
+      "line": 106,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createGameOverRunSummary",
@@ -60174,7 +60418,7 @@
       "evidence": [
         {
           "path": "src/shared/run-store-rules.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -61777,7 +62021,7 @@
       "evidence": [
         {
           "path": "src/shared/run-store-rules.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -66940,6 +67184,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/SceneWipe.tsx->symbol:src/renderer/components/SceneWipe.tsx#SCENE_WIPE_MS",
+      "source": "file:src/renderer/components/SceneWipe.tsx",
+      "target": "symbol:src/renderer/components/SceneWipe.tsx#SCENE_WIPE_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneWipe.tsx->symbol:src/renderer/components/SceneWipe.tsx#SceneWipe",
+      "source": "file:src/renderer/components/SceneWipe.tsx",
+      "target": "symbol:src/renderer/components/SceneWipe.tsx#SceneWipe",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneWipe.tsx->symbol:src/renderer/components/SceneWipe.tsx#SceneWipeProps",
+      "source": "file:src/renderer/components/SceneWipe.tsx",
+      "target": "symbol:src/renderer/components/SceneWipe.tsx#SceneWipeProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeBook",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeBook",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeFrame",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "symbol:src/renderer/components/sceneWipeFrames.ts#buildWipeFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_FRAMES",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_FRAMES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_VIEWBOX",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "symbol:src/renderer/components/sceneWipeFrames.ts#WIPE_VIEWBOX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ScoreTermsLine.tsx->symbol:src/renderer/components/ScoreTermsLine.tsx#default",
       "source": "file:src/renderer/components/ScoreTermsLine.tsx",
       "target": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
@@ -67243,6 +67535,12 @@
       "id": "exports:src/renderer/components/storeVaultLayout.ts->symbol:src/renderer/components/storeVaultLayout.ts#StoreHotspot",
       "source": "file:src/renderer/components/storeVaultLayout.ts",
       "target": "symbol:src/renderer/components/storeVaultLayout.ts#StoreHotspot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/storeWareGlyphs.tsx->symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
+      "source": "file:src/renderer/components/storeWareGlyphs.tsx",
+      "target": "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
       "kind": "exports"
     },
     {
@@ -69571,6 +69869,12 @@
       "id": "exports:src/renderer/components/useSceneBeat.ts->symbol:src/renderer/components/useSceneBeat.ts#useBeat",
       "source": "file:src/renderer/components/useSceneBeat.ts",
       "target": "symbol:src/renderer/components/useSceneBeat.ts#useBeat",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/useSceneWipe.ts->symbol:src/renderer/components/useSceneWipe.ts#useSceneWipe",
+      "source": "file:src/renderer/components/useSceneWipe.ts",
+      "target": "symbol:src/renderer/components/useSceneWipe.ts#useSceneWipe",
       "kind": "exports"
     },
     {
@@ -79738,9 +80042,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#isStocked",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "symbol:src/shared/run-store-rules.ts#isStocked",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#rollStoreStock",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "symbol:src/shared/run-store-rules.ts#rollStoreStock",
       "kind": "exports"
     },
     {
@@ -85999,6 +86315,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/SceneWipe.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/SceneWipe.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/ScoreTermsLine.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/ScoreTermsLine.tsx",
@@ -86032,6 +86354,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/useGameScreenPowerTileHints.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/useSceneWipe.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/useSceneWipe.ts",
       "kind": "imports"
     },
     {
@@ -87265,6 +87593,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SceneWipe.tsx->src/renderer/components/sceneWipeFrames.ts",
+      "source": "file:src/renderer/components/SceneWipe.tsx",
+      "target": "file:src/renderer/components/sceneWipeFrames.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneWipeFrames.test.tsx->src/renderer/components/SceneWipe.tsx",
+      "source": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "target": "file:src/renderer/components/SceneWipe.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneWipeFrames.test.tsx->src/renderer/components/sceneWipeFrames.ts",
+      "source": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "target": "file:src/renderer/components/sceneWipeFrames.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneWipeFrames.test.tsx->src/renderer/components/useSceneWipe.ts",
+      "source": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "target": "file:src/renderer/components/useSceneWipe.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneWipeFrames.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ScoreTermsLine.test.tsx->src/renderer/components/ScoreTermsLine.tsx",
       "source": "file:src/renderer/components/ScoreTermsLine.test.tsx",
       "target": "file:src/renderer/components/ScoreTermsLine.tsx",
@@ -87721,6 +88079,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/components/storeWareGlyphs.tsx",
+      "source": "file:src/renderer/components/StoreVault.tsx",
+      "target": "file:src/renderer/components/storeWareGlyphs.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/copy/storeSheet.ts",
       "source": "file:src/renderer/components/StoreVault.tsx",
       "target": "file:src/renderer/copy/storeSheet.ts",
@@ -87747,6 +88111,12 @@
     {
       "id": "imports:src/renderer/components/storeVaultLayout.ts->src/shared/run-store-rules.ts",
       "source": "file:src/renderer/components/storeVaultLayout.ts",
+      "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/storeWareGlyphs.tsx->src/shared/run-store-rules.ts",
+      "source": "file:src/renderer/components/storeWareGlyphs.tsx",
       "target": "file:src/shared/run-store-rules.ts",
       "kind": "imports"
     },
@@ -90406,6 +90776,12 @@
       "id": "imports:src/renderer/components/useGameScreenPowerTileHints.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useSceneWipe.ts->src/renderer/components/SceneWipe.tsx",
+      "source": "file:src/renderer/components/useSceneWipe.ts",
+      "target": "file:src/renderer/components/SceneWipe.tsx",
       "kind": "imports"
     },
     {
@@ -98629,6 +99005,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-store-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-store-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
@@ -99364,6 +99746,24 @@
       "id": "imports:src/shared/steam-rich-presence-tokens.ts->src/shared/contracts.ts",
       "source": "file:src/shared/steam-rich-presence-tokens.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/store-stock.test.ts->src/shared/floor-clear-transition.ts",
+      "source": "file:src/shared/store-stock.test.ts",
+      "target": "file:src/shared/floor-clear-transition.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/store-stock.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/store-stock.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/store-stock.test.ts->src/shared/run-store-rules.ts",
+      "source": "file:src/shared/store-stock.test.ts",
+      "target": "file:src/shared/run-store-rules.ts",
       "kind": "imports"
     },
     {
@@ -103651,6 +104051,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/SceneWipe.tsx->file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "source": "file:src/renderer/components/SceneWipe.tsx",
+      "target": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneWipeFrames.ts->file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "source": "file:src/renderer/components/sceneWipeFrames.ts",
+      "target": "file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/ScoreTermsLine.tsx->file:src/renderer/components/ScoreTermsLine.test.tsx",
       "source": "file:src/renderer/components/ScoreTermsLine.tsx",
       "target": "file:src/renderer/components/ScoreTermsLine.test.tsx",
@@ -104122,6 +104534,12 @@
       "id": "tested_by:src/renderer/components/tileTextures.ts->file:src/renderer/components/tileTextures.test.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "file:src/renderer/components/tileTextures.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/useSceneWipe.ts->file:src/renderer/components/sceneWipeFrames.test.tsx",
+      "source": "file:src/renderer/components/useSceneWipe.ts",
+      "target": "file:src/renderer/components/sceneWipeFrames.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -106549,6 +106967,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-clear-transition.ts->file:src/shared/store-stock.test.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/store-stock.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-curio-greeting-rules.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/floor-curio-greeting-rules.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -106966,6 +107390,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/softlock-fairness.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/softlock-fairness.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/store-stock.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/store-stock.test.ts",
       "kind": "tested_by"
     },
     {
@@ -108196,6 +108626,12 @@
       "id": "tested_by:src/shared/run-store-rules.ts->file:src/shared/run-store-rules.test.ts",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "file:src/shared/run-store-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-store-rules.ts->file:src/shared/store-stock.test.ts",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "file:src/shared/store-stock.test.ts",
       "kind": "tested_by"
     },
     {

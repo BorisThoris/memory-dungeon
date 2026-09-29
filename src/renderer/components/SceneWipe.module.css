@@ -1,0 +1,115 @@
+/*
+ * The wipe (`SceneWipe.tsx`): six drawn frames of ink, stepped. Each frame is its own SVG; a
+ * single stepped animation on the stack decides which one shows, so the whole thing is a
+ * flipbook: frames 0..5 grow the ink (0.38 s), the last frame holds while the room changes
+ * underneath (0.1 s), then 5..0 let it go (0.28 s).
+ */
+.wipe {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: wipeFrame 760ms linear forwards;
+    /* Each frame is shown for its slice of the book, on the way up and on the way down. */
+    animation-delay: 0s;
+}
+
+.ink {
+    /* Ink with a brush edge: the fill a shade off black, the rim a lighter stroke that reads as the wet edge. */
+    fill: #0e0a12;
+    stroke: #5a4632;
+    stroke-width: 7;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+}
+
+/* Frame N shows during [N, N+1) / 6 of the first 0.38 s and again on the way down. */
+.frame[data-frame='0'] {
+    animation-name: wipeFrame0;
+}
+
+.frame[data-frame='1'] {
+    animation-name: wipeFrame1;
+}
+
+.frame[data-frame='2'] {
+    animation-name: wipeFrame2;
+}
+
+.frame[data-frame='3'] {
+    animation-name: wipeFrame3;
+}
+
+.frame[data-frame='4'] {
+    animation-name: wipeFrame4;
+}
+
+.frame[data-frame='5'] {
+    animation-name: wipeFrame5;
+}
+
+@keyframes wipeFrame {
+    to {
+        opacity: 0;
+    }
+}
+
+/* Up: 0-50%; hold: 50-63%; down: 63-100%. Six frames each way. */
+@keyframes wipeFrame0 {
+    0%, 8% { opacity: 1; }
+    8.01%, 91.9% { opacity: 0; }
+    92%, 100% { opacity: 1; }
+}
+
+@keyframes wipeFrame1 {
+    0%, 8% { opacity: 0; }
+    8.01%, 16% { opacity: 1; }
+    16.01%, 85.9% { opacity: 0; }
+    86%, 91.9% { opacity: 1; }
+    92%, 100% { opacity: 0; }
+}
+
+@keyframes wipeFrame2 {
+    0%, 16% { opacity: 0; }
+    16.01%, 24% { opacity: 1; }
+    24.01%, 79.9% { opacity: 0; }
+    80%, 85.9% { opacity: 1; }
+    86%, 100% { opacity: 0; }
+}
+
+@keyframes wipeFrame3 {
+    0%, 24% { opacity: 0; }
+    24.01%, 33% { opacity: 1; }
+    33.01%, 73.9% { opacity: 0; }
+    74%, 79.9% { opacity: 1; }
+    80%, 100% { opacity: 0; }
+}
+
+@keyframes wipeFrame4 {
+    0%, 33% { opacity: 0; }
+    33.01%, 42% { opacity: 1; }
+    42.01%, 67.9% { opacity: 0; }
+    68%, 73.9% { opacity: 1; }
+    74%, 100% { opacity: 0; }
+}
+
+@keyframes wipeFrame5 {
+    0%, 42% { opacity: 0; }
+    42.01%, 67.9% { opacity: 1; }
+    68%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wipe {
+        display: none;
+    }
+}

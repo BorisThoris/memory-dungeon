@@ -685,6 +685,12 @@ export interface RunState {
      */
     gold?: number;
     storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId, number>>;
+    /**
+     * What this stop has on its shelves (`rollStoreStock`), rolled from the seed and the floor
+     * when the stop opens: a miss always, the rest by the roll. Absent on runs saved before
+     * stops were stocked, and read as everything.
+     */
+    storeStock?: Array<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId>;
     /** Relics bought in the store this run (`run-relic-rules.ts`), kept to the end of it. */
     relics?: RelicId[];
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */
