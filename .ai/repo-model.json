@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2782,
-    "codeFileCount": 988,
-    "exportedSymbolCount": 2999,
+    "trackedFileCount": 2792,
+    "codeFileCount": 991,
+    "exportedSymbolCount": 3002,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7799
+    "relationshipCount": 7807
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 10606,
-      "sha256": "bea116cb7fc3c6cfa1fdffb0bdaa49a018bffbb415dfbfdeec2f9342a2a7a6f1"
+      "bytes": 11420,
+      "sha256": "c32c5b5f0af06c90ec17699b840e309a02dcc298c23174bfed309c3ec3bc4491"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "da13fab981c7137dfc8e3b6ff9861d63e617aa42716bf0af52c29a229daaa431"
+      "sha256": "a3b451f90389fd60cf5e7e9611f0fa7a0e9c3116a2b5745afadb7408b54c2db1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5481,8 +5481,8 @@
     {
       "path": "scripts/scene-pipeline/snow_mask.py",
       "category": "script",
-      "bytes": 3587,
-      "sha256": "b39ee180112ca7941370553b4f2ca9dabfa61d1ea2c04caba4eb4b0342eed015"
+      "bytes": 3891,
+      "sha256": "3ed29028932afa22488ae8026864b6694bd9d0ef0a0249c4946459cce2ebba2f"
     },
     {
       "path": "scripts/scene-pipeline/sprites/bg-gameplay-dungeon-ring.json",
@@ -8053,6 +8053,42 @@
       "sha256": "1e5ef99289a649400481569c8bb40276ce9b1a93997992e7b0510d2fa759bdca"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-shop-v1.png",
+      "category": "source",
+      "bytes": 111979,
+      "sha256": "98976e8a471983b786ceedb6bf6255ecd4441026970cb5149b80c6111b2ca72c"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-shop-v1.webp",
+      "category": "source",
+      "bytes": 59482,
+      "sha256": "2c3d57e089fc7ed2e34ee097ee0aa836573138e99c52e6cfa05468dc17a7293d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-void-v1.png",
+      "category": "source",
+      "bytes": 54017,
+      "sha256": "cba0ad26c50d184f16de53af63bfacc725bc05b3892179714d3b1a55a78a2980"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-snow-void-v1.webp",
+      "category": "source",
+      "bytes": 26794,
+      "sha256": "a710b73bd27510fa4864fb596ce1b957db555dcb179d80d3abbcb624a062f471"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-wet-dungeon-v1.png",
+      "category": "source",
+      "bytes": 249671,
+      "sha256": "140edb7d1cb19d9835177b0d6b3eb64dcd5e37c5ff40477f82dad43a3bde5df6"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/overlay-wet-dungeon-v1.webp",
+      "category": "source",
+      "bytes": 146936,
+      "sha256": "fa49b9fafc211e262011edd026ae5e2364a30eeef18c759d59623884c9ef4c7e"
+    },
+    {
       "path": "src/renderer/assets/ui/brand-crest.svg",
       "category": "source",
       "bytes": 2251,
@@ -8163,8 +8199,8 @@
     {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
-      "bytes": 4790,
-      "sha256": "9c9a18a5bc559ad4fb05a2e748c6d51ecb0884eed1f65887d73163004102d84a"
+      "bytes": 5321,
+      "sha256": "8048b5a7fc040262f91616392fe5bccabc036d0ff73a28233406f1f0f8d2bd94"
     },
     {
       "path": "src/renderer/assets/ui/menu-emblem.svg",
@@ -9387,20 +9423,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 11210,
-      "sha256": "625ed2302bf014618a354be40534c3d6c887ddeed485240869926822abc1fdd9"
+      "bytes": 11944,
+      "sha256": "bb719e3240b1204da77b680ab315093bea346b842b43b3e5d68b357aa3cd0e9c"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 14694,
-      "sha256": "1ddb85f2edd3a12b2306e564f0e9c16240f7e89bab9b96a0d24d6d5a2cab52f9"
+      "bytes": 14695,
+      "sha256": "d66abf9d26aa2037ae45dd3187e9e746c6929f3a6df3fd27ef050ca72e1c2544"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 13387,
-      "sha256": "135a320e2086b53348e56717c0c77e381ca79f8fa8ab75a09c50cca65c33a1ac"
+      "bytes": 14637,
+      "sha256": "3df6ff92e44d83258251ffcde579696cbc00763b4a3efa99dc1122dfa3100b30"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9435,8 +9471,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 103408,
-      "sha256": "59cc68693efd09d03ccf34803cd337d9553b4512b217e104ac500615a353904a"
+      "bytes": 104031,
+      "sha256": "19a8f792d21611422dad7002179f6d2616aa02eb72cdb21c9de9bac80e467770"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9765,14 +9801,14 @@
     {
       "path": "src/renderer/components/sceneMood.test.ts",
       "category": "test",
-      "bytes": 4121,
-      "sha256": "6ea2cbe725918098edc34d00a77194b8efa7bd963f5fc3200e67fc5dfa2ee286"
+      "bytes": 4850,
+      "sha256": "e7664ab7471412ffd904194d48027c1e137e017b2ceeb34b12b8eea4c75c0b34"
     },
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 5460,
-      "sha256": "19cba07029bf33e3f50f45bc86b1a40269fa8ca08d4cfe41e8e32c8a4dd6cadc"
+      "bytes": 6586,
+      "sha256": "bba9d2959287183f05c1e9dd9ab180ab25d953cc9dc1f9e2340a4b184e78b5ed"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -9959,6 +9995,30 @@
       "category": "source",
       "bytes": 3460,
       "sha256": "7f22181b83de69a1bde0330f76e8dc2640e9608eaaa4a8e3d5932c36b5bc146c"
+    },
+    {
+      "path": "src/renderer/components/stormBolts.test.ts",
+      "category": "test",
+      "bytes": 1283,
+      "sha256": "7e154b0f0555891bbd6677f3b2e5ef5cae97991030ab44ba80f7a11fe08832f0"
+    },
+    {
+      "path": "src/renderer/components/stormBolts.ts",
+      "category": "source",
+      "bytes": 2094,
+      "sha256": "a13b2f2e436c21b4dd50573ec00db927e524da75b389ff8fafea8238f970768b"
+    },
+    {
+      "path": "src/renderer/components/StormBoltsOverlay.module.css",
+      "category": "source",
+      "bytes": 1196,
+      "sha256": "2f9f3445e042f7b8c5b0c60f8054149fd2fe69031d445258df24e3230d3005db"
+    },
+    {
+      "path": "src/renderer/components/StormBoltsOverlay.tsx",
+      "category": "source",
+      "bytes": 1376,
+      "sha256": "9468a9a3cfed466040ac9560fa4055d4ca1e1633d45ce89a5cfd8472f652998b"
     },
     {
       "path": "src/renderer/components/SuitMarkerPlane.tsx",
@@ -12597,14 +12657,14 @@
     {
       "path": "src/shared/combo-heat-rules.test.ts",
       "category": "test",
-      "bytes": 3707,
-      "sha256": "30c757c07977c0e599deed6cea23cc5a97fc3ba62e95a2b353e781de6a512eed"
+      "bytes": 3454,
+      "sha256": "914510cc7116732ff733bcf0e9c3729db45d03aee3fb90cf781a3c70af45a68d"
     },
     {
       "path": "src/shared/combo-heat-rules.ts",
       "category": "source",
-      "bytes": 10337,
-      "sha256": "32aad66778d256ef6fc7fe7e868a5b14e4408246fd221fa30b7bd9f13046cf5b"
+      "bytes": 9832,
+      "sha256": "b1b1dd5b9ff29fbc57626bd8fd2dfb96d0c21510b6c03900daaa26c12964e4ba"
     },
     {
       "path": "src/shared/combo-heat-theme.test.ts",
@@ -17568,7 +17628,7 @@
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 95,
+      "lineCount": 103,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts"
       ],
@@ -19721,7 +19781,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 232,
+      "lineCount": 246,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -19730,6 +19790,7 @@
         "file:src/renderer/components/SceneMotes.tsx",
         "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/components/StormBoltsOverlay.tsx",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -19831,7 +19892,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2134,
+      "lineCount": 2147,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20662,7 +20723,7 @@
       "path": "src/renderer/components/sceneMood.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 64,
+      "lineCount": 74,
       "imports": [
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -20677,7 +20738,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 115,
+      "lineCount": 134,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -20688,7 +20749,8 @@
         "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
         "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
         "symbol:src/renderer/components/sceneMood.ts#SceneMood",
-        "symbol:src/renderer/components/sceneMood.ts#ScenePlateId"
+        "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
+        "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor"
       ],
       "testedBy": [
         "file:src/renderer/components/sceneMood.test.ts"
@@ -21148,6 +21210,50 @@
       "testedBy": [
         "file:src/renderer/components/StoreSheetRows.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/stormBolts.test.ts",
+      "path": "src/renderer/components/stormBolts.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 25,
+      "imports": [
+        "file:src/renderer/components/stormBolts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/stormBolts.ts",
+      "path": "src/renderer/components/stormBolts.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 45,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
+        "symbol:src/renderer/components/stormBolts.ts#STORM_VIEWBOX",
+        "symbol:src/renderer/components/stormBolts.ts#StormBolt"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/stormBolts.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/StormBoltsOverlay.tsx",
+      "path": "src/renderer/components/StormBoltsOverlay.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 29,
+      "imports": [
+        "file:src/renderer/components/stormBolts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/SuitMarkerPlane.tsx",
@@ -28638,7 +28744,7 @@
       "path": "src/shared/combo-heat-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 75,
+      "lineCount": 71,
       "imports": [
         "file:src/shared/combo-heat-rules.ts"
       ],
@@ -28650,17 +28756,15 @@
       "path": "src/shared/combo-heat-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 227,
+      "lineCount": 211,
       "imports": [
         "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
-        "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
         "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
-        "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
         "symbol:src/shared/combo-heat-rules.ts#comboHeat",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
@@ -36129,32 +36233,32 @@
       "name": "getUiArtRows",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 88,
-      "endLine": 92
+      "line": 96,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_CARD_ART",
       "name": "MODE_CARD_ART",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#MODE_POSTER_KEYS",
       "name": "MODE_POSTER_KEYS",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#resolveModePosterUrl",
       "name": "resolveModePosterUrl",
       "kind": "ExportSpecifier",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART",
@@ -36162,31 +36266,31 @@
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
       "line": 8,
-      "endLine": 47
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UI_ART_KEYS",
       "name": "UI_ART_KEYS",
       "kind": "value",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 51,
-      "endLine": 81
+      "line": 56,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtKey",
       "name": "UiArtKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#UiArtRow",
       "name": "UiArtRow",
       "kind": "interface",
       "file": "src/renderer/assets/ui/index.ts",
-      "line": 83,
-      "endLine": 86
+      "line": 91,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/assets/ui/modeArt.ts#getModePosterArtRows",
@@ -38689,16 +38793,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 94,
-      "endLine": 231
+      "line": 97,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 59,
-      "endLine": 90
+      "line": 60,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -38777,8 +38881,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2133,
-      "endLine": 2133
+      "line": 2146,
+      "endLine": 2146
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -39297,24 +39401,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 57,
-      "endLine": 63
+      "line": 61,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 65,
-      "endLine": 105
+      "line": 80,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 108,
-      "endLine": 114
+      "line": 127,
+      "endLine": 133
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
@@ -39322,7 +39426,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 25,
-      "endLine": 46
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -39331,6 +39435,14 @@
       "file": "src/renderer/components/sceneMood.ts",
       "line": 23,
       "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
+      "name": "voidReturnKeyFor",
+      "kind": "value",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 73,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -39819,6 +39931,38 @@
       "file": "src/renderer/components/StoreSheetRows.tsx",
       "line": 72,
       "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
+      "name": "buildStormBolts",
+      "kind": "value",
+      "file": "src/renderer/components/stormBolts.ts",
+      "line": 17,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/components/stormBolts.ts#STORM_VIEWBOX",
+      "name": "STORM_VIEWBOX",
+      "kind": "value",
+      "file": "src/renderer/components/stormBolts.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/components/stormBolts.ts#StormBolt",
+      "name": "StormBolt",
+      "kind": "interface",
+      "file": "src/renderer/components/stormBolts.ts",
+      "line": 9,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
+      "name": "StormBoltsOverlay",
+      "kind": "function",
+      "file": "src/renderer/components/StormBoltsOverlay.tsx",
+      "line": 10,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/SuitMarkerPlane.tsx#SuitMarkerPlane",
@@ -48717,36 +48861,20 @@
       "endLine": 28
     },
     {
-      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
-      "name": "COMBO_HEAT_STAGE_LABELS",
-      "kind": "value",
-      "file": "src/shared/combo-heat-rules.ts",
-      "line": 188,
-      "endLine": 195
-    },
-    {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
       "name": "COMBO_HEAT_THEMES",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 107,
-      "endLine": 156
+      "line": 99,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
       "name": "COMBO_MILESTONE_CALLOUT",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 185,
-      "endLine": 186
-    },
-    {
-      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
-      "name": "COMBO_STAGE_CALLOUTS",
-      "kind": "value",
-      "file": "src/shared/combo-heat-rules.ts",
-      "line": 67,
-      "endLine": 72
+      "line": 177,
+      "endLine": 178
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
@@ -48761,16 +48889,16 @@
       "name": "comboHeatLevels",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 213,
-      "endLine": 226
+      "line": 197,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
       "name": "ComboHeatLevels",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 197,
-      "endLine": 209
+      "line": 181,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
@@ -48801,32 +48929,32 @@
       "name": "ComboHeatTheme",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 87,
-      "endLine": 105
+      "line": 79,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
       "name": "comboHeatThemeForSeed",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 159,
-      "endLine": 169
+      "line": 151,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
       "name": "ComboHeatThemeId",
       "kind": "type",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 85,
-      "endLine": 85
+      "line": 77,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
       "name": "comboMilestoneReached",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 175,
-      "endLine": 183
+      "line": 167,
+      "endLine": 175
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
@@ -66444,6 +66572,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
       "source": "file:src/renderer/components/SceneMotes.tsx",
       "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -66807,6 +66941,30 @@
       "id": "exports:src/renderer/components/StoreSheetRows.tsx->symbol:src/renderer/components/StoreSheetRows.tsx#default",
       "source": "file:src/renderer/components/StoreSheetRows.tsx",
       "target": "symbol:src/renderer/components/StoreSheetRows.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/stormBolts.ts->symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
+      "source": "file:src/renderer/components/stormBolts.ts",
+      "target": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/stormBolts.ts->symbol:src/renderer/components/stormBolts.ts#STORM_VIEWBOX",
+      "source": "file:src/renderer/components/stormBolts.ts",
+      "target": "symbol:src/renderer/components/stormBolts.ts#STORM_VIEWBOX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/stormBolts.ts->symbol:src/renderer/components/stormBolts.ts#StormBolt",
+      "source": "file:src/renderer/components/stormBolts.ts",
+      "target": "symbol:src/renderer/components/stormBolts.ts#StormBolt",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/StormBoltsOverlay.tsx->symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
+      "source": "file:src/renderer/components/StormBoltsOverlay.tsx",
+      "target": "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
       "kind": "exports"
     },
     {
@@ -73482,12 +73640,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
-      "source": "file:src/shared/combo-heat-rules.ts",
-      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
@@ -73497,12 +73649,6 @@
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
-      "source": "file:src/shared/combo-heat-rules.ts",
-      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
       "kind": "exports"
     },
     {
@@ -85257,6 +85403,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/StormBoltsOverlay.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/StormBoltsOverlay.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
@@ -87192,6 +87344,24 @@
       "id": "imports:src/renderer/components/StoreSheetRows.tsx->src/shared/run-store-rules.ts",
       "source": "file:src/renderer/components/StoreSheetRows.tsx",
       "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/stormBolts.test.ts->src/renderer/components/stormBolts.ts",
+      "source": "file:src/renderer/components/stormBolts.test.ts",
+      "target": "file:src/renderer/components/stormBolts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/stormBolts.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/stormBolts.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StormBoltsOverlay.tsx->src/renderer/components/stormBolts.ts",
+      "source": "file:src/renderer/components/StormBoltsOverlay.tsx",
+      "target": "file:src/renderer/components/stormBolts.ts",
       "kind": "imports"
     },
     {
@@ -103140,6 +103310,12 @@
       "id": "tested_by:src/renderer/components/StoreSheetRows.tsx->file:src/renderer/components/StoreSheetRows.test.tsx",
       "source": "file:src/renderer/components/StoreSheetRows.tsx",
       "target": "file:src/renderer/components/StoreSheetRows.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/stormBolts.ts->file:src/renderer/components/stormBolts.test.ts",
+      "source": "file:src/renderer/components/stormBolts.ts",
+      "target": "file:src/renderer/components/stormBolts.test.ts",
       "kind": "tested_by"
     },
     {

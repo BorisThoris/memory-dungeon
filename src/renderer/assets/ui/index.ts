@@ -29,6 +29,11 @@ export const UI_ART = {
     gameplaySceneFrost: resolveUiBackgroundUrl('overlay-frost-v1.webp'),
     /** Snow lying on the room's ledges, brackets and stones (`scripts/scene-pipeline/snow_mask.py`). */
     gameplaySceneSnow: resolveUiBackgroundUrl('overlay-snow-dungeon-v1.webp'),
+    /** The same snow for the other rooms, so a frost run stays frozen through the shop and the void. */
+    gameplaySceneSnowShop: resolveUiBackgroundUrl('overlay-snow-shop-v1.webp'),
+    gameplaySceneSnowVoid: resolveUiBackgroundUrl('overlay-snow-void-v1.webp'),
+    /** Wet stone for a storm run: a thin blue sheen on the room's upward faces (`snow_mask.py --wet`). */
+    gameplaySceneWet: resolveUiBackgroundUrl('overlay-wet-dungeon-v1.webp'),
     gameplayWorkshopScene: resolveUiBackgroundUrl('bg-gameplay-arcane-workshop-v1.webp'),
     gameplayWorkshopTable: resolveUiBackgroundUrl('bg-board-arcane-table-v1.webp'),
     menuEmblem: menuEmblemUrl,
@@ -65,6 +70,9 @@ export const UI_ART_KEYS = [
     'gameplaySceneVoid',
     'gameplaySceneFrost',
     'gameplaySceneSnow',
+    'gameplaySceneSnowShop',
+    'gameplaySceneSnowVoid',
+    'gameplaySceneWet',
     'gameplayWorkshopScene',
     'gameplayWorkshopTable',
     'menuEmblem',

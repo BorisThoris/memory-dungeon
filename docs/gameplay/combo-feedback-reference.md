@@ -110,6 +110,18 @@ All three are derived from run state (the turn event, the floor, the store stop)
 shows the same room and nothing replays on a mount. The plates were rendered with Z-Image-Turbo
 from `scripts/card-pipeline/scene-moods.zimage.manifest.json` at the dungeon's camera and size.
 
+### The next rungs, taken (round seven)
+
+- **The storm's room.** Wet stone: the same mask script in `--wet` mode (thinner, bluer,
+  fainter) laid on the room's upward faces, shimmering slowly (`--scene-wet`). Lightning through
+  the arches: `StormBoltsOverlay`, three seeded bolts in the plate's space (`stormBolts.ts`),
+  each striking on its own phase of the storm beat the room's flash already runs on.
+- **Frozen through every room.** The snow mask is per plate now (`overlay-snow-shop-v1`,
+  `overlay-snow-void-v1`), each shown with its room, and the ice pane is the screen's, so a frost
+  run stays frozen through the shop and the void.
+- **Back from the void.** The floor after a black hole's opens with one flash of the ring (the
+  Fever-arrival layer, keyed to the loss) and a stamp, BACK FROM THE VOID.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

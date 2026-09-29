@@ -1,0 +1,66 @@
+/*
+ * The storm's bolts (`StormBoltsOverlay.tsx`). They live in the plate, over the stone and under
+ * the flames, and strike on the storm beat: the same period the room's flash uses
+ * (`--scene-storm`, 0..1 with the heat), each bolt on its own phase of it.
+ */
+.bolts {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+.bolt {
+    opacity: 0;
+    animation: stormBoltStrike calc(7s - 5s * var(--scene-storm, 0)) linear infinite;
+    animation-delay: calc(var(--bolt-offset, 0) * (7s - 5s * var(--scene-storm, 0)));
+}
+
+.core {
+    fill: none;
+    stroke: #f4efff;
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.glow {
+    fill: none;
+    stroke: #b48cff;
+    stroke-width: 9;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    opacity: 0.85;
+}
+
+@keyframes stormBoltStrike {
+    0%,
+    86%,
+    100% {
+        opacity: 0;
+    }
+
+    87% {
+        opacity: 1;
+    }
+
+    89% {
+        opacity: 0.15;
+    }
+
+    91% {
+        opacity: 0.9;
+    }
+
+    95% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bolt {
+        animation: none;
+    }
+}

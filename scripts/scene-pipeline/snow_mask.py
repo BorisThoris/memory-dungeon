@@ -24,7 +24,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 
-def snow_mask(base: Image.Image, seed: int = 7) -> Image.Image:
+def snow_mask(base: Image.Image, seed: int = 7, tint: tuple[int, int, int] = (235, 244, 255), strength: float = 1.0, depth: int = 6) -> Image.Image:
     rgb = np.asarray(base.convert("RGB"), dtype=np.float32) / 255.0
     lum = 0.2126 * rgb[..., 0] + 0.7152 * rgb[..., 1] + 0.0722 * rgb[..., 2]
     h, w = lum.shape
@@ -37,7 +37,8 @@ def snow_mask(base: Image.Image, seed: int = 7) -> Image.Image:
     tops *= np.clip((soft - 0.10) * 4.0, 0.0, 1.0)
     # The drift: carry each top down a few pixels with a falling weight.
     drift = np.zeros_like(tops)
-    for offset, weight in ((0, 1.0), (1, 0.95), (2, 0.8), (3, 0.6), (4, 0.4), (5, 0.25), (6, 0.12)):
+    for offset in range(depth + 1):
+        weight = max(0.0, 1.0 - (offset / max(1, depth)) ** 1.4)
         drift[offset:] = np.maximum(drift[offset:], tops[: h - offset] * weight)
     # Hold the centre (the board) and the foot (the HUD) back.
     yy, xx = np.mgrid[0:h, 0:w]
@@ -50,19 +51,19 @@ def snow_mask(base: Image.Image, seed: int = 7) -> Image.Image:
     grain = rng.random((h, w)).astype(np.float32)
     grain = np.asarray(Image.fromarray((grain * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.8)), dtype=np.float32) / 255.0
     drift *= 0.65 + 0.7 * grain
-    alpha = np.clip(drift, 0.0, 1.0)
+    alpha = np.clip(drift * strength, 0.0, 1.0)
     alpha = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.6)), dtype=np.float32) / 255.0
     out = np.zeros((h, w, 4), dtype=np.uint8)
-    out[..., 0] = 235
-    out[..., 1] = 244
-    out[..., 2] = 255
+    out[..., 0], out[..., 1], out[..., 2] = tint
     out[..., 3] = (alpha * 255).astype(np.uint8)
     return Image.fromarray(out, "RGBA")
 
 
 def main() -> None:
     src, dst = Path(sys.argv[1]), Path(sys.argv[2])
-    mask = snow_mask(Image.open(src))
+    # Optional: a wet-stone sheen instead of snow - thinner, bluer, fainter (`--wet`).
+    wet = "--wet" in sys.argv[3:]
+    mask = snow_mask(Image.open(src), tint=(150, 200, 255) if wet else (235, 244, 255), strength=0.55 if wet else 1.0, depth=2 if wet else 6)
     dst.parent.mkdir(parents=True, exist_ok=True)
     mask.save(dst)
     cover = np.asarray(mask)[..., 3].mean() / 255.0

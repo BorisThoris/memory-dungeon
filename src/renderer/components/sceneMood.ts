@@ -37,6 +37,10 @@ export interface SceneMood {
     iceGlow: number;
     /** A storm run's flashes, 0..1 with the heat; 0 otherwise. */
     storm: number;
+    /** A storm run's wet stone: the sheen on the room's upward faces, 0..1. */
+    wet: number;
+    /** Identity of the floor the run came back to after a void floor, for the return beat; null otherwise. */
+    voidReturnKey: string | null;
     /** Grade over the plate: hue rotation, saturation and brightness, from the temper and the heat. */
     hueDeg: number;
     saturate: number;
@@ -62,6 +66,17 @@ export const blackHoleKeyFor = (run: Pick<RunState, 'board' | 'status'>, latestL
     return `void:${latestLossEvent.eventId}`;
 };
 
+/**
+ * The return from the void: the floor after a black hole's. Keyed to the loss that opened it, so
+ * the beat plays once as the dungeon comes back and never on a later floor or a restore of one.
+ */
+export const voidReturnKeyFor = (run: Pick<RunState, 'board' | 'status'>, latestLoss: BoardTurnResolvedEvent | null): string | null => {
+    if (!latestLoss || !isMiss(latestLoss)) return null;
+    if (latestLoss.announcement.currentStreakBefore < COMBO_HEAT_STAGE_FROM.inferno) return null;
+    if (run.board?.level !== latestLoss.announcement.level + 1) return null;
+    return `return:${latestLoss.eventId}`;
+};
+
 export const deriveSceneMood = ({
     combo,
     latestLoss,
@@ -79,13 +94,15 @@ export const deriveSceneMood = ({
     const heat = comboHeat(combo);
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
     const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : 'dungeon';
+    // A frost run stays frozen through every room: the snow masks are per plate, the pane is the screen's.
     const frost = temper.id === 'frost' && plate === 'dungeon' ? round(Math.min(1, heat * 1.15)) : 0;
     // Snow settles first, the pane follows, the cracks run last: the room freezes in that order.
-    const cold = temper.id === 'frost' && plate === 'dungeon' ? heat : 0;
+    const cold = temper.id === 'frost' ? heat : 0;
     const snow = round(Math.min(1, cold * 1.6));
     const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
     const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
     const storm = temper.id === 'storm' && plate === 'dungeon' ? round(heat) : 0;
+    const voidReturnKey = voidReturnKeyFor(run, latestLoss);
     const graded = plate === 'dungeon';
     return {
         plate,
@@ -97,6 +114,8 @@ export const deriveSceneMood = ({
         iceCracks,
         iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),
         storm,
+        wet: round(temper.id === 'storm' && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
+        voidReturnKey,
         hueDeg: graded ? Math.round(temper.ringHueDeg * 0.35 * heat) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),
         brightness: round(graded ? (temper.id === 'frost' ? 1 + 0.12 * heat : 1 + 0.06 * heat) : plate === 'void' ? 0.85 : 1),

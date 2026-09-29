@@ -63,14 +63,6 @@ export const comboStageReached = (comboBefore: number, comboAfter: number): Excl
     return after as Exclude<ComboHeatStage, 'cold' | 'warm'>;
 };
 
-/** What the stamp says, per stage: the arcade register, all caps, one word and a mark. */
-export const COMBO_STAGE_CALLOUTS: Readonly<Record<Exclude<ComboHeatStage, 'cold' | 'warm'>, string>> = {
-    hot: 'HOT!',
-    blazing: 'BLAZING!',
-    inferno: 'INFERNO!',
-    legendary: 'LEGENDARY!'
-};
-
 /**
  * The temper of a run: which element the combo ladder burns in, rolled from the run seed.
  *
@@ -185,14 +177,6 @@ export const comboMilestoneReached = (comboBefore: number, comboAfter: number): 
 export const COMBO_MILESTONE_CALLOUT = (milestone: number): string =>
     milestone === 50 ? 'HALF-CENTURY!' : milestone === 100 ? 'CENTURY!' : `${milestone} COMBO!`;
 
-export const COMBO_HEAT_STAGE_LABELS: Readonly<Record<ComboHeatStage, string>> = {
-    cold: '',
-    warm: 'Warm',
-    hot: 'Hot',
-    blazing: 'Blazing',
-    inferno: 'Inferno',
-    legendary: 'Legendary'
-};
 
 export interface ComboHeatLevels {
     stage: ComboHeatStage;

@@ -124,7 +124,7 @@ import {
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStageReached } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
-import { deriveSceneMood, latestMissEvent } from './sceneMood';
+import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
 import { GameplayScene } from './GameplayScene';
@@ -1059,11 +1059,27 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * purchases are accumulated on the count going up, never re-derived from a restore.
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
+    // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
+    const latestLossEvent = useMemo(
+        () => latestMissEvent(
+            (Array.isArray(run.gameplayEventJournal) ? run.gameplayEventJournal : []).filter(
+                (event): event is BoardTurnResolvedEvent => (event as { type?: string }).type === 'board.turn_resolved'
+            )
+        ),
+        [run.gameplayEventJournal]
+    );
+    const voidReturnKey = voidReturnKeyFor(run, latestLossEvent);
     const screenCallouts = useMemo(
-        () => [...deriveTurnCallouts(latestTurnForPulse, missesLeft(run), comboTemper), ...purchaseCallouts],
+        () => [
+            ...deriveTurnCallouts(latestTurnForPulse, missesLeft(run), comboTemper),
+            ...(voidReturnKey
+                ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: 'BACK FROM THE VOID', sub: 'The room is yours again' }]
+                : []),
+            ...purchaseCallouts
+        ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey]
     );
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1589,16 +1605,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const sceneMood = useMemo(
         () => deriveSceneMood({
             combo: run.stats.currentStreak,
-            latestLoss: latestMissEvent(
-                (Array.isArray(run.gameplayEventJournal) ? run.gameplayEventJournal : []).filter(
-                    (event): event is BoardTurnResolvedEvent => (event as { type?: string }).type === 'board.turn_resolved'
-                )
-            ),
+            latestLoss: latestLossEvent,
             run,
             storeOpen: storeSheetOpen,
             temper: comboTemper
         }),
-        [run, storeSheetOpen, comboTemper]
+        [run, storeSheetOpen, comboTemper, latestLossEvent]
     );
     const gameplayShellInert =
         !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
@@ -1641,6 +1653,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     comboStage={comboHeatLevelsNow.stage}
                     comboHueDeg={comboTemper.ringHueDeg}
                     mood={sceneMood}
+                    runSeed={run.runSeed}
                 />
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}

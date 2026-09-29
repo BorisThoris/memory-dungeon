@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
     COMBO_HEAT_STAGE_FROM,
-    COMBO_HEAT_STAGE_LABELS,
-    COMBO_STAGE_CALLOUTS,
     comboStageReached,
     comboHeat,
     comboHeatLevels,
@@ -24,7 +22,6 @@ describe('combo heat', () => {
         expect([...froms].sort((a, b) => a - b)).toEqual(froms);
         for (const stage of ['cold', 'warm', 'hot', 'blazing', 'inferno', 'legendary'] as const) {
             expect(comboHeatStageIndex(stage)).toBe(['cold', 'warm', 'hot', 'blazing', 'inferno', 'legendary'].indexOf(stage));
-            expect(COMBO_HEAT_STAGE_LABELS[stage]).toBeDefined();
         }
     });
 
@@ -49,7 +46,6 @@ describe('combo heat', () => {
         expect(comboStageReached(2, 3)).toBeNull();
         expect(comboStageReached(10, 0)).toBeNull();
         expect(comboStageReached(12, 12)).toBeNull();
-        for (const stage of ['hot', 'blazing', 'inferno', 'legendary'] as const) expect(COMBO_STAGE_CALLOUTS[stage]).toMatch(/!$/);
     });
 
     it('turns every level up with the stage, and keeps them all bounded', () => {

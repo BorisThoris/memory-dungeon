@@ -168,8 +168,8 @@ describe('GameplayScene', () => {
         render(<GameplayScene {...base} quality="low" pulse="pop" pulseKey="t" />);
         // base + the two other rooms + the frost + three glows + the flare; the three light passes
         // and the pulse are gone. The rooms and the frost are plates the mood shows, not passes.
-        expect(layerCount()).toBe(10);
-        expect(full).toBe(14);
+        expect(layerCount()).toBe(13);
+        expect(full).toBe(17);
         expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
     });
 
@@ -235,7 +235,7 @@ describe('GameplayScene', () => {
             const scene = screen.getByTestId('gameplay-scene');
             expect(scene).toHaveAttribute('data-scene-effect-tier', 'lean');
             expect(scene).toHaveAttribute('data-alive', 'false');
-            expect(layerCount()).toBe(9);
+            expect(layerCount()).toBe(12);
             expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
             expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
             expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);

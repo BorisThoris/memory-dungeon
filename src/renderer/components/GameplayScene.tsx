@@ -8,6 +8,7 @@ import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import type { SceneMood } from './sceneMood';
+import { StormBoltsOverlay } from './StormBoltsOverlay';
 import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
 import { ringMotes } from './sceneSpriteClocks';
@@ -87,6 +88,8 @@ export interface GameplaySceneProps {
     comboHueDeg?: number;
     /** What the room has become (`sceneMood.ts`): the plate, the frost, the black hole. */
     mood?: SceneMood;
+    /** The run seed: the storm's bolts are laid out from it. */
+    runSeed?: number;
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
@@ -105,7 +108,8 @@ export function GameplayScene({
     comboHeat = 0,
     comboStage = 'cold',
     comboHueDeg = 0,
-    mood
+    mood,
+    runSeed = 0
 }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
@@ -147,6 +151,7 @@ export function GameplayScene({
                     '--scene-snow': mood?.snow ?? 0,
                     '--scene-snow-glow': mood?.snowGlow ?? 0,
                     '--scene-storm': mood?.storm ?? 0,
+                    '--scene-wet': mood?.wet ?? 0,
                     '--scene-grade-hue': `${mood?.hueDeg ?? 0}deg`,
                     '--scene-grade-saturate': mood?.saturate ?? 1,
                     '--scene-grade-brightness': mood?.brightness ?? 1,
@@ -187,8 +192,13 @@ export function GameplayScene({
                 <div className={`${plate.layer} ${styles.layer} ${styles.runeGlow}`} style={bg(UI_ART.gameplaySceneGlowRunes)} />
                 <div className={`${plate.layer} ${styles.layer} ${styles.ringGlow}`} style={bg(UI_ART.gameplaySceneGlowRing)} />
                 {/* A frost run: snow settles on the room's ledges and stones with the heat, and glows. */}
-                <div className={`${plate.layer} ${styles.snowGlow}`} style={bg(UI_ART.gameplaySceneSnow)} />
-                <div className={`${plate.layer} ${styles.snow}`} data-testid="gameplay-scene-snow" style={bg(UI_ART.gameplaySceneSnow)} />
+                <div className={`${plate.layer} ${styles.snowGlow}`} data-plate="dungeon" style={bg(UI_ART.gameplaySceneSnow)} />
+                <div className={`${plate.layer} ${styles.snow}`} data-plate="dungeon" data-testid="gameplay-scene-snow" style={bg(UI_ART.gameplaySceneSnow)} />
+                <div className={`${plate.layer} ${styles.snow}`} data-plate="shop" style={bg(UI_ART.gameplaySceneSnowShop)} />
+                <div className={`${plate.layer} ${styles.snow}`} data-plate="void" style={bg(UI_ART.gameplaySceneSnowVoid)} />
+                {/* A storm run: the stone runs wet, and lightning comes down through the arches on the beat. */}
+                <div className={`${plate.layer} ${styles.wet}`} data-testid="gameplay-scene-wet" style={bg(UI_ART.gameplaySceneWet)} />
+                {!still && (mood?.storm ?? 0) > 0 ? <StormBoltsOverlay seed={runSeed} /> : null}
                 {/* A frost run: ice grows in from the edges with the heat, screened over the room. */}
                 <div className={`${plate.layer} ${styles.frost}`} data-testid="gameplay-scene-frost" style={bg(UI_ART.gameplaySceneFrost)} />
                 {/* A storm run: the room flashes white now and then, more often the hotter it is. */}
@@ -196,6 +206,10 @@ export function GameplayScene({
                 {/* The black hole: the room collapses into it once, on the miss that opened it. */}
                 {mood?.blackHoleKey && !still ? (
                     <div className={styles.blackHole} data-testid="gameplay-scene-black-hole" key={mood.blackHoleKey} />
+                ) : null}
+                {/* Back from the void: the dungeon returns with one flash of the whole ring, like Fever's arrival. */}
+                {mood?.voidReturnKey && !still ? (
+                    <div className={`${plate.layer} ${styles.layer} ${styles.feverArrival}`} data-testid="gameplay-scene-return" key={mood.voidReturnKey} style={bg(UI_ART.gameplaySceneGlowRing)} />
                 ) : null}
                 {feverKey && !still ? (
                     <div

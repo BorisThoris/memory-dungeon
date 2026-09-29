@@ -112,8 +112,8 @@
 .scene[data-scene-plate='void'] .dungeonBase,
 .scene[data-scene-plate='shop'] .things,
 .scene[data-scene-plate='void'] .things,
-.scene[data-scene-plate='shop'] .layer,
-.scene[data-scene-plate='void'] .layer,
+.scene[data-scene-plate='shop'] .layer:not(.snow),
+.scene[data-scene-plate='void'] .layer:not(.snow),
 .scene[data-scene-plate='shop'] .mist,
 .scene[data-scene-plate='void'] .mist {
     opacity: 0 !important;
@@ -127,8 +127,36 @@
  */
 .snow {
     mix-blend-mode: normal;
-    opacity: var(--scene-snow, 0);
+    opacity: 0;
     transition: opacity 1400ms ease;
+}
+
+/* Each room's own snow shows with that room; the others hold at nothing. */
+.scene[data-scene-plate='dungeon'] .snow[data-plate='dungeon'],
+.scene[data-scene-plate='shop'] .snow[data-plate='shop'],
+.scene[data-scene-plate='void'] .snow[data-plate='void'] {
+    opacity: var(--scene-snow, 0);
+}
+
+/* Wet stone (`--scene-wet`): a thin blue sheen on the upward faces, shimmering slowly. */
+.wet {
+    mix-blend-mode: screen;
+    opacity: var(--scene-wet, 0);
+    transition: opacity 1400ms ease;
+}
+
+.scene[data-alive='true'] .wet {
+    animation: sceneWetShimmer 5s ease-in-out infinite alternate;
+}
+
+@keyframes sceneWetShimmer {
+    from {
+        filter: brightness(0.85);
+    }
+
+    to {
+        filter: brightness(1.35);
+    }
 }
 
 .snowGlow {
