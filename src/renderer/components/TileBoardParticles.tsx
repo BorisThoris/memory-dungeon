@@ -9,13 +9,12 @@ import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
 import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
-import { comboHeatLevels } from '../../shared/combo-heat-rules';
+import { COMBO_HEAT_THEMES, comboHeatLevels, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 
 const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
-/** Ember colour by heat stage: gold, orange, red-orange, rose, violet-white. */
-const EMBER_TINTS = ['#ffd27a', '#ffd27a', '#ffa24f', '#ff7a3d', '#ff4d5e', '#e2b3ff'] as const;
+const themeOf = (id: ComboHeatThemeId | undefined) => COMBO_HEAT_THEMES.find((theme) => theme.id === id) ?? COMBO_HEAT_THEMES[0]!;
 
-export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, combo = 0, time, sharedFrameClock }: {
+export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, combo = 0, comboTheme, time, sharedFrameClock }: {
     board: BoardState;
     compact: boolean;
     graphicsQuality: GraphicsQualityPreset;
@@ -25,6 +24,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     cardHeat: number;
     /** The run's combo: it carries across floors, and every burst and bolt grows with it. */
     combo?: number;
+    /** The run's temper (`comboHeatThemeForSeed`): the palette and motion of the embers and bolts. */
+    comboTheme?: ComboHeatThemeId;
     time: RefObject<number>;
     sharedFrameClock: boolean;
 }) => {
@@ -47,6 +48,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         motion.current = reduceMotion;
         const intensity = comboEffectIntensity(combo);
         const energy = Math.max(cardHeat, intensity);
+        const theme = themeOf(comboTheme);
+        const arcTint = theme.arcTints[intensity < 0.35 ? 0 : intensity < 0.6 ? 1 : intensity < 0.8 ? 2 : 3];
         // Where a card stands now: its live group if it has one, its layout slot if not.
         const anchorOf = (tileId: string) => {
             const index = board.tiles.findIndex((tile) => tile.id === tileId);
@@ -62,7 +65,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const arc of collectGroupArcCues(previous.current, board)) {
             const emitted = system.emitArc({ from: anchorOf(arc.fromTileId), to: anchorOf(arc.toTileId),
                 seed: hashStringToSeed(`${arc.fromTileId}>${arc.toTileId}:arc`), time: time.current, delay: arc.delay,
-                intensity: arc.kind === 'pair' ? intensity * 0.85 : intensity, reduceMotion, quality: graphicsQuality });
+                intensity: arc.kind === 'pair' ? intensity * 0.85 : intensity, reduceMotion, quality: graphicsQuality, tint: arcTint });
             if (emitted > 0) totals.current.arc += 1;
         }
         for (const cue of collectBoardParticleCues(previous.current, board)) {
@@ -95,7 +98,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, combo, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
+    }, [board, cardHeat, combo, comboTheme, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
     useFrame(() => {
         if (!reduceMotion && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextRimTick.current) {
             nextRimTick.current = time.current + (graphicsQuality === 'low' ? 0.24 : graphicsQuality === 'medium' ? 0.16 : 0.1);
@@ -134,7 +137,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 const group = groups[(emberTick.current + index) % groups.length]!;
                 const emitted = system.emit({ kind: 'ember', x: group.position.x, y: group.position.y, z: group.position.z,
                     time: time.current, seed: (emberTick.current + index) * 7919 + Math.floor(time.current * 10), reduceMotion, quality: graphicsQuality,
-                    energy: heat.heat, tint: EMBER_TINTS[heat.stageIndex] });
+                    energy: heat.heat, tint: themeOf(comboTheme).colors[heat.stageIndex], emberMode: themeOf(comboTheme).emberMode });
                 if (emitted) totals.current.ember += 1;
             }
             emberTick.current += Math.max(1, limit);

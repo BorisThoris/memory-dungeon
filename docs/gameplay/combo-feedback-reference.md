@@ -47,6 +47,39 @@ in `boardTrauma.ts`).
 | The loss is loud | A miss zeroes the combo; COMBO BROKEN is stamped across the screen, the cards gutter (`cardBreakSnuff`), the mismatch sample drops a rung per tier, the ladder reads red as it empties |
 | Time bends | The Fever break's hit-stop (`FEVER_WAVE_SLOW`) |
 
+## Rarity, seeds and temperature (round five)
+
+What the leaders do with *rarity* and *variance*, and what was taken from it:
+
+- **Balatro's editions** are cosmetic-plus-mechanical variants rolled per card at 0.3–2%
+  (Negative 0.3%, Polychrome 0.3%, Holographic 1.4%, Foil 2%): rare enough that seeing one is
+  an event, common enough that a long session sees several. The lesson is the *rate*, not the
+  effect.
+- **Shiny Pokémon** are the purest case: a palette swap with no mechanical effect, and one of
+  the most-hunted things in games. A roguelike can make a shiny cheaply - "palette swapping,
+  ridiculous lighting and/or simple animations" - and players will chase it.
+- **The pool tables sell the streak's instrument in elements** - Firestorm, Permafrost,
+  Lightning cues; an Ice & Fire event with themed tables. The streak looks different depending
+  on what you brought, and the elements are the collection.
+- **Seeded runs** (Balatro, Spelunky, Slay the Spire) make a variant *shareable*: the same seed
+  is the same run for everyone, so a rare one is a thing you can hand to a friend.
+
+Built as **the temper of a run** (`combo-heat-rules.ts`, `comboHeatThemeForSeed`): rolled once
+from the run seed, so a shared run has the same temper for everyone.
+
+| Temper | Weight | Stages | What changes |
+| --- | --- | --- | --- |
+| Ember | 70% | Warm, Hot, Blazing, Inferno, Legendary | The default fire |
+| Frost | 18% | Chill, Cold, Frozen, Glacial, Absolute Zero | Icy palette; snow drifts *down* off the cards; the ring turns toward blue |
+| Storm | 10% | Charged, Sparking, Storm, Tempest, Godlike | Violet-electric; static sparks fly out of the cards; bolts run white |
+| Prismatic | 2% | Shimmer, Gleam, Radiant, Prismatic, Mythic | The shiny: every hue cycling, stamps tagged RARE |
+
+The temper drives the HUD's colours and stage names, the stamps' words and colours, the embers'
+colour and motion, the lightning's tint, the room's ring hue and the screen's aura. It changes
+nothing a rule reads. The first time a non-ember run warms it stamps itself (FROST RUN), so the
+player learns what they drew. Separately, **combo milestones** at 50 and every 100 get their own
+stamp (HALF-CENTURY!, CENTURY!) - rare by nature rather than by roll.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

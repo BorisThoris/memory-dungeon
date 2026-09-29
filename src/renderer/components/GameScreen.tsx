@@ -122,7 +122,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
-import { comboHeatLevels, comboHeatStageIndex, comboStageReached } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStageReached } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
 import { GameplayScene } from './GameplayScene';
@@ -1040,6 +1040,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The combo heat (`combo-heat-rules.ts`): the stage every surface below reads, once per render.
     const comboHeatLevelsNow = comboHeatLevels(run.stats.currentStreak);
+    // The run's temper (`comboHeatThemeForSeed`): the element its heat burns in, rolled from the seed.
+    const comboTemper = comboHeatThemeForSeed(run.runSeed);
     /*
      * The stage the latest turn reached (`comboStageReached`): the rank-up stamp and its sting
      * are keyed to that turn, so a run that opens already Blazing shows nothing until it climbs.
@@ -1056,10 +1058,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const screenCallouts = useMemo(
-        () => [...deriveTurnCallouts(latestTurnForPulse, missesLeft(run)), ...purchaseCallouts],
+        () => [...deriveTurnCallouts(latestTurnForPulse, missesLeft(run), comboTemper), ...purchaseCallouts],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts]
+        [latestTurnForPulse, purchaseCallouts, comboTemper]
     );
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1592,8 +1594,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             {...{ [REG104_DATA_SHELL]: reg104GameplayShellVariant }}
             data-testid="game-shell"
             data-combo-stage={comboHeatLevelsNow.stage}
+            data-combo-theme={comboTemper.id}
             ref={shellRef}
-            style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg` } as CSSProperties}
+            style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg`, '--combo-flame': comboTemper.colors[comboHeatLevelsNow.stageIndex] } as CSSProperties}
         >
             <MainMenuBackground
                 fieldTiltRef={gameFieldTiltRef}
@@ -1616,10 +1619,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     tier={runChainTier(run)}
                     comboHeat={comboHeatLevelsNow.heat}
                     comboStage={comboHeatLevelsNow.stage}
+                    comboHueDeg={comboTemper.ringHueDeg}
                 />
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
-            <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-testid="combo-aura" />
+            <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
@@ -1727,6 +1731,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 onboardingTargetTileIds={onboardingBoardTargetIds}
                                 cardHeat={runChainMeter(run).fill}
                                 combo={run.stats.currentStreak}
+                                comboTheme={comboTemper.id}
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,
                                     floorCurioId: run.floorCurioId ?? null,

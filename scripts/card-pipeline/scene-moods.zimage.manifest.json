@@ -1,0 +1,29 @@
+{
+  "$comment": "Z-Image-Turbo batch for the gameplay backdrop's other places and its overlays (2026-09-29). The dungeon ring is the room; these are what the room becomes: the shop the store stop opens into, the void a black hole leaves after a great combo dies. Same plate size and camera as bg-gameplay-dungeon-ring-v2 (wide, floor open at the centre, the board sits over the middle). Render: py -3.12 scripts/card-pipeline/batch_local_zimage.py --manifest scripts/card-pipeline/scene-moods.zimage.manifest.json --cpu-offload ; pick from tmp/zimage/scene-moods.zimage.manifest/contact-sheet.png, copy the take to `target`, then yarn assets:ui-backgrounds:export-runtime-webp. Turbo has no negative prompt: describe only what should be there.",
+  "defaults": {
+    "width": 1376,
+    "height": 768,
+    "steps": 8,
+    "candidates": 3
+  },
+  "entries": [
+    {
+      "id": "bg-gameplay-shop-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
+      "seed": 52010,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot from the same low camera as a torchlit dungeon chamber, but this is a hidden merchant's vault carved into the stone: shelves of glowing potion bottles and rolled scrolls along both walls, a heavy wooden counter at the back draped in deep red cloth with brass scales and stacked gold coins, hanging lanterns throwing warm amber light, a cool cyan crystal lamp on the counter, the stone floor in the foreground open and empty, deep midnight blue-black shadows, antique gold trim, painterly, symmetrical composition centred on the counter, no text, no letters, no signs, no watermark, no people."
+    },
+    {
+      "id": "bg-gameplay-void-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-void-v1.png",
+      "seed": 52020,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a ruined dungeon chamber after a collapse into the void: the stone floor at the centre broken open into a black hole with slow violet and deep blue light bending around its rim, loose stones and dust drifting up into the dark, the torches on the walls gone out leaving only faint cyan embers, the vaulted ceiling cracked with starlight showing through, the foreground floor open and empty, deep midnight blue-black palette with violet accents, painterly, symmetrical composition centred on the black hole, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "overlay-frost-v1",
+      "target": "src/renderer/assets/ui/backgrounds/overlay-frost-v1.png",
+      "seed": 52030,
+      "prompt": "Frost crystals and ice growing inward from all four edges of the image on a pure black background, delicate white and pale cyan feathered ice ferns, sharp frozen crystal shards, the centre of the image left completely black and empty, photographic macro detail, high contrast white on black, no text, no letters, no watermark."
+    }
+  ]
+}

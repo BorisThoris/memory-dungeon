@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 60 as const;
+export const ENCYCLOPEDIA_VERSION = 61 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -580,7 +580,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
             'Your **combo carries from floor to floor until you miss** - the chain, its tier, its cascade and early-start momentum, all of it. A floor cleared at Fever opens the next one at Fever, and the only thing that ends it is a miss. ' +
-            'Past Fever the combo keeps heating: **Warm** from 3, **Hot** from 6, **Blazing** from 10, **Inferno** from 16, **Legendary** from 25. The heat changes nothing a rule reads - the rungs still decide what a break takes - but the whole game answers it: flames climb the chain rail, the combo number burns, embers rise off the cards, the torches and the ring go wild, lightning through every pop forks and thickens, and the edges of the screen glow in the stage\'s colour.'
+            'Past Fever the combo keeps heating: **Warm** from 3, **Hot** from 6, **Blazing** from 10, **Inferno** from 16, **Legendary** from 25. The heat changes nothing a rule reads - the rungs still decide what a break takes - but the whole game answers it: flames climb the chain rail, the combo number burns, embers rise off the cards, the torches and the ring go wild, lightning through every pop forks and thickens, and the edges of the screen glow in the stage\'s colour. ' +
+            'Every run has a **temper**, rolled from its seed: most burn **Ember**; some run **Frost**, and the combo goes cold instead - Chill, Cold, Frozen, Glacial, Absolute Zero - with snow drifting down off the cards; some run **Storm**. One run in fifty is **Prismatic**, the rare one: every colour at once, and its stamps say so. The temper changes nothing a rule reads. A combo of fifty, and of every hundred, gets a stamp of its own.'
     },
     {
         id: 'tile_suits',

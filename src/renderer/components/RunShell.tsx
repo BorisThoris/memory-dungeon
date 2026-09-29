@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElemen
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { COMBO_HEAT_STAGE_LABELS, comboHeatLevels } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
@@ -290,6 +290,7 @@ const RunShell = ({
     // The ladder above the ladder: the combo's heat stage (`combo-heat-rules.ts`), which keeps the
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
+    const temper = comboHeatThemeForSeed(run.runSeed);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -394,9 +395,10 @@ const RunShell = ({
             className={styles.shell}
             data-chain-tier={tier}
             data-combo-stage={heat.stage}
+            data-combo-theme={temper.id}
             data-memorize={memorize ? 'true' : 'false'}
             data-testid="run-shell"
-            style={{ '--combo-heat': heat.heat, '--combo-aura': heat.aura, '--combo-hue': `${heat.hueDeg}deg` } as CSSProperties}
+            style={{ '--combo-heat': heat.heat, '--combo-aura': heat.aura, '--combo-hue': `${heat.hueDeg}deg`, '--combo-flame': temper.colors[heat.stageIndex] } as CSSProperties}
         >
             <header className={styles.head} data-testid="game-hud">
                 <div className={styles.stats} role="group" aria-label="Run stats">
@@ -581,7 +583,7 @@ const RunShell = ({
                                 </span>
                                 <span className={styles.comboLabel}>
                                     <span data-testid="hud-combo-stage">
-                                        {COMBO_HEAT_STAGE_LABELS[heat.stage] ? `Combo · ${COMBO_HEAT_STAGE_LABELS[heat.stage]}` : 'Combo'}
+                                        {temper.labels[heat.stage] ? `Combo · ${temper.labels[heat.stage]}` : 'Combo'}
                                     </span>
                                     {carried > 0 ? (
                                         <span className={styles.comboCarried} data-testid="hud-combo-carried">

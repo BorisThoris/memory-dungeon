@@ -82,6 +82,8 @@ export interface GameplaySceneProps {
     /** The combo heat (`combo-heat-rules.ts`): the room keeps answering past Fever. */
     comboHeat?: number;
     comboStage?: ComboHeatStage;
+    /** The temper's hue (`ComboHeatTheme.ringHueDeg`): where the ring turns at full heat. */
+    comboHueDeg?: number;
 }
 
 const bg = (url: string) => ({ backgroundImage: `url(${url})` });
@@ -98,10 +100,11 @@ export function GameplayScene({
     reduceMotion,
     tier,
     comboHeat = 0,
-    comboStage = 'cold'
+    comboStage = 'cold',
+    comboHueDeg = 0
 }: GameplaySceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
-    const ring = sceneRingLevels(fill, comboHeat);
+    const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
     const still = effectTier === 'still';
     const alive = effectTier === 'full';

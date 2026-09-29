@@ -2,6 +2,7 @@ import type { MutableRefObject, RefObject } from 'react';
 import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { TileBoardParticles } from './TileBoardParticles';
+import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import { TileBezel, type TileHoverTiltState } from './TileBezel';
@@ -18,6 +19,7 @@ interface TileBoardSceneBoardGroupProps {
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat: number;
     combo?: number;
+    comboTheme?: ComboHeatThemeId;
     cardGlowAnimated: boolean;
     boardColumns: number;
     boardEntranceMotionBudgetMs: number;
@@ -58,6 +60,7 @@ export const TileBoardSceneBoardGroup = ({
     cardGlowAnimated,
     cardHeat,
     combo = 0,
+    comboTheme,
     boardColumns,
     boardEntranceMotionBudgetMs,
     boardEntranceMotionDeadlineMs,
@@ -89,7 +92,7 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
-            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} time={visualTime}
+            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />
         {graphicsQuality !== 'low' ? (
             <mesh

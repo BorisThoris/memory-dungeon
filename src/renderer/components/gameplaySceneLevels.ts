@@ -33,15 +33,16 @@ const clamp01 = (value: number): number => (Number.isFinite(value) ? Math.min(1,
  * shows: at Fever the meter is full and the room would otherwise stop answering, so the heat keeps
  * the ring brightening, turning further toward rose and then violet, and throwing more motes.
  */
-export const sceneRingLevels = (fill: number, heat = 0): SceneRingLevels => {
+export const sceneRingLevels = (fill: number, heat = 0, temperHueDeg = 0): SceneRingLevels => {
     const f = clamp01(fill);
     const h = clamp01(heat);
+    const temper = Number.isFinite(temperHueDeg) ? temperHueDeg : 0;
     // Ease in: the first pairs barely move the room, the last ones before Fever move it most.
     const eased = f * f * (3 - 2 * f);
     return {
         light: round(0.5 + 0.8 * eased + 0.5 * h),
         glow: round(0.68 + 0.72 * eased + 0.6 * h),
-        hueDeg: Math.round(-40 * eased - 50 * h) + 0, // + 0 folds -0 into 0 so the CSS variable never reads "-0deg"
+        hueDeg: Math.round(-40 * eased - 50 * h + temper * h) + 0, // + 0 folds -0 into 0 so the CSS variable never reads "-0deg"
         saturate: round(1 + 0.4 * eased + 0.5 * h),
         pulsePeak: round(0.35 + 0.9 * eased + 0.3 * h),
         motes: round(Math.min(1.6, eased + 0.6 * h))

@@ -94,6 +94,12 @@ scales × (1 + `TRAUMA_HEAT_SCALE` × heat), every match past Hot carries a spar
 key per stage, and the score floater grows and burns in the stage's colour. The study behind it:
 [combo-feedback-reference.md](./combo-feedback-reference.md).
 
+**The temper.** `comboHeatThemeForSeed(runSeed)` rolls the run's element once from its seed
+(ember 70%, frost 18%, storm 10%, prismatic 2%) and every surface above reads it: the shell's
+`--combo-flame` per stage and `data-combo-theme`, the stamps' words and colours (prismatic tagged
+RARE, hue-cycling), the embers' colour and `emberMode` (frost snow falls, storm sparks fly), the
+lightning `tint`, the ring's `ringHueDeg` at heat, the aura. Presentation only.
+
 **Combo scaling.** The combo carries across floors until a miss, and the board's effects
 read it through `comboEffectIntensity` (saturating: 3 links ≈ 0.28, 10 ≈ 0.67, 20 ≈ 0.89).
 It sets each bolt's strands (one to three), forks, width, life and colour (cyan, gold,

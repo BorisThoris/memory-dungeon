@@ -315,6 +315,34 @@
     }
 }
 
+/* The shiny's stamps: the palette cycles and a RARE tag rides above the word. */
+.callout[data-callout-rare='true'] .stampText {
+    animation: calloutPrismatic 3s linear infinite;
+}
+
+.callout[data-callout-rare='true'] .stamp::before {
+    content: 'RARE';
+    position: absolute;
+    top: -1.4em;
+    left: 0.2em;
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    font-style: normal;
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    color: var(--margin-paper, #f8f4f4);
+    text-shadow: 0 0 10px white;
+}
+
+@keyframes calloutPrismatic {
+    from {
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
 /* Reduced motion: the type and its colour, fading; nothing moves. */
 .callout[data-reduce-motion='true'] .stamp,
 .callout[data-reduce-motion='true'] .sub {

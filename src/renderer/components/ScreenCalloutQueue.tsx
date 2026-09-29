@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ScreenCallout } from './screenCallouts';
 import styles from './ScreenCalloutQueue.module.css';
 
@@ -52,9 +52,11 @@ export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueu
             data-callout-kind={showing.kind}
             data-callout-size={showing.size}
             data-callout-tone={showing.tone}
+            data-callout-rare={showing.rare ? 'true' : 'false'}
             data-reduce-motion={reduceMotion ? 'true' : 'false'}
             data-testid="screen-callout"
             key={showing.key}
+            style={showing.color ? ({ '--stamp': showing.color } as CSSProperties) : undefined}
         >
             <span className={styles.flash} />
             <span className={styles.ring} />

@@ -25,6 +25,8 @@ export interface BoardArcBurst {
     intensity: number;
     reduceMotion: boolean;
     quality: GraphicsQualityPreset;
+    /** The bolt's colour; the ember palette's by intensity when omitted. */
+    tint?: string;
 }
 
 export interface BoardParticleBurst {
@@ -43,6 +45,8 @@ export interface BoardParticleBurst {
     rimMood?: RimParticleMood;
     /** Ember colour, for the combo heat's palette; the warm default otherwise. */
     tint?: string;
+    /** How an ember moves: up like a spark from a fire, down like snow, or out like a static spark. */
+    emberMode?: 'rise' | 'fall' | 'spark';
 }
 
 const vertexShader = `
@@ -277,8 +281,18 @@ export const createBoardParticleSystem = () => {
                 } else if (ember) {
                     // Born somewhere on the card's face, drifting up and a little sideways, rising
                     // faster the longer it lives (negative gravity), damped so it never streaks.
-                    origin.setXYZ(slot, burst.x + (rng() - 0.5) * 0.55, burst.y + (rng() - 0.5) * 0.7, burst.z + 0.07);
-                    movement.setXYZW(slot, (rng() - 0.5) * 0.12, 0.18 + rng() * 0.25 + energy * 0.25, -(0.12 + energy * 0.2), 0.9);
+                    const mode = burst.emberMode ?? 'rise';
+                    origin.setXYZ(slot, burst.x + (rng() - 0.5) * 0.55, burst.y + (rng() - 0.5) * 0.7 + (mode === 'fall' ? 0.3 : 0), burst.z + 0.07);
+                    if (mode === 'fall') {
+                        // Snow: drifts down slowly, swaying, and settles rather than accelerating.
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.18, -(0.05 + rng() * 0.08), 0.06 + energy * 0.05, 0.6);
+                    } else if (mode === 'spark') {
+                        // Static: thrown out fast in any direction and gone quickly.
+                        const theta = rng() * Math.PI * 2;
+                        movement.setXYZW(slot, Math.cos(theta) * (0.4 + energy * 0.4), Math.sin(theta) * (0.4 + energy * 0.4), 0, 3.5);
+                    } else {
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.12, 0.18 + rng() * 0.25 + energy * 0.25, -(0.12 + energy * 0.2), 0.9);
+                    }
                 } else {
                     origin.setXYZ(slot, burst.x + Math.cos(angle) * offset, burst.y + Math.sin(angle) * offset, ripple ? -0.025 : burst.z + 0.06);
                     movement.setXYZW(slot, Math.cos(angle) * speed, Math.sin(angle) * speed + (kind === 2 ? 0.35 : 0),
@@ -317,7 +331,7 @@ export const createBoardParticleSystem = () => {
             const travel = 0.07;
             const start = arc.time + (arc.delay ?? 0);
             const z = Math.max(arc.from.z, arc.to.z) + 0.09;
-            arcColor.set(comboArcTint(intensity));
+            arcColor.set(arc.tint ?? comboArcTint(intensity));
             let emitted = 0;
             for (let strand = 0; strand < strands; strand += 1) {
                 const path = buildLightningPath(arc.from.x, arc.from.y, arc.to.x, arc.to.y,

@@ -12,6 +12,7 @@ import {
     type FocusEvent
 } from 'react';
 import { flushSync } from 'react-dom';
+import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { getChainTier } from '../../shared/chain-tier-rules';
@@ -374,6 +375,8 @@ interface TileBoardProps {
     cardHeat?: number;
     /** The run's combo (it carries across floors until a miss); the board's effects scale with it. */
     combo?: number;
+    /** The run's temper (`comboHeatThemeForSeed`). */
+    comboTheme?: ComboHeatThemeId;
     /** Current run chain state, used to preview the payoff of a highlighted chain move. */
     chainContext?: {
         currentStreak: number;
@@ -666,6 +669,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     traitRouteHintText = null,
     cardHeat = 0,
     combo = 0,
+    comboTheme,
     chainContext,
     recoveryContext = null,
     peekRevealedTileIds = [],
@@ -3307,6 +3311,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         board={board}
                                         cardHeat={cardHeat}
                                         combo={combo}
+                                        comboTheme={comboTheme}
                                         boardViewport={renderedViewportState}
                                         compact={compact}
                                         cursedPairKey={cursedPairKey}

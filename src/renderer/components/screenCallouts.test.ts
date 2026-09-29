@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
+import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
 import { derivePurchaseCallouts, deriveTurnCallouts } from './screenCallouts';
 
 const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventFixture>[0]> & { before: number; after: number }): BoardTurnResolvedEvent =>
@@ -13,7 +14,8 @@ const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventF
 describe('the screen stamps a turn earns', () => {
     it('stamps the rank a match reached, with the combo under it', () => {
         const callouts = deriveTurnCallouts(turn({ before: 5, after: 6 }), 3);
-        expect(callouts).toEqual([{ key: expect.stringMatching(/^rank:/), kind: 'rank', size: 'major', tone: 'hot', title: 'HOT!', sub: 'Combo ×6' }]);
+        expect(callouts).toHaveLength(1);
+        expect(callouts[0]).toMatchObject({ key: expect.stringMatching(/^rank:/), kind: 'rank', size: 'major', tone: 'hot', title: 'HOT!', sub: 'Combo ×6' });
     });
 
     it('stamps a lost combo, the last miss, or the bank saving an ordinary one', () => {
@@ -36,6 +38,25 @@ describe('the screen stamps a turn earns', () => {
         expect(callouts[1]).toMatchObject({ tone: 'gold', title: 'MISS BANKED', sub: '+1 · five in a row' });
         expect(callouts[2]).toMatchObject({ tone: 'cyan', title: expect.stringMatching(/!$/) });
         expect(new Set(callouts.map((callout) => callout.key)).size).toBe(3);
+    });
+
+    it('stamps in the run\'s temper: its words, its colours, a reveal the first time it warms, and RARE on the shiny', () => {
+        const frost = COMBO_HEAT_THEMES.find((theme) => theme.id === 'frost')!;
+        const cold = deriveTurnCallouts(turn({ before: 5, after: 6 }), 3, frost);
+        expect(cold[0]).toMatchObject({ kind: 'rank', title: 'COLD!', color: frost.colors[2] });
+        expect(cold[0]?.rare).toBeUndefined();
+        const reveal = deriveTurnCallouts(turn({ before: 2, after: 3 }), 3, frost);
+        expect(reveal).toEqual([expect.objectContaining({ kind: 'temper', size: 'minor', title: 'FROST RUN' })]);
+        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3)).toEqual([]);
+        const prismatic = COMBO_HEAT_THEMES.find((theme) => theme.id === 'prismatic')!;
+        const shiny = deriveTurnCallouts(turn({ before: 24, after: 25 }), 3, prismatic);
+        expect(shiny[0]).toMatchObject({ kind: 'rank', title: 'MYTHIC!', rare: true, sub: 'RARE · Combo ×25' });
+    });
+
+    it('stamps the half-century before anything else, in the top colour', () => {
+        const callouts = deriveTurnCallouts(turn({ before: 49, after: 50 }), 3);
+        expect(callouts[0]).toMatchObject({ kind: 'milestone', size: 'major', title: 'HALF-CENTURY!' });
+        expect(callouts.map((callout) => callout.kind)).toEqual(['milestone', 'banked']);
     });
 
     it('stamps nothing for a plain match, and nothing without a turn', () => {

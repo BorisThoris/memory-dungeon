@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2764,
-    "codeFileCount": 982,
-    "exportedSymbolCount": 2983,
+    "trackedFileCount": 2768,
+    "codeFileCount": 985,
+    "exportedSymbolCount": 2994,
     "contentItemCount": 10,
     "mechanicCount": 51,
     "stateFieldCount": 92,
-    "relationshipCount": 7758
+    "relationshipCount": 7787
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 6197,
-      "sha256": "bde3236ae9dbd7c06f7474bde7ee14ff6d59652340dea5c20b599ebbd2b15b52"
+      "bytes": 8452,
+      "sha256": "1dbaf5e1e3d6f90e75804b14f17559920f8d96472e668941a82d3aa9606295f1"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -699,8 +699,8 @@
     {
       "path": "docs/gameplay/epic-board-rendering-assists.md",
       "category": "documentation",
-      "bytes": 10796,
-      "sha256": "23214a18a9c0712ef130acfc77557f37d16cee3caf956d5c34a8e4be14182a8e"
+      "bytes": 11258,
+      "sha256": "0c665a599d4bb506fe44a164d7d8df57c519d6af1b75bad764568abf2a7b4b87"
     },
     {
       "path": "docs/gameplay/epic-choose-your-path.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 36083,
-      "sha256": "75fefde1906dfc897b1451b21c06d82f1cc63a1e0b97684dbbc9e0455115166e"
+      "bytes": 36281,
+      "sha256": "3f8fd93d0bd469ca4435be8d5bb5e613910a6fa713741e9bea2ee8f48dbd333d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33561,
-      "sha256": "2b1fb76317d2b4a4982cfb689655beeaa1f456300494d0e5cd8f8a4b39b0f33d"
+      "sha256": "2fd161582b18da8f1f4e7edfbce186dd46c81a4a8c4ba4f1ad4ac05bf17f395f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4419,8 +4419,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 120553,
-      "sha256": "9484a962bb877f1433ff460f7dc9a3b48b8195b08c4ec017ff118a2fac9d6bd8"
+      "bytes": 120843,
+      "sha256": "25ab360baf548d41a3aef139c832fa81d432d42961a2d923c232d8da02a0d045"
     },
     {
       "path": "public/site.webmanifest",
@@ -4985,6 +4985,12 @@
       "category": "script",
       "bytes": 566,
       "sha256": "51dd451a46a2985b79566ef378f727a1b683610daf1cd3d3db8bd6083900bc4b"
+    },
+    {
+      "path": "scripts/card-pipeline/scene-moods.zimage.manifest.json",
+      "category": "script",
+      "bytes": 2927,
+      "sha256": "cc3b41ed299ab992d5bee2f5d17fe49a61cc810630d56f745edf7d87c10bda58"
     },
     {
       "path": "scripts/card-pipeline/trim-png-bounding-box.mjs",
@@ -9123,8 +9129,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 19755,
-      "sha256": "d80bc34f8f03a527088f18e8a95a838e7f9de491e7d26ae6edfca41afb362779"
+      "bytes": 20751,
+      "sha256": "8f55c11bf8910fe16b6eab1aaf77c355200c260877eece30d11bee5925889d6d"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9333,14 +9339,14 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 10727,
-      "sha256": "e77fb9b0ea36060cc773f9fcf0393d66f680c21be3e768862d0748617330f879"
+      "bytes": 10881,
+      "sha256": "99edc0e349acab8820350d3e6c1145101a655a11b8fb909e5d0241c89375f47b"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "category": "source",
-      "bytes": 5616,
-      "sha256": "bc36ca7fc61ce0a99f46a25e2337dbda17f93c10589a2a773297d3a27bd147fb"
+      "bytes": 5716,
+      "sha256": "1cd67f94554fbf64130035d185cbec521801ecb89b7182ce454979b97cfd5fdc"
     },
     {
       "path": "src/renderer/components/gameplayVisualConfig.test.ts",
@@ -9357,8 +9363,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 53994,
-      "sha256": "77db992d68b294eeb47c3d6ca157039dd14c2057d55e4ae1c328d4c0d965fb04"
+      "bytes": 54338,
+      "sha256": "1292817eda7b078b3c97dfe31305f985f9c319dcc773659bbc835052778afeed"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9369,8 +9375,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 101415,
-      "sha256": "f107c3dd10c7d333d624735d00bbc2bc4e880338894c9d879b143f8512758bc7"
+      "bytes": 101893,
+      "sha256": "0c6451349435adabd2d7d1483be653a4b9eb70128f6bfd6066bed572a1cf634f"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9639,8 +9645,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 46261,
-      "sha256": "be2bd725a8d01da1731ef284fa8362f537f397b388254b917c6cff4b04347cd6"
+      "bytes": 46573,
+      "sha256": "1a075b20b398b050bc89e5395d72a6c5cfbf79e69833c495c372860265c9b5b3"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -9651,8 +9657,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 39069,
-      "sha256": "681ca05ee4f7bacccf30c1cfcef031d2aa7ac3b25d406a48daea02a8ee92a868"
+      "bytes": 39192,
+      "sha256": "93e91fccb565c215d36f2077920bbcaf9005c30a1f2a9c0e8f5d21c11bdfacfd"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9671,6 +9677,18 @@
       "category": "source",
       "bytes": 3432,
       "sha256": "bb8026772b64b41818530241961219b98c9a4b818736700a09ccfeef3a23395d"
+    },
+    {
+      "path": "src/renderer/components/sceneMood.test.ts",
+      "category": "test",
+      "bytes": 3490,
+      "sha256": "68bd6823e87fc1cecb40075bc0f592a529a787438de558a220b747bf088035e1"
+    },
+    {
+      "path": "src/renderer/components/sceneMood.ts",
+      "category": "source",
+      "bytes": 4638,
+      "sha256": "f7cb53fa87816b3c2a9f70d9c8d3af70d8bfed60407ddd47b59ce6144be72852"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -9729,8 +9747,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 8412,
-      "sha256": "5d27a9ab8ee1ba8e041c855c103a8169595bd693d335e026fc9945cd953b0883"
+      "bytes": 9082,
+      "sha256": "2a2da94d12acbf26cd5aea4077dd5d18a1221d48863d56cad156c5caf2c66e74"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
@@ -9741,20 +9759,20 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3149,
-      "sha256": "7733cdc65d4add701be4c227b0f706280ab16cf3a0af010b0df5a6c28677d309"
+      "bytes": 3329,
+      "sha256": "3a37e5d4fe85c4d8d3f0797c2390138cc841d5aadf9effaea691c8978e87f348"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 3756,
-      "sha256": "8fa912815fe845b29e9650ccaf917c1b7c5c655228b79e69e54af98ff511c588"
+      "bytes": 5253,
+      "sha256": "064578c0d3bb20a034b159d3f21e25c39e6619ff8bba14b2c898d3b6cdb4a4a0"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 5420,
-      "sha256": "551ce9eeadcdba98a0571edd739914821229dfa0d8232f0e58f9baddfa6744f3"
+      "bytes": 6879,
+      "sha256": "7dfc39b965872110d3677a4b9763637b7eb7bea6274b2859d0222b446c77be9e"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -9885,8 +9903,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 149731,
-      "sha256": "e29460623afddace58222eace962da459762a9a479bdaed9ccd6b80f6196f05f"
+      "bytes": 149972,
+      "sha256": "fd34ba8949d8968e4488b3562101746efa8c387c42570afb666bfa95d434cd1b"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -10233,8 +10251,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 9984,
-      "sha256": "1ce949db25f967e4aaa00c8e1db3049a6b163c3b7c89090145aa72c304f0bcfa"
+      "bytes": 10366,
+      "sha256": "7364ca8db194641d77c72673932c143efc5f0f4d754791a2ac3163b1edfb33bf"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -10371,14 +10389,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 21718,
-      "sha256": "6686c601dc16ed3f5f4c7450d708a9e26e5efa8d81041749bb211c92cea91b74"
+      "bytes": 21832,
+      "sha256": "fabc3c18c5d2917dbd493ec2aa8ea1681a529ecb9dcd6fbc8f9ed3fad22be79b"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 8053,
-      "sha256": "ca36d027932b9fa708dbd677137f768c1845d3f11c8680bdc85284e740439572"
+      "bytes": 8199,
+      "sha256": "ba941ff34982c8a83482654ede3a8aeca047a4bae5469bd4288c23626d97febf"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -12094,7 +12112,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 36577,
-      "sha256": "141f9bfbd76b691f582451755b922fe84a50920ac9aabda050aa70ea695a7318"
+      "sha256": "b11262cff97e7b1118bebe9a870fb3f61168a173729b682b423911b14ce70482"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12501,8 +12519,14 @@
     {
       "path": "src/shared/combo-heat-rules.ts",
       "category": "source",
-      "bytes": 4951,
-      "sha256": "440f82070a700637299138980c4a68a060d00f26ba0258ed3917d532d57364c4"
+      "bytes": 10337,
+      "sha256": "32aad66778d256ef6fc7fe7e868a5b14e4408246fd221fa30b7bd9f13046cf5b"
+    },
+    {
+      "path": "src/shared/combo-heat-theme.test.ts",
+      "category": "test",
+      "bytes": 2989,
+      "sha256": "2eaf660c0f4f10b3c9ae2e383a2927a6d8751946544ba064df85801378fa0051"
     },
     {
       "path": "src/shared/content-lock-state.ts",
@@ -13203,8 +13227,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 37037,
-      "sha256": "a5984116294b32eb85bf145d7968b95029be46d5223517547ffcce829cf295f0"
+      "bytes": 37484,
+      "sha256": "92d36006402a7e574e9cb7e84a121b384984fc8258128115de6888e0bffcffdd"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -19074,7 +19098,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 371,
+      "lineCount": 385,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -19613,7 +19637,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 201,
+      "lineCount": 204,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -19640,7 +19664,7 @@
       "path": "src/renderer/components/gameplaySceneLevels.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 120,
+      "lineCount": 121,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -19722,7 +19746,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2097,
+      "lineCount": 2102,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20419,7 +20443,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 735,
+      "lineCount": 737,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -20499,6 +20523,43 @@
       "testedBy": [
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneMood.test.ts",
+      "path": "src/renderer/components/sceneMood.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 55,
+      "imports": [
+        "file:src/renderer/components/sceneMood.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/test/gameplay-event-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/sceneMood.ts",
+      "path": "src/renderer/components/sceneMood.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 98,
+      "imports": [
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
+        "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
+        "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
+        "symbol:src/renderer/components/sceneMood.ts#SceneMood",
+        "symbol:src/renderer/components/sceneMood.ts#ScenePlateId"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneMood.test.ts"
       ]
     },
     {
@@ -20622,7 +20683,7 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 73,
+      "lineCount": 75,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts"
       ],
@@ -20641,10 +20702,11 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 56,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/test/gameplay-event-fixtures.ts"
       ],
       "exports": [],
@@ -20655,7 +20717,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 130,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -21035,7 +21097,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3450,
+      "lineCount": 3455,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -21070,6 +21132,7 @@
         "file:src/shared/chain-targets.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/clump-read-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
         "file:src/shared/graphicsQuality.ts",
@@ -22099,7 +22162,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 160,
+      "lineCount": 163,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -22531,7 +22594,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 526,
+      "lineCount": 529,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -22577,7 +22640,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 195,
+      "lineCount": 198,
       "imports": [
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -22586,6 +22649,7 @@
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/components/tileBoardRuneField.ts",
         "file:src/renderer/platformTilt/platformTiltTypes.ts",
+        "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
@@ -25642,6 +25706,7 @@
         "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback"
       ],
       "testedBy": [
+        "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
@@ -28453,13 +28518,16 @@
       "path": "src/shared/combo-heat-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 112,
+      "lineCount": 227,
       "imports": [
+        "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
         "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
+        "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
+        "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
         "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
         "symbol:src/shared/combo-heat-rules.ts#comboHeat",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
@@ -28467,11 +28535,30 @@
         "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+        "symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
+        "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
+        "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
+        "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
         "symbol:src/shared/combo-heat-rules.ts#comboStageReached"
       ],
       "testedBy": [
-        "file:src/shared/combo-heat-rules.test.ts"
+        "file:src/renderer/components/sceneMood.test.ts",
+        "file:src/renderer/components/screenCallouts.test.ts",
+        "file:src/shared/combo-heat-rules.test.ts",
+        "file:src/shared/combo-heat-theme.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/combo-heat-theme.test.ts",
+      "path": "src/shared/combo-heat-theme.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 55,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/content-lock-state.ts",
@@ -31052,7 +31139,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 662,
+      "lineCount": 663,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34246,6 +34333,7 @@
       "testedBy": [
         "file:src/renderer/audio/feverDuck.test.ts",
         "file:src/renderer/components/GameScreen.test.tsx",
+        "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
         "file:src/renderer/copy/anchorBeat.test.ts",
         "file:src/renderer/copy/chainBeat.test.ts",
@@ -37950,7 +38038,7 @@
       "kind": "interface",
       "file": "src/renderer/components/boardParticleSystem.ts",
       "line": 18,
-      "endLine": 28
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#boardParticleBudget",
@@ -37965,8 +38053,8 @@
       "name": "BoardParticleBurst",
       "kind": "interface",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 30,
-      "endLine": 46
+      "line": 32,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
@@ -37981,8 +38069,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 141,
-      "endLine": 370
+      "line": 145,
+      "endLine": 384
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -38469,8 +38557,8 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 89,
-      "endLine": 200
+      "line": 91,
+      "endLine": 203
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
@@ -38478,23 +38566,23 @@
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
       "line": 58,
-      "endLine": 85
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
       "name": "sceneFlameLevels",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 85,
-      "endLine": 100
+      "line": 86,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneFlameLevels",
       "name": "SceneFlameLevels",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 53,
-      "endLine": 62
+      "line": 54,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneRingLevels",
@@ -38502,7 +38590,7 @@
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
       "line": 36,
-      "endLine": 49
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#SceneRingLevels",
@@ -38517,8 +38605,8 @@
       "name": "sceneTorchFlarePeak",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneLevels.ts",
-      "line": 106,
-      "endLine": 119
+      "line": 107,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/components/gameplayVisualConfig.ts#CARD_INTERACTION_FEEDBACK",
@@ -38557,8 +38645,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2096,
-      "endLine": 2096
+      "line": 2101,
+      "endLine": 2101
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -38957,8 +39045,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 734,
-      "endLine": 734
+      "line": 736,
+      "endLine": 736
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -39031,6 +39119,46 @@
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 37,
       "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
+      "name": "blackHoleKeyFor",
+      "kind": "value",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 50,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
+      "name": "deriveSceneMood",
+      "kind": "value",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 58,
+      "endLine": 88
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
+      "name": "latestMissEvent",
+      "kind": "value",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 91,
+      "endLine": 97
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
+      "name": "SceneMood",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 25,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
+      "name": "ScenePlateId",
+      "kind": "type",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -39182,7 +39310,7 @@
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
       "line": 26,
-      "endLine": 72
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
@@ -39197,48 +39325,48 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 78,
-      "endLine": 98
+      "line": 104,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
       "name": "deriveTurnCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 46,
-      "endLine": 75
+      "line": 59,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCallout",
       "name": "ScreenCallout",
       "kind": "interface",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 29,
-      "endLine": 37
+      "line": 38,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutKind",
       "name": "ScreenCalloutKind",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutTone",
       "name": "ScreenCalloutTone",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#stageTone",
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 101,
-      "endLine": 101
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -39549,24 +39677,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3449,
-      "endLine": 3449
+      "line": 3454,
+      "endLine": 3454
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 328,
-      "endLine": 335
+      "line": 329,
+      "endLine": 336
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 337,
-      "endLine": 341
+      "line": 338,
+      "endLine": 342
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -40837,8 +40965,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 18,
-      "endLine": 159
+      "line": 17,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -41413,16 +41541,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 525,
-      "endLine": 525
+      "line": 528,
+      "endLine": 528
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 159,
-      "endLine": 159
+      "line": 160,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
@@ -41437,8 +41565,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 52,
-      "endLine": 194
+      "line": 54,
+      "endLine": 197
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -48413,80 +48541,128 @@
       "name": "COMBO_HEAT_STAGE_FROM",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 21,
-      "endLine": 27
+      "line": 22,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_LABELS",
       "name": "COMBO_HEAT_STAGE_LABELS",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 73,
-      "endLine": 80
+      "line": 188,
+      "endLine": 195
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
+      "name": "COMBO_HEAT_THEMES",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 107,
+      "endLine": 156
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
+      "name": "COMBO_MILESTONE_CALLOUT",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 185,
+      "endLine": 186
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
       "name": "COMBO_STAGE_CALLOUTS",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 66,
-      "endLine": 71
+      "line": 67,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
       "name": "comboHeat",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 50,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
       "name": "comboHeatLevels",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 98,
-      "endLine": 111
+      "line": 213,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
       "name": "ComboHeatLevels",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 82,
-      "endLine": 94
+      "line": 197,
+      "endLine": 209
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
       "name": "comboHeatStage",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 31,
-      "endLine": 39
+      "line": 32,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
       "name": "ComboHeatStage",
       "kind": "type",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
       "name": "comboHeatStageIndex",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 43,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
+      "name": "ComboHeatTheme",
+      "kind": "interface",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 87,
+      "endLine": 105
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
+      "name": "comboHeatThemeForSeed",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 159,
+      "endLine": 169
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
+      "name": "ComboHeatThemeId",
+      "kind": "type",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 85,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
+      "name": "comboMilestoneReached",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 175,
+      "endLine": 183
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
       "name": "comboStageReached",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 57,
-      "endLine": 63
+      "line": 58,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/content-lock-state.ts#BuildFlavour",
@@ -52917,16 +53093,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 629,
-      "endLine": 647
+      "line": 630,
+      "endLine": 648
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 650,
-      "endLine": 661
+      "line": 651,
+      "endLine": 662
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -52934,7 +53110,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 568,
-      "endLine": 626
+      "endLine": 627
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -61251,7 +61427,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 475
         }
       ],
       "tests": [
@@ -61290,7 +61466,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 475
         }
       ],
       "tests": [
@@ -61324,7 +61500,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 475
         }
       ],
       "tests": [
@@ -61358,7 +61534,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 475
         }
       ],
       "tests": [
@@ -66033,6 +66209,36 @@
       "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#SceneMood",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
       "kind": "exports"
     },
     {
@@ -73080,6 +73286,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#COMBO_STAGE_CALLOUTS",
@@ -73119,6 +73337,30 @@
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
       "kind": "exports"
     },
     {
@@ -86169,6 +86411,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/sceneMood.test.ts->src/renderer/components/sceneMood.ts",
+      "source": "file:src/renderer/components/sceneMood.test.ts",
+      "target": "file:src/renderer/components/sceneMood.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.test.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/components/sceneMood.test.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/sceneMood.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.test.ts->src/shared/test/gameplay-event-fixtures.ts",
+      "source": "file:src/renderer/components/sceneMood.test.ts",
+      "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
@@ -86268,6 +86552,12 @@
       "id": "imports:src/renderer/components/screenCallouts.test.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
       "source": "file:src/renderer/components/screenCallouts.test.ts",
       "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/screenCallouts.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/screenCallouts.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -87084,6 +87374,12 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/clump-read-rules.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/shared/clump-read-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -88668,6 +88964,12 @@
       "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/platformTilt/platformTiltTypes.ts",
       "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "target": "file:src/renderer/platformTilt/platformTiltTypes.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -93603,9 +93905,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/combo-heat-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/combo-heat-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-theme.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/shared/combo-heat-theme.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -102495,6 +102809,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/sceneMood.ts->file:src/renderer/components/sceneMood.test.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/renderer/components/sceneMood.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/sceneSpriteClocks.ts->file:src/renderer/components/CathedralScene.test.tsx",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "file:src/renderer/components/CathedralScene.test.tsx",
@@ -103449,6 +103769,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/gameplayFeedbackAdapter.ts->file:src/renderer/components/sceneMood.test.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "file:src/renderer/components/sceneMood.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/gameplayFeedbackAdapter.ts->file:src/renderer/components/screenCallouts.test.ts",
       "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "target": "file:src/renderer/components/screenCallouts.test.ts",
@@ -104295,9 +104621,27 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/sceneMood.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/renderer/components/sceneMood.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/screenCallouts.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/renderer/components/screenCallouts.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/shared/combo-heat-rules.test.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/shared/combo-heat-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/shared/combo-heat-theme.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/combo-heat-theme.test.ts",
       "kind": "tested_by"
     },
     {
@@ -107664,6 +108008,12 @@
       "id": "tested_by:src/shared/test/gameplay-event-fixtures.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/shared/test/gameplay-event-fixtures.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/gameplay-event-fixtures.ts->file:src/renderer/components/sceneMood.test.ts",
+      "source": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "target": "file:src/renderer/components/sceneMood.test.ts",
       "kind": "tested_by"
     },
     {

@@ -1,6 +1,15 @@
 import type { RunState } from '../../shared/contracts';
 import { comboMissesEarned } from '../../shared/miss-bank';
-import { COMBO_HEAT_STAGE_FROM, COMBO_STAGE_CALLOUTS, comboStageReached, type ComboHeatStage } from '../../shared/combo-heat-rules';
+import {
+    COMBO_HEAT_STAGE_FROM,
+    COMBO_HEAT_THEMES,
+    COMBO_MILESTONE_CALLOUT,
+    comboHeatStage,
+    comboMilestoneReached,
+    comboStageReached,
+    type ComboHeatStage,
+    type ComboHeatTheme
+} from '../../shared/combo-heat-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
@@ -23,7 +32,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, they play in this order, which is the order of what the player most needs to know.
  */
-export type ScreenCalloutKind = 'rank' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -34,23 +43,40 @@ export interface ScreenCallout {
     tone: ScreenCalloutTone;
     title: string;
     sub: string;
+    /** The temper's own colour for the stamp, over the tone's. */
+    color?: string;
+    /** The shiny's stamps: tagged rare, palette cycling. */
+    rare?: boolean;
 }
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['rank', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
 /** The stamps one resolved turn earns, given the misses the bank holds after it. */
-export const deriveTurnCallouts = (event: TurnEvent | null, missesLeftAfter: number | null): ScreenCallout[] => {
+export const deriveTurnCallouts = (
+    event: TurnEvent | null,
+    missesLeftAfter: number | null,
+    temper: ComboHeatTheme = COMBO_HEAT_THEMES[0]!
+): ScreenCallout[] => {
     if (!event) return [];
     const { currentStreakBefore: before, currentStreakAfter: after } = event.announcement;
     const id = event.eventId;
     const callouts: ScreenCallout[] = [];
+    const rare = temper.rare ? { rare: true } : {};
+    const milestone = comboMilestoneReached(before, after);
+    if (milestone !== null) {
+        callouts.push({ key: `milestone:${id}`, kind: 'milestone', size: 'major', tone: 'legendary', title: COMBO_MILESTONE_CALLOUT(milestone), sub: `Combo ×${after} · a rare one`, color: temper.colors[5], ...rare });
+    }
     const stage = comboStageReached(before, after);
     if (stage) {
-        callouts.push({ key: `rank:${id}`, kind: 'rank', size: 'major', tone: stage, title: COMBO_STAGE_CALLOUTS[stage], sub: `Combo ×${after}` });
+        callouts.push({ key: `rank:${id}`, kind: 'rank', size: 'major', tone: stage, title: temper.callouts[stage], sub: temper.rare ? `RARE · Combo ×${after}` : `Combo ×${after}`, color: temper.colors[comboHeatStageIndexOf(stage)], ...rare });
+    }
+    // The temper shows itself the first time the combo warms: a frost run says it is one.
+    if (temper.id !== 'ember' && comboHeatStage(before) === 'cold' && comboHeatStage(after) !== 'cold') {
+        callouts.push({ key: `temper:${id}`, kind: 'temper', size: 'minor', tone: 'gold', title: `${temper.title.toUpperCase()} RUN`, sub: temper.rare ? 'Rare · one run in fifty' : 'This run\'s temper, from its seed', color: temper.colors[2], ...rare });
     }
     if (isMiss(event)) {
         const lost = before >= COMBO_HEAT_STAGE_FROM.hot;
@@ -99,3 +125,5 @@ export const derivePurchaseCallouts = (
 
 /** The tone a stage stamps in, exported for the queue's tests. */
 export const stageTone = (stage: Exclude<ComboHeatStage, 'cold' | 'warm'>): ScreenCalloutTone => stage;
+
+const comboHeatStageIndexOf = (stage: ComboHeatStage): number => ['cold', 'warm', 'hot', 'blazing', 'inferno', 'legendary'].indexOf(stage);

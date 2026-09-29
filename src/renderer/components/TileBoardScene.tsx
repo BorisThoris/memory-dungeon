@@ -53,7 +53,7 @@ import {
     sampleTraumaShake,
     TRAUMA_STAGE_UP
 } from './boardTrauma';
-import { comboHeatLevels } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import {
     applyInitialTileBoardViewportMotionState,
     computeInitialTileBoardViewportMotionState,
@@ -91,6 +91,7 @@ interface TileBoardSceneProps {
     cardHeat?: number;
     /** The run's combo, for the effects that scale with it. */
     combo?: number;
+    comboTheme?: ComboHeatThemeId;
     boardViewport: TileBoardViewportState;
     compact: boolean;
     debugPeekActive: boolean;
@@ -164,6 +165,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     board,
     cardHeat = 0,
     combo = 0,
+    comboTheme,
     boardViewport,
     compact,
     debugPeekActive,
@@ -507,6 +509,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 cardGlowAnimated={cardGlowAnimated}
                 cardHeat={cardHeat}
                 combo={combo}
+                comboTheme={comboTheme}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}
                 shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                 shuffleStaggerTileCount={shuffleStaggerTileCount}

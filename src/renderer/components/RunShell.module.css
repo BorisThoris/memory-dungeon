@@ -58,23 +58,27 @@
  * `--combo-aura` (0 at cold) and `--combo-heat` are set on the shell with the run.
  */
 .shell {
+    /* Set inline from the run's temper (`comboHeatThemeForSeed`), a colour per stage. */
     --combo-flame: var(--gold);
 }
 
-.shell[data-combo-stage='hot'] {
-    --combo-flame: #ffa24f;
+/* The shiny: the palette cycles through every hue. */
+.shell[data-combo-theme='prismatic'] .comboCount,
+.shell[data-combo-theme='prismatic'] .ladderFlames {
+    animation-name: comboBump, comboPrismatic;
+    animation-duration: 420ms, 4s;
+    animation-iteration-count: 1, infinite;
+    animation-timing-function: cubic-bezier(0.2, 1.6, 0.4, 1), linear;
 }
 
-.shell[data-combo-stage='blazing'] {
-    --combo-flame: #ff7a3d;
-}
+@keyframes comboPrismatic {
+    from {
+        filter: hue-rotate(0deg);
+    }
 
-.shell[data-combo-stage='inferno'] {
-    --combo-flame: #ff4d5e;
-}
-
-.shell[data-combo-stage='legendary'] {
-    --combo-flame: #e2b3ff;
+    to {
+        filter: hue-rotate(360deg);
+    }
 }
 
 .srOnly {
