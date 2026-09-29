@@ -4246,7 +4246,7 @@
       "path": "package.json",
       "category": "configuration",
       "bytes": 33031,
-      "sha256": "17d28121381c64ce1facb004e121891c616546ba645807af469cad9ed190fdf7"
+      "sha256": "0e4f88f6609deb5a5430af4ecc9a5414bde3b58c354649a1390e08897751e6e8"
     },
     {
       "path": "packages/notifications/package.json",

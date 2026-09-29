@@ -20,7 +20,7 @@
     "build": "yarn clean && yarn build:renderer && yarn build:electron",
     "build:cloudflare": "yarn build:renderer",
     "build:renderer": "vite build",
-    "deploy:pages": "vite build && wrangler pages deploy dist --project-name=memory-dungeon-git --branch=main --commit-dirty=true",
+    "deploy:pages": "vite build && wrangler pages deploy dist --project-name=memory-dungeon-git --branch main --commit-dirty=true",
     "build:renderer:sourcemap": "cross-env VITE_SOURCEMAP=1 vite build",
     "analyze:bundle": "cross-env VITE_BUNDLE_ANALYZE=1 VITE_OUT_DIR=dist-analyze vite build",
     "build:renderer:locked-dist": "cross-env VITE_SKIP_EMPTY_OUT_DIR=1 vite build",
