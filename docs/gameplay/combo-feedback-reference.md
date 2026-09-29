@@ -39,10 +39,12 @@ in `boardTrauma.ts`).
 | --- | --- |
 | Streak counter as the headline | The combo (`stats.currentStreak`) is the big number in the chain column (`RunShell`), bumping on every link, with how much came down the stairs beside it |
 | Streak survives the rack | The whole chain ladder crosses floors (`chain-carryover-rules.ts`); a miss is the only end |
-| Named ranks stamped on screen | `combo-heat-rules.ts`: warm 3, hot 6, blazing 10, inferno 16, legendary 25. `ComboStageCallout` stamps HOT! / BLAZING! / INFERNO! / LEGENDARY! across the screen on the turn that reaches one, with a three-note sting (`playComboStageSfx`) and a shake pulse (`TRAUMA_STAGE_UP`) |
+| Named ranks stamped on screen | `combo-heat-rules.ts`: warm 3, hot 6, blazing 10, inferno 16, legendary 25. `ScreenCalloutQueue` stamps HOT! / BLAZING! / INFERNO! / LEGENDARY! across the screen on the turn that reaches one - italic on a skew, a sheen swept across the letters, speed lines - with a three-note sting (`playComboStageSfx`) and a shake pulse (`TRAUMA_STAGE_UP`) |
+| The bad stamped like the good | The same stamp for a combo of Hot or better lost (COMBO BROKEN ×N), for the bank's last miss (LAST MISS!), and a smaller one for a miss the bank saved (MISS · N left) |
+| Prizes stamped in the same currency | A miss banked by five in a row, a pickup claimed with the match, and every store purchase (consumables and relics) get the minor stamp, so what the run hands out reads as part of the combo's feedback and not a separate ledger |
 | The cue catches fire | Flames lick up the chain rail; the combo number takes an aura and flickers; from Hot the cards throw embers; lightning through every match and pop forks and thickens |
 | Everything scales | Break trauma × (1 + 0.5 × heat); the score floater grows half again and burns in the stage's colour; the room's torches and ring past their Fever levels; a vignette around the whole screen; a sparkle on every match a step up the key per stage |
-| The loss is loud | A miss zeroes the combo; the cards gutter (`cardBreakSnuff`), the mismatch sample drops a rung per tier, the ladder reads red as it empties |
+| The loss is loud | A miss zeroes the combo; COMBO BROKEN is stamped across the screen, the cards gutter (`cardBreakSnuff`), the mismatch sample drops a rung per tier, the ladder reads red as it empties |
 | Time bends | The Fever break's hit-stop (`FEVER_WAVE_SLOW`) |
 
 ## What is deliberately not borrowed
@@ -59,8 +61,8 @@ in `boardTrauma.ts`).
 ## Where each piece lives
 
 - Stages and levels: `src/shared/combo-heat-rules.ts` (`comboHeatLevels`, `comboStageReached`).
-- The stamp: `src/renderer/components/ComboStageCallout.tsx` (+ `.module.css`), keyed to the turn
-  event in `GameScreen.tsx`.
+- The stamps: `src/renderer/components/screenCallouts.ts` (what a turn or a purchase earns) and
+  `ScreenCalloutQueue.tsx` (+ `.module.css`), fed from the turn event in `GameScreen.tsx`.
 - The sting and the sparkle: `src/renderer/audio/gameSfx.ts` (`playComboStageSfx`, the heat layer
   in `playMatchSfx`).
 - The shake: `src/renderer/components/boardTrauma.ts` (`TRAUMA_HEAT_SCALE`, `TRAUMA_STAGE_UP`),

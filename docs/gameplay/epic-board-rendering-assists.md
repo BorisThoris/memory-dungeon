@@ -82,10 +82,13 @@ under negative gravity, tinted by stage; `data-particle-ember-bursts`). A vignet
 the whole screen (`.comboAura` in GameScreen) breathes faster the hotter it gets. Everything is
 static under reduced motion and nothing is drawn at cold.
 
-**Rank-up stamp.** The turn that reaches a heat stage from Hot up stamps the screen
-(`ComboStageCallout`: HOT! / BLAZING! / INFERNO! / LEGENDARY!, slammed in, a flash and a shock
-ring, gone in 1.15 s), keyed to the turn event via `comboStageReached` so a restore never
-replays it. It plays a three-note sting (`playComboStageSfx`) and adds `TRAUMA_STAGE_UP` to the
+**Screen stamps.** `screenCallouts.ts` turns the latest turn event into stamps and
+`ScreenCalloutQueue` plays them one at a time in the anime register (heavy italic on a skew,
+a sheen swept across the letters, speed lines, a flash, a shock ring): the rank reached (HOT! /
+BLAZING! / INFERNO! / LEGENDARY!), a combo of Hot or better lost (COMBO BROKEN), the bank's
+last miss spent (LAST MISS!), an ordinary miss the bank saved (MISS · N left, minor), a miss
+banked by five in a row, a pickup claimed, and every store purchase. Keyed to the turn event
+(or the purchase count reached) so a restore never replays one. It plays a three-note sting (`playComboStageSfx`) and adds `TRAUMA_STAGE_UP` to the
 board shake, read off the combo prop's rising edge in `TileBoardScene`. Break trauma itself
 scales × (1 + `TRAUMA_HEAT_SCALE` × heat), every match past Hot carries a sparkle a step up the
 key per stage, and the score floater grows and burns in the stage's colour. The study behind it:

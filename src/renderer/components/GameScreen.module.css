@@ -700,7 +700,8 @@ under pause/relic modals.
     font-variant-numeric: tabular-nums;
     font-family: var(--margin-body-font);
     font-weight: 400;
-    font-size: clamp(0.8rem, 2vi, 0.95rem);
+    /* Grows with the combo heat (--combo-heat is on the shell): half again at Legendary. */
+    font-size: calc(clamp(0.8rem, 2vi, 0.95rem) * (1 + 0.55 * var(--combo-heat, 0)));
     letter-spacing: 0;
     color: var(--margin-paper);
     text-shadow: 0 2px 24px color-mix(in srgb, var(--margin-ink) 90%, transparent);
@@ -730,10 +731,6 @@ under pause/relic modals.
  * Legendary is half again the size of a cold one and burns in the stage's colour, the way the
  * arcade tables' "+500" gets bigger and hotter the longer the streak.
  */
-.matchScoreFloater {
-    font-size: calc(clamp(0.8rem, 2vi, 0.95rem) * (1 + 0.55 * var(--combo-heat, 0)));
-}
-
 .matchScoreFloater[data-combo-stage='hot'] {
     --floater-heat: #ffa24f;
 }

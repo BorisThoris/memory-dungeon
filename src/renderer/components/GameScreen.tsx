@@ -123,7 +123,8 @@ import {
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { comboHeatLevels, comboHeatStageIndex, comboStageReached } from '../../shared/combo-heat-rules';
-import { ComboStageCallout } from './ComboStageCallout';
+import { ScreenCalloutQueue } from './ScreenCalloutQueue';
+import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -270,6 +271,18 @@ const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | nu
             : null;
 
     return pickupProgress ? `${baseText}. ${pickupProgress}` : baseText;
+};
+
+/** Store purchases as stamps, accumulated as the counts go up; the first read is the baseline. */
+const usePurchaseCallouts = (storePurchases: RunState['storePurchases']): ScreenCallout[] => {
+    const previous = useRef(storePurchases);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        const fresh = derivePurchaseCallouts(previous.current, storePurchases);
+        previous.current = storePurchases;
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [storePurchases]);
+    return callouts;
 };
 
 type MatchFloaterHeat = 'cashout' | 'prime' | 'score' | 'stack' | 'surge';
@@ -1035,6 +1048,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? comboStageReached(latestTurnForPulse.announcement.currentStreakBefore, latestTurnForPulse.announcement.currentStreakAfter)
         : null;
     const comboStageKey = comboStageReachedNow && latestTurnForPulse ? `stage:${latestTurnForPulse.eventId}` : null;
+    /*
+     * The screen stamps (`screenCallouts.ts`): what the latest turn earned - a rank, a lost
+     * combo, the last miss, a banked one, a pickup - plus every store purchase made on this
+     * screen. The queue plays each key once, so the turn's set is recomputed freely and the
+     * purchases are accumulated on the count going up, never re-derived from a restore.
+     */
+    const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
+    const screenCallouts = useMemo(
+        () => [...deriveTurnCallouts(latestTurnForPulse, missesLeft(run)), ...purchaseCallouts],
+        // The bank is read for the turn that just resolved; a later grant is its own turn.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [latestTurnForPulse, purchaseCallouts]
+    );
     const feverArrivalKey =
         latestTurnForPulse &&
         latestTurnForPulse.announcement.chainTierAfter === 'fever' &&
@@ -1594,7 +1620,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-testid="combo-aura" />
-            <ComboStageCallout calloutKey={comboStageKey} combo={run.stats.currentStreak} reduceMotion={reduceMotion} stage={comboStageReachedNow} />
+            <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}

@@ -1,0 +1,366 @@
+/*
+ * The stamps (`ScreenCalloutQueue.tsx`), in the anime register: heavy italic type on a skew,
+ * slammed in oversized, a sheen of light swept across the letters as it lands, speed lines
+ * behind it, a flash and a shock ring in the moment's colour. A minor is the same stamp at two
+ * thirds the size, higher, faster, without the ring. Reduced motion keeps the type and its
+ * colour, fading; no slam, sweep, lines, flash or ring.
+ */
+.callout {
+    --stamp: var(--margin-gold, #e1ad66);
+    --stamp-ms: 1150ms;
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    pointer-events: none;
+}
+
+.callout[data-callout-size='minor'] {
+    --stamp-ms: 820ms;
+    justify-content: flex-start;
+    padding-top: 22vh;
+}
+
+.callout[data-callout-tone='hot'] {
+    --stamp: #ffa24f;
+}
+
+.callout[data-callout-tone='blazing'] {
+    --stamp: #ff7a3d;
+}
+
+.callout[data-callout-tone='inferno'] {
+    --stamp: #ff4d5e;
+}
+
+.callout[data-callout-tone='legendary'] {
+    --stamp: #e2b3ff;
+}
+
+.callout[data-callout-tone='miss'] {
+    --stamp: var(--margin-miss, #e0655a);
+}
+
+.callout[data-callout-tone='gold'] {
+    --stamp: var(--margin-fever, #facb8d);
+}
+
+.callout[data-callout-tone='cyan'] {
+    --stamp: #8fdcff;
+}
+
+.stamp {
+    position: relative;
+    display: block;
+    transform: skewX(-9deg) rotate(-3deg);
+    animation: calloutStamp var(--stamp-ms) cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
+}
+
+.callout[data-callout-size='minor'] .stamp {
+    animation-name: calloutStampMinor;
+}
+
+.stampText {
+    position: relative;
+    display: block;
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(3rem, 11vi, 7.5rem);
+    line-height: 1;
+    letter-spacing: 0.05em;
+    color: var(--stamp);
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--margin-paper, #f8f4f4) 55%, transparent);
+    text-shadow:
+        0 0 18px color-mix(in srgb, var(--stamp) 85%, transparent),
+        0 0 60px color-mix(in srgb, var(--stamp) 55%, transparent),
+        0.12em 0.12em 0 color-mix(in srgb, var(--margin-ink, #131111) 92%, transparent);
+}
+
+.callout[data-callout-size='minor'] .stampText {
+    font-size: clamp(2rem, 6.5vi, 4.4rem);
+}
+
+/* The sheen: the same word in a diagonal band of white light, clipped to the letters, swept
+   left to right as the stamp lands. */
+.stampText::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.95) 48%, rgba(255, 255, 255, 0.55) 52%, transparent 62%);
+    background-size: 260% 100%;
+    background-position: 120% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: calloutSheen calc(var(--stamp-ms) * 0.55) ease-out calc(var(--stamp-ms) * 0.12) forwards;
+}
+
+.callout[data-callout-tone='legendary'] .stampText {
+    -webkit-text-stroke: 1.5px color-mix(in srgb, white 80%, transparent);
+}
+
+.sub {
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    font-size: clamp(0.85rem, 1.6vi, 1.1rem);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--margin-paper, #f8f4f4);
+    text-shadow: 0 2px 12px color-mix(in srgb, var(--margin-ink, #131111) 90%, transparent);
+    animation: calloutSub var(--stamp-ms) ease-out forwards;
+}
+
+.flash {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 45% at 50% 50%, color-mix(in srgb, var(--stamp) 55%, transparent), transparent 70%);
+    opacity: 0;
+    animation: calloutFlash var(--stamp-ms) ease-out forwards;
+}
+
+.callout[data-callout-size='minor'] .flash {
+    background: radial-gradient(ellipse 40% 25% at 50% 30%, color-mix(in srgb, var(--stamp) 40%, transparent), transparent 70%);
+}
+
+/* A shock ring thrown out from the stamp: one bordered circle scaling up, cheap to paint at any size. */
+.ring {
+    position: absolute;
+    width: 28vmin;
+    height: 28vmin;
+    border-radius: 50%;
+    border: 3px solid var(--stamp);
+    box-sizing: border-box;
+    opacity: 0;
+    animation: calloutRing var(--stamp-ms) cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.callout[data-callout-size='minor'] .ring {
+    display: none;
+}
+
+/* Speed lines: a band of thin diagonal strokes behind the word, rushing left. */
+.lines {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    height: 22vmin;
+    background: repeating-linear-gradient(
+        -12deg,
+        transparent 0 14px,
+        color-mix(in srgb, var(--stamp) 45%, transparent) 14px 15px,
+        transparent 15px 34px,
+        color-mix(in srgb, var(--margin-paper, #f8f4f4) 30%, transparent) 34px 35px
+    );
+    mask-image: linear-gradient(90deg, transparent, black 25%, black 75%, transparent);
+    opacity: 0;
+    animation: calloutLines var(--stamp-ms) ease-out forwards;
+}
+
+.callout[data-callout-size='minor'] .lines {
+    height: 12vmin;
+    top: calc(22vh - 3vmin);
+}
+
+@keyframes calloutStamp {
+    0% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) scale(2.6);
+        filter: blur(6px) brightness(2);
+    }
+
+    14% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) scale(1);
+        filter: blur(0) brightness(1.4);
+    }
+
+    22% {
+        transform: skewX(-9deg) rotate(-3deg) scale(1.06);
+    }
+
+    30% {
+        transform: skewX(-9deg) rotate(-3deg) scale(1);
+        filter: brightness(1);
+    }
+
+    78% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) scale(1.18) translateY(-1.2rem);
+        filter: blur(3px);
+    }
+}
+
+@keyframes calloutStampMinor {
+    0% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) translateX(-3rem) scale(1.6);
+        filter: blur(4px) brightness(1.8);
+    }
+
+    16% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) translateX(0) scale(1);
+        filter: blur(0) brightness(1.3);
+    }
+
+    30% {
+        filter: brightness(1);
+    }
+
+    74% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) translateX(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) translateX(2.5rem) scale(0.96);
+        filter: blur(2px);
+    }
+}
+
+@keyframes calloutSheen {
+    from {
+        background-position: 120% 0;
+    }
+
+    to {
+        background-position: -60% 0;
+    }
+}
+
+@keyframes calloutSub {
+    0%,
+    16% {
+        opacity: 0;
+        transform: translateY(0.6rem);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    76% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-0.6rem);
+    }
+}
+
+@keyframes calloutFlash {
+    0% {
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    55% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes calloutRing {
+    0%,
+    10% {
+        opacity: 0;
+        transform: scale(0.35);
+    }
+
+    14% {
+        opacity: 0.9;
+    }
+
+    60%,
+    100% {
+        opacity: 0;
+        transform: scale(3.2);
+    }
+}
+
+@keyframes calloutLines {
+    0% {
+        opacity: 0;
+        transform: translateX(6%);
+    }
+
+    14% {
+        opacity: 0.9;
+    }
+
+    60%,
+    100% {
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+}
+
+/* Reduced motion: the type and its colour, fading; nothing moves. */
+.callout[data-reduce-motion='true'] .stamp,
+.callout[data-reduce-motion='true'] .sub {
+    animation: calloutStill var(--stamp-ms) ease-out forwards;
+}
+
+.callout[data-reduce-motion='true'] .stamp {
+    transform: none;
+}
+
+.callout[data-reduce-motion='true'] .stampText::after,
+.callout[data-reduce-motion='true'] .flash,
+.callout[data-reduce-motion='true'] .ring,
+.callout[data-reduce-motion='true'] .lines {
+    display: none;
+}
+
+@keyframes calloutStill {
+    0% {
+        opacity: 0;
+    }
+
+    15%,
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stamp,
+    .sub {
+        animation: calloutStill var(--stamp-ms) ease-out forwards;
+    }
+
+    .stamp {
+        transform: none;
+    }
+
+    .stampText::after,
+    .flash,
+    .ring,
+    .lines {
+        display: none;
+    }
+}
