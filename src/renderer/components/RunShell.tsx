@@ -19,7 +19,8 @@ import {
     chainRungApproach,
     chainTierRungs,
     runChainMeter,
-    runChainTier
+    runChainTier,
+    runLadderChain
 } from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { tapStudyClosing } from '../input/touchHaptics';
@@ -282,6 +283,9 @@ const RunShell = ({
     const meter = runChainMeter(run);
     const tier = runChainTier(run);
     const chain = runNonNegativeInteger(run.stats.currentStreak);
+    // Links the combo brought down the stairs: the combo carries whole until a miss, the ladder
+    // below it restarts each floor, and without saying so the reset rail reads as a lost combo.
+    const carried = Math.min(chain, runNonNegativeInteger(run.chainLinksAboveLadder));
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -552,28 +556,50 @@ const RunShell = ({
                             <span className={styles.ladderMarker} />
                         </span>
                         <div className={styles.chainRead}>
+                            {/* The combo is the headline: it carries floor to floor until a miss.
+                                The rung below it is this floor's pop multiplier, and restarts. */}
                             <span
-                                aria-label={CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}
-                                className={styles.rungValue}
-                                data-chain-tier={tier}
-                                data-rung-multiplier={chainRungScoreMultiplier(tier)}
-                                data-testid="hud-chain-rung-value"
-                                role="img"
+                                className={styles.combo}
+                                data-combo={chain}
+                                data-combo-carried={carried > 0 ? 'true' : 'false'}
+                                data-testid="hud-combo"
                             >
-                                {`×${chainRungScoreMultiplier(tier)}`}
+                                <span className={styles.comboCount} key={chain}>
+                                    {chain}
+                                </span>
+                                <span className={styles.comboLabel}>
+                                    Combo
+                                    {carried > 0 ? (
+                                        <span className={styles.comboCarried} data-testid="hud-combo-carried">
+                                            {`${carried} carried`}
+                                        </span>
+                                    ) : null}
+                                </span>
                             </span>
-                            <span
-                                className={styles.chainDepth}
-                                data-chain-tier={tier}
-                                title={`${CHAIN_BEAT_COPY.momentumHint(
-                                    chain,
-                                    runNonNegativeInteger(run.chunkPairsThisChain),
-                                    runNonNegativeInteger(run.skipMomentumThisChain),
-                                    rungs,
-                                    run.board?.floorArchetypeId
-                                )} ${CHAIN_BEAT_COPY.rungLadder()}`}
-                            >
-                                {CHAIN_TIER_LABELS[tier] ? `Chain ${chain} · ${CHAIN_TIER_LABELS[tier]}` : `Chain ${chain}`}
+                            <span className={styles.tierRow}>
+                                <span
+                                    aria-label={CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}
+                                    className={styles.rungValue}
+                                    data-chain-tier={tier}
+                                    data-rung-multiplier={chainRungScoreMultiplier(tier)}
+                                    data-testid="hud-chain-rung-value"
+                                    role="img"
+                                >
+                                    {`×${chainRungScoreMultiplier(tier)}`}
+                                </span>
+                                <span
+                                    className={styles.chainDepth}
+                                    data-chain-tier={tier}
+                                    title={`${CHAIN_BEAT_COPY.momentumHint(
+                                        runLadderChain(run),
+                                        runNonNegativeInteger(run.chunkPairsThisChain),
+                                        runNonNegativeInteger(run.skipMomentumThisChain),
+                                        rungs,
+                                        run.board?.floorArchetypeId
+                                    )} ${CHAIN_BEAT_COPY.rungLadder()}`}
+                                >
+                                    {`Pops · ${CHAIN_TIER_LABELS[tier] || 'Lone'}`}
+                                </span>
                             </span>
                             <span className={styles.chainGoal} data-chain-tier={nextTier ?? 'fever'} data-testid="hud-chain-goal">
                                 <em>{nextTierLabel}</em>

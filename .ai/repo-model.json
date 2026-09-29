@@ -9633,20 +9633,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 41762,
-      "sha256": "905fc743e6e839ca4ce0bfc016d7520bec101b79de97cb914370916eb4ea9963"
+      "bytes": 42897,
+      "sha256": "7512c92143849f94c66b8c3f2d37abfc4fd79311e5b444545b7554f483dbcb66"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 31807,
-      "sha256": "a9759db1994e1ee3eb5222037cdb72de1872413fe7edbb2575236543ec1a112c"
+      "bytes": 33217,
+      "sha256": "3848f6010a6e921589e7561e82b775748cb2282a330887ba5db639b325c232d8"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 36549,
-      "sha256": "ba1fb8bb6d943ea911e87232be4284026fb2f17e311647f12b6bbb6dc328531b"
+      "bytes": 38197,
+      "sha256": "920757cd07d10d3b3da81eaf8c3319d7744a5963152364c09ef37a8d65086f96"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -20348,7 +20348,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 589,
+      "lineCount": 606,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -20363,7 +20363,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 695,
+      "lineCount": 721,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -38763,24 +38763,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 694,
-      "endLine": 694
+      "line": 720,
+      "endLine": 720
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 53,
-      "endLine": 83
+      "line": 54,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 40,
-      "endLine": 51
+      "line": 41,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -58741,7 +58741,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 88
+          "line": 89
         }
       ],
       "tests": [
@@ -60893,7 +60893,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 458
+          "line": 462
         }
       ],
       "tests": [
@@ -60932,7 +60932,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 458
+          "line": 462
         }
       ],
       "tests": [
@@ -60966,7 +60966,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 458
+          "line": 462
         }
       ],
       "tests": [
@@ -61000,7 +61000,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 458
+          "line": 462
         }
       ],
       "tests": [

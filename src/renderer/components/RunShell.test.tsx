@@ -45,7 +45,7 @@ describe('RunShell', () => {
         expect(within(stats).getByTestId('hud-floor')).toHaveTextContent(/floor/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/turns/i);
-        expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
+        expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/combo/i);
         // There are no lives (Gen 183): no hearts, no life count, and the mutator stat only
         // appears when it carries a value; there is no clock to show.
         expect(stats).not.toHaveTextContent(/lives|\u2665/i);
@@ -176,7 +176,8 @@ describe('RunShell', () => {
         };
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
-        const chain = within(screen.getByTestId('hud-chain')).getByText(/Chain 3/);
+        expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo', '3');
+        const chain = within(screen.getByTestId('hud-chain')).getByText(/Pops · Sharp/);
         // Twelve pairs: Sharp from 7, Fever from 9. A chain of 3 plus 4 cascaded pairs is Sharp.
         expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
         expect(chain).toHaveTextContent(/Sharp/);
@@ -535,7 +536,23 @@ describe('RunShell — The Margin', () => {
         // A chain of three stands on Clean: that rung and the ones below read as reached.
         expect(ladder.querySelector('[data-rung="clean"]')).toHaveAttribute('data-rung-reached', 'true');
         expect(ladder.querySelector('[data-rung="sharp"]')).toHaveAttribute('data-rung-reached', 'false');
-        expect(screen.getByTestId('hud-chain')).toHaveTextContent('Chain 3 · Clean');
+        expect(screen.getByTestId('hud-chain')).toHaveTextContent('Pops · Clean');
+    });
+
+    it('headlines the combo, and says how much of it came down the stairs', () => {
+        // The combo carries whole until a miss while the ladder restarts each floor; a rail back on
+        // Lone under a small "Chain 9" read as a lost combo, so the combo is the big number now.
+        const base = playingRun();
+        const carried: RunState = { ...base, chainLinksAboveLadder: 8, stats: { ...base.stats, currentStreak: 9 } };
+        const { rerender } = render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={carried} tools={[]} />);
+        expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo', '9');
+        expect(screen.getByTestId('hud-combo')).toHaveTextContent(/9\s*Combo/);
+        expect(screen.getByTestId('hud-combo-carried')).toHaveTextContent('8 carried');
+        // Only one link reaches this floor's ladder: the rung is still the floor's own.
+        expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'none');
+        rerender(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, stats: { ...base.stats, currentStreak: 2 } }} tools={[]} />);
+        expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo-carried', 'false');
+        expect(screen.queryByTestId('hud-combo-carried')).toBeNull();
     });
 
     /**
