@@ -22,6 +22,7 @@ import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { runChainTier } from './chain-tier-rules';
+import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -77,6 +78,7 @@ export type TestHallRoomId =
     | 'lantern'
     | 'heat-afterglow'
     | 'heat-pop'
+    | 'zone'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -109,6 +111,10 @@ export type TestHallStep =
     | { readonly do: 'gambit'; readonly a: string; readonly b: string; readonly third: string }
     | { readonly do: 'wild'; readonly tileId: string }
     | { readonly do: 'buy'; readonly item: StoreItemId }
+    /** The Zone: ignite it, turn a card inside it, or end it early. */
+    | { readonly do: 'ignite' }
+    | { readonly do: 'zoneFlip'; readonly tileId: string }
+    | { readonly do: 'zoneResolve' }
     | { readonly do: 'clear' }
     /** Descend from a cleared floor to the next one, which opens on its study window. */
     | { readonly do: 'advance' }
@@ -860,6 +866,39 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'zone',
+        title: 'The Zone',
+        mechanic: 'At Inferno the combo can be burned to open the Zone: cards turned inside it stay up and nothing resolves until it ends. Then every pair matches at once, and what is left is played as misses at full price.',
+        graphMechanicIds: ['power.ignition_zone', 'board.chain_chunk_fever', 'economy.miss_bank'],
+        tryThis: 'You arrive at a combo of sixteen. Ignite: the combo is spent and the Zone opens for three pairs. Turn both a cards, both b cards, then c and d. Resolve: a and b match, c and d miss.',
+        build: () => room(['a:e b:m c:t d:b', 'e:b x:t x:t f:e', 'a:e b:m c:t d:b', 'e:b f:e g:m g:m'], { streak: 16 }),
+        script: [
+            {
+                step: { do: 'ignite' },
+                says: 'the Zone opens for three pairs and the combo burns to zero',
+                expect: (r) => (r.zone?.pairs === 3 && r.stats.currentStreak === 0 && r.zonesThisRun === 1 ? null : `zone ${JSON.stringify(r.zone)}, combo ${r.stats.currentStreak}`)
+            },
+            { step: { do: 'zoneFlip', tileId: 'a-1' }, says: 'a card turned in the Zone stays up and nothing resolves', expect: (r) => (r.status === 'playing' && r.board?.flippedTileIds.length === 1 ? null : `status ${r.status}, up ${r.board?.flippedTileIds.length}`) },
+            { step: { do: 'zoneFlip', tileId: 'a-2' }, says: 'its partner joins it face up: still nothing resolves', expect: (r) => (r.status === 'playing' && r.board?.flippedTileIds.length === 2 && r.board.matchedPairs === 0 ? null : `status ${r.status}, up ${r.board?.flippedTileIds.length}, matched ${r.board?.matchedPairs}`) },
+            { step: { do: 'zoneFlip', tileId: 'b-1' }, says: 'a third card, which no turn allows', expect: (r) => (r.board?.flippedTileIds.length === 3 ? null : `up ${r.board?.flippedTileIds.length}`) },
+            { step: { do: 'zoneFlip', tileId: 'b-2' }, says: 'a fourth', expect: (r) => (r.board?.flippedTileIds.length === 4 ? null : `up ${r.board?.flippedTileIds.length}`) },
+            { step: { do: 'zoneFlip', tileId: 'c-1' }, says: 'a fifth', expect: (r) => (r.board?.flippedTileIds.length === 5 ? null : `up ${r.board?.flippedTileIds.length}`) },
+            {
+                step: { do: 'zoneFlip', tileId: 'd-1' },
+                says: 'the sixth card closes the Zone: a and b match (the drop may take more), c and d are one miss, the bonus is paid, and the miss ends the combo the matches rebuilt',
+                expect: (r, b) => {
+                    if (r.zone !== null) return 'zone still open';
+                    if (!r.board || !r.board.tiles.filter((t) => t.pairKey === 'a' || t.pairKey === 'b').every((t) => t.state === 'matched')) return 'a or b still standing';
+                    if (r.stats.mismatches !== b.stats.mismatches + 1) return `mismatches ${r.stats.mismatches}`;
+                    if (r.lastZone?.matched !== 2 || r.lastZone.missed !== 1 || r.lastZone.bonus !== 400) return `last zone ${JSON.stringify(r.lastZone)}`;
+                    if (r.zonePairsThisRun !== 2) return `zone pairs ${r.zonePairsThisRun}`;
+                    if (r.stats.currentStreak !== 0) return `combo ${r.stats.currentStreak}`;
+                    return r.board.flippedTileIds.length === 0 && r.status === 'playing' ? null : `up ${r.board.flippedTileIds.length}, status ${r.status}`;
+                }
+            }
+        ]
+    },
+    {
         id: 'n-back',
         title: 'The anchor',
         mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
@@ -1192,6 +1231,18 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'pin':
             return togglePinnedTile(run, step.tileId);
+        case 'ignite': {
+            const next = igniteZone(run);
+            return next === run ? null : next;
+        }
+        case 'zoneFlip': {
+            const next = zoneFlipTile(run, step.tileId);
+            return next === run ? null : next;
+        }
+        case 'zoneResolve': {
+            const next = resolveZone(run);
+            return next === run ? null : next;
+        }
         case 'gambit':
             return resolveBoardTurn(flipTile(flipTile(flipTile(run, step.a), step.b), step.third));
         case 'wild': {

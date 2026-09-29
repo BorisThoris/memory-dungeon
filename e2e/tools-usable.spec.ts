@@ -166,6 +166,28 @@ test.describe('Every tool can be used from the dock', () => {
         expect((await read(page)).bombs).toBe(0);
     });
 
+    test('ignite: at Inferno press Ignite, turn four cards with nothing resolving, press Resolve', async ({ page }) => {
+        await openRoom(page, 'zone');
+        await expect(tool(page, /ignite/i)).toBeEnabled();
+        await tool(page, /ignite/i).click();
+        await expect.poll(async () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            return useAppStore.getState().run?.zone?.pairs ?? 0;
+        })).toBe(3);
+        await expect(page.getByTestId('zone-veil')).toHaveAttribute('data-zone', 'true');
+        await expect(page.getByTestId('hud-zone')).toHaveText('Zone · 0 of 6 cards');
+        for (const id of ['a-1', 'a-2', 'c-1', 'd-1']) await pick(page, id);
+        await expect.poll(async () => (await read(page)).flipped.length).toBe(4);
+        expect((await read(page)).status).toBe('playing');
+        await expect(tool(page, /resolve/i)).toBeEnabled();
+        await tool(page, /resolve/i).click();
+        await expect.poll(async () => (await read(page)).states['a-2']).toBe('matched');
+        const after = await read(page);
+        expect(after.flipped).toEqual([]);
+        expect(after.states['c-1']).toBe('hidden');
+        await expect(page.getByTestId('zone-veil')).toHaveAttribute('data-zone', 'false');
+    });
+
     test('bomb: cancel targeting and preserve the last-pair guard', async ({ page }) => {
         await openRoom(page, 'bomb');
         const bomb = page.getByTestId('tool-bomb');

@@ -9,6 +9,7 @@ import { hasRelic } from './run-relic-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
+import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -35,13 +36,15 @@ export interface SoakPlayer {
     peekRate: number;
     /** Share of turns the player shuffles first, when a shuffle is in hand. */
     shuffleRate: number;
+    /** Share of turns the player ignites the Zone, when the combo allows it. */
+    zoneRate: number;
 }
 
 export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild', SoakPlayer>> = {
-    careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02 },
-    average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05 },
-    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08 },
-    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05 }
+    careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5 },
+    average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5 },
+    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08, zoneRate: 0.5 },
+    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5 }
 };
 
 export interface SoakViolation {
@@ -70,6 +73,9 @@ export interface SoakRunReport {
     wildMatches: number;
     /** Matches resolved with a heat perk on: every rise in heatPerkTurnsThisFloor. */
     heatPerkTurns: number;
+    /** Zones ignited, and pairs matched inside them. */
+    zones: number;
+    zonePairs: number;
     violations: SoakViolation[];
 }
 
@@ -114,8 +120,16 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const listed = [...run.board.flippedTileIds].sort();
         return JSON.stringify(faceUp) === JSON.stringify(listed) ? null : `face up ${faceUp.join(',')} vs listed ${listed.join(',')}`;
     },
-    'no more than two cards face up at once, three with the gambit': (_b, run) =>
-        run.board && run.board.flippedTileIds.length > 3 ? `${run.board.flippedTileIds.length} face up` : null,
+    'no more than two cards face up at once, three with the gambit, twice the Zone\'s pairs in a Zone': (_b, run) => {
+        if (!run.board) return null;
+        const cap = isZoneActive(run) ? run.zone!.pairs * 2 : 3;
+        return run.board.flippedTileIds.length > cap ? `${run.board.flippedTileIds.length} face up against ${cap}` : null;
+    },
+    'a Zone is open only while the floor is played, and never past its own pairs': (_b, run) => {
+        if (!isZoneActive(run)) return null;
+        if (run.status !== 'playing') return `zone open while ${run.status}`;
+        return run.zone!.pairs >= 2 && run.zone!.pairs <= 6 ? null : `zone of ${run.zone!.pairs} pairs`;
+    },
     'charges, gold and counters are whole numbers, never negative': (_b, run) => {
         const fields: Array<[string, unknown]> = [
             ['shuffleCharges', run.shuffleCharges],
@@ -151,8 +165,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         (run.runEndReason == null) === (run.status !== 'gameOver') ? null : `status ${run.status}, reason ${String(run.runEndReason)}`,
     'the score never goes down': (before, run) =>
         before && run.stats.totalScore < before.stats.totalScore ? `score ${before.stats.totalScore} -> ${run.stats.totalScore}` : null,
-    'the combo falls only on a miss, and then to nothing': (before, run) => {
+    'the combo falls only on a miss or an ignition, and then to nothing': (before, run, action) => {
         if (!before || run.stats.currentStreak >= before.stats.currentStreak) return null;
+        // The Zone burns the combo to open (`zone-rules.ts`): the one fall that is not a miss.
+        if (action === 'ignite') return run.stats.currentStreak === 0 && run.zone != null ? null : `ignition left a combo of ${run.stats.currentStreak}`;
         if (run.stats.mismatches <= before.stats.mismatches) return `combo ${before.stats.currentStreak} -> ${run.stats.currentStreak} without a miss`;
         return run.stats.currentStreak === 0 ? null : `a miss left a combo of ${run.stats.currentStreak}`;
     },
@@ -247,6 +263,8 @@ export const soakRun = ({
     let relicsBought = 0;
     let wildMatches = 0;
     let heatPerkTurns = 0;
+    let zones = 0;
+    let zonePairs = 0;
     let floorsCleared = 0;
 
     const act = (action: string, next: RunState): void => {
@@ -259,6 +277,8 @@ export const soakRun = ({
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
+        zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
+        zonePairs += Math.max(0, (next.zonePairsThisRun ?? 0) - (run.zonePairsThisRun ?? 0));
         run = next;
     };
 
@@ -290,6 +310,21 @@ export const soakRun = ({
         }
         const hidden = hiddenReal(run);
         if (hidden.length === 0) break;
+        // The Zone, when the fire allows it: ignite, turn cards until it closes on its own or the
+        // player closes it early, half the time each. The Zone's flips are turns of a kind.
+        if (canIgniteZone(run) && rng() < player.zoneRate) {
+            act('ignite', igniteZone(run));
+            const early = rng() < 0.5;
+            while (isZoneActive(run) && zoneFlipsLeft(run) > 0) {
+                const pool = hiddenReal(run).filter((tile) => tile.state === 'hidden');
+                if (pool.length === 0) break;
+                act('zone-flip', zoneFlipTile(run, pick(pool).id));
+                if (early && isZoneActive(run) && zoneFlipsLeft(run) <= 2) break;
+            }
+            if (isZoneActive(run)) act('zone-resolve', resolveZone(run));
+            turns += 1;
+            continue;
+        }
         // Powers first, the way a player spends them before committing to a turn.
         if (run.peekCharges > 0 && rng() < player.peekRate) {
             const next = applyPeek(run, pick(hidden).id);
@@ -338,6 +373,8 @@ export const soakRun = ({
         relicsBought,
         wildMatches,
         heatPerkTurns,
+        zones,
+        zonePairs,
         violations
     };
 };

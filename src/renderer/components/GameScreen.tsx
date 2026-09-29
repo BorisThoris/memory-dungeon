@@ -128,7 +128,9 @@ import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood'
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
-import { derivePurchaseCallouts, deriveTurnCallouts, type ScreenCallout } from './screenCallouts';
+import { derivePurchaseCallouts, deriveTurnCallouts, deriveZoneCallouts, type ScreenCallout } from './screenCallouts';
+import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
+import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -289,6 +291,19 @@ const usePurchaseCallouts = (storePurchases: RunState['storePurchases']): Screen
     return callouts;
 };
 
+/** The Zone's stamps, accumulated on the count and the last resolve; the first read is the baseline. */
+const useZoneCallouts = (run: RunState): ScreenCallout[] => {
+    const previous = useRef<Pick<RunState, 'zonesThisRun' | 'lastZone'>>({ zonesThisRun: run.zonesThisRun, lastZone: run.lastZone });
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    const { zonesThisRun, lastZone } = run;
+    useEffect(() => {
+        const fresh = deriveZoneCallouts(previous.current, { zonesThisRun, lastZone });
+        previous.current = { zonesThisRun, lastZone };
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
 type MatchFloaterHeat = 'cashout' | 'prime' | 'score' | 'stack' | 'surge';
 type MismatchFloaterHeat = 'break' | 'recover' | 'risk' | 'trait-surge';
 
@@ -394,6 +409,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openCodexFromPlaying: state.openCodexFromPlaying,
             buyStoreItem: state.buyStoreItem,
             useBomb: state.useBomb,
+            igniteZone: state.igniteZone,
+            resolveZone: state.resolveZone,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
@@ -697,6 +714,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         goToMenu,
         buyStoreItem,
         useBomb: spendBomb,
+        igniteZone,
+        resolveZone,
         openCodexFromPlaying,
         openInventoryFromPlaying,
         openSettings,
@@ -1061,6 +1080,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * purchases are accumulated on the count going up, never re-derived from a restore.
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
+    const zoneCallouts = useZoneCallouts(run);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1077,7 +1097,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ...(voidReturnKey
                 ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: 'BACK FROM THE VOID', sub: 'The room is yours again' }]
                 : []),
-            ...purchaseCallouts
+            ...purchaseCallouts,
+            ...zoneCallouts
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1540,6 +1561,27 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     }
                 }
             },
+            ...(isZoneActive(run) || canIgniteZone(run) || run.status === 'playing' && comboHeatLevelsNow.stageIndex >= comboHeatStageIndex('inferno')
+                ? [
+                      {
+                          ...toolSpec('ignite'),
+                          label: isZoneActive(run) ? ZONE_TOOL_COPY.resolveLabel : ZONE_TOOL_COPY.igniteLabel,
+                          glyph: RUN_SHELL_GLYPHS.ignite,
+                          armed: isZoneActive(run),
+                          disabled: !isZoneActive(run) && !canIgniteZone(run),
+                          title: isZoneActive(run)
+                              ? ZONE_TOOL_COPY.open(zoneFlipsLeft(run))
+                              : canIgniteZone(run) ? ZONE_TOOL_COPY.ready(zonePairsAvailable(run))
+                              : run.status !== 'playing' ? ZONE_TOOL_COPY.unavailable
+                              : run.board.flippedTileIds.length > 0 ? ZONE_TOOL_COPY.pendingFlip
+                              : ZONE_TOOL_COPY.tooFewPairs,
+                          onClick: () => {
+                              if (isZoneActive(run)) resolveZone();
+                              else igniteZone();
+                          }
+                      }
+                  ]
+                : []),
             ...(showFlashPairPower
                 ? [
                       {
@@ -1645,6 +1687,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-combo-stage={comboHeatLevelsNow.stage}
             data-combo-theme={comboTemper.id}
             data-store-open={storeSheetOpen ? 'true' : 'false'}
+            data-zone={isZoneActive(run) ? 'true' : 'false'}
             ref={shellRef}
             style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg`, '--combo-flame': comboTemper.colors[comboHeatLevelsNow.stageIndex], '--combo-surge': comboHeatLevelsNow.surge } as CSSProperties}
         >
@@ -1676,6 +1719,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             </div>
             {/* The combo aura: the screen's edges burn with the combo, past anything the meter shows. */}
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
+            {/* The Zone's veil: time stopped, the room held in a cold light until the resolve. */}
+            <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
             <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
             {sceneWipe ? <SceneWipe direction={sceneWipe.direction} key={sceneWipe.key} reduceMotion={reduceMotion} wipeKey={sceneWipe.key} /> : null}

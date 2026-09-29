@@ -417,6 +417,20 @@ export interface LevelResult {
     largestBreakScore?: number;
 }
 
+export interface ZoneState {
+    /** Pairs the Zone allows: the face-up cap is twice this. */
+    readonly pairs: number;
+}
+
+export interface ZoneResult {
+    /** Unique per Zone (`zone:${runSeed}:${level}:${zonesThisRun}`), for stamps that play once. */
+    readonly key: string;
+    readonly pairs: number;
+    readonly matched: number;
+    readonly missed: number;
+    readonly bonus: number;
+}
+
 export type TileTraitKind = 'echo' | 'heavy' | 'conduit' | 'stasis';
 export interface RunSummary {
     totalScore: number;
@@ -569,6 +583,16 @@ export interface RunState {
      * of the card the player has just flipped off the board - no score, no miss, no turn.
      */
     bombCharges: number;
+    /**
+     * The Zone (`zone-rules.ts`): open while the player turns cards with nothing resolving, null
+     * otherwise. Ignited at Inferno or better; it burns the combo to open.
+     */
+    zone: ZoneState | null;
+    /** Zones ignited this run, and the pairs matched inside them. */
+    zonesThisRun: number;
+    zonePairsThisRun: number;
+    /** How the last Zone resolved, for the stamps; null until one has. */
+    lastZone: ZoneResult | null;
     peekRevealedTileIds: string[];
     /** H2 Undo: remaining undos this floor (cancel resolving before timer). */
     undoUsesThisFloor: number;

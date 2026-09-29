@@ -201,6 +201,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 262,
         reason: 'Bombs are only bought at the store and the census players never shop. The whole-run soak throws them and requires one to land; two test hall rooms walk the aim and the last-pair guard.'
     },
+    'power.ignition_zone': {
+        generation: 264,
+        reason: 'The Zone is ignited by the player at Inferno or better, and the census players never spend a combo on anything. The whole-run soak ignites it on half the turns it may, walks its flips and requires a Zone to open and to match a pair; the zone room walks the burn, the free flips, the resolve, the miss and the bonus.'
+    },
     'inventory.relics': {
         generation: 262,
         reason: 'Relics are only bought at the store and the census players never shop. The whole-run soak requires a relic to be bought, and the Deep Pockets and Long Look rooms walk their effects.'

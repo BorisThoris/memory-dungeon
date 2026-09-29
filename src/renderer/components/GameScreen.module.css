@@ -132,6 +132,39 @@
     transition: opacity 600ms ease, box-shadow 600ms ease;
 }
 
+/* The Zone (`zone-rules.ts`): time stopped. A cold rim and a slow pulse, off the moment it resolves. */
+.zoneVeil {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: inset 0 0 8rem 2rem color-mix(in srgb, #9fd8ff 45%, transparent);
+    background: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, #0a1a2e 40%, transparent) 100%);
+    transition: opacity 400ms ease;
+}
+
+.zoneVeil[data-zone='true'] {
+    opacity: 1;
+    animation: zonePulse 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes zonePulse {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(1.25);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .zoneVeil[data-zone='true'] {
+        animation: none;
+    }
+}
+
 .comboAura[data-combo-stage='hot'],
 .comboAura[data-combo-stage='blazing'],
 .comboAura[data-combo-stage='inferno'],

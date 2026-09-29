@@ -133,6 +133,16 @@ export function GameplayExitIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** The Zone's flame: a tongue of fire with an inner tongue, the dock's Ignite. */
+export function GameplayIgniteIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M12 3c1 3 4 4.5 4 8.5A4 4 0 0 1 8 11.5c0-1.5.6-2.6 1.4-3.5.2 1.3.9 2 1.6 2.3C11.5 8 11 5.5 12 3Z" />
+            <path d="M9 17.5c0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.3-.8-2.2-1.5-3-.2 1-.7 1.5-1.5 1.7-.6-.4-.9-1.1-.8-2-.9.7-2.2 1.8-2.2 3.3Z" />
+        </svg>
+    );
+}
+
 export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
     return (
         <svg {...base} className={className} {...rest}>

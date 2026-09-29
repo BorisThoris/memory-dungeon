@@ -35,6 +35,9 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.relicsBought > 0), 'no run ever bought a relic').toBe(true);
         // The careful player runs hot: the combo's perks change the board on some of its matches.
         expect(reports.some((report) => report.heatPerkTurns > 0), 'no run ever played a match with a heat perk on').toBe(true);
+        // The Zone: the careful player reaches Inferno and ignites it; some of its pairs match.
+        expect(reports.some((report) => report.zones > 0), 'no run ever ignited the Zone').toBe(true);
+        expect(reports.some((report) => report.zonePairs > 0), 'no Zone ever matched a pair').toBe(true);
         // The joker left its partner stranded and the floor unclearable until a soak player used it.
         const wild = Array.from({ length: 4 }, (_unused, index) =>
             soakRun({ seed: 7_001 + index * 7_919, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 3 })

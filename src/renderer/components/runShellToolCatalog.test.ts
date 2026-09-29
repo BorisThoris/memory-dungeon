@@ -59,6 +59,6 @@ describe('the run dock catalog', () => {
     it('marks exactly the tools that are not always offered', () => {
         // Flash pair only carries charges in Practice and Wild runs. Everything else is always
         // present, disabled with a reason when it cannot be used.
-        expect(RUN_SHELL_TOOL_CATALOG.filter((tool) => tool.conditional).map((tool) => tool.id)).toEqual(['flash']);
+        expect(RUN_SHELL_TOOL_CATALOG.filter((tool) => tool.conditional).map((tool) => tool.id)).toEqual(['ignite', 'flash']);
     });
 });

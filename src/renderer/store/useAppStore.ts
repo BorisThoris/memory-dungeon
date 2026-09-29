@@ -1,5 +1,6 @@
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
+import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
 import { createGameplayBombCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -435,6 +436,16 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
+        // In the Zone a press turns a card and nothing resolves; the last allowed card resolves the Zone.
+        if (isZoneActive(run)) {
+            const next = zoneFlipTile(run, tileId);
+            if (next === run) return;
+            void resumeAudioContext();
+            playFlipSfx(sfxGainFromStore(), comboMeterFromStore());
+            set({ run: next });
+            return;
+        }
+
         const gambitThirdPick =
             run.status === 'resolving' &&
             run.board &&
@@ -606,6 +617,20 @@ export const useAppStore = create<AppState>((set, get) => ({
         void resumeAudioContext();
         playPowerArmSfx(sfxGainFromStore());
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
+    },
+
+    igniteZone: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canIgniteZone(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        set({ run: igniteZoneRule(run) });
+    },
+
+    resolveZone: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !isZoneActive(run)) return;
+        set({ run: resolveZoneRule(run) });
     },
 
     applyFlashPairPower: () => {

@@ -316,6 +316,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Heat perks census (2026-09-30): 0.412 x 1.10, with the combo’s afterglow and wider pop on the reference player’s hot floors. Heat perks (2026-09-30). Until now the combo heat was presentation only, and the combo study said so on purpose. The owner overrode it: the hot player gets a different board, the way NBA Jam, Peggle and the pool tables do it. From Hot every match lights face-down cards beside it until the next flip (one, two at Blazing, three from Inferno - the lantern on a shorter wick); from Blazing a break may take one pair over its rung cap; from Inferno the first wave walks a step further. Measured first (yarn sim:pop-share, perfect player): matched share of a floor 0.38 before the perks, 0.34 with them, biggest break 0.34 to 0.38 of the board; a second pair at Legendary read 0.33 and 0.41 and was cut. The heat carried into the turn is what counts. No perk touches the miss bank: a run stays as punishing at Legendary as at cold, so the combo has more to lose for having burned. Counted by matches resolved with any perk on; the reference player never misses, so the census reads it on most floors past the first.'
     },
     {
+        id: 'power.ignition_zone',
+        verdict: 'changed',
+        generation: 264,
+        present: ['igniteZone', 'zoneFlipTile', 'resolveZone', 'ZONE_BONUS_PER_PAIR_SQUARED', 'zonesThisRun'],
+        note: 'The Zone (2026-09-30), the new concept the combo study asked for after its twelfth round: Tetris Effect stops time and lets the player break a base rule; Guitar Hero earns the power on the streak and lets the player spend it. Here the base rule is that a turn is two cards. At Inferno or better, on a clean board, the player may ignite: the combo burns to zero and the Zone opens for three pairs (four at Legendary, one more per ascension, six at most, never more than the pairs still hidden). Cards turned inside it stay up and nothing resolves; the last allowed card, or the player, ends it. The resolve plays what is face up through the game\u2019s own turns: every complete pair first, so the chain climbs and the pop widens through them, then the leftovers as misses two at a time at full price from the bank, and a lone leftover for nothing. A bonus of 100 x matched squared on top. Never safer: the combo is the entry fee and a bad Zone costs the misses the same cards would have cost. No census row (no census player ignites); the soak is the proof.'
+    },
+    {
         id: 'hazard.skittish_cards',
         counter: 'skittishFlinches',
         verdict: 'changed',

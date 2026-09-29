@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 62 as const;
+export const ENCYCLOPEDIA_VERSION = 63 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -399,6 +399,12 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
 
 /** Toolbar / store powers and related actions (one entry per major mechanic). */
 export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'power_zone',
+        title: 'The Zone (Ignite)',
+        description:
+            'At **Inferno** or better, with nothing face up, press **Ignite**. Your combo **burns to zero** and the Zone opens for **three pairs** (**four** at Legendary, one more for every ascension, six at most). Inside it, time stops: every card you turn **stays up** and **nothing resolves**. Turn the last allowed card, or press **Resolve**, and everything face up plays at once: every complete pair **matches first**, so the chain climbs and the pop widens through them; what is left is played as **misses**, two cards at a time, at full price from the bank (a lone leftover card costs nothing). On top, a Zone bonus of **100 × pairs matched²**. A perfect Zone leaves a fresh combo standing; a bad one costs what those cards would have cost as turns.'
+    },
     {
         id: 'power_full_shuffle',
         title: 'Full-board shuffle',

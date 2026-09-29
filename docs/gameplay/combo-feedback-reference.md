@@ -241,6 +241,32 @@ the combo ("Afterglow 2 · Pop +1", or "Fire at 6" while cold); the Codex has a 
 hall has two rooms (`heat-afterglow`, `heat-pop`); the soak checks the afterglow never lights
 more than the heat allows and requires the careful player to run hot.
 
+## Round thirteen: the Zone (2026-09-30)
+
+The owner asked for an entirely new concept built on the leaders' dogma. The two that go
+furthest past "louder" are Tetris Effect's Zone (time stops, and a rule the base game forbids -
+more than four lines at once - becomes possible) and Guitar Hero's Star Power (earned on the
+streak, *spent* by the player). Here the base rule is that a turn is two cards, and the Zone
+(`src/shared/zone-rules.ts`) is where it is not:
+
+- **Ignite** (dock tool, offered at Inferno or better with nothing face up): the combo burns to
+  zero - NBA Jam's fire dies on one basket, this one is cashed in on purpose - and the Zone
+  opens for three pairs (four at Legendary, one more per ascension, six at most).
+- **In the Zone** every card turned stays up and nothing resolves; the rail counts the cards
+  (`hud-zone`), the room is held under a cold veil, and the last allowed card or **Resolve**
+  ends it.
+- **The resolve** plays everything face up through the game's own turns: complete pairs first,
+  so the chain climbs and the pop widens through them (a perfect Zone leaves a combo standing);
+  then the leftovers as misses two at a time, at full price from the bank; a lone leftover for
+  nothing. A bonus of 100 × matched² on top, quadratic like the Zone's line clears.
+- **The stamps**: IGNITION! when it opens; PERFECT ZONE! or ZONE ×n when it resolves, in the
+  miss's red when the leftovers cost the bank.
+
+Never safer: the combo is the entry fee, and a bad Zone costs exactly the misses the same cards
+would have cost as turns. What changes is what a turn *is*, for a few seconds, for the player who
+earned it. The soak ignites it on half the turns it may and requires a Zone to open and to match
+a pair; the `zone` room walks the burn, the free flips, the resolve, the miss and the bonus.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

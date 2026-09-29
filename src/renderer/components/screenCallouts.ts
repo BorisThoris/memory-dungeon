@@ -34,7 +34,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, they play in this order, which is the order of what the player most needs to know.
  */
-export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -53,7 +53,7 @@ export interface ScreenCallout {
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['ignite', 'zone', 'milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
@@ -107,6 +107,36 @@ export const deriveTurnCallouts = (
 };
 
 /** The stamps for purchases made since `previous`: one per unit bought, keyed by the count reached. */
+/**
+ * The Zone's stamps (`zone-rules.ts`): IGNITION when a Zone opens (the count going up), and the
+ * verdict when one resolves (a new `lastZone` key): PERFECT ZONE when every pair matched and
+ * nothing missed, ZONE ×n otherwise, in the miss's red when the leftovers cost the bank.
+ */
+export const deriveZoneCallouts = (
+    previous: Pick<RunState, 'zonesThisRun' | 'lastZone'> | undefined,
+    next: Pick<RunState, 'zonesThisRun' | 'lastZone'>
+): ScreenCallout[] => {
+    const callouts: ScreenCallout[] = [];
+    const was = previous?.zonesThisRun ?? 0;
+    const now = next.zonesThisRun ?? 0;
+    for (let count = was + 1; count <= now; count += 1) {
+        callouts.push({ key: `ignite:${count}`, kind: 'ignite', size: 'major', tone: 'inferno', title: 'IGNITION!', sub: 'The Zone is open: nothing resolves until you do' });
+    }
+    const last = next.lastZone;
+    if (last && last.key !== previous?.lastZone?.key) {
+        const perfect = last.missed === 0 && last.matched === last.pairs;
+        callouts.push({
+            key: last.key,
+            kind: 'zone',
+            size: 'major',
+            tone: perfect ? 'legendary' : last.missed > 0 ? 'miss' : 'gold',
+            title: perfect ? 'PERFECT ZONE!' : `ZONE ×${last.matched}`,
+            sub: last.missed > 0 ? `+${last.bonus} · ${last.missed} ${last.missed === 1 ? 'miss' : 'misses'} at full price` : `+${last.bonus} · nothing lost`
+        });
+    }
+    return callouts;
+};
+
 export const derivePurchaseCallouts = (
     previous: RunState['storePurchases'] | undefined,
     next: RunState['storePurchases'] | undefined

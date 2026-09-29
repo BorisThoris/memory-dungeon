@@ -312,7 +312,11 @@
                 "lanternLitTileIds",
                 "lanternLightsThisFloor",
                 "anchorClaimsThisFloor",
-                "heatPerkTurnsThisFloor"
+                "heatPerkTurnsThisFloor",
+                "zone",
+                "zonesThisRun",
+                "zonePairsThisRun",
+                "lastZone"
             ],
             "writes": [
                 "feedbackLines"
@@ -1899,6 +1903,49 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "power.ignition_zone",
+            "label": "The Zone",
+            "kind": "power",
+            "role": "burn_an_inferno_combo_to_stop_time_turn_cards_freely_and_resolve_them_all_at_once",
+            "evidence": [
+                "src/shared/zone-rules.ts",
+                "src/renderer/store/useAppStore.ts",
+                "src/renderer/components/runShellToolCatalog.ts",
+                "src/renderer/copy/zoneToolCopy.ts",
+                "src/renderer/components/screenCallouts.ts"
+            ],
+            "reads": [
+                "currentStreak",
+                "tileStates",
+                "runStatus",
+                "zone"
+            ],
+            "writes": [
+                "zone",
+                "zonesThisRun",
+                "zonePairsThisRun",
+                "lastZone",
+                "currentStreak",
+                "tileStates",
+                "score"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "burns-the-combo-to-open",
+                "resolves-through-the-games-own-turns",
+                "leftovers-cost-the-bank-at-full-price",
+                "never-crosses-the-stairs"
+            ],
+            "tests": [
+                "src/shared/zone-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2801,6 +2848,30 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rail names the perks under the combo; lit faces show on the board"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "power.ignition_zone",
+            "kind": "triggers",
+            "label": "an Inferno combo offers the Zone"
+        },
+        {
+            "source": "power.ignition_zone",
+            "target": "core.board_turn_resolution",
+            "kind": "modifies",
+            "label": "resolves every face-up pair, then the leftovers, as turns at once"
+        },
+        {
+            "source": "power.ignition_zone",
+            "target": "economy.miss_bank",
+            "kind": "risk",
+            "label": "leftover cards are misses at full price"
+        },
+        {
+            "source": "power.ignition_zone",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "Ignite/Resolve on the dock, the Zone line on the rail, the veil and the stamps"
         }
     ],
     "coverage": {

@@ -5,6 +5,8 @@ import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { comboHeatLevels, comboHeatThemeForSeed, comboStageLabel } from '../../shared/combo-heat-rules';
 import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
 import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
+import { zoneRailLine } from '../copy/zoneToolCopy';
+import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
@@ -595,7 +597,11 @@ const RunShell = ({
                                             {`${carried} carried`}
                                         </span>
                                     ) : null}
-                                    {perksLine ? (
+                                    {isZoneActive(run) ? (
+                                        <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-zone">
+                                            {zoneRailLine(run.board?.flippedTileIds.length ?? 0, (run.zone?.pairs ?? 0) * 2)}
+                                        </span>
+                                    ) : perksLine ? (
                                         <span className={styles.comboPerks} data-perks-active={comboHeatPerksActive(perks) ? 'true' : 'false'} data-testid="hud-combo-perks">
                                             {perksLine}
                                         </span>

@@ -19,6 +19,7 @@ export type RunShellToolId =
     | 'pin'
     | 'peek'
     | 'bomb'
+    | 'ignite'
     | 'flash'
     | 'undo'
     | 'greet'
@@ -52,6 +53,9 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'peek', label: 'Peek', spends: 'peekCharges' },
     // Bought at the store stop (2026-09-24). Hidden like every tool with no charges left.
     { conditional: false, id: 'bomb', label: 'Bomb', spends: 'bombCharges' },
+    // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
+    // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
+    { conditional: true, id: 'ignite', label: 'Ignite', spends: null },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },

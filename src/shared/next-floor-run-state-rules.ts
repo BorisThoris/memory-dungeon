@@ -75,6 +75,8 @@ export const createNextFloorRunState = (
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
         heatPerkTurnsThisFloor: 0,
+        // A Zone never crosses the stairs: the floor it opened on resolves it or ends it.
+        zone: null,
         // Pair keys repeat from floor to floor, so a carried anchor would mark a card on the wrong board.
         nBackAnchorPairKey: null,
         nBackMatchCounter: 0,
