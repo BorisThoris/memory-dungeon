@@ -2,9 +2,49 @@ import { describe, expect, it } from 'vitest';
 import {
     COMBO_HEAT_THEMES,
     COMBO_MILESTONE_CALLOUT,
+    comboAscension,
+    comboAscensionCallout,
+    comboAscensionReached,
+    comboHeatLevels,
     comboHeatThemeForSeed,
-    comboMilestoneReached
+    comboMilestoneReached,
+    comboStageLabel,
+    comboSurge,
+    romanNumeral
 } from './combo-heat-rules';
+
+describe('the ladder past its top', () => {
+    it('ascends every twenty-five links after Legendary, without end', () => {
+        expect(comboAscension(24)).toBe(0);
+        expect(comboAscension(25)).toBe(1);
+        expect(comboAscension(49)).toBe(1);
+        expect(comboAscension(50)).toBe(2);
+        expect(comboAscension(1000)).toBe(40);
+        expect(comboAscensionReached(24, 25)).toBeNull();
+        expect(comboAscensionReached(49, 50)).toBe(2);
+        expect(comboAscensionReached(74, 80)).toBe(3);
+        expect(comboAscensionReached(50, 60)).toBeNull();
+        expect(comboSurge(25)).toBe(0);
+        expect(comboSurge(50)).toBe(1);
+        expect(comboSurge(100)).toBe(2);
+        expect(comboSurge(10_000)).toBeGreaterThan(comboSurge(1_000));
+        expect(comboHeatLevels(1000).embers).toBe(12);
+        expect(comboHeatLevels(1000).surge).toBeGreaterThan(comboHeatLevels(100).surge);
+    });
+
+    it('names the ascensions in numerals, on any temper', () => {
+        expect(romanNumeral(2)).toBe('II');
+        expect(romanNumeral(4)).toBe('IV');
+        expect(romanNumeral(40)).toBe('XL');
+        const ember = COMBO_HEAT_THEMES[0]!;
+        expect(comboStageLabel(ember.labels, 25)).toBe('Legendary');
+        expect(comboStageLabel(ember.labels, 50)).toBe('Legendary II');
+        expect(comboStageLabel(ember.labels, 6)).toBe('Hot');
+        expect(comboAscensionCallout(ember.callouts.legendary, 3)).toBe('LEGENDARY III!');
+        const frost = COMBO_HEAT_THEMES.find((theme) => theme.id === 'frost')!;
+        expect(comboAscensionCallout(frost.callouts.legendary, 2)).toBe('ABSOLUTE ZERO II!');
+    });
+});
 
 describe('the temper of a run', () => {
     it('is rolled from the seed, the same seed the same temper, at the weights written down', () => {
@@ -39,15 +79,13 @@ describe('the temper of a run', () => {
         expect(COMBO_HEAT_THEMES.find((theme) => theme.id === 'frost')!.emberMode).toBe('fall');
     });
 
-    it('stamps the half-century, the century and every hundred after, once each', () => {
-        expect(comboMilestoneReached(49, 50)).toBe(50);
-        expect(comboMilestoneReached(48, 53)).toBe(50);
+    it('stamps the century and every hundred after, once each', () => {
+        expect(comboMilestoneReached(49, 50)).toBeNull();
         expect(comboMilestoneReached(50, 51)).toBeNull();
         expect(comboMilestoneReached(99, 100)).toBe(100);
         expect(comboMilestoneReached(199, 201)).toBe(200);
         expect(comboMilestoneReached(10, 0)).toBeNull();
         expect(comboMilestoneReached(1, 2)).toBeNull();
-        expect(COMBO_MILESTONE_CALLOUT(50)).toBe('HALF-CENTURY!');
         expect(COMBO_MILESTONE_CALLOUT(100)).toBe('CENTURY!');
         expect(COMBO_MILESTONE_CALLOUT(300)).toBe('300 COMBO!');
     });

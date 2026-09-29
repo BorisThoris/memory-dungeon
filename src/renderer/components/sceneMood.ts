@@ -1,5 +1,5 @@
 import type { RunState } from '../../shared/contracts';
-import { COMBO_HEAT_STAGE_FROM, comboHeat, type ComboHeatTheme } from '../../shared/combo-heat-rules';
+import { COMBO_HEAT_STAGE_FROM, comboHeat, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 
 /**
@@ -47,6 +47,8 @@ export interface SceneMood {
     brightness: number;
     /** The prismatic run's slow hue cycle, on when the combo is warm. */
     prismatic: boolean;
+    /** The unbounded climb past Legendary (`comboSurge`): more bolts, more of everything, forever. */
+    surge: number;
 }
 
 const round = (value: number): number => Math.round(value * 1000) / 1000;
@@ -119,7 +121,8 @@ export const deriveSceneMood = ({
         hueDeg: graded ? Math.round(temper.ringHueDeg * 0.35 * heat) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),
         brightness: round(graded ? (temper.id === 'frost' ? 1 + 0.12 * heat : 1 + 0.06 * heat) : plate === 'void' ? 0.85 : 1),
-        prismatic: temper.id === 'prismatic' && graded && heat > 0
+        prismatic: temper.id === 'prismatic' && graded && heat > 0,
+        surge: round(comboSurge(combo))
     };
 };
 

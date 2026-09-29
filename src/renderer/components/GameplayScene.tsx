@@ -198,7 +198,7 @@ export function GameplayScene({
                 <div className={`${plate.layer} ${styles.snow}`} data-plate="void" style={bg(UI_ART.gameplaySceneSnowVoid)} />
                 {/* A storm run: the stone runs wet, and lightning comes down through the arches on the beat. */}
                 <div className={`${plate.layer} ${styles.wet}`} data-testid="gameplay-scene-wet" style={bg(UI_ART.gameplaySceneWet)} />
-                {!still && (mood?.storm ?? 0) > 0 ? <StormBoltsOverlay seed={runSeed} /> : null}
+                {!still && (mood?.storm ?? 0) > 0 ? <StormBoltsOverlay count={3 + Math.min(6, Math.floor(mood?.surge ?? 0))} seed={runSeed} /> : null}
                 {/* A frost run: ice grows in from the edges with the heat, screened over the room. */}
                 <div className={`${plate.layer} ${styles.frost}`} data-testid="gameplay-scene-frost" style={bg(UI_ART.gameplaySceneFrost)} />
                 {/* A storm run: the room flashes white now and then, more often the hotter it is. */}

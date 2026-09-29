@@ -617,7 +617,10 @@
 .comboCount {
     font-family: var(--heading-font);
     font-weight: 400;
-    font-size: 3.6rem;
+    /* Past Legendary the number keeps growing with the surge (log2 of the ascension): a combo of
+       200 is a bigger number on the screen than 50, and 800 bigger still, without end and without
+       ever outgrowing the column (the surge is slow). */
+    font-size: calc(3.6rem * (1 + 0.12 * var(--combo-surge, 0)));
     line-height: 1;
     color: color-mix(in srgb, var(--combo-flame) calc(100% * var(--combo-aura, 0)), var(--marker));
     font-variant-numeric: tabular-nums;
@@ -682,9 +685,9 @@
 .shell[data-combo-stage='blazing'] .ladderFlames,
 .shell[data-combo-stage='inferno'] .ladderFlames,
 .shell[data-combo-stage='legendary'] .ladderFlames {
-    width: 1.8rem;
-    left: -0.85rem;
-    box-shadow: 0 0 18px color-mix(in srgb, var(--combo-flame) 70%, transparent);
+    width: calc(1.8rem + 0.6rem * var(--combo-surge, 0));
+    left: calc(-0.85rem - 0.3rem * var(--combo-surge, 0));
+    box-shadow: 0 0 calc(18px + 12px * var(--combo-surge, 0)) color-mix(in srgb, var(--combo-flame) 70%, transparent);
 }
 
 @keyframes ladderFlameLick {

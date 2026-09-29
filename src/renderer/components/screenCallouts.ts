@@ -4,6 +4,8 @@ import {
     COMBO_HEAT_STAGE_FROM,
     COMBO_HEAT_THEMES,
     COMBO_MILESTONE_CALLOUT,
+    comboAscensionCallout,
+    comboAscensionReached,
     comboHeatStage,
     comboMilestoneReached,
     comboStageReached,
@@ -69,6 +71,10 @@ export const deriveTurnCallouts = (
     const milestone = comboMilestoneReached(before, after);
     if (milestone !== null) {
         callouts.push({ key: `milestone:${id}`, kind: 'milestone', size: 'major', tone: 'legendary', title: COMBO_MILESTONE_CALLOUT(milestone), sub: `Combo ×${after} · a rare one`, color: temper.colors[5], ...rare });
+    }
+    const ascension = comboAscensionReached(before, after);
+    if (ascension !== null) {
+        callouts.push({ key: `ascend:${id}`, kind: 'rank', size: 'major', tone: 'legendary', title: comboAscensionCallout(temper.callouts.legendary, ascension), sub: temper.rare ? `RARE · Combo ×${after}` : `Combo ×${after}`, color: temper.colors[5], ...rare });
     }
     const stage = comboStageReached(before, after);
     if (stage) {

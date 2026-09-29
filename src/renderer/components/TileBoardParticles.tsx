@@ -50,6 +50,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         const energy = Math.max(cardHeat, intensity);
         const theme = themeOf(comboTheme);
         const arcTint = theme.arcTints[intensity < 0.35 ? 0 : intensity < 0.6 ? 1 : intensity < 0.8 ? 2 : 3];
+        const surge = comboHeatLevels(combo).surge;
         // Where a card stands now: its live group if it has one, its layout slot if not.
         const anchorOf = (tileId: string) => {
             const index = board.tiles.findIndex((tile) => tile.id === tileId);
@@ -65,7 +66,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const arc of collectGroupArcCues(previous.current, board)) {
             const emitted = system.emitArc({ from: anchorOf(arc.fromTileId), to: anchorOf(arc.toTileId),
                 seed: hashStringToSeed(`${arc.fromTileId}>${arc.toTileId}:arc`), time: time.current, delay: arc.delay,
-                intensity: arc.kind === 'pair' ? intensity * 0.85 : intensity, reduceMotion, quality: graphicsQuality, tint: arcTint });
+                intensity: arc.kind === 'pair' ? intensity * 0.85 : intensity, reduceMotion, quality: graphicsQuality, tint: arcTint, extraStrands: surge });
             if (emitted > 0) totals.current.arc += 1;
         }
         for (const cue of collectBoardParticleCues(previous.current, board)) {
@@ -126,7 +127,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         // table, more cards and more often the hotter it gets, in the stage's colour.
         const heat = comboHeatLevels(combo);
         if (!reduceMotion && heat.embers > 0 && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextEmberTick.current) {
-            nextEmberTick.current = time.current + (graphicsQuality === 'low' ? 0.5 : 0.34) * (1 - heat.heat * 0.45);
+            nextEmberTick.current = time.current + (graphicsQuality === 'low' ? 0.5 : 0.34) * (1 - heat.heat * 0.45) / (1 + heat.surge * 0.5);
             const groups = [];
             for (const bag of frames.current.values()) {
                 const group = bag.groupRef.current;

@@ -39,7 +39,7 @@ import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
-import StoreSheetRows from './StoreSheetRows';
+import StoreVault from './StoreVault';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1627,8 +1627,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-testid="game-shell"
             data-combo-stage={comboHeatLevelsNow.stage}
             data-combo-theme={comboTemper.id}
+            data-store-open={storeSheetOpen ? 'true' : 'false'}
             ref={shellRef}
-            style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg`, '--combo-flame': comboTemper.colors[comboHeatLevelsNow.stageIndex] } as CSSProperties}
+            style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg`, '--combo-flame': comboTemper.colors[comboHeatLevelsNow.stageIndex], '--combo-surge': comboHeatLevelsNow.surge } as CSSProperties}
         >
             <MainMenuBackground
                 fieldTiltRef={gameFieldTiltRef}
@@ -1753,7 +1754,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
-                            {floorClearBeatShown && run.lastLevelResult ? (
+                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen ? (
                                 <FloorClearBeat
                                     notes={floorClearNotes}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
@@ -2048,26 +2049,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     </OverlayModal>
                 )}
                 {!suppressStatusOverlays && run.status === 'levelComplete' && storeStopKey === floorClearKey && (
-                    <OverlayModal
-                        actions={[{ label: STORE_SHEET_COPY.descend, onClick: continueToNextLevel, variant: 'primary' }]}
-                        focusPrimaryActionFirst
-                        headerPlateTone="pause"
-                        onEscape={continueToNextLevel}
-                        subtitle={STORE_SHEET_COPY.subtitle(run.lastLevelResult?.level ?? 0, runGold(run))}
-                        testId="store-sheet"
-                        scrim="clear"
-                        title={STORE_SHEET_COPY.title}
-                    >
-                        <StoreSheetRows
-                            onBuy={(id) => {
+                    <StoreVault
+                        floor={run.lastLevelResult?.level ?? 0}
+                        onDescend={continueToNextLevel}
+                        onBuy={(id) => {
                                 const before = useAppStore.getState().run;
                                 playMenuOpen();
                                 buyStoreItem(id);
                                 return useAppStore.getState().run !== before;
                             }}
-                            run={run}
-                        />
-                    </OverlayModal>
+                        run={run}
+                    />
                 )}
 
 

@@ -122,6 +122,24 @@ from `scripts/card-pipeline/scene-moods.zimage.manifest.json` at the dungeon's c
 - **Back from the void.** The floor after a black hole's opens with one flash of the ring (the
   Fever-arrival layer, keyed to the loss) and a stamp, BACK FROM THE VOID.
 
+## No ceiling, and the shop as a room (round eight)
+
+- **The ladder has no top.** Legendary opens at 25 and every 25 links after it is another
+  ascension - Legendary II, III, IV... in the temper's own word (Absolute Zero II, Godlike VIII) -
+  without end (`comboAscension`, `comboSurge`). The surge (log2 of the ascension) is what the
+  endless effects read: one more strand of lightning per step, embers faster and more of them,
+  more bolts through the storm's arches, another ring of aura, a bigger combo number and a wider
+  flame up the rail, a stamp for every ascension and for every hundred. Things with a real ceiling
+  (the particle budget, quality tiers) clamp it themselves; nothing else does.
+- **The store is the room.** No sheet: the merchant's vault is the screen and the things in the
+  painting are the things you buy (`StoreVault`, `storeVaultLayout.ts`): a ring of light on the
+  coins (another miss), the crystal (a peek), the scales (a shuffle), the bell (a bomb), the
+  ledger, the bottles and the two lanterns (the relics), each a real button with the name and
+  price beside it and what it does on hover or focus; the trapdoor in the floor is Descend. Still
+  a dialog for everyone who is not looking - labelled, focus-trapped, Escape descends, first focus
+  on Descend, a receipt in a status line - and the wares sit above the trapdoor so a pad's d-pad
+  walks up into them. On a phone the hotspots clamp to the screen's edges.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

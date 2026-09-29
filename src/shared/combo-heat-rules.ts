@@ -43,6 +43,54 @@ export const comboHeatStage = (combo: number): ComboHeatStage => {
 export const comboHeatStageIndex = (stage: ComboHeatStage): number => Math.max(0, STAGES.indexOf(stage));
 
 /**
+ * The ladder has no top. Legendary opens at 25 and every 25 links after it is another
+ * **ascension** - Legendary II, III, IV and on, without end - so a combo of 200 is not the same
+ * screen as a combo of 25. 0 below Legendary, 1 at it, 2 from 50, and so on.
+ */
+export const COMBO_ASCENSION_SPAN = 25;
+export const comboAscension = (combo: number): number => {
+    const links = runNonNegativeInteger(combo);
+    return links < COMBO_HEAT_STAGE_FROM.legendary ? 0 : Math.floor((links - COMBO_HEAT_STAGE_FROM.legendary) / COMBO_ASCENSION_SPAN) + 1;
+};
+
+/** The ascension a turn reached past the first, or null: the second Legendary stamp and every one after. */
+export const comboAscensionReached = (comboBefore: number, comboAfter: number): number | null => {
+    const before = comboAscension(comboBefore);
+    const after = comboAscension(comboAfter);
+    return after > before && after >= 2 ? after : null;
+};
+
+/**
+ * How much past the top of the meter the run has climbed, unbounded but slow: 0 below
+ * Legendary, 1 at the second ascension, 2 at the fourth, 3 at the eighth. Everything that must
+ * keep growing forever grows on this - one more strand of lightning, one more ring of aura, a
+ * bigger number - while the things with a ceiling (a particle budget) clamp it themselves.
+ */
+export const comboSurge = (combo: number): number => {
+    const ascension = comboAscension(combo);
+    return ascension <= 1 ? 0 : Math.log2(ascension);
+};
+
+const ROMAN: readonly [number, string][] = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+export const romanNumeral = (value: number): string => {
+    let n = Math.max(0, Math.floor(value));
+    let out = '';
+    for (const [weight, glyph] of ROMAN) while (n >= weight) { out += glyph; n -= weight; }
+    return out;
+};
+
+/** The stage's label with its ascension: "Legendary", then "Legendary II", "Legendary III"... */
+export const comboStageLabel = (labels: Readonly<Record<ComboHeatStage, string>>, combo: number): string => {
+    const stage = comboHeatStage(combo);
+    const ascension = comboAscension(combo);
+    return ascension >= 2 ? `${labels[stage]} ${romanNumeral(ascension)}` : labels[stage];
+};
+
+/** The stamp for an ascension past the first: the temper's Legendary word with the numeral. */
+export const comboAscensionCallout = (legendaryCallout: string, ascension: number): string =>
+    `${legendaryCallout.replace(/!$/, '')} ${romanNumeral(ascension)}!`;
+
+/**
  * The heat as one number, 0..1, saturating: the first links are where the growth is felt, and a
  * combo carried across five floors still has somewhere to climb. 3 ≈ 0.22, 10 ≈ 0.57, 16 ≈ 0.74,
  * 25 ≈ 0.88, 40 ≈ 0.96.
@@ -168,20 +216,23 @@ export const comboMilestoneReached = (comboBefore: number, comboAfter: number): 
     const before = runNonNegativeInteger(comboBefore);
     const after = runNonNegativeInteger(comboAfter);
     if (after <= before) return null;
-    if (before < 50 && after >= 50 && after < 100) return 50;
     const hundredsBefore = Math.floor(before / 100);
     const hundredsAfter = Math.floor(after / 100);
     return hundredsAfter > hundredsBefore ? hundredsAfter * 100 : null;
 };
 
 export const COMBO_MILESTONE_CALLOUT = (milestone: number): string =>
-    milestone === 50 ? 'HALF-CENTURY!' : milestone === 100 ? 'CENTURY!' : `${milestone} COMBO!`;
+    milestone === 100 ? 'CENTURY!' : `${milestone} COMBO!`;
 
 
 export interface ComboHeatLevels {
     stage: ComboHeatStage;
     stageIndex: number;
     heat: number;
+    /** Legendary and every 25 links after it: 0 below, 1 at 25, 2 at 50... without end. */
+    ascension: number;
+    /** log2 of the ascension past the first: the unbounded, slow growth the endless effects read. */
+    surge: number;
     /** Extra rate on the room's flames and the card medallions past what the meter gives, 1 at cold. */
     burn: number;
     /** Strength of the aura around the combo number and the screen's edges, 0 at cold. */
@@ -198,13 +249,17 @@ export const comboHeatLevels = (combo: number): ComboHeatLevels => {
     const stage = comboHeatStage(combo);
     const stageIndex = comboHeatStageIndex(stage);
     const heat = comboHeat(combo);
+    const ascension = comboAscension(combo);
+    const surge = comboSurge(combo);
     return {
         stage,
         stageIndex,
         heat: round(heat),
+        ascension,
+        surge: round(surge),
         burn: round(1 + heat * 1.1),
         aura: round(stageIndex === 0 ? 0 : 0.18 + heat * 0.82),
         hueDeg: Math.round(-12 * stageIndex * (stageIndex >= 4 ? 2.2 : 1)) + 0,
-        embers: stageIndex < 2 ? 0 : Math.min(6, stageIndex * 1.5)
+        embers: stageIndex < 2 ? 0 : Math.min(12, stageIndex * 1.5 + Math.max(0, ascension - 1))
     };
 };

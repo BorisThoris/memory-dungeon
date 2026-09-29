@@ -60,7 +60,7 @@ describe('combo heat', () => {
             expect(levels.embers).toBeGreaterThanOrEqual(previous.embers);
             expect(levels.burn).toBeLessThanOrEqual(2.2);
             expect(levels.aura).toBeLessThanOrEqual(1);
-            expect(levels.embers).toBeLessThanOrEqual(6);
+            expect(levels.embers).toBeLessThanOrEqual(12);
             expect(Object.is(levels.hueDeg, -0)).toBe(false);
             previous = levels;
         }

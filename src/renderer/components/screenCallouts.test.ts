@@ -53,10 +53,12 @@ describe('the screen stamps a turn earns', () => {
         expect(shiny[0]).toMatchObject({ kind: 'rank', title: 'MYTHIC!', rare: true, sub: 'RARE · Combo ×25' });
     });
 
-    it('stamps the half-century before anything else, in the top colour', () => {
-        const callouts = deriveTurnCallouts(turn({ before: 49, after: 50 }), 3);
-        expect(callouts[0]).toMatchObject({ kind: 'milestone', size: 'major', title: 'HALF-CENTURY!' });
-        expect(callouts.map((callout) => callout.kind)).toEqual(['milestone', 'banked']);
+    it('stamps every ascension past Legendary, and the century before anything else', () => {
+        const second = deriveTurnCallouts(turn({ before: 49, after: 50 }), 3);
+        expect(second[0]).toMatchObject({ kind: 'rank', size: 'major', title: 'LEGENDARY II!', sub: 'Combo ×50' });
+        expect(second.map((callout) => callout.kind)).toEqual(['rank', 'banked']);
+        const century = deriveTurnCallouts(turn({ before: 99, after: 100 }), 3);
+        expect(century.map((callout) => callout.title)).toEqual(['CENTURY!', 'LEGENDARY IV!', 'MISS BANKED']);
     });
 
     it('stamps nothing for a plain match, and nothing without a turn', () => {

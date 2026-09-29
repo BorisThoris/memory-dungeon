@@ -27,6 +27,8 @@ export interface BoardArcBurst {
     quality: GraphicsQualityPreset;
     /** The bolt's colour; the ember palette's by intensity when omitted. */
     tint?: string;
+    /** Strands past the three the intensity buys: the ascensions' (`comboSurge`), clamped by quality. */
+    extraStrands?: number;
 }
 
 export interface BoardParticleBurst {
@@ -323,7 +325,8 @@ export const createBoardParticleSystem = () => {
             const intensity = Math.max(0, Math.min(1, arc.intensity));
             const rng = createMulberry32(arc.seed);
             const lowTier = arc.quality === 'low';
-            const strands = lowTier ? 1 : Math.min(arc.quality === 'medium' ? 2 : 3, 1 + (intensity > 0.4 ? 1 : 0) + (intensity > 0.7 ? 1 : 0));
+            const extra = Math.max(0, Math.floor(arc.extraStrands ?? 0));
+            const strands = lowTier ? 1 : Math.min(arc.quality === 'medium' ? 3 : 6, 1 + (intensity > 0.4 ? 1 : 0) + (intensity > 0.7 ? 1 : 0) + extra);
             const segments = lowTier ? 5 : 6 + Math.round(intensity * 4);
             const forks = lowTier ? 0 : Math.round(intensity * (arc.quality === 'medium' ? 2 : 3));
             const width = 0.045 + intensity * 0.07;

@@ -7,8 +7,8 @@ import styles from './StormBoltsOverlay.module.css';
  * shown by the same beat as the room's white flash (`--scene-storm` sets its period). Each bolt
  * strikes on its own offset of the beat so the room never flashes the same way twice in a row.
  */
-export function StormBoltsOverlay({ seed }: { seed: number }) {
-    const bolts = useMemo(() => buildStormBolts(seed), [seed]);
+export function StormBoltsOverlay({ seed, count = 3 }: { seed: number; count?: number }) {
+    const bolts = useMemo(() => buildStormBolts(seed, count), [seed, count]);
     const { width, height } = STORM_VIEWBOX;
     return (
         <svg aria-hidden="true" className={styles.bolts} data-testid="gameplay-scene-bolts" preserveAspectRatio="none" viewBox={`0 0 ${width} ${height}`}>

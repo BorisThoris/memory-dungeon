@@ -123,16 +123,18 @@ test.describe('The store stop, in the store-stop room', () => {
             await page.waitForTimeout(1200);
         }
         await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
-        // The modal body clips (it never scrolls), so a row has to sit inside the body, not merely the dialog.
-        const box = await page.getByTestId('store-rows').locator('..').boundingBox();
+        // The store is the room now: every ware is a button on its object, on screen, and says what
+        // it does when the pointer or focus is on it (Gen 263's clipped descriptions cannot recur -
+        // there is no body to clip - but a hotspot can still fall off a viewport, so each is checked).
+        const viewport = page.viewportSize()!;
         const ids = ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'];
         for (const id of ids) {
-            // Gen 263: the last three descriptions were clipped while their buy buttons stayed.
-            const row = page.getByTestId(`store-row-${id}`);
-            await expect(row).toBeVisible();
-            const rowBox = await row.boundingBox();
-            expect(rowBox && box && rowBox.y + rowBox.height <= box.y + box.height, `${id} row inside the dialog body`).toBe(true);
-            await expect(page.getByTestId(`store-buy-${id}`)).toBeVisible();
+            const buy = page.getByTestId(`store-buy-${id}`);
+            await expect(buy).toBeVisible();
+            const box = (await buy.boundingBox())!;
+            expect(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width && box.y + box.height <= viewport.height, `${id} on screen`).toBe(true);
+            await buy.hover();
+            await expect(page.getByTestId(`store-row-${id}`)).toBeVisible();
         }
         await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
     });
@@ -155,17 +157,9 @@ test.describe('The store stop on a phone', () => {
             await page.waitForTimeout(1200);
         }
         await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
-        // Gen 263: on a phone the last three rows sat below a dialog body that clips, unseen and unbuyable.
-        // The body must hold its content (it clips, never scrolls), and the list must be the part that scrolls;
-        // a script can scroll a clipping box, so reaching the buttons alone would not prove a player can.
-        const layout = await page.getByTestId('store-rows').evaluate((list) => {
-            const body = list.parentElement!;
-            return { bodyClips: body.scrollHeight > body.clientHeight + 1, listScrolls: getComputedStyle(list).overflowY };
-        });
-        expect(layout.bodyClips).toBe(false);
-        expect(['auto', 'scroll']).toContain(layout.listScrolls);
-        // Exercise purchases as well as scrolling: the previous test's title promised buying,
-        // but it never pressed a buy button. Give this fixture enough gold and room in the bank.
+        // The store is the room: on a phone the plate is cover-fitted, so the wares at the room's
+        // edges can slide off the sides. Every hotspot has to be on screen and buyable, unscrolled.
+        // Give this fixture enough gold and room in the bank.
         await page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             const run = useAppStore.getState().run!;
@@ -173,10 +167,9 @@ test.describe('The store stop on a phone', () => {
         });
         for (const id of ['miss', 'peek', 'shuffle', 'bomb', 'deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle'] as const) {
             const buy = page.getByTestId(`store-buy-${id}`);
-            await buy.scrollIntoViewIfNeeded();
-            const list = await page.getByTestId('store-rows').boundingBox();
-            const button = await buy.boundingBox();
-            expect(list && button && button.y >= list.y - 1 && button.y + button.height <= list.y + list.height + 1, `${id} reachable`).toBe(true);
+            const viewport = page.viewportSize()!;
+            const button = (await buy.boundingBox())!;
+            expect(button.x >= 0 && button.y >= 0 && button.x + button.width <= viewport.width && button.y + button.height <= viewport.height, `${id} on screen`).toBe(true);
             await expect(buy).toBeEnabled();
             await buy.click();
             await expect.poll(() => page.evaluate(async (item) => {
