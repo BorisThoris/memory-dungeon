@@ -372,6 +372,8 @@ interface TileBoardProps {
      * (`tileBoardCardHeat`), so a streak is felt on the thing the player is looking at.
      */
     cardHeat?: number;
+    /** The run's combo (it carries across floors until a miss); the board's effects scale with it. */
+    combo?: number;
     /** Current run chain state, used to preview the payoff of a highlighted chain move. */
     chainContext?: {
         currentStreak: number;
@@ -663,6 +665,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     traitRouteTargetTileIds = [],
     traitRouteHintText = null,
     cardHeat = 0,
+    combo = 0,
     chainContext,
     recoveryContext = null,
     peekRevealedTileIds = [],
@@ -3303,6 +3306,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         allowGambitThirdFlip={allowGambitThirdFlip}
                                         board={board}
                                         cardHeat={cardHeat}
+                                        combo={combo}
                                         boardViewport={renderedViewportState}
                                         compact={compact}
                                         cursedPairKey={cursedPairKey}

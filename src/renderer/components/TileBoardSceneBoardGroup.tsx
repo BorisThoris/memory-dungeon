@@ -17,6 +17,7 @@ interface TileBoardSceneBoardGroupProps {
     visualTime: MutableRefObject<number>;
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat: number;
+    combo?: number;
     cardGlowAnimated: boolean;
     boardColumns: number;
     boardEntranceMotionBudgetMs: number;
@@ -56,6 +57,7 @@ export const TileBoardSceneBoardGroup = ({
     visualTime,
     cardGlowAnimated,
     cardHeat,
+    combo = 0,
     boardColumns,
     boardEntranceMotionBudgetMs,
     boardEntranceMotionDeadlineMs,
@@ -87,7 +89,7 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
-            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} time={visualTime}
+            reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />
         {graphicsQuality !== 'low' ? (
             <mesh

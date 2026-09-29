@@ -3,7 +3,7 @@ import { type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { CHAIN_CARRYOVER_CAP, carriedChainForNextFloor } from './chain-carryover-rules';
-import { getChainTier } from './chain-tier-rules';
+import { getChainTier, runChainTier, runLadderChain } from './chain-tier-rules';
 import { pickFloorCurio } from './floor-curio-rules';
 
 describe('createNextFloorRunState', () => {
@@ -86,7 +86,7 @@ describe('createNextFloorRunState', () => {
         expect(next.chunkPairsThisChain).toBe(0);
     });
 
-    it('caps the carried chain short of Clean, so the floor opens holding no tier', () => {
+    it('carries the whole combo but caps the ladder short of Clean, so the floor opens holding no tier', () => {
         const baseRun = createNewRun(0, { runSeed: 12 });
         const nextBoard = { ...baseRun.board!, level: 4 };
         const run = {
@@ -101,8 +101,11 @@ describe('createNextFloorRunState', () => {
             memorizeRemainingMs: 2500
         });
 
-        expect(next.stats.currentStreak).toBe(CHAIN_CARRYOVER_CAP);
-        expect(getChainTier(next.stats.currentStreak, nextBoard.pairCount)).toBe('none');
+        expect(next.stats.currentStreak).toBe(40);
+        expect(next.chainLinksAboveLadder).toBe(40 - CHAIN_CARRYOVER_CAP);
+        expect(runLadderChain(next)).toBe(CHAIN_CARRYOVER_CAP);
+        expect(getChainTier(runLadderChain(next), nextBoard.pairCount)).toBe('none');
+        expect(runChainTier(next)).toBe('none');
     });
 
     it('normalizes malformed stat records before resetting next-floor stats', () => {

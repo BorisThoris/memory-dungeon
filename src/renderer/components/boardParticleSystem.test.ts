@@ -47,9 +47,9 @@ describe('the shared board particle pool', () => {
         pool.emit({ ...burst, quality: 'low' });
         expect(pool.advance(1.1)).toBeLessThanOrEqual(boardParticleBudget('low'));
         for (let i = 0; i < 20; i += 1) pool.emit({ ...burst, quality: 'low' });
-        expect(pool.advance(1.1)).toBe(96);
+        expect(pool.advance(1.1)).toBe(boardParticleBudget('low'));
         pool.configure('medium');
-        expect(pool.mesh.geometry.instanceCount).toBe(192);
+        expect(pool.mesh.geometry.instanceCount).toBe(boardParticleBudget('medium'));
         expect(pool.advance(1.1)).toBe(0);
         pool.dispose();
     });

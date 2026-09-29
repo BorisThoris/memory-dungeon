@@ -1,6 +1,14 @@
 /**
  * The chain follows you down the stairs. The ladder does not.
  *
+ * **Since the combo carry (2026-09-29) the whole combo crosses**: `stats.currentStreak` is never
+ * touched by a floor boundary, and only a miss ends it (`turn-mismatch-rules.ts`). What this
+ * module caps is what the *ladder* counts: every link above the cap is held in
+ * `chainLinksAboveLadder` and left out of the tiers (`runLadderChain`), so everything measured
+ * below still holds for the rungs, while the score, the miss bank's fifth-link grants, the sound
+ * and the board's effects all ride the whole combo. The rest of this comment is the reasoning
+ * for the ladder's cap, written when the cap was the whole carry.
+ *
  * Until Gen 262 a floor clear zeroed the streak: the last pair of floor N resolved with a chain of
  * nine standing, the stairs took it, and floor N+1 opened cold. That is the one moment in the run
  * where the player did everything right and the game answered by taking the thing they built - a

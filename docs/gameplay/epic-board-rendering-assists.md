@@ -62,7 +62,23 @@ The quieter setting follows the control offered by
 `boardMatchImpact.test.ts` covers the contact trajectory and reduced-motion suppression;
 the particle and browser tests cover staggered rings, shared buffers, budgets and expiry.
 
+**Group lightning.** A match arcs a bolt between its two cards at contact, and every card
+its break takes is struck by a bolt from the nearest card already hit - same suit first, so
+the charge visibly runs through the clump; a Fever bridge takes its bolt from whatever was
+struck nearest (`boardGroupArcs.ts`). Each bolt strikes just ahead of its card's break-wave
+burst, is drawn tip-first so the charge is seen travelling, and strobes as it fades. Bolts
+are instanced segment quads (particle kind 7) in the same bounded pool, which grew to
+640 / 320 / 128 slots for high / medium / low. Reduced motion draws none.
+
+**Combo scaling.** The combo carries across floors until a miss, and the board's effects
+read it through `comboEffectIntensity` (saturating: 3 links ≈ 0.28, 10 ≈ 0.67, 20 ≈ 0.89).
+It sets each bolt's strands (one to three), forks, width, life and colour (cyan, gold,
+amber, rose-white), and floors the energy of match and chain bursts and contact rings, so a
+long combo makes every match and pop visibly bigger. The canvas reports
+`data-particle-arc-bursts` and `data-particle-combo`.
+
 `boardParticleSystem.test.ts` checks bounds, reuse, lifetime, reduced motion and cleanup;
+`boardGroupArcs.test.ts` checks bolt routing, replay safety, seeding and combo scaling;
 `boardParticleCues.test.ts` checks transition selection. `e2e/board-particles.spec.ts`
 exercises real bomb, match and chain actions and checks shader errors, expiry and canvas
 stability. On Windows, run browser tests headlessly through the noninteractive isolation

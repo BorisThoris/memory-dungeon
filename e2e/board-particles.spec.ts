@@ -107,7 +107,7 @@ for (const reduced of [false, true]) {
             await expect.poll(() => count(page, 'bomb-bursts')).toBe(2);
             await expect.poll(() => count(page, 'peak')).toBeGreaterThan(0);
             const active = await count(page, 'peak');
-            expect(active).toBeLessThanOrEqual(reduced ? 2 : 384);
+            expect(active).toBeLessThanOrEqual(reduced ? 2 : 640);
             await expect.poll(() => page.evaluate(() => Boolean((window as unknown as { __particleFrame?: string }).__particleFrame))).toBe(true);
             const particleFrame = await page.evaluate(() => (window as unknown as { __particleFrame: string }).__particleFrame);
             writeFileSync(`output/playwright/particles-burst-${reduced ? 'reduced' : '4k'}.png`, Buffer.from(particleFrame.split(',')[1]!, 'base64'));
@@ -135,6 +135,8 @@ for (const reduced of [false, true]) {
             await pick(page, 'a-2');
             await expect.poll(() => count(page, 'match-bursts')).toBe(2);
             await expect.poll(() => count(page, 'ripple-bursts')).toBe(reduced ? 0 : 2);
+            // The pair arcs between its two cards; reduced motion draws no bolts.
+            await expect.poll(() => count(page, 'arc-bursts')).toBe(reduced ? 0 : 1);
             await expect.poll(() => page.evaluate(() => (window as unknown as { __rimMatchFrames?: string[] }).__rimMatchFrames?.length)).toBe(3);
             const matchFrames = await page.evaluate(() => (window as unknown as { __rimMatchFrames: string[] }).__rimMatchFrames);
             matchFrames.forEach((frame, index) => writeFileSync(
@@ -146,10 +148,32 @@ for (const reduced of [false, true]) {
             expect(await canvas(page).evaluate((node: HTMLCanvasElement) => node.width * node.height)).toBeLessThanOrEqual(3840 * 2160);
             if (!reduced) {
                 await gotoWithSaveAndQuery(page, JSON.stringify(save), 'hallRoom=clean-pop');
-                await expect(canvas(page)).toHaveAttribute('data-particle-budget', '384', { timeout: 150_000 });
+                await expect(canvas(page)).toHaveAttribute('data-particle-budget', '640', { timeout: 150_000 });
+                await canvas(page).evaluate((node: HTMLCanvasElement) => {
+                    const capture = new MutationObserver(() => {
+                        if (Number(node.dataset.particleArcBursts) === 0) return;
+                        capture.disconnect();
+                        const frames: string[] = [];
+                        (window as unknown as { __arcFrames: string[] }).__arcFrames = frames;
+                        let frame = 0;
+                        const sample = () => {
+                            frame += 1;
+                            if ([2, 4, 6].includes(frame)) frames.push(node.toDataURL());
+                            if (frame < 6) requestAnimationFrame(sample);
+                        };
+                        requestAnimationFrame(sample);
+                    });
+                    capture.observe(node, { attributes: true, attributeFilter: ['data-particle-arc-bursts'] });
+                });
                 await pick(page, 'a-1');
                 await pick(page, 'a-2');
                 await expect.poll(() => count(page, 'chain-bursts')).toBeGreaterThan(0);
+                // The group lightning: the pair's own arc, then a bolt into every card the pop took.
+                await expect.poll(() => count(page, 'arc-bursts')).toBeGreaterThan(1);
+                await expect.poll(() => page.evaluate(() => (window as unknown as { __arcFrames?: string[] }).__arcFrames?.length)).toBe(3);
+                const arcFrames = await page.evaluate(() => (window as unknown as { __arcFrames: string[] }).__arcFrames);
+                arcFrames.forEach((frame, index) => writeFileSync(
+                    `output/playwright/particles-lightning-4k-${index}.png`, Buffer.from(frame.split(',')[1]!, 'base64')));
                 await page.screenshot({ path: 'output/playwright/particles-chain-4k.png' });
                 await expect.poll(() => count(page, 'active')).toBe(0);
             }

@@ -57,6 +57,7 @@ import {
 import { WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { CHAIN_CARRYOVER_CAP } from './chain-carryover-rules';
+import { runLadderChain } from './chain-tier-rules';
 import { pairsForFloor } from './pair-curve';
 import { parTurnsForFloor } from './floor-par';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
@@ -778,7 +779,7 @@ describe('game rules', () => {
         expect(resolved.stats.totalScore).toBe(Math.max(0, base - penalty));
     });
 
-    it('costs a miss a try, a turn and half the streak, and nothing else', () => {
+    it('costs a miss a try, a turn and the whole combo, and nothing else', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
             createTile('a2', 'A', 'A'),
@@ -801,7 +802,9 @@ describe('game rules', () => {
         expect(resolved.turnsThisFloor).toBe(1);
         expect(resolved.stats.tries).toBe(1);
         expect(resolved.stats.mismatches).toBe(1);
-        expect(resolved.stats.currentStreak).toBe(1);
+        // A miss is the one thing that ends the combo; the stairs never do.
+        expect(resolved.stats.currentStreak).toBe(0);
+        expect(resolved.chainLinksAboveLadder).toBe(0);
         expect(resolved.stats.totalScore).toBe(0);
         expect(resolved.board?.tiles.every((tile) => tile.state === 'hidden')).toBe(true);
     });
@@ -992,9 +995,10 @@ describe('game rules', () => {
         expect(nextRun.board?.level).toBe(2);
         expect(nextRun.stats.tries).toBe(0);
         expect(nextRun.stats.currentLevelScore).toBe(0);
-        // The per-floor counters reset; the chain is not one of them. It crosses the stairs
-        // capped short of Clean (`chain-carryover-rules.ts`), so a chain of three arrives at two.
-        expect(nextRun.stats.currentStreak).toBe(CHAIN_CARRYOVER_CAP);
+        // The per-floor counters reset; the combo is not one of them. It crosses the stairs whole,
+        // and only the ladder is capped short of Clean (`chain-carryover-rules.ts`).
+        expect(nextRun.stats.currentStreak).toBe(finishedLevel.stats.currentStreak);
+        expect(runLadderChain(nextRun)).toBe(Math.min(finishedLevel.stats.currentStreak, CHAIN_CARRYOVER_CAP));
         // Arriving on a floor also seats its resident, and some of them hand over a peek, a
         // shuffle or a longer look. Read the resident's contribution from the same seed the
         // advance used, so this stays an assertion about what carries over rather than a bet on

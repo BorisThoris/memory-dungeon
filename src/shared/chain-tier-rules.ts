@@ -8,7 +8,7 @@
  * it, a Clean chain lets the partners that left take their own clumps, a Sharp chain lets the
  * reaction run until it stops, and Fever is the celebration.
  *
- * A mismatch halves the chain (`turn-mismatch-rules.ts`), the way a missed peg ends the shot.
+ * A mismatch ends the chain (`turn-mismatch-rules.ts`), the way a missed peg ends the shot.
  * That is the "one more" tension the whole genre runs on, and here it maps onto a real skill: the
  * chain is literally how many things in a row you remembered.
  *
@@ -105,9 +105,20 @@ export type ChainMomentumRun = Pick<RunState, 'chunkPairsThisChain' | 'skipMomen
 export const runChainMomentumPairs = (run: ChainMomentumRun): number =>
     runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(run.skipMomentumThisChain);
 
+/**
+ * The part of the combo the break ladder counts.
+ *
+ * The combo carries whole from floor to floor until a miss; the ladder may take only one link
+ * across a boundary (`chain-carryover-rules.ts`), so every link above that is held in
+ * `chainLinksAboveLadder` and left out here. Everything that decides a tier reads this, and
+ * everything that shows or pays the combo (score, pitch, effects, the miss bank) reads the streak.
+ */
+export const runLadderChain = (run: Pick<RunState, 'stats' | 'chainLinksAboveLadder'>): number =>
+    Math.max(0, runNonNegativeInteger(run.stats?.currentStreak) - runNonNegativeInteger(run.chainLinksAboveLadder));
+
 /** The run's live tier: its momentum against its floor. The one call every surface should make. */
-export const runChainTier = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainTier =>
-    getChainTier(chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run)), run.board?.pairCount ?? null);
+export const runChainTier = (run: Pick<RunState, 'stats' | 'board' | 'chainLinksAboveLadder'> & ChainMomentumRun): ChainTier =>
+    getChainTier(chainMomentum(runLadderChain(run), runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 const CHAIN_TIER_ORDER: readonly ChainTier[] = ['none', 'clean', 'sharp', 'fever'];
 
@@ -163,8 +174,8 @@ export const chainMeter = (momentum: number, pairsOnFloor?: number | null): Chai
 };
 
 /** The run's own meter: its momentum against its floor. */
-export const runChainMeter = (run: Pick<RunState, 'stats' | 'board'> & ChainMomentumRun): ChainMeter =>
-    chainMeter(chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run)), run.board?.pairCount ?? null);
+export const runChainMeter = (run: Pick<RunState, 'stats' | 'board' | 'chainLinksAboveLadder'> & ChainMomentumRun): ChainMeter =>
+    chainMeter(chainMomentum(runLadderChain(run), runChainMomentumPairs(run)), run.board?.pairCount ?? null);
 
 /**
  * The rung the chain is climbing toward, and how close it is.

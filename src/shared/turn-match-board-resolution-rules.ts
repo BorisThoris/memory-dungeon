@@ -1,6 +1,6 @@
 import type { BoardState, RunState } from './contracts';
 import { createMatchedPairClaimBoard } from './match-claim-rules';
-import { chainMomentum, runChainMomentumPairs } from './chain-tier-rules';
+import { chainMomentum, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
 import { resolveChunkBreak, type ChunkBreakResult } from './chunk-break-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -37,7 +37,7 @@ export const resolveTurnMatchBoardResolution = ({
         board: claimedBoard,
         run,
         matchedTileIds: [firstTileId, secondTileId],
-        chain: chainMomentum(normalizeSessionStats(run.stats).currentStreak + 1, runChainMomentumPairs(run))
+        chain: chainMomentum(runLadderChain({ ...run, stats: normalizeSessionStats(run.stats) }) + 1, runChainMomentumPairs(run))
     });
 
     /*

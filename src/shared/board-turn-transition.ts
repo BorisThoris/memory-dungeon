@@ -199,7 +199,8 @@ export const createResolveBoardTurnTransition = ({
             chunkPairsBroken: chunkBreak.brokenPairKeys.length,
             chunkScore: chunkBreak.score + chunkFindable.scoreGain,
             chunkTier: chunkBreak.tier,
-            chainAfter: scoring.currentStreak,
+            // The floor's records are the ladder's: a combo carried in is not a chain this board saw.
+            chainAfter: Math.max(0, runNonNegativeInteger(scoring.currentStreak) - runNonNegativeInteger(run.chainLinksAboveLadder)),
             chunkDroppedPairs: chunkBreak.droppedPairKeys.length,
             chunkMomentumPairs: chunkBreakMomentumPairs(chunkBreak),
             chunkRippleWaves: chunkBreak.waves

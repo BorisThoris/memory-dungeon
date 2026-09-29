@@ -82,6 +82,7 @@ import {
     chainRungApproach,
     runChainMeter,
     runChainMomentumPairs,
+    runLadderChain,
     runChainTier,
     type ChainTier
 } from '../../shared/chain-tier-rules';
@@ -1672,10 +1673,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 guidedTargetTileIds={onboardingBoardTargetIds}
                                 onboardingTargetTileIds={onboardingBoardTargetIds}
                                 cardHeat={runChainMeter(run).fill}
+                                combo={run.stats.currentStreak}
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,
                                     floorCurioId: run.floorCurioId ?? null,
-                                    momentum: chainMomentum(run.stats.currentStreak, runChainMomentumPairs(run))
+                                    momentum: chainMomentum(runLadderChain(run), runChainMomentumPairs(run))
                                 }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}

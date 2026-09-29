@@ -131,8 +131,9 @@ export const resolveMismatchTurnTransition = ({
         // A miss is a turn against the par as much as a match is; the gambit's three flips are one.
         turnsThisFloor: runNonNegativeInteger(run.turnsThisFloor) + 1,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
-        // A miss keeps half the streak (the score multiplier forgives) but every other source of
-        // momentum is gone, so the ladder is climbed again from what was remembered.
+        // A miss ends the combo. It is the one thing that does: the combo crosses floors whole
+        // (`next-floor-run-state-rules.ts`), so the miss is what the whole run's chain rides on.
+        // Every other source of momentum goes with it, and the ladder is climbed again from zero.
         //
         // This used to say "the fire goes out", which was a figure of speech until there was a
         // fire: the room's torches now burn off this same momentum (`sceneFlameLevels`). They do
@@ -142,11 +143,12 @@ export const resolveMismatchTurnTransition = ({
         // itself; this line only takes the cascade away.
         chunkPairsThisChain: 0,
         skipMomentumThisChain: 0,
+        chainLinksAboveLadder: 0,
         stats: {
             ...stats,
             tries: penalty.tries,
             mismatches: runNonNegativeInteger(stats.mismatches) + 1,
-            currentStreak: Math.floor(runNonNegativeInteger(stats.currentStreak) / 2),
+            currentStreak: 0,
             rating: calculateRating(penalty.tries),
             highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
             tileTraitMismatches: addTileTraitCountStats(stats.tileTraitMismatches, sourceTiles)

@@ -11,6 +11,7 @@ import { carryMissBank } from './miss-bank';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface CreateNextFloorRunStateOptions {
     activeMutators: MutatorId[];
@@ -30,6 +31,12 @@ export const createNextFloorRunState = (
      * momentum does not cross at all.
      */
     const carriedChain = carriedChainForNextFloor(stats.currentStreak);
+    /*
+     * The combo itself crosses whole: it ends on a miss, never on the stairs. Only the ladder is
+     * capped, by holding every link above its one carried link out of what the tiers read
+     * (`runLadderChain`).
+     */
+    const combo = runNonNegativeInteger(stats.currentStreak);
 
     const nextRun: RunState = {
         ...run,
@@ -90,8 +97,9 @@ export const createNextFloorRunState = (
             currentLevelScore: 0,
             rating: calculateRating(0),
             highestLevel: Math.max(stats.highestLevel, nextBoard.level),
-            currentStreak: carriedChain
-        }
+            currentStreak: combo
+        },
+        chainLinksAboveLadder: combo - carriedChain
     };
     /*
      * Whoever lives on the next floor moves in before anything else reads the run: their peek

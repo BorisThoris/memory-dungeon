@@ -140,6 +140,15 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         (run.runEndReason == null) === (run.status !== 'gameOver') ? null : `status ${run.status}, reason ${String(run.runEndReason)}`,
     'the score never goes down': (before, run) =>
         before && run.stats.totalScore < before.stats.totalScore ? `score ${before.stats.totalScore} -> ${run.stats.totalScore}` : null,
+    'the combo falls only on a miss, and then to nothing': (before, run) => {
+        if (!before || run.stats.currentStreak >= before.stats.currentStreak) return null;
+        if (run.stats.mismatches <= before.stats.mismatches) return `combo ${before.stats.currentStreak} -> ${run.stats.currentStreak} without a miss`;
+        return run.stats.currentStreak === 0 ? null : `a miss left a combo of ${run.stats.currentStreak}`;
+    },
+    'the ladder never counts links the combo does not hold': (_b, run) => {
+        const above = run.chainLinksAboveLadder ?? 0;
+        return nonNegativeInteger(above) && above <= run.stats.currentStreak ? null : `${String(above)} links above the ladder on a combo of ${run.stats.currentStreak}`;
+    },
     'a floor only ever moves forward by one': (before, run) => {
         if (!before?.board || !run.board) return null;
         const step = run.board.level - before.board.level;

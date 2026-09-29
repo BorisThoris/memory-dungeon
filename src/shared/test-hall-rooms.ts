@@ -21,6 +21,8 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
+import { CHAIN_CARRYOVER_CAP } from './chain-carryover-rules';
+import { runChainTier, runLadderChain } from './chain-tier-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -42,6 +44,8 @@ import { WILD_PAIR_KEY } from './tile-identity';
  */
 export type TestHallRoomId =
     | 'pairs'
+    | 'combo-carries'
+    | 'combo-ends-on-miss'
     | 'miss-bank-edge'
     | 'chain-earns-miss'
     | 'clean-pop'
@@ -274,6 +278,51 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'match', pairKey: 'a' }, says: 'the match takes pair a', expect: expectAll(isGone('a'), turnsAre(1), (r) => (r.stats.currentStreak === 1 ? null : `streak ${r.stats.currentStreak}`)) },
             { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'the miss spends one miss and resets the chain', expect: expectAll(isStanding('b'), isStanding('c'), missesAre(2), turnsAre(2), (r) => (r.stats.currentStreak === 0 ? null : `streak ${r.stats.currentStreak}`)) },
             { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'combo-carries',
+        title: 'The combo carries',
+        mechanic: 'The combo crosses the stairs whole and keeps paying; only one link of it counts toward the next floor\'s rungs.',
+        graphMechanicIds: ['board.chain_chunk_fever', 'progression.run_flow'],
+        tryThis: 'Your combo stands at seven. Match, clear the floor and descend: the combo is still there, the rungs start one link up.',
+        build: () => room(['a:e b:t c:m', 'c:m a:e b:t'], { streak: 7, run: { chainLinksAboveLadder: 6 } }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match adds a link', expect: (r) => (r.stats.currentStreak === 8 ? null : `combo ${r.stats.currentStreak}`) },
+            { step: { do: 'clear' }, says: 'the floor clears with the combo standing', expect: expectAll(statusIs('levelComplete'), (r) => (r.stats.currentStreak >= 8 ? null : `combo ${r.stats.currentStreak}`)) },
+            {
+                step: { do: 'advance' },
+                says: 'the next floor opens holding the whole combo, one link of it on the ladder and no tier',
+                expect: expectAll(statusIs('memorize'), (r, b) =>
+                    r.stats.currentStreak !== b.stats.currentStreak
+                        ? `combo ${b.stats.currentStreak} -> ${r.stats.currentStreak}`
+                        : runLadderChain(r) !== CHAIN_CARRYOVER_CAP
+                          ? `ladder ${runLadderChain(r)}`
+                          : runChainTier(r) !== 'none'
+                            ? `tier ${runChainTier(r)}`
+                            : null)
+            }
+        ]
+    },
+    {
+        id: 'combo-ends-on-miss',
+        title: 'A miss ends the combo',
+        mechanic: 'A combo carried down the stairs keeps climbing until a miss, and the miss ends all of it.',
+        graphMechanicIds: ['board.chain_chunk_fever', 'core.board_turn_resolution'],
+        tryThis: 'You arrive with a combo of twelve, one link of it on the ladder. Match once, then miss.',
+        build: () => room(['a:e b:t', 'c:m a:e', 'b:t c:m'], { streak: 12, run: { chainLinksAboveLadder: 11 } }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the match adds a link to the combo and to the ladder',
+                expect: (r) => (r.stats.currentStreak === 13 && runLadderChain(r) === 2 ? null : `combo ${r.stats.currentStreak}, ladder ${runLadderChain(r)}`)
+            },
+            {
+                step: { do: 'miss', a: 'b-1', b: 'c-1' },
+                says: 'the miss ends the combo, carried links and all',
+                expect: expectAll(missesAre(2), (r) =>
+                    r.stats.currentStreak === 0 && runLadderChain(r) === 0 && !r.chainLinksAboveLadder ? null : `combo ${r.stats.currentStreak}, above ${r.chainLinksAboveLadder}`)
+            }
         ]
     },
     {

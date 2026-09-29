@@ -12,7 +12,7 @@ import { getFloorClearObjectiveResult } from './secondary-objective-rules';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getChainTier, higherChainTier, runChainMomentumPairs } from './chain-tier-rules';
+import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
 import { floorClearGold, runGold } from './run-store-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
@@ -33,7 +33,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     // clears at, and it multiplies the floor-end bonus. Read before the streak resets with the
     // floor, never from the score.
     const momentumBonus = getFloorClearMomentumBonus({
-        chain: stats.currentStreak,
+        chain: runLadderChain({ ...run, stats }),
         cascadedPairs: runChainMomentumPairs(run),
         pairsOnFloor: board.pairCount
     });

@@ -1499,6 +1499,7 @@
                 "src/shared/board-turn-transition.ts",
                 "src/renderer/copy/chainBeat.ts",
                 "src/renderer/components/tileBoardBreakWave.ts",
+                "src/renderer/components/boardGroupArcs.ts",
                 "src/renderer/components/RunShell.tsx"
             ],
             "reads": [

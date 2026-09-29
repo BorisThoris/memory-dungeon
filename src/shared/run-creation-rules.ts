@@ -157,6 +157,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         chunkScoreThisFloor: 0,
         chunkPairsThisChain: 0,
         skipMomentumThisChain: 0,
+        chainLinksAboveLadder: 0,
         feverBreaksThisFloor: 0,
         bestChainThisFloor: 0,
         peakChainTierThisFloor: 'none',

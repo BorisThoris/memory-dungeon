@@ -6,11 +6,26 @@ import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { createMulberry32 } from '../../shared/rng';
 import { noopMeshRaycast } from './tileBoardPick';
 import { sampleCardRim, type RimParticleMood } from './boardParticleRim';
+import { buildLightningPath, comboArcTint } from './boardGroupArcs';
 
-export type BoardParticleKind = 'bomb' | 'match' | 'flip' | 'chain' | 'rim' | 'ripple';
-export const BOARD_PARTICLE_CAPACITY = 384;
+export type BoardParticleKind = 'bomb' | 'match' | 'flip' | 'chain' | 'rim' | 'ripple' | 'arc';
+/** Room for a Fever break's bolts on top of its bursts: an arc is a few dozen segment quads. */
+export const BOARD_PARTICLE_CAPACITY = 640;
 export const boardParticleBudget = (quality: GraphicsQualityPreset): number =>
-    quality === 'low' ? 96 : quality === 'medium' ? 192 : BOARD_PARTICLE_CAPACITY;
+    quality === 'low' ? 128 : quality === 'medium' ? 320 : BOARD_PARTICLE_CAPACITY;
+
+/** One lightning bolt between two points on the board, scaled by the combo. */
+export interface BoardArcBurst {
+    from: { x: number; y: number; z: number };
+    to: { x: number; y: number; z: number };
+    seed: number;
+    time: number;
+    delay?: number;
+    /** 0..1, from `comboEffectIntensity`: strands, forks, width, life and colour all read it. */
+    intensity: number;
+    reduceMotion: boolean;
+    quality: GraphicsQualityPreset;
+}
 
 export interface BoardParticleBurst {
     kind: BoardParticleKind;
@@ -44,9 +59,16 @@ const vertexShader = `
         float seconds = time - lifetime.x;
         float age = seconds / max(0.001, lifetime.y);
         vUv = uv; vTint = tint; vAge = age; vKind = lifetime.w;
-        bool ripple = vKind > 5.5;
+        bool ripple = vKind > 5.5 && vKind < 6.5;
         if ((ripple && rippleLayer < 0.5) || (!ripple && rippleLayer > 0.5) || lifetime.y <= 0.0 || age < 0.0 || age >= 1.0) {
             gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+            return;
+        }
+        if (vKind > 6.5) {
+            // A bolt segment: a fixed quad from one path point to the next, length by width.
+            vec2 segment = vec2(position.x * lifetime.z, position.y * movement.z);
+            segment = mat2(cos(rotation.x), sin(rotation.x), -sin(rotation.x), cos(rotation.x)) * segment;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(origin + vec3(segment, 0.0), 1.0);
             return;
         }
         float travel = (1.0 - exp(-movement.w * seconds)) / max(movement.w, 0.001);
@@ -77,6 +99,7 @@ const fragmentShader = `
         float radius = length(p);
         float shape = pow(max(0.0, 1.0 - radius), 2.0);
         float strength = 0.9;
+        vec3 color = vTint;
         if (vKind > 0.5 && vKind < 1.5) {
             shape = 1.0 - smoothstep(0.035, 0.1, abs(radius - 0.72));
             strength = 0.58;
@@ -89,7 +112,17 @@ const fragmentShader = `
             shape = core + rays * 0.6;
             strength = 1.0;
         }
-        if (vKind > 5.5) {
+        if (vKind > 6.5) {
+            float d = abs(vUv.y * 2.0 - 1.0);
+            float core = exp(-d * d * 28.0);
+            float glow = exp(-d * d * 3.0) * 0.6;
+            // Lightning strobes: each bolt strobes on a beat keyed to its tint.
+            float beat = fract(sin(floor(vAge * 20.0) * 12.9898 + vTint.g * 78.233) * 43758.5453);
+            shape = (core + glow) * (0.55 + 0.45 * step(0.3, beat));
+            strength = 1.0;
+            color = mix(vTint, vec3(1.0), core * 0.7);
+        }
+        if (vKind > 5.5 && vKind < 6.5) {
             float band = abs(radius - 0.76);
             shape = exp(-band * band * 1800.0) + exp(-band * band * 110.0) * 0.3;
             strength = 0.72;
@@ -97,7 +130,7 @@ const fragmentShader = `
         float fade = smoothstep(0.0, 0.06, vAge) * pow(1.0 - vAge, 1.5);
         float alpha = shape * fade * strength;
         if (alpha < 0.003) discard;
-        gl_FragColor = vec4(vTint, alpha);
+        gl_FragColor = vec4(color, alpha);
         #include <colorspace_fragment>
     }
 `;
@@ -149,6 +182,25 @@ export const createBoardParticleSystem = () => {
     const rimSample = { x: 0, y: 0, nx: 0, ny: 0 };
     let cursor = 0;
     let budget = BOARD_PARTICLE_CAPACITY;
+    const arcColor = new Color();
+    /** The next slot a one-shot effect may take: never a contact ring that is still showing. */
+    const claimSlot = (time: number): number | null => {
+        let checked = 0;
+        while (ends[cursor % budget]! > time && lifetime.getW(cursor % budget) === 6 && checked++ < budget) cursor += 1;
+        return checked >= budget ? null : cursor++ % budget;
+    };
+    /** One bolt segment from (ax, ay) to (bx, by). */
+    const writeSegment = (slot: number, ax: number, ay: number, bx: number, by: number, z: number,
+        width: number, start: number, life: number): void => {
+        const length = Math.hypot(bx - ax, by - ay);
+        origin.setXYZ(slot, (ax + bx) / 2, (ay + by) / 2, z);
+        // Overlap the joints a little so a bent bolt reads as one line, not a dotted one.
+        movement.setXYZW(slot, 0, 0, width, 1);
+        lifetime.setXYZW(slot, start, life, length * 1.12 + width * 0.5, 7);
+        tint.setXYZ(slot, arcColor.r, arcColor.g, arcColor.b);
+        rotation.setXY(slot, Math.atan2(by - ay, bx - ax), 0);
+        ends[slot] = start + life;
+    };
 
     const clear = (): void => {
         ends.fill(0);
@@ -230,6 +282,62 @@ export const createBoardParticleSystem = () => {
                 rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);
                 ends[slot] = start + life;
                 emitted += 1;
+            }
+            if (emitted > 0) {
+                for (const value of attributes) value.needsUpdate = true;
+                mesh.visible = true;
+                rippleMesh.visible = true;
+            }
+            return emitted;
+        },
+        /**
+         * A combo-scaled lightning bolt: one strand at a fresh combo, up to three with forks at
+         * the top, each strand drawn tip-first so the charge is seen travelling. Returns quads used.
+         */
+        emitArc(arc: BoardArcBurst): number {
+            configure(arc.quality);
+            if (arc.reduceMotion) return 0;
+            const intensity = Math.max(0, Math.min(1, arc.intensity));
+            const rng = createMulberry32(arc.seed);
+            const lowTier = arc.quality === 'low';
+            const strands = lowTier ? 1 : Math.min(arc.quality === 'medium' ? 2 : 3, 1 + (intensity > 0.4 ? 1 : 0) + (intensity > 0.7 ? 1 : 0));
+            const segments = lowTier ? 5 : 6 + Math.round(intensity * 4);
+            const forks = lowTier ? 0 : Math.round(intensity * (arc.quality === 'medium' ? 2 : 3));
+            const width = 0.045 + intensity * 0.07;
+            const life = 0.38 + intensity * 0.3;
+            const travel = 0.07;
+            const start = arc.time + (arc.delay ?? 0);
+            const z = Math.max(arc.from.z, arc.to.z) + 0.09;
+            arcColor.set(comboArcTint(intensity));
+            let emitted = 0;
+            for (let strand = 0; strand < strands; strand += 1) {
+                const path = buildLightningPath(arc.from.x, arc.from.y, arc.to.x, arc.to.y,
+                    arc.seed + strand * 7919, segments, 0.1 + intensity * 0.08 + strand * 0.04);
+                const strandWidth = strand === 0 ? width : width * 0.55;
+                for (let index = 0; index < segments; index += 1) {
+                    const slot = claimSlot(start);
+                    if (slot === null) break;
+                    writeSegment(slot, path[index * 2]!, path[index * 2 + 1]!, path[index * 2 + 2]!, path[index * 2 + 3]!, z,
+                        strandWidth, start + index / segments * travel + strand * 0.03, life - strand * 0.05);
+                    emitted += 1;
+                }
+                if (strand > 0) continue;
+                for (let fork = 0; fork < forks; fork += 1) {
+                    const at = 1 + Math.floor(rng() * Math.max(1, segments - 2));
+                    const ax = path[at * 2]!;
+                    const ay = path[at * 2 + 1]!;
+                    const heading = Math.atan2(arc.to.y - arc.from.y, arc.to.x - arc.from.x) + (rng() > 0.5 ? 1 : -1) * (0.5 + rng() * 0.5);
+                    const reach = Math.hypot(arc.to.x - arc.from.x, arc.to.y - arc.from.y) / segments * (1.2 + rng());
+                    const branch = buildLightningPath(ax, ay, ax + Math.cos(heading) * reach, ay + Math.sin(heading) * reach,
+                        arc.seed + 131 * (fork + 1), 2, 0.25);
+                    for (let index = 0; index < 2; index += 1) {
+                        const slot = claimSlot(start);
+                        if (slot === null) break;
+                        writeSegment(slot, branch[index * 2]!, branch[index * 2 + 1]!, branch[index * 2 + 2]!, branch[index * 2 + 3]!, z,
+                            width * 0.45, start + at / segments * travel + 0.02, life * 0.6);
+                        emitted += 1;
+                    }
+                }
             }
             if (emitted > 0) {
                 for (const value of attributes) value.needsUpdate = true;

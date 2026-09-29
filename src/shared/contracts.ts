@@ -637,6 +637,12 @@ export interface RunState {
      * and read as zero.
      */
     skipMomentumThisChain?: number;
+    /**
+     * Links of the combo that crossed a floor boundary above the one link the break ladder may
+     * carry (`chain-carryover-rules.ts`). The combo (`stats.currentStreak`) carries whole until a
+     * miss; the ladder reads the combo minus these. Absent on older saves, and read as zero.
+     */
+    chainLinksAboveLadder?: number;
     /** Breaks that landed at the Fever rung this floor, and the longest chain the floor saw. */
     feverBreaksThisFloor: number;
     bestChainThisFloor: number;

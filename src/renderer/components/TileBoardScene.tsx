@@ -87,6 +87,8 @@ interface TileBoardSceneProps {
     board: BoardState;
     /** Chain meter fill, 0..1: how hard the card backs burn. */
     cardHeat?: number;
+    /** The run's combo, for the effects that scale with it. */
+    combo?: number;
     boardViewport: TileBoardViewportState;
     compact: boolean;
     debugPeekActive: boolean;
@@ -159,6 +161,7 @@ const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     board,
     cardHeat = 0,
+    combo = 0,
     boardViewport,
     compact,
     debugPeekActive,
@@ -482,6 +485,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
                 cardGlowAnimated={cardGlowAnimated}
                 cardHeat={cardHeat}
+                combo={combo}
                 shuffleMotionBudgetMs={shuffleMotionBudgetMs}
                 shuffleMotionDeadlineMs={shuffleMotionDeadlineMs}
                 shuffleStaggerTileCount={shuffleStaggerTileCount}

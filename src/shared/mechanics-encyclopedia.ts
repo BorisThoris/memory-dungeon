@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 58 as const;
+export const ENCYCLOPEDIA_VERSION = 59 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -575,11 +575,11 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Sharp, a little over half the floor\'s pairs of momentum and four at least, runs the reaction one wave on from where the pop stopped. ' +
             'Fever, three quarters and seven at least, runs it three waves and lets it **bridge** into the one clump its cards were touching, whatever that suit is. Every pair a break takes adds to the chain\'s momentum. ' +
             'Treasure inside a break spills and pays as if you had matched it. Each popped pair starts at **60% of a base match\'s score**, then the break multiplies by its tier (Clean ×2, Sharp ×4, Fever ×8) and ripple (×1.75 for a second wave, up to ×6). Those multipliers apply to popped pairs, not the pair you remembered. Broken pairs give no recall credit - memory still pays best - but they ' +
-            'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
+            'clear the floor faster, and a longer ripple pays more. A miss ends the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pair on its own: that is the drop, and it happens at any chain, so the last pair of a suit is never a pair you have to grind out. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
-            'Up to **one chain link** carries into the next floor: with that link, two more matches reach Clean instead of three. Every tier is earned on the board that shows it. Cascade and early-start momentum stay behind with the floor where you earned them.'
+            'Your **combo carries from floor to floor until you miss**: it keeps paying its score, and the lightning that runs through every pair and pop grows with it. The rungs are the floor\'s own - only **one link** of it counts toward them on a new floor, so two more matches reach Clean instead of three, and every tier is earned on the board that shows it. Cascade and early-start momentum stay behind with the floor where you earned them.'
     },
     {
         id: 'tile_suits',
