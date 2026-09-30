@@ -1540,9 +1540,14 @@
     padding: 0.4rem;
     border: 1px solid var(--rule);
     border-radius: 8px;
-    background: color-mix(in srgb, var(--ink) 90%, transparent);
+    background: color-mix(in srgb, var(--ink) 96%, transparent);
     pointer-events: auto;
     animation: captionIn 140ms ease-out;
+}
+
+/* A phone sideways has width and no height: the bag is one row, so it covers as little board as it can. */
+:global([data-shell-layout='phone-landscape']) .tray {
+    grid-template-columns: repeat(auto-fit, minmax(3.75rem, 1fr));
 }
 
 .tray .tool {
