@@ -73,7 +73,8 @@ describe('the record set', () => {
         const run = gameOverRunFixture();
         render(<GameOverScreen run={run} />);
         const rematch = screen.getByTestId('game-over-rematch');
-        expect(rematch).toHaveTextContent('Rematch this board');
+        expect(rematch).toHaveTextContent('REMATCH');
+        expect(rematch).toHaveAccessibleName(/Rematch - play this exact board again/);
         rematch.click();
         expect(gameOverStoreMocks.startSharedRun).toHaveBeenCalledWith(`md1:classic:${run.runRulesVersion}:${run.runSeed}`);
     });
@@ -220,7 +221,9 @@ describe('GameOverScreen (REF-031)', () => {
         render(<GameOverScreen run={gameOverRunFixture()} />);
 
         expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
-        expect(screen.getByRole('heading', { level: 1, name: 'Expedition Over' })).toBeInTheDocument();
+        // The verdict is the page's one h1, stamped by how the run ended: this fixture hit the turn ceiling.
+        expect(screen.getByRole('heading', { level: 1, name: "TIME'S UP" })).toBeInTheDocument();
+        expect(screen.getByTestId('run-end-score-line')).toHaveTextContent('Floor');
 
         const polite = screen.getByLabelText('Run summary announcement');
         expect(polite).toHaveAttribute('aria-live', 'polite');

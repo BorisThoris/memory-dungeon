@@ -18,6 +18,8 @@ import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
+import { RunEndStamp } from './RunEndStamp';
+import { RUN_END_STAMP_COPY } from '../copy/runEndStamp';
 import { useAppStore } from '../store/useAppStore';
 import { CathedralScene } from './CathedralScene';
 import MainMenuBackground from './MainMenuBackground';
@@ -275,22 +277,27 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
 
                 <div className={styles.layout}>
                     <Panel className={styles.heroPanel} padding="lg" variant="strong">
-                        <div className={styles.heroLockup}>
-                            <img alt="" className={styles.brandCrest} src={UI_ART.brandCrest} />
-                            <Eyebrow data-testid="game-over-mode-heading">
-                                {gameOverScreenCopy.heroEyebrow} · {runModeHeading(summary)}
-                            </Eyebrow>
-                            <ScreenTitle as="h1" role="screenLg">
-                                {gameOverScreenCopy.heroTitle}
-                            </ScreenTitle>
-                        </div>
-                        <div
-                            aria-label={`Total score ${summary.totalScore.toLocaleString()}`}
-                            className={styles.scoreHero}
-                        >
-                            <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
-                            <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
-                        </div>
+                        {/* The end, stamped (`RunEndStamp`): the verdict word, the score line, a flourish, and
+                            the choices as stamps you can press - the in-run stamps' register, held at rest. */}
+                        <RunEndStamp
+                            actions={[
+                                { id: 'play-again', label: RUN_END_STAMP_COPY.playAgain, ariaLabel: gameOverScreenCopy.playAgainAriaLabel, onClick: restartRun },
+                                ...(rematchKey !== null
+                                    ? [{ id: 'rematch' as const, label: RUN_END_STAMP_COPY.rematch, ariaLabel: gameOverScreenCopy.rematchAriaLabel, testId: 'game-over-rematch', onClick: startRematch }]
+                                    : []),
+                                { id: 'main-menu', label: RUN_END_STAMP_COPY.mainMenu, ariaLabel: gameOverScreenCopy.mainMenuAriaLabel, onClick: leaveToMenu }
+                            ]}
+                            eyebrow={
+                                <Eyebrow data-testid="game-over-mode-heading">
+                                    {gameOverScreenCopy.heroEyebrow} · {runModeHeading(summary)}
+                                </Eyebrow>
+                            }
+                            personalBest={personalBest}
+                            reason={summary.runEndReason}
+                            reduceMotion={settings.reduceMotion}
+                            runSeed={run.runSeed}
+                            summary={summary}
+                        />
                         {/* How it ended, before how far it got: the one fact this screen has that the run bar did not. */}
                         {endReasonLine ? (
                             <p className={styles.copy} data-testid="game-over-end-reason">
@@ -378,44 +385,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     <h2 className={styles.panelHeading}>{gameOverScreenCopy.actionHeading}</h2>
                                 </div>
                             </div>
+                            {/* Play again, the rematch and the menu are the stamps in the hero now; the
+                                ledger keeps the one action that is about the record: handing it on. */}
                             <div className={styles.actionButtons}>
-                                <UiButton
-                                    fullWidth
-                                    aria-label={gameOverScreenCopy.playAgainAriaLabel}
-                                    size="lg"
-                                    variant="primary"
-                                    className={styles.desktopActionButton}
-                                    onClick={restartRun}
-                                >
-                                    {gameOverScreenCopy.playAgainLabel}
-                                </UiButton>
-                                {rematchKey !== null ? (
-                                    <UiButton
-                                        fullWidth
-                                        aria-label={gameOverScreenCopy.rematchAriaLabel}
-                                        className={styles.desktopActionButton}
-                                        data-testid="game-over-rematch"
-                                        onClick={startRematch}
-                                        size="lg"
-                                        variant="secondary"
-                                    >
-                                        {gameOverScreenCopy.rematchLabel}
-                                    </UiButton>
-                                ) : null}
-                                <UiButton
-                                    fullWidth
-                                    aria-label={gameOverScreenCopy.mainMenuAriaLabel}
-                                    size="lg"
-                                    variant="secondary"
-                                    className={styles.desktopActionButton}
-                                    onClick={() => {
-                                        resumeUiSfxContext();
-                                        playUiBackSfx(uiGain);
-                                        goToMenu();
-                                    }}
-                                >
-                                    {gameOverScreenCopy.mainMenuLabel}
-                                </UiButton>
                                 <UiButton
                                     fullWidth
                                     aria-label={gameOverScreenCopy.copyResultAriaLabel}

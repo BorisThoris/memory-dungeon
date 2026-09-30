@@ -267,6 +267,27 @@ would have cost as turns. What changes is what a turn *is*, for a few seconds, f
 earned it. The soak ignites it on half the turns it may and requires a Zone to open and to match
 a pair; the `zone` room walks the burn, the free flips, the resolve, the miss and the bonus.
 
+## Round fourteen: the end, stamped (2026-09-30)
+
+The owner asked for the results screen to open the way the in-run stamps do - the anime duel
+screens of the 2000s card cartoons - with the choices as stamps you can press. `RunEndStamp`
+replaces the hero of the results page:
+
+- **The verdict**, one word by how the run ended, never a verdict on the player: JOURNEY OVER
+  (the misses ran out), TIME'S UP, UNTIL NEXT TIME (the player stopped), CONTRACT SEALED, TABLE
+  SETTLED; EXPEDITION OVER for a summary from before the reason was recorded. It is the page's
+  one h1, slammed in with the sheen, speed lines and a flash, held at rest.
+- **The score line** under it: score and floor, in the ledger's gold.
+- **A flourish**, a smaller second stamp for the one thing worth one: NEW RECORD! over everything,
+  else LEGENDARY / INFERNO / BLAZING RUN by the heat the best chain reached.
+- **The choices as stamps**: PLAY AGAIN (in the temper's hottest colour), REMATCH, MAIN MENU,
+  each a real button with the ledger's accessible names, skewed at rest, upright and sheened on
+  hover or focus, staggered in after the verdict. The ledger keeps Copy result and the next-run
+  cards; the run's temper colours the whole thing.
+
+Reduced motion shows it all at rest. The fit contract, the reachability gate and the controller
+walk still pass on the results screen; the playtest's results screenshot is the reference.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

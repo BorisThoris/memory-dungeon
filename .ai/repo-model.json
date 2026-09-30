@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2812,
-    "codeFileCount": 1007,
-    "exportedSymbolCount": 3059,
+    "trackedFileCount": 2816,
+    "codeFileCount": 1010,
+    "exportedSymbolCount": 3068,
     "contentItemCount": 10,
     "mechanicCount": 53,
     "stateFieldCount": 97,
-    "relationshipCount": 7985
+    "relationshipCount": 8005
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 22325,
-      "sha256": "5effb6f478935e6716d122c24c015e2ec30fc4f16efbe4e552dbfd513f699c67"
+      "bytes": 23734,
+      "sha256": "2c471eec91d81faca595d1c520cc8e87c29fdcec8973fc89f0b488857da0e577"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "8dd2fe2ec247b2eba258e8612612678affd7b504f21556a5a682448808c86867"
+      "sha256": "cef1e0292d530b56235cfa3f3510dd64a71cd09452fe356f386a33b5e7add613"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9411,14 +9411,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 15679,
-      "sha256": "56e2a6ea22b512d7295ad477ff0b3db5b7ca71c526d2d11e2190dfee2f991db2"
+      "bytes": 15944,
+      "sha256": "a633d279554687aeb8c85d7992fd527fd4b8260f4a562fbb23c822dd97b7932a"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 25481,
-      "sha256": "1e1037c1a45f7705c84094ea4161fa8f7b6fadab69ef7442b6787f58db161f3c"
+      "bytes": 24219,
+      "sha256": "3dfc222fd8b065ae16ad988e2eb0b058abd2b5a65ecb0fce1b8b6818d5311557"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9767,6 +9767,24 @@
       "category": "source",
       "bytes": 15137,
       "sha256": "dd68affefb8f36a318717926f4f0a02adf3d4086faf09a0d01103e020d0c51e3"
+    },
+    {
+      "path": "src/renderer/components/RunEndStamp.module.css",
+      "category": "source",
+      "bytes": 8986,
+      "sha256": "13ad83e0d2f6a1682a1de53bc16682040af7e56e458adad9dd6e6467aa53099b"
+    },
+    {
+      "path": "src/renderer/components/RunEndStamp.test.tsx",
+      "category": "test",
+      "bytes": 3761,
+      "sha256": "ccafb1a85f43d4165df9d91464cbd92b9eff8b06b144d215656a7b9685cba71c"
+    },
+    {
+      "path": "src/renderer/components/RunEndStamp.tsx",
+      "category": "source",
+      "bytes": 4012,
+      "sha256": "18596f15b61f95dbdda504bf2ce5edd909c9b9bf805df2eb17bf659b7ab85e7f"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
@@ -11171,6 +11189,12 @@
       "category": "source",
       "bytes": 7191,
       "sha256": "c20a59a921a1d73d6b3fa5f090dc0665cc23a8f2a85f6ec65fdd204b9e825359"
+    },
+    {
+      "path": "src/renderer/copy/runEndStamp.ts",
+      "category": "source",
+      "bytes": 2186,
+      "sha256": "993c0be216ab62ca755795137d723d60ea93817f2287e2c26ed586b48feda684"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -19813,7 +19837,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 326,
+      "lineCount": 329,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -19829,14 +19853,16 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 499,
+      "lineCount": 471,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
+        "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
         "file:src/renderer/copy/passAndPlay.ts",
+        "file:src/renderer/copy/runEndStamp.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/hooks/useCopyToClipboard.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
@@ -20739,6 +20765,39 @@
       ],
       "testedBy": [
         "file:src/renderer/components/ProfileScreen.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/RunEndStamp.test.tsx",
+      "path": "src/renderer/components/RunEndStamp.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 64,
+      "imports": [
+        "file:src/renderer/components/RunEndStamp.tsx",
+        "file:src/renderer/copy/runEndStamp.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RunEndStamp.tsx",
+      "path": "src/renderer/components/RunEndStamp.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 90,
+      "imports": [
+        "file:src/renderer/copy/runEndStamp.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
+        "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampAction",
+        "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunEndStamp.test.tsx"
       ]
     },
     {
@@ -24732,6 +24791,28 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/runEndStamp.ts",
+      "path": "src/renderer/copy/runEndStamp.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 48,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
+        "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
+        "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+        "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
+        "symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
+        "symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunEndStamp.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/runHistory.ts",
@@ -39206,8 +39287,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 498,
-      "endLine": 498
+      "line": 470,
+      "endLine": 470
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -39784,6 +39865,30 @@
       "file": "src/renderer/components/ProfileScreen.tsx",
       "line": 279,
       "endLine": 279
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
+      "name": "RunEndStamp",
+      "kind": "function",
+      "file": "src/renderer/components/RunEndStamp.tsx",
+      "line": 36,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampAction",
+      "name": "RunEndStampAction",
+      "kind": "interface",
+      "file": "src/renderer/components/RunEndStamp.tsx",
+      "line": 17,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps",
+      "name": "RunEndStampProps",
+      "kind": "interface",
+      "file": "src/renderer/components/RunEndStamp.tsx",
+      "line": 25,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
@@ -44375,6 +44480,54 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 17,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
+      "name": "RUN_END_STAMP_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 42,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
+      "name": "RUN_END_VERDICT",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 9,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+      "name": "RUN_END_VERDICT_UNKNOWN",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
+      "name": "runEndFlourish",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 31,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
+      "name": "runEndScoreLine",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 24,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict",
+      "name": "runEndVerdict",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 20,
       "endLine": 21
     },
     {
@@ -67582,6 +67735,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/RunEndStamp.tsx->symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndStamp.tsx->symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampAction",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampAction",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndStamp.tsx->symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/RunLoadingScreen.tsx->symbol:src/renderer/components/RunLoadingScreen.tsx#default",
       "source": "file:src/renderer/components/RunLoadingScreen.tsx",
       "target": "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
@@ -71023,6 +71194,42 @@
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict",
       "kind": "exports"
     },
     {
@@ -86707,6 +86914,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/RunEndStamp.tsx",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/components/RunEndStamp.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/copy/gameOverScreen.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/copy/gameOverScreen.ts",
@@ -86716,6 +86929,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/copy/runEndStamp.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/copy/runEndStamp.ts",
       "kind": "imports"
     },
     {
@@ -88120,6 +88339,36 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndStamp.test.tsx->src/renderer/components/RunEndStamp.tsx",
+      "source": "file:src/renderer/components/RunEndStamp.test.tsx",
+      "target": "file:src/renderer/components/RunEndStamp.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndStamp.test.tsx->src/renderer/copy/runEndStamp.ts",
+      "source": "file:src/renderer/components/RunEndStamp.test.tsx",
+      "target": "file:src/renderer/copy/runEndStamp.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndStamp.tsx->src/renderer/copy/runEndStamp.ts",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "file:src/renderer/copy/runEndStamp.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndStamp.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndStamp.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -92080,6 +92329,18 @@
       "id": "imports:src/renderer/copy/restlessFloorBeat.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/copy/restlessFloorBeat.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/runEndStamp.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/runEndStamp.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -105173,6 +105434,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/RunEndStamp.tsx->file:src/renderer/components/RunEndStamp.test.tsx",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "file:src/renderer/components/RunEndStamp.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RunLoadingScreen.tsx->file:src/renderer/components/runLoadingScreen.test.tsx",
       "source": "file:src/renderer/components/RunLoadingScreen.tsx",
       "target": "file:src/renderer/components/runLoadingScreen.test.tsx",
@@ -105866,6 +106133,12 @@
       "id": "tested_by:src/renderer/copy/passAndPlay.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/copy/passAndPlay.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/runEndStamp.ts->file:src/renderer/components/RunEndStamp.test.tsx",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "file:src/renderer/components/RunEndStamp.test.tsx",
       "kind": "tested_by"
     },
     {
