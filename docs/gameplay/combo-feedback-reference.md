@@ -295,6 +295,22 @@ opens on the choices with the verdict held small above them. The ledger keeps th
 Reduced motion shows it all at rest. The fit contract, the reachability gate and the controller
 walk still pass on the results screen; the playtest's results screenshot is the reference.
 
+## Weather on every run (2026-09-30)
+
+The owner reported the environment effects (snow and the rest) as lost. They were not: a probe
+of a frost seed at combo 20 had the snow at full opacity and the ice pane up, on desktop and on a
+phone, and production served every overlay. What read as lost was two gaps in the design. The
+weather belonged only to the rarer tempers (frost 18%, storm 10%), so seven runs in ten, the
+ember ones, never had any; and every weather started at zero, so a cold combo - a run's first
+turns, and every turn after a miss or an ignition - showed nothing even on a frost run.
+
+Now every run has weather from its first turn (`WEATHER_FLOOR` in `sceneMood.ts`, 0.45), and
+the heat builds it from there: a frost run opens on snow on the ledges and rime at the edges, a
+storm run on wet stone and the odd far bolt, and an ember or prismatic run on embers drifting up
+off the floor (`EmberDriftOverlay`, seeded per run, thicker and faster with the heat, `--scene-ash`).
+The ice pane over the board still waits for the heat. The temper stamp names ember runs too, so
+every run says what its weather is the first time the combo warms.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

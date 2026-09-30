@@ -39,6 +39,8 @@ export interface SceneMood {
     storm: number;
     /** A storm run's wet stone: the sheen on the room's upward faces, 0..1. */
     wet: number;
+    /** An ember run's weather: sparks and ash drifting up through the room, 0..1. */
+    ash: number;
     /** Identity of the floor the run came back to after a void floor, for the return beat; null otherwise. */
     voidReturnKey: string | null;
     /** Grade over the plate: hue rotation, saturation and brightness, from the temper and the heat. */
@@ -95,6 +97,9 @@ export const voidReturnKeyFor = (run: Pick<RunState, 'board' | 'status'>, latest
     return `return:${latestLoss.eventId}`;
 };
 
+/** The weather every run shows at a cold combo, before the heat builds it (0..1). */
+export const WEATHER_FLOOR = 0.45;
+
 export const deriveSceneMood = ({
     combo,
     latestLoss,
@@ -138,14 +143,24 @@ export const deriveSceneMood = ({
           : null;
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
     const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : 'dungeon';
+    /*
+     * Every run has weather from its first turn (`SCENE_WEATHER_FLOOR`): a frost run opens on a
+     * dusting of snow and rime at the edges, a storm run on wet stone and the odd far bolt, an
+     * ember run on sparks and ash drifting up. The heat builds each from there. Until 2026-09-30
+     * all of it started at zero, so a cold combo - every run's first turns, and every turn after a
+     * miss - looked like no weather at all, and an ember run (seven in ten) never had any.
+     */
+    const weather = WEATHER_FLOOR + (1 - WEATHER_FLOOR) * heat;
     // A frost run stays frozen through every room: the snow masks are per plate, the pane is the screen's.
-    const frost = temper.id === 'frost' && plate === 'dungeon' ? round(Math.min(1, heat * 1.15)) : 0;
+    const frost = temper.id === 'frost' && plate === 'dungeon' ? round(Math.min(1, weather * 1.15)) : 0;
     // Snow settles first, the pane follows, the cracks run last: the room freezes in that order.
+    // The pane over the screen waits for the heat: it covers the board, so it is earned.
     const cold = temper.id === 'frost' ? heat : 0;
-    const snow = round(Math.min(1, cold * 1.6));
+    const snow = temper.id === 'frost' ? round(Math.min(1, weather * 1.6)) : 0;
     const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
     const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
-    const storm = temper.id === 'storm' && plate === 'dungeon' ? round(heat) : 0;
+    const storm = temper.id === 'storm' && plate === 'dungeon' ? round(weather) : 0;
+    const ash = (temper.id === 'ember' || temper.id === 'prismatic') && plate !== 'shop' ? round(weather) : 0;
     const voidReturnKey = voidReturnKeyFor(run, latestLoss);
     const graded = plate === 'dungeon';
     return {
@@ -154,6 +169,7 @@ export const deriveSceneMood = ({
         frost,
         snow,
         snowGlow: round(snow * (0.3 + 0.7 * cold)),
+        ash,
         ice,
         iceCracks,
         iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),

@@ -47,7 +47,8 @@ describe('the screen stamps a turn earns', () => {
         expect(cold[0]?.rare).toBeUndefined();
         const reveal = deriveTurnCallouts(turn({ before: 2, after: 3 }), 3, frost);
         expect(reveal).toEqual([expect.objectContaining({ kind: 'temper', size: 'minor', title: 'FROST RUN' })]);
-        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3)).toEqual([]);
+        // An ember run names its weather too (the default temper when none is passed is ember).
+        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3)).toEqual([expect.objectContaining({ kind: 'temper', title: 'EMBER RUN' })]);
         const prismatic = COMBO_HEAT_THEMES.find((theme) => theme.id === 'prismatic')!;
         const shiny = deriveTurnCallouts(turn({ before: 24, after: 25 }), 3, prismatic);
         expect(shiny[0]).toMatchObject({ kind: 'rank', title: 'MYTHIC!', rare: true, sub: 'RARE · Combo ×25' });

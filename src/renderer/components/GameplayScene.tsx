@@ -9,6 +9,8 @@ import { useSceneLook } from '../hooks/useSceneLook';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import type { SceneMood } from './sceneMood';
 import { StormBoltsOverlay } from './StormBoltsOverlay';
+import { EmberDriftOverlay } from './EmberDriftOverlay';
+import { emberMoteCount } from './emberDrift';
 import { GoldRain } from './GoldRain';
 import { useBeat } from './useSceneBeat';
 import { SceneMotes } from './SceneMotes';
@@ -163,6 +165,7 @@ export function GameplayScene({
                     '--scene-snow-glow': mood?.snowGlow ?? 0,
                     '--scene-storm': mood?.storm ?? 0,
                     '--scene-wet': mood?.wet ?? 0,
+                    '--scene-ash': mood?.ash ?? 0,
                     '--scene-tempo': mood?.tempo ?? 1,
                     '--scene-grade-hue': `${mood?.hueDeg ?? 0}deg`,
                     '--scene-grade-saturate': mood?.saturate ?? 1,
@@ -211,6 +214,8 @@ export function GameplayScene({
                 {/* A storm run: the stone runs wet, and lightning comes down through the arches on the beat. */}
                 <div className={`${plate.layer} ${styles.wet}`} data-testid="gameplay-scene-wet" style={bg(UI_ART.gameplaySceneWet)} />
                 {!still && (mood?.storm ?? 0) > 0 ? <StormBoltsOverlay count={3 + Math.min(6, Math.floor(mood?.surge ?? 0))} seed={runSeed} /> : null}
+                {/* An ember run: sparks and ash drift up off the floor, thicker with the heat. */}
+                {!still && (mood?.ash ?? 0) > 0 ? <EmberDriftOverlay count={emberMoteCount(mood?.surge ?? 0) + Math.round((mood?.ash ?? 0) * 14)} seed={runSeed} /> : null}
                 {/* A frost run: ice grows in from the edges with the heat, screened over the room. */}
                 <div className={`${plate.layer} ${styles.frost}`} data-testid="gameplay-scene-frost" style={bg(UI_ART.gameplaySceneFrost)} />
                 {/* A storm run: the room flashes white now and then, more often the hotter it is. */}

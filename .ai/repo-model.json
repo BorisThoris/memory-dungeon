@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2823,
-    "codeFileCount": 1016,
-    "exportedSymbolCount": 3077,
+    "trackedFileCount": 2827,
+    "codeFileCount": 1019,
+    "exportedSymbolCount": 3085,
     "contentItemCount": 10,
     "mechanicCount": 53,
     "stateFieldCount": 97,
-    "relationshipCount": 8040
+    "relationshipCount": 8054
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 24370,
-      "sha256": "b8f98e0a8ef6f297b2e0eb6e4f625760c5f4c4feaeecac0d318f07852c74be8e"
+      "bytes": 25523,
+      "sha256": "8e4f9fe2b8498d75bd1fec6c6def207b7777765db9ea0e4884c955b426380931"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "7af8cef57d5d7ad0734f8211bc5fe5941f4ef2284d14b3e176f5f58c1a83a8df"
+      "sha256": "cb79720c2fed59d5daf2956ca83364a81cdd9ab5f12e716f074721394fb0754f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9385,6 +9385,30 @@
       "sha256": "1028aec5fd203d6f99f911bad542616098f1ca6b68d83e140e5b2338d899a92b"
     },
     {
+      "path": "src/renderer/components/emberDrift.test.ts",
+      "category": "test",
+      "bytes": 1344,
+      "sha256": "5f391c8eb7d4a83ee51051b5f418eeff0d6a1641d18f812ad59813b9480e289f"
+    },
+    {
+      "path": "src/renderer/components/emberDrift.ts",
+      "category": "source",
+      "bytes": 2239,
+      "sha256": "5d44c543bc5ce503774fd93a1e041754b91dac76a2ea6b66211219da2de6e5d1"
+    },
+    {
+      "path": "src/renderer/components/EmberDriftOverlay.module.css",
+      "category": "source",
+      "bytes": 1350,
+      "sha256": "7bf1ca9eb4d1a0bf895437cad8363f943b5b045766e312c0ef6d29a699a7fba3"
+    },
+    {
+      "path": "src/renderer/components/EmberDriftOverlay.tsx",
+      "category": "source",
+      "bytes": 2047,
+      "sha256": "057db99841b1ac83303d706602288e89767120d43606b3ed07c4ec5d3132baf2"
+    },
+    {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "category": "test",
       "bytes": 11900,
@@ -9447,8 +9471,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 15876,
-      "sha256": "dfd6e07a06f48f46d39686dd40c4bc78126c2fdb5f6545e705a531f4ac4fd225"
+      "bytes": 16303,
+      "sha256": "409ff7b2f896c44a68bc92fe59a708dc0ed9b35bcd0df43af2e7dbff381465b6"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9873,14 +9897,14 @@
     {
       "path": "src/renderer/components/sceneMood.test.ts",
       "category": "test",
-      "bytes": 6726,
-      "sha256": "d740ae149cabe63a3ae7e7f026bbda22a10fbc27c1e74de0adc0ba64a5b7e2c2"
+      "bytes": 7586,
+      "sha256": "474c7474dafbd8379331618a133466e951abaad3c005fae2aed7bb1a81aa6ef7"
     },
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 9508,
-      "sha256": "f09efbe7ceaf798222b8f5ccb8fc763147bececc1465b8a4620704f3fab1e918"
+      "bytes": 10546,
+      "sha256": "04aa556367f2397ebe5e887bd277df9be4f2a9c32a2a02fc12d44cb3a5c779f6"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -9981,14 +10005,14 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 5460,
-      "sha256": "d0095c88390f4ddb0853362e3b642cfb9cc7d02ce83bad4b92e206d99f1c5fad"
+      "bytes": 5620,
+      "sha256": "20585e681ab1777e1aeb619415dedfdf235ef101c3525f2e645e912551e4fadd"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 8793,
-      "sha256": "9caf89d3f45c5c102f4ff9453a5e0a0cd1b6dceb2518320a3995ba512ab4634a"
+      "bytes": 8859,
+      "sha256": "1651564b919c55a07e680cae71b2314fb44407f458ab79ae79cc2638853be6f0"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -19851,6 +19875,53 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/emberDrift.test.ts",
+      "path": "src/renderer/components/emberDrift.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 30,
+      "imports": [
+        "file:src/renderer/components/emberDrift.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/emberDrift.ts",
+      "path": "src/renderer/components/emberDrift.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 57,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
+        "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_BASE",
+        "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_MAX",
+        "symbol:src/renderer/components/emberDrift.ts#EMBER_VIEWBOX",
+        "symbol:src/renderer/components/emberDrift.ts#EmberMote",
+        "symbol:src/renderer/components/emberDrift.ts#emberMoteCount"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/emberDrift.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/EmberDriftOverlay.tsx",
+      "path": "src/renderer/components/EmberDriftOverlay.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 46,
+      "imports": [
+        "file:src/renderer/components/emberDrift.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "layer": "renderer",
@@ -19988,10 +20059,12 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 262,
+      "lineCount": 267,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/emberDrift.ts",
+        "file:src/renderer/components/EmberDriftOverlay.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts",
         "file:src/renderer/components/GoldRain.tsx",
         "file:src/renderer/components/sceneMood.ts",
@@ -21056,7 +21129,7 @@
       "path": "src/renderer/components/sceneMood.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 97,
+      "lineCount": 107,
       "imports": [
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -21071,7 +21144,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 186,
+      "lineCount": 202,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -21083,7 +21156,8 @@
         "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
         "symbol:src/renderer/components/sceneMood.ts#SceneMood",
         "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
-        "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor"
+        "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
+        "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR"
       ],
       "testedBy": [
         "file:src/renderer/components/sceneMood.test.ts"
@@ -21281,7 +21355,7 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 79,
+      "lineCount": 80,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -21296,7 +21370,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 166,
+      "lineCount": 167,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -39423,6 +39497,62 @@
       "endLine": 157
     },
     {
+      "id": "symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
+      "name": "buildEmberDrift",
+      "kind": "value",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 35,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_BASE",
+      "name": "EMBER_MOTES_BASE",
+      "kind": "value",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_MAX",
+      "name": "EMBER_MOTES_MAX",
+      "kind": "value",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/emberDrift.ts#EMBER_VIEWBOX",
+      "name": "EMBER_VIEWBOX",
+      "kind": "value",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/components/emberDrift.ts#EmberMote",
+      "name": "EmberMote",
+      "kind": "interface",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 9,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
+      "name": "emberMoteCount",
+      "kind": "value",
+      "file": "src/renderer/components/emberDrift.ts",
+      "line": 32,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
+      "name": "EmberDriftOverlay",
+      "kind": "function",
+      "file": "src/renderer/components/EmberDriftOverlay.tsx",
+      "line": 10,
+      "endLine": 45
+    },
+    {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -39475,16 +39605,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 99,
-      "endLine": 261
+      "line": 101,
+      "endLine": 266
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 62,
-      "endLine": 95
+      "line": 64,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -40187,24 +40317,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 79,
-      "endLine": 85
+      "line": 81,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 98,
-      "endLine": 176
+      "line": 103,
+      "endLine": 192
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 179,
-      "endLine": 185
+      "line": 195,
+      "endLine": 201
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
@@ -40212,7 +40342,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 25,
-      "endLine": 68
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -40227,8 +40357,16 @@
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 91,
-      "endLine": 96
+      "line": 93,
+      "endLine": 98
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
+      "name": "WEATHER_FLOOR",
+      "kind": "value",
+      "file": "src/renderer/components/sceneMood.ts",
+      "line": 101,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -40459,8 +40597,8 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 140,
-      "endLine": 160
+      "line": 141,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -40468,15 +40606,15 @@
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
       "line": 61,
-      "endLine": 107
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveZoneCallouts",
       "name": "deriveZoneCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 115,
-      "endLine": 138
+      "line": 116,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCallout",
@@ -40507,8 +40645,8 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 163,
-      "endLine": 163
+      "line": 164,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -67511,6 +67649,48 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_BASE",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_BASE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_MAX",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#EMBER_MOTES_MAX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#EMBER_VIEWBOX",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#EMBER_VIEWBOX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#EmberMote",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#EmberMote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/EmberDriftOverlay.tsx->symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
+      "source": "file:src/renderer/components/EmberDriftOverlay.tsx",
+      "target": "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/FloorClearBeat.tsx->symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
@@ -68114,6 +68294,12 @@
       "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
       "source": "file:src/renderer/components/sceneMood.ts",
       "target": "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "kind": "exports"
     },
     {
@@ -87116,6 +87302,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/emberDrift.test.ts->src/renderer/components/emberDrift.ts",
+      "source": "file:src/renderer/components/emberDrift.test.ts",
+      "target": "file:src/renderer/components/emberDrift.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/emberDrift.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/EmberDriftOverlay.tsx->src/renderer/components/emberDrift.ts",
+      "source": "file:src/renderer/components/EmberDriftOverlay.tsx",
+      "target": "file:src/renderer/components/emberDrift.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/FloorClearBeat.test.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
@@ -87365,6 +87569,18 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/emberDrift.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/emberDrift.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/EmberDriftOverlay.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/EmberDriftOverlay.tsx",
       "kind": "imports"
     },
     {
@@ -105615,6 +105831,12 @@
       "id": "tested_by:src/renderer/components/CollectionScreen.tsx->file:src/renderer/components/CollectionScreen.test.tsx",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/renderer/components/CollectionScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/emberDrift.ts->file:src/renderer/components/emberDrift.test.ts",
+      "source": "file:src/renderer/components/emberDrift.ts",
+      "target": "file:src/renderer/components/emberDrift.test.ts",
       "kind": "tested_by"
     },
     {

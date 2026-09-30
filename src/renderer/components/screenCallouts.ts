@@ -80,8 +80,9 @@ export const deriveTurnCallouts = (
     if (stage) {
         callouts.push({ key: `rank:${id}`, kind: 'rank', size: 'major', tone: stage, title: temper.callouts[stage], sub: temper.rare ? `RARE · Combo ×${after}` : `Combo ×${after}`, color: temper.colors[comboHeatStageIndexOf(stage)], ...rare });
     }
-    // The temper shows itself the first time the combo warms: a frost run says it is one.
-    if (temper.id !== 'ember' && comboHeatStage(before) === 'cold' && comboHeatStage(after) !== 'cold') {
+    // The temper shows itself the first time the combo warms: a frost run says it is one, and
+    // so does an ember run, so every run names the weather the room has been showing.
+    if (comboHeatStage(before) === 'cold' && comboHeatStage(after) !== 'cold') {
         callouts.push({ key: `temper:${id}`, kind: 'temper', size: 'minor', tone: 'gold', title: `${temper.title.toUpperCase()} RUN`, sub: temper.rare ? 'Rare · one run in fifty' : 'This run\'s temper, from its seed', color: temper.colors[2], ...rare });
     }
     if (isMiss(event)) {

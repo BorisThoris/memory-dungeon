@@ -1,0 +1,63 @@
+/*
+ * The ember run's weather (`EmberDriftOverlay.tsx`): motes rising off the floor, swaying, dying
+ * out under the vault. `--scene-ash` (0..1) is how much of it shows; the heat makes it climb
+ * faster (`--scene-tempo`). Sparks glow orange and screen over the stone; the rest are dimmer red cinders.
+ */
+.drift {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: calc(0.7 + 0.3 * var(--scene-ash, 0));
+    mix-blend-mode: screen;
+}
+
+.spark,
+.ash {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: emberRise calc(var(--dur, 10s) / var(--scene-tempo, 1)) linear infinite;
+    animation-delay: calc(var(--phase, 0) * var(--dur, 10s) * -1);
+}
+
+.spark {
+    fill: #ff7a24;
+}
+
+.ash {
+    fill: #d9481a;
+}
+
+@keyframes emberRise {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(1);
+    }
+
+    12% {
+        opacity: 0.95;
+    }
+
+    50% {
+        transform: translate(var(--sway, 0px), calc(var(--rise, -300px) * 0.5)) scale(0.9);
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(calc(var(--sway, 0px) * -0.4), var(--rise, -300px)) scale(0.5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spark,
+    .ash {
+        animation: none;
+        opacity: 0.5;
+    }
+}

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
-import { blackHoleKeyFor, deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
+import { blackHoleKeyFor, deriveSceneMood, latestMissEvent, voidReturnKeyFor, WEATHER_FLOOR } from './sceneMood';
 
 const theme = (id: string) => COMBO_HEAT_THEMES.find((candidate) => candidate.id === id)!;
 const turn = (before: number, after: number, outcome: 'match' | 'mismatch', level = 4): BoardTurnResolvedEvent =>
@@ -18,6 +18,16 @@ describe('what the room becomes', () => {
     it('is the dungeon, graded by the temper as the combo climbs', () => {
         const cold = deriveSceneMood({ combo: 0, latestLoss: null, run: run(), storeOpen: false, temper: theme('ember') });
         expect(cold).toMatchObject({ plate: 'dungeon', blackHoleKey: null, frost: 0, storm: 0, hueDeg: 0, saturate: 1, brightness: 1, prismatic: false });
+        // Every run has weather from its first turn: an ember run's ash drifts at a cold combo.
+        expect(cold.ash).toBe(WEATHER_FLOOR);
+        expect(deriveSceneMood({ combo: 20, latestLoss: null, run: run(), storeOpen: false, temper: theme('ember') }).ash).toBeGreaterThan(0.8);
+        const coldFrost = deriveSceneMood({ combo: 0, latestLoss: null, run: run(), storeOpen: false, temper: theme('frost') });
+        expect(coldFrost.snow).toBeGreaterThan(0.4);
+        expect(coldFrost.frost).toBeGreaterThan(0);
+        // The pane over the board is earned by the heat, never there at a cold combo.
+        expect(coldFrost.ice).toBe(0);
+        expect(coldFrost.ash).toBe(0);
+        expect(deriveSceneMood({ combo: 0, latestLoss: null, run: run(), storeOpen: false, temper: theme('storm') }).storm).toBe(WEATHER_FLOOR);
         const frost = deriveSceneMood({ combo: 20, latestLoss: null, run: run(), storeOpen: false, temper: theme('frost') });
         expect(frost.frost).toBeGreaterThan(0.8);
         // The room freezes in order: snow settles first, the pane follows, the cracks run last.
@@ -26,7 +36,7 @@ describe('what the room becomes', () => {
         expect(frost.iceCracks).toBeGreaterThan(0.5);
         expect(frost.iceGlow).toBeGreaterThan(0);
         const chill = deriveSceneMood({ combo: 3, latestLoss: null, run: run(), storeOpen: false, temper: theme('frost') });
-        expect(chill.snow).toBeGreaterThan(0);
+        expect(chill.snow).toBeGreaterThan(coldFrost.snow);
         expect(chill.iceCracks).toBe(0);
         expect(deriveSceneMood({ combo: 20, latestLoss: null, run: run(), storeOpen: false, temper: theme('ember') }).snow).toBe(0);
         expect(frost.saturate).toBeLessThan(1);
