@@ -1137,11 +1137,6 @@
     font-size: 1.625rem;
 }
 
-:global([data-shell-layout='phone-portrait']) .scoreValue,
-:global([data-shell-layout='phone-landscape']) .scoreValue {
-    font-size: 2.5rem;
-}
-
 :global([data-shell-layout='phone-portrait']) .identity,
 :global([data-shell-layout='phone-landscape']) .identity {
     gap: 0.65rem;
