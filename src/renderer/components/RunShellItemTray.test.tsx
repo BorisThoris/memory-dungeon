@@ -41,6 +41,16 @@ describe('RunShell item tray (phone)', () => {
         expect(screen.getByTestId('tool-tray-toggle')).toHaveAccessibleName(/pick a card to peek is armed/i);
     });
 
+    it('stands Fit on the bar once there is a pinch to undo, and keeps it in the bag until then', () => {
+        const { rerender } = render(
+            <RunShell onPause={vi.fn()} personalBestDepth={false} run={run()} shellLayout="phone-portrait" tools={[tool('peek'), tool('fit', { disabled: true })]} />
+        );
+        expect(screen.queryByTestId('tool-fit')).not.toBeInTheDocument();
+        rerender(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run()} shellLayout="phone-portrait" tools={[tool('peek'), tool('fit')]} />);
+        expect(screen.getByTestId('tool-fit')).toBeInTheDocument();
+        expect(screen.queryByTestId('tool-tray')).not.toBeInTheDocument();
+    });
+
     it('keeps every tool on the dock on a desktop', () => {
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run()} shellLayout="desktop" tools={[tool('peek')]} />);
         expect(screen.getByTestId('tool-peek')).toBeInTheDocument();

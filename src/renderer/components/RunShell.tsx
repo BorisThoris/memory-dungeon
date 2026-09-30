@@ -348,7 +348,10 @@ const RunShell = ({
     const [trayOpenOnFloor, setTrayOpenOnFloor] = useState<number | null>(null);
     const trayOpen = compactDock && trayOpenOnFloor === floorLevel;
     const armedTool = visibleTools.find((tool) => tool.armed);
-    const usableToolCount = visibleTools.filter((tool) => !tool.disabled).length;
+    // Fit undoes a pinch, so once there is a pinch to undo it stands on the bar beside Items.
+    const barTools = compactDock ? visibleTools.filter((tool) => tool.id === 'fit' && !tool.disabled) : [];
+    const trayTools = compactDock ? visibleTools.filter((tool) => !barTools.includes(tool)) : visibleTools;
+    const usableToolCount = trayTools.filter((tool) => !tool.disabled).length;
     const chooseTool = (tool: RunShellTool): void => {
         if (compactDock) {
             setTrayOpenOnFloor(null);
@@ -741,11 +744,11 @@ const RunShell = ({
                 >
                     {trayOpen ? (
                         <div aria-label="Items" className={styles.tray} data-testid="tool-tray" id="run-shell-item-tray" role="group">
-                            {visibleTools.map(toolButton)}
+                            {trayTools.map(toolButton)}
                         </div>
                     ) : null}
                     {compactDock ? (
-                        visibleTools.length > 0 ? (
+                        trayTools.length > 0 ? (
                             <button
                                 aria-controls="run-shell-item-tray"
                                 aria-expanded={trayOpen}
@@ -767,6 +770,7 @@ const RunShell = ({
                     ) : (
                         visibleTools.map(toolButton)
                     )}
+                    {barTools.map(toolButton)}
                     {visibleTools.length > 0 && !compactDock ? <span aria-hidden="true" className={styles.dockDivider} /> : null}
                     <button
                         aria-label={RUN_SHELL_LABELS.pause}
