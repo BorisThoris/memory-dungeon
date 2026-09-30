@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-29T19:44:07.303Z",
+  "generatedAt": "2026-09-30T12:58:52.889Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -136,6 +136,7 @@
       "soak",
       "sim:curve",
       "sim:survival",
+      "sim:pop-share",
       "sim:archetype-pressure",
       "audit:shared-reach",
       "audit:test-only-modules",
@@ -297,28 +298,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 165532,
+        "bytes": 166051,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-29T19:43:41.482Z"
+        "capturedAt": "2026-09-30T12:58:31.774Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 154613,
+        "bytes": 156820,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-29T19:43:49.885Z"
+        "capturedAt": "2026-09-30T12:58:37.184Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130115,
+        "bytes": 130748,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-29T19:44:01.446Z"
+        "capturedAt": "2026-09-30T12:58:47.569Z"
       },
       {
         "profile": "mobile",
@@ -327,16 +328,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-29T19:43:55.281Z"
+        "capturedAt": "2026-09-30T12:58:41.840Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122494,
+        "bytes": 123001,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-29T19:44:07.026Z"
+        "capturedAt": "2026-09-30T12:58:52.647Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -345,7 +346,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-29T19:41:48.883Z"
+        "capturedAt": "2026-09-30T12:56:27.625Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -354,7 +355,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-29T19:41:48.883Z"
+        "capturedAt": "2026-09-30T12:56:27.625Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -363,7 +364,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-29T19:41:48.884Z"
+        "capturedAt": "2026-09-30T12:56:27.625Z"
       },
       {
         "profile": "reel-end-card",
@@ -372,7 +373,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-29T19:41:48.885Z"
+        "capturedAt": "2026-09-30T12:56:27.627Z"
       }
     ],
     "trailers": [
@@ -499,17 +500,17 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1219,
-    "testFiles": 526,
-    "sourceLines": 190305,
+    "sourceFiles": 1252,
+    "testFiles": 538,
+    "sourceLines": 194168,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1032
+        "files": 1064
       },
       {
         "directory": "scripts",
-        "files": 98
+        "files": 99
       },
       {
         "directory": "e2e",
@@ -540,10 +541,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "bd37e32e",
-    "lastCommitDate": "2026-09-29T22:40:13+03:00",
-    "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/group-effects-combo-ccb75d",
-    "commitCount": 1875,
+    "head": "4707a29a",
+    "lastCommitDate": "2026-09-30T15:55:54+03:00",
+    "lastCommitSubject": "Weather on every run, from its first turn: embers for ember runs, a floor under frost and storm",
+    "commitCount": 1889,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
