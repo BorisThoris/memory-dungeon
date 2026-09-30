@@ -25,9 +25,9 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  *   They come from different pairs, and only sometimes both halves of one, so the ice never points
  *   at a match. It freezes only while at least two whole pairs stay free, and cracks early if a pop
  *   leaves none, so a floor can always be played.
- * - **Element worlds** (`resolveWorldShift`). A pop of three pairs or more pulls the room into the
- *   element of the cards that popped; a second element combines with it (two at most, the oldest
- *   goes). Each element has a rule: ember burns the afterglow one card wider, tide trades two
+ * - **Element worlds** (`resolveWorldPull`, `worldRules`). A pop of four pairs or more, or three
+ *   matches of one element in a row, pulls the room toward an element; see the section below for depth
+ *   and fusions. A second element combines with the first (two at most, the oldest goes). Each element has a rule: ember burns the afterglow one card wider, tide trades two
  *   face-down cards every third turn, moss overgrows a card beside a match (it cannot open the next
  *   turn), bone is cold (the freeze). The world holds across floors until another big pop changes
  *   it; the void takes it away.

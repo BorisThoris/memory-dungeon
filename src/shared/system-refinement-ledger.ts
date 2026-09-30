@@ -327,7 +327,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 264,
         present: ['resolveFrostStep', 'isColdWorld', 'freePairsLeft', 'thawIfStuck', 'frostFreezesThisFloor'],
-        note: 'The world reacts (2026-09-30). In a cold world - a frost temper, or bone in the element world - every third turn freezes two face-down cards (three from Blazing) for two turns, and a frozen card cannot be turned. They come from different pairs and only sometimes both halves of one, so the ice never reads as a hint. It freezes only while two whole pairs stay free, cracks early when a pop or a bomb leaves none, and thaws when the Zone stops time, so a floor can always be played. No census row; the soak requires a freeze and checks a frozen card is never face up.'
+        note: 'The world reacts (2026-09-30). In a cold world - bone in the element world; since the biome removal no run is cold by its seed - every third turn freezes two face-down cards (three from Blazing) for two turns, and a frozen card cannot be turned. They come from different pairs and only sometimes both halves of one, so the ice never reads as a hint. It freezes only while two whole pairs stay free, cracks early when a pop or a bomb leaves none, and thaws when the Zone stops time, so a floor can always be played. No census row; the soak requires a freeze and checks a frozen card is never face up.'
     },
     {
         id: 'board.element_worlds',

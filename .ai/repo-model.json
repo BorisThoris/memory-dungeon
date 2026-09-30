@@ -5181,8 +5181,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 18377,
-      "sha256": "8b7bdc9decbad2e7d692e5bc552c555a1335cbe6f62755ec266044fc54b1286a"
+      "bytes": 18384,
+      "sha256": "4aeb5fc065da739e98071386d47f12461fd66558ab485010ebe94518af73b6d3"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -14499,8 +14499,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 59586,
-      "sha256": "50ff157a59b506b7c58eb68929707789525518c7c32633efcbac2e5f30772f32"
+      "bytes": 59619,
+      "sha256": "adc580c6f2ad3674fa10562846de777e3d64e1318e863a09cbc6e24793e389df"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14787,8 +14787,8 @@
     {
       "path": "src/shared/world-reaction-rules.ts",
       "category": "source",
-      "bytes": 21668,
-      "sha256": "f3e3616728e6be0f32868bf671842d43bcad0f3d9d49a281c6e4de36fc1aa4b6"
+      "bytes": 21751,
+      "sha256": "bda44d5709edd6053abdf81a3e31605cbc8be6f9f851c796eb5ff8263c41da7d"
     },
     {
       "path": "src/shared/zone-rules.test.ts",

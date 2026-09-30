@@ -207,7 +207,7 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
     },
     'hazard.frost_freeze': {
         generation: 264,
-        reason: 'The cold runs on the run seed (a frost temper) or on a world a big pop made, which a fresh floor census does not carry. The whole-run soak requires a freeze and checks no frozen card is ever face up; the frost-freeze room walks the freeze, the refused press and the thaw.'
+        reason: 'The cold comes only from a bone world, which a big pop or a run of bone matches makes and a fresh floor census does not carry. The whole-run soak requires a freeze and checks no frozen card is ever face up; the frost-freeze room walks the freeze, the refused press and the thaw.'
     },
     'board.element_worlds': {
         generation: 264,
