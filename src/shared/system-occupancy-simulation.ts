@@ -327,7 +327,7 @@ const spendTools = (run: RunState, phase: 'opening' | 'underway'): RunState => {
         return run;
     }
     if (phase === 'opening') {
-        const hidden = board.tiles.find((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+        const hidden = board.tiles.find((tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey));
         return hidden ? applyPeek(run, hidden.id) : run;
     }
     const shuffled = applyShuffle(run);
@@ -409,7 +409,7 @@ const spendSetupTools = (run: RunState, phase: 'opening' | 'afterMiss'): RunStat
     // the player with nothing they can act on.
     let next = run;
     const seen = board.tiles.find(
-        (tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && !runStringArray(next.pinnedTileIds).includes(tile.id)
+        (tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey) && !runStringArray(next.pinnedTileIds).includes(tile.id)
     );
     if (seen) next = togglePinnedTile(next, seen.id);
     return applyFlashPair(next);
@@ -492,7 +492,7 @@ const playFloorFrom = (
         );
         if (groups.length === 0) break;
         const hidden = run
-            .board!.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+            .board!.tiles.filter((tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey));
         const wantsMiss = rng() < missRate && hidden.length >= 3;
         let first: Tile;
         let second: Tile;
@@ -535,7 +535,7 @@ const playFloorFrom = (
              * only moment a player could.
              */
             const third = run.board!.tiles.find(
-                (tile) => tile.state === 'hidden' && tile.id !== first.id && tile.id !== second.id
+                (tile) => tile.state === 'hidden' && tile.frozen !== true && tile.id !== first.id && tile.id !== second.id
             );
             const gambit = third ? flipTile(flipped, third.id) : flipped;
             if (gambit !== flipped) {

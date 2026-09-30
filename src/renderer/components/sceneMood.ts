@@ -1,4 +1,4 @@
-import type { RelicId, RunState } from '../../shared/contracts';
+import type { RelicId, RunState, TileSuit } from '../../shared/contracts';
 import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 
@@ -41,6 +41,10 @@ export interface SceneMood {
     wet: number;
     /** An ember run's weather: sparks and ash drifting up through the room, 0..1. */
     ash: number;
+    /** A moss world's weather: spores drifting up through the room, 0..1. */
+    spores: number;
+    /** The element world (`world-reaction-rules.ts`) the room is in, oldest first. */
+    world: readonly TileSuit[];
     /** Identity of the floor the run came back to after a void floor, for the return beat; null otherwise. */
     voidReturnKey: string | null;
     /** Grade over the plate: hue rotation, saturation and brightness, from the temper and the heat. */
@@ -108,7 +112,8 @@ export const deriveSceneMood = ({
     payout = null,
     run,
     storeOpen,
-    temper
+    temper,
+    world = []
 }: {
     combo: number;
     /** The latest miss on the journal, or null: the black hole reads it. */
@@ -122,6 +127,8 @@ export const deriveSceneMood = ({
     run: Pick<RunState, 'board' | 'status' | 'relics'>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
+    /** The element world a big pop pulled the room into; each element brings its weather. */
+    world?: readonly TileSuit[];
 }): SceneMood => {
     const heat = comboHeat(combo);
     const surge = comboSurge(combo);
@@ -156,11 +163,15 @@ export const deriveSceneMood = ({
     // Snow settles first, the pane follows, the cracks run last: the room freezes in that order.
     // The pane over the screen waits for the heat: it covers the board, so it is earned.
     const cold = temper.id === 'frost' ? heat : 0;
-    const snow = temper.id === 'frost' ? round(Math.min(1, weather * 1.6)) : 0;
+    // A bone world is cold too: its snow settles, but the pane over the board stays the frost run's.
+    const snowy = temper.id === 'frost' || world.includes('bone');
+    const snow = snowy ? round(Math.min(1, weather * 1.6)) : 0;
     const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
     const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
-    const storm = temper.id === 'storm' && plate === 'dungeon' ? round(weather) : 0;
-    const ash = (temper.id === 'ember' || temper.id === 'prismatic') && plate !== 'shop' ? round(weather) : 0;
+    // A tide world brings the storm's weather at a lower pitch; ember and moss worlds their drifts.
+    const storm = plate === 'dungeon' ? round(temper.id === 'storm' ? weather : world.includes('tide') ? weather * 0.6 : 0) : 0;
+    const ash = (temper.id === 'ember' || temper.id === 'prismatic' || world.includes('ember')) && plate !== 'shop' ? round(weather) : 0;
+    const spores = world.includes('moss') && plate !== 'shop' ? round(weather) : 0;
     const voidReturnKey = voidReturnKeyFor(run, latestLoss);
     const graded = plate === 'dungeon';
     return {
@@ -170,11 +181,13 @@ export const deriveSceneMood = ({
         snow,
         snowGlow: round(snow * (0.3 + 0.7 * cold)),
         ash,
+        spores,
+        world: [...world],
         ice,
         iceCracks,
         iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),
         storm,
-        wet: round(temper.id === 'storm' && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
+        wet: round((temper.id === 'storm' || world.includes('tide')) && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
         voidReturnKey,
         hueDeg: graded ? Math.round(temper.ringHueDeg * 0.35 * heat) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),

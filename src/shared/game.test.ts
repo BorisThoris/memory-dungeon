@@ -383,7 +383,8 @@ const solveBoardByExhaustingPairs = (board: BoardState, runSeed: number): RunSta
         const nextPair = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
             .filter((pairKey) => !SOLVER_IGNORED_PAIR_KEYS.has(pairKey))
             .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
-            .find((tiles) => tiles.length === 2);
+            // A player skips a pair with an iced half until it thaws (the cold world, `world-reaction-rules.ts`).
+            .find((tiles) => tiles.length === 2 && tiles.every((tile) => tile.frozen !== true));
         if (!nextPair) {
             break;
         }

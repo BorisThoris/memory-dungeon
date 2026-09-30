@@ -3,6 +3,7 @@ import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
 import { hasMutator } from './mutators';
+import { isColdWorld, resolveFrostStep, resolveTideSwap, resolveVoidSpew } from './world-reaction-rules';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -99,11 +100,26 @@ export const resolveMismatchTurnTransition = ({
         : null;
     const boardAfterMagpie =
         magpie?.theft != null ? applyMagpieTheft(spunMiss.board, magpie.theft) : spunMiss.board;
+    /*
+     * The void spews (`world-reaction-rules.ts`): a miss that kills a combo of Inferno or better
+     * opens the black hole, and it spits matched pairs back face down and shuffles the face-down
+     * cards. The world it was burning in goes with it.
+     */
+    const spew = resolveVoidSpew({
+        board: boardAfterMagpie,
+        comboLost: runNonNegativeInteger(stats.currentStreak),
+        pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [],
+        runSeed: run.runSeed,
+        rulesVersion: run.runRulesVersion,
+        mismatchCount: runNonNegativeInteger(stats.mismatches) + 1
+    });
+    const boardAfterVoid = spew?.board ?? boardAfterMagpie;
+    const worldAfterMiss = spew ? [] : (run.world ?? []);
     // A miss is a turn on the restless floor's clock as much as a match is; it drifts after the bird.
     const turnsAfterMiss = runNonNegativeInteger(run.turnsThisFloor) + 1;
     const drift = hasMutator(run, 'restless_floor')
         ? resolveRestlessDrift({
-              board: boardAfterMagpie,
+              board: boardAfterVoid,
               turnsThisFloor: turnsAfterMiss,
               driftsBefore: runNonNegativeInteger(run.restlessDriftsThisFloor),
               pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [],
@@ -111,7 +127,23 @@ export const resolveMismatchTurnTransition = ({
               rulesVersion: run.runRulesVersion
           })
         : null;
-    const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterMagpie, drift.swaps) : boardAfterMagpie;
+    const boardAfterRestless = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterVoid, drift.swaps) : boardAfterVoid;
+    // The tide and the cold keep their clocks on a miss too; the combo they read is gone (0).
+    const pinnedAfterMiss = Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [];
+    const tided = worldAfterMiss.includes('tide')
+        ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: turnsAfterMiss, pinnedTileIds: pinnedAfterMiss, runSeed: run.runSeed, rulesVersion: run.runRulesVersion })
+        : null;
+    const frostStep = resolveFrostStep({
+        board: tided ?? boardAfterRestless,
+        turnsThisFloor: turnsAfterMiss,
+        frozenUntilTurn: run.frozenUntilTurn,
+        cold: isColdWorld({ runSeed: run.runSeed, world: worldAfterMiss }),
+        combo: 0,
+        pinnedTileIds: pinnedAfterMiss,
+        runSeed: run.runSeed,
+        rulesVersion: run.runRulesVersion
+    });
+    const boardAfterDrift = frostStep.board;
 
     return {
         ...run,
@@ -125,6 +157,11 @@ export const resolveMismatchTurnTransition = ({
             runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
         skittishFlinchesThisFloor:
             runNonNegativeInteger(run.skittishFlinchesThisFloor) + (flinch?.kind === 'flinch' ? 1 : 0),
+        world: worldAfterMiss,
+        voidSpewsThisFloor: runNonNegativeInteger(run.voidSpewsThisFloor) + (spew ? 1 : 0),
+        tideSwapsThisFloor: runNonNegativeInteger(run.tideSwapsThisFloor) + (tided ? 1 : 0),
+        frozenUntilTurn: frostStep.frozenUntilTurn,
+        frostFreezesThisFloor: runNonNegativeInteger(run.frostFreezesThisFloor) + (frostStep.froze ? 1 : 0),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor: runNonNegativeInteger(run.recallMistakesThisFloor) + 1,

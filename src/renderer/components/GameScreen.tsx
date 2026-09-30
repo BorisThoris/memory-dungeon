@@ -128,7 +128,7 @@ import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood'
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
-import { derivePurchaseCallouts, deriveTurnCallouts, deriveZoneCallouts, type ScreenCallout } from './screenCallouts';
+import { derivePurchaseCallouts, deriveTurnCallouts, deriveWorldCallouts, deriveZoneCallouts, type ScreenCallout, type WorldCalloutRun } from './screenCallouts';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -301,6 +301,20 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = { zonesThisRun, lastZone };
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
+/** The world's stamps, accumulated on its counts going up; the first read is the baseline. */
+const useWorldCallouts = (run: RunState): ScreenCallout[] => {
+    const previous = useRef<WorldCalloutRun | undefined>(undefined);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    const { board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor } = run;
+    useEffect(() => {
+        const now: WorldCalloutRun = { board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor };
+        const fresh = deriveWorldCallouts(previous.current, now);
+        previous.current = now;
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor]);
     return callouts;
 };
 
@@ -1089,6 +1103,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
+    const worldCallouts = useWorldCallouts(run);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1106,7 +1121,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: 'BACK FROM THE VOID', sub: 'The room is yours again' }]
                 : []),
             ...purchaseCallouts,
-            ...zoneCallouts
+            ...zoneCallouts,
+            ...worldCallouts
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1673,7 +1689,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             payout: scenePayout,
             run,
             storeOpen: storeSheetOpen,
-            temper: comboTemper
+            temper: comboTemper,
+            world: run.world ?? []
         }),
         // The payout is read by its key and gold; the object is rebuilt each render.
         // eslint-disable-next-line react-hooks/exhaustive-deps

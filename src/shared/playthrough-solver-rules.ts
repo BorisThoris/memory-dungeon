@@ -34,7 +34,8 @@ export const getUnresolvedPlayablePairGroups = (board: BoardState): Tile[][] => 
         groups.set(tile.pairKey, group);
     }
     return [...groups.values()]
-        .filter((group) => group.length >= 2)
+        // A pair with a frozen half cannot be played until it thaws; the cold keeps one free (`world-reaction-rules.ts`).
+        .filter((group) => group.length >= 2 && !group.some((tile) => tile.frozen === true && tile.state === 'hidden'))
         .sort((left, right) => {
             const leftHasExposed = left.some((tile) => tile.state !== 'hidden') ? 0 : 1;
             const rightHasExposed = right.some((tile) => tile.state !== 'hidden') ? 0 : 1;

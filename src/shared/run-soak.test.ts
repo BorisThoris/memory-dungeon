@@ -38,6 +38,10 @@ describe('the run soak', () => {
         // The Zone: the careful player reaches Inferno and ignites it; some of its pairs match.
         expect(reports.some((report) => report.zones > 0), 'no run ever ignited the Zone').toBe(true);
         expect(reports.some((report) => report.zonePairs > 0), 'no Zone ever matched a pair').toBe(true);
+        // The world reacts: the void spits after a great combo dies, the cold freezes, big pops shift the world.
+        expect(reports.some((report) => report.voidSpews > 0), 'the void never spat').toBe(true);
+        expect(reports.some((report) => report.frostFreezes > 0), 'the cold never froze a card').toBe(true);
+        expect(reports.some((report) => report.worldShifts > 0), 'no big pop ever shifted the world').toBe(true);
         // The joker left its partner stranded and the floor unclearable until a soak player used it.
         const wild = Array.from({ length: 4 }, (_unused, index) =>
             soakRun({ seed: 7_001 + index * 7_919, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 3 })

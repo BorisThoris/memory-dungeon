@@ -301,6 +301,9 @@ export const getTraitRouteCadenceAction = (
     return 'None';
 };
 
+/** The cold's ice on a frozen back: a pale glacier blue, clear of the anchor's teal and the lock's orange. */
+export const FROZEN_BACK_COLOR = '#bfe8ff';
+
 /** The anchor's mark: a cold teal, clear of every trait colour and of the lock's burnt orange. */
 export const ANCHOR_MARK_COLOR = '#5fe0cf';
 
@@ -352,7 +355,10 @@ export const getTileBoardReadabilityState = ({
     // A lock outranks every read: it is the one thing on a back that changes what may be tapped this turn.
     // The burnt orange is the lock ring sticky fingers draws on the stuck card (Gen 263; the card is
     // face down since the test hall found the block sitting on an already-matched slot).
-    const hiddenReadabilityAccentColor = stickyFingerSlotMark
+    // Ice outranks the lock: a frozen back (the cold world) cannot be turned at all until it thaws.
+    const hiddenReadabilityAccentColor = tile.frozen === true && tile.state === 'hidden' && !faceUp
+        ? FROZEN_BACK_COLOR
+        : stickyFingerSlotMark
         ? '#c65a28'
         : anchorMarkBack && !faceUp && tile.state === 'hidden'
           ? ANCHOR_MARK_COLOR

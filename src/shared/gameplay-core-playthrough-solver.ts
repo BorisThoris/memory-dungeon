@@ -286,6 +286,7 @@ const nextKnownPairPinCandidate = (
             const tile = board.tiles.find((candidate) => candidate.id === tileId);
             return tile &&
                 tile.state === 'hidden' &&
+                tile.frozen !== true &&
                 !pinned.has(tile.id) &&
                 (rememberedPairCounts.get(entry.pairKey) ?? 0) >= 2
                 ? [{ tile, entry }]
@@ -337,7 +338,7 @@ const chooseUnknownTile = (
 ): Tile | null => {
     const excluded = new Set(excludedTileIds);
     const candidates = playablePolicyTiles(run)
-        .filter((tile) => tile.state === 'hidden' && !excluded.has(tile.id));
+        .filter((tile) => tile.state === 'hidden' && tile.frozen !== true && !excluded.has(tile.id));
     return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
 };
 
@@ -348,7 +349,7 @@ const chooseUnknownTileFromOppositeEdge = (
 ): Tile | null => {
     const excluded = new Set(excludedTileIds);
     const candidates = playablePolicyTiles(run)
-        .filter((tile) => tile.state === 'hidden' && !excluded.has(tile.id))
+        .filter((tile) => tile.state === 'hidden' && tile.frozen !== true && !excluded.has(tile.id))
         .reverse();
     return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
 };

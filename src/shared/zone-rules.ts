@@ -5,6 +5,7 @@ import { runFilteredStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { isColdWorld, thawBoard } from './world-reaction-rules';
 
 /**
  * The Zone: time stops for a hot hand.
@@ -104,7 +105,7 @@ export const zoneFlipTile = (run: RunState, tileId: string): RunState => {
     const board = run.board;
     const index = board.tiles.findIndex((tile) => tile.id === tileId);
     const tile = board.tiles[index];
-    if (!tile || tile.state !== 'hidden') return run;
+    if (!tile || tile.state !== 'hidden' || tile.frozen === true) return run;
     const flipped = runFilteredStringArray(board.flippedTileIds);
     if (flipped.includes(tileId)) return run;
     if (flipped.length === 0 && run.stickyBlockIndex !== null && index === run.stickyBlockIndex) return run;
@@ -134,6 +135,9 @@ const faceDown = (run: RunState, ids: readonly string[]): RunState => ({
         : run.board
 });
 
+/** The ice off the board before a replayed turn, so a freeze between two replays never blocks one. */
+const thawRun = (run: RunState): RunState => (run.board ? { ...run, board: thawBoard(run.board), frozenUntilTurn: null } : run);
+
 /** Play one turn of two cards through the game's own resolver, from a board with nothing up. */
 const playTurn = (run: RunState, first: string, second: string): RunState => resolveBoardTurn(flipTile(flipTile(run, first), second));
 
@@ -157,8 +161,12 @@ export const resolveZone = (run: RunState): RunState => {
         for (const id of ids.slice(2)) leftovers.push(id);
         if (ids.length === 1) leftovers.push(ids[0]!);
     }
-    // Everything goes down, and the Zone closes, before the turns replay what was seen.
-    let next: RunState = { ...faceDown(run, up), zone: null };
+    // Everything goes down, and the Zone closes, before the turns replay what was seen. The ice
+    // cracks when time stops (`world-reaction-rules.ts`): a freeze landing on a card the replay
+    // still has to turn would leave a turn with one card up.
+    const downed = faceDown(run, up);
+    let next: RunState = { ...downed, board: downed.board ? thawBoard(downed.board) : downed.board, frozenUntilTurn: null, zone: null };
+    const cold = isColdWorld(next);
     // A pop from an earlier turn can take a card that was face up; a turn is played only on
     // cards still on the board, and a pair the pop took counts as the pop's, not the Zone's.
     const stillHidden = (state: RunState, id: string): boolean => state.board?.tiles.find((tile) => tile.id === id)?.state === 'hidden';
@@ -167,7 +175,7 @@ export const resolveZone = (run: RunState): RunState => {
     for (const [first, second] of matches) {
         if (next.status !== 'playing') break;
         if (!stillHidden(next, first) || !stillHidden(next, second)) continue;
-        next = playTurn(next, first, second);
+        next = playTurn(cold ? thawRun(next) : next, first, second);
         matched += 1;
     }
     let pending: string | null = null;
@@ -178,7 +186,7 @@ export const resolveZone = (run: RunState): RunState => {
             pending = id;
             continue;
         }
-        next = playTurn(next, pending, id);
+        next = playTurn(cold ? thawRun(next) : next, pending, id);
         pending = null;
         missed += 1;
     }

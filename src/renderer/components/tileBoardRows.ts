@@ -217,8 +217,10 @@ export const buildTileBoardRows = ({
             stickyBlockedTileId,
             tile
         });
+        // The cold's ice (`world-reaction-rules.ts`): a frozen back cannot be picked, like a lock.
+        const frozenBack = tile.frozen === true && tile.state === 'hidden' && !faceUp;
         const { nonPickableBack, powerBackAccent } = getTileBoardHiddenBackAccents({
-            openingLocked: stickyFingerSlotMark,
+            openingLocked: stickyFingerSlotMark || frozenBack,
             clumpReadNextTileIds,
             clumpReadTileIds,
             faceUp,

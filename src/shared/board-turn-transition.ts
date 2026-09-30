@@ -17,6 +17,14 @@ import { hasRelic } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
+import {
+    EMBER_WORLD_AFTERGLOW_BONUS,
+    isColdWorld,
+    mossOvergrowthIndex,
+    resolveFrostStep,
+    resolveTideSwap,
+    resolveWorldShift
+} from './world-reaction-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
@@ -219,7 +227,29 @@ export const createResolveBoardTurnTransition = ({
                   rulesVersion: run.runRulesVersion
               })
             : null;
-        const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
+        const boardAfterRestless = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
+        /*
+         * The world reacts (`world-reaction-rules.ts`): a pop of three pairs or more pulls the room
+         * into the popped cards' element; a tide world trades two face-down cards every third turn;
+         * a cold world (frost, or bone in the world) freezes cards every third turn. After the drift,
+         * before the lantern, so a lit face is where it will be and never on ice it cannot use.
+         */
+        const worldAfter = resolveWorldShift(run.world, firstTile.suit, 1 + chunkBreak.brokenPairKeys.length);
+        const worldShifted = worldAfter.join('|') !== (run.world ?? []).join('|');
+        const tided = worldAfter.includes('tide')
+            ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: progress.turnsThisFloor, pinnedTileIds: boardCleanup.pinnedTileIds, runSeed: run.runSeed, rulesVersion: run.runRulesVersion })
+            : null;
+        const frostStep = resolveFrostStep({
+            board: tided ?? boardAfterRestless,
+            turnsThisFloor: progress.turnsThisFloor,
+            frozenUntilTurn: run.frozenUntilTurn,
+            cold: isColdWorld({ runSeed: run.runSeed, world: worldAfter }),
+            combo: runNonNegativeInteger(scoring.currentStreak),
+            pinnedTileIds: boardCleanup.pinnedTileIds,
+            runSeed: run.runSeed,
+            rulesVersion: run.runRulesVersion
+        });
+        const boardAfterDrift = frostStep.board;
         /*
          * The lantern lights last, on the board the player will look at: after the pop has taken
          * what it takes and any drift has moved what it moves, so a lit face is where it will be.
@@ -230,7 +260,10 @@ export const createResolveBoardTurnTransition = ({
         const candleLit = hasRelic(run, 'tallow_candle') && runNonNegativeInteger(sourceBoard.matchedPairs) === 0;
         const heatPerks = runComboHeatPerks(run);
         const lanternLights = hasMutator(run, 'lantern_light') || candleLit;
-        const lanternMax = lanternLights ? LANTERN_MAX_LIT : heatPerks.afterglow;
+        // An ember world burns the afterglow one card wider, even at a cold combo.
+        const lanternMax = lanternLights
+            ? LANTERN_MAX_LIT
+            : Math.min(LANTERN_MAX_LIT, heatPerks.afterglow + (worldAfter.includes('ember') ? EMBER_WORLD_AFTERGLOW_BONUS : 0));
         const lanternLit =
             lanternMax > 0
                 ? resolveLanternLight({
@@ -278,6 +311,11 @@ export const createResolveBoardTurnTransition = ({
             // The lantern's own count: the afterglow is counted by the heat perks, not here.
             lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLights && lanternLit.length > 0 ? 1 : 0),
             heatPerkTurnsThisFloor: runNonNegativeInteger(run.heatPerkTurnsThisFloor) + (comboHeatPerksActive(heatPerks) ? 1 : 0),
+            world: worldAfter,
+            worldShiftsThisFloor: runNonNegativeInteger(run.worldShiftsThisFloor) + (worldShifted ? 1 : 0),
+            tideSwapsThisFloor: runNonNegativeInteger(run.tideSwapsThisFloor) + (tided ? 1 : 0),
+            frozenUntilTurn: frostStep.frozenUntilTurn,
+            frostFreezesThisFloor: runNonNegativeInteger(run.frostFreezesThisFloor) + (frostStep.froze ? 1 : 0),
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
@@ -295,7 +333,11 @@ export const createResolveBoardTurnTransition = ({
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? selectStickyFingersBlockIndex(run, boardAfterDrift, firstTile.id),
+            // A moss world overgrows a face-down card beside the match: it cannot open the next turn.
+            stickyBlockIndex:
+                traitReward.stickyBlockIndex ??
+                selectStickyFingersBlockIndex(run, boardAfterDrift, firstTile.id) ??
+                (worldAfter.includes('moss') ? mossOvergrowthIndex(boardAfterDrift, firstTile.id) : null),
             ...progress,
             stats: {
                 ...stats,

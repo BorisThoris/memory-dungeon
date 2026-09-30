@@ -10,6 +10,8 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
+import { EMBER_WORLD_AFTERGLOW_BONUS, freePairsLeft } from './world-reaction-rules';
+import { LANTERN_MAX_LIT } from './lantern-light-rules';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -76,6 +78,10 @@ export interface SoakRunReport {
     /** Zones ignited, and pairs matched inside them. */
     zones: number;
     zonePairs: number;
+    /** The world's reactions: voids that spat, freezes, world shifts. */
+    voidSpews: number;
+    frostFreezes: number;
+    worldShifts: number;
     violations: SoakViolation[];
 }
 
@@ -125,6 +131,19 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const cap = isZoneActive(run) ? run.zone!.pairs * 2 : 3;
         return run.board.flippedTileIds.length > cap ? `${run.board.flippedTileIds.length} face up against ${cap}` : null;
     },
+    'a frozen card is never face up, and never frozen without a whole pair left free': (_b, run) => {
+        if (!run.board) return null;
+        const upFrozen = run.board.tiles.filter((tile) => tile.frozen === true && tile.state !== 'hidden');
+        if (upFrozen.length > 0) return `frozen and ${upFrozen[0]!.state}: ${upFrozen[0]!.id}`;
+        // Read between turns: mid-turn the free pair's first half is face up and not counted.
+        if (run.board.flippedTileIds.length > 0) return null;
+        const iced = run.board.tiles.some((tile) => tile.frozen === true);
+        return !iced || freePairsLeft(run.board) >= 1 ? null : 'ice with no whole pair free';
+    },
+    'the world holds two distinct elements at most': (_b, run) => {
+        const world = run.world ?? [];
+        return world.length <= 2 && new Set(world).size === world.length ? null : `world ${world.join(',')}`;
+    },
     'a Zone is open only while the floor is played, and never past its own pairs': (_b, run) => {
         if (!isZoneActive(run)) return null;
         if (run.status !== 'playing') return `zone open while ${run.status}`;
@@ -146,10 +165,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const bad = fields.filter(([, value]) => !nonNegativeInteger(value));
         return bad.length === 0 ? null : bad.map(([name, value]) => `${name}=${String(value)}`).join(', ');
     },
-    'the afterglow lights no more cards than the heat the run carried in allows': (before, run) => {
+    'the afterglow lights no more cards than the heat the run carried in allows, one more in an ember world': (before, run) => {
         if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle')) return null;
         const lit = Array.isArray(run.lanternLitTileIds) ? run.lanternLitTileIds.length : 0;
-        const allowed = runComboHeatPerks(before).afterglow;
+        const allowed = Math.min(LANTERN_MAX_LIT, runComboHeatPerks(before).afterglow + ((run.world ?? []).includes('ember') ? EMBER_WORLD_AFTERGLOW_BONUS : 0));
         return lit <= allowed ? null : `${lit} lit at a combo of ${before.stats.currentStreak}, which allows ${allowed}`;
     },
     'the miss bank never holds more than its cap': (_b, run) => {
@@ -233,7 +252,7 @@ const checkAll = (before: RunState | null, after: RunState, action: string): str
     });
 
 const hiddenReal = (run: RunState): Tile[] =>
-    (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+    (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey));
 
 export const soakRun = ({
     seed,
@@ -265,6 +284,9 @@ export const soakRun = ({
     let heatPerkTurns = 0;
     let zones = 0;
     let zonePairs = 0;
+    let voidSpews = 0;
+    let frostFreezes = 0;
+    let worldShifts = 0;
     let floorsCleared = 0;
 
     const act = (action: string, next: RunState): void => {
@@ -279,6 +301,9 @@ export const soakRun = ({
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
         zonePairs += Math.max(0, (next.zonePairsThisRun ?? 0) - (run.zonePairsThisRun ?? 0));
+        voidSpews += Math.max(0, (next.voidSpewsThisFloor ?? 0) - (run.voidSpewsThisFloor ?? 0));
+        frostFreezes += Math.max(0, (next.frostFreezesThisFloor ?? 0) - (run.frostFreezesThisFloor ?? 0));
+        worldShifts += Math.max(0, (next.worldShiftsThisFloor ?? 0) - (run.worldShiftsThisFloor ?? 0));
         run = next;
     };
 
@@ -375,6 +400,9 @@ export const soakRun = ({
         heatPerkTurns,
         zones,
         zonePairs,
+        voidSpews,
+        frostFreezes,
+        worldShifts,
         violations
     };
 };

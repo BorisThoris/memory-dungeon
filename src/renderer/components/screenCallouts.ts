@@ -15,6 +15,7 @@ import {
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
+import { WORLD_STAMP_COPY, worldTitle } from '../copy/worldReactionCopy';
 
 /**
  * The screen stamps (`ScreenCalloutQueue`): every moment the run wants the whole screen for,
@@ -34,7 +35,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, they play in this order, which is the order of what the player most needs to know.
  */
-export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'void' | 'frozen' | 'world';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -53,7 +54,7 @@ export interface ScreenCallout {
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['ignite', 'zone', 'milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['ignite', 'zone', 'void', 'milestone', 'rank', 'temper', 'world', 'broken', 'last', 'frozen', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
@@ -137,6 +138,36 @@ export const deriveZoneCallouts = (
     }
     return callouts;
 };
+
+/**
+ * The world reacting (`world-reaction-rules.ts`), stamped on the counts going up: THE VOID SPITS
+ * when a lost Inferno combo returns pairs, FROZEN when the cold ices cards, and the world's name
+ * when a big pop shifts it. Keyed by floor and count, so a restore replays none.
+ */
+export const deriveWorldCallouts = (
+    previous: WorldCalloutRun | undefined,
+    next: WorldCalloutRun
+): ScreenCallout[] => {
+    const callouts: ScreenCallout[] = [];
+    const floor = next.board?.level ?? 0;
+    const sameFloor = previous?.board?.level === floor;
+    const rose = (key: 'voidSpewsThisFloor' | 'frostFreezesThisFloor' | 'worldShiftsThisFloor'): number =>
+        Math.max(0, (next[key] ?? 0) - (sameFloor ? previous?.[key] ?? 0 : 0));
+    if (previous === undefined) return callouts;
+    if (rose('voidSpewsThisFloor') > 0) {
+        const back = Math.max(1, (previous.board?.matchedPairs ?? 0) - (next.board?.matchedPairs ?? 0));
+        callouts.push({ key: `void:${floor}:${next.voidSpewsThisFloor}`, kind: 'void', size: 'major', tone: 'miss', title: WORLD_STAMP_COPY.voidTitle, sub: WORLD_STAMP_COPY.voidSub(back) });
+    }
+    if (rose('worldShiftsThisFloor') > 0 && (next.world ?? []).length > 0) {
+        callouts.push({ key: `world:${floor}:${next.worldShiftsThisFloor}`, kind: 'world', size: 'major', tone: 'cyan', title: worldTitle(next.world ?? []), sub: WORLD_STAMP_COPY.worldSub(next.world ?? []) });
+    }
+    if (rose('frostFreezesThisFloor') > 0) {
+        callouts.push({ key: `frozen:${floor}:${next.frostFreezesThisFloor}`, kind: 'frozen', size: 'minor', tone: 'cyan', title: WORLD_STAMP_COPY.frozenTitle, sub: WORLD_STAMP_COPY.frozenSub });
+    }
+    return callouts;
+};
+
+export type WorldCalloutRun = Pick<RunState, 'board' | 'world' | 'voidSpewsThisFloor' | 'frostFreezesThisFloor' | 'worldShiftsThisFloor'>;
 
 export const derivePurchaseCallouts = (
     previous: RunState['storePurchases'] | undefined,

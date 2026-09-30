@@ -97,7 +97,7 @@ const playFloor = (board: BoardState, seed: number, tag: string): number => {
         );
         if (groups.length === 0) break;
         const hidden = run.board!.tiles.filter(
-            (tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey)
+            (tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey)
         );
         let first;
         let second;

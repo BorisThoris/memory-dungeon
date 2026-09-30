@@ -110,7 +110,7 @@ export const simulateDifficultyCurve = ({
                 );
                 if (groups.length === 0) break;
                 const hidden = run.board!.tiles.filter(
-                    (tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey)
+                    (tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey)
                 );
                 const wantsMiss = rng() < missRate && hidden.length >= 3;
                 let first;

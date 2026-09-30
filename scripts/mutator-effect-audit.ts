@@ -121,7 +121,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         );
         if (groups.length === 0) break;
         const hidden = run.board!.tiles.filter(
-            (tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey)
+            (tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey)
         );
         const wantsMiss = rng() < 0.25 && hidden.length >= 3;
         let first;

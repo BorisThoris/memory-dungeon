@@ -201,6 +201,18 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 262,
         reason: 'Bombs are only bought at the store and the census players never shop. The whole-run soak throws them and requires one to land; two test hall rooms walk the aim and the last-pair guard.'
     },
+    'hazard.void_spew': {
+        generation: 264,
+        reason: 'The void needs a combo of Inferno or better to die on a miss, and the floor census starts every floor cold. The whole-run soak requires the void to spit, and the void-spew room walks the pairs coming back, the shuffle and the world emptied.'
+    },
+    'hazard.frost_freeze': {
+        generation: 264,
+        reason: 'The cold runs on the run seed (a frost temper) or on a world a big pop made, which a fresh floor census does not carry. The whole-run soak requires a freeze and checks no frozen card is ever face up; the frost-freeze room walks the freeze, the refused press and the thaw.'
+    },
+    'board.element_worlds': {
+        generation: 264,
+        reason: 'A world is made by a pop of three pairs and carried across floors, which a floor census that starts each floor fresh cannot see. The whole-run soak requires a world shift and bounds the world at two elements; the tide-world room walks a shift and its tide.'
+    },
     'power.ignition_zone': {
         generation: 264,
         reason: 'The Zone is ignited by the player at Inferno or better, and the census players never spend a combo on anything. The whole-run soak ignites it on half the turns it may, walks its flips and requires a Zone to open and to match a pair; the zone room walks the burn, the free flips, the resolve, the miss and the bonus.'

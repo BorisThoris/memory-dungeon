@@ -135,7 +135,7 @@ export interface CascadeBalanceSimulationInput {
 
 const EMPTY_RATINGS = (): Record<Rating, number> => ({ 'S++': 0, S: 0, A: 0, B: 0, C: 0, D: 0, F: 0 });
 
-const hiddenTilesOf = (board: BoardState): Tile[] => board.tiles.filter((tile) => tile.state === 'hidden');
+const hiddenTilesOf = (board: BoardState): Tile[] => board.tiles.filter((tile) => tile.state === 'hidden' && tile.frozen !== true);
 
 /**
  * One floor, one player. A miss is a real mismatch — two hidden tiles from different pairs — so

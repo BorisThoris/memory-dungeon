@@ -316,7 +316,14 @@
                 "zone",
                 "zonesThisRun",
                 "zonePairsThisRun",
-                "lastZone"
+                "lastZone",
+                "world",
+                "frozenTiles",
+                "frozenUntilTurn",
+                "voidSpewsThisFloor",
+                "frostFreezesThisFloor",
+                "worldShiftsThisFloor",
+                "tideSwapsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -1946,6 +1953,121 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "hazard.void_spew",
+            "label": "The Void Spews",
+            "kind": "hazard",
+            "role": "a_miss_that_kills_an_inferno_combo_returns_matched_pairs_and_shuffles_the_board",
+            "evidence": [
+                "src/shared/world-reaction-rules.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/renderer/components/sceneMood.ts"
+            ],
+            "reads": [
+                "currentStreak",
+                "tileStates",
+                "pinnedTileIds",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "matchedPairs",
+                "voidSpewsThisFloor",
+                "world"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "returns-only-matched-pairs",
+                "strips-returned-findables",
+                "pinned-cards-stay"
+            ],
+            "tests": [
+                "src/shared/world-reaction-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "hazard.frost_freeze",
+            "label": "The Cold Freezes",
+            "kind": "hazard",
+            "role": "a_cold_world_freezes_face_down_cards_so_they_cannot_be_turned_for_two_turns",
+            "evidence": [
+                "src/shared/world-reaction-rules.ts",
+                "src/shared/flip-tile-transition.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/renderer/components/tileBoardReadability.ts"
+            ],
+            "reads": [
+                "runSeed",
+                "world",
+                "tileStates",
+                "turnsThisFloor",
+                "currentStreak"
+            ],
+            "writes": [
+                "frozenTiles",
+                "frozenUntilTurn",
+                "frostFreezesThisFloor"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "two-whole-pairs-stay-free",
+                "thaws-when-stuck",
+                "thaws-when-time-stops",
+                "never-a-pair-hint"
+            ],
+            "tests": [
+                "src/shared/world-reaction-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "board.element_worlds",
+            "label": "Element Worlds",
+            "kind": "board",
+            "role": "a_big_pop_pulls_the_room_into_its_element_whose_rule_then_holds",
+            "evidence": [
+                "src/shared/world-reaction-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/sceneMood.ts",
+                "src/renderer/components/GameplayScene.tsx"
+            ],
+            "reads": [
+                "tileSuits",
+                "chunkPairsBroken",
+                "world"
+            ],
+            "writes": [
+                "world",
+                "worldShiftsThisFloor",
+                "tideSwapsThisFloor",
+                "stickyBlockIndex",
+                "lanternLitTileIds"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "two-elements-at-most",
+                "the-void-empties-it",
+                "tide-skips-pinned-and-frozen"
+            ],
+            "tests": [
+                "src/shared/world-reaction-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2872,6 +2994,72 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "Ignite/Resolve on the dock, the Zone line on the rail, the veil and the stamps"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.void_spew",
+            "kind": "triggers",
+            "label": "a miss after an Inferno combo opens the void"
+        },
+        {
+            "source": "hazard.void_spew",
+            "target": "board.cleanup",
+            "kind": "modifies",
+            "label": "matched pairs come back face down, the board is shuffled"
+        },
+        {
+            "source": "hazard.void_spew",
+            "target": "board.element_worlds",
+            "kind": "modifies",
+            "label": "the void empties the world"
+        },
+        {
+            "source": "hazard.void_spew",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the black hole spits, and a stamp says how many pairs came back"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.frost_freeze",
+            "kind": "triggers",
+            "label": "every third turn in a cold world freezes cards"
+        },
+        {
+            "source": "hazard.frost_freeze",
+            "target": "core.board_turn_resolution",
+            "kind": "blocks",
+            "label": "a frozen card cannot be turned"
+        },
+        {
+            "source": "hazard.frost_freeze",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "frozen cards are iced on the board"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "board.element_worlds",
+            "kind": "triggers",
+            "label": "a pop of three pairs shifts the world to its element"
+        },
+        {
+            "source": "board.element_worlds",
+            "target": "hazard.frost_freeze",
+            "kind": "triggers",
+            "label": "a bone world is cold"
+        },
+        {
+            "source": "board.element_worlds",
+            "target": "board.lantern_light",
+            "kind": "modifies",
+            "label": "an ember world burns the afterglow a card wider"
+        },
+        {
+            "source": "board.element_worlds",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the room takes the world weather and the rail names it"
         }
     ],
     "coverage": {

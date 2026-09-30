@@ -6,6 +6,7 @@ import { comboHeatLevels, comboHeatThemeForSeed, comboStageLabel } from '../../s
 import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
 import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
 import { zoneRailLine } from '../copy/zoneToolCopy';
+import { worldRailLine } from '../copy/worldReactionCopy';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
@@ -639,6 +640,11 @@ const RunShell = ({
                                     {carried > 0 ? (
                                         <span className={styles.comboCarried} data-testid="hud-combo-carried">
                                             {`${carried} carried`}
+                                        </span>
+                                    ) : null}
+                                    {worldRailLine(run.world ?? []) ? (
+                                        <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-world">
+                                            {worldRailLine(run.world ?? [])}
                                         </span>
                                     ) : null}
                                     {isZoneActive(run) ? (

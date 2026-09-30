@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 63 as const;
+export const ENCYCLOPEDIA_VERSION = 64 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -459,6 +459,12 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
  * Floor bonuses, streak rewards, and optional rules that affect score — mirrors `finalizeLevel` / match resolution in `game.ts`.
  */
 export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'sys_world_reactions',
+        title: 'The world reacts',
+        description:
+            'The room is not only scenery. **The void spews**: a miss that kills a combo of **Inferno** (16) or better opens the black hole, and it spits **matched pairs back face down** - one, plus one for every ten links over sixteen, three at most - and **shuffles** every face-down card that is not pinned. **The cold freezes**: in a cold world (a **frost** run, or a **bone** world) every **third turn** freezes **two** face-down cards (three from Blazing) for **two turns**; a frozen card cannot be turned. The ice comes from different pairs, only sometimes both halves of one, so it never gives a pair away, and it always leaves **two whole pairs** free. **Element worlds**: a pop that takes **three pairs or more** pulls the room into the element of the cards that popped, and a second element joins it (two at most). **Ember**: the afterglow lights one card more, even cold. **Tide**: every third turn two face-down cards trade places. **Moss**: a match overgrows the face-down card beside it, which cannot open the next turn. **Bone**: the cold. The world carries from floor to floor until another big pop changes it; the void takes it away.'
+    },
     {
         id: 'sys_combo_heat_perks',
         title: 'Heat: what a hot combo changes',

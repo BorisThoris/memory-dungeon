@@ -30,6 +30,19 @@
     fill: #d9481a;
 }
 
+/* A moss world's spores: the same drift, green and slower to die out. */
+.drift[data-palette='spore'] {
+    opacity: calc(0.6 + 0.4 * var(--scene-ash, 0.5));
+}
+
+.drift[data-palette='spore'] .spark {
+    fill: #b6f07a;
+}
+
+.drift[data-palette='spore'] .ash {
+    fill: #5fae4a;
+}
+
 @keyframes emberRise {
     0% {
         opacity: 0;

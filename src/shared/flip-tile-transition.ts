@@ -53,7 +53,8 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
 
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
 
-        if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
+        // A frozen card (the cold world, `world-reaction-rules.ts`) cannot be turned until it thaws.
+        if (!tile || tile.state !== 'hidden' || tile.frozen === true || currentFlippedTileIds.includes(tileId)) {
             return run;
         }
 

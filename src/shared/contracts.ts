@@ -291,6 +291,8 @@ export interface Tile {
     suit?: TileSuit;
     /** True on a tile a chunk break took off the board, so it can be told apart from a defeated enemy. */
     brokenByChunk?: boolean;
+    /** The cold world's ice (`world-reaction-rules.ts`): a frozen card cannot be turned until it thaws. */
+    frozen?: boolean;
     /** The tier the break that took this tile landed at ('none' for a pop), so the shatter can play a Fever break slower. */
     brokenAtTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Which wave of the ripple took this tile: 0 for the match's own region, 1 for what its partners popped, and so on. */
@@ -731,6 +733,18 @@ export interface RunState {
     lanternLightsThisFloor: number;
     /** `combo_heat_perks`: matches this floor resolved with a heat perk on (afterglow, a wider pop, a longer reach). */
     heatPerkTurnsThisFloor: number;
+    /**
+     * The element world (`world-reaction-rules.ts`): the elements a big pop pulled the room into,
+     * oldest first, two at most. Carries across floors; the void empties it.
+     */
+    world?: TileSuit[];
+    /** The turn the cold's ice lasts through; null when nothing is frozen. */
+    frozenUntilTurn?: number | null;
+    /** This floor: times the void spat pairs back, the cold froze cards, the world shifted, the tide traded cards. */
+    voidSpewsThisFloor?: number;
+    frostFreezesThisFloor?: number;
+    worldShiftsThisFloor?: number;
+    tideSwapsThisFloor?: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
 }

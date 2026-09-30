@@ -34,7 +34,8 @@ const unresolvedPlayablePairGroups = (board: BoardState): Tile[][] => {
         groups.set(tile.pairKey, group);
     }
     return [...groups.values()]
-        .filter((group) => group.length >= 2)
+        // A pair with an iced half waits for the thaw; the cold always leaves one free (`world-reaction-rules.ts`).
+        .filter((group) => group.length >= 2 && !group.some((tile) => tile.frozen === true && tile.state === 'hidden'))
         .sort((left, right) => {
             const leftHasExposed = left.some((tile) => tile.state !== 'hidden') ? 0 : 1;
             const rightHasExposed = right.some((tile) => tile.state !== 'hidden') ? 0 : 1;

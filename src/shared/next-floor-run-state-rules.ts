@@ -75,6 +75,12 @@ export const createNextFloorRunState = (
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
         heatPerkTurnsThisFloor: 0,
+        // The world carries down the stairs; the ice and the floor's counts do not.
+        frozenUntilTurn: null,
+        voidSpewsThisFloor: 0,
+        frostFreezesThisFloor: 0,
+        worldShiftsThisFloor: 0,
+        tideSwapsThisFloor: 0,
         // A Zone never crosses the stairs: the floor it opened on resolves it or ends it.
         zone: null,
         // Pair keys repeat from floor to floor, so a carried anchor would mark a card on the wrong board.

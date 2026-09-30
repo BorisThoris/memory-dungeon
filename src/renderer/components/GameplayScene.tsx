@@ -140,6 +140,7 @@ export function GameplayScene({
             data-scene-fill={fill.toFixed(2)}
             data-scene-tier={tier}
             data-combo-stage={comboStage}
+            data-scene-world={(mood?.world ?? []).join(' ')}
             data-scene-plate={mood?.plate ?? 'dungeon'}
             data-scene-prismatic={mood?.prismatic ? 'true' : 'false'}
             data-scene-hit={hitting && !still ? 'true' : 'false'}
@@ -216,6 +217,8 @@ export function GameplayScene({
                 {!still && (mood?.storm ?? 0) > 0 ? <StormBoltsOverlay count={3 + Math.min(6, Math.floor(mood?.surge ?? 0))} seed={runSeed} /> : null}
                 {/* An ember run: sparks and ash drift up off the floor, thicker with the heat. */}
                 {!still && (mood?.ash ?? 0) > 0 ? <EmberDriftOverlay count={emberMoteCount(mood?.surge ?? 0) + Math.round((mood?.ash ?? 0) * 14)} seed={runSeed} /> : null}
+                {/* A moss world: spores drift up the same way, green. */}
+                {!still && (mood?.spores ?? 0) > 0 ? <EmberDriftOverlay count={emberMoteCount(mood?.surge ?? 0)} palette="spore" seed={runSeed + 1} /> : null}
                 {/* A frost run: ice grows in from the edges with the heat, screened over the room. */}
                 <div className={`${plate.layer} ${styles.frost}`} data-testid="gameplay-scene-frost" style={bg(UI_ART.gameplaySceneFrost)} />
                 {/* A storm run: the room flashes white now and then, more often the hotter it is. */}

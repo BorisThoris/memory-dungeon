@@ -311,6 +311,30 @@ off the floor (`EmberDriftOverlay`, seeded per run, thicker and faster with the 
 The ice pane over the board still waits for the heat. The temper stamp names ember runs too, so
 every run says what its weather is the first time the combo warms.
 
+## The world reacts (2026-09-30)
+
+The owner asked for the rules to hear the world the room was already showing, in the arcade
+tables' way: the jackpot machine does not just flash, it changes the table. Three rules in
+`src/shared/world-reaction-rules.ts`, all on the punishing side, each guarded so a floor can
+always be played:
+
+- **The void spews.** A miss that kills a combo of Inferno or better opens the black hole, and it
+  spits matched pairs back face down (1 + one per ten links over 16, three at most), shuffles the
+  unpinned face-down cards and empties the world. Stamp: THE VOID SPITS.
+- **The cold freezes.** In a frost run or a bone world, every third turn ices two cards (three
+  from Blazing) for two turns; an iced card cannot be turned and draws in glacier blue. Mostly
+  single halves of different pairs, both halves of one pair about a third of the time, so the ice
+  never reads as a hint; two whole pairs always stay free; the ice cracks when a pop or a bomb
+  leaves none, and thaws when the Zone stops time. Stamp: FROZEN.
+- **Element worlds.** A pop of three pairs or more pulls the room into the popped cards' element
+  (ember, tide, moss, bone); a second element combines with it, two at most. Each brings its
+  weather and a rule: ember embers and the afterglow one card wider; tide the storm's wet and
+  bolts and two cards trading places every third turn; moss green spores and a match overgrowing
+  the card beside it; bone snow and the cold. The rail names the world; a stamp announces a shift.
+
+These ship to the test realm (`yarn deploy:pages:test`, the `memory-dungeon-test` Pages project)
+for play before they go to production.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

@@ -71,7 +71,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
                 group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
             );
             if (groups.length === 0) break;
-            const hidden = run.board!.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+            const hidden = run.board!.tiles.filter((tile) => tile.state === 'hidden' && tile.frozen !== true && !isSingletonUtilityPairKey(tile.pairKey));
             const wantsMiss = rng() < missRate && hidden.length >= 3;
             let first;
             let second;

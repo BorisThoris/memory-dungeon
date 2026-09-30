@@ -23,6 +23,9 @@ import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { runChainTier } from './chain-tier-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
+import { freePairsLeft } from './world-reaction-rules';
+
+const frozenCount = (run: RunState): number => (run.board?.tiles ?? []).filter((t) => t.frozen === true).length;
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -79,6 +82,9 @@ export type TestHallRoomId =
     | 'heat-afterglow'
     | 'heat-pop'
     | 'zone'
+    | 'void-spew'
+    | 'frost-freeze'
+    | 'tide-world'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -115,6 +121,10 @@ export type TestHallStep =
     | { readonly do: 'ignite' }
     | { readonly do: 'zoneFlip'; readonly tileId: string }
     | { readonly do: 'zoneResolve' }
+    /** Press a frozen card: the step plays (a player can press it) and the rules must refuse it. */
+    | { readonly do: 'pressFrozen' }
+    /** Miss on the first two face-down cards of different pairs, whatever a pop has left. */
+    | { readonly do: 'missAny' }
     | { readonly do: 'clear' }
     /** Descend from a cleared floor to the next one, which opens on its study window. */
     | { readonly do: 'advance' }
@@ -899,6 +909,65 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'void-spew',
+        title: 'The void spews',
+        mechanic: 'A miss that kills a combo of Inferno or better opens the black hole: it spits matched pairs back face down and shuffles the face-down cards, and the world goes with it.',
+        graphMechanicIds: ['hazard.void_spew', 'economy.miss_bank'],
+        tryThis: 'You arrive at a combo of twenty-six. Match a and b (the fire takes more with them), then miss: pairs come back face down somewhere new.',
+        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e'], { streak: 26, run: { world: ['tide'] } }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the combo climbs', expect: (r) => (r.stats.currentStreak === 27 ? null : `combo ${r.stats.currentStreak}`) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'and climbs', expect: (r) => (r.stats.currentStreak === 28 ? null : `combo ${r.stats.currentStreak}`) },
+            {
+                step: { do: 'missAny' },
+                says: 'the miss opens the void: pairs come back face down, the cards are shuffled, the world is emptied',
+                expect: (r, b) => {
+                    if (r.voidSpewsThisFloor !== 1) return `spews ${r.voidSpewsThisFloor}`;
+                    const back = (b.board?.matchedPairs ?? 0) - (r.board?.matchedPairs ?? 0);
+                    if (back < 1) return `matched ${b.board?.matchedPairs} -> ${r.board?.matchedPairs}`;
+                    if ((r.world ?? []).length !== 0) return `world ${(r.world ?? []).join(',')}`;
+                    const order = (run: RunState) => (run.board?.tiles ?? []).map((t) => t.id).join(',');
+                    return order(r) !== order(b) ? null : 'nothing moved';
+                }
+            }
+        ]
+    },
+    {
+        id: 'frost-freeze',
+        title: 'The cold freezes',
+        mechanic: 'In a cold world every third turn freezes two cards for two turns; a frozen card cannot be turned. Two whole pairs always stay free.',
+        graphMechanicIds: ['hazard.frost_freeze'],
+        tryThis: 'A frost run. Miss three times: two cards ice over. Press one - nothing turns. Two turns later the ice is gone.',
+        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e'], { misses: 4, run: { runSeed: 14 } }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one, nothing freezes', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two, nothing freezes', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) },
+            {
+                step: { do: 'miss', a: 'e-1', b: 'f-1' },
+                says: 'turn three, two cards ice over, and two whole pairs stay free',
+                expect: (r) => (frozenCount(r) === 2 && r.frostFreezesThisFloor === 1 && r.board && freePairsLeft(r.board) >= 2 ? null : `frozen ${frozenCount(r)}, freezes ${r.frostFreezesThisFloor}`)
+            },
+            { step: { do: 'pressFrozen' }, says: 'a frozen card cannot be turned', expect: (r) => (r.board?.flippedTileIds.length === 0 ? null : `up ${r.board?.flippedTileIds.join(',')}`) },
+            { step: { do: 'match', pairKey: 'g' }, says: 'the ice holds through the next turn', expect: (r) => (frozenCount(r) === 2 ? null : `frozen ${frozenCount(r)}`) },
+            { step: { do: 'match', pairKey: 'h' }, says: 'and thaws after its two turns', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) }
+        ]
+    },
+    {
+        id: 'tide-world',
+        title: 'A tide world',
+        mechanic: 'A pop of three pairs or more pulls the room into the popped cards\' element. A tide world trades two face-down cards every third turn; a second element combines with it.',
+        graphMechanicIds: ['board.element_worlds', 'board.chain_chunk_fever'],
+        tryThis: 'A floor of tide cards and a combo of ten. Match x: the pop takes the floor with it and the room turns to tide, and two face-down cards trade places.',
+        build: () => room(['a:t b:t c:t d:t', 'a:t b:t c:t d:t', 'x:t f:t g:t h:t', 'x:t f:t g:t h:t', 'm:m n:m m:m n:m'], { streak: 10 }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'x' },
+                says: 'the big pop pulls the room into tide, and the tide trades two face-down cards on its first turn',
+                expect: (r) => ((r.world ?? []).join(',') === 'tide' && r.worldShiftsThisFloor === 1 && r.tideSwapsThisFloor === 1 ? null : `world ${(r.world ?? []).join(',')}, shifts ${r.worldShiftsThisFloor}, tide ${r.tideSwapsThisFloor}`)
+            }
+        ]
+    },
+    {
         id: 'n-back',
         title: 'The anchor',
         mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
@@ -1238,6 +1307,16 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'zoneFlip': {
             const next = zoneFlipTile(run, step.tileId);
             return next === run ? null : next;
+        }
+        case 'missAny': {
+            const hidden = (run.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.frozen !== true && t.pairKey !== WILD_PAIR_KEY);
+            const first = hidden[0];
+            const second = hidden.find((t) => first && t.pairKey !== first.pairKey);
+            return first && second ? resolveBoardTurn(flipTile(flipTile(run, first.id), second.id)) : null;
+        }
+        case 'pressFrozen': {
+            const frozen = (run.board?.tiles ?? []).find((t) => t.frozen === true && t.state === 'hidden');
+            return frozen ? flipTile(run, frozen.id) : null;
         }
         case 'zoneResolve': {
             const next = resolveZone(run);

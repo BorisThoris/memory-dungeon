@@ -26,6 +26,7 @@ import { hideTileAfterTurn } from './tile-state-rules';
 import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { thawIfStuck } from './world-reaction-rules';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
@@ -340,7 +341,7 @@ export const applyBomb = (run: RunState, tileId: string): RunState => {
     }
     const tile = run.board.tiles.find((candidate) => candidate.id === tileId)!;
     const pairTileIds = run.board.tiles.filter((candidate) => candidate.pairKey === tile.pairKey).map((candidate) => candidate.id);
-    return {
+    const bombed: RunState = {
         ...run,
         bombCharges: decrementRunCounter(run.bombCharges),
         powersUsedThisRun: true,
@@ -351,11 +352,13 @@ export const applyBomb = (run: RunState, tileId: string): RunState => {
             matchedPairs: runNonNegativeInteger(run.board.matchedPairs) + 1,
             tiles: run.board.tiles.map((candidate) =>
                 pairTileIds.includes(candidate.id)
-                    ? { ...candidate, state: 'removed' as const, findableKind: undefined }
+                    ? { ...candidate, state: 'removed' as const, findableKind: undefined, frozen: undefined }
                     : candidate
             )
         }
     };
+    // A bomb can take the last free pair; the cold's ice cracks rather than leave nothing to play.
+    return bombed.board ? { ...bombed, board: thawIfStuck(bombed.board) } : bombed;
 };
 
 export const cancelResolvingWithUndo = (run: RunState): RunState => {
