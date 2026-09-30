@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2831,
-    "codeFileCount": 1023,
-    "exportedSymbolCount": 3122,
+    "trackedFileCount": 2832,
+    "codeFileCount": 1024,
+    "exportedSymbolCount": 3137,
     "contentItemCount": 10,
     "mechanicCount": 56,
-    "stateFieldCount": 106,
-    "relationshipCount": 8184
+    "stateFieldCount": 108,
+    "relationshipCount": 8209
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 520853,
-      "sha256": "2e53757216dbfb6cc878254824a984794bb3cc0553974d2f7a508153e096ca20"
+      "bytes": 521856,
+      "sha256": "3bce922871dcf93956fde7b56c7a16f99780ea7a02547295379ff83f80e5b10f"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 27963,
-      "sha256": "15e63210087db8a2bff84a94604739c7faf155cd720a96497464d6e2a465fdf4"
+      "bytes": 28750,
+      "sha256": "3b94302f034762a100963213497f690e52d1e3a0766874d0798cd32177af06c6"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 42308,
-      "sha256": "fddfde916b47836d384245e171fd06969a237aabf64bba1cbb3168936210475e"
+      "bytes": 43551,
+      "sha256": "73c9e8820e08d1342abd13bcbebb1f2c08ae5b4500be88afc7c056724b21840c"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "881ec0864c8172e767ddb4a7125513dfbc7bf21f9144804aa52875d6337e2c31"
+      "sha256": "6ddd03aa18d8c3f95464af119696678eec212cb01f73110db874bcb7ab078206"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9433,6 +9433,12 @@
       "sha256": "80c9d81035d3250354dea4686ec84de9aaf629e6b65c4a353a21afcce6b46169"
     },
     {
+      "path": "src/renderer/components/FrostOverlayPlane.tsx",
+      "category": "source",
+      "bytes": 3697,
+      "sha256": "511283153890896ba08e0d73b9829fd8a6d0c48a189b21124d9bb144ffa82757"
+    },
+    {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
       "bytes": 20016,
@@ -9459,8 +9465,8 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 15096,
-      "sha256": "d900c8caafe033047eaace9716eb3ce436421dc0f81892137232a6989a3194c6"
+      "bytes": 15980,
+      "sha256": "19d5e9b94bd7f3dc147505114af2720d85139152318ccd52e12c9a54b8db7eaa"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
@@ -9471,8 +9477,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 16598,
-      "sha256": "1d985f3e07d9606e1869b706e05932486895b9afb318f2657fad11ddbf2ecb83"
+      "bytes": 16723,
+      "sha256": "8d9f070d0a4332726b4c07250360c1b5e787f66f1443b4759fa5327bce404c75"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9507,8 +9513,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 109288,
-      "sha256": "63928ac3be257cd8cf95e078140c1cbde354daabf69829075ba3259433963445"
+      "bytes": 110474,
+      "sha256": "f829a26b94d10a44aac21603b25609feecb3325b9beb3fee7366857e2b8b7c85"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9867,8 +9873,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 43863,
-      "sha256": "e2ed0db26a15818d6e47d1559d63529f874cd581502d52cafe27cde51ff9eb54"
+      "bytes": 43905,
+      "sha256": "cf6db86cac973c606cab27e4292cc66af638fc349eaf9c6b022cb45682ce95e2"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9903,8 +9909,8 @@
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 11396,
-      "sha256": "11c2f51607d22f6792d6fb5198852d3442818219e960a2cbae4ca9e7e2aca1e6"
+      "bytes": 11723,
+      "sha256": "dab597e13cd6c2d2d7c0871dc4cdd8813b3244a199826611c94b5b61b0a71a5b"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -10011,8 +10017,8 @@
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 10460,
-      "sha256": "00d03d13928b33353cc8d2cf31c8718464a2a123047cfa9829b7881d01251698"
+      "bytes": 11519,
+      "sha256": "2b962ee071c52ef9309a36baf33c951cceba6e2d9d2230173d839374fad547d1"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -10167,8 +10173,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 34267,
-      "sha256": "87e2bf49788a3918800cdba62d42612e010a0ceb71672b4c664e28d02085fa14"
+      "bytes": 34564,
+      "sha256": "1c1cdd31d53838302ab3a2cc61ba8346a037e58d4c1ff73649509c66ce744948"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -11007,8 +11013,8 @@
     {
       "path": "src/renderer/components/worldCallouts.test.ts",
       "category": "test",
-      "bytes": 3028,
-      "sha256": "2bcaafc1ef6b2d02dead86598d00a6f7f5e571f2e8530d28daebc9c6c67439cb"
+      "bytes": 4333,
+      "sha256": "fcffbc13822ecfaa865bf178f0e47ea8335066aba4a82595c5fd8e651a5bc767"
     },
     {
       "path": "src/renderer/copy/anchorBeat.test.ts",
@@ -11313,8 +11319,8 @@
     {
       "path": "src/renderer/copy/worldReactionCopy.ts",
       "category": "source",
-      "bytes": 1555,
-      "sha256": "639e364b9053b710e78b68490755a1c1c55cb4d8a8d8db7527060469db23371e"
+      "bytes": 3111,
+      "sha256": "6fd3bdd302fd52fddf45185c0b173140043a1d399635cf1c6c509cc23e9047db"
     },
     {
       "path": "src/renderer/copy/zoneToolCopy.ts",
@@ -11841,14 +11847,14 @@
     {
       "path": "src/renderer/store/appStoreInitialState.ts",
       "category": "source",
-      "bytes": 1630,
-      "sha256": "3f88f3ced3c9c71ab8f8d372e2fc3dda7a36482e8b562625e32c799037eb5fc5"
+      "bytes": 1684,
+      "sha256": "a097c06f298a635e00a4f0bcd3c04a11d741819e5fa1556e6e135799045da861"
     },
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4899,
-      "sha256": "81db1ccc3eb97e82e29dd4d82a7a7440499a1079578afef9ec1d139f92efb232"
+      "bytes": 5054,
+      "sha256": "84be0c7660b3598d5bc01b6211af9ccb16f7149c4097a14047a9c8a473cc1867"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -12183,8 +12189,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 24726,
-      "sha256": "38574d50dc55f9102cee01d3e7a3a9d42b5ba627531f0d36699f21086e98cfe3"
+      "bytes": 25011,
+      "sha256": "c53f020631d1a89c5a57add4bb0fecc2c8f3afbc65a7a552035a32619fd158e4"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -12435,8 +12441,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 42614,
-      "sha256": "6450f92478c6e94ec23449bca22639382cabe1c65485e6c82f37b19e3f97a1ec"
+      "bytes": 43857,
+      "sha256": "64b0fe04abcfd30d5bcb18e8294294935cfbc718dce487d7661637653b97c66b"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12663,8 +12669,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 22399,
-      "sha256": "e12e469ad3db449e20ef7893b32ba5ab3a5e1020963598cd51779167c1835a9c"
+      "bytes": 23110,
+      "sha256": "ad2d39c2df44d0f7763ec438600cc6af036492750101b72aecc3825b1ccbdb01"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12897,8 +12903,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 39045,
-      "sha256": "3e4193d6c75963451305751fe6d54eaecf4700f389870ef24af185ed8645df01"
+      "bytes": 39354,
+      "sha256": "f2bebdc3b75de10c2be6e7497faf0123bd391d02135f629098ee4210ac5b318e"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13293,8 +13299,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 103637,
-      "sha256": "8d003ab36e539b311b7c4bd1054e9696341df36e946d2c4eec0e56a331a08220"
+      "bytes": 103763,
+      "sha256": "863f600fdf424cc1176494b27d8649fce4912eecf3b64f2739cd39410c53a99a"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13575,8 +13581,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 40959,
-      "sha256": "564d6196bdc45255def53de6c55473d0b198efb9a12ac6ac763789438cb459b4"
+      "bytes": 41680,
+      "sha256": "2aaebf1186cae42920a036bff7f5814f8d05dcd0710647e6a4aa0503989b7411"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14037,8 +14043,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 9051,
-      "sha256": "c909d70b95989f1642df784f97f58f2fbd06b70daf916b64591baca389bcfb52"
+      "bytes": 9103,
+      "sha256": "8348f5c62cd824eb698a88d66c784481eb4882c0079e0f724fc241f677b5fd57"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -14223,8 +14229,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 22099,
-      "sha256": "0a629a343564e680ccee89b1b7087a45a7ddadb5f1c5baf64e9ca099e152fdae"
+      "bytes": 22684,
+      "sha256": "f047aa510e6c9cb864215a66de76048b218a81f0c53b82386796a30dded966af"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14493,8 +14499,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 58320,
-      "sha256": "bd4ef583b8ccf80a71bc8f748b207ce1f583782b230b5e2ca2d862fe46d5357f"
+      "bytes": 59586,
+      "sha256": "50ff157a59b506b7c58eb68929707789525518c7c32633efcbac2e5f30772f32"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14517,8 +14523,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 83269,
-      "sha256": "a95dd7dc2ebdf1723a26602ee0b83b9bdb5aef2e0e4b6c7d729c02fa74d954fc"
+      "bytes": 86090,
+      "sha256": "07c3555416f6bb196c42d82bc41020ae218b804c16d66f82afc160228ee75cd6"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14739,8 +14745,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 9768,
-      "sha256": "128eebc92830b019c4471f89357c7aec8f6c7ddd9a0a388b92b8b1744386d74d"
+      "bytes": 10346,
+      "sha256": "bc938bb9d031beb015c6808de8ebff785fd97657e71e7e64d3e6130e1ce1e198"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -14775,14 +14781,14 @@
     {
       "path": "src/shared/world-reaction-rules.test.ts",
       "category": "test",
-      "bytes": 6830,
-      "sha256": "7287792e39a6b3f583b399bab5ed67722b7d1e4be98b16e552748ae8facb8e87"
+      "bytes": 11379,
+      "sha256": "653e7de3d3b8cb4d8b5cfdbaddc5407307a4648974d7161d78db4a04d23ee1ee"
     },
     {
       "path": "src/shared/world-reaction-rules.ts",
       "category": "source",
-      "bytes": 15269,
-      "sha256": "43858eedbce303ba7838bc2bd981d9d48c98867718998049b84526bf2b8b7bd3"
+      "bytes": 21668,
+      "sha256": "f3e3616728e6be0f32868bf671842d43bcad0f3d9d49a281c6e4de36fc1aa4b6"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -19988,6 +19994,22 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/FrostOverlayPlane.tsx",
+      "path": "src/renderer/components/FrostOverlayPlane.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 82,
+      "imports": [
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/FrostOverlayPlane.tsx#FrostOverlayPlane"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/GameOverScreen.test.tsx",
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
@@ -20083,7 +20105,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 270,
+      "lineCount": 272,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -20198,7 +20220,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2229,
+      "lineCount": 2247,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20235,6 +20257,7 @@
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/copy/skittishCardsBeat.ts",
         "file:src/renderer/copy/storeSheet.ts",
+        "file:src/renderer/copy/worldReactionCopy.ts",
         "file:src/renderer/copy/zoneToolCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
@@ -21169,7 +21192,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 215,
+      "lineCount": 218,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -21396,7 +21419,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 194,
+      "lineCount": 205,
       "imports": [
         "file:src/renderer/copy/worldReactionCopy.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -21805,9 +21828,10 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 881,
+      "lineCount": 884,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
+        "file:src/renderer/components/FrostOverlayPlane.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
         "file:src/renderer/components/SuitMarkerPlane.tsx",
@@ -24374,7 +24398,7 @@
       "path": "src/renderer/components/worldCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 47,
+      "lineCount": 62,
       "imports": [
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/components/screenCallouts.ts",
@@ -25200,13 +25224,15 @@
       "path": "src/renderer/copy/worldReactionCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 35,
+      "lineCount": 65,
       "imports": [
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/world-reaction-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_ELEMENT_NAME",
         "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_ELEMENT_RULE",
+        "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_FUSION_RULE",
         "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_STAMP_COPY",
         "symbol:src/renderer/copy/worldReactionCopy.ts#worldRailLine",
         "symbol:src/renderer/copy/worldReactionCopy.ts#worldTitle"
@@ -26490,7 +26516,7 @@
       "path": "src/renderer/store/appStoreInitialState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/store/appStoreTypes.ts",
         "file:src/renderer/store/matchScorePop.ts",
@@ -26506,7 +26532,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 112,
+      "lineCount": 114,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -27551,7 +27577,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 733,
+      "lineCount": 739,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -28765,7 +28791,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 489,
+      "lineCount": 501,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -29609,7 +29635,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 875,
+      "lineCount": 879,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -31326,7 +31352,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3086,
+      "lineCount": 3090,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -33596,7 +33622,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 221,
+      "lineCount": 223,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -34200,7 +34226,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 409,
+      "lineCount": 415,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -35242,7 +35268,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1390,
+      "lineCount": 1427,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -36025,7 +36051,7 @@
       "path": "src/shared/turn-mismatch-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 196,
+      "lineCount": 204,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/magpie-rules.ts",
@@ -36166,7 +36192,7 @@
       "path": "src/shared/world-reaction-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 119,
+      "lineCount": 179,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/world-reaction-rules.ts"
@@ -36179,7 +36205,7 @@
       "path": "src/shared/world-reaction-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 303,
+      "lineCount": 444,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
@@ -36190,10 +36216,14 @@
         "file:src/shared/tile-identity.ts"
       ],
       "exports": [
+        "symbol:src/shared/world-reaction-rules.ts#advanceElementStreak",
+        "symbol:src/shared/world-reaction-rules.ts#ELEMENT_STREAK_PULL",
+        "symbol:src/shared/world-reaction-rules.ts#ElementStreak",
         "symbol:src/shared/world-reaction-rules.ts#EMBER_WORLD_AFTERGLOW_BONUS",
         "symbol:src/shared/world-reaction-rules.ts#freePairsLeft",
         "symbol:src/shared/world-reaction-rules.ts#FROST_FREE_PAIRS_KEPT",
         "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_EVERY_TURNS",
+        "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_MAX",
         "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_TURNS",
         "symbol:src/shared/world-reaction-rules.ts#FROST_PAIR_FREEZE_CHANCE",
         "symbol:src/shared/world-reaction-rules.ts#frostFreezeCount",
@@ -36204,7 +36234,7 @@
         "symbol:src/shared/world-reaction-rules.ts#resolveFrostStep",
         "symbol:src/shared/world-reaction-rules.ts#resolveTideSwap",
         "symbol:src/shared/world-reaction-rules.ts#resolveVoidSpew",
-        "symbol:src/shared/world-reaction-rules.ts#resolveWorldShift",
+        "symbol:src/shared/world-reaction-rules.ts#resolveWorldPull",
         "symbol:src/shared/world-reaction-rules.ts#runWorldShifts",
         "symbol:src/shared/world-reaction-rules.ts#thawBoard",
         "symbol:src/shared/world-reaction-rules.ts#thawIfStuck",
@@ -36213,9 +36243,18 @@
         "symbol:src/shared/world-reaction-rules.ts#VOID_SPEW_MAX_PAIRS",
         "symbol:src/shared/world-reaction-rules.ts#VoidSpew",
         "symbol:src/shared/world-reaction-rules.ts#voidSpewPairs",
+        "symbol:src/shared/world-reaction-rules.ts#WORLD_FUSIONS",
+        "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_DEPTH",
         "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_ELEMENTS",
         "symbol:src/shared/world-reaction-rules.ts#WORLD_SHIFT_PAIRS",
-        "symbol:src/shared/world-reaction-rules.ts#worldHas"
+        "symbol:src/shared/world-reaction-rules.ts#worldFusion",
+        "symbol:src/shared/world-reaction-rules.ts#WorldFusion",
+        "symbol:src/shared/world-reaction-rules.ts#WorldFusionId",
+        "symbol:src/shared/world-reaction-rules.ts#worldHas",
+        "symbol:src/shared/world-reaction-rules.ts#WorldPull",
+        "symbol:src/shared/world-reaction-rules.ts#WorldPullOutcome",
+        "symbol:src/shared/world-reaction-rules.ts#worldRules",
+        "symbol:src/shared/world-reaction-rules.ts#WorldRules"
       ],
       "testedBy": [
         "file:src/shared/world-reaction-rules.test.ts"
@@ -39708,6 +39747,14 @@
       "endLine": 24
     },
     {
+      "id": "symbol:src/renderer/components/FrostOverlayPlane.tsx#FrostOverlayPlane",
+      "name": "FrostOverlayPlane",
+      "kind": "value",
+      "file": "src/renderer/components/FrostOverlayPlane.tsx",
+      "line": 74,
+      "endLine": 81
+    },
+    {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -39745,7 +39792,7 @@
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
       "line": 101,
-      "endLine": 269
+      "endLine": 271
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
@@ -39832,40 +39879,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2228,
-      "endLine": 2228
+      "line": 2246,
+      "endLine": 2246
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 249,
-      "endLine": 249
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 247,
-      "endLine": 247
+      "line": 248,
+      "endLine": 248
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 241,
-      "endLine": 241
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -40456,24 +40503,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 85,
-      "endLine": 91
+      "line": 87,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 107,
-      "endLine": 205
+      "line": 109,
+      "endLine": 208
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 208,
-      "endLine": 214
+      "line": 211,
+      "endLine": 217
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
@@ -40481,7 +40528,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 25,
-      "endLine": 74
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -40496,16 +40543,16 @@
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 97,
-      "endLine": 102
+      "line": 99,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "name": "WEATHER_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 105,
-      "endLine": 105
+      "line": 107,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -40736,8 +40783,8 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 168,
-      "endLine": 188
+      "line": 179,
+      "endLine": 199
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -40753,7 +40800,7 @@
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
       "line": 143,
-      "endLine": 164
+      "endLine": 175
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveZoneCallouts",
@@ -40792,16 +40839,16 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 191,
-      "endLine": 191
+      "line": 202,
+      "endLine": 202
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#WorldCalloutRun",
       "name": "WorldCalloutRun",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 166,
-      "endLine": 166
+      "line": 177,
+      "endLine": 177
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -41168,16 +41215,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 880,
-      "endLine": 880
+      "line": 883,
+      "endLine": 883
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 156,
-      "endLine": 160
+      "line": 157,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -45240,40 +45287,48 @@
       "name": "WORLD_ELEMENT_NAME",
       "kind": "value",
       "file": "src/renderer/copy/worldReactionCopy.ts",
-      "line": 7,
-      "endLine": 12
+      "line": 8,
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_ELEMENT_RULE",
       "name": "WORLD_ELEMENT_RULE",
       "kind": "value",
       "file": "src/renderer/copy/worldReactionCopy.ts",
-      "line": 15,
-      "endLine": 20
+      "line": 16,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_FUSION_RULE",
+      "name": "WORLD_FUSION_RULE",
+      "kind": "value",
+      "file": "src/renderer/copy/worldReactionCopy.ts",
+      "line": 24,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_STAMP_COPY",
       "name": "WORLD_STAMP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/worldReactionCopy.ts",
-      "line": 28,
-      "endLine": 34
+      "line": 49,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/copy/worldReactionCopy.ts#worldRailLine",
       "name": "worldRailLine",
       "kind": "value",
       "file": "src/renderer/copy/worldReactionCopy.ts",
-      "line": 25,
-      "endLine": 26
+      "line": 41,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/copy/worldReactionCopy.ts#worldTitle",
       "name": "worldTitle",
       "kind": "value",
       "file": "src/renderer/copy/worldReactionCopy.ts",
-      "line": 22,
-      "endLine": 23
+      "line": 35,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
@@ -46368,8 +46423,8 @@
       "name": "createAppStoreInitialState",
       "kind": "value",
       "file": "src/renderer/store/appStoreInitialState.ts",
-      "line": 32,
-      "endLine": 58
+      "line": 33,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/store/appStoreTypes.ts#AppState",
@@ -46377,7 +46432,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 14,
-      "endLine": 111
+      "endLine": 113
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -47433,7 +47488,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 232,
-      "endLine": 726
+      "endLine": 732
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -49112,40 +49167,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 81,
-      "endLine": 91
+      "line": 82,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 47,
-      "endLine": 52
+      "line": 48,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 60,
-      "endLine": 79
+      "line": 61,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 54,
-      "endLine": 58
+      "line": 55,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 113,
-      "endLine": 488
+      "line": 114,
+      "endLine": 500
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -50680,16 +50735,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 752,
-      "endLine": 752
+      "line": 756,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 822,
-      "endLine": 824
+      "line": 826,
+      "endLine": 828
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -50752,8 +50807,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 830,
-      "endLine": 835
+      "line": 834,
+      "endLine": 839
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -50784,8 +50839,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 848,
-      "endLine": 874
+      "line": 852,
+      "endLine": 878
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -51080,8 +51135,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 754,
-      "endLine": 767
+      "line": 758,
+      "endLine": 771
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -51152,16 +51207,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 838,
-      "endLine": 838
+      "line": 842,
+      "endLine": 842
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 841,
-      "endLine": 846
+      "line": 845,
+      "endLine": 850
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -51184,16 +51239,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 815,
-      "endLine": 819
+      "line": 819,
+      "endLine": 823
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 813,
-      "endLine": 813
+      "line": 817,
+      "endLine": 817
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -51208,8 +51263,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 774,
-      "endLine": 786
+      "line": 778,
+      "endLine": 790
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -51217,7 +51272,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 534,
-      "endLine": 750
+      "endLine": 754
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -51256,8 +51311,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 788,
-      "endLine": 807
+      "line": 792,
+      "endLine": 811
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -57081,7 +57136,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 50,
-      "endLine": 212
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -57096,8 +57151,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 214,
-      "endLine": 220
+      "line": 216,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -57937,7 +57992,7 @@
       "kind": "value",
       "file": "src/shared/run-soak.ts",
       "line": 103,
-      "endLine": 246
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -57960,8 +58015,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 257,
-      "endLine": 408
+      "line": 263,
+      "endLine": 414
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -59504,32 +59559,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1276,
-      "endLine": 1365
+      "line": 1313,
+      "endLine": 1402
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 288,
-      "endLine": 1263
+      "line": 290,
+      "endLine": 1300
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1389,
-      "endLine": 1389
+      "line": 1426,
+      "endLine": 1426
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 143,
-      "endLine": 154
+      "line": 145,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -59537,39 +59592,39 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 48,
-      "endLine": 101
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1367,
-      "endLine": 1370
+      "line": 1404,
+      "endLine": 1407
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 136,
-      "endLine": 141
+      "line": 138,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 103,
-      "endLine": 134
+      "line": 105,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1372,
-      "endLine": 1387
+      "line": 1409,
+      "endLine": 1424
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -60673,7 +60728,7 @@
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
       "line": 59,
-      "endLine": 195
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/turn-resolution.ts#calculateMatchScore",
@@ -60932,20 +60987,44 @@
       "endLine": 26
     },
     {
+      "id": "symbol:src/shared/world-reaction-rules.ts#advanceElementStreak",
+      "name": "advanceElementStreak",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 355,
+      "endLine": 359
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#ELEMENT_STREAK_PULL",
+      "name": "ELEMENT_STREAK_PULL",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 326,
+      "endLine": 326
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#ElementStreak",
+      "name": "ElementStreak",
+      "kind": "interface",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 349,
+      "endLine": 352
+    },
+    {
       "id": "symbol:src/shared/world-reaction-rules.ts#EMBER_WORLD_AFTERGLOW_BONUS",
       "name": "EMBER_WORLD_AFTERGLOW_BONUS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 259,
-      "endLine": 259
+      "line": 253,
+      "endLine": 253
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#freePairsLeft",
       "name": "freePairsLeft",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 130,
-      "endLine": 137
+      "line": 132,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#FROST_FREE_PAIRS_KEPT",
@@ -60964,6 +61043,14 @@
       "endLine": 111
     },
     {
+      "id": "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_MAX",
+      "name": "FROST_FREEZE_MAX",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 116,
+      "endLine": 116
+    },
+    {
       "id": "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_TURNS",
       "name": "FROST_FREEZE_TURNS",
       "kind": "value",
@@ -60976,64 +61063,64 @@
       "name": "FROST_PAIR_FREEZE_CHANCE",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 116,
-      "endLine": 116
+      "line": 118,
+      "endLine": 118
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#frostFreezeCount",
       "name": "frostFreezeCount",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 118,
-      "endLine": 119
+      "line": 120,
+      "endLine": 121
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#FrostStep",
       "name": "FrostStep",
       "kind": "interface",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 157,
-      "endLine": 163
+      "line": 159,
+      "endLine": 165
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#isColdWorld",
       "name": "isColdWorld",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 125,
-      "endLine": 125
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#isTileFrozen",
       "name": "isTileFrozen",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 127,
-      "endLine": 127
+      "line": 129,
+      "endLine": 129
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#mossOvergrowthIndex",
       "name": "mossOvergrowthIndex",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 291,
-      "endLine": 299
+      "line": 301,
+      "endLine": 309
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveFrostStep",
       "name": "resolveFrostStep",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 170,
-      "endLine": 234
+      "line": 172,
+      "endLine": 242
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveTideSwap",
       "name": "resolveTideSwap",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 264,
-      "endLine": 288
+      "line": 258,
+      "endLine": 298
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveVoidSpew",
@@ -61044,44 +61131,44 @@
       "endLine": 107
     },
     {
-      "id": "symbol:src/shared/world-reaction-rules.ts#resolveWorldShift",
-      "name": "resolveWorldShift",
+      "id": "symbol:src/shared/world-reaction-rules.ts#resolveWorldPull",
+      "name": "resolveWorldPull",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 246,
-      "endLine": 254
+      "line": 337,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#runWorldShifts",
       "name": "runWorldShifts",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 302,
-      "endLine": 302
+      "line": 312,
+      "endLine": 312
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#thawBoard",
       "name": "thawBoard",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 148,
-      "endLine": 151
+      "line": 150,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#thawIfStuck",
       "name": "thawIfStuck",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 154,
-      "endLine": 155
+      "line": 156,
+      "endLine": 157
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#TIDE_EVERY_TURNS",
       "name": "TIDE_EVERY_TURNS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 262,
-      "endLine": 262
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#VOID_SPEW_FROM",
@@ -61116,28 +61203,100 @@
       "endLine": 44
     },
     {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WORLD_FUSIONS",
+      "name": "WORLD_FUSIONS",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 371,
+      "endLine": 378
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_DEPTH",
+      "name": "WORLD_MAX_DEPTH",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 323,
+      "endLine": 323
+    },
+    {
       "id": "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_ELEMENTS",
       "name": "WORLD_MAX_ELEMENTS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 240,
-      "endLine": 240
+      "line": 248,
+      "endLine": 248
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#WORLD_SHIFT_PAIRS",
       "name": "WORLD_SHIFT_PAIRS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 239,
-      "endLine": 239
+      "line": 247,
+      "endLine": 247
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#worldFusion",
+      "name": "worldFusion",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 380,
+      "endLine": 383
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WorldFusion",
+      "name": "WorldFusion",
+      "kind": "interface",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 363,
+      "endLine": 366
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WorldFusionId",
+      "name": "WorldFusionId",
+      "kind": "type",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 361,
+      "endLine": 361
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#worldHas",
       "name": "worldHas",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 256,
-      "endLine": 256
+      "line": 250,
+      "endLine": 250
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WorldPull",
+      "name": "WorldPull",
+      "kind": "interface",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 330,
+      "endLine": 334
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WorldPullOutcome",
+      "name": "WorldPullOutcome",
+      "kind": "type",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 328,
+      "endLine": 328
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#worldRules",
+      "name": "worldRules",
+      "kind": "value",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 406,
+      "endLine": 443
+    },
+    {
+      "id": "symbol:src/shared/world-reaction-rules.ts#WorldRules",
+      "name": "WorldRules",
+      "kind": "interface",
+      "file": "src/shared/world-reaction-rules.ts",
+      "line": 385,
+      "endLine": 398
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#canIgniteZone",
@@ -61573,7 +61732,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 26
+          "line": 21
         },
         {
           "path": "src/renderer/components/sceneMood.ts",
@@ -61587,7 +61746,7 @@
       "tests": [
         {
           "path": "src/shared/world-reaction-rules.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -62081,11 +62240,11 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 22
+          "line": 235
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 6
+          "line": 133
         },
         {
           "path": "src/renderer/components/tileBoardReadability.ts",
@@ -64136,6 +64295,16 @@
       "writtenBy": []
     },
     {
+      "id": "state:elementStreak",
+      "name": "elementStreak",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:board.element_worlds"
+      ]
+    },
+    {
       "id": "state:encorePairKeys",
       "name": "encorePairKeys",
       "readBy": [
@@ -65158,6 +65327,16 @@
       "writtenBy": [
         "mechanic:board.element_worlds",
         "mechanic:hazard.void_spew"
+      ]
+    },
+    {
+      "id": "state:worldDepth",
+      "name": "worldDepth",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:board.element_worlds"
       ]
     },
     {
@@ -68409,6 +68588,12 @@
       "id": "exports:src/renderer/components/FloorClearBeat.tsx->symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FrostOverlayPlane.tsx->symbol:src/renderer/components/FrostOverlayPlane.tsx#FrostOverlayPlane",
+      "source": "file:src/renderer/components/FrostOverlayPlane.tsx",
+      "target": "symbol:src/renderer/components/FrostOverlayPlane.tsx#FrostOverlayPlane",
       "kind": "exports"
     },
     {
@@ -72567,6 +72752,12 @@
       "id": "exports:src/renderer/copy/worldReactionCopy.ts->symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_ELEMENT_RULE",
       "source": "file:src/renderer/copy/worldReactionCopy.ts",
       "target": "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_ELEMENT_RULE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/worldReactionCopy.ts->symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_FUSION_RULE",
+      "source": "file:src/renderer/copy/worldReactionCopy.ts",
+      "target": "symbol:src/renderer/copy/worldReactionCopy.ts#WORLD_FUSION_RULE",
       "kind": "exports"
     },
     {
@@ -84330,6 +84521,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#advanceElementStreak",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#advanceElementStreak",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#ELEMENT_STREAK_PULL",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#ELEMENT_STREAK_PULL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#ElementStreak",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#ElementStreak",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#EMBER_WORLD_AFTERGLOW_BONUS",
       "source": "file:src/shared/world-reaction-rules.ts",
       "target": "symbol:src/shared/world-reaction-rules.ts#EMBER_WORLD_AFTERGLOW_BONUS",
@@ -84351,6 +84560,12 @@
       "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_EVERY_TURNS",
       "source": "file:src/shared/world-reaction-rules.ts",
       "target": "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_EVERY_TURNS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_MAX",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#FROST_FREEZE_MAX",
       "kind": "exports"
     },
     {
@@ -84414,9 +84629,9 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#resolveWorldShift",
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#resolveWorldPull",
       "source": "file:src/shared/world-reaction-rules.ts",
-      "target": "symbol:src/shared/world-reaction-rules.ts#resolveWorldShift",
+      "target": "symbol:src/shared/world-reaction-rules.ts#resolveWorldPull",
       "kind": "exports"
     },
     {
@@ -84468,6 +84683,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WORLD_FUSIONS",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WORLD_FUSIONS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_DEPTH",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_DEPTH",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_ELEMENTS",
       "source": "file:src/shared/world-reaction-rules.ts",
       "target": "symbol:src/shared/world-reaction-rules.ts#WORLD_MAX_ELEMENTS",
@@ -84480,9 +84707,51 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#worldFusion",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#worldFusion",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WorldFusion",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WorldFusion",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WorldFusionId",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WorldFusionId",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#worldHas",
       "source": "file:src/shared/world-reaction-rules.ts",
       "target": "symbol:src/shared/world-reaction-rules.ts#worldHas",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WorldPull",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WorldPull",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WorldPullOutcome",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WorldPullOutcome",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#worldRules",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#worldRules",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/world-reaction-rules.ts->symbol:src/shared/world-reaction-rules.ts#WorldRules",
+      "source": "file:src/shared/world-reaction-rules.ts",
+      "target": "symbol:src/shared/world-reaction-rules.ts#WorldRules",
       "kind": "exports"
     },
     {
@@ -88353,6 +88622,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FrostOverlayPlane.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/FrostOverlayPlane.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FrostOverlayPlane.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/FrostOverlayPlane.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FrostOverlayPlane.tsx->src/shared/rng.ts",
+      "source": "file:src/renderer/components/FrostOverlayPlane.tsx",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -88962,6 +89249,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/storeSheet.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/storeSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/worldReactionCopy.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/worldReactionCopy.ts",
       "kind": "imports"
     },
     {
@@ -90840,6 +91133,12 @@
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/cardArcaneGlowMaterial.ts",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/FrostOverlayPlane.tsx",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/FrostOverlayPlane.tsx",
       "kind": "imports"
     },
     {
@@ -94008,6 +94307,12 @@
       "id": "imports:src/renderer/copy/worldReactionCopy.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/copy/worldReactionCopy.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/worldReactionCopy.ts->src/shared/world-reaction-rules.ts",
+      "source": "file:src/renderer/copy/worldReactionCopy.ts",
+      "target": "file:src/shared/world-reaction-rules.ts",
       "kind": "imports"
     },
     {
@@ -104446,6 +104751,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:elementStreak",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:elementStreak",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
@@ -104569,6 +104880,12 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:world",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:world",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:worldDepth",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:worldDepth",
       "kind": "reads"
     },
     {
@@ -113435,6 +113752,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:board.element_worlds->state:elementStreak",
+      "source": "mechanic:board.element_worlds",
+      "target": "state:elementStreak",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:board.element_worlds->state:lanternLitTileIds",
       "source": "mechanic:board.element_worlds",
       "target": "state:lanternLitTileIds",
@@ -113456,6 +113779,12 @@
       "id": "writes:mechanic:board.element_worlds->state:world",
       "source": "mechanic:board.element_worlds",
       "target": "state:world",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.element_worlds->state:worldDepth",
+      "source": "mechanic:board.element_worlds",
+      "target": "state:worldDepth",
       "kind": "writes"
     },
     {

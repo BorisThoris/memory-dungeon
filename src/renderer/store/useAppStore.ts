@@ -481,6 +481,12 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
+        // An iced card refuses the press; say so, so a player aiming for it knows why nothing turned.
+        if (run.board?.tiles.find((tile) => tile.id === tileId)?.frozen === true) {
+            set({ frozenPressCount: get().frozenPressCount + 1 });
+            return;
+        }
+
         applyPlayingTilePressSurfaceResult(
             createPlayingTilePressSurfaceResult({
                 boardPinMode,

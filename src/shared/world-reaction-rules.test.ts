@@ -8,7 +8,11 @@ import {
     resolveFrostStep,
     resolveTideSwap,
     resolveVoidSpew,
-    resolveWorldShift,
+    resolveWorldPull,
+    advanceElementStreak,
+    worldFusion,
+    worldRules,
+    FROST_FREEZE_MAX,
     thawIfStuck,
     voidSpewPairs
 } from './world-reaction-rules';
@@ -94,17 +98,73 @@ describe('the cold freezes', () => {
 });
 
 describe('element worlds', () => {
-    it('shift on a pop of three pairs, combine two elements, and drop the oldest', () => {
-        expect(resolveWorldShift([], 'tide', 2)).toEqual([]);
-        expect(resolveWorldShift([], 'tide', 3)).toEqual(['tide']);
-        expect(resolveWorldShift(['tide'], 'moss', 4)).toEqual(['tide', 'moss']);
-        expect(resolveWorldShift(['tide', 'moss'], 'bone', 3)).toEqual(['moss', 'bone']);
-        expect(resolveWorldShift(['tide', 'moss'], 'tide', 3)).toEqual(['moss', 'tide']);
-        expect(resolveWorldShift(undefined, undefined, 9)).toEqual([]);
+    it('a pull enters an element, deepens the one the world holds, and is held off by a deep world', () => {
+        expect(resolveWorldPull([], 0, 'tide')).toEqual({ world: ['tide'], depth: 1, outcome: 'entered' });
+        expect(resolveWorldPull(['tide'], 1, 'tide')).toEqual({ world: ['tide'], depth: 2, outcome: 'deepened' });
+        expect(resolveWorldPull(['tide'], 3, 'tide')).toEqual({ world: ['tide'], depth: 3, outcome: 'deepened' });
+        // A deep world wears down before it lets another element in.
+        expect(resolveWorldPull(['tide'], 2, 'moss')).toEqual({ world: ['tide'], depth: 1, outcome: 'held' });
+        expect(resolveWorldPull(['tide'], 1, 'moss')).toEqual({ world: ['tide', 'moss'], depth: 1, outcome: 'entered' });
+        // Two at most: a third element pushes the oldest out; a held element leads again.
+        expect(resolveWorldPull(['tide', 'moss'], 1, 'bone')).toEqual({ world: ['moss', 'bone'], depth: 1, outcome: 'entered' });
+        expect(resolveWorldPull(['tide', 'moss'], 1, 'tide')).toEqual({ world: ['moss', 'tide'], depth: 2, outcome: 'deepened' });
+        expect(resolveWorldPull(undefined, undefined, undefined)).toEqual({ world: [], depth: 0, outcome: null });
+    });
+
+    it('three matches of one element in a row pull the world, and a different element starts the count again', () => {
+        let step = advanceElementStreak(null, 'moss');
+        expect(step).toEqual({ streak: { suit: 'moss', count: 1 }, pulls: false });
+        step = advanceElementStreak(step.streak, 'moss');
+        expect(step.pulls).toBe(false);
+        step = advanceElementStreak(step.streak, 'moss');
+        expect(step).toEqual({ streak: null, pulls: true });
+        expect(advanceElementStreak({ suit: 'moss', count: 2 }, 'bone')).toEqual({ streak: { suit: 'bone', count: 1 }, pulls: false });
+        expect(advanceElementStreak({ suit: 'moss', count: 2 }, undefined)).toEqual({ streak: null, pulls: false });
+    });
+
+    it('two elements fuse into a named world, whatever their order', () => {
+        expect(worldFusion(['tide', 'bone'])?.id).toBe('blizzard');
+        expect(worldFusion(['bone', 'tide'])?.id).toBe('blizzard');
+        expect(worldFusion(['ember', 'tide'])?.id).toBe('steam');
+        expect(worldFusion(['moss', 'ember'])?.id).toBe('wildfire');
+        expect(worldFusion(['bone', 'ember'])?.id).toBe('ash');
+        expect(worldFusion(['tide', 'moss'])?.id).toBe('swamp');
+        expect(worldFusion(['moss', 'bone'])?.id).toBe('grave');
+        expect(worldFusion(['tide'])).toBeNull();
+    });
+
+    it('turns each world into its rules, sharper deep and sharper fused, inside the guards', () => {
+        expect(worldRules([], 0)).toMatchObject({ afterglowBonus: 0, tideEvery: null, cold: false, overgrowth: false, fusion: null });
+        expect(worldRules(['ember'], 1).afterglowBonus).toBe(1);
+        expect(worldRules(['ember'], 3).afterglowBonus).toBe(2);
+        expect(worldRules(['tide'], 1)).toMatchObject({ tideEvery: 3, tideSwaps: 1 });
+        expect(worldRules(['tide'], 3).tideSwaps).toBe(2);
+        expect(worldRules(['bone'], 1)).toMatchObject({ cold: true, freezeTurns: 2, freezeExtra: 0 });
+        expect(worldRules(['bone'], 3).freezeTurns).toBe(3);
+        expect(worldRules(['tide', 'bone'], 1)).toMatchObject({ cold: true, freezeExtra: 1, freezeTurns: 3, tideEvery: 3 });
+        expect(worldRules(['ember', 'tide'], 1).tideEvery).toBe(2);
+        expect(worldRules(['ember', 'bone'], 1)).toMatchObject({ cold: true, freezeExtra: -1, afterglowBonus: 1 });
+        expect(worldRules(['moss', 'ember'], 1).afterglowBonus).toBe(2);
+        expect(worldRules(['tide', 'moss'], 1)).toMatchObject({ tideSwaps: 2, overgrowth: true });
+        expect(worldRules(['moss', 'bone'], 1)).toMatchObject({ freezeTurns: 3, overgrowth: true });
+    });
+
+    it('a blizzard freezes more and for longer, and still leaves two whole pairs free', () => {
+        const rules = worldRules(['tide', 'bone'], 1);
+        const step = resolveFrostStep({ ...base, board: board(), turnsThisFloor: 3, frozenUntilTurn: null, cold: rules.cold, combo: 0, freezeExtra: rules.freezeExtra, freezeTurns: rules.freezeTurns });
+        expect(step.board.tiles.filter((t) => t.frozen)).toHaveLength(3);
+        expect(step.frozenUntilTurn).toBe(6);
+        expect(freePairsLeft(step.board)).toBeGreaterThanOrEqual(FROST_FREE_PAIRS_KEPT);
+        const hot = resolveFrostStep({ ...base, board: board(), turnsThisFloor: 3, frozenUntilTurn: null, cold: true, combo: 30, freezeExtra: 5 });
+        expect(hot.board.tiles.filter((t) => t.frozen).length).toBeLessThanOrEqual(FROST_FREEZE_MAX);
     });
 
     it('tide trades two cards of different pairs on its turn, never a pinned or frozen one', () => {
         expect(resolveTideSwap({ ...base, board: board(), turnsThisFloor: 3 })).toBeNull();
+        // Steam runs every second turn, a swamp trades two pairs of cards.
+        expect(resolveTideSwap({ ...base, board: board(), turnsThisFloor: 3, every: 2 })).not.toBeNull();
+        const swamp = resolveTideSwap({ ...base, board: board(), turnsThisFloor: 4, swaps: 2 })!;
+        expect(swamp.tiles.filter((t, index) => board().tiles[index]!.id !== t.id)).toHaveLength(4);
         const swapped = resolveTideSwap({ ...base, board: board(), turnsThisFloor: 4 })!;
         const moved = swapped.tiles.filter((t, index) => board().tiles[index]!.id !== t.id);
         expect(moved).toHaveLength(2);

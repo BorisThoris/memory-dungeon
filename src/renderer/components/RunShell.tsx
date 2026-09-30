@@ -642,9 +642,9 @@ const RunShell = ({
                                             {`${carried} carried`}
                                         </span>
                                     ) : null}
-                                    {worldRailLine(run.world ?? []) ? (
+                                    {worldRailLine(run.world ?? [], run.worldDepth ?? 1) ? (
                                         <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-world">
-                                            {worldRailLine(run.world ?? [])}
+                                            {worldRailLine(run.world ?? [], run.worldDepth ?? 1)}
                                         </span>
                                     ) : null}
                                     {isZoneActive(run) ? (

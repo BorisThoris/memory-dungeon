@@ -10,7 +10,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
-import { EMBER_WORLD_AFTERGLOW_BONUS, freePairsLeft } from './world-reaction-rules';
+import { freePairsLeft, WORLD_MAX_DEPTH, worldRules } from './world-reaction-rules';
 import { LANTERN_MAX_LIT } from './lantern-light-rules';
 
 /**
@@ -140,9 +140,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const iced = run.board.tiles.some((tile) => tile.frozen === true);
         return !iced || freePairsLeft(run.board) >= 1 ? null : 'ice with no whole pair free';
     },
-    'the world holds two distinct elements at most': (_b, run) => {
+    'the world holds two distinct elements at most, and runs one to three deep while it holds any': (_b, run) => {
         const world = run.world ?? [];
-        return world.length <= 2 && new Set(world).size === world.length ? null : `world ${world.join(',')}`;
+        if (world.length > 2 || new Set(world).size !== world.length) return `world ${world.join(',')}`;
+        const depth = run.worldDepth ?? (world.length > 0 ? 1 : 0);
+        if (world.length === 0) return depth === 0 ? null : `plain dungeon ${depth} deep`;
+        return depth >= 1 && depth <= WORLD_MAX_DEPTH ? null : `world ${world.join(',')} ${depth} deep`;
     },
     'a Zone is open only while the floor is played, and never past its own pairs': (_b, run) => {
         if (!isZoneActive(run)) return null;
@@ -165,10 +168,13 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const bad = fields.filter(([, value]) => !nonNegativeInteger(value));
         return bad.length === 0 ? null : bad.map(([name, value]) => `${name}=${String(value)}`).join(', ');
     },
-    'the afterglow lights no more cards than the heat the run carried in allows, one more in an ember world': (before, run) => {
+    'the afterglow lights no more cards than the heat the run carried in allows, one more in an ember world': (before, run, action) => {
         if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle')) return null;
+        // A Zone's resolve plays several turns in one action and the combo climbs through them; the heat
+        // carried into its last turn is not the heat before the action, so this reads single turns only.
+        if (action === 'zone-flip' || action === 'zone-resolve') return null;
         const lit = Array.isArray(run.lanternLitTileIds) ? run.lanternLitTileIds.length : 0;
-        const allowed = Math.min(LANTERN_MAX_LIT, runComboHeatPerks(before).afterglow + ((run.world ?? []).includes('ember') ? EMBER_WORLD_AFTERGLOW_BONUS : 0));
+        const allowed = Math.min(LANTERN_MAX_LIT, runComboHeatPerks(before).afterglow + worldRules(run.world, run.worldDepth).afterglowBonus);
         return lit <= allowed ? null : `${lit} lit at a combo of ${before.stats.currentStreak}, which allows ${allowed}`;
     },
     'the miss bank never holds more than its cap': (_b, run) => {

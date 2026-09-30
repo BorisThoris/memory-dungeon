@@ -6,6 +6,7 @@ type AppStoreInitialState = Pick<
     AppState,
     | 'achievementBridgeNotice'
     | 'boardPinMode'
+    | 'frozenPressCount'
     | 'regionShuffleArmed'
     | 'hydrated'
     | 'hydrating'
@@ -48,6 +49,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         priorCrashNotice: null,
         saveReadFailureNotice: null,
         saveWritesBlockedByReadFailure: false,
+        frozenPressCount: 0,
         boardPinMode: false,
         peekModeArmed: false,
         regionShuffleArmed: false,

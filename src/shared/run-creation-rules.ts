@@ -184,6 +184,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         lanternLightsThisFloor: 0,
         heatPerkTurnsThisFloor: 0,
         world: [],
+        worldDepth: 0,
+        elementStreak: null,
         frozenUntilTurn: null,
         voidSpewsThisFloor: 0,
         frostFreezesThisFloor: 0,

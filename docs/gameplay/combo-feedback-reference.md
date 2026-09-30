@@ -345,6 +345,17 @@ freezing cards), of tide to storm, of moss to a new green temper, of ember back 
 elements combine, the latest leading the palette and both bringing their weather. A world a pop
 makes is prismatic one time in fifty, so the shiny is found in play, not rolled at the door.
 
+## Worlds are places (2026-09-30)
+
+Measured first: a careful player's world changed about once a floor, so none felt like somewhere,
+and two elements only stacked their rules. Now a world runs one to three deep (a pull of its own
+element deepens it; another element has to wear it down first), the cards pull it directly (three
+matches of one element in a row, no pop needed), and two elements fuse into a named world with its
+own sharper rule: Steam, Wildfire, Ash, Swamp, Blizzard, Grave (`worldRules`). The side panel names
+the world and its depth (World · Blizzard II (Tide × Bone)); stamps mark a world deepening and a world
+holding off a newcomer. Frozen cards wear an ice pane on the back and a press on one is answered with
+FROZEN; the void's spit lurches the room in violet.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

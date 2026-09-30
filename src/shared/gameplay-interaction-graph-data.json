@@ -318,6 +318,8 @@
                 "zonePairsThisRun",
                 "lastZone",
                 "world",
+                "worldDepth",
+                "elementStreak",
                 "frozenTiles",
                 "frozenUntilTurn",
                 "voidSpewsThisFloor",
@@ -2049,6 +2051,8 @@
             ],
             "writes": [
                 "world",
+                "worldDepth",
+                "elementStreak",
                 "worldShiftsThisFloor",
                 "tideSwapsThisFloor",
                 "stickyBlockIndex",

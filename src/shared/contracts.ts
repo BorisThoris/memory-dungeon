@@ -738,6 +738,10 @@ export interface RunState {
      * oldest first, two at most. Carries across floors; the void empties it.
      */
     world?: TileSuit[];
+    /** How deep the world runs, 1..3 (0 in the plain dungeon): a pull of an element it holds deepens it, another wears it down. */
+    worldDepth?: number;
+    /** Matches in a row of one element; three pull the world toward it without a pop. */
+    elementStreak?: { suit: TileSuit; count: number } | null;
     /** The turn the cold's ice lasts through; null when nothing is frozen. */
     frozenUntilTurn?: number | null;
     /** This floor: times the void spat pairs back, the cold froze cards, the world shifted, the tide traded cards. */

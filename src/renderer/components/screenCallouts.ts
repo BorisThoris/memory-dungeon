@@ -160,10 +160,21 @@ export const deriveWorldCallouts = (
     if (rose('frostFreezesThisFloor') > 0) {
         callouts.push({ key: `frozen:${floor}:${next.frostFreezesThisFloor}`, kind: 'frozen', size: 'minor', tone: 'cyan', title: WORLD_STAMP_COPY.frozenTitle, sub: WORLD_STAMP_COPY.frozenSub });
     }
+    // The same world, deeper or worn down: a deep world bites harder, a held one is about to give way.
+    const sameWorld = (previous.world ?? []).join('|') === (next.world ?? []).join('|') && (next.world ?? []).length > 0;
+    const depthBefore = previous.worldDepth ?? 0;
+    const depthAfter = next.worldDepth ?? 0;
+    const turnKey = `${floor}:${next.turnsThisFloor ?? 0}`;
+    if (sameWorld && depthAfter > depthBefore) {
+        const lead = (next.world ?? [])[(next.world ?? []).length - 1]!;
+        callouts.push({ key: `deep:${turnKey}:${depthAfter}`, kind: 'world', size: 'minor', tone: 'cyan', title: WORLD_STAMP_COPY.deepenedTitle(worldTitle([lead]).replace(' WORLD', '')), sub: WORLD_STAMP_COPY.deepenedSub(depthAfter) });
+    } else if (sameWorld && depthAfter < depthBefore && rose('voidSpewsThisFloor') === 0) {
+        callouts.push({ key: `held:${turnKey}:${depthAfter}`, kind: 'world', size: 'minor', tone: 'gold', title: WORLD_STAMP_COPY.heldTitle, sub: WORLD_STAMP_COPY.heldSub(depthAfter) });
+    }
     return callouts;
 };
 
-export type WorldCalloutRun = Pick<RunState, 'board' | 'world' | 'voidSpewsThisFloor' | 'frostFreezesThisFloor' | 'worldShiftsThisFloor'>;
+export type WorldCalloutRun = Pick<RunState, 'board' | 'world' | 'worldDepth' | 'turnsThisFloor' | 'voidSpewsThisFloor' | 'frostFreezesThisFloor' | 'worldShiftsThisFloor'>;
 
 export const derivePurchaseCallouts = (
     previous: RunState['storePurchases'] | undefined,

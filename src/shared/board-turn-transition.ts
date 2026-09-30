@@ -18,12 +18,13 @@ import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rul
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
 import {
-    EMBER_WORLD_AFTERGLOW_BONUS,
-    isColdWorld,
+    advanceElementStreak,
     mossOvergrowthIndex,
     resolveFrostStep,
     resolveTideSwap,
-    resolveWorldShift
+    resolveWorldPull,
+    WORLD_SHIFT_PAIRS,
+    worldRules
 } from './world-reaction-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
@@ -234,20 +235,29 @@ export const createResolveBoardTurnTransition = ({
          * a cold world (frost, or bone in the world) freezes cards every third turn. After the drift,
          * before the lantern, so a lit face is where it will be and never on ice it cannot use.
          */
-        const worldAfter = resolveWorldShift(run.world, firstTile.suit, 1 + chunkBreak.brokenPairKeys.length);
+        // Two ways in: a pop of three pairs or more, or three matches of one element in a row.
+        const popPull = 1 + chunkBreak.brokenPairKeys.length >= WORLD_SHIFT_PAIRS;
+        const streakStep = advanceElementStreak(run.elementStreak, firstTile.suit);
+        const pull = popPull || streakStep.pulls
+            ? resolveWorldPull(run.world, run.worldDepth, firstTile.suit)
+            : { world: [...(run.world ?? [])], depth: runNonNegativeInteger(run.worldDepth ?? ((run.world ?? []).length > 0 ? 1 : 0)), outcome: null };
+        const worldAfter = pull.world;
         const worldShifted = worldAfter.join('|') !== (run.world ?? []).join('|');
-        const tided = worldAfter.includes('tide')
-            ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: progress.turnsThisFloor, pinnedTileIds: boardCleanup.pinnedTileIds, runSeed: run.runSeed, rulesVersion: run.runRulesVersion })
+        const rules = worldRules(worldAfter, pull.depth);
+        const tided = rules.tideEvery !== null
+            ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: progress.turnsThisFloor, pinnedTileIds: boardCleanup.pinnedTileIds, runSeed: run.runSeed, rulesVersion: run.runRulesVersion, every: rules.tideEvery, swaps: rules.tideSwaps })
             : null;
         const frostStep = resolveFrostStep({
             board: tided ?? boardAfterRestless,
             turnsThisFloor: progress.turnsThisFloor,
             frozenUntilTurn: run.frozenUntilTurn,
-            cold: isColdWorld({ world: worldAfter }),
+            cold: rules.cold,
             combo: runNonNegativeInteger(scoring.currentStreak),
             pinnedTileIds: boardCleanup.pinnedTileIds,
             runSeed: run.runSeed,
-            rulesVersion: run.runRulesVersion
+            rulesVersion: run.runRulesVersion,
+            freezeExtra: rules.freezeExtra,
+            freezeTurns: rules.freezeTurns
         });
         const boardAfterDrift = frostStep.board;
         /*
@@ -263,7 +273,7 @@ export const createResolveBoardTurnTransition = ({
         // An ember world burns the afterglow one card wider, even at a cold combo.
         const lanternMax = lanternLights
             ? LANTERN_MAX_LIT
-            : Math.min(LANTERN_MAX_LIT, heatPerks.afterglow + (worldAfter.includes('ember') ? EMBER_WORLD_AFTERGLOW_BONUS : 0));
+            : Math.min(LANTERN_MAX_LIT, heatPerks.afterglow + rules.afterglowBonus);
         const lanternLit =
             lanternMax > 0
                 ? resolveLanternLight({
@@ -312,6 +322,8 @@ export const createResolveBoardTurnTransition = ({
             lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLights && lanternLit.length > 0 ? 1 : 0),
             heatPerkTurnsThisFloor: runNonNegativeInteger(run.heatPerkTurnsThisFloor) + (comboHeatPerksActive(heatPerks) ? 1 : 0),
             world: worldAfter,
+            worldDepth: pull.depth,
+            elementStreak: popPull || streakStep.pulls ? null : streakStep.streak,
             worldShiftsThisFloor: runNonNegativeInteger(run.worldShiftsThisFloor) + (worldShifted ? 1 : 0),
             tideSwapsThisFloor: runNonNegativeInteger(run.tideSwapsThisFloor) + (tided ? 1 : 0),
             frozenUntilTurn: frostStep.frozenUntilTurn,
@@ -337,7 +349,7 @@ export const createResolveBoardTurnTransition = ({
             stickyBlockIndex:
                 traitReward.stickyBlockIndex ??
                 selectStickyFingersBlockIndex(run, boardAfterDrift, firstTile.id) ??
-                (worldAfter.includes('moss') ? mossOvergrowthIndex(boardAfterDrift, firstTile.id) : null),
+                (rules.overgrowth ? mossOvergrowthIndex(boardAfterDrift, firstTile.id) : null),
             ...progress,
             stats: {
                 ...stats,

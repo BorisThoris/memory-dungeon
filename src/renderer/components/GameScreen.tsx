@@ -131,6 +131,7 @@ import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveTurnCallouts, deriveWorldCallouts, deriveZoneCallouts, type ScreenCallout, type WorldCalloutRun } from './screenCallouts';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
+import { WORLD_STAMP_COPY } from '../copy/worldReactionCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -304,17 +305,30 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
     return callouts;
 };
 
+/** A FROZEN stamp for each press an iced card refused (the store counts them). */
+const useFrozenPressCallouts = (): ScreenCallout[] => {
+    const count = useAppStore((state) => state.frozenPressCount);
+    const seen = useRef(count);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        if (count <= seen.current) return;
+        seen.current = count;
+        setCallouts((current) => [...current, { key: `frozen-press:${count}`, kind: 'frozen' as const, size: 'minor' as const, tone: 'cyan' as const, title: WORLD_STAMP_COPY.frozenTitle, sub: WORLD_STAMP_COPY.frozenPressSub }].slice(-4));
+    }, [count]);
+    return callouts;
+};
+
 /** The world's stamps, accumulated on its counts going up; the first read is the baseline. */
 const useWorldCallouts = (run: RunState): ScreenCallout[] => {
     const previous = useRef<WorldCalloutRun | undefined>(undefined);
     const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
-    const { board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor } = run;
+    const { board, world, worldDepth, turnsThisFloor, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor } = run;
     useEffect(() => {
-        const now: WorldCalloutRun = { board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor };
+        const now: WorldCalloutRun = { board, world, worldDepth, turnsThisFloor, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor };
         const fresh = deriveWorldCallouts(previous.current, now);
         previous.current = now;
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
-    }, [board, world, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor]);
+    }, [board, world, worldDepth, turnsThisFloor, voidSpewsThisFloor, frostFreezesThisFloor, worldShiftsThisFloor]);
     return callouts;
 };
 
@@ -1104,6 +1118,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
     const worldCallouts = useWorldCallouts(run);
+    const frozenPressCallouts = useFrozenPressCallouts();
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1122,11 +1137,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 : []),
             ...purchaseCallouts,
             ...zoneCallouts,
-            ...worldCallouts
+            ...worldCallouts,
+            ...frozenPressCallouts
         ],
-        // The bank is read for the turn that just resolved; a later grant is its own turn.
+        // The bank is read for the turn that just resolved; a later grant is its own turn. The Zone's,
+        // the world's and the frozen-press stamps fill a render after the turn that made them, so they
+        // are dependencies in their own right: without them those stamps waited for the next turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey]
+        [latestTurnForPulse, purchaseCallouts, zoneCallouts, worldCallouts, frozenPressCallouts, comboTemper, voidReturnKey]
     );
     const feverArrivalKey =
         latestTurnForPulse &&

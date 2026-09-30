@@ -112,6 +112,8 @@ export const FROST_FREEZE_EVERY_TURNS = 3;
 export const FROST_FREEZE_TURNS = 2;
 /** Whole pairs that must stay free of ice for the cold to freeze at all. */
 export const FROST_FREE_PAIRS_KEPT = 2;
+/** The most cards any world freezes at once, a blizzard at a hot combo; the free-pair guard still holds. */
+export const FROST_FREEZE_MAX = 4;
 /** How often a freeze takes both halves of one pair, so the ice never reads as "these differ". */
 export const FROST_PAIR_FREEZE_CHANCE = 0.3;
 
@@ -175,7 +177,9 @@ export const resolveFrostStep = ({
     combo,
     pinnedTileIds,
     runSeed,
-    rulesVersion
+    rulesVersion,
+    freezeExtra = 0,
+    freezeTurns = FROST_FREEZE_TURNS
 }: {
     board: BoardState;
     turnsThisFloor: number;
@@ -185,6 +189,10 @@ export const resolveFrostStep = ({
     pinnedTileIds: readonly string[];
     runSeed: number;
     rulesVersion: number;
+    /** Cards over the combo's count a fused world freezes (a blizzard +1, ash -1); see `worldRules`. */
+    freezeExtra?: number;
+    /** Turns the ice lasts; a deep bone world or a blizzard holds it three. */
+    freezeTurns?: number;
 }): FrostStep => {
     const expired = frozenUntilTurn == null || turnsThisFloor >= frozenUntilTurn;
     let next = expired ? thawBoard(board) : thawIfStuck(board);
@@ -206,7 +214,7 @@ export const resolveFrostStep = ({
         byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), index]);
     });
     const pairs = [...byPair.entries()].filter(([, cells]) => cells.length === 2);
-    const want = frostFreezeCount(combo);
+    const want = Math.max(1, Math.min(FROST_FREEZE_MAX, frostFreezeCount(combo) + freezeExtra));
     const picked: number[] = [];
     const order = [...pairs];
     for (let index = order.length - 1; index > 0; index -= 1) {
@@ -230,28 +238,14 @@ export const resolveFrostStep = ({
     let cells = picked.slice(0, want);
     while (cells.length > 0 && freePairsLeft(frozenBoard(cells)) < FROST_FREE_PAIRS_KEPT) cells = cells.slice(0, -1);
     if (cells.length === 0) return { board: next, frozenUntilTurn: null, froze: false };
-    return { board: frozenBoard(cells), frozenUntilTurn: turnsThisFloor + FROST_FREEZE_TURNS, froze: true };
+    return { board: frozenBoard(cells), frozenUntilTurn: turnsThisFloor + freezeTurns, froze: true };
 };
 
 // ---- Element worlds -------------------------------------------------------------------------
 
 /** Pairs a single pop has to take (the match's pair included) to pull the room into its element. */
-export const WORLD_SHIFT_PAIRS = 3;
+export const WORLD_SHIFT_PAIRS = 4;
 export const WORLD_MAX_ELEMENTS = 2;
-
-/**
- * The world after a pop of `pairsTaken` pairs of `suit`: the element joins (or moves to the front
- * of) the world, the oldest leaves past two. Unchanged below the threshold or without a suit.
- */
-export const resolveWorldShift = (
-    world: readonly TileSuit[] | undefined,
-    suit: TileSuit | undefined,
-    pairsTaken: number
-): TileSuit[] => {
-    const now = [...(world ?? [])];
-    if (!suit || pairsTaken < WORLD_SHIFT_PAIRS) return now;
-    return [...now.filter((element) => element !== suit), suit].slice(-WORLD_MAX_ELEMENTS);
-};
 
 export const worldHas = (run: Pick<RunState, 'world'>, element: TileSuit): boolean => (run.world ?? []).includes(element);
 
@@ -266,25 +260,41 @@ export const resolveTideSwap = ({
     turnsThisFloor,
     pinnedTileIds,
     runSeed,
-    rulesVersion
+    rulesVersion,
+    every = TIDE_EVERY_TURNS,
+    swaps = 1
 }: {
     board: BoardState;
     turnsThisFloor: number;
     pinnedTileIds: readonly string[];
     runSeed: number;
     rulesVersion: number;
+    /** Turns between tides: three, two in steam. */
+    every?: number;
+    /** Pairs of cards each tide trades: one, two in a swamp or a deep tide. */
+    swaps?: number;
 }): BoardState | null => {
-    if (turnsThisFloor <= 0 || turnsThisFloor % TIDE_EVERY_TURNS !== 1) return null;
-    const cells = hiddenRealIndices(board).filter((index) => !pinnedTileIds.includes(board.tiles[index]!.id) && !isTileFrozen(board.tiles[index]));
-    if (cells.length < 2) return null;
+    const cadence = Math.max(2, Math.floor(every));
+    if (turnsThisFloor <= 0 || turnsThisFloor % cadence !== 1 % cadence) return null;
     const rng = createMulberry32(hashStringToSeed(`tide:${runSeed}:${rulesVersion}:${board.level}:${turnsThisFloor}`));
-    const first = cells[pickRngIndex(rng, cells.length)]!;
-    const others = cells.filter((index) => board.tiles[index]!.pairKey !== board.tiles[first]!.pairKey);
-    if (others.length === 0) return null;
-    const second = others[pickRngIndex(rng, others.length)]!;
     const tiles = [...board.tiles];
-    [tiles[first], tiles[second]] = [tiles[second]!, tiles[first]!];
-    return { ...board, tiles };
+    let moved = 0;
+    const used = new Set<number>();
+    for (let swap = 0; swap < Math.max(1, swaps); swap += 1) {
+        const cells = hiddenRealIndices({ ...board, tiles }).filter(
+            (index) => !used.has(index) && !pinnedTileIds.includes(tiles[index]!.id) && !isTileFrozen(tiles[index])
+        );
+        if (cells.length < 2) break;
+        const first = cells[pickRngIndex(rng, cells.length)]!;
+        const others = cells.filter((index) => tiles[index]!.pairKey !== tiles[first]!.pairKey);
+        if (others.length === 0) break;
+        const second = others[pickRngIndex(rng, others.length)]!;
+        [tiles[first], tiles[second]] = [tiles[second]!, tiles[first]!];
+        used.add(first);
+        used.add(second);
+        moved += 1;
+    }
+    return moved > 0 ? { ...board, tiles } : null;
 };
 
 /** Moss's rule: a match overgrows the first face-down card beside it; it cannot open the next turn. */
@@ -300,3 +310,134 @@ export const mossOvergrowthIndex = (board: BoardState, matchedTileId: string): n
 
 /** Worlds counted this floor, for the census and the soak. */
 export const runWorldShifts = (run: Pick<RunState, 'worldShiftsThisFloor'>): number => runNonNegativeInteger(run.worldShiftsThisFloor);
+
+// ---- Depth, the element streak, fusions -----------------------------------------------------
+
+/**
+ * How deep the world runs, 1..3 (0 in the plain dungeon). A world is a place, not a mood: a pull
+ * of an element the world already holds deepens it; a pull of another element first wears the
+ * depth down, and only a world one deep lets the newcomer in. Measured before this (careful
+ * player, 30 runs): the world changed about once a floor, so nothing lasted long enough to feel
+ * like somewhere.
+ */
+export const WORLD_MAX_DEPTH = 3;
+
+/** Matches in a row of one element that pull the world toward it without a pop: the cards' own way in. */
+export const ELEMENT_STREAK_PULL = 3;
+
+export type WorldPullOutcome = 'entered' | 'deepened' | 'held' | null;
+
+export interface WorldPull {
+    readonly world: TileSuit[];
+    readonly depth: number;
+    readonly outcome: WorldPullOutcome;
+}
+
+/** The world after one pull toward `suit` (a big pop, or three matches of it in a row). */
+export const resolveWorldPull = (world: readonly TileSuit[] | undefined, depth: number | undefined, suit: TileSuit | undefined): WorldPull => {
+    const now = [...(world ?? [])];
+    const deep = Math.max(0, Math.min(WORLD_MAX_DEPTH, Math.floor(depth ?? (now.length > 0 ? 1 : 0))));
+    if (!suit) return { world: now, depth: deep, outcome: null };
+    if (now.includes(suit)) {
+        // The element leads again, and the world goes one deeper.
+        return { world: [...now.filter((element) => element !== suit), suit], depth: Math.min(WORLD_MAX_DEPTH, Math.max(1, deep) + 1), outcome: 'deepened' };
+    }
+    if (deep > 1) return { world: now, depth: deep - 1, outcome: 'held' };
+    return { world: [...now, suit].slice(-WORLD_MAX_ELEMENTS), depth: 1, outcome: 'entered' };
+};
+
+export interface ElementStreak {
+    readonly suit: TileSuit;
+    readonly count: number;
+}
+
+/** The streak after a match of `suit`, and whether it just reached the pull (then it starts again). */
+export const advanceElementStreak = (streak: ElementStreak | null | undefined, suit: TileSuit | undefined): { streak: ElementStreak | null; pulls: boolean } => {
+    if (!suit) return { streak: null, pulls: false };
+    const count = streak?.suit === suit ? runNonNegativeInteger(streak.count) + 1 : 1;
+    return count >= ELEMENT_STREAK_PULL ? { streak: null, pulls: true } : { streak: { suit, count }, pulls: false };
+};
+
+export type WorldFusionId = 'steam' | 'wildfire' | 'ash' | 'swamp' | 'blizzard' | 'grave';
+
+export interface WorldFusion {
+    readonly id: WorldFusionId;
+    readonly title: string;
+}
+
+const fusionKey = (a: TileSuit, b: TileSuit): string => [a, b].sort().join('+');
+
+/** Two elements make a named world with its own sharper rules (`worldRules`), not two rules side by side. */
+export const WORLD_FUSIONS: Readonly<Record<string, WorldFusion>> = {
+    [fusionKey('ember', 'tide')]: { id: 'steam', title: 'Steam' },
+    [fusionKey('ember', 'moss')]: { id: 'wildfire', title: 'Wildfire' },
+    [fusionKey('ember', 'bone')]: { id: 'ash', title: 'Ash' },
+    [fusionKey('tide', 'moss')]: { id: 'swamp', title: 'Swamp' },
+    [fusionKey('tide', 'bone')]: { id: 'blizzard', title: 'Blizzard' },
+    [fusionKey('moss', 'bone')]: { id: 'grave', title: 'Grave' }
+};
+
+export const worldFusion = (world: readonly TileSuit[] | undefined): WorldFusion | null => {
+    const elements = world ?? [];
+    return elements.length === 2 ? WORLD_FUSIONS[fusionKey(elements[0]!, elements[1]!)] ?? null : null;
+};
+
+export interface WorldRules {
+    /** Cards the afterglow lights over the combo's own (the lantern's cap still holds). */
+    readonly afterglowBonus: number;
+    /** Turns between tides, or null with no tide in the world. */
+    readonly tideEvery: number | null;
+    readonly tideSwaps: number;
+    /** Whether the world is cold, and how the cold bites. */
+    readonly cold: boolean;
+    readonly freezeExtra: number;
+    readonly freezeTurns: number;
+    /** Whether a match overgrows the card beside it. */
+    readonly overgrowth: boolean;
+    readonly fusion: WorldFusion | null;
+}
+
+/**
+ * Everything a world does to the board, in one place. Each element brings its rule; a deep world
+ * (three) sharpens its lead element's; a fusion sharpens the pair's. Every number here stays inside
+ * the guards the rules already keep: the ice always leaves two whole pairs free, the tide never
+ * moves a pinned or frozen card, the afterglow never passes the lantern's three.
+ */
+export const worldRules = (world: readonly TileSuit[] | undefined, depth: number | undefined): WorldRules => {
+    const elements = world ?? [];
+    const deep = Math.max(0, Math.floor(depth ?? (elements.length > 0 ? 1 : 0))) >= WORLD_MAX_DEPTH;
+    const lead = elements[elements.length - 1];
+    const has = (element: TileSuit): boolean => elements.includes(element);
+    const fusion = worldFusion(elements);
+    let afterglowBonus = has('ember') ? EMBER_WORLD_AFTERGLOW_BONUS + (deep && lead === 'ember' ? 1 : 0) : 0;
+    let tideEvery: number | null = has('tide') ? TIDE_EVERY_TURNS : null;
+    let tideSwaps = has('tide') && deep && lead === 'tide' ? 2 : 1;
+    const cold = has('bone');
+    let freezeExtra = 0;
+    let freezeTurns = cold && deep && lead === 'bone' ? 3 : FROST_FREEZE_TURNS;
+    const overgrowth = has('moss');
+    switch (fusion?.id) {
+        case 'steam':
+            tideEvery = 2;
+            break;
+        case 'wildfire':
+            afterglowBonus += 1;
+            break;
+        case 'ash':
+            freezeExtra = -1;
+            break;
+        case 'swamp':
+            tideSwaps = 2;
+            break;
+        case 'blizzard':
+            freezeExtra = 1;
+            freezeTurns = 3;
+            break;
+        case 'grave':
+            freezeTurns = 3;
+            break;
+        default:
+            break;
+    }
+    return { afterglowBonus, tideEvery, tideSwaps, cold, freezeExtra, freezeTurns, overgrowth, fusion };
+};

@@ -17,17 +17,32 @@ describe('the world, stamped', () => {
         const spat = deriveWorldCallouts(state(4, {}, 5), state(4, { voidSpewsThisFloor: 1 }, 3));
         expect(spat).toEqual([expect.objectContaining({ kind: 'void', size: 'major', title: 'THE VOID SPITS', sub: expect.stringContaining('2 pairs') })]);
         const shifted = deriveWorldCallouts(state(4), state(4, { worldShiftsThisFloor: 1, world: ['tide', 'moss'] }));
-        expect(shifted[0]).toMatchObject({ kind: 'world', title: 'TIDE × MOSS WORLD' });
-        expect(shifted[0]!.sub).toContain('trades two cards');
+        // Tide and moss fuse into a swamp: the stamp names the fusion and its sharper rule.
+        expect(shifted[0]).toMatchObject({ kind: 'world', title: 'SWAMP!' });
+        expect(shifted[0]!.sub).toContain('two pairs of cards');
+        const single = deriveWorldCallouts(state(4), state(4, { worldShiftsThisFloor: 1, world: ['tide'] }));
+        expect(single[0]).toMatchObject({ title: 'TIDE WORLD' });
+        expect(single[0]!.sub).toContain('trades two cards');
         expect(deriveWorldCallouts(state(4), state(4, { frostFreezesThisFloor: 1 }))[0]).toMatchObject({ kind: 'frozen', title: 'FROZEN' });
         // A new floor's counters start again from zero; one there is a new moment, not a restore.
         expect(deriveWorldCallouts(state(4, { frostFreezesThisFloor: 3 }), state(5, { frostFreezesThisFloor: 1 }))).toHaveLength(1);
     });
 
+    it('stamps a world deepening, and a world holding off a newcomer, once each', () => {
+        const deeper = deriveWorldCallouts(state(4, { world: ['tide'], worldDepth: 1, turnsThisFloor: 3 }), state(4, { world: ['tide'], worldDepth: 2, turnsThisFloor: 4 }));
+        expect(deeper).toEqual([expect.objectContaining({ kind: 'world', title: 'TIDE DEEPENS' })]);
+        const held = deriveWorldCallouts(state(4, { world: ['tide'], worldDepth: 3, turnsThisFloor: 5 }), state(4, { world: ['tide'], worldDepth: 2, turnsThisFloor: 6 }));
+        expect(held).toEqual([expect.objectContaining({ title: 'THE WORLD HOLDS' })]);
+        expect(deriveWorldCallouts(state(4, { world: ['tide'], worldDepth: 2 }), state(4, { world: ['tide'], worldDepth: 2 }))).toEqual([]);
+    });
+
     it('names the world on the rail', () => {
         expect(worldRailLine([])).toBeNull();
         expect(worldRailLine(['bone'])).toBe('World · Bone');
-        expect(worldTitle(['ember', 'tide'])).toBe('EMBER × TIDE WORLD');
+        expect(worldRailLine(['bone'], 3)).toBe('World · Bone III');
+        expect(worldRailLine(['tide', 'bone'], 2)).toBe('World · Blizzard II (Tide × Bone)');
+        expect(worldTitle(['ember', 'tide'])).toBe('STEAM!');
+        expect(worldTitle(['moss'])).toBe('MOSS WORLD');
     });
 
     it('brings each element\'s weather into the room', () => {

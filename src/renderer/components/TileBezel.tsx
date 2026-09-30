@@ -28,6 +28,7 @@ import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
 import { SuitMarkerPlane } from './SuitMarkerPlane';
+import { FrostOverlayPlane } from './FrostOverlayPlane';
 import { getBreakWaveDelaySec } from './tileBoardBreakWave';
 import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
 import { TileBoardHoverChrome } from './TileBoardHoverChrome';
@@ -795,6 +796,8 @@ const TileBezelInner = ({
                         wearAssets={wearAssets}
                     />
                     {tile.suit ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
+                    {/* The cold's ice on a frozen back (`world-reaction-rules.ts`): it cannot be turned until it thaws. */}
+                    {tile.frozen === true && tile.state === 'hidden' ? <FrostOverlayPlane faceZ={faceZ} /> : null}
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}
                         face="back"

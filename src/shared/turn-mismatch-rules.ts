@@ -3,7 +3,7 @@ import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
 import { hasMutator } from './mutators';
-import { isColdWorld, resolveFrostStep, resolveTideSwap, resolveVoidSpew } from './world-reaction-rules';
+import { resolveFrostStep, resolveTideSwap, resolveVoidSpew, worldRules } from './world-reaction-rules';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -115,6 +115,8 @@ export const resolveMismatchTurnTransition = ({
     });
     const boardAfterVoid = spew?.board ?? boardAfterMagpie;
     const worldAfterMiss = spew ? [] : (run.world ?? []);
+    const depthAfterMiss = spew ? 0 : runNonNegativeInteger(run.worldDepth ?? (worldAfterMiss.length > 0 ? 1 : 0));
+    const rules = worldRules(worldAfterMiss, depthAfterMiss);
     // A miss is a turn on the restless floor's clock as much as a match is; it drifts after the bird.
     const turnsAfterMiss = runNonNegativeInteger(run.turnsThisFloor) + 1;
     const drift = hasMutator(run, 'restless_floor')
@@ -130,15 +132,17 @@ export const resolveMismatchTurnTransition = ({
     const boardAfterRestless = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterVoid, drift.swaps) : boardAfterVoid;
     // The tide and the cold keep their clocks on a miss too; the combo they read is gone (0).
     const pinnedAfterMiss = Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : [];
-    const tided = worldAfterMiss.includes('tide')
-        ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: turnsAfterMiss, pinnedTileIds: pinnedAfterMiss, runSeed: run.runSeed, rulesVersion: run.runRulesVersion })
+    const tided = rules.tideEvery !== null
+        ? resolveTideSwap({ board: boardAfterRestless, turnsThisFloor: turnsAfterMiss, pinnedTileIds: pinnedAfterMiss, runSeed: run.runSeed, rulesVersion: run.runRulesVersion, every: rules.tideEvery, swaps: rules.tideSwaps })
         : null;
     const frostStep = resolveFrostStep({
         board: tided ?? boardAfterRestless,
         turnsThisFloor: turnsAfterMiss,
         frozenUntilTurn: run.frozenUntilTurn,
-        cold: isColdWorld({ world: worldAfterMiss }),
+        cold: rules.cold,
         combo: 0,
+        freezeExtra: rules.freezeExtra,
+        freezeTurns: rules.freezeTurns,
         pinnedTileIds: pinnedAfterMiss,
         runSeed: run.runSeed,
         rulesVersion: run.runRulesVersion
@@ -158,6 +162,10 @@ export const resolveMismatchTurnTransition = ({
         skittishFlinchesThisFloor:
             runNonNegativeInteger(run.skittishFlinchesThisFloor) + (flinch?.kind === 'flinch' ? 1 : 0),
         world: worldAfterMiss,
+        worldDepth: depthAfterMiss,
+        // The run of one element survives a miss (only another element breaks it), so the cards can move
+        // the world for a player who misses often too; the void, which empties the world, resets it.
+        elementStreak: spew ? null : run.elementStreak ?? null,
         voidSpewsThisFloor: runNonNegativeInteger(run.voidSpewsThisFloor) + (spew ? 1 : 0),
         tideSwapsThisFloor: runNonNegativeInteger(run.tideSwapsThisFloor) + (tided ? 1 : 0),
         frozenUntilTurn: frostStep.frozenUntilTurn,

@@ -40,6 +40,8 @@ export interface AppState {
      * out of a read failure from inside the game.
      */
     recoverUnreadableSave: () => Promise<void>;
+    /** Presses refused because the card was iced (`world-reaction-rules.ts`); the screen stamps FROZEN on each. UI only. */
+    frozenPressCount: number;
     boardPinMode: boolean;
     peekModeArmed: boolean;
     regionShuffleArmed: boolean;

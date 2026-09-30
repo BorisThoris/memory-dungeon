@@ -85,6 +85,8 @@ export type TestHallRoomId =
     | 'void-spew'
     | 'frost-freeze'
     | 'tide-world'
+    | 'blizzard'
+    | 'element-streak'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -974,6 +976,41 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 step: { do: 'match', pairKey: 'x' },
                 says: 'the big pop pulls the room into tide, and the tide trades two face-down cards on its first turn',
                 expect: (r) => ((r.world ?? []).join(',') === 'tide' && r.worldShiftsThisFloor === 1 && r.tideSwapsThisFloor === 1 ? null : `world ${(r.world ?? []).join(',')}, shifts ${r.worldShiftsThisFloor}, tide ${r.tideSwapsThisFloor}`)
+            }
+        ]
+    },
+    {
+        id: 'blizzard',
+        title: 'A blizzard',
+        mechanic: 'Two elements fuse into a named world with sharper rules. Tide and bone make a blizzard: the cold freezes three cards for three turns, and the tide still runs.',
+        graphMechanicIds: ['board.element_worlds', 'hazard.frost_freeze'],
+        tryThis: 'The room is a blizzard. Miss three times: three cards ice over, and they hold for three turns.',
+        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'i:m j:t i:m j:t'], { misses: 4, run: { world: ['tide', 'bone'], worldDepth: 1 } }),
+        script: [
+            { step: { do: 'missAny' }, says: 'turn one', expect: () => null },
+            { step: { do: 'missAny' }, says: 'turn two', expect: () => null },
+            {
+                step: { do: 'missAny' },
+                says: 'turn three: three cards ice over for three turns, and two whole pairs stay free',
+                expect: (r) => (frozenCount(r) === 3 && r.frozenUntilTurn === 6 && r.board && freePairsLeft(r.board) >= 2 ? null : `frozen ${frozenCount(r)} until ${r.frozenUntilTurn}`)
+            },
+            { step: { do: 'pressFrozen' }, says: 'an iced card cannot be turned', expect: (r) => (r.board?.flippedTileIds.length === 0 ? null : 'a frozen card turned') }
+        ]
+    },
+    {
+        id: 'element-streak',
+        title: 'Three of an element',
+        mechanic: 'Three matches of one element in a row pull the world toward it, no pop needed: the cards themselves move the room.',
+        graphMechanicIds: ['board.element_worlds'],
+        tryThis: 'Match the three moss pairs one after another: the room becomes a moss world. Break the run with another element and the count starts again.',
+        build: () => room(['a:m b:e c:t d:b', 'e:t f:b g:m h:e', 'a:m b:e c:t d:b', 'e:t f:b g:m h:e', 'j:t i:m k:b l:m', 'l:m k:b i:m j:t']),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'one moss match', expect: (r) => (r.elementStreak?.suit === 'moss' && r.elementStreak.count === 1 ? null : `streak ${JSON.stringify(r.elementStreak)}`) },
+            { step: { do: 'match', pairKey: 'g' }, says: 'two in a row', expect: (r) => ((r.world ?? []).length === 0 && r.elementStreak?.count === 2 ? null : `world ${(r.world ?? []).join(',')} streak ${JSON.stringify(r.elementStreak)}`) },
+            {
+                step: { do: 'match', pairKey: 'i' },
+                says: 'the third pulls the room into moss',
+                expect: (r) => ((r.world ?? []).join(',') === 'moss' && r.worldDepth === 1 && r.worldShiftsThisFloor === 1 && !r.elementStreak ? null : `world ${(r.world ?? []).join(',')} depth ${r.worldDepth} shifts ${r.worldShiftsThisFloor}`)
             }
         ]
     },
