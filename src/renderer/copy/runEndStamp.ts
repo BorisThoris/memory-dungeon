@@ -43,5 +43,7 @@ export const RUN_END_STAMP_COPY = {
     kicker: 'Expedition over',
     playAgain: 'PLAY AGAIN',
     rematch: 'REMATCH',
-    mainMenu: 'MAIN MENU'
+    mainMenu: 'MAIN MENU',
+    record: 'THE RECORD',
+    skipHint: 'Press anything to continue'
 } as const;

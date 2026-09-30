@@ -209,7 +209,7 @@ test.describe('pass and play', () => {
          * match, and then the loop is a floor ahead of the board and gives up on a game that is
          * still going. Play until the run says it is over.
          */
-        const gameOver = page.getByTestId('game-over-above-fold-summary');
+        const gameOver = page.getByTestId('run-end-cinematic');
         for (let pass = 0; pass < PASS_AND_PLAY_FLOORS * 3; pass += 1) {
             /*
              * The board unmounts the moment the run ends, and its grid hooks go with it. Checking
@@ -244,6 +244,8 @@ test.describe('pass and play', () => {
             await page.waitForTimeout(600);
         }
 
+        // The end is a cut-scene first; the standings are on the record behind its last choice.
+        await page.getByTestId('run-end-cinematic-record').click({ timeout: 60_000 });
         await expect(
             page.getByTestId('game-over-pass-and-play'),
             'the agreed length ends the game and the standings decide it'

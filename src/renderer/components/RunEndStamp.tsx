@@ -15,7 +15,7 @@ import styles from './RunEndStamp.module.css';
  * shows everything at rest.
  */
 export interface RunEndStampAction {
-    id: 'play-again' | 'rematch' | 'main-menu';
+    id: 'play-again' | 'rematch' | 'main-menu' | 'record';
     label: string;
     ariaLabel: string;
     testId?: string;

@@ -50,6 +50,16 @@ vi.mock('../store/useAppStore', () => ({
         } as never)
 }));
 
+/**
+ * The screen opens on the cut-scene (`RunEndCinematic`); the ledger these tests read is behind
+ * its last choice. The mocked settings run with reduced motion, so the choices are up at once.
+ */
+const renderScreen = (run: RunState) => {
+    const rendered = render(<GameOverScreen run={run} />);
+    fireEvent.click(screen.getByTestId('run-end-cinematic-record'));
+    return rendered;
+};
+
 const gameOverRunFixture = (totalScore = 0, runEndReason: RunEndReason | null = 'turn_ceiling'): RunState => {
     let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
     run = { ...run, runEndReason, stats: { ...run.stats, totalScore }, status: 'gameOver' };
@@ -61,7 +71,7 @@ describe('the record set', () => {
         // Thesis §55.2. The tile replaced "Floors Cleared", which the floor headline already says.
         let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
         run = { ...run, biggestChunkPairs: 5, runEndReason: 'turn_ceiling', status: 'gameOver' };
-        render(<GameOverScreen run={createRunSummary(run, [])} />);
+        renderScreen(createRunSummary(run, []));
         expect(screen.getByText('Largest Break')).toBeInTheDocument();
         expect(screen.getByText('5 pairs')).toBeInTheDocument();
         expect(screen.queryByText('Floors Cleared')).not.toBeInTheDocument();
@@ -71,7 +81,7 @@ describe('the record set', () => {
         // Thesis §56.3. The seed and rules ride the share key, so a rematch and a pasted key can
         // never start different boards.
         const run = gameOverRunFixture();
-        render(<GameOverScreen run={run} />);
+        renderScreen(run);
         const rematch = screen.getByTestId('game-over-rematch');
         expect(rematch).toHaveTextContent('REMATCH');
         expect(rematch).toHaveAccessibleName(/Rematch - play this exact board again/);
@@ -80,7 +90,7 @@ describe('the record set', () => {
     });
 
     it('says so plainly when nothing broke', () => {
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
         expect(screen.getByText('None yet')).toBeInTheDocument();
     });
 });
@@ -95,14 +105,14 @@ describe('how the run ended', () => {
     };
 
     it('says the last miss came, without a word about failing', () => {
-        render(<GameOverScreen run={withReason('miss_budget')} />);
+        renderScreen(withReason('miss_budget'));
         const line = screen.getByTestId('game-over-end-reason');
         expect(line).toHaveTextContent('You ran out of misses on floor 7.');
         expect(line).not.toHaveTextContent(/life|lives|lost|fail|died|death/i);
     });
 
     it('says the player stopped, the contract ended it, or the table finished', () => {
-        const { rerender } = render(<GameOverScreen run={withReason('quit')} />);
+        const { rerender } = renderScreen(withReason('quit'));
         expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent('You stopped on floor 7.');
         // The reason names the floor; the caption does not say it again.
         expect(screen.queryByText(/before the archive sealed/)).toBeNull();
@@ -113,7 +123,7 @@ describe('how the run ended', () => {
     });
 
     it('says nothing about it for a summary from before the reason was recorded', () => {
-        render(<GameOverScreen run={withReason(undefined)} />);
+        renderScreen(withReason(undefined));
         expect(screen.queryByTestId('game-over-end-reason')).toBeNull();
         expect(screen.getByText('Floor 7 reached before the archive sealed.')).toBeInTheDocument();
     });
@@ -134,7 +144,7 @@ describe('the table at game over', () => {
                 ]
             }
         };
-        render(<GameOverScreen run={shared} />);
+        renderScreen(shared);
         expect(screen.getByTestId('game-over-standing-seat-1-chain')).toHaveTextContent('best chain ×4');
         expect(screen.queryByTestId('game-over-standing-seat-2-chain')).toBeNull();
         expect(screen.getByTestId('game-over-pass-and-play-result')).toHaveTextContent('Player 1 wins');
@@ -145,7 +155,7 @@ describe('the nave a run ends in', () => {
     const naveHeatFor = (bestStreak: number) => {
         let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
         run = { ...run, runEndReason: 'turn_ceiling', stats: { ...run.stats, bestStreak }, status: 'gameOver' };
-        const { unmount } = render(<GameOverScreen run={createRunSummary(run, [])} />);
+        const { unmount } = renderScreen(createRunSummary(run, []));
         const heat = screen.getByTestId('cathedral-scene').getAttribute('data-scene-heat');
         unmount();
         return Number(heat);
@@ -175,7 +185,7 @@ describe('GameOverScreen (REF-031)', () => {
     it('says the run beat the record, which the Best Score stat never did', () => {
         gameOverStoreMocks.bestScoreAtRunStart = 900;
 
-        render(<GameOverScreen run={gameOverRunFixture(1200)} />);
+        renderScreen(gameOverRunFixture(1200));
 
         const line = screen.getByTestId('game-over-personal-best');
         expect(line).toHaveTextContent(/new personal best/i);
@@ -185,7 +195,7 @@ describe('GameOverScreen (REF-031)', () => {
     it('stays silent about a run that fell short of the record', () => {
         gameOverStoreMocks.bestScoreAtRunStart = 5000;
 
-        render(<GameOverScreen run={gameOverRunFixture(1200)} />);
+        renderScreen(gameOverRunFixture(1200));
 
         expect(screen.queryByTestId('game-over-personal-best')).not.toBeInTheDocument();
     });
@@ -194,7 +204,7 @@ describe('GameOverScreen (REF-031)', () => {
         const writeText = vi.fn(async (_text: string) => undefined);
         Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
         // Not userEvent: its setup swaps in its own clipboard stub, so the real one never runs.
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
 
         fireEvent.click(screen.getByTestId('game-over-copy-result'));
 
@@ -208,7 +218,7 @@ describe('GameOverScreen (REF-031)', () => {
             configurable: true,
             value: { writeText: vi.fn(async () => Promise.reject(new Error('denied'))) }
         });
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
 
         fireEvent.click(screen.getByTestId('game-over-copy-result'));
 
@@ -218,7 +228,7 @@ describe('GameOverScreen (REF-031)', () => {
     });
 
     it('exposes a single page title and polite run summary for assistive tech', async () => {
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
 
         expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
         // The verdict is the page's one h1, stamped by how the run ended: this fixture hit the turn ceiling.
@@ -239,13 +249,13 @@ describe('GameOverScreen (REF-031)', () => {
     });
 
     it('speaks a run lost to the miss bank as that, and an old summary without a reason by its floor', async () => {
-        const { unmount } = render(<GameOverScreen run={gameOverRunFixture(40, 'miss_budget')} />);
+        const { unmount } = renderScreen(gameOverRunFixture(40, 'miss_budget'));
         const polite = screen.getByLabelText('Run summary announcement');
         await waitFor(() => expect(polite).toHaveTextContent(/You ran out of misses on floor \d+\. Final score 40\./));
         expect(polite).not.toHaveTextContent(/complete/i);
         unmount();
 
-        render(<GameOverScreen run={gameOverRunFixture(40, null)} />);
+        renderScreen(gameOverRunFixture(40, null));
         await waitFor(() =>
             expect(screen.getByLabelText('Run summary announcement')).toHaveTextContent(/Final score 40\. Highest floor \d+\./)
         );
@@ -262,18 +272,18 @@ describe('GameOverScreen (REF-031)', () => {
                   }
                 : null
         };
-        render(<GameOverScreen run={withAchievement} />);
+        renderScreen(withAchievement);
 
         expect(screen.getByRole('heading', { level: 2, name: 'New archive entries' })).toBeInTheDocument();
     });
 
     it('plays game-over open on mount', () => {
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
         expect(uiSfxMocks.playGameOverOpenSfx).toHaveBeenCalledTimes(1);
     });
 
     it('REG-007 keeps primary retry actions in the above-fold mobile summary block', () => {
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
 
         const topSummary = screen.getByTestId('game-over-above-fold-summary');
         expect(topSummary).toHaveTextContent('score');
@@ -289,7 +299,7 @@ describe('GameOverScreen (REF-031)', () => {
         expect(rows.map((row) => row.id)).toEqual(['run_it_back', 'chain_target', 'build_recap', 'local_share', 'next_goal']);
         expect(rows.every((row) => row.localOnly)).toBe(true);
 
-        render(<GameOverScreen run={gameOverRunFixture()} />);
+        renderScreen(gameOverRunFixture());
         // The rail shows only what changes the next run. The mode is named once, in the
         // eyebrow; the build recap restated the relic and mutator chips; the share string
         // and the dungeon journal were telemetry.
@@ -320,7 +330,7 @@ describe('GameOverScreen (REF-031)', () => {
                 : null
         };
 
-        render(<GameOverScreen run={scholarRun} />);
+        renderScreen(scholarRun);
 
         expect(screen.getByTestId('game-over-mode-heading')).toHaveTextContent(/Scholar contract/i);
         expect(screen.getByTestId('game-over-mode-identity')).toHaveTextContent(/no full-board shuffle/i);

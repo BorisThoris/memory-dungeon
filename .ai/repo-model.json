@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2820,
-    "codeFileCount": 1014,
-    "exportedSymbolCount": 3072,
+    "trackedFileCount": 2823,
+    "codeFileCount": 1016,
+    "exportedSymbolCount": 3077,
     "contentItemCount": 10,
     "mechanicCount": 53,
     "stateFieldCount": 97,
-    "relationshipCount": 8026
+    "relationshipCount": 8040
   },
   "inventory": [
     {
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 23734,
-      "sha256": "2c471eec91d81faca595d1c520cc8e87c29fdcec8973fc89f0b488857da0e577"
+      "bytes": 24370,
+      "sha256": "b8f98e0a8ef6f297b2e0eb6e4f625760c5f4c4feaeecac0d318f07852c74be8e"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "29dfa76435d0a8c1fae5a6e1ca95bf66d88235dd3ecb7dee58982f223d1a5bff"
+      "sha256": "7af8cef57d5d7ad0734f8211bc5fe5941f4ef2284d14b3e176f5f58c1a83a8df"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3909,8 +3909,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 13049,
-      "sha256": "1065cbfc55147cb8be320a1056262a1f32a3ecf970a2e82a69c1b3eaba033647"
+      "bytes": 13222,
+      "sha256": "97c85348f4d2dac607012b203e99ffd23e84437e288d9111e70c97b1e5976094"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3921,8 +3921,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 4282,
-      "sha256": "142315c387461f6f677c5f76d767ad8e5ae9485fd6fd8ac281494c3306017d91"
+      "bytes": 4441,
+      "sha256": "622717eab971e0eeaeb19a4db751214efc354fbfbc724096e0c1089096c6b192"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -9417,14 +9417,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 15944,
-      "sha256": "a633d279554687aeb8c85d7992fd527fd4b8260f4a562fbb23c822dd97b7932a"
+      "bytes": 15959,
+      "sha256": "8dc48b101b174f9978a6dc5f279c445f0231020f8b278a7bccbce354df054328"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24219,
-      "sha256": "3dfc222fd8b065ae16ad988e2eb0b058abd2b5a65ecb0fce1b8b6818d5311557"
+      "bytes": 25154,
+      "sha256": "064ea73131e02b60e6a8bc3c8b400d6bac16e272d9881fb09866b2fdbfac9c63"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9775,6 +9775,24 @@
       "sha256": "dd68affefb8f36a318717926f4f0a02adf3d4086faf09a0d01103e020d0c51e3"
     },
     {
+      "path": "src/renderer/components/RunEndCinematic.module.css",
+      "category": "source",
+      "bytes": 10656,
+      "sha256": "6b7a66204ece40d4411e72f28b3dde4cc6915314a3a0df1a58f420ebacf2403b"
+    },
+    {
+      "path": "src/renderer/components/RunEndCinematic.test.tsx",
+      "category": "test",
+      "bytes": 3978,
+      "sha256": "0bc8c78f225b6a8990fdae2d1de78e54790ecb0e613f1e9651ba42a182e08399"
+    },
+    {
+      "path": "src/renderer/components/RunEndCinematic.tsx",
+      "category": "source",
+      "bytes": 6794,
+      "sha256": "c3a9bc7e562d501e84ab307112c39d0e74d52f77f5ea54d6607fd56b126cee2e"
+    },
+    {
       "path": "src/renderer/components/RunEndStamp.module.css",
       "category": "source",
       "bytes": 8986,
@@ -9789,8 +9807,8 @@
     {
       "path": "src/renderer/components/RunEndStamp.tsx",
       "category": "source",
-      "bytes": 4012,
-      "sha256": "18596f15b61f95dbdda504bf2ce5edd909c9b9bf805df2eb17bf659b7ab85e7f"
+      "bytes": 4023,
+      "sha256": "7e26f61c6473f6491d38aa59b39bf2a01bc21de42af394ca99e0e570b72bf814"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
@@ -11097,8 +11115,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 7188,
-      "sha256": "95a0704e8027bb4597dd345e762fb78ff250be2e25d4bc46e80d865e06e1a063"
+      "bytes": 7347,
+      "sha256": "985705b15c19b2bbdfda1e355b09072e7530a5d3ee1c0ece0621aeb3e935ab58"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -11205,8 +11223,8 @@
     {
       "path": "src/renderer/copy/runEndStamp.ts",
       "category": "source",
-      "bytes": 2186,
-      "sha256": "993c0be216ab62ca755795137d723d60ea93817f2287e2c26ed586b48feda684"
+      "bytes": 2256,
+      "sha256": "7222574c228d8176e5f761d3b1031b1d758ee8044ac26579e62bb32792fcfc9f"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -19879,7 +19897,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 329,
+      "lineCount": 339,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -19895,12 +19913,13 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 471,
+      "lineCount": 493,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
+        "file:src/renderer/components/RunEndCinematic.tsx",
         "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -20810,6 +20829,42 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "path": "src/renderer/components/RunEndCinematic.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 62,
+      "imports": [
+        "file:src/renderer/components/RunEndCinematic.tsx",
+        "file:src/renderer/components/RunEndStamp.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RunEndCinematic.tsx",
+      "path": "src/renderer/components/RunEndCinematic.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 130,
+      "imports": [
+        "file:src/renderer/components/RunEndStamp.tsx",
+        "file:src/renderer/copy/runEndStamp.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunEndCinematic.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/RunEndStamp.test.tsx",
       "path": "src/renderer/components/RunEndStamp.test.tsx",
       "layer": "renderer",
@@ -20839,6 +20894,7 @@
         "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps"
       ],
       "testedBy": [
+        "file:src/renderer/components/RunEndCinematic.test.tsx",
         "file:src/renderer/components/RunEndStamp.test.tsx"
       ]
     },
@@ -24568,7 +24624,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 142,
+      "lineCount": 144,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -24857,7 +24913,7 @@
       "path": "src/renderer/copy/runEndStamp.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 48,
+      "lineCount": 50,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
@@ -39387,8 +39443,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 470,
-      "endLine": 470
+      "line": 492,
+      "endLine": 492
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -39965,6 +40021,46 @@
       "file": "src/renderer/components/ProfileScreen.tsx",
       "line": 279,
       "endLine": 279
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+      "name": "RUN_END_FLOURISH_MS",
+      "kind": "value",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 23,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
+      "name": "RUN_END_VERDICT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
+      "name": "RunEndCinematic",
+      "kind": "function",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 36,
+      "endLine": 129
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
+      "name": "RunEndCinematicPhase",
+      "kind": "type",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps",
+      "name": "RunEndCinematicProps",
+      "kind": "interface",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 25,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
@@ -44251,8 +44347,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 122,
-      "endLine": 141
+      "line": 124,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -44260,15 +44356,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 108
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 114,
-      "endLine": 115
+      "line": 116,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -44596,7 +44692,7 @@
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
       "line": 42,
-      "endLine": 47
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
@@ -67865,6 +67961,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/RunEndStamp.tsx->symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
       "source": "file:src/renderer/components/RunEndStamp.tsx",
       "target": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
@@ -87074,6 +87200,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/RunEndCinematic.tsx",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/components/RunEndCinematic.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/RunEndStamp.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/RunEndStamp.tsx",
@@ -88499,6 +88631,42 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.test.tsx->src/renderer/components/RunEndCinematic.tsx",
+      "source": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "target": "file:src/renderer/components/RunEndCinematic.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.test.tsx->src/renderer/components/RunEndStamp.tsx",
+      "source": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "target": "file:src/renderer/components/RunEndStamp.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.tsx->src/renderer/components/RunEndStamp.tsx",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "file:src/renderer/components/RunEndStamp.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.tsx->src/renderer/copy/runEndStamp.ts",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "file:src/renderer/copy/runEndStamp.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -105651,6 +105819,18 @@
       "id": "tested_by:src/renderer/components/ProfileScreen.tsx->file:src/renderer/components/ProfileScreen.test.tsx",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/components/ProfileScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/RunEndCinematic.tsx->file:src/renderer/components/RunEndCinematic.test.tsx",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/RunEndStamp.tsx->file:src/renderer/components/RunEndCinematic.test.tsx",
+      "source": "file:src/renderer/components/RunEndStamp.tsx",
+      "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
       "kind": "tested_by"
     },
     {

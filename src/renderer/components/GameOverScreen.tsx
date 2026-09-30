@@ -18,7 +18,8 @@ import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
-import { RunEndStamp } from './RunEndStamp';
+import { RunEndStamp, type RunEndStampAction } from './RunEndStamp';
+import { RunEndCinematic } from './RunEndCinematic';
 import { RUN_END_STAMP_COPY } from '../copy/runEndStamp';
 import { useAppStore } from '../store/useAppStore';
 import { CathedralScene } from './CathedralScene';
@@ -100,6 +101,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
      * about it - which is how this screen could open in silence.
      */
     const [spokenRunSummary, setSpokenRunSummary] = useState('');
+    /*
+     * The end is a cut-scene first (`RunEndCinematic`): the verdict plastered across the screen,
+     * then the choices. The ledger of numbers is one of those choices, not the page you land on.
+     */
+    const [page, setPage] = useState<'cinematic' | 'record'>('cinematic');
     useEffect(() => {
         const timer = window.setTimeout(() => setSpokenRunSummary(politeRunSummaryText), 0);
         return () => window.clearTimeout(timer);
@@ -169,6 +175,13 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         summary
     });
     const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
+    const stampActions: RunEndStampAction[] = [
+        { id: 'play-again', label: RUN_END_STAMP_COPY.playAgain, ariaLabel: gameOverScreenCopy.playAgainAriaLabel, onClick: restartRun },
+        ...(rematchKey !== null
+            ? [{ id: 'rematch' as const, label: RUN_END_STAMP_COPY.rematch, ariaLabel: gameOverScreenCopy.rematchAriaLabel, testId: 'game-over-rematch', onClick: startRematch }]
+            : []),
+        { id: 'main-menu', label: RUN_END_STAMP_COPY.mainMenu, ariaLabel: gameOverScreenCopy.mainMenuAriaLabel, onClick: leaveToMenu }
+    ];
     const endReasonLine = runEndReasonLine(summary);
     // The nave the run ends in burns at the best chain the run actually reached, measured on the
     // meter's own scale rather than a second one invented here: the board is gone, so the streak
@@ -193,17 +206,31 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 />
             </div>
             <div className={styles.scrim} />
+            <p
+                aria-atomic="true"
+                aria-label="Run summary announcement"
+                aria-live="polite"
+                className={styles.visuallyHidden}
+                role="status"
+            >
+                {spokenRunSummary}
+            </p>
 
+            {page === 'cinematic' ? (
+                <RunEndCinematic
+                    actions={[
+                        ...stampActions,
+                        { id: 'record', label: RUN_END_STAMP_COPY.record, ariaLabel: gameOverScreenCopy.recordAriaLabel, testId: 'run-end-cinematic-record', onClick: () => setPage('record') }
+                    ]}
+                    personalBest={personalBest}
+                    reason={summary.runEndReason}
+                    reasonLine={endReasonLine}
+                    reduceMotion={settings.reduceMotion}
+                    runSeed={run.runSeed}
+                    summary={summary}
+                />
+            ) : (
             <div className={styles.foreground}>
-                <p
-                    aria-atomic="true"
-                    aria-label="Run summary announcement"
-                    aria-live="polite"
-                    className={styles.visuallyHidden}
-                    role="status"
-                >
-                    {spokenRunSummary}
-                </p>
                 <section
                     aria-label={GAME_OVER_LABELS.region}
                     className={styles.mobileActionDock}
@@ -280,13 +307,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {/* The end, stamped (`RunEndStamp`): the verdict word, the score line, a flourish, and
                             the choices as stamps you can press - the in-run stamps' register, held at rest. */}
                         <RunEndStamp
-                            actions={[
-                                { id: 'play-again', label: RUN_END_STAMP_COPY.playAgain, ariaLabel: gameOverScreenCopy.playAgainAriaLabel, onClick: restartRun },
-                                ...(rematchKey !== null
-                                    ? [{ id: 'rematch' as const, label: RUN_END_STAMP_COPY.rematch, ariaLabel: gameOverScreenCopy.rematchAriaLabel, testId: 'game-over-rematch', onClick: startRematch }]
-                                    : []),
-                                { id: 'main-menu', label: RUN_END_STAMP_COPY.mainMenu, ariaLabel: gameOverScreenCopy.mainMenuAriaLabel, onClick: leaveToMenu }
-                            ]}
+                            actions={stampActions}
                             eyebrow={
                                 <Eyebrow data-testid="game-over-mode-heading">
                                     {gameOverScreenCopy.heroEyebrow} · {runModeHeading(summary)}
@@ -463,6 +484,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 ) : null}
 
             </div>
+            )}
         </section>
     );
 };

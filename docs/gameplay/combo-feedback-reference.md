@@ -269,9 +269,16 @@ a pair; the `zone` room walks the burn, the free flips, the resolve, the miss an
 
 ## Round fourteen: the end, stamped (2026-09-30)
 
-The owner asked for the results screen to open the way the in-run stamps do - the anime duel
-screens of the 2000s card cartoons - with the choices as stamps you can press. `RunEndStamp`
-replaces the hero of the results page:
+The owner asked for the results screen to open the way the in-run stamps do - the duel and
+hunt screens of the 2000s (the card cartoons, the demon hunter) - with the choices as stamps you
+can press, and then said it plainly: do away with the panels. The end is a cut-scene first
+(`RunEndCinematic`): the room goes dark under a burst of speed lines, the verdict word is
+plastered across the middle of the screen (slammed in, swept with a sheen, held ~2.3 s, gone), a
+flourish gets its own beat, and then the choices take its place one after another as stamped
+words you can press - PLAY AGAIN, REMATCH, MAIN MENU and THE RECORD, which opens the ledger of
+numbers. Any press or key skips to the choices; Escape still leaves for the menu; reduced motion
+opens on the choices with the verdict held small above them. The ledger keeps the earlier
+`RunEndStamp` hero:
 
 - **The verdict**, one word by how the run ended, never a verdict on the player: JOURNEY OVER
   (the misses ran out), TIME'S UP, UNTIL NEXT TIME (the player stopped), CONTRACT SEALED, TABLE

@@ -39,6 +39,8 @@ export const gameOverScreenCopy = {
     rematchAriaLabel: 'Rematch - play this exact board again, same layout and rules',
     mainMenuLabel: 'Main Menu',
     mainMenuAriaLabel: 'Return to the main menu',
+    /* The cut-scene's last choice: the ledger of numbers, achievements and the next-run cards. */
+    recordAriaLabel: 'The record - see the run in numbers',
     /**
      * Copying the result is an action, not another restatement of the score: it hands the run to
      * somebody else, seed and all.

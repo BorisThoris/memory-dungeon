@@ -41,6 +41,8 @@ test.describe('Expanded playable interludes and post-run loop', () => {
     test('game over actions restart and return to menu', async ({ page }) => {
         test.setTimeout(260_000);
         await forceGameOverViaE2eHook(page);
+        // The end is a cut-scene first; the ledger is its last choice.
+        await page.getByTestId('run-end-cinematic-record').click({ timeout: 60_000 });
         await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Chain target/i);
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Reach Clean|Reach Sharp|Reach Fever|Hold Fever/i);

@@ -1,0 +1,437 @@
+/*
+ * The end as a cut-scene (`RunEndCinematic.tsx`): a black room, a burst of speed lines from the
+ * centre, the verdict slammed across the middle in the stamp's type and swept with a sheen, then
+ * gone; then the choices, one after another, in the same type, pressable. The run's temper
+ * colours the burst and the hottest choice; the reason colours the verdict.
+ */
+.cinematic {
+    --stamp: var(--margin-gold, #e1ad66);
+    --beat: 2300ms;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-align: center;
+    isolation: isolate;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, color-mix(in srgb, var(--margin-ink, #131111) 55%, transparent), color-mix(in srgb, var(--margin-ink, #131111) 96%, transparent) 100%);
+}
+
+.cinematic[data-tone='miss'] {
+    --stamp: var(--margin-miss, #e0655a);
+}
+
+.cinematic[data-tone='paper'] {
+    --stamp: var(--margin-paper, #f8f4f4);
+}
+
+.cinematic[data-tone='gold'] {
+    --stamp: var(--temper, var(--margin-gold, #e1ad66));
+}
+
+/* The burst: speed lines from the centre, the anime cut's radial rush, in the temper's colour. */
+.burst {
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg 4deg, color-mix(in srgb, var(--temper, var(--stamp)) 14%, transparent) 4deg 5.5deg);
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 18%, black 55%, transparent 80%);
+    opacity: 0;
+    animation: runEndBurst var(--beat) ease-out both;
+}
+
+.cinematic[data-phase='choices'] .burst {
+    animation: runEndBurstHold 1200ms ease-out both;
+}
+
+.flash {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 50% 40% at 50% 50%, color-mix(in srgb, var(--stamp) 40%, white 20%), transparent 70%);
+    opacity: 0;
+    animation: runEndFlash var(--beat) ease-out both;
+}
+
+.kicker {
+    position: absolute;
+    top: max(1.2rem, env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--margin-paper-dim, #b8b0aa);
+}
+
+.stampText {
+    position: relative;
+    display: inline-block;
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    color: var(--stamp);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--margin-paper, #f8f4f4) 55%, transparent);
+    text-shadow:
+        0 0 22px color-mix(in srgb, var(--stamp) 85%, transparent),
+        0 0 70px color-mix(in srgb, var(--stamp) 50%, transparent),
+        0.12em 0.12em 0 color-mix(in srgb, var(--margin-ink, #131111) 94%, transparent);
+}
+
+/* The sheen: the word again in a band of light, clipped to the letters, swept once as it lands. */
+.stampText::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.95) 48%, rgba(255, 255, 255, 0.55) 52%, transparent 62%);
+    background-size: 260% 100%;
+    background-position: 120% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: runEndSheen 700ms ease-out 260ms both;
+}
+
+.verdict {
+    margin: 0;
+    padding: 0 0.2em;
+    transform: skewX(-9deg) rotate(-3deg);
+    animation: runEndSlam var(--beat) cubic-bezier(0.2, 1.4, 0.3, 1) both;
+}
+
+.verdict .stampText {
+    font-size: clamp(3rem, 13vi, 10rem);
+}
+
+.verdict[data-flourish-tone='gold'] {
+    --stamp: var(--margin-fever, #facb8d);
+    animation-duration: 1400ms;
+}
+
+.verdict[data-flourish-tone='legendary'] {
+    --stamp: #e2b3ff;
+    animation-duration: 1400ms;
+}
+
+.verdict[data-flourish-tone='inferno'] {
+    --stamp: #ff4d5e;
+    animation-duration: 1400ms;
+}
+
+.verdict[data-flourish-tone='blazing'] {
+    --stamp: #ff7a3d;
+    animation-duration: 1400ms;
+}
+
+.line {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    animation: runEndRise 900ms ease-out 500ms both;
+}
+
+.scoreLine {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.4rem, 3.6vi, 2.4rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--margin-gold, #e1ad66);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--margin-ink, #131111) 90%, transparent);
+}
+
+.reason,
+.heldReason {
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    font-style: italic;
+    font-size: clamp(0.85rem, 1.6vi, 1.05rem);
+    color: var(--margin-paper, #f8f4f4);
+    opacity: 0.85;
+}
+
+.skipHint {
+    position: absolute;
+    bottom: max(1.2rem, env(safe-area-inset-bottom, 0px));
+    left: 0;
+    right: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--margin-paper-dim, #b8b0aa);
+    animation: runEndRise 800ms ease-out 1200ms both;
+}
+
+/* The verdict held small above the choices, with the score and how it ended. */
+.held {
+    margin: 0 0 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    animation: runEndRise 500ms ease-out both;
+}
+
+.heldVerdict {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.3rem, 3.4vi, 2.2rem);
+    letter-spacing: 0.08em;
+    color: var(--stamp);
+    transform: skewX(-9deg);
+    text-shadow: 0 0 18px color-mix(in srgb, var(--stamp) 70%, transparent);
+}
+
+.heldLine {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.05rem, 2.4vi, 1.5rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--margin-gold, #e1ad66);
+    font-variant-numeric: tabular-nums;
+}
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* The choices: the stamp, pressable. Skewed at rest; upright, lit and sheened on hover or focus. */
+.choice {
+    --stamp: var(--margin-paper, #f8f4f4);
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0.15rem 0.6rem;
+    margin: 0;
+    cursor: pointer;
+    transform: skewX(-9deg);
+    transition: transform 160ms ease, filter 160ms ease;
+    animation: runEndChoice 620ms cubic-bezier(0.2, 1.4, 0.3, 1) calc(140ms + var(--i, 0) * 150ms) both;
+}
+
+.choice .stampText {
+    font-size: clamp(1.8rem, 6.4vi, 4.2rem);
+}
+
+.choice .stampText::after {
+    animation: none;
+}
+
+.choice[data-action='play-again'] {
+    --stamp: var(--temper-hot, var(--margin-fever, #facb8d));
+}
+
+.choice[data-action='record'] .stampText {
+    font-size: clamp(1.2rem, 3.4vi, 2.2rem);
+    opacity: 0.85;
+}
+
+.choice:hover,
+.choice:focus-visible {
+    transform: skewX(-9deg) scale(1.1);
+    filter: brightness(1.3);
+    outline: 0;
+}
+
+.choice:focus-visible .stampText {
+    -webkit-text-stroke: 2px color-mix(in srgb, white 90%, transparent);
+}
+
+.choice:hover .stampText::after,
+.choice:focus-visible .stampText::after {
+    animation: runEndSheen 700ms ease-out both;
+}
+
+.choice:active {
+    transform: skewX(-9deg) scale(0.96);
+}
+
+@keyframes runEndSlam {
+    0% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) scale(3.2);
+        filter: blur(10px) brightness(2.4);
+    }
+
+    12% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) scale(1);
+        filter: blur(0) brightness(1.5);
+    }
+
+    18% {
+        transform: skewX(-9deg) rotate(-3deg) scale(1.07);
+    }
+
+    26% {
+        transform: skewX(-9deg) rotate(-3deg) scale(1);
+        filter: brightness(1);
+    }
+
+    84% {
+        opacity: 1;
+        transform: skewX(-9deg) rotate(-3deg) scale(1.02);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: skewX(-9deg) rotate(-3deg) scale(1.4) translateY(-2rem);
+        filter: blur(8px);
+    }
+}
+
+@keyframes runEndChoice {
+    0% {
+        opacity: 0;
+        transform: skewX(-9deg) translateX(-4rem) scale(1.6);
+        filter: blur(5px) brightness(1.8);
+    }
+
+    55% {
+        opacity: 1;
+        transform: skewX(-9deg) translateX(0) scale(1);
+        filter: blur(0) brightness(1.3);
+    }
+
+    100% {
+        opacity: 1;
+        transform: skewX(-9deg) translateX(0) scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes runEndSheen {
+    from {
+        background-position: 120% 0;
+    }
+
+    to {
+        background-position: -60% 0;
+    }
+}
+
+@keyframes runEndRise {
+    from {
+        opacity: 0;
+        transform: translateY(0.8rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes runEndBurst {
+    0% {
+        opacity: 0;
+        transform: scale(1.6) rotate(0deg);
+    }
+
+    12% {
+        opacity: 1;
+        transform: scale(1) rotate(2deg);
+    }
+
+    84% {
+        opacity: 0.7;
+        transform: scale(1.04) rotate(6deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.3) rotate(8deg);
+    }
+}
+
+@keyframes runEndBurstHold {
+    from {
+        opacity: 0;
+        transform: scale(1.3);
+    }
+
+    to {
+        opacity: 0.35;
+        transform: scale(1);
+    }
+}
+
+@keyframes runEndFlash {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    40%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* At rest for reduced motion: the words and their colour; no slam, sweep, burst or flash. */
+.cinematic[data-reduce-motion='true'] .verdict,
+.cinematic[data-reduce-motion='true'] .line,
+.cinematic[data-reduce-motion='true'] .held,
+.cinematic[data-reduce-motion='true'] .choice,
+.cinematic[data-reduce-motion='true'] .skipHint,
+.cinematic[data-reduce-motion='true'] .stampText::after,
+.cinematic[data-reduce-motion='true'] .burst,
+.cinematic[data-reduce-motion='true'] .flash {
+    animation: none;
+}
+
+.cinematic[data-reduce-motion='true'] .burst {
+    opacity: 0.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .verdict,
+    .line,
+    .held,
+    .choice,
+    .skipHint,
+    .stampText::after,
+    .burst,
+    .flash {
+        animation: none;
+    }
+}
+
+@media (max-height: 560px) {
+    .verdict .stampText {
+        font-size: clamp(2.2rem, 12vi, 4.5rem);
+    }
+
+    .choice .stampText {
+        font-size: clamp(1.3rem, 5vi, 2rem);
+    }
+
+    .choices {
+        gap: 0.1rem;
+    }
+
+    .held {
+        margin-bottom: 0.2rem;
+    }
+}
