@@ -13,7 +13,7 @@ import { runGold } from '../../shared/run-store-rules';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/toolbarRoving';
 import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
-import { GameplayMenuIcon } from '../ui/gameplayIcons';
+import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
@@ -335,6 +335,50 @@ const RunShell = ({
             : RUN_SHELL_LINE_COPY.chainKicker(chain, CHAIN_TIER_LABELS[tier]);
     const kickerTier = memorize || lineTone === 'error' || (!said && onboardingLine) ? 'none' : tier;
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
+
+    /*
+     * A phone folds the dock into one Items button beside Pause. Ten tools in two rows took a
+     * quarter of an upright phone and left the board a strip in the middle; the board is the game,
+     * and the tools are reached for a few times a floor. The tray opens over the board rather than
+     * pushing it, so the board never refits when the player looks in the bag, and it closes again
+     * once a tool is chosen or the floor changes (keyed on the floor, so no effect has to reset it).
+     */
+    const compactDock = shellLayout === 'phone-portrait' || shellLayout === 'phone-landscape';
+    const floorLevel = run.board?.level ?? 0;
+    const [trayOpenOnFloor, setTrayOpenOnFloor] = useState<number | null>(null);
+    const trayOpen = compactDock && trayOpenOnFloor === floorLevel;
+    const armedTool = visibleTools.find((tool) => tool.armed);
+    // Fit undoes a pinch, so once there is a pinch to undo it stands on the bar beside Items.
+    const barTools = compactDock ? visibleTools.filter((tool) => tool.id === 'fit' && !tool.disabled) : [];
+    const trayTools = compactDock ? visibleTools.filter((tool) => !barTools.includes(tool)) : visibleTools;
+    const usableToolCount = trayTools.filter((tool) => !tool.disabled).length;
+    const chooseTool = (tool: RunShellTool): void => {
+        if (compactDock) {
+            setTrayOpenOnFloor(null);
+        }
+        tool.onClick();
+    };
+    const toolButton = (tool: RunShellTool): ReactElement => (
+        <button
+            aria-label={tool.name ?? tool.title ?? tool.label}
+            aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
+            className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
+            data-testid={`tool-${tool.id}`}
+            disabled={tool.disabled}
+            key={tool.id}
+            onClick={() => chooseTool(tool)}
+            title={compactDock ? undefined : tool.title}
+            type="button"
+        >
+            <span className={styles.toolGlyph}>{tool.glyph}</span>
+            <span className={styles.toolLabel}>{tool.label}</span>
+            {tool.charges !== undefined && tool.charges > 0 ? (
+                <span aria-hidden="true" className={styles.toolCount}>
+                    {tool.charges}
+                </span>
+            ) : null}
+        </button>
+    );
 
     /*
      * One tab stop for the dock, re-synced on every render.
@@ -698,28 +742,36 @@ const RunShell = ({
                     ref={dockRef}
                     role="toolbar"
                 >
-                    {visibleTools.map((tool) => (
-                        <button
-                            aria-label={tool.name ?? tool.title ?? tool.label}
-                            aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
-                            className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
-                            data-testid={`tool-${tool.id}`}
-                            disabled={tool.disabled}
-                            key={tool.id}
-                            onClick={tool.onClick}
-                            title={tool.title}
-                            type="button"
-                        >
-                            <span className={styles.toolGlyph}>{tool.glyph}</span>
-                            <span className={styles.toolLabel}>{tool.label}</span>
-                            {tool.charges !== undefined && tool.charges > 0 ? (
-                                <span aria-hidden="true" className={styles.toolCount}>
-                                    {tool.charges}
-                                </span>
-                            ) : null}
-                        </button>
-                    ))}
-                    {visibleTools.length > 0 ? <span aria-hidden="true" className={styles.dockDivider} /> : null}
+                    {trayOpen ? (
+                        <div aria-label="Items" className={styles.tray} data-testid="tool-tray" id="run-shell-item-tray" role="group">
+                            {trayTools.map(toolButton)}
+                        </div>
+                    ) : null}
+                    {compactDock ? (
+                        trayTools.length > 0 ? (
+                            <button
+                                aria-controls="run-shell-item-tray"
+                                aria-expanded={trayOpen}
+                                aria-label={armedTool ? `${armedTool.name ?? armedTool.title ?? armedTool.label} is armed. Items` : 'Items'}
+                                className={`${styles.tool} ${styles.toolTray} ${armedTool ? styles.toolArmed : ''}`.trim()}
+                                data-testid="tool-tray-toggle"
+                                onClick={() => setTrayOpenOnFloor(trayOpen ? null : floorLevel)}
+                                type="button"
+                            >
+                                <span className={styles.toolGlyph}>{armedTool ? armedTool.glyph : <GameplayItemsIcon />}</span>
+                                <span className={styles.toolLabel}>{armedTool ? armedTool.label : 'Items'}</span>
+                                {usableToolCount > 0 && !armedTool ? (
+                                    <span aria-hidden="true" className={styles.toolCount}>
+                                        {usableToolCount}
+                                    </span>
+                                ) : null}
+                            </button>
+                        ) : null
+                    ) : (
+                        visibleTools.map(toolButton)
+                    )}
+                    {barTools.map(toolButton)}
+                    {visibleTools.length > 0 && !compactDock ? <span aria-hidden="true" className={styles.dockDivider} /> : null}
                     <button
                         aria-label={RUN_SHELL_LABELS.pause}
                         className={`${styles.tool} ${styles.toolPause}`}

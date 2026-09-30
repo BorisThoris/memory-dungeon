@@ -71,6 +71,14 @@ const pick = async (page: Page, id: string): Promise<void> => {
     }, id);
 };
 
+/** A phone folds the dock into Items (RunShell); open it the way a player would before reaching for a tool. */
+const openItemsIfFolded = async (page: Page): Promise<void> => {
+    const toggle = page.getByTestId('tool-tray-toggle');
+    if ((await toggle.isVisible().catch(() => false)) && (await toggle.getAttribute('aria-expanded')) !== 'true') {
+        await toggle.click();
+    }
+};
+
 const tool = (page: Page, name: RegExp) => page.getByRole('toolbar', { name: /game controls/i }).getByRole('button', { name }).first();
 
 const openRoom = async (page: Page, room: string): Promise<void> => {
@@ -98,13 +106,20 @@ for (const display of [
             await startClassicRunFromModeSelect(page);
             await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
             await expect.poll(async () => (await read(page)).status).toBe('playing');
+            await openItemsIfFolded(page);
             const bomb = page.getByTestId('tool-bomb');
             await expect(bomb).toBeVisible();
             await expect(bomb).toBeEnabled();
             expect((await read(page)).bombs).toBe(1);
             await bomb.click();
-            await expect(bomb).toHaveAttribute('aria-pressed', 'true');
-            await expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
+            if (display.name === 'phone') {
+                // The bag closes on a choice so the board is clear to aim at; Items says what is armed.
+                await expect(page.getByTestId('tool-tray')).toHaveCount(0);
+                await expect(page.getByTestId('tool-tray-toggle')).toHaveAccessibleName(/choose a card to bomb.*armed/i);
+            } else {
+                await expect(bomb).toHaveAttribute('aria-pressed', 'true');
+                await expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
+            }
             if (display.name.includes('4K')) {
                 await expect(page.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
             }
@@ -137,6 +152,7 @@ for (const display of [
                 }).observe(node, { attributes: true, attributeFilter: ['width', 'height'], attributeOldValue: true });
                 node.addEventListener('webglcontextlost', () => { node.dataset.contextLosses = '1'; });
             });
+            await openItemsIfFolded(page);
             await page.getByTestId('tool-shuffle').click();
             await expect.poll(async () => (await read(page)).shuffles).toBe(0);
             await page.waitForTimeout(4000);

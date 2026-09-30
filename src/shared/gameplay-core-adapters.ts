@@ -106,6 +106,32 @@ export const resolveBoardTurnThroughGameplayCore = (
     };
 };
 
+/**
+ * Lets go of a turn the core refused to resolve.
+ *
+ * A rejected resolve hands back the run it was given, still `resolving` with its cards face up,
+ * and no resolve clock is left to fire again: the board stays flip-locked and not interactive, so
+ * every card on it is dead until the run ends. Turning the cards back down and returning to play
+ * costs the player that turn and nothing else.
+ */
+export const releaseRejectedBoardTurn = (run: RunState): RunState => {
+    if (run.status !== 'resolving' || !run.board) {
+        return run;
+    }
+    const flipped = new Set(Array.isArray(run.board.flippedTileIds) ? run.board.flippedTileIds : []);
+    return {
+        ...run,
+        status: 'playing',
+        board: {
+            ...run.board,
+            flippedTileIds: [],
+            tiles: run.board.tiles.map((tile) =>
+                flipped.has(tile.id) && tile.state === 'flipped' ? { ...tile, state: 'hidden' } : tile
+            )
+        }
+    };
+};
+
 /** Records one wildcard bridge while delegating the surrounding match payout to the established resolver. */
 export const consumeWildMatchThroughGameplayCore = (
     run: RunState,

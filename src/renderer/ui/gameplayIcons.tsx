@@ -152,3 +152,14 @@ export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
         </svg>
     );
 }
+
+/** The satchel a phone's dock folds its tools into. */
+export function GameplayItemsIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M9 7V5.5a3 3 0 0 1 6 0V7" fill="none" />
+            <path d="M5 8h14l-1.2 11H6.2Z" fill="none" />
+            <path d="M9.5 12h5" />
+        </svg>
+    );
+}

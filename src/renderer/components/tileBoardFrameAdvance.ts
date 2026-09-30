@@ -308,6 +308,9 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         textureRevision: p.textureRevision,
         keyboardFocused: p.keyboardFocused,
         focusDimmed: p.focusDimmed,
-        graphicsQuality: p.graphicsQuality
+        graphicsQuality: p.graphicsQuality,
+        tileState: p.tile.state,
+        faceUp: p.faceUp,
+        pickable: p.pickable
     };
 };

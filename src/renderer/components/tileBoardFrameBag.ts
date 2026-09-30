@@ -10,6 +10,7 @@ import type {
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 import type { TileBezelFramePropsSnapshot } from './tileBoardFramePropsSnapshot';
+import type { TileBezelActivityGate } from './tileFrameActivity';
 
 export interface TileBezelPlaneGeometries {
     front: PlaneGeometry;
@@ -68,13 +69,7 @@ export interface TileBezelFrameBag {
     matchedVictoryFlameMeshRef: MutableRefObject<Mesh | null>;
     matchedVictoryBurstT0Ref: MutableRefObject<number | null>;
     prevTileMatchedRef: MutableRefObject<boolean>;
-    lastActivityVisualGateRef: MutableRefObject<{
-        traitRouteReadabilityIntensity?: string;
-        textureRevision: number;
-        keyboardFocused: boolean;
-        focusDimmed: boolean;
-        graphicsQuality: GraphicsQualityPreset;
-    } | null>;
+    lastActivityVisualGateRef: MutableRefObject<TileBezelActivityGate | null>;
 }
 
 export type CreateTileBezelFrameBagInput = Omit<TileBezelFrameBag, 'planeGeometries'> & {

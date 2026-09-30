@@ -1,13 +1,25 @@
 import { ALL_FACE_PANEL_URLS_ORDERED } from './facePanelRasterUrls';
 
+/**
+ * Face panels (1-based file numbers) the SDXL batch spoiled: dot noise, tiled wallpaper, stripes
+ * and grids with no motif. On a phone they read as broken art rather than a picture - panel 02 is
+ * a trident standing in a field of black-and-white static - so they are dealt to no card.
+ */
+export const SPOILED_FACE_PANEL_NUMBERS: ReadonlySet<number> = new Set([
+    1, 2, 12, 23, 26, 48, 50, 52, 56, 65, 71, 73, 77, 79, 80
+]);
+
+const dealtPanels = (from: number, to: number): readonly string[] =>
+    ALL_FACE_PANEL_URLS_ORDERED.slice(from, to).filter((_, i) => !SPOILED_FACE_PANEL_NUMBERS.has(from + i + 1));
+
 /** Central illustration variants (bread-and-butter motifs). */
-export const FACE_PANEL_COMMON_URLS = ALL_FACE_PANEL_URLS_ORDERED.slice(0, 48) as readonly string[];
+export const FACE_PANEL_COMMON_URLS = dealtPanels(0, 48);
 
 /** Richer motifs — appear less often via weighted strip. */
-export const FACE_PANEL_UNCOMMON_URLS = ALL_FACE_PANEL_URLS_ORDERED.slice(48, 72) as readonly string[];
+export const FACE_PANEL_UNCOMMON_URLS = dealtPanels(48, 72);
 
 /** Showcase / rare — few files, lowest selection rate. */
-export const FACE_PANEL_RARE_URLS = ALL_FACE_PANEL_URLS_ORDERED.slice(72, 80) as readonly string[];
+export const FACE_PANEL_RARE_URLS = dealtPanels(72, 80);
 
 /**
  * Deterministic fallback list for `resolveCardIllustrationUrl` (~200 slots).

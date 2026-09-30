@@ -47,6 +47,7 @@ interface TileBoardDomSurfaceModel {
 
 export const buildTileBoardDomSurfaceModel = ({
     allowGambitThirdFlip,
+    zoneFlipCapacity,
     board,
     boardApplicationFocused,
     debugPeekActive,
@@ -61,6 +62,8 @@ export const buildTileBoardDomSurfaceModel = ({
     traitRouteTargetTileIds = []
 }: {
     allowGambitThirdFlip: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     board: BoardState;
     boardApplicationFocused: boolean;
     debugPeekActive: boolean;
@@ -130,6 +133,7 @@ export const buildTileBoardDomSurfaceModel = ({
     }),
     cardFeedbackStatesAttr: getCardFeedbackStatesAttr({
         allowGambitThirdFlip,
+        zoneFlipCapacity,
         board,
         boardApplicationFocused,
         debugPeekActive,
@@ -168,6 +172,7 @@ export const buildTileBoardDomSurfaceModel = ({
     hiddenTileCount: getHiddenTileCount(board),
     pickableHiddenSlotsAttr: getPickableHiddenSlotsAttr({
         allowGambitThirdFlip,
+        zoneFlipCapacity,
         board,
         includeDevAttributes,
         interactive

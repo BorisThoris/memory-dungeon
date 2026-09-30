@@ -131,11 +131,14 @@ export const getCardFeedbackVisibleTraitPreviewCount = ({
 
 export const getPickableHiddenSlotsAttr = ({
     allowGambitThirdFlip,
+    zoneFlipCapacity,
     board,
     includeDevAttributes,
     interactive
 }: {
     allowGambitThirdFlip: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     board: BoardState;
     includeDevAttributes: boolean;
     interactive: boolean;
@@ -144,12 +147,13 @@ export const getPickableHiddenSlotsAttr = ({
         return undefined;
     }
 
-    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
+    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity));
     return slotListFor(board, (tile) => tile.state === 'hidden' && pickable.has(tile.id));
 };
 
 export const getCardFeedbackStatesAttr = ({
     allowGambitThirdFlip,
+    zoneFlipCapacity,
     board,
     boardApplicationFocused,
     debugPeekActive,
@@ -163,6 +167,8 @@ export const getCardFeedbackStatesAttr = ({
     traitRouteTargetTileIds = []
 }: {
     allowGambitThirdFlip: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     board: BoardState;
     boardApplicationFocused: boolean;
     debugPeekActive: boolean;
@@ -175,7 +181,7 @@ export const getCardFeedbackStatesAttr = ({
     traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
 }): string => {
-    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
+    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity));
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
     const selectedTraitFollowupTileIdSet = new Set(selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board));

@@ -1013,6 +1013,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.status === 'resolving' &&
         allowGambitThirdFlip &&
         (run.board?.flippedTileIds.length ?? 0) === 2;
+    /*
+     * The two cards of a resolving turn take a tap: the store reads it as "go on now" (a miss held
+     * for the Gambit or Undo, `MISS_DECISION_HOLD_MS`, is otherwise a wait of a couple of seconds
+     * that nothing on the board would let the player cut short). The flip lock keeps every hidden
+     * card shut meanwhile, so only those two become pickable.
+     */
+    const resolvingPairTappable = run.status === 'resolving' && (run.board?.flippedTileIds.length ?? 0) === 2;
+    const zoneFlipCapacity = isZoneActive(run) ? runNonNegativeInteger(run.zone?.pairs) * 2 : 0;
     const wideRecallInPlay = run.activeMutators.includes('wide_recall');
     const silhouetteDuringPlay = run.activeMutators.includes('silhouette_twist');
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
@@ -1829,6 +1837,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             <MemoTileBoard
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}
+                                zoneFlipCapacity={zoneFlipCapacity}
                                 board={run.board}
                                 handoffSeatLabel={run.passAndPlay?.handoffPending === true ? activeSeatLabel : null}
                                 cursedPairKey={run.board.cursedPairKey ?? null}
@@ -1847,7 +1856,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     momentum: chainMomentum(runLadderChain(run), runChainMomentumPairs(run))
                                 }}
                                 recoveryContext={boardRecoveryContext}
-                                interactive={run.status === 'playing' || gambitThirdPickActive}
+                                interactive={run.status === 'playing' || gambitThirdPickActive || resolvingPairTappable}
                                 mobileCameraMode={cameraViewportMode}
                                 nBackAnchorPairKey={run.nBackAnchorPairKey}
                                 nBackMutatorActive={nBackMutatorActive}

@@ -511,8 +511,10 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
-        // The camera's reset lives on the dock, next to the pinch it undoes, not behind a pause.
+        // The camera's reset lives on the dock, next to the pinch it undoes, not behind a pause. A
+        // phone folds the dock into Items; with no pinch yet, Fit is in the bag.
         const dock = await screen.findByRole('toolbar', { name: /game controls/i });
+        await user.click(within(dock).getByTestId('tool-tray-toggle'));
         expect(within(dock).getByRole('button', { name: /^fit board$/i })).toBeInTheDocument();
 
         await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));

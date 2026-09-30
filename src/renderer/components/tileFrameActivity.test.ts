@@ -52,7 +52,10 @@ const makeBag = (opts: {
                 textureRevision: opts.p.textureRevision,
                 keyboardFocused: opts.p.keyboardFocused,
                 focusDimmed: opts.p.focusDimmed,
-                graphicsQuality: opts.p.graphicsQuality
+                graphicsQuality: opts.p.graphicsQuality,
+                tileState: opts.p.tile.state,
+                faceUp: opts.p.faceUp,
+                pickable: opts.p.pickable
             }
         };
 
@@ -259,6 +262,63 @@ describe('shouldAdvanceTileBezelThisFrame', () => {
         expect(shouldAdvanceTileBezelThisFrame(bag, 51, nowMs)).toBe(true);
         p.reduceMotion = true;
         expect(shouldAdvanceTileBezelThisFrame(bag, 51, nowMs)).toBe(false);
+    });
+
+    it('wakes a face-up card that is cleared without moving, and keeps it awake until it has left', () => {
+        const nowMs = 1_000_000;
+        const p = {
+            reduceMotion: false,
+            faceUp: true,
+            pickable: false,
+            focusDimmed: false,
+            keyboardFocused: false,
+            graphicsQuality: 'low' as const,
+            textureRevision: 0,
+            resolvingSelection: null,
+            shuffleMotionDeadlineMs: 0,
+            shuffleMotionBudgetMs: 0,
+            shuffleStaggerTileCount: 0,
+            boardEntranceMotionDeadlineMs: 0,
+            boardEntranceMotionBudgetMs: 0,
+            boardEntranceStaggerTileCount: 0,
+            tile: baseTile({ state: 'flipped' }),
+            tileFieldParallaxEnabled: false,
+            fieldAmp: 1,
+            fieldTiltRef: { current: { x: 0, y: 0 } },
+            hoverTiltRef: { current: { tileId: null, x: 0, y: 0 } },
+            transform: {
+                imperfectionRotationX: 0,
+                imperfectionRotationZ: 0,
+                layoutYaw: 0,
+                flipRotationY: 0,
+                baseX: 0,
+                baseY: 0,
+                imperfectionX: 0,
+                imperfectionY: 0,
+                layoutJitterX: 0,
+                layoutJitterY: 0,
+                layoutJitterZ: 0
+            }
+        } as TileBezelActivityBag['propsRef']['current'];
+        const group = new Group();
+        group.position.set(0, 0.0012, 0.0018);
+        const bag = makeBag({
+            p,
+            group,
+            refs: { liftSmoothRef: { current: 0.0012 }, faceUpStructBlendRef: { current: 1 } }
+        });
+        expect(shouldAdvanceTileBezelThisFrame(bag, 50, nowMs)).toBe(false);
+
+        // A bomb takes the face-up card: same pose, new state.
+        p.tile = baseTile({ state: 'removed' });
+        expect(shouldAdvanceTileBezelThisFrame(bag, 50, nowMs)).toBe(true);
+
+        // Once drawn in its new state it stays awake while its burst clock runs, however long the wave.
+        bag.lastActivityVisualGateRef.current!.tileState = 'removed';
+        bag.matchedVictoryBurstT0Ref.current = 50;
+        expect(shouldAdvanceTileBezelThisFrame(bag, 60, nowMs)).toBe(true);
+        bag.matchedVictoryBurstT0Ref.current = null;
+        expect(shouldAdvanceTileBezelThisFrame(bag, 60, nowMs)).toBe(false);
     });
 
     it('reduceMotion: returns false for settled hidden tile (no rim fire)', () => {

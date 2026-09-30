@@ -29,6 +29,43 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             return run;
         }
 
+        /*
+         * Every refusal below hands back the run it was given, untouched. The clears of what a flash
+         * and the lantern lit used to happen first, so a refused press - the open card tapped again,
+         * the sticky-blocked card, a third card with no Gambit - still returned a new run: the lit
+         * faces went dark with no turn taken, and the store, reading any new run as a flip, disarmed
+         * whatever mode the player had armed.
+         */
+        const board = run.board;
+        const currentFlippedTileIds = currentFlippedTileIdsBeforeFlash;
+        if (!currentFlippedTileIds) {
+            return run;
+        }
+
+        const allowThird =
+            run.gambitAvailableThisFloor &&
+            !run.gambitThirdFlipUsed &&
+            currentFlippedTileIds.length === 2;
+        const maxFlips = allowThird ? 3 : 2;
+        if (currentFlippedTileIds.length >= maxFlips) {
+            return run;
+        }
+
+        const tile = board.tiles.find((candidate) => candidate.id === tileId);
+
+        if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
+            return run;
+        }
+
+        const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
+        if (
+            currentFlippedTileIds.length === 0 &&
+            run.stickyBlockIndex !== null &&
+            tileIndex === run.stickyBlockIndex
+        ) {
+            return run;
+        }
+
         const flashCleared =
             (runFilteredStringArrayOrNull(run.flashPairRevealedTileIds)?.length ?? 0) > 0
                 ? { ...run, flashPairRevealedTileIds: [] }
@@ -38,38 +75,6 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             (runFilteredStringArrayOrNull(flashCleared.lanternLitTileIds)?.length ?? 0) > 0
                 ? { ...flashCleared, lanternLitTileIds: [] }
                 : flashCleared;
-        const board = runAfterFlashClear.board;
-        if (!board) {
-            return runAfterFlashClear;
-        }
-        const currentFlippedTileIds = runFilteredStringArrayOrNull(board.flippedTileIds);
-        if (!currentFlippedTileIds) {
-            return runAfterFlashClear;
-        }
-
-        const allowThird =
-            runAfterFlashClear.gambitAvailableThisFloor &&
-            !runAfterFlashClear.gambitThirdFlipUsed &&
-            currentFlippedTileIds.length === 2;
-        const maxFlips = allowThird ? 3 : 2;
-        if (currentFlippedTileIds.length >= maxFlips) {
-            return runAfterFlashClear;
-        }
-
-        const tile = board.tiles.find((candidate) => candidate.id === tileId);
-
-        if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
-            return runAfterFlashClear;
-        }
-
-        const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
-        if (
-            currentFlippedTileIds.length === 0 &&
-            runAfterFlashClear.stickyBlockIndex !== null &&
-            tileIndex === runAfterFlashClear.stickyBlockIndex
-        ) {
-            return runAfterFlashClear;
-        }
 
         const peekRevealedTileIds =
             (runFilteredStringArrayOrNull(runAfterFlashClear.peekRevealedTileIds)?.length ?? 0) > 0

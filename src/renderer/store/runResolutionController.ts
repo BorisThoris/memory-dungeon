@@ -20,6 +20,7 @@ import {
 } from '../../shared/save-data';
 import {
     deactivateDebugRevealThroughGameplayCore,
+    releaseRejectedBoardTurn,
     resolveBoardTurnThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
@@ -229,7 +230,7 @@ export const createRunResolutionController = ({
         const { saveData } = getState();
         const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
         const resolution = resolveBoardTurnThroughGameplayCore(run, encore);
-        const next = resolution.run;
+        const next = resolution.migrated ? resolution.run : releaseRejectedBoardTurn(resolution.run);
         const event = [...resolution.events].reverse().find(
             (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
                 item.type === 'board.turn_resolved'
