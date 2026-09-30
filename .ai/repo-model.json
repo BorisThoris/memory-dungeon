@@ -5067,8 +5067,8 @@
     {
       "path": "scripts/deploy-pages.mjs",
       "category": "script",
-      "bytes": 1298,
-      "sha256": "69acbb031ff514ad7e4d1774a47863753a5210d1946c2d98134c5f5084c6baca"
+      "bytes": 1595,
+      "sha256": "b6d4e66c53303600ce59ac22f1d58a8229235280f4e472ad6c8b6ec3e8aba945"
     },
     {
       "path": "scripts/e2e-locator-audit.ts",

@@ -16,4 +16,10 @@ const project = projectArg ? projectArg.slice('--project='.length) : 'memory-dun
 const run = (command) => execSync(command, { stdio: 'inherit' });
 const head = execSync('git rev-parse --short HEAD').toString().trim();
 run('yarn -s build:renderer');
-run(`npx wrangler pages deploy dist --project-name=${project} --branch main --commit-hash=${head} --commit-dirty=true`);
+// The test realm is a Workers static site (`wrangler.toml` already describes one: `./dist`, SPA
+// fallback), so it deploys by name with `wrangler deploy`; production stays a Pages project.
+if (project === 'memory-dungeon-test') {
+    run(`npx wrangler deploy --name ${project}`);
+} else {
+    run(`npx wrangler pages deploy dist --project-name=${project} --branch main --commit-hash=${head} --commit-dirty=true`);
+}
