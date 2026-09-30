@@ -13,6 +13,7 @@
  * The stages are the combo alone, not the floor: a floor's rungs decide what a break takes, this
  * decides only how the run looks and sounds. Nothing here is read by a rule.
  */
+import type { TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed } from './rng';
 
@@ -116,13 +117,18 @@ export const comboStageReached = (comboBefore: number, comboAfter: number): Excl
  *
  * The pool tables sell the streak's instrument in elements - a fire cue, a permafrost cue, a
  * lightning cue - and Balatro's editions and Pokémon's shinies show what a rare palette does to a
- * run: it changes nothing a rule reads and everything a player remembers. So a run's heat has a
- * temper. Most runs are ember (the default fire). Some are frost, and the combo goes cold rather
- * than hot - chill, frozen, glacial, absolute zero - with snow drifting down off the cards instead
- * of embers rising. Some are storm. One in fifty is prismatic, the shiny: every colour at once,
- * and its stamps say so. Seeded, so a shared run has the same temper for everyone who plays it.
+ * run: it changes nothing a rule reads and everything a player remembers. So the heat has a
+ * temper: the palette, the stage names and the stamp words it burns in.
+ *
+ * Until 2026-09-30 the temper was rolled once from the run seed and held for the whole run - a run
+ * was a frost run or a storm run from its first card. The owner asked for runs not to be bound to
+ * a biome but to change as they go, so the temper now follows the element world the player's own
+ * pops pulled the room into (`temperForWorld`): the plain dungeon burns ember, a tide world storms,
+ * a bone world freezes (chill, frozen, glacial, absolute zero, snow falling instead of embers
+ * rising), a moss world grows. A world a pop makes is prismatic one time in fifty, the shiny:
+ * every colour at once, and its stamps say so.
  */
-export type ComboHeatThemeId = 'ember' | 'frost' | 'storm' | 'prismatic';
+export type ComboHeatThemeId = 'ember' | 'frost' | 'storm' | 'moss' | 'prismatic';
 
 export interface ComboHeatTheme {
     id: ComboHeatThemeId;
@@ -130,8 +136,6 @@ export interface ComboHeatTheme {
     title: string;
     /** The shiny: stamps carry a RARE tag and the palette cycles. */
     rare: boolean;
-    /** Roll weight; the four sum to 100. */
-    weight: number;
     labels: Readonly<Record<ComboHeatStage, string>>;
     callouts: Readonly<Record<Exclude<ComboHeatStage, 'cold' | 'warm'>, string>>;
     /** One colour per stage index, cold through legendary. */
@@ -149,7 +153,6 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
         id: 'ember',
         title: 'Ember',
         rare: false,
-        weight: 70,
         labels: { cold: '', warm: 'Warm', hot: 'Hot', blazing: 'Blazing', inferno: 'Inferno', legendary: 'Legendary' },
         callouts: { hot: 'HOT!', blazing: 'BLAZING!', inferno: 'INFERNO!', legendary: 'LEGENDARY!' },
         colors: ['#e1ad66', '#e1ad66', '#ffa24f', '#ff7a3d', '#ff4d5e', '#e2b3ff'],
@@ -161,7 +164,6 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
         id: 'frost',
         title: 'Frost',
         rare: false,
-        weight: 18,
         labels: { cold: '', warm: 'Chill', hot: 'Cold', blazing: 'Frozen', inferno: 'Glacial', legendary: 'Absolute Zero' },
         callouts: { hot: 'COLD!', blazing: 'FROZEN!', inferno: 'GLACIAL!', legendary: 'ABSOLUTE ZERO!' },
         colors: ['#bfe3f7', '#bfe3f7', '#8fdcff', '#5fc3ff', '#b9a6ff', '#ffffff'],
@@ -173,7 +175,6 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
         id: 'storm',
         title: 'Storm',
         rare: false,
-        weight: 10,
         labels: { cold: '', warm: 'Charged', hot: 'Sparking', blazing: 'Storm', inferno: 'Tempest', legendary: 'Godlike' },
         callouts: { hot: 'SPARKING!', blazing: 'STORM!', inferno: 'TEMPEST!', legendary: 'GODLIKE!' },
         colors: ['#c9c2ff', '#c9c2ff', '#a78bff', '#8a5cff', '#d94dff', '#f6f0ff'],
@@ -182,10 +183,20 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
         ringHueDeg: -60
     },
     {
+        id: 'moss',
+        title: 'Moss',
+        rare: false,
+        labels: { cold: '', warm: 'Sprouting', hot: 'Verdant', blazing: 'Overgrown', inferno: 'Wildwood', legendary: 'Worldtree' },
+        callouts: { hot: 'VERDANT!', blazing: 'OVERGROWN!', inferno: 'WILDWOOD!', legendary: 'WORLDTREE!' },
+        colors: ['#b9d98a', '#b9d98a', '#8fe06a', '#5fcf5a', '#c8f25a', '#f4ffd0'],
+        emberMode: 'rise',
+        arcTints: ['#c8f5a0', '#8fe06a', '#e0ff7a', '#ffffff'],
+        ringHueDeg: 80
+    },
+    {
         id: 'prismatic',
         title: 'Prismatic',
         rare: true,
-        weight: 2,
         labels: { cold: '', warm: 'Shimmer', hot: 'Gleam', blazing: 'Radiant', inferno: 'Prismatic', legendary: 'Mythic' },
         callouts: { hot: 'GLEAM!', blazing: 'RADIANT!', inferno: 'PRISMATIC!', legendary: 'MYTHIC!' },
         colors: ['#ffd27a', '#ffd27a', '#7dffc4', '#7ec8ff', '#ff8ae2', '#ffffff'],
@@ -195,18 +206,35 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
     }
 ];
 
-/** The run's temper, rolled once from its seed: the same seed is the same temper for everyone. */
-export const comboHeatThemeForSeed = (runSeed: number): ComboHeatTheme => {
-    const seed = Number.isFinite(runSeed) ? Math.floor(runSeed) : 0;
-    const rng = createMulberry32(hashStringToSeed(`combo-heat-theme:${seed}`));
-    const roll = rng() * 100;
-    let at = 0;
-    for (const theme of COMBO_HEAT_THEMES) {
-        at += theme.weight;
-        if (roll < at) return theme;
-    }
-    return COMBO_HEAT_THEMES[0]!;
+/** Which temper each card element's world burns in; the plain dungeon (no world yet) is ember. */
+export const WORLD_ELEMENT_TEMPER: Readonly<Record<TileSuit, ComboHeatThemeId>> = {
+    ember: 'ember',
+    tide: 'storm',
+    bone: 'frost',
+    moss: 'moss'
 };
+
+/** A world a pop makes is prismatic this often: the shiny, found in play rather than rolled at the door. */
+export const PRISMATIC_WORLD_CHANCE = 0.02;
+
+const themeById = (id: ComboHeatThemeId): ComboHeatTheme => COMBO_HEAT_THEMES.find((theme) => theme.id === id) ?? COMBO_HEAT_THEMES[0]!;
+
+/**
+ * The temper the heat burns in right now: the latest element of the world the run's pops made
+ * (`world-reaction-rules.ts`), or ember in the plain dungeon. A world is prismatic one time in
+ * fifty, decided from the seed and the world itself, so the same world in the same run is the same.
+ */
+export const temperForWorld = (world: readonly TileSuit[] | undefined, runSeed: number): ComboHeatTheme => {
+    const elements = world ?? [];
+    const latest = elements[elements.length - 1];
+    if (!latest) return themeById('ember');
+    const seed = Number.isFinite(runSeed) ? Math.floor(runSeed) : 0;
+    const rng = createMulberry32(hashStringToSeed(`world-temper:${seed}:${elements.join('+')}`));
+    return rng() < PRISMATIC_WORLD_CHANCE ? themeById('prismatic') : themeById(WORLD_ELEMENT_TEMPER[latest]);
+};
+
+/** The temper a run is in: its world's, or the plain dungeon's. */
+export const runTemper = (run: { runSeed: number; world?: readonly TileSuit[] }): ComboHeatTheme => temperForWorld(run.world, run.runSeed);
 
 /**
  * The rare stamps a combo earns on its own, whatever the temper: the half-century, the century,

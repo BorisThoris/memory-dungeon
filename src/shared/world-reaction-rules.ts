@@ -1,5 +1,5 @@
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
-import { COMBO_HEAT_STAGE_FROM, comboHeatStageIndex, comboHeatStage, comboHeatThemeForSeed } from './combo-heat-rules';
+import { COMBO_HEAT_STAGE_FROM, comboHeatStageIndex, comboHeatStage } from './combo-heat-rules';
 import { applyMagpieTheft } from './magpie-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -20,7 +20,7 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  *   black hole, and the black hole spits: matched pairs come back face down (one, plus one for every
  *   ten links over sixteen, three at most) and every face-down card is shuffled. The streak you
  *   lost takes the work it was built on with it.
- * - **The cold freezes** (`resolveFrostStep`). In a cold world - a frost run, or a bone world - every
+ * - **The cold freezes** (`resolveFrostStep`). In a cold world - a bone world - every
  *   third turn freezes two cards (three from Blazing) for two turns; a frozen card cannot be turned.
  *   They come from different pairs, and only sometimes both halves of one, so the ice never points
  *   at a match. It freezes only while at least two whole pairs stay free, and cracks early if a pop
@@ -118,9 +118,11 @@ export const FROST_PAIR_FREEZE_CHANCE = 0.3;
 export const frostFreezeCount = (combo: number): number =>
     comboHeatStageIndex(comboHeatStage(combo)) >= comboHeatStageIndex('blazing') ? 3 : 2;
 
-/** Whether the run's world is cold: a frost run always is; a bone world is while bone is in it. */
-export const isColdWorld = (run: Pick<RunState, 'runSeed' | 'world'>): boolean =>
-    comboHeatThemeForSeed(run.runSeed).id === 'frost' || (run.world ?? []).includes('bone');
+/**
+ * Whether the run's world is cold: while bone is in it. A run is not born cold - the cold comes
+ * from the bone cards the player popped their way into, and leaves when the world moves on.
+ */
+export const isColdWorld = (run: { world?: readonly TileSuit[] }): boolean => (run.world ?? []).includes('bone');
 
 export const isTileFrozen = (tile: Pick<Tile, 'frozen'> | undefined): boolean => tile?.frozen === true;
 

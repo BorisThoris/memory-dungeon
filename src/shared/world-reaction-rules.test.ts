@@ -48,10 +48,11 @@ describe('the void spews', () => {
 });
 
 describe('the cold freezes', () => {
-    it('is cold on a frost run or in a bone world', () => {
-        expect(isColdWorld({ runSeed: 14, world: [] })).toBe(true);
-        expect(isColdWorld({ runSeed: 90_210, world: [] })).toBe(false);
-        expect(isColdWorld({ runSeed: 90_210, world: ['bone'] })).toBe(true);
+    it('is cold only in a bone world: no run is born cold', () => {
+        expect(isColdWorld({ world: [] })).toBe(false);
+        expect(isColdWorld({ world: ['tide'] })).toBe(false);
+        expect(isColdWorld({ world: ['bone'] })).toBe(true);
+        expect(isColdWorld({ world: ['bone', 'moss'] })).toBe(true);
     });
 
     it('freezes on every third turn, from different pairs, keeping two whole pairs free, and thaws after two turns', () => {

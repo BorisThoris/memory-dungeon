@@ -137,7 +137,7 @@ export const resolveMismatchTurnTransition = ({
         board: tided ?? boardAfterRestless,
         turnsThisFloor: turnsAfterMiss,
         frozenUntilTurn: run.frozenUntilTurn,
-        cold: isColdWorld({ runSeed: run.runSeed, world: worldAfterMiss }),
+        cold: isColdWorld({ world: worldAfterMiss }),
         combo: 0,
         pinnedTileIds: pinnedAfterMiss,
         runSeed: run.runSeed,

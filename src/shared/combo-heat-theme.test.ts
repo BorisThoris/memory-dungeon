@@ -6,7 +6,9 @@ import {
     comboAscensionCallout,
     comboAscensionReached,
     comboHeatLevels,
-    comboHeatThemeForSeed,
+    PRISMATIC_WORLD_CHANCE,
+    runTemper,
+    temperForWorld,
     comboMilestoneReached,
     comboStageLabel,
     comboSurge,
@@ -47,23 +49,34 @@ describe('the ladder past its top', () => {
 });
 
 describe('the temper of a run', () => {
-    it('is rolled from the seed, the same seed the same temper, at the weights written down', () => {
-        expect(COMBO_HEAT_THEMES.reduce((sum, theme) => sum + theme.weight, 0)).toBe(100);
-        const counts = new Map<string, number>();
-        for (let seed = 1; seed <= 4000; seed += 1) {
-            const theme = comboHeatThemeForSeed(seed);
-            expect(comboHeatThemeForSeed(seed)).toBe(theme);
-            counts.set(theme.id, (counts.get(theme.id) ?? 0) + 1);
-        }
-        for (const theme of COMBO_HEAT_THEMES) {
-            const share = (counts.get(theme.id) ?? 0) / 4000;
-            expect(share, theme.id).toBeGreaterThan(theme.weight / 100 - 0.03);
-            expect(share, theme.id).toBeLessThan(theme.weight / 100 + 0.03);
-        }
-        // The shiny is the only rare one, and it is the rarest.
+    it('is not rolled at the door: every run starts in the plain dungeon, ember, whatever its seed', () => {
+        for (let seed = 1; seed <= 200; seed += 1) expect(runTemper({ runSeed: seed, world: [] }).id).toBe('ember');
+        expect(runTemper({ runSeed: 14 }).id).toBe('ember');
+    });
+
+    it('follows the world the pops made: its latest element, the same world the same temper', () => {
+        const plain = (world: Parameters<typeof temperForWorld>[0]) => {
+            // A seed whose worlds are not the shiny, so the mapping itself is what is read.
+            for (let seed = 1; seed < 500; seed += 1) {
+                const theme = temperForWorld(world, seed);
+                if (!theme.rare) return theme.id;
+            }
+            return 'none';
+        };
+        expect(plain(['ember'])).toBe('ember');
+        expect(plain(['tide'])).toBe('storm');
+        expect(plain(['bone'])).toBe('frost');
+        expect(plain(['moss'])).toBe('moss');
+        expect(plain(['bone', 'tide'])).toBe('storm');
+        expect(temperForWorld(['tide'], 7)).toBe(temperForWorld(['tide'], 7));
+    });
+
+    it('makes a world prismatic about one time in fifty, and only a world, never the plain dungeon', () => {
+        let shiny = 0;
+        for (let seed = 1; seed <= 4000; seed += 1) if (temperForWorld(['moss'], seed).rare) shiny += 1;
+        expect(shiny / 4000).toBeGreaterThan(PRISMATIC_WORLD_CHANCE - 0.012);
+        expect(shiny / 4000).toBeLessThan(PRISMATIC_WORLD_CHANCE + 0.012);
         expect(COMBO_HEAT_THEMES.filter((theme) => theme.rare).map((theme) => theme.id)).toEqual(['prismatic']);
-        expect(Math.min(...COMBO_HEAT_THEMES.map((theme) => theme.weight))).toBe(COMBO_HEAT_THEMES.find((theme) => theme.rare)!.weight);
-        expect(comboHeatThemeForSeed(Number.NaN).id).toBe(comboHeatThemeForSeed(0).id);
     });
 
     it('names every stage and stamp in every temper, with a colour per stage', () => {

@@ -243,7 +243,7 @@ export const createResolveBoardTurnTransition = ({
             board: tided ?? boardAfterRestless,
             turnsThisFloor: progress.turnsThisFloor,
             frozenUntilTurn: run.frozenUntilTurn,
-            cold: isColdWorld({ runSeed: run.runSeed, world: worldAfter }),
+            cold: isColdWorld({ world: worldAfter }),
             combo: runNonNegativeInteger(scoring.currentStreak),
             pinnedTileIds: boardCleanup.pinnedTileIds,
             runSeed: run.runSeed,

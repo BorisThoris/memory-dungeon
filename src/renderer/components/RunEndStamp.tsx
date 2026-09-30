@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
-import { comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
+import { temperForWorld } from '../../shared/combo-heat-rules';
+import type { TileSuit } from '../../shared/contracts';
 import { RUN_END_STAMP_COPY, runEndFlourish, runEndScoreLine, runEndVerdict } from '../copy/runEndStamp';
 import styles from './RunEndStamp.module.css';
 
@@ -8,7 +9,7 @@ import styles from './RunEndStamp.module.css';
  * The run's end, stamped: the verdict word slams in over the results the way a rank-up does in
  * play, the score line lands under it, a flourish stamp says the one extra thing worth saying,
  * and the choices come in one after another as stamps you can press. The tone is the run's own
- * temper (`comboHeatThemeForSeed`), so a frost run ends in frost.
+ * world's temper (`temperForWorld`), so a run that ended in a bone world ends in frost.
  *
  * The stamps are the page's real heading and buttons, not decoration over them: the h1 is the
  * verdict, the buttons carry the same accessible names as the ledger's did, and reduced motion
@@ -26,6 +27,8 @@ export interface RunEndStampProps {
     summary: Pick<RunSummary, 'totalScore' | 'highestLevel' | 'bestStreak'>;
     reason: RunEndReason | null | undefined;
     runSeed: number;
+    /** The world the run ended in. */
+    world?: readonly TileSuit[];
     personalBest: 'beaten' | 'matched' | null;
     actions: readonly RunEndStampAction[];
     reduceMotion: boolean;
@@ -33,8 +36,8 @@ export interface RunEndStampProps {
     eyebrow?: ReactNode;
 }
 
-export function RunEndStamp({ summary, reason, runSeed, personalBest, actions, reduceMotion, eyebrow }: RunEndStampProps) {
-    const temper = comboHeatThemeForSeed(runSeed);
+export function RunEndStamp({ summary, reason, runSeed, world, personalBest, actions, reduceMotion, eyebrow }: RunEndStampProps) {
+    const temper = temperForWorld(world, runSeed);
     const verdict = runEndVerdict(reason);
     const flourish = runEndFlourish(summary, personalBest);
     const tone = reason === 'miss_budget' ? 'miss' : reason === 'quit' || reason == null ? 'paper' : 'gold';

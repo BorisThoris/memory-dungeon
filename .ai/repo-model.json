@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2831,
     "codeFileCount": 1023,
-    "exportedSymbolCount": 3119,
+    "exportedSymbolCount": 3122,
     "contentItemCount": 10,
     "mechanicCount": 56,
     "stateFieldCount": 106,
-    "relationshipCount": 8180
+    "relationshipCount": 8184
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 520029,
-      "sha256": "e05d3a3303d832d3cdcebfcf7e5b62c032cb941b43b822399e74ca7e2d7ce36c"
+      "bytes": 520853,
+      "sha256": "2e53757216dbfb6cc878254824a984794bb3cc0553974d2f7a508153e096ca20"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -687,8 +687,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 27232,
-      "sha256": "fed66a8b0479bba6fc97f710726866044379658904a9acd645808f9393d1495d"
+      "bytes": 27963,
+      "sha256": "15e63210087db8a2bff84a94604739c7faf155cd720a96497464d6e2a465fdf4"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 41433,
-      "sha256": "1bc2ab6cc215c57c1c4189bfd5257ba6da674373d9415b1d87f38bcc26402b7a"
+      "bytes": 42308,
+      "sha256": "fddfde916b47836d384245e171fd06969a237aabf64bba1cbb3168936210475e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2380,7 +2380,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "77dfdeba28ba85bca91dba4d71cc3aca2fafb538037b333af0f3bb4db7e7f2b0"
+      "sha256": "881ec0864c8172e767ddb4a7125513dfbc7bf21f9144804aa52875d6337e2c31"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9447,8 +9447,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 25154,
-      "sha256": "064ea73131e02b60e6a8bc3c8b400d6bac16e272d9881fb09866b2fdbfac9c63"
+      "bytes": 25238,
+      "sha256": "2e7f63e37f7f1f3cc7e369bfd7750b4f44d8c5ec8ec1ac72103ae9f854584367"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9507,8 +9507,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 109314,
-      "sha256": "221695d7b96bc57404591ab5b96c89d438c7f25f91dd0dd02581d433aae087d2"
+      "bytes": 109288,
+      "sha256": "63928ac3be257cd8cf95e078140c1cbde354daabf69829075ba3259433963445"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9807,14 +9807,14 @@
     {
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
       "category": "test",
-      "bytes": 3978,
-      "sha256": "0bc8c78f225b6a8990fdae2d1de78e54790ecb0e613f1e9651ba42a182e08399"
+      "bytes": 3995,
+      "sha256": "35403677ee40374b48b09c150daf6e75aae128935aba80b432a02b5c8f945ec3"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "category": "source",
-      "bytes": 6794,
-      "sha256": "c3a9bc7e562d501e84ab307112c39d0e74d52f77f5ea54d6607fd56b126cee2e"
+      "bytes": 6950,
+      "sha256": "57726c5005593c8227fad6c651b63402e29028525b7354e0917df9c0883c6de1"
     },
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
@@ -9825,14 +9825,14 @@
     {
       "path": "src/renderer/components/RunEndStamp.test.tsx",
       "category": "test",
-      "bytes": 3761,
-      "sha256": "ccafb1a85f43d4165df9d91464cbd92b9eff8b06b144d215656a7b9685cba71c"
+      "bytes": 3807,
+      "sha256": "fbe3f4e877be6dc5da8d1e651cb559401f4d6a5706d028387b9d05b3fa49be0b"
     },
     {
       "path": "src/renderer/components/RunEndStamp.tsx",
       "category": "source",
-      "bytes": 4023,
-      "sha256": "7e26f61c6473f6491d38aa59b39bf2a01bc21de42af394ca99e0e570b72bf814"
+      "bytes": 4173,
+      "sha256": "d3112952cde267a9a8d17e098e16f20807b04db732054681b9d5e2c3fcf423db"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
@@ -9867,8 +9867,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 43895,
-      "sha256": "c5a66ecb8b366cdb5cfc7df73aaf42f3b228ffde264e1a6546c959111581fe9b"
+      "bytes": 43863,
+      "sha256": "e2ed0db26a15818d6e47d1559d63529f874cd581502d52cafe27cde51ff9eb54"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10005,14 +10005,14 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 5620,
-      "sha256": "20585e681ab1777e1aeb619415dedfdf235ef101c3525f2e645e912551e4fadd"
+      "bytes": 5447,
+      "sha256": "8eeb343cb1a4b119a6464aebe8357b666edc63cccdc1fc7de2cf352e6df06786"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 10831,
-      "sha256": "3b04df394ec42ad4692f5b39bec86ea07eb3ae169a5cc0e12af7fa4197804d54"
+      "bytes": 10460,
+      "sha256": "00d03d13928b33353cc8d2cf31c8718464a2a123047cfa9829b7881d01251698"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -12435,8 +12435,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 41739,
-      "sha256": "3bcf167f4cb6f442eaf21bbd07b20046ab6c44d700056ddac219c061b511520d"
+      "bytes": 42614,
+      "sha256": "6450f92478c6e94ec23449bca22639382cabe1c65485e6c82f37b19e3f97a1ec"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12663,8 +12663,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 22421,
-      "sha256": "da3baa9ee61a7d757843029f835ae4fd1eaf74f77873552a98b482079e792d67"
+      "bytes": 22399,
+      "sha256": "e12e469ad3db449e20ef7893b32ba5ab3a5e1020963598cd51779167c1835a9c"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -12855,14 +12855,14 @@
     {
       "path": "src/shared/combo-heat-rules.ts",
       "category": "source",
-      "bytes": 12667,
-      "sha256": "bcc72726c09f54f471f116190f6844025c220fbe9d02f34a089adaf19c367196"
+      "bytes": 14466,
+      "sha256": "09aa3665ce9091788f45ce6ede827657eecaab4c05da4ce7ce718fd5b0fdba79"
     },
     {
       "path": "src/shared/combo-heat-theme.test.ts",
       "category": "test",
-      "bytes": 4642,
-      "sha256": "99e44fe7f94a41071b9e1ea57eea9a97b875a8519c19fcbd4fc5f673b36605c6"
+      "bytes": 5122,
+      "sha256": "dbcf534439a420c44fd48bb9c18b64b2ff0d8b2feea9e1021a8a3e55cbd82973"
     },
     {
       "path": "src/shared/content-lock-state.ts",
@@ -13575,8 +13575,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 40480,
-      "sha256": "bffd422ef93bd2f5562f8873353a886e99068539eaccd61d4f82b1011f539da0"
+      "bytes": 40959,
+      "sha256": "564d6196bdc45255def53de6c55473d0b198efb9a12ac6ac763789438cb459b4"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14493,8 +14493,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 57445,
-      "sha256": "0043eb7fb8e71e69c47f9eb6f7a216562d07e04fb8b920da90ff37425c804f47"
+      "bytes": 58320,
+      "sha256": "bd4ef583b8ccf80a71bc8f748b207ce1f583782b230b5e2ca2d862fe46d5357f"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14517,8 +14517,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 82139,
-      "sha256": "95c074e5c42ce0d4a6e9a61a119fb40e3517442e946427e0ba2f89c31795f476"
+      "bytes": 83269,
+      "sha256": "a95dd7dc2ebdf1723a26602ee0b83b9bdb5aef2e0e4b6c7d729c02fa74d954fc"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14739,8 +14739,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 9790,
-      "sha256": "00d048ff535c38dd438370fde94be8c2ab41fd158da4e466eaa5dafc4bfbdd4b"
+      "bytes": 9768,
+      "sha256": "128eebc92830b019c4471f89357c7aec8f6c7ddd9a0a388b92b8b1744386d74d"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -14775,14 +14775,14 @@
     {
       "path": "src/shared/world-reaction-rules.test.ts",
       "category": "test",
-      "bytes": 6793,
-      "sha256": "5f9c023bce49c92b7785a18516392023ccc847f90330d2b23733b6631c210557"
+      "bytes": 6830,
+      "sha256": "7287792e39a6b3f583b399bab5ed67722b7d1e4be98b16e552748ae8facb8e87"
     },
     {
       "path": "src/shared/world-reaction-rules.ts",
       "category": "source",
-      "bytes": 15271,
-      "sha256": "19d8eb45c0c38df33d958216c210e1851011556b62328fd2e32850b9c533ae05"
+      "bytes": 15269,
+      "sha256": "43858eedbce303ba7838bc2bd981d9d48c98867718998049b84526bf2b8b7bd3"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -20008,7 +20008,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 493,
+      "lineCount": 495,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -20943,7 +20943,7 @@
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 130,
+      "lineCount": 133,
       "imports": [
         "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/runEndStamp.ts",
@@ -20966,7 +20966,7 @@
       "path": "src/renderer/components/RunEndStamp.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 64,
+      "lineCount": 65,
       "imports": [
         "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/runEndStamp.ts"
@@ -20979,7 +20979,7 @@
       "path": "src/renderer/components/RunEndStamp.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 93,
       "imports": [
         "file:src/renderer/copy/runEndStamp.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -21381,7 +21381,7 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 80,
+      "lineCount": 79,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -21396,7 +21396,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 198,
+      "lineCount": 194,
       "imports": [
         "file:src/renderer/copy/worldReactionCopy.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -29448,8 +29448,9 @@
       "path": "src/shared/combo-heat-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 266,
+      "lineCount": 294,
       "imports": [
+        "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts"
       ],
@@ -29468,13 +29469,16 @@
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
         "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
-        "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
         "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
         "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
         "symbol:src/shared/combo-heat-rules.ts#comboStageLabel",
         "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
         "symbol:src/shared/combo-heat-rules.ts#comboSurge",
-        "symbol:src/shared/combo-heat-rules.ts#romanNumeral"
+        "symbol:src/shared/combo-heat-rules.ts#PRISMATIC_WORLD_CHANCE",
+        "symbol:src/shared/combo-heat-rules.ts#romanNumeral",
+        "symbol:src/shared/combo-heat-rules.ts#runTemper",
+        "symbol:src/shared/combo-heat-rules.ts#temperForWorld",
+        "symbol:src/shared/combo-heat-rules.ts#WORLD_ELEMENT_TEMPER"
       ],
       "testedBy": [
         "file:src/renderer/components/sceneMood.test.ts",
@@ -29491,7 +29495,7 @@
       "path": "src/shared/combo-heat-theme.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 93,
+      "lineCount": 106,
       "imports": [
         "file:src/shared/combo-heat-rules.ts"
       ],
@@ -35238,7 +35242,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1373,
+      "lineCount": 1390,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -36162,7 +36166,7 @@
       "path": "src/shared/world-reaction-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 118,
+      "lineCount": 119,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/world-reaction-rules.ts"
@@ -36175,7 +36179,7 @@
       "path": "src/shared/world-reaction-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 301,
+      "lineCount": 303,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
@@ -39708,8 +39712,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 492,
-      "endLine": 492
+      "line": 494,
+      "endLine": 494
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -40292,64 +40296,64 @@
       "name": "RUN_END_FLOURISH_MS",
       "kind": "value",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
       "name": "RUN_END_VERDICT_MS",
       "kind": "value",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
       "name": "RunEndCinematic",
       "kind": "function",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 36,
-      "endLine": 129
+      "line": 39,
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
       "name": "RunEndCinematicPhase",
       "kind": "type",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 20,
-      "endLine": 20
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps",
       "name": "RunEndCinematicProps",
       "kind": "interface",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 25,
-      "endLine": 34
+      "line": 26,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
       "name": "RunEndStamp",
       "kind": "function",
       "file": "src/renderer/components/RunEndStamp.tsx",
-      "line": 36,
-      "endLine": 89
+      "line": 39,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampAction",
       "name": "RunEndStampAction",
       "kind": "interface",
       "file": "src/renderer/components/RunEndStamp.tsx",
-      "line": 17,
-      "endLine": 23
+      "line": 18,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStampProps",
       "name": "RunEndStampProps",
       "kind": "interface",
       "file": "src/renderer/components/RunEndStamp.tsx",
-      "line": 25,
-      "endLine": 34
+      "line": 26,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/RunLoadingScreen.tsx#default",
@@ -40732,72 +40736,72 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 172,
-      "endLine": 192
+      "line": 168,
+      "endLine": 188
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
       "name": "deriveTurnCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 62,
-      "endLine": 109
+      "line": 61,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveWorldCallouts",
       "name": "deriveWorldCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 147,
-      "endLine": 168
+      "line": 143,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveZoneCallouts",
       "name": "deriveZoneCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 117,
-      "endLine": 140
+      "line": 113,
+      "endLine": 136
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCallout",
       "name": "ScreenCallout",
       "kind": "interface",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 41,
-      "endLine": 53
+      "line": 40,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutKind",
       "name": "ScreenCalloutKind",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutTone",
       "name": "ScreenCalloutTone",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#stageTone",
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 195,
-      "endLine": 195
+      "line": 191,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#WorldCalloutRun",
       "name": "WorldCalloutRun",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 170,
-      "endLine": 170
+      "line": 166,
+      "endLine": 166
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -50252,168 +50256,192 @@
       "name": "COMBO_ASCENSION_SPAN",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_STAGE_FROM",
       "name": "COMBO_HEAT_STAGE_FROM",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 22,
-      "endLine": 28
+      "line": 23,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_HEAT_THEMES",
       "name": "COMBO_HEAT_THEMES",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 147,
-      "endLine": 196
+      "line": 151,
+      "endLine": 207
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#COMBO_MILESTONE_CALLOUT",
       "name": "COMBO_MILESTONE_CALLOUT",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 224,
-      "endLine": 225
+      "line": 252,
+      "endLine": 253
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboAscension",
       "name": "comboAscension",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 51,
-      "endLine": 54
+      "line": 52,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboAscensionCallout",
       "name": "comboAscensionCallout",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 90,
-      "endLine": 91
+      "line": 91,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboAscensionReached",
       "name": "comboAscensionReached",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 57,
-      "endLine": 61
+      "line": 58,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeat",
       "name": "comboHeat",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 98,
-      "endLine": 98
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatLevels",
       "name": "comboHeatLevels",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 248,
-      "endLine": 265
+      "line": 276,
+      "endLine": 293
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatLevels",
       "name": "ComboHeatLevels",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 228,
-      "endLine": 244
+      "line": 256,
+      "endLine": 272
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStage",
       "name": "comboHeatStage",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 32,
-      "endLine": 40
+      "line": 33,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatStage",
       "name": "ComboHeatStage",
       "kind": "type",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatStageIndex",
       "name": "comboHeatStageIndex",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatTheme",
       "name": "ComboHeatTheme",
       "kind": "interface",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 127,
-      "endLine": 145
-    },
-    {
-      "id": "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
-      "name": "comboHeatThemeForSeed",
-      "kind": "value",
-      "file": "src/shared/combo-heat-rules.ts",
-      "line": 199,
-      "endLine": 209
+      "line": 133,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
       "name": "ComboHeatThemeId",
       "kind": "type",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 125,
-      "endLine": 125
+      "line": 131,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboMilestoneReached",
       "name": "comboMilestoneReached",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 215,
-      "endLine": 222
+      "line": 243,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboStageLabel",
       "name": "comboStageLabel",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 83,
-      "endLine": 87
+      "line": 84,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboStageReached",
       "name": "comboStageReached",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 106,
-      "endLine": 112
+      "line": 107,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#comboSurge",
       "name": "comboSurge",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 69,
-      "endLine": 72
+      "line": 70,
+      "endLine": 73
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#PRISMATIC_WORLD_CHANCE",
+      "name": "PRISMATIC_WORLD_CHANCE",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 218,
+      "endLine": 218
     },
     {
       "id": "symbol:src/shared/combo-heat-rules.ts#romanNumeral",
       "name": "romanNumeral",
       "kind": "value",
       "file": "src/shared/combo-heat-rules.ts",
-      "line": 75,
-      "endLine": 80
+      "line": 76,
+      "endLine": 81
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#runTemper",
+      "name": "runTemper",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 237,
+      "endLine": 237
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#temperForWorld",
+      "name": "temperForWorld",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 227,
+      "endLine": 234
+    },
+    {
+      "id": "symbol:src/shared/combo-heat-rules.ts#WORLD_ELEMENT_TEMPER",
+      "name": "WORLD_ELEMENT_TEMPER",
+      "kind": "value",
+      "file": "src/shared/combo-heat-rules.ts",
+      "line": 210,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/content-lock-state.ts#BuildFlavour",
@@ -59476,32 +59504,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1266,
-      "endLine": 1348
+      "line": 1276,
+      "endLine": 1365
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 286,
-      "endLine": 1253
+      "line": 288,
+      "endLine": 1263
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1372,
-      "endLine": 1372
+      "line": 1389,
+      "endLine": 1389
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 141,
-      "endLine": 152
+      "line": 143,
+      "endLine": 154
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -59516,16 +59544,16 @@
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1350,
-      "endLine": 1353
+      "line": 1367,
+      "endLine": 1370
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 134,
-      "endLine": 139
+      "line": 136,
+      "endLine": 141
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
@@ -59533,15 +59561,15 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 103,
-      "endLine": 132
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1355,
-      "endLine": 1370
+      "line": 1372,
+      "endLine": 1387
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -60908,16 +60936,16 @@
       "name": "EMBER_WORLD_AFTERGLOW_BONUS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 257,
-      "endLine": 257
+      "line": 259,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#freePairsLeft",
       "name": "freePairsLeft",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 128,
-      "endLine": 135
+      "line": 130,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#FROST_FREE_PAIRS_KEPT",
@@ -60964,48 +60992,48 @@
       "name": "FrostStep",
       "kind": "interface",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 155,
-      "endLine": 161
+      "line": 157,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#isColdWorld",
       "name": "isColdWorld",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 122,
-      "endLine": 123
+      "line": 125,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#isTileFrozen",
       "name": "isTileFrozen",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 125,
-      "endLine": 125
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#mossOvergrowthIndex",
       "name": "mossOvergrowthIndex",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 289,
-      "endLine": 297
+      "line": 291,
+      "endLine": 299
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveFrostStep",
       "name": "resolveFrostStep",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 168,
-      "endLine": 232
+      "line": 170,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveTideSwap",
       "name": "resolveTideSwap",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 262,
-      "endLine": 286
+      "line": 264,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#resolveVoidSpew",
@@ -61020,40 +61048,40 @@
       "name": "resolveWorldShift",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 244,
-      "endLine": 252
+      "line": 246,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#runWorldShifts",
       "name": "runWorldShifts",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 300,
-      "endLine": 300
+      "line": 302,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#thawBoard",
       "name": "thawBoard",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 146,
-      "endLine": 149
+      "line": 148,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#thawIfStuck",
       "name": "thawIfStuck",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 152,
-      "endLine": 153
+      "line": 154,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#TIDE_EVERY_TURNS",
       "name": "TIDE_EVERY_TURNS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 260,
-      "endLine": 260
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#VOID_SPEW_FROM",
@@ -61092,24 +61120,24 @@
       "name": "WORLD_MAX_ELEMENTS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 238,
-      "endLine": 238
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#WORLD_SHIFT_PAIRS",
       "name": "WORLD_SHIFT_PAIRS",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 237,
-      "endLine": 237
+      "line": 239,
+      "endLine": 239
     },
     {
       "id": "symbol:src/shared/world-reaction-rules.ts#worldHas",
       "name": "worldHas",
       "kind": "value",
       "file": "src/shared/world-reaction-rules.ts",
-      "line": 254,
-      "endLine": 254
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#canIgniteZone",
@@ -63101,7 +63129,7 @@
         },
         {
           "path": "src/renderer/components/screenCallouts.ts",
-          "line": 38
+          "line": 37
         }
       ],
       "tests": [
@@ -76376,12 +76404,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
-      "source": "file:src/shared/combo-heat-rules.ts",
-      "target": "symbol:src/shared/combo-heat-rules.ts#comboHeatThemeForSeed",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#ComboHeatThemeId",
@@ -76412,9 +76434,33 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#PRISMATIC_WORLD_CHANCE",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#PRISMATIC_WORLD_CHANCE",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#romanNumeral",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "symbol:src/shared/combo-heat-rules.ts#romanNumeral",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#runTemper",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#runTemper",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#temperForWorld",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#temperForWorld",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-heat-rules.ts->symbol:src/shared/combo-heat-rules.ts#WORLD_ELEMENT_TEMPER",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "symbol:src/shared/combo-heat-rules.ts#WORLD_ELEMENT_TEMPER",
       "kind": "exports"
     },
     {
@@ -97856,6 +97902,12 @@
       "id": "imports:src/shared/combo-heat-rules.test.ts->src/shared/combo-heat-rules.ts",
       "source": "file:src/shared/combo-heat-rules.test.ts",
       "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-heat-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {

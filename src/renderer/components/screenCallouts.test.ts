@@ -40,15 +40,14 @@ describe('the screen stamps a turn earns', () => {
         expect(new Set(callouts.map((callout) => callout.key)).size).toBe(3);
     });
 
-    it('stamps in the run\'s temper: its words, its colours, a reveal the first time it warms, and RARE on the shiny', () => {
+    it('stamps in the world\'s temper: its words, its colours, and RARE on the shiny; no run-start reveal', () => {
         const frost = COMBO_HEAT_THEMES.find((theme) => theme.id === 'frost')!;
         const cold = deriveTurnCallouts(turn({ before: 5, after: 6 }), 3, frost);
         expect(cold[0]).toMatchObject({ kind: 'rank', title: 'COLD!', color: frost.colors[2] });
         expect(cold[0]?.rare).toBeUndefined();
-        const reveal = deriveTurnCallouts(turn({ before: 2, after: 3 }), 3, frost);
-        expect(reveal).toEqual([expect.objectContaining({ kind: 'temper', size: 'minor', title: 'FROST RUN' })]);
-        // An ember run names its weather too (the default temper when none is passed is ember).
-        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3)).toEqual([expect.objectContaining({ kind: 'temper', title: 'EMBER RUN' })]);
+        // A run is not born into a temper, so warming up stamps nothing; a world shift has its own stamp.
+        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3, frost)).toEqual([]);
+        expect(deriveTurnCallouts(turn({ before: 2, after: 3 }), 3)).toEqual([]);
         const prismatic = COMBO_HEAT_THEMES.find((theme) => theme.id === 'prismatic')!;
         const shiny = deriveTurnCallouts(turn({ before: 24, after: 25 }), 3, prismatic);
         expect(shiny[0]).toMatchObject({ kind: 'rank', title: 'MYTHIC!', rare: true, sub: 'RARE · Combo ×25' });

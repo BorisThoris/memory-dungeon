@@ -36,13 +36,14 @@ describe('the run, stamped', () => {
                 reason="miss_budget"
                 reduceMotion={false}
                 runSeed={14}
+                world={['bone']}
                 summary={{ totalScore: 12_345, highestLevel: 9, bestStreak: 12 }}
             />
         );
         expect(screen.getByRole('heading', { level: 1, name: 'JOURNEY OVER' })).toBeInTheDocument();
         expect(screen.getByTestId('run-end-score-line')).toHaveTextContent('12,345 · Floor 9');
         expect(screen.getByTestId('run-end-flourish')).toHaveTextContent('NEW RECORD!');
-        // Seed 14 is a frost run: the stamp carries the temper.
+        // The run ended in a bone world: the stamp carries its frost temper.
         expect(screen.getByTestId('run-end-stamp')).toHaveAttribute('data-temper', 'frost');
         expect(screen.getByTestId('run-end-stamp')).toHaveAttribute('data-tone', 'miss');
         fireEvent.click(screen.getByRole('button', { name: 'Play Again - start a new run after this expedition' }));

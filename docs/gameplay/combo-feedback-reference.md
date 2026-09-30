@@ -335,6 +335,16 @@ always be played:
 These ship to the test realm (`yarn deploy:pages:test`: `memory-dungeon-test`, a Workers static
 site deployed with `wrangler deploy --name`) for play before they go to production.
 
+## Runs evolve, they are not born into a biome (2026-09-30)
+
+The owner: "I don't want runs to be bound to a biome; runs should change and evolve as you go."
+The temper had been rolled from the seed and held for the whole run, so a run was a frost run from
+its first card. It now follows the world the player's pops make (`temperForWorld`): every run
+opens in the plain dungeon, ember; a big pop of bone cards turns it to frost (and the cold starts
+freezing cards), of tide to storm, of moss to a new green temper, of ember back to fire. Two
+elements combine, the latest leading the palette and both bringing their weather. A world a pop
+makes is prismatic one time in fifty, so the shiny is found in play, not rolled at the door.
+
 ## What is deliberately not borrowed
 
 - **A decay timer.** The tables' streaks die on a clock; here the only thing that ends a combo is

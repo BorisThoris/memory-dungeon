@@ -15,7 +15,7 @@ describe('the end as a cut-scene', () => {
 
     it('plasters the verdict, then the flourish, then the choices, on its own clock', () => {
         render(
-            <RunEndCinematic actions={actions()} personalBest="beaten" reason="miss_budget" reasonLine="You ran out of misses on floor 9." reduceMotion={false} runSeed={14} summary={{ totalScore: 12_345, highestLevel: 9, bestStreak: 12 }} />
+            <RunEndCinematic actions={actions()} personalBest="beaten" reason="miss_budget" reasonLine="You ran out of misses on floor 9." reduceMotion={false} runSeed={14} summary={{ totalScore: 12_345, highestLevel: 9, bestStreak: 12 }} world={['bone']} />
         );
         const stage = screen.getByTestId('run-end-cinematic');
         expect(stage).toHaveAttribute('data-phase', 'verdict');

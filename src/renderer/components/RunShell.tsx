@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElemen
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { comboHeatLevels, comboHeatThemeForSeed, comboStageLabel } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboStageLabel, runTemper } from '../../shared/combo-heat-rules';
 import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
 import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
 import { zoneRailLine } from '../copy/zoneToolCopy';
@@ -298,7 +298,7 @@ const RunShell = ({
     // The ladder above the ladder: the combo's heat stage (`combo-heat-rules.ts`), which keeps the
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
-    const temper = comboHeatThemeForSeed(run.runSeed);
+    const temper = runTemper(run);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.

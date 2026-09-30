@@ -228,6 +228,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     reduceMotion={settings.reduceMotion}
                     runSeed={run.runSeed}
                     summary={summary}
+                    world={run.world}
                 />
             ) : (
             <div className={styles.foreground}>
@@ -318,6 +319,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             reduceMotion={settings.reduceMotion}
                             runSeed={run.runSeed}
                             summary={summary}
+                            world={run.world}
                         />
                         {/* How it ended, before how far it got: the one fact this screen has that the run bar did not. */}
                         {endReasonLine ? (

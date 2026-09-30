@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
-import { comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
+import { temperForWorld } from '../../shared/combo-heat-rules';
+import type { TileSuit } from '../../shared/contracts';
 import { RUN_END_STAMP_COPY, runEndFlourish, runEndScoreLine, runEndVerdict } from '../copy/runEndStamp';
 import type { RunEndStampAction } from './RunEndStamp';
 import styles from './RunEndCinematic.module.css';
@@ -28,13 +29,15 @@ export interface RunEndCinematicProps {
     /** How the run ended, in words, under the verdict; null for a summary that predates the reason. */
     reasonLine: string | null;
     runSeed: number;
+    /** The world the run ended in: its temper colours the end. */
+    world?: readonly TileSuit[];
     personalBest: 'beaten' | 'matched' | null;
     actions: readonly RunEndStampAction[];
     reduceMotion: boolean;
 }
 
-export function RunEndCinematic({ summary, reason, reasonLine, runSeed, personalBest, actions, reduceMotion }: RunEndCinematicProps) {
-    const temper = comboHeatThemeForSeed(runSeed);
+export function RunEndCinematic({ summary, reason, reasonLine, runSeed, world, personalBest, actions, reduceMotion }: RunEndCinematicProps) {
+    const temper = temperForWorld(world, runSeed);
     const verdict = runEndVerdict(reason);
     const flourish = runEndFlourish(summary, personalBest);
     const [phase, setPhase] = useState<RunEndCinematicPhase>(reduceMotion ? 'choices' : 'verdict');

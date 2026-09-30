@@ -122,7 +122,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
-import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStageReached } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatStageIndex, comboStageReached, runTemper } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
@@ -1085,8 +1085,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The combo heat (`combo-heat-rules.ts`): the stage every surface below reads, once per render.
     const comboHeatLevelsNow = comboHeatLevels(run.stats.currentStreak);
-    // The run's temper (`comboHeatThemeForSeed`): the element its heat burns in, rolled from the seed.
-    const comboTemper = comboHeatThemeForSeed(run.runSeed);
+    // The temper the heat burns in (`runTemper`): the world the run's own pops made, or the plain dungeon's.
+    const comboTemper = runTemper(run);
     /*
      * The stage the latest turn reached (`comboStageReached`): the rank-up stamp and its sting
      * are keyed to that turn, so a run that opens already Blazing shows nothing until it climbs.

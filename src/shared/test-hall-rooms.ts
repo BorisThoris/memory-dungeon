@@ -125,6 +125,8 @@ export type TestHallStep =
     | { readonly do: 'pressFrozen' }
     /** Miss on the first two face-down cards of different pairs, whatever a pop has left. */
     | { readonly do: 'missAny' }
+    /** Match the first pair with both halves face down and free of ice. */
+    | { readonly do: 'matchFree' }
     | { readonly do: 'clear' }
     /** Descend from a cleared floor to the next one, which opens on its study window. */
     | { readonly do: 'advance' }
@@ -935,10 +937,10 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'frost-freeze',
         title: 'The cold freezes',
-        mechanic: 'In a cold world every third turn freezes two cards for two turns; a frozen card cannot be turned. Two whole pairs always stay free.',
+        mechanic: 'In a cold world (bone) every third turn freezes two cards for two turns; a frozen card cannot be turned. Two whole pairs always stay free.',
         graphMechanicIds: ['hazard.frost_freeze'],
-        tryThis: 'A frost run. Miss three times: two cards ice over. Press one - nothing turns. Two turns later the ice is gone.',
-        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e'], { misses: 4, run: { runSeed: 14 } }),
+        tryThis: 'A bone world. Miss three times: two cards ice over. Press one - nothing turns. Two turns later the ice is gone.',
+        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e'], { misses: 4, run: { world: ['bone'] } }),
         script: [
             { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one, nothing freezes', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) },
             { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two, nothing freezes', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) },
@@ -948,8 +950,16 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: (r) => (frozenCount(r) === 2 && r.frostFreezesThisFloor === 1 && r.board && freePairsLeft(r.board) >= 2 ? null : `frozen ${frozenCount(r)}, freezes ${r.frostFreezesThisFloor}`)
             },
             { step: { do: 'pressFrozen' }, says: 'a frozen card cannot be turned', expect: (r) => (r.board?.flippedTileIds.length === 0 ? null : `up ${r.board?.flippedTileIds.join(',')}`) },
-            { step: { do: 'match', pairKey: 'g' }, says: 'the ice holds through the next turn', expect: (r) => (frozenCount(r) === 2 ? null : `frozen ${frozenCount(r)}`) },
-            { step: { do: 'match', pairKey: 'h' }, says: 'and thaws after its two turns', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) }
+            {
+                step: { do: 'matchFree' },
+                says: 'the ice holds through the next turn - unless the pop takes an iced card, which shatters it',
+                expect: (r, b) => {
+                    const iced = (b.board?.tiles ?? []).filter((t) => t.frozen === true).map((t) => t.id);
+                    const shattered = iced.filter((id) => r.board?.tiles.find((t) => t.id === id)?.state !== 'hidden');
+                    return frozenCount(r) === iced.length - shattered.length ? null : `frozen ${frozenCount(r)} of ${iced.length}, ${shattered.length} shattered`;
+                }
+            },
+            { step: { do: 'matchFree' }, says: 'and thaws after its two turns', expect: (r) => (frozenCount(r) === 0 ? null : `frozen ${frozenCount(r)}`) }
         ]
     },
     {
@@ -1267,7 +1277,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
     switch (step.do) {
         case 'match': {
             const [first, second] = halvesOf(run, step.pairKey);
-            if (!first || !second) return null;
+            // An iced half cannot be turned: the step cannot be played, rather than passing on a no-op.
+            if (!first || !second || first.frozen === true || second.frozen === true) return null;
             return resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
         }
         case 'miss':
@@ -1307,6 +1318,12 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'zoneFlip': {
             const next = zoneFlipTile(run, step.tileId);
             return next === run ? null : next;
+        }
+        case 'matchFree': {
+            const free = (run.board?.tiles ?? []).find(
+                (t) => t.state === 'hidden' && t.frozen !== true && t.pairKey !== WILD_PAIR_KEY && halvesOf(run, t.pairKey).length === 2 && halvesOf(run, t.pairKey).every((h) => h.frozen !== true)
+            );
+            return free ? playTestHallStep(run, { do: 'match', pairKey: free.pairKey }) : null;
         }
         case 'missAny': {
             const hidden = (run.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.frozen !== true && t.pairKey !== WILD_PAIR_KEY);
