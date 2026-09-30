@@ -332,8 +332,8 @@ always be played:
   bolts and two cards trading places every third turn; moss green spores and a match overgrowing
   the card beside it; bone snow and the cold. The rail names the world; a stamp announces a shift.
 
-These ship to the test realm (`yarn deploy:pages:test`, the `memory-dungeon-test` Pages project)
-for play before they go to production.
+These ship to the test realm (`yarn deploy:pages:test`: `memory-dungeon-test`, a Workers static
+site deployed with `wrangler deploy --name`) for play before they go to production.
 
 ## What is deliberately not borrowed
 
