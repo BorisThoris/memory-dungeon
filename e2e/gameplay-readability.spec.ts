@@ -42,7 +42,17 @@ test.describe('Gameplay readability hardening', () => {
                     return { text: node.textContent, left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: box.width };
                 }).filter((box) => box.width > 0)
             );
-            expect(labels.length, 'the chain ladder has visible tier names').toBeGreaterThanOrEqual(3);
+            // A phone's head keeps the combo and its multiplier and leaves the ladder to the desktop
+            // margin (RunShell.module.css); everywhere else the rungs are named.
+            const shellLayout = await page.locator('[data-shell-layout]').first().getAttribute('data-shell-layout');
+            const phone = shellLayout === 'phone-portrait' || shellLayout === 'phone-landscape';
+            if (phone) {
+                expect(labels, 'the phone head draws no ladder').toEqual([]);
+                await expect(page.getByTestId('hud-combo')).toBeVisible();
+                await expect(page.getByTestId('hud-chain-rung-value')).toBeVisible();
+            } else {
+                expect(labels.length, 'the chain ladder has visible tier names').toBeGreaterThanOrEqual(3);
+            }
             for (let i = 0; i < labels.length; i += 1) {
                 for (let j = i + 1; j < labels.length; j += 1) {
                     const a = labels[i]!;
@@ -89,7 +99,9 @@ test.describe('Gameplay readability hardening', () => {
 
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
 
-        const powerButton = page.getByTestId('game-action-dock').getByRole('button').first();
+        // A phone folds the powers into Items (RunShell): open the bag, then press the first power.
+        await page.getByTestId('tool-tray-toggle').click();
+        const powerButton = page.getByTestId('tool-tray').getByRole('button').first();
         await powerButton.click({ force: true });
         /*
          * Arming a power used to open a teaching panel. The rebuild teaches on the board instead —

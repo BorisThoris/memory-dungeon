@@ -83,6 +83,8 @@ export interface TileBoardRow {
 
 export interface BuildTileBoardRowsInput {
     allowGambitThirdFlip: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     board: BoardState;
     bountyPairKey: string | null;
     clumpReadNextTileIds?: ReadonlySet<string>;
@@ -120,6 +122,7 @@ export interface BuildTileBoardRowsInput {
 
 export const buildTileBoardRows = ({
     allowGambitThirdFlip,
+    zoneFlipCapacity,
     board,
     bountyPairKey,
     clumpReadNextTileIds,
@@ -157,7 +160,7 @@ export const buildTileBoardRows = ({
     const totalColumns = board.columns;
     const totalRows = board.rows;
     const flippedN = board.flippedTileIds.length;
-    const flipLocked = isTileBoardFlipLocked({ allowGambitThirdFlip, flippedTileCount: flippedN });
+    const flipLocked = isTileBoardFlipLocked({ allowGambitThirdFlip, flippedTileCount: flippedN, zoneFlipCapacity });
     const tutorialPairOrdinalByKey = getTutorialPairOrdinalByKey(board, showTutorialPairMarkers, onboardingTargetTileIds);
     const traitOpportunityByTileId = new Map(
         getTraitOpportunitySummary(board).tiles.map((opportunity) => [opportunity.tileId, opportunity])

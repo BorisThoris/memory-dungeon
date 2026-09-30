@@ -52,9 +52,10 @@ export const MOBILE_CAMERA_FIT_MARGIN = 0.76;
  * A phone held upright: the width is the scarce axis and nothing sits beside the board, so the
  * bleed margin that keeps a sideways phone's board clear of its chrome only made the tiles small.
  * On a 390px phone the 6×4 clumped board took a third of its stage at 0.76; the suits and the clump
- * rings need the width more than the pinch gesture needs a margin.
+ * rings need the width more than the pinch gesture needs a margin, and with the phone dock folded
+ * into Items (RunShell) nothing but the screen edge sits beside it.
  */
-export const PORTRAIT_CAMERA_FIT_MARGIN = 0.92;
+export const PORTRAIT_CAMERA_FIT_MARGIN = 0.97;
 
 /** The camera-mode fit margin for a stage: tighter when the stage is taller than it is wide. */
 export const getCameraFitMargin = ({ viewportHeight, viewportWidth }: { viewportHeight: number; viewportWidth: number }): number =>

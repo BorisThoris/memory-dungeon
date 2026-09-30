@@ -70,6 +70,7 @@ import {
     TilePickMeshRegistryContext
 } from './tileBoardSceneRegistries';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
+import type { TileBezelActivityGate } from './tileFrameActivity';
 import { getTileBoardSurfaceVariant } from './tileBoardSurfaceVariant';
 import { frontRoughnessVariantForSurface, overlayVariantForSurface } from './tileBoardTextureVariant';
 import { initialTileBoardCardTint } from './tileBoardInitialCardTint';
@@ -448,12 +449,7 @@ const TileBezelInner = ({
         };
     }, [focusGlowMaterial, hoverBackGlowMaterial, hoverFrontGlowMaterial, matchedRimFireMaterial, resolvingGlowMaterial]);
     const prevTileMatchedRef = useRef(false);
-    const lastActivityVisualGateRef = useRef<{
-        textureRevision: number;
-        keyboardFocused: boolean;
-        focusDimmed: boolean;
-        graphicsQuality: GraphicsQualityPreset;
-    } | null>(null);
+    const lastActivityVisualGateRef = useRef<TileBezelActivityGate | null>(null);
 
     useLayoutEffect(() => {
         bagRef.current = createOrUpdateTileBezelFrameBag(bagRef.current, {

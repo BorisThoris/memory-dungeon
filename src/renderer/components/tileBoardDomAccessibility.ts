@@ -23,6 +23,7 @@ import {
     getTraitRouteReadabilityTier
 } from './tileBoardReadability';
 import { isTilePickable } from './tileBoardPick';
+import { isTileBoardFlipLocked } from './tileBoardFlipLock';
 
 const EMPTY_ROUTE_SETUP_TARGETS: ReadonlySet<string> = new Set();
 
@@ -274,9 +275,17 @@ export const getPowerTargetAriaText = (
     return '';
 };
 
-export const getPickableTileIds = (board: BoardState, interactive: boolean, allowGambitThirdFlip: boolean): string[] => {
-    const flippedN = board.flippedTileIds.length;
-    const flipLocked = flippedN >= 2 && !(allowGambitThirdFlip && flippedN === 2);
+export const getPickableTileIds = (
+    board: BoardState,
+    interactive: boolean,
+    allowGambitThirdFlip: boolean,
+    zoneFlipCapacity = 0
+): string[] => {
+    const flipLocked = isTileBoardFlipLocked({
+        allowGambitThirdFlip,
+        flippedTileCount: board.flippedTileIds.length,
+        zoneFlipCapacity
+    });
     const ids: string[] = [];
     for (const tile of board.tiles) {
         if (tile.state === 'removed') {
@@ -299,9 +308,10 @@ export const moveFocusInGrid = (
     fromId: string | null,
     dir: 'up' | 'down' | 'left' | 'right',
     interactive: boolean,
-    allowGambitThirdFlip: boolean
+    allowGambitThirdFlip: boolean,
+    zoneFlipCapacity = 0
 ): string | null => {
-    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
+    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity));
     if (pickable.size === 0) {
         return null;
     }

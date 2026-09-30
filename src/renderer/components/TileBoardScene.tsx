@@ -127,6 +127,8 @@ interface TileBoardSceneProps {
     dimmedTileIds?: ReadonlySet<string>;
     /** When true with two flips, allow picking a third tile (gambit) instead of locking hidden tiles. */
     allowGambitThirdFlip?: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     /** PERF-007: caps texture anisotropy vs device max. */
     graphicsQuality?: GraphicsQualityPreset;
     /** Keyboard focus ring target - only set while the board application region is actually focused (see `TileBoard`; WebGL canvas is `aria-hidden`, SR uses the app region + live region). */
@@ -193,6 +195,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     boardEntranceStaggerTileCount = 0,
     dimmedTileIds,
     allowGambitThirdFlip = false,
+    zoneFlipCapacity = 0,
     graphicsQuality = 'medium',
     focusedTileId = null,
     pairProximityHintsEnabled = true,
@@ -298,6 +301,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     } = useMemo(() => {
         return buildTileBoardSceneModel({
             allowGambitThirdFlip,
+            zoneFlipCapacity,
             board,
             bountyPairKey,
             cardHeight: CARD_HEIGHT,
@@ -338,6 +342,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         });
     }, [
         allowGambitThirdFlip,
+        zoneFlipCapacity,
         board,
         bountyPairKey,
         compact,

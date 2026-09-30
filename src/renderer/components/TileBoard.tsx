@@ -394,6 +394,8 @@ interface TileBoardProps {
     } | null;
     peekRevealedTileIds?: string[];
     allowGambitThirdFlip?: boolean;
+    /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
+    zoneFlipCapacity?: number;
     wideRecallInPlay?: boolean;
     silhouetteDuringPlay?: boolean;
     nBackAnchorPairKey?: string | null;
@@ -674,6 +676,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     recoveryContext = null,
     peekRevealedTileIds = [],
         allowGambitThirdFlip = false,
+        zoneFlipCapacity = 0,
         wideRecallInPlay = false,
         silhouetteDuringPlay = false,
         nBackAnchorPairKey = null,
@@ -840,6 +843,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     } = useMemo(() => {
         return buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip,
+            zoneFlipCapacity,
             board,
             boardApplicationFocused,
             debugPeekActive,
@@ -854,6 +858,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         });
     }, [
         allowGambitThirdFlip,
+        zoneFlipCapacity,
         board,
         boardApplicationFocused,
         debugPeekActive,
@@ -1038,7 +1043,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [board, includeDevAttributes]);
 
     useEffect(() => {
-        const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
+        const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity);
         let active = true;
         queueMicrotask(() => {
             if (!active) {
@@ -2309,7 +2314,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const handleBoardApplicationFocus = useCallback((): void => {
         setBoardApplicationFocused(true);
         setFocusedTileId((cur) => {
-            const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
+            const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity);
             if (pickable.length === 0) {
                 return null;
             }
@@ -2334,7 +2339,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             if (!boardGraphicsOk || !interactive) {
                 return;
             }
-            const rawPickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
+            const rawPickable = getPickableTileIds(board, interactive, allowGambitThirdFlip, zoneFlipCapacity);
             const guidedPickable =
                 guidedTargetTileIds.length > 0
                     ? rawPickable.filter((tileId) => guidedTargetTileIds.includes(tileId))
@@ -2356,7 +2361,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return;
             }
             if (dir) {
-                const next = moveFocusInGrid(board, focusedTileId, dir, interactive, allowGambitThirdFlip);
+                const next = moveFocusInGrid(board, focusedTileId, dir, interactive, allowGambitThirdFlip, zoneFlipCapacity);
                 if (next && next !== focusedTileId) {
                     // Consumed only when the grid actually moved. At the edge of the board the key
                     // is left unhandled on purpose, so a controller's directional focus driver can
@@ -2368,6 +2373,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         },
         [
             allowGambitThirdFlip,
+            zoneFlipCapacity,
             board,
             boardGraphicsOk,
             focusedTileId,
@@ -3308,6 +3314,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 >
                                     <TileBoardScene
                                         allowGambitThirdFlip={allowGambitThirdFlip}
+                                        zoneFlipCapacity={zoneFlipCapacity}
                                         board={board}
                                         cardHeat={cardHeat}
                                         combo={combo}

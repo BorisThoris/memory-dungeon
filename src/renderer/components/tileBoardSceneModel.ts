@@ -31,6 +31,7 @@ export const buildTileBoardSceneModel = ({
 }: BuildTileBoardSceneModelInput): TileBoardSceneModel => {
     const flipLocked = isTileBoardFlipLocked({
         allowGambitThirdFlip: rowInput.allowGambitThirdFlip,
+        zoneFlipCapacity: rowInput.zoneFlipCapacity,
         flippedTileCount: rowInput.board.flippedTileIds.length
     });
     const tileBezelRows = buildTileBoardRows({

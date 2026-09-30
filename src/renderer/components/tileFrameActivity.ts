@@ -6,6 +6,26 @@ import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
 /**
+ * What a tile last drew, compared against its props on every frame to decide whether it needs one.
+ *
+ * The tile's own state is part of it. Without it a card that changed state without changing pose
+ * was never woken: a bombed card goes `flipped` -> `removed` while staying face up, so its rotation,
+ * lift and depth all already matched and the gate said "idle" - the burst and the departure never
+ * started, and the card stayed on the board face up with its pick slab switched off. A player saw
+ * a flipped card that could not be tapped.
+ */
+export type TileBezelActivityGate = {
+    traitRouteReadabilityIntensity?: string;
+    textureRevision: number;
+    keyboardFocused: boolean;
+    focusDimmed: boolean;
+    graphicsQuality: GraphicsQualityPreset;
+    tileState?: Tile['state'];
+    faceUp?: boolean;
+    pickable?: boolean;
+};
+
+/**
  * Subset of `TileBezelFrameBag` / props used to decide whether consolidated `useFrame` must run
  * `advanceTileBezelFrame` for this tile. When false for ~2 frames (hysteresis below), idle drift
  * is skipped for that tile (spec: drop subtle motion while quiescent).
@@ -56,13 +76,7 @@ export type TileBezelActivityBag = {
     liftSmoothRef: MutableRefObject<number>;
     pressingOnCardRef: MutableRefObject<boolean>;
     focusDimBlendRef: MutableRefObject<number>;
-    lastActivityVisualGateRef: MutableRefObject<{
-        traitRouteReadabilityIntensity?: string;
-        textureRevision: number;
-        keyboardFocused: boolean;
-        focusDimmed: boolean;
-        graphicsQuality: GraphicsQualityPreset;
-    } | null>;
+    lastActivityVisualGateRef: MutableRefObject<TileBezelActivityGate | null>;
 };
 
 const POS_EPS = 0.00028;
@@ -147,8 +161,21 @@ export function shouldAdvanceTileBezelThisFrame(
         gate.keyboardFocused !== p.keyboardFocused ||
         gate.focusDimmed !== p.focusDimmed ||
         gate.graphicsQuality !== p.graphicsQuality ||
-        gate.traitRouteReadabilityIntensity !== p.traitRouteReadabilityIntensity
+        gate.traitRouteReadabilityIntensity !== p.traitRouteReadabilityIntensity ||
+        gate.tileState !== p.tile.state ||
+        gate.faceUp !== p.faceUp ||
+        gate.pickable !== p.pickable
     ) {
+        return true;
+    }
+
+    /*
+     * A cleared card is not done until it has burst and left. The burst clock is set on the frame
+     * the card is cleared and handed back as null once its departure has run out, so while it holds
+     * a time the card is still on its way off the board - a chunk-break casualty may still be waiting
+     * for the wave to reach it, which no fixed duration here would cover.
+     */
+    if (bag.matchedVictoryBurstT0Ref.current != null && (p.tile.state === 'matched' || p.tile.state === 'removed')) {
         return true;
     }
 

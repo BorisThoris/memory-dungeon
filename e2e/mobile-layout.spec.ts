@@ -196,9 +196,15 @@ async function expectCoreGameplayChromeFits(page: Page): Promise<void> {
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
     // Settings, Codex, Inventory and Retreat live behind the pause menu since the run-shell rebuild,
-    // so what has to stay reachable on a small screen is the menu button itself, and the camera's
-    // Fit board next to it.
-    await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name: /^fit board$/i }), 8);
+    // so what has to stay reachable on a small screen is the menu button itself, and the tools
+    // beside it: on a phone they are folded into Items (Fit board with them), elsewhere the camera's
+    // Fit board sits on the dock.
+    const items = page.getByTestId('tool-tray-toggle');
+    await expectLocatorFullyInWindowViewport(
+        page,
+        (await items.count()) > 0 ? items : page.getByRole('button', { name: /^fit board$/i }),
+        8
+    );
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-toolbar-main-menu'), 8);
 }
 
@@ -410,6 +416,9 @@ test.describe('Mobile layout (renderer)', () => {
         await navigateToLevel1PlayPhase(page);
         const controls = page.getByRole('toolbar', { name: /game controls/i });
         await expect(controls).toBeVisible();
+        // A phone folds the tools into Items; open the bag so the tools inside it are measured too.
+        await page.getByTestId('tool-tray-toggle').click();
+        await expect(page.getByTestId('tool-tray')).toBeVisible();
         // Every tool on the dock, not a named few: Codex and Settings moved behind the pause menu,
         // and a list of names went stale with them. Disabled tools count; a finger still lands on them.
         const buttons = controls.getByRole('button', { includeHidden: false });
