@@ -3,6 +3,7 @@ import {
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
+    type RealmId,
     type RunState
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
@@ -128,7 +129,7 @@ import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
-import { REALM_AMBIENCE_STRENGTH, setRealmAmbience } from './realmAmbience';
+import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience } from './realmAmbience';
 import { RealmScreenOverlay } from './RealmScreenOverlay';
 import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
 import { realmCarryoverLines } from '../copy/realmCopy';
@@ -284,6 +285,21 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
     return callouts;
+};
+
+/** The realm the board just left, held long enough for its overlay to go off the glass. */
+const useLeavingRealm = (realm: RealmId | null): RealmId | null => {
+    const previous = useRef(realm);
+    const [leaving, setLeaving] = useState<RealmId | null>(null);
+    useEffect(() => {
+        const from = previous.current;
+        previous.current = realm;
+        if (!from || !realm || from === realm) return undefined;
+        setLeaving(from);
+        const timer = window.setTimeout(() => setLeaving(null), 1200);
+        return () => window.clearTimeout(timer);
+    }, [realm]);
+    return leaving;
 };
 
 /** THE VOID SPITS, once per spit: the count rising on the same floor (`void-spew-rules.ts`). */
@@ -1102,6 +1118,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         setRealmAmbience({ realm: ambienceRealm, secondary: ambienceSecondary, strength: ambienceRealm ? ambienceStrength : 0 });
     }, [ambienceRealm, ambienceSecondary, ambienceStrength]);
     useEffect(() => () => setRealmAmbience({ realm: null, secondary: null, strength: 0 }), []);
+    // The realm's events reach the cards they name (`realmCardMotion.ts`); the one a run opened on is not replayed.
+    const realmEvent = run.lastRealmEvent ?? null;
+    const realmEventKey = ambienceRealm ? realmEvent?.key ?? null : null;
+    const seenRealmEventKey = useRef<string | null | undefined>(undefined);
+    useEffect(() => {
+        if (seenRealmEventKey.current === undefined) {
+            seenRealmEventKey.current = realmEventKey;
+            return;
+        }
+        if (!realmEventKey || realmEventKey === seenRealmEventKey.current || !realmEvent) return;
+        seenRealmEventKey.current = realmEventKey;
+        pulseRealmEvent(realmEvent);
+    }, [realmEventKey, realmEvent]);
+    useEffect(() => () => pulseRealmEvent(null), []);
+    const leavingRealm = useLeavingRealm(ambienceRealm);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1765,7 +1796,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 </div>
             ) : null}
             {/* The realm on the glass (`RealmScreenOverlay`): flames, vines, rain, rime, charge, at the edges. */}
-            {ambienceRealm ? <RealmScreenOverlay realm={ambienceRealm} reduceMotion={reduceMotion} seed={run.runSeed} strength={ambienceStrength} /> : null}
+            {leavingRealm && leavingRealm !== ambienceRealm ? (
+                <RealmScreenOverlay leaving realm={leavingRealm} reduceMotion={reduceMotion} seed={run.runSeed + 2} strength={ambienceStrength} />
+            ) : null}
+            {ambienceRealm ? (
+                <RealmScreenOverlay realm={ambienceRealm} reduceMotion={reduceMotion} seed={run.runSeed} strength={ambienceStrength} surgeKey={realmEventKey} />
+            ) : null}
             {ambienceRealm && ambienceSecondary && ambienceSecondary !== ambienceRealm ? (
                 <RealmScreenOverlay realm={ambienceSecondary} reduceMotion={reduceMotion} seed={run.runSeed + 1} strength={ambienceStrength * 0.7} />
             ) : null}

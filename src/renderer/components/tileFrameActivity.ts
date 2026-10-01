@@ -4,6 +4,7 @@ import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { sampleTraumaShake, TILE_SHAKE_MAXIMA } from './boardTrauma';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
+import { realmCardWantsFrame } from './realmAmbience';
 
 /**
  * What a tile last drew, compared against its props on every frame to decide whether it needs one.
@@ -274,6 +275,11 @@ export function shouldAdvanceTileBezelThisFrame(
         p.boardEntranceMotionDeadlineMs > 0 &&
         nowMs < p.boardEntranceMotionDeadlineMs;
     if (shuffleLayoutActive || entranceLayoutActive) {
+        return true;
+    }
+
+    // The realm's sway and jolts (`realmCardMotion.ts`).
+    if (realmCardWantsFrame(p.tile.id, p.graphicsQuality !== 'low' && p.tile.state === 'hidden' && !p.faceUp, nowMs)) {
         return true;
     }
 

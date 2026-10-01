@@ -23,6 +23,17 @@ import {
 import { applyTileBoardFrameMaterialState } from './tileBoardFrameMaterialState';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { sampleMatchImpact } from './boardMatchImpact';
+import {
+    REALM_GLIDE_SHAPE,
+    addRealmOffsets,
+    putRealmOffset,
+    sampleRealmJolt,
+    sampleRealmSway,
+    takeBackRealmOffset,
+    REALM_JOLT_MS,
+    ZERO_REALM_OFFSET
+} from './realmCardMotion';
+import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -211,16 +222,32 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         trauma: bag.traumaRef.current,
         wobbleTime: clock.elapsedTime
     });
+    // The realm's sway and jolts (`realmCardMotion.ts`) are added after the damping; take last frame's back first.
+    takeBackRealmOffset(group);
+    const realmEvent = useRealmEventPulse.getState().event;
+    const joltMs = realmEvent && realmEvent.tileIds.has(p.tile.id) ? now - realmEvent.at : -1;
+    const jolting = realmEvent != null && joltMs >= 0 && joltMs < REALM_JOLT_MS;
     applyTileBoardCardGroupMotionState(
         group,
         cardGroupMotionState,
-        delta
+        delta,
+        jolting ? REALM_GLIDE_SHAPE[realmEvent.family] : undefined
     );
     if (isMatched && pulseRefs.matchedVictoryBurstStartedAt != null) {
         const impact = sampleMatchImpact(time - pulseRefs.matchedVictoryBurstStartedAt, p.reduceMotion);
         group.position.z += impact.z;
         group.scale.x *= impact.scaleX;
         group.scale.y *= impact.scaleY;
+    }
+
+    if (!p.reduceMotion) {
+        const ambience = useRealmAmbience.getState();
+        const phase = (p.transform.seed % 997) * 0.0063;
+        const sway = p.graphicsQuality !== 'low' && p.tile.state === 'hidden' && !p.faceUp
+            ? sampleRealmSway(ambience.realm, ambience.strength, time, phase, p.transform.baseX / 1.18, -p.transform.baseY / 1.18)
+            : ZERO_REALM_OFFSET;
+        const jolt = jolting ? sampleRealmJolt(realmEvent.family, joltMs, phase) : ZERO_REALM_OFFSET;
+        putRealmOffset(group, addRealmOffsets(sway, jolt));
     }
 
     const frameVisualState = computeTileBoardFrameVisualState({

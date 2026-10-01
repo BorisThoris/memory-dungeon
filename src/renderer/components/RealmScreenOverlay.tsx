@@ -2,6 +2,7 @@ import { useMemo, type CSSProperties, type ReactElement } from 'react';
 import type { RealmId } from '../../shared/contracts';
 import { createMulberry32 } from '../../shared/rng';
 import styles from './RealmScreenOverlay.module.css';
+import { useBeat } from './useSceneBeat';
 
 /**
  * The realm over the whole screen (2026-10-01). The room behind the board took a tint and a drift
@@ -16,6 +17,10 @@ export interface RealmScreenOverlayProps {
     strength: number;
     seed: number;
     reduceMotion: boolean;
+    /** The realm's latest event: the edges surge with it, flames leaping, rain sheeting, charge going white. */
+    surgeKey?: string | null;
+    /** The realm the board just left (an omen turned it): it burns, melts or washes off the glass. */
+    leaving?: boolean;
 }
 
 const VIEW_W = 1600;
@@ -134,14 +139,17 @@ const Rime = ({ seed }: { seed: number }): ReactElement => {
     );
 };
 
-export function RealmScreenOverlay({ realm, strength, seed, reduceMotion }: RealmScreenOverlayProps) {
+export function RealmScreenOverlay({ realm, strength, seed, reduceMotion, surgeKey = null, leaving = false }: RealmScreenOverlayProps) {
+    const surging = useBeat(surgeKey, 1300);
     return (
         <div
             aria-hidden="true"
             className={styles.overlay}
+            data-leaving={leaving ? 'true' : 'false'}
+            data-surge={surging && !leaving ? 'true' : 'false'}
             data-realm={realm}
             data-reduce-motion={reduceMotion ? 'true' : 'false'}
-            data-testid="realm-screen-overlay"
+            data-testid={leaving ? 'realm-screen-overlay-leaving' : 'realm-screen-overlay'}
             style={{ '--realm-strength': strength } as CSSProperties}
         >
             <span className={styles.vignette} />

@@ -1,6 +1,7 @@
 import type { RelicId, RunState } from '../../shared/contracts';
 import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
+import { REALM_JOLT_FAMILY, type RealmJoltFamily } from './realmCardMotion';
 
 /**
  * What the room becomes, read off the run.
@@ -65,6 +66,9 @@ export interface SceneMood {
     freezeKey: string | null;
     /** The void spitting new pairs and reshuffling the board (`void-spew-rules.ts`): the room lurches violet. */
     spewKey: string | null;
+    /** The realm's last event and how it hits (`realmCardMotion.ts`): the room flashes, flares, gusts, surges or darkens with it. */
+    realmEventKey: string | null;
+    realmEventFamily: RealmJoltFamily | null;
     goldRain: { key: string; coins: number } | null;
     /** The bank is empty: the boss-warning state, held until a miss is banked again. */
     peril: boolean;
@@ -124,7 +128,7 @@ export const deriveSceneMood = ({
     missesLeft?: number | null;
     /** A payout to rain gold on (a floor clear, a purchase), keyed by what paid it. */
     payout?: { key: string; gold: number } | null;
-    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor'>>;
+    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor' | 'lastRealmEvent'>>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
 }): SceneMood => {
@@ -195,6 +199,8 @@ export const deriveSceneMood = ({
         hitKey,
         missKey,
         freezeKey,
+        realmEventKey: run.lastRealmEvent?.key ?? null,
+        realmEventFamily: run.lastRealmEvent ? REALM_JOLT_FAMILY[run.lastRealmEvent.kind] ?? null : null,
         spewKey: (run.voidSpewsThisFloor ?? 0) > 0 ? `spew:${run.board?.level ?? 0}:${run.voidSpewsThisFloor}` : null,
         goldRain,
         peril: missesLeft === 0 && (run.status === 'playing' || run.status === 'resolving'),

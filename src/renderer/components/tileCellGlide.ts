@@ -21,10 +21,19 @@ export const GLIDE_ARC = 0.9;
 export const GLIDE_TILT = 0.22;
 export const GLIDE_SWELL = 0.1;
 
+/** A glide's flight: how long, how high, how far it leans. The weather gives some moves their own. */
+export interface GlideShape {
+    ms: number;
+    arc: number;
+    tilt: number;
+}
+
+export const DEFAULT_GLIDE_SHAPE: GlideShape = { ms: GLIDE_MS, arc: GLIDE_ARC, tilt: GLIDE_TILT };
+
 interface GlideMemory {
     lastX: number;
     lastY: number;
-    glide: { fromX: number; fromY: number; fromZ: number; start: number; tiltSign: number } | null;
+    glide: { fromX: number; fromY: number; fromZ: number; start: number; tiltSign: number; shape: GlideShape } | null;
 }
 
 const memory = new WeakMap<object, GlideMemory>();
@@ -51,7 +60,8 @@ export const sampleCellGlide = (
     target: { x: number; y: number; z: number },
     current: { x: number; y: number; z: number },
     now: number,
-    reduceMotion: boolean
+    reduceMotion: boolean,
+    shape: GlideShape = DEFAULT_GLIDE_SHAPE
 ): GlideFrame | null => {
     let entry = memory.get(card);
     if (!entry) {
@@ -63,11 +73,11 @@ export const sampleCellGlide = (
     entry.lastX = target.x;
     entry.lastY = target.y;
     if (jumped && !reduceMotion) {
-        entry.glide = { fromX: current.x, fromY: current.y, fromZ: current.z, start: now, tiltSign: target.x >= current.x ? -1 : 1 };
+        entry.glide = { fromX: current.x, fromY: current.y, fromZ: current.z, start: now, tiltSign: target.x >= current.x ? -1 : 1, shape };
     }
     const glide = entry.glide;
     if (!glide) return null;
-    const t = (now - glide.start) / GLIDE_MS;
+    const t = (now - glide.start) / glide.shape.ms;
     if (t >= 1 || t < 0) {
         entry.glide = null;
         return null;
@@ -77,8 +87,8 @@ export const sampleCellGlide = (
     return {
         x: glide.fromX + (target.x - glide.fromX) * eased,
         y: glide.fromY + (target.y - glide.fromY) * eased,
-        lift: GLIDE_ARC * arc,
-        tilt: glide.tiltSign * GLIDE_TILT * arc,
+        lift: glide.shape.arc * arc,
+        tilt: glide.tiltSign * glide.shape.tilt * arc,
         swell: 1 + GLIDE_SWELL * arc
     };
 };

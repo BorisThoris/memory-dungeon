@@ -298,6 +298,138 @@
     }
 }
 
+
+/* The realm's events (`realmCardMotion.ts`): the room takes the hit the cards take. */
+.scene[data-scene-realm-event='flash'] .plate {
+    animation: sceneRealmFlash 700ms ease-out;
+}
+
+.scene[data-scene-realm-event='flare'] .plate {
+    animation: sceneRealmFlare 900ms ease-out;
+}
+
+.scene[data-scene-realm-event='gust'] .plate {
+    animation: sceneRealmGust 850ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.scene[data-scene-realm-event='surge'] .plate {
+    animation: sceneRealmSurge 900ms ease-in-out;
+}
+
+.scene[data-scene-realm-event='creep'] .plate {
+    animation: sceneRealmCreep 900ms ease-in-out;
+}
+
+@keyframes sceneRealmFlash {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+
+    6% {
+        transform: translate(-50.6%, -49.6%) scale(1.03);
+        filter: brightness(2.6) saturate(0.4) hue-rotate(220deg);
+    }
+
+    14% {
+        transform: translate(-49.5%, -50.3%) scale(1.01);
+        filter: brightness(0.6) saturate(1.4) hue-rotate(240deg);
+    }
+
+    22% {
+        transform: translate(-50.3%, -50%) scale(1.02);
+        filter: brightness(1.9) saturate(0.6) hue-rotate(220deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+}
+
+@keyframes sceneRealmFlare {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+
+    18% {
+        transform: translate(-50%, -50.6%) scale(1.04);
+        filter: brightness(1.6) sepia(0.6) saturate(2.2) hue-rotate(-12deg);
+    }
+
+    55% {
+        transform: translate(-50%, -50.2%) scale(1.015);
+        filter: brightness(1.25) sepia(0.3) saturate(1.5);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+}
+
+@keyframes sceneRealmGust {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+
+    20% {
+        transform: translate(-51.4%, -50%) scale(1.02) skewX(-1.2deg);
+        filter: brightness(1.35) saturate(0.45) hue-rotate(190deg);
+    }
+
+    50% {
+        transform: translate(-49.6%, -50%) scale(1.005) skewX(0.4deg);
+        filter: brightness(1.1) saturate(0.7);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+}
+
+@keyframes sceneRealmSurge {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+
+    30% {
+        transform: translate(-50%, -49%) scale(1.03) rotate(0.6deg);
+        filter: brightness(0.9) saturate(1.5) hue-rotate(170deg);
+    }
+
+    60% {
+        transform: translate(-50%, -50.8%) scale(1.01) rotate(-0.4deg);
+        filter: brightness(1.05) saturate(1.2) hue-rotate(170deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+}
+
+@keyframes sceneRealmCreep {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+
+    35% {
+        transform: translate(-50%, -50%) scale(0.97);
+        filter: brightness(0.6) saturate(1.6) hue-rotate(60deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: none;
+    }
+}
+
 @keyframes sceneHit {
     0% {
         transform: translate(-50%, -50%) scale(1);
@@ -405,6 +537,7 @@
 @media (prefers-reduced-motion: reduce) {
     .scene[data-scene-hit='true'] .plate,
     .scene[data-scene-spew='true'] .plate,
+    .scene:not([data-scene-realm-event='none']) .plate,
     .scene[data-scene-miss='true'] .dungeonBase,
     .scene[data-scene-miss='true'] .torchGlow,
     .scene[data-scene-peril='true'] .peril {

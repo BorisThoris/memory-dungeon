@@ -87,6 +87,24 @@ const PAINTERS: Record<RealmId, Painter> = {
         }
     },
     tide: (ctx, rng) => {
+        // Deep water at the edges, then caustic ripples across the face, then the sheen and the drops.
+        edgeVignette(ctx, 'rgba(20, 90, 170, 0)', 'rgba(10, 70, 150, 0.6)');
+        ctx.lineCap = 'round';
+        for (let i = 0; i < 9; i += 1) {
+            const y0 = (i + 0.5) * (H / 9) + (rng() - 0.5) * 12;
+            const amp = 5 + rng() * 7;
+            const freq = 0.03 + rng() * 0.025;
+            const ph = rng() * Math.PI * 2;
+            ctx.strokeStyle = `rgba(190, 235, 255, ${0.28 + rng() * 0.25})`;
+            ctx.lineWidth = 1.5 + rng() * 2;
+            ctx.beginPath();
+            for (let x = 0; x <= W; x += 6) {
+                const y = y0 + Math.sin(x * freq + ph) * amp;
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
         const sheen = ctx.createLinearGradient(0, 0, W, H);
         sheen.addColorStop(0, 'rgba(120, 190, 255, 0.35)');
         sheen.addColorStop(0.45, 'rgba(160, 220, 255, 0.08)');
@@ -94,10 +112,10 @@ const PAINTERS: Record<RealmId, Painter> = {
         sheen.addColorStop(1, 'rgba(80, 150, 230, 0.4)');
         ctx.fillStyle = sheen;
         ctx.fillRect(0, 0, W, H);
-        for (let i = 0; i < 34; i += 1) {
+        for (let i = 0; i < 44; i += 1) {
             const x = rng() * W;
             const y = rng() * H;
-            const r = 2 + rng() * 6;
+            const r = 3 + rng() * 8;
             const drop = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
             drop.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
             drop.addColorStop(0.5, 'rgba(170, 220, 255, 0.35)');

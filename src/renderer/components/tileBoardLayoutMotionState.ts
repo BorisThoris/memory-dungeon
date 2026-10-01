@@ -1,5 +1,5 @@
 import { MathUtils } from 'three';
-import { sampleCellGlide } from './tileCellGlide';
+import { sampleCellGlide, type GlideShape } from './tileCellGlide';
 
 const nowMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 import { sampleTraumaShake, TILE_SHAKE_MAXIMA } from './boardTrauma';
@@ -156,7 +156,8 @@ export const computeTileBoardLayoutMotionState = ({
 export const applyTileBoardCardGroupMotionState = (
     target: TileBoardCardGroupMotionTarget,
     state: TileBoardCardGroupMotionState,
-    delta: number
+    delta: number,
+    glideShape?: GlideShape
 ): void => {
     target.rotation.x = MathUtils.damp(
         target.rotation.x,
@@ -184,7 +185,7 @@ export const applyTileBoardCardGroupMotionState = (
         sampleCellGlide(target, goal, target.position, nowMs(), true);
     } else {
         // A card that changed cells glides there (`tileCellGlide.ts`) instead of appearing there.
-        const glide = sampleCellGlide(target, goal, target.position, nowMs(), state.reduceMotion);
+        const glide = sampleCellGlide(target, goal, target.position, nowMs(), state.reduceMotion, glideShape);
         if (glide) {
             target.position.x = glide.x;
             target.position.y = glide.y;

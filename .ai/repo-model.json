@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2848,
-    "codeFileCount": 1037,
-    "exportedSymbolCount": 3192,
+    "trackedFileCount": 2850,
+    "codeFileCount": 1039,
+    "exportedSymbolCount": 3210,
     "contentItemCount": 10,
     "mechanicCount": 57,
     "stateFieldCount": 112,
-    "relationshipCount": 8349
+    "relationshipCount": 8376
   },
   "inventory": [
     {
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 6241,
-      "sha256": "e48c785a409aa5991878232afc08150133644d2907736692a12872896c793e76"
+      "bytes": 7167,
+      "sha256": "15406c6538cf7285a2734ea0f6af166d3fc5874576e05ebdbef047436e3ed163"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "ead1c5a5ec60900fc2f8d4949ebcb0e467a091869d44f8d3ad49df7ae15747d9"
+      "sha256": "1c39bcbbfb886df6bc4c066cd4df01c0e550c52a66cc36962421ba6a07fb9298"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9465,8 +9465,8 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 15967,
-      "sha256": "171418c88bd11b2eb0a0bfbab01addbeb946b7d0ee3ae744cbd23d531b470b5c"
+      "bytes": 19120,
+      "sha256": "cdf31ca6aba89dd5020bf253b8c5b7c2a9b61e9d5e95b858a41ab5e4b1895abd"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
@@ -9477,8 +9477,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 16462,
-      "sha256": "065fbb47f24af1dcda5ad57c554bb4b1187bc20d04b7f951570a74079032609f"
+      "bytes": 16632,
+      "sha256": "c37aa5feef569af091369d509eb3c9dd50c97337d2dd2d16f6c8c5e52ca9885c"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9513,8 +9513,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 111770,
-      "sha256": "7e6429d5b3059dc7a512252f8ef8391521973674977292e20e1982d2439496a1"
+      "bytes": 113519,
+      "sha256": "798afbb0d744eaafa890ee945f8ca4b4736c12a882ac80dc984f236faa4972a7"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9807,26 +9807,38 @@
     {
       "path": "src/renderer/components/realmAmbience.ts",
       "category": "source",
-      "bytes": 1112,
-      "sha256": "8a3f85854a9e458f33c1bef0b78052dfc140a9bca378172efe8612e6e7f56fd8"
+      "bytes": 2847,
+      "sha256": "f8762e112f51c0649ebc0106561f0003e85adf6b4974c95b0bd20edce401053f"
     },
     {
       "path": "src/renderer/components/RealmAmbientBackPlane.tsx",
       "category": "source",
-      "bytes": 8796,
-      "sha256": "ef2a08f11e93ca7043d71d0388a99ddc1e92b32a1912396d9d03cf9d9012b874"
+      "bytes": 9639,
+      "sha256": "0e62a93e60c73874b8ccd1b32d952a86003b10da81a0720623622ce1b425949b"
+    },
+    {
+      "path": "src/renderer/components/realmCardMotion.test.ts",
+      "category": "test",
+      "bytes": 3049,
+      "sha256": "083eb6ce6caaa705e42f491281a8d76b9794d1c86a3ff9bbd917110313d110cf"
+    },
+    {
+      "path": "src/renderer/components/realmCardMotion.ts",
+      "category": "source",
+      "bytes": 7841,
+      "sha256": "cda31a59b82a88dedd537e1c84d938dc2d07d44c44afad1a4e7ffd6d0ff2d982"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
       "category": "source",
-      "bytes": 5389,
-      "sha256": "4280e6d70892fae4bb61bded86f25fbb849195f60436160f9c28f8d30ddcb386"
+      "bytes": 7894,
+      "sha256": "ae474ac6d9cae72f977f8e05d7ba0684f4b5705dd8efd1df48f84ef4dbe2c322"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.tsx",
       "category": "source",
-      "bytes": 7631,
-      "sha256": "8254621caf6c421b5cffea2c18a1d9c53beb1916b8e9818e96439dce0132054b"
+      "bytes": 8184,
+      "sha256": "a76a333d0a95182b9455f5d4e51e6d3b506958d787f0d9179b8c81ecc9e9bb50"
     },
     {
       "path": "src/renderer/components/realmTileMarkKey.ts",
@@ -9957,8 +9969,8 @@
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 11567,
-      "sha256": "0e9ddc6954b4ae320be77a31e660b7e34a50b3a8cb7367ac02c3d600d91d9ec4"
+      "bytes": 12039,
+      "sha256": "3458d89d90b90ef81377f705737b4711eee8aff33bd57eca51c8e3d73bcbfbd2"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -10389,8 +10401,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 12445,
-      "sha256": "01ef35bda2fde048c6790bafcfb1be409338fe9cfb8e3f4b182d138be44c4244"
+      "bytes": 13740,
+      "sha256": "5d9a2dcf67172c288bea31492653e2c57b544e4d41d185cb6b74b48f8673b268"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -10557,8 +10569,8 @@
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "category": "source",
-      "bytes": 9276,
-      "sha256": "16d201930c0faa33b7d6d8cb348d776d3fcc0ada33f25dbbdc80729a417a6cae"
+      "bytes": 9334,
+      "sha256": "8fac0e40a556629ce63cbe7efc0278c1e682494b5e8a12dbc81a87ad48ee86aa"
     },
     {
       "path": "src/renderer/components/tileBoardMaterialVisualState.test.ts",
@@ -10941,8 +10953,8 @@
     {
       "path": "src/renderer/components/tileCellGlide.ts",
       "category": "source",
-      "bytes": 3480,
-      "sha256": "a9cc875dd6121b20ca6d86f4340fc7bd2122e7a23e54fa8279263dfa2a5814a9"
+      "bytes": 3856,
+      "sha256": "127e26be1b064ccef5cd9ddb3692c6098952632dc643182fc724d18246a3d626"
     },
     {
       "path": "src/renderer/components/tileFieldTilt.test.ts",
@@ -10965,8 +10977,8 @@
     {
       "path": "src/renderer/components/tileFrameActivity.ts",
       "category": "source",
-      "bytes": 15069,
-      "sha256": "f7da6896a12567ff8f6f3486c7d57b22671d32a08e53f7d3f4cb68bc6bd3dd9e"
+      "bytes": 15330,
+      "sha256": "818ba45b4f99bbc475f9d4cd500299d24fc21fc284a30e6db122be81809ec649"
     },
     {
       "path": "src/renderer/components/tileResolvingSelection.test.ts",
@@ -20186,7 +20198,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 269,
+      "lineCount": 271,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -20301,7 +20313,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2251,
+      "lineCount": 2287,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21038,15 +21050,20 @@
       "path": "src/renderer/components/realmAmbience.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 29,
+      "lineCount": 68,
       "imports": [
+        "file:src/renderer/components/realmCardMotion.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/realmAmbience.ts#pulseRealmEvent",
         "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
         "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+        "symbol:src/renderer/components/realmAmbience.ts#RealmAmbienceEvent",
+        "symbol:src/renderer/components/realmAmbience.ts#realmCardWantsFrame",
         "symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
-        "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience"
+        "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience",
+        "symbol:src/renderer/components/realmAmbience.ts#useRealmEventPulse"
       ],
       "testedBy": []
     },
@@ -21055,7 +21072,7 @@
       "path": "src/renderer/components/RealmAmbientBackPlane.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 199,
+      "lineCount": 217,
       "imports": [
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -21069,12 +21086,52 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/realmCardMotion.test.ts",
+      "path": "src/renderer/components/realmCardMotion.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 66,
+      "imports": [
+        "file:src/renderer/components/realmCardMotion.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/realmCardMotion.ts",
+      "path": "src/renderer/components/realmCardMotion.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 181,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/realmCardMotion.ts#addRealmOffsets",
+        "symbol:src/renderer/components/realmCardMotion.ts#putRealmOffset",
+        "symbol:src/renderer/components/realmCardMotion.ts#REALM_GLIDE_SHAPE",
+        "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_FAMILY",
+        "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_MS",
+        "symbol:src/renderer/components/realmCardMotion.ts#RealmCardOffset",
+        "symbol:src/renderer/components/realmCardMotion.ts#RealmGlideShape",
+        "symbol:src/renderer/components/realmCardMotion.ts#RealmJoltFamily",
+        "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmJolt",
+        "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmSway",
+        "symbol:src/renderer/components/realmCardMotion.ts#takeBackRealmOffset",
+        "symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/realmCardMotion.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/RealmScreenOverlay.tsx",
       "path": "src/renderer/components/RealmScreenOverlay.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 161,
+      "lineCount": 169,
       "imports": [
+        "file:src/renderer/components/useSceneBeat.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
       ],
@@ -21381,8 +21438,9 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 214,
+      "lineCount": 220,
       "imports": [
+        "file:src/renderer/components/realmCardMotion.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
@@ -22586,9 +22644,11 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 317,
+      "lineCount": 344,
       "imports": [
         "file:src/renderer/components/boardMatchImpact.ts",
+        "file:src/renderer/components/realmAmbience.ts",
+        "file:src/renderer/components/realmCardMotion.ts",
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardFrameMaterialState.ts",
@@ -23058,7 +23118,7 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 264,
+      "lineCount": 265,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
@@ -24205,15 +24265,17 @@
       "path": "src/renderer/components/tileCellGlide.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 98,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/tileCellGlide.ts#DEFAULT_GLIDE_SHAPE",
         "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
         "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_JUMP",
         "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_MS",
         "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_SWELL",
         "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_TILT",
         "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+        "symbol:src/renderer/components/tileCellGlide.ts#GlideShape",
         "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
         "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide"
       ],
@@ -24264,10 +24326,11 @@
       "path": "src/renderer/components/tileFrameActivity.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 406,
+      "lineCount": 412,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -40158,7 +40221,7 @@
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
       "line": 101,
-      "endLine": 268
+      "endLine": 270
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
@@ -40245,40 +40308,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2250,
-      "endLine": 2250
+      "line": 2286,
+      "endLine": 2286
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 252,
-      "endLine": 252
+      "line": 253,
+      "endLine": 253
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 251,
+      "endLine": 251
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 254,
-      "endLine": 254
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 244,
-      "endLine": 244
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -40705,60 +40768,188 @@
       "endLine": 279
     },
     {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#pulseRealmEvent",
+      "name": "pulseRealmEvent",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 43,
+      "endLine": 53
+    },
+    {
       "id": "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
       "name": "REALM_AMBIENCE_STRENGTH",
       "kind": "value",
       "file": "src/renderer/components/realmAmbience.ts",
-      "line": 16,
-      "endLine": 20
+      "line": 55,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
       "name": "RealmAmbience",
       "kind": "interface",
       "file": "src/renderer/components/realmAmbience.ts",
-      "line": 9,
-      "endLine": 14
+      "line": 10,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbienceEvent",
+      "name": "RealmAmbienceEvent",
+      "kind": "interface",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 18,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#realmCardWantsFrame",
+      "name": "realmCardWantsFrame",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 33,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
       "name": "setRealmAmbience",
       "kind": "value",
       "file": "src/renderer/components/realmAmbience.ts",
-      "line": 24,
-      "endLine": 28
+      "line": 63,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience",
       "name": "useRealmAmbience",
       "kind": "value",
       "file": "src/renderer/components/realmAmbience.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 61,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#useRealmEventPulse",
+      "name": "useRealmEventPulse",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
       "name": "RealmAmbientBackPlane",
       "kind": "value",
       "file": "src/renderer/components/RealmAmbientBackPlane.tsx",
-      "line": 180,
-      "endLine": 198
+      "line": 198,
+      "endLine": 216
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#addRealmOffsets",
+      "name": "addRealmOffsets",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 179,
+      "endLine": 180
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#putRealmOffset",
+      "name": "putRealmOffset",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 167,
+      "endLine": 177
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#REALM_GLIDE_SHAPE",
+      "name": "REALM_GLIDE_SHAPE",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 144,
+      "endLine": 148
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_FAMILY",
+      "name": "REALM_JOLT_FAMILY",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 21,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_MS",
+      "name": "REALM_JOLT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 41,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#RealmCardOffset",
+      "name": "RealmCardOffset",
+      "kind": "interface",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 43,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#RealmGlideShape",
+      "name": "RealmGlideShape",
+      "kind": "interface",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 138,
+      "endLine": 142
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#RealmJoltFamily",
+      "name": "RealmJoltFamily",
+      "kind": "type",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmJolt",
+      "name": "sampleRealmJolt",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 102,
+      "endLine": 135
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmSway",
+      "name": "sampleRealmSway",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 61,
+      "endLine": 99
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#takeBackRealmOffset",
+      "name": "takeBackRealmOffset",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 156,
+      "endLine": 164
+    },
+    {
+      "id": "symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET",
+      "name": "ZERO_REALM_OFFSET",
+      "kind": "value",
+      "file": "src/renderer/components/realmCardMotion.ts",
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
       "name": "RealmScreenOverlay",
       "kind": "function",
       "file": "src/renderer/components/RealmScreenOverlay.tsx",
-      "line": 137,
-      "endLine": 160
+      "line": 142,
+      "endLine": 168
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps",
       "name": "RealmScreenOverlayProps",
       "kind": "interface",
       "file": "src/renderer/components/RealmScreenOverlay.tsx",
-      "line": 14,
-      "endLine": 19
+      "line": 15,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/realmTileMarkKey.ts#RealmTileMark",
@@ -40957,64 +41148,64 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 86,
-      "endLine": 92
+      "line": 90,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 108,
-      "endLine": 204
+      "line": 112,
+      "endLine": 210
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 207,
-      "endLine": 213
+      "line": 213,
+      "endLine": 219
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneDriftTone",
       "name": "SceneDriftTone",
       "kind": "type",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
       "name": "SceneMood",
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 26,
-      "endLine": 75
+      "line": 27,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
       "name": "ScenePlateId",
       "kind": "type",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 98,
-      "endLine": 103
+      "line": 102,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "name": "WEATHER_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 106,
-      "endLine": 106
+      "line": 110,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -42525,8 +42716,8 @@
       "name": "advanceTileBezelFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
-      "line": 33,
-      "endLine": 316
+      "line": 44,
+      "endLine": 343
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -42926,15 +43117,15 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "line": 156,
-      "endLine": 204
+      "endLine": 205
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardCardGroupMotionState",
       "name": "computeTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 206,
-      "endLine": 263
+      "line": 207,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
@@ -44177,6 +44368,14 @@
       "endLine": 5
     },
     {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#DEFAULT_GLIDE_SHAPE",
+      "name": "DEFAULT_GLIDE_SHAPE",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 31,
+      "endLine": 31
+    },
+    {
       "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
       "name": "GLIDE_ARC",
       "kind": "value",
@@ -44221,24 +44420,32 @@
       "name": "GlideFrame",
       "kind": "interface",
       "file": "src/renderer/components/tileCellGlide.ts",
-      "line": 34,
-      "endLine": 43
+      "line": 43,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GlideShape",
+      "name": "GlideShape",
+      "kind": "interface",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 25,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
       "name": "isCardGliding",
       "kind": "value",
       "file": "src/renderer/components/tileCellGlide.ts",
-      "line": 87,
-      "endLine": 87
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
       "name": "sampleCellGlide",
       "kind": "value",
       "file": "src/renderer/components/tileCellGlide.ts",
-      "line": 49,
-      "endLine": 84
+      "line": 58,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/tileFieldTilt.ts#getTileFieldAmplification",
@@ -44261,48 +44468,48 @@
       "name": "advanceScheduledTileBezelFrames",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 116,
-      "endLine": 142
+      "line": 117,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#AdvanceScheduledTileBezelFramesResult",
       "name": "AdvanceScheduledTileBezelFramesResult",
       "kind": "interface",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 99,
-      "endLine": 102
+      "line": 100,
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#scheduleTileBezelFrameActivity",
       "name": "scheduleTileBezelFrameActivity",
       "kind": "value",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 104,
-      "endLine": 114
+      "line": 105,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#shouldAdvanceTileBezelThisFrame",
       "name": "shouldAdvanceTileBezelThisFrame",
       "kind": "function",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 144,
-      "endLine": 405
+      "line": 145,
+      "endLine": 411
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#TileBezelActivityBag",
       "name": "TileBezelActivityBag",
       "kind": "type",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 33,
-      "endLine": 80
+      "line": 34,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/tileFrameActivity.ts#TileBezelActivityGate",
       "name": "TileBezelActivityGate",
       "kind": "type",
       "file": "src/renderer/components/tileFrameActivity.ts",
-      "line": 17,
-      "endLine": 26
+      "line": 18,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/tileResolvingSelection.ts#getMatchResolvingPairTileIds",
@@ -62900,7 +63107,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 34
+          "line": 35
         }
       ],
       "tests": [
@@ -63273,7 +63480,7 @@
         },
         {
           "path": "src/renderer/components/sceneMood.ts",
-          "line": 16
+          "line": 17
         },
         {
           "path": "src/renderer/components/tileCellGlide.ts",
@@ -63855,7 +64062,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -64646,7 +64853,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 34
+          "line": 35
         }
       ],
       "tests": [
@@ -69940,6 +70147,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#pulseRealmEvent",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#pulseRealmEvent",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
       "source": "file:src/renderer/components/realmAmbience.ts",
       "target": "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
@@ -69949,6 +70162,18 @@
       "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
       "source": "file:src/renderer/components/realmAmbience.ts",
       "target": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#RealmAmbienceEvent",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbienceEvent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#realmCardWantsFrame",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#realmCardWantsFrame",
       "kind": "exports"
     },
     {
@@ -69964,9 +70189,87 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#useRealmEventPulse",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#useRealmEventPulse",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/RealmAmbientBackPlane.tsx->symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
       "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
       "target": "symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#addRealmOffsets",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#addRealmOffsets",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#putRealmOffset",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#putRealmOffset",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#REALM_GLIDE_SHAPE",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#REALM_GLIDE_SHAPE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_FAMILY",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_FAMILY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_MS",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#REALM_JOLT_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#RealmCardOffset",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#RealmCardOffset",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#RealmGlideShape",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#RealmGlideShape",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#RealmJoltFamily",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#RealmJoltFamily",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#sampleRealmJolt",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmJolt",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#sampleRealmSway",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#sampleRealmSway",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#takeBackRealmOffset",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#takeBackRealmOffset",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET",
       "kind": "exports"
     },
     {
@@ -72544,6 +72847,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#DEFAULT_GLIDE_SHAPE",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#DEFAULT_GLIDE_SHAPE",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
       "source": "file:src/renderer/components/tileCellGlide.ts",
       "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
@@ -72577,6 +72886,12 @@
       "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
       "source": "file:src/renderer/components/tileCellGlide.ts",
       "target": "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GlideShape",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GlideShape",
       "kind": "exports"
     },
     {
@@ -91430,6 +91745,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/realmAmbience.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/realmAmbience.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/realmAmbience.ts",
       "target": "file:src/shared/contracts.ts",
@@ -91463,6 +91784,24 @@
       "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/shared/rng.ts",
       "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmCardMotion.test.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/realmCardMotion.test.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmCardMotion.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmScreenOverlay.tsx->src/renderer/components/useSceneBeat.ts",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "file:src/renderer/components/useSceneBeat.ts",
       "kind": "imports"
     },
     {
@@ -91895,6 +92234,12 @@
       "id": "imports:src/renderer/components/sceneMood.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/components/sceneMood.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
       "kind": "imports"
     },
     {
@@ -93335,6 +93680,18 @@
       "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/boardMatchImpact.ts",
       "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
       "target": "file:src/renderer/components/boardMatchImpact.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/realmAmbience.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/realmAmbience.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
       "kind": "imports"
     },
     {
@@ -94973,6 +95330,12 @@
       "id": "imports:src/renderer/components/tileFrameActivity.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/tileFrameActivity.ts",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileFrameActivity.ts->src/renderer/components/realmAmbience.ts",
+      "source": "file:src/renderer/components/tileFrameActivity.ts",
+      "target": "file:src/renderer/components/realmAmbience.ts",
       "kind": "imports"
     },
     {
@@ -109391,6 +109754,12 @@
       "id": "tested_by:src/renderer/components/ProfileScreen.tsx->file:src/renderer/components/ProfileScreen.test.tsx",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/components/ProfileScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/realmCardMotion.ts->file:src/renderer/components/realmCardMotion.test.ts",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "file:src/renderer/components/realmCardMotion.test.ts",
       "kind": "tested_by"
     },
     {

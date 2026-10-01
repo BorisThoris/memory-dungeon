@@ -210,9 +210,144 @@
     }
 }
 
+/* A surge: the realm's own event lands and the edges answer it (`surgeKey`). */
+.overlay[data-surge='true'] .vignette {
+    animation: realmSurgeVignette 1.3s ease-out;
+}
+
+.overlay[data-surge='true'] .flames {
+    animation: realmSurgeFlames 1.3s ease-out;
+    transform-origin: 50% 100%;
+}
+
+.overlay[data-surge='true'] .rain {
+    animation-duration: 0.18s;
+    opacity: 1;
+}
+
+.overlay[data-surge='true'] .rime,
+.overlay[data-surge='true'] .vines {
+    animation: realmSurgeCorners 1.3s ease-out;
+}
+
+.overlay[data-surge='true'] .charge {
+    animation: realmSurgeCharge 1.3s steps(1);
+}
+
+@keyframes realmSurgeVignette {
+    0% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    15% {
+        opacity: 1;
+        filter: brightness(1.9) saturate(1.4);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+@keyframes realmSurgeFlames {
+    0% {
+        transform: scaleY(1);
+    }
+
+    18% {
+        transform: scaleY(1.9);
+        filter: brightness(1.5);
+    }
+
+    60% {
+        transform: scaleY(1.25);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes realmSurgeCorners {
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(1.12);
+        filter: brightness(1.6);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes realmSurgeCharge {
+    0%,
+    10%,
+    24% {
+        opacity: 1;
+        box-shadow: inset 0 0 260px rgba(240, 230, 255, 0.95);
+        background: rgba(220, 210, 255, 0.18);
+    }
+
+    6%,
+    16%,
+    100% {
+        opacity: 0.5;
+    }
+}
+
+/* The realm the board left: it goes off the glass as the new one comes on. */
+.overlay[data-leaving='true'] {
+    animation: realmLeave 1.2s ease-in forwards;
+}
+
+.overlay[data-leaving='true'][data-realm='ember'] {
+    animation-name: realmLeaveBurn;
+}
+
+@keyframes realmLeave {
+    from {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(1.12);
+        filter: blur(6px);
+    }
+}
+
+@keyframes realmLeaveBurn {
+    0% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    25% {
+        opacity: 1;
+        filter: brightness(2.4) saturate(1.6);
+    }
+
+    100% {
+        opacity: 0;
+        filter: brightness(0.4);
+    }
+}
+
 .overlay[data-reduce-motion='true'] .tongue,
 .overlay[data-reduce-motion='true'] .rain,
 .overlay[data-reduce-motion='true'] .charge {
+    animation: none;
+}
+
+.overlay[data-reduce-motion='true'][data-surge='true'] *,
+.overlay[data-reduce-motion='true'][data-leaving='true'] {
     animation: none;
 }
 
@@ -227,6 +362,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .overlay[data-surge='true'] *,
+    .overlay[data-leaving='true'] {
+        animation: none;
+    }
+
     .tongue,
     .rain,
     .charge {

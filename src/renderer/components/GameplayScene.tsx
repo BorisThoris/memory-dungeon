@@ -122,6 +122,7 @@ export function GameplayScene({
     const missing = useBeat(mood?.missKey ?? null, 700);
     const frozen = useBeat(mood?.freezeKey ?? null, 900);
     const spewing = useBeat(mood?.spewKey ?? null, 1100);
+    const realmStruck = useBeat(mood?.realmEventKey ?? null, 900);
     const effectTier = useSceneEffectTier(quality, reduceMotion);
     const still = effectTier === 'still';
     const alive = effectTier === 'full';
@@ -145,6 +146,7 @@ export function GameplayScene({
             data-scene-prismatic={mood?.prismatic ? 'true' : 'false'}
             data-scene-hit={hitting && !still ? 'true' : 'false'}
             data-scene-spew={spewing && !still ? 'true' : 'false'}
+            data-scene-realm-event={realmStruck && !still ? mood?.realmEventFamily ?? 'none' : 'none'}
             data-scene-miss={missing && !still ? 'true' : 'false'}
             data-scene-frozen={frozen && !still ? 'true' : 'false'}
             data-scene-peril={mood?.peril ? 'true' : 'false'}
