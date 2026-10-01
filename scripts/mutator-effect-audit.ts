@@ -83,7 +83,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
         cycleFloor: entry.cycleFloor
     });
     let run: RunState = {
-        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
+        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })),
         activeMutators: mutators,
         board,
         status: 'playing',

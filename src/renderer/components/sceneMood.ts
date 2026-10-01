@@ -21,6 +21,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
  * Everything here is presentation; nothing a rule reads.
  */
 export type ScenePlateId = 'dungeon' | 'shop' | 'void';
+export type SceneDriftTone = 'ember' | 'spore' | 'bubble';
 
 export interface SceneMood {
     plate: ScenePlateId;
@@ -41,6 +42,8 @@ export interface SceneMood {
     wet: number;
     /** An ember run's weather: sparks and ash drifting up through the room, 0..1. */
     ash: number;
+    /** What drifts: embers, the grove's spores, or the tide's bubbles. */
+    driftTone: SceneDriftTone;
     /** Identity of the floor the run came back to after a void floor, for the return beat; null otherwise. */
     voidReturnKey: string | null;
     /** Grade over the plate: hue rotation, saturation and brightness, from the temper and the heat. */
@@ -160,7 +163,12 @@ export const deriveSceneMood = ({
     const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
     const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
     const storm = temper.id === 'storm' && plate === 'dungeon' ? round(weather) : 0;
-    const ash = (temper.id === 'ember' || temper.id === 'prismatic') && plate !== 'shop' ? round(weather) : 0;
+    // The drift is the ember run's, and the grove's spores and the tide's bubbles (`realm-rules.ts`).
+    const drifts = temper.id === 'ember' || temper.id === 'prismatic' || temper.id === 'grove' || temper.id === 'tide';
+    const ash = drifts && plate !== 'shop' ? round(weather) : 0;
+    const driftTone: SceneDriftTone = temper.id === 'grove' ? 'spore' : temper.id === 'tide' ? 'bubble' : 'ember';
+    // The realms without a pane of their own are graded from the first turn, so the room reads as the place.
+    const realmTint = temper.id === 'tide' || temper.id === 'grove' ? 0.45 : 0;
     const voidReturnKey = voidReturnKeyFor(run, latestLoss);
     const graded = plate === 'dungeon';
     return {
@@ -170,13 +178,14 @@ export const deriveSceneMood = ({
         snow,
         snowGlow: round(snow * (0.3 + 0.7 * cold)),
         ash,
+        driftTone,
         ice,
         iceCracks,
         iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),
         storm,
-        wet: round(temper.id === 'storm' && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
+        wet: round((temper.id === 'storm' || temper.id === 'tide') && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
         voidReturnKey,
-        hueDeg: graded ? Math.round(temper.ringHueDeg * 0.35 * heat) + 0 : 0,
+        hueDeg: graded ? Math.round(temper.ringHueDeg * (realmTint * 0.5 + 0.35 * heat)) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),
         brightness: round(graded ? (temper.id === 'frost' ? 1 + 0.12 * heat : 1 + 0.06 * heat) : plate === 'void' ? 0.85 : 1),
         prismatic: temper.id === 'prismatic' && graded && heat > 0,

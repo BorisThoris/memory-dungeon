@@ -23,6 +23,8 @@ import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { runChainTier } from './chain-tier-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
+import { chooseRealmDoor } from './realm-rules';
+import { isTileFlipBlocked } from './realm-weather-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -92,7 +94,17 @@ export type TestHallRoomId =
     | 'wild-run'
     | 'no-shuffle'
     | 'session-stats'
-    | 'journal';
+    | 'journal'
+    | 'realm-frostbite'
+    | 'realm-blizzard'
+    | 'realm-wildfire'
+    | 'realm-burnout'
+    | 'realm-current'
+    | 'realm-lightning'
+    | 'realm-vines'
+    | 'realm-overgrowth'
+    | 'realm-omen'
+    | 'realm-travel';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -118,6 +130,10 @@ export type TestHallStep =
     | { readonly do: 'clear' }
     /** Descend from a cleared floor to the next one, which opens on its study window. */
     | { readonly do: 'advance' }
+    /** Walk through a travel door at a floor clear (`realm-rules.ts`). */
+    | { readonly do: 'travel'; readonly door: number }
+    /** Match the pair of the card that is burning (an ember realm's wildfire). */
+    | { readonly do: 'matchBurning' }
     /** End the study window and start play. */
     | { readonly do: 'study' };
 
@@ -181,7 +197,7 @@ const room = (
         tiles: editTiles = (tiles: Tile[]) => tiles
     } = {}
 ): RunState => {
-    const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: 90_210 }));
+    const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: 90_210, realm: null }));
     const { tiles, columns } = layout(rows);
     const laid = editTiles(tiles);
     const board: BoardState = {
@@ -272,6 +288,31 @@ const journaledOneTurn = (run: RunState, before: RunState): string | null => {
 const scheduled = (run: RunState) => pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.board?.level ?? 0, run.gameMode);
 
 // ---- The rooms --------------------------------------------------------------------------------
+
+// ---- Realms -----------------------------------------------------------------------------------
+
+const tileById = (run: RunState, id: string): Tile | undefined => (run.board?.tiles ?? []).find((t) => t.id === id);
+const realmRun = (realmId: NonNullable<RunState['realmId']>, realmSeverity: NonNullable<RunState['realmSeverity']>, extra: Partial<RunState> = {}): Partial<RunState> => ({
+    realmId,
+    realmSeverity,
+    realmWeatherThisFloor: 0,
+    realmReactionsThisFloor: 0,
+    realmDousedThisFloor: 0,
+    realmBurnoutsThisFloor: 0,
+    realmVinesCutThisFloor: 0,
+    realmFrozenThisFloor: 0,
+    realmLitTileIds: [],
+    lastRealmEvent: null,
+    ...extra
+});
+const realmEventIs = (kind: NonNullable<RunState['lastRealmEvent']>['kind']) => (run: RunState) =>
+    run.lastRealmEvent?.kind === kind ? null : `the realm's last event was ${run.lastRealmEvent?.kind ?? 'nothing'}, expected ${kind}`;
+const goldIs = (n: number) => (run: RunState) => (runGold(run) === n ? null : `gold ${runGold(run)}, expected ${n}`);
+const frostIs = (id: string, n: number | undefined) => (run: RunState) =>
+    tileById(run, id)?.frost === n ? null : `${id} frost ${tileById(run, id)?.frost}, expected ${n}`;
+// A checkerboard of two suits: no card touches one of its own suit, so a match takes its own pair
+// and nothing else, and a room can count turns without a pop clearing pairs it means to play.
+const EIGHT_PAIRS = ['a:e b:t c:e d:t', 'f:t e:e h:t g:e', 'c:e d:t a:e b:t', 'h:t g:e f:t e:e'];
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
@@ -1180,6 +1221,199 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'match', pairKey: 'a' }, says: 'the match is one journaled turn', expect: (r, b) => journaledOneTurn(r, b) },
             { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'the miss is one more', expect: (r, b) => journaledOneTurn(r, b) }
         ]
+    },
+    {
+        id: 'realm-frostbite',
+        title: 'Frostbite',
+        mechanic: 'In the Frozen Reach a miss freezes both cards it showed for two turns: they cannot be turned until the ice goes.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Miss a against b, then try to turn a: it is frozen. Two more turns and the ice is gone.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('frost', 'calm') }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'both cards freeze for two turns', expect: expectAll(frostIs('a-1', 2), frostIs('b-1', 2), realmEventIs('frostbite'), (r) => (r.realmFrozenThisFloor === 2 ? null : `frozen ${r.realmFrozenThisFloor}`)) },
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'a frozen card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the frozen card turned') },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a turn later the ice is thinner', expect: expectAll(frostIs('a-1', 1), frostIs('c-1', 2)) },
+            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'and then it is gone', expect: expectAll(frostIs('a-1', undefined), frostIs('b-1', undefined)) }
+        ]
+    },
+    {
+        id: 'realm-blizzard',
+        title: 'Blizzard',
+        mechanic: 'Every fourth turn in the Frozen Reach a blizzard slides one row of face-down cards with the wind and snows their backs over.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Take four turns and watch the fourth slide a row and bury its suits in snow.',
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 5, run: realmRun('frost', 'wild') }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn one') },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn two') },
+            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'turn three, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn three') },
+            {
+                step: { do: 'miss', a: 'g-1', b: 'h-1' },
+                says: 'turn four: a row slides and its backs are snowed over',
+                expect: expectAll(realmEventIs('blizzard'), (r, b) => {
+                    const snowed = (r.board?.tiles ?? []).map((t, index) => ({ t, index })).filter(({ t }) => t.snowed);
+                    if (snowed.length < 2) return `${snowed.length} cards snowed`;
+                    const cols = r.board!.columns;
+                    if (new Set(snowed.map(({ index }) => Math.floor(index / cols))).size !== 1) return 'snow on more than one row';
+                    return order(r) !== order(b) ? null : 'no card moved';
+                })
+            }
+        ]
+    },
+    {
+        id: 'realm-wildfire',
+        title: 'Wildfire',
+        mechanic: 'Every third turn in the Cinder Deep a face-down card catches fire on a three-turn fuse; matched in time it is doused for two gold.',
+        graphMechanicIds: ['board.realm_weather', 'economy.gold'],
+        tryThis: 'Match three pairs; the third turn lights a card. Match the burning card and its partner.',
+        build: () => room(EIGHT_PAIRS, { level: 6, run: realmRun('ember', 'wild', { gold: 0 }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
+            { step: { do: 'match', pairKey: 'e' }, says: 'turn two', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn two' : null) },
+            { step: { do: 'match', pairKey: 'h' }, says: 'turn three lights a card on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 1 ? null : 'no card on a fresh fuse')) },
+            { step: { do: 'matchBurning' }, says: 'matched in time, the fire is doused for two gold', expect: expectAll(realmEventIs('doused'), goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
+        ]
+    },
+    {
+        id: 'realm-burnout',
+        title: 'Burnout',
+        mechanic: 'A fuse that runs out burns a gold and spreads the fire to a face-down neighbour.',
+        graphMechanicIds: ['board.realm_weather', 'economy.gold'],
+        tryThis: 'Card c is on its last turn of fuse. Take any turn and watch it burn out and catch beside it.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
+                run: realmRun('ember', 'calm', { gold: 5 }),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'c-1' ? { ...t, fuse: 1 } : t))
+            }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'the fuse runs out: a gold burns and the fire spreads to a neighbour',
+                expect: expectAll(realmEventIs('burnout'), goldIs(4), (r) => (tileById(r, 'c-1')?.fuse == null ? null : 'c-1 still burning'), (r) =>
+                    (r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 1 ? null : 'the fire did not spread')
+            }
+        ]
+    },
+    {
+        id: 'realm-current',
+        title: 'The current',
+        mechanic: 'Every third turn in the Drowned Vault the tide runs one column of face-down cards down a step, and sweeps across the room.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Take three turns: on the third, the first column runs down a step.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'wild') }),
+        script: [
+            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'turn one', expect: (r, b) => (order(r) === order(b) ? null : 'cards moved on turn one') },
+            { step: { do: 'miss', a: 'd-1', b: 'f-1' }, says: 'turn two', expect: (r, b) => (order(r) === order(b) ? null : 'cards moved on turn two') },
+            {
+                step: { do: 'miss', a: 'b-1', b: 'd-1' },
+                says: 'turn three: the first column runs down a step, the bottom card to the top',
+                expect: expectAll(realmEventIs('current'), (r, b) =>
+                    positionOf(r, b.board!.tiles[8]!.id) === 0 && positionOf(r, b.board!.tiles[0]!.id) === 4 ? null : `column 0 reads ${[0, 4, 8].map((i) => r.board!.tiles[i]!.id).join(',')}`)
+            }
+        ]
+    },
+    {
+        id: 'realm-lightning',
+        title: 'Lightning',
+        mechanic: 'Every fourth turn in the Thunder Spire lightning swaps two face-down cards and leaves both lit until the next flip.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Take four turns: the fourth swaps two cards, and they show where they landed.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 5, run: realmRun('storm', 'wild') }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn one') },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn two') },
+            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'turn three', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn three') },
+            {
+                step: { do: 'miss', a: 'a-2', b: 'c-2' },
+                says: 'turn four: two cards swap and stay lit',
+                expect: expectAll(realmEventIs('lightning'), (r, b) => {
+                    const lit = r.realmLitTileIds ?? [];
+                    if (lit.length !== 2) return `${lit.length} lit`;
+                    return lit.every((id) => positionOf(r, id) !== positionOf(b, id)) ? null : 'a lit card did not move';
+                })
+            },
+            { step: { do: 'flip', tileId: 'b-2' }, says: 'the next flip puts the light out', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'still lit') }
+        ]
+    },
+    {
+        id: 'realm-vines',
+        title: 'Vines',
+        mechanic: 'In the Overgrown Crypt a vined card cannot be turned; a match beside it cuts the vine for a gold.',
+        graphMechanicIds: ['board.realm_weather', 'economy.gold'],
+        tryThis: 'Try to turn b: the vines hold it. Match a beside it and the vine is cut.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'a:e e:t f:m c:b', 'b:t d:b e:t f:m'], {
+                run: realmRun('grove', 'calm', { gold: 0 }),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' ? { ...t, vined: true } : t))
+            }),
+        script: [
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the vined card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the vined card turned') },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match beside it cuts the vine for a gold', expect: expectAll(realmEventIs('harvest'), goldIs(1), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'b-1 is still vined')) }
+        ]
+    },
+    {
+        id: 'realm-overgrowth',
+        title: 'Overgrowth',
+        mechanic: 'Every third turn in the Overgrown Crypt vines creep over a face-down card, next to vines already there when they can.',
+        graphMechanicIds: ['board.realm_weather', 'safety.softlock_fairness'],
+        tryThis: 'Take three turns and a card is vined; the floor always keeps a pair you can turn.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('grove', 'wild') }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.vined) ? 'vines on turn one' : null) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.vined) ? 'vines on turn two' : null) },
+            {
+                step: { do: 'miss', a: 'e-1', b: 'f-1' },
+                says: 'turn three: vines take a card, and the floor can still be finished',
+                expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 1 ? null : 'no card vined'), finishable)
+            },
+            { step: { do: 'clear' }, says: 'the floor clears around the vines', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'realm-omen',
+        title: 'The omen',
+        mechanic: 'An omen pair carries another realm’s sigil; matching it sets off a reaction and turns the floor into that realm.',
+        graphMechanicIds: ['board.realm_omen', 'board.realm_weather'],
+        tryThis: 'Pair a is an Ember omen in the Frozen Reach, and c is frozen. Match a: the Thaw melts the ice and the floor burns.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
+                run: realmRun('frost', 'calm', { gold: 0 }),
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, omen: 'ember' as const } : t.id === 'c-1' ? { ...t, frost: 2 } : t))
+            }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the Thaw: the ice melts for a gold and the floor turns to ember',
+                expect: expectAll(realmEventIs('reaction'), frostIs('c-1', undefined), goldIs(1), (r) =>
+                    r.realmId === 'ember' && r.lastRealmEvent?.reaction === 'Thaw' ? null : `realm ${r.realmId}, reaction ${r.lastRealmEvent?.reaction}`)
+            }
+        ]
+    },
+    {
+        id: 'realm-travel',
+        title: 'The travel doors',
+        mechanic: 'A floor clear offers three doors - three realms, one calm, one wild, one raging - and the next floor is built behind the one walked through.',
+        graphMechanicIds: ['economy.realm_travel', 'progression.run_flow'],
+        tryThis: 'Clear the floor, pick the second door and descend: the next floor is in that realm.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm') }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the clear offers three doors, the frost among them',
+                expect: expectAll(statusIs('levelComplete'), (r) => {
+                    const doors = r.realmDoors ?? [];
+                    if (doors.length !== 3) return `${doors.length} doors`;
+                    if (doors.map((d) => d.severity).sort().join(',') !== 'calm,raging,wild') return 'not one of each severity';
+                    return doors.some((d) => d.realmId === 'frost') ? null : 'the realm the floor ended in is not a door';
+                })
+            },
+            { step: { do: 'travel', door: 1 }, says: 'the second door is walked through', expect: (r) => (r.nextRealm?.realmId === r.realmDoors?.[1]?.realmId ? null : 'the door was not taken') },
+            {
+                step: { do: 'advance' },
+                says: 'the next floor is built in that realm, at that severity',
+                expect: (r, b) => (r.realmId === b.realmDoors?.[1]?.realmId && r.realmSeverity === b.realmDoors?.[1]?.severity ? null : `built in ${r.realmId}/${r.realmSeverity}`)
+            }
+        ]
     }
 ];
 
@@ -1255,7 +1489,14 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             // Real pairs only: a joker left standing is the Wild run's to carry, not a pair to clear.
             let next = run;
             for (let guard = 0; guard < 64 && next.status === 'playing'; guard += 1) {
-                const pairKey = (next.board?.tiles ?? []).find((t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY)?.pairKey;
+                // A frozen or vined card cannot be turned yet: clear the pairs that can be.
+                const tiles = next.board?.tiles ?? [];
+                const pairKey = tiles.find(
+                    (t) =>
+                        t.state === 'hidden' &&
+                        t.pairKey !== WILD_PAIR_KEY &&
+                        tiles.filter((other) => other.pairKey === t.pairKey && other.state === 'hidden').every((half) => !isTileFlipBlocked(half))
+                )?.pairKey;
                 if (!pairKey) break;
                 next = playTestHallStep(next, { do: 'match', pairKey }) ?? next;
             }
@@ -1263,6 +1504,14 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'advance':
             return run.status === 'levelComplete' ? advanceToNextLevel(run) : null;
+        case 'travel': {
+            const next = chooseRealmDoor(run, step.door);
+            return next === run ? null : next;
+        }
+        case 'matchBurning': {
+            const burning = (run.board?.tiles ?? []).find((t) => t.state === 'hidden' && t.fuse != null);
+            return burning ? playTestHallStep(run, { do: 'match', pairKey: burning.pairKey }) : null;
+        }
         case 'study':
             return run.status === 'memorize' ? finishMemorizePhase(run) : null;
     }

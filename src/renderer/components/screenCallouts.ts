@@ -15,6 +15,8 @@ import {
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
+import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
+import { REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
 
 /**
  * The screen stamps (`ScreenCalloutQueue`): every moment the run wants the whole screen for,
@@ -34,7 +36,7 @@ import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, they play in this order, which is the order of what the player most needs to know.
  */
-export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'realm';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -53,7 +55,7 @@ export interface ScreenCallout {
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['ignite', 'zone', 'milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['realm', 'ignite', 'zone', 'milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
@@ -113,6 +115,84 @@ export const deriveTurnCallouts = (
  * verdict when one resolves (a new `lastZone` key): PERFECT ZONE when every pair matched and
  * nothing missed, ZONE ×n otherwise, in the miss's red when the leftovers cost the bank.
  */
+/** What a realm event is stamped as: the weather's word, and what it did in a line. */
+const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'>, { title: string; sub: (event: RealmEvent) => string; size: 'major' | 'minor' }>> = {
+    blizzard: { title: 'BLIZZARD!', sub: (e) => `A row slides with the wind · ${e.tileIds.length} cards snowed over`, size: 'major' },
+    frostbite: { title: 'FROSTBITE', sub: () => 'Both cards frozen: wait out the ice', size: 'minor' },
+    wildfire: { title: 'WILDFIRE!', sub: () => 'A card is burning: match it before the fuse runs out', size: 'major' },
+    burnout: { title: 'BURNT OUT', sub: (e) => `${Math.abs(e.gold ?? 0)} gold lost · the fire spreads`, size: 'minor' },
+    doused: { title: 'DOUSED!', sub: (e) => `+${e.gold ?? 0} gold`, size: 'minor' },
+    current: { title: 'THE TIDE TURNS', sub: (e) => `A column runs down a step · ${e.tileIds.length} cards moved`, size: 'major' },
+    lightning: { title: 'LIGHTNING!', sub: () => 'Two cards swapped: they show where they landed', size: 'major' },
+    overgrowth: { title: 'OVERGROWTH', sub: (e) => `Vines take ${e.tileIds.length === 1 ? 'a card' : `${e.tileIds.length} cards`}: match beside them to cut`, size: 'major' },
+    harvest: { title: 'HARVEST!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'vine' : 'vines'} cut · +${e.gold ?? 0} gold`, size: 'minor' },
+    thaw: { title: 'THE HOLD BREAKS', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'card' : 'cards'} free again`, size: 'minor' }
+};
+
+/** The stamp for a realm event (`realm-weather-rules.ts`), in the realm's colour. */
+export const realmEventCallout = (event: RealmEvent, realmColor: string): ScreenCallout => {
+    if (event.kind === 'reaction' && event.to) {
+        const to = REALMS[event.to];
+        return {
+            key: `realm:${event.key}`,
+            kind: 'realm',
+            size: 'major',
+            tone: 'legendary',
+            title: `${(event.reaction ?? 'Reaction').toUpperCase()}!`,
+            sub: `The floor turns to ${to.title}${event.gold ? ` · +${event.gold} gold` : ''}`,
+            color: to.color
+        };
+    }
+    const stamp = REALM_EVENT_STAMPS[event.kind as Exclude<RealmEvent['kind'], 'reaction'>];
+    return {
+        key: `realm:${event.key}`,
+        kind: 'realm',
+        size: stamp.size,
+        tone: (event.gold ?? 0) < 0 ? 'miss' : (event.gold ?? 0) > 0 ? 'gold' : 'cyan',
+        title: stamp.title,
+        sub: stamp.sub(event),
+        color: realmColor
+    };
+};
+
+/** The stamp a floor opens on: where it is, and how hard the weather blows. */
+export const realmEntryCallout = (key: string, realm: keyof typeof REALMS, severity: keyof typeof REALM_SEVERITIES): ScreenCallout => ({
+    key: `realm-enter:${key}`,
+    kind: 'realm',
+    size: 'major',
+    tone: 'legendary',
+    title: REALMS[realm].place.toUpperCase(),
+    sub: `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`,
+    color: REALMS[realm].color
+});
+
+/** What the realm stamps are derived from: where the floor is, and the realm's last event. */
+export interface RealmCalloutSnapshot {
+    runSeed: number;
+    level: number;
+    realm: RealmId | null;
+    severity: RealmSeverity;
+    playing: boolean;
+    event: RealmEvent | null;
+}
+
+/**
+ * The realm stamps between two reads: the floor arriving in a realm (once per floor, as play
+ * starts) and every realm event the turn reported. The first read is the baseline.
+ */
+export const deriveRealmCallouts = (previous: RealmCalloutSnapshot, next: RealmCalloutSnapshot): ScreenCallout[] => {
+    if (!next.realm) return [];
+    const callouts: ScreenCallout[] = [];
+    const arrived = previous.runSeed !== next.runSeed || previous.level !== next.level || !previous.playing;
+    if (next.playing && arrived) {
+        callouts.push(realmEntryCallout(`${next.runSeed}:${next.level}`, next.realm, next.severity));
+    }
+    if (next.event && next.event.key !== previous.event?.key) {
+        callouts.push(realmEventCallout(next.event, REALMS[next.realm].color));
+    }
+    return callouts;
+};
+
 export const deriveZoneCallouts = (
     previous: Pick<RunState, 'zonesThisRun' | 'lastZone'> | undefined,
     next: Pick<RunState, 'zonesThisRun' | 'lastZone'>

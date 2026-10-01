@@ -107,7 +107,8 @@ export const createGeneratedBoardSolverRun = (
     rulesVersion = GAME_RULES_VERSION
 ): RunState => {
     return {
-        ...createNewRun(0, { runSeed: seed, runRulesVersionOverride: rulesVersion }),
+        // A generated board on its own: the realm's weather has its own solvability guard and tests.
+        ...createNewRun(0, { runSeed: seed, runRulesVersionOverride: rulesVersion, realm: null }),
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles)

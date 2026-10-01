@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 63 as const;
+export const ENCYCLOPEDIA_VERSION = 64 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -593,7 +593,31 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Clear the floor with momentum still standing and the floor-end bonus multiplies with the tier: 1.5x at Clean, 2.5x at Sharp, 5x at Fever - Extreme Fever. Never the rating. ' +
             'Your **combo carries from floor to floor until you miss** - the chain, its tier, its cascade and early-start momentum, all of it. A floor cleared at Fever opens the next one at Fever, and the only thing that ends it is a miss. ' +
             'Past Fever the combo keeps heating: **Warm** from 3, **Hot** from 6, **Blazing** from 10, **Inferno** from 16, **Legendary** from 25. The heat changes nothing a rule reads - the rungs still decide what a break takes - but the whole game answers it: flames climb the chain rail, the combo number burns, embers rise off the cards, the torches and the ring go wild, lightning through every pop forks and thickens, and the edges of the screen glow in the stage\'s colour. ' +
-            'Every run has a **temper**, rolled from its seed: most burn **Ember**; some run **Frost**, and the combo goes cold instead - Chill, Cold, Frozen, Glacial, Absolute Zero - with snow drifting down off the cards; some run **Storm**. One run in fifty is **Prismatic**, the rare one: every colour at once, and its stamps say so. The temper changes nothing a rule reads. A combo of fifty, and of every hundred, gets a stamp of its own.'
+            'Every run has a **temper**, rolled from its seed: most burn **Ember**; some run **Frost**, and the combo goes cold instead - Chill, Cold, Frozen, Glacial, Absolute Zero - with snow drifting down off the cards; some run **Storm**. One run in fifty is **Prismatic**, the rare one: every colour at once, and its stamps say so. The temper changes nothing a rule reads, and on a floor in a realm the heat burns in the realm\u2019s own element instead - frost, ember, storm, tide or grove. A combo of fifty, and of every hundred, gets a stamp of its own.'
+    },
+    {
+        id: 'realms',
+        title: 'Realms and their weather',
+        description:
+            'Every floor is in a **realm**, and the realm plays the board with you. Its weather comes on a clock you wind yourself - every few turns, match or miss - and the chip at the top says how many turns are left. ' +
+            '**The Frozen Reach**: a miss freezes both cards it showed for two turns, and a frozen card cannot be turned; a **blizzard** slides one row of face-down cards with the wind and snows their backs over, so their suits cannot be read until you turn them. ' +
+            '**The Cinder Deep**: **wildfire** lights a card on a three-turn fuse. Match it and its partner in time and the fire is **doused** for two gold; let the fuse run out and it burns a gold and spreads to a neighbour. ' +
+            '**The Drowned Vault**: the **current** runs one column of face-down cards down a step, the bottom card to the top, and sweeps across the room. ' +
+            '**The Thunder Spire**: **lightning** swaps two face-down cards and leaves both lit until your next flip - what it shows you is where they landed. ' +
+            '**The Overgrown Crypt**: **vines** creep over a card and hold it so it cannot be turned; a match beside vines cuts them, a gold for every vine. ' +
+            'Matching beside frozen cards shatters their ice. However the weather falls, a floor always keeps a pair you can turn: if the ice and the vines would leave none, they give way.'
+    },
+    {
+        id: 'realm_omens',
+        title: 'Omens',
+        description:
+            'From the third floor, one pair on the board is an **omen** of another realm: its sigil is on both halves. Matching it sets off a **reaction** - frost meeting ember is a **Thaw**, ember meeting tide is **Steam**, a grove set alight is **Wildfire** - and the floor becomes the omen\u2019s realm for the rest of the floor. What the old weather left behind goes, a gold for each thing it clears, and the new weather starts from the next turn. Wildfire through a grove sets every vine alight instead of clearing it; a storm breaking strikes at once. You have to match the omen to clear the floor, so the choice is when.'
+    },
+    {
+        id: 'realm_travel',
+        title: 'Travel',
+        description:
+            'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - omen and all - is always one of the doors. A run opens somewhere calm.'
     },
     {
         id: 'tile_suits',

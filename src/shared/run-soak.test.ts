@@ -38,6 +38,13 @@ describe('the run soak', () => {
         // The Zone: the careful player reaches Inferno and ignites it; some of its pairs match.
         expect(reports.some((report) => report.zones > 0), 'no run ever ignited the Zone').toBe(true);
         expect(reports.some((report) => report.zonePairs > 0), 'no Zone ever matched a pair').toBe(true);
+        // The realms: weather comes, omens react, the player answers it, and doors are walked through.
+        expect(reports.some((report) => report.realmWeather > 0), 'no realm ever had weather').toBe(true);
+        expect(reports.some((report) => report.realmReactions > 0), 'no omen ever set off a reaction').toBe(true);
+        expect(reports.some((report) => report.realmDoused > 0), 'no fire was ever doused').toBe(true);
+        expect(reports.some((report) => report.realmVinesCut > 0), 'no vine was ever cut').toBe(true);
+        expect(reports.some((report) => report.realmFrozen > 0), 'no card was ever frozen').toBe(true);
+        expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
         // The joker left its partner stranded and the floor unclearable until a soak player used it.
         const wild = Array.from({ length: 4 }, (_unused, index) =>
             soakRun({ seed: 7_001 + index * 7_919, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 3 })

@@ -88,7 +88,9 @@ export const simulateDifficultyCurve = ({
             cycleFloor: entry.cycleFloor
         });
         let run: RunState = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
+            // No realm: this is the pair curve and the par it is judged against. The realms' weather is
+            // a layer on top, paid for in gold at the clear, and the soak plays it (`run-soak.ts`).
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })),
             // The bank is held open, as in every census: this measures the curve, not survival.
             missBank: undefined,
             activeMutators: mutators,

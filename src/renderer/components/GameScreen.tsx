@@ -1,4 +1,3 @@
-import { ACHIEVEMENTS } from '../../shared/achievements';
 import { describeHeldPair } from '../../shared/held-pair-rules';
 import {
     MAX_PINNED_TILES,
@@ -19,7 +18,6 @@ import {
     canRegionShuffleRow,
     canShuffleBoard
 } from '../../shared/board-powers';
-import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -40,6 +38,7 @@ import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
 import StoreVault from './StoreVault';
+import RealmTravel from './RealmTravel';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -64,7 +63,6 @@ import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
     formatHudActionFeedbackText,
-    getFindableToastText,
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -122,13 +120,14 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
-import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForSeed, comboStageReached } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun, comboStageReached } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
-import { derivePurchaseCallouts, deriveTurnCallouts, deriveZoneCallouts, type ScreenCallout } from './screenCallouts';
+import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
+import { runRealmId, runRealmSeverity } from '../../shared/realm-rules';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -258,27 +257,6 @@ type NextFloorSignalRow = {
     value: string;
 };
 
-/**
- * Pickup toast copy, projected from the resolved-turn event. The claimed kind, the
- * pickup counters and the chain state all come from what the core reported, so the toast
- * cannot disagree with the rules the way a board-snapshot diff could.
- */
-const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | null => {
-    const claimedKind = turnEvent.matchedFindableKind;
-    if (claimedKind == null) {
-        return null;
-    }
-    const baseText = getFindableToastText(claimedKind);
-    const pickupClaimed = runNonNegativeInteger(turnEvent.findablesClaimedAfter);
-    const pickupTotal = runNonNegativeInteger(turnEvent.findablesTotalAfter);
-    const pickupProgress =
-        pickupTotal > 0
-            ? `Pickups ${pickupClaimed}/${pickupTotal}.`
-            : null;
-
-    return pickupProgress ? `${baseText}. ${pickupProgress}` : baseText;
-};
-
 /** Store purchases as stamps, accumulated as the counts go up; the first read is the baseline. */
 const usePurchaseCallouts = (storePurchases: RunState['storePurchases']): ScreenCallout[] => {
     const previous = useRef(storePurchases);
@@ -301,6 +279,32 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = { zonesThisRun, lastZone };
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
+/**
+ * The realm's stamps (`realm-weather-rules.ts`): every new event it reports, and the floor's arrival
+ * in a realm. Accumulated on the event key, so a restore replays none and each is stamped once.
+ */
+const useRealmCallouts = (run: RunState): ScreenCallout[] => {
+    const playing = run.status === 'playing' || run.status === 'resolving';
+    const snapshot: RealmCalloutSnapshot = {
+        runSeed: run.runSeed,
+        level: run.board?.level ?? 0,
+        realm: runRealmId(run),
+        severity: runRealmSeverity(run),
+        playing,
+        event: run.lastRealmEvent ?? null
+    };
+    const previous = useRef<RealmCalloutSnapshot>(snapshot);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    const { runSeed, level, realm, severity, event } = snapshot;
+    useEffect(() => {
+        const next: RealmCalloutSnapshot = { runSeed, level, realm, severity, playing, event };
+        const fresh = deriveRealmCallouts(previous.current, next);
+        previous.current = next;
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [runSeed, level, realm, severity, playing, event]);
     return callouts;
 };
 
@@ -389,6 +393,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * that cleared, so it opens once per stop.
      */
     const [storeStopKey, setStoreStopKey] = useState<string | null>(null);
+    /*
+     * The travel doors (`realm-rules.ts`): after the beat - and after the store, on a store floor -
+     * the player picks where the next floor is. Keyed on the floor that cleared, like the store.
+     */
+    const [travelKey, setTravelKey] = useState<string | null>(null);
     const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (!compactTouchChrome) {
@@ -404,6 +413,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
             continueToNextLevel: state.continueToNextLevel,
+            travelThroughRealmDoor: state.travelThroughRealmDoor,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
@@ -710,6 +720,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         applyFlashPairPower,
         greetFloorResident,
         continueToNextLevel,
+        travelThroughRealmDoor,
         dismissPowersFtue,
         goToMenu,
         buyStoreItem,
@@ -877,19 +888,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (ids.length === 0) {
                 return;
             }
-            const infoDuration = reduceMotion ? 3500 : 5500;
-            const { showAchievement } = useNotificationStore.getState();
+            // No banner over the board (2026-09-30): an unlock is not the player's business mid-floor,
+            // and the owner read the stack of them as filler. The results screen lists what a run
+            // unlocked; here they are only marked as seen.
             for (const achievementId of ids) {
-                if (seenAchievementToastIdsRef.current.has(achievementId)) {
-                    continue;
-                }
                 seenAchievementToastIdsRef.current.add(achievementId);
-                const def = ACHIEVEMENTS.find((item) => item.id === achievementId);
-                if (def) {
-                    showAchievement(`${def.title} — ${def.description}`, infoDuration, {
-                        stackKey: `achievement:${achievementId}`
-                    });
-                }
             }
         };
 
@@ -917,29 +920,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         suppressStatusOverlays
     ]);
 
-    useEffect(() => {
-        if (!typedBoardTurnEvent) {
-            return;
-        }
-        if (typedBoardTurnEvent.matchedFindableKind == null) {
-            return;
-        }
-        if (typedBoardTurnEvent.findablesClaimedAfter <= typedBoardTurnEvent.findablesClaimedBefore) {
-            return;
-        }
-        const toastText = getPickupStackToastText(typedBoardTurnEvent);
-        if (toastText == null) {
-            return;
-        }
-        const { showInfo } = useNotificationStore.getState();
-        showInfo(
-            toastText,
-            reduceMotion ? 2200 : 3200,
-            // Keyed on the event id so one resolved turn toasts once, no matter how many
-            // times the component re-renders.
-            { stackKey: `pickup:${typedBoardTurnEvent.eventId}` }
-        );
-    }, [typedBoardTurnEvent, reduceMotion]);
+    // The pickup toast went with the rest of the filler over the board (2026-09-30): the score pop
+    // on the pair already says what a pickup paid.
 
     /** Persist `powersFtueSeen` once the player leaves tutorial floors (pair markers no longer needed). */
     useEffect(() => {
@@ -997,10 +979,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ...run.peekRevealedTileIds,
             ...run.flashPairRevealedTileIds,
             // Lantern light shows faces the same way; it lives in its own field so it never counts as a peek.
-            ...(run.lanternLitTileIds ?? [])
+            ...(run.lanternLitTileIds ?? []),
+            ...(run.realmLitTileIds ?? [])
         ]);
         return [...merged];
-    }, [run.peekRevealedTileIds, run.flashPairRevealedTileIds, run.lanternLitTileIds]);
+    }, [run.peekRevealedTileIds, run.flashPairRevealedTileIds, run.lanternLitTileIds, run.realmLitTileIds]);
     const allowGambitThirdFlip = run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed;
     const activeSeatLabel = run.passAndPlay
         ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)
@@ -1072,7 +1055,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // The combo heat (`combo-heat-rules.ts`): the stage every surface below reads, once per render.
     const comboHeatLevelsNow = comboHeatLevels(run.stats.currentStreak);
     // The run's temper (`comboHeatThemeForSeed`): the element its heat burns in, rolled from the seed.
-    const comboTemper = comboHeatThemeForSeed(run.runSeed);
+    const comboTemper = comboHeatThemeForRun(run);
     /*
      * The stage the latest turn reached (`comboStageReached`): the rank-up stamp and its sting
      * are keyed to that turn, so a run that opens already Blazing shows nothing until it climbs.
@@ -1089,6 +1072,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
+    const realmCallouts = useRealmCallouts(run);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1106,11 +1090,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: 'BACK FROM THE VOID', sub: 'The room is yours again' }]
                 : []),
             ...purchaseCallouts,
-            ...zoneCallouts
+            ...zoneCallouts,
+            ...realmCallouts
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts]
     );
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1156,6 +1141,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const storeStopDue = isStoreStopFloor(run.lastLevelResult?.level) && !isPassAndPlayRun(run.passAndPlay);
+    // A shared table does not stop for doors either: the next floor builds behind the first one.
+    const travelDue = (run.realmDoors?.length ?? 0) > 0 && !isPassAndPlayRun(run.passAndPlay);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1177,7 +1164,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * was cut short by anything else is harmless.
      */
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey || travelKey === floorClearKey) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1192,6 +1179,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const afterBeat = (): void => {
             if (storeStopDue) {
                 setStoreStopKey(floorClearKey);
+                return;
+            }
+            if (travelDue) {
+                setTravelKey(floorClearKey);
                 return;
             }
             continueToNextLevel();
@@ -1216,7 +1207,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey, travelDue, travelKey]);
 
     const nextFloorResidentLine = run.lastLevelResult
         ? floorClearResidentLine(
@@ -1649,7 +1640,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The store stop is a dialog over the cleared board like pause is, so the board goes inert under
     // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
-    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
+    const travelOpen = run.status === 'levelComplete' && travelKey === floorClearKey;
+    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey && !travelOpen;
     /*
      * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
      * collapses it into the void for the floor, and the store stop is the merchant's vault.
@@ -1680,7 +1672,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [run, storeSheetOpen, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
     );
     const gameplayShellInert =
-        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
+        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen || travelOpen);
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1826,7 +1818,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
-                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen ? (
+                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen && !travelOpen ? (
                                 <FloorClearBeat
                                     notes={floorClearNotes}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
@@ -2121,10 +2113,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </dl>
                     </OverlayModal>
                 )}
-                {!suppressStatusOverlays && run.status === 'levelComplete' && storeStopKey === floorClearKey && (
+                {!suppressStatusOverlays && travelOpen && run.realmDoors ? (
+                    <RealmTravel
+                        doors={run.realmDoors}
+                        endedIn={runRealmId(run)}
+                        floorsIn={run.realmFloorsThisRun ?? {}}
+                        onChoose={(index) => {
+                            playMenuOpen();
+                            travelThroughRealmDoor(index);
+                        }}
+                    />
+                ) : null}
+                {!suppressStatusOverlays && storeSheetOpen && (
                     <StoreVault
                         floor={run.lastLevelResult?.level ?? 0}
-                        onDescend={continueToNextLevel}
+                        onDescend={() => (travelDue ? setTravelKey(floorClearKey) : continueToNextLevel())}
                         onBuy={(id) => {
                                 const before = useAppStore.getState().run;
                                 playMenuOpen();

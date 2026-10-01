@@ -463,7 +463,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(greetings).toHaveLength(1);
     });
 
-    it('defers achievement toasts while the floor-clear beat is up, then emits after leaving levelComplete', () => {
+    it('shows no achievement banner over the board, on the beat or after it (the results screen lists unlocks)', () => {
         const runFixture = levelCompleteRunFixture();
 
         const { rerender } = render(
@@ -490,7 +490,7 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(achievementNotifications()).toBe(1);
+        expect(achievementNotifications()).toBe(0);
     });
 
     it('says the floor, the score and the way it went on the beat, with nothing to press and the board still live', () => {
@@ -608,7 +608,7 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
-    it('adds chain reward stack context to pickup reward toasts', async () => {
+    it('raises no pickup toast over the board: the score pop says what a pickup paid', async () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const initialRun = {
             ...baseRun,
@@ -664,10 +664,11 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         await waitFor(() => {
-            const pickupToast = useNotificationStore
-                .getState()
-                .notifications.find((notification) => notification.stackKey === `pickup:${claimEvent.eventId}`);
-            expect(pickupToast?.message).toBe('Score glint +25 score. Pickups 1/2.');
+            expect(
+                useNotificationStore
+                    .getState()
+                    .notifications.some((notification) => notification.stackKey === `pickup:${claimEvent.eventId}`)
+            ).toBe(false);
         });
     });
 

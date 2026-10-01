@@ -67,11 +67,9 @@ describe('board-turn feedback ownership boundary', () => {
             expect(core, field).toContain(field);
         }
         expect(gameScreen).toContain('getLatestBoardTurnResolvedEvent({ gameplayEventJournal })');
-        expect(gameScreen).toContain('typedBoardTurnEvent.matchedFindableKind');
-        expect(gameScreen).toMatch(/getPickupStackToastText = \(\s*turnEvent: BoardTurnResolvedEvent/u);
-        expect(gameScreen).toContain('getPickupStackToastText(typedBoardTurnEvent)');
-        expect(gameScreen).toContain('turnEvent.findablesClaimedAfter');
-        expect(gameScreen).toContain('turnEvent.findablesTotalAfter');
+        // The pickup toast over the board went with the rest of the filler (2026-09-30); what a
+        // pickup paid is said by the score pop, which reads the same typed event.
+        expect(gameScreen).not.toContain('getPickupStackToastText');
         expect(gameScreen).not.toContain('PickupStackToastState');
         expect(turnAnnouncement).toContain('turnEvent.matchedFindableKind');
         expect(turnAnnouncement).toContain('board-turn:${turnEvent.eventId}');

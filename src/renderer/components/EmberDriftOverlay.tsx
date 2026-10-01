@@ -1,17 +1,18 @@
 import { useMemo, type CSSProperties } from 'react';
 import { buildEmberDrift, EMBER_VIEWBOX } from './emberDrift';
 import styles from './EmberDriftOverlay.module.css';
+import type { SceneDriftTone } from './sceneMood';
 
 /**
  * The ember run's weather: sparks and ash drifting up through the room, in the plate's space so
  * they rise off the same floor at every viewport. Built once per seed; `--scene-ash` (0..1, from
  * the run's first turn, growing with the heat) sets how much of it shows and how fast it climbs.
  */
-export function EmberDriftOverlay({ seed, count }: { seed: number; count: number }) {
+export function EmberDriftOverlay({ seed, count, tone = 'ember' }: { seed: number; count: number; tone?: SceneDriftTone }) {
     const motes = useMemo(() => buildEmberDrift(seed, count), [seed, count]);
     const { width, height } = EMBER_VIEWBOX;
     return (
-        <svg aria-hidden="true" className={styles.drift} data-testid="gameplay-scene-embers" preserveAspectRatio="none" viewBox={`0 0 ${width} ${height}`}>
+        <svg aria-hidden="true" className={styles.drift} data-testid="gameplay-scene-embers" data-tone={tone} preserveAspectRatio="none" viewBox={`0 0 ${width} ${height}`}>
             <defs>
                 <filter id="ember-glow" x="-200%" y="-200%" width="500%" height="500%">
                     <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="7" />

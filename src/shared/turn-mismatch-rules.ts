@@ -3,6 +3,7 @@ import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
 import { hasMutator } from './mutators';
+import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -112,12 +113,23 @@ export const resolveMismatchTurnTransition = ({
           })
         : null;
     const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterMagpie, drift.swaps) : boardAfterMagpie;
+    // The realm answers the miss last: frostbite, the clocks, and on its turn the weather.
+    const realmTurn = resolveRealmTurn({
+        run,
+        board: boardAfterDrift,
+        outcome: 'miss',
+        tileIds,
+        sourceTiles,
+        turnsThisFloor: turnsAfterMiss,
+        pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : []
+    });
 
     return {
         ...run,
+        ...applyRealmTurnToRun(run, realmTurn),
         status: penalty.status,
         runEndReason: penalty.contractFail ? 'contract' : run.runEndReason ?? null,
-        board: boardAfterDrift,
+        board: realmTurn.board,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         magpieTheftsThisFloor:
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),

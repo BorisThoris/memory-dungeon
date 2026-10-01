@@ -10,6 +10,8 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
+import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
+import { chooseRealmDoor, REALM_DOOR_COUNT } from './realm-rules';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -76,6 +78,14 @@ export interface SoakRunReport {
     /** Zones ignited, and pairs matched inside them. */
     zones: number;
     zonePairs: number;
+    /** The realms (`realm-rules.ts`): weather events, omen reactions, fires doused and burnt out, vines cut, cards frozen, doors walked through. */
+    realmWeather: number;
+    realmReactions: number;
+    realmDoused: number;
+    realmBurnouts: number;
+    realmVinesCut: number;
+    realmFrozen: number;
+    realmDoors: number;
     violations: SoakViolation[];
 }
 
@@ -146,8 +156,11 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const bad = fields.filter(([, value]) => !nonNegativeInteger(value));
         return bad.length === 0 ? null : bad.map(([name, value]) => `${name}=${String(value)}`).join(', ');
     },
-    'the afterglow lights no more cards than the heat the run carried in allows': (before, run) => {
+    'the afterglow lights no more cards than the heat the run carried in allows': (before, run, action) => {
         if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle')) return null;
+        // A Zone replays several turns in one action, and the combo its matches build lights the
+        // later ones: the heat carried into the action is not the heat the last turn resolved on.
+        if (action === 'zone-flip' || action === 'zone-resolve') return null;
         const lit = Array.isArray(run.lanternLitTileIds) ? run.lanternLitTileIds.length : 0;
         const allowed = runComboHeatPerks(before).afterglow;
         return lit <= allowed ? null : `${lit} lit at a combo of ${before.stats.currentStreak}, which allows ${allowed}`;
@@ -217,6 +230,35 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const price = storeOffer(before).find((row) => row.id === id)?.price ?? Number.NaN;
         return runGold(before) - runGold(run) === price ? null : `gold ${runGold(before)} -> ${runGold(run)} for ${id} at ${price}`;
     },
+    /*
+     * The realms (`realm-rules.ts`). The weather may freeze, vine, burn and move cards, and none
+     * of it may leave a floor that cannot be finished or turn a card the rules say cannot be turned.
+     */
+    'frozen and vined cards always leave a pair that can be turned': (_b, run) => {
+        if (!run.board || run.status !== 'playing' || run.board.flippedTileIds.length > 0) return null;
+        return boardHasTurnablePair(run.board.tiles) ? null : 'no pair left that can be turned';
+    },
+    'a frozen or vined card is never turned face up': (before, run, action) => {
+        if (!before?.board || !run.board || (action !== 'flip' && action !== 'zone-flip')) return null;
+        const turned = run.board.tiles.filter((tile) => tile.state === 'flipped' && before.board!.tiles.find((was) => was.id === tile.id)?.state === 'hidden');
+        const blocked = turned.filter((tile) => {
+            const was = before.board!.tiles.find((candidate) => candidate.id === tile.id)!;
+            return isTileFlipBlocked(was);
+        });
+        return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
+    },
+    'a floor clear offers three doors, the realm it ended in among them': (before, run) => {
+        if (run.status !== 'levelComplete' || before?.status === 'levelComplete' || !run.realmId) return null;
+        const doors = run.realmDoors ?? [];
+        if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
+        return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
+    },
+    'a floor is built in the realm of the door walked through': (before, run, action) => {
+        if (action !== 'descend' || !before?.nextRealm || !run.board) return null;
+        return run.realmId === before.nextRealm.realmId && run.realmSeverity === before.nextRealm.severity
+            ? null
+            : `walked into ${before.nextRealm.realmId}/${before.nextRealm.severity}, built in ${String(run.realmId)}/${String(run.realmSeverity)}`;
+    },
     'the peak rung never falls within a floor': (before, run) => {
         if (!before?.board || !run.board || before.board.level !== run.board.level) return null;
         const order = ['none', 'clean', 'sharp', 'fever'];
@@ -232,8 +274,9 @@ const checkAll = (before: RunState | null, after: RunState, action: string): str
         return problem ? [`${name}: ${problem}`] : [];
     });
 
+// A player can only turn what the realm lets them: frozen and vined cards are passed over.
 const hiddenReal = (run: RunState): Tile[] =>
-    (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+    (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && !isTileFlipBlocked(tile));
 
 export const soakRun = ({
     seed,
@@ -266,6 +309,13 @@ export const soakRun = ({
     let zones = 0;
     let zonePairs = 0;
     let floorsCleared = 0;
+    let realmWeather = 0;
+    let realmReactions = 0;
+    let realmDoused = 0;
+    let realmBurnouts = 0;
+    let realmVinesCut = 0;
+    let realmFrozen = 0;
+    let realmDoors = 0;
 
     const act = (action: string, next: RunState): void => {
         step += 1;
@@ -279,6 +329,15 @@ export const soakRun = ({
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
         zonePairs += Math.max(0, (next.zonePairsThisRun ?? 0) - (run.zonePairsThisRun ?? 0));
+        // Per-floor realm counters reset on the stairs; a rise within a floor is what happened.
+        if (next.board?.level === run.board?.level) {
+            realmWeather += Math.max(0, (next.realmWeatherThisFloor ?? 0) - (run.realmWeatherThisFloor ?? 0));
+            realmReactions += Math.max(0, (next.realmReactionsThisFloor ?? 0) - (run.realmReactionsThisFloor ?? 0));
+            realmDoused += Math.max(0, (next.realmDousedThisFloor ?? 0) - (run.realmDousedThisFloor ?? 0));
+            realmBurnouts += Math.max(0, (next.realmBurnoutsThisFloor ?? 0) - (run.realmBurnoutsThisFloor ?? 0));
+            realmVinesCut += Math.max(0, (next.realmVinesCutThisFloor ?? 0) - (run.realmVinesCutThisFloor ?? 0));
+            realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
+        }
         run = next;
     };
 
@@ -299,6 +358,11 @@ export const soakRun = ({
                     purchases += 1;
                     act(`buy:${row.id}`, bought);
                 }
+            }
+            // The travel doors: a player picks one, the way the travel screen asks them to.
+            if (Array.isArray(run.realmDoors) && run.realmDoors.length > 0) {
+                realmDoors += 1;
+                act('travel', chooseRealmDoor(run, pickRngIndex(rng, run.realmDoors.length)));
             }
             act('descend', advanceToNextLevel(run));
             if ((run as RunState).status === 'memorize') act('study', finishMemorizePhase(run));
@@ -375,6 +439,13 @@ export const soakRun = ({
         heatPerkTurns,
         zones,
         zonePairs,
+        realmWeather,
+        realmReactions,
+        realmDoused,
+        realmBurnouts,
+        realmVinesCut,
+        realmFrozen,
+        realmDoors,
         violations
     };
 };

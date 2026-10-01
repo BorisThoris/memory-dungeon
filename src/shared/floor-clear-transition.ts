@@ -14,6 +14,7 @@ import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
 import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
+import { realmClearGold, rollRealmDoors, runRealmId, runRealmSeverity } from './realm-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -73,7 +74,12 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount)
     );
     // What the clear pays into the purse: the rung it cleared at and the turns it came in under.
-    const goldEarned = floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar });
+    // A realm's weather multiplies it: the harder the door the floor was entered by, the more it pays.
+    const realmId = runRealmId(run);
+    const goldEarned = realmClearGold(
+        floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
+        realmId ? runRealmSeverity(run) : null
+    );
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,
         featuredObjectiveCompleted,
@@ -121,6 +127,15 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         },
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
+        // The travel doors: where the next floor can be, the realm this one ended in among them.
+        ...(realmId
+            ? {
+                  realmDoors: rollRealmDoors(run.runSeed, board.level, realmId),
+                  nextRealm: null,
+                  realmFloorsThisRun: { ...(run.realmFloorsThisRun ?? {}), [realmId]: runNonNegativeInteger(run.realmFloorsThisRun?.[realmId] ?? 0) + 1 },
+                  realmLitTileIds: []
+              }
+            : {}),
         // The stop's shelves are stocked as it opens, from the seed and the floor.
         ...(isStoreStopFloor(board.level) ? { storeStock: rollStoreStock(run.runSeed, board.level, run.relics ?? []) } : {}),
         timerState: clearResolveState(run),

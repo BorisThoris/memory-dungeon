@@ -1,4 +1,5 @@
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
+import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
 import { createGameplayBombCommand } from '../../shared/gameplay-core-contracts';
@@ -595,6 +596,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (bought) {
             set({ run: bought });
         }
+    },
+
+    travelThroughRealmDoor: (index) => {
+        const { run } = get();
+        if (!run || run.status !== 'levelComplete') {
+            return;
+        }
+        const chosen = chooseRealmDoor(run, index);
+        if (chosen !== run) {
+            set({ run: chosen });
+        }
+        get().continueToNextLevel();
     },
 
     useBomb: () => {

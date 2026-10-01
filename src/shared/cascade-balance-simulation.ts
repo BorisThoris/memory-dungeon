@@ -165,7 +165,7 @@ export const playCascadeBalanceFloor = ({
         gameMode: 'endless',
         activeMutators: schedule.mutators
     });
-    const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed }));
+    const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null }));
     // The bank is held open here as in the census: this sim measures what a floor does at a miss
     // rate, not how long a run survives (`miss-bank.ts`); a floor with three misses on a fresh bank
     // would otherwise read as fallen and the bands would measure the budget rather than the pop.

@@ -30,7 +30,7 @@ for (const seed of seeds) {
     const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
     const mutators = filterMutatorsByContentLock(entry.mutators);
     const board = buildBoard(1, { runSeed: seed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: mutators, floorTag: entry.floorTag, floorArchetypeId: entry.floorArchetypeId, featuredObjectiveId: entry.featuredObjectiveId, cycleFloor: entry.cycleFloor });
-    let run: RunState = { ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })), activeMutators: mutators, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) };
+    let run: RunState = { ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })), activeMutators: mutators, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) };
     for (let floor = 1; floor <= floors; floor += 1) {
         const rng = createMulberry32(hashStringToSeed(`pop:${seed}:${floor}`));
         let turns = 0;

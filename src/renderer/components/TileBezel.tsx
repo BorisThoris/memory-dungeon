@@ -27,6 +27,7 @@ import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
 import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
+import { RealmTileMarks } from './RealmTileMarks';
 import { SuitMarkerPlane } from './SuitMarkerPlane';
 import { getBreakWaveDelaySec } from './tileBoardBreakWave';
 import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
@@ -794,7 +795,9 @@ const TileBezelInner = ({
                         tutorialPairOrdinal={tutorialPairOrdinal}
                         wearAssets={wearAssets}
                     />
-                    {tile.suit ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
+                    {/* A blizzard's snow buries the suit until the card is turned (`realm-weather-rules.ts`). */}
+                    {tile.suit && !(tile.snowed && tile.state === 'hidden') ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
+                    <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} />
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}
                         face="back"

@@ -23,11 +23,22 @@
 }
 
 .spark {
-    fill: #ff7a24;
+    fill: var(--drift-spark, #ff7a24);
 }
 
 .ash {
-    fill: #d9481a;
+    fill: var(--drift-ash, #d9481a);
+}
+
+/* The same drift in the other realms (`realm-rules.ts`): spores in the grove, bubbles in the tide. */
+.drift[data-tone='spore'] {
+    --drift-spark: #c8f06a;
+    --drift-ash: #5fae3a;
+}
+
+.drift[data-tone='bubble'] {
+    --drift-spark: #bff5ff;
+    --drift-ash: #3fa8c8;
 }
 
 @keyframes emberRise {

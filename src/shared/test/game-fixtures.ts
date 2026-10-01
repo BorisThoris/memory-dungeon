@@ -42,7 +42,7 @@ export const makeBoard = (tiles: Tile[], overrides: Partial<BoardState> = {}): B
  * one passes it in `overrides` — `Recall Focus memory loop` in `game.test.ts` does exactly that.
  */
 export const makeRun = (tiles: Tile[], overrides: Partial<RunState> = {}): RunState => ({
-    ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
+    ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, realm: null })),
     activeMutators: [],
     recallFocus: 0,
     board: makeBoard(tiles),

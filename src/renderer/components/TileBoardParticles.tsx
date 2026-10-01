@@ -9,10 +9,10 @@ import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
 import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
-import { COMBO_HEAT_THEMES, comboHeatLevels, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 
 const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
-const themeOf = (id: ComboHeatThemeId | undefined) => COMBO_HEAT_THEMES.find((theme) => theme.id === id) ?? COMBO_HEAT_THEMES[0]!;
+const themeOf = (id: ComboHeatThemeId | undefined) => heatThemeById(id);
 
 export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, combo = 0, comboTheme, time, sharedFrameClock }: {
     board: BoardState;

@@ -40,7 +40,8 @@ const snapshot = (page: Page): Promise<Snapshot> =>
                 .map((tile) => ({ id: tile.id, k: tile.pairKey })),
             blocked: run?.stickyBlockIndex != null ? run.board?.tiles[run.stickyBlockIndex]?.id ?? null : null,
             hidden: (run?.board?.tiles ?? [])
-                .filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__'))
+                // A frozen or vined card cannot be turned (`realm-weather-rules.ts`); a player passes it over.
+                .filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__') && !((tile.frost ?? 0) > 0) && tile.vined !== true)
                 .map((tile) => ({ id: tile.id, k: tile.pairKey }))
         };
     });
@@ -82,6 +83,12 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
             if (await descend.isVisible().catch(() => false)) {
                 await shot(`store-after-${level}`);
                 await descend.click();
+            }
+            // The travel doors (`realm-rules.ts`): pick one, the way a player picks where to go.
+            const door = page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
+            if (await door.isVisible().catch(() => false)) {
+                await shot(`travel-after-${level}`);
+                await door.click();
             }
             await page.waitForTimeout(600);
             continue;

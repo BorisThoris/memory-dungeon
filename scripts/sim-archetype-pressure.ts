@@ -85,7 +85,7 @@ export interface ArchetypePressureRow {
 const playFloor = (board: BoardState, seed: number, tag: string): number => {
     const rng = createMulberry32(hashStringToSeed(`archetype:${seed}:${tag}:${ARCHETYPE_PRESSURE_MISS_RATE}`));
     let run: RunState = {
-        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
+        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })),
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles)

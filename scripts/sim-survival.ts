@@ -55,7 +55,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         cycleFloor: entry.cycleFloor
     });
     let run: RunState = {
-        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })),
+        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })),
         activeMutators: mutators,
         board,
         status: 'playing',

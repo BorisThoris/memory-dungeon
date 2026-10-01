@@ -370,7 +370,8 @@ const SOLVER_IGNORED_PAIR_KEYS = new Set([WILD_PAIR_KEY]);
 
 const solveBoardByExhaustingPairs = (board: BoardState, runSeed: number): RunState => {
     const base = finishMemorizePhase(
-        createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed })
+        // A board-generation check: the realm's weather is proven solvable in its own tests.
+        createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed, realm: null })
     );
     let run: RunState = {
         ...base,

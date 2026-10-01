@@ -14,6 +14,7 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runArray } from './run-array-guards';
+import { enterRealmFloor, nextFloorRealmDoor } from './realm-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -37,7 +38,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
 
     const transitionRun: RunState = run;
 
-    const nextBoard = buildBoard(nextLevelNum, {
+    const builtBoard = buildBoard(nextLevelNum, {
         runSeed: run.runSeed,
         runRulesVersion: run.runRulesVersion,
         activeMutators: nextActiveMutators,
@@ -48,10 +49,13 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         cycleFloor: nextCycleFloor,
         gameMode: run.gameMode
     });
+    // The next floor is in the realm the player walked into at the clear (`realm-rules.ts`).
+    const realmEntry = enterRealmFloor(run, builtBoard, nextFloorRealmDoor(run));
+    const nextBoard = realmEntry.board;
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
-    return createNextFloorRunState(transitionRun, {
+    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields }, {
         activeMutators: nextActiveMutators,
         board: nextBoard,
         memorizeRemainingMs: baseMemorizeMs

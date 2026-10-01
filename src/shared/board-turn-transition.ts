@@ -17,6 +17,7 @@ import { hasRelic } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { hasMutator } from './mutators';
+import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
@@ -242,6 +243,20 @@ export const createResolveBoardTurnTransition = ({
                       maxLit: lanternMax
                   })
                 : [];
+        /*
+         * The realm answers last (`realm-weather-rules.ts`): an omen's reaction, a doused fire, cut
+         * vines, the clocks, and on its turn the weather, on the board the player will look at.
+         */
+        const realmTurn = resolveRealmTurn({
+            run,
+            board: boardAfterDrift,
+            outcome: 'match',
+            tileIds: [firstTile.id, secondTile.id],
+            sourceTiles: [firstTile, secondTile],
+            turnsThisFloor: progress.turnsThisFloor,
+            pinnedTileIds: boardCleanup.pinnedTileIds
+        });
+        const boardAfterRealm = realmTurn.board;
         const stats = normalizeSessionStats(run.stats);
         /*
          * The anchor (Anchor Chain): read on the board the player will look at next. A matched anchor
@@ -249,7 +264,7 @@ export const createResolveBoardTurnTransition = ({
          */
         const anchor = hasMutator(run, 'n_back_anchor')
             ? resolveAnchorAfterMatch({
-                  board: boardAfterDrift,
+                  board: boardAfterRealm,
                   anchorPairKeyBefore: run.nBackAnchorPairKey,
                   matchesSinceAnchorBefore: runNonNegativeInteger(run.nBackMatchCounter),
                   matchedPairKey: firstTile.pairKey,
@@ -270,7 +285,7 @@ export const createResolveBoardTurnTransition = ({
         const nextRun: RunState = {
             ...journaledRun,
             status: 'playing',
-            board: boardAfterDrift,
+            board: boardAfterRealm,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             restlessDriftsThisFloor:
                 runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
@@ -295,7 +310,7 @@ export const createResolveBoardTurnTransition = ({
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? selectStickyFingersBlockIndex(run, boardAfterDrift, firstTile.id),
+            stickyBlockIndex: traitReward.stickyBlockIndex ?? selectStickyFingersBlockIndex(run, boardAfterRealm, firstTile.id),
             ...progress,
             stats: {
                 ...stats,
@@ -311,6 +326,7 @@ export const createResolveBoardTurnTransition = ({
             timerState: clearResolveState(run)
         };
 
+        Object.assign(nextRun, applyRealmTurnToRun(nextRun, realmTurn));
         // The rung the HUD now shows, read the way it reads it, kept as the floor's and the run's peak.
         const shownTier = runChainTier(nextRun);
         const cleanedNextRun = releaseStrandedStasisBlock({

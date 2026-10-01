@@ -17,7 +17,7 @@ const hapticMocks = vi.hoisted(() => ({
 vi.mock('../input/touchHaptics', () => hapticMocks);
 
 // A fixed seed: the temper (and so the heat stage's name) is rolled from it, and the tests read the ember names.
-const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 90_210 }));
+const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 90_210, realm: null }));
 
 /**
  * Floor 1's board carries two suits, and since Gen 259 par reads the palette off the board - so a

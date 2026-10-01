@@ -5,6 +5,7 @@ import {
     INITIAL_SHUFFLE_CHARGES,
     type BoardState,
     type MutatorId,
+    type RealmDoor,
     type RunState,
     type WeakerShuffleMode
 } from './contracts';
@@ -18,6 +19,7 @@ import { createSessionStats } from './session-stats-rules';
 import { createTimerState } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { createPassAndPlayState } from './pass-and-play-rules';
+import { enterRealmFloor, openingRealmDoor } from './realm-rules';
 
 export interface CreateRunOptions {
     runSeed?: number;
@@ -43,6 +45,11 @@ export interface CreateRunOptions {
     onboardingSafeFirstFloor?: boolean;
     /** Seats for a same-device multiplayer run; omitted for every solo run. */
     passAndPlaySeats?: number | null;
+    /**
+     * The realm the run opens in (`realm-rules.ts`). Omitted: seeded, calm. Null: no realms, which
+     * is what a fixed board gets unless it asks for one.
+     */
+    realm?: RealmDoor | null;
 }
 
 const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
@@ -75,7 +82,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     const shuffleScoreTaxActive = options.shuffleScoreTaxActive ?? false;
     const enableWildJoker = options.enableWildJoker ?? false;
     const peekCharges = options.enablePeek === false ? 0 : 1;
-    const board =
+    const builtBoard =
         options.fixedBoard ??
         buildBoard(1, {
             runSeed,
@@ -89,6 +96,11 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
             suppressFindables: useOnboardingSafeFirstFloor
         });
+
+    const openingRealm =
+        options.realm !== undefined ? options.realm : options.fixedBoard ? null : openingRealmDoor(runSeed);
+    const realmEntry = enterRealmFloor({ runSeed, runRulesVersion: rulesVersion }, builtBoard, openingRealm);
+    const board = realmEntry.board;
 
     const run: RunState = {
         status: 'memorize',
@@ -187,7 +199,10 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         zonesThisRun: 0,
         zonePairsThisRun: 0,
         lastZone: null,
-        shiftingSpotlightNonce: 0
+        shiftingSpotlightNonce: 0,
+        realmReactionsThisRun: 0,
+        realmFloorsThisRun: {},
+        ...realmEntry.fields
     };
 
     const memorizeMs = getMemorizeDurationForRun(run, 1);

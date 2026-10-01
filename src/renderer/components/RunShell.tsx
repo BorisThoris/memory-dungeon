@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElemen
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { comboHeatLevels, comboHeatThemeForSeed, comboStageLabel } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
 import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
 import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
 import { zoneRailLine } from '../copy/zoneToolCopy';
@@ -15,6 +15,8 @@ import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/t
 import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
+import { REALMS, runRealmId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
+import { REALM_HUD_COPY } from '../copy/realmCopy';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -297,7 +299,7 @@ const RunShell = ({
     // The ladder above the ladder: the combo's heat stage (`combo-heat-rules.ts`), which keeps the
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
-    const temper = comboHeatThemeForSeed(run.runSeed);
+    const temper = comboHeatThemeForRun(run);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -318,6 +320,9 @@ const RunShell = ({
     const missesRemaining = missesLeft(run);
     const missesEarned = useMissEarned(missesRemaining);
     const pairCount = run.board?.pairCount ?? 0;
+    const realm = runRealmId(run);
+    const realmSeverity = runRealmSeverity(run);
+    const weatherIn = realm ? turnsUntilRealmWeather(realm, realmSeverity, runNonNegativeInteger(run.turnsThisFloor)) : 0;
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
@@ -523,6 +528,25 @@ const RunShell = ({
                                 ) : null}
                             </span>
                         </span>
+                        {/* The realm (`realm-rules.ts`): where this floor is, how hard the weather blows,
+                            and how many turns until it comes. The one clock on the board the player
+                            is winding themselves, so it is always shown. */}
+                        {realm ? (
+                            <span
+                                aria-label={REALM_HUD_COPY.aria(realm, realmSeverity, weatherIn)}
+                                className={styles.realm}
+                                data-realm={realm}
+                                data-weather-soon={weatherIn === 1 ? 'true' : undefined}
+                                data-testid="hud-realm"
+                                role="img"
+                                style={{ '--realm-color': REALMS[realm].color } as CSSProperties}
+                            >
+                                <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity)}</span>
+                                <span className={styles.realmClock} data-testid="hud-realm-clock">
+                                    {REALM_HUD_COPY.clock(realm, weatherIn)}
+                                </span>
+                            </span>
+                        ) : null}
                         {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
                             <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
                                 {mutatorTitles.join(' · ')}
@@ -701,8 +725,14 @@ const RunShell = ({
             </header>
 
             <footer className={styles.foot} data-testid="game-action-dock">
+                {/*
+                  * The caption under the board is no longer drawn (2026-09-30): the owner read it as
+                  * filler - a sentence restating what the board, the combo and the score pop had just
+                  * shown. It stays in the page for screen readers and for the tests that read what
+                  * the HUD said, and takes no room on the stage.
+                  */}
                 {line ? (
-                    <div className={styles.caption}>
+                    <div className={styles.srOnly} data-testid="run-shell-caption">
                         <span className={styles.kicker} data-chain-tier={kickerTier}>
                             {kicker}
                         </span>

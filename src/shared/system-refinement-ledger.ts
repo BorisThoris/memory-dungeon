@@ -323,6 +323,27 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The Zone (2026-09-30), the new concept the combo study asked for after its twelfth round: Tetris Effect stops time and lets the player break a base rule; Guitar Hero earns the power on the streak and lets the player spend it. Here the base rule is that a turn is two cards. At Inferno or better, on a clean board, the player may ignite: the combo burns to zero and the Zone opens for three pairs (four at Legendary, one more per ascension, six at most, never more than the pairs still hidden). Cards turned inside it stay up and nothing resolves; the last allowed card, or the player, ends it. The resolve plays what is face up through the game\u2019s own turns: every complete pair first, so the chain climbs and the pop widens through them, then the leftovers as misses two at a time at full price from the bank, and a lone leftover for nothing. A bonus of 100 x matched squared on top. Never safer: the combo is the entry fee and a bad Zone costs the misses the same cards would have cost. No census row (no census player ignites); the soak is the proof.'
     },
     {
+        id: 'board.realm_weather',
+        verdict: 'changed',
+        generation: 265,
+        present: ['resolveRealmTurn', 'releaseRealmHoldsIfStuck', 'isTileFlipBlocked', 'WILDFIRE_FUSE', 'FROSTBITE_TURNS'],
+        note: 'Realms (2026-09-30). The owner asked for environments to be a prominent factor that changes how a floor plays, not how it looks. Every floor is in one of five realms, and each has weather on a clock the player winds: a blizzard slides a row with the wind and snows the backs over (the suit is the one thing a back tells you, and the snow takes it), wildfire lights a card on a three-turn fuse that burns a gold and spreads if it runs out, the tide runs a column down a step, lightning swaps two cards and leaves them lit, vines hold cards so they cannot be turned. The realm also answers the player: a miss in the frost freezes both cards for two turns, a match beside vines cuts them for gold, a burning card matched in time is doused for gold. A guard after every turn and every bomb frees the ice and the vines if they would leave no pair that can be turned. No census row: the census builds realm-free floors to measure the pair curve; the soak requires every answer to happen and checks the guard on every action.'
+    },
+    {
+        id: 'board.realm_omen',
+        verdict: 'changed',
+        generation: 265,
+        present: ['seatRealmOmen', 'omenOfMatch', 'REALM_REACTION_NAMES', 'OMEN_FIRST_FLOOR'],
+        note: 'Omen cards (2026-09-30), the environment cards. From the third floor one plain pair on a realm board carries another realm\u2019s sigil on both halves. Matching it sets off a named reaction (frost and ember is a Thaw, ember and tide is Steam, a grove set alight is Wildfire) and the floor turns into the omen\u2019s realm: what the old weather left goes, each thing paying a gold, and the new clock runs from the next turn. Wildfire through a grove sets the vines alight instead of clearing them, and a storm breaking strikes at once. The omen must be matched to clear the floor, so the decision is when - and where the run goes next, since the realm a floor ends in is always a door.'
+    },
+    {
+        id: 'economy.realm_travel',
+        verdict: 'changed',
+        generation: 265,
+        present: ['rollRealmDoors', 'chooseRealmDoor', 'nextFloorRealmDoor', 'realmClearGold', 'REALM_SEVERITIES'],
+        note: 'Realm travel (2026-09-30), the Shape of Dreams paths the owner asked for. Every floor clear offers three doors - three realms, one calm, one wild, one raging - after the beat and after the store on a store floor. Calm weather comes a turn later and pays the base gold; raging comes a turn sooner, takes two cards a time, and pays half again at the clear. A run opens in a seeded calm realm. A shared table takes the first door without stopping. The scene, the snow, the embers and the combo\u2019s stamps follow the realm the floor is in, so the place is felt as well as played.'
+    },
+    {
         id: 'hazard.skittish_cards',
         counter: 'skittishFlinches',
         verdict: 'changed',

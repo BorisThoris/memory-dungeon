@@ -605,8 +605,8 @@ const playFloor = (
      */
     const base = finishMemorizePhase(
         setup
-            ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
-            : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+            ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
+            : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
     );
     return playFloorFrom(
         {
@@ -693,8 +693,8 @@ export const simulateRunOccupancy = ({
             const firstBoard = scheduledFloorBoard(seed, 1, setup);
             let run: RunState = finishMemorizePhase(
                 setup
-                    ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
-                    : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
+                    ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
+                    : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
             );
             run = {
                 ...run,

@@ -76,6 +76,33 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
  */
 export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor';
+/**
+ * The realms (`realm-rules.ts`): the environment a floor is played in. Each has weather that
+ * changes the board while it is played, on a clock the player winds, and the player picks the next
+ * one at every floor clear (the travel doors). Listed so a test can walk them.
+ */
+export const REALM_IDS = ['frost', 'ember', 'tide', 'storm', 'grove'] as const;
+export type RealmId = (typeof REALM_IDS)[number];
+/** How hard a travel door's weather blows: sooner weather pays more gold at the clear. */
+export type RealmSeverity = 'calm' | 'wild' | 'raging';
+/** One door on the travel screen: where the next floor is, and how hard its weather blows. */
+export interface RealmDoor {
+    realmId: RealmId;
+    severity: RealmSeverity;
+}
+/** The last thing a realm did to the board, for the HUD to name. Keyed so it is said once. */
+export interface RealmEvent {
+    key: string;
+    kind: 'blizzard' | 'frostbite' | 'wildfire' | 'burnout' | 'doused' | 'current' | 'lightning' | 'overgrowth' | 'harvest' | 'thaw' | 'reaction';
+    /** The cards it touched, for the board to flash. */
+    tileIds: string[];
+    /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
+    reaction?: string;
+    from?: RealmId;
+    to?: RealmId;
+    /** Gold it paid (positive) or burned (negative). */
+    gold?: number;
+}
 /** A relic bought in the store (`run-relic-rules.ts`). */
 export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
@@ -301,6 +328,16 @@ export interface Tile {
     findableKind?: FindableKind;
     /** Optional lightweight pair modifier: adds match rewards or mismatch drawbacks without changing pair identity. */
     tileTraitKind?: TileTraitKind;
+    /** Frost realm: turns this card stays frozen. A frozen card cannot be turned. */
+    frost?: number;
+    /** Frost realm: a blizzard snowed over this card's back, so its suit cannot be read until it is turned. */
+    snowed?: boolean;
+    /** Ember realm: turns left on this card's fuse. Match it before it burns out. */
+    fuse?: number;
+    /** Grove realm: vines hold this card down; it cannot be turned until a match beside it cuts them. */
+    vined?: boolean;
+    /** An omen card: matching its pair turns the floor's realm into this one (`realm-omen-rules.ts`). */
+    omen?: RealmId;
 }
 
 export type FloorTag = 'normal' | 'breather' | 'boss';
@@ -733,6 +770,31 @@ export interface RunState {
     heatPerkTurnsThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
+    /**
+     * The realm this floor is played in (`realm-rules.ts`), and how hard its weather blows. An omen
+     * match can turn it mid-floor. Absent or null on a run with no realms (fixtures, old saves).
+     */
+    realmId?: RealmId | null;
+    realmSeverity?: RealmSeverity;
+    /** The travel doors offered at this floor's clear, and the one the player walked through. */
+    realmDoors?: RealmDoor[] | null;
+    nextRealm?: RealmDoor | null;
+    /** Weather events this floor, and the reactions omens set off this floor and this run. */
+    realmWeatherThisFloor?: number;
+    realmReactionsThisFloor?: number;
+    realmReactionsThisRun?: number;
+    /** Ember: fires matched before their fuse ran out, and fires that burned out, this floor. */
+    realmDousedThisFloor?: number;
+    realmBurnoutsThisFloor?: number;
+    /** Grove: vines a match cut this floor. Frost: cards a miss froze this floor. */
+    realmVinesCutThisFloor?: number;
+    realmFrozenThisFloor?: number;
+    /** Floors cleared in each realm this run; the travel screen and the results read it. */
+    realmFloorsThisRun?: Partial<Record<RealmId, number>>;
+    /** What the realm last did, for the HUD to say once. */
+    lastRealmEvent?: RealmEvent | null;
+    /** Storm: the cards lightning left lit; they show their faces until the next flip, like the lantern's. */
+    realmLitTileIds?: string[];
 }
 
 export type AchievementState = Record<AchievementId, boolean>;

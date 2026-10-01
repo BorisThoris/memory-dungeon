@@ -1,6 +1,7 @@
 import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
+import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
@@ -56,6 +57,10 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
         if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
             return run;
         }
+        // Frozen and vined cards cannot be turned (`realm-weather-rules.ts`).
+        if (isTileFlipBlocked(tile)) {
+            return run;
+        }
 
         const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
         if (
@@ -71,10 +76,15 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
                 ? { ...run, flashPairRevealedTileIds: [] }
                 : run;
         // What the lantern lit goes dark the moment the next card is turned, the same way a flash does.
-        const runAfterFlashClear =
+        const lanternCleared =
             (runFilteredStringArrayOrNull(flashCleared.lanternLitTileIds)?.length ?? 0) > 0
                 ? { ...flashCleared, lanternLitTileIds: [] }
                 : flashCleared;
+        // What lightning lit goes dark the same way (`realm-weather-rules.ts`).
+        const runAfterFlashClear =
+            (runFilteredStringArrayOrNull(lanternCleared.realmLitTileIds)?.length ?? 0) > 0
+                ? { ...lanternCleared, realmLitTileIds: [] }
+                : lanternCleared;
 
         const peekRevealedTileIds =
             (runFilteredStringArrayOrNull(runAfterFlashClear.peekRevealedTileIds)?.length ?? 0) > 0
@@ -110,7 +120,7 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             board: {
                 ...board,
                 tiles: board.tiles.map((candidate) =>
-                    candidate.id === tileId ? { ...candidate, state: 'flipped' } : candidate
+                    candidate.id === tileId ? { ...shedSnow(candidate), state: 'flipped' } : candidate
                 ),
                 flippedTileIds
             },

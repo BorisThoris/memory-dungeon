@@ -122,7 +122,7 @@ export const comboStageReached = (comboBefore: number, comboAfter: number): Excl
  * of embers rising. Some are storm. One in fifty is prismatic, the shiny: every colour at once,
  * and its stamps say so. Seeded, so a shared run has the same temper for everyone who plays it.
  */
-export type ComboHeatThemeId = 'ember' | 'frost' | 'storm' | 'prismatic';
+export type ComboHeatThemeId = 'ember' | 'frost' | 'storm' | 'prismatic' | 'tide' | 'grove';
 
 export interface ComboHeatTheme {
     id: ComboHeatThemeId;
@@ -194,6 +194,60 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
         ringHueDeg: 200
     }
 ];
+
+/**
+ * The two realms that have no temper of their own (`realm-rules.ts`) get one here. They are never
+ * rolled from a seed - their weight is nought and they are not in `COMBO_HEAT_THEMES` - they are
+ * what the heat burns in while a floor is in the Drowned Vault or the Overgrown Crypt.
+ */
+export const REALM_HEAT_THEMES: readonly ComboHeatTheme[] = [
+    {
+        id: 'tide',
+        title: 'Tide',
+        rare: false,
+        weight: 0,
+        labels: { cold: '', warm: 'Ripple', hot: 'Swell', blazing: 'Surge', inferno: 'Torrent', legendary: 'Tsunami' },
+        callouts: { hot: 'SWELL!', blazing: 'SURGE!', inferno: 'TORRENT!', legendary: 'TSUNAMI!' },
+        colors: ['#9fe8dc', '#9fe8dc', '#4fd6c8', '#2fb6d8', '#3a8cff', '#e8fffb'],
+        emberMode: 'fall',
+        arcTints: ['#bff5ec', '#4fd6c8', '#2fb6d8', '#ffffff'],
+        ringHueDeg: 150
+    },
+    {
+        id: 'grove',
+        title: 'Grove',
+        rare: false,
+        weight: 0,
+        labels: { cold: '', warm: 'Sprout', hot: 'Bloom', blazing: 'Overgrown', inferno: 'Primeval', legendary: 'Worldtree' },
+        callouts: { hot: 'BLOOM!', blazing: 'OVERGROWN!', inferno: 'PRIMEVAL!', legendary: 'WORLDTREE!' },
+        colors: ['#c8e6a0', '#c8e6a0', '#8fd66a', '#5fbf4a', '#d6e04a', '#f4ffe0'],
+        emberMode: 'rise',
+        arcTints: ['#d8f0b8', '#8fd66a', '#d6e04a', '#ffffff'],
+        ringHueDeg: 60
+    }
+];
+
+/** Every temper by id, the realm ones included. */
+export const heatThemeById = (id: ComboHeatThemeId | undefined | null): ComboHeatTheme =>
+    [...COMBO_HEAT_THEMES, ...REALM_HEAT_THEMES].find((theme) => theme.id === id) ?? COMBO_HEAT_THEMES[0]!;
+
+/**
+ * The temper a run's heat burns in right now. A floor in a realm burns in the realm's element, so
+ * the snow, the embers, the storm and the stamps are the environment's (2026-09-30); a run with no
+ * realm keeps the temper its seed rolled.
+ */
+export const comboHeatThemeForRun = (run: { runSeed: number; realmId?: string | null }): ComboHeatTheme => {
+    switch (run.realmId) {
+        case 'frost':
+        case 'ember':
+        case 'storm':
+        case 'tide':
+        case 'grove':
+            return heatThemeById(run.realmId);
+        default:
+            return comboHeatThemeForSeed(run.runSeed);
+    }
+};
 
 /** The run's temper, rolled once from its seed: the same seed is the same temper for everyone. */
 export const comboHeatThemeForSeed = (runSeed: number): ComboHeatTheme => {

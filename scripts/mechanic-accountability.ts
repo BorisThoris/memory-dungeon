@@ -209,6 +209,18 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 262,
         reason: 'Relics are only bought at the store and the census players never shop. The whole-run soak requires a relic to be bought, and the Deep Pockets and Long Look rooms walk their effects.'
     },
+    'board.realm_weather': {
+        generation: 265,
+        reason: 'The census builds each floor fresh with no realm, because it measures the pair curve and the par it is judged against. The whole-run soak plays every realm through its doors, requires weather, frostbite, a doused fire and a cut vine to happen, and checks after every action that a turnable pair remains; a test hall room walks each realm.'
+    },
+    'board.realm_omen': {
+        generation: 265,
+        reason: 'An omen lives on realm floors from the third on, and the census floors have no realm. The whole-run soak requires reactions to occur across its runs, and the omen room in the test hall walks a reaction turning the frost into ember.'
+    },
+    'economy.realm_travel': {
+        generation: 265,
+        reason: 'The doors open between floors and the census never walks the stairs through them. The whole-run soak takes a door at every clear and checks that the next floor is built in the realm it walked into and that the realm a floor ended in is always offered.'
+    },
     'inventory.mutator_loadout': {
         generation: 217,
         reason: 'Not a run setup - the schedule hands a different mutator to every floor - but a per-floor selection rather than an event, and the census counts what accumulates within a floor. Its accountability is the mutator-effect audit, which presses all ten and requires each to move a channel a player could notice.'

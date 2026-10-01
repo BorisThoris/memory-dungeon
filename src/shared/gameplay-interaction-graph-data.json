@@ -316,7 +316,19 @@
                 "zone",
                 "zonesThisRun",
                 "zonePairsThisRun",
-                "lastZone"
+                "lastZone",
+                "realmWeatherThisFloor",
+                "realmDousedThisFloor",
+                "realmBurnoutsThisFloor",
+                "realmVinesCutThisFloor",
+                "realmFrozenThisFloor",
+                "realmLitTileIds",
+                "lastRealmEvent",
+                "realmReactionsThisFloor",
+                "realmReactionsThisRun",
+                "realmDoors",
+                "nextRealm",
+                "realmFloorsThisRun"
             ],
             "writes": [
                 "feedbackLines"
@@ -1946,6 +1958,125 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "board.realm_weather",
+            "label": "Realm Weather",
+            "kind": "board",
+            "role": "the_floor_s_realm_changes_the_board_on_a_clock_the_player_winds_and_answers_their_turns",
+            "evidence": [
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/renderer/components/RealmTileMarks.tsx",
+                "src/renderer/components/screenCallouts.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "realmId",
+                "realmSeverity",
+                "turnsThisFloor",
+                "pinnedTileIds",
+                "runSeed"
+            ],
+            "writes": [
+                "realmWeatherThisFloor",
+                "realmDousedThisFloor",
+                "realmBurnoutsThisFloor",
+                "realmVinesCutThisFloor",
+                "realmFrozenThisFloor",
+                "realmLitTileIds",
+                "lastRealmEvent"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "a-turnable-pair-always-remains",
+                "pinned-cards-never-move",
+                "hidden-cards-only",
+                "fires-capped-at-four",
+                "bombs-run-the-guard-too"
+            ],
+            "tests": [
+                "src/shared/realm-weather-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "board.realm_omen",
+            "label": "Omen Cards",
+            "kind": "board",
+            "role": "an_environment_card_whose_match_sets_off_a_reaction_and_turns_the_floor_s_realm",
+            "evidence": [
+                "src/shared/realm-omen-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/renderer/components/RealmTileMarks.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "pairKeys",
+                "realmId",
+                "runSeed"
+            ],
+            "writes": [
+                "realmId",
+                "realmReactionsThisFloor",
+                "realmReactionsThisRun"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "an-ordinary-pair-to-match",
+                "never-the-realm-it-is-in",
+                "from-the-third-floor"
+            ],
+            "tests": [
+                "src/shared/realm-rules.test.ts",
+                "src/shared/realm-weather-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
+        },
+        {
+            "id": "economy.realm_travel",
+            "label": "Realm Travel",
+            "kind": "economy",
+            "role": "three_doors_at_every_floor_clear_pick_the_next_floor_s_realm_and_how_hard_it_blows_harder_pays_more_gold",
+            "evidence": [
+                "src/shared/realm-rules.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/renderer/components/RealmTravel.tsx"
+            ],
+            "reads": [
+                "realmId",
+                "realmSeverity",
+                "lastLevelResult",
+                "runSeed"
+            ],
+            "writes": [
+                "realmDoors",
+                "nextRealm",
+                "realmSeverity",
+                "realmFloorsThisRun",
+                "gold"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "the-realm-a-floor-ended-in-is-always-a-door",
+                "a-shared-table-takes-the-first-door"
+            ],
+            "tests": [
+                "src/shared/realm-rules.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -2872,6 +3003,42 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "Ignite/Resolve on the dock, the Zone line on the rail, the veil and the stamps"
+        },
+        {
+            "source": "board.realm_weather",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the realm chip and its clock, the marks on the cards and the weather stamps"
+        },
+        {
+            "source": "board.realm_omen",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the omen sigil on both halves and the reaction stamp"
+        },
+        {
+            "source": "economy.realm_travel",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the travel doors at every floor clear"
+        },
+        {
+            "source": "board.realm_omen",
+            "target": "board.realm_weather",
+            "kind": "modifies",
+            "label": "a reaction clears the old weather and starts the new realm's clock"
+        },
+        {
+            "source": "economy.realm_travel",
+            "target": "board.realm_weather",
+            "kind": "gates",
+            "label": "the door walked through decides the next floor's weather and how soon it comes"
+        },
+        {
+            "source": "board.realm_omen",
+            "target": "economy.realm_travel",
+            "kind": "enables",
+            "label": "the realm a floor ended in is always one of the doors"
         }
     ],
     "coverage": {

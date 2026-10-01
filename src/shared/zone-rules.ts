@@ -1,4 +1,5 @@
 import type { RunState, Tile, ZoneResult, ZoneState } from './contracts';
+import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
 import { comboAscension, comboHeatStage } from './combo-heat-rules';
 import { flipTile, resolveBoardTurn } from './game';
 import { runFilteredStringArray } from './run-array-guards';
@@ -108,14 +109,17 @@ export const zoneFlipTile = (run: RunState, tileId: string): RunState => {
     const flipped = runFilteredStringArray(board.flippedTileIds);
     if (flipped.includes(tileId)) return run;
     if (flipped.length === 0 && run.stickyBlockIndex !== null && index === run.stickyBlockIndex) return run;
+    // The realm's holds apply in the Zone too: a frozen or vined card cannot be turned.
+    if (isTileFlipBlocked(tile)) return run;
     const next: RunState = {
         ...run,
         peekRevealedTileIds: [],
         flashPairRevealedTileIds: [],
         lanternLitTileIds: [],
+        realmLitTileIds: [],
         board: {
             ...board,
-            tiles: board.tiles.map((candidate) => (candidate.id === tileId ? { ...candidate, state: 'flipped' as const } : candidate)),
+            tiles: board.tiles.map((candidate) => (candidate.id === tileId ? { ...shedSnow(candidate), state: 'flipped' as const } : candidate)),
             flippedTileIds: [...flipped, tileId]
         },
         flipHistory: [...run.flipHistory, tileId]
@@ -134,8 +138,28 @@ const faceDown = (run: RunState, ids: readonly string[]): RunState => ({
         : run.board
 });
 
-/** Play one turn of two cards through the game's own resolver, from a board with nothing up. */
-const playTurn = (run: RunState, first: string, second: string): RunState => resolveBoardTurn(flipTile(flipTile(run, first), second));
+/**
+ * Play one turn of two cards through the game's own resolver, from a board with nothing up. The
+ * cards were turned inside the Zone, so weather that took hold of them while earlier turns replayed
+ * (a vine, the frost) does not stop them being played: they were already in the player's hand.
+ */
+const playTurn = (run: RunState, first: string, second: string): RunState =>
+    resolveBoardTurn(flipTile(flipTile(releaseHolds(run, [first, second]), first), second));
+
+const releaseHolds = (run: RunState, ids: readonly string[]): RunState =>
+    run.board && run.board.tiles.some((tile) => ids.includes(tile.id) && isTileFlipBlocked(tile))
+        ? {
+              ...run,
+              board: {
+                  ...run.board,
+                  tiles: run.board.tiles.map((tile) => {
+                      if (!ids.includes(tile.id)) return tile;
+                      const { frost: _frost, vined: _vined, ...rest } = tile;
+                      return rest;
+                  })
+              }
+          }
+        : run;
 
 /**
  * End the Zone: matches first, then the misses, then the bonus. Unchanged when no Zone is open.

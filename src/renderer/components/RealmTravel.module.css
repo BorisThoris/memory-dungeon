@@ -1,0 +1,211 @@
+/*
+ * The travel doors (`RealmTravel.tsx`): three arches over the dungeon, each in its realm's colour.
+ * Side by side where there is width, stacked on an upright phone; the arch's sigil and the place
+ * name are what the eye takes in, the weather and its rules are read second.
+ */
+.travel {
+    position: absolute;
+    inset: 0;
+    z-index: 22;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.8rem, 2.4vh, 1.6rem);
+    padding: max(1rem, env(safe-area-inset-top, 0px)) 1rem max(1rem, env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    pointer-events: auto;
+    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(6, 6, 10, 0.55), rgba(6, 6, 10, 0.88));
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    color: var(--margin-paper, #f8f4f4);
+    animation: travelIn 260ms ease-out;
+}
+
+.head {
+    text-align: center;
+}
+
+.title {
+    margin: 0;
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: 0.08em;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+}
+
+.subtitle {
+    margin: 0.2rem 0 0;
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-style: italic;
+    color: var(--margin-paper-2, #d7d3d3);
+}
+
+.doors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 17rem));
+    gap: clamp(0.7rem, 2vw, 1.4rem);
+    width: min(56rem, 100%);
+    justify-content: center;
+}
+
+.door {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    padding: 1rem 0.9rem 1.1rem;
+    border: 1px solid color-mix(in srgb, var(--realm-color) 60%, transparent);
+    border-radius: 9rem 9rem 0.9rem 0.9rem;
+    background:
+        radial-gradient(ellipse 90% 55% at 50% 0%, color-mix(in srgb, var(--realm-color) 30%, transparent), transparent 70%),
+        rgba(12, 10, 16, 0.86);
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    animation: doorIn 360ms ease-out both;
+    animation-delay: calc(var(--door-index, 0) * 80ms);
+}
+
+.door:hover,
+.door:focus-visible {
+    outline: none;
+    transform: translateY(-4px);
+    border-color: var(--realm-color);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), 0 0 26px color-mix(in srgb, var(--realm-color) 55%, transparent);
+}
+
+.arch {
+    display: grid;
+    place-items: center;
+    width: clamp(4rem, 9vw, 5.5rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid var(--realm-color);
+    background: radial-gradient(circle, color-mix(in srgb, var(--realm-color) 40%, transparent), rgba(0, 0, 0, 0.6) 70%);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--realm-color) 45%, transparent);
+}
+
+.sigil {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1;
+    color: var(--realm-color);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--realm-color) 80%, transparent);
+}
+
+.kicker {
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--realm-color);
+}
+
+.place {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    line-height: 1.1;
+}
+
+.severity {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--margin-paper-2, #d7d3d3);
+}
+
+.weather {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--margin-paper-2, #d7d3d3);
+}
+
+.severity[data-severity='raging'] {
+    color: #ff8a6a;
+}
+
+.severity[data-severity='calm'] {
+    color: #a8d8c0;
+}
+
+.rules {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    color: var(--margin-paper, #f8f4f4);
+}
+
+.been {
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--margin-paper-2, #d7d3d3);
+}
+
+/* An upright phone: the doors stack, and each door reads as a row with its arch on the left. */
+@media (max-width: 40rem) {
+    .doors {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(26rem, 100%);
+    }
+
+    .door {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: 0.8rem;
+        row-gap: 0.2rem;
+        align-items: start;
+        border-radius: 3rem 0.9rem 0.9rem 3rem;
+        padding: 0.7rem 0.9rem;
+        text-align: left;
+    }
+
+    .arch {
+        grid-row: span 6;
+        width: 3.6rem;
+    }
+
+    .rules {
+        margin-top: 0;
+        font-size: 0.8rem;
+    }
+}
+
+@keyframes travelIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes doorIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .travel,
+    .door {
+        animation: none;
+    }
+
+    .door:hover,
+    .door:focus-visible {
+        transform: none;
+    }
+}

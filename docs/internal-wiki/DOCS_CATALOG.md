@@ -36,6 +36,7 @@
 | [MARKET_SIMILAR_GAMES_RESEARCH.md](../MARKET_SIMILAR_GAMES_RESEARCH.md) | Market / comps research |
 | [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md) | Current project report for the Windows-first Electron desktop game |
 | [MUTATORS.md](../MUTATORS.md) | Mutator reference checklist |
+| [REALMS.md](../REALMS.md) | Realms (weather on a turn clock), omen reactions and the travel doors |
 | [REMOVED_POWERS.md](../REMOVED_POWERS.md) | Why Destroy and Stray left the game (Gen 200) |
 | [PICTURE_SUPERIORITY_CHECKLIST.md](../PICTURE_SUPERIORITY_CHECKLIST.md) | Picture-superiority UX checklist |
 | [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) | Contributing puzzles |

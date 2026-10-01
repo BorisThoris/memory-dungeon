@@ -76,6 +76,8 @@ export interface AppState {
     openInventoryFromPlaying: () => void;
     /** The store stop's purchase: buys one item into the live run, or does nothing the sheet would refuse. */
     buyStoreItem: (id: StoreItemId) => void;
+    /** Walks through a travel door at a floor clear (`realm-rules.ts`) and builds the next floor there. */
+    travelThroughRealmDoor: (index: number) => void;
     /** Spends a bomb on the one card face up (`applyBomb`), or does nothing when it cannot. */
     useBomb: () => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */

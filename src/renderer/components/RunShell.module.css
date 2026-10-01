@@ -217,6 +217,52 @@
     font-weight: 500;
 }
 
+/*
+ * The realm chip (`realm-rules.ts`): the place in its own colour, and the turns until its weather.
+ * A pill rather than a plain word because it is the one thing in the head that changes the board on
+ * its own; it pulses on the turn before the weather comes.
+ */
+.realm {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding: 0.1rem 0.7rem 0.15rem;
+    border: 1px solid color-mix(in srgb, var(--realm-color, var(--gold)) 70%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--realm-color, var(--gold)) 14%, transparent);
+    color: var(--realm-color, var(--gold));
+    white-space: nowrap;
+}
+
+.realmName {
+    font-weight: 600;
+}
+
+.realmClock {
+    color: var(--paper);
+    font-variant-numeric: tabular-nums;
+}
+
+.realm[data-weather-soon='true'] {
+    animation: realmSoon 900ms ease-in-out infinite alternate;
+}
+
+@keyframes realmSoon {
+    from {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--realm-color, var(--gold)) 0%, transparent);
+    }
+
+    to {
+        box-shadow: 0 0 14px 2px color-mix(in srgb, var(--realm-color, var(--gold)) 55%, transparent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .realm[data-weather-soon='true'] {
+        animation: none;
+    }
+}
+
 .mutator {
     padding-left: 1.1rem;
     border-left: 1px solid color-mix(in srgb, var(--paper) 24%, transparent);
@@ -1147,6 +1193,23 @@
 :global([data-shell-layout='phone-portrait']) .mutator,
 :global([data-shell-layout='phone-landscape']) .mutator {
     letter-spacing: 0.12em;
+}
+
+/*
+ * The realm chip on an upright phone: the head's first row has no width left for it, so the row
+ * wraps and the chip takes its own line under the floor and the par.
+ */
+:global([data-shell-layout='phone-portrait']) .identity {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+}
+
+:global([data-shell-layout='phone-portrait']) .realm,
+:global([data-shell-layout='phone-landscape']) .realm {
+    gap: 0.4rem;
+    padding: 0.05rem 0.55rem 0.1rem;
+    letter-spacing: 0.08em;
 }
 
 /* "4 / 9" — the word is what the phone's row has no width for. */
