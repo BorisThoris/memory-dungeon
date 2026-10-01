@@ -172,8 +172,16 @@ export const runRealmSeverity = (run: Pick<RunState, 'realmSeverity'>): RealmSev
 export const realmIntervalFor = (realmId: RealmId, severity: RealmSeverity): number =>
     Math.max(2, REALMS[realmId].interval + REALM_SEVERITIES[severity].intervalDelta);
 
+/**
+ * Whether the realm's weather runs on its own clock (2026-10-01). Once the matched groups cast the
+ * elements (`element-group-rules.ts`), the owner kept the clock only where it is the extra danger:
+ * a raging floor. On a calm or wild floor everything that happens to the board comes from the cards.
+ */
+export const realmWeatherClockRuns = (severity: RealmSeverity): boolean => severity === 'raging';
+
 /** True on the resolved turns the realm's weather comes. `turnsThisFloor` is the count after the turn. */
 export const isRealmWeatherTurn = (realmId: RealmId, severity: RealmSeverity, turnsThisFloor: number): boolean => {
+    if (!realmWeatherClockRuns(severity)) return false;
     const turns = runNonNegativeInteger(turnsThisFloor);
     return turns > 0 && turns % realmIntervalFor(realmId, severity) === 0;
 };

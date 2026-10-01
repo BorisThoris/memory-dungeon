@@ -30,9 +30,11 @@ describe('realms', () => {
         expect(realmClearGold(6, 'calm')).toBe(6);
         expect(realmClearGold(6, 'raging')).toBe(9);
         expect(REALM_SEVERITIES.raging.reach).toBe(2);
-        expect([1, 2, 3, 4, 5, 6].map((t) => isRealmWeatherTurn('ember', 'wild', t))).toEqual([
-            false, false, true, false, false, true
+        // The clock runs on a raging floor only (2026-10-01): elsewhere the cards make the weather.
+        expect([1, 2, 3, 4, 5, 6].map((t) => isRealmWeatherTurn('ember', 'raging', t))).toEqual([
+            false, true, false, true, false, true
         ]);
+        expect([1, 2, 3, 4, 5, 6].some((t) => isRealmWeatherTurn('ember', 'wild', t) || isRealmWeatherTurn('ember', 'calm', t))).toBe(false);
         expect(turnsUntilRealmWeather('ember', 'wild', 0)).toBe(3);
         expect(turnsUntilRealmWeather('ember', 'wild', 2)).toBe(1);
     });

@@ -1287,17 +1287,16 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-blizzard',
         title: 'Blizzard',
-        mechanic: 'Every fourth turn in the Frozen Reach a blizzard slides one row of face-down cards with the wind and snows their backs over.',
+        mechanic: 'On a raging floor the realm keeps its own clock: every third turn in the Frozen Reach a blizzard slides one row of face-down cards with the wind and snows their backs over.',
         graphMechanicIds: ['board.realm_weather'],
-        tryThis: 'Take four turns and watch the fourth slide a row and bury its suits in snow.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 5, run: realmRun('frost', 'wild') }),
+        tryThis: 'Take three turns on a raging floor and watch the third slide a row and bury its suits in snow.',
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 5, run: realmRun('frost', 'raging') }),
         script: [
             { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn one') },
             { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn two') },
-            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'turn three, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn three') },
             {
-                step: { do: 'miss', a: 'g-1', b: 'h-1' },
-                says: 'turn four: a row slides and its backs are snowed over',
+                step: { do: 'miss', a: 'e-1', b: 'f-1' },
+                says: 'turn three: a row slides and its backs are snowed over',
                 expect: expectAll(realmEventIs('blizzard'), (r, b) => {
                     const snowed = (r.board?.tiles ?? []).map((t, index) => ({ t, index })).filter(({ t }) => t.snowed);
                     if (snowed.length < 2) return `${snowed.length} cards snowed`;
@@ -1311,15 +1310,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-wildfire',
         title: 'Wildfire',
-        mechanic: 'Every third turn in the Cinder Deep a face-down card catches fire on a three-turn fuse; matched in time it is doused for two gold.',
+        mechanic: 'Every second turn on a raging Cinder Deep, wildfire sets two face-down cards on a three-turn fuse; matched in time a fire is doused for two gold.',
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
-        tryThis: 'Match three pairs; the third turn lights a card. Match the burning card and its partner.',
-        build: () => room(EIGHT_PAIRS, { level: 6, run: realmRun('ember', 'wild', { gold: 0 }) }),
+        tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
+        build: () => room(EIGHT_PAIRS, { level: 6, run: realmRun('ember', 'raging', { gold: 0 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
-            { step: { do: 'match', pairKey: 'e' }, says: 'turn two', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn two' : null) },
-            { step: { do: 'match', pairKey: 'h' }, says: 'turn three lights a card on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 1 ? null : 'no card on a fresh fuse')) },
-            { step: { do: 'matchBurning' }, says: 'matched in time, the fire is doused for two gold', expect: expectAll(realmEventIs('doused'), goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
+            { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },
+            { step: { do: 'matchBurning' }, says: 'matched in time, the fire is doused for two gold', expect: expectAll(goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
         ]
     },
     {
@@ -1345,38 +1343,39 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-current',
         title: 'The current',
-        mechanic: 'Every third turn in the Drowned Vault the tide runs one column of face-down cards down a step, and sweeps across the room.',
+        mechanic: 'Every second turn on a raging Drowned Vault the tide runs one column of face-down cards down a step, the bottom card to the top, and sweeps across the room.',
         graphMechanicIds: ['board.realm_weather'],
-        tryThis: 'Take three turns: on the third, the first column runs down a step.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'wild') }),
+        tryThis: 'One turn into a raging floor, match c: the tide runs the first column down a step.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'raging', { turnsThisFloor: 1 }) }),
         script: [
-            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'turn one', expect: (r, b) => (order(r) === order(b) ? null : 'cards moved on turn one') },
-            { step: { do: 'miss', a: 'd-1', b: 'f-1' }, says: 'turn two', expect: (r, b) => (order(r) === order(b) ? null : 'cards moved on turn two') },
             {
-                step: { do: 'miss', a: 'b-1', b: 'd-1' },
-                says: 'turn three: the first column runs down a step, the bottom card to the top',
-                expect: expectAll(realmEventIs('current'), (r, b) =>
-                    positionOf(r, b.board!.tiles[8]!.id) === 0 && positionOf(r, b.board!.tiles[0]!.id) === 4 ? null : `column 0 reads ${[0, 4, 8].map((i) => r.board!.tiles[i]!.id).join(',')}`)
+                // A lone moss pair with nothing to pop casts no hold, so the current is all that moves.
+                step: { do: 'match', pairKey: 'c' },
+                says: 'turn two: the first column runs down a step, the bottom card to the top',
+                expect: expectAll(realmEventIs('current'), (r, b) => {
+                    const cols = b.board!.columns;
+                    const column = b.board!.tiles.map((t, i) => ({ t, i })).filter(({ t, i }) => i % cols === 0 && t.state === 'hidden' && t.pairKey !== 'c');
+                    return column.every(({ t }, k) => r.board!.tiles[column[(k + 1) % column.length]!.i]!.id === t.id)
+                        ? null
+                        : `column 0 reads ${[0, 4, 8].map((i) => r.board!.tiles[i]!.id).join(',')}`;
+                })
             }
         ]
     },
     {
         id: 'realm-lightning',
         title: 'Lightning',
-        mechanic: 'Every fourth turn in the Thunder Spire lightning swaps two face-down cards and leaves both lit until the next flip.',
+        mechanic: 'Every third turn on a raging Thunder Spire lightning strikes twice: two swaps of face-down cards, all four left lit until the next flip.',
         graphMechanicIds: ['board.realm_weather'],
-        tryThis: 'Take four turns: the fourth swaps two cards, and they show where they landed.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 5, run: realmRun('storm', 'wild') }),
+        tryThis: 'Two turns into a raging floor, match c: lightning swaps two pairs of cards, and they show where they landed.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 5, run: realmRun('storm', 'raging', { turnsThisFloor: 2 }) }),
         script: [
-            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn one') },
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn two') },
-            { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'turn three', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'lit on turn three') },
             {
-                step: { do: 'miss', a: 'a-2', b: 'c-2' },
-                says: 'turn four: two cards swap and stay lit',
+                step: { do: 'match', pairKey: 'c' },
+                says: 'turn three: four cards swap and stay lit',
                 expect: expectAll(realmEventIs('lightning'), (r, b) => {
                     const lit = r.realmLitTileIds ?? [];
-                    if (lit.length !== 2) return `${lit.length} lit`;
+                    if (lit.length !== 4) return `${lit.length} lit`;
                     return lit.every((id) => positionOf(r, id) !== positionOf(b, id)) ? null : 'a lit card did not move';
                 })
             },
@@ -1402,17 +1401,16 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-overgrowth',
         title: 'Overgrowth',
-        mechanic: 'Every third turn in the Overgrown Crypt vines creep over a face-down card, next to vines already there when they can.',
+        mechanic: 'Every second turn on a raging Overgrown Crypt vines creep over two face-down cards, next to vines already there when they can.',
         graphMechanicIds: ['board.realm_weather', 'safety.softlock_fairness'],
-        tryThis: 'Take three turns and a card is vined; the floor always keeps a pair you can turn.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('grove', 'wild') }),
+        tryThis: 'One turn into a raging floor, match d: vines take two cards; the floor always keeps a pair you can turn.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('grove', 'raging', { turnsThisFloor: 1 }) }),
         script: [
-            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.vined) ? 'vines on turn one' : null) },
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.vined) ? 'vines on turn two' : null) },
             {
-                step: { do: 'miss', a: 'e-1', b: 'f-1' },
-                says: 'turn three: vines take a card, and the floor can still be finished',
-                expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 1 ? null : 'no card vined'), finishable)
+                // A lone bone pair with nothing to pop holds nothing, so the vines are all the weather's.
+                step: { do: 'match', pairKey: 'd' },
+                says: 'turn two: vines take two cards, and the floor can still be finished',
+                expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 2 ? null : 'not two cards vined'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor clears around the vines', expect: statusIs('levelComplete') }
         ]
@@ -1469,7 +1467,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every third weather of a floor is the realm\u2019s peak; the Frozen Reach\u2019s is a whiteout that snows over every face-down card.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Two blizzards have blown already. Take one turn: the whiteout buries every suit on the board.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('frost', 'wild', { realmWeatherThisFloor: 2, turnsThisFloor: 3 }) }),
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('frost', 'raging', { realmWeatherThisFloor: 2, turnsThisFloor: 2 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
@@ -1486,10 +1484,11 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'The Thunder Spire\u2019s peak lights a whole row of face-down cards until the next flip, and moves nothing.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Two strikes have fallen. Take one turn: a whole row shows its faces. Read it before you flip.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'wild', { realmWeatherThisFloor: 2, turnsThisFloor: 3 }) }),
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'raging', { realmWeatherThisFloor: 2, turnsThisFloor: 2 }) }),
         script: [
             {
-                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                // A match, not a miss: a raging storm throws a miss's cards, and this peak moves nothing.
+                step: { do: 'match', pairKey: 'a' },
                 says: 'a whole row lit, and nothing moved',
                 expect: expectAll(realmEventIs('thunderclap'), (r) => ((r.realmLitTileIds ?? []).length === 4 ? null : `${(r.realmLitTileIds ?? []).length} lit`), (r, b) =>
                     order(r) === order(b) ? null : 'a card moved')
@@ -1505,12 +1504,12 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () =>
             room(['a:e b:t c:m d:b', 'a:e e:t f:m c:b', 'b:t d:b e:t f:m'], {
                 misses: 3,
-                run: realmRun('grove', 'wild', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 2 }),
+                run: realmRun('grove', 'raging', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
                 tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' ? { ...t, vined: true } : t))
             }),
         script: [
             { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'the peak: the vines bloom', expect: expectAll(realmEventIs('bloom'), (r) => (tileById(r, 'b-1')?.bloom === true ? null : 'b-1 did not bloom')) },
-            { step: { do: 'match', pairKey: 'a' }, says: 'the bloom beside the match is cut for three gold', expect: expectAll(realmEventIs('harvest'), (r) => (runGold(r) >= 3 ? null : `gold ${runGold(r)}`), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'still vined')) }
+            { step: { do: 'match', pairKey: 'a' }, says: 'the bloom beside the match is cut for three gold', expect: expectAll((r) => ((r.realmVinesCutThisFloor ?? 0) >= 1 ? null : 'nothing cut'), (r) => (runGold(r) >= 3 ? null : `gold ${runGold(r)}`), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'still vined')) }
         ]
     },
     {
@@ -1519,12 +1518,12 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'A confluence floor is two realms at once: their weather comes by turns, and both answer the player.',
         graphMechanicIds: ['economy.realm_travel', 'board.realm_weather'],
         tryThis: 'Storm meets frost. The next weather is the frost\u2019s, and a miss here freezes like the frost does.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'wild', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1, turnsThisFloor: 3 }) }),
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'raging', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1, turnsThisFloor: 2 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
                 says: 'the frost\u2019s blizzard comes on the storm floor, and the miss freezes',
-                expect: expectAll(realmEventIs('blizzard'), frostIs('a-1', 2), (r) => (r.realmId === 'storm' && r.realmSecondaryId === 'frost' ? null : `realms ${r.realmId}/${r.realmSecondaryId}`))
+                expect: expectAll(realmEventIs('blizzard'), frostIs('a-1', 3), (r) => (r.realmId === 'storm' && r.realmSecondaryId === 'frost' ? null : `realms ${r.realmId}/${r.realmSecondaryId}`))
             },
             { step: { do: 'clear' }, says: 'and the clear pays double gold', expect: expectAll(statusIs('levelComplete'), (r, b) => ((r.lastLevelResult?.goldEarned ?? 0) >= 4 && runGold(r) > runGold(b) ? null : `earned ${r.lastLevelResult?.goldEarned}`)) }
         ]

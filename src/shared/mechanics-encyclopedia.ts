@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 70 as const;
+export const ENCYCLOPEDIA_VERSION = 71 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -605,13 +605,13 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'realms',
         title: 'Realms and their weather',
         description:
-            'Every floor is in a **realm**, and the realm plays the board with you. Its weather comes on a clock you wind yourself - every few turns, match or miss - and the chip at the top says how many turns are left. ' +
+            'Every floor is in a **realm**. On a calm or wild floor the realm is the place - its look, its sound, which element reaches furthest - and everything that happens to the board comes from your matches (see **The elements**). On a **raging** floor the realm also plays the board with you: its weather comes on a clock you wind yourself - every few turns, match or miss - and the chip at the top says how many turns are left. ' +
             '**The Frozen Reach**: a miss freezes both cards it showed for two turns, and a frozen card cannot be turned; a **blizzard** slides one row of face-down cards with the wind and snows their backs over, so their suits cannot be read until you turn them. ' +
             '**The Cinder Deep**: **wildfire** lights a card on a three-turn fuse. Match it and its partner in time and the fire is **doused** for two gold; let the fuse run out and it burns a gold and spreads to a neighbour. ' +
             '**The Drowned Vault**: the **current** runs one column of face-down cards down a step, the bottom card to the top, and sweeps across the room. ' +
             '**The Thunder Spire**: **lightning** swaps two face-down cards and leaves both lit until your next flip - what it shows you is where they landed. ' +
             '**The Overgrown Crypt**: **vines** creep over a card and hold it so it cannot be turned; a match beside vines cuts them, a gold for every vine. ' +
-            'Every third weather of a floor is the realm\u2019s **peak**: a **Whiteout** snows over every back on the board; a **Firestorm** lights a fire and spreads every fire at once; a **Spring Tide** runs two columns; a **Thunderclap** lights a whole row until your next flip and moves nothing; a **Bloom** flowers the vines, and a bloom you cut pays three gold. The chip at the top names the peak when it is next. ' +
+            'Every third weather of a raging floor is the realm\u2019s **peak**: a **Whiteout** snows over every back on the board; a **Firestorm** lights a fire and spreads every fire at once; a **Spring Tide** runs two columns; a **Thunderclap** lights a whole row until your next flip and moves nothing; a **Bloom** flowers the vines, and a bloom you cut pays three gold. The chip at the top names the peak when it is next. ' +
             'A **Raging** realm strikes back at a miss, on the two cards you just saw: the Cinder Deep **scalds** them, both burning on a two-turn fuse; the Drowned Vault\u2019s **undertow** drags each a cell down its column; the Thunder Spire\u2019s **static** throws each across the board, unlit; the Overgrown Crypt **snares** both in vines. ' +
             'Matching beside frozen cards shatters their ice. However the weather falls, a floor always keeps a pair you can turn: if the ice and the vines would leave none, they give way.'
     },

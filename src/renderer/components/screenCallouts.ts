@@ -16,7 +16,7 @@ import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findab
 import { STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
-import { REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
+import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
 
 /**
  * The screen stamps (`ScreenCalloutQueue`): every moment the run wants the whole screen for,
@@ -189,8 +189,10 @@ export const realmEntryCallout = (
     tone: 'legendary',
     title: secondary ? 'CONFLUENCE!' : REALMS[realm].place.toUpperCase(),
     sub: secondary
-        ? `${REALMS[realm].title} meets ${REALMS[secondary].title} · their weather by turns · double gold`
-        : `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`,
+        ? `${REALMS[realm].title} meets ${REALMS[secondary].title} · double gold`
+        : realmWeatherClockRuns(severity)
+          ? `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`
+          : `${REALM_SEVERITIES[severity].title} · your matches cast the elements`,
     color: REALMS[realm].color
 });
 

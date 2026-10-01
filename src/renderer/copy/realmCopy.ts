@@ -1,6 +1,6 @@
 import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
 import { ATTUNEMENT_GOLD_STEP, SMOKE_STUDY_CUT_PER_BURNOUT } from '../../shared/realm-carryover-rules';
-import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
+import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
 export const REALM_HUD_COPY = {
@@ -12,6 +12,9 @@ export const REALM_HUD_COPY = {
     sway: (realm: RealmId, pairs: number, tip: number): string => `${REALMS[realm].title} rising ${pairs}/${tip}`,
     /** The next weather by name - the peak's own name when it is the peak. */
     clock: (weather: string, turnsLeft: number): string => (turnsLeft <= 1 ? `${weather} next turn` : `${weather} in ${turnsLeft}`),
+    /** A calm or wild floor: no clock, the cards make the weather. */
+    ariaNoClock: (realm: RealmId, severity: RealmSeverity, secondary: RealmId | null = null): string =>
+        `${REALMS[realm].place}${secondary ? ` meeting ${REALMS[secondary].place}` : ''}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. Your matches cast the elements.`,
     aria: (realm: RealmId, severity: RealmSeverity, weather: string, turnsLeft: number, secondary: RealmId | null = null): string =>
         `${REALMS[realm].place}${secondary ? ` meeting ${REALMS[secondary].place}` : ''}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. ${weather} in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`
 } as const;
@@ -58,7 +61,9 @@ export const REALM_TRAVEL_COPY = {
     confluenceRule: (door: RealmDoor): string | null =>
         door.confluence ? `Both realms' weather, one after the other, and both answer your turns.` : null,
     weatherLine: (door: RealmDoor): string =>
-        door.confluence
+        !realmWeatherClockRuns(door.severity)
+            ? 'No weather of its own: your matches cast the elements'
+            : door.confluence
             ? `${REALMS[door.realmId].weather} and ${REALMS[door.confluence].weather.toLowerCase()} by turns, every ${realmIntervalFor(door.realmId, door.severity)} turns`
             : `${REALMS[door.realmId].weather} every ${realmIntervalFor(door.realmId, door.severity)} turns · ${REALMS[door.realmId].peak} every third`,
     choose: (door: RealmDoor): string =>

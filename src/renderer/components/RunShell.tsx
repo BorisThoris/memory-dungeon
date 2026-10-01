@@ -15,7 +15,7 @@ import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/t
 import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
-import { REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
+import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { REALM_HUD_COPY } from '../copy/realmCopy';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
@@ -538,7 +538,7 @@ const RunShell = ({
                             is winding themselves, so it is always shown. */}
                         {realm ? (
                             <span
-                                aria-label={REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary)}
+                                aria-label={realmWeatherClockRuns(realmSeverity) ? REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary) : REALM_HUD_COPY.ariaNoClock(realm, realmSeverity, realmSecondary)}
                                 className={styles.realm}
                                 data-peak-next={comingWeather?.peak ? 'true' : undefined}
                                 data-realm={realm}
@@ -548,9 +548,12 @@ const RunShell = ({
                                 style={{ '--realm-color': REALMS[realm].color } as CSSProperties}
                             >
                                 <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity, realmSecondary)}</span>
-                                <span className={styles.realmClock} data-testid="hud-realm-clock">
-                                    {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
-                                </span>
+                                {/* The weather's own clock runs on a raging floor only; elsewhere the cards make the weather. */}
+                                {realmWeatherClockRuns(realmSeverity) ? (
+                                    <span className={styles.realmClock} data-testid="hud-realm-clock">
+                                        {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
+                                    </span>
+                                ) : null}
                                 {/* The sway: the realm the player's matches lean the floor toward, from two pairs. */}
                                 {swayLead && swayLead.pairs >= 2 ? (
                                     <span

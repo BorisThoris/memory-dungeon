@@ -1,4 +1,5 @@
 import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
+import { isTileFlipBlocked } from '../../shared/realm-weather-rules';
 import { MISS_DECISION_HOLD_MS } from '../../shared/scoring-rules';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
@@ -828,11 +829,18 @@ describe('useAppStore timers', () => {
                 pairGroups.set(tile.pairKey, ids);
             }
 
-            for (const ids of [...pairGroups.values()].filter((group) => group.length === 2)) {
+            // A matched group casts its element (`element-group-rules.ts`): a popped Frost or Grove group can
+            // hold a card, so take the next pair whose two halves can both be turned, not a fixed order.
+            for (let guard = 0; guard < 64 && useAppStore.getState().run?.status === 'playing'; guard += 1) {
+                const tiles = useAppStore.getState().run!.board!.tiles;
+                const ids = [...pairGroups.values()].find(
+                    (group) => group.length === 2 && group.every((id) => { const t = tiles.find((tile) => tile.id === id); return t?.state === 'hidden' && !isTileFlipBlocked(t); })
+                );
+                if (!ids) break;
                 useAppStore.getState().pressTile(ids[0]!);
                 useAppStore.getState().pressTile(ids[1]!);
                 // A new run holds the Gambit, so a miss waits out the decision hold (`MISS_DECISION_HOLD_MS`).
-        await vi.advanceTimersByTimeAsync(MISS_DECISION_HOLD_MS + 200);
+                await vi.advanceTimersByTimeAsync(MISS_DECISION_HOLD_MS + 200);
             }
 
             run = useAppStore.getState().run;

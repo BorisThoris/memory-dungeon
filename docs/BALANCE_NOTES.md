@@ -4,6 +4,8 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 
 ## Recent intent
 
+- **2026-10-01 the realm clock runs on raging floors only (`realmWeatherClockRuns`):** with the groups casting the elements, the owner kept the timed weather only where it is the extra danger. Calm and wild floors are shaped by the player's matches alone; raging keeps its weather, peaks and backlash. The hall's weather rooms moved to raging floors.
+
 - **2026-10-01 the suits are the elements (`element-group-rules.ts`):** every match casts its group's element two steps out (Fire burns holds away, Water douses and washes, Frost kills fires, Grove snares). Holds only from popped groups, one card, frost for a turn: measured 8.9 -> 8.1 average floors per run (the first cut, two holds and two-turn frost, was 8.9 -> 5.6 and too much). Fire's burn pays nothing so the harvest keeps its meaning.
 
 - **2026-10-01 the sway (`realm-sway-rules.ts`):** the cards change the world. Pairs matched of an off-realm suit lean the floor toward that suit's realm; carried with the combo and wiped by a miss, five pairs of one suit tip the floor (once a floor, same severity, no clear and no gold). Chosen from a soak measurement: a per-floor count tipped late and rarely; the carried count rewards clean chains (careful 21% of realm floors, sloppy none). It is a way out of a realm, not a safer floor: the severity holds and what the old weather left stays.

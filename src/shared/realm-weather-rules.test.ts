@@ -5,6 +5,7 @@ import {
     BURNOUT_GOLD,
     DOUSE_GOLD,
     FROSTBITE_TURNS,
+    FROSTBITE_TURNS_RAGING,
     VINE_CUT_GOLD,
     WILDFIRE_FUSE,
     BLOOM_CUT_GOLD,
@@ -88,7 +89,7 @@ describe('realm weather', () => {
 
     it('frost: a blizzard slides one row with the wind and snows it over, moving nothing off the board', () => {
         const b = board(sixteen());
-        const result = turn(runIn('frost'), b, 'match', ['h1', 'h2'].filter(() => false), 4);
+        const result = turn(runIn('frost', 'raging'), b, 'match', [], 3);
         const event = result.events.find((e) => e.kind === 'blizzard')!;
         expect(event.tileIds.length).toBeGreaterThanOrEqual(2);
         expect(multiset(result.board)).toEqual(multiset(b));
@@ -108,9 +109,10 @@ describe('realm weather', () => {
 
     it('ember: wildfire lights a card on a fuse; matched in time it is doused for gold', () => {
         const b = board(sixteen());
-        const lit = turn(runIn('ember'), b, 'miss', ['a1', 'b1'], 3);
+        const lit = turn(runIn('ember', 'raging'), b, 'match', [], 2);
         const burning = lit.board.tiles.filter((t) => t.fuse === WILDFIRE_FUSE);
-        expect(burning).toHaveLength(1);
+        // A raging wildfire reaches two cards.
+        expect(burning).toHaveLength(2);
         const pairKey = burning[0]!.pairKey;
         const matched = board(lit.board.tiles.map((t) => (t.pairKey === pairKey ? { ...t, state: 'matched' as const } : t)));
         const sources = lit.board.tiles.filter((t) => t.pairKey === pairKey);
@@ -139,7 +141,7 @@ describe('realm weather', () => {
 
     it('tide: the current runs one column down a step', () => {
         const b = board(sixteen());
-        const result = turn(runIn('tide'), b, 'miss', ['a1', 'b1'], 3);
+        const result = turn(runIn('tide', 'raging'), b, 'match', [], 2);
         const event = result.events.find((e) => e.kind === 'current')!;
         expect(event.tileIds).toHaveLength(4);
         expect(multiset(result.board)).toEqual(multiset(b));
@@ -150,11 +152,12 @@ describe('realm weather', () => {
 
     it('storm: lightning swaps two cards and leaves them lit', () => {
         const b = board(sixteen());
-        const result = turn(runIn('storm'), b, 'miss', ['a1', 'b1'], 4);
-        expect(result.litTileIds).toHaveLength(2);
+        // A raging storm strikes twice: two swaps, four cards lit.
+        const result = turn(runIn('storm', 'raging'), b, 'match', [], 3);
+        expect(result.litTileIds).toHaveLength(4);
         expect(multiset(result.board)).toEqual(multiset(b));
         const moved = result.board.tiles.filter((t, i) => t.id !== b.tiles[i]!.id);
-        expect(moved).toHaveLength(2);
+        expect(moved).toHaveLength(4);
     });
 
     it('grove: vines hold a card; a match beside them cuts them for gold', () => {
@@ -233,7 +236,7 @@ describe('realm weather', () => {
 
     it('frost peak: a whiteout snows over every face-down card', () => {
         const b = board(sixteen());
-        const result = turn(runIn('frost', 'wild', { realmWeatherThisFloor: 2 }), b, 'match', [], 4);
+        const result = turn(runIn('frost', 'raging', { realmWeatherThisFloor: 2 }), b, 'match', [], 3);
         expect(result.events.find((e) => e.kind === 'whiteout')).toBeDefined();
         expect(result.board.tiles.every((t) => t.snowed)).toBe(true);
         expect(result.peaks).toBe(1);
@@ -243,7 +246,7 @@ describe('realm weather', () => {
         const tiles = sixteen();
         tiles[0] = { ...tiles[0]!, fuse: 2 };
         tiles[10] = { ...tiles[10]!, fuse: 2 };
-        const result = turn(runIn('ember', 'wild', { realmWeatherThisFloor: 2 }), board(tiles), 'match', [], 3);
+        const result = turn(runIn('ember', 'raging', { realmWeatherThisFloor: 2 }), board(tiles), 'match', [], 2);
         expect(result.events.find((e) => e.kind === 'firestorm')).toBeDefined();
         const burning = result.board.tiles.filter((t) => t.fuse != null).length;
         expect(burning).toBeGreaterThan(3);
@@ -252,13 +255,13 @@ describe('realm weather', () => {
 
     it('tide peak: a spring tide runs two columns', () => {
         const b = board(sixteen());
-        const result = turn(runIn('tide', 'wild', { realmWeatherThisFloor: 2 }), b, 'miss', ['a1', 'b1'], 3);
+        const result = turn(runIn('tide', 'raging', { realmWeatherThisFloor: 2 }), b, 'match', [], 2);
         expect(result.events.find((e) => e.kind === 'springtide')!.tileIds).toHaveLength(8);
     });
 
     it('storm peak: a thunderclap lights a whole row and moves nothing', () => {
         const b = board(sixteen());
-        const result = turn(runIn('storm', 'wild', { realmWeatherThisFloor: 2 }), b, 'miss', ['a1', 'b1'], 4);
+        const result = turn(runIn('storm', 'raging', { realmWeatherThisFloor: 2 }), b, 'match', [], 3);
         expect(result.litTileIds).toHaveLength(4);
         expect(result.board.tiles.map((t) => t.id)).toEqual(b.tiles.map((t) => t.id));
     });
@@ -266,17 +269,18 @@ describe('realm weather', () => {
     it('grove peak: the vines bloom, and a bloom cut pays three gold', () => {
         const tiles = sixteen();
         tiles[1] = { ...tiles[1]!, vined: true };
-        const bloomed = turn(runIn('grove', 'wild', { realmWeatherThisFloor: 2 }), board(tiles), 'miss', ['h1', 'h2'], 3);
+        const bloomed = turn(runIn('grove', 'raging', { realmWeatherThisFloor: 2 }), board(tiles), 'match', [], 2);
         expect(bloomed.events.find((e) => e.kind === 'bloom')).toBeDefined();
         expect(bloomed.board.tiles[1]!.bloom).toBe(true);
         const pair = [bloomed.board.tiles[0]!, bloomed.board.tiles[5]!];
         const cut = resolveRealmTurn({
-            run: runIn('grove', 'wild', { realmWeatherThisFloor: 3 }),
+            run: runIn('grove', 'raging', { realmWeatherThisFloor: 3 }),
             board: board(bloomed.board.tiles.map((t, i) => (i === 0 || i === 5 ? { ...t, state: 'matched' as const } : t))),
             outcome: 'match',
             tileIds: pair.map((t) => t.id),
             sourceTiles: pair,
-            turnsThisFloor: 4,
+            // Off the clock, so the cut is not undone by the next overgrowth.
+            turnsThisFloor: 3,
             pinnedTileIds: []
         });
         expect(cut.board.tiles[1]!.vined).toBeUndefined();
@@ -286,12 +290,13 @@ describe('realm weather', () => {
 
     it('a confluence alternates its two realms\u2019 weather, and both answer the player', () => {
         const b = board(sixteen());
-        const run = runIn('storm', 'wild', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1 });
+        const run = runIn('storm', 'raging', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1 });
         expect(nextRealmWeather(run)?.realmId).toBe('frost');
-        const result = turn(run, b, 'miss', ['a1', 'b1'], 4);
-        // The second weather is the frost's, and the frost freezes a miss even on a storm floor.
-        expect(result.events.map((e) => e.kind)).toEqual(['frostbite', 'blizzard']);
-        expect(result.board.tiles.find((t) => t.id === 'a1')!.frost).toBe(FROSTBITE_TURNS);
+        const result = turn(run, b, 'miss', ['a1', 'b1'], 3);
+        // The second weather is the frost's, and the frost freezes a miss even on a storm floor;
+        // the raging storm strikes back at the miss as well (static).
+        expect(result.events.map((e) => e.kind)).toEqual(['frostbite', 'static', 'blizzard']);
+        expect(result.board.tiles.find((t) => t.id === 'a1')!.frost).toBe(FROSTBITE_TURNS_RAGING);
     });
 
     it('an omen reaction ends a confluence', () => {
