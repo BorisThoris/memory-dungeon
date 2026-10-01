@@ -330,6 +330,30 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
+        id: 'realm_weather_strike',
+        domain: 'gameplay',
+        interaction: 'A realm event lands on a resolved turn (weather, peak, backlash, douse, harvest, thaw) or the void spits new pairs',
+        cue: 'none',
+        callsite: 'applyResolveBoardTurn -> playResolveSfx -> playRealmEventSfx / playVoidSpewSfx',
+        semanticMoment: 'pressure',
+        decision: 'procedural_only',
+        cooldownPolicy: 'realm category polyphony cap of 8; once per new realm event key, a peak a quarter louder; the void once per spit',
+        mixRole: 'filtered-noise weather under the turn cue: thunder crack and roll, fire whoosh, wind, ice snap, wave, vine creak, chime, hiss, void implosion',
+        reducedMotionSafe: true
+    },
+    {
+        id: 'realm_ambient_bed',
+        domain: 'gameplay',
+        interaction: 'A realm holds the board in play: its weather is heard between strikes',
+        cue: 'none',
+        callsite: 'GameScreen realm ambience effect -> setRealmAmbientBed',
+        semanticMoment: 'ambient',
+        decision: 'procedural_only',
+        cooldownPolicy: 'one bed at a time; same realm re-levels, a new realm crossfades, none or mute fades out',
+        mixRole: 'quiet filtered-noise bed under everything (rain, wind, fire, rumble, leaves) at 2.8% of the SFX gain, scaled by the realm severity',
+        reducedMotionSafe: true
+    },
+    {
         id: 'board_power',
         domain: 'gameplay',
         interaction: 'Arm, use, or preview board powers and their tool payoff crescendo',

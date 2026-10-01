@@ -130,6 +130,7 @@ import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience } from './realmAmbience';
+import { setRealmAmbientBed } from '../audio/realmAmbientBed';
 import { RealmScreenOverlay } from './RealmScreenOverlay';
 import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
 import { realmCarryoverLines } from '../copy/realmCopy';
@@ -1118,6 +1119,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         setRealmAmbience({ realm: ambienceRealm, secondary: ambienceSecondary, strength: ambienceRealm ? ambienceStrength : 0 });
     }, [ambienceRealm, ambienceSecondary, ambienceStrength]);
     useEffect(() => () => setRealmAmbience({ realm: null, secondary: null, strength: 0 }), []);
+    // The realm heard between its strikes (`realmAmbientBed.ts`): rain, wind, fire, rumble, leaves.
+    useEffect(() => {
+        setRealmAmbientBed(ambienceRealm, ambienceStrength, shuffleSfxGain);
+    }, [ambienceRealm, ambienceStrength, shuffleSfxGain]);
+    useEffect(() => () => setRealmAmbientBed(null, 0, 0), []);
     // The realm's events reach the cards they name (`realmCardMotion.ts`); the one a run opened on is not replayed.
     const realmEvent = run.lastRealmEvent ?? null;
     const realmEventKey = ambienceRealm ? realmEvent?.key ?? null : null;

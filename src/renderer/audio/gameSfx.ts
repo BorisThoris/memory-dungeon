@@ -1,4 +1,4 @@
-import type { RunState } from '../../shared/contracts';
+import type { RealmEvent, RunState } from '../../shared/contracts';
 import { runArray } from '../../shared/run-array-guards';
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
@@ -44,6 +44,7 @@ export const __resetGameSfxEngineForTests = (): void => {
     resetSampledSfxForTests();
     resetSharedAudioContextForTests();
     __resetComboVoicingForTests();
+    noiseBuffer = null;
 };
 
 const getAudioContext = getSharedAudioContext;
@@ -68,7 +69,7 @@ const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): number =>
     clamp01(masterVolume) * clamp01(sfxVolume);
 
-type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
+type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle' | 'realm';
 type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
 type MismatchRecoveryCrescendoSfxTier = 'break' | 'recover' | 'risk' | 'trait-surge';
 type MatchPayoffSfxPayload = {
@@ -82,7 +83,8 @@ type MatchPayoffSfxPayload = {
 interface ScheduledVoice {
     category: SfxCategory;
     gain: GainNode;
-    osc: OscillatorNode;
+    /** An oscillator, or a noise buffer for the realm's weather (`playNoise`). */
+    osc: AudioScheduledSourceNode;
     startTime: number;
 }
 
@@ -92,7 +94,8 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     match: 4,
     mismatch: 4,
     power: 5,
-    shuffle: 4
+    shuffle: 4,
+    realm: 8
 };
 
 const activeVoices: ScheduledVoice[] = [];
@@ -209,6 +212,185 @@ const playToneUnguarded = (options: ToneOptions): void => {
     }, cleanupMs + 50);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + options.durationSec + 0.02);
+};
+
+/** One second of white noise, made once: the weather's wind, fire, rain and thunder are filtered from it. */
+let noiseBuffer: AudioBuffer | null = null;
+const getNoiseBuffer = (ctx: AudioContext): AudioBuffer => {
+    if (noiseBuffer && noiseBuffer.sampleRate === ctx.sampleRate) return noiseBuffer;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let seed = 0x9e3779b9;
+    for (let i = 0; i < data.length; i += 1) {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        data[i] = (seed / 0xffffffff) * 2 - 1;
+    }
+    noiseBuffer = buffer;
+    return buffer;
+};
+
+interface NoiseOptions {
+    durationSec: number;
+    gain: number;
+    filter: BiquadFilterType;
+    /** The filter's sweep: from, optionally through a peak at the middle, to. */
+    from: number;
+    peak?: number;
+    to: number;
+    q?: number;
+    /** Seconds the noise takes to swell in; a crack is near zero, a wind is slow. */
+    attackSec?: number;
+    delaySec?: number;
+}
+
+/** Filtered noise: the voice of the realm's weather, which a pure tone cannot carry. */
+const playNoise = (options: NoiseOptions): void =>
+    audioNeverThrows(() => {
+        const ctx = getAudioContext();
+        if (!ctx || options.gain <= 0.001) return;
+        stealOldestInCategory('realm');
+        const start = ctx.currentTime + (options.delaySec ?? 0);
+        const end = start + options.durationSec;
+        const source = ctx.createBufferSource();
+        source.buffer = getNoiseBuffer(ctx);
+        source.loop = true;
+        const filter = ctx.createBiquadFilter();
+        filter.type = options.filter;
+        filter.Q.value = options.q ?? 1;
+        filter.frequency.setValueAtTime(options.from, start);
+        if (options.peak != null) {
+            filter.frequency.exponentialRampToValueAtTime(options.peak, start + options.durationSec * 0.4);
+        }
+        filter.frequency.exponentialRampToValueAtTime(Math.max(20, options.to), end);
+        const g = ctx.createGain();
+        const attack = Math.max(0.004, options.attackSec ?? 0.01);
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(options.gain * 0.5, start + attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, end);
+        source.connect(filter);
+        filter.connect(g);
+        g.connect(ctx.destination);
+        const voice: ScheduledVoice = { category: 'realm', osc: source, gain: g, startTime: start };
+        activeVoices.push(voice);
+        source.addEventListener('ended', () => removeVoice(voice));
+        globalThis.setTimeout(() => removeVoice(voice), (options.delaySec ?? 0) * 1000 + (options.durationSec + 0.1) * 1000);
+        source.start(start);
+        source.stop(end + 0.02);
+    });
+
+type RealmSound = 'thunder' | 'crackle' | 'fire' | 'wind' | 'ice' | 'wave' | 'creak' | 'chime' | 'hiss';
+
+/** Each sound's level, measured against a match cue in a browser so none hides under the bed or shouts over the turn. */
+const REALM_SOUND_LEVEL: Readonly<Record<RealmSound, number>> = {
+    thunder: 0.6,
+    crackle: 1.2,
+    fire: 1.8,
+    wind: 1.3,
+    ice: 0.6,
+    wave: 0.8,
+    creak: 0.95,
+    chime: 1,
+    hiss: 1.2
+};
+
+/** What each realm event sounds like (`realm-weather-rules.ts`). */
+export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>> = {
+    lightning: 'thunder',
+    thunderclap: 'thunder',
+    reaction: 'thunder',
+    static: 'crackle',
+    wildfire: 'fire',
+    firestorm: 'fire',
+    burnout: 'fire',
+    scald: 'fire',
+    blizzard: 'wind',
+    whiteout: 'wind',
+    frostbite: 'ice',
+    current: 'wave',
+    springtide: 'wave',
+    undertow: 'wave',
+    overgrowth: 'creak',
+    bloom: 'creak',
+    snare: 'creak',
+    harvest: 'chime',
+    thaw: 'chime',
+    doused: 'hiss'
+};
+
+/**
+ * The realm's weather, heard (2026-10-01). Every realm event moved or marked cards in silence; now
+ * lightning cracks and rolls, fire whooshes, the blizzard howls, ice snaps, the tide surges, vines
+ * creak, a cut vine or a thaw chimes, a doused fire hisses. Procedural, so nothing new to preload.
+ */
+export const playRealmEventSfx = (gain: number, kind: RealmEvent['kind'], peak = false): void => {
+    if (gain <= 0.001) return;
+    const sound = REALM_EVENT_SOUND[kind];
+    // Levelled in a browser against a match cue (2026-10-01): the thunder and the creak read under the bed at 1x.
+    const g = gain * (peak ? 1.25 : 1) * REALM_SOUND_LEVEL[sound];
+    switch (sound) {
+        case 'thunder':
+            playNoise({ durationSec: 0.09, gain: g * 0.9, filter: 'highpass', from: 2400, to: 1600, attackSec: 0.002 });
+            playNoise({ durationSec: 1.4, gain: g * 0.85, filter: 'lowpass', from: 420, to: 45, attackSec: 0.03, delaySec: 0.04 });
+            playTone({ frequency: 82, frequencyEnd: 38, durationSec: 0.9, gain: g * 0.4, type: 'sawtooth', category: 'realm' });
+            return;
+        case 'crackle':
+            for (let n = 0; n < 6; n += 1) {
+                playNoise({ durationSec: 0.035, gain: g * 0.6, filter: 'bandpass', from: 3200 + n * 400, to: 2600, q: 4, attackSec: 0.002, delaySec: n * 0.055 });
+            }
+            playTone({ frequency: 1200, frequencyEnd: 300, durationSec: 0.3, gain: g * 0.18, type: 'square', category: 'realm' });
+            return;
+        case 'fire':
+            playNoise({ durationSec: 0.75, gain: g * 0.8, filter: 'bandpass', from: 300, peak: 2600, to: 700, q: 0.8, attackSec: 0.12 });
+            for (let n = 0; n < 4; n += 1) {
+                playNoise({ durationSec: 0.03, gain: g * 0.35, filter: 'highpass', from: 3000, to: 2500, attackSec: 0.002, delaySec: 0.15 + n * 0.12 });
+            }
+            return;
+        case 'wind':
+            playNoise({ durationSec: 1.3, gain: g * 0.75, filter: 'bandpass', from: 350, peak: 1400, to: 300, q: 2.5, attackSec: 0.35 });
+            playTone({ frequency: 520, frequencyEnd: 780, durationSec: 0.9, gain: g * 0.08, type: 'sine', category: 'realm' });
+            return;
+        case 'ice':
+            playNoise({ durationSec: 0.05, gain: g * 0.7, filter: 'highpass', from: 4000, to: 3000, attackSec: 0.002 });
+            playTone({ frequency: 2600, frequencyEnd: 3300, durationSec: 0.25, gain: g * 0.2, type: 'sine', category: 'realm' });
+            playTone({ frequency: 3900, frequencyEnd: 3500, durationSec: 0.35, gain: g * 0.12, type: 'sine', category: 'realm' });
+            return;
+        case 'wave':
+            playNoise({ durationSec: 1.2, gain: g * 0.8, filter: 'lowpass', from: 250, peak: 1600, to: 200, q: 0.7, attackSec: 0.3 });
+            playTone({ frequency: 110, frequencyEnd: 68, durationSec: 0.8, gain: g * 0.25, type: 'sine', category: 'realm' });
+            return;
+        case 'creak':
+            playTone({ frequency: 74, frequencyEnd: 58, durationSec: 0.45, gain: g * 0.32, type: 'sawtooth', category: 'realm' });
+            playNoise({ durationSec: 0.5, gain: g * 0.4, filter: 'bandpass', from: 900, peak: 1800, to: 700, q: 1.5, attackSec: 0.05, delaySec: 0.08 });
+            return;
+        case 'chime':
+            playTone({ frequency: 880, frequencyEnd: 1320, durationSec: 0.18, gain: g * 0.3, type: 'triangle', category: 'realm' });
+            return;
+        case 'hiss':
+            playNoise({ durationSec: 0.6, gain: g * 0.6, filter: 'highpass', from: 1800, to: 5000, attackSec: 0.02 });
+            return;
+    }
+};
+
+/** The void spits (`void-spew-rules.ts`): the room is sucked in, then thrown back out. */
+export const playVoidSpewSfx = (rawGain: number): void => {
+    if (rawGain <= 0.001) return;
+    const gain = rawGain * 0.7;
+    playTone({ frequency: 260, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.5, type: 'sine', category: 'realm' });
+    playNoise({ durationSec: 0.55, gain: gain * 0.5, filter: 'lowpass', from: 3000, to: 120, attackSec: 0.05 });
+    playNoise({ durationSec: 0.9, gain: gain * 0.9, filter: 'lowpass', from: 120, peak: 2400, to: 300, attackSec: 0.01, delaySec: 0.55 });
+    scheduleCue(() => playTone({ frequency: 40, frequencyEnd: 220, durationSec: 0.4, gain: gain * 0.45, type: 'sawtooth', category: 'realm' }), 550);
+};
+
+/** The realm's sounds for a resolved turn: its newest event, and the void if it spat. */
+const playRealmTurnSfx = (before: RunState, after: RunState, gain: number): void => {
+    const event = after.lastRealmEvent;
+    if (event && event.key !== before.lastRealmEvent?.key) {
+        const peaks = (after.realmPeaksThisFloor ?? 0) > (before.realmPeaksThisFloor ?? 0);
+        playRealmEventSfx(gain, event.kind, peaks);
+    }
+    if ((after.voidSpewsThisFloor ?? 0) > (before.voidSpewsThisFloor ?? 0) && after.board?.level === before.board?.level) {
+        playVoidSpewSfx(gain);
+    }
 };
 
 /**
@@ -823,6 +1005,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
             });
         }
     }
+    playRealmTurnSfx(before, after, gain);
 };
 
 /** Arming peek / swap / pin: short affirming chirp (not played on disarm). */

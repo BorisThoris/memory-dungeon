@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2850,
-    "codeFileCount": 1039,
-    "exportedSymbolCount": 3213,
+    "trackedFileCount": 2853,
+    "codeFileCount": 1042,
+    "exportedSymbolCount": 3219,
     "contentItemCount": 10,
     "mechanicCount": 57,
     "stateFieldCount": 113,
-    "relationshipCount": 8382
+    "relationshipCount": 8402
   },
   "inventory": [
     {
@@ -273,8 +273,8 @@
     {
       "path": "docs/AUDIO_INTERACTION_MATRIX.md",
       "category": "documentation",
-      "bytes": 10138,
-      "sha256": "86554ff6f8755d9cdc86eaff9e1e2c980dd1e7befaee388d5abdcd85e2baa046"
+      "bytes": 10755,
+      "sha256": "47d09e0a744626d8d5f9581556d1d3de726e97c096e74fbb85a9a54970cc1677"
     },
     {
       "path": "docs/AUDIO_PHRASE_SIZING.md",
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 8298,
-      "sha256": "8351ead42c5e5a55a7fdb5558bbb0970ec2b568775b018494a242d59a4f93178"
+      "bytes": 9113,
+      "sha256": "bc43db84ba8eff9e7e26fac2de6543152eccbb1d6a3639e5878c88d724a04ba5"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2b9475f5e42cc7fe7940c017897f0d9cdda991e3d9fe0c582db561c07bbca5cf"
+      "sha256": "4d85bbb35870bf33eb117b0a281097102bd797df257dabcb678f37f046c0cc09"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8721,14 +8721,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 10439,
-      "sha256": "912bfaf9a514b1e8166b7721224753a10de5993a40c281d5610bfbef0f6189e6"
+      "bytes": 10508,
+      "sha256": "ee42e35fb2367b8ae815e64578c898d8f5fafcf640b4a624e0f934903276877b"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 21176,
-      "sha256": "f1ed3e84e413115ea0797bb90d1c8d1cc677cbd2b6064f26ab5007910b46a71c"
+      "bytes": 22555,
+      "sha256": "b33138d17fa9de70e6ad66cd7ce109fcb44bafdc5229bfa40698309fca47922a"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -8811,8 +8811,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 34314,
-      "sha256": "3b776f281cc0c87ae30358460f31479ac21efc26271b4f83eae8270c930a4428"
+      "bytes": 43266,
+      "sha256": "c762d83e3dc51614b04496192f7f5a77613e131b86a5c93e361a5527acbb215e"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -8843,6 +8843,24 @@
       "category": "source",
       "bytes": 3182,
       "sha256": "ea81516ad1fd20b3b3c34a44e8115f35a7f1048a6dcf2b13e9f05e9ce2eafee7"
+    },
+    {
+      "path": "src/renderer/audio/realmAmbientBed.test.ts",
+      "category": "test",
+      "bytes": 3068,
+      "sha256": "50666928171e5477ff92c89e59447ea9546092f7de2e22c25a8b494aca60ff6d"
+    },
+    {
+      "path": "src/renderer/audio/realmAmbientBed.ts",
+      "category": "source",
+      "bytes": 6206,
+      "sha256": "40d6b1d121fe8b213bef6da302d485e26bb76cf2744a2dd457eb56f8f36057f3"
+    },
+    {
+      "path": "src/renderer/audio/realmSfx.test.ts",
+      "category": "test",
+      "bytes": 3820,
+      "sha256": "d0a48827a43ce235ce1da2a1eac1e20fd3aa428660a200104ca1acb47cdfdbda"
     },
     {
       "path": "src/renderer/audio/resolutionGapDuck.test.ts",
@@ -9513,8 +9531,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 113519,
-      "sha256": "798afbb0d744eaafa890ee945f8ca4b4736c12a882ac80dc984f236faa4972a7"
+      "bytes": 113904,
+      "sha256": "f02a9e693c4698801dc457da37d05b34cea626cdfef468a29716e0b92d82deb1"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -18128,7 +18146,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 190,
+      "lineCount": 192,
       "imports": [
         "file:src/renderer/audio/audioInteractionCoverage.ts"
       ],
@@ -18140,7 +18158,7 @@
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 420,
+      "lineCount": 444,
       "imports": [
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts"
@@ -18378,7 +18396,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 923,
+      "lineCount": 1106,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -18406,16 +18424,20 @@
         "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
+        "symbol:src/renderer/audio/gameSfx.ts#playRealmEventSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
         "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
+        "symbol:src/renderer/audio/gameSfx.ts#playVoidSpewSfx",
+        "symbol:src/renderer/audio/gameSfx.ts#REALM_EVENT_SOUND",
         "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
         "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings"
       ],
       "testedBy": [
         "file:src/renderer/audio/audioCueSafety.test.ts",
         "file:src/renderer/audio/gameSfx.test.ts",
-        "file:src/renderer/audio/gameSfxCancellation.test.ts"
+        "file:src/renderer/audio/gameSfxCancellation.test.ts",
+        "file:src/renderer/audio/realmSfx.test.ts"
       ]
     },
     {
@@ -18494,6 +18516,53 @@
       "testedBy": [
         "file:src/renderer/audio/preloadAudioBuffers.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/audio/realmAmbientBed.test.ts",
+      "path": "src/renderer/audio/realmAmbientBed.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 72,
+      "imports": [
+        "file:src/renderer/audio/realmAmbientBed.ts",
+        "file:src/renderer/audio/webAudioContext.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/realmAmbientBed.ts",
+      "path": "src/renderer/audio/realmAmbientBed.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 155,
+      "imports": [
+        "file:src/renderer/audio/audioSafety.ts",
+        "file:src/renderer/audio/webAudioContext.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
+        "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LEVEL",
+        "symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/realmAmbientBed.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/audio/realmSfx.test.ts",
+      "path": "src/renderer/audio/realmSfx.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 84,
+      "imports": [
+        "file:src/renderer/audio/gameSfx.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/audio/resolutionGapDuck.test.ts",
@@ -18638,6 +18707,7 @@
         "symbol:src/renderer/audio/webAudioContext.ts#resumeSharedAudioContext"
       ],
       "testedBy": [
+        "file:src/renderer/audio/realmAmbientBed.test.ts",
         "file:src/renderer/audio/webAudioContext.test.ts"
       ]
     },
@@ -20313,10 +20383,11 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2287,
+      "lineCount": 2293,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
+        "file:src/renderer/audio/realmAmbientBed.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/boardFloaterPlacement.ts",
@@ -30009,6 +30080,8 @@
         "file:src/renderer/audio/gameplayMusic.test.ts",
         "file:src/renderer/audio/gameSfx.test.ts",
         "file:src/renderer/audio/gameSfxCancellation.test.ts",
+        "file:src/renderer/audio/realmAmbientBed.test.ts",
+        "file:src/renderer/audio/realmSfx.test.ts",
         "file:src/renderer/audio/resolutionGapDuck.test.ts",
         "file:src/renderer/cardFace/programmaticCardFace.test.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
@@ -37817,31 +37890,31 @@
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
       "line": 55,
-      "endLine": 404
+      "endLine": 428
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsGameplaySfx",
       "name": "audioCoverageCueIsGameplaySfx",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 416,
-      "endLine": 416
+      "line": 440,
+      "endLine": 440
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageCueIsKnown",
       "name": "audioCoverageCueIsKnown",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 418,
-      "endLine": 419
+      "line": 442,
+      "endLine": 443
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#audioCoverageRowsByDomain",
       "name": "audioCoverageRowsByDomain",
       "kind": "value",
       "file": "src/renderer/audio/audioInteractionCoverage.ts",
-      "line": 413,
-      "endLine": 414
+      "line": 437,
+      "endLine": 438
     },
     {
       "id": "symbol:src/renderer/audio/audioInteractionCoverage.ts#AudioSemanticMoment",
@@ -38081,135 +38154,159 @@
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
       "line": 41,
-      "endLine": 47
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#CHUNK_BREAK_MAX_NOTES",
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 497,
-      "endLine": 497
+      "line": 679,
+      "endLine": 679
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 604,
-      "endLine": 629
+      "line": 786,
+      "endLine": 811
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
       "name": "playComboStageSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 387,
-      "endLine": 405
+      "line": 569,
+      "endLine": 587
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 221,
-      "endLine": 233
+      "line": 403,
+      "endLine": 415
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 905,
-      "endLine": 922
+      "line": 1088,
+      "endLine": 1105
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 264,
-      "endLine": 279
+      "line": 446,
+      "endLine": 461
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 722,
-      "endLine": 752
+      "line": 904,
+      "endLine": 934
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 339,
-      "endLine": 359
+      "line": 521,
+      "endLine": 541
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 631,
-      "endLine": 655
+      "line": 813,
+      "endLine": 837
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 844,
-      "endLine": 856
+      "line": 1027,
+      "endLine": 1039
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 829,
-      "endLine": 841
+      "line": 1012,
+      "endLine": 1024
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameSfx.ts#playRealmEventSfx",
+      "name": "playRealmEventSfx",
+      "kind": "value",
+      "file": "src/renderer/audio/gameSfx.ts",
+      "line": 325,
+      "endLine": 372
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 758,
-      "endLine": 826
+      "line": 940,
+      "endLine": 1009
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 862,
-      "endLine": 900
+      "line": 1045,
+      "endLine": 1083
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
       "name": "playStudyClosingTickSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 248,
-      "endLine": 261
+      "line": 430,
+      "endLine": 443
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameSfx.ts#playVoidSpewSfx",
+      "name": "playVoidSpewSfx",
+      "kind": "value",
+      "file": "src/renderer/audio/gameSfx.ts",
+      "line": 375,
+      "endLine": 382
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameSfx.ts#REALM_EVENT_SOUND",
+      "name": "REALM_EVENT_SOUND",
+      "kind": "value",
+      "file": "src/renderer/audio/gameSfx.ts",
+      "line": 297,
+      "endLine": 318
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
       "name": "resumeAudioContext",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 51,
-      "endLine": 56
+      "line": 52,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings",
       "name": "sfxGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 68,
-      "endLine": 69
+      "line": 69,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/audio/musicalScale.ts#A4_HZ",
@@ -38298,6 +38395,30 @@
       "file": "src/renderer/audio/preloadAudioBuffers.ts",
       "line": 30,
       "endLine": 92
+    },
+    {
+      "id": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
+      "name": "REALM_BED_LAYERS",
+      "kind": "value",
+      "file": "src/renderer/audio/realmAmbientBed.ts",
+      "line": 25,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LEVEL",
+      "name": "REALM_BED_LEVEL",
+      "kind": "value",
+      "file": "src/renderer/audio/realmAmbientBed.ts",
+      "line": 43,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed",
+      "name": "setRealmAmbientBed",
+      "kind": "value",
+      "file": "src/renderer/audio/realmAmbientBed.ts",
+      "line": 131,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
@@ -40312,40 +40433,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2286,
-      "endLine": 2286
+      "line": 2292,
+      "endLine": 2292
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 253,
-      "endLine": 253
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 255,
-      "endLine": 255
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 245,
-      "endLine": 245
+      "line": 246,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -68235,6 +68356,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playRealmEventSfx",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "symbol:src/renderer/audio/gameSfx.ts#playRealmEventSfx",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
@@ -68250,6 +68377,18 @@
       "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#playVoidSpewSfx",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "symbol:src/renderer/audio/gameSfx.ts#playVoidSpewSfx",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameSfx.ts->symbol:src/renderer/audio/gameSfx.ts#REALM_EVENT_SOUND",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "symbol:src/renderer/audio/gameSfx.ts#REALM_EVENT_SOUND",
       "kind": "exports"
     },
     {
@@ -68328,6 +68467,24 @@
       "id": "exports:src/renderer/audio/preloadAudioBuffers.ts->symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
       "source": "file:src/renderer/audio/preloadAudioBuffers.ts",
       "target": "symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/realmAmbientBed.ts->symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/realmAmbientBed.ts->symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LEVEL",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LEVEL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/realmAmbientBed.ts->symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed",
       "kind": "exports"
     },
     {
@@ -88945,6 +89102,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/audio/realmAmbientBed.test.ts->src/renderer/audio/realmAmbientBed.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.test.ts",
+      "target": "file:src/renderer/audio/realmAmbientBed.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmAmbientBed.test.ts->src/renderer/audio/webAudioContext.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.test.ts",
+      "target": "file:src/renderer/audio/webAudioContext.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmAmbientBed.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmAmbientBed.ts->src/renderer/audio/audioSafety.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "file:src/renderer/audio/audioSafety.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmAmbientBed.ts->src/renderer/audio/webAudioContext.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "file:src/renderer/audio/webAudioContext.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmAmbientBed.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmSfx.test.ts->src/renderer/audio/gameSfx.ts",
+      "source": "file:src/renderer/audio/realmSfx.test.ts",
+      "target": "file:src/renderer/audio/gameSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/realmSfx.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/realmSfx.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/resolutionGapDuck.test.ts->src/renderer/audio/audioMixDuckingPolicy.ts",
       "source": "file:src/renderer/audio/resolutionGapDuck.test.ts",
       "target": "file:src/renderer/audio/audioMixDuckingPolicy.ts",
@@ -90682,6 +90887,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/audio/gameSfx.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/audio/gameSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/audio/realmAmbientBed.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/audio/realmAmbientBed.ts",
       "kind": "imports"
     },
     {
@@ -109285,6 +109496,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/gameSfx.ts->file:src/renderer/audio/realmSfx.test.ts",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "file:src/renderer/audio/realmSfx.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/musicalScale.ts->file:src/renderer/audio/comboVoicing.test.ts",
       "source": "file:src/renderer/audio/musicalScale.ts",
       "target": "file:src/renderer/audio/comboVoicing.test.ts",
@@ -109300,6 +109517,12 @@
       "id": "tested_by:src/renderer/audio/preloadAudioBuffers.ts->file:src/renderer/audio/preloadAudioBuffers.test.ts",
       "source": "file:src/renderer/audio/preloadAudioBuffers.ts",
       "target": "file:src/renderer/audio/preloadAudioBuffers.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/audio/realmAmbientBed.ts->file:src/renderer/audio/realmAmbientBed.test.ts",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "file:src/renderer/audio/realmAmbientBed.test.ts",
       "kind": "tested_by"
     },
     {
@@ -109324,6 +109547,12 @@
       "id": "tested_by:src/renderer/audio/uiSfx.ts->file:src/renderer/audio/uiSfx.test.ts",
       "source": "file:src/renderer/audio/uiSfx.ts",
       "target": "file:src/renderer/audio/uiSfx.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/audio/webAudioContext.ts->file:src/renderer/audio/realmAmbientBed.test.ts",
+      "source": "file:src/renderer/audio/webAudioContext.ts",
+      "target": "file:src/renderer/audio/realmAmbientBed.test.ts",
       "kind": "tested_by"
     },
     {
@@ -111844,6 +112073,18 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/gameSfxCancellation.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/audio/gameSfxCancellation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/realmAmbientBed.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/audio/realmAmbientBed.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/audio/realmSfx.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/audio/realmSfx.test.ts",
       "kind": "tested_by"
     },
     {

@@ -37,6 +37,8 @@ describe('REG-037 audio interaction coverage', () => {
             'chain_break_miss',
             'trait_mismatch_surge',
             'mismatch_recovery_crescendo',
+            'realm_weather_strike',
+            'realm_ambient_bed',
             'board_power'
         ]);
         expect(gameplay.find((row) => row.id === 'resolve_match')?.mixRole).toMatch(/reward/i);
