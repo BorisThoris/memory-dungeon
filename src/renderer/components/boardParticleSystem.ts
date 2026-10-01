@@ -49,6 +49,8 @@ export interface BoardParticleBurst {
     tint?: string;
     /** How an ember moves: up like a spark from a fire, down like snow, or out like a static spark. */
     emberMode?: 'rise' | 'fall' | 'spark';
+    /** An ember's size against the combo's sparks: the realm's snow, drops and leaves are bigger (`realmParticles.ts`). */
+    sizeScale?: number;
 }
 
 const vertexShader = `
@@ -300,7 +302,7 @@ export const createBoardParticleSystem = () => {
                     movement.setXYZW(slot, Math.cos(angle) * speed, Math.sin(angle) * speed + (kind === 2 ? 0.35 : 0),
                         kind === 0 ? (bomb ? 1.2 : 0.25) : 0, bomb ? 2.1 : 1.2);
                 }
-                lifetime.setXYZW(slot, start, life, ember ? 0.03 + rng() * 0.045 + energy * 0.03 : size, kind);
+                lifetime.setXYZW(slot, start, life, ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
                 color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);
                 if (kind === 0 && rng() > 0.7) color.set('#fff2ce');
                 tint.setXYZ(slot, color.r, color.g, color.b);

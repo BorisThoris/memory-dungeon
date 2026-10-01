@@ -27,17 +27,23 @@ export const REALM_BED_LAYERS: Readonly<Record<RealmId, readonly BedLayer[]>> = 
         { filter: 'highpass', frequency: 2400, q: 0.5, level: 0.8, lfoHz: 0.13, lfoDepth: 0.35 },
         { filter: 'lowpass', frequency: 260, q: 0.7, level: 0.5, lfoHz: 0.09, lfoDepth: 0.6 }
     ],
-    frost: [{ filter: 'bandpass', frequency: 700, q: 3, level: 1, lfoHz: 0.11, lfoDepth: 0.7 }],
+    frost: [{ filter: 'bandpass', frequency: 600, q: 0.8, level: 1, lfoHz: 0.08, lfoDepth: 0.6 }],
     ember: [
         { filter: 'lowpass', frequency: 260, q: 0.8, level: 1.6, lfoHz: 0.2, lfoDepth: 0.3 },
-        { filter: 'bandpass', frequency: 1900, q: 0.9, level: 0.8, lfoHz: 7.5, lfoDepth: 0.8 }
+        { filter: 'bandpass', frequency: 1900, q: 0.7, level: 0.6, lfoHz: 3.2, lfoDepth: 0.5 }
     ],
     storm: [
-        { filter: 'lowpass', frequency: 140, q: 1.2, level: 3, lfoHz: 0.07, lfoDepth: 0.8 },
-        { filter: 'bandpass', frequency: 5200, q: 2, level: 0.25, lfoHz: 0.31, lfoDepth: 0.9 }
+        { filter: 'lowpass', frequency: 140, q: 0.7, level: 3, lfoHz: 0.07, lfoDepth: 0.8 },
+        { filter: 'highpass', frequency: 5200, q: 0.7, level: 0.2, lfoHz: 0.31, lfoDepth: 0.9 }
     ],
-    grove: [{ filter: 'bandpass', frequency: 3200, q: 1.4, level: 0.6, lfoHz: 0.23, lfoDepth: 0.75 }]
+    grove: [{ filter: 'bandpass', frequency: 3200, q: 0.8, level: 0.6, lfoHz: 0.23, lfoDepth: 0.75 }]
 };
+
+/**
+ * Off until the owner has heard it (2026-10-01: the first bed buzzed, its noise generator cycling).
+ * `setRealmAmbientBed` takes it as a parameter so the tests still walk the bed itself.
+ */
+export const REALM_BED_ENABLED = false;
 
 /** The bed's ceiling against the SFX gain: under the turn cues, never over them. */
 export const REALM_BED_LEVEL = 0.028;
@@ -59,10 +65,14 @@ const noise = (ctx: AudioContext): AudioBuffer => {
     // Two seconds, so the loop seam is not a pulse.
     const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
     const data = buffer.getChannelData(0);
-    let seed = 0x2545f491;
+    let seed = 0x2545f491 | 0;
     for (let i = 0; i < data.length; i += 1) {
-        seed = (seed * 1103515245 + 12345) >>> 0;
-        data[i] = (seed / 0xffffffff) * 2 - 1;
+        // xorshift32 on 32-bit integers: a multiply-and-add on a float loses precision and cycles (the
+        // bed's old generator repeated every 4,235 samples, an 11 Hz buzz instead of noise).
+        seed ^= seed << 13;
+        seed ^= seed >>> 17;
+        seed ^= seed << 5;
+        data[i] = ((seed >>> 0) / 0xffffffff) * 2 - 1;
     }
     bedNoise = buffer;
     return buffer;
@@ -128,9 +138,9 @@ const startBed = (ctx: AudioContext, realm: RealmId, level: number): PlayingBed 
  * Hold the bed for `realm` at `strength` (0..1) under the SFX `gain`, or stop it with a null realm or
  * a muted gain. Idempotent: the same realm only re-levels; a new one crossfades.
  */
-export const setRealmAmbientBed = (realm: RealmId | null, strength: number, gain: number): void =>
+export const setRealmAmbientBed = (realm: RealmId | null, strength: number, gain: number, enabled = REALM_BED_ENABLED): void =>
     audioNeverThrows(() => {
-        const level = realm ? gain * REALM_BED_LEVEL * (0.6 + 0.4 * Math.max(0, Math.min(1, strength))) : 0;
+        const level = realm && enabled ? gain * REALM_BED_LEVEL * (0.6 + 0.4 * Math.max(0, Math.min(1, strength))) : 0;
         if (!realm || level <= 0.0005) {
             current?.stop();
             current = null;

@@ -95,7 +95,7 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     mismatch: 4,
     power: 5,
     shuffle: 4,
-    realm: 8
+    realm: 16
 };
 
 const activeVoices: ScheduledVoice[] = [];
@@ -118,6 +118,20 @@ const removeVoice = (voice: ScheduledVoice): void => {
 };
 
 const stopVoice = (voice: ScheduledVoice): void => {
+    // A realm voice (noise mostly) is faded out, not cut: cutting a noise source mid-swell clicks.
+    if (voice.category === 'realm') {
+        try {
+            const now = voice.gain.context.currentTime;
+            voice.gain.gain.cancelScheduledValues(now);
+            voice.gain.gain.setValueAtTime(Math.max(0.0001, voice.gain.gain.value), now);
+            voice.gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+            voice.osc.stop(now + 0.02);
+        } catch {
+            /* already stopped */
+        }
+        removeVoice(voice);
+        return;
+    }
     try {
         voice.osc.stop();
     } catch {
@@ -220,10 +234,14 @@ const getNoiseBuffer = (ctx: AudioContext): AudioBuffer => {
     if (noiseBuffer && noiseBuffer.sampleRate === ctx.sampleRate) return noiseBuffer;
     const buffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
     const data = buffer.getChannelData(0);
-    let seed = 0x9e3779b9;
+    let seed = 0x9e3779b9 | 0;
     for (let i = 0; i < data.length; i += 1) {
-        seed = (seed * 1664525 + 1013904223) >>> 0;
-        data[i] = (seed / 0xffffffff) * 2 - 1;
+        // xorshift32 on 32-bit integers: a multiply-and-add on a float loses precision and cycles (the
+        // bed's old generator repeated every 4,235 samples, an 11 Hz buzz instead of noise).
+        seed ^= seed << 13;
+        seed ^= seed >>> 17;
+        seed ^= seed << 5;
+        data[i] = ((seed >>> 0) / 0xffffffff) * 2 - 1;
     }
     noiseBuffer = buffer;
     return buffer;
@@ -290,7 +308,7 @@ const REALM_SOUND_LEVEL: Readonly<Record<RealmSound, number>> = {
     wave: 0.8,
     creak: 0.95,
     chime: 1,
-    hiss: 1.2
+    hiss: 0.55
 };
 
 /** What each realm event sounds like (`realm-weather-rules.ts`). */
@@ -331,22 +349,22 @@ export const playRealmEventSfx = (gain: number, kind: RealmEvent['kind'], peak =
         case 'thunder':
             playNoise({ durationSec: 0.09, gain: g * 0.9, filter: 'highpass', from: 2400, to: 1600, attackSec: 0.002 });
             playNoise({ durationSec: 1.4, gain: g * 0.85, filter: 'lowpass', from: 420, to: 45, attackSec: 0.03, delaySec: 0.04 });
-            playTone({ frequency: 82, frequencyEnd: 38, durationSec: 0.9, gain: g * 0.4, type: 'sawtooth', category: 'realm' });
+            playTone({ frequency: 70, frequencyEnd: 34, durationSec: 0.9, gain: g * 0.55, type: 'sine', category: 'realm' });
             return;
         case 'crackle':
             for (let n = 0; n < 6; n += 1) {
                 playNoise({ durationSec: 0.035, gain: g * 0.6, filter: 'bandpass', from: 3200 + n * 400, to: 2600, q: 4, attackSec: 0.002, delaySec: n * 0.055 });
             }
-            playTone({ frequency: 1200, frequencyEnd: 300, durationSec: 0.3, gain: g * 0.18, type: 'square', category: 'realm' });
+            playTone({ frequency: 1200, frequencyEnd: 300, durationSec: 0.3, gain: g * 0.12, type: 'triangle', category: 'realm' });
             return;
         case 'fire':
             playNoise({ durationSec: 0.75, gain: g * 0.8, filter: 'bandpass', from: 300, peak: 2600, to: 700, q: 0.8, attackSec: 0.12 });
             for (let n = 0; n < 4; n += 1) {
-                playNoise({ durationSec: 0.03, gain: g * 0.35, filter: 'highpass', from: 3000, to: 2500, attackSec: 0.002, delaySec: 0.15 + n * 0.12 });
+                playNoise({ durationSec: 0.03, gain: g * 0.18, filter: 'bandpass', from: 2600, to: 2200, q: 0.8, attackSec: 0.004, delaySec: 0.15 + n * 0.12 });
             }
             return;
         case 'wind':
-            playNoise({ durationSec: 1.3, gain: g * 0.75, filter: 'bandpass', from: 350, peak: 1400, to: 300, q: 2.5, attackSec: 0.35 });
+            playNoise({ durationSec: 1.3, gain: g * 0.75, filter: 'bandpass', from: 350, peak: 1100, to: 300, q: 1, attackSec: 0.35 });
             playTone({ frequency: 520, frequencyEnd: 780, durationSec: 0.9, gain: g * 0.08, type: 'sine', category: 'realm' });
             return;
         case 'ice':
@@ -359,8 +377,8 @@ export const playRealmEventSfx = (gain: number, kind: RealmEvent['kind'], peak =
             playTone({ frequency: 110, frequencyEnd: 68, durationSec: 0.8, gain: g * 0.25, type: 'sine', category: 'realm' });
             return;
         case 'creak':
-            playTone({ frequency: 74, frequencyEnd: 58, durationSec: 0.45, gain: g * 0.32, type: 'sawtooth', category: 'realm' });
-            playNoise({ durationSec: 0.5, gain: g * 0.4, filter: 'bandpass', from: 900, peak: 1800, to: 700, q: 1.5, attackSec: 0.05, delaySec: 0.08 });
+            playTone({ frequency: 96, frequencyEnd: 70, durationSec: 0.45, gain: g * 0.3, type: 'triangle', category: 'realm' });
+            playNoise({ durationSec: 0.5, gain: g * 0.4, filter: 'bandpass', from: 900, peak: 1800, to: 700, q: 0.9, attackSec: 0.05, delaySec: 0.08 });
             return;
         case 'chime':
             playTone({ frequency: 880, frequencyEnd: 1320, durationSec: 0.18, gain: g * 0.3, type: 'triangle', category: 'realm' });
@@ -378,7 +396,7 @@ export const playVoidSpewSfx = (rawGain: number): void => {
     playTone({ frequency: 260, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.5, type: 'sine', category: 'realm' });
     playNoise({ durationSec: 0.55, gain: gain * 0.5, filter: 'lowpass', from: 3000, to: 120, attackSec: 0.05 });
     playNoise({ durationSec: 0.9, gain: gain * 0.9, filter: 'lowpass', from: 120, peak: 2400, to: 300, attackSec: 0.01, delaySec: 0.55 });
-    scheduleCue(() => playTone({ frequency: 40, frequencyEnd: 220, durationSec: 0.4, gain: gain * 0.45, type: 'sawtooth', category: 'realm' }), 550);
+    scheduleCue(() => playTone({ frequency: 55, frequencyEnd: 220, durationSec: 0.4, gain: gain * 0.45, type: 'triangle', category: 'realm' }), 550);
 };
 
 /** The realm's sounds for a resolved turn: its newest event, and the void if it spat. */

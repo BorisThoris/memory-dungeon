@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2855,
-    "codeFileCount": 1044,
-    "exportedSymbolCount": 3232,
+    "trackedFileCount": 2857,
+    "codeFileCount": 1046,
+    "exportedSymbolCount": 3240,
     "contentItemCount": 10,
     "mechanicCount": 58,
     "stateFieldCount": 115,
-    "relationshipCount": 8446
+    "relationshipCount": 8464
   },
   "inventory": [
     {
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 10474,
-      "sha256": "7f9990a5abb48d15316cfb105f8312088e48fd352de3a0373d47cfe237f765a1"
+      "bytes": 11335,
+      "sha256": "f9b37f3d65dd825482a6fc0bfdd672937affaa5a7dab8db7e5734a59f8c3db50"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "41111198017b477231f15dd22090c182f12ab0982d42c3358752f61d6fba80d3"
+      "sha256": "c304f550a65dd1f49856bb597e713bbdb23fc3fed9ca86676d40b64d71b116ed"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -8811,8 +8811,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 43266,
-      "sha256": "c762d83e3dc51614b04496192f7f5a77613e131b86a5c93e361a5527acbb215e"
+      "bytes": 44099,
+      "sha256": "60651b569495e6b12037fc7aae65223299bb035e2a8b1d9d328f517d86531fe4"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -8847,14 +8847,14 @@
     {
       "path": "src/renderer/audio/realmAmbientBed.test.ts",
       "category": "test",
-      "bytes": 3068,
-      "sha256": "50666928171e5477ff92c89e59447ea9546092f7de2e22c25a8b494aca60ff6d"
+      "bytes": 3277,
+      "sha256": "e6798ffd600c2af86ea9f91071cce8218d0b0090f69711e138fb6c918f962928"
     },
     {
       "path": "src/renderer/audio/realmAmbientBed.ts",
       "category": "source",
-      "bytes": 6206,
-      "sha256": "40d6b1d121fe8b213bef6da302d485e26bb76cf2744a2dd457eb56f8f36057f3"
+      "bytes": 6731,
+      "sha256": "734fb30f1fbc6a07f8561f1009b1d7722cea8286d39cbc1b5b7d18d55d97d5c6"
     },
     {
       "path": "src/renderer/audio/realmSfx.test.ts",
@@ -9261,8 +9261,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 20966,
-      "sha256": "a33a251fa26d3bffffde1f49283ea2b2a7da34279d737197eb105622fa2160c0"
+      "bytes": 21141,
+      "sha256": "bceff4f5646df456ce869c40c23e1d51f6abdd42c6046e96857513263b4a24c5"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9845,6 +9845,18 @@
       "category": "source",
       "bytes": 7925,
       "sha256": "57c0f65e44b0e663fe313d452ff4b91e7da5eb2ab2ba608f93017a7cf0bef85c"
+    },
+    {
+      "path": "src/renderer/components/realmParticles.test.ts",
+      "category": "test",
+      "bytes": 1667,
+      "sha256": "619eac2d56bdb382ced040e8bd48ee5fed0eef3bbac97b9178a0c1e9fe2ec96e"
+    },
+    {
+      "path": "src/renderer/components/realmParticles.ts",
+      "category": "source",
+      "bytes": 3086,
+      "sha256": "731839dd1ad8636d37ba981985e131dcacbbd9d56cf9ef680ced17c328567ef0"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -10617,8 +10629,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 10402,
-      "sha256": "59a17dcc1909a8080ff09a46a974d89dc2f8609215255e41fbfcb3a1c370b593"
+      "bytes": 13862,
+      "sha256": "8da19f307174aee60a035f4b0e05cfb8b4503baf1fe52de9af83069006c3eb7f"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -18408,7 +18420,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1106,
+      "lineCount": 1124,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -18534,7 +18546,7 @@
       "path": "src/renderer/audio/realmAmbientBed.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 72,
+      "lineCount": 78,
       "imports": [
         "file:src/renderer/audio/realmAmbientBed.ts",
         "file:src/renderer/audio/webAudioContext.ts",
@@ -18548,13 +18560,14 @@
       "path": "src/renderer/audio/realmAmbientBed.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 155,
+      "lineCount": 165,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/webAudioContext.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_ENABLED",
         "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
         "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LEVEL",
         "symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed"
@@ -19690,7 +19703,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 388,
+      "lineCount": 390,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -21209,7 +21222,45 @@
         "symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET"
       ],
       "testedBy": [
-        "file:src/renderer/components/realmCardMotion.test.ts"
+        "file:src/renderer/components/realmCardMotion.test.ts",
+        "file:src/renderer/components/realmParticles.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/realmParticles.test.ts",
+      "path": "src/renderer/components/realmParticles.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 28,
+      "imports": [
+        "file:src/renderer/components/realmCardMotion.ts",
+        "file:src/renderer/components/realmParticles.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/realmParticles.ts",
+      "path": "src/renderer/components/realmParticles.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 61,
+      "imports": [
+        "file:src/renderer/components/realmCardMotion.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/realmParticles.ts#REALM_AMBIENT_MOTE",
+        "symbol:src/renderer/components/realmParticles.ts#REALM_EVENT_MOTE",
+        "symbol:src/renderer/components/realmParticles.ts#REALM_MOTE_SIZE",
+        "symbol:src/renderer/components/realmParticles.ts#RealmMote",
+        "symbol:src/renderer/components/realmParticles.ts#realmMoteInterval",
+        "symbol:src/renderer/components/realmParticles.ts#RealmMoteMode",
+        "symbol:src/renderer/components/realmParticles.ts#realmStatusMote"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/realmParticles.test.ts"
       ]
     },
     {
@@ -23296,13 +23347,15 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 164,
+      "lineCount": 216,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/realmAmbience.ts",
+        "file:src/renderer/components/realmParticles.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -30113,6 +30166,7 @@
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/MainMenuBackground.test.tsx",
         "file:src/renderer/components/ProfileScreen.test.tsx",
+        "file:src/renderer/components/realmParticles.test.ts",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/StoreVault.test.tsx",
@@ -38221,136 +38275,136 @@
       "name": "CHUNK_BREAK_MAX_NOTES",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 679,
-      "endLine": 679
+      "line": 697,
+      "endLine": 697
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 786,
-      "endLine": 811
+      "line": 804,
+      "endLine": 829
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playComboStageSfx",
       "name": "playComboStageSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 569,
-      "endLine": 587
+      "line": 587,
+      "endLine": 605
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 403,
-      "endLine": 415
+      "line": 421,
+      "endLine": 433
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1088,
-      "endLine": 1105
+      "line": 1106,
+      "endLine": 1123
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 446,
-      "endLine": 461
+      "line": 464,
+      "endLine": 479
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 904,
-      "endLine": 934
+      "line": 922,
+      "endLine": 952
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 521,
-      "endLine": 541
+      "line": 539,
+      "endLine": 559
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 813,
-      "endLine": 837
+      "line": 831,
+      "endLine": 855
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1027,
-      "endLine": 1039
+      "line": 1045,
+      "endLine": 1057
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1012,
-      "endLine": 1024
+      "line": 1030,
+      "endLine": 1042
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playRealmEventSfx",
       "name": "playRealmEventSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 325,
-      "endLine": 372
+      "line": 343,
+      "endLine": 390
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 940,
-      "endLine": 1009
+      "line": 958,
+      "endLine": 1027
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1045,
-      "endLine": 1083
+      "line": 1063,
+      "endLine": 1101
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playStudyClosingTickSfx",
       "name": "playStudyClosingTickSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 430,
-      "endLine": 443
+      "line": 448,
+      "endLine": 461
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playVoidSpewSfx",
       "name": "playVoidSpewSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 375,
-      "endLine": 382
+      "line": 393,
+      "endLine": 400
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#REALM_EVENT_SOUND",
       "name": "REALM_EVENT_SOUND",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 297,
-      "endLine": 318
+      "line": 315,
+      "endLine": 336
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
@@ -38457,6 +38511,14 @@
       "endLine": 92
     },
     {
+      "id": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_ENABLED",
+      "name": "REALM_BED_ENABLED",
+      "kind": "value",
+      "file": "src/renderer/audio/realmAmbientBed.ts",
+      "line": 46,
+      "endLine": 46
+    },
+    {
       "id": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
       "name": "REALM_BED_LAYERS",
       "kind": "value",
@@ -38469,16 +38531,16 @@
       "name": "REALM_BED_LEVEL",
       "kind": "value",
       "file": "src/renderer/audio/realmAmbientBed.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/audio/realmAmbientBed.ts#setRealmAmbientBed",
       "name": "setRealmAmbientBed",
       "kind": "value",
       "file": "src/renderer/audio/realmAmbientBed.ts",
-      "line": 131,
-      "endLine": 154
+      "line": 141,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/audio/resolutionGapDuck.ts#RESOLUTION_GAP_DUCK_MULTIPLIER",
@@ -39846,7 +39908,7 @@
       "kind": "interface",
       "file": "src/renderer/components/boardParticleSystem.ts",
       "line": 34,
-      "endLine": 52
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/boardParticleSystem.ts#BoardParticleKind",
@@ -39861,8 +39923,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 147,
-      "endLine": 387
+      "line": 149,
+      "endLine": 389
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -41151,6 +41213,62 @@
       "file": "src/renderer/components/realmCardMotion.ts",
       "line": 55,
       "endLine": 55
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#REALM_AMBIENT_MOTE",
+      "name": "REALM_AMBIENT_MOTE",
+      "kind": "value",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 31,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#REALM_EVENT_MOTE",
+      "name": "REALM_EVENT_MOTE",
+      "kind": "value",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 39,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#REALM_MOTE_SIZE",
+      "name": "REALM_MOTE_SIZE",
+      "kind": "value",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#RealmMote",
+      "name": "RealmMote",
+      "kind": "interface",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 20,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#realmMoteInterval",
+      "name": "realmMoteInterval",
+      "kind": "value",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 60,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#RealmMoteMode",
+      "name": "RealmMoteMode",
+      "kind": "type",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/realmParticles.ts#realmStatusMote",
+      "name": "realmStatusMote",
+      "kind": "value",
+      "file": "src/renderer/components/realmParticles.ts",
+      "line": 49,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
@@ -43405,8 +43523,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 17,
-      "endLine": 163
+      "line": 19,
+      "endLine": 215
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -68714,6 +68832,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/realmAmbientBed.ts->symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_ENABLED",
+      "source": "file:src/renderer/audio/realmAmbientBed.ts",
+      "target": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_ENABLED",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/realmAmbientBed.ts->symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
       "source": "file:src/renderer/audio/realmAmbientBed.ts",
       "target": "symbol:src/renderer/audio/realmAmbientBed.ts#REALM_BED_LAYERS",
@@ -70733,6 +70857,48 @@
       "id": "exports:src/renderer/components/realmCardMotion.ts->symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET",
       "source": "file:src/renderer/components/realmCardMotion.ts",
       "target": "symbol:src/renderer/components/realmCardMotion.ts#ZERO_REALM_OFFSET",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#REALM_AMBIENT_MOTE",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#REALM_AMBIENT_MOTE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#REALM_EVENT_MOTE",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#REALM_EVENT_MOTE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#REALM_MOTE_SIZE",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#REALM_MOTE_SIZE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#RealmMote",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#RealmMote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#realmMoteInterval",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#realmMoteInterval",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#RealmMoteMode",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#RealmMoteMode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmParticles.ts->symbol:src/renderer/components/realmParticles.ts#realmStatusMote",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "symbol:src/renderer/components/realmParticles.ts#realmStatusMote",
       "kind": "exports"
     },
     {
@@ -92418,6 +92584,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/realmParticles.test.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/realmParticles.test.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmParticles.test.ts->src/renderer/components/realmParticles.ts",
+      "source": "file:src/renderer/components/realmParticles.test.ts",
+      "target": "file:src/renderer/components/realmParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmParticles.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmParticles.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmParticles.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmParticles.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RealmScreenOverlay.tsx->src/renderer/components/useSceneBeat.ts",
       "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
       "target": "file:src/renderer/components/useSceneBeat.ts",
@@ -94887,6 +95083,18 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleSystem.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/realmAmbience.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/realmAmbience.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/realmParticles.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/realmParticles.ts",
       "kind": "imports"
     },
     {
@@ -110521,6 +110729,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/realmCardMotion.ts->file:src/renderer/components/realmParticles.test.ts",
+      "source": "file:src/renderer/components/realmCardMotion.ts",
+      "target": "file:src/renderer/components/realmParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/realmParticles.ts->file:src/renderer/components/realmParticles.test.ts",
+      "source": "file:src/renderer/components/realmParticles.ts",
+      "target": "file:src/renderer/components/realmParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RunEndCinematic.tsx->file:src/renderer/components/RunEndCinematic.test.tsx",
       "source": "file:src/renderer/components/RunEndCinematic.tsx",
       "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
@@ -112624,6 +112844,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/ProfileScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/ProfileScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/realmParticles.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/realmParticles.test.ts",
       "kind": "tested_by"
     },
     {
