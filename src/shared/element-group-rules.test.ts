@@ -29,21 +29,21 @@ describe('elemental groups', () => {
 
     it('Fire burns vines, ice and snow off the cards it reaches, and pays nothing', () => {
         let tiles = matched(board(ROWS), 'a');
-        tiles = tiles.map((tile) => (tile.id === 'c-2' ? { ...tile, vined: true } : tile.id === 'f-1' ? { ...tile, frost: 2 } : tile));
+        tiles = tiles.map((tile) => (tile.id === 'c-2' ? { ...tile, vined: true } : tile.id === 'd-2' ? { ...tile, frost: 2 } : tile));
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'frost', pinned: new Set() })!;
         expect(cast.kind).toBe('scorch');
         expect(at(tiles, 'c-2').vined).toBeUndefined();
-        expect(at(tiles, 'f-1').frost).toBeUndefined();
-        expect(cast.touchedTileIds.sort()).toEqual(['c-2', 'f-1']);
+        expect(at(tiles, 'd-2').frost).toBeUndefined();
+        expect(cast.touchedTileIds.sort()).toEqual(['c-2', 'd-2']);
     });
 
     it('Water puts fires out and washes the cards it reaches along, never a pinned one', () => {
         let tiles = matched(board(ROWS), 'b');
-        tiles = tiles.map((tile) => (tile.id === 'c-1' ? { ...tile, fuse: 2 } : tile));
+        tiles = tiles.map((tile) => (tile.id === 'e-1' ? { ...tile, fuse: 2 } : tile));
         const before = tiles.map((tile) => tile.id).join();
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['b-1', 'b-2'], realmId: 'ember', pinned: new Set(['a-1']) })!;
         expect(cast.kind).toBe('wash');
-        expect(at(tiles, 'c-1').fuse).toBeUndefined();
+        expect(at(tiles, 'e-1').fuse).toBeUndefined();
         expect(tiles.map((tile) => tile.id).join()).not.toBe(before);
         expect(tiles[0]!.id).toBe('a-1');
     });

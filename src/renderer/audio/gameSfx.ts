@@ -359,7 +359,10 @@ export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>>
     scorch: 'fire',
     wash: 'wave',
     freeze: 'ice',
-    entangle: 'creak'
+    entangle: 'creak',
+    empowered: 'chime',
+    neutralized: 'hiss',
+    released: 'chime'
 };
 
 /**

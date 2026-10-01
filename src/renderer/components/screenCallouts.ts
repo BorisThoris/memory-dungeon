@@ -139,6 +139,9 @@ const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'
     wash: { title: 'WATER!', sub: () => 'Your water puts out fires and washes the cards around it along', size: 'minor' },
     freeze: { title: 'FROST!', sub: () => 'Your frost freezes the cards around it', size: 'minor' },
     entangle: { title: 'GROVE!', sub: () => 'Your grove snares the cards around it in vines', size: 'minor' },
+    empowered: { title: 'EMPOWERED!', sub: (e) => `${e.tileIds.length === 1 ? 'A card drinks' : `${e.tileIds.length} cards drink`} its own element · a gold each when matched`, size: 'minor' },
+    neutralized: { title: 'NEUTRALIZED!', sub: (e) => `${e.tileIds.length === 1 ? 'A card puts' : `${e.tileIds.length} cards put`} the element out: nothing lands`, size: 'minor' },
+    released: { title: 'RELEASED!', sub: (e) => `The element they drank pays out · +${e.gold ?? 0} gold`, size: 'minor' },
     bloom: { title: 'BLOOM!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'bloom' : 'blooms'}: three gold for every one you cut`, size: 'major' }
 };
 
@@ -155,9 +158,7 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
             size: 'major',
             tone: 'legendary',
             title: `${(event.reaction ?? 'Reaction').toUpperCase()}!`,
-            sub: event.cause === 'sway'
-                ? `Your matches tip the floor into ${to.title}`
-                : `The floor turns to ${to.title}${event.gold ? ` · +${event.gold} gold` : ''}`,
+            sub: `Your matches tip the floor into ${to.title}`,
             color: to.color
         };
     }

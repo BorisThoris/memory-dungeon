@@ -1,5 +1,10 @@
-import { CanvasTexture, NearestFilter, SRGBColorSpace } from 'three';
+import { CanvasTexture, LinearFilter, SRGBColorSpace } from 'three';
 
+/**
+ * The badge is the number in a lit gem: a gold disc with a dark rim and a halo, so it reads on every
+ * card face and every element at a glance (2026-10-01: the owner asked for "the top right hint" to
+ * be more noticeable; it had been a small dark tile with a thin green numeral).
+ */
 const paintHint = (canvas: HTMLCanvasElement, distance: number): void => {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
@@ -7,21 +12,31 @@ const paintHint = (canvas: HTMLCanvasElement, distance: number): void => {
     }
     const w = canvas.width;
     const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
     ctx.clearRect(0, 0, w, h);
-    const pad = 10;
-    ctx.fillStyle = 'rgba(8,12,22,0.88)';
+    const halo = ctx.createRadialGradient(cx, cy, w * 0.36, cx, cy, w * 0.5);
+    halo.addColorStop(0, 'rgba(255, 214, 110, 0.85)');
+    halo.addColorStop(1, 'rgba(255, 214, 110, 0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, w, h);
+    const r = w * 0.4;
     ctx.beginPath();
-    if (typeof ctx.roundRect === 'function') {
-        ctx.roundRect(pad, pad, w - pad * 2, h - pad * 2, 14);
-    } else {
-        ctx.rect(pad, pad, w - pad * 2, h - pad * 2);
-    }
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    const disc = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r);
+    disc.addColorStop(0, '#fff6cf');
+    disc.addColorStop(0.55, '#ffd25e');
+    disc.addColorStop(1, '#e09a1c');
+    ctx.fillStyle = disc;
     ctx.fill();
-    ctx.fillStyle = '#7de8b8';
-    ctx.font = 'bold 68px system-ui, "Segoe UI", sans-serif';
+    ctx.lineWidth = w * 0.045;
+    ctx.strokeStyle = '#2a1606';
+    ctx.stroke();
+    ctx.fillStyle = '#1c0e04';
+    ctx.font = `900 ${Math.round(w * (distance >= 10 ? 0.42 : 0.54))}px system-ui, "Segoe UI", sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(String(distance), w / 2, h / 2 + 3);
+    ctx.fillText(String(distance), cx, cy + w * 0.02);
 };
 
 /**
@@ -39,13 +54,13 @@ export const badgeTexture = (distance: number): CanvasTexture => {
     const cached = badgeByDistance.get(distance);
     if (cached) return cached;
     const canvas = document.createElement('canvas');
-    canvas.width = 128;
-    canvas.height = 128;
+    canvas.width = 160;
+    canvas.height = 160;
     paintHint(canvas, distance);
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
-    texture.minFilter = NearestFilter;
-    texture.magFilter = NearestFilter;
+    texture.minFilter = LinearFilter;
+    texture.magFilter = LinearFilter;
     badgeByDistance.set(distance, texture);
     return texture;
 };

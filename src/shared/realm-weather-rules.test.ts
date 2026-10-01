@@ -189,45 +189,6 @@ describe('realm weather', () => {
         expect(result.events.some((e) => e.kind === 'thaw')).toBe(true);
     });
 
-    it('an omen matched sets off a reaction and turns the realm', () => {
-        const tiles = sixteen().map((t) => (t.pairKey === 'a' ? { ...t, omen: 'ember' as const } : t));
-        tiles[6] = { ...tiles[6]!, frost: 2 };
-        const pair = tiles.filter((t) => t.pairKey === 'a');
-        const matched = board(tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t)));
-        const result = resolveRealmTurn({
-            run: runIn('frost'),
-            board: matched,
-            outcome: 'match',
-            tileIds: pair.map((t) => t.id),
-            sourceTiles: pair,
-            turnsThisFloor: 1,
-            pinnedTileIds: []
-        });
-        expect(result.realmId).toBe('ember');
-        const reaction = result.events.find((e) => e.kind === 'reaction')!;
-        expect(reaction.reaction).toBe('Thaw');
-        expect(result.board.tiles[6]!.frost).toBeUndefined();
-        expect(result.goldDelta).toBe(1);
-    });
-
-    it('wildfire through a grove sets the vines alight', () => {
-        const tiles = sixteen().map((t) => (t.pairKey === 'a' ? { ...t, omen: 'ember' as const } : t));
-        tiles[6] = { ...tiles[6]!, vined: true };
-        const pair = tiles.filter((t) => t.pairKey === 'a');
-        const result = resolveRealmTurn({
-            run: runIn('grove'),
-            board: board(tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t))),
-            outcome: 'match',
-            tileIds: pair.map((t) => t.id),
-            sourceTiles: pair,
-            turnsThisFloor: 1,
-            pinnedTileIds: []
-        });
-        expect(result.events[0]!.reaction).toBe('Wildfire');
-        expect(result.board.tiles[6]!.fuse).toBe(WILDFIRE_FUSE);
-        expect(result.board.tiles[6]!.vined).toBeUndefined();
-    });
-
     it('every third weather of a floor is the realm\u2019s peak', () => {
         expect([0, 1, 2, 3, 4, 5].map(isRealmPeak)).toEqual([false, false, true, false, false, true]);
         expect(nextRealmWeather({ realmId: 'frost', realmWeatherThisFloor: 2 })).toEqual({ realmId: 'frost', peak: true, name: 'Whiteout' });
@@ -297,22 +258,6 @@ describe('realm weather', () => {
         // the raging storm strikes back at the miss as well (static).
         expect(result.events.map((e) => e.kind)).toEqual(['frostbite', 'static', 'blizzard']);
         expect(result.board.tiles.find((t) => t.id === 'a1')!.frost).toBe(FROSTBITE_TURNS_RAGING);
-    });
-
-    it('an omen reaction ends a confluence', () => {
-        const tiles = sixteen().map((t) => (t.pairKey === 'a' ? { ...t, omen: 'ember' as const } : t));
-        const pair = tiles.filter((t) => t.pairKey === 'a');
-        const result = resolveRealmTurn({
-            run: runIn('storm', 'wild', { realmSecondaryId: 'frost' }),
-            board: board(tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t))),
-            outcome: 'match',
-            tileIds: pair.map((t) => t.id),
-            sourceTiles: pair,
-            turnsThisFloor: 1,
-            pinnedTileIds: []
-        });
-        expect(result.realmId).toBe('ember');
-        expect(result.secondaryId).toBeNull();
     });
 
     it('is seeded: the same turn on the same board does the same thing', () => {

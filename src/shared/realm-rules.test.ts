@@ -5,6 +5,7 @@ import {
     REALMS,
     REALM_SEVERITIES,
     chooseRealmDoor,
+    enterRealmFloor,
     isRealmWeatherTurn,
     nextFloorRealmDoor,
     openingRealmDoor,
@@ -13,7 +14,7 @@ import {
     rollRealmDoors,
     turnsUntilRealmWeather
 } from './realm-rules';
-import { OMEN_FIRST_FLOOR, REALM_REACTION_NAMES, seatRealmOmen } from './realm-omen-rules';
+import { REALM_REACTION_NAMES } from './realm-omen-rules';
 
 describe('realms', () => {
     it('every realm is defined, with two rules a door can show', () => {
@@ -106,15 +107,11 @@ describe('realms', () => {
         expect(chooseRealmDoor(base, 0)).toBe(base);
     });
 
-    it('omens seat on one plain pair from the third floor, never of the realm itself', () => {
-        const early = buildBoard(OMEN_FIRST_FLOOR - 1, { runSeed: 3, runRulesVersion: 51 });
-        expect(seatRealmOmen(early, 'frost', 3, 51)).toBe(early);
-        for (let seed = 0; seed < 30; seed += 1) {
-            const board = seatRealmOmen(buildBoard(5, { runSeed: seed, runRulesVersion: 51 }), 'frost', seed, 51);
-            const omens = board.tiles.filter((t) => t.omen);
-            expect(omens).toHaveLength(2);
-            expect(omens[0]!.pairKey).toBe(omens[1]!.pairKey);
-            expect(omens[0]!.omen).not.toBe('frost');
+    it('no card carries an omen any more: every floor deals plain elemental cards', () => {
+        for (let seed = 0; seed < 10; seed += 1) {
+            const run = createNewRun(0, { runSeed: seed, realm: { realmId: 'frost', severity: 'wild' } });
+            const board = buildBoard(5, { runSeed: seed, runRulesVersion: run.runRulesVersion });
+            expect(enterRealmFloor(run, board, { realmId: 'frost', severity: 'wild' }).board).toBe(board);
         }
     });
 

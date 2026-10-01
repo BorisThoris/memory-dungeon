@@ -326,6 +326,8 @@
                 "realmSway",
                 "realmTipsThisFloor",
                 "elementCastsThisFloor",
+                "elementEmpoweredThisFloor",
+                "elementNeutralizedThisFloor",
                 "realmLitTileIds",
                 "lastRealmEvent",
                 "realmReactionsThisFloor",
@@ -2012,39 +2014,39 @@
             ]
         },
         {
-            "id": "board.realm_omen",
-            "label": "Omen Cards",
+            "id": "board.element_alchemy",
+            "label": "Elemental Alchemy",
             "kind": "board",
-            "role": "an_environment_card_whose_match_sets_off_a_reaction_and_turns_the_floor_s_realm",
+            "role": "every_card_is_its_suit_s_element_it_drinks_its_own_element_and_is_empowered_and_puts_out_the_one_its_element_beats",
             "evidence": [
-                "src/shared/realm-omen-rules.ts",
+                "src/shared/element-alchemy-rules.ts",
                 "src/shared/realm-weather-rules.ts",
-                "src/renderer/components/RealmTileMarks.tsx"
+                "src/shared/element-group-rules.ts",
+                "src/renderer/components/ElementCardBack.tsx"
             ],
             "reads": [
                 "tileStates",
-                "pairKeys",
-                "realmId",
-                "runSeed"
+                "realmId"
             ],
             "writes": [
-                "realmId",
-                "realmReactionsThisFloor",
-                "realmReactionsThisRun"
+                "tileStates",
+                "gold",
+                "elementEmpoweredThisFloor",
+                "elementNeutralizedThisFloor",
+                "lastRealmEvent"
             ],
             "enables": [
                 "objective.floor_clear"
             ],
             "blocks": [],
             "softlockGuards": [
-                "an-ordinary-pair-to-match",
-                "never-the-realm-it-is-in",
-                "from-the-third-floor"
+                "alchemy-only-ever-stops-an-element-acting",
+                "realm-guard-frees-holds-that-leave-no-pair"
             ],
             "tests": [
-                "src/shared/realm-rules.test.ts",
-                "src/shared/realm-weather-rules.test.ts",
-                "src/shared/test-hall-rooms.test.ts"
+                "src/shared/element-alchemy-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
             ]
         },
         {
@@ -2140,6 +2142,8 @@
                 "realmId",
                 "realmSway",
                 "realmTipsThisFloor",
+                "realmReactionsThisFloor",
+                "realmReactionsThisRun",
                 "lastRealmEvent"
             ],
             "enables": [
@@ -3124,10 +3128,10 @@
             "label": "the realm chip and its clock, the marks on the cards and the weather stamps"
         },
         {
-            "source": "board.realm_omen",
+            "source": "board.element_alchemy",
             "target": "feedback.gameplay_hud",
             "kind": "displays",
-            "label": "the omen sigil on both halves and the reaction stamp"
+            "label": "every back is made of its element, an empowered card glows, the empowered, neutralized and released stamps"
         },
         {
             "source": "economy.realm_travel",
@@ -3136,10 +3140,10 @@
             "label": "the travel doors at every floor clear"
         },
         {
-            "source": "board.realm_omen",
+            "source": "board.element_alchemy",
             "target": "board.realm_weather",
             "kind": "modifies",
-            "label": "a reaction clears the old weather and starts the new realm's clock"
+            "label": "a card is untouched by its own element and by the one it puts out: frostbite, backlashes and weather pass it by"
         },
         {
             "source": "economy.realm_travel",
@@ -3148,10 +3152,16 @@
             "label": "the door walked through decides the next floor's weather and how soon it comes"
         },
         {
-            "source": "board.realm_omen",
-            "target": "economy.realm_travel",
-            "kind": "enables",
-            "label": "the realm a floor ended in is always one of the doors"
+            "source": "board.element_alchemy",
+            "target": "board.element_groups",
+            "kind": "modifies",
+            "label": "a cast meets the cards it reaches: kin drink it, a counter puts it out, a hold spent on either holds nothing"
+        },
+        {
+            "source": "board.element_alchemy",
+            "target": "economy.gold",
+            "kind": "modifies",
+            "label": "an empowered card pays a gold when it is matched"
         },
         {
             "source": "core.board_turn_resolution",

@@ -10,15 +10,16 @@ import { runNonNegativeInteger } from './run-number-guards';
  * matches. Every card's back carries one of four suits, and each suit belongs to a realm: ember to
  * the Cinder Deep, tide to the Drowned Vault, moss to the Overgrown Crypt, bone to the Frozen Reach.
  * Every pair matched of a suit whose realm the floor is NOT in (pops included) leans the world
- * toward it; at `REALM_SWAY_TIP` pairs of one suit the floor tips into that realm, the way an omen
- * turns it, with the same reaction, keeping its severity.
+ * toward it; at `REALM_SWAY_TIP` pairs of one suit the floor tips into that realm with a named
+ * reaction (`realm-omen-rules.ts`), keeping its severity. Since the omen cards were retired
+ * (2026-10-01) the sway is the one way a floor turns.
  *
  * The sway carries between floors with the combo and, like the combo, a miss wipes it: chasing a
  * suit is a clean chain's privilege (`scripts/` probe 2026-10-01: at 5, careful play tipped about a
  * fifth of realm floors, sloppy play none, early in the floor because the sway arrived carried).
  * Once a floor at most; a tip empties the sway. The storm has no suit: a floor can be tipped out of
- * the Thunder Spire but never into it. Unlike an omen's reaction a tip clears nothing and pays
- * nothing: what the old weather left stays on the board.
+ * the Thunder Spire but never into it. A tip clears nothing and pays nothing: what the
+ * old weather left stays on the board.
  */
 
 export const SUIT_REALM: Readonly<Record<TileSuit, RealmId>> = {

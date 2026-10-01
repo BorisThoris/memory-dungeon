@@ -14,7 +14,12 @@ import { useRealmAmbience, useRealmSwayLean } from './realmAmbience';
  * edges with cracks glowing through in the ember realm, a wet sheen and droplets in the tide, violet
  * static in the storm, moss creeping in from the corners in the grove. One texture per realm,
  * painted once and shared; the fire's cracks and the storm's static breathe.
+ *
+ * Since every card became its own element (`ElementCardBack`), the realm is a lighter veil over
+ * the material, so the card still reads as what it is made of.
  */
+const REALM_VEIL_BASE = 0.3;
+const REALM_VEIL_SEVERITY = 0.25;
 const W = 256;
 const H = 360;
 
@@ -193,7 +198,7 @@ const realmTexture = (realm: RealmId): CanvasTexture => {
 };
 
 /**
- * Paint every realm's back before play (the board's floor warmup calls it): an omen can turn the
+ * Paint every realm's back before play (the board's floor warmup calls it): the sway can turn the
  * floor into a realm it has not shown yet, and its texture must not be drawn mid-floor.
  */
 export const prewarmRealmBackTextures = (upload?: (texture: CanvasTexture) => void): void => {
@@ -232,7 +237,7 @@ export const RealmAmbientBackPlane = ({ faceZ, reduceMotion, suit }: { faceZ: nu
     const material = useRef<MeshBasicMaterial | null>(null);
     useFrame(({ clock }) => {
         if (!material.current || !realm) return;
-        const base = 0.55 + 0.45 * strength;
+        const base = REALM_VEIL_BASE + REALM_VEIL_SEVERITY * strength;
         material.current.opacity = BREATHES.has(realm) && !reduceMotion ? base * (0.78 + 0.22 * Math.sin(clock.elapsedTime * (realm === 'storm' ? 9 : 2.4))) : base;
     });
     if (!realm) return null;
@@ -240,7 +245,7 @@ export const RealmAmbientBackPlane = ({ faceZ, reduceMotion, suit }: { faceZ: nu
         <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
             <mesh position={[0, 0, 0.052]} raycast={noopMeshRaycast} renderOrder={11}>
                 <planeGeometry args={[CARD_PLANE_WIDTH * 1.01, CARD_PLANE_HEIGHT * 1.01]} />
-                <meshBasicMaterial depthTest depthWrite={false} map={realmTexture(realm)} opacity={0.55 + 0.45 * strength} ref={material} side={DoubleSide} toneMapped={false} transparent />
+                <meshBasicMaterial depthTest depthWrite={false} map={realmTexture(realm)} opacity={REALM_VEIL_BASE + REALM_VEIL_SEVERITY * strength} ref={material} side={DoubleSide} toneMapped={false} transparent />
             </mesh>
             {lean && lean.realm !== realm ? <SwayPlane progress={lean.progress} realm={lean.realm} reduceMotion={reduceMotion} /> : null}
         </group>

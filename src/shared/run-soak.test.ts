@@ -40,15 +40,18 @@ describe('the run soak', () => {
         // The Zone: the careful player reaches Inferno and ignites it; some of its pairs match.
         expect(reports.some((report) => report.zones > 0), 'no run ever ignited the Zone').toBe(true);
         expect(reports.some((report) => report.zonePairs > 0), 'no Zone ever matched a pair').toBe(true);
-        // The realms: weather comes, omens react, the player answers it, and doors are walked through.
+        // The realms: weather comes, the sway turns them, the player answers it, and doors are walked through.
         expect(reports.some((report) => report.realmWeather > 0), 'no realm ever had weather').toBe(true);
-        expect(reports.some((report) => report.realmReactions > 0), 'no omen ever set off a reaction').toBe(true);
+        expect(reports.some((report) => report.realmReactions > 0), 'no realm ever turned').toBe(true);
         expect(reports.some((report) => report.realmDoused > 0), 'no fire was ever doused').toBe(true);
         expect(reports.some((report) => report.realmVinesCut > 0), 'no vine was ever cut').toBe(true);
         expect(reports.some((report) => report.realmFrozen > 0), 'no card was ever frozen').toBe(true);
         expect(reports.some((report) => report.realmBacklashes > 0), 'no raging realm ever struck back').toBe(true);
         expect(reports.some((report) => report.realmTips > 0), 'the sway never tipped a floor').toBe(true);
         expect(reports.some((report) => report.elementCasts > 0), 'no matched group ever cast its element').toBe(true);
+        // Alchemy: some card drank its own element, and some put an element out.
+        expect(reports.some((report) => report.elementEmpowered > 0), 'no card ever drank its own element').toBe(true);
+        expect(reports.some((report) => report.elementNeutralized > 0), 'no card ever put an element out').toBe(true);
         expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
         expect(reports.some((report) => report.realmPeaks > 0), 'no realm ever reached its peak').toBe(true);
         expect(reports.some((report) => report.realmConfluences > 0), 'no floor was ever a confluence').toBe(true);

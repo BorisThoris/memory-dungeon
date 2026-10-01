@@ -1,7 +1,6 @@
 import { useMemo, type ReactElement } from 'react';
 import { CanvasTexture, DoubleSide, LinearFilter, SRGBColorSpace } from 'three';
-import type { RealmId, Tile } from '../../shared/contracts';
-import { REALMS } from '../../shared/realm-rules';
+import type { Tile } from '../../shared/contracts';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
@@ -9,7 +8,8 @@ import { realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
 /**
  * What a realm has done to a card, drawn on it (`realm-weather-rules.ts`): ice over a frozen card
  * with the turns it has left, snow over a back whose suit a blizzard buried, a flame and its fuse
- * on a burning card, vines over a held one, and an omen's sigil on both halves of the omen pair.
+ * on a burning card, vines over a held one. (The omen's sigil in the top corner went with the omen
+ * cards: every card is its element now, `ElementCardBack`.)
  *
  * One canvas per combination of marks, shared by every card that shows it, so a board of frozen
  * cards paints the ice once. Painted, not modelled: the marks have to read at a glance on a phone,
@@ -17,14 +17,6 @@ import { realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
  */
 const CANVAS_W = 256;
 const CANVAS_H = Math.round(CANVAS_W * (CARD_PLANE_HEIGHT / CARD_PLANE_WIDTH));
-
-const RUNES: Readonly<Record<RealmId, string>> = {
-    frost: '❄',
-    ember: '▲',
-    tide: '≈',
-    storm: 'ϟ',
-    grove: '♣'
-};
 
 const roundRect = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): void => {
     ctx.beginPath();
@@ -138,27 +130,6 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
         ctx.font = 'bold 72px system-ui, "Segoe UI", sans-serif';
         ctx.fillText(String(mark.fuse), cx, h * 0.38);
     }
-
-    if (mark.omen) {
-        // The omen's sigil, in its realm's colour, in a disc at the top corner: an environment card.
-        const color = REALMS[mark.omen].color;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 8;
-        roundRect(ctx, 4, 4, w - 8, h - 8, 24);
-        ctx.stroke();
-        const r = 42;
-        const x = w - r - 12;
-        const y = r + 12;
-        ctx.fillStyle = 'rgba(10, 8, 14, 0.85)';
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.lineWidth = 6;
-        ctx.stroke();
-        ctx.fillStyle = color;
-        ctx.font = 'bold 52px system-ui, "Segoe UI Symbol", sans-serif';
-        ctx.fillText(RUNES[mark.omen], x, y + 3);
-    }
 };
 
 const textures = new Map<string, CanvasTexture>();
@@ -200,8 +171,8 @@ const MarkPlane = ({ mark, z }: { mark: RealmTileMark; z: number }): ReactElemen
 };
 
 /**
- * The marks for one card. The back shows everything the realm did to a hidden card; the face shows
- * only the omen, since a card face up is neither frozen, held nor burning any more.
+ * The marks for one card's back: everything the realm did to a hidden card. A card face up is
+ * neither frozen, held nor burning any more, so its face carries none.
  */
 export const RealmTileMarks = ({ faceZ, tile, faceUp }: { faceZ: number; tile: Tile; faceUp: boolean }): ReactElement | null => {
     const back = useMemo<RealmTileMark | null>(() => {
@@ -211,28 +182,14 @@ export const RealmTileMarks = ({ faceZ, tile, faceUp }: { faceZ: number; tile: T
             snowed: tile.snowed === true,
             fuse: Math.max(0, Math.floor(tile.fuse ?? 0)),
             vined: tile.vined === true,
-            bloom: tile.vined === true && tile.bloom === true,
-            omen: tile.omen ?? null
+            bloom: tile.vined === true && tile.bloom === true
         };
-        return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.omen ? mark : null;
-    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.bloom, tile.omen]);
-    const front = useMemo<RealmTileMark | null>(
-        () => (tile.omen && tile.state !== 'removed' ? { frost: 0, snowed: false, fuse: 0, vined: false, bloom: false, omen: tile.omen } : null),
-        [tile.omen, tile.state]
-    );
-    if (!back && !front) return null;
+        return mark.frost || mark.snowed || mark.fuse || mark.vined ? mark : null;
+    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.bloom]);
+    if (!back || faceUp) return null;
     return (
-        <>
-            {back && !faceUp ? (
-                <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
-                    <MarkPlane mark={back} z={0.056} />
-                </group>
-            ) : null}
-            {front && faceUp ? (
-                <group position={[0, 0, faceZ]}>
-                    <MarkPlane mark={front} z={0.0009} />
-                </group>
-            ) : null}
-        </>
+        <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
+            <MarkPlane mark={back} z={0.056} />
+        </group>
     );
 };

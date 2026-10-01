@@ -29,7 +29,7 @@ import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
 import { RealmTileMarks } from './RealmTileMarks';
 import { RealmAmbientBackPlane } from './RealmAmbientBackPlane';
-import { SuitMarkerPlane } from './SuitMarkerPlane';
+import { ElementCardBack } from './ElementCardBack';
 import { getBreakWaveDelaySec } from './tileBoardBreakWave';
 import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
 import { TileBoardHoverChrome } from './TileBoardHoverChrome';
@@ -796,8 +796,10 @@ const TileBezelInner = ({
                         tutorialPairOrdinal={tutorialPairOrdinal}
                         wearAssets={wearAssets}
                     />
-                    {/* A blizzard's snow buries the suit until the card is turned (`realm-weather-rules.ts`). */}
-                    {tile.suit && !(tile.snowed && tile.state === 'hidden') ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
+                    {/* The card is made of its element (`ElementCardBack`); a blizzard's snow buries it until the card is turned. */}
+                    {tile.suit && !(tile.snowed && tile.state === 'hidden') ? (
+                        <ElementCardBack empowered={tile.empowered === true && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
+                    ) : null}
                     {/* The realm on every face-down back (`RealmAmbientBackPlane`): the place, not only what its weather did. */}
                     {tile.state === 'hidden' ? <RealmAmbientBackPlane faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} /> : null}
                     <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} />

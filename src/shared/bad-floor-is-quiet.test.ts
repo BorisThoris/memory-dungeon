@@ -10,6 +10,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { isTileFlipBlocked } from './realm-weather-rules';
 
 /**
  * Thesis §67, trace 4: a bad floor is quiet, not punishing (task T2.10).
@@ -38,8 +39,9 @@ const playMiss = (run: RunState): RunState => {
 };
 
 const playMatch = (run: RunState): RunState => {
+    // A pair the player can turn: a card the realm froze or vined is passed over, as at the table.
     const group = getUnresolvedPlayablePairGroups(run.board!).find((tiles) =>
-        tiles.every((tile) => tile.state === 'hidden')
+        tiles.every((tile) => tile.state === 'hidden' && !isTileFlipBlocked(tile))
     )!;
     return resolveBoardTurn(flipTile(flipTile(run, group[0]!.id), group[1]!.id));
 };

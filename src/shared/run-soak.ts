@@ -1,5 +1,5 @@
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
-import type { BoardState, RunState, Tile } from './contracts';
+import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
@@ -11,6 +11,7 @@ import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId }
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
 import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
+import { elementWouldLand } from './element-alchemy-rules';
 import { chooseRealmDoor, REALM_DOOR_COUNT } from './realm-rules';
 
 /**
@@ -80,7 +81,7 @@ export interface SoakRunReport {
     /** Zones ignited, and pairs matched inside them. */
     zones: number;
     zonePairs: number;
-    /** The realms (`realm-rules.ts`): weather events, omen reactions, fires doused and burnt out, vines cut, cards frozen, doors walked through. */
+    /** The realms (`realm-rules.ts`): weather events, reactions (the sway tipping a floor), fires doused and burnt out, vines cut, cards frozen, doors walked through. */
     realmWeather: number;
     realmReactions: number;
     realmDoused: number;
@@ -93,6 +94,9 @@ export interface SoakRunReport {
     realmTips: number;
     /** Matched groups casting their element on the board (`element-group-rules.ts`). */
     elementCasts: number;
+    /** Elemental alchemy (`element-alchemy-rules.ts`): cards that drank their own element, and elements a card put out. */
+    elementEmpowered: number;
+    elementNeutralized: number;
     realmDoors: number;
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
@@ -279,6 +283,23 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.realmChill) return `chill ${run.realmChill} still carried`;
         return frozen >= Math.min(before.realmChill, 1) ? null : `${frozen} frozen against a chill of ${before.realmChill}`;
     },
+    /*
+     * Elemental alchemy (`element-alchemy-rules.ts`): a card is untouched by its own element and by
+     * the one it puts out, so no card may newly take ice or snow as a frost or fire card, a fire as
+     * a fire or water card, or vines as a grove or frost card.
+     */
+    'no card takes the mark of an element it answers': (before, run) => {
+        if (!before?.board || !run.board) return null;
+        const was = new Map(before.board.tiles.map((tile) => [tile.id, tile]));
+        const wrong = run.board.tiles.filter((tile) => {
+            const prior = was.get(tile.id);
+            if (!prior || tile.state !== 'hidden') return false;
+            const gained = (key: 'frost' | 'snowed' | 'fuse' | 'vined', element: TileSuit): boolean =>
+                tile[key] != null && prior[key] == null && !elementWouldLand(tile, element);
+            return gained('frost', 'bone') || gained('snowed', 'bone') || gained('fuse', 'ember') || gained('vined', 'moss');
+        });
+        return wrong.length === 0 ? null : `${wrong.map((tile) => `${tile.id} (${tile.suit})`).join(', ')} took an element it answers`;
+    },
     'a confluence is two different realms': (_b, run) =>
         run.realmSecondaryId != null && run.realmSecondaryId === run.realmId ? `confluence of ${run.realmId} with itself` : null,
     'a floor is built in the realm of the door walked through': (before, run, action) => {
@@ -356,6 +377,8 @@ export const soakRun = ({
     let realmBacklashes = 0;
     let realmTips = 0;
     let elementCasts = 0;
+    let elementEmpowered = 0;
+    let elementNeutralized = 0;
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
@@ -388,6 +411,8 @@ export const soakRun = ({
             realmBacklashes += Math.max(0, (next.realmBacklashesThisFloor ?? 0) - (run.realmBacklashesThisFloor ?? 0));
             realmTips += Math.max(0, (next.realmTipsThisFloor ?? 0) - (run.realmTipsThisFloor ?? 0));
             elementCasts += Math.max(0, (next.elementCastsThisFloor ?? 0) - (run.elementCastsThisFloor ?? 0));
+            elementEmpowered += Math.max(0, (next.elementEmpoweredThisFloor ?? 0) - (run.elementEmpoweredThisFloor ?? 0));
+            elementNeutralized += Math.max(0, (next.elementNeutralizedThisFloor ?? 0) - (run.elementNeutralizedThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
@@ -510,6 +535,8 @@ export const soakRun = ({
         realmBacklashes,
         realmTips,
         elementCasts,
+        elementEmpowered,
+        elementNeutralized,
         realmDoors,
         realmPeaks,
         realmConfluences,

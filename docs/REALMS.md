@@ -1,4 +1,4 @@
-# Realms, omens and travel
+# Realms, elements and travel
 
 The owner's brief (2026-09-30): the filler text over the board goes, and **environments become a
 prominent factor that changes how a floor plays**. The player picks where to go next, the way Shape
@@ -11,8 +11,11 @@ floor is played.
 2. The realm's **weather** comes on a clock the player winds (resolved turns, match or miss), the
    same shape as the restless floor, and the HUD chip counts it down (`RunShell`, `realmCopy.ts`).
 3. The realm also **answers the player's turns** (`realm-weather-rules.ts`).
-4. From floor 3 one pair is an **omen** of another realm (`realm-omen-rules.ts`). Matching it sets
-   off a named reaction and turns the floor into the omen's realm.
+4. Every card is its suit's **element** (`element-alchemy-rules.ts`), drawn as the material itself
+   (`ElementCardBack.tsx`). Its matches cast it (`element-group-rules.ts`), they lean the floor
+   toward its realm until it tips (`realm-sway-rules.ts`), and the card answers any element that
+   reaches it (see Alchemy below). The omen cards of 2026-09-30, one pair a floor with another realm's
+   sigil in its top corner, were retired on 2026-10-01.
 5. At the clear, after the beat (and the store on a store floor), **three doors**: three realms,
    one calm, one wild, one raging (`RealmTravel.tsx`). The realm the floor ended in is always one.
    Harder weather comes sooner and pays more gold at the clear (×1, ×1.25, ×1.5).
@@ -80,14 +83,29 @@ Pinned cards stay put, the floor guard still frees vines that would leave no tur
 From floor 4, about one clear in three turns its wild door into a **confluence**: two realms at once
 (`RealmDoor.confluence`, `RunState.realmSecondaryId`). The weather alternates between them (the
 first realm's, then the second's), both realms answer the player (a miss freezes if either is the
-frost), and the clear pays double gold. An omen's reaction settles the floor on the omen's realm.
+frost), and the clear pays double gold. A tip settles the floor on the realm it tipped into.
 
-## Omen reactions
+## Reactions
 
 Every pair of realms has a name (`REALM_REACTION_NAMES`): Thaw (frost to ember), Steam (ember to
-tide), Wildfire (grove to ember), Whiteout (storm to frost) and so on. A reaction clears what the old
-weather left (a gold each, at most five). Two do more: ember through a grove sets every vine alight,
-and a storm breaking strikes at once.
+tide), Wildfire (grove to ember), Whiteout (storm to frost) and so on. The sway's tip is stamped with
+it. A tip clears nothing and pays nothing.
+
+## Alchemy
+
+Whenever an element would act on a face-down card (frostbite, a raging backlash, a matched group's
+cast, every weather), the card answers first:
+
+| Card | Drinks (empowered) | Puts out (neutralized) | Open to |
+|------|--------------------|------------------------|---------|
+| Fire (ember) | fire | frost | water, grove |
+| Water (tide) | water | fire | frost, grove |
+| Frost (bone) | frost | grove | fire, water |
+| Grove (moss) | grove | water | fire, frost |
+
+A card that drinks its own element is **empowered**: it glows and pays a gold when matched. A hold
+(a freeze or a snare) spent on a card that answers holds nothing. The storm is no element. Soak, 60
+seeds a player: the average player went from 8.7 floors a run to 10.2 (9.5 without the gold).
 
 ## Consequences that carry (`realm-carryover-rules.ts`)
 
@@ -112,7 +130,7 @@ The floor-clear beat says what was sent on.
 ## Presentation
 
 - Card marks (`RealmTileMarks.tsx`): ice with the turns left, snow over the suit, a flame with its
-  fuse, vines, and the omen's sigil on both halves.
+  fuse, vines. The card itself is its element (`ElementCardBack.tsx`), brighter while empowered.
 - Stamps for every weather event and reaction, and one naming the realm as a floor opens
   (`screenCallouts.ts`).
 - The room follows the realm: the heat temper is the realm's (`comboHeatThemeForRun`), so frost

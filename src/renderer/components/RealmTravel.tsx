@@ -8,7 +8,7 @@ import styles from './RealmTravel.module.css';
 
 interface RealmTravelProps {
     doors: readonly RealmDoor[];
-    /** The realm the floor ended in: its door is the way you came (an omen may have changed it). */
+    /** The realm the floor ended in: its door is the way you came (the sway may have tipped it). */
     endedIn: RealmId | null;
     /** Floors this run has cleared in each realm, to say where the player has been. */
     floorsIn: Partial<Record<RealmId, number>>;

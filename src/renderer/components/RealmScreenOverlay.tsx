@@ -19,7 +19,7 @@ export interface RealmScreenOverlayProps {
     reduceMotion: boolean;
     /** The realm's latest event: the edges surge with it, flames leaping, rain sheeting, charge going white. */
     surgeKey?: string | null;
-    /** The realm the board just left (an omen turned it): it burns, melts or washes off the glass. */
+    /** The realm the board just left (the sway tipped it): it burns, melts or washes off the glass. */
     leaving?: boolean;
 }
 

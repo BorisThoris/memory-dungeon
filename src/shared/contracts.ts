@@ -122,15 +122,20 @@ export interface RealmEvent {
         | 'scorch'
         | 'wash'
         | 'freeze'
-        | 'entangle';
+        | 'entangle'
+        // Elemental alchemy (`element-alchemy-rules.ts`): a card drank its own element, put out the one it
+        // beats, or was matched empowered and paid for it.
+        | 'empowered'
+        | 'neutralized'
+        | 'released';
     /** The cards it touched, for the board to flash. */
     tileIds: string[];
     /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
     reaction?: string;
     from?: RealmId;
     to?: RealmId;
-    /** What turned the realm: an omen matched, or the sway of the player's matches tipping it (`realm-sway-rules.ts`). */
-    cause?: 'omen' | 'sway';
+    /** What turned the realm: the sway of the player's matches tipping it (`realm-sway-rules.ts`). */
+    cause?: 'sway';
     /** Gold it paid (positive) or burned (negative). */
     gold?: number;
 }
@@ -369,8 +374,11 @@ export interface Tile {
     vined?: boolean;
     /** Grove realm: the vines on this card have bloomed, and cutting them pays three gold, not one. */
     bloom?: boolean;
-    /** An omen card: matching its pair turns the floor's realm into this one (`realm-omen-rules.ts`). */
-    omen?: RealmId;
+    /**
+     * Elemental alchemy (`element-alchemy-rules.ts`): this card drank its own element when it reached
+     * it, and pays a gold when it is matched.
+     */
+    empowered?: boolean;
 }
 
 export type FloorTag = 'normal' | 'breather' | 'boss';
@@ -811,8 +819,8 @@ export interface RunState {
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */
     shiftingSpotlightNonce: number;
     /**
-     * The realm this floor is played in (`realm-rules.ts`), and how hard its weather blows. An omen
-     * match can turn it mid-floor. Absent or null on a run with no realms (fixtures, old saves).
+     * The realm this floor is played in (`realm-rules.ts`), and how hard its weather blows. The sway
+     * can turn it mid-floor. Absent or null on a run with no realms (fixtures, old saves).
      */
     realmId?: RealmId | null;
     realmSeverity?: RealmSeverity;
@@ -831,7 +839,7 @@ export interface RunState {
     /** The travel doors offered at this floor's clear, and the one the player walked through. */
     realmDoors?: RealmDoor[] | null;
     nextRealm?: RealmDoor | null;
-    /** Weather events this floor, and the reactions omens set off this floor and this run. */
+    /** Weather events this floor, and the reactions (the sway tipping the realm) this floor and this run. */
     realmWeatherThisFloor?: number;
     realmReactionsThisFloor?: number;
     realmReactionsThisRun?: number;
@@ -852,6 +860,9 @@ export interface RunState {
     realmTipsThisFloor?: number;
     /** Elements cast by matched suit groups this floor that changed the board (`element-group-rules.ts`). */
     elementCastsThisFloor?: number;
+    /** Elemental alchemy this floor: cards that drank their own element, and elements a card put out. */
+    elementEmpoweredThisFloor?: number;
+    elementNeutralizedThisFloor?: number;
     /** Floors cleared in each realm this run; the travel screen and the results read it. */
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */

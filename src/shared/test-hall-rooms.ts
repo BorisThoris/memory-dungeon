@@ -104,7 +104,6 @@ export type TestHallRoomId =
     | 'realm-lightning'
     | 'realm-vines'
     | 'realm-overgrowth'
-    | 'realm-omen'
     | 'realm-travel'
     | 'realm-whiteout'
     | 'realm-thunderclap'
@@ -121,7 +120,9 @@ export type TestHallRoomId =
     | 'element-fire'
     | 'element-water'
     | 'element-frost'
-    | 'element-grove';
+    | 'element-grove'
+    | 'element-kin'
+    | 'element-neutralize';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -334,6 +335,13 @@ const frostIs = (id: string, n: number | undefined) => (run: RunState) =>
 // A checkerboard of two suits: no card touches one of its own suit, so a match takes its own pair
 // and nothing else, and a room can count turns without a pop clearing pairs it means to play.
 const EIGHT_PAIRS = ['a:e b:t c:e d:t', 'f:t e:e h:t g:e', 'c:e d:t a:e b:t', 'h:t g:e f:t e:e'];
+/**
+ * The same board in other elements (`element-alchemy-rules.ts`): a card is untouched by its own
+ * element and by the one it puts out, so a room about fire is dealt grove and frost cards, and a
+ * room about frost grove and water cards.
+ */
+const EIGHT_PAIRS_GROWN = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m').replace(/:t/g, ':b'));
+const EIGHT_PAIRS_THAWED = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m'));
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
@@ -1276,7 +1284,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'In the Frozen Reach a miss freezes both cards it showed for two turns: they cannot be turned until the ice goes.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Miss a against b, then try to turn a: it is frozen. Two more turns and the ice is gone.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('frost', 'calm') }),
+        build: () => room(['a:m b:t c:t d:m', 'e:e f:b a:m b:t', 'c:t d:m e:e f:b'], { misses: 4, run: realmRun('frost', 'calm') }),
         script: [
             { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'both cards freeze for two turns', expect: expectAll(frostIs('a-1', 2), frostIs('b-1', 2), realmEventIs('frostbite'), (r) => (r.realmFrozenThisFloor === 2 ? null : `frozen ${r.realmFrozenThisFloor}`)) },
             { step: { do: 'flip', tileId: 'a-1' }, says: 'a frozen card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the frozen card turned') },
@@ -1313,7 +1321,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every second turn on a raging Cinder Deep, wildfire sets two face-down cards on a three-turn fuse; matched in time a fire is doused for two gold.',
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
-        build: () => room(EIGHT_PAIRS, { level: 6, run: realmRun('ember', 'raging', { gold: 0 }) }),
+        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
             { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },
@@ -1404,7 +1412,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every second turn on a raging Overgrown Crypt vines creep over two face-down cards, next to vines already there when they can.',
         graphMechanicIds: ['board.realm_weather', 'safety.softlock_fairness'],
         tryThis: 'One turn into a raging floor, match d: vines take two cards; the floor always keeps a pair you can turn.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('grove', 'raging', { turnsThisFloor: 1 }) }),
+        build: () => room(['a:e b:t c:t d:e', 'e:e f:t a:e b:t', 'c:t d:e e:e f:t'], { misses: 4, run: realmRun('grove', 'raging', { turnsThisFloor: 1 }) }),
         script: [
             {
                 // A lone bone pair with nothing to pop holds nothing, so the vines are all the weather's.
@@ -1413,26 +1421,6 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 2 ? null : 'not two cards vined'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor clears around the vines', expect: statusIs('levelComplete') }
-        ]
-    },
-    {
-        id: 'realm-omen',
-        title: 'The omen',
-        mechanic: 'An omen pair carries another realm’s sigil; matching it sets off a reaction and turns the floor into that realm.',
-        graphMechanicIds: ['board.realm_omen', 'board.realm_weather'],
-        tryThis: 'Pair a is an Ember omen in the Frozen Reach, and c is frozen. Match a: the Thaw melts the ice and the floor burns.',
-        build: () =>
-            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
-                run: realmRun('frost', 'calm', { gold: 0 }),
-                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, omen: 'ember' as const } : t.id === 'c-1' ? { ...t, frost: 2 } : t))
-            }),
-        script: [
-            {
-                step: { do: 'match', pairKey: 'a' },
-                says: 'the Thaw: the ice melts for a gold and the floor turns to ember',
-                expect: expectAll(realmEventIs('reaction'), frostIs('c-1', undefined), goldIs(1), (r) =>
-                    r.realmId === 'ember' && r.lastRealmEvent?.reaction === 'Thaw' ? null : `realm ${r.realmId}, reaction ${r.lastRealmEvent?.reaction}`)
-            }
         ]
     },
     {
@@ -1467,7 +1455,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every third weather of a floor is the realm\u2019s peak; the Frozen Reach\u2019s is a whiteout that snows over every face-down card.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Two blizzards have blown already. Take one turn: the whiteout buries every suit on the board.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('frost', 'raging', { realmWeatherThisFloor: 2, turnsThisFloor: 2 }) }),
+        build: () => room(EIGHT_PAIRS_THAWED, { level: 6, misses: 3, run: realmRun('frost', 'raging', { realmWeatherThisFloor: 2, turnsThisFloor: 2 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
@@ -1502,7 +1490,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Card b is vined. Take a turn and the vines bloom; then match a beside it for three gold.',
         build: () =>
-            room(['a:e b:t c:m d:b', 'a:e e:t f:m c:b', 'b:t d:b e:t f:m'], {
+            room(['a:e b:t c:e d:t', 'a:e e:t f:e c:e', 'b:t d:t e:t f:e'], {
                 misses: 3,
                 run: realmRun('grove', 'raging', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
                 tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' ? { ...t, vined: true } : t))
@@ -1518,7 +1506,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'A confluence floor is two realms at once: their weather comes by turns, and both answer the player.',
         graphMechanicIds: ['economy.realm_travel', 'board.realm_weather'],
         tryThis: 'Storm meets frost. The next weather is the frost\u2019s, and a miss here freezes like the frost does.',
-        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'raging', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1, turnsThisFloor: 2 }) }),
+        build: () => room(EIGHT_PAIRS_THAWED, { level: 6, misses: 3, run: realmRun('storm', 'raging', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1, turnsThisFloor: 2 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
@@ -1589,7 +1577,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'A raging Cinder Deep strikes back at a miss: both cards it showed catch fire on a two-turn fuse.',
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Miss a against b: both are burning now. Match a before its fuse runs out and the fire is doused for gold.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('ember', 'raging', { gold: 0 }) }),
+        build: () => room(['a:m b:b c:e d:t', 'e:e f:t a:m b:b', 'c:e d:t e:e f:t'], { misses: 4, run: realmRun('ember', 'raging', { gold: 0 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
@@ -1605,7 +1593,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'A raging Drowned Vault strikes back at a miss: the undertow drags each card it showed one cell down its column.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Miss a against b along the top row: each is dragged a cell down, and the cards below rise to take their places.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'raging') }),
+        build: () => room(['a:e b:b c:m d:t', 'e:e f:b a:e b:b', 'c:m d:t e:e f:b'], { misses: 4, run: realmRun('tide', 'raging') }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
@@ -1712,14 +1700,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'Water',
         mechanic: 'A tide group is Water: it puts out every fire within two steps of the group and washes the face-down cards it reaches one place along.',
         graphMechanicIds: ['board.element_groups'],
-        tryThis: 'c-1 is burning. Match b: the water puts the fire out and the cards around it drift.',
+        tryThis: 'e-1, a fire card, is burning. Match b: the water puts the fire out and the cards around it drift.',
         build: () =>
-            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm'), tiles: (tiles) => tiles.map((t) => (t.id === 'c-1' ? { ...t, fuse: 2 } : t)) }),
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm'), tiles: (tiles) => tiles.map((t) => (t.id === 'e-1' ? { ...t, fuse: 2 } : t)) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'b' },
                 says: 'the fire is out and the cards around the group have moved',
-                expect: expectAll(realmEventIs('wash'), (r) => (tileById(r, 'c-1')?.fuse == null ? null : 'c-1 still burning'), (r, b) => {
+                expect: expectAll(realmEventIs('wash'), (r) => (tileById(r, 'e-1')?.fuse == null ? null : 'e-1 still burning'), (r, b) => {
                     const moved = (r.board?.tiles ?? []).filter((t, i) => t.state === 'hidden' && b.board!.tiles[i]?.id !== t.id);
                     return moved.length >= 2 ? null : `${moved.length} cards moved`;
                 })
@@ -1754,6 +1742,38 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 step: { do: 'match', pairKey: 'a' },
                 says: 'the grove group snares one card',
                 expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 1 ? null : 'not exactly one vined card'), finishable)
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-kin',
+        title: 'Kin: a card drinks its own element',
+        mechanic: 'Every card is made of its element. An element that reaches a card of its own kind does not act on it: the card drinks it, is empowered, and pays a gold when it is matched.',
+        graphMechanicIds: ['board.element_alchemy', 'board.realm_weather'],
+        tryThis: 'In the Frozen Reach, miss a frost card (a, ice) with a water card (b): the frost freezes the water card, and the ice card drinks it and glows. Match a for its gold.',
+        build: () => room(['a:b b:t c:m d:e', 'e:e f:t a:b b:t', 'c:m d:e e:e f:t'], { run: realmRun('frost', 'calm', { gold: 0 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'the frost freezes the water card; the frost card drinks it and is empowered',
+                expect: expectAll(frostIs('a-1', undefined), (r) => (tileById(r, 'a-1')?.empowered === true ? null : 'a-1 not empowered'), (r) => ((tileById(r, 'b-1')?.frost ?? 0) > 0 ? null : 'b-1 not frozen'), (r) => ((r.elementEmpoweredThisFloor ?? 0) === 1 ? null : `empowered ${r.elementEmpoweredThisFloor}`))
+            },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the empowered card matched pays a gold', expect: goldIs(1) }
+        ]
+    },
+    {
+        id: 'element-neutralize',
+        title: 'Counter: a card puts an element out',
+        mechanic: 'Each element puts out one other: water puts out fire, fire melts frost, frost kills growth, roots hold against water. That element reaching the card does nothing.',
+        graphMechanicIds: ['board.element_alchemy', 'board.realm_weather'],
+        tryThis: 'In the Frozen Reach, miss a fire card (d) with a grove card (c): the grove card freezes, the fire card melts the frost and stays free.',
+        build: () => room(['a:b b:t c:m d:e', 'e:e f:t a:b b:t', 'c:m d:e e:e f:t'], { run: realmRun('frost', 'calm') }),
+        script: [
+            {
+                step: { do: 'miss', a: 'd-1', b: 'c-1' },
+                says: 'the fire card is untouched, the grove card frozen',
+                expect: expectAll(frostIs('d-1', undefined), (r) => ((tileById(r, 'c-1')?.frost ?? 0) > 0 ? null : 'c-1 not frozen'), (r) => ((r.elementNeutralizedThisFloor ?? 0) === 1 ? null : `neutralized ${r.elementNeutralizedThisFloor}`), (r) => (tileById(r, 'd-1')?.empowered == null ? null : 'd-1 empowered'))
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]

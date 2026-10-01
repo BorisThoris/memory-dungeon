@@ -3,6 +3,7 @@ import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { runNonNegativeInteger } from './run-number-guards';
 import { SUIT_REALM } from './realm-sway-rules';
+import { createAlchemyLog, elementLands, elementWouldLand, type AlchemyLog } from './element-alchemy-rules';
 
 /**
  * Elemental groups (2026-10-01): the suits are the elements, and a matched group casts its element
@@ -32,6 +33,10 @@ import { SUIT_REALM } from './realm-sway-rules';
  * card, one turn of frost, cost 8.9 to 8.1 and the careful player nothing. The realm’s guard
  * still frees holds that would leave no pair to turn. Water moves at most
  * `ELEMENT_WASH_CAP`, never a pinned card.
+ *
+ * Every card the cast would act on answers first (`element-alchemy-rules.ts`): a card of the
+ * cast's own element drinks it and is empowered, a card of the element that puts it out is left
+ * as it was, and a hold spent on either holds nothing.
  */
 
 export type ElementCastKind = Extract<RealmEvent['kind'], 'scorch' | 'wash' | 'freeze' | 'entangle'>;
@@ -92,13 +97,15 @@ export const castElement = ({
     columns,
     groupTileIds,
     realmId,
-    pinned
+    pinned,
+    alchemy = createAlchemyLog()
 }: {
     tiles: Tile[];
     columns: number;
     groupTileIds: readonly string[];
     realmId: RealmId | null;
     pinned: ReadonlySet<string>;
+    alchemy?: AlchemyLog;
 }): ElementCast | null => {
     const group = groupTileIds.map((id) => tiles.findIndex((tile) => tile.id === id)).filter((index) => index >= 0);
     const suit = group.map((index) => tiles[index]!).find((tile) => tile.suit && isReal(tile))?.suit;
@@ -114,6 +121,7 @@ export const castElement = ({
             for (const index of reached) {
                 const tile = tiles[index]!;
                 if (tile.vined == null && tile.frost == null && tile.snowed == null && tile.bloom == null) continue;
+                if (!elementLands(tiles, index, suit, alchemy)) continue;
                 const { vined: _v, bloom: _b, frost: _f, snowed: _s, ...rest } = tile;
                 tiles[index] = rest;
                 touched.push(tile.id);
@@ -122,13 +130,16 @@ export const castElement = ({
         case 'wash': {
             for (const index of reached) {
                 const tile = tiles[index]!;
-                if (tile.fuse == null) continue;
-                const { fuse: _fuse, ...rest } = tile;
+                if (tile.fuse == null || !elementLands(tiles, index, suit, alchemy)) continue;
+                const { fuse: _fuse, ...rest } = tiles[index]!;
                 tiles[index] = rest;
                 touched.push(tile.id);
             }
-            const movable = reached.filter((index) => !pinned.has(tiles[index]!.id)).slice(0, ELEMENT_WASH_CAP);
+            const carried = reached.filter((index) => !pinned.has(tiles[index]!.id)).slice(0, ELEMENT_WASH_CAP);
+            // Water and grove cards are not carried: the water flows around them.
+            const movable = carried.filter((index) => elementWouldLand(tiles[index]!, suit));
             if (movable.length >= 2) {
+                for (const index of carried) if (!movable.includes(index)) elementLands(tiles, index, suit, alchemy);
                 const moved = movable.map((index) => tiles[index]!);
                 movable.forEach((index, at) => {
                     tiles[index] = moved[(at - 1 + moved.length) % moved.length]!;
@@ -141,15 +152,17 @@ export const castElement = ({
             let held = 0;
             for (const index of reached) {
                 const tile = tiles[index]!;
-                if (tile.fuse != null) {
-                    const { fuse: _fuse, ...rest } = tile;
+                if (tile.fuse != null && elementLands(tiles, index, suit, alchemy)) {
+                    const { fuse: _fuse, ...rest } = tiles[index]!;
                     tiles[index] = rest;
                     touched.push(tile.id);
                 }
                 if (held >= holdCap || runNonNegativeInteger(tiles[index]!.frost ?? 0) > 0) continue;
+                // The hold is spent on the nearest card, whether it freezes or answers.
+                held += 1;
+                if (!elementLands(tiles, index, suit, alchemy)) continue;
                 tiles[index] = { ...tiles[index]!, frost: ELEMENT_FREEZE_TURNS };
                 if (!touched.includes(tile.id)) touched.push(tile.id);
-                held += 1;
             }
             break;
         }
@@ -159,9 +172,10 @@ export const castElement = ({
                 const tile = tiles[index]!;
                 if (held >= holdCap) break;
                 if (tile.vined === true || pinned.has(tile.id)) continue;
-                tiles[index] = { ...tile, vined: true };
-                touched.push(tile.id);
                 held += 1;
+                if (!elementLands(tiles, index, suit, alchemy)) continue;
+                tiles[index] = { ...tiles[index]!, vined: true };
+                touched.push(tile.id);
             }
             break;
         }

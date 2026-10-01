@@ -42,7 +42,10 @@ export const REALM_JOLT_FAMILY: Readonly<Record<RealmEvent['kind'], RealmJoltFam
     scorch: 'flare',
     wash: 'surge',
     freeze: 'gust',
-    entangle: 'creep'
+    entangle: 'creep',
+    empowered: 'pop',
+    neutralized: 'pop',
+    released: 'pop'
 };
 
 /** How long a jolt lasts. */

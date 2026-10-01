@@ -8,7 +8,6 @@ import {
 } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
-import { seatRealmOmen } from './realm-omen-rules';
 import { ATTUNEMENT_GOLD_STEP, ATTUNEMENT_MAX } from './realm-carryover-rules';
 
 /**
@@ -24,11 +23,12 @@ import { ATTUNEMENT_GOLD_STEP, ATTUNEMENT_MAX } from './realm-carryover-rules';
  *   runs a column down, lightning swaps two cards and leaves them lit, vines hold cards down;
  * - each realm also answers the player's own turns: a miss in the frost freezes the two cards it
  *   showed, a match beside a vine cuts it, a burning card matched in time is doused for gold;
- * - an **omen** pair on the board (`realm-omen-rules.ts`) is an environment card: matching it
- *   sets off a reaction and turns the floor into the omen's realm for the rest of the floor;
+ * - every card is made of its suit's element (`element-alchemy-rules.ts`): a card is untouched by
+ *   its own element (it drinks it and is empowered) and by the one its element puts out, and the
+ *   sway of the player's matches can turn the floor into another realm (`realm-sway-rules.ts`);
  * - at every floor clear the player walks through one of three **doors**: a realm and how hard
  *   its weather blows. Harder weather comes sooner and pays more gold at the clear. The realm the
- *   floor ended in is always one of the doors, so an omen matched is a route chosen.
+ *   floor ended in is always one of the doors, so a floor tipped is a route chosen.
  *
  * Seeded throughout, so a shared seed is the same weather for everyone who plays it.
  */
@@ -226,8 +226,8 @@ export const REALM_DOOR_COUNT = 3;
 
 /**
  * The doors at a floor clear. Three realms, one of each severity, seeded from the run and the floor
- * that cleared. The realm the floor ended in is always one of them (an omen matched is a route
- * picked); the other two are realms the floor was not in.
+ * that cleared. The realm the floor ended in is always one of them (a floor tipped by the sway is a
+ * route picked); the other two are realms the floor was not in.
  */
 export const rollRealmDoors = (runSeed: number, clearedLevel: number, endedIn: RealmId | null): RealmDoor[] => {
     const rng = createMulberry32(hashStringToSeed(`realm-doors:${Math.floor(runSeed)}:${Math.floor(clearedLevel)}`));
@@ -298,6 +298,8 @@ export const freshRealmFloorCounters = (): Pick<
     | 'realmBacklashesThisFloor'
     | 'realmTipsThisFloor'
     | 'elementCastsThisFloor'
+    | 'elementEmpoweredThisFloor'
+    | 'elementNeutralizedThisFloor'
     | 'lastRealmEvent'
     | 'realmLitTileIds'
     | 'realmPeaksThisFloor'
@@ -311,14 +313,15 @@ export const freshRealmFloorCounters = (): Pick<
     realmBacklashesThisFloor: 0,
     realmTipsThisFloor: 0,
     elementCastsThisFloor: 0,
+    elementEmpoweredThisFloor: 0,
+    elementNeutralizedThisFloor: 0,
     lastRealmEvent: null,
     realmLitTileIds: [],
     realmPeaksThisFloor: 0
 });
 
 /**
- * A floor about to be played in a realm: the board with its omen seated, and the run fields that
- * say where it is. A run without realms gets its board back and nothing to write.
+ * A floor about to be played in a realm: its board, and the run fields that say where it is. A run without realms gets its board back and nothing to write.
  */
 export const enterRealmFloor = (
     run: Pick<RunState, 'runSeed' | 'runRulesVersion'>,
@@ -329,7 +332,7 @@ export const enterRealmFloor = (
         return { board, fields: {} };
     }
     return {
-        board: seatRealmOmen(board, door.realmId, run.runSeed, run.runRulesVersion),
+        board,
         fields: {
             realmId: door.realmId,
             realmSeverity: door.severity,

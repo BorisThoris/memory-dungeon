@@ -1,6 +1,7 @@
 import type { BoardState, RealmId, RunState, Tile } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { elementWouldLand } from './element-alchemy-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -94,12 +95,15 @@ export const applyRealmSmokeToStudy = (ms: number, smoke: number | undefined, mi
     return Math.max(minimumMs, Math.floor(ms * (1 - SMOKE_STUDY_CUT_PER_BURNOUT * level)));
 };
 
-/** The cold carried in: `chill` seeded face-down cards start frozen. */
+/**
+ * The cold carried in: `chill` seeded face-down cards start frozen. Never a frost or fire card: a
+ * card is untouched by its own element and by the one it puts out (`element-alchemy-rules.ts`).
+ */
 export const applyRealmChill = (board: BoardState, chill: number | undefined, runSeed: number, rulesVersion: number): BoardState => {
     const count = runNonNegativeInteger(chill ?? 0);
     if (count === 0) return board;
     const rng = createMulberry32(hashStringToSeed(`realm-chill:${Math.floor(runSeed)}:${rulesVersion}:${board.level}`));
-    const candidates = board.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey)).map((tile) => tile.id);
+    const candidates = board.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && elementWouldLand(tile, 'bone')).map((tile) => tile.id);
     // Never both halves of one pair, so the chill delays a pair rather than locking it.
     const chosen: string[] = [];
     const keys = new Set<string>();
