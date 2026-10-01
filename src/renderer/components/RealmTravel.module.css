@@ -132,6 +132,16 @@
     color: var(--margin-paper-2, #d7d3d3);
 }
 
+.attuned {
+    padding: 0.05rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--realm-color) 26%, transparent);
+    color: var(--realm-color);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
 .weather {
     font-size: 0.8rem;
     font-style: italic;
@@ -182,7 +192,7 @@
     }
 
     .arch {
-        grid-row: span 6;
+        grid-row: span 8;
         width: 3.6rem;
     }
 

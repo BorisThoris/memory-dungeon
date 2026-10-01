@@ -1,4 +1,5 @@
-import type { RealmDoor, RealmId, RealmSeverity } from '../../shared/contracts';
+import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
+import { ATTUNEMENT_GOLD_STEP, SMOKE_STUDY_CUT_PER_BURNOUT } from '../../shared/realm-carryover-rules';
 import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
@@ -13,6 +14,29 @@ export const REALM_HUD_COPY = {
         `${REALMS[realm].place}${secondary ? ` meeting ${REALMS[secondary].place}` : ''}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. ${weather} in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`
 } as const;
 
+const NUMERALS = ['', 'I', 'II', 'III'] as const;
+export const attunementNumeral = (level: number): string => NUMERALS[Math.max(0, Math.min(3, Math.floor(level)))] ?? '';
+
+/** The floor-clear beat's lines for what a realm floor sends on (`realm-carryover-rules.ts`). */
+export const realmCarryoverLines = (
+    result: LevelResult | null,
+    attunement: RunState['realmAttunement']
+): string[] => {
+    if (!result?.realmId) return [];
+    const lines: string[] = [];
+    if (result.realmAttuned) {
+        const level = attunement?.[result.realmAttuned] ?? 1;
+        lines.push(`Attuned to ${REALMS[result.realmAttuned].title} ${attunementNumeral(level)}: its clears pay +${Math.round(level * ATTUNEMENT_GOLD_STEP * 100)}% gold`);
+    }
+    if (result.realmSmoke) {
+        lines.push(`Smoke follows you: the next study is ${Math.round(result.realmSmoke * SMOKE_STUDY_CUT_PER_BURNOUT * 100)}% shorter`);
+    }
+    if (result.realmChill) {
+        lines.push(`The cold comes with you: ${result.realmChill} cards start the next floor frozen`);
+    }
+    return lines;
+};
+
 /** The travel screen (`RealmTravel`): the doors at a floor clear. */
 export const REALM_TRAVEL_COPY = {
     title: 'Where now?',
@@ -25,6 +49,8 @@ export const REALM_TRAVEL_COPY = {
             ? `Confluence · ×${CONFLUENCE_GOLD_MULTIPLIER} gold`
             : `${severity.title} · ×${severity.goldMultiplier} gold`;
     },
+    attunedLine: (level: number): string | null =>
+        level > 0 ? `Attuned ${attunementNumeral(level)} · +${Math.round(level * ATTUNEMENT_GOLD_STEP * 100)}% gold` : null,
     placeLine: (door: RealmDoor): string =>
         door.confluence ? `${REALMS[door.realmId].place} meets ${REALMS[door.confluence].place.replace(/^The /, 'the ')}` : REALMS[door.realmId].place,
     confluenceRule: (door: RealmDoor): string | null =>

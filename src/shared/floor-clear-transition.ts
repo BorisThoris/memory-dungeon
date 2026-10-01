@@ -15,6 +15,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
 import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
 import { realmClearGold, rollRealmDoors, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
+import { realmAttunementLevel, realmCarryoverAtClear } from './realm-carryover-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -79,8 +80,11 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const goldEarned = realmClearGold(
         floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
         realmId ? runRealmSeverity(run) : null,
-        runRealmSecondaryId(run) != null
+        runRealmSecondaryId(run) != null,
+        realmAttunementLevel(run, realmId)
     );
+    // What the floor sends on: smoke, chill, and the attunement a clean clear earned.
+    const carryover = realmCarryoverAtClear(run, realmId, turnsTaken, parTurns);
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,
         featuredObjectiveCompleted,
@@ -134,12 +138,27 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                   realmDoors: rollRealmDoors(run.runSeed, board.level, realmId),
                   nextRealm: null,
                   realmFloorsThisRun: { ...(run.realmFloorsThisRun ?? {}), [realmId]: runNonNegativeInteger(run.realmFloorsThisRun?.[realmId] ?? 0) + 1 },
+                  realmSmoke: carryover.realmSmoke,
+                  realmChill: carryover.realmChill,
+                  realmAttunement: carryover.realmAttunement,
                   realmLitTileIds: []
               }
             : {}),
         // The stop's shelves are stocked as it opens, from the seed and the floor.
         ...(isStoreStopFloor(board.level) ? { storeStock: rollStoreStock(run.runSeed, board.level, run.relics ?? []) } : {}),
         timerState: clearResolveState(run),
-        lastLevelResult: { ...lastLevelResult, goldEarned, ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }) }
+        lastLevelResult: {
+            ...lastLevelResult,
+            goldEarned,
+            ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }),
+            ...(realmId
+                ? {
+                      realmId,
+                      ...(carryover.attuned ? { realmAttuned: carryover.attuned } : {}),
+                      ...(carryover.realmSmoke > 0 ? { realmSmoke: carryover.realmSmoke } : {}),
+                      ...(carryover.realmChill > 0 ? { realmChill: carryover.realmChill } : {})
+                  }
+                : {})
+        }
     };
 };

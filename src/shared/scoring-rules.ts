@@ -17,6 +17,7 @@ import { hasRelic, LONG_LOOK_MS } from './run-relic-rules';
 import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
 import { pairsForFloor } from './pair-curve';
 import { isWildPairKey } from './tile-identity';
+import { applyRealmSmokeToStudy } from './realm-carryover-rules';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
 
@@ -86,7 +87,8 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     if (hasRelic(run, 'long_look')) {
         ms += LONG_LOOK_MS;
     }
-    return ms;
+    // The smoke of fires that burnt out on the floor before hangs in this one (`realm-carryover-rules.ts`).
+    return applyRealmSmokeToStudy(ms, run.realmSmoke, MEMORIZE_MIN_MS);
 };
 
 export const calculateRating = (tries: number): Rating => {

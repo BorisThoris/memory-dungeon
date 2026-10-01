@@ -55,6 +55,16 @@ tide), Wildfire (grove to ember), Whiteout (storm to frost) and so on. A reactio
 weather left (a gold each, at most five). Two do more: ember through a grove sets every vine alight,
 and a storm breaking strikes at once.
 
+## Consequences that carry (`realm-carryover-rules.ts`)
+
+| Carryover | Cause | Effect on the next floor |
+|-----------|-------|--------------------------|
+| Smoke | Each fire that burnt out (up to 3) | Its study window is 12% shorter per level |
+| Chill | Four or more cards frozen on the floor | Two cards (of different pairs) start frozen |
+| Attunement | A clean clear by the realm's measure: frost no frostbite, ember no burnout, tide/storm within par, grove two vines cut | +25% gold on that realm's clears per level, up to 3; the doors show it |
+
+The floor-clear beat says what was sent on.
+
 ## Safety
 
 - The guard (`releaseRealmHoldsIfStuck`) runs after every turn and every bomb: if frozen and vined

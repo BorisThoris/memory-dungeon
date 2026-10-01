@@ -108,7 +108,10 @@ export type TestHallRoomId =
     | 'realm-whiteout'
     | 'realm-thunderclap'
     | 'realm-bloom'
-    | 'realm-confluence';
+    | 'realm-confluence'
+    | 'realm-attunement'
+    | 'realm-smoke'
+    | 'realm-chill';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -1485,6 +1488,61 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: expectAll(realmEventIs('blizzard'), frostIs('a-1', 2), (r) => (r.realmId === 'storm' && r.realmSecondaryId === 'frost' ? null : `realms ${r.realmId}/${r.realmSecondaryId}`))
             },
             { step: { do: 'clear' }, says: 'and the clear pays double gold', expect: expectAll(statusIs('levelComplete'), (r, b) => ((r.lastLevelResult?.goldEarned ?? 0) >= 4 && runGold(r) > runGold(b) ? null : `earned ${r.lastLevelResult?.goldEarned}`)) }
+        ]
+    },
+    {
+        id: 'realm-attunement',
+        title: 'Attunement',
+        mechanic: 'A realm floor cleared clean by that realm\u2019s measure attunes the player to it: a quarter more gold on its clears per level, up to three.',
+        graphMechanicIds: ['economy.realm_travel', 'economy.gold'],
+        tryThis: 'Clear this ember floor without letting a fire burn out: you are attuned to Ember, and the doors say so.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('ember', 'calm', { realmAttunement: {} }) }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'a clean clear attunes the player to Ember',
+                expect: expectAll(statusIs('levelComplete'), (r) =>
+                    r.realmAttunement?.ember === 1 && r.lastLevelResult?.realmAttuned === 'ember' ? null : `attunement ${JSON.stringify(r.realmAttunement)}`)
+            }
+        ]
+    },
+    {
+        id: 'realm-smoke',
+        title: 'Smoke',
+        mechanic: 'Every fire that burnt out on a floor hangs in the next room as smoke: its study window is twelve per cent shorter per burnout, up to three.',
+        graphMechanicIds: ['board.realm_weather', 'phase.memorize'],
+        tryThis: 'Two fires burnt out on this floor. Clear it and descend: the next study is shorter.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('ember', 'calm', { realmBurnoutsThisFloor: 2 }) }),
+        script: [
+            { step: { do: 'clear' }, says: 'the clear sends the smoke on', expect: expectAll(statusIs('levelComplete'), (r) => (r.realmSmoke === 2 && r.lastLevelResult?.realmSmoke === 2 ? null : `smoke ${r.realmSmoke}`)) },
+            {
+                step: { do: 'advance' },
+                says: 'the next floor studies through it: a shorter window',
+                expect: expectAll(statusIs('memorize'), (r) => {
+                    const clear = getMemorizeDurationForRun({ ...r, realmSmoke: 0 }, r.board?.level ?? 0);
+                    const smoky = r.timerState.memorizeRemainingMs ?? 0;
+                    return smoky < clear ? null : `study ${smoky} against ${clear} without smoke`;
+                })
+            }
+        ]
+    },
+    {
+        id: 'realm-chill',
+        title: 'The chill',
+        mechanic: 'A floor that froze four cards or more sends the cold on: the next floor opens with two cards already frozen.',
+        graphMechanicIds: ['board.realm_weather', 'progression.run_flow'],
+        tryThis: 'Four cards froze on this floor. Clear it and descend: two cards on the next board start frozen.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm', { realmFrozenThisFloor: 4 }) }),
+        script: [
+            { step: { do: 'clear' }, says: 'the clear sends the cold on', expect: (r) => (r.realmChill === 2 ? null : `chill ${r.realmChill}`) },
+            {
+                step: { do: 'advance' },
+                says: 'two cards of the next floor start frozen, and the chill is spent',
+                expect: (r) => {
+                    const frozen = (r.board?.tiles ?? []).filter((t) => (t.frost ?? 0) > 0).length;
+                    return frozen === 2 && !r.realmChill ? null : `${frozen} frozen, chill ${r.realmChill}`;
+                }
+            }
         ]
     }
 ];

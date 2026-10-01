@@ -473,6 +473,11 @@ export interface LevelResult {
     floorEfficiencyBonus?: number;
     /** The biggest single break on the floor, in score; absent when nothing broke. */
     largestBreakScore?: number;
+    /** The realm the floor ended in, and what it sends on (\`realm-carryover-rules.ts\`). */
+    realmId?: RealmId;
+    realmAttuned?: RealmId;
+    realmSmoke?: number;
+    realmChill?: number;
 }
 
 export interface ZoneState {
@@ -801,6 +806,14 @@ export interface RunState {
     realmSecondaryId?: RealmId | null;
     /** Peak weather this floor (every third weather event), and confluence floors this run. */
     realmPeaksThisFloor?: number;
+    /**
+     * What realm floors send on (`realm-carryover-rules.ts`): the smoke of fires that burnt out, which
+     * shortens the study of the floor it hangs in; the chill of a floor that froze four cards, which
+     * freezes cards on the next; and the attunement each realm has earned with clean clears.
+     */
+    realmSmoke?: number;
+    realmChill?: number;
+    realmAttunement?: Partial<Record<RealmId, number>>;
     /** The travel doors offered at this floor's clear, and the one the player walked through. */
     realmDoors?: RealmDoor[] | null;
     nextRealm?: RealmDoor | null;

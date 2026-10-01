@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 65 as const;
+export const ENCYCLOPEDIA_VERSION = 66 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -619,7 +619,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Travel',
         description:
             'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - omen and all - is always one of the doors. A run opens somewhere calm. ' +
-            'From the fourth floor the wild door is sometimes a **confluence**: two realms at once. Their weather comes by turns, both answer your turns - a miss freezes if either is the frost - and the clear pays **double**. Matching an omen settles the floor on the omen\u2019s realm alone.'
+            'From the fourth floor the wild door is sometimes a **confluence**: two realms at once. Their weather comes by turns, both answer your turns - a miss freezes if either is the frost - and the clear pays **double**. Matching an omen settles the floor on the omen\u2019s realm alone. ' +
+            'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you are **attuned** to it: a quarter more gold on its clears for each level, up to three, and its doors say so.'
     },
     {
         id: 'tile_suits',

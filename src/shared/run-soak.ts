@@ -89,6 +89,10 @@ export interface SoakRunReport {
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
     realmConfluences: number;
+    /** What realm floors sent on: attunements earned, floors studied through smoke, floors opened in the cold. */
+    realmAttunements: number;
+    realmSmokeFloors: number;
+    realmChillFloors: number;
     violations: SoakViolation[];
 }
 
@@ -256,6 +260,17 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
         return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
     },
+    'smoke, chill and attunement stay within their caps': (_b, run) => {
+        if ((run.realmSmoke ?? 0) > 3) return `smoke ${run.realmSmoke}`;
+        const over = Object.entries(run.realmAttunement ?? {}).filter(([, level]) => (level ?? 0) > 3);
+        return over.length === 0 ? null : `attunement ${JSON.stringify(run.realmAttunement)}`;
+    },
+    'the chill a floor sends on freezes that many cards of the next, and is spent': (before, run, action) => {
+        if (action !== 'descend' || !before?.realmChill || !run.board) return null;
+        const frozen = run.board.tiles.filter((tile) => (tile.frost ?? 0) > 0).length;
+        if (run.realmChill) return `chill ${run.realmChill} still carried`;
+        return frozen >= Math.min(before.realmChill, 1) ? null : `${frozen} frozen against a chill of ${before.realmChill}`;
+    },
     'a confluence is two different realms': (_b, run) =>
         run.realmSecondaryId != null && run.realmSecondaryId === run.realmId ? `confluence of ${run.realmId} with itself` : null,
     'a floor is built in the realm of the door walked through': (before, run, action) => {
@@ -329,6 +344,9 @@ export const soakRun = ({
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
+    let realmAttunements = 0;
+    let realmSmokeFloors = 0;
+    let realmChillFloors = 0;
 
     const act = (action: string, next: RunState): void => {
         step += 1;
@@ -351,9 +369,16 @@ export const soakRun = ({
             realmVinesCut += Math.max(0, (next.realmVinesCutThisFloor ?? 0) - (run.realmVinesCutThisFloor ?? 0));
             realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
-        } else if (next.realmSecondaryId) {
-            realmConfluences += 1;
+        } else {
+            if (next.realmSecondaryId) realmConfluences += 1;
+            if ((next.realmSmoke ?? 0) > 0) realmSmokeFloors += 1;
+            if ((run.realmChill ?? 0) > 0) realmChillFloors += 1;
         }
+        realmAttunements += Math.max(
+            0,
+            Object.values(next.realmAttunement ?? {}).reduce((sum, level) => sum + (level ?? 0), 0) -
+                Object.values(run.realmAttunement ?? {}).reduce((sum, level) => sum + (level ?? 0), 0)
+        );
         run = next;
     };
 
@@ -464,6 +489,9 @@ export const soakRun = ({
         realmDoors,
         realmPeaks,
         realmConfluences,
+        realmAttunements,
+        realmSmokeFloors,
+        realmChillFloors,
         violations
     };
 };

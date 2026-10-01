@@ -128,6 +128,7 @@ import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { realmCarryoverLines } from '../copy/realmCopy';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -1215,7 +1216,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
           )
         : null;
-    const floorClearNotes = [floorClearObjectiveLine, nextFloorResidentLine].filter(
+    const floorClearNotes = [floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement), nextFloorResidentLine].filter(
         (line): line is string => typeof line === 'string' && line.length > 0
     );
     const nextFloorIdentity = nextFloorPreview
@@ -2119,6 +2120,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         doors={run.realmDoors}
                         endedIn={runRealmId(run)}
                         floorsIn={run.realmFloorsThisRun ?? {}}
+                        attunement={run.realmAttunement ?? {}}
                         onChoose={(index) => {
                             playMenuOpen();
                             travelThroughRealmDoor(index);

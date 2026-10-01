@@ -15,6 +15,7 @@ import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runArray } from './run-array-guards';
 import { enterRealmFloor, nextFloorRealmDoor } from './realm-rules';
+import { applyRealmChill } from './realm-carryover-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -51,11 +52,12 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     });
     // The next floor is in the realm the player walked into at the clear (`realm-rules.ts`).
     const realmEntry = enterRealmFloor(run, builtBoard, nextFloorRealmDoor(run));
-    const nextBoard = realmEntry.board;
+    // The cold a frozen floor sent on: cards that start this one frozen (`realm-carryover-rules.ts`).
+    const nextBoard = applyRealmChill(realmEntry.board, run.realmChill, run.runSeed, run.runRulesVersion);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
-    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields }, {
+    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields, ...(run.realmChill ? { realmChill: 0 } : {}) }, {
         activeMutators: nextActiveMutators,
         board: nextBoard,
         memorizeRemainingMs: baseMemorizeMs

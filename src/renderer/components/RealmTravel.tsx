@@ -12,6 +12,8 @@ interface RealmTravelProps {
     endedIn: RealmId | null;
     /** Floors this run has cleared in each realm, to say where the player has been. */
     floorsIn: Partial<Record<RealmId, number>>;
+    /** Attunement each realm has earned with clean clears (`realm-carryover-rules.ts`). */
+    attunement: Partial<Record<RealmId, number>>;
     onChoose: (index: number) => void;
 }
 
@@ -33,7 +35,7 @@ const SIGILS: Readonly<Record<RealmId, string>> = {
  * Escape: a floor has to be somewhere, and Escape picking a door for the player would be a door
  * they did not choose.
  */
-const RealmTravel = ({ doors, endedIn, floorsIn, onChoose }: RealmTravelProps): ReactElement => {
+const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTravelProps): ReactElement => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const firstRef = useRef<HTMLButtonElement | null>(null);
     const titleId = useId();
@@ -89,6 +91,11 @@ const RealmTravel = ({ doors, endedIn, floorsIn, onChoose }: RealmTravelProps): 
                             </span>
                             <span className={styles.kicker}>{REALM_TRAVEL_COPY.doorKicker(door, endedIn)}</span>
                             <span className={styles.place}>{REALM_TRAVEL_COPY.placeLine(door)}</span>
+                            {REALM_TRAVEL_COPY.attunedLine(attunement[door.realmId] ?? 0) ? (
+                                <span className={styles.attuned} data-testid={`realm-door-${index}-attuned`}>
+                                    {REALM_TRAVEL_COPY.attunedLine(attunement[door.realmId] ?? 0)}
+                                </span>
+                            ) : null}
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>

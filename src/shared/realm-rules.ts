@@ -9,6 +9,7 @@ import {
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { seatRealmOmen } from './realm-omen-rules';
+import { ATTUNEMENT_GOLD_STEP, ATTUNEMENT_MAX } from './realm-carryover-rules';
 
 /**
  * The realms: where a floor is played, and what the place does to the board while it is played.
@@ -191,10 +192,11 @@ export const CONFLUENCE_FIRST_FLOOR = 4;
 export const CONFLUENCE_CHANCE = 0.34;
 
 /** The gold a floor's clear pays in this realm's weather: the door's multiplier, rounded half up. */
-export const realmClearGold = (baseGold: number, severity: RealmSeverity | null, confluence = false): number =>
+export const realmClearGold = (baseGold: number, severity: RealmSeverity | null, confluence = false, attunement = 0): number =>
     Math.floor(
         runNonNegativeInteger(baseGold) *
-            (confluence ? CONFLUENCE_GOLD_MULTIPLIER : severity ? REALM_SEVERITIES[severity].goldMultiplier : 1) +
+            ((confluence ? CONFLUENCE_GOLD_MULTIPLIER : severity ? REALM_SEVERITIES[severity].goldMultiplier : 1) +
+                ATTUNEMENT_GOLD_STEP * Math.min(ATTUNEMENT_MAX, runNonNegativeInteger(attunement))) +
             0.5
     );
 
