@@ -1,5 +1,6 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
+import { castElement } from './element-group-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -17,6 +18,8 @@ import { omenOfMatch, realmReactionName } from './realm-omen-rules';
  * 2. the realm answers the turn: a match douses a burning card, cuts the vines beside it and
  *    shatters the ice beside it; a miss in the frost freezes the cards it showed, and a miss in any
  *    other realm at its raging pitch is struck back at (`resolveRealmBacklash`);
+ * 2b. the matched group casts its element on the cards around it (`element-group-rules.ts`):
+ *    Fire scorches, Water washes, Frost freezes, Grove entangles;
  * 3. the clocks tick: ice thaws a turn, fuses burn a turn, and a fuse that runs out burns a gold
  *    and spreads the fire to a neighbour;
  * 4. on its turn, the weather: blizzard, wildfire, current, lightning or overgrowth;
@@ -96,6 +99,8 @@ export interface RealmTurnInput {
     /** The floor's turn count after this turn. */
     turnsThisFloor: number;
     pinnedTileIds: readonly string[];
+    /** The matched pair and every card its pop took: the group that casts its element (`element-group-rules.ts`). */
+    groupTileIds?: readonly string[];
     /** Pairs the turn matched, by suit, pops included: the sway's input (`realm-sway-rules.ts`). */
     pairsBySuit?: Partial<Record<TileSuit, number>>;
 }
@@ -122,6 +127,8 @@ export interface RealmTurnResult {
     /** The sway after the turn, and whether it tipped the floor (0 or 1). */
     sway: RealmSway;
     tips: number;
+    /** A matched group's element cast that changed the board this turn (0 or 1). */
+    casts: number;
 }
 
 const rngFor = (kind: string, run: RunState, level: number, turns: number) =>
@@ -398,7 +405,8 @@ export const resolveRealmTurn = ({
     sourceTiles,
     turnsThisFloor,
     pinnedTileIds,
-    pairsBySuit = {}
+    pairsBySuit = {},
+    groupTileIds = []
 }: RealmTurnInput): RealmTurnResult => {
     const startRealm = runRealmId(run);
     const empty: RealmTurnResult = {
@@ -417,7 +425,8 @@ export const resolveRealmTurn = ({
         frozen: 0,
         backlashes: 0,
         sway: runRealmSway(run),
-        tips: 0
+        tips: 0,
+        casts: 0
     };
     if (!startRealm) {
         return empty;
@@ -441,6 +450,7 @@ export const resolveRealmTurn = ({
     let frozen = 0;
     let backlashes = 0;
     let tips = 0;
+    let casts = 0;
     let omenFired = false;
     let weather = 0;
     let litTileIds: string[] = [];
@@ -570,6 +580,16 @@ export const resolveRealmTurn = ({
             backlashes += 1;
             for (const id of lashed.tileIds) touchedThisTurn.add(id);
             events.push({ key: eventKey(run, level, turns, lashed.kind), kind: lashed.kind, tileIds: lashed.tileIds });
+        }
+    }
+
+    // 2b. The matched group casts its element on the cards around it (`element-group-rules.ts`).
+    if (outcome === 'match' && groupTileIds.length > 0) {
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, pinned });
+        if (cast && cast.touchedTileIds.length > 0) {
+            casts += 1;
+            for (const id of cast.touchedTileIds) touchedThisTurn.add(id);
+            events.push({ key: eventKey(run, level, turns, cast.kind), kind: cast.kind, tileIds: [...cast.groupTileIds, ...cast.touchedTileIds] });
         }
     }
 
@@ -721,7 +741,8 @@ export const resolveRealmTurn = ({
         frozen,
         backlashes,
         sway,
-        tips
+        tips,
+        casts
     };
 };
 
@@ -749,6 +770,7 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
         realmBacklashesThisFloor: runNonNegativeInteger(run.realmBacklashesThisFloor ?? 0) + result.backlashes,
         realmSway: result.sway,
         realmTipsThisFloor: runNonNegativeInteger(run.realmTipsThisFloor ?? 0) + result.tips,
+        elementCastsThisFloor: runNonNegativeInteger(run.elementCastsThisFloor ?? 0) + result.casts,
         // The most telling event of the turn is the one the HUD names: a reaction over everything.
         lastRealmEvent:
             result.events.find((event) => event.kind === 'reaction') ?? result.events[result.events.length - 1] ?? run.lastRealmEvent ?? null,

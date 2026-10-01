@@ -134,6 +134,9 @@ const cascadeClumpRun = (): RunState => {
         chunkPairsThisChain: 0,
         skipMomentumThisChain: 0,
         turnsThisFloor: 0,
+        // No realm: this board proves the ladder, and an element cast or the weather would hold a card the walk needs.
+        realmId: null,
+        realmSecondaryId: null,
         largestChunkScoreThisFloor: 0,
         stats: {
             ...base.stats,

@@ -117,7 +117,11 @@ export type TestHallRoomId =
     | 'realm-undertow'
     | 'realm-static'
     | 'realm-snare'
-    | 'realm-sway';
+    | 'realm-sway'
+    | 'element-fire'
+    | 'element-water'
+    | 'element-frost'
+    | 'element-grove';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -1682,7 +1686,77 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'a moss pair now leans toward the grove again, from nothing',
                 expect: (r) => (r.realmSway?.moss === 1 && r.realmId === 'tide' ? null : `sway ${JSON.stringify(r.realmSway)} in ${r.realmId}`)
             },
-            { step: { do: 'miss', a: 'a-1', b: 'd-1' }, says: 'a miss wipes the sway', expect: (r) => (Object.keys(r.realmSway ?? {}).length === 0 ? null : `sway ${JSON.stringify(r.realmSway)}`) }
+            { step: { do: 'missAny' }, says: 'a miss wipes the sway (the grove has snared some of the cards around its match)', expect: (r) => (Object.keys(r.realmSway ?? {}).length === 0 ? null : `sway ${JSON.stringify(r.realmSway)}`) }
+        ]
+    },
+    {
+        id: 'element-fire',
+        title: 'Fire',
+        mechanic: 'The suits are the elements, and a matched group casts its own. An ember group is Fire: it burns vines, ice and snow off the face-down cards within two steps of every card in the group, for nothing.',
+        graphMechanicIds: ['board.element_groups'],
+        tryThis: 'c-2 is vined and d-2 frozen, out of reach of a plain match. Match a: its pop takes e, and the fire from all four cards burns both clear.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
+                run: realmRun('frost', 'calm'),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'c-2' ? { ...t, vined: true } : t.id === 'd-2' ? { ...t, frost: 3 } : t))
+            }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the fire group burns the vine and the ice away',
+                expect: expectAll(realmEventIs('scorch'), (r) => (tileById(r, 'c-2')?.vined == null && tileById(r, 'd-2')?.frost == null ? null : `c-2 vined ${tileById(r, 'c-2')?.vined}, d-2 frost ${tileById(r, 'd-2')?.frost}`), (r) => ((r.elementCastsThisFloor ?? 0) === 1 ? null : `casts ${r.elementCastsThisFloor}`))
+            }
+        ]
+    },
+    {
+        id: 'element-water',
+        title: 'Water',
+        mechanic: 'A tide group is Water: it puts out every fire within two steps of the group and washes the face-down cards it reaches one place along.',
+        graphMechanicIds: ['board.element_groups'],
+        tryThis: 'c-1 is burning. Match b: the water puts the fire out and the cards around it drift.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm'), tiles: (tiles) => tiles.map((t) => (t.id === 'c-1' ? { ...t, fuse: 2 } : t)) }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'the fire is out and the cards around the group have moved',
+                expect: expectAll(realmEventIs('wash'), (r) => (tileById(r, 'c-1')?.fuse == null ? null : 'c-1 still burning'), (r, b) => {
+                    const moved = (r.board?.tiles ?? []).filter((t, i) => t.state === 'hidden' && b.board!.tiles[i]?.id !== t.id);
+                    return moved.length >= 2 ? null : `${moved.length} cards moved`;
+                })
+            }
+        ]
+    },
+    {
+        id: 'element-frost',
+        title: 'Frost',
+        mechanic: 'A bone group is Frost: it kills every fire it reaches, and a group the pop made freezes the nearest face-down card it reaches for a turn.',
+        graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
+        tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and the frost freezes the nearest card.',
+        build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm') }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the frost group freezes one card, for a turn',
+                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 1 ? null : 'not exactly one frozen card'), finishable)
+            },
+            { step: { do: 'missAny' }, says: 'a turn later the ice is gone', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
+        ]
+    },
+    {
+        id: 'element-grove',
+        title: 'Grove',
+        mechanic: 'A moss group is Grove: a group the pop made snares the nearest face-down card it reaches in vines, until a match beside it or a fire cuts it.',
+        graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
+        tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and the vines take the nearest card.',
+        build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm') }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the grove group snares one card',
+                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 1 ? null : 'not exactly one vined card'), finishable)
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     }
 ];
@@ -1734,10 +1808,13 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return other ? playTestHallStep(run, { do: 'match', pairKey: other.pairKey }) : null;
         }
         case 'missAny': {
-            const hidden = (run.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY);
+            // Turnable cards only: a frozen or vined card refuses the flip, which would leave a half turn.
+            const hidden = (run.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY && !isTileFlipBlocked(t));
             const first = hidden[0];
             const second = hidden.find((t) => first && t.pairKey !== first.pairKey);
-            return first && second ? resolveBoardTurn(flipTile(flipTile(run, first.id), second.id)) : null;
+            if (!first || !second) return null;
+            const next = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+            return next.stats.tries > run.stats.tries ? next : null;
         }
         case 'pin':
             return togglePinnedTile(run, step.tileId);

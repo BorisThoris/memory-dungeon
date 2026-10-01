@@ -330,6 +330,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The Zone (2026-09-30), the new concept the combo study asked for after its twelfth round: Tetris Effect stops time and lets the player break a base rule; Guitar Hero earns the power on the streak and lets the player spend it. Here the base rule is that a turn is two cards. At Inferno or better, on a clean board, the player may ignite: the combo burns to zero and the Zone opens for three pairs (four at Legendary, one more per ascension, six at most, never more than the pairs still hidden). Cards turned inside it stay up and nothing resolves; the last allowed card, or the player, ends it. The resolve plays what is face up through the game\u2019s own turns: every complete pair first, so the chain climbs and the pop widens through them, then the leftovers as misses two at a time at full price from the bank, and a lone leftover for nothing. A bonus of 100 x matched squared on top. Never safer: the combo is the entry fee and a bad Zone costs the misses the same cards would have cost. No census row (no census player ignites); the soak is the proof.'
     },
     {
+        id: 'board.element_groups',
+        verdict: 'changed',
+        generation: 267,
+        present: ['castElement', 'cardsWithinReach', 'ELEMENT_CAST_KIND', 'ELEMENT_HOLD_CAP_GROUP', 'elementCastsThisFloor'],
+        note: 'Elemental groups (2026-10-01). The owner: the cards already carry effects and groups, and the realm system sat on top of them; the effects must come from the cards and their groups, and the groups should be the elements. So the four suits are the four elements (ember Fire, tide Water, moss Grove, bone Frost) and every match casts its group\u2019s element from the matched pair and every card its pop took, two steps out (three in the element\u2019s own realm): Fire burns vines, ice and snow away for nothing; Water douses fires and washes the cards it reaches along; Frost kills fires; Grove and Frost hold a card only when the pop made a group, one card, frost for a turn. Measured with the soak first: two holds a cast and two-turn frost cut the average run from 8.9 floors to 5.6; the shipped holds cost 8.9 to 8.1 and the careful player nothing. No census row: realm-free census floors.'
+    },
+    {
         id: 'board.realm_sway',
         verdict: 'changed',
         generation: 266,

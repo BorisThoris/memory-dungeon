@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 69 as const;
+export const ENCYCLOPEDIA_VERSION = 70 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -620,6 +620,12 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Omens',
         description:
             'From the third floor, one pair on the board is an **omen** of another realm: its sigil is on both halves. Matching it sets off a **reaction** - frost meeting ember is a **Thaw**, ember meeting tide is **Steam**, a grove set alight is **Wildfire** - and the floor becomes the omen\u2019s realm for the rest of the floor. What the old weather left behind goes, a gold for each thing it clears, and the new weather starts from the next turn. Wildfire through a grove sets every vine alight instead of clearing it; a storm breaking strikes at once. You have to match the omen to clear the floor, so the choice is when.'
+    },
+    {
+        id: 'element_groups',
+        title: 'The elements',
+        description:
+            'The four suits on the backs of the cards are the four elements: **ember is Fire**, **tide is Water**, **moss is Grove**, **bone is Frost**. Every match casts its element from the pair and from every card its pop took, onto the face-down cards up to two steps away - three when the floor is in that element\u2019s own realm, so a big pop reaches far. **Fire** burns vines, ice and snow away. **Water** puts fires out and washes the cards it reaches one place along. **Frost** kills fires, and a popped Frost group freezes the nearest card for a turn. A popped **Grove** group snares the nearest card in vines until a match beside it, or a fire, cuts it. Choosing which group to break, and where, is choosing what the board does next.'
     },
     {
         id: 'realm_sway',

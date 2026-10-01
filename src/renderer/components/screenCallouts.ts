@@ -135,8 +135,15 @@ const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'
     undertow: { title: 'UNDERTOW!', sub: () => 'The realm strikes back: the cards you missed are dragged a step down', size: 'major' },
     static: { title: 'STATIC!', sub: () => 'The realm strikes back: the cards you missed are thrown across the board', size: 'major' },
     snare: { title: 'SNARED!', sub: () => 'The realm strikes back: the cards you missed are held in vines', size: 'major' },
+    scorch: { title: 'FIRE!', sub: () => 'Your fire burns the ice and vines around it away', size: 'minor' },
+    wash: { title: 'WATER!', sub: () => 'Your water puts out fires and washes the cards around it along', size: 'minor' },
+    freeze: { title: 'FROST!', sub: () => 'Your frost freezes the cards around it', size: 'minor' },
+    entangle: { title: 'GROVE!', sub: () => 'Your grove snares the cards around it in vines', size: 'minor' },
     bloom: { title: 'BLOOM!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'bloom' : 'blooms'}: three gold for every one you cut`, size: 'major' }
 };
+
+/** The realm whose colour each element cast wears (`element-group-rules.ts`). */
+const ELEMENT_CAST_REALM: Partial<Record<RealmEvent['kind'], keyof typeof REALMS>> = { scorch: 'ember', wash: 'tide', freeze: 'frost', entangle: 'grove' };
 
 /** The stamp for a realm event (`realm-weather-rules.ts`), in the realm's colour. */
 export const realmEventCallout = (event: RealmEvent, realmColor: string): ScreenCallout => {
@@ -155,6 +162,9 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
         };
     }
     const stamp = REALM_EVENT_STAMPS[event.kind as Exclude<RealmEvent['kind'], 'reaction'>];
+    // An element's cast wears its own element's colour, not the floor's.
+    const elementRealm = ELEMENT_CAST_REALM[event.kind];
+    const color = elementRealm ? REALMS[elementRealm].color : realmColor;
     return {
         key: `realm:${event.key}`,
         kind: 'realm',
@@ -162,7 +172,7 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
         tone: (event.gold ?? 0) < 0 ? 'miss' : (event.gold ?? 0) > 0 ? 'gold' : 'cyan',
         title: stamp.title,
         sub: stamp.sub(event),
-        color: realmColor
+        color
     };
 };
 

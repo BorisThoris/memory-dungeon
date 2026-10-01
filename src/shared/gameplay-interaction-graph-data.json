@@ -325,6 +325,7 @@
                 "realmBacklashesThisFloor",
                 "realmSway",
                 "realmTipsThisFloor",
+                "elementCastsThisFloor",
                 "realmLitTileIds",
                 "lastRealmEvent",
                 "realmReactionsThisFloor",
@@ -2084,6 +2085,41 @@
             ]
         },
         {
+            "id": "board.element_groups",
+            "label": "Elemental Groups",
+            "kind": "board",
+            "role": "a_matched_suit_group_casts_its_element_fire_scorches_water_washes_frost_freezes_grove_entangles",
+            "evidence": [
+                "src/shared/element-group-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/screenCallouts.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "realmId",
+                "pinnedTileIds"
+            ],
+            "writes": [
+                "tileStates",
+                "elementCastsThisFloor",
+                "lastRealmEvent"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "holds-only-on-popped-groups-one-card",
+                "realm-guard-frees-holds-that-leave-no-pair"
+            ],
+            "tests": [
+                "src/shared/element-group-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.realm_sway",
             "label": "The Sway",
             "kind": "board",
@@ -3116,6 +3152,24 @@
             "target": "economy.realm_travel",
             "kind": "enables",
             "label": "the realm a floor ended in is always one of the doors"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.element_groups",
+            "kind": "triggers",
+            "label": "every match casts its group's element on the cards around it"
+        },
+        {
+            "source": "board.element_groups",
+            "target": "board.realm_weather",
+            "kind": "modifies",
+            "label": "fire burns vines and ice, water douses fires, frost and grove hold cards"
+        },
+        {
+            "source": "board.element_groups",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the cast stamps its element, its cards jolt and burst, its recording plays"
         },
         {
             "source": "core.board_turn_resolution",

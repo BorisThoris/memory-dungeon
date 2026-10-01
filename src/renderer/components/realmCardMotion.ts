@@ -38,7 +38,11 @@ export const REALM_JOLT_FAMILY: Readonly<Record<RealmEvent['kind'], RealmJoltFam
     scald: 'flare',
     undertow: 'surge',
     static: 'flash',
-    snare: 'creep'
+    snare: 'creep',
+    scorch: 'flare',
+    wash: 'surge',
+    freeze: 'gust',
+    entangle: 'creep'
 };
 
 /** How long a jolt lasts. */

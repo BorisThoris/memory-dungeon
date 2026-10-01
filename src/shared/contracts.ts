@@ -117,7 +117,12 @@ export interface RealmEvent {
         | 'scald'
         | 'undertow'
         | 'static'
-        | 'snare';
+        | 'snare'
+        // A matched suit group casts its element (`element-group-rules.ts`): Fire, Water, Frost, Grove.
+        | 'scorch'
+        | 'wash'
+        | 'freeze'
+        | 'entangle';
     /** The cards it touched, for the board to flash. */
     tileIds: string[];
     /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
@@ -845,6 +850,8 @@ export interface RunState {
     realmSway?: Partial<Record<TileSuit, number>>;
     /** Floors tipped into another realm by the sway, this floor (at most one). */
     realmTipsThisFloor?: number;
+    /** Elements cast by matched suit groups this floor that changed the board (`element-group-rules.ts`). */
+    elementCastsThisFloor?: number;
     /** Floors cleared in each realm this run; the travel screen and the results read it. */
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */

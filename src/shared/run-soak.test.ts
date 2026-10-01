@@ -48,6 +48,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.realmFrozen > 0), 'no card was ever frozen').toBe(true);
         expect(reports.some((report) => report.realmBacklashes > 0), 'no raging realm ever struck back').toBe(true);
         expect(reports.some((report) => report.realmTips > 0), 'the sway never tipped a floor').toBe(true);
+        expect(reports.some((report) => report.elementCasts > 0), 'no matched group ever cast its element').toBe(true);
         expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
         expect(reports.some((report) => report.realmPeaks > 0), 'no realm ever reached its peak').toBe(true);
         expect(reports.some((report) => report.realmConfluences > 0), 'no floor was ever a confluence').toBe(true);

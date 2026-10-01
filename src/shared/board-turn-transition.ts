@@ -256,10 +256,14 @@ export const createResolveBoardTurnTransition = ({
             const suit = swaySuitOf(sourceBoard.tiles.find((tile) => tile.pairKey === pairKey));
             if (suit) pairsBySuit[suit] = (pairsBySuit[suit] ?? 0) + 1;
         }
+        // The group that casts its element: the matched pair and every card the pop took.
+        const castPairs = new Set(swayPairs);
+        const groupTileIds = sourceBoard.tiles.filter((tile) => castPairs.has(tile.pairKey)).map((tile) => tile.id);
         const realmTurn = resolveRealmTurn({
             run,
             board: boardAfterDrift,
             pairsBySuit,
+            groupTileIds,
             outcome: 'match',
             tileIds: [firstTile.id, secondTile.id],
             sourceTiles: [firstTile, secondTile],

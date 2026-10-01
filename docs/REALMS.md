@@ -41,6 +41,19 @@ Calm adds a turn to the interval, raging takes one away and doubles each event's
 
 The HUD chip names the peak when it is next, in the realm's colour.
 
+## The elements: your groups cast them (`element-group-rules.ts`, 2026-10-01)
+
+The owner: the cards already carry groups and effects, and the realm system sat on top of them; the effects must come from the cards and their groups, and the groups should be the elements. So the four suits are the elements - **ember is Fire, tide is Water, moss is Grove, bone is Frost** - and every match casts its element from the matched pair and every card its pop took, onto the face-down cards up to two steps away (three when the floor is in that element's realm):
+
+| Element | Cast | What it does to the cards it reaches |
+| --- | --- | --- |
+| Fire | scorch | burns vines, ice and snow away (pays nothing; a harvest pays because a match cut the vine) |
+| Water | wash | puts every fire out and washes the cards it reaches one place along (never a pinned card) |
+| Frost | freeze | kills every fire; a popped group freezes the nearest card for one turn |
+| Grove | entangle | a popped group snares the nearest card in vines |
+
+Only a group the pop made holds a card, one a cast. Measured with the soak: two holds a cast and two-turn frost cut the average player's run from 8.9 floors to 5.6; the shipped holds cost 8.9 to 8.1 and the careful player nothing. Every match already thaws and cuts what is right beside it, so a cast starts where that ends. A cast that changes the board stamps the element (FIRE!, WATER!, FROST!, GROVE!) in its own colour, jolts and bursts its cards and plays its recording. Counted as `elementCastsThisFloor`. The realm weather clock still runs alongside; whether to retire it is the owner's call.
+
 ## The sway: your matches tip the world (`realm-sway-rules.ts`, 2026-10-01)
 
 Each suit belongs to a realm: ember to the Cinder Deep, tide to the Drowned Vault, moss to the Overgrown Crypt, bone to the Frozen Reach. Every pair matched of a suit whose realm the floor is not in, pops included, leans the world toward it (`realmSway`). The lean carries between floors with the combo, and a miss wipes it. At **five** pairs of one suit (`REALM_SWAY_TIP`) the floor tips into that realm with the omen's reaction, keeping its severity, at most once a floor (`realmTipsThisFloor`); a tip empties the lean, clears nothing and pays nothing. An omen matched on the same turn wins. The storm has no suit, by decision: a floor can be leaned out of the Thunder Spire, never into it.

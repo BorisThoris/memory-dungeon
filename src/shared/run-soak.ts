@@ -91,6 +91,8 @@ export interface SoakRunReport {
     realmBacklashes: number;
     /** The sway tipping a floor into another realm (`realm-sway-rules.ts`). */
     realmTips: number;
+    /** Matched groups casting their element on the board (`element-group-rules.ts`). */
+    elementCasts: number;
     realmDoors: number;
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
@@ -353,6 +355,7 @@ export const soakRun = ({
     let realmFrozen = 0;
     let realmBacklashes = 0;
     let realmTips = 0;
+    let elementCasts = 0;
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
@@ -384,6 +387,7 @@ export const soakRun = ({
             realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
             realmBacklashes += Math.max(0, (next.realmBacklashesThisFloor ?? 0) - (run.realmBacklashesThisFloor ?? 0));
             realmTips += Math.max(0, (next.realmTipsThisFloor ?? 0) - (run.realmTipsThisFloor ?? 0));
+            elementCasts += Math.max(0, (next.elementCastsThisFloor ?? 0) - (run.elementCastsThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
@@ -505,6 +509,7 @@ export const soakRun = ({
         realmFrozen,
         realmBacklashes,
         realmTips,
+        elementCasts,
         realmDoors,
         realmPeaks,
         realmConfluences,

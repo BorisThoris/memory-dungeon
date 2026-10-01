@@ -4,6 +4,8 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 
 ## Recent intent
 
+- **2026-10-01 the suits are the elements (`element-group-rules.ts`):** every match casts its group's element two steps out (Fire burns holds away, Water douses and washes, Frost kills fires, Grove snares). Holds only from popped groups, one card, frost for a turn: measured 8.9 -> 8.1 average floors per run (the first cut, two holds and two-turn frost, was 8.9 -> 5.6 and too much). Fire's burn pays nothing so the harvest keeps its meaning.
+
 - **2026-10-01 the sway (`realm-sway-rules.ts`):** the cards change the world. Pairs matched of an off-realm suit lean the floor toward that suit's realm; carried with the combo and wiped by a miss, five pairs of one suit tip the floor (once a floor, same severity, no clear and no gold). Chosen from a soak measurement: a per-floor count tipped late and rarely; the carried count rewards clean chains (careful 21% of realm floors, sloppy none). It is a way out of a realm, not a safer floor: the severity holds and what the old weather left stays.
 
 - **2026-10-01 a raging realm strikes back (`resolveRealmBacklash`):** only the frost answered a miss, so a miss in the other realms cost the bank and nothing else, and the raging door's extra half of gold was bought with weather a turn sooner. Now a raging ember scalds the two missed cards (two-turn fuse), a raging tide drags each a cell down its column, a raging storm throws each across the board unlit, a raging grove snares both. The same "the world punishes the mistake" beat the owner asked for with the void, at the door the player chose for the gold. Calm and wild are unchanged.

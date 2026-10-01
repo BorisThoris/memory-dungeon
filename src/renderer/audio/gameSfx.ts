@@ -355,7 +355,11 @@ export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>>
     snare: 'creak',
     harvest: 'chime',
     thaw: 'chime',
-    doused: 'hiss'
+    doused: 'hiss',
+    scorch: 'fire',
+    wash: 'wave',
+    freeze: 'ice',
+    entangle: 'creak'
 };
 
 /**
