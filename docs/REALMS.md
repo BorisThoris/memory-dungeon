@@ -88,3 +88,7 @@ The floor-clear beat says what was sent on.
 
 The caption under the board (the HUD announcer's sentence) is no longer drawn - it stays in the page
 for screen readers - and achievement and pickup toasts no longer appear over the board.
+
+## On the board and the screen (2026-10-01)
+
+Every face-down card wears its realm (`RealmAmbientBackPlane`: frost rime, ember char with glowing cracks, tide sheen and droplets, storm static, grove moss), and the screen carries it at the edges (`RealmScreenOverlay`: flames licking up, vines creeping in, rain, rime, charge); both are stronger in a wilder realm, and a confluence shows its second realm too. Any card the weather moves (the current, the blizzard row, lightning) glides to its new cell instead of snapping (`tileCellGlide.ts`).

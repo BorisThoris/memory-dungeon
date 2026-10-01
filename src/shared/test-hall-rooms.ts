@@ -81,6 +81,7 @@ export type TestHallRoomId =
     | 'heat-afterglow'
     | 'heat-pop'
     | 'zone'
+    | 'void-spew'
     | 'n-back'
     | 'spotlight'
     | 'wide-recall'
@@ -134,6 +135,8 @@ export type TestHallStep =
     | { readonly do: 'ignite' }
     | { readonly do: 'zoneFlip'; readonly tileId: string }
     | { readonly do: 'zoneResolve' }
+    /** Miss on the first two face-down cards of different pairs, whatever a pop has left. */
+    | { readonly do: 'missAny' }
     | { readonly do: 'clear' }
     /** Descend from a cleared floor to the next one, which opens on its study window. */
     | { readonly do: 'advance' }
@@ -949,6 +952,33 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'void-spew',
+        title: 'The void spews',
+        mechanic: 'A miss that kills a combo of Inferno or better opens the black hole: it spits brand-new pairs into cells already cleared and reshuffles every face-down card on the board.',
+        graphMechanicIds: ['hazard.void_spew', 'economy.miss_bank'],
+        tryThis: 'You arrive at a combo of twenty-six. Match a and b, then miss: new cards fill cleared cells and the whole board reshuffles.',
+        build: () => room(['a:e b:t c:m d:b', 'e:b f:m g:t h:e', 'a:e b:t c:m d:b', 'e:b f:m g:t h:e'], { streak: 26 }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the combo climbs', expect: (r) => (r.stats.currentStreak === 27 ? null : 'combo ' + r.stats.currentStreak) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'and climbs', expect: (r) => (r.stats.currentStreak === 28 ? null : 'combo ' + r.stats.currentStreak) },
+            {
+                step: { do: 'missAny' },
+                says: 'the miss opens the void: new pairs fill cleared cells, and every face-down card moves',
+                expect: (r, b) => {
+                    if (r.voidSpewsThisFloor !== 1) return 'spews ' + r.voidSpewsThisFloor;
+                    const fresh = (r.board?.tiles ?? []).filter((t) => t.pairKey.includes('-void-'));
+                    if (fresh.length !== 4 || fresh.some((t) => t.state !== 'hidden')) return 'new cards ' + fresh.length;
+                    const before = new Set((b.board?.tiles ?? []).map((t) => t.symbol));
+                    if (fresh.some((t) => before.has(t.symbol))) return 'a new card wears a face the board already showed';
+                    const gone = new Set((r.board?.tiles ?? []).filter((t) => t.state === 'matched' || t.state === 'removed').map((t) => t.pairKey)).size;
+                    if (r.board?.matchedPairs !== gone) return 'matchedPairs ' + r.board?.matchedPairs + ' vs gone ' + gone;
+                    const moved = (r.board?.tiles ?? []).filter((t, index) => t.state === 'hidden' && !t.pairKey.includes('-void-') && b.board?.tiles[index]?.id !== t.id).length;
+                    return moved > 0 ? null : 'nothing moved';
+                }
+            }
+        ]
+    },
+    {
         id: 'n-back',
         title: 'The anchor',
         mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
@@ -1592,6 +1622,12 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
                 (t) => t.state === 'hidden' && t.pairKey !== run.nBackAnchorPairKey && halvesOf(run, t.pairKey).length === 2
             );
             return other ? playTestHallStep(run, { do: 'match', pairKey: other.pairKey }) : null;
+        }
+        case 'missAny': {
+            const hidden = (run.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.pairKey !== WILD_PAIR_KEY);
+            const first = hidden[0];
+            const second = hidden.find((t) => first && t.pairKey !== first.pairKey);
+            return first && second ? resolveBoardTurn(flipTile(flipTile(run, first.id), second.id)) : null;
         }
         case 'pin':
             return togglePinnedTile(run, step.tileId);

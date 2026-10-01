@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2840,
-    "codeFileCount": 1030,
-    "exportedSymbolCount": 3171,
+    "trackedFileCount": 2848,
+    "codeFileCount": 1037,
+    "exportedSymbolCount": 3192,
     "contentItemCount": 10,
-    "mechanicCount": 56,
-    "stateFieldCount": 111,
-    "relationshipCount": 8286
+    "mechanicCount": 57,
+    "stateFieldCount": 112,
+    "relationshipCount": 8349
   },
   "inventory": [
     {
@@ -285,8 +285,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 518584,
-      "sha256": "0ed99112fbe2319a424f5442d2de36103c3306709fbe2c711cc227dd8b53813f"
+      "bytes": 519719,
+      "sha256": "0acab10afab8374b6a316be18f143d65d3bc675f1771e66182e03310429b238d"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 42022,
-      "sha256": "88505fdc73b328fd3fef8165a54dfc6aceb72f66713fa6ee2f91d1bdb235ed93"
+      "bytes": 42747,
+      "sha256": "9677e8c02d7c9702f65455fcc79943ad60556765c8e338b903308e0f0bd52e33"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 5698,
-      "sha256": "97561e239bc8709506f05ec41234f0d85f5b2e59e97142078357c0f66f3b7b48"
+      "bytes": 6241,
+      "sha256": "e48c785a409aa5991878232afc08150133644d2907736692a12872896c793e76"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "45d385cb37928340c6b7bfbd2148110c7818d51d18dc0bb75f3fd590cd8a7bea"
+      "sha256": "ead1c5a5ec60900fc2f8d4949ebcb0e467a091869d44f8d3ad49df7ae15747d9"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4251,8 +4251,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33005,
-      "sha256": "1c3ae3993d2ce08877bdbe80d46b8dfcad9850f4057b8581d054bd6b93f62134"
+      "bytes": 33093,
+      "sha256": "545319e8f8ea94425a9830fe734d72089b385baa821fb633c73372ccae67a80d"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4425,8 +4425,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122572,
-      "sha256": "1a0e1c6eef4defa412bd1f07cfc152f7c3f5099689798b6734c5ed4864c3a764"
+      "bytes": 122804,
+      "sha256": "4de12e71d6816ca093edbc46a371d10841dc4c054b07f875b94f1aefcbaa8e0d"
     },
     {
       "path": "public/site.webmanifest",
@@ -5073,8 +5073,8 @@
     {
       "path": "scripts/deploy-pages.mjs",
       "category": "script",
-      "bytes": 901,
-      "sha256": "3ae1eba34240ff5af83513b54d9c6208291279b1c4a1eaa9b9307e235e9a6d9c"
+      "bytes": 1595,
+      "sha256": "b6d4e66c53303600ce59ac22f1d58a8229235280f4e472ad6c8b6ec3e8aba945"
     },
     {
       "path": "scripts/e2e-locator-audit.ts",
@@ -5187,8 +5187,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 18430,
-      "sha256": "ac5d30ef325a7e4e9d20f665c359d813890b9c983817e45ca0ac4b7069913263"
+      "bytes": 18741,
+      "sha256": "4e45ebfb7ccd31c90392583de86728199015313a40270bdd98f6126b334758be"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -9465,8 +9465,8 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 15096,
-      "sha256": "d900c8caafe033047eaace9716eb3ce436421dc0f81892137232a6989a3194c6"
+      "bytes": 15967,
+      "sha256": "171418c88bd11b2eb0a0bfbab01addbeb946b7d0ee3ae744cbd23d531b470b5c"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
@@ -9477,8 +9477,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 16337,
-      "sha256": "01ad112ab9e40753ab1bba55e6e672aaf4fcd1bbfbb3421219158e415289490e"
+      "bytes": 16462,
+      "sha256": "065fbb47f24af1dcda5ad57c554bb4b1187bc20d04b7f951570a74079032609f"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9513,8 +9513,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 109445,
-      "sha256": "52f8d1eef8f8d203625d97e4aad7637971bc7c4667691f8ae64a337649fd6588"
+      "bytes": 111770,
+      "sha256": "7e6429d5b3059dc7a512252f8ef8391521973674977292e20e1982d2439496a1"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9805,6 +9805,30 @@
       "sha256": "dd68affefb8f36a318717926f4f0a02adf3d4086faf09a0d01103e020d0c51e3"
     },
     {
+      "path": "src/renderer/components/realmAmbience.ts",
+      "category": "source",
+      "bytes": 1112,
+      "sha256": "8a3f85854a9e458f33c1bef0b78052dfc140a9bca378172efe8612e6e7f56fd8"
+    },
+    {
+      "path": "src/renderer/components/RealmAmbientBackPlane.tsx",
+      "category": "source",
+      "bytes": 8796,
+      "sha256": "ef2a08f11e93ca7043d71d0388a99ddc1e92b32a1912396d9d03cf9d9012b874"
+    },
+    {
+      "path": "src/renderer/components/RealmScreenOverlay.module.css",
+      "category": "source",
+      "bytes": 5389,
+      "sha256": "4280e6d70892fae4bb61bded86f25fbb849195f60436160f9c28f8d30ddcb386"
+    },
+    {
+      "path": "src/renderer/components/RealmScreenOverlay.tsx",
+      "category": "source",
+      "bytes": 7631,
+      "sha256": "8254621caf6c421b5cffea2c18a1d9c53beb1916b8e9818e96439dce0132054b"
+    },
+    {
       "path": "src/renderer/components/realmTileMarkKey.ts",
       "category": "source",
       "bytes": 596,
@@ -9933,8 +9957,8 @@
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 11258,
-      "sha256": "9466cc5e2dd480366977094021adcfda3fdc31490fc6d17f7f339bdf6b3f2681"
+      "bytes": 11567,
+      "sha256": "0e9ddc6954b4ae320be77a31e660b7e34a50b3a8cb7367ac02c3d600d91d9ec4"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -10197,8 +10221,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 34559,
-      "sha256": "64cef42263a88392bf78cf94cae15e8a2f8cfb8c95936d2b61687abb83f0eb6c"
+      "bytes": 34878,
+      "sha256": "88028c310410cc4af5c6c956729f8e65f1608599875e8a7caeecef12b8283fc0"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -10533,8 +10557,8 @@
     {
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "category": "source",
-      "bytes": 8335,
-      "sha256": "c991d1a8be8d112a94b7a4e2088edd1f223f1620d7d6509e199b9595d70d73ec"
+      "bytes": 9276,
+      "sha256": "16d201930c0faa33b7d6d8cb348d776d3fcc0ada33f25dbbdc80729a417a6cae"
     },
     {
       "path": "src/renderer/components/tileBoardMaterialVisualState.test.ts",
@@ -10913,6 +10937,12 @@
       "category": "source",
       "bytes": 654,
       "sha256": "9086fe961f0e5772b1f090adfb5c6270626ab00db42eced8cc286d0d8e3512cc"
+    },
+    {
+      "path": "src/renderer/components/tileCellGlide.ts",
+      "category": "source",
+      "bytes": 3480,
+      "sha256": "a9cc875dd6121b20ca6d86f4340fc7bd2122e7a23e54fa8279263dfa2a5814a9"
     },
     {
       "path": "src/renderer/components/tileFieldTilt.test.ts",
@@ -11339,6 +11369,12 @@
       "category": "source",
       "bytes": 4353,
       "sha256": "76fa325685665a4b4553bf9c9963c3bee4b946e7978e26a387675a4c250b09c5"
+    },
+    {
+      "path": "src/renderer/copy/voidSpewCopy.ts",
+      "category": "source",
+      "bytes": 236,
+      "sha256": "7f9ccd3fe0a7352d79ce0eb7d59b31e40f4b3ebe64742f1b9fdd591929b4db5b"
     },
     {
       "path": "src/renderer/copy/zoneToolCopy.ts",
@@ -12459,8 +12495,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 42328,
-      "sha256": "d4f43110602839040183f065dc5352e75120b806d764c7d59462cb51865e2765"
+      "bytes": 43055,
+      "sha256": "fd20d5cfab6575ec7fd088517938693ba4b6a2510bc55e53513ace3d92ff84ad"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12921,8 +12957,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 43067,
-      "sha256": "eacfcaef5a0d8e86a32e240ed855ce7880af61d7aa2aad69b9185c06bfd21a1c"
+      "bytes": 43235,
+      "sha256": "0f97ddc14cc38f7f2b291d932dd4cae70ad64c04b0376d3cbf92639408647741"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13317,8 +13353,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 103091,
-      "sha256": "a408f423227523568535c6e0df4cddac8daa1730e5f33b3126bc2d7c2aafb592"
+      "bytes": 105034,
+      "sha256": "4d8cddc6f4b18e4578d72280d0e85369b80547926477a3f01a661338f2601f9a"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13564,7 +13600,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
       "bytes": 5803,
-      "sha256": "030b4b4cad7c31deb928066b01aef5e48c703554e5f210582f14fa8893eb4d2b"
+      "sha256": "59cc899f64f9ebec2a5f3b8f2f95a8280b01d91fd11f0f4798b6e8c45ba3b526"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -13599,8 +13635,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 43314,
-      "sha256": "7d14bd806a3569ca2ae23f2c49ed8fafc306c5bc684855b0c6bd133a99451df9"
+      "bytes": 43857,
+      "sha256": "f2962826b6789340e6d1b735190550b2cdec22965de7b44118209fbe3068dfa0"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13719,8 +13755,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 4264,
-      "sha256": "9ffee126de9d87930e465da2e7338daaf6612c2246523d6a1e047c259204ea48"
+      "bytes": 4295,
+      "sha256": "098d8a7c03f92ff06681c57726dc93537b087261b5a238ee0308e9013aafd567"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -14103,8 +14139,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 9545,
-      "sha256": "ff481d5baada09e4f932b812e0c08f323ad47f5062f39f4736d41d5ea12c2122"
+      "bytes": 9576,
+      "sha256": "8f2636d09df121abe8f0ba225d08fda6af00d98de3bf9d445238bca5441ac9ac"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -14283,14 +14319,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 5197,
-      "sha256": "eedf709f8ecd7b1b59c2933e3e0cf2727ffe879f3b3dad7ac2fcea872cfd7f91"
+      "bytes": 5394,
+      "sha256": "f2c53465eb5fc0c36aac5d0e22b889832495f517b7b144f47dbadc0314089b31"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 27446,
-      "sha256": "393e56145c597f25c33652bdbfe53263b7f206d1f94afa79a9e56b95e7fbeff8"
+      "bytes": 27692,
+      "sha256": "563eacf23dba8da955cc00220705b0de5fe9d50e836af6ff56093b5d3bc85c46"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14559,8 +14595,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 58174,
-      "sha256": "35d10286376862163a784f13866fc2ecedafdf0d7d386b8a65b38e90f02cc245"
+      "bytes": 59067,
+      "sha256": "6f4d48bf645e5b247e5494fc8852834221c1036fb8ed2f9014a5219c24d46e35"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14583,8 +14619,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 100876,
-      "sha256": "308d3578bfee477a1dae6872ebb7d5c2d863e48060c59479a8b4b12d63a94b21"
+      "bytes": 103648,
+      "sha256": "c6647af652aba32490543929b53f1ac275f53129bd01f7f5ebdea206c62e32e8"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14805,8 +14841,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 8205,
-      "sha256": "d70458da8abf9ff0b999967e55c372d06e4dd24ac0e3818d567482473bae9010"
+      "bytes": 8902,
+      "sha256": "a6f74ccf2d8d363d3d0e17abf9ebe75f0bbc29318d51b147ab746b94c2792a37"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -14837,6 +14873,18 @@
       "category": "source",
       "bytes": 8576,
       "sha256": "34333fab387358fe2bae8ec2d6c5e57f283a3656f262a1468a079a327d4aef9f"
+    },
+    {
+      "path": "src/shared/void-spew-rules.test.ts",
+      "category": "test",
+      "bytes": 3364,
+      "sha256": "a312bbb7d064c5ff75ae9681802e4caf71a38de12bf04f3e9f23e4e29762e592"
+    },
+    {
+      "path": "src/shared/void-spew-rules.ts",
+      "category": "source",
+      "bytes": 5459,
+      "sha256": "fa75064ff8b45a19b1aeac3cc447d675708f6f04f5528a6f52c7f04597b950d0"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -20138,7 +20186,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 267,
+      "lineCount": 269,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -20253,7 +20301,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2218,
+      "lineCount": 2251,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20269,6 +20317,8 @@
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/components/MemorizeSkipLayer.tsx",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/components/realmAmbience.ts",
+        "file:src/renderer/components/RealmScreenOverlay.tsx",
         "file:src/renderer/components/RealmTravel.tsx",
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellGlyphs.tsx",
@@ -20292,6 +20342,7 @@
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/copy/skittishCardsBeat.ts",
         "file:src/renderer/copy/storeSheet.ts",
+        "file:src/renderer/copy/voidSpewCopy.ts",
         "file:src/renderer/copy/zoneToolCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
@@ -20983,6 +21034,57 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/realmAmbience.ts",
+      "path": "src/renderer/components/realmAmbience.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 29,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
+        "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+        "symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
+        "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "path": "src/renderer/components/RealmAmbientBackPlane.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 199,
+      "imports": [
+        "file:src/renderer/components/realmAmbience.ts",
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "path": "src/renderer/components/RealmScreenOverlay.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 161,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
+        "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/realmTileMarkKey.ts",
       "path": "src/renderer/components/realmTileMarkKey.ts",
       "layer": "renderer",
@@ -21279,7 +21381,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 211,
+      "lineCount": 214,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -21916,11 +22018,12 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 884,
+      "lineCount": 887,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
+        "file:src/renderer/components/RealmAmbientBackPlane.tsx",
         "file:src/renderer/components/RealmTileMarks.tsx",
         "file:src/renderer/components/SuitMarkerPlane.tsx",
         "file:src/renderer/components/tileBoardBreakWave.ts",
@@ -22955,11 +23058,12 @@
       "path": "src/renderer/components/tileBoardLayoutMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 247,
+      "lineCount": 264,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/renderer/components/tileCellGlide.ts",
         "file:src/renderer/components/tileResolvingSelection.ts"
       ],
       "exports": [
@@ -24095,6 +24199,25 @@
       "testedBy": [
         "file:src/renderer/components/tileBoardWebglBoundary.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/tileCellGlide.ts",
+      "path": "src/renderer/components/tileCellGlide.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 88,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
+        "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_JUMP",
+        "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_MS",
+        "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_SWELL",
+        "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_TILT",
+        "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+        "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
+        "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/tileFieldTilt.test.ts",
@@ -25309,6 +25432,18 @@
       "testedBy": [
         "file:src/renderer/copy/traitInteractionLaneMap.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/copy/voidSpewCopy.ts",
+      "path": "src/renderer/copy/voidSpewCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 6,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/zoneToolCopy.ts",
@@ -29703,7 +29838,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 961,
+      "lineCount": 963,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -29962,6 +30097,7 @@
         "file:src/shared/turn-match-scoring-summary-rules.test.ts",
         "file:src/shared/turn-mismatch-rules.test.ts",
         "file:src/shared/version-gate.test.ts",
+        "file:src/shared/void-spew-rules.test.ts",
         "file:src/shared/zone-rules.test.ts"
       ]
     },
@@ -31433,7 +31569,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3065,
+      "lineCount": 3119,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -32228,7 +32364,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 702,
+      "lineCount": 708,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32631,7 +32767,7 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 109,
+      "lineCount": 110,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/chain-carryover-rules.ts",
@@ -33890,7 +34026,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 230,
+      "lineCount": 231,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -34482,7 +34618,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 72,
+      "lineCount": 74,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -34495,7 +34631,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 498,
+      "lineCount": 503,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -35466,7 +35602,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 598,
+      "lineCount": 605,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -35538,7 +35674,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1673,
+      "lineCount": 1709,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -36322,7 +36458,7 @@
       "path": "src/shared/turn-mismatch-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 171,
+      "lineCount": 185,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/magpie-rules.ts",
@@ -36337,7 +36473,8 @@
         "file:src/shared/shifting-spotlight-rules.ts",
         "file:src/shared/skittish-cards-rules.ts",
         "file:src/shared/tile-state-rules.ts",
-        "file:src/shared/tile-trait-rules.ts"
+        "file:src/shared/tile-trait-rules.ts",
+        "file:src/shared/void-spew-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/turn-mismatch-rules.ts#calculateMismatchPenalty",
@@ -36456,6 +36593,45 @@
       "testedBy": [
         "file:src/shared/save-data.test.ts",
         "file:src/shared/version-gate.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/void-spew-rules.test.ts",
+      "path": "src/shared/void-spew-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 62,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/void-spew-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/void-spew-rules.ts",
+      "path": "src/shared/void-spew-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 111,
+      "imports": [
+        "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/tile-identity.ts",
+        "file:src/shared/tile-suit-rules.ts",
+        "file:src/shared/tile-symbol-catalog.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
+        "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
+        "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
+        "symbol:src/shared/void-spew-rules.ts#VoidSpew",
+        "symbol:src/shared/void-spew-rules.ts#voidSpewPairs"
+      ],
+      "testedBy": [
+        "file:src/shared/void-spew-rules.test.ts"
       ]
     },
     {
@@ -39982,7 +40158,7 @@
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
       "line": 101,
-      "endLine": 266
+      "endLine": 268
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
@@ -40069,40 +40245,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2217,
-      "endLine": 2217
+      "line": 2250,
+      "endLine": 2250
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 249,
-      "endLine": 249
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 247,
-      "endLine": 247
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 241,
-      "endLine": 241
+      "line": 244,
+      "endLine": 244
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -40529,6 +40705,62 @@
       "endLine": 279
     },
     {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
+      "name": "REALM_AMBIENCE_STRENGTH",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 16,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+      "name": "RealmAmbience",
+      "kind": "interface",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 9,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
+      "name": "setRealmAmbience",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 24,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience",
+      "name": "useRealmAmbience",
+      "kind": "value",
+      "file": "src/renderer/components/realmAmbience.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
+      "name": "RealmAmbientBackPlane",
+      "kind": "value",
+      "file": "src/renderer/components/RealmAmbientBackPlane.tsx",
+      "line": 180,
+      "endLine": 198
+    },
+    {
+      "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
+      "name": "RealmScreenOverlay",
+      "kind": "function",
+      "file": "src/renderer/components/RealmScreenOverlay.tsx",
+      "line": 137,
+      "endLine": 160
+    },
+    {
+      "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps",
+      "name": "RealmScreenOverlayProps",
+      "kind": "interface",
+      "file": "src/renderer/components/RealmScreenOverlay.tsx",
+      "line": 14,
+      "endLine": 19
+    },
+    {
       "id": "symbol:src/renderer/components/realmTileMarkKey.ts#RealmTileMark",
       "name": "RealmTileMark",
       "kind": "interface",
@@ -40725,24 +40957,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 84,
-      "endLine": 90
+      "line": 86,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 106,
-      "endLine": 201
+      "line": 108,
+      "endLine": 204
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 204,
-      "endLine": 210
+      "line": 207,
+      "endLine": 213
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneDriftTone",
@@ -40758,7 +40990,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 26,
-      "endLine": 73
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -40773,16 +41005,16 @@
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 96,
-      "endLine": 101
+      "line": 98,
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "name": "WEATHER_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 104,
-      "endLine": 104
+      "line": 106,
+      "endLine": 106
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -41461,16 +41693,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 883,
-      "endLine": 883
+      "line": 886,
+      "endLine": 886
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 157,
-      "endLine": 161
+      "line": 158,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -42693,32 +42925,32 @@
       "name": "applyTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 153,
-      "endLine": 187
+      "line": 156,
+      "endLine": 204
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardCardGroupMotionState",
       "name": "computeTileBoardCardGroupMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 189,
-      "endLine": 246
+      "line": 206,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#computeTileBoardLayoutMotionState",
       "name": "computeTileBoardLayoutMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 85,
-      "endLine": 151
+      "line": 88,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/components/tileBoardLayoutMotionState.ts#TILE_BOARD_ZERO_LAYOUT_MOTION",
       "name": "TILE_BOARD_ZERO_LAYOUT_MOTION",
       "kind": "value",
       "file": "src/renderer/components/tileBoardLayoutMotionState.ts",
-      "line": 76,
-      "endLine": 83
+      "line": 79,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/tileBoardMaterialVisualState.ts#applyCardMaterialEmissive",
@@ -43943,6 +44175,70 @@
       "file": "src/renderer/components/tileBoardWebglSupport.ts",
       "line": 1,
       "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
+      "name": "GLIDE_ARC",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_JUMP",
+      "name": "GLIDE_JUMP",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_MS",
+      "name": "GLIDE_MS",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_SWELL",
+      "name": "GLIDE_SWELL",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_TILT",
+      "name": "GLIDE_TILT",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+      "name": "GlideFrame",
+      "kind": "interface",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 34,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
+      "name": "isCardGliding",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 87,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
+      "name": "sampleCellGlide",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 49,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/tileFieldTilt.ts#getTileFieldAmplification",
@@ -45551,6 +45847,14 @@
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
       "line": 99,
       "endLine": 100
+    },
+    {
+      "id": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
+      "name": "VOID_SPEW_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/voidSpewCopy.ts",
+      "line": 2,
+      "endLine": 5
     },
     {
       "id": "symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
@@ -50957,16 +51261,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 838,
-      "endLine": 838
+      "line": 840,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 908,
-      "endLine": 910
+      "line": 910,
+      "endLine": 912
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -51029,8 +51333,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 916,
-      "endLine": 921
+      "line": 918,
+      "endLine": 923
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -51061,8 +51365,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 934,
-      "endLine": 960
+      "line": 936,
+      "endLine": 962
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -51357,8 +51661,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 840,
-      "endLine": 853
+      "line": 842,
+      "endLine": 855
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -51469,16 +51773,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 924,
-      "endLine": 924
+      "line": 926,
+      "endLine": 926
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 927,
-      "endLine": 932
+      "line": 929,
+      "endLine": 934
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -51501,16 +51805,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 901,
-      "endLine": 905
+      "line": 903,
+      "endLine": 907
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 899,
-      "endLine": 899
+      "line": 901,
+      "endLine": 901
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -51525,8 +51829,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 860,
-      "endLine": 872
+      "line": 862,
+      "endLine": 874
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -51534,7 +51838,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 595,
-      "endLine": 836
+      "endLine": 838
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -51573,8 +51877,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 874,
-      "endLine": 893
+      "line": 876,
+      "endLine": 895
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -55213,24 +55517,24 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 669,
-      "endLine": 687
+      "line": 675,
+      "endLine": 693
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 690,
-      "endLine": 701
+      "line": 696,
+      "endLine": 707
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 580,
-      "endLine": 666
+      "line": 586,
+      "endLine": 672
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -55246,15 +55550,15 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 461,
-      "endLine": 528
+      "endLine": 534
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 533,
-      "endLine": 577
+      "line": 539,
+      "endLine": 583
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -55958,7 +56262,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
       "line": 22,
-      "endLine": 108
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
@@ -57918,7 +58222,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 57,
-      "endLine": 221
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -57933,8 +58237,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 223,
-      "endLine": 229
+      "line": 224,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -58773,8 +59077,8 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 114,
-      "endLine": 295
+      "line": 116,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -58797,8 +59101,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 307,
-      "endLine": 497
+      "line": 309,
+      "endLine": 502
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -58806,7 +59110,7 @@
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
       "line": 61,
-      "endLine": 97
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
@@ -60189,16 +60493,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 594,
-      "endLine": 597
+      "line": 601,
+      "endLine": 604
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 574,
-      "endLine": 579
+      "line": 581,
+      "endLine": 586
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -60206,7 +60510,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 562
+      "endLine": 569
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -60229,8 +60533,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 564,
-      "endLine": 565
+      "line": 571,
+      "endLine": 572
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -60245,16 +60549,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 588,
-      "endLine": 591
+      "line": 595,
+      "endLine": 598
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 568,
-      "endLine": 571
+      "line": 575,
+      "endLine": 578
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -60341,32 +60645,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1561,
-      "endLine": 1648
+      "line": 1591,
+      "endLine": 1684
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 326,
-      "endLine": 1548
+      "line": 329,
+      "endLine": 1578
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1672,
-      "endLine": 1672
+      "line": 1708,
+      "endLine": 1708
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 154,
-      "endLine": 165
+      "line": 157,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -60374,39 +60678,39 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 47,
-      "endLine": 114
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1650,
-      "endLine": 1653
+      "line": 1686,
+      "endLine": 1689
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 147,
-      "endLine": 152
+      "line": 150,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 116,
-      "endLine": 145
+      "line": 117,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1655,
-      "endLine": 1670
+      "line": 1691,
+      "endLine": 1706
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -61477,40 +61781,40 @@
       "name": "calculateMismatchPenalty",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 40,
-      "endLine": 49
+      "line": 41,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#createHiddenMismatchBoard",
       "name": "createHiddenMismatchBoard",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 28,
-      "endLine": 38
+      "line": 29,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#MismatchPenalty",
       "name": "MismatchPenalty",
       "kind": "interface",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 22,
-      "endLine": 26
+      "line": 23,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#MismatchTurnTransitionInput",
       "name": "MismatchTurnTransitionInput",
       "kind": "interface",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 51,
-      "endLine": 57
+      "line": 52,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#resolveMismatchTurnTransition",
       "name": "resolveMismatchTurnTransition",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 59,
-      "endLine": 170
+      "line": 60,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/turn-resolution.ts#calculateMatchScore",
@@ -61767,6 +62071,46 @@
       "file": "src/shared/version-gate.ts",
       "line": 18,
       "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
+      "name": "resolveVoidSpew",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 44,
+      "endLine": 110
+    },
+    {
+      "id": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
+      "name": "VOID_SPEW_FROM",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 25,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
+      "name": "VOID_SPEW_MAX_PAIRS",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/void-spew-rules.ts#VoidSpew",
+      "name": "VoidSpew",
+      "kind": "interface",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 32,
+      "endLine": 36
+    },
+    {
+      "id": "symbol:src/shared/void-spew-rules.ts#voidSpewPairs",
+      "name": "voidSpewPairs",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 29,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#canIgniteZone",
@@ -62176,7 +62520,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 36
+          "line": 38
         }
       ],
       "enables": [
@@ -62348,7 +62692,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 43
         }
       ],
       "enables": [
@@ -62644,7 +62988,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 43
         }
       ],
       "enables": [
@@ -62910,6 +63254,53 @@
         "hidden-cards-only",
         "pinned-cards-never-move",
         "never-with-own-partner"
+      ]
+    },
+    {
+      "id": "mechanic:hazard.void_spew",
+      "mechanicId": "hazard.void_spew",
+      "label": "The Void Spews",
+      "kind": "hazard",
+      "role": "a_miss_that_kills_an_inferno_combo_spits_new_pairs_into_cleared_cells_and_reshuffles_the_board",
+      "evidence": [
+        {
+          "path": "src/shared/void-spew-rules.ts",
+          "line": 10
+        },
+        {
+          "path": "src/shared/turn-mismatch-rules.ts",
+          "line": 7
+        },
+        {
+          "path": "src/renderer/components/sceneMood.ts",
+          "line": 16
+        },
+        {
+          "path": "src/renderer/components/tileCellGlide.ts",
+          "line": 7
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/void-spew-rules.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 36
+        }
+      ],
+      "enables": [
+        "objective.floor_clear"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "only-adds-pairs-and-moves-face-down-cards",
+        "matched-pairs-count-what-is-gone"
       ]
     },
     {
@@ -63768,7 +64159,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 38
+          "line": 40
         }
       ],
       "enables": [
@@ -64735,6 +65126,7 @@
         "mechanic:board.combo_heat_perks",
         "mechanic:economy.gold",
         "mechanic:economy.miss_bank",
+        "mechanic:hazard.void_spew",
         "mechanic:power.ignition_zone"
       ],
       "writtenBy": [
@@ -65106,6 +65498,7 @@
       "writtenBy": [
         "mechanic:board.chain_chunk_fever",
         "mechanic:core.board_turn_resolution",
+        "mechanic:hazard.void_spew",
         "mechanic:power.bomb"
       ]
     },
@@ -65533,6 +65926,7 @@
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
         "mechanic:hazard.skittish_cards",
+        "mechanic:hazard.void_spew",
         "mechanic:inventory.mutator_loadout"
       ],
       "writtenBy": []
@@ -65688,6 +66082,7 @@
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
         "mechanic:hazard.skittish_cards",
+        "mechanic:hazard.void_spew",
         "mechanic:inventory.wild_match_token",
         "mechanic:objective.floor_clear",
         "mechanic:power.bomb",
@@ -65710,6 +66105,7 @@
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
         "mechanic:hazard.skittish_cards",
+        "mechanic:hazard.void_spew",
         "mechanic:power.bomb",
         "mechanic:power.ignition_zone",
         "mechanic:power.region_shuffle",
@@ -65798,6 +66194,16 @@
       "writtenBy": [
         "mechanic:inventory.undo_charge",
         "mechanic:power.undo_resolve"
+      ]
+    },
+    {
+      "id": "state:voidSpewsThisFloor",
+      "name": "voidSpewsThisFloor",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:hazard.void_spew"
       ]
     },
     {
@@ -66211,6 +66617,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "every flinch is announced"
+    },
+    {
+      "id": "displays:mechanic:hazard.void_spew->mechanic:feedback.gameplay_hud:the room lurches violet, the cards glide to new cells, a stamp says what came back",
+      "source": "mechanic:hazard.void_spew",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the room lurches violet, the cards glide to new cells, a stamp says what came back"
     },
     {
       "id": "displays:mechanic:inventory.contract_loadout->mechanic:feedback.gameplay_hud:shows locked restrictions beside affected powers",
@@ -69527,6 +69940,48 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#REALM_AMBIENCE_STRENGTH",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#RealmAmbience",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#setRealmAmbience",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmAmbience.ts->symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "symbol:src/renderer/components/realmAmbience.ts#useRealmAmbience",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RealmAmbientBackPlane.tsx->symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "symbol:src/renderer/components/RealmAmbientBackPlane.tsx#RealmAmbientBackPlane",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RealmScreenOverlay.tsx->symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RealmScreenOverlay.tsx->symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/realmTileMarkKey.ts->symbol:src/renderer/components/realmTileMarkKey.ts#RealmTileMark",
       "source": "file:src/renderer/components/realmTileMarkKey.ts",
       "target": "symbol:src/renderer/components/realmTileMarkKey.ts#RealmTileMark",
@@ -72089,6 +72544,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_ARC",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_JUMP",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_JUMP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_MS",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_SWELL",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_SWELL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GLIDE_TILT",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GLIDE_TILT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileFieldTilt.ts->symbol:src/renderer/components/tileFieldTilt.ts#getTileFieldAmplification",
       "source": "file:src/renderer/components/tileFieldTilt.ts",
       "target": "symbol:src/renderer/components/tileFieldTilt.ts#getTileFieldAmplification",
@@ -73292,6 +73795,12 @@
       "id": "exports:src/renderer/copy/traitInteractionLaneMap.ts->symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/voidSpewCopy.ts->symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
+      "source": "file:src/renderer/copy/voidSpewCopy.ts",
+      "target": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
       "kind": "exports"
     },
     {
@@ -85457,6 +85966,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#VoidSpew",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#VoidSpew",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#voidSpewPairs",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#voidSpewPairs",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/zone-rules.ts->symbol:src/shared/zone-rules.ts#canIgniteZone",
       "source": "file:src/shared/zone-rules.ts",
       "target": "symbol:src/shared/zone-rules.ts#canIgniteZone",
@@ -86178,6 +86717,30 @@
       "id": "implemented_by:mechanic:hazard.skittish_cards->file:src/shared/turn-mismatch-rules.ts",
       "source": "mechanic:hazard.skittish_cards",
       "target": "file:src/shared/turn-mismatch-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.void_spew->file:src/renderer/components/sceneMood.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/renderer/components/sceneMood.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.void_spew->file:src/renderer/components/tileCellGlide.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/renderer/components/tileCellGlide.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.void_spew->file:src/shared/turn-mismatch-rules.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/shared/turn-mismatch-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.void_spew->file:src/shared/void-spew-rules.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/shared/void-spew-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -89823,6 +90386,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/realmAmbience.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/realmAmbience.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/RealmScreenOverlay.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/RealmTravel.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/RealmTravel.tsx",
@@ -89958,6 +90533,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/storeSheet.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/storeSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/voidSpewCopy.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/voidSpewCopy.ts",
       "kind": "imports"
     },
     {
@@ -90846,6 +91427,54 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmAmbience.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmAmbience.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/renderer/components/realmAmbience.ts",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "file:src/renderer/components/realmAmbience.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmAmbientBackPlane.tsx->src/shared/rng.ts",
+      "source": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmScreenOverlay.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmScreenOverlay.tsx->src/shared/rng.ts",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "file:src/shared/rng.ts",
       "kind": "imports"
     },
     {
@@ -91926,6 +92555,12 @@
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/matchedCardRimFireMaterial.ts",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/matchedCardRimFireMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/RealmAmbientBackPlane.tsx",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/RealmAmbientBackPlane.tsx",
       "kind": "imports"
     },
     {
@@ -93162,6 +93797,12 @@
       "id": "imports:src/renderer/components/tileBoardLayoutMotionState.ts->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardLayoutMotionState.ts->src/renderer/components/tileCellGlide.ts",
+      "source": "file:src/renderer/components/tileBoardLayoutMotionState.ts",
+      "target": "file:src/renderer/components/tileCellGlide.ts",
       "kind": "imports"
     },
     {
@@ -104919,6 +105560,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/turn-mismatch-rules.ts->src/shared/void-spew-rules.ts",
+      "source": "file:src/shared/turn-mismatch-rules.ts",
+      "target": "file:src/shared/void-spew-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/turn-resolution.ts->src/shared/game.ts",
       "source": "file:src/shared/turn-resolution.ts",
       "target": "file:src/shared/game.ts",
@@ -104964,6 +105611,60 @@
       "id": "imports:src/shared/version-gate.ts->src/shared/floor-mutator-schedule.ts",
       "source": "file:src/shared/version-gate.ts",
       "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/void-spew-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.test.ts->src/shared/void-spew-rules.ts",
+      "source": "file:src/shared/void-spew-rules.test.ts",
+      "target": "file:src/shared/void-spew-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/board-tile-generation-rules.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/tile-identity.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/void-spew-rules.ts->src/shared/tile-symbol-catalog.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/tile-symbol-catalog.ts",
       "kind": "imports"
     },
     {
@@ -105169,6 +105870,13 @@
       "target": "mechanic:progression.run_flow",
       "kind": "modifies",
       "label": "owns parasite pressure board construction and floor-start perk consequences"
+    },
+    {
+      "id": "modifies:mechanic:hazard.void_spew->mechanic:board.cleanup:new pairs fill cleared cells and every face-down card moves",
+      "source": "mechanic:hazard.void_spew",
+      "target": "mechanic:board.cleanup",
+      "kind": "modifies",
+      "label": "new pairs fill cleared cells and every face-down card moves"
     },
     {
       "id": "modifies:mechanic:inventory.mutator_loadout->mechanic:phase.memorize:projects timing mutators into the study window",
@@ -105902,6 +106610,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:voidSpewsThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:voidSpewsThisFloor",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:zone",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:zone",
@@ -106030,6 +106744,24 @@
     {
       "id": "reads:mechanic:hazard.skittish_cards->state:tileStates",
       "source": "mechanic:hazard.skittish_cards",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.void_spew->state:currentStreak",
+      "source": "mechanic:hazard.void_spew",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.void_spew->state:runSeed",
+      "source": "mechanic:hazard.void_spew",
+      "target": "state:runSeed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.void_spew->state:tileStates",
+      "source": "mechanic:hazard.void_spew",
       "target": "state:tileStates",
       "kind": "reads"
     },
@@ -107120,6 +107852,24 @@
       "id": "tested_by:mechanic:hazard.skittish_cards->file:src/shared/test-hall-rooms.test.ts",
       "source": "mechanic:hazard.skittish_cards",
       "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.void_spew->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.void_spew->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.void_spew->file:src/shared/void-spew-rules.test.ts",
+      "source": "mechanic:hazard.void_spew",
+      "target": "file:src/shared/void-spew-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -111578,6 +112328,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/void-spew-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/void-spew-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/zone-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/zone-rules.test.ts",
@@ -114494,6 +115250,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/void-spew-rules.ts->file:src/shared/void-spew-rules.test.ts",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "file:src/shared/void-spew-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/zone-rules.ts->file:src/shared/zone-rules.test.ts",
       "source": "file:src/shared/zone-rules.ts",
       "target": "file:src/shared/zone-rules.test.ts",
@@ -114559,6 +115321,13 @@
       "target": "mechanic:hazard.skittish_cards",
       "kind": "triggers",
       "label": "a miss makes the missed cards flinch"
+    },
+    {
+      "id": "triggers:mechanic:core.board_turn_resolution->mechanic:hazard.void_spew:a miss after an Inferno combo opens the void",
+      "source": "mechanic:core.board_turn_resolution",
+      "target": "mechanic:hazard.void_spew",
+      "kind": "triggers",
+      "label": "a miss after an Inferno combo opens the void"
     },
     {
       "id": "triggers:mechanic:core.gameplay_commands->mechanic:core.board_turn_resolution:submits one strict delayed turn command",
@@ -115040,6 +115809,24 @@
       "id": "writes:mechanic:hazard.skittish_cards->state:tileStates",
       "source": "mechanic:hazard.skittish_cards",
       "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.void_spew->state:matchedPairs",
+      "source": "mechanic:hazard.void_spew",
+      "target": "state:matchedPairs",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.void_spew->state:tileStates",
+      "source": "mechanic:hazard.void_spew",
+      "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.void_spew->state:voidSpewsThisFloor",
+      "source": "mechanic:hazard.void_spew",
+      "target": "state:voidSpewsThisFloor",
       "kind": "writes"
     },
     {

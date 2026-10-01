@@ -328,7 +328,8 @@
                 "realmReactionsThisRun",
                 "realmDoors",
                 "nextRealm",
-                "realmFloorsThisRun"
+                "realmFloorsThisRun",
+                "voidSpewsThisFloor"
             ],
             "writes": [
                 "feedbackLines"
@@ -2077,6 +2078,41 @@
                 "src/shared/realm-rules.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "hazard.void_spew",
+            "label": "The Void Spews",
+            "kind": "hazard",
+            "role": "a_miss_that_kills_an_inferno_combo_spits_new_pairs_into_cleared_cells_and_reshuffles_the_board",
+            "evidence": [
+                "src/shared/void-spew-rules.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/renderer/components/sceneMood.ts",
+                "src/renderer/components/tileCellGlide.ts"
+            ],
+            "reads": [
+                "currentStreak",
+                "tileStates",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "matchedPairs",
+                "voidSpewsThisFloor"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "only-adds-pairs-and-moves-face-down-cards",
+                "matched-pairs-count-what-is-gone"
+            ],
+            "tests": [
+                "src/shared/void-spew-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3039,6 +3075,24 @@
             "target": "economy.realm_travel",
             "kind": "enables",
             "label": "the realm a floor ended in is always one of the doors"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.void_spew",
+            "kind": "triggers",
+            "label": "a miss after an Inferno combo opens the void"
+        },
+        {
+            "source": "hazard.void_spew",
+            "target": "board.cleanup",
+            "kind": "modifies",
+            "label": "new pairs fill cleared cells and every face-down card moves"
+        },
+        {
+            "source": "hazard.void_spew",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the room lurches violet, the cards glide to new cells, a stamp says what came back"
         }
     ],
     "coverage": {

@@ -128,6 +128,9 @@ import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { REALM_AMBIENCE_STRENGTH, setRealmAmbience } from './realmAmbience';
+import { RealmScreenOverlay } from './RealmScreenOverlay';
+import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
 import { realmCarryoverLines } from '../copy/realmCopy';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
@@ -280,6 +283,21 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = { zonesThisRun, lastZone };
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
+/** THE VOID SPITS, once per spit: the count rising on the same floor (`void-spew-rules.ts`). */
+const useVoidCallouts = (run: RunState): ScreenCallout[] => {
+    const level = run.board?.level ?? 0;
+    const spews = run.voidSpewsThisFloor ?? 0;
+    const previous = useRef({ level, spews });
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        const rose = previous.current.level === level && spews > previous.current.spews;
+        previous.current = { level, spews };
+        if (!rose) return;
+        setCallouts((current) => [...current, { key: `void:${level}:${spews}`, kind: 'broken' as const, size: 'major' as const, tone: 'miss' as const, title: VOID_SPEW_COPY.title, sub: VOID_SPEW_COPY.sub }].slice(-4));
+    }, [level, spews]);
     return callouts;
 };
 
@@ -1075,6 +1093,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
     const realmCallouts = useRealmCallouts(run);
+    const voidCallouts = useVoidCallouts(run);
+    // The realm on every face-down card (`RealmAmbientBackPlane`), and its strength by the realm's severity.
+    const ambienceRealm = run.status === 'playing' || run.status === 'resolving' || run.status === 'memorize' ? runRealmId(run) : null;
+    const ambienceSecondary = runRealmSecondaryId(run);
+    const ambienceStrength = REALM_AMBIENCE_STRENGTH[runRealmSeverity(run)] ?? 0.8;
+    useEffect(() => {
+        setRealmAmbience({ realm: ambienceRealm, secondary: ambienceSecondary, strength: ambienceRealm ? ambienceStrength : 0 });
+    }, [ambienceRealm, ambienceSecondary, ambienceStrength]);
+    useEffect(() => () => setRealmAmbience({ realm: null, secondary: null, strength: 0 }), []);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(
@@ -1093,11 +1120,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 : []),
             ...purchaseCallouts,
             ...zoneCallouts,
-            ...realmCallouts
+            ...realmCallouts,
+            ...voidCallouts
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts]
     );
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1735,6 +1763,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 >
                     <IceSheetOverlay reduceMotion={reduceMotion} seed={run.runSeed} />
                 </div>
+            ) : null}
+            {/* The realm on the glass (`RealmScreenOverlay`): flames, vines, rain, rime, charge, at the edges. */}
+            {ambienceRealm ? <RealmScreenOverlay realm={ambienceRealm} reduceMotion={reduceMotion} seed={run.runSeed} strength={ambienceStrength} /> : null}
+            {ambienceRealm && ambienceSecondary && ambienceSecondary !== ambienceRealm ? (
+                <RealmScreenOverlay realm={ambienceSecondary} reduceMotion={reduceMotion} seed={run.runSeed + 1} strength={ambienceStrength * 0.7} />
             ) : null}
             <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
                 <div

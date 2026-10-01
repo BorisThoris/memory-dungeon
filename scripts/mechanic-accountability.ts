@@ -201,6 +201,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 262,
         reason: 'Bombs are only bought at the store and the census players never shop. The whole-run soak throws them and requires one to land; two test hall rooms walk the aim and the last-pair guard.'
     },
+    'hazard.void_spew': {
+        generation: 264,
+        reason: 'The void needs a combo of Inferno or better to die on a miss, and the floor census starts every floor cold. The whole-run soak requires the void to spit, and the void-spew room walks the new pairs, the reshuffle and the matched count.'
+    },
     'power.ignition_zone': {
         generation: 264,
         reason: 'The Zone is ignited by the player at Inferno or better, and the census players never spend a combo on anything. The whole-run soak ignites it on half the turns it may, walks its flips and requires a Zone to open and to match a pair; the zone room walks the burn, the free flips, the resolve, the miss and the bonus.'

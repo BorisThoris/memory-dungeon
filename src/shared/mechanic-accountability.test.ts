@@ -80,7 +80,7 @@ describe('every mechanic answers for itself', () => {
         // 43 to 48 in Gen 262: the miss bank, gold, the store stop, bombs and relics joined the graph,
         // each exempt with the soak as its proof rather than counted, because no census player shops.
         // 53 to 56 on 2026-09-30: realm weather, omens and realm travel, exempt with the soak as proof.
-        expect(gameplayInteractionGraph.mechanics.length).toBe(56);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(57);
         /*
          * Nothing is blind by family any more: every remaining mechanic carries its own argued
          * exemption. Ten of them.

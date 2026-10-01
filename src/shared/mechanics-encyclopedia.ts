@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 66 as const;
+export const ENCYCLOPEDIA_VERSION = 67 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -459,6 +459,12 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
  * Floor bonuses, streak rewards, and optional rules that affect score — mirrors `finalizeLevel` / match resolution in `game.ts`.
  */
 export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'sys_void_spew',
+        title: 'The void spews',
+        description:
+            'Lose a combo of **Inferno** (16) or better to a miss and the room collapses into the **void** - and the void spits. It lays **brand-new pairs**, faces you have not seen on this floor, face down into cells you had already cleared (one, plus one for every ten links over sixteen, three at most), and then **reshuffles every face-down card on the board**, pinned ones too. A big combo lost costs what you knew, and leaves more to find.'
+    },
     {
         id: 'sys_combo_heat_perks',
         title: 'Heat: what a hot combo changes',

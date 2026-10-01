@@ -63,6 +63,8 @@ export interface SceneMood {
     hitKey: string | null;
     missKey: string | null;
     freezeKey: string | null;
+    /** The void spitting new pairs and reshuffling the board (`void-spew-rules.ts`): the room lurches violet. */
+    spewKey: string | null;
     goldRain: { key: string; coins: number } | null;
     /** The bank is empty: the boss-warning state, held until a miss is banked again. */
     peril: boolean;
@@ -122,7 +124,7 @@ export const deriveSceneMood = ({
     missesLeft?: number | null;
     /** A payout to rain gold on (a floor clear, a purchase), keyed by what paid it. */
     payout?: { key: string; gold: number } | null;
-    run: Pick<RunState, 'board' | 'status' | 'relics'>;
+    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor'>>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
 }): SceneMood => {
@@ -193,6 +195,7 @@ export const deriveSceneMood = ({
         hitKey,
         missKey,
         freezeKey,
+        spewKey: (run.voidSpewsThisFloor ?? 0) > 0 ? `spew:${run.board?.level ?? 0}:${run.voidSpewsThisFloor}` : null,
         goldRain,
         peril: missesLeft === 0 && (run.status === 'playing' || run.status === 'resolving'),
         tempo: round(1 + 0.35 * surge),

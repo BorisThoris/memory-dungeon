@@ -1,4 +1,7 @@
 import { MathUtils } from 'three';
+import { sampleCellGlide } from './tileCellGlide';
+
+const nowMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 import { sampleTraumaShake, TILE_SHAKE_MAXIMA } from './boardTrauma';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 import type { TileTransform } from './tileBoardTransform';
@@ -171,19 +174,33 @@ export const applyTileBoardCardGroupMotionState = (
         ? state.rotationYTarget
         : MathUtils.damp(target.rotation.y, state.rotationYTarget, state.rotationDamp, delta);
 
+    const goal = { x: state.positionXTarget, y: state.positionYTarget, z: state.positionZTarget };
+    let swell = 1;
     if (state.layoutMotionActive) {
         target.position.x = MathUtils.damp(target.position.x, state.positionXTarget, state.posLambda, delta);
         target.position.y = MathUtils.damp(target.position.y, state.positionYTarget, state.posLambda, delta);
         target.position.z = MathUtils.damp(target.position.z, state.positionZTarget, state.posLambda, delta);
+        // Keep the glide's memory current, so the end of a shuffle is not read as a move.
+        sampleCellGlide(target, goal, target.position, nowMs(), true);
     } else {
-        target.position.x = state.positionXTarget;
-        target.position.y = state.positionYTarget;
-        target.position.z = state.positionZTarget;
+        // A card that changed cells glides there (`tileCellGlide.ts`) instead of appearing there.
+        const glide = sampleCellGlide(target, goal, target.position, nowMs(), state.reduceMotion);
+        if (glide) {
+            target.position.x = glide.x;
+            target.position.y = glide.y;
+            target.position.z = state.positionZTarget + glide.lift;
+            target.rotation.z += glide.tilt;
+            swell = glide.swell;
+        } else {
+            target.position.x = state.positionXTarget;
+            target.position.y = state.positionYTarget;
+            target.position.z = state.positionZTarget;
+        }
     }
 
-    target.scale.x = state.scaleTarget;
-    target.scale.y = state.scaleTarget;
-    target.scale.z = state.scaleTarget;
+    target.scale.x = state.scaleTarget * swell;
+    target.scale.y = state.scaleTarget * swell;
+    target.scale.z = state.scaleTarget * swell;
 };
 
 export const computeTileBoardCardGroupMotionState = ({

@@ -316,6 +316,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Heat perks census (2026-09-30): 0.412 x 1.10, with the combo’s afterglow and wider pop on the reference player’s hot floors. Heat perks (2026-09-30). Until now the combo heat was presentation only, and the combo study said so on purpose. The owner overrode it: the hot player gets a different board, the way NBA Jam, Peggle and the pool tables do it. From Hot every match lights face-down cards beside it until the next flip (one, two at Blazing, three from Inferno - the lantern on a shorter wick); from Blazing a break may take one pair over its rung cap; from Inferno the first wave walks a step further. Measured first (yarn sim:pop-share, perfect player): matched share of a floor 0.38 before the perks, 0.34 with them, biggest break 0.34 to 0.38 of the board; a second pair at Legendary read 0.33 and 0.41 and was cut. The heat carried into the turn is what counts. No perk touches the miss bank: a run stays as punishing at Legendary as at cold, so the combo has more to lose for having burned. Counted by matches resolved with any perk on; the reference player never misses, so the census reads it on most floors past the first.'
     },
     {
+        id: 'hazard.void_spew',
+        verdict: 'changed',
+        generation: 264,
+        present: ['resolveVoidSpew', 'voidSpewPairs', 'VOID_SPEW_FROM', 'voidSpewsThisFloor'],
+        note: 'The void spews (2026-10-01). The black hole had been the room only: a great combo died and the dungeon plate turned to the void while the board went on as before. The owner asked for it to spawn new cards and reshuffle the entire board. A miss that kills a combo of Inferno or better now lays brand-new pairs - fresh pair keys, faces the floor has not shown - into the cells of pairs already cleared (one, plus one for every ten links over sixteen, three at most; pop casualties first), and then every face-down card on the board trades places, pinned ones included. Every card glides to its new cell. No census row (the floor census never reaches Inferno); the soak requires a spew.'
+    },
+    {
         id: 'power.ignition_zone',
         verdict: 'changed',
         generation: 264,

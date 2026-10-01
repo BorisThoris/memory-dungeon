@@ -70,6 +70,7 @@ export const createNextFloorRunState = (
         missBank: carryMissBank(run, nextBoard.level),
         largestChunkScoreThisFloor: 0,
         magpieTheftsThisFloor: 0,
+        voidSpewsThisFloor: 0,
         restlessDriftsThisFloor: 0,
         skittishFlinchesThisFloor: 0,
         lanternLitTileIds: [],

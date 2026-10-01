@@ -71,6 +71,8 @@ export interface SoakRunReport {
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
     missesGranted: number;
     relicsBought: number;
+    /** Misses that opened the void and spat new pairs onto a reshuffled board. */
+    voidSpews: number;
     /** Jokers spent: every fall in wildMatchesRemaining. */
     wildMatches: number;
     /** Matches resolved with a heat perk on: every rise in heatPerkTurnsThisFloor. */
@@ -330,6 +332,7 @@ export const soakRun = ({
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
+    let voidSpews = 0;
     let wildMatches = 0;
     let heatPerkTurns = 0;
     let zones = 0;
@@ -356,6 +359,7 @@ export const soakRun = ({
         goldEarned += Math.max(0, runGold(next) - runGold(run));
         missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
+        voidSpews += Math.max(0, (next.voidSpewsThisFloor ?? 0) - (run.voidSpewsThisFloor ?? 0));
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
@@ -476,6 +480,7 @@ export const soakRun = ({
         goldEarned,
         missesGranted,
         relicsBought,
+        voidSpews,
         wildMatches,
         heatPerkTurns,
         zones,

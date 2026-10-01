@@ -784,6 +784,8 @@ export interface RunState {
     largestChunkScoreThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
+    /** The void (`void-spew-rules.ts`): misses this floor that killed an Inferno combo and spat new pairs onto a reshuffled board. */
+    voidSpewsThisFloor?: number;
     /** `restless_floor`: drifts the floor has made this floor; the next one moves one more pair of cards, to a cap. */
     restlessDriftsThisFloor: number;
     /** `skittish_cards`: misses this floor on which the missed cards flinched into a neighbouring cell. */

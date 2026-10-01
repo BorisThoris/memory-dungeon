@@ -4,6 +4,7 @@ import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules
 import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
 import { hasMutator } from './mutators';
 import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
+import { resolveVoidSpew } from './void-spew-rules';
 import { decreaseRecallFocus, rememberForgottenTiles } from './recall-rules';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -113,10 +114,22 @@ export const resolveMismatchTurnTransition = ({
           })
         : null;
     const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(boardAfterMagpie, drift.swaps) : boardAfterMagpie;
+    /*
+     * The void spews (`void-spew-rules.ts`): a miss that kills a combo of Inferno or better opens the
+     * black hole, and it spits new pairs into cleared cells and reshuffles every face-down card.
+     */
+    const spew = resolveVoidSpew({
+        board: boardAfterDrift,
+        comboLost: runNonNegativeInteger(stats.currentStreak),
+        runSeed: run.runSeed,
+        rulesVersion: run.runRulesVersion,
+        mismatchCount: runNonNegativeInteger(stats.mismatches) + 1
+    });
+    const boardAfterVoid = spew?.board ?? boardAfterDrift;
     // The realm answers the miss last: frostbite, the clocks, and on its turn the weather.
     const realmTurn = resolveRealmTurn({
         run,
-        board: boardAfterDrift,
+        board: boardAfterVoid,
         outcome: 'miss',
         tileIds,
         sourceTiles,
@@ -133,6 +146,7 @@ export const resolveMismatchTurnTransition = ({
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         magpieTheftsThisFloor:
             runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
+        voidSpewsThisFloor: runNonNegativeInteger(run.voidSpewsThisFloor) + (spew ? 1 : 0),
         restlessDriftsThisFloor:
             runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
         skittishFlinchesThisFloor:
