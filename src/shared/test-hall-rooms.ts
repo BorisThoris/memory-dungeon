@@ -104,7 +104,11 @@ export type TestHallRoomId =
     | 'realm-vines'
     | 'realm-overgrowth'
     | 'realm-omen'
-    | 'realm-travel';
+    | 'realm-travel'
+    | 'realm-whiteout'
+    | 'realm-thunderclap'
+    | 'realm-bloom'
+    | 'realm-confluence';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -302,6 +306,8 @@ const realmRun = (realmId: NonNullable<RunState['realmId']>, realmSeverity: NonN
     realmVinesCutThisFloor: 0,
     realmFrozenThisFloor: 0,
     realmLitTileIds: [],
+    realmPeaksThisFloor: 0,
+    realmSecondaryId: null,
     lastRealmEvent: null,
     ...extra
 });
@@ -1413,6 +1419,72 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'the next floor is built in that realm, at that severity',
                 expect: (r, b) => (r.realmId === b.realmDoors?.[1]?.realmId && r.realmSeverity === b.realmDoors?.[1]?.severity ? null : `built in ${r.realmId}/${r.realmSeverity}`)
             }
+        ]
+    },
+    {
+        id: 'realm-whiteout',
+        title: 'Whiteout',
+        mechanic: 'Every third weather of a floor is the realm\u2019s peak; the Frozen Reach\u2019s is a whiteout that snows over every face-down card.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Two blizzards have blown already. Take one turn: the whiteout buries every suit on the board.',
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('frost', 'wild', { realmWeatherThisFloor: 2, turnsThisFloor: 3 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'the peak: every face-down card is snowed over',
+                expect: expectAll(realmEventIs('whiteout'), (r) =>
+                    (r.board?.tiles ?? []).filter((t) => t.state === 'hidden').every((t) => t.snowed) ? null : 'a face-down card has no snow', (r) =>
+                    r.realmPeaksThisFloor === 1 ? null : `peaks ${r.realmPeaksThisFloor}`)
+            }
+        ]
+    },
+    {
+        id: 'realm-thunderclap',
+        title: 'Thunderclap',
+        mechanic: 'The Thunder Spire\u2019s peak lights a whole row of face-down cards until the next flip, and moves nothing.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Two strikes have fallen. Take one turn: a whole row shows its faces. Read it before you flip.',
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'wild', { realmWeatherThisFloor: 2, turnsThisFloor: 3 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'a whole row lit, and nothing moved',
+                expect: expectAll(realmEventIs('thunderclap'), (r) => ((r.realmLitTileIds ?? []).length === 4 ? null : `${(r.realmLitTileIds ?? []).length} lit`), (r, b) =>
+                    order(r) === order(b) ? null : 'a card moved')
+            }
+        ]
+    },
+    {
+        id: 'realm-bloom',
+        title: 'Bloom',
+        mechanic: 'The Overgrown Crypt\u2019s peak makes its vines bloom: a bloom cut by a match beside it pays three gold.',
+        graphMechanicIds: ['board.realm_weather', 'economy.gold'],
+        tryThis: 'Card b is vined. Take a turn and the vines bloom; then match a beside it for three gold.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'a:e e:t f:m c:b', 'b:t d:b e:t f:m'], {
+                misses: 3,
+                run: realmRun('grove', 'wild', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 2 }),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' ? { ...t, vined: true } : t))
+            }),
+        script: [
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'the peak: the vines bloom', expect: expectAll(realmEventIs('bloom'), (r) => (tileById(r, 'b-1')?.bloom === true ? null : 'b-1 did not bloom')) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the bloom beside the match is cut for three gold', expect: expectAll(realmEventIs('harvest'), (r) => (runGold(r) >= 3 ? null : `gold ${runGold(r)}`), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'still vined')) }
+        ]
+    },
+    {
+        id: 'realm-confluence',
+        title: 'Confluence',
+        mechanic: 'A confluence floor is two realms at once: their weather comes by turns, and both answer the player.',
+        graphMechanicIds: ['economy.realm_travel', 'board.realm_weather'],
+        tryThis: 'Storm meets frost. The next weather is the frost\u2019s, and a miss here freezes like the frost does.',
+        build: () => room(EIGHT_PAIRS, { level: 6, misses: 3, run: realmRun('storm', 'wild', { realmSecondaryId: 'frost', realmWeatherThisFloor: 1, turnsThisFloor: 3 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'the frost\u2019s blizzard comes on the storm floor, and the miss freezes',
+                expect: expectAll(realmEventIs('blizzard'), frostIs('a-1', 2), (r) => (r.realmId === 'storm' && r.realmSecondaryId === 'frost' ? null : `realms ${r.realmId}/${r.realmSecondaryId}`))
+            },
+            { step: { do: 'clear' }, says: 'and the clear pays double gold', expect: expectAll(statusIs('levelComplete'), (r, b) => ((r.lastLevelResult?.goldEarned ?? 0) >= 4 && runGold(r) > runGold(b) ? null : `earned ${r.lastLevelResult?.goldEarned}`)) }
         ]
     }
 ];

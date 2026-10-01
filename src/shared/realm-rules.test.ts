@@ -48,6 +48,31 @@ describe('realms', () => {
         expect(rollRealmDoors(99, 4, 'tide')).toEqual(rollRealmDoors(99, 4, 'tide'));
     });
 
+    it('sometimes turns the wild door into a confluence from the fourth floor, which pays double', () => {
+        const confluences = Array.from({ length: 200 }, (_, seed) => rollRealmDoors(seed, 5, 'frost')).flatMap((doors) =>
+            doors.filter((door) => door.confluence)
+        );
+        expect(confluences.length).toBeGreaterThan(30);
+        for (const door of confluences) {
+            expect(door.severity).toBe('wild');
+            expect(door.confluence).not.toBe(door.realmId);
+        }
+        expect(Array.from({ length: 100 }, (_, seed) => rollRealmDoors(seed, 1, 'frost')).flat().some((door) => door.confluence)).toBe(false);
+        expect(realmClearGold(6, 'wild', true)).toBe(12);
+    });
+
+    it('a confluence door builds a floor with two realms', () => {
+        const base = createNewRun(0, { runSeed: 12 });
+        const cleared: RunState = {
+            ...base,
+            status: 'levelComplete',
+            realmDoors: [{ realmId: 'storm', severity: 'wild', confluence: 'ember' }]
+        };
+        const next = advanceToNextLevel(chooseRealmDoor(cleared, 0));
+        expect(next.realmId).toBe('storm');
+        expect(next.realmSecondaryId).toBe('ember');
+    });
+
     it('a run opens in a seeded, calm realm, and every realm opens some run', () => {
         const run = createNewRun(0, { runSeed: 5 });
         expect(run.realmId).toBe(openingRealmDoor(5).realmId);

@@ -46,6 +46,9 @@ export interface RealmDefinition {
     interval: number;
     /** What the door says the realm does, in one line each. */
     rules: readonly [string, string];
+    /** The realm's peak: what every third weather of a floor becomes, and what it does. */
+    peak: string;
+    peakRule: string;
     /** Scene tint for the room: hue rotation in degrees and saturation, applied to the backdrop. */
     hueDeg: number;
     saturate: number;
@@ -64,6 +67,8 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
             'A miss freezes both cards for two turns: no turning them until the ice goes.',
             'Blizzards slide a row with the wind and snow over the backs.'
         ],
+        peak: 'Whiteout',
+        peakRule: 'Every face-down card is snowed over: no suit on the board can be read.',
         hueDeg: 170,
         saturate: 0.7,
         color: '#9fdcff'
@@ -78,6 +83,8 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
             'Wildfire lights a card on a three-turn fuse. Match it in time: doused, gold.',
             'A fuse that runs out burns a gold and spreads to a neighbour.'
         ],
+        peak: 'Firestorm',
+        peakRule: 'A new fire, and every fire on the board spreads to a neighbour at once.',
         hueDeg: -12,
         saturate: 1.35,
         color: '#ff8a3d'
@@ -92,6 +99,8 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
             'The current runs one column down a step, and sweeps across the room.',
             'Watch the column it names: the cards in it all move together.'
         ],
+        peak: 'Spring Tide',
+        peakRule: 'Two columns run at once.',
         hueDeg: 150,
         saturate: 1.05,
         color: '#4fd6c8'
@@ -106,6 +115,8 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
             'Lightning swaps two hidden cards and leaves both lit until your next flip.',
             'What it shows you is where they landed. Look fast.'
         ],
+        peak: 'Thunderclap',
+        peakRule: 'A whole row of face-down cards is lit until your next flip. Nothing moves.',
         hueDeg: -70,
         saturate: 1.1,
         color: '#b69bff'
@@ -120,6 +131,8 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
             'Vines creep over a card: it cannot be turned while they hold.',
             'A match beside vines cuts them, a gold for every vine.'
         ],
+        peak: 'Bloom',
+        peakRule: 'The vines flower: every bloom cut pays three gold.',
         hueDeg: 60,
         saturate: 1.15,
         color: '#8fd66a'
@@ -171,9 +184,23 @@ export const turnsUntilRealmWeather = (realmId: RealmId, severity: RealmSeverity
     return interval - (turns % interval);
 };
 
+/** A confluence floor pays this multiple of the clear's gold, whatever its severity. */
+export const CONFLUENCE_GOLD_MULTIPLIER = 2;
+/** The first floor a confluence door can lead to, and the chance a clear offers one. */
+export const CONFLUENCE_FIRST_FLOOR = 4;
+export const CONFLUENCE_CHANCE = 0.34;
+
 /** The gold a floor's clear pays in this realm's weather: the door's multiplier, rounded half up. */
-export const realmClearGold = (baseGold: number, severity: RealmSeverity | null): number =>
-    Math.floor(runNonNegativeInteger(baseGold) * (severity ? REALM_SEVERITIES[severity].goldMultiplier : 1) + 0.5);
+export const realmClearGold = (baseGold: number, severity: RealmSeverity | null, confluence = false): number =>
+    Math.floor(
+        runNonNegativeInteger(baseGold) *
+            (confluence ? CONFLUENCE_GOLD_MULTIPLIER : severity ? REALM_SEVERITIES[severity].goldMultiplier : 1) +
+            0.5
+    );
+
+/** A confluence floor's second realm, or null: never the same realm as the first. */
+export const runRealmSecondaryId = (run: Pick<RunState, 'realmId' | 'realmSecondaryId'>): RealmId | null =>
+    isRealmId(run.realmSecondaryId) && run.realmSecondaryId !== run.realmId ? run.realmSecondaryId : null;
 
 /** The realm a run opens in: seeded, calm, so a first floor is a place before it is a problem. */
 export const openingRealmDoor = (runSeed: number): RealmDoor => {
@@ -197,9 +224,23 @@ export const rollRealmDoors = (runSeed: number, clearedLevel: number, endedIn: R
     const others = shuffleWithRng(rng, REALM_IDS.filter((id) => id !== endedIn));
     const realms: RealmId[] = endedIn ? [endedIn, others[0]!, others[1]!] : others.slice(0, REALM_DOOR_COUNT);
     const severities = shuffleWithRng(rng, ['calm', 'wild', 'raging'] as RealmSeverity[]);
-    const doors = realms.map((realmId, index) => ({ realmId, severity: severities[index] ?? 'wild' }));
+    const doors: RealmDoor[] = realms.map((realmId, index) => ({ realmId, severity: severities[index] ?? 'wild' }));
     // Shown in a seeded order, so the realm the floor ended in is not always the first door.
-    return shuffleWithRng(rng, doors);
+    const shown = shuffleWithRng(rng, doors);
+    /*
+     * A confluence: from the fourth floor, about one clear in three turns its wild door into two
+     * realms at once - the weather alternates between them, both answer the player, and the clear
+     * pays double. Drawn after the doors, so the doors themselves are the same with or without it.
+     */
+    if (clearedLevel + 1 >= CONFLUENCE_FIRST_FLOOR && rng() < CONFLUENCE_CHANCE) {
+        const wild = shown.findIndex((door) => door.severity === 'wild');
+        const host = shown[wild];
+        if (host) {
+            const partners = REALM_IDS.filter((id) => id !== host.realmId);
+            shown[wild] = { ...host, confluence: partners[pickRngIndex(rng, partners.length)]! };
+        }
+    }
+    return shown;
 };
 
 /** The player walks through a door: remembered until the next floor builds in it. */
@@ -211,7 +252,14 @@ export const chooseRealmDoor = (run: RunState, index: number): RunState => {
     if (!door || !isRealmId(door.realmId) || !isSeverity(door.severity)) {
         return run;
     }
-    return { ...run, nextRealm: { realmId: door.realmId, severity: door.severity } };
+    return {
+        ...run,
+        nextRealm: {
+            realmId: door.realmId,
+            severity: door.severity,
+            ...(isRealmId(door.confluence) && door.confluence !== door.realmId ? { confluence: door.confluence } : {})
+        }
+    };
 };
 
 /** Where the next floor is: the door walked through, or the first door when none was (a shared table). */
@@ -224,7 +272,8 @@ export const nextFloorRealmDoor = (run: RunState): RealmDoor | null => {
         return first;
     }
     const current = runRealmId(run);
-    return current ? { realmId: current, severity: runRealmSeverity(run) } : null;
+    const secondary = runRealmSecondaryId(run);
+    return current ? { realmId: current, severity: runRealmSeverity(run), ...(secondary ? { confluence: secondary } : {}) } : null;
 };
 
 /** The per-floor realm counters, zeroed for a floor that is about to build. */
@@ -238,6 +287,7 @@ export const freshRealmFloorCounters = (): Pick<
     | 'realmFrozenThisFloor'
     | 'lastRealmEvent'
     | 'realmLitTileIds'
+    | 'realmPeaksThisFloor'
 > => ({
     realmWeatherThisFloor: 0,
     realmReactionsThisFloor: 0,
@@ -246,7 +296,8 @@ export const freshRealmFloorCounters = (): Pick<
     realmVinesCutThisFloor: 0,
     realmFrozenThisFloor: 0,
     lastRealmEvent: null,
-    realmLitTileIds: []
+    realmLitTileIds: [],
+    realmPeaksThisFloor: 0
 });
 
 /**
@@ -266,6 +317,7 @@ export const enterRealmFloor = (
         fields: {
             realmId: door.realmId,
             realmSeverity: door.severity,
+            realmSecondaryId: isRealmId(door.confluence) && door.confluence !== door.realmId ? door.confluence : null,
             realmDoors: null,
             nextRealm: null,
             ...freshRealmFloorCounters()

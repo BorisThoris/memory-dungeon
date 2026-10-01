@@ -29,6 +29,25 @@ floor is played.
 
 Calm adds a turn to the interval, raging takes one away and doubles each event's reach.
 
+## Peaks (every third weather of a floor)
+
+| Realm | Peak | What it does |
+|-------|------|--------------|
+| Frost | Whiteout | Every face-down card is snowed over: no suit on the board can be read |
+| Ember | Firestorm | A new fire, then every fire spreads to a neighbour at once (up to six burning) |
+| Tide | Spring Tide | Two columns run at once |
+| Storm | Thunderclap | A whole row of face-down cards is lit until the next flip; nothing moves (the peak that pays) |
+| Grove | Bloom | The vines flower: a bloom cut by a match beside it pays three gold, not one |
+
+The HUD chip names the peak when it is next, in the realm's colour.
+
+## Confluence
+
+From floor 4, about one clear in three turns its wild door into a **confluence**: two realms at once
+(`RealmDoor.confluence`, `RunState.realmSecondaryId`). The weather alternates between them (the
+first realm's, then the second's), both realms answer the player (a miss freezes if either is the
+frost), and the clear pays double gold. An omen's reaction settles the floor on the omen's realm.
+
 ## Omen reactions
 
 Every pair of realms has a name (`REALM_REACTION_NAMES`): Thaw (frost to ember), Steam (ember to

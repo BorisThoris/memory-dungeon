@@ -126,7 +126,12 @@ const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'
     lightning: { title: 'LIGHTNING!', sub: () => 'Two cards swapped: they show where they landed', size: 'major' },
     overgrowth: { title: 'OVERGROWTH', sub: (e) => `Vines take ${e.tileIds.length === 1 ? 'a card' : `${e.tileIds.length} cards`}: match beside them to cut`, size: 'major' },
     harvest: { title: 'HARVEST!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'vine' : 'vines'} cut · +${e.gold ?? 0} gold`, size: 'minor' },
-    thaw: { title: 'THE HOLD BREAKS', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'card' : 'cards'} free again`, size: 'minor' }
+    thaw: { title: 'THE HOLD BREAKS', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'card' : 'cards'} free again`, size: 'minor' },
+    whiteout: { title: 'WHITEOUT!', sub: () => 'Every back is snowed over: play from memory', size: 'major' },
+    firestorm: { title: 'FIRESTORM!', sub: (e) => `${e.tileIds.length} cards burning: douse what you can`, size: 'major' },
+    springtide: { title: 'SPRING TIDE!', sub: (e) => `Two columns run · ${e.tileIds.length} cards moved`, size: 'major' },
+    thunderclap: { title: 'THUNDERCLAP!', sub: (e) => `A row lit: ${e.tileIds.length} faces until your next flip`, size: 'major' },
+    bloom: { title: 'BLOOM!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'bloom' : 'blooms'}: three gold for every one you cut`, size: 'major' }
 };
 
 /** The stamp for a realm event (`realm-weather-rules.ts`), in the realm's colour. */
@@ -156,13 +161,20 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
 };
 
 /** The stamp a floor opens on: where it is, and how hard the weather blows. */
-export const realmEntryCallout = (key: string, realm: keyof typeof REALMS, severity: keyof typeof REALM_SEVERITIES): ScreenCallout => ({
+export const realmEntryCallout = (
+    key: string,
+    realm: keyof typeof REALMS,
+    severity: keyof typeof REALM_SEVERITIES,
+    secondary: RealmId | null = null
+): ScreenCallout => ({
     key: `realm-enter:${key}`,
     kind: 'realm',
     size: 'major',
     tone: 'legendary',
-    title: REALMS[realm].place.toUpperCase(),
-    sub: `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`,
+    title: secondary ? 'CONFLUENCE!' : REALMS[realm].place.toUpperCase(),
+    sub: secondary
+        ? `${REALMS[realm].title} meets ${REALMS[secondary].title} · their weather by turns · double gold`
+        : `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`,
     color: REALMS[realm].color
 });
 
@@ -172,6 +184,7 @@ export interface RealmCalloutSnapshot {
     level: number;
     realm: RealmId | null;
     severity: RealmSeverity;
+    secondary: RealmId | null;
     playing: boolean;
     event: RealmEvent | null;
 }
@@ -185,7 +198,7 @@ export const deriveRealmCallouts = (previous: RealmCalloutSnapshot, next: RealmC
     const callouts: ScreenCallout[] = [];
     const arrived = previous.runSeed !== next.runSeed || previous.level !== next.level || !previous.playing;
     if (next.playing && arrived) {
-        callouts.push(realmEntryCallout(`${next.runSeed}:${next.level}`, next.realm, next.severity));
+        callouts.push(realmEntryCallout(`${next.runSeed}:${next.level}`, next.realm, next.severity, next.secondary));
     }
     if (next.event && next.event.key !== previous.event?.key) {
         callouts.push(realmEventCallout(next.event, REALMS[next.realm].color));

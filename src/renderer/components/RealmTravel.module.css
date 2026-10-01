@@ -90,6 +90,22 @@
     box-shadow: 0 0 24px color-mix(in srgb, var(--realm-color) 45%, transparent);
 }
 
+.arch[data-confluence='true'] {
+    display: flex;
+    gap: 0.15rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.arch[data-confluence='true'] .sigil {
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+}
+
+.door[data-confluence='true'] {
+    border-style: double;
+    border-width: 3px;
+}
+
 .sigil {
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     line-height: 1;

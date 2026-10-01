@@ -15,7 +15,8 @@ import { handleHorizontalToolbarKeyDown, syncToolbarTabIndices } from '../a11y/t
 import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
-import { REALMS, runRealmId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
+import { REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
+import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { REALM_HUD_COPY } from '../copy/realmCopy';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
@@ -323,6 +324,8 @@ const RunShell = ({
     const realm = runRealmId(run);
     const realmSeverity = runRealmSeverity(run);
     const weatherIn = realm ? turnsUntilRealmWeather(realm, realmSeverity, runNonNegativeInteger(run.turnsThisFloor)) : 0;
+    const realmSecondary = runRealmSecondaryId(run);
+    const comingWeather = nextRealmWeather(run);
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
@@ -533,17 +536,18 @@ const RunShell = ({
                             is winding themselves, so it is always shown. */}
                         {realm ? (
                             <span
-                                aria-label={REALM_HUD_COPY.aria(realm, realmSeverity, weatherIn)}
+                                aria-label={REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary)}
                                 className={styles.realm}
+                                data-peak-next={comingWeather?.peak ? 'true' : undefined}
                                 data-realm={realm}
                                 data-weather-soon={weatherIn === 1 ? 'true' : undefined}
                                 data-testid="hud-realm"
                                 role="img"
                                 style={{ '--realm-color': REALMS[realm].color } as CSSProperties}
                             >
-                                <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity)}</span>
+                                <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity, realmSecondary)}</span>
                                 <span className={styles.realmClock} data-testid="hud-realm-clock">
-                                    {REALM_HUD_COPY.clock(realm, weatherIn)}
+                                    {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
                                 </span>
                             </span>
                         ) : null}

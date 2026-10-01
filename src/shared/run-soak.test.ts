@@ -45,6 +45,8 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.realmVinesCut > 0), 'no vine was ever cut').toBe(true);
         expect(reports.some((report) => report.realmFrozen > 0), 'no card was ever frozen').toBe(true);
         expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
+        expect(reports.some((report) => report.realmPeaks > 0), 'no realm ever reached its peak').toBe(true);
+        expect(reports.some((report) => report.realmConfluences > 0), 'no floor was ever a confluence').toBe(true);
         // The joker left its partner stranded and the floor unclearable until a soak player used it.
         const wild = Array.from({ length: 4 }, (_unused, index) =>
             soakRun({ seed: 7_001 + index * 7_919, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 3 })

@@ -70,6 +70,7 @@ const RealmTravel = ({ doors, endedIn, floorsIn, onChoose }: RealmTravelProps): 
                             className={styles.door}
                             data-modal-initial-focus={index === 0 ? true : undefined}
                             data-realm={door.realmId}
+                            data-confluence={door.confluence ? 'true' : undefined}
                             data-severity={door.severity}
                             data-testid={`realm-door-${index}`}
                             key={`${door.realmId}:${door.severity}`}
@@ -78,17 +79,25 @@ const RealmTravel = ({ doors, endedIn, floorsIn, onChoose }: RealmTravelProps): 
                             style={{ '--realm-color': realm.color, '--door-index': index } as CSSProperties}
                             type="button"
                         >
-                            <span aria-hidden="true" className={styles.arch}>
+                            <span aria-hidden="true" className={styles.arch} data-confluence={door.confluence ? 'true' : undefined}>
                                 <span className={styles.sigil}>{SIGILS[door.realmId]}</span>
+                                {door.confluence ? (
+                                    <span className={styles.sigil} style={{ '--realm-color': REALMS[door.confluence].color } as CSSProperties}>
+                                        {SIGILS[door.confluence]}
+                                    </span>
+                                ) : null}
                             </span>
                             <span className={styles.kicker}>{REALM_TRAVEL_COPY.doorKicker(door, endedIn)}</span>
-                            <span className={styles.place}>{realm.place}</span>
+                            <span className={styles.place}>{REALM_TRAVEL_COPY.placeLine(door)}</span>
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>
                             <span className={styles.weather}>{REALM_TRAVEL_COPY.weatherLine(door)}</span>
                             <span className={styles.rules}>
-                                {realm.rules.map((rule) => (
+                                {(door.confluence
+                                    ? [REALM_TRAVEL_COPY.confluenceRule(door)!, realm.rules[0], REALMS[door.confluence].rules[0]]
+                                    : [...realm.rules, `${realm.peak}: ${realm.peakRule}`]
+                                ).map((rule) => (
                                     <span className={styles.rule} key={rule}>
                                         {rule}
                                     </span>

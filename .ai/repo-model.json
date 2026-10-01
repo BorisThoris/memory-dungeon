@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2838,
     "codeFileCount": 1028,
-    "exportedSymbolCount": 3146,
+    "exportedSymbolCount": 3155,
     "contentItemCount": 10,
     "mechanicCount": 56,
     "stateFieldCount": 111,
-    "relationshipCount": 8242
+    "relationshipCount": 8252
   },
   "inventory": [
     {
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 41101,
-      "sha256": "0e67253cf51b2fd221624fefa6aa03ad7c3ab69c988f24cc0acf8c36038c549f"
+      "bytes": 41581,
+      "sha256": "30e78d1eeb569488361074e0734c11d80ae9319844ab2e609292561566bc02de"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 4053,
-      "sha256": "c77df1951c74c4c2e7ab0cc0cfb07ff16f77f15065b13624661366f04e5eaffe"
+      "bytes": 5100,
+      "sha256": "b23c9822aac71fd892f2550d6907e5f092138ae34d95d3093b99b65cdbe6f98e"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "ae748f4ac7f1db22b687b3c68f7678f3b80212ea1f437c11f7d11c015d318cc7"
+      "sha256": "e9cd21569c0661835a338238796684798e1fb6a0df18f3db8ea9ee2517ccc8ae"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5583,8 +5583,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 2745,
-      "sha256": "1fd2765eacd2089190a08fe5509f08f3d45b3c095d4f9760e66a708d82fbacf8"
+      "bytes": 2831,
+      "sha256": "b6ebda332ad256c3a3ed9498a641caa0f2bce5bfc879be5899075e8224a52f6a"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -9513,8 +9513,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 109160,
-      "sha256": "212df29be797e3e5d4e09cbd811709345bd540ecff0f3c8be256da68d38a7129"
+      "bytes": 109259,
+      "sha256": "58bd1b8be08d6b20674c955962b704a2620ac99bd32760784332cd980a5426ce"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9807,26 +9807,26 @@
     {
       "path": "src/renderer/components/realmTileMarkKey.ts",
       "category": "source",
-      "bytes": 552,
-      "sha256": "590a3b893d14a1bf7f2bfb35b02303b2c5b27da3e85b68779ae4b1a36f26db40"
+      "bytes": 596,
+      "sha256": "41ec54f1b686327016d47d5d7643f11d7d1fb1d098468e3b1a23a5ad306d7507"
     },
     {
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "category": "source",
-      "bytes": 8585,
-      "sha256": "f387309472879aea9a6dc2f0144c0036828593edeab0f0bf3e8e1051b397af7b"
+      "bytes": 9451,
+      "sha256": "082986d35ea088340c2f7b65779c0749e444de985bcb20586af00496ba8b4683"
     },
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 5117,
-      "sha256": "c2c19555644326f4c3179103c74c736f95278600d244cf46095791be00aa1bc1"
+      "bytes": 5412,
+      "sha256": "dbc69ffa79750874e43a652a28ba0b6d666c5a920f8a81d007401bbaa4a06237"
     },
     {
       "path": "src/renderer/components/RealmTravel.tsx",
       "category": "source",
-      "bytes": 4945,
-      "sha256": "2a29f5c86472f8448897faeffe1743593ab5f796064e470d4a7d7b428a8a31d9"
+      "bytes": 5714,
+      "sha256": "9363077982d1e2fa937c05e4dcab59c65da0e2d78bb6e53cce3270c4d900f8cc"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
@@ -9885,8 +9885,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 53489,
-      "sha256": "75842e1d94799baa1a8d850b24570fa23cab609e517ef444aa6369b4791af91a"
+      "bytes": 53669,
+      "sha256": "fafab5f2c10a23f349fe9eb873995b961bd01c6d3f2a1bf242d2f7d5f482a845"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -9897,8 +9897,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 45546,
-      "sha256": "59e6b5d713902c7083cc5901579837e59cc571b559b611b3625948640d6b6e7b"
+      "bytes": 45945,
+      "sha256": "a39fde7877a75f297612c3c00bf49019d1389f30180f6a4cf19719735ed5ce6a"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10041,8 +10041,8 @@
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 13202,
-      "sha256": "f40e03d3dd8a7ee4d5d80021d792ef26eb20b5dd7d6702a5a92694308339ddc5"
+      "bytes": 14112,
+      "sha256": "4cccd7f4928b215879eaeb86485266b978340e485f75fab4ce24aaefb80b77fe"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -11259,8 +11259,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 1701,
-      "sha256": "b18e4853f936269540a1b55c9292acf80414e8d516d838486d0e716ef95449c5"
+      "bytes": 2850,
+      "sha256": "d3d8315147344a794c3e12c86cf514866c169d13bc69df0d8225cdd639d45263"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -12459,8 +12459,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 41407,
-      "sha256": "97a3e6df84683d20a61396100e96a9cad8a63b8367967fe8b4a471d8d5f94e6f"
+      "bytes": 41887,
+      "sha256": "0783b05a77a92a5c0647d86794305bdce7d0c83a9f1e8ce43659904dee93fe77"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -12921,8 +12921,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 41628,
-      "sha256": "4e7dcd83fb58b4b27e76ebaf0062d770554d180e87256509594009513cead8fc"
+      "bytes": 42450,
+      "sha256": "75b123d1245b67c4094a3b7fcf2fe0d0d7904a91c6ffa1aa61f32ba8f807ca95"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13095,8 +13095,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 7198,
-      "sha256": "bed1498a5a45d022a76db421809a3bfa34be12cf870f7666869ac64dd55af432"
+      "bytes": 7261,
+      "sha256": "c78af2ff34138ac8d74ee8994f66c4d6a884c6759b8f09641a770f01103d52d9"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -13599,8 +13599,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 42024,
-      "sha256": "36368e386919edc09a7743059ca77ffa065e08081d9efef029cef20c344f3160"
+      "bytes": 42745,
+      "sha256": "9c1109aa8459dbd3ce068aa6fcd95c4267be00d76e3b8b878b6f902b7fd0654d"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -13977,26 +13977,26 @@
     {
       "path": "src/shared/realm-rules.test.ts",
       "category": "test",
-      "bytes": 4565,
-      "sha256": "2612608171995875e100befd927217e26f739f31c401e96dc58c171f213646d1"
+      "bytes": 5772,
+      "sha256": "fc4420fc7c404f26f0888257381c72c00b5754098c1eaa7d96309b3b5428105e"
     },
     {
       "path": "src/shared/realm-rules.ts",
       "category": "source",
-      "bytes": 11396,
-      "sha256": "1069e3e1550d08b8013df8d7b944d5ec4a4b5807f63f3d679e441d53f679b5c5"
+      "bytes": 13962,
+      "sha256": "ed6426475a3de2475942f01bec52d0d239f7384aaaf56d9389ca6f2a3023ab3d"
     },
     {
       "path": "src/shared/realm-weather-rules.test.ts",
       "category": "test",
-      "bytes": 11069,
-      "sha256": "aed8f6db7d8c7eb90598a5e8ac8ea4099c97f451cade010a57534ba6abc3ea0c"
+      "bytes": 15763,
+      "sha256": "0dcbb03018a6bdfcd9ed515b9fc70f54ac64f496f1c51ea6bdb96bdb47ac6ab2"
     },
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 21459,
-      "sha256": "3fdb42f6aa1333352886bd85201bb1bf3421545ea2fa8f54e3dcc5bfd43b8f9b"
+      "bytes": 27042,
+      "sha256": "85af603aba62cd1f0cdeee365415c3cf2cf47c25be23597029edf1163716abed"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -14271,14 +14271,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 4735,
-      "sha256": "58d1e6e93a5b4ff5ad49997bb39d622c45540c6e8b9fe14f8f88cd77268173c6"
+      "bytes": 4961,
+      "sha256": "763dd4e2814e15e7501ceef449b0a45b76c1a50add4fc8f8cb7adfc429840505"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 24778,
-      "sha256": "632352de305b8d897fe8b4810b6c21160028e0296d49d279b3c029ea8a6541cf"
+      "bytes": 25829,
+      "sha256": "af62277ebe9c3d64eb36fa49a569d800ef76fe71d0fda53b88e1d6c146bea2da"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14547,8 +14547,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 57114,
-      "sha256": "47dc0157e2513125aeeeb14d0520cc08a65d7c890eb78dd997270da42afd257a"
+      "bytes": 57660,
+      "sha256": "2678260b7d449865908dc777eedac837314253cdf99dcf720b8a0c318087e4cf"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14571,8 +14571,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 92837,
-      "sha256": "73ee286616c8a4bbb5a1320d267ddf545ac9d044cceeb488c6d9ce2278a308c8"
+      "bytes": 97403,
+      "sha256": "60121a609d381a6598cff232afd8a43cbdf7a95fbfa3009b2470b4e0aec57e21"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -20241,7 +20241,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2215,
+      "lineCount": 2216,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20974,7 +20974,7 @@
       "path": "src/renderer/components/realmTileMarkKey.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 15,
+      "lineCount": 16,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -20989,7 +20989,7 @@
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 222,
+      "lineCount": 239,
       "imports": [
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -21007,7 +21007,7 @@
       "path": "src/renderer/components/RealmTravel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 107,
+      "lineCount": 116,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/realmCopy.ts",
@@ -21143,7 +21143,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 835,
+      "lineCount": 839,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -21169,6 +21169,7 @@
         "file:src/shared/miss-bank.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/realm-rules.ts",
+        "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/zone-rules.ts"
@@ -21492,7 +21493,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 247,
+      "lineCount": 260,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -25068,7 +25069,7 @@
       "path": "src/renderer/copy/realmCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 27,
+      "lineCount": 41,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-rules.ts"
@@ -29686,7 +29687,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 923,
+      "lineCount": 948,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -30391,7 +30392,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 145,
+      "lineCount": 146,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -32208,7 +32209,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 699,
+      "lineCount": 701,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -33427,7 +33428,7 @@
       "path": "src/shared/realm-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 102,
+      "lineCount": 127,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -33442,7 +33443,7 @@
       "path": "src/shared/realm-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 275,
+      "lineCount": 327,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-omen-rules.ts",
@@ -33451,6 +33452,9 @@
       ],
       "exports": [
         "symbol:src/shared/realm-rules.ts#chooseRealmDoor",
+        "symbol:src/shared/realm-rules.ts#CONFLUENCE_CHANCE",
+        "symbol:src/shared/realm-rules.ts#CONFLUENCE_FIRST_FLOOR",
+        "symbol:src/shared/realm-rules.ts#CONFLUENCE_GOLD_MULTIPLIER",
         "symbol:src/shared/realm-rules.ts#enterRealmFloor",
         "symbol:src/shared/realm-rules.ts#freshRealmFloorCounters",
         "symbol:src/shared/realm-rules.ts#isRealmId",
@@ -33467,6 +33471,7 @@
         "symbol:src/shared/realm-rules.ts#RealmSeverityDefinition",
         "symbol:src/shared/realm-rules.ts#rollRealmDoors",
         "symbol:src/shared/realm-rules.ts#runRealmId",
+        "symbol:src/shared/realm-rules.ts#runRealmSecondaryId",
         "symbol:src/shared/realm-rules.ts#runRealmSeverity",
         "symbol:src/shared/realm-rules.ts#turnsUntilRealmWeather",
         "symbol:src/shared/realm-rules.ts#usesRealms"
@@ -33480,7 +33485,7 @@
       "path": "src/shared/realm-weather-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 250,
+      "lineCount": 339,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -33494,7 +33499,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 512,
+      "lineCount": 621,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-omen-rules.ts",
@@ -33506,14 +33511,19 @@
       ],
       "exports": [
         "symbol:src/shared/realm-weather-rules.ts#applyRealmTurnToRun",
+        "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
         "symbol:src/shared/realm-weather-rules.ts#boardHasTurnablePair",
         "symbol:src/shared/realm-weather-rules.ts#BURNOUT_GOLD",
         "symbol:src/shared/realm-weather-rules.ts#DOUSE_GOLD",
+        "symbol:src/shared/realm-weather-rules.ts#FIRESTORM_MAX_BURNING",
         "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS",
         "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS_RAGING",
+        "symbol:src/shared/realm-weather-rules.ts#isRealmPeak",
         "symbol:src/shared/realm-weather-rules.ts#isTileFlipBlocked",
+        "symbol:src/shared/realm-weather-rules.ts#nextRealmWeather",
         "symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD",
         "symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD_CAP",
+        "symbol:src/shared/realm-weather-rules.ts#REALM_PEAK_EVERY",
         "symbol:src/shared/realm-weather-rules.ts#RealmTurnInput",
         "symbol:src/shared/realm-weather-rules.ts#RealmTurnResult",
         "symbol:src/shared/realm-weather-rules.ts#releaseRealmHoldsIfStuck",
@@ -34403,7 +34413,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 68,
+      "lineCount": 70,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -34416,7 +34426,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 452,
+      "lineCount": 470,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -35458,7 +35468,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1543,
+      "lineCount": 1615,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -39989,8 +39999,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2214,
-      "endLine": 2214
+      "line": 2215,
+      "endLine": 2215
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -40454,31 +40464,31 @@
       "kind": "interface",
       "file": "src/renderer/components/realmTileMarkKey.ts",
       "line": 4,
-      "endLine": 10
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/components/realmTileMarkKey.ts#realmTileMarkKey",
       "name": "realmTileMarkKey",
       "kind": "value",
       "file": "src/renderer/components/realmTileMarkKey.ts",
-      "line": 13,
-      "endLine": 14
+      "line": 14,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/RealmTileMarks.tsx#RealmTileMarks",
       "name": "RealmTileMarks",
       "kind": "value",
       "file": "src/renderer/components/RealmTileMarks.tsx",
-      "line": 190,
-      "endLine": 221
+      "line": 206,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/RealmTravel.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RealmTravel.tsx",
-      "line": 106,
-      "endLine": 106
+      "line": 115,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
@@ -40565,24 +40575,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 834,
-      "endLine": 834
+      "line": 838,
+      "endLine": 838
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 61,
-      "endLine": 91
+      "line": 62,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 48,
-      "endLine": 59
+      "line": 49,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -40933,16 +40943,16 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 221,
-      "endLine": 241
+      "line": 234,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
       "name": "deriveRealmCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 183,
-      "endLine": 194
+      "line": 196,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -40957,32 +40967,32 @@
       "name": "deriveZoneCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 196,
-      "endLine": 219
+      "line": 209,
+      "endLine": 232
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#RealmCalloutSnapshot",
       "name": "RealmCalloutSnapshot",
       "kind": "interface",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 170,
-      "endLine": 177
+      "line": 182,
+      "endLine": 190
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#realmEntryCallout",
       "name": "realmEntryCallout",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 159,
-      "endLine": 167
+      "line": 164,
+      "endLine": 179
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#realmEventCallout",
       "name": "realmEventCallout",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 133,
-      "endLine": 156
+      "line": 138,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCallout",
@@ -41013,8 +41023,8 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 244,
-      "endLine": 244
+      "line": 257,
+      "endLine": 257
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -45102,15 +45112,15 @@
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
       "line": 5,
-      "endLine": 11
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_TRAVEL_COPY",
       "name": "REALM_TRAVEL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 14,
-      "endLine": 26
+      "line": 17,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/copy/restlessFloorBeat.ts#restlessDriftAnnouncement",
@@ -50853,48 +50863,48 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 214,
-      "endLine": 246
+      "line": 233,
+      "endLine": 265
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 800,
-      "endLine": 800
+      "line": 825,
+      "endLine": 825
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 870,
-      "endLine": 872
+      "line": 895,
+      "endLine": 897
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 255,
-      "endLine": 255
+      "line": 274,
+      "endLine": 274
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 269,
-      "endLine": 269
+      "line": 288,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 368,
-      "endLine": 396
+      "line": 389,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -50909,32 +50919,32 @@
       "name": "BuiltinPuzzleDefinition",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 154,
-      "endLine": 165
+      "line": 173,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/contracts.ts#CameraViewportModePreference",
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 262,
-      "endLine": 262
+      "line": 281,
+      "endLine": 281
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 205,
-      "endLine": 210
+      "line": 224,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 878,
-      "endLine": 883
+      "line": 903,
+      "endLine": 908
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -50957,16 +50967,16 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 248,
-      "endLine": 252
+      "line": 267,
+      "endLine": 271
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 896,
-      "endLine": 922
+      "line": 921,
+      "endLine": 947
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -51005,32 +51015,32 @@
       "name": "FeaturedObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 108,
-      "endLine": 108
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_KIND_SPAWN_WEIGHTS",
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 198,
-      "endLine": 200
+      "line": 217,
+      "endLine": 219
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
       "name": "FINDABLE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 194,
-      "endLine": 196
+      "line": 213,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
       "name": "FindableKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 191,
-      "endLine": 191
+      "line": 210,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
@@ -51045,24 +51055,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 352,
-      "endLine": 365
+      "line": 373,
+      "endLine": 386
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 366,
-      "endLine": 366
+      "line": 387,
+      "endLine": 387
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 343,
-      "endLine": 343
+      "line": 364,
+      "endLine": 364
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -51077,32 +51087,32 @@
       "name": "GameMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 148,
-      "endLine": 148
+      "line": 167,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayCommandJournalEntry",
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 511,
-      "endLine": 515
+      "line": 532,
+      "endLine": 536
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 517,
-      "endLine": 527
+      "line": 538,
+      "endLine": 548
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 272,
-      "endLine": 272
+      "line": 291,
+      "endLine": 291
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -51133,8 +51143,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 416,
-      "endLine": 455
+      "line": 437,
+      "endLine": 476
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -51229,64 +51239,64 @@
       "name": "MUTATOR_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 167,
-      "endLine": 180
+      "line": 186,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/contracts.ts#MutatorId",
       "name": "MutatorId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 181,
-      "endLine": 181
+      "line": 200,
+      "endLine": 200
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlaySeat",
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 540,
-      "endLine": 552
+      "line": 561,
+      "endLine": 573
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 554,
-      "endLine": 567
+      "line": 575,
+      "endLine": 588
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 802,
-      "endLine": 815
+      "line": 827,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
       "name": "PuzzleDifficulty",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 150,
-      "endLine": 150
+      "line": 169,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleGoal",
       "name": "PuzzleGoal",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 151,
-      "endLine": 151
+      "line": 170,
+      "endLine": 170
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzlePackId",
       "name": "PuzzlePackId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 152,
-      "endLine": 152
+      "line": 171,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/contracts.ts#Rating",
@@ -51310,15 +51320,15 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 89,
-      "endLine": 92
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmEvent",
       "name": "RealmEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 94,
-      "endLine": 105
+      "line": 96,
+      "endLine": 124
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmId",
@@ -51365,24 +51375,24 @@
       "name": "RelicId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 107,
-      "endLine": 107
+      "line": 126,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 886,
-      "endLine": 886
+      "line": 911,
+      "endLine": 911
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 889,
-      "endLine": 894
+      "line": 914,
+      "endLine": 919
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -51397,24 +51407,24 @@
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 211,
-      "endLine": 211
+      "line": 230,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 863,
-      "endLine": 867
+      "line": 888,
+      "endLine": 892
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 861,
-      "endLine": 861
+      "line": 886,
+      "endLine": 886
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -51429,40 +51439,40 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 822,
-      "endLine": 834
+      "line": 847,
+      "endLine": 859
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 569,
-      "endLine": 798
+      "line": 590,
+      "endLine": 823
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 212,
-      "endLine": 212
+      "line": 231,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 472,
-      "endLine": 509
+      "line": 493,
+      "endLine": 530
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 529,
-      "endLine": 534
+      "line": 550,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -51477,8 +51487,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 836,
-      "endLine": 855
+      "line": 861,
+      "endLine": 880
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -51493,16 +51503,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 398,
-      "endLine": 414
+      "line": 419,
+      "endLine": 435
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 274,
-      "endLine": 309
+      "line": 293,
+      "endLine": 328
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -51525,16 +51535,16 @@
       "name": "SubscreenReturnView",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 133,
-      "endLine": 133
+      "line": 152,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/contracts.ts#Tile",
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 311,
-      "endLine": 341
+      "line": 330,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -51557,48 +51567,48 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 471,
-      "endLine": 471
+      "line": 492,
+      "endLine": 492
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
       "name": "VIEW_STATES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 117,
-      "endLine": 128
+      "line": 136,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
       "name": "ViewState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 130,
-      "endLine": 130
+      "line": 149,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 203,
-      "endLine": 203
+      "line": 222,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 462,
-      "endLine": 469
+      "line": 483,
+      "endLine": 490
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 457,
-      "endLine": 460
+      "line": 478,
+      "endLine": 481
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -52126,7 +52136,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 19,
-      "endLine": 144
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -55117,16 +55127,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 666,
-      "endLine": 684
+      "line": 668,
+      "endLine": 686
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 687,
-      "endLine": 698
+      "line": 689,
+      "endLine": 700
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -55134,7 +55144,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 580,
-      "endLine": 663
+      "endLine": 665
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -57013,64 +57023,88 @@
       "name": "chooseRealmDoor",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 206,
-      "endLine": 215
+      "line": 247,
+      "endLine": 263
+    },
+    {
+      "id": "symbol:src/shared/realm-rules.ts#CONFLUENCE_CHANCE",
+      "name": "CONFLUENCE_CHANCE",
+      "kind": "value",
+      "file": "src/shared/realm-rules.ts",
+      "line": 191,
+      "endLine": 191
+    },
+    {
+      "id": "symbol:src/shared/realm-rules.ts#CONFLUENCE_FIRST_FLOOR",
+      "name": "CONFLUENCE_FIRST_FLOOR",
+      "kind": "value",
+      "file": "src/shared/realm-rules.ts",
+      "line": 190,
+      "endLine": 190
+    },
+    {
+      "id": "symbol:src/shared/realm-rules.ts#CONFLUENCE_GOLD_MULTIPLIER",
+      "name": "CONFLUENCE_GOLD_MULTIPLIER",
+      "kind": "value",
+      "file": "src/shared/realm-rules.ts",
+      "line": 188,
+      "endLine": 188
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#enterRealmFloor",
       "name": "enterRealmFloor",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 256,
-      "endLine": 274
+      "line": 307,
+      "endLine": 326
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#freshRealmFloorCounters",
       "name": "freshRealmFloorCounters",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 231,
-      "endLine": 250
+      "line": 280,
+      "endLine": 301
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#isRealmId",
       "name": "isRealmId",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 146,
-      "endLine": 147
+      "line": 159,
+      "endLine": 160
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#isRealmWeatherTurn",
       "name": "isRealmWeatherTurn",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 162,
-      "endLine": 165
+      "line": 175,
+      "endLine": 178
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#nextFloorRealmDoor",
       "name": "nextFloorRealmDoor",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 218,
-      "endLine": 228
+      "line": 266,
+      "endLine": 277
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#openingRealmDoor",
       "name": "openingRealmDoor",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 179,
-      "endLine": 182
+      "line": 206,
+      "endLine": 209
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#REALM_DOOR_COUNT",
       "name": "REALM_DOOR_COUNT",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 188,
-      "endLine": 188
+      "line": 215,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#REALM_RULES_VERSION",
@@ -57085,16 +57119,16 @@
       "name": "REALM_SEVERITIES",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 140,
-      "endLine": 144
+      "line": 153,
+      "endLine": 157
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#realmClearGold",
       "name": "realmClearGold",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 175,
-      "endLine": 176
+      "line": 194,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#RealmDefinition",
@@ -57102,87 +57136,103 @@
       "kind": "interface",
       "file": "src/shared/realm-rules.ts",
       "line": 38,
-      "endLine": 54
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#realmIntervalFor",
       "name": "realmIntervalFor",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 158,
-      "endLine": 159
+      "line": 171,
+      "endLine": 172
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#REALMS",
       "name": "REALMS",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 56,
-      "endLine": 127
+      "line": 59,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#RealmSeverityDefinition",
       "name": "RealmSeverityDefinition",
       "kind": "interface",
       "file": "src/shared/realm-rules.ts",
-      "line": 129,
-      "endLine": 138
+      "line": 142,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#rollRealmDoors",
       "name": "rollRealmDoors",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 195,
-      "endLine": 203
+      "line": 222,
+      "endLine": 244
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#runRealmId",
       "name": "runRealmId",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 152,
-      "endLine": 153
+      "line": 165,
+      "endLine": 166
+    },
+    {
+      "id": "symbol:src/shared/realm-rules.ts#runRealmSecondaryId",
+      "name": "runRealmSecondaryId",
+      "kind": "value",
+      "file": "src/shared/realm-rules.ts",
+      "line": 202,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#runRealmSeverity",
       "name": "runRealmSeverity",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 155,
-      "endLine": 156
+      "line": 168,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#turnsUntilRealmWeather",
       "name": "turnsUntilRealmWeather",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 168,
-      "endLine": 172
+      "line": 181,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/realm-rules.ts#usesRealms",
       "name": "usesRealms",
       "kind": "value",
       "file": "src/shared/realm-rules.ts",
-      "line": 184,
-      "endLine": 185
+      "line": 211,
+      "endLine": 212
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#applyRealmTurnToRun",
       "name": "applyRealmTurnToRun",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 481,
-      "endLine": 504
+      "line": 588,
+      "endLine": 613
+    },
+    {
+      "id": "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
+      "name": "BLOOM_CUT_GOLD",
+      "kind": "value",
+      "file": "src/shared/realm-weather-rules.ts",
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#boardHasTurnablePair",
       "name": "boardHasTurnablePair",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 197,
-      "endLine": 209
+      "line": 260,
+      "endLine": 272
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#BURNOUT_GOLD",
@@ -57201,6 +57251,14 @@
       "endLine": 32
     },
     {
+      "id": "symbol:src/shared/realm-weather-rules.ts#FIRESTORM_MAX_BURNING",
+      "name": "FIRESTORM_MAX_BURNING",
+      "kind": "value",
+      "file": "src/shared/realm-weather-rules.ts",
+      "line": 40,
+      "endLine": 40
+    },
+    {
       "id": "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS",
       "name": "FROSTBITE_TURNS",
       "kind": "value",
@@ -57217,68 +57275,92 @@
       "endLine": 26
     },
     {
+      "id": "symbol:src/shared/realm-weather-rules.ts#isRealmPeak",
+      "name": "isRealmPeak",
+      "kind": "value",
+      "file": "src/shared/realm-weather-rules.ts",
+      "line": 63,
+      "endLine": 63
+    },
+    {
       "id": "symbol:src/shared/realm-weather-rules.ts#isTileFlipBlocked",
       "name": "isTileFlipBlocked",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 39,
-      "endLine": 40
+      "line": 45,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/shared/realm-weather-rules.ts#nextRealmWeather",
+      "name": "nextRealmWeather",
+      "kind": "value",
+      "file": "src/shared/realm-weather-rules.ts",
+      "line": 69,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD",
       "name": "REACTION_CLEAR_GOLD",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD_CAP",
       "name": "REACTION_CLEAR_GOLD_CAP",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 42,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/realm-weather-rules.ts#REALM_PEAK_EVERY",
+      "name": "REALM_PEAK_EVERY",
+      "kind": "value",
+      "file": "src/shared/realm-weather-rules.ts",
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#RealmTurnInput",
       "name": "RealmTurnInput",
       "kind": "interface",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 53,
-      "endLine": 64
+      "line": 83,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#RealmTurnResult",
       "name": "RealmTurnResult",
       "kind": "interface",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 66,
-      "endLine": 79
+      "line": 96,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#releaseRealmHoldsIfStuck",
       "name": "releaseRealmHoldsIfStuck",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 216,
-      "endLine": 227
+      "line": 279,
+      "endLine": 290
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#resolveRealmTurn",
       "name": "resolveRealmTurn",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 230,
-      "endLine": 478
+      "line": 293,
+      "endLine": 585
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#shedSnow",
       "name": "shedSnow",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 507,
-      "endLine": 511
+      "line": 616,
+      "endLine": 620
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#VINE_CUT_GOLD",
@@ -58493,8 +58575,8 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 107,
-      "endLine": 269
+      "line": 110,
+      "endLine": 280
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -58517,8 +58599,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 281,
-      "endLine": 451
+      "line": 292,
+      "endLine": 469
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -58526,7 +58608,7 @@
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
       "line": 61,
-      "endLine": 90
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
@@ -60061,32 +60143,32 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1431,
-      "endLine": 1518
+      "line": 1503,
+      "endLine": 1590
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 317,
-      "endLine": 1418
+      "line": 323,
+      "endLine": 1490
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1542,
-      "endLine": 1542
+      "line": 1614,
+      "endLine": 1614
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 147,
-      "endLine": 158
+      "line": 151,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -60094,39 +60176,39 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 47,
-      "endLine": 107
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1520,
-      "endLine": 1523
+      "line": 1592,
+      "endLine": 1595
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 140,
-      "endLine": 145
+      "line": 144,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 109,
-      "endLine": 138
+      "line": 113,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1525,
-      "endLine": 1540
+      "line": 1597,
+      "endLine": 1612
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -61771,7 +61853,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 96
+          "line": 97
         }
       ],
       "tests": [
@@ -62012,7 +62094,7 @@
         },
         {
           "path": "src/shared/realm-weather-rules.test.ts",
-          "line": 71
+          "line": 75
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -64169,7 +64251,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 351
+          "line": 354
         }
       ],
       "tests": [
@@ -64208,7 +64290,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 351
+          "line": 354
         }
       ],
       "tests": [
@@ -64242,7 +64324,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 351
+          "line": 354
         }
       ],
       "tests": [
@@ -64276,7 +64358,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 351
+          "line": 354
         }
       ],
       "tests": [
@@ -81673,6 +81755,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#CONFLUENCE_CHANCE",
+      "source": "file:src/shared/realm-rules.ts",
+      "target": "symbol:src/shared/realm-rules.ts#CONFLUENCE_CHANCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#CONFLUENCE_FIRST_FLOOR",
+      "source": "file:src/shared/realm-rules.ts",
+      "target": "symbol:src/shared/realm-rules.ts#CONFLUENCE_FIRST_FLOOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#CONFLUENCE_GOLD_MULTIPLIER",
+      "source": "file:src/shared/realm-rules.ts",
+      "target": "symbol:src/shared/realm-rules.ts#CONFLUENCE_GOLD_MULTIPLIER",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#enterRealmFloor",
       "source": "file:src/shared/realm-rules.ts",
       "target": "symbol:src/shared/realm-rules.ts#enterRealmFloor",
@@ -81769,6 +81869,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#runRealmSecondaryId",
+      "source": "file:src/shared/realm-rules.ts",
+      "target": "symbol:src/shared/realm-rules.ts#runRealmSecondaryId",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/realm-rules.ts->symbol:src/shared/realm-rules.ts#runRealmSeverity",
       "source": "file:src/shared/realm-rules.ts",
       "target": "symbol:src/shared/realm-rules.ts#runRealmSeverity",
@@ -81793,6 +81899,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#boardHasTurnablePair",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "symbol:src/shared/realm-weather-rules.ts#boardHasTurnablePair",
@@ -81811,6 +81923,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#FIRESTORM_MAX_BURNING",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "symbol:src/shared/realm-weather-rules.ts#FIRESTORM_MAX_BURNING",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS",
@@ -81823,9 +81941,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#isRealmPeak",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "symbol:src/shared/realm-weather-rules.ts#isRealmPeak",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#isTileFlipBlocked",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "symbol:src/shared/realm-weather-rules.ts#isTileFlipBlocked",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#nextRealmWeather",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "symbol:src/shared/realm-weather-rules.ts#nextRealmWeather",
       "kind": "exports"
     },
     {
@@ -81838,6 +81968,12 @@
       "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD_CAP",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "symbol:src/shared/realm-weather-rules.ts#REACTION_CLEAR_GOLD_CAP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/realm-weather-rules.ts->symbol:src/shared/realm-weather-rules.ts#REALM_PEAK_EVERY",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "symbol:src/shared/realm-weather-rules.ts#REALM_PEAK_EVERY",
       "kind": "exports"
     },
     {
@@ -90746,6 +90882,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/realm-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/realm-weather-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/realm-weather-rules.ts",
       "kind": "imports"
     },
     {

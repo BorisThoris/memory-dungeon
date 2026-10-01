@@ -86,6 +86,9 @@ export interface SoakRunReport {
     realmVinesCut: number;
     realmFrozen: number;
     realmDoors: number;
+    /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
+    realmPeaks: number;
+    realmConfluences: number;
     violations: SoakViolation[];
 }
 
@@ -253,11 +256,19 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
         return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
     },
+    'a confluence is two different realms': (_b, run) =>
+        run.realmSecondaryId != null && run.realmSecondaryId === run.realmId ? `confluence of ${run.realmId} with itself` : null,
     'a floor is built in the realm of the door walked through': (before, run, action) => {
         if (action !== 'descend' || !before?.nextRealm || !run.board) return null;
         return run.realmId === before.nextRealm.realmId && run.realmSeverity === before.nextRealm.severity
             ? null
             : `walked into ${before.nextRealm.realmId}/${before.nextRealm.severity}, built in ${String(run.realmId)}/${String(run.realmSeverity)}`;
+    },
+    'a confluence door builds a floor in both its realms': (before, run, action) => {
+        if (action !== 'descend' || !before?.nextRealm || !run.board) return null;
+        return (before.nextRealm.confluence ?? null) === (run.realmSecondaryId ?? null)
+            ? null
+            : `walked into a confluence with ${String(before.nextRealm.confluence)}, built with ${String(run.realmSecondaryId)}`;
     },
     'the peak rung never falls within a floor': (before, run) => {
         if (!before?.board || !run.board || before.board.level !== run.board.level) return null;
@@ -316,6 +327,8 @@ export const soakRun = ({
     let realmVinesCut = 0;
     let realmFrozen = 0;
     let realmDoors = 0;
+    let realmPeaks = 0;
+    let realmConfluences = 0;
 
     const act = (action: string, next: RunState): void => {
         step += 1;
@@ -337,6 +350,9 @@ export const soakRun = ({
             realmBurnouts += Math.max(0, (next.realmBurnoutsThisFloor ?? 0) - (run.realmBurnoutsThisFloor ?? 0));
             realmVinesCut += Math.max(0, (next.realmVinesCutThisFloor ?? 0) - (run.realmVinesCutThisFloor ?? 0));
             realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
+            realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
+        } else if (next.realmSecondaryId) {
+            realmConfluences += 1;
         }
         run = next;
     };
@@ -446,6 +462,8 @@ export const soakRun = ({
         realmVinesCut,
         realmFrozen,
         realmDoors,
+        realmPeaks,
+        realmConfluences,
         violations
     };
 };

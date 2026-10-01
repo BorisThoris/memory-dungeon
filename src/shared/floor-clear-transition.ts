@@ -14,7 +14,7 @@ import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
 import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
-import { realmClearGold, rollRealmDoors, runRealmId, runRealmSeverity } from './realm-rules';
+import { realmClearGold, rollRealmDoors, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
@@ -78,7 +78,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const realmId = runRealmId(run);
     const goldEarned = realmClearGold(
         floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
-        realmId ? runRealmSeverity(run) : null
+        realmId ? runRealmSeverity(run) : null,
+        runRealmSecondaryId(run) != null
     );
     const lastLevelResult = createFloorClearLevelResult({
         bonusTags,

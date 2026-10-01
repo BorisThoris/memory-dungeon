@@ -61,6 +61,22 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
             ctx.ellipse(x * w, y * h, 16, 9, 0.6, 0, Math.PI * 2);
             ctx.fill();
         }
+        if (mark.bloom) {
+            // Bloomed: flowers on the vine, worth three gold to cut.
+            for (const [x, y] of [[0.5, 0.45], [0.28, 0.72], [0.74, 0.22]] as const) {
+                ctx.fillStyle = 'rgba(255, 150, 210, 0.98)';
+                for (let petal = 0; petal < 5; petal += 1) {
+                    const angle = (petal / 5) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.ellipse(x * w + Math.cos(angle) * 14, y * h + Math.sin(angle) * 14, 11, 8, angle, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.fillStyle = 'rgba(255, 230, 120, 1)';
+                ctx.beginPath();
+                ctx.arc(x * w, y * h, 8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
     }
 
     if (mark.frost > 0) {
@@ -195,12 +211,13 @@ export const RealmTileMarks = ({ faceZ, tile, faceUp }: { faceZ: number; tile: T
             snowed: tile.snowed === true,
             fuse: Math.max(0, Math.floor(tile.fuse ?? 0)),
             vined: tile.vined === true,
+            bloom: tile.vined === true && tile.bloom === true,
             omen: tile.omen ?? null
         };
         return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.omen ? mark : null;
-    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.omen]);
+    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.bloom, tile.omen]);
     const front = useMemo<RealmTileMark | null>(
-        () => (tile.omen && tile.state !== 'removed' ? { frost: 0, snowed: false, fuse: 0, vined: false, omen: tile.omen } : null),
+        () => (tile.omen && tile.state !== 'removed' ? { frost: 0, snowed: false, fuse: 0, vined: false, bloom: false, omen: tile.omen } : null),
         [tile.omen, tile.state]
     );
     if (!back && !front) return null;

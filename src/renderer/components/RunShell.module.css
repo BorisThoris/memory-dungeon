@@ -243,6 +243,11 @@
     font-variant-numeric: tabular-nums;
 }
 
+.realm[data-peak-next='true'] .realmClock {
+    color: var(--realm-color, var(--gold));
+    font-weight: 600;
+}
+
 .realm[data-weather-soon='true'] {
     animation: realmSoon 900ms ease-in-out infinite alternate;
 }
@@ -1207,6 +1212,9 @@
 
 :global([data-shell-layout='phone-portrait']) .realm,
 :global([data-shell-layout='phone-landscape']) .realm {
+    flex-wrap: wrap;
+    max-width: 100%;
+    white-space: normal;
     gap: 0.4rem;
     padding: 0.05rem 0.55rem 0.1rem;
     letter-spacing: 0.08em;

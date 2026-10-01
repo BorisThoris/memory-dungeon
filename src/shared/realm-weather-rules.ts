@@ -3,7 +3,7 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
-import { REALM_SEVERITIES, isRealmWeatherTurn, runRealmId, runRealmSeverity } from './realm-rules';
+import { REALMS, REALM_SEVERITIES, isRealmWeatherTurn, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
 import { omenOfMatch, realmReactionName } from './realm-omen-rules';
 
 /**
@@ -32,6 +32,12 @@ export const WILDFIRE_MAX_BURNING = 4;
 export const DOUSE_GOLD = 2;
 export const BURNOUT_GOLD = 1;
 export const VINE_CUT_GOLD = 1;
+/** A bloomed vine pays this when it is cut. */
+export const BLOOM_CUT_GOLD = 3;
+/** Every this-many weather events of a floor, the weather is the realm's peak instead. */
+export const REALM_PEAK_EVERY = 3;
+/** A firestorm may burn this many cards at once, over wildfire's usual cap. */
+export const FIRESTORM_MAX_BURNING = 6;
 export const REACTION_CLEAR_GOLD = 1;
 export const REACTION_CLEAR_GOLD_CAP = 5;
 
@@ -40,12 +46,36 @@ export const isTileFlipBlocked = (tile: Tile): boolean =>
     tile.state === 'hidden' && (runNonNegativeInteger(tile.frost ?? 0) > 0 || tile.vined === true);
 
 const hasRealmStatus = (tile: Tile): boolean =>
-    tile.frost != null || tile.snowed != null || tile.fuse != null || tile.vined != null;
+    tile.frost != null || tile.snowed != null || tile.fuse != null || tile.vined != null || tile.bloom != null;
 
 const withoutRealmStatus = (tile: Tile): Tile => {
     if (!hasRealmStatus(tile)) return tile;
-    const { frost: _frost, snowed: _snowed, fuse: _fuse, vined: _vined, ...rest } = tile;
+    const { frost: _frost, snowed: _snowed, fuse: _fuse, vined: _vined, bloom: _bloom, ...rest } = tile;
     return rest;
+};
+
+const withoutVines = (tile: Tile): Tile => {
+    const { vined: _vined, bloom: _bloom, ...rest } = tile;
+    return rest;
+};
+
+/** Whether the weather a floor is about to have is its realm's peak: the third, sixth, ninth... */
+export const isRealmPeak = (weatherBefore: number): boolean => (runNonNegativeInteger(weatherBefore) + 1) % REALM_PEAK_EVERY === 0;
+
+/**
+ * Which realm's weather comes next on a floor, and whether it is the peak. A confluence floor
+ * alternates: the first realm's weather, then the second's, and so on.
+ */
+export const nextRealmWeather = (
+    run: Pick<RunState, 'realmId' | 'realmSecondaryId' | 'realmWeatherThisFloor'>
+): { realmId: RealmId; peak: boolean; name: string } | null => {
+    const primary = runRealmId(run);
+    if (!primary) return null;
+    const secondary = runRealmSecondaryId(run);
+    const count = runNonNegativeInteger(run.realmWeatherThisFloor ?? 0);
+    const realmId = secondary && count % 2 === 1 ? secondary : primary;
+    const peak = isRealmPeak(count);
+    return { realmId, peak, name: peak ? REALMS[realmId].peak : REALMS[realmId].weather };
 };
 
 const isRealCard = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey);
@@ -71,6 +101,10 @@ export interface RealmTurnResult {
     litTileIds: string[];
     events: RealmEvent[];
     weather: number;
+    /** Peak weather this turn (every third weather event of a floor). */
+    peaks: number;
+    /** The second realm after the turn: an omen's reaction ends a confluence. */
+    secondaryId: RealmId | null;
     reactions: number;
     doused: number;
     burnouts: number;
@@ -125,7 +159,7 @@ const blizzard = (
     return indices.map((index) => tiles[index]!.id);
 };
 
-const current = (tiles: Tile[], board: BoardState, pinned: ReadonlySet<string>, sweep: number): string[] => {
+const current = (tiles: Tile[], board: BoardState, pinned: ReadonlySet<string>, sweep: number): { ids: string[]; col: number } => {
     const cols = Math.max(1, board.columns);
     for (let step = 0; step < cols; step += 1) {
         const col = (sweep + step) % cols;
@@ -135,10 +169,39 @@ const current = (tiles: Tile[], board: BoardState, pinned: ReadonlySet<string>, 
         }
         if (indices.length >= 2) {
             cycleTiles(tiles, indices);
-            return indices.map((index) => tiles[index]!.id);
+            return { ids: indices.map((index) => tiles[index]!.id), col };
         }
     }
-    return [];
+    return { ids: [], col: -1 };
+};
+
+/** Thunderclap: the row with the most face-down cards is lit, every card in it. Nothing moves. */
+const thunderclap = (tiles: Tile[], board: BoardState): string[] => {
+    const cols = Math.max(1, board.columns);
+    let best: string[] = [];
+    for (let row = 0; row * cols < tiles.length; row += 1) {
+        const ids = tiles.slice(row * cols, row * cols + cols).filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
+        if (ids.length > best.length) best = ids;
+    }
+    return best;
+};
+
+/** Firestorm's second half: every burning card spreads to one face-down neighbour, under the storm's cap. */
+const spreadEveryFire = (tiles: Tile[], board: BoardState, rng: () => number): string[] => {
+    const spread: string[] = [];
+    const burning = tiles.map((tile, index) => ({ tile, index })).filter(({ tile }) => tile.state === 'hidden' && tile.fuse != null);
+    for (const { index } of burning) {
+        if (tiles.filter((tile) => tile.state === 'hidden' && tile.fuse != null).length >= FIRESTORM_MAX_BURNING) break;
+        const near = orthogonalNeighbourIndices(index, board.columns, tiles.length).filter((n) => {
+            const tile = tiles[n];
+            return tile != null && tile.state === 'hidden' && tile.fuse == null && isRealCard(tile);
+        });
+        if (near.length === 0) continue;
+        const pick = near[pickRngIndex(rng, near.length)]!;
+        tiles[pick] = { ...tiles[pick]!, fuse: WILDFIRE_FUSE };
+        spread.push(tiles[pick]!.id);
+    }
+    return spread;
 };
 
 const lightning = (tiles: Tile[], pinned: ReadonlySet<string>, rng: () => number, strikes: number): string[] => {
@@ -218,7 +281,7 @@ export const releaseRealmHoldsIfStuck = (tiles: Tile[]): string[] => {
     const freed: string[] = [];
     tiles.forEach((tile, index) => {
         if (tile.state === 'hidden' && (tile.frost != null || tile.vined != null)) {
-            const { frost: _frost, vined: _vined, ...rest } = tile;
+            const { frost: _frost, vined: _vined, bloom: _bloom, ...rest } = tile;
             tiles[index] = rest;
             freed.push(tile.id);
         }
@@ -244,6 +307,8 @@ export const resolveRealmTurn = ({
         litTileIds: [],
         events: [],
         weather: 0,
+        peaks: 0,
+        secondaryId: runRealmSecondaryId(run),
         reactions: 0,
         doused: 0,
         burnouts: 0,
@@ -262,6 +327,8 @@ export const resolveRealmTurn = ({
     const indexOf = new Map(tiles.map((tile, index) => [tile.id, index]));
     const events: RealmEvent[] = [];
     let realmId: RealmId = startRealm;
+    let secondaryId: RealmId | null = runRealmSecondaryId(run);
+    let peaks = 0;
     let goldDelta = 0;
     let reactions = 0;
     let doused = 0;
@@ -296,6 +363,8 @@ export const resolveRealmTurn = ({
             const gold = Math.min(REACTION_CLEAR_GOLD_CAP, cleared * REACTION_CLEAR_GOLD);
             goldDelta += gold;
             realmId = omen;
+            // The reaction settles the floor on one realm: a confluence ends with it.
+            secondaryId = null;
             reactions += 1;
             events.push({
                 key: eventKey(run, level, turns, 'reaction'),
@@ -322,6 +391,7 @@ export const resolveRealmTurn = ({
             events.push({ key: eventKey(run, level, turns, 'doused'), kind: 'doused', tileIds: [...tileIds], gold: DOUSE_GOLD });
         }
         const cut: string[] = [];
+        let cutGold = 0;
         const thawed: string[] = [];
         for (const id of tileIds) {
             const at = indexOf.get(id);
@@ -330,9 +400,9 @@ export const resolveRealmTurn = ({
                 const tile = tiles[near];
                 if (!tile || tile.state !== 'hidden') continue;
                 if (tile.vined === true) {
-                    const { vined: _vined, ...rest } = tile;
-                    tiles[near] = rest;
+                    tiles[near] = withoutVines(tile);
                     cut.push(tile.id);
+                    cutGold += tile.bloom === true ? BLOOM_CUT_GOLD : VINE_CUT_GOLD;
                 } else if (runNonNegativeInteger(tile.frost ?? 0) > 0) {
                     const { frost: _frost, ...rest } = tile;
                     tiles[near] = rest;
@@ -342,13 +412,13 @@ export const resolveRealmTurn = ({
         }
         if (cut.length > 0) {
             vinesCut += cut.length;
-            goldDelta += cut.length * VINE_CUT_GOLD;
-            events.push({ key: eventKey(run, level, turns, 'harvest'), kind: 'harvest', tileIds: cut, gold: cut.length * VINE_CUT_GOLD });
+            goldDelta += cutGold;
+            events.push({ key: eventKey(run, level, turns, 'harvest'), kind: 'harvest', tileIds: cut, gold: cutGold });
         }
         if (thawed.length > 0) {
             events.push({ key: eventKey(run, level, turns, 'shatter'), kind: 'thaw', tileIds: thawed });
         }
-    } else if (realmId === 'frost') {
+    } else if (realmId === 'frost' || secondaryId === 'frost') {
         const turnsFrozen = severity === 'raging' ? FROSTBITE_TURNS_RAGING : FROSTBITE_TURNS;
         const froze: string[] = [];
         for (const id of tileIds) {
@@ -417,14 +487,25 @@ export const resolveRealmTurn = ({
         });
     }
 
-    // 4. The weather.
+    // 4. The weather: the realm's own, its peak every third time, and a confluence's two in turn.
     if (isRealmWeatherTurn(realmId, severity, turns)) {
-        const rng = rngFor(realmId, run, level, turns);
-        const sweep = runNonNegativeInteger(run.realmWeatherThisFloor ?? 0);
+        const count = runNonNegativeInteger(run.realmWeatherThisFloor ?? 0);
+        const weatherRealm: RealmId = secondaryId && count % 2 === 1 ? secondaryId : realmId;
+        const peak = isRealmPeak(count);
+        const rng = rngFor(weatherRealm, run, level, turns);
         let touched: string[] = [];
         let kind: RealmEvent['kind'] = 'blizzard';
-        switch (realmId) {
+        switch (weatherRealm) {
             case 'frost': {
+                if (peak) {
+                    // Whiteout: every face-down card is snowed over.
+                    tiles.forEach((tile, index) => {
+                        if (tile.state === 'hidden') tiles[index] = { ...tile, snowed: true };
+                    });
+                    touched = tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
+                    kind = 'whiteout';
+                    break;
+                }
                 // The wind holds its direction for a floor, so a player can learn which way it blows.
                 const windEast = hashStringToSeed(`realm-wind:${run.runSeed}:${level}`) % 2 === 0;
                 touched = blizzard(tiles, board, pinned, rng, windEast);
@@ -433,24 +514,48 @@ export const resolveRealmTurn = ({
             }
             case 'ember':
                 touched = wildfire(tiles, rng, reach);
-                kind = 'wildfire';
+                if (peak) {
+                    touched = [...touched, ...spreadEveryFire(tiles, board, rng)];
+                    kind = 'firestorm';
+                } else {
+                    kind = 'wildfire';
+                }
                 break;
-            case 'tide':
-                touched = current(tiles, board, pinned, sweep);
+            case 'tide': {
+                const first = current(tiles, board, pinned, count);
+                touched = first.ids;
                 kind = 'current';
+                if (peak && first.col >= 0) {
+                    touched = [...touched, ...current(tiles, board, pinned, first.col + 1).ids.filter((id) => !first.ids.includes(id))];
+                    kind = 'springtide';
+                }
                 break;
+            }
             case 'storm':
-                touched = lightning(tiles, pinned, rng, reach);
+                if (peak) {
+                    touched = thunderclap(tiles, board);
+                    kind = 'thunderclap';
+                } else {
+                    touched = lightning(tiles, pinned, rng, reach);
+                    kind = 'lightning';
+                }
                 litTileIds = [...litTileIds, ...touched];
-                kind = 'lightning';
                 break;
             case 'grove':
                 touched = overgrowth(tiles, board, pinned, rng, reach);
                 kind = 'overgrowth';
+                if (peak) {
+                    tiles.forEach((tile, index) => {
+                        if (tile.state === 'hidden' && tile.vined === true) tiles[index] = { ...tile, bloom: true };
+                    });
+                    touched = tiles.filter((tile) => tile.state === 'hidden' && tile.bloom === true).map((tile) => tile.id);
+                    kind = 'bloom';
+                }
                 break;
         }
         if (touched.length > 0) {
             weather += 1;
+            if (peak) peaks += 1;
             events.push({ key: eventKey(run, level, turns, kind), kind, tileIds: touched });
         }
     }
@@ -469,6 +574,8 @@ export const resolveRealmTurn = ({
         litTileIds: [...new Set(litTileIds)],
         events,
         weather,
+        peaks,
+        secondaryId,
         reactions,
         doused,
         burnouts,
@@ -488,6 +595,8 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
     return {
         board: result.board,
         realmId: result.realmId,
+        realmSecondaryId: result.secondaryId,
+        realmPeaksThisFloor: runNonNegativeInteger(run.realmPeaksThisFloor ?? 0) + result.peaks,
         gold: Math.max(0, runNonNegativeInteger(run.gold ?? 0) + result.goldDelta),
         realmWeatherThisFloor: runNonNegativeInteger(run.realmWeatherThisFloor ?? 0) + result.weather,
         realmReactionsThisFloor: runNonNegativeInteger(run.realmReactionsThisFloor ?? 0) + result.reactions,

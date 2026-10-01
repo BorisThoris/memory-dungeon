@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 64 as const;
+export const ENCYCLOPEDIA_VERSION = 65 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -605,6 +605,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             '**The Drowned Vault**: the **current** runs one column of face-down cards down a step, the bottom card to the top, and sweeps across the room. ' +
             '**The Thunder Spire**: **lightning** swaps two face-down cards and leaves both lit until your next flip - what it shows you is where they landed. ' +
             '**The Overgrown Crypt**: **vines** creep over a card and hold it so it cannot be turned; a match beside vines cuts them, a gold for every vine. ' +
+            'Every third weather of a floor is the realm\u2019s **peak**: a **Whiteout** snows over every back on the board; a **Firestorm** lights a fire and spreads every fire at once; a **Spring Tide** runs two columns; a **Thunderclap** lights a whole row until your next flip and moves nothing; a **Bloom** flowers the vines, and a bloom you cut pays three gold. The chip at the top names the peak when it is next. ' +
             'Matching beside frozen cards shatters their ice. However the weather falls, a floor always keeps a pair you can turn: if the ice and the vines would leave none, they give way.'
     },
     {
@@ -617,7 +618,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'realm_travel',
         title: 'Travel',
         description:
-            'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - omen and all - is always one of the doors. A run opens somewhere calm.'
+            'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - omen and all - is always one of the doors. A run opens somewhere calm. ' +
+            'From the fourth floor the wild door is sometimes a **confluence**: two realms at once. Their weather comes by turns, both answer your turns - a miss freezes if either is the frost - and the clear pays **double**. Matching an omen settles the floor on the omen\u2019s realm alone.'
     },
     {
         id: 'tile_suits',

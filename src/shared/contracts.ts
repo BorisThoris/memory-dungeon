@@ -89,11 +89,30 @@ export type RealmSeverity = 'calm' | 'wild' | 'raging';
 export interface RealmDoor {
     realmId: RealmId;
     severity: RealmSeverity;
+    /** A confluence door: a second realm whose weather alternates with the first. Pays double. */
+    confluence?: RealmId;
 }
 /** The last thing a realm did to the board, for the HUD to name. Keyed so it is said once. */
 export interface RealmEvent {
     key: string;
-    kind: 'blizzard' | 'frostbite' | 'wildfire' | 'burnout' | 'doused' | 'current' | 'lightning' | 'overgrowth' | 'harvest' | 'thaw' | 'reaction';
+    kind:
+        | 'blizzard'
+        | 'frostbite'
+        | 'wildfire'
+        | 'burnout'
+        | 'doused'
+        | 'current'
+        | 'lightning'
+        | 'overgrowth'
+        | 'harvest'
+        | 'thaw'
+        | 'reaction'
+        // Every third weather of a floor is the realm's peak (`realm-weather-rules.ts`).
+        | 'whiteout'
+        | 'firestorm'
+        | 'springtide'
+        | 'thunderclap'
+        | 'bloom';
     /** The cards it touched, for the board to flash. */
     tileIds: string[];
     /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
@@ -336,6 +355,8 @@ export interface Tile {
     fuse?: number;
     /** Grove realm: vines hold this card down; it cannot be turned until a match beside it cuts them. */
     vined?: boolean;
+    /** Grove realm: the vines on this card have bloomed, and cutting them pays three gold, not one. */
+    bloom?: boolean;
     /** An omen card: matching its pair turns the floor's realm into this one (`realm-omen-rules.ts`). */
     omen?: RealmId;
 }
@@ -776,6 +797,10 @@ export interface RunState {
      */
     realmId?: RealmId | null;
     realmSeverity?: RealmSeverity;
+    /** A confluence floor's second realm: its weather alternates with the first's, and both answer the player. */
+    realmSecondaryId?: RealmId | null;
+    /** Peak weather this floor (every third weather event), and confluence floors this run. */
+    realmPeaksThisFloor?: number;
     /** The travel doors offered at this floor's clear, and the one the player walked through. */
     realmDoors?: RealmDoor[] | null;
     nextRealm?: RealmDoor | null;

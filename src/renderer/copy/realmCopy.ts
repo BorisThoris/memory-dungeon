@@ -1,13 +1,16 @@
 import type { RealmDoor, RealmId, RealmSeverity } from '../../shared/contracts';
-import { REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
+import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
 export const REALM_HUD_COPY = {
-    name: (realm: RealmId, severity: RealmSeverity): string => `${REALMS[realm].title} · ${REALM_SEVERITIES[severity].title}`,
-    clock: (realm: RealmId, turnsLeft: number): string =>
-        turnsLeft <= 1 ? `${REALMS[realm].weather} next turn` : `${REALMS[realm].weather} in ${turnsLeft}`,
-    aria: (realm: RealmId, severity: RealmSeverity, turnsLeft: number): string =>
-        `${REALMS[realm].place}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. ${REALMS[realm].weather} in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`
+    name: (realm: RealmId, severity: RealmSeverity, secondary: RealmId | null = null): string =>
+        secondary
+            ? `${REALMS[realm].title} + ${REALMS[secondary].title}`
+            : `${REALMS[realm].title} · ${REALM_SEVERITIES[severity].title}`,
+    /** The next weather by name - the peak's own name when it is the peak. */
+    clock: (weather: string, turnsLeft: number): string => (turnsLeft <= 1 ? `${weather} next turn` : `${weather} in ${turnsLeft}`),
+    aria: (realm: RealmId, severity: RealmSeverity, weather: string, turnsLeft: number, secondary: RealmId | null = null): string =>
+        `${REALMS[realm].place}${secondary ? ` meeting ${REALMS[secondary].place}` : ''}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. ${weather} in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`
 } as const;
 
 /** The travel screen (`RealmTravel`): the doors at a floor clear. */
@@ -18,9 +21,20 @@ export const REALM_TRAVEL_COPY = {
         door.realmId === endedIn ? 'The way you came' : REALMS[door.realmId].title,
     severityLine: (door: RealmDoor): string => {
         const severity = REALM_SEVERITIES[door.severity];
-        return `${severity.title} · ×${severity.goldMultiplier} gold`;
+        return door.confluence
+            ? `Confluence · ×${CONFLUENCE_GOLD_MULTIPLIER} gold`
+            : `${severity.title} · ×${severity.goldMultiplier} gold`;
     },
+    placeLine: (door: RealmDoor): string =>
+        door.confluence ? `${REALMS[door.realmId].place} meets ${REALMS[door.confluence].place.replace(/^The /, 'the ')}` : REALMS[door.realmId].place,
+    confluenceRule: (door: RealmDoor): string | null =>
+        door.confluence ? `Both realms' weather, one after the other, and both answer your turns.` : null,
     weatherLine: (door: RealmDoor): string =>
-        `${REALMS[door.realmId].weather} every ${realmIntervalFor(door.realmId, door.severity)} turns`,
-    choose: (door: RealmDoor): string => `Go to ${REALMS[door.realmId].place}, ${REALM_SEVERITIES[door.severity].title.toLowerCase()}`
+        door.confluence
+            ? `${REALMS[door.realmId].weather} and ${REALMS[door.confluence].weather.toLowerCase()} by turns, every ${realmIntervalFor(door.realmId, door.severity)} turns`
+            : `${REALMS[door.realmId].weather} every ${realmIntervalFor(door.realmId, door.severity)} turns · ${REALMS[door.realmId].peak} every third`,
+    choose: (door: RealmDoor): string =>
+        door.confluence
+            ? `Go to the confluence of ${REALMS[door.realmId].place} and ${REALMS[door.confluence].place}`
+            : `Go to ${REALMS[door.realmId].place}, ${REALM_SEVERITIES[door.severity].title.toLowerCase()}`
 } as const;

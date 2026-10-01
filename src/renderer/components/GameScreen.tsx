@@ -127,7 +127,7 @@ import { IceSheetOverlay } from './IceSheetOverlay';
 import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
-import { runRealmId, runRealmSeverity } from '../../shared/realm-rules';
+import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -293,18 +293,19 @@ const useRealmCallouts = (run: RunState): ScreenCallout[] => {
         level: run.board?.level ?? 0,
         realm: runRealmId(run),
         severity: runRealmSeverity(run),
+        secondary: runRealmSecondaryId(run),
         playing,
         event: run.lastRealmEvent ?? null
     };
     const previous = useRef<RealmCalloutSnapshot>(snapshot);
     const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
-    const { runSeed, level, realm, severity, event } = snapshot;
+    const { runSeed, level, realm, severity, secondary, event } = snapshot;
     useEffect(() => {
-        const next: RealmCalloutSnapshot = { runSeed, level, realm, severity, playing, event };
+        const next: RealmCalloutSnapshot = { runSeed, level, realm, severity, secondary, playing, event };
         const fresh = deriveRealmCallouts(previous.current, next);
         previous.current = next;
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
-    }, [runSeed, level, realm, severity, playing, event]);
+    }, [runSeed, level, realm, severity, secondary, playing, event]);
     return callouts;
 };
 
