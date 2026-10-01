@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 67 as const;
+export const ENCYCLOPEDIA_VERSION = 68 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -612,6 +612,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             '**The Thunder Spire**: **lightning** swaps two face-down cards and leaves both lit until your next flip - what it shows you is where they landed. ' +
             '**The Overgrown Crypt**: **vines** creep over a card and hold it so it cannot be turned; a match beside vines cuts them, a gold for every vine. ' +
             'Every third weather of a floor is the realm\u2019s **peak**: a **Whiteout** snows over every back on the board; a **Firestorm** lights a fire and spreads every fire at once; a **Spring Tide** runs two columns; a **Thunderclap** lights a whole row until your next flip and moves nothing; a **Bloom** flowers the vines, and a bloom you cut pays three gold. The chip at the top names the peak when it is next. ' +
+            'A **Raging** realm strikes back at a miss, on the two cards you just saw: the Cinder Deep **scalds** them, both burning on a two-turn fuse; the Drowned Vault\u2019s **undertow** drags each a cell down its column; the Thunder Spire\u2019s **static** throws each across the board, unlit; the Overgrown Crypt **snares** both in vines. ' +
             'Matching beside frozen cards shatters their ice. However the weather falls, a floor always keeps a pair you can turn: if the ice and the vines would leave none, they give way.'
     },
     {

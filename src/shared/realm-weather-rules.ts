@@ -13,7 +13,8 @@ import { omenOfMatch, realmReactionName } from './realm-omen-rules';
  *
  * 1. an omen matched sets off its reaction and turns the realm (`realm-omen-rules.ts`);
  * 2. the realm answers the turn: a match douses a burning card, cuts the vines beside it and
- *    shatters the ice beside it; a miss in the frost freezes the cards it showed;
+ *    shatters the ice beside it; a miss in the frost freezes the cards it showed, and a miss in any
+ *    other realm at its raging pitch is struck back at (`resolveRealmBacklash`);
  * 3. the clocks tick: ice thaws a turn, fuses burn a turn, and a fuse that runs out burns a gold
  *    and spreads the fire to a neighbour;
  * 4. on its turn, the weather: blizzard, wildfire, current, lightning or overgrowth;
@@ -40,6 +41,8 @@ export const REALM_PEAK_EVERY = 3;
 export const FIRESTORM_MAX_BURNING = 6;
 export const REACTION_CLEAR_GOLD = 1;
 export const REACTION_CLEAR_GOLD_CAP = 5;
+/** A raging ember scalds a miss's cards on a shorter fuse than wildfire's. */
+export const SCALD_FUSE = 2;
 
 /** A card the player cannot turn because of the realm: frozen, or held by vines. */
 export const isTileFlipBlocked = (tile: Tile): boolean =>
@@ -110,6 +113,8 @@ export interface RealmTurnResult {
     burnouts: number;
     vinesCut: number;
     frozen: number;
+    /** A raging realm's backlash this turn (0 or 1). */
+    backlashes: number;
 }
 
 const rngFor = (kind: string, run: RunState, level: number, turns: number) =>
@@ -240,6 +245,94 @@ const overgrowth = (tiles: Tile[], board: BoardState, pinned: ReadonlySet<string
     return grown;
 };
 
+/**
+ * A raging realm strikes back at a miss (2026-10-01). Frost always froze a miss's cards; the other
+ * four realms only acted on their clock, so a miss in them cost the bank and nothing else. At the
+ * raging pitch each now answers the miss in its own way, on the two cards the player just saw:
+ *
+ * - **ember, scald**: both catch fire on a short fuse (`SCALD_FUSE`): match them in time or they
+ *   burn a gold and spread;
+ * - **tide, undertow**: each is dragged one cell down its column (the bottom one to the top), so
+ *   what was seen is a cell off;
+ * - **storm, static**: each is thrown across the board, swapped with a card of another pair, and
+ *   not lit, so what was seen is gone;
+ * - **grove, snare**: both are vined and held until a match beside them cuts them.
+ *
+ * Pinned cards stay put. The guard after the turn still frees the vines if they would leave no pair
+ * that can be turned. Returns the cards it touched (the ones moved and the ones they swapped with).
+ */
+export const resolveRealmBacklash = (
+    realmId: RealmId,
+    tiles: Tile[],
+    columns: number,
+    pinned: ReadonlySet<string>,
+    missedIds: readonly string[],
+    rng: () => number
+): { kind: RealmEvent['kind']; tileIds: string[] } | null => {
+    const at = (id: string): number => tiles.findIndex((tile) => tile.id === id);
+    const missed = missedIds.filter((id) => {
+        const index = at(id);
+        return index >= 0 && tiles[index]!.state === 'hidden' && isRealCard(tiles[index]!);
+    });
+    if (missed.length === 0) return null;
+    const touched: string[] = [];
+    switch (realmId) {
+        case 'ember': {
+            for (const id of missed) {
+                const index = at(id);
+                const burning = tiles.filter((tile) => tile.state === 'hidden' && tile.fuse != null).length;
+                if (tiles[index]!.fuse != null || burning >= WILDFIRE_MAX_BURNING) continue;
+                tiles[index] = { ...tiles[index]!, fuse: SCALD_FUSE };
+                touched.push(id);
+            }
+            return touched.length > 0 ? { kind: 'scald', tileIds: touched } : null;
+        }
+        case 'tide': {
+            const cols = Math.max(1, columns);
+            for (const id of missed) {
+                const index = at(id);
+                if (!movable(tiles, index, pinned)) continue;
+                let below = index + cols;
+                if (below >= tiles.length) below = index % cols;
+                if (below === index || !movable(tiles, below, pinned)) continue;
+                const other = tiles[below]!;
+                tiles[below] = tiles[index]!;
+                tiles[index] = other;
+                touched.push(id, other.id);
+            }
+            return touched.length > 0 ? { kind: 'undertow', tileIds: [...new Set(touched)] } : null;
+        }
+        case 'storm': {
+            for (const id of missed) {
+                const index = at(id);
+                if (!movable(tiles, index, pinned)) continue;
+                const pool = tiles
+                    .map((_, n) => n)
+                    .filter((n) => n !== index && movable(tiles, n, pinned) && !missed.includes(tiles[n]!.id) && tiles[n]!.pairKey !== tiles[index]!.pairKey);
+                if (pool.length === 0) continue;
+                const far = pool[pickRngIndex(rng, pool.length)]!;
+                const other = tiles[far]!;
+                tiles[far] = tiles[index]!;
+                tiles[index] = other;
+                touched.push(id, other.id);
+            }
+            return touched.length > 0 ? { kind: 'static', tileIds: [...new Set(touched)] } : null;
+        }
+        case 'grove': {
+            for (const id of missed) {
+                const index = at(id);
+                if (pinned.has(id) || tiles[index]!.vined === true) continue;
+                tiles[index] = { ...tiles[index]!, vined: true };
+                touched.push(id);
+            }
+            return touched.length > 0 ? { kind: 'snare', tileIds: touched } : null;
+        }
+        case 'frost':
+            return null;
+    }
+    return null;
+};
+
 const wildfire = (tiles: Tile[], rng: () => number, count: number): string[] => {
     const lit: string[] = [];
     for (let n = 0; n < count; n += 1) {
@@ -313,7 +406,8 @@ export const resolveRealmTurn = ({
         doused: 0,
         burnouts: 0,
         vinesCut: 0,
-        frozen: 0
+        frozen: 0,
+        backlashes: 0
     };
     if (!startRealm) {
         return empty;
@@ -335,6 +429,7 @@ export const resolveRealmTurn = ({
     let burnouts = 0;
     let vinesCut = 0;
     let frozen = 0;
+    let backlashes = 0;
     let weather = 0;
     let litTileIds: string[] = [];
     const touchedThisTurn = new Set<string>();
@@ -432,6 +527,14 @@ export const resolveRealmTurn = ({
         if (froze.length > 0) {
             frozen += froze.length;
             events.push({ key: eventKey(run, level, turns, 'frostbite'), kind: 'frostbite', tileIds: froze });
+        }
+    }
+    if (outcome === 'miss' && severity === 'raging' && realmId !== 'frost') {
+        const lashed = resolveRealmBacklash(realmId, tiles, board.columns, pinned, tileIds, rngFor('backlash', run, level, turns));
+        if (lashed) {
+            backlashes += 1;
+            for (const id of lashed.tileIds) touchedThisTurn.add(id);
+            events.push({ key: eventKey(run, level, turns, lashed.kind), kind: lashed.kind, tileIds: lashed.tileIds });
         }
     }
 
@@ -580,7 +683,8 @@ export const resolveRealmTurn = ({
         doused,
         burnouts,
         vinesCut,
-        frozen
+        frozen,
+        backlashes
     };
 };
 
@@ -605,6 +709,7 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
         realmBurnoutsThisFloor: runNonNegativeInteger(run.realmBurnoutsThisFloor ?? 0) + result.burnouts,
         realmVinesCutThisFloor: runNonNegativeInteger(run.realmVinesCutThisFloor ?? 0) + result.vinesCut,
         realmFrozenThisFloor: runNonNegativeInteger(run.realmFrozenThisFloor ?? 0) + result.frozen,
+        realmBacklashesThisFloor: runNonNegativeInteger(run.realmBacklashesThisFloor ?? 0) + result.backlashes,
         // The most telling event of the turn is the one the HUD names: a reaction over everything.
         lastRealmEvent:
             result.events.find((event) => event.kind === 'reaction') ?? result.events[result.events.length - 1] ?? run.lastRealmEvent ?? null,

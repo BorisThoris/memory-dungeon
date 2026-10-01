@@ -322,6 +322,7 @@
                 "realmBurnoutsThisFloor",
                 "realmVinesCutThisFloor",
                 "realmFrozenThisFloor",
+                "realmBacklashesThisFloor",
                 "realmLitTileIds",
                 "lastRealmEvent",
                 "realmReactionsThisFloor",
@@ -1986,6 +1987,7 @@
                 "realmBurnoutsThisFloor",
                 "realmVinesCutThisFloor",
                 "realmFrozenThisFloor",
+                "realmBacklashesThisFloor",
                 "realmLitTileIds",
                 "lastRealmEvent"
             ],

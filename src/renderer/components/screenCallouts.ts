@@ -131,6 +131,10 @@ const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'
     firestorm: { title: 'FIRESTORM!', sub: (e) => `${e.tileIds.length} cards burning: douse what you can`, size: 'major' },
     springtide: { title: 'SPRING TIDE!', sub: (e) => `Two columns run · ${e.tileIds.length} cards moved`, size: 'major' },
     thunderclap: { title: 'THUNDERCLAP!', sub: (e) => `A row lit: ${e.tileIds.length} faces until your next flip`, size: 'major' },
+    scald: { title: 'SCALDED!', sub: (e) => `The realm strikes back: ${e.tileIds.length === 1 ? 'a card you missed is' : 'both cards you missed are'} burning, two turns to douse`, size: 'major' },
+    undertow: { title: 'UNDERTOW!', sub: () => 'The realm strikes back: the cards you missed are dragged a step down', size: 'major' },
+    static: { title: 'STATIC!', sub: () => 'The realm strikes back: the cards you missed are thrown across the board', size: 'major' },
+    snare: { title: 'SNARED!', sub: () => 'The realm strikes back: the cards you missed are held in vines', size: 'major' },
     bloom: { title: 'BLOOM!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'bloom' : 'blooms'}: three gold for every one you cut`, size: 'major' }
 };
 

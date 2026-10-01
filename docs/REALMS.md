@@ -41,6 +41,19 @@ Calm adds a turn to the interval, raging takes one away and doubles each event's
 
 The HUD chip names the peak when it is next, in the realm's colour.
 
+## Backlash: a raging realm strikes back (`resolveRealmBacklash`, 2026-10-01)
+
+Frost has always frozen a miss's cards. At the **raging** pitch the other four answer a miss too, on the two cards the player just saw, so the raging door's half-again gold is paid for in more than weather speed:
+
+| Realm | Backlash | What it does to the missed cards |
+| --- | --- | --- |
+| Ember | Scald | Both catch fire on a two-turn fuse (`SCALD_FUSE`): douse them by matching in time, or they burn a gold and spread |
+| Tide | Undertow | Each is dragged one cell down its column, the bottom row wrapping to the top |
+| Storm | Static | Each is thrown across the board, swapped with a card of another pair, and not lit |
+| Grove | Snare | Both are vined and held until a match beside them cuts them |
+
+Pinned cards stay put, the floor guard still frees vines that would leave no turnable pair, and calm and wild floors keep the old answer (frostbite in the frost, nothing elsewhere). Counted as `realmBacklashesThisFloor`; the soak requires one to happen, and the hall walks each (`realm-scald`, `realm-undertow`, `realm-static`, `realm-snare`).
+
 ## Confluence
 
 From floor 4, about one clear in three turns its wild door into a **confluence**: two realms at once

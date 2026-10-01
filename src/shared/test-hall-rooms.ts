@@ -112,7 +112,11 @@ export type TestHallRoomId =
     | 'realm-confluence'
     | 'realm-attunement'
     | 'realm-smoke'
-    | 'realm-chill';
+    | 'realm-chill'
+    | 'realm-scald'
+    | 'realm-undertow'
+    | 'realm-static'
+    | 'realm-snare';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -1573,6 +1577,84 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return frozen === 2 && !r.realmChill ? null : `${frozen} frozen, chill ${r.realmChill}`;
                 }
             }
+        ]
+    },
+    {
+        id: 'realm-scald',
+        title: 'Scald',
+        mechanic: 'A raging Cinder Deep strikes back at a miss: both cards it showed catch fire on a two-turn fuse.',
+        graphMechanicIds: ['board.realm_weather', 'economy.gold'],
+        tryThis: 'Miss a against b: both are burning now. Match a before its fuse runs out and the fire is doused for gold.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('ember', 'raging', { gold: 0 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'the miss is scalded: both cards burn on a two-turn fuse',
+                expect: expectAll(realmEventIs('scald'), (r) => (tileById(r, 'a-1')?.fuse === 2 && tileById(r, 'b-1')?.fuse === 2 ? null : `fuses ${tileById(r, 'a-1')?.fuse},${tileById(r, 'b-1')?.fuse}`), (r) => (r.realmBacklashesThisFloor === 1 ? null : `backlashes ${r.realmBacklashesThisFloor}`))
+            },
+            { step: { do: 'match', pairKey: 'a' }, says: 'matched in time, the scald is doused for two gold (the weather comes on this turn too)', expect: expectAll(goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
+        ]
+    },
+    {
+        id: 'realm-undertow',
+        title: 'Undertow',
+        mechanic: 'A raging Drowned Vault strikes back at a miss: the undertow drags each card it showed one cell down its column.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Miss a against b along the top row: each is dragged a cell down, and the cards below rise to take their places.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'raging') }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'both cards are dragged one cell down',
+                expect: expectAll(realmEventIs('undertow'), (r, b) => {
+                    const cols = b.board!.columns;
+                    const a = positionOf(b, 'a-1');
+                    const bb = positionOf(b, 'b-1');
+                    if (positionOf(r, 'a-1') !== a + cols) return `a-1 at ${positionOf(r, 'a-1')}, expected ${a + cols}`;
+                    if (positionOf(r, 'b-1') !== bb + cols) return `b-1 at ${positionOf(r, 'b-1')}, expected ${bb + cols}`;
+                    return r.realmBacklashesThisFloor === 1 ? null : `backlashes ${r.realmBacklashesThisFloor}`;
+                })
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'realm-static',
+        title: 'Static',
+        mechanic: 'A raging Thunder Spire strikes back at a miss: static throws each card it showed across the board, swapped with a card of another pair, and lights neither.',
+        graphMechanicIds: ['board.realm_weather'],
+        tryThis: 'Miss a against b: both are thrown somewhere else, and nothing shows you where.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('storm', 'raging') }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'both cards are thrown elsewhere, unlit',
+                expect: expectAll(realmEventIs('static'), (r, b) => {
+                    if (positionOf(r, 'a-1') === positionOf(b, 'a-1') || positionOf(r, 'b-1') === positionOf(b, 'b-1')) return 'a missed card stayed put';
+                    if ((r.realmLitTileIds ?? []).length > 0) return 'static lit a card';
+                    const into = (id: string) => r.board!.tiles[positionOf(b, id)]!;
+                    if (into('a-1').pairKey === 'a' || into('b-1').pairKey === 'b') return 'a card swapped with its own pair';
+                    return null;
+                }, finishable)
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'realm-snare',
+        title: 'Snare',
+        mechanic: 'A raging Overgrown Crypt strikes back at a miss: both cards it showed are snared in vines and cannot be turned until a match beside them cuts them.',
+        graphMechanicIds: ['board.realm_weather', 'safety.softlock_fairness'],
+        tryThis: 'Miss a against b, then try to turn a: the vines hold it. Match c beside b to cut b free.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('grove', 'raging', { gold: 0 }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'b-1' },
+                says: 'both cards are snared',
+                expect: expectAll(realmEventIs('snare'), (r) => (tileById(r, 'a-1')?.vined && tileById(r, 'b-1')?.vined ? null : 'a missed card is not vined'), finishable)
+            },
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'a snared card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the snared card turned') },
+            { step: { do: 'match', pairKey: 'c' }, says: 'a match beside the snare cuts it, though this turn’s overgrowth may creep back over it', expect: expectAll((r) => ((r.realmVinesCutThisFloor ?? 0) >= 1 ? null : 'no vine was cut'), finishable) }
         ]
     }
 ];

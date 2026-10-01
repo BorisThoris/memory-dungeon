@@ -1,7 +1,7 @@
 import { useRef, type ReactElement } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { CanvasTexture, DoubleSide, LinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
-import type { RealmId } from '../../shared/contracts';
+import { REALM_IDS, type RealmId } from '../../shared/contracts';
 import { createMulberry32 } from '../../shared/rng';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
@@ -190,6 +190,17 @@ const realmTexture = (realm: RealmId): CanvasTexture => {
     texture.magFilter = LinearFilter;
     textures.set(realm, texture);
     return texture;
+};
+
+/**
+ * Paint every realm's back before play (the board's floor warmup calls it): an omen can turn the
+ * floor into a realm it has not shown yet, and its texture must not be drawn mid-floor.
+ */
+export const prewarmRealmBackTextures = (upload?: (texture: CanvasTexture) => void): void => {
+    for (const realm of REALM_IDS) {
+        const texture = realmTexture(realm);
+        upload?.(texture);
+    }
 };
 
 /** The breath of the fire and the storm: their marks pulse; the rest hold still. */

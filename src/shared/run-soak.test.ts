@@ -46,6 +46,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.realmDoused > 0), 'no fire was ever doused').toBe(true);
         expect(reports.some((report) => report.realmVinesCut > 0), 'no vine was ever cut').toBe(true);
         expect(reports.some((report) => report.realmFrozen > 0), 'no card was ever frozen').toBe(true);
+        expect(reports.some((report) => report.realmBacklashes > 0), 'no raging realm ever struck back').toBe(true);
         expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
         expect(reports.some((report) => report.realmPeaks > 0), 'no realm ever reached its peak').toBe(true);
         expect(reports.some((report) => report.realmConfluences > 0), 'no floor was ever a confluence').toBe(true);

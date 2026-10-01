@@ -215,7 +215,7 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
     },
     'board.realm_weather': {
         generation: 265,
-        reason: 'The census builds each floor fresh with no realm, because it measures the pair curve and the par it is judged against. The whole-run soak plays every realm through its doors, requires weather, frostbite, a doused fire and a cut vine to happen, and checks after every action that a turnable pair remains; a test hall room walks each realm.'
+        reason: 'The census builds each floor fresh with no realm, because it measures the pair curve and the par it is judged against. The whole-run soak plays every realm through its doors, requires weather, frostbite, a raging backlash, a doused fire and a cut vine to happen, and checks after every action that a turnable pair remains; a test hall room walks each realm.'
     },
     'board.realm_omen': {
         generation: 265,

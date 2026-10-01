@@ -87,6 +87,8 @@ export interface SoakRunReport {
     realmBurnouts: number;
     realmVinesCut: number;
     realmFrozen: number;
+    /** A raging realm striking back at a miss (`resolveRealmBacklash`). */
+    realmBacklashes: number;
     realmDoors: number;
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
@@ -344,6 +346,7 @@ export const soakRun = ({
     let realmBurnouts = 0;
     let realmVinesCut = 0;
     let realmFrozen = 0;
+    let realmBacklashes = 0;
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
@@ -372,6 +375,7 @@ export const soakRun = ({
             realmBurnouts += Math.max(0, (next.realmBurnoutsThisFloor ?? 0) - (run.realmBurnoutsThisFloor ?? 0));
             realmVinesCut += Math.max(0, (next.realmVinesCutThisFloor ?? 0) - (run.realmVinesCutThisFloor ?? 0));
             realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
+            realmBacklashes += Math.max(0, (next.realmBacklashesThisFloor ?? 0) - (run.realmBacklashesThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
@@ -491,6 +495,7 @@ export const soakRun = ({
         realmBurnouts,
         realmVinesCut,
         realmFrozen,
+        realmBacklashes,
         realmDoors,
         realmPeaks,
         realmConfluences,

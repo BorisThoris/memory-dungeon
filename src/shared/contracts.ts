@@ -112,7 +112,12 @@ export interface RealmEvent {
         | 'firestorm'
         | 'springtide'
         | 'thunderclap'
-        | 'bloom';
+        | 'bloom'
+        // A raging realm strikes back at a miss (`resolveRealmBacklash`): ember, tide, storm, grove.
+        | 'scald'
+        | 'undertow'
+        | 'static'
+        | 'snare';
     /** The cards it touched, for the board to flash. */
     tileIds: string[];
     /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
@@ -829,6 +834,8 @@ export interface RunState {
     /** Grove: vines a match cut this floor. Frost: cards a miss froze this floor. */
     realmVinesCutThisFloor?: number;
     realmFrozenThisFloor?: number;
+    /** A raging realm's backlashes this floor: a miss scalded, dragged, thrown or snared (`resolveRealmBacklash`). */
+    realmBacklashesThisFloor?: number;
     /** Floors cleared in each realm this run; the travel screen and the results read it. */
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */
