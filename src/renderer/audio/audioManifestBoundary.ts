@@ -5,7 +5,9 @@ const manifestEntrySchema = <Category extends z.ZodType>(categorySchema: Categor
     z
         .object({
             file: nonEmptyStringSchema,
-            category: categorySchema
+            category: categorySchema,
+            /** `natural`: play the recording at level and fade only its end (recorded impacts have tails). */
+            envelope: z.enum(['natural']).optional()
         })
         .strict();
 
@@ -19,7 +21,7 @@ const matchTierRangeSchema = z
 export const sfxManifestSchema = z
     .object({
         version: z.number().int().positive(),
-        entries: manifestEntriesSchema(z.enum(['flip', 'match', 'mismatch', 'power', 'shuffle'])),
+        entries: manifestEntriesSchema(z.enum(['flip', 'match', 'mismatch', 'power', 'shuffle', 'realm'])),
         matchTierDepthRanges: z
             .object({
                 'match-tier-low': matchTierRangeSchema,

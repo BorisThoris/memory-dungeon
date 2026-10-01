@@ -17,6 +17,21 @@
 | shuffle-full | `shuffle-full.ogg` |
 | shuffle-quick | `shuffle-quick.ogg` |
 | floor-clear | `floor-clear.ogg` |
+| realm-fire-1 | `realm-fire-1.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-fire-2 | `realm-fire-2.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-fire-3 | `realm-fire-3.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-burnout | `realm-burnout.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-ice-1 | `realm-ice-1.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-ice-2 | `realm-ice-2.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-ice-3 | `realm-ice-3.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-wind | `realm-wind.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-water-1 | `realm-water-1.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-water-2 | `realm-water-2.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-douse | `realm-douse.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-lightning-1 | `realm-lightning-1.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-lightning-2 | `realm-lightning-2.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-static | `realm-static.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| realm-earth | `realm-earth.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
 
 Match streak depth maps to low / mid / high in `manifest.json`.
 

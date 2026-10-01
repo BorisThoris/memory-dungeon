@@ -333,12 +333,12 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         id: 'realm_weather_strike',
         domain: 'gameplay',
         interaction: 'A realm event lands on a resolved turn (weather, peak, backlash, douse, harvest, thaw) or the void spits new pairs',
-        cue: 'none',
+        cue: 'realm-fire-1',
         callsite: 'applyResolveBoardTurn -> playResolveSfx -> playRealmEventSfx / playVoidSpewSfx',
         semanticMoment: 'pressure',
-        decision: 'procedural_only',
+        decision: 'sampled_with_fallback',
         cooldownPolicy: 'realm category polyphony cap of 8; once per new realm event key, a peak a quarter louder; the void once per spit',
-        mixRole: 'filtered-noise weather under the turn cue: thunder crack and roll, fire whoosh, wind, ice snap, wave, vine creak, chime, hiss, void implosion',
+        mixRole: 'CC0 recorded impacts (lightning, fire, ice, water, earth, wind, crackle, douse) taken in turn, procedural filtered noise as the fallback; chime and void stay procedural',
         reducedMotionSafe: true
     },
     {

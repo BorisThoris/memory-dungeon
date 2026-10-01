@@ -21,7 +21,8 @@ import {
     resetSampledSfxForTests,
     silenceAllSampleVoices,
     tryPlaySampled as tryPlaySampledUnguarded,
-    type SampledVoicing
+    type SampledVoicing,
+    type SfxSampleKey
 } from './sampledSfx';
 import {
     getSharedAudioContext,
@@ -311,6 +312,28 @@ const REALM_SOUND_LEVEL: Readonly<Record<RealmSound, number>> = {
     hiss: 0.55
 };
 
+/**
+ * The recordings each sound plays (CC0, `assets/ASSET_SOURCES.md`), taken in turn so a run of the
+ * same event does not repeat one take. The procedural voice below is the fallback when a sample has
+ * not decoded. The chime stays procedural: a small, clean confirmation reads better than an impact.
+ */
+const REALM_SOUND_SAMPLES: Readonly<Record<RealmSound, readonly SfxSampleKey[]>> = {
+    thunder: ['realm-lightning-1', 'realm-lightning-2'],
+    crackle: ['realm-static'],
+    fire: ['realm-fire-1', 'realm-fire-2', 'realm-fire-3'],
+    wind: ['realm-wind'],
+    ice: ['realm-ice-1', 'realm-ice-2', 'realm-ice-3'],
+    wave: ['realm-water-1', 'realm-water-2'],
+    creak: ['realm-earth'],
+    chime: [],
+    hiss: ['realm-douse']
+};
+/** Events with a recording of their own over their sound's. */
+const REALM_EVENT_SAMPLES: Partial<Record<RealmEvent['kind'], readonly SfxSampleKey[]>> = {
+    burnout: ['realm-burnout']
+};
+let realmSampleTurn = 0;
+
 /** What each realm event sounds like (`realm-weather-rules.ts`). */
 export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>> = {
     lightning: 'thunder',
@@ -343,6 +366,11 @@ export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>>
 export const playRealmEventSfx = (gain: number, kind: RealmEvent['kind'], peak = false): void => {
     if (gain <= 0.001) return;
     const sound = REALM_EVENT_SOUND[kind];
+    const takes = REALM_EVENT_SAMPLES[kind] ?? (sound ? REALM_SOUND_SAMPLES[sound] : undefined) ?? [];
+    if (takes.length > 0) {
+        realmSampleTurn += 1;
+        if (tryPlaySampled(takes[realmSampleTurn % takes.length]!, gain * (peak ? 1.25 : 1))) return;
+    }
     // Levelled in a browser against a match cue (2026-10-01): the thunder and the creak read under the bed at 1x.
     const g = gain * (peak ? 1.25 : 1) * REALM_SOUND_LEVEL[sound];
     switch (sound) {

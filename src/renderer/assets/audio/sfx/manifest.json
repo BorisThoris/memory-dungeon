@@ -11,7 +11,22 @@
         "peek-power": { "file": "peek-power.ogg", "category": "power" },
         "shuffle-full": { "file": "shuffle-full.ogg", "category": "shuffle" },
         "shuffle-quick": { "file": "shuffle-quick.ogg", "category": "shuffle" },
-        "floor-clear": { "file": "floor-clear.ogg", "category": "power" }
+        "floor-clear": { "file": "floor-clear.ogg", "category": "power" },
+        "realm-fire-1": { "file": "realm-fire-1.ogg", "category": "realm", "envelope": "natural" },
+        "realm-fire-2": { "file": "realm-fire-2.ogg", "category": "realm", "envelope": "natural" },
+        "realm-fire-3": { "file": "realm-fire-3.ogg", "category": "realm", "envelope": "natural" },
+        "realm-burnout": { "file": "realm-burnout.ogg", "category": "realm", "envelope": "natural" },
+        "realm-ice-1": { "file": "realm-ice-1.ogg", "category": "realm", "envelope": "natural" },
+        "realm-ice-2": { "file": "realm-ice-2.ogg", "category": "realm", "envelope": "natural" },
+        "realm-ice-3": { "file": "realm-ice-3.ogg", "category": "realm", "envelope": "natural" },
+        "realm-wind": { "file": "realm-wind.ogg", "category": "realm", "envelope": "natural" },
+        "realm-water-1": { "file": "realm-water-1.ogg", "category": "realm", "envelope": "natural" },
+        "realm-water-2": { "file": "realm-water-2.ogg", "category": "realm", "envelope": "natural" },
+        "realm-douse": { "file": "realm-douse.ogg", "category": "realm", "envelope": "natural" },
+        "realm-lightning-1": { "file": "realm-lightning-1.ogg", "category": "realm", "envelope": "natural" },
+        "realm-lightning-2": { "file": "realm-lightning-2.ogg", "category": "realm", "envelope": "natural" },
+        "realm-static": { "file": "realm-static.ogg", "category": "realm", "envelope": "natural" },
+        "realm-earth": { "file": "realm-earth.ogg", "category": "realm", "envelope": "natural" }
     },
     "matchTierDepthRanges": {
         "match-tier-low": [1, 5],

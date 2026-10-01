@@ -9,7 +9,7 @@ import { sfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
 
-type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
+type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle' | 'realm';
 
 export type SfxSampleKey = keyof typeof sfxManifest.entries;
 
@@ -26,7 +26,22 @@ export const SFX_SAMPLE_KEYS = [
     'peek-power',
     'shuffle-full',
     'shuffle-quick',
-    'floor-clear'
+    'floor-clear',
+    'realm-fire-1',
+    'realm-fire-2',
+    'realm-fire-3',
+    'realm-burnout',
+    'realm-ice-1',
+    'realm-ice-2',
+    'realm-ice-3',
+    'realm-wind',
+    'realm-water-1',
+    'realm-water-2',
+    'realm-douse',
+    'realm-lightning-1',
+    'realm-lightning-2',
+    'realm-static',
+    'realm-earth'
 ] as const satisfies readonly SfxSampleKey[];
 
 export const MATCH_TIER_SAMPLE_KEYS = [
@@ -47,7 +62,8 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     match: 4,
     mismatch: 4,
     power: 5,
-    shuffle: 4
+    shuffle: 4,
+    realm: 6
 };
 
 interface SampleVoice {
@@ -191,6 +207,10 @@ export function tryPlaySampled(key: SfxSampleKey, gain: number, voicing?: Sample
 
     g.gain.setValueAtTime(0.0001, t0);
     g.gain.exponentialRampToValueAtTime(gain * 0.35, t0 + 0.012);
+    if (meta.envelope === 'natural') {
+        // A recording carries its own decay: hold it at level and fade only the last moment.
+        g.gain.setValueAtTime(gain * 0.35, Math.max(t0 + 0.012, t0 + dur - 0.12));
+    }
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
     src.connect(g);

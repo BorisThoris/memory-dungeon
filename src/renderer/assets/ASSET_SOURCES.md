@@ -131,3 +131,17 @@ Square **1024×1024** (icons / non-card): `--resolution card` or `square`. Expli
 Presets: `yarn imagegen -- --list-resolutions`. Optional `--quality low|medium|high|auto` for `gpt-image-*`.
 
 Add or update a row in this table when you replace a file.
+
+## Realm and element sounds (CC0 recordings, 2026-10-01)
+
+The owner asked for free, royalty-free recordings in place of the procedural realm sounds. All four sources are **CC0** (public domain, no attribution required); credited here anyway. Trimmed to one-shots, faded, loudness-normalised to about -19 LUFS (the match samples sit near -17), -1.5 dBTP, 48 kHz stereo Ogg Vorbis q5. Played with a natural envelope (`"envelope": "natural"` in `audio/sfx/manifest.json`).
+
+| Runtime file(s) | Role | Source | Author | License |
+|---|---|---|---|---|
+| `audio/sfx/realm-fire-1..3.ogg` | Fire: wildfire, firestorm, scald, a fire group's cast | "Basic Spell Impacts [Free/CC0]", Fire Spell Impact 3, 4, 5 - https://lentikula.itch.io/freecc0-basic-spell-impacts-sfx | lentikula | CC0 1.0 |
+| `audio/sfx/realm-ice-1..3.ogg` | Frost: frostbite, a frost group's freeze | same pack, Ice Spell Impact 3, 4, 5 | lentikula | CC0 1.0 |
+| `audio/sfx/realm-water-1..2.ogg`, `realm-douse.ogg` | Water: current, spring tide, undertow, a water group's wash; a doused fire (Impact 4, first 0.9 s) | same pack, Water Spell Impact 1, 4 | lentikula | CC0 1.0 |
+| `audio/sfx/realm-lightning-1..2.ogg`, `realm-static.ogg` | Storm: lightning, thunderclap, a reaction; static (Impact 5, first second) | same pack, Lightning Spell Impact 1, 4, 5 | lentikula | CC0 1.0 |
+| `audio/sfx/realm-earth.ogg` | Grove: overgrowth, bloom, snare, a grove group's entangle | "Earth Element Magic Spell" - https://opengameart.org/content/earth-element-magic-spell | qubodup | CC0 |
+| `audio/sfx/realm-burnout.ogg` | A fire burning out | "Fire Crackling" (fire-1.wav, first 1.6 s, compressed) - https://opengameart.org/content/fire-crackling | AntumDeluge | CC0 |
+| `audio/sfx/realm-wind.ogg` | Blizzard, whiteout | "wind whoosh loop" (0.3-2.1 s) - https://opengameart.org/content/wind-whoosh-loop | SketchMan3 | CC0 |
