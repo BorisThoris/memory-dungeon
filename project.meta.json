@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T12:58:52.889Z",
+  "generatedAt": "2026-10-01T00:59:28.636Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -298,28 +298,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 166051,
+        "bytes": 166010,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-30T12:58:31.774Z"
+        "capturedAt": "2026-10-01T00:59:05.977Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 156820,
+        "bytes": 156450,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-30T12:58:37.184Z"
+        "capturedAt": "2026-10-01T00:59:11.640Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130748,
+        "bytes": 129641,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-30T12:58:47.569Z"
+        "capturedAt": "2026-10-01T00:59:22.950Z"
       },
       {
         "profile": "mobile",
@@ -328,16 +328,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-30T12:58:41.840Z"
+        "capturedAt": "2026-10-01T00:59:16.757Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 123001,
+        "bytes": 122572,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-30T12:58:52.647Z"
+        "capturedAt": "2026-10-01T00:59:28.367Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -346,7 +346,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-30T12:56:27.625Z"
+        "capturedAt": "2026-10-01T00:56:03.058Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -355,7 +355,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-30T12:56:27.625Z"
+        "capturedAt": "2026-10-01T00:56:03.058Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -364,7 +364,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-30T12:56:27.625Z"
+        "capturedAt": "2026-10-01T00:56:03.059Z"
       },
       {
         "profile": "reel-end-card",
@@ -373,7 +373,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-09-30T12:56:27.627Z"
+        "capturedAt": "2026-10-01T00:56:03.061Z"
       }
     ],
     "trailers": [
@@ -500,13 +500,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1252,
-    "testFiles": 538,
-    "sourceLines": 194168,
+    "sourceFiles": 1262,
+    "testFiles": 540,
+    "sourceLines": 197274,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1064
+        "files": 1074
       },
       {
         "directory": "scripts",
@@ -541,10 +541,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "4707a29a",
-    "lastCommitDate": "2026-09-30T15:55:54+03:00",
-    "lastCommitSubject": "Weather on every run, from its first turn: embers for ember runs, a floor under frost and storm",
-    "commitCount": 1889,
+    "head": "662fb92a",
+    "lastCommitDate": "2026-10-01T00:55:29Z",
+    "lastCommitSubject": "Realm peaks and confluences: every third weather is the realm's peak, and some doors lead to two realms",
+    "commitCount": 1892,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
