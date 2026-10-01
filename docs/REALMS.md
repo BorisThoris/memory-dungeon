@@ -41,6 +41,14 @@ Calm adds a turn to the interval, raging takes one away and doubles each event's
 
 The HUD chip names the peak when it is next, in the realm's colour.
 
+## The sway: your matches tip the world (`realm-sway-rules.ts`, 2026-10-01)
+
+Each suit belongs to a realm: ember to the Cinder Deep, tide to the Drowned Vault, moss to the Overgrown Crypt, bone to the Frozen Reach. Every pair matched of a suit whose realm the floor is not in, pops included, leans the world toward it (`realmSway`). The lean carries between floors with the combo, and a miss wipes it. At **five** pairs of one suit (`REALM_SWAY_TIP`) the floor tips into that realm with the omen's reaction, keeping its severity, at most once a floor (`realmTipsThisFloor`); a tip empties the lean, clears nothing and pays nothing. An omen matched on the same turn wins. The storm has no suit, by decision: a floor can be leaned out of the Thunder Spire, never into it.
+
+It shows building: from two pairs the realm chip reads "Tide rising 3/5" in the coming realm's colour (pulsing at four), and the leaning suit's face-down backs wear the coming realm over their own, more of it the closer the tip. The tip stamps the reaction's name with "Your matches tip the floor into ...".
+
+The threshold was measured before it was built (a soak observer, 160 runs): a per-floor count tipped 15% of floors at 82% of the way through, too late to matter; carried with the combo, at five, careful play tipped 21% of realm floors, average 7%, sloppy none, around turn three.
+
 ## Backlash: a raging realm strikes back (`resolveRealmBacklash`, 2026-10-01)
 
 Frost has always frozen a miss's cards. At the **raging** pitch the other four answer a miss too, on the two cards the player just saw, so the raging door's half-again gold is paid for in more than weather speed:

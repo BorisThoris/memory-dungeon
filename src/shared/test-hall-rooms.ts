@@ -116,7 +116,8 @@ export type TestHallRoomId =
     | 'realm-scald'
     | 'realm-undertow'
     | 'realm-static'
-    | 'realm-snare';
+    | 'realm-snare'
+    | 'realm-sway';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -1655,6 +1656,33 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             },
             { step: { do: 'flip', tileId: 'a-1' }, says: 'a snared card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the snared card turned') },
             { step: { do: 'match', pairKey: 'c' }, says: 'a match beside the snare cuts it, though this turn’s overgrowth may creep back over it', expect: expectAll((r) => ((r.realmVinesCutThisFloor ?? 0) >= 1 ? null : 'no vine was cut'), finishable) }
+        ]
+    },
+    {
+        id: 'realm-sway',
+        title: 'The sway',
+        mechanic: 'Matching pairs of a suit whose realm the floor is not in leans the world toward it; at five pairs, carried between floors and wiped by a miss, the floor tips into that realm.',
+        graphMechanicIds: ['board.realm_sway', 'board.realm_weather'],
+        tryThis: 'Four tide pairs are already carried into the Frozen Reach. Match b, a tide pair: the fifth tips the floor into the Drowned Vault.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('frost', 'calm', { realmSway: { tide: 4, moss: 2 } }) }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'the fifth tide pair tips the floor into the Drowned Vault, and empties the sway',
+                expect: expectAll(
+                    realmEventIs('reaction'),
+                    (r) => (r.realmId === 'tide' ? null : `the floor is in ${r.realmId}`),
+                    (r) => (r.lastRealmEvent?.cause === 'sway' && r.lastRealmEvent.from === 'frost' ? null : `event ${JSON.stringify(r.lastRealmEvent)}`),
+                    (r) => (r.realmTipsThisFloor === 1 ? null : `tips ${r.realmTipsThisFloor}`),
+                    (r) => (Object.keys(r.realmSway ?? {}).length === 0 ? null : `sway left ${JSON.stringify(r.realmSway)}`)
+                )
+            },
+            {
+                step: { do: 'match', pairKey: 'c' },
+                says: 'a moss pair now leans toward the grove again, from nothing',
+                expect: (r) => (r.realmSway?.moss === 1 && r.realmId === 'tide' ? null : `sway ${JSON.stringify(r.realmSway)} in ${r.realmId}`)
+            },
+            { step: { do: 'miss', a: 'a-1', b: 'd-1' }, says: 'a miss wipes the sway', expect: (r) => (Object.keys(r.realmSway ?? {}).length === 0 ? null : `sway ${JSON.stringify(r.realmSway)}`) }
         ]
     }
 ];

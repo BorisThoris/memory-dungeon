@@ -129,7 +129,8 @@ import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
-import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience } from './realmAmbience';
+import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
+import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
 import { RealmScreenOverlay } from './RealmScreenOverlay';
 import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
@@ -1139,6 +1140,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     }, [realmEventKey, realmEvent]);
     useEffect(() => () => pulseRealmEvent(null), []);
     const leavingRealm = useLeavingRealm(ambienceRealm);
+    // The sway on the leaning suit's backs (`realm-sway-rules.ts`), from two pairs, so a single match is not a signal.
+    const swayLead = ambienceRealm ? leadingSway(runRealmSway(run), ambienceRealm) : null;
+    const swaySuit = swayLead && swayLead.pairs >= 2 ? swayLead.suit : null;
+    const swayRealm = swaySuit ? swayLead!.realm : null;
+    const swayProgress = swaySuit ? Math.min(1, swayLead!.pairs / REALM_SWAY_TIP) : 0;
+    useEffect(() => {
+        setRealmSwayLean(swaySuit && swayRealm ? { suit: swaySuit, realm: swayRealm, progress: swayProgress } : null);
+    }, [swaySuit, swayRealm, swayProgress]);
+    useEffect(() => () => setRealmSwayLean(null), []);
     // The latest miss on the journal: the black hole and the return from it both read it (`sceneMood.ts`).
     const latestLossEvent = useMemo(
         () => latestMissEvent(

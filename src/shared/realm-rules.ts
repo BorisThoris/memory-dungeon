@@ -288,6 +288,7 @@ export const freshRealmFloorCounters = (): Pick<
     | 'realmVinesCutThisFloor'
     | 'realmFrozenThisFloor'
     | 'realmBacklashesThisFloor'
+    | 'realmTipsThisFloor'
     | 'lastRealmEvent'
     | 'realmLitTileIds'
     | 'realmPeaksThisFloor'
@@ -299,6 +300,7 @@ export const freshRealmFloorCounters = (): Pick<
     realmVinesCutThisFloor: 0,
     realmFrozenThisFloor: 0,
     realmBacklashesThisFloor: 0,
+    realmTipsThisFloor: 0,
     lastRealmEvent: null,
     realmLitTileIds: [],
     realmPeaksThisFloor: 0

@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 68 as const;
+export const ENCYCLOPEDIA_VERSION = 69 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -620,6 +620,12 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Omens',
         description:
             'From the third floor, one pair on the board is an **omen** of another realm: its sigil is on both halves. Matching it sets off a **reaction** - frost meeting ember is a **Thaw**, ember meeting tide is **Steam**, a grove set alight is **Wildfire** - and the floor becomes the omen\u2019s realm for the rest of the floor. What the old weather left behind goes, a gold for each thing it clears, and the new weather starts from the next turn. Wildfire through a grove sets every vine alight instead of clearing it; a storm breaking strikes at once. You have to match the omen to clear the floor, so the choice is when.'
+    },
+    {
+        id: 'realm_sway',
+        title: 'The sway',
+        description:
+            'Your matches lean the world. Every suit belongs to a realm - **ember** to the Cinder Deep, **tide** to the Drowned Vault, **moss** to the Overgrown Crypt, **bone** to the Frozen Reach - and every pair you match of a suit whose realm you are not in, pops included, leans the floor toward it. The lean comes with you down the stairs like your combo, and like your combo a miss wipes it. At **five pairs** of one suit the floor **tips** into that realm: the same reaction an omen sets off, at the same severity, once a floor. A tip clears nothing and pays nothing - what the old weather left stays. The realm chip counts the lean, and the backs of the leaning suit take on the realm that is coming. The Thunder Spire has no suit: you can lean your way out of a storm, never into one.'
     },
     {
         id: 'realm_travel',

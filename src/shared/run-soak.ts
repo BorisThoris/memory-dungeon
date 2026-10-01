@@ -89,6 +89,8 @@ export interface SoakRunReport {
     realmFrozen: number;
     /** A raging realm striking back at a miss (`resolveRealmBacklash`). */
     realmBacklashes: number;
+    /** The sway tipping a floor into another realm (`realm-sway-rules.ts`). */
+    realmTips: number;
     realmDoors: number;
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
@@ -313,13 +315,16 @@ export const soakRun = ({
     player,
     playerName,
     maxFloors = 30,
-    maxActions = 4000
+    maxActions = 4000,
+    observe
 }: {
     seed: number;
     player: SoakPlayer;
     playerName: string;
     maxFloors?: number;
     maxActions?: number;
+    /** Sees every action as it is taken, for an instrument measuring something the report does not count. */
+    observe?: (before: RunState, next: RunState, action: string) => void;
 }): SoakRunReport => {
     const rng = createMulberry32(hashStringToSeed(`soak:${seed}:${playerName}`));
     const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
@@ -347,6 +352,7 @@ export const soakRun = ({
     let realmVinesCut = 0;
     let realmFrozen = 0;
     let realmBacklashes = 0;
+    let realmTips = 0;
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
@@ -356,6 +362,7 @@ export const soakRun = ({
 
     const act = (action: string, next: RunState): void => {
         step += 1;
+        observe?.(run, next, action);
         for (const invariant of checkAll(run, next, action)) {
             violations.push({ seed, player: playerName, floor: run.board?.level ?? 0, step, action, invariant });
         }
@@ -376,6 +383,7 @@ export const soakRun = ({
             realmVinesCut += Math.max(0, (next.realmVinesCutThisFloor ?? 0) - (run.realmVinesCutThisFloor ?? 0));
             realmFrozen += Math.max(0, (next.realmFrozenThisFloor ?? 0) - (run.realmFrozenThisFloor ?? 0));
             realmBacklashes += Math.max(0, (next.realmBacklashesThisFloor ?? 0) - (run.realmBacklashesThisFloor ?? 0));
+            realmTips += Math.max(0, (next.realmTipsThisFloor ?? 0) - (run.realmTipsThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
@@ -496,6 +504,7 @@ export const soakRun = ({
         realmVinesCut,
         realmFrozen,
         realmBacklashes,
+        realmTips,
         realmDoors,
         realmPeaks,
         realmConfluences,

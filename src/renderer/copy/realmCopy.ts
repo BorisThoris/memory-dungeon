@@ -8,6 +8,8 @@ export const REALM_HUD_COPY = {
         secondary
             ? `${REALMS[realm].title} + ${REALMS[secondary].title}`
             : `${REALMS[realm].title} · ${REALM_SEVERITIES[severity].title}`,
+    /** The sway (`realm-sway-rules.ts`): the realm the player's matches are leaning the floor toward. */
+    sway: (realm: RealmId, pairs: number, tip: number): string => `${REALMS[realm].title} rising ${pairs}/${tip}`,
     /** The next weather by name - the peak's own name when it is the peak. */
     clock: (weather: string, turnsLeft: number): string => (turnsLeft <= 1 ? `${weather} next turn` : `${weather} in ${turnsLeft}`),
     aria: (realm: RealmId, severity: RealmSeverity, weather: string, turnsLeft: number, secondary: RealmId | null = null): string =>

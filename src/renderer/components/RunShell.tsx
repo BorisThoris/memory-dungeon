@@ -18,6 +18,7 @@ import { useCountUp } from '../hooks/useCountUp';
 import { REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { REALM_HUD_COPY } from '../copy/realmCopy';
+import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -322,6 +323,7 @@ const RunShell = ({
     const missesEarned = useMissEarned(missesRemaining);
     const pairCount = run.board?.pairCount ?? 0;
     const realm = runRealmId(run);
+    const swayLead = realm ? leadingSway(runRealmSway(run), realm) : null;
     const realmSeverity = runRealmSeverity(run);
     const weatherIn = realm ? turnsUntilRealmWeather(realm, realmSeverity, runNonNegativeInteger(run.turnsThisFloor)) : 0;
     const realmSecondary = runRealmSecondaryId(run);
@@ -549,6 +551,17 @@ const RunShell = ({
                                 <span className={styles.realmClock} data-testid="hud-realm-clock">
                                     {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
                                 </span>
+                                {/* The sway: the realm the player's matches lean the floor toward, from two pairs. */}
+                                {swayLead && swayLead.pairs >= 2 ? (
+                                    <span
+                                        className={styles.realmSway}
+                                        data-sway-near={swayLead.pairs >= REALM_SWAY_TIP - 1 ? 'true' : undefined}
+                                        data-testid="hud-realm-sway"
+                                        style={{ '--sway-color': REALMS[swayLead.realm].color } as CSSProperties}
+                                    >
+                                        {REALM_HUD_COPY.sway(swayLead.realm, swayLead.pairs, REALM_SWAY_TIP)}
+                                    </span>
+                                ) : null}
                             </span>
                         ) : null}
                         {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (

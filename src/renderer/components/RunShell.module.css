@@ -1764,3 +1764,33 @@
 :global([data-shell-layout='phone-landscape']) .memorizeHint {
     display: none;
 }
+
+/* The sway (`realm-sway-rules.ts`): the coming realm's name in its own colour, pulsing at the edge of tipping. */
+.realmSway {
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+    border-left: 1px solid color-mix(in srgb, var(--sway-color, #fff) 50%, transparent);
+    color: var(--sway-color, #fff);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.realmSway[data-sway-near='true'] {
+    animation: realmSwayNear 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes realmSwayNear {
+    from {
+        text-shadow: 0 0 0 transparent;
+    }
+
+    to {
+        text-shadow: 0 0 10px var(--sway-color, #fff);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .realmSway[data-sway-near='true'] {
+        animation: none;
+    }
+}

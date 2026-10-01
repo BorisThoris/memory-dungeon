@@ -1,5 +1,5 @@
 import { create } from 'zustand/react';
-import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
+import type { RealmEvent, RealmId, RealmSeverity, TileSuit } from '../../shared/contracts';
 import { REALM_JOLT_FAMILY, REALM_JOLT_MS, type RealmJoltFamily } from './realmCardMotion';
 
 /**
@@ -22,6 +22,21 @@ export interface RealmAmbienceEvent {
     /** `performance.now()` when it reached the screen. */
     at: number;
 }
+
+/** The sway (`realm-sway-rules.ts`): the suit leaning the world, the realm it leans toward, and how far (0..1). */
+export interface RealmSwayLean {
+    suit: TileSuit;
+    realm: RealmId;
+    progress: number;
+}
+
+export const useRealmSwayLean = create<{ lean: RealmSwayLean | null }>(() => ({ lean: null }));
+
+export const setRealmSwayLean = (lean: RealmSwayLean | null): void => {
+    const now = useRealmSwayLean.getState().lean;
+    if (now?.suit === lean?.suit && now?.realm === lean?.realm && now?.progress === lean?.progress) return;
+    useRealmSwayLean.setState({ lean });
+};
 
 export const useRealmEventPulse = create<{ event: RealmAmbienceEvent | null }>(() => ({ event: null }));
 

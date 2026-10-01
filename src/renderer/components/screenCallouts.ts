@@ -148,7 +148,9 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
             size: 'major',
             tone: 'legendary',
             title: `${(event.reaction ?? 'Reaction').toUpperCase()}!`,
-            sub: `The floor turns to ${to.title}${event.gold ? ` · +${event.gold} gold` : ''}`,
+            sub: event.cause === 'sway'
+                ? `Your matches tip the floor into ${to.title}`
+                : `The floor turns to ${to.title}${event.gold ? ` · +${event.gold} gold` : ''}`,
             color: to.color
         };
     }

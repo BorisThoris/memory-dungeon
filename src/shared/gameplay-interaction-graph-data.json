@@ -323,6 +323,8 @@
                 "realmVinesCutThisFloor",
                 "realmFrozenThisFloor",
                 "realmBacklashesThisFloor",
+                "realmSway",
+                "realmTipsThisFloor",
                 "realmLitTileIds",
                 "lastRealmEvent",
                 "realmReactionsThisFloor",
@@ -2082,6 +2084,43 @@
             ]
         },
         {
+            "id": "board.realm_sway",
+            "label": "The Sway",
+            "kind": "board",
+            "role": "pairs_matched_of_an_off_realm_suit_carried_with_the_combo_tip_the_floor_into_that_suit_realm",
+            "evidence": [
+                "src/shared/realm-sway-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/RealmAmbientBackPlane.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "realmId",
+                "realmSway",
+                "realmTipsThisFloor"
+            ],
+            "writes": [
+                "realmId",
+                "realmSway",
+                "realmTipsThisFloor",
+                "lastRealmEvent"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "changes-the-realm-only-never-the-cards",
+                "once-a-floor"
+            ],
+            "tests": [
+                "src/shared/realm-sway-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "hazard.void_spew",
             "label": "The Void Spews",
             "kind": "hazard",
@@ -3077,6 +3116,24 @@
             "target": "economy.realm_travel",
             "kind": "enables",
             "label": "the realm a floor ended in is always one of the doors"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.realm_sway",
+            "kind": "triggers",
+            "label": "every match leans the world toward its suit's realm, a miss wipes the lean"
+        },
+        {
+            "source": "board.realm_sway",
+            "target": "board.realm_weather",
+            "kind": "modifies",
+            "label": "at five pairs of one suit the floor tips into that suit's realm"
+        },
+        {
+            "source": "board.realm_sway",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the realm chip counts the lean and the leaning suit's backs take on the coming realm"
         },
         {
             "source": "core.board_turn_resolution",

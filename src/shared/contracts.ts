@@ -124,6 +124,8 @@ export interface RealmEvent {
     reaction?: string;
     from?: RealmId;
     to?: RealmId;
+    /** What turned the realm: an omen matched, or the sway of the player's matches tipping it (`realm-sway-rules.ts`). */
+    cause?: 'omen' | 'sway';
     /** Gold it paid (positive) or burned (negative). */
     gold?: number;
 }
@@ -836,6 +838,13 @@ export interface RunState {
     realmFrozenThisFloor?: number;
     /** A raging realm's backlashes this floor: a miss scalded, dragged, thrown or snared (`resolveRealmBacklash`). */
     realmBacklashesThisFloor?: number;
+    /**
+     * The sway (`realm-sway-rules.ts`): pairs matched of each suit whose realm the floor is not in.
+     * Carried between floors with the combo; a miss wipes it, a tip empties it.
+     */
+    realmSway?: Partial<Record<TileSuit, number>>;
+    /** Floors tipped into another realm by the sway, this floor (at most one). */
+    realmTipsThisFloor?: number;
     /** Floors cleared in each realm this run; the travel screen and the results read it. */
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */

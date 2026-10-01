@@ -330,6 +330,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The Zone (2026-09-30), the new concept the combo study asked for after its twelfth round: Tetris Effect stops time and lets the player break a base rule; Guitar Hero earns the power on the streak and lets the player spend it. Here the base rule is that a turn is two cards. At Inferno or better, on a clean board, the player may ignite: the combo burns to zero and the Zone opens for three pairs (four at Legendary, one more per ascension, six at most, never more than the pairs still hidden). Cards turned inside it stay up and nothing resolves; the last allowed card, or the player, ends it. The resolve plays what is face up through the game\u2019s own turns: every complete pair first, so the chain climbs and the pop widens through them, then the leftovers as misses two at a time at full price from the bank, and a lone leftover for nothing. A bonus of 100 x matched squared on top. Never safer: the combo is the entry fee and a bad Zone costs the misses the same cards would have cost. No census row (no census player ignites); the soak is the proof.'
     },
     {
+        id: 'board.realm_sway',
+        verdict: 'changed',
+        generation: 266,
+        present: ['swayAfterTurn', 'swayTip', 'leadingSway', 'REALM_SWAY_TIP', 'SUIT_REALM', 'realmTipsThisFloor'],
+        note: 'The sway (2026-10-01): the owner asked for the cards to change the world, not only the world the cards. Each suit belongs to a realm (ember to the Cinder Deep, tide to the Drowned Vault, moss to the Overgrown Crypt, bone to the Frozen Reach). Every pair matched of a suit whose realm the floor is not in, pops included, leans the world toward it; the lean carries between floors with the combo and a miss wipes it. At five pairs of one suit the floor tips into that realm with the omen\u2019s reaction, keeping its severity, at most once a floor; unlike an omen it clears nothing and pays nothing. Measured before it was built: a per-floor count tipped 15% of floors at 82% of the way through, too late to matter; carried with the combo, at five, careful play tipped 21% of realm floors, average 7%, sloppy none, around turn three. The storm has no suit: a floor can be tipped out of it, never into it. The realm chip counts the lean and the leaning suit\u2019s backs take on the coming realm.'
+    },
+    {
         id: 'board.realm_weather',
         verdict: 'changed',
         generation: 265,

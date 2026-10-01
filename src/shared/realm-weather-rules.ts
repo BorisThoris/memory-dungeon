@@ -1,4 +1,5 @@
-import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile } from './contracts';
+import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
+import { runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -11,7 +12,8 @@ import { omenOfMatch, realmReactionName } from './realm-omen-rules';
  *
  * Applied last in both turn seams, on the board the turn actually produced, in this order:
  *
- * 1. an omen matched sets off its reaction and turns the realm (`realm-omen-rules.ts`);
+ * 1. an omen matched sets off its reaction and turns the realm (`realm-omen-rules.ts`); failing
+ *    that, the sway of the player's matches may tip it (`realm-sway-rules.ts`);
  * 2. the realm answers the turn: a match douses a burning card, cuts the vines beside it and
  *    shatters the ice beside it; a miss in the frost freezes the cards it showed, and a miss in any
  *    other realm at its raging pitch is struck back at (`resolveRealmBacklash`);
@@ -94,6 +96,8 @@ export interface RealmTurnInput {
     /** The floor's turn count after this turn. */
     turnsThisFloor: number;
     pinnedTileIds: readonly string[];
+    /** Pairs the turn matched, by suit, pops included: the sway's input (`realm-sway-rules.ts`). */
+    pairsBySuit?: Partial<Record<TileSuit, number>>;
 }
 
 export interface RealmTurnResult {
@@ -115,6 +119,9 @@ export interface RealmTurnResult {
     frozen: number;
     /** A raging realm's backlash this turn (0 or 1). */
     backlashes: number;
+    /** The sway after the turn, and whether it tipped the floor (0 or 1). */
+    sway: RealmSway;
+    tips: number;
 }
 
 const rngFor = (kind: string, run: RunState, level: number, turns: number) =>
@@ -390,7 +397,8 @@ export const resolveRealmTurn = ({
     tileIds,
     sourceTiles,
     turnsThisFloor,
-    pinnedTileIds
+    pinnedTileIds,
+    pairsBySuit = {}
 }: RealmTurnInput): RealmTurnResult => {
     const startRealm = runRealmId(run);
     const empty: RealmTurnResult = {
@@ -407,7 +415,9 @@ export const resolveRealmTurn = ({
         burnouts: 0,
         vinesCut: 0,
         frozen: 0,
-        backlashes: 0
+        backlashes: 0,
+        sway: runRealmSway(run),
+        tips: 0
     };
     if (!startRealm) {
         return empty;
@@ -430,6 +440,8 @@ export const resolveRealmTurn = ({
     let vinesCut = 0;
     let frozen = 0;
     let backlashes = 0;
+    let tips = 0;
+    let omenFired = false;
     let weather = 0;
     let litTileIds: string[] = [];
     const touchedThisTurn = new Set<string>();
@@ -458,6 +470,7 @@ export const resolveRealmTurn = ({
             const gold = Math.min(REACTION_CLEAR_GOLD_CAP, cleared * REACTION_CLEAR_GOLD);
             goldDelta += gold;
             realmId = omen;
+            omenFired = true;
             // The reaction settles the floor on one realm: a confluence ends with it.
             secondaryId = null;
             reactions += 1;
@@ -468,6 +481,7 @@ export const resolveRealmTurn = ({
                 reaction: realmReactionName(from, omen),
                 from,
                 to: omen,
+                cause: 'omen',
                 gold
             });
             // A storm breaking strikes at once.
@@ -475,6 +489,27 @@ export const resolveRealmTurn = ({
                 litTileIds = lightning(tiles, pinned, rngFor('reaction-strike', run, level, turns), reach);
             }
         }
+    }
+
+    // 1b. The sway: the turn's pairs lean the world, a miss wipes the lean, and at the tip the floor turns.
+    let sway = swayAfterTurn(runRealmSway(run), realmId, outcome, pairsBySuit);
+    const tipTo = omenFired ? null : swayTip(sway, realmId, runNonNegativeInteger(run.realmTipsThisFloor ?? 0));
+    if (tipTo) {
+        const from = realmId;
+        realmId = tipTo;
+        secondaryId = null;
+        tips += 1;
+        sway = {};
+        events.push({
+            key: eventKey(run, level, turns, 'tip'),
+            kind: 'reaction',
+            tileIds: [...tileIds],
+            reaction: realmReactionName(from, tipTo),
+            from,
+            to: tipTo,
+            cause: 'sway',
+            gold: 0
+        });
     }
 
     // 2. The realm answers the turn.
@@ -684,7 +719,9 @@ export const resolveRealmTurn = ({
         burnouts,
         vinesCut,
         frozen,
-        backlashes
+        backlashes,
+        sway,
+        tips
     };
 };
 
@@ -710,6 +747,8 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
         realmVinesCutThisFloor: runNonNegativeInteger(run.realmVinesCutThisFloor ?? 0) + result.vinesCut,
         realmFrozenThisFloor: runNonNegativeInteger(run.realmFrozenThisFloor ?? 0) + result.frozen,
         realmBacklashesThisFloor: runNonNegativeInteger(run.realmBacklashesThisFloor ?? 0) + result.backlashes,
+        realmSway: result.sway,
+        realmTipsThisFloor: runNonNegativeInteger(run.realmTipsThisFloor ?? 0) + result.tips,
         // The most telling event of the turn is the one the HUD names: a reaction over everything.
         lastRealmEvent:
             result.events.find((event) => event.kind === 'reaction') ?? result.events[result.events.length - 1] ?? run.lastRealmEvent ?? null,

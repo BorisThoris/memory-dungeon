@@ -2,7 +2,8 @@ import {
     type BoardState,
     type FindableKind,
     type RunState,
-    type Tile
+    type Tile,
+    type TileSuit
 } from './contracts';
 import { chunkBreakMomentumPairs } from './chunk-break-rules';
 import { higherChainTier, runChainTier } from './chain-tier-rules';
@@ -33,6 +34,7 @@ import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
+import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
@@ -247,9 +249,17 @@ export const createResolveBoardTurnTransition = ({
          * The realm answers last (`realm-weather-rules.ts`): an omen's reaction, a doused fire, cut
          * vines, the clocks, and on its turn the weather, on the board the player will look at.
          */
+        // The sway's input (`realm-sway-rules.ts`): the pair matched and every pair the pop took, by suit.
+        const pairsBySuit: Partial<Record<TileSuit, number>> = {};
+        const swayPairs = [firstTile.pairKey, ...chunkBreak.brokenPairKeys];
+        for (const pairKey of swayPairs) {
+            const suit = swaySuitOf(sourceBoard.tiles.find((tile) => tile.pairKey === pairKey));
+            if (suit) pairsBySuit[suit] = (pairsBySuit[suit] ?? 0) + 1;
+        }
         const realmTurn = resolveRealmTurn({
             run,
             board: boardAfterDrift,
+            pairsBySuit,
             outcome: 'match',
             tileIds: [firstTile.id, secondTile.id],
             sourceTiles: [firstTile, secondTile],

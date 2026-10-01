@@ -213,6 +213,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 262,
         reason: 'Relics are only bought at the store and the census players never shop. The whole-run soak requires a relic to be bought, and the Deep Pockets and Long Look rooms walk their effects.'
     },
+    'board.realm_sway': {
+        generation: 266,
+        reason: 'The sway lives on realm floors and the census builds realm-free floors to measure the pair curve. The whole-run soak counts tips across its runs and requires one to happen, and the sway room in the test hall walks a tip, a lean from nothing and a miss wiping it.'
+    },
     'board.realm_weather': {
         generation: 265,
         reason: 'The census builds each floor fresh with no realm, because it measures the pair curve and the par it is judged against. The whole-run soak plays every realm through its doors, requires weather, frostbite, a raging backlash, a doused fire and a cut vine to happen, and checks after every action that a turnable pair remains; a test hall room walks each realm.'

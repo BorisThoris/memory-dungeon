@@ -1,11 +1,11 @@
 import { useRef, type ReactElement } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { CanvasTexture, DoubleSide, LinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
-import { REALM_IDS, type RealmId } from '../../shared/contracts';
+import { REALM_IDS, type RealmId, type TileSuit } from '../../shared/contracts';
 import { createMulberry32 } from '../../shared/rng';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
-import { useRealmAmbience } from './realmAmbience';
+import { useRealmAmbience, useRealmSwayLean } from './realmAmbience';
 
 /**
  * The realm on every face-down card (2026-10-01). The realm's weather marked only the cards it
@@ -206,7 +206,27 @@ export const prewarmRealmBackTextures = (upload?: (texture: CanvasTexture) => vo
 /** The breath of the fire and the storm: their marks pulse; the rest hold still. */
 const BREATHES: ReadonlySet<RealmId> = new Set(['ember', 'storm']);
 
-export const RealmAmbientBackPlane = ({ faceZ, reduceMotion }: { faceZ: number; reduceMotion: boolean }): ReactElement | null => {
+/**
+ * The sway on a card (`realm-sway-rules.ts`): a card of the suit leaning the world wears the realm
+ * it leans toward over its own, more of it the closer the floor is to tipping, breathing as it nears.
+ */
+const SwayPlane = ({ realm, progress, reduceMotion }: { realm: RealmId; progress: number; reduceMotion: boolean }): ReactElement => {
+    const material = useRef<MeshBasicMaterial | null>(null);
+    const base = 0.15 + 0.7 * progress;
+    useFrame(({ clock }) => {
+        if (!material.current) return;
+        material.current.opacity = reduceMotion ? base : base * (0.75 + 0.25 * Math.sin(clock.elapsedTime * (1.5 + 4 * progress)));
+    });
+    return (
+        <mesh position={[0, 0, 0.053]} raycast={noopMeshRaycast} renderOrder={12}>
+            <planeGeometry args={[CARD_PLANE_WIDTH * 1.01, CARD_PLANE_HEIGHT * 1.01]} />
+            <meshBasicMaterial depthTest depthWrite={false} map={realmTexture(realm)} opacity={base} ref={material} side={DoubleSide} toneMapped={false} transparent />
+        </mesh>
+    );
+};
+
+export const RealmAmbientBackPlane = ({ faceZ, reduceMotion, suit }: { faceZ: number; reduceMotion: boolean; suit?: TileSuit }): ReactElement | null => {
+    const lean = useRealmSwayLean((state) => (suit && state.lean?.suit === suit ? state.lean : null));
     const realm = useRealmAmbience((state) => state.realm);
     const strength = useRealmAmbience((state) => state.strength);
     const material = useRef<MeshBasicMaterial | null>(null);
@@ -222,6 +242,7 @@ export const RealmAmbientBackPlane = ({ faceZ, reduceMotion }: { faceZ: number; 
                 <planeGeometry args={[CARD_PLANE_WIDTH * 1.01, CARD_PLANE_HEIGHT * 1.01]} />
                 <meshBasicMaterial depthTest depthWrite={false} map={realmTexture(realm)} opacity={0.55 + 0.45 * strength} ref={material} side={DoubleSide} toneMapped={false} transparent />
             </mesh>
+            {lean && lean.realm !== realm ? <SwayPlane progress={lean.progress} realm={lean.realm} reduceMotion={reduceMotion} /> : null}
         </group>
     );
 };

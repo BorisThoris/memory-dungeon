@@ -799,7 +799,7 @@ const TileBezelInner = ({
                     {/* A blizzard's snow buries the suit until the card is turned (`realm-weather-rules.ts`). */}
                     {tile.suit && !(tile.snowed && tile.state === 'hidden') ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
                     {/* The realm on every face-down back (`RealmAmbientBackPlane`): the place, not only what its weather did. */}
-                    {tile.state === 'hidden' ? <RealmAmbientBackPlane faceZ={faceZ} reduceMotion={reduceMotion} /> : null}
+                    {tile.state === 'hidden' ? <RealmAmbientBackPlane faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} /> : null}
                     <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} />
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}
