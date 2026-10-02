@@ -10737,8 +10737,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 16060,
-      "sha256": "15204829643c9c7800dd27af45165326baa038cc7a17be51630f84b1513740b2"
+      "bytes": 16203,
+      "sha256": "3ea17456abd7263c869172d2637b040faf018ed964d04efec359a60a29725d77"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -23532,7 +23532,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 248,
+      "lineCount": 249,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -44009,7 +44009,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
       "line": 19,
-      "endLine": 247
+      "endLine": 248
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",

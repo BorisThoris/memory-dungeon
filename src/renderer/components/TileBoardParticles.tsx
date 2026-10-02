@@ -201,8 +201,9 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         }
         // Every card gives off its own material (`elementCardMote`): flame, liquid, ice, leaf. A few
         // cards a tick, taken in turn so the whole board smoulders, drips, glints and sheds; a charged
-        // card is always among them.
-        if (!reduceMotion && playingNow && time.current >= nextElementTick.current) {
+        // card is always among them. On a realm floor only, like the rest of the elements: a run
+        // with no realm casts nothing, and its air is the combo's alone.
+        if (!reduceMotion && playingNow && realm && time.current >= nextElementTick.current) {
             nextElementTick.current = time.current + realmMoteInterval(graphicsQuality);
             const charged = [];
             const plain = [];
