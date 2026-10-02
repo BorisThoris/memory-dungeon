@@ -29,6 +29,10 @@ describe('the realm in the air', () => {
         // The charge has no cap; the energy the shader takes does.
         expect(elementCardMote({ state: 'hidden', suit: 'ember', pairKey: 'a', empowered: 900 })!.energy).toBe(1);
         expect(elementCardMote({ state: 'matched', suit: 'ember', pairKey: 'a' })).toBeNull();
+        expect(elementCardMote({ state: 'flipped', suit: 'tide', pairKey: 'a' })).toEqual(plain);
+        expect(elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a', snowed: true })).toBeNull();
+        expect(elementCardMote({ state: 'flipped', suit: 'tide', pairKey: 'a', snowed: true })).toEqual(plain);
+        expect(elementCardMote({ state: 'removed', suit: 'tide', pairKey: 'a' })).toBeNull();
         expect(elementCardMote({ state: 'hidden', pairKey: 'a' })).toBeNull();
         expect(elementMoteCards('low')).toBeLessThan(elementMoteCards('high'));
     });

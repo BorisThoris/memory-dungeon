@@ -39,6 +39,7 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
                   return tile != null && tile.state !== 'hidden';
               }, column - 1);
             }, { timeout: 30_000 }).toBe(true);
+            if (column === 1) await page.screenshot({ path: testInfo.outputPath(`${suit}-front-and-back.png`) });
         }
         await expect.poll(async () => Number(await page.getByTestId('tile-board-stage').getAttribute('data-element-ground-cells')), { timeout: 30_000 }).toBeGreaterThan(0);
         const result = await page.evaluate(async () => {

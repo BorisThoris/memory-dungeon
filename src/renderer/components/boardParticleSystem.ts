@@ -94,6 +94,9 @@ const vertexShader = `
         float travel = (1.0 - exp(-movement.w * seconds)) / max(movement.w, 0.001);
         vec3 center = origin + vec3(movement.xy * travel, 0.0);
         center.y -= movement.z * seconds * seconds * 0.5;
+        // Material-specific drift, anchored at birth (no sideways teleport on spawn).
+        if (vKind > 7.5 && vKind < 8.5) center.x += sin(seconds * 9.0 + origin.x * 13.0) * seconds * 0.035;
+        if (vKind > 10.5) center.x += (sin(seconds * 3.5 + rotation.x) - sin(rotation.x)) * 0.09;
         float scale = lifetime.z * mix(1.0, 0.22, age);
         if (vKind > 0.5 && vKind < 1.5) scale = lifetime.z * mix(0.45, 2.1, age);
         if (vKind > 1.5 && vKind < 2.5) scale = lifetime.z * mix(0.5, 1.5, age);
@@ -110,6 +113,8 @@ const vertexShader = `
         // A drop stretches as it falls.
         if (vKind > 8.5 && vKind < 9.5) local.y *= 1.25 + min(0.9, movement.z * seconds * 0.9);
         if (vKind > 9.5 && vKind < 10.5) local.y *= 1.5;
+        // A leaf rolls in the air, presenting its broad side and then its thin edge.
+        if (vKind > 10.5) local.x *= 0.35 + 0.65 * abs(cos(seconds * 3.0 + rotation.x));
         if (ripple) local.y *= 0.72;
         local = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * local;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(center + vec3(local, 0.0), 1.0);

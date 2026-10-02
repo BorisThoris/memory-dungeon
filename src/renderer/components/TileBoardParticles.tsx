@@ -220,7 +220,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             for (const bag of frames.current.values()) {
                 const group = bag.groupRef.current;
                 const props = bag.propsRef.current;
-                if (!group?.visible || group.scale.x < 0.35 || props.faceUp) continue;
+                if (!group?.visible || group.scale.x < 0.35 || group.scale.y < 0.35) continue;
                 const mote = elementCardMote(props.tile);
                 if (!mote) continue;
                 if (props.tile.empowered) charged.push({ group, mote });
@@ -229,7 +229,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             const cards = elementMoteCards(graphicsQuality);
             const picks = [];
             for (let index = 0; index < Math.min(charged.length, Math.ceil(cards / 2)); index += 1) picks.push(charged[(elementTick.current + index) % charged.length]!);
-            for (let index = 0; picks.length < cards && index < plain.length; index += 1) picks.push(plain[(elementTick.current * 3 + index * 5) % plain.length]!);
+            for (let index = 0; picks.length < cards && index < plain.length; index += 1) picks.push(plain[(elementTick.current + index) % plain.length]!);
             picks.forEach(({ group, mote }, index) => {
                 const emitted = system.emit({ kind: 'ember', x: group.position.x, y: group.position.y, z: group.position.z,
                     time: time.current, seed: elementTick.current * 5303 + index * 131 + 17, reduceMotion, quality: graphicsQuality,

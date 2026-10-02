@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2897,
-    "codeFileCount": 1065,
-    "exportedSymbolCount": 3335,
+    "trackedFileCount": 2898,
+    "codeFileCount": 1066,
+    "exportedSymbolCount": 3336,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8768
+    "relationshipCount": 8775
   },
   "inventory": [
     {
@@ -2398,7 +2398,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "9de4dc824566a674f84609e4b1988b229efe09536508c0210bfaff3f04ec6341"
+      "sha256": "7dd5bb42f60166ed29d771bda10fe1af20155efb62c2045de197e3d6aa19ac4f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3891,8 +3891,8 @@
     {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
-      "bytes": 5785,
-      "sha256": "32fd7ea02c6205d97ab63b88db5ddfae4bdbc0d77aad601435f132004e26249d"
+      "bytes": 5899,
+      "sha256": "628952dc7ccddbe56bf60865204b34bf904f71cdd3963a4a91a90cf83ceabf2b"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -9375,8 +9375,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 28146,
-      "sha256": "1e86061e983b186d794ec497177359b73aa75dd9ada9ba6d6cbde6632c75a724"
+      "bytes": 28614,
+      "sha256": "c68490e23d0e516c142d4b1240dae73713ace5e2e599bcba5457baa6b87acecb"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9527,6 +9527,12 @@
       "category": "source",
       "bytes": 18793,
       "sha256": "90f5cff38c80ba0d964acaf86246e7e1aa92cfe6c06bb8da9d6eadf848677719"
+    },
+    {
+      "path": "src/renderer/components/ElementCardMaterial.tsx",
+      "category": "source",
+      "bytes": 4588,
+      "sha256": "db211063d6d0fcf0929bfb6b8dd964ea6ba5d25274def77922cf449734a4a900"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.module.css",
@@ -10017,14 +10023,14 @@
     {
       "path": "src/renderer/components/realmParticles.test.ts",
       "category": "test",
-      "bytes": 2778,
-      "sha256": "dbbb99f05277decd1cf38c42992d439f0fba1ba8c9cc2b27e74f3e2af5006c32"
+      "bytes": 3189,
+      "sha256": "ffecad046228422c5036ea34e01832f302e199f79bee8a59e78f0e420f73cf51"
     },
     {
       "path": "src/renderer/components/realmParticles.ts",
       "category": "source",
-      "bytes": 5103,
-      "sha256": "4fe3ce4fd49bdc861e2eb338ca6388741f91cc484bb2890c764bc1affd9563e5"
+      "bytes": 5167,
+      "sha256": "1d8fa685d16e229c100dd2cf597280ffb71f2d394961e4725e988df33a0d1bcd"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -10425,8 +10431,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 35116,
-      "sha256": "79e97aa0ee0d09f9da560699cf4be17317f7f65c8ca124669f6ff4a17326f1c6"
+      "bytes": 35651,
+      "sha256": "dab2e3dd4bce4c02f0b420acb69e73efef6490df9f7feb45e00a28b628334901"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -10792,7 +10798,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
       "bytes": 16920,
-      "sha256": "8011975250d89a8d3c2ef4cbd0f5d538e782605a09192980039c11cb1d19cb26"
+      "sha256": "1fdd47264a624a0d122c60468159a7f4804d56153199c555caf9f3073f87b1c2"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -19943,7 +19949,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 496,
+      "lineCount": 501,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -20366,6 +20372,24 @@
       "exports": [
         "symbol:src/renderer/components/ElementCardBack.tsx#ElementCardBack",
         "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "path": "src/renderer/components/ElementCardMaterial.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 91,
+      "imports": [
+        "file:src/renderer/components/realmParticles.ts",
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/ElementCardMaterial.tsx#ElementCardMaterial"
       ],
       "testedBy": []
     },
@@ -21609,7 +21633,7 @@
       "path": "src/renderer/components/realmParticles.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 41,
+      "lineCount": 45,
       "imports": [
         "file:src/renderer/components/realmCardMotion.ts",
         "file:src/renderer/components/realmParticles.ts",
@@ -22587,10 +22611,11 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 890,
+      "lineCount": 895,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/ElementCardBack.tsx",
+        "file:src/renderer/components/ElementCardMaterial.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
         "file:src/renderer/components/RealmAmbientBackPlane.tsx",
@@ -40657,8 +40682,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 208,
-      "endLine": 495
+      "line": 213,
+      "endLine": 500
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -41107,6 +41132,14 @@
       "file": "src/renderer/components/ElementCardBack.tsx",
       "line": 380,
       "endLine": 385
+    },
+    {
+      "id": "symbol:src/renderer/components/ElementCardMaterial.tsx#ElementCardMaterial",
+      "name": "ElementCardMaterial",
+      "kind": "function",
+      "file": "src/renderer/components/ElementCardMaterial.tsx",
+      "line": 68,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/ElementCastGuide.tsx#ElementCastGuide",
@@ -43065,16 +43098,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 889,
-      "endLine": 889
+      "line": 894,
+      "endLine": 894
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 159,
-      "endLine": 163
+      "line": 160,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -71908,6 +71941,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/ElementCardMaterial.tsx->symbol:src/renderer/components/ElementCardMaterial.tsx#ElementCardMaterial",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "symbol:src/renderer/components/ElementCardMaterial.tsx#ElementCardMaterial",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ElementCastGuide.tsx->symbol:src/renderer/components/ElementCastGuide.tsx#ElementCastGuide",
       "source": "file:src/renderer/components/ElementCastGuide.tsx",
       "target": "symbol:src/renderer/components/ElementCastGuide.tsx#ElementCastGuide",
@@ -93254,6 +93293,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/renderer/components/realmParticles.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/renderer/components/realmParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ElementCastGuide.test.tsx->src/renderer/components/ElementCastGuide.tsx",
       "source": "file:src/renderer/components/ElementCastGuide.test.tsx",
       "target": "file:src/renderer/components/ElementCastGuide.tsx",
@@ -96239,6 +96308,12 @@
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/ElementCardBack.tsx",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/ElementCardBack.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/ElementCardMaterial.tsx",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/ElementCardMaterial.tsx",
       "kind": "imports"
     },
     {
