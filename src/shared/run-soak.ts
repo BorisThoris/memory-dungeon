@@ -11,7 +11,8 @@ import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId }
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
 import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
-import { elementWouldLand } from './element-alchemy-rules';
+import { elementWouldLand, tileCharge } from './element-alchemy-rules';
+import { isStreakPrimed, runElementStreak } from './element-resonance-rules';
 import { chooseRealmDoor, REALM_DOOR_COUNT } from './realm-rules';
 
 /**
@@ -97,6 +98,11 @@ export interface SoakRunReport {
     /** Elemental alchemy (`element-alchemy-rules.ts`): cards that drank their own element, and elements a card put out. */
     elementEmpowered: number;
     elementNeutralized: number;
+    /** Resonance (`element-resonance-rules.ts`): reactions two elements made, and the deepest stack, charge and realm depth a run reached. */
+    elementReactions: number;
+    elementResonancePeak: number;
+    elementChargePeak: number;
+    realmDepthPeak: number;
     realmDoors: number;
     /** Peak weather (every third weather event of a floor), and floors played at a confluence of two realms. */
     realmPeaks: number;
@@ -272,10 +278,27 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
         return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
     },
-    'smoke, chill and attunement stay within their caps': (_b, run) => {
+    'smoke stays within its cap, and depth, resonance and charge are whole and never negative': (_b, run) => {
         if ((run.realmSmoke ?? 0) > 3) return `smoke ${run.realmSmoke}`;
-        const over = Object.entries(run.realmAttunement ?? {}).filter(([, level]) => (level ?? 0) > 3);
-        return over.length === 0 ? null : `attunement ${JSON.stringify(run.realmAttunement)}`;
+        const whole = (value: unknown): boolean => typeof value === 'number' && Number.isInteger(value) && value >= 0;
+        if (!Object.values(run.realmAttunement ?? {}).every(whole)) return `attunement ${JSON.stringify(run.realmAttunement)}`;
+        if (!Object.values(run.elementResonance ?? {}).every(whole)) return `resonance ${JSON.stringify(run.elementResonance)}`;
+        const charged = run.board?.tiles.find((tile) => tile.empowered != null && tile.empowered !== true && !(whole(tile.empowered) && tile.empowered > 0));
+        return charged ? `charge ${String(charged.empowered)} on ${charged.id}` : null;
+    },
+    'a reaction spends a primed streak of another element, and a miss breaks the streak': (before, run, action) => {
+        // One resolved turn at a time: a Zone resolves several matches in one action.
+        if (!before || action !== 'resolve' || before.board?.level !== run.board?.level) return null;
+        const reacted = (run.elementReactionsThisFloor ?? 0) - (before.elementReactionsThisFloor ?? 0);
+        if (reacted > 0) {
+            const spent = runElementStreak(before);
+            if (!isStreakPrimed(spent)) return `reaction on streak ${JSON.stringify(before.elementStreak)}`;
+            if (run.elementStreak?.suit === spent!.suit) return `reaction kept the ${spent!.suit} streak`;
+        }
+        if ((run.stats.mismatches ?? 0) > (before.stats.mismatches ?? 0) && run.elementStreak != null) {
+            return `streak ${JSON.stringify(run.elementStreak)} survived a miss`;
+        }
+        return null;
     },
     'the chill a floor sends on freezes that many cards of the next, and is spent': (before, run, action) => {
         if (action !== 'descend' || !before?.realmChill || !run.board) return null;
@@ -379,6 +402,10 @@ export const soakRun = ({
     let elementCasts = 0;
     let elementEmpowered = 0;
     let elementNeutralized = 0;
+    let elementReactions = 0;
+    let elementResonancePeak = 0;
+    let elementChargePeak = 0;
+    let realmDepthPeak = 0;
     let realmDoors = 0;
     let realmPeaks = 0;
     let realmConfluences = 0;
@@ -414,6 +441,7 @@ export const soakRun = ({
             elementEmpowered += Math.max(0, (next.elementEmpoweredThisFloor ?? 0) - (run.elementEmpoweredThisFloor ?? 0));
             elementNeutralized += Math.max(0, (next.elementNeutralizedThisFloor ?? 0) - (run.elementNeutralizedThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
+            elementReactions += Math.max(0, (next.elementReactionsThisFloor ?? 0) - (run.elementReactionsThisFloor ?? 0));
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
             if ((next.realmSmoke ?? 0) > 0) realmSmokeFloors += 1;
@@ -424,6 +452,9 @@ export const soakRun = ({
             Object.values(next.realmAttunement ?? {}).reduce((sum, level) => sum + (level ?? 0), 0) -
                 Object.values(run.realmAttunement ?? {}).reduce((sum, level) => sum + (level ?? 0), 0)
         );
+        elementResonancePeak = Math.max(elementResonancePeak, ...Object.values(next.elementResonance ?? {}).map((stacks) => stacks ?? 0));
+        elementChargePeak = Math.max(elementChargePeak, ...(next.board?.tiles ?? []).map((tile) => tileCharge(tile)));
+        realmDepthPeak = Math.max(realmDepthPeak, ...Object.values(next.realmAttunement ?? {}).map((level) => level ?? 0));
         run = next;
     };
 
@@ -537,6 +568,10 @@ export const soakRun = ({
         elementCasts,
         elementEmpowered,
         elementNeutralized,
+        elementReactions,
+        elementResonancePeak,
+        elementChargePeak,
+        realmDepthPeak,
         realmDoors,
         realmPeaks,
         realmConfluences,

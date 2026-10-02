@@ -96,6 +96,11 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
                                     {REALM_TRAVEL_COPY.attunedLine(attunement[door.realmId] ?? 0)}
                                 </span>
                             ) : null}
+                            {REALM_TRAVEL_COPY.depthWarning(door, attunement[door.realmId] ?? 0) ? (
+                                <span className={styles.attuned} data-testid={`realm-door-${index}-depth-warning`}>
+                                    {REALM_TRAVEL_COPY.depthWarning(door, attunement[door.realmId] ?? 0)}
+                                </span>
+                            ) : null}
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>

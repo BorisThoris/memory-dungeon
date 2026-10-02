@@ -1,5 +1,5 @@
 import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
-import { ATTUNEMENT_GOLD_STEP, SMOKE_STUDY_CUT_PER_BURNOUT } from '../../shared/realm-carryover-rules';
+import { SMOKE_STUDY_CUT_PER_BURNOUT, attunementGoldBonus, realmBacklashRuns } from '../../shared/realm-carryover-rules';
 import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
@@ -19,8 +19,20 @@ export const REALM_HUD_COPY = {
         `${REALMS[realm].place}${secondary ? ` meeting ${REALMS[secondary].place}` : ''}, ${REALM_SEVERITIES[severity].title.toLowerCase()}. ${weather} in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`
 } as const;
 
-const NUMERALS = ['', 'I', 'II', 'III'] as const;
-export const attunementNumeral = (level: number): string => NUMERALS[Math.max(0, Math.min(3, Math.floor(level)))] ?? '';
+const ROMAN: readonly [number, string][] = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+/** The depth as a numeral: attunement has no cap, so neither has this. */
+export const attunementNumeral = (level: number): string => {
+    let left = Math.max(0, Math.floor(level));
+    let out = '';
+    for (const [value, glyph] of ROMAN) {
+        while (left >= value) {
+            out += glyph;
+            left -= value;
+        }
+    }
+    return out;
+};
+const attunementGoldPercent = (level: number): number => Math.round(attunementGoldBonus(level) * 100);
 
 /** The floor-clear beat's lines for what a realm floor sends on (`realm-carryover-rules.ts`). */
 export const realmCarryoverLines = (
@@ -31,7 +43,7 @@ export const realmCarryoverLines = (
     const lines: string[] = [];
     if (result.realmAttuned) {
         const level = attunement?.[result.realmAttuned] ?? 1;
-        lines.push(`Attuned to ${REALMS[result.realmAttuned].title} ${attunementNumeral(level)}: its clears pay +${Math.round(level * ATTUNEMENT_GOLD_STEP * 100)}% gold`);
+        lines.push(`Deeper into ${REALMS[result.realmAttuned].title}: depth ${attunementNumeral(level)}, its clears pay +${attunementGoldPercent(level)}% gold`);
     }
     if (result.realmSmoke) {
         lines.push(`Smoke follows you: the next study is ${Math.round(result.realmSmoke * SMOKE_STUDY_CUT_PER_BURNOUT * 100)}% shorter`);
@@ -55,7 +67,10 @@ export const REALM_TRAVEL_COPY = {
             : `${severity.title} · ×${severity.goldMultiplier} gold`;
     },
     attunedLine: (level: number): string | null =>
-        level > 0 ? `Attuned ${attunementNumeral(level)} · +${Math.round(level * ATTUNEMENT_GOLD_STEP * 100)}% gold` : null,
+        level > 0 ? `Depth ${attunementNumeral(level)} · +${attunementGoldPercent(level)}% gold` : null,
+    /** What going deeper behind this door costs: the realm bites back at misses sooner. */
+    depthWarning: (door: RealmDoor, level: number): string | null =>
+        door.severity !== 'raging' && realmBacklashRuns(door.severity, level) ? 'This deep, it strikes back at a miss' : null,
     placeLine: (door: RealmDoor): string =>
         door.confluence ? `${REALMS[door.realmId].place} meets ${REALMS[door.confluence].place.replace(/^The /, 'the ')}` : REALMS[door.realmId].place,
     confluenceRule: (door: RealmDoor): string | null =>

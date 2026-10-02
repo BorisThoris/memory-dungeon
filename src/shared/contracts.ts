@@ -127,11 +127,21 @@ export interface RealmEvent {
         // beats, or was matched empowered and paid for it.
         | 'empowered'
         | 'neutralized'
-        | 'released';
+        | 'released'
+        // Two elements met on a primed streak (`element-resonance-rules.ts`): Steam, Blaze, Thaw,
+        // Freeze-over, Flood, Frostbloom.
+        | 'steam'
+        | 'blaze'
+        | 'melt'
+        | 'freezeover'
+        | 'flood'
+        | 'frostbloom';
     /** The cards it touched, for the board to flash. */
     tileIds: string[];
     /** A reaction's name ("Thaw", "Steam"), and the realms it turned between. */
     reaction?: string;
+    /** An elemental reaction's potency (`element-resonance-rules.ts`). */
+    potency?: number;
     from?: RealmId;
     to?: RealmId;
     /** What turned the realm: the sway of the player's matches tipping it (`realm-sway-rules.ts`). */
@@ -375,10 +385,11 @@ export interface Tile {
     /** Grove realm: the vines on this card have bloomed, and cutting them pays three gold, not one. */
     bloom?: boolean;
     /**
-     * Elemental alchemy (`element-alchemy-rules.ts`): this card drank its own element when it reached
-     * it, and pays a gold when it is matched.
+     * Elemental alchemy (`element-alchemy-rules.ts`): this card's charge, one for every time it drank
+     * its own element, without a cap. Matched, the charge joins its element's resonance and pays a gold
+     * for every two. `true` is a save from before the charge was counted, and reads as one.
      */
-    empowered?: boolean;
+    empowered?: number | true;
 }
 
 export type FloorTag = 'normal' | 'breather' | 'boss';
@@ -863,6 +874,18 @@ export interface RunState {
     /** Elemental alchemy this floor: cards that drank their own element, and elements a card put out. */
     elementEmpoweredThisFloor?: number;
     elementNeutralizedThisFloor?: number;
+    /**
+     * Resonance (`element-resonance-rules.ts`): the run's stacks of each element, one a pair matched
+     * and one a charge, never capped; a missed card sheds one of its element.
+     */
+    elementResonance?: Partial<Record<TileSuit, number>>;
+    /** The element in hand and the matches made of it in a row; carried between floors, broken by a miss. */
+    elementStreak?: { suit: TileSuit; links: number } | null;
+    /** Reactions two elements made on a primed streak, this floor and this run. */
+    elementReactionsThisFloor?: number;
+    elementReactionsThisRun?: number;
+    /** Turns the floor still holds still for (a Freeze-over): no weather, no backlash, no frostbite, no fuse burns. */
+    realmStillTurns?: number;
     /** Floors cleared in each realm this run; the travel screen and the results read it. */
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */

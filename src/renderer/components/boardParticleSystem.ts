@@ -51,7 +51,17 @@ export interface BoardParticleBurst {
     emberMode?: 'rise' | 'fall' | 'spark';
     /** An ember's size against the combo's sparks: the realm's snow, drops and leaves are bigger (`realmParticles.ts`). */
     sizeScale?: number;
+    /**
+     * An ember drawn as its element's own material (`elementCardMote`): a flame tongue licking up, a
+     * drop of liquid that beads and falls, a shard of ice that glints, a leaf that tumbles. It moves
+     * as its material does, whatever `emberMode` says.
+     */
+    shape?: BoardParticleShape;
 }
+
+export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf';
+/** The shader's kind code for each shape, after the bolt's seven. */
+export const BOARD_PARTICLE_SHAPE_KIND: Readonly<Record<BoardParticleShape, number>> = { flame: 8, droplet: 9, shard: 10, leaf: 11 };
 
 const vertexShader = `
     attribute vec3 origin;
@@ -74,7 +84,7 @@ const vertexShader = `
             gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
             return;
         }
-        if (vKind > 6.5) {
+        if (vKind > 6.5 && vKind < 7.5) {
             // A bolt segment: a fixed quad from one path point to the next, length by width.
             vec2 segment = vec2(position.x * lifetime.z, position.y * movement.z);
             segment = mat2(cos(rotation.x), sin(rotation.x), -sin(rotation.x), cos(rotation.x)) * segment;
@@ -89,10 +99,17 @@ const vertexShader = `
         if (vKind > 1.5 && vKind < 2.5) scale = lifetime.z * mix(0.5, 1.5, age);
         if (vKind > 2.5 && vKind < 3.5) scale = lifetime.z;
         if (vKind > 3.5) scale = lifetime.z * mix(1.0, 0.35, age);
+        // The elements: a flame thins as it climbs, a drop and a shard keep their size, a leaf too.
+        if (vKind > 7.5 && vKind < 8.5) scale = lifetime.z * mix(1.15, 0.5, age);
+        if (vKind > 8.5) scale = lifetime.z;
         if (ripple) scale = lifetime.z * mix(0.3, 1.0, 1.0 - pow(1.0 - age, 3.0));
         float angle = rotation.x + rotation.y * seconds;
         vec2 local = position.xy * scale;
         if (vKind < 0.5) local.y *= 2.2;
+        if (vKind > 7.5 && vKind < 8.5) local.y *= 1.9;
+        // A drop stretches as it falls.
+        if (vKind > 8.5 && vKind < 9.5) local.y *= 1.25 + min(0.9, movement.z * seconds * 0.9);
+        if (vKind > 9.5 && vKind < 10.5) local.y *= 1.5;
         if (ripple) local.y *= 0.72;
         local = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * local;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(center + vec3(local, 0.0), 1.0);
@@ -103,6 +120,7 @@ const fragmentShader = `
     varying vec3 vTint;
     varying float vAge;
     varying float vKind;
+    uniform float time;
     void main() {
         if (vAge < 0.0 || vAge >= 1.0) discard;
         vec2 p = vUv * 2.0 - 1.0;
@@ -122,7 +140,7 @@ const fragmentShader = `
             shape = core + rays * 0.6;
             strength = 1.0;
         }
-        if (vKind > 6.5) {
+        if (vKind > 6.5 && vKind < 7.5) {
             float d = abs(vUv.y * 2.0 - 1.0);
             float core = exp(-d * d * 28.0);
             float glow = exp(-d * d * 3.0) * 0.6;
@@ -136,6 +154,47 @@ const fragmentShader = `
             float band = abs(radius - 0.76);
             shape = exp(-band * band * 1800.0) + exp(-band * band * 110.0) * 0.3;
             strength = 0.72;
+        }
+        if (vKind > 7.5 && vKind < 8.5) {
+            // Fire: a tongue, wide at the foot and pointed at the tip, that wavers; white-hot in
+            // the core, its own colour in the body, red at the tip.
+            float up = p.y * 0.5 + 0.5;
+            float sway = sin(p.y * 5.0 + time * 13.0 + vTint.g * 40.0) * 0.16 * up;
+            float d = length(vec2((p.x + sway) * (1.25 + 2.4 * up * up), p.y * 0.92 + 0.08));
+            shape = smoothstep(1.0, 0.35, d);
+            float core = smoothstep(0.55, 0.0, d + up * 0.35);
+            color = mix(mix(vTint, vec3(0.9, 0.16, 0.04), up * 0.7), vec3(1.0, 0.95, 0.75), core);
+            strength = 0.95;
+        }
+        if (vKind > 8.5 && vKind < 9.5) {
+            // Liquid: a drop with a round belly and a drawn-out neck, a hard edge, a dark rim where
+            // the light bends, and one bright highlight.
+            float neck = max(0.0, p.y);
+            float d = length(vec2(p.x * (1.15 + 1.7 * neck * neck), p.y * 0.95 + 0.05));
+            shape = smoothstep(0.95, 0.82, d);
+            float rim = smoothstep(0.45, 0.9, d);
+            float highlight = exp(-dot(p - vec2(-0.28, -0.22), p - vec2(-0.28, -0.22)) * 22.0);
+            float caustic = 0.5 + 0.5 * sin(p.x * 7.0 + p.y * 5.0 + time * 5.0 + vTint.b * 30.0);
+            color = mix(vTint * (0.85 + 0.25 * caustic), vTint * 0.45, rim) + vec3(highlight);
+            strength = 0.88;
+        }
+        if (vKind > 9.5 && vKind < 10.5) {
+            // Ice: a cut crystal, hard-edged, each facet its own brightness, with a glint that comes and goes.
+            float d = abs(p.x) * 1.7 + abs(p.y);
+            shape = smoothstep(1.0, 0.92, d);
+            float facet = 0.62 + 0.2 * step(0.0, p.x) + 0.18 * step(0.0, p.y * p.x);
+            float glint = pow(max(0.0, sin(time * 4.0 + vTint.r * 60.0 + p.y * 3.0)), 10.0);
+            float spine = exp(-abs(p.x) * 26.0) * 0.5;
+            color = mix(vTint * facet, vec3(1.0), spine + glint * 0.8);
+            strength = 0.9;
+        }
+        if (vKind > 10.5) {
+            // Growth: a leaf, two arcs meeting at a point, with a midrib and a lighter side.
+            float blade = abs(p.x) - (1.0 - p.y * p.y) * 0.5;
+            shape = smoothstep(0.04, -0.06, blade);
+            float midrib = exp(-abs(p.x) * 30.0) * 0.45;
+            color = vTint * (0.78 + 0.3 * step(0.0, p.x)) - vec3(midrib * 0.35);
+            strength = 0.92;
         }
         float fade = smoothstep(0.0, 0.06, vAge) * pow(1.0 - vAge, 1.5);
         float alpha = shape * fade * strength;
@@ -244,7 +303,8 @@ export const createBoardParticleSystem = () => {
             const warm = rim ? burst.rimMood === 'match' ? '#baffdf' : burst.rimMood === 'charge' ? '#ffb34b' : '#ffe3a3'
                 : bomb ? '#ffd391' : burst.kind === 'chain' ? '#ffb34b' : flip ? '#9cebea' : '#ffe0a0';
             const density = burst.quality === 'low' ? 0.45 : burst.quality === 'medium' ? 0.7 : 1;
-            const sparks = Math.round((rim ? 2 + energy * 2 : ember ? 2 + energy * 4 : bomb ? 44 : flip ? 8 : 28 + energy * 12) * density);
+            const shaped = ember && burst.shape ? burst.shape : null;
+            const sparks = Math.round((rim ? 2 + energy * 2 : shaped ? 1 + energy * 3 : ember ? 2 + energy * 4 : bomb ? 44 : flip ? 8 : 28 + energy * 12) * density);
             const smoke = bomb ? Math.round(8 * density) : 0;
             const count = burst.reduceMotion ? (flip || rim || ripple || ember ? 0 : 1) : ripple ? (burst.quality === 'low' ? 2 : 3) : ember ? sparks : sparks + smoke + (edge ? 0 : 1);
             let emitted = 0;
@@ -261,10 +321,12 @@ export const createBoardParticleSystem = () => {
                     if (checked >= budget) break;
                 }
                 const slot = cursor++ % budget;
-                const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : ember ? 0 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
+                const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : shaped ? BOARD_PARTICLE_SHAPE_KIND[shaped] : ember ? 0 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
                 const angle = ripple ? 0 : rng() * Math.PI * 2;
                 const speed = kind === 0 ? (bomb ? 1.2 : 0.45) * (0.35 + rng()) : kind === 2 ? 0.28 : 0;
-                const life = burst.reduceMotion ? 0.5 : ripple ? 0.65 + index * 0.08 : rim ? 0.3 + rng() * 0.3 : ember ? 0.9 + rng() * 0.8 : kind === 1 ? 0.65 : kind === 2 ? 1.1 : 0.45 + rng() * 0.65;
+                const life = burst.reduceMotion ? 0.5 : ripple ? 0.65 + index * 0.08 : rim ? 0.3 + rng() * 0.3
+                    : shaped === 'flame' ? 0.55 + rng() * 0.5 : shaped === 'droplet' ? 0.8 + rng() * 0.5 : shaped === 'shard' ? 1.1 + rng() * 0.8 : shaped === 'leaf' ? 1.3 + rng() * 0.9
+                    : ember ? 0.9 + rng() * 0.8 : kind === 1 ? 0.65 : kind === 2 ? 1.1 : 0.45 + rng() * 0.65;
                 const start = burst.time + (burst.reduceMotion ? 0 : burst.delay ?? 0) + (ripple ? index * 0.085 : kind === 2 ? 0.05 : edge && !rim ? index / Math.max(1, sparks) * 0.16 : 0);
                 const size = ripple ? 2.1 + energy * 1.2 + index * 0.32 : kind === 3 ? 1.05 : kind === 4 ? (rim ? 0.065 : 0.11) + rng() * 0.055 + energy * 0.035
                     : kind === 1 ? (bomb ? 1.3 : 0.75) : kind === 2 ? 0.7 : 0.035 + rng() * (bomb ? 0.09 : 0.055);
@@ -282,6 +344,27 @@ export const createBoardParticleSystem = () => {
                     } else { point.x += burst.x; point.y += burst.y; point.z += burst.z; }
                     origin.setXYZ(slot, point.x, point.y, point.z + 0.06);
                     movement.setXYZW(slot, direction.x, direction.y + (rim ? 0.06 : 0.12), -0.08, 1.5);
+                } else if (shaped) {
+                    // The card's own material, born on its face and moving as that material moves.
+                    const px = burst.x + (rng() - 0.5) * 0.6;
+                    if (shaped === 'flame') {
+                        // Off the foot of the card, straight up, faster the longer it burns.
+                        origin.setXYZ(slot, px, burst.y - 0.38 + rng() * 0.45, burst.z + 0.07);
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.1, 0.22 + rng() * 0.2 + energy * 0.3, -(0.25 + energy * 0.3), 0.8);
+                    } else if (shaped === 'droplet') {
+                        // Beads on the face, hangs a moment, then falls under its own weight.
+                        origin.setXYZ(slot, px, burst.y + (rng() - 0.5) * 0.7, burst.z + 0.07);
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.03, -0.01, 0.7 + rng() * 0.5 + energy * 0.4, 0.25);
+                    } else if (shaped === 'shard') {
+                        // Breaks off and drifts out slowly, turning, barely sinking.
+                        const theta = rng() * Math.PI * 2;
+                        origin.setXYZ(slot, px, burst.y + (rng() - 0.5) * 0.75, burst.z + 0.07);
+                        movement.setXYZW(slot, Math.cos(theta) * (0.06 + energy * 0.1), Math.sin(theta) * (0.06 + energy * 0.1), 0.03, 0.7);
+                    } else {
+                        // Shed from the top, falling and swaying.
+                        origin.setXYZ(slot, px, burst.y + 0.1 + rng() * 0.4, burst.z + 0.07);
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.3, -(0.04 + rng() * 0.08), 0.1 + energy * 0.08, 0.7);
+                    }
                 } else if (ember) {
                     // Born somewhere on the card's face, drifting up and a little sideways, rising
                     // faster the longer it lives (negative gravity), damped so it never streaks.
@@ -302,11 +385,13 @@ export const createBoardParticleSystem = () => {
                     movement.setXYZW(slot, Math.cos(angle) * speed, Math.sin(angle) * speed + (kind === 2 ? 0.35 : 0),
                         kind === 0 ? (bomb ? 1.2 : 0.25) : 0, bomb ? 2.1 : 1.2);
                 }
-                lifetime.setXYZW(slot, start, life, ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
+                lifetime.setXYZW(slot, start, life, shaped ? (0.085 + rng() * 0.05 + energy * 0.05) * (shaped === 'flame' ? 1.5 : 1) * (burst.sizeScale ?? 1) : ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
                 color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);
                 if (kind === 0 && rng() > 0.7) color.set('#fff2ce');
                 tint.setXYZ(slot, color.r, color.g, color.b);
-                rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);
+                // A flame and a drop stay upright; a shard turns slowly and a leaf tumbles.
+                if (shaped) rotation.setXY(slot, shaped === 'flame' || shaped === 'droplet' ? 0 : angle, shaped === 'shard' ? (rng() - 0.5) * 1.2 : shaped === 'leaf' ? (rng() - 0.5) * 4 : 0);
+                else rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);
                 ends[slot] = start + life;
                 emitted += 1;
             }

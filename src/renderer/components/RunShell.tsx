@@ -19,6 +19,7 @@ import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runReal
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { REALM_HUD_COPY } from '../copy/realmCopy';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
+import ElementResonanceStrip from './ElementResonanceStrip';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -537,6 +538,7 @@ const RunShell = ({
                             and how many turns until it comes. The one clock on the board the player
                             is winding themselves, so it is always shown. */}
                         {realm ? (
+                            <span className={styles.realmAnchor}>
                             <span
                                 aria-label={realmWeatherClockRuns(realmSeverity) ? REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary) : REALM_HUD_COPY.ariaNoClock(realm, realmSeverity, realmSecondary)}
                                 className={styles.realm}
@@ -565,6 +567,9 @@ const RunShell = ({
                                         {REALM_HUD_COPY.sway(swayLead.realm, swayLead.pairs, REALM_SWAY_TIP)}
                                     </span>
                                 ) : null}
+                            </span>
+                            {/* The elements' stacks and the streak in hand (`element-resonance-rules.ts`), hung under the chip. */}
+                            <ElementResonanceStrip run={run} />
                             </span>
                         ) : null}
                         {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (

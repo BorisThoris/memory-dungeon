@@ -328,6 +328,10 @@
                 "elementCastsThisFloor",
                 "elementEmpoweredThisFloor",
                 "elementNeutralizedThisFloor",
+                "elementResonance",
+                "elementStreak",
+                "elementReactionsThisFloor",
+                "realmStillTurns",
                 "realmLitTileIds",
                 "lastRealmEvent",
                 "realmReactionsThisFloor",
@@ -2050,6 +2054,48 @@
             ]
         },
         {
+            "id": "board.element_resonance",
+            "label": "Elemental Resonance",
+            "kind": "board",
+            "role": "the_elements_stack_without_a_cap_a_streak_of_one_element_primes_and_a_different_element_matched_next_reacts_with_it",
+            "evidence": [
+                "src/shared/element-resonance-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/realm-carryover-rules.ts",
+                "src/renderer/components/ElementResonanceStrip.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "realmId",
+                "elementResonance",
+                "elementStreak",
+                "realmStillTurns"
+            ],
+            "writes": [
+                "tileStates",
+                "gold",
+                "elementResonance",
+                "elementStreak",
+                "elementReactionsThisFloor",
+                "realmStillTurns",
+                "realmLitTileIds",
+                "lastRealmEvent"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "a-reaction-only-frees-lights-charges-or-pays",
+                "realm-guard-frees-holds-that-leave-no-pair"
+            ],
+            "tests": [
+                "src/shared/element-resonance-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "economy.realm_travel",
             "label": "Realm Travel",
             "kind": "economy",
@@ -3180,6 +3226,42 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the cast stamps its element, its cards jolt and burst, its recording plays"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.element_resonance",
+            "kind": "triggers",
+            "label": "every match stacks its element and links the streak, a miss sheds a stack and breaks it"
+        },
+        {
+            "source": "board.element_resonance",
+            "target": "board.element_groups",
+            "kind": "modifies",
+            "label": "every tier of an element's resonance is a step of reach on its cast"
+        },
+        {
+            "source": "board.element_resonance",
+            "target": "board.realm_weather",
+            "kind": "modifies",
+            "label": "a blaze burns every vine, a thaw frees all ice and snow, a freeze-over holds the weather, the backlash and the fuses still"
+        },
+        {
+            "source": "board.element_resonance",
+            "target": "board.element_alchemy",
+            "kind": "modifies",
+            "label": "a charged card matched adds its charge to its element's stacks, and a frostbloom charges the cards nearest the match"
+        },
+        {
+            "source": "board.element_resonance",
+            "target": "economy.gold",
+            "kind": "modifies",
+            "label": "a blaze pays a gold for every two of its potency"
+        },
+        {
+            "source": "board.element_resonance",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the resonance strip counts every element's stacks and the streak in hand, each reaction stamps its name and potency, and every card gives off its element"
         },
         {
             "source": "core.board_turn_resolution",

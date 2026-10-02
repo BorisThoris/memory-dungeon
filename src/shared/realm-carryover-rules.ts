@@ -13,18 +13,56 @@ import { runNonNegativeInteger } from './run-number-guards';
  *   board through smoke.
  * - **Chill.** A floor that froze four cards or more sends the cold on: the next floor opens with
  *   two cards already frozen, whatever realm it is in.
- * - **Attunement.** A realm floor cleared clean by that realm's own measure attunes the player to
- *   it, up to three: every level is a quarter more gold on that realm's clears, and the travel doors
- *   say so. It turns the route into a build - stay in the realm you have mastered, or chase the
- *   doors that pay.
+ * - **Attunement, the realm's depth.** Every clear in a realm attunes the player to it by a level,
+ *   two when the floor was clean by that realm's own measure, and every other realm fades by one.
+ *   Since 2026-10-02 it has no cap: keep walking through the same realm's door and it stacks without
+ *   end. A level is a quarter more gold on that realm's clears up to three and a twentieth after
+ *   (`attunementGoldBonus`); the realm's element takes over a pair of the floor a level
+ *   (`deepenFloorDeck` in `realm-rules.ts`) and resonates more (`realmResonanceBonus`); and the
+ *   realm bites back sooner (`realmBacklashRuns`) and its raging weather reaches further
+ *   (`realmDepthReach`). It turns the route into a build - go deeper where you are, or start again
+ *   behind another door.
  */
 export const SMOKE_STUDY_CUT_PER_BURNOUT = 0.12;
 export const SMOKE_MAX = 3;
 export const CHILL_FROZEN_THRESHOLD = 4;
 export const CHILL_CARDS = 2;
 export const CHILL_FROST_TURNS = 2;
-export const ATTUNEMENT_MAX = 3;
+/** Gold a level adds to the realm's clears: the full step for the first levels, the deep step after, without end. */
 export const ATTUNEMENT_GOLD_STEP = 0.25;
+export const ATTUNEMENT_FULL_STEP_LEVELS = 3;
+export const ATTUNEMENT_DEEP_GOLD_STEP = 0.05;
+/** Levels a clear earns in its realm, the extra a clean one earns, and what every other realm fades by. */
+export const ATTUNEMENT_PER_CLEAR = 1;
+export const ATTUNEMENT_CLEAN_BONUS = 1;
+export const ATTUNEMENT_FADE = 1;
+/** Depth at which a wild realm, and then even a calm one, strikes back at a miss. */
+export const DEPTH_BACKLASH_WILD = 3;
+export const DEPTH_BACKLASH_CALM = 6;
+/** Levels of depth for one more card of reach in raging weather, and for one more stack a pair of the realm's element. */
+export const DEPTH_PER_REACH = 4;
+export const DEPTH_PER_RESONANCE = 3;
+
+/** The share of gold a depth adds to its realm's clears. */
+export const attunementGoldBonus = (level: number): number => {
+    const depth = runNonNegativeInteger(level);
+    return (
+        ATTUNEMENT_GOLD_STEP * Math.min(ATTUNEMENT_FULL_STEP_LEVELS, depth) +
+        ATTUNEMENT_DEEP_GOLD_STEP * Math.max(0, depth - ATTUNEMENT_FULL_STEP_LEVELS)
+    );
+};
+
+/** Whether the realm answers a miss with its backlash: always raging, wild from depth 3, calm from depth 6. */
+export const realmBacklashRuns = (severity: 'calm' | 'wild' | 'raging', depth: number): boolean =>
+    severity === 'raging' ||
+    (severity === 'wild' && runNonNegativeInteger(depth) >= DEPTH_BACKLASH_WILD) ||
+    runNonNegativeInteger(depth) >= DEPTH_BACKLASH_CALM;
+
+/** Cards of reach the depth adds to raging weather. */
+export const realmDepthReach = (depth: number): number => Math.floor(runNonNegativeInteger(depth) / DEPTH_PER_REACH);
+
+/** Stacks the depth adds to every pair matched of the realm's own element. */
+export const realmResonanceBonus = (depth: number): number => Math.floor(runNonNegativeInteger(depth) / DEPTH_PER_RESONANCE);
 
 /** Each realm's measure of a clean floor: the thing that realm punishes, not done. */
 export const REALM_CLEAN_MEASURE: Readonly<Record<RealmId, string>> = {
@@ -55,7 +93,7 @@ export const realmFloorWasClean = (
 };
 
 export const realmAttunementLevel = (run: Pick<RunState, 'realmAttunement'>, realmId: RealmId | null): number =>
-    realmId ? Math.min(ATTUNEMENT_MAX, runNonNegativeInteger(run.realmAttunement?.[realmId] ?? 0)) : 0;
+    realmId ? runNonNegativeInteger(run.realmAttunement?.[realmId] ?? 0) : 0;
 
 export interface RealmCarryover {
     realmSmoke: number;
@@ -72,14 +110,21 @@ export const realmCarryoverAtClear = (
     turnsTaken: number,
     parTurns: number
 ): RealmCarryover => {
-    const attunement = { ...(run.realmAttunement ?? {}) };
+    const attunement: Partial<Record<RealmId, number>> = { ...(run.realmAttunement ?? {}) };
     if (!realmId) {
         return { realmSmoke: 0, realmChill: 0, realmAttunement: attunement, attuned: null };
     }
     const clean = realmFloorWasClean(run, realmId, turnsTaken, parTurns);
     const before = realmAttunementLevel(run, realmId);
-    const attuned = clean && before < ATTUNEMENT_MAX ? realmId : null;
-    if (attuned) attunement[realmId] = before + 1;
+    // Every other realm fades; this one deepens, twice as fast when it was played clean.
+    for (const other of Object.keys(attunement) as RealmId[]) {
+        if (other === realmId) continue;
+        const faded = Math.max(0, runNonNegativeInteger(attunement[other] ?? 0) - ATTUNEMENT_FADE);
+        if (faded > 0) attunement[other] = faded;
+        else delete attunement[other];
+    }
+    const attuned: RealmId | null = realmId;
+    attunement[realmId] = before + ATTUNEMENT_PER_CLEAR + (clean ? ATTUNEMENT_CLEAN_BONUS : 0);
     return {
         realmSmoke: Math.min(SMOKE_MAX, runNonNegativeInteger(run.realmBurnoutsThisFloor ?? 0)),
         realmChill: runNonNegativeInteger(run.realmFrozenThisFloor ?? 0) >= CHILL_FROZEN_THRESHOLD ? CHILL_CARDS : 0,

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Matrix4, Vector3 } from 'three';
-import { boardParticleBudget, createBoardParticleSystem, type BoardParticleBurst } from './boardParticleSystem';
+import { BOARD_PARTICLE_SHAPE_KIND, boardParticleBudget, createBoardParticleSystem, type BoardParticleBurst } from './boardParticleSystem';
 
 const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, time: 1,
     reduceMotion: false, quality: 'high' };
@@ -22,6 +22,38 @@ describe('the shared board particle pool', () => {
         // An explosion filling the pool leaves the embers nowhere to go: they never evict it.
         for (let i = 0; i < 40; i += 1) pool.emit({ ...burst, seed: i });
         expect(pool.emit({ ...burst, kind: 'ember', time: 1.01 })).toBe(0);
+        pool.dispose();
+    });
+
+    it('draws each element as its own material, moving as that material moves', () => {
+        const pool = createBoardParticleSystem();
+        const movement = pool.mesh.geometry.getAttribute('movement');
+        const lifetime = pool.mesh.geometry.getAttribute('lifetime');
+        const rotation = pool.mesh.geometry.getAttribute('rotation');
+        let slot = 0;
+        for (const shape of ['flame', 'droplet', 'shard', 'leaf'] as const) {
+            const emitted = pool.emit({ ...burst, kind: 'ember', energy: 0.6, tint: '#5fb8f2', shape });
+            expect(emitted, shape).toBeGreaterThan(0);
+            for (let index = slot; index < slot + emitted; index += 1) {
+                expect(lifetime.getW(index), shape).toBe(BOARD_PARTICLE_SHAPE_KIND[shape]);
+                // A flame climbs and climbs faster; a drop falls under its own weight; a leaf sinks.
+                if (shape === 'flame') {
+                    expect(movement.getY(index)).toBeGreaterThan(0);
+                    expect(movement.getZ(index)).toBeLessThan(0);
+                    expect(rotation.getX(index)).toBe(0);
+                }
+                if (shape === 'droplet') {
+                    expect(movement.getZ(index)).toBeGreaterThan(0.5);
+                    expect(rotation.getY(index)).toBe(0);
+                }
+                if (shape === 'leaf') expect(movement.getY(index)).toBeLessThan(0);
+            }
+            slot += emitted;
+        }
+        // Element motes take free slots only, and none under reduced motion.
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'flame', reduceMotion: true })).toBe(0);
+        for (let i = 0; i < 40; i += 1) pool.emit({ ...burst, seed: i });
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'flame', time: 1.01 })).toBe(0);
         pool.dispose();
     });
 

@@ -52,6 +52,11 @@ describe('the run soak', () => {
         // Alchemy: some card drank its own element, and some put an element out.
         expect(reports.some((report) => report.elementEmpowered > 0), 'no card ever drank its own element').toBe(true);
         expect(reports.some((report) => report.elementNeutralized > 0), 'no card ever put an element out').toBe(true);
+        // Resonance: two elements react on a primed streak, and the stacks pass every old cap.
+        expect(reports.some((report) => report.elementReactions > 0), 'no two elements ever reacted').toBe(true);
+        expect(reports.some((report) => report.elementResonancePeak > 5), 'no element ever stacked past five').toBe(true);
+        expect(reports.some((report) => report.elementChargePeak > 1), 'no card ever held more than one charge').toBe(true);
+        expect(reports.some((report) => report.realmDepthPeak > 3), 'no realm ever went deeper than the old cap of three').toBe(true);
         expect(reports.some((report) => report.realmDoors > 0), 'no door was ever walked through').toBe(true);
         expect(reports.some((report) => report.realmPeaks > 0), 'no realm ever reached its peak').toBe(true);
         expect(reports.some((report) => report.realmConfluences > 0), 'no floor was ever a confluence').toBe(true);

@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { advanceToNextLevel, buildBoard, createNewRun, getMemorizeDurationForRun } from './game';
 import {
-    ATTUNEMENT_MAX,
+    ATTUNEMENT_FULL_STEP_LEVELS,
+    attunementGoldBonus,
+    realmBacklashRuns,
+    realmDepthReach,
+    realmResonanceBonus,
     CHILL_CARDS,
     applyRealmChill,
     applyRealmSmokeToStudy,
@@ -24,23 +28,37 @@ describe('what a realm floor sends on', () => {
         expect(realmFloorWasClean({ realmVinesCutThisFloor: 2 }, 'grove', 20, 8)).toBe(true);
     });
 
-    it('a clean clear attunes, up to three; smoke counts burnouts up to three; chill follows four frozen', () => {
+    it('every clear deepens its realm, a clean one twice, with no cap; the others fade; smoke counts burnouts up to three; chill follows four frozen', () => {
         const clean = realmCarryoverAtClear(base({ realmBurnoutsThisFloor: 0 }), 'ember', 5, 8);
         expect(clean.attuned).toBe('ember');
-        expect(clean.realmAttunement.ember).toBe(1);
-        const capped = realmCarryoverAtClear(base({ realmAttunement: { ember: ATTUNEMENT_MAX } }), 'ember', 5, 8);
-        expect(capped.attuned).toBeNull();
+        expect(clean.realmAttunement.ember).toBe(2);
+        const deep = realmCarryoverAtClear(base({ realmAttunement: { ember: 40, frost: 3, tide: 1 } }), 'ember', 5, 8);
+        expect(deep.realmAttunement).toEqual({ ember: 42, frost: 2 });
         const smoky = realmCarryoverAtClear(base({ realmBurnoutsThisFloor: 5 }), 'ember', 5, 8);
         expect(smoky.realmSmoke).toBe(3);
-        expect(smoky.attuned).toBeNull();
+        expect(smoky.realmAttunement.ember).toBe(1);
         expect(realmCarryoverAtClear(base({ realmFrozenThisFloor: 4 }), 'frost', 5, 8).realmChill).toBe(CHILL_CARDS);
         expect(realmCarryoverAtClear(base({ realmFrozenThisFloor: 3 }), 'frost', 5, 8).realmChill).toBe(0);
     });
 
-    it('attunement adds a quarter of the clear’s gold per level', () => {
+    it('depth adds a quarter of the clear’s gold a level to three, a twentieth after, without end', () => {
         expect(realmClearGold(8, 'calm', false, 0)).toBe(8);
         expect(realmClearGold(8, 'calm', false, 2)).toBe(12);
-        expect(realmAttunementLevel({ realmAttunement: { frost: 9 } }, 'frost')).toBe(ATTUNEMENT_MAX);
+        expect(realmAttunementLevel({ realmAttunement: { frost: 9 } }, 'frost')).toBe(9);
+        expect(attunementGoldBonus(ATTUNEMENT_FULL_STEP_LEVELS)).toBeCloseTo(0.75);
+        expect(attunementGoldBonus(13)).toBeCloseTo(1.25);
+        expect(realmClearGold(10, 'calm', false, 13)).toBe(23);
+    });
+
+    it('the deeper the realm, the sooner it strikes back and the further it reaches', () => {
+        expect(realmBacklashRuns('raging', 0)).toBe(true);
+        expect(realmBacklashRuns('wild', 2)).toBe(false);
+        expect(realmBacklashRuns('wild', 3)).toBe(true);
+        expect(realmBacklashRuns('calm', 5)).toBe(false);
+        expect(realmBacklashRuns('calm', 6)).toBe(true);
+        expect(realmDepthReach(3)).toBe(0);
+        expect(realmDepthReach(9)).toBe(2);
+        expect(realmResonanceBonus(7)).toBe(2);
     });
 
     it('smoke shortens the study of the floor it hangs in, never under the minimum', () => {

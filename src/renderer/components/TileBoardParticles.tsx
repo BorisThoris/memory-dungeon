@@ -11,7 +11,7 @@ import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
-import { REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, REALM_MOTE_SIZE, realmMoteInterval, realmStatusMote, type RealmMote } from './realmParticles';
+import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, REALM_MOTE_SIZE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMote, type RealmMote } from './realmParticles';
 
 const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
 const themeOf = (id: ComboHeatThemeId | undefined) => heatThemeById(id);
@@ -47,6 +47,9 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const realmTick = useRef(0);
     const realmBursts = useRef(0);
     const realmEventKey = useRef<string | null>(null);
+    const nextElementTick = useRef(0);
+    const elementTick = useRef(0);
+    const elementBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useLayoutEffect(() => {
         system.configure(graphicsQuality);
@@ -195,6 +198,35 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             }
             realmTick.current += 1;
             gl.domElement.setAttribute('data-particle-realm-bursts', String(realmBursts.current));
+        }
+        // Every card gives off its own material (`elementCardMote`): flame, liquid, ice, leaf. A few
+        // cards a tick, taken in turn so the whole board smoulders, drips, glints and sheds; a charged
+        // card is always among them.
+        if (!reduceMotion && playingNow && time.current >= nextElementTick.current) {
+            nextElementTick.current = time.current + realmMoteInterval(graphicsQuality);
+            const charged = [];
+            const plain = [];
+            for (const bag of frames.current.values()) {
+                const group = bag.groupRef.current;
+                const props = bag.propsRef.current;
+                if (!group?.visible || group.scale.x < 0.35 || props.faceUp) continue;
+                const mote = elementCardMote(props.tile);
+                if (!mote) continue;
+                if (props.tile.empowered) charged.push({ group, mote });
+                else plain.push({ group, mote });
+            }
+            const cards = elementMoteCards(graphicsQuality);
+            const picks = [];
+            for (let index = 0; index < Math.min(charged.length, Math.ceil(cards / 2)); index += 1) picks.push(charged[(elementTick.current + index) % charged.length]!);
+            for (let index = 0; picks.length < cards && index < plain.length; index += 1) picks.push(plain[(elementTick.current * 3 + index * 5) % plain.length]!);
+            picks.forEach(({ group, mote }, index) => {
+                const emitted = system.emit({ kind: 'ember', x: group.position.x, y: group.position.y, z: group.position.z,
+                    time: time.current, seed: elementTick.current * 5303 + index * 131 + 17, reduceMotion, quality: graphicsQuality,
+                    energy: mote.energy, tint: mote.tint, shape: mote.shape, sizeScale: ELEMENT_MOTE_SIZE });
+                if (emitted) elementBursts.current += 1;
+            });
+            elementTick.current += 1;
+            gl.domElement.setAttribute('data-particle-element-bursts', String(elementBursts.current));
         }
         const active = system.advance(time.current);
         if (active > peakCount.current) {

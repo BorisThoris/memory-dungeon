@@ -13,10 +13,13 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * on a face-down card - a matched group's cast, the realm's weather, a raging realm's backlash, a
  * miss's frostbite - the card answers first:
  *
- * - **Kin, empowered.** An element does not act on a card made of it: the card drinks it instead
- *   and is empowered (`Tile.empowered`). Fire does not burn a fire card, frost does not freeze a
- *   frost card, vines do not hold a grove card, water does not carry a water card off. An empowered
- *   card pays `EMPOWERED_MATCH_GOLD` when it is matched, and it glows until then.
+ * - **Kin, charged.** An element does not act on a card made of it: the card drinks it instead
+ *   and gains a charge (`Tile.empowered`, a count with no cap since 2026-10-02). Fire does not burn
+ *   a fire card, frost does not freeze a frost card, vines do not hold a grove card, water does not
+ *   carry a water card off. A matched group's cast charges every card of its own element a step
+ *   short of its reach, whether or not it would have acted on it (`chargeKin`). A charged card matched adds
+ *   its charge to its element's resonance (`element-resonance-rules.ts`) and pays a gold for every
+ *   `CHARGES_PER_GOLD` charges; it glows until then, brighter the more it holds.
  * - **Counter, neutralized.** Each element puts out one other (`ELEMENT_NEUTRALIZES`): water puts
  *   out fire, fire melts frost, frost kills growth, and roots hold against water. That element
  *   reaching the card is snuffed on contact and does nothing.
@@ -48,8 +51,12 @@ export const ELEMENT_NAMES: Readonly<Record<TileSuit, string>> = {
     moss: 'Grove'
 };
 
-/** Gold an empowered card pays when it is matched. */
-export const EMPOWERED_MATCH_GOLD = 1;
+/** Charges a matched card pays a gold for. */
+export const CHARGES_PER_GOLD = 4;
+
+/** A card's charge: how many times it has drunk its own element (`true` is an old save's one). */
+export const tileCharge = (tile: Pick<Tile, 'empowered'> | undefined): number =>
+    tile?.empowered === true ? 1 : typeof tile?.empowered === 'number' && Number.isFinite(tile.empowered) ? Math.max(0, Math.floor(tile.empowered)) : 0;
 
 export type ElementAlchemy = 'empowered' | 'neutralized';
 
@@ -82,8 +89,11 @@ export const elementLands = (tiles: Tile[], index: number, element: TileSuit, lo
     const answer = elementAlchemy(tile, element);
     if (answer === null) return true;
     if (answer === 'empowered') {
-        if (tile.empowered !== true) tiles[index] = { ...tile, empowered: true };
-        if (!log.empowered.includes(tile.id)) log.empowered.push(tile.id);
+        // One charge a card a turn, however many elements of its kind reach it.
+        if (!log.empowered.includes(tile.id)) {
+            tiles[index] = { ...tile, empowered: tileCharge(tile) + 1 };
+            log.empowered.push(tile.id);
+        }
     } else if (!log.neutralized.includes(tile.id)) {
         log.neutralized.push(tile.id);
     }
@@ -93,6 +103,21 @@ export const elementLands = (tiles: Tile[], index: number, element: TileSuit, lo
 /** Whether `element` would act on a card, without logging or empowering anything. */
 export const elementWouldLand = (tile: Tile, element: TileSuit): boolean => elementAlchemy(tile, element) === null;
 
-/** What the empowered cards among `tiles` pay when they are matched. */
+/**
+ * A cast charges its own kind: every card of `element` among `indices` drinks it, acted on or not.
+ * Returns the ids it charged.
+ */
+export const chargeKin = (tiles: Tile[], indices: readonly number[], element: TileSuit, log: AlchemyLog): string[] => {
+    const charged: string[] = [];
+    for (const index of indices) {
+        const tile = tiles[index];
+        if (!tile || elementAlchemy(tile, element) !== 'empowered' || log.empowered.includes(tile.id)) continue;
+        elementLands(tiles, index, element, log);
+        charged.push(tile.id);
+    }
+    return charged;
+};
+
+/** What the charged cards among `tiles` pay when they are matched: a gold for every `CHARGES_PER_GOLD` charges. */
 export const empoweredMatchGold = (tiles: readonly Tile[]): number =>
-    tiles.filter((tile) => tile.empowered === true).length * EMPOWERED_MATCH_GOLD;
+    Math.floor(tiles.reduce((sum, tile) => sum + tileCharge(tile), 0) / CHARGES_PER_GOLD);

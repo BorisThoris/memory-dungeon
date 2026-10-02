@@ -1765,6 +1765,12 @@
     display: none;
 }
 
+/* The realm chip and, hung under it, the resonance strip (`ElementResonanceStrip.tsx`): the top row keeps its width. */
+.realmAnchor {
+    position: relative;
+    display: inline-flex;
+}
+
 /* The sway (`realm-sway-rules.ts`): the coming realm's name in its own colour, pulsing at the edge of tipping. */
 .realmSway {
     margin-left: 0.5em;

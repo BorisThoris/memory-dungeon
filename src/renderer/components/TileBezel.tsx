@@ -20,6 +20,7 @@ import {
     type ShaderMaterial
 } from 'three';
 import type { BoardState, GraphicsQualityPreset, Tile } from '../../shared/contracts';
+import { tileCharge } from '../../shared/element-alchemy-rules';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
@@ -798,7 +799,7 @@ const TileBezelInner = ({
                     />
                     {/* The card is made of its element (`ElementCardBack`); a blizzard's snow buries it until the card is turned. */}
                     {tile.suit && !(tile.snowed && tile.state === 'hidden') ? (
-                        <ElementCardBack empowered={tile.empowered === true && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
+                        <ElementCardBack empowered={tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
                     ) : null}
                     {/* The realm on every face-down back (`RealmAmbientBackPlane`): the place, not only what its weather did. */}
                     {tile.state === 'hidden' ? <RealmAmbientBackPlane faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} /> : null}

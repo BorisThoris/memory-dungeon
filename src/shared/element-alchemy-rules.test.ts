@@ -4,7 +4,8 @@ import { TILE_SUITS } from './tile-suit-rules';
 import { createNewRun } from './game';
 import {
     ELEMENT_NEUTRALIZES,
-    EMPOWERED_MATCH_GOLD,
+    CHARGES_PER_GOLD,
+    tileCharge,
     createAlchemyLog,
     elementAlchemy,
     elementLands,
@@ -61,14 +62,19 @@ describe('elemental alchemy', () => {
         expect(elementAlchemy(card('x', 'x'), 'ember')).toBeNull();
     });
 
-    it('a kin card is empowered once, and pays when it is matched', () => {
+    it('a kin card gains one charge a turn, with no cap over turns, and pays a gold for every two', () => {
         const tiles = [card('a', 'a', 'ember')];
         const log = createAlchemyLog();
         expect(elementLands(tiles, 0, 'ember', log)).toBe(false);
         expect(elementLands(tiles, 0, 'ember', log)).toBe(false);
-        expect(tiles[0]!.empowered).toBe(true);
+        expect(tiles[0]!.empowered).toBe(1);
         expect(log.empowered).toEqual(['a']);
-        expect(empoweredMatchGold(tiles)).toBe(EMPOWERED_MATCH_GOLD);
+        expect(empoweredMatchGold(tiles)).toBe(0);
+        for (let turn = 0; turn < 40; turn += 1) elementLands(tiles, 0, 'ember', createAlchemyLog());
+        expect(tileCharge(tiles[0])).toBe(41);
+        expect(empoweredMatchGold(tiles)).toBe(Math.floor(41 / CHARGES_PER_GOLD));
+        // A save from before the charge was counted reads as one.
+        expect(tileCharge({ empowered: true })).toBe(1);
     });
 
     it('frostbite: a miss in the frost freezes neither a frost card nor a fire card', () => {
@@ -84,7 +90,7 @@ describe('elemental alchemy', () => {
         });
         const by = (id: string) => result.board.tiles.find((tile) => tile.id === id)!;
         expect(by('a1').frost).toBeUndefined();
-        expect(by('a1').empowered).toBe(true);
+        expect(by('a1').empowered).toBe(1);
         expect(by('b1').frost).toBeUndefined();
         expect(by('b1').empowered).toBeUndefined();
         expect(by('c1').frost).toBeGreaterThan(0);
@@ -98,7 +104,7 @@ describe('elemental alchemy', () => {
     });
 
     it('a matched empowered pair pays its gold', () => {
-        const tiles = [card('a1', 'a', 'ember', { empowered: true, state: 'matched' }), card('a2', 'a', 'ember', { state: 'matched' }), card('b1', 'b', 'tide'), card('b2', 'b', 'tide')];
+        const tiles = [card('a1', 'a', 'ember', { empowered: CHARGES_PER_GOLD, state: 'matched' }), card('a2', 'a', 'ember', { state: 'matched' }), card('b1', 'b', 'tide'), card('b2', 'b', 'tide')];
         const result = resolveRealmTurn({
             run: runIn('storm', 'calm'),
             board: board(tiles, 2),
@@ -108,8 +114,8 @@ describe('elemental alchemy', () => {
             turnsThisFloor: 1,
             pinnedTileIds: []
         });
-        expect(result.goldDelta).toBe(EMPOWERED_MATCH_GOLD);
-        expect(result.events.find((event) => event.kind === 'released')?.gold).toBe(EMPOWERED_MATCH_GOLD);
+        expect(result.goldDelta).toBe(1);
+        expect(result.events.find((event) => event.kind === 'released')?.gold).toBe(1);
     });
 
     it('a hold spent on an immune card holds nothing', () => {
@@ -135,6 +141,6 @@ describe('elemental alchemy', () => {
         const result = resolveRealmTurn({ run, board: board(tiles, 1), outcome: 'match', tileIds: [], sourceTiles: [], turnsThisFloor: 2, pinnedTileIds: [] });
         expect(result.board.tiles[0]!.id).toBe('a1');
         expect(result.board.tiles[3]!.id).toBe('d1');
-        expect(result.board.tiles[0]!.empowered).toBe(true);
+        expect(result.board.tiles[0]!.empowered).toBe(1);
     });
 });

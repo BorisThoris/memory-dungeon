@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { REALM_IDS } from '../../shared/contracts';
 import { REALM_JOLT_FAMILY } from './realmCardMotion';
-import { REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, realmMoteInterval, realmStatusMote } from './realmParticles';
+import { ELEMENT_CARD_MOTE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMote } from './realmParticles';
 
 describe('the realm in the air', () => {
     it('gives every realm an ambient mote and every event family a burst', () => {
@@ -18,6 +18,19 @@ describe('the realm in the air', () => {
         expect(realmStatusMote({ state: 'hidden' }, true)?.mode).toBe('spark');
         expect(realmStatusMote({ state: 'hidden' }, false)).toBeNull();
         expect(realmStatusMote({ state: 'matched', fuse: 1 }, false)).toBeNull();
+    });
+
+    it('every card gives off its own material: flame, liquid, ice, leaf, and more of it the more charge it holds', () => {
+        expect(Object.fromEntries(Object.entries(ELEMENT_CARD_MOTE).map(([suit, mote]) => [suit, mote.shape]))).toEqual({ ember: 'flame', tide: 'droplet', bone: 'shard', moss: 'leaf' });
+        const plain = elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a' })!;
+        const charged = elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a', empowered: 3 })!;
+        expect(plain.shape).toBe('droplet');
+        expect(charged.energy).toBeGreaterThan(plain.energy);
+        // The charge has no cap; the energy the shader takes does.
+        expect(elementCardMote({ state: 'hidden', suit: 'ember', pairKey: 'a', empowered: 900 })!.energy).toBe(1);
+        expect(elementCardMote({ state: 'matched', suit: 'ember', pairKey: 'a' })).toBeNull();
+        expect(elementCardMote({ state: 'hidden', pairKey: 'a' })).toBeNull();
+        expect(elementMoteCards('low')).toBeLessThan(elementMoteCards('high'));
     });
 
     it('ticks slower on lower graphics', () => {

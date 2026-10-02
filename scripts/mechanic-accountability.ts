@@ -229,6 +229,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 268,
         reason: 'Alchemy answers elements on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak counts empowered and neutralized cards across its runs and requires both, and the kin and counter rooms in the test hall walk a card drinking frost and paying for it and a fire card melting a frostbite.'
     },
+    'board.element_resonance': {
+        generation: 269,
+        reason: 'Resonance, the streak and the reactions live on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak requires a reaction, a stack past five, a card holding more than one charge and a realm deeper than the old cap of three, and checks every turn that a reaction spent a primed streak; eight test hall rooms walk the stacks, each of the six reactions and a deep realm striking back.'
+    },
     'economy.realm_travel': {
         generation: 265,
         reason: 'The doors open between floors and the census never walks the stairs through them. The whole-run soak takes a door at every clear and checks that the next floor is built in the realm it walked into and that the realm a floor ended in is always offered.'

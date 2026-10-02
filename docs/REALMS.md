@@ -154,3 +154,98 @@ The strikes are **CC0 recordings** (lightning, fire, ice and water impacts by le
 ## In the air (2026-10-01)
 
 The board's own particles carry the realm (`realmParticles.ts`, through the pooled system in `boardParticleSystem.ts`, free slots only so a match or a bomb is never crowded out): a burning card throws sparks up, a frozen or snowed card sheds frost motes, a vined card drops leaves; a few face-down cards a tick give off the realm itself (embers rising, drops falling, snow, static, leaves); and every realm event bursts on the cards it names in its family's colour. Realm motes are 2.4 times a combo spark. None of it with reduced motion; one mote a tick at low graphics. The canvas counts them in `data-particle-realm-bursts`.
+
+## Resonance, reactions and depth: the elements stack without end (2026-10-02)
+
+The owner's brief: "expand the elemental system even more, make them infinitely stacking. If you keep
+picking the same zone/element it should infinitely stack. I wanted the cards to utilize the particle
+system we have to show their type ... The alchemy combination system also isn't really impactful.
+First of all theory craft this entire system, then implement it." "Zone" here is the realm behind a
+door, not the time-stop Zone of `zone-rules.ts`, which this does not touch.
+
+### What was capped, and what was thin
+
+Three things stopped: attunement at three levels (and it was gold only), an empowered card was a
+yes or a no worth one gold, and the sway emptied at five. And alchemy only answered where an element
+would have *acted* - a fire cast meets a card only if that card wore vines or ice - so on most
+turns no card answered anything, a neutralized element did nothing, and nothing happened when two
+different elements met. The player can read every card's element off its back and choose the order
+of their matches; nothing rewarded the order.
+
+### The theory: three numbers that never stop, one decision a turn
+
+| Layer | Stacks by | Never capped | What it buys | What it costs |
+|-------|-----------|--------------|--------------|---------------|
+| **Resonance** (per element, the run's) | every pair matched of the element, pops included; plus the charge of every charged card in the match | `elementResonance` | score on that element's matches (+`RESONANCE_SCORE_PER_STACK` a stack, a pair); a **tier** at 2, 6, 12, 20, 30 ... stacks (`resonanceTier`, T at T(T+1)) that widens the element's cast by a step and feeds reactions | a missed card sheds a stack of its element and loses its charge |
+| **Streak** (the element in hand) | matching the same element again, floor to floor: a link a turn, however many pairs the pop took | `elementStreak` | at two links it is **primed**: matching a *different* element spends it as a reaction of potency links + half the tier | a miss breaks it |
+| **Depth** (per realm: attunement, uncapped) | walking through the same realm's door: +1 a clear, +2 a clean one; every other realm fades by 1 | `realmAttunement` | gold (+25% a level to three, +5% a level after, without end); the realm's element takes over one more pair of the floor a level (to half the floor); its pairs resonate +1 more per three levels | the realm strikes back at misses from **wild** at depth 3 and even **calm** at depth 6 (`realmBacklashRuns`); raging weather reaches one more card per four levels |
+
+So the turn's decision is: **the same element again** (the streak grows, the stack deepens, the cast
+widens) or **a different one now** (cash the streak in as a reaction). And the door's decision is:
+**the same realm again** (deeper: more of its element on the floor, more gold, a realm that bites
+back sooner) or a new one (the depth fades).
+
+### Charge: every cast feeds its own kind
+
+A cast now charges *every* face-down card of its own element a step short of its reach, acted on
+or not (`Tile.empowered` is a count, not a flag; no cap). A charged card matched adds its charge to
+its element's resonance and pays a gold for every four charges. This is what makes clusters matter: match
+fire beside fire and the fire around it is worth more, and wants matching next - which is the streak.
+
+### Reactions: what alchemy does now (`element-resonance-rules.ts`)
+
+Six pairs of elements, six reactions, each a different resource, each scaled by potency *p* (the
+primed streak's links + half the spent element's tier + half the storm's depth: the Thunder Spire has no
+element, it is the catalyst):
+
+| Elements | Reaction | What it does |
+|----------|----------|--------------|
+| Fire + Water | **Steam** | lifts the fog: *p* face-down cards nearest the match show their faces until the next flip |
+| Fire + Grove | **Blaze** | every vine and bloom on the floor burns away; a gold for every two of *p*, rounded up |
+| Fire + Frost | **Thaw** | every card is freed of ice and snow; 25 x *p*² score |
+| Water + Frost | **Freeze-over** | the floor holds still for *p* + 1 turns: no weather, no backlash, no frostbite, fuses do not burn down, casts hold nothing |
+| Water + Grove | **Flood** | both elements gain *p* resonance |
+| Frost + Grove | **Frostbloom** | the *p* face-down cards nearest the match each gain a charge, whatever their element |
+
+The immunities stay (a card still drinks its own element and puts out the one it beats).
+
+### Predicted, then measured
+
+Baseline (soak, 60 seeds a player, before any of this): careful 27.0 floors a run and 15.6 gold a
+floor, average 10.2 and 11.6, sloppy 2.4, wild 10.2; no violations. Prediction: reactions and charge
+gold lengthen the careful and average runs by one to two floors, depth's backlash takes about half
+of that back from players who stay in one realm, sloppy play (no streaks, shed stacks) does not
+move. If the average player gains more than two floors the gold terms come down first (charge gold,
+the post-three attunement step), not the reactions.
+
+**Measured** (same soak, 60 seeds a player, `yarn soak --seeds=60`):
+
+| Cut | Careful floors / gold a floor | Average | Sloppy | Reactions a turn | Verdict |
+|-----|-------------------------------|---------|--------|------------------|---------|
+| Before | 27.0 / 15.6 | 10.2 / 11.6 | 2.4 | - | baseline |
+| First cut: streak in pairs, charge at full reach, a gold for two charges, Blaze *p* gold, +10% deep step | 27.6 / 38.8 | 9.7 / 19.7 | 2.4 | 42% | survival held but gold was two and a half times: any pop primed the streak, and every card on a small floor was charged every turn |
+| Shipped: streak in turns, potency on half the tier, charge a step short of the reach, a gold for four charges, Blaze *p*/2, +5% deep step | 28.5 / 19.5 | 10.0 / 12.8 | 2.5 | 14% careful, 9% average | within the prediction; careful play is paid a quarter more gold for a floor and a half |
+
+No violations in any cut; the soak now also holds that a reaction only ever spends a primed streak
+of another element and that a miss leaves no streak. The deepest runs reached resonance 827 in one
+element, a card holding ten charges, and depth 15 in one realm: nothing stops.
+
+### Shown
+
+- **Every card gives off its material** through the board's pooled particles (`elementCardMote` in
+  `realmParticles.ts`, shapes in `boardParticleSystem.ts`): a fire card licks **flame** tongues up
+  from its foot, a water card beads **liquid** drops that hang and fall, a frost card sheds cut
+  **ice** shards that glint, a grove card drops **leaves** that tumble. Each is drawn as that
+  material by the particle shader (a wavering tongue with a white-hot core; a drop with a hard edge,
+  a dark rim and a highlight; a faceted crystal; a leaf with a midrib), not as a tinted dot. A
+  charged card gives off more. Free slots only, none with reduced motion, one card a tick at low
+  graphics; counted in `data-particle-element-bursts`.
+- **The resonance strip** (`ElementResonanceStrip.tsx`) hangs under the realm chip: the four runes
+  with their stacks, the element in hand lit with its links, pulsing once primed, and the turns a
+  Freeze-over still holds.
+- Each reaction stamps its name, the two elements and its potency (`screenCallouts.ts`), jolts its
+  cards and plays its element's recording. The doors show the depth as a numeral that keeps
+  counting, and warn when a calm or wild door is deep enough to strike back.
+- Eight test hall rooms: `element-resonance`, `element-steam`, `element-blaze`, `element-thaw`,
+  `element-freezeover`, `element-flood`, `element-frostbloom`, `realm-depth`; and
+  `e2e/element-resonance.spec.ts` plays Steam in a browser.

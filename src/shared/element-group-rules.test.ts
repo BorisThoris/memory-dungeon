@@ -34,7 +34,9 @@ describe('elemental groups', () => {
         expect(cast.kind).toBe('scorch');
         expect(at(tiles, 'c-2').vined).toBeUndefined();
         expect(at(tiles, 'd-2').frost).toBeUndefined();
-        expect(cast.touchedTileIds.sort()).toEqual(['c-2', 'd-2']);
+        // The fire cards beside the match drink the cast (`chargeKin`): a charge each.
+        expect(cast.touchedTileIds.sort()).toEqual(['c-2', 'd-2', 'e-1', 'e-2']);
+        expect(at(tiles, 'e-1').empowered).toBe(1);
     });
 
     it('Water puts fires out and washes the cards it reaches along, never a pinned one', () => {

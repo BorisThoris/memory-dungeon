@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 72 as const;
+export const ENCYCLOPEDIA_VERSION = 73 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -620,9 +620,18 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Alchemy',
         description:
             'Every card is made of its element, and you can see which: **Fire** is char split by molten veins, **Water** is deep blue under a web of light, **Frost** is faceted ice, **Grove** is moss and leaves. When an element reaches a face-down card - your casts, the realm\u2019s weather, a raging backlash, the frostbite of a miss - the card answers first. ' +
-            'Its **own** element it drinks: nothing happens to it, it is **empowered** and glows, and it pays **a gold** when you match it. ' +
+            'Its **own** element it drinks: nothing happens to it, and it gains a **charge** and glows, brighter the more it holds - there is no limit. Every cast also charges the cards of its own element right beside it. Match a charged card and its charge joins its element\u2019s **resonance**, with a gold for every four charges; miss it and the charge is lost. ' +
             'The element its own **puts out** is **neutralized** and does nothing: **water puts out fire**, **fire melts frost**, **frost kills growth**, and **roots hold against water**. The other two elements land as always. ' +
             'So a fire card never burns and never freezes, a water card is never carried off or set alight, and a frost or grove card shrugs off what its element beats. A freeze or a snare spent on a card that answers holds nothing.'
+    },
+    {
+        id: 'element_resonance',
+        title: 'Resonance and reactions',
+        description:
+            'The elements **stack, and never stop**. Every pair you match of an element - the pairs its pop takes too - is a stack of its **resonance** for the whole run, and the strip beside the board counts all four. Each stack is score on that element\u2019s matches, and every **tier** (at 2, 6, 12, 20, 30 stacks and on) widens its cast by a step. A card you miss sheds a stack of its element. ' +
+            'Match the **same element again** and you build a **streak**, floor to floor; a miss breaks it. At two in a row the streak is **primed**, and the next match of a **different** element spends it: the two elements **react**. The potency is the streak, plus half the spent element\u2019s tier, plus half your depth in the Thunder Spire. ' +
+            '**Steam** (fire and water) shows that many of the nearest faces until your next flip. **Blaze** (fire and grove) burns every vine on the floor and pays a gold for every two of its potency. **Thaw** (fire and frost) frees every card of ice and snow and scores 25 times its potency squared. **Freeze-over** (water and frost) holds the floor still for its potency plus one turns: no weather, no backlash, no frostbite, no fuse burning down. **Flood** (water and grove) adds its potency to both elements\u2019 resonance. **Frostbloom** (frost and grove) charges that many of the nearest cards. ' +
+            'So every turn asks: the same element again, and deeper - or a different one now, and the reaction.'
     },
     {
         id: 'element_groups',
@@ -642,7 +651,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         description:
             'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - tipped or not - is always one of the doors. A run opens somewhere calm. ' +
             'From the fourth floor the wild door is sometimes a **confluence**: two realms at once. Their weather comes by turns, both answer your turns - a miss freezes if either is the frost - and the clear pays **double**. Matching an omen settles the floor on the omen\u2019s realm alone. ' +
-            'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you are **attuned** to it: a quarter more gold on its clears for each level, up to three, and its doors say so.'
+            'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you go deeper twice as fast. Every clear in a realm takes you a level **deeper** into it, and every other realm fades by one; there is no limit. Each level is a quarter more gold on that realm\u2019s clears up to three and a twentieth after, one more pair of the floor made of the realm\u2019s element (up to half the floor), and more resonance from it. But a deep realm bites: it strikes back at a miss on a **wild** floor from depth three, and even a **calm** one from depth six, and its raging weather reaches further. The doors show your depth.'
     },
     {
         id: 'tile_suits',

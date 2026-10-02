@@ -4,11 +4,14 @@ import {
     type RealmDoor,
     type RealmId,
     type RealmSeverity,
-    type RunState
+    type RunState,
+    type TileSuit
 } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
-import { ATTUNEMENT_GOLD_STEP, ATTUNEMENT_MAX } from './realm-carryover-rules';
+import { attunementGoldBonus } from './realm-carryover-rules';
+import { SUIT_REALM } from './realm-sway-rules';
+import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
 /**
  * The realms: where a floor is played, and what the place does to the board while it is played.
@@ -204,7 +207,7 @@ export const realmClearGold = (baseGold: number, severity: RealmSeverity | null,
     Math.floor(
         runNonNegativeInteger(baseGold) *
             ((confluence ? CONFLUENCE_GOLD_MULTIPLIER : severity ? REALM_SEVERITIES[severity].goldMultiplier : 1) +
-                ATTUNEMENT_GOLD_STEP * Math.min(ATTUNEMENT_MAX, runNonNegativeInteger(attunement))) +
+                attunementGoldBonus(attunement)) +
             0.5
     );
 
@@ -300,6 +303,8 @@ export const freshRealmFloorCounters = (): Pick<
     | 'elementCastsThisFloor'
     | 'elementEmpoweredThisFloor'
     | 'elementNeutralizedThisFloor'
+    | 'elementReactionsThisFloor'
+    | 'realmStillTurns'
     | 'lastRealmEvent'
     | 'realmLitTileIds'
     | 'realmPeaksThisFloor'
@@ -315,16 +320,42 @@ export const freshRealmFloorCounters = (): Pick<
     elementCastsThisFloor: 0,
     elementEmpoweredThisFloor: 0,
     elementNeutralizedThisFloor: 0,
+    elementReactionsThisFloor: 0,
+    realmStillTurns: 0,
     lastRealmEvent: null,
     realmLitTileIds: [],
     realmPeaksThisFloor: 0
 });
 
+/** The share of a floor's pairs a realm's element can take over, however deep the player is. */
+export const DEEP_DECK_SHARE = 0.5;
+
+/**
+ * The deeper the player is in a realm, the more of the floor is made of it (2026-10-02): the
+ * realm's element takes over one more pair for every level of depth, up to half the floor's pairs.
+ * The pairs it takes are seeded; a pair keeps its symbol and its cells, only its element turns. The
+ * storm has no element, so its floors are dealt as they come.
+ */
+export const deepenFloorDeck = (board: BoardState, realmId: RealmId, depth: number, runSeed: number, rulesVersion: number): BoardState => {
+    const element = (Object.keys(SUIT_REALM) as TileSuit[]).find((suit) => SUIT_REALM[suit] === realmId);
+    const levels = runNonNegativeInteger(depth);
+    if (!element || levels === 0) return board;
+    const real = board.tiles.filter((tile) => tile.suit != null && !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey));
+    const suitByPair = new Map<string, TileSuit>();
+    for (const tile of real) suitByPair.set(tile.pairKey, tile.suit!);
+    const own = [...suitByPair.values()].filter((suit) => suit === element).length;
+    const take = Math.min(levels, Math.floor(suitByPair.size * DEEP_DECK_SHARE) - own);
+    if (take <= 0) return board;
+    const rng = createMulberry32(hashStringToSeed(`realm-deck:${Math.floor(runSeed)}:${rulesVersion}:${board.level}`));
+    const taken = new Set(shuffleWithRng(rng, [...suitByPair.keys()].filter((pairKey) => suitByPair.get(pairKey) !== element)).slice(0, take));
+    return { ...board, tiles: board.tiles.map((tile) => (taken.has(tile.pairKey) ? { ...tile, suit: element } : tile)) };
+};
+
 /**
  * A floor about to be played in a realm: its board, and the run fields that say where it is. A run without realms gets its board back and nothing to write.
  */
 export const enterRealmFloor = (
-    run: Pick<RunState, 'runSeed' | 'runRulesVersion'>,
+    run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'realmAttunement'>,
     board: BoardState,
     door: RealmDoor | null
 ): { board: BoardState; fields: Partial<RunState> } => {
@@ -332,7 +363,7 @@ export const enterRealmFloor = (
         return { board, fields: {} };
     }
     return {
-        board,
+        board: deepenFloorDeck(board, door.realmId, runNonNegativeInteger(run.realmAttunement?.[door.realmId] ?? 0), run.runSeed, run.runRulesVersion),
         fields: {
             realmId: door.realmId,
             realmSeverity: door.severity,

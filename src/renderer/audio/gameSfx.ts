@@ -362,7 +362,13 @@ export const REALM_EVENT_SOUND: Readonly<Record<RealmEvent['kind'], RealmSound>>
     entangle: 'creak',
     empowered: 'chime',
     neutralized: 'hiss',
-    released: 'chime'
+    released: 'chime',
+    steam: 'hiss',
+    blaze: 'fire',
+    melt: 'chime',
+    freezeover: 'ice',
+    flood: 'wave',
+    frostbloom: 'chime'
 };
 
 /**

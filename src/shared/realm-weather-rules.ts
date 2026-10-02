@@ -1,5 +1,5 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
-import { runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
+import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { castElement } from './element-group-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -7,7 +7,21 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { REALMS, REALM_SEVERITIES, isRealmWeatherTurn, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
 import { realmReactionName } from './realm-omen-rules';
-import { createAlchemyLog, elementLands, elementWouldLand, empoweredMatchGold, type AlchemyLog } from './element-alchemy-rules';
+import { createAlchemyLog, elementLands, elementWouldLand, empoweredMatchGold, tileCharge, type AlchemyLog } from './element-alchemy-rules';
+import { cardsWithinReach } from './element-group-rules';
+import {
+    ELEMENT_REACTION_KINDS,
+    resolveElementReaction,
+    resonanceAfterMatch,
+    resonanceAfterMiss,
+    resonanceOf,
+    resonanceTier,
+    runElementResonance,
+    runElementStreak,
+    type ElementResonance,
+    type ElementStreak
+} from './element-resonance-rules';
+import { realmAttunementLevel, realmBacklashRuns, realmDepthReach, realmResonanceBonus } from './realm-carryover-rules';
 
 /**
  * What a realm does to the board on a resolved turn (`realm-rules.ts` has the realms themselves).
@@ -126,6 +140,13 @@ export interface RealmTurnResult {
     /** Elemental alchemy this turn: cards that drank their own element, and elements a card put out. */
     empowered: number;
     neutralized: number;
+    /** Resonance and the streak after the turn, and the score the stacks and a Thaw paid (`element-resonance-rules.ts`). */
+    resonance: ElementResonance;
+    streak: ElementStreak | null;
+    scoreDelta: number;
+    /** A reaction two elements made this turn (0 or 1), and the turns the floor holds still for after it. */
+    elementReactions: number;
+    stillTurns: number;
 }
 
 const rngFor = (kind: string, run: RunState, level: number, turns: number) =>
@@ -451,13 +472,23 @@ export const resolveRealmTurn = ({
         tips: 0,
         casts: 0,
         empowered: 0,
-        neutralized: 0
+        neutralized: 0,
+        resonance: runElementResonance(run),
+        streak: runElementStreak(run),
+        scoreDelta: 0,
+        elementReactions: 0,
+        stillTurns: runNonNegativeInteger(run.realmStillTurns ?? 0)
     };
     if (!startRealm) {
         return empty;
     }
     const severity: RealmSeverity = runRealmSeverity(run);
-    const reach = REALM_SEVERITIES[severity].reach;
+    // Depth (`realm-carryover-rules.ts`): the deeper in the realm, the further its raging weather reaches.
+    const depth = realmAttunementLevel(run, startRealm);
+    const reach = REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(depth) : 0);
+    // A Freeze-over holds the floor still: no weather, no backlash, no frostbite, no fuse burns down.
+    const stillBefore = runNonNegativeInteger(run.realmStillTurns ?? 0);
+    const still = stillBefore > 0;
     const level = board.level;
     const turns = runNonNegativeInteger(turnsThisFloor);
     const pinned = new Set(pinnedTileIds);
@@ -480,6 +511,11 @@ export const resolveRealmTurn = ({
     let litTileIds: string[] = [];
     const touchedThisTurn = new Set<string>();
     const alchemy = createAlchemyLog();
+    let resonanceTurn = resonanceAfterMiss(runElementResonance(run), []);
+    let resonance = runElementResonance(run);
+    let scoreDelta = 0;
+    let elementReactions = 0;
+    let stillTurns = Math.max(0, stillBefore - 1);
 
     // 1. The sway: the turn's pairs lean the world, a miss wipes the lean, and at the tip the floor turns.
     let sway = swayAfterTurn(runRealmSway(run), realmId, outcome, pairsBySuit);
@@ -503,6 +539,19 @@ export const resolveRealmTurn = ({
         });
     }
 
+    // 1b. Before the realm answers a miss, what the miss itself costs the elements.
+    if (outcome === 'miss') {
+        // A missed card sheds a stack of its element and loses its charge; the streak breaks.
+        resonanceTurn = resonanceAfterMiss(resonance, sourceTiles);
+        resonance = resonanceTurn.resonance;
+        for (const id of tileIds) {
+            const at = indexOf.get(id);
+            if (at == null || tileCharge(tiles[at]) === 0) continue;
+            const { empowered: _empowered, ...rest } = tiles[at]!;
+            tiles[at] = rest;
+        }
+    }
+
     // 2. The realm answers the turn.
     if (outcome === 'match') {
         // Empowered cards in the matched group pay what they drank.
@@ -514,10 +563,22 @@ export const resolveRealmTurn = ({
             events.push({
                 key: eventKey(run, level, turns, 'released'),
                 kind: 'released',
-                tileIds: matched.filter((tile) => tile.empowered === true).map((tile) => tile.id),
+                tileIds: matched.filter((tile) => tileCharge(tile) > 0).map((tile) => tile.id),
                 gold: released
             });
         }
+        // The stacks: every pair and every charge is resonance, and a primed streak meets the new element.
+        const castSuit = (Object.keys(pairsBySuit) as TileSuit[])[0];
+        resonanceTurn = resonanceAfterMatch({
+            resonance,
+            streak: runElementStreak(run),
+            pairsBySuit,
+            matchedTiles: matched,
+            extraPerPair: castSuit && SUIT_REALM[castSuit] === realmId ? realmResonanceBonus(depth) : 0,
+            stormDepth: realmAttunementLevel(run, 'storm')
+        });
+        resonance = resonanceTurn.resonance;
+        scoreDelta += resonanceTurn.score;
         const burningMatched = sourceTiles.filter((tile) => tile.fuse != null).length;
         if (burningMatched > 0) {
             doused += 1;
@@ -552,7 +613,7 @@ export const resolveRealmTurn = ({
         if (thawed.length > 0) {
             events.push({ key: eventKey(run, level, turns, 'shatter'), kind: 'thaw', tileIds: thawed });
         }
-    } else if (realmId === 'frost' || secondaryId === 'frost') {
+    } else if (!still && (realmId === 'frost' || secondaryId === 'frost')) {
         const turnsFrozen = severity === 'raging' ? FROSTBITE_TURNS_RAGING : FROSTBITE_TURNS;
         const froze: string[] = [];
         for (const id of tileIds) {
@@ -569,7 +630,7 @@ export const resolveRealmTurn = ({
             events.push({ key: eventKey(run, level, turns, 'frostbite'), kind: 'frostbite', tileIds: froze });
         }
     }
-    if (outcome === 'miss' && severity === 'raging' && realmId !== 'frost') {
+    if (outcome === 'miss' && !still && realmBacklashRuns(severity, depth) && realmId !== 'frost') {
         const lashed = resolveRealmBacklash(realmId, tiles, board.columns, pinned, tileIds, rngFor('backlash', run, level, turns), alchemy);
         if (lashed) {
             backlashes += 1;
@@ -580,12 +641,40 @@ export const resolveRealmTurn = ({
 
     // 2b. The matched group casts its element on the cards around it (`element-group-rules.ts`).
     if (outcome === 'match' && groupTileIds.length > 0) {
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, pinned, alchemy });
+        const castSuit = (Object.keys(pairsBySuit) as TileSuit[])[0];
+        const tier = castSuit ? resonanceTier(resonanceOf(resonance, castSuit)) : 0;
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, pinned, alchemy, tier, still });
         if (cast && cast.touchedTileIds.length > 0) {
             casts += 1;
             for (const id of cast.touchedTileIds) touchedThisTurn.add(id);
             events.push({ key: eventKey(run, level, turns, cast.kind), kind: cast.kind, tileIds: [...cast.groupTileIds, ...cast.touchedTileIds] });
         }
+    }
+
+    // 2c. A primed streak meets a different element: the two react (`element-resonance-rules.ts`).
+    if (resonanceTurn.reaction) {
+        const { definition, potency, spent } = resonanceTurn.reaction;
+        const group = groupTileIds.map((id) => indexOf.get(id)).filter((index): index is number => index != null);
+        const nearest = cardsWithinReach(tiles, Math.max(1, board.columns), group, tiles.length);
+        const reaction = resolveElementReaction(definition.kind, potency, tiles, nearest);
+        elementReactions += 1;
+        goldDelta += reaction.gold;
+        scoreDelta += reaction.score;
+        litTileIds = [...litTileIds, ...reaction.litTileIds];
+        stillTurns = Math.max(stillTurns, reaction.stillTurns);
+        if (reaction.resonanceGain > 0) {
+            resonance = { ...resonance };
+            for (const suit of definition.elements) resonance[suit] = resonanceOf(resonance, suit) + reaction.resonanceGain;
+        }
+        events.push({
+            key: eventKey(run, level, turns, definition.kind),
+            kind: definition.kind,
+            tileIds: [...tileIds, ...reaction.touchedTileIds],
+            reaction: definition.name,
+            potency: reaction.potency,
+            from: SUIT_REALM[spent.suit],
+            ...(reaction.gold > 0 ? { gold: reaction.gold } : {})
+        });
     }
 
     // 3. The clocks tick.
@@ -602,7 +691,7 @@ export const resolveRealmTurn = ({
                 next = { ...next, frost: frost - 1 };
             }
         }
-        if (tile.fuse != null) {
+        if (tile.fuse != null && !still) {
             const fuse = runNonNegativeInteger(tile.fuse) - 1;
             if (fuse <= 0) {
                 const { fuse: _fuse, ...rest } = next;
@@ -642,7 +731,7 @@ export const resolveRealmTurn = ({
     }
 
     // 4. The weather: the realm's own, its peak every third time, and a confluence's two in turn.
-    if (isRealmWeatherTurn(realmId, severity, turns)) {
+    if (!still && isRealmWeatherTurn(realmId, severity, turns)) {
         const count = runNonNegativeInteger(run.realmWeatherThisFloor ?? 0);
         const weatherRealm: RealmId = secondaryId && count % 2 === 1 ? secondaryId : realmId;
         const peak = isRealmPeak(count);
@@ -748,11 +837,17 @@ export const resolveRealmTurn = ({
         tips,
         casts,
         empowered: alchemy.empowered.length,
-        neutralized: alchemy.neutralized.length
+        neutralized: alchemy.neutralized.length,
+        resonance,
+        streak: resonanceTurn.streak,
+        scoreDelta,
+        elementReactions,
+        stillTurns
     };
 };
 
 const ALCHEMY_EVENT_KINDS: ReadonlySet<RealmEvent['kind']> = new Set(['empowered', 'neutralized']);
+const ELEMENT_REACTION_EVENT_KINDS: ReadonlySet<RealmEvent['kind']> = new Set(ELEMENT_REACTION_KINDS);
 
 /** The run fields a realm turn writes, merged over the run the seam built. */
 export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Partial<RunState> => {
@@ -781,10 +876,27 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
         elementCastsThisFloor: runNonNegativeInteger(run.elementCastsThisFloor ?? 0) + result.casts,
         elementEmpoweredThisFloor: runNonNegativeInteger(run.elementEmpoweredThisFloor ?? 0) + result.empowered,
         elementNeutralizedThisFloor: runNonNegativeInteger(run.elementNeutralizedThisFloor ?? 0) + result.neutralized,
+        elementResonance: result.resonance,
+        elementStreak: result.streak,
+        elementReactionsThisFloor: runNonNegativeInteger(run.elementReactionsThisFloor ?? 0) + result.elementReactions,
+        elementReactionsThisRun: runNonNegativeInteger(run.elementReactionsThisRun ?? 0) + result.elementReactions,
+        realmStillTurns: result.stillTurns,
+        // What the stacks and a Thaw scored joins the turn's score.
+        ...(result.scoreDelta > 0
+            ? {
+                  stats: {
+                      ...run.stats,
+                      totalScore: runNonNegativeInteger(run.stats.totalScore) + result.scoreDelta,
+                      currentLevelScore: runNonNegativeInteger(run.stats.currentLevelScore) + result.scoreDelta,
+                      bestScore: Math.max(runNonNegativeInteger(run.stats.bestScore), runNonNegativeInteger(run.stats.totalScore) + result.scoreDelta)
+                  }
+              }
+            : {}),
         // The most telling event of the turn is the one the HUD names: a reaction over everything,
         // and the weather over the alchemy it met (the cards wear what they drank).
         lastRealmEvent:
             result.events.find((event) => event.kind === 'reaction') ??
+            result.events.find((event) => ELEMENT_REACTION_EVENT_KINDS.has(event.kind)) ??
             [...result.events].reverse().find((event) => !ALCHEMY_EVENT_KINDS.has(event.kind)) ??
             result.events[result.events.length - 1] ??
             run.lastRealmEvent ??

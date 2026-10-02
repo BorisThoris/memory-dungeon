@@ -25,6 +25,7 @@ import { runChainTier } from './chain-tier-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
+import { tileCharge } from './element-alchemy-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -122,7 +123,15 @@ export type TestHallRoomId =
     | 'element-frost'
     | 'element-grove'
     | 'element-kin'
-    | 'element-neutralize';
+    | 'element-neutralize'
+    | 'element-resonance'
+    | 'element-steam'
+    | 'element-blaze'
+    | 'element-thaw'
+    | 'element-freezeover'
+    | 'element-flood'
+    | 'element-frostbloom'
+    | 'realm-depth';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -342,6 +351,26 @@ const EIGHT_PAIRS = ['a:e b:t c:e d:t', 'f:t e:e h:t g:e', 'c:e d:t a:e b:t', 'h
  */
 const EIGHT_PAIRS_GROWN = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m').replace(/:t/g, ':b'));
 const EIGHT_PAIRS_THAWED = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m'));
+/**
+ * The resonance rooms' floor (`element-resonance-rules.ts`): fire and water along the top and the
+ * bottom, grove and frost between them. A fire or water match bridges the row between and takes
+ * the other pair of its element with it (probed 2026-10-02), which is two stacks and one link.
+ */
+const SIX_ELEMENTS = ['a:e b:t a:e b:t', 'e:m f:b e:m f:b', 'c:e d:t c:e d:t'];
+const resonanceIs = (suit: TileSuit, stacks: number) => (run: RunState) =>
+    (run.elementResonance?.[suit] ?? 0) === stacks ? null : `${suit} resonance ${run.elementResonance?.[suit] ?? 0}, expected ${stacks}`;
+const streakIs = (suit: TileSuit | null, links = 0) => (run: RunState) =>
+    (suit === null ? run.elementStreak == null : run.elementStreak?.suit === suit && run.elementStreak.links === links)
+        ? null
+        : `streak ${JSON.stringify(run.elementStreak ?? null)}, expected ${suit ? `${suit} x${links}` : 'none'}`;
+const chargeIs = (id: string, charge: number) => (run: RunState) =>
+    tileCharge(tileById(run, id)) === charge ? null : `${id} charge ${tileCharge(tileById(run, id))}, expected ${charge}`;
+const reactedOnce = (kind: NonNullable<RunState['lastRealmEvent']>['kind'], potency: number) =>
+    expectAll(
+        realmEventIs(kind),
+        (r) => (r.lastRealmEvent?.potency === potency ? null : `potency ${r.lastRealmEvent?.potency}, expected ${potency}`),
+        (r) => ((r.elementReactionsThisFloor ?? 0) === 1 ? null : `reactions ${r.elementReactionsThisFloor}`)
+    );
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
@@ -1519,16 +1548,16 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-attunement',
         title: 'Attunement',
-        mechanic: 'A realm floor cleared clean by that realm\u2019s measure attunes the player to it: a quarter more gold on its clears per level, up to three.',
+        mechanic: 'Every clear in a realm deepens the player\u2019s attunement to it by a level, two when the floor was clean by that realm\u2019s measure, with no cap: a quarter more gold on its clears a level to three, a twentieth after.',
         graphMechanicIds: ['economy.realm_travel', 'economy.gold'],
-        tryThis: 'Clear this ember floor without letting a fire burn out: you are attuned to Ember, and the doors say so.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('ember', 'calm', { realmAttunement: {} }) }),
+        tryThis: 'You are nine deep in the Cinder Deep and two in the frost. Clear this ember floor without letting a fire burn out: eleven deep now, and the frost has faded a level.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('ember', 'calm', { realmAttunement: { ember: 9, frost: 2 } }) }),
         script: [
             {
                 step: { do: 'clear' },
-                says: 'a clean clear attunes the player to Ember',
+                says: 'a clean clear deepens Ember by two, past any cap, and the frost fades by one',
                 expect: expectAll(statusIs('levelComplete'), (r) =>
-                    r.realmAttunement?.ember === 1 && r.lastLevelResult?.realmAttuned === 'ember' ? null : `attunement ${JSON.stringify(r.realmAttunement)}`)
+                    r.realmAttunement?.ember === 11 && r.realmAttunement?.frost === 1 && r.lastLevelResult?.realmAttuned === 'ember' ? null : `attunement ${JSON.stringify(r.realmAttunement)}`)
             }
         ]
     },
@@ -1749,17 +1778,17 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-kin',
         title: 'Kin: a card drinks its own element',
-        mechanic: 'Every card is made of its element. An element that reaches a card of its own kind does not act on it: the card drinks it, is empowered, and pays a gold when it is matched.',
+        mechanic: 'Every card is made of its element. An element that reaches a card of its own kind does not act on it: the card drinks it and gains a charge, and a charge matched is a stack of its element\'s resonance.',
         graphMechanicIds: ['board.element_alchemy', 'board.realm_weather'],
-        tryThis: 'In the Frozen Reach, miss a frost card (a, ice) with a water card (b): the frost freezes the water card, and the ice card drinks it and glows. Match a for its gold.',
+        tryThis: 'In the Frozen Reach, miss a frost card (a, ice) with a water card (b): the frost freezes the water card, and the ice card drinks it and glows. Match a and its charge becomes resonance.',
         build: () => room(['a:b b:t c:m d:e', 'e:e f:t a:b b:t', 'c:m d:e e:e f:t'], { run: realmRun('frost', 'calm', { gold: 0 }) }),
         script: [
             {
                 step: { do: 'miss', a: 'a-1', b: 'b-1' },
                 says: 'the frost freezes the water card; the frost card drinks it and is empowered',
-                expect: expectAll(frostIs('a-1', undefined), (r) => (tileById(r, 'a-1')?.empowered === true ? null : 'a-1 not empowered'), (r) => ((tileById(r, 'b-1')?.frost ?? 0) > 0 ? null : 'b-1 not frozen'), (r) => ((r.elementEmpoweredThisFloor ?? 0) === 1 ? null : `empowered ${r.elementEmpoweredThisFloor}`))
+                expect: expectAll(frostIs('a-1', undefined), chargeIs('a-1', 1), (r) => ((tileById(r, 'b-1')?.frost ?? 0) > 0 ? null : 'b-1 not frozen'), (r) => ((r.elementEmpoweredThisFloor ?? 0) === 1 ? null : `empowered ${r.elementEmpoweredThisFloor}`))
             },
-            { step: { do: 'match', pairKey: 'a' }, says: 'the empowered card matched pays a gold', expect: goldIs(1) }
+            { step: { do: 'match', pairKey: 'a' }, says: 'matched, its charge joins the frost\'s resonance: a stack for the pair and one for the charge', expect: resonanceIs('bone', 2) }
         ]
     },
     {
@@ -1774,6 +1803,134 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 step: { do: 'miss', a: 'd-1', b: 'c-1' },
                 says: 'the fire card is untouched, the grove card frozen',
                 expect: expectAll(frostIs('d-1', undefined), (r) => ((tileById(r, 'c-1')?.frost ?? 0) > 0 ? null : 'c-1 not frozen'), (r) => ((r.elementNeutralizedThisFloor ?? 0) === 1 ? null : `neutralized ${r.elementNeutralizedThisFloor}`), (r) => (tileById(r, 'd-1')?.empowered == null ? null : 'd-1 empowered'))
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-resonance',
+        title: 'Resonance: the elements stack',
+        mechanic: 'Every pair matched of an element is a stack of it for the run, with no cap, and the pairs a pop takes are stacks too; a turn is one link of the streak however many pairs it took. A missed card sheds a stack of its element and loses its charge, and the miss breaks the streak.',
+        graphMechanicIds: ['board.element_resonance'],
+        tryThis: 'Water already stands at 40 stacks. Match a (fire): its pop takes the other fire pair, two stacks and one link. Miss a water card: water sheds a stack and the streak is gone. Match water: it climbs again, past forty.',
+        build: () => room(SIX_ELEMENTS, { misses: 4, run: realmRun('storm', 'calm', { elementResonance: { tide: 40 } }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match and the pair its pop took are two stacks of fire, and one link in hand', expect: expectAll(isGone('c'), resonanceIs('ember', 2), streakIs('ember', 1)) },
+            { step: { do: 'miss', a: 'b-1', b: 'e-1' }, says: 'the missed water card sheds a stack of water, and the streak breaks', expect: expectAll(resonanceIs('tide', 39), resonanceIs('ember', 2), streakIs(null)) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'water stacks on, two pairs deeper, with no cap to stop at', expect: expectAll(resonanceIs('tide', 41), streakIs('tide', 1)) },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-steam',
+        title: 'Steam: fire meets water',
+        mechanic: 'Two matches of one element in a row prime the streak. A different element matched next spends it: the two react, with a potency of the links in hand plus half the spent element\'s tier. Fire and water make Steam: that many face-down cards nearest the match show their faces until the next flip.',
+        graphMechanicIds: ['board.element_resonance'],
+        tryThis: 'One fire match is in hand from the floor above. Match fire again (a), then a water pair (b): Steam lifts, and two cards beside the match show their faces.',
+        build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'ember', links: 1 } }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'two links: the streak is primed, and nothing has reacted', expect: expectAll(streakIs('ember', 2), (r) => ((r.elementReactionsThisFloor ?? 0) === 0 ? null : 'reacted early')) },
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'water on the primed fire is Steam at potency two: two faces lit, and the hand is water now',
+                expect: expectAll(reactedOnce('steam', 2), streakIs('tide', 1), (r) => ((r.realmLitTileIds ?? []).length === 2 ? null : `lit ${(r.realmLitTileIds ?? []).length}`))
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-blaze',
+        title: 'Blaze: fire meets grove',
+        mechanic: 'Fire and grove make a Blaze: every vine and bloom on the floor burns away, and it pays a gold for every two of its potency, rounded up.',
+        graphMechanicIds: ['board.element_resonance', 'economy.gold'],
+        tryThis: 'Three fire matches are in hand. Match the grove pair (e): the vines across the floor burn off and the Blaze pays two gold.',
+        build: () =>
+            room(SIX_ELEMENTS, {
+                run: realmRun('storm', 'calm', { gold: 0, elementStreak: { suit: 'ember', links: 3 } }),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' || t.id === 'd-1' ? { ...t, vined: true } : t))
+            }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'e' },
+                says: 'the Blaze burns both vines and pays two gold',
+                expect: expectAll(reactedOnce('blaze', 3), goldIs(2), (r) => ((r.board?.tiles ?? []).some((t) => t.vined) ? 'a vine is left' : null), finishable)
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-thaw',
+        title: 'Thaw: fire meets frost',
+        mechanic: 'Fire and frost make a Thaw: every card on the floor is freed of ice and snow, and it scores twenty-five times its potency squared.',
+        graphMechanicIds: ['board.element_resonance', 'board.realm_weather'],
+        tryThis: 'Two frost matches are in hand. Match a fire pair (a): the ice and the snow across the floor are gone at once.',
+        build: () =>
+            room(SIX_ELEMENTS, {
+                run: realmRun('storm', 'calm', { elementStreak: { suit: 'bone', links: 2 } }),
+                tiles: (tiles) => tiles.map((t) => (t.id === 'd-1' ? { ...t, frost: 3 } : t.id === 'd-2' ? { ...t, snowed: true } : t))
+            }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the Thaw frees the frozen card and the snowed one, three steps from the match',
+                expect: expectAll(reactedOnce('melt', 2), frostIs('d-1', undefined), (r) => (tileById(r, 'd-2')?.snowed == null ? null : 'd-2 still snowed'))
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-freezeover',
+        title: 'Freeze-over: water meets frost',
+        mechanic: 'Water and frost make a Freeze-over: the floor holds still for its potency plus one turns. No weather comes, no realm strikes back, a miss in the frost freezes nothing, and no fuse burns down.',
+        graphMechanicIds: ['board.element_resonance', 'board.realm_weather'],
+        tryThis: 'In a raging Frozen Reach with two water matches in hand, match the frost pair (f): the floor holds still. Now miss: nothing freezes.',
+        build: () => room(SIX_ELEMENTS, { misses: 4, run: realmRun('frost', 'raging', { elementStreak: { suit: 'tide', links: 2 } }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'f' }, says: 'the floor holds still for three turns', expect: expectAll(reactedOnce('freezeover', 2), (r) => (r.realmStillTurns === 3 ? null : `still ${r.realmStillTurns}`)) },
+            {
+                step: { do: 'miss', a: 'b-1', b: 'e-1' },
+                says: 'a miss in the raging frost freezes nothing while it holds, and a turn of the stillness is spent',
+                expect: expectAll((r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'a card froze' : null), (r) => (r.realmStillTurns === 2 ? null : `still ${r.realmStillTurns}`), (r) => ((r.realmFrozenThisFloor ?? 0) === 0 ? null : `frozen ${r.realmFrozenThisFloor}`))
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-flood',
+        title: 'Flood: water meets grove',
+        mechanic: 'Water and grove make a Flood: both elements gain its potency in resonance. The potency is the links in hand plus half the spent element\'s tier, so deep water floods deeper.',
+        graphMechanicIds: ['board.element_resonance'],
+        tryThis: 'Two water matches are in hand and water stands at six stacks (tier two). Match the grove pair (e): the Flood is potency three, and both elements rise by three.',
+        build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'tide', links: 2 }, elementResonance: { tide: 6, moss: 1 } }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'e' }, says: 'water rises by three, and grove by its pair and three', expect: expectAll(reactedOnce('flood', 3), resonanceIs('tide', 9), resonanceIs('moss', 5)) },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'element-frostbloom',
+        title: 'Frostbloom: frost meets grove',
+        mechanic: 'Frost and grove make a Frostbloom: as many face-down cards as its potency, the nearest to the match, each gain a charge, whatever their element.',
+        graphMechanicIds: ['board.element_resonance', 'board.element_alchemy'],
+        tryThis: 'Two grove matches are in hand. Match the frost pair (f): the two cards nearest it gain a charge, and they are water cards.',
+        build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'moss', links: 2 } }) }),
+        script: [
+            { step: { do: 'match', pairKey: 'f' }, says: 'the two nearest cards are charged', expect: expectAll(reactedOnce('frostbloom', 2), chargeIs('b-1', 1), chargeIs('b-2', 1)) },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'realm-depth',
+        title: 'Depth: a deep realm bites back',
+        mechanic: 'Attunement has no cap: every clear in a realm deepens it. A deep realm strikes back at a miss sooner: a wild floor from depth three, and even a calm one from depth six.',
+        graphMechanicIds: ['economy.realm_travel', 'board.realm_weather'],
+        tryThis: 'This Overgrown Crypt is calm, and you are six deep in it. Miss two water cards: the grove snares them, as only a raging floor used to.',
+        build: () => room(SIX_ELEMENTS, { misses: 4, run: realmRun('grove', 'calm', { realmAttunement: { grove: 6 } }) }),
+        script: [
+            {
+                step: { do: 'miss', a: 'b-1', b: 'd-1' },
+                says: 'the calm floor strikes back: both missed cards are held in vines',
+                expect: expectAll(realmEventIs('snare'), (r) => (tileById(r, 'b-1')?.vined === true && tileById(r, 'd-1')?.vined === true ? null : 'the missed cards are not vined'), (r) => (r.realmBacklashesThisFloor === 1 ? null : `backlashes ${r.realmBacklashesThisFloor}`), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]

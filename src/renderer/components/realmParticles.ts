@@ -1,4 +1,7 @@
-import type { RealmId, Tile } from '../../shared/contracts';
+import type { RealmId, Tile, TileSuit } from '../../shared/contracts';
+import { tileCharge } from '../../shared/element-alchemy-rules';
+import { isSingletonUtilityPairKey, isWildPairKey } from '../../shared/tile-identity';
+import type { BoardParticleShape } from './boardParticleSystem';
 import type { RealmJoltFamily } from './realmCardMotion';
 
 /**
@@ -12,7 +15,12 @@ import type { RealmJoltFamily } from './realmCardMotion';
  * - **ambient**: a few face-down cards a tick give off the realm itself: embers rising in the
  *   Cinder Deep, drops falling in the Drowned Vault, snow in the Frozen Reach, static in the
  *   Thunder Spire, leaves in the Overgrown Crypt;
- * - **event**: every realm event bursts on the cards it names, in its family's colour and motion.
+ * - **event**: every realm event bursts on the cards it names, in its family's colour and motion;
+ * - **element** (2026-10-02): every face-down card gives off its own material, drawn as that
+ *   material by the particle shader: a fire card licks flame, a water card beads and drips liquid,
+ *   a frost card sheds shards of ice, a grove card drops leaves. The owner: "I wanted the cards to
+ *   utilize the particle system we have to show their type." A charged card gives off more, with
+ *   no ceiling on the charge and a ceiling of one on the energy.
  */
 
 export type RealmMoteMode = 'rise' | 'fall' | 'spark';
@@ -55,6 +63,33 @@ export const realmStatusMote = (tile: Pick<Tile, 'state' | 'fuse' | 'frost' | 's
     if (lit) return { tint: '#d9c8ff', mode: 'spark', energy: 0.5 };
     return null;
 };
+
+export interface ElementMote {
+    tint: string;
+    shape: BoardParticleShape;
+}
+
+/** What each element's card gives off. */
+export const ELEMENT_CARD_MOTE: Readonly<Record<TileSuit, ElementMote>> = {
+    ember: { tint: '#ff8a2a', shape: 'flame' },
+    tide: { tint: '#5fb8f2', shape: 'droplet' },
+    bone: { tint: '#cfeeff', shape: 'shard' },
+    moss: { tint: '#7fcf52', shape: 'leaf' }
+};
+
+/** An element mote's size against a combo spark. */
+export const ELEMENT_MOTE_SIZE = 1.25;
+export const ELEMENT_MOTE_BASE_ENERGY = 0.22;
+export const ELEMENT_MOTE_ENERGY_PER_CHARGE = 0.16;
+
+/** What a face-down card gives off for being its element, and how hard: more for every charge it holds. */
+export const elementCardMote = (tile: Pick<Tile, 'state' | 'suit' | 'pairKey' | 'empowered'>): (ElementMote & { energy: number }) | null => {
+    if (tile.state !== 'hidden' || !tile.suit || isSingletonUtilityPairKey(tile.pairKey) || isWildPairKey(tile.pairKey)) return null;
+    return { ...ELEMENT_CARD_MOTE[tile.suit], energy: Math.min(1, ELEMENT_MOTE_BASE_ENERGY + ELEMENT_MOTE_ENERGY_PER_CHARGE * tileCharge(tile)) };
+};
+
+/** How many cards give off their element a tick, by graphics quality. */
+export const elementMoteCards = (quality: 'low' | 'medium' | 'high'): number => (quality === 'low' ? 1 : quality === 'medium' ? 3 : 5);
 
 /** Seconds between realm particle ticks, by graphics quality. */
 export const realmMoteInterval = (quality: 'low' | 'medium' | 'high'): number => (quality === 'low' ? 0.5 : quality === 'medium' ? 0.3 : 0.18);

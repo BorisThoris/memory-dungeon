@@ -3,7 +3,7 @@ import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { runNonNegativeInteger } from './run-number-guards';
 import { SUIT_REALM } from './realm-sway-rules';
-import { createAlchemyLog, elementLands, elementWouldLand, type AlchemyLog } from './element-alchemy-rules';
+import { chargeKin, createAlchemyLog, elementLands, elementWouldLand, type AlchemyLog } from './element-alchemy-rules';
 
 /**
  * Elemental groups (2026-10-01): the suits are the elements, and a matched group casts its element
@@ -37,6 +37,10 @@ import { createAlchemyLog, elementLands, elementWouldLand, type AlchemyLog } fro
  * Every card the cast would act on answers first (`element-alchemy-rules.ts`): a card of the
  * cast's own element drinks it and is empowered, a card of the element that puts it out is left
  * as it was, and a hold spent on either holds nothing.
+ *
+ * Since 2026-10-02 the cast grows with the element's resonance (`element-resonance-rules.ts`): a
+ * step of reach and two more cards washed for every tier, and it charges every card of its own
+ * element a step short of its reach (`ELEMENT_KIN_REACH_SHORT`), acted on or not. While the floor holds still (a Freeze-over) it holds nothing.
  */
 
 export type ElementCastKind = Extract<RealmEvent['kind'], 'scorch' | 'wash' | 'freeze' | 'entangle'>;
@@ -53,6 +57,9 @@ export const ELEMENT_REACH_IN_OWN_REALM = 3;
 export const ELEMENT_HOLD_CAP = 0;
 export const ELEMENT_HOLD_CAP_GROUP = 1;
 export const ELEMENT_WASH_CAP = 6;
+export const ELEMENT_WASH_PER_TIER = 2;
+/** How far short of the cast's reach it charges its own kind. */
+export const ELEMENT_KIN_REACH_SHORT = 1;
 export const ELEMENT_FREEZE_TURNS = 1;
 
 const isReal = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
@@ -98,7 +105,9 @@ export const castElement = ({
     groupTileIds,
     realmId,
     pinned,
-    alchemy = createAlchemyLog()
+    alchemy = createAlchemyLog(),
+    tier = 0,
+    still = false
 }: {
     tiles: Tile[];
     columns: number;
@@ -106,16 +115,24 @@ export const castElement = ({
     realmId: RealmId | null;
     pinned: ReadonlySet<string>;
     alchemy?: AlchemyLog;
+    /** The element's resonance tier: a step of reach each. */
+    tier?: number;
+    /** The floor is holding still: the cast holds no card. */
+    still?: boolean;
 }): ElementCast | null => {
     const group = groupTileIds.map((id) => tiles.findIndex((tile) => tile.id === id)).filter((index) => index >= 0);
     const suit = group.map((index) => tiles[index]!).find((tile) => tile.suit && isReal(tile))?.suit;
     if (!suit) return null;
     const kind = ELEMENT_CAST_KIND[suit];
-    const reach = SUIT_REALM[suit] === realmId ? ELEMENT_REACH_IN_OWN_REALM : ELEMENT_REACH;
+    const steps = runNonNegativeInteger(tier);
+    const reach = (SUIT_REALM[suit] === realmId ? ELEMENT_REACH_IN_OWN_REALM : ELEMENT_REACH) + steps;
     const reached = cardsWithinReach(tiles, Math.max(1, columns), group, reach);
     const groupPairs = new Set(group.map((index) => tiles[index]!.pairKey)).size;
-    const holdCap = groupPairs >= 2 ? ELEMENT_HOLD_CAP_GROUP : ELEMENT_HOLD_CAP;
-    const touched: string[] = [];
+    const holdCap = still ? 0 : groupPairs >= 2 ? ELEMENT_HOLD_CAP_GROUP : ELEMENT_HOLD_CAP;
+    // The cast feeds its own kind first, a step short of its reach: the fire beside a fire match
+    // gains a charge. Measured 2026-10-02: at the cast's full reach every card on a small floor was
+    // charged every turn, and the charge was a multiplier on everything instead of a place on the board.
+    const touched: string[] = chargeKin(tiles, cardsWithinReach(tiles, Math.max(1, columns), group, Math.max(1, reach - ELEMENT_KIN_REACH_SHORT)), suit, alchemy);
     switch (kind) {
         case 'scorch':
             for (const index of reached) {
@@ -135,7 +152,7 @@ export const castElement = ({
                 tiles[index] = rest;
                 touched.push(tile.id);
             }
-            const carried = reached.filter((index) => !pinned.has(tiles[index]!.id)).slice(0, ELEMENT_WASH_CAP);
+            const carried = reached.filter((index) => !pinned.has(tiles[index]!.id)).slice(0, ELEMENT_WASH_CAP + ELEMENT_WASH_PER_TIER * steps);
             // Water and grove cards are not carried: the water flows around them.
             const movable = carried.filter((index) => elementWouldLand(tiles[index]!, suit));
             if (movable.length >= 2) {
