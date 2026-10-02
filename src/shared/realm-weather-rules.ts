@@ -1,6 +1,8 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { castElement } from './element-group-rules';
+import { runChainTier } from './chain-tier-rules';
+import { CHAIN_MULT } from './chunk-break-rules';
 import { castElementalGround, groundAnchoredTileIds, readElementalGround } from './element-ground-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -490,6 +492,7 @@ export const resolveRealmTurn = ({
     const level = board.level;
     const turns = runNonNegativeInteger(turnsThisFloor);
     let ground = readElementalGround(board);
+    let castImpact = board.elementCast;
     const pinned = new Set([...pinnedTileIds, ...groundAnchoredTileIds(board.tiles, ground)]);
     const tiles: Tile[] = [...board.tiles];
     const indexOf = new Map(tiles.map((tile, index) => [tile.id, index]));
@@ -666,8 +669,13 @@ export const resolveRealmTurn = ({
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
         }
         const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, secondaryId, pinned, alchemy, tier, still,
-            combo: run.stats.currentStreak, quenchFire: field?.quenchFire });
+            combo: run.stats.currentStreak, quenchFire: field?.quenchFire, multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
+            castImpact = {
+                key: eventKey(run, level, turns, cast.kind), suit: cast.suit, sourceCells: cast.sourceCells,
+                contacts: cast.contacts, multiplier: cast.multiplier, power: cast.power, groupPairs: cast.groupPairs,
+                reaction: field?.reaction ?? null, detail: `${cast.summary}${field ? ` · ${field.detail}` : ''}`
+            };
             casts += 1;
             for (const id of cast.touchedTileIds) touchedThisTurn.add(id);
             events.push({
@@ -846,9 +854,19 @@ export const resolveRealmTurn = ({
     }
 
     const changed = tiles.some((tile, index) => tile !== board.tiles[index]);
+    if (castImpact && castImpact !== board.elementCast) {
+        castImpact = { ...castImpact, contacts: castImpact.contacts.map(contact => {
+            const cell = tiles.findIndex(tile => tile.id === contact.tileId);
+            const tile = tiles[cell];
+            // A streak reaction or weather may clear the new hold before the frame is rendered.
+            const effect = tile?.vined ? 'entangled' : (tile?.frost ?? 0) > 0 ? 'frozen'
+                : tile?.fuse != null ? 'ignited' : contact.effect === 'current' ? 'current' : 'cleared';
+            return { ...contact, cell, effect };
+        }) };
+    }
     return {
-        board: changed || ground.some((cell, index) => cell !== (board.elementalGround?.[index] ?? null))
-            ? { ...board, tiles, elementalGround: ground } : board,
+        board: changed || castImpact !== board.elementCast || ground.some((cell, index) => cell !== (board.elementalGround?.[index] ?? null))
+            ? { ...board, tiles, elementalGround: ground, elementCast: castImpact } : board,
         realmId,
         goldDelta,
         litTileIds: [...new Set(litTileIds)],

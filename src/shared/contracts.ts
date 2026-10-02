@@ -13,8 +13,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 52: every-match casts and ground. */
-export const GAME_RULES_VERSION = 52;
+/** Bump when generation or player-visible gameplay rules change. 53: amplified block casts. */
+export const GAME_RULES_VERSION = 53;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -419,6 +419,18 @@ export const FLOOR_ARCHETYPE_IDS = [
 ] as const;
 export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
+export interface ElementCastImpact {
+    key: string;
+    suit: TileSuit;
+    sourceCells: number[];
+    contacts: { tileId: string; cell: number; suit: TileSuit; outcome: 'charged' | 'neutralized' | 'affected'; effect?: 'ignited' | 'frozen' | 'entangled' | 'current' | 'cleared'; group: number }[];
+    multiplier: number;
+    power: number;
+    groupPairs: number;
+    reaction: string | null;
+    detail: string;
+}
+
 export interface BoardState {
     level: number;
     pairCount: number;
@@ -427,6 +439,8 @@ export interface BoardState {
     tiles: Tile[];
     /** Cell-bound elemental ground: stays in place when cards move, lasts until overwritten. */
     elementalGround?: (TileSuit | null)[];
+    /** Actual cast contacts, retained independently of weather for the board's impact animation. */
+    elementCast?: ElementCastImpact;
     flippedTileIds: string[];
     matchedPairs: number;
     /** GP-O02: optional pair key that grants a bonus if matched last among real pairs. */

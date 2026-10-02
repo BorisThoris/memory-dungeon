@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 74 as const;
+export const ENCYCLOPEDIA_VERSION = 75 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -637,8 +637,8 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'element_groups',
         title: 'The elements',
         description:
-            'Every elemental match casts, even a single pair: **Fire** clears ice and vines and ignites a vulnerable card on a three-turn fuse; **Water** douses fires and carries unanchored cards; **Frost** douses fires and freezes a vulnerable card for one turn; **Grove** snares a vulnerable card until a match beside it cuts the vine. ' +
-            'Casts start at two steps of reach, three in their own realm (either half of a confluence). Every three combo and every resonance tier adds a step. At combo six, resonance tier two, or a multi-pair pop, casts can target two cards. Combo six or tier two also makes Grove vines bloom: three gold when cut. Immunities, pins and the last-playable-pair guard still apply. ' +
+            'Every elemental match casts, even a single pair: **Fire** clears ice and vines and ignites a vulnerable block on three-turn fuses; **Water** douses fires and carries unanchored cards; **Frost** douses fires and freezes a vulnerable block for one turn; **Grove** snares a vulnerable block until a match beside it cuts the vine. ' +
+            'Casts start at two steps of reach, three in their own realm (either half of a confluence). Every three combo and every resonance tier adds a step. Casts start at two targets, spreading through touching same-element blocks. Every six combo, two resonance tiers, extra popped pair and multiplier doubling adds a target, up to six. Beams show the source and receiving blocks: shields mark neutralization, and COMBINE +1 marks absorbed charges. Combo six or tier two also makes Grove vines bloom: three gold when cut. Immunities, pins and the last-playable-pair guard still apply. ' +
             'Every match leaves **ground** under its cells and their neighbours, surviving even after the cards leave. Ice anchors cards against elemental movement; a later match on planted roots harvests one gold. Overlapping ground reacts locally: Steam reveals faces, Thaw frees ice and reveals a face, Blaze clears vines, Ice bridges anchor, Irrigation plants roots and charges a card, Frostbloom charges two. Bare ground takes the arena\u2019s element; the Storm conducts a face reveal. These local reactions are separate from the stronger primed-streak reactions. Open **Casts** beside the element counters for the current strength and arena rules.'
     },
     {

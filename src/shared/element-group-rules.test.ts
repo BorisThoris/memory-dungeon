@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile, TileSuit } from './contracts';
-import { ELEMENT_HOLD_CAP, ELEMENT_HOLD_CAP_GROUP, ELEMENT_REACH, castElement, cardsWithinReach } from './element-group-rules';
+import { ELEMENT_HOLD_CAP, ELEMENT_REACH, castElement, cardsWithinReach, elementalContactGroups } from './element-group-rules';
 
 const SUITS: Record<string, TileSuit> = { e: 'ember', t: 'tide', m: 'moss', b: 'bone' };
 /** A 4-column board from rows like 'a:e b:t c:m d:b'; ids are `${pairKey}-1` then `-2`. */
@@ -35,7 +35,7 @@ describe('elemental groups', () => {
         expect(at(tiles, 'c-2').vined).toBeUndefined();
         expect(at(tiles, 'd-2').frost).toBeUndefined();
         // The fire cards beside the match drink the cast (`chargeKin`): a charge each.
-        expect(cast.touchedTileIds.sort()).toEqual(['c-1', 'c-2', 'd-2', 'e-1', 'e-2']);
+        expect(cast.touchedTileIds.sort()).toEqual(['c-1', 'c-2', 'd-1', 'd-2', 'e-1', 'e-2']);
         expect(at(tiles, 'c-1').fuse).toBe(3);
         expect(at(tiles, 'e-1').empowered).toBe(1);
     });
@@ -51,7 +51,7 @@ describe('elemental groups', () => {
         expect(tiles[0]!.id).toBe('a-1');
     });
 
-    it('Frost kills fire and freezes one card; a popped group freezes two', () => {
+    it('Frost kills fire and freezes two cards; a popped group freezes three', () => {
         let tiles = matched(board(ROWS), 'd');
         tiles = tiles.map((tile) => (tile.id === 'c-1' ? { ...tile, fuse: 2 } : tile));
         const single = castElement({ tiles, columns: 4, groupTileIds: ['d-1', 'd-2'], realmId: 'ember', pinned: new Set() })!;
@@ -60,16 +60,62 @@ describe('elemental groups', () => {
         expect(tiles.filter((tile) => (tile.frost ?? 0) > 0)).toHaveLength(ELEMENT_HOLD_CAP);
         const group = matched(matched(board(ROWS), 'd'), 'h');
         castElement({ tiles: group, columns: 4, groupTileIds: ['d-1', 'd-2', 'h-1', 'h-2'], realmId: 'ember', pinned: new Set() });
-        expect(group.filter((tile) => (tile.frost ?? 0) > 0)).toHaveLength(ELEMENT_HOLD_CAP_GROUP);
+        expect(group.filter((tile) => (tile.frost ?? 0) > 0)).toHaveLength(3);
     });
 
-    it('Grove snares one card on every match and two on a popped group', () => {
+    it('Grove snares two cards on every match and three on a popped group', () => {
         const single = matched(board(ROWS), 'c');
         expect(castElement({ tiles: single, columns: 4, groupTileIds: ['c-1', 'c-2'], realmId: 'tide', pinned: new Set() })!.kind).toBe('entangle');
         expect(single.filter((tile) => tile.vined)).toHaveLength(ELEMENT_HOLD_CAP);
         const group = matched(matched(board(ROWS), 'c'), 'g');
         castElement({ tiles: group, columns: 4, groupTileIds: ['c-1', 'c-2', 'g-1', 'g-2'], realmId: 'tide', pinned: new Set() });
-        expect(group.filter((tile) => tile.vined)).toHaveLength(ELEMENT_HOLD_CAP_GROUP);
+        expect(group.filter((tile) => tile.vined)).toHaveLength(3);
+    });
+
+    it('receiving blocks are connected by element, never through a gap or a different suit', () => {
+        const tiles = board(['a:e b:t b:t c:m', 'a:e d:t c:m d:t']);
+        expect(elementalContactGroups(tiles, 4, [1, 2, 3, 4, 5, 6, 7])).toEqual([[1, 5, 2], [3], [4], [6], [7]]);
+    });
+
+    it('a higher multiplier carries more of the same reachable water targets', () => {
+        const rows = ['a:t a:t b:e b:e c:e c:e', 'd:e d:e e:e e:e f:e f:e', 'g:e g:e h:e h:e i:e i:e'];
+        const castAt = (multiplier: number) => {
+            const tiles = matched(board(rows), 'a');
+            return castElement({ tiles, columns: 6, groupTileIds: ['a-1', 'a-2'], realmId: 'tide', pinned: new Set(), tier: 1, multiplier })!;
+        };
+        expect(castAt(1).touchedTileIds).toHaveLength(8);
+        expect(castAt(8).touchedTileIds.length).toBeGreaterThan(8);
+    });
+
+    it('an amplified cast binds a block while reserving a playable pair instead of erasing all vines', () => {
+        const tiles = matched(board(['a:m a:m b:e b:e', 'c:e c:e d:e d:e', 'e:e e:e f:e f:e']), 'a');
+        const cast = castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'grove', pinned: new Set(), combo: 12, multiplier: 8 })!;
+        expect(tiles.filter(t => t.vined)).toHaveLength(6);
+        expect(cast.power).toBe(6);
+        expect(cast.contacts.filter(c => c.outcome === 'affected')).toHaveLength(6);
+        const free = tiles.filter(t => t.state === 'hidden' && !t.vined);
+        expect(free.some(a => free.some(b => a.id !== b.id && a.pairKey === b.pairKey))).toBe(true);
+    });
+
+    it('fire records neutralization and kin absorption even on an otherwise clean board', () => {
+        const tiles = matched(board(ROWS), 'a');
+        const cast = castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'ember', pinned: new Set() })!;
+        expect(cast.contacts.some(c => c.suit === 'tide' && c.outcome === 'neutralized')).toBe(true);
+        expect(cast.contacts.some(c => c.suit === 'ember' && c.outcome === 'charged')).toBe(true);
+        expect(cast.contacts.every(c => tiles[c.cell]?.id === c.tileId)).toBe(true);
+    });
+
+    it('keeps a pair free when an amplified hold could otherwise cover every remaining card', () => {
+        for (const suit of ['moss', 'bone'] as const) {
+            const tiles = matched(board(['a:m a:m b:t b:t', 'c:t c:t d:t d:t']), 'a');
+            tiles[0] = { ...tiles[0]!, suit };
+            tiles[1] = { ...tiles[1]!, suit };
+            castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'storm', pinned: new Set(), combo: 12, multiplier: 8 });
+            expect(tiles.filter(t => t.vined || t.frost)).toHaveLength(4);
+            const free = tiles.filter(t => t.state === 'hidden' && !t.vined && !t.frost);
+            expect(free).toHaveLength(2);
+            expect(free[0]!.pairKey).toBe(free[1]!.pairKey);
+        }
     });
 
     it('reaches further in its own realm', () => {

@@ -3,6 +3,7 @@ import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { TileBoardParticles } from './TileBoardParticles';
 import { ElementGround } from './ElementGround';
+import { ElementCastImpact } from './ElementCastImpact';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -93,6 +94,7 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} lowQuality={graphicsQuality === 'low'} />
+        <ElementCastImpact board={board} compact={compact} reduceMotion={reduceMotion} />
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />

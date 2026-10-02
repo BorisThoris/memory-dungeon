@@ -44,10 +44,13 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         const result = await page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             const run = useAppStore.getState().run!;
-            return { casts: run.elementCastsThisFloor, matched: run.board!.matchedPairs, tiles: run.board!.tiles, ground: run.board!.elementalGround, event: run.lastRealmEvent };
+            return { casts: run.elementCastsThisFloor, matched: run.board!.matchedPairs, tiles: run.board!.tiles, ground: run.board!.elementalGround, event: run.lastRealmEvent, impact: run.board!.elementCast };
         });
         expect(result.casts).toBe(1);
         expect(result.matched).toBe(1);
+        expect(result.impact?.suit).toBe(suit);
+        expect(result.impact?.contacts.length).toBeGreaterThan(0);
+        expect(result.impact?.contacts.every(contact => result.tiles[contact.cell]?.id === contact.tileId)).toBe(true);
         expect(result.ground?.filter(Boolean).length).toBeGreaterThan(0);
         if (suit === 'ember') expect(result.tiles.some((tile) => tile.fuse === 3)).toBe(true);
         if (suit === 'bone') expect(result.tiles.some((tile) => tile.frost === 1)).toBe(true);

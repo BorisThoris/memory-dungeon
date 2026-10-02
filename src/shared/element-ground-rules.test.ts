@@ -112,24 +112,24 @@ describe('every match casts, with transparent scaling', () => {
         const tiles = makeTiles(suit);
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'storm', pinned: new Set() })!;
         const status = suit === 'ember' ? 'fuse' : suit === 'bone' ? 'frost' : 'vined';
-        expect(tiles.filter((tile) => tile[status])).toHaveLength(1);
+        expect(tiles.filter((tile) => tile[status])).toHaveLength(2);
         expect(cast.touchedTileIds.length).toBeGreaterThan(0);
     });
 
     it('combo, resonance and pop size strengthen different parts of the cast', () => {
-        expect(elementCastPower(0, 0)).toEqual({ extraReach: 0, targets: 1, blooming: false });
-        expect(elementCastPower(3, 0)).toEqual({ extraReach: 1, targets: 1, blooming: false });
-        expect(elementCastPower(6, 0)).toEqual({ extraReach: 2, targets: 2, blooming: true });
-        expect(elementCastPower(0, 2)).toEqual({ extraReach: 2, targets: 2, blooming: true });
-        expect(elementCastPower(0, 0, 2).targets).toBe(2);
-        expect(elementCastPower(9000, 200).targets).toBe(2);
+        expect(elementCastPower(0, 0)).toEqual({ extraReach: 0, targets: 2, blooming: false });
+        expect(elementCastPower(3, 0)).toEqual({ extraReach: 1, targets: 2, blooming: false });
+        expect(elementCastPower(6, 0)).toEqual({ extraReach: 2, targets: 3, blooming: true });
+        expect(elementCastPower(0, 2)).toEqual({ extraReach: 2, targets: 3, blooming: true });
+        expect(elementCastPower(0, 0, 2).targets).toBe(3);
+        expect(elementCastPower(9000, 200).targets).toBe(6);
         expect(elementCastPower(9000, 200).extraReach).toBe(3200);
     });
 
-    it('a stronger Grove cast produces two blooming vines, not a silent numeric bonus', () => {
+    it('a stronger Grove cast produces three blooming vines, not a silent numeric bonus', () => {
         const tiles = makeTiles('moss');
         castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'grove', pinned: new Set(), combo: 6 });
-        expect(tiles.filter((tile) => tile.vined && tile.bloom)).toHaveLength(2);
+        expect(tiles.filter((tile) => tile.vined && tile.bloom)).toHaveLength(3);
     });
 
     it('the full resolver keeps one playable pair, records every cast, and preserves tile identity', () => {
@@ -138,6 +138,9 @@ describe('every match casts, with transparent scaling', () => {
             const run = createNewRun(0, { realm: { realmId: 'storm', severity: 'calm' } });
             const result = resolveRealmTurn({ run, board: board(tiles), outcome: 'match', tileIds: ['t0', 't1'], groupTileIds: ['t0', 't1'], sourceTiles: tiles.slice(0, 2), turnsThisFloor: 1, pinnedTileIds: [], pairsBySuit: { [suit]: 1 } });
             expect(result.casts).toBe(1);
+            expect(result.board.elementCast?.suit).toBe(suit);
+            expect(result.board.elementCast?.sourceCells).toEqual([0, 1]);
+            expect(result.board.elementCast?.contacts.every(contact => result.board.tiles[contact.cell]?.id === contact.tileId)).toBe(true);
             expect(result.board.elementalGround?.filter(Boolean).length).toBeGreaterThan(0);
             expect(result.events.some((event) => event.ground?.cells === 5)).toBe(true);
             expect(boardHasTurnablePair(result.board.tiles)).toBe(true);

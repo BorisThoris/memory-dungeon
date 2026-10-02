@@ -1,9 +1,9 @@
-import type { RealmEvent, RealmId, Tile, TileSuit } from './contracts';
+import type { ElementCastImpact, RealmEvent, RealmId, Tile, TileSuit } from './contracts';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { runNonNegativeInteger } from './run-number-guards';
 import { SUIT_REALM } from './realm-sway-rules';
-import { chargeKin, createAlchemyLog, elementLands, elementWouldLand, type AlchemyLog } from './element-alchemy-rules';
+import { chargeKin, createAlchemyLog, elementAlchemy, elementLands, elementWouldLand, type AlchemyLog } from './element-alchemy-rules';
 
 /**
  * Elemental groups (2026-10-01): the suits are the elements, and a matched group casts its element
@@ -26,9 +26,10 @@ import { chargeKin, createAlchemyLog, elementLands, elementWouldLand, type Alche
  * Reach is counted in steps from every card of the group, so a bigger pop reaches further by having
  * more cards: two steps, three when the floor is in the element's own realm. Every match already
  * thaws and cuts what is right beside it (`realm-weather-rules.ts` step 2), so an element starts
- * where that ends. Every match now acts, with one target at base strength and up to two from
- * combo 6, resonance tier 2 or a pop. Every three combo and every resonance tier adds reach.
- * The guard still frees holds that would leave no pair to turn. Water never moves a pinned card.
+ * where that ends. Every match acts on two targets at base strength, scaling to six with combo,
+ * resonance, popped pairs and multiplier. Touching same-element blocks receive the spell together.
+ * Every three combo and every resonance tier adds reach. Holds preserve a playable pair before
+ * placement, so the final guard does not erase the whole cast. Water never moves a pinned card.
  *
  * Every card the cast would act on answers first (`element-alchemy-rules.ts`): a card of the
  * cast's own element drinks it and is empowered, a card of the element that puts it out is left
@@ -50,8 +51,8 @@ export const ELEMENT_CAST_KIND: Readonly<Record<TileSuit, ElementCastKind>> = {
 
 export const ELEMENT_REACH = 2;
 export const ELEMENT_REACH_IN_OWN_REALM = 3;
-export const ELEMENT_HOLD_CAP = 1;
-export const ELEMENT_HOLD_CAP_GROUP = 2;
+export const ELEMENT_HOLD_CAP = 2;
+export const ELEMENT_HOLD_CAP_GROUP = 6;
 export const ELEMENT_WASH_CAP = 6;
 export const ELEMENT_WASH_PER_TIER = 2;
 /** How far short of the cast's reach it charges its own kind. */
@@ -59,17 +60,21 @@ export const ELEMENT_KIN_REACH_SHORT = 1;
 export const ELEMENT_FREEZE_TURNS = 1;
 
 /** The same readable thresholds for every cast. Targets cap for fairness; reach keeps growing. */
-export const elementCastPower = (combo: number, tier: number, groupPairs = 1) => ({
+export const elementCastPower = (combo: number, tier: number, groupPairs = 1, multiplier = 1) => ({
     extraReach: Math.floor(runNonNegativeInteger(combo) / 3) + runNonNegativeInteger(tier),
-    targets: Math.min(ELEMENT_HOLD_CAP_GROUP, ELEMENT_HOLD_CAP + Math.floor(runNonNegativeInteger(combo) / 6) + Math.floor(runNonNegativeInteger(tier) / 2) + (groupPairs >= 2 ? 1 : 0)),
+    targets: Math.min(ELEMENT_HOLD_CAP_GROUP, ELEMENT_HOLD_CAP + Math.floor(runNonNegativeInteger(combo) / 6) + Math.floor(runNonNegativeInteger(tier) / 2) + Math.max(0, groupPairs - 1) + Math.floor(Math.log2(Math.max(1, runNonNegativeInteger(multiplier))))),
     blooming: runNonNegativeInteger(combo) >= 6 || runNonNegativeInteger(tier) >= 2
 });
 
+/** Currents move more cards instead of applying holds; they share the cast's amplification. */
+export const elementWashCapacity = (power: ReturnType<typeof elementCastPower>): number =>
+    ELEMENT_WASH_CAP + ELEMENT_WASH_PER_TIER * (power.extraReach + power.targets - ELEMENT_HOLD_CAP);
+
 export const ELEMENT_MATCH_RULES: Readonly<Record<TileSuit, string>> = {
-    ember: 'Every match scorches ice and vines, then ignites a vulnerable card. Steam or Thaw quenches the ignition.',
+    ember: 'Every match scorches ice and vines, then ignites a vulnerable block. Steam or Thaw quenches the ignition.',
     tide: 'Every match douses fires and carries vulnerable, unanchored cards one place along.',
-    bone: 'Every match douses fires and freezes a vulnerable card for one turn. Ice ground anchors cards against elemental movement.',
-    moss: 'Every match snares a vulnerable card until a match beside it cuts the vines. At combo 6 or resonance tier 2, the vines bloom for three gold.'
+    bone: 'Every match douses fires and freezes a vulnerable block for one turn. Ice ground anchors cards against elemental movement.',
+    moss: 'Every match snares a vulnerable block until a match beside it cuts the vines. At combo 6 or resonance tier 2, the vines bloom for three gold.'
 };
 
 const isReal = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
@@ -103,7 +108,45 @@ export interface ElementCast {
     groupTileIds: string[];
     touchedTileIds: string[];
     summary: string;
+    sourceCells: number[];
+    contacts: ElementCastImpact['contacts'];
+    power: number;
+    multiplier: number;
+    groupPairs: number;
 }
+
+/** A cast travels through touching cards of one element before jumping to the next block. */
+export const elementalContactGroups = (tiles: readonly Tile[], columns: number, reached: readonly number[]): number[][] => {
+    const remaining = new Set(reached);
+    const groups: number[][] = [];
+    for (const start of reached) {
+        if (!remaining.delete(start)) continue;
+        const group = [start];
+        for (let at = 0; at < group.length; at += 1) {
+            for (const next of orthogonalNeighbourIndices(group[at]!, columns, tiles.length)) {
+                if (remaining.has(next) && tiles[next]?.suit === tiles[start]?.suit) {
+                    remaining.delete(next);
+                    group.push(next);
+                }
+            }
+        }
+        groups.push(group);
+    }
+    return groups;
+};
+
+/** Do not create a hold that would require the end-of-turn guard to erase the whole cast. */
+const leavesPlayablePair = (tiles: readonly Tile[], heldIndex: number): boolean => {
+    const counts = new Map<string, number>();
+    for (let index = 0; index < tiles.length; index += 1) {
+        const tile = tiles[index]!;
+        if (index === heldIndex || tile.state !== 'hidden' || !isReal(tile) || tile.vined || (tile.frost ?? 0) > 0) continue;
+        const count = (counts.get(tile.pairKey) ?? 0) + 1;
+        if (count >= 2) return true;
+        counts.set(tile.pairKey, count);
+    }
+    return false;
+};
 
 /**
  * Cast the element of a matched group on `tiles` (mutated in place, like the realm's other steps).
@@ -121,7 +164,8 @@ export const castElement = ({
     tier = 0,
     still = false,
     combo = 0,
-    quenchFire = false
+    quenchFire = false,
+    multiplier = 1
 }: {
     tiles: Tile[];
     columns: number;
@@ -136,6 +180,7 @@ export const castElement = ({
     still?: boolean;
     combo?: number;
     quenchFire?: boolean;
+    multiplier?: number;
 }): ElementCast | null => {
     const group = groupTileIds.map((id) => tiles.findIndex((tile) => tile.id === id)).filter((index) => index >= 0);
     const suit = group.map((index) => tiles[index]!).find((tile) => tile.suit && isReal(tile))?.suit;
@@ -143,9 +188,14 @@ export const castElement = ({
     const kind = ELEMENT_CAST_KIND[suit];
     const steps = runNonNegativeInteger(tier);
     const groupPairs = new Set(group.map((index) => tiles[index]!.pairKey)).size;
-    const power = elementCastPower(combo, steps, groupPairs);
+    const power = elementCastPower(combo, steps, groupPairs, multiplier);
     const reach = (SUIT_REALM[suit] === realmId || SUIT_REALM[suit] === secondaryId ? ELEMENT_REACH_IN_OWN_REALM : ELEMENT_REACH) + power.extraReach;
-    const reached = cardsWithinReach(tiles, Math.max(1, columns), group, Math.min(tiles.length, reach));
+    const groups = elementalContactGroups(tiles, Math.max(1, columns), cardsWithinReach(tiles, Math.max(1, columns), group, Math.min(tiles.length, reach)));
+    const reached = groups.flat();
+    const before = [...tiles];
+    // The visible wave meets counter-elements too. Their response must survive into the impact
+    // record, even when another card receives the actual hold or ignition.
+    for (const index of reached) if (elementAlchemy(tiles[index]!, suit) === 'neutralized') elementLands(tiles, index, suit, alchemy);
     const holdCap = still ? 0 : power.targets;
     const outcomes: string[] = [];
     // The cast feeds its own kind first, a step short of its reach: the fire beside a fire match
@@ -169,7 +219,7 @@ export const castElement = ({
                 let burning = tiles.filter((tile) => tile.state === 'hidden' && tile.fuse != null).length;
                 for (const index of reached) {
                     const tile = tiles[index]!;
-                    if (ignited >= power.targets || burning >= 4) break;
+                    if (ignited >= power.targets || burning >= Math.max(4, power.targets)) break;
                     if (tile.fuse != null || pinned.has(tile.id) || !elementWouldLand(tile, suit)) continue;
                     tiles[index] = { ...tile, fuse: 3 };
                     touched.push(tile.id);
@@ -191,7 +241,7 @@ export const castElement = ({
             }
             const carried = reached.filter((index) => !pinned.has(tiles[index]!.id));
             // Water and grove cards are not carried: the water flows around them.
-            const movable = carried.filter((index) => elementWouldLand(tiles[index]!, suit)).slice(0, ELEMENT_WASH_CAP + ELEMENT_WASH_PER_TIER * power.extraReach);
+            const movable = carried.filter((index) => elementWouldLand(tiles[index]!, suit)).slice(0, elementWashCapacity(power));
             if (movable.length >= 2) {
                 for (const index of carried) if (!elementWouldLand(tiles[index]!, suit)) elementLands(tiles, index, suit, alchemy);
                 const moved = movable.map((index) => tiles[index]!);
@@ -212,8 +262,9 @@ export const castElement = ({
                     tiles[index] = rest;
                     touched.push(tile.id);
                 }
-                if (held >= holdCap || runNonNegativeInteger(tiles[index]!.frost ?? 0) > 0) continue;
+                if (held >= holdCap || runNonNegativeInteger(tiles[index]!.frost ?? 0) > 0 || pinned.has(tile.id)) continue;
                 if (!elementLands(tiles, index, suit, alchemy)) continue;
+                if (!leavesPlayablePair(tiles, index)) continue;
                 held += 1;
                 tiles[index] = { ...tiles[index]!, frost: ELEMENT_FREEZE_TURNS };
                 if (!touched.includes(tile.id)) touched.push(tile.id);
@@ -228,6 +279,7 @@ export const castElement = ({
                 if (held >= holdCap) break;
                 if (tile.vined === true || pinned.has(tile.id)) continue;
                 if (!elementLands(tiles, index, suit, alchemy)) continue;
+                if (!leavesPlayablePair(tiles, index)) continue;
                 held += 1;
                 tiles[index] = { ...tiles[index]!, vined: true, ...(power.blooming ? { bloom: true } : {}) };
                 touched.push(tile.id);
@@ -237,5 +289,15 @@ export const castElement = ({
         }
     }
     if (outcomes.length === 0) outcomes.push(still ? 'Freeze-over holds hazards still' : touched.length > 0 ? `${new Set(touched).size} cards affected` : 'No vulnerable cards in reach');
-    return { kind, suit, groupTileIds: group.map((index) => tiles[index]!.id), touchedTileIds: [...new Set(touched)], summary: outcomes.join(' · ') };
+    const contacts: ElementCastImpact['contacts'] = [];
+    groups.forEach((indices, groupIndex) => indices.forEach((originalCell) => {
+        const original = before[originalCell]!;
+        const originalId = original.id;
+        const cell = tiles.findIndex(tile => tile.id === originalId);
+        const outcome = alchemy.neutralized.includes(originalId) ? 'neutralized' : alchemy.empowered.includes(originalId) ? 'charged' : touched.includes(originalId) ? 'affected' : null;
+        const tile = tiles[cell]!;
+        const effect = tile.vined ? 'entangled' : (tile.frost ?? 0) > 0 ? 'frozen' : tile.fuse != null ? 'ignited' : kind === 'wash' ? 'current' : 'cleared';
+        if (outcome && original.suit) contacts.push({ tileId: originalId, cell, suit: original.suit, outcome, effect, group: groupIndex });
+    }));
+    return { kind, suit, sourceCells: group, contacts, power: power.targets, multiplier, groupPairs, groupTileIds: group.map((index) => tiles[index]!.id), touchedTileIds: [...new Set(touched)], summary: outcomes.join(' · ') };
 };

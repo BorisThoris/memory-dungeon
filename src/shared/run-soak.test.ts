@@ -26,6 +26,9 @@ describe('the run soak', () => {
         const reports = Array.from({ length: SOAK_SEEDS }, (_unused, index) =>
             soakRun({ seed: 9_001 + index * 7_919, player: SOAK_PLAYERS.careful, playerName: 'careful' })
         );
+        // Rules 53 reseeded the deal and strengthened holds. Keep a real Inferno/void witness
+        // alongside the broad sample instead of relying on the first twelve seeds to hit it.
+        reports.push(soakRun({ seed: 278_247, player: SOAK_PLAYERS.careful, playerName: 'careful' }));
         expect(reports.some((report) => report.purchases > 0), 'no run ever shopped at a stop').toBe(true);
         expect(reports.some((report) => report.bombsUsed > 0), 'no run ever threw a bomb').toBe(true);
         /* The five run-economy mechanics have no row in the floor census (the reference player never
@@ -69,6 +72,12 @@ describe('the run soak', () => {
         expect(wild.some((report) => report.wildMatches > 0), 'no wild run ever played its joker').toBe(true);
         expect(wild.flatMap((report) => report.violations)).toEqual([]);
         expect(Object.keys(SOAK_INVARIANTS).length).toBeGreaterThanOrEqual(15);
+    });
+
+    it('resolves a pair completed by an opener instead of stopping on two face-up cards', () => {
+        const report = soakRun({ seed: 78_851, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 40 });
+        expect(report.ended).not.toBe('resolving');
+        expect(report.violations).toEqual([]);
     });
 
     it('catches a broken invariant rather than passing it', () => {

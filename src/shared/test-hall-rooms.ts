@@ -126,6 +126,7 @@ export type TestHallRoomId =
     | 'element-water'
     | 'element-frost'
     | 'element-grove'
+    | 'element-blocks'
     | 'element-kin'
     | 'element-neutralize'
     | 'element-resonance'
@@ -1775,7 +1776,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-frost',
         title: 'Frost',
-        mechanic: 'Every Frost match douses fires and freezes a vulnerable card for one turn. A pop, combo 6 or resonance tier 2 reaches two targets.',
+        mechanic: 'Every Frost match douses fires and freezes two vulnerable cards for one turn. Combo, resonance, pops and multiplier add targets, up to six.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
         tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and the frost freezes the nearest card.',
         build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm') }),
@@ -1791,18 +1792,35 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-grove',
         title: 'Grove',
-        mechanic: 'Every Grove match snares a vulnerable card. A pop, combo 6 or resonance tier 2 reaches two targets. Strong casts grow blooming vines.',
+        mechanic: 'Every Grove match snares two vulnerable cards. Combo, resonance, pops and multiplier add targets, up to six. Strong casts grow blooming vines.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
         tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and the vines take the nearest card.',
         build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm') }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the popped grove group snares two cards',
-                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 2 ? null : 'not exactly two vined cards'), finishable)
+                says: 'the popped grove group snares three cards',
+                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 3 ? null : 'not exactly three vined cards'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
+    },
+    {
+        id: 'element-blocks',
+        title: 'Overgrowth: blocks answer a cast',
+        mechanic: 'A high-combo Grove cast binds six vulnerable cards in connected blocks. Frost blocks neutralize it, Grove blocks combine with it, and a playable pair stays free.',
+        graphMechanicIds: ['board.element_groups', 'board.element_alchemy', 'safety.softlock_fairness'],
+        tryThis: 'Match the two Grove cards at the top left. Follow the beams: Fire and Water become entangled, Frost shields neutralize the cast, and the far Grove pair absorbs a charge.',
+        build: () => room(['a:m a:m b:e b:e c:e c:e', 'd:t d:t e:t e:t f:b f:b', 'g:e g:e h:b h:b i:m i:m', 'k:b k:b l:e l:e j:m j:m'], {
+            streak: 12, run: realmRun('storm', 'calm', { chunkPairsThisChain: 3 })
+        }),
+        script: [{
+            step: { do: 'match', pairKey: 'a' }, says: 'six vines, counter shields and kin charges are recorded as distinct contacts',
+            expect: expectAll((r) => {
+                const impact = r.board?.elementCast;
+                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.vined).length === 6 ? null : 'missing amplified block responses';
+            }, finishable)
+        }, { step: { do: 'clear' }, says: 'the amplified floor still clears', expect: statusIs('levelComplete') }]
     },
     {
         id: 'element-kin',

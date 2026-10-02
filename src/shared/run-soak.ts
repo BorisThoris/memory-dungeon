@@ -531,6 +531,13 @@ export const soakRun = ({
         const pool = hiddenReal(run);
         const first = pick(pool);
         act('flip', flipTile(run, first.id));
+        // A previously refused opener can leave one card up. This flip may already complete
+        // that pair; resolve it before looking for a second hidden card (there may be none free).
+        if ((run as RunState).status === 'resolving') {
+            turns += 1;
+            act('resolve', resolveBoardTurn(run));
+            continue;
+        }
         if (bombTargetTileId(run) === first.id && rng() < player.bombRate) {
             bombsUsed += 1;
             act('bomb', applyBomb(run, first.id));

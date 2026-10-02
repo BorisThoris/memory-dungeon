@@ -24,23 +24,24 @@ The new contract is **every elemental match casts and leaves ground**. No random
 | Arena | `realm-rules.ts`, `realm-weather-rules.ts` | Bare ground has the arena's material; raging weather and depth backlash remain. |
 | Sway and travel | `realm-sway-rules.ts`, `realm-carryover-rules.ts` | Matches can tip the arena; doors and depth affect later floors. A tip now uses its destination's depth immediately. |
 | Resolution | `board-turn-transition.ts`, `realm-weather-rules.ts` | Cleanup, ground chemistry, cast, streak reaction, clocks, weather, fairness guard. |
-| Presentation | `ElementGround.tsx`, `RealmTileMarks.tsx`, existing realm particles/audio | Persistent ground plus card statuses, burst/motion and sounds. Four instanced ground draws maximum. |
+| Presentation | `ElementGround.tsx`, `ElementCastImpact.tsx`, `RealmTileMarks.tsx`, existing realm particles/audio | Persistent ground plus card statuses, source-to-block beams, shields, charge labels and sounds. Four instanced ground draws plus one transient impact draw. |
 | Explanation | `ElementCastGuide.tsx`, `screenCallouts.ts`, Codex, accessible card labels | Current power, arena interactions, actual cast result and ground under each card. |
 
 ## Guaranteed casts and strength
 
 | Element | Every match | Stronger cast |
 | --- | --- | --- |
-| Fire | Clear reachable ice/snow/vines; ignite one vulnerable card on a 3-turn fuse | Up to two ignitions, maximum four burning cards. Steam/Thaw quench ignition. |
-| Water | Douse reachable fires; rotate vulnerable, unanchored cards one place | Carry budget grows by two per added step of reach. |
-| Frost | Douse reachable fire; freeze one vulnerable card for one turn | Up to two frozen cards; duration stays one turn. |
-| Grove | Snare one vulnerable card; matching beside it cuts the vine for gold | Up to two snares; combo 6 or resonance tier 2 produces blooms worth three gold. |
+| Fire | Clear reachable ice/snow/vines; ignite two vulnerable cards on 3-turn fuses | Up to six ignitions; burning cap is the larger of four and cast power. Steam/Thaw quench ignition. |
+| Water | Douse reachable fires; rotate vulnerable, unanchored cards one place | Carry budget grows by two per added step of reach and target amplification. |
+| Frost | Douse reachable fire; freeze two vulnerable cards for one turn | Up to six frozen cards; duration stays one turn. |
+| Grove | Snare two vulnerable cards; matching beside them cuts vines for gold | Up to six snares; combo 6 or resonance tier 2 produces blooms worth three gold. |
 
 Base reach is two orthogonal steps, or three in the cast's own arena (either realm of a confluence).
-Add one step per three combo already in hand and one per resonance tier. A pop, combo six or
-resonance tier two raises the target budget from one to two. Reach can keep growing; actual traversal
-is bounded by board size. Target and fire caps prevent high resonance from locking/burning the
-whole board. The score multiplier remains an economy rule, rather than silently multiplying holds.
+Add one step per three combo already in hand and one per resonance tier. Targets start at two,
+plus one per six combo, two resonance tiers, extra popped pair and multiplier doubling, capped at six.
+Touching cards of the same element receive the cast together before it moves to the next block.
+Reach can keep growing; actual traversal is bounded by board size. Before placing a hold, the cast
+preserves a playable pair. This avoids the old failure where the final guard erased the whole cast.
 
 A cast charges kin, searches past immune targets, and always reports the outcome. When no vulnerable
 cards remain, it still leaves ground; the feedback says so. Freeze-over deliberately suspends new
@@ -94,6 +95,15 @@ reaction, retaining existing sound and particle event families.
 Cast messages are retained separately from weather messages so both appear on a turn where the
 arena also acts. Escape dismisses the guide before the gameplay pause shortcut handles it.
 
+Rules 53 add a dedicated `BoardState.elementCast` record. Weather cannot replace the visual cast.
+A radial reveal connects each matched source to actual receiving cards and connects adjacent cards
+within a receiving block. Shields say NEUTRALIZED; absorbed charges say COMBINE +1; affected cards
+name their status. Grove draws thick vines across the cards. Strong casts have larger source runes,
+thicker beams and an OVERGROWTH / FIRE ERUPTION / DEEP FREEZE / TIDAL WAVE title. The layer lasts
+4.5 seconds (5.5 for strong casts), fades out, respects reduced motion and never intercepts input.
+One bounded canvas texture and one transparent draw serve the whole cast. The authored
+`element-blocks` hall room exercises six vines, shields and kin charging in a single real match.
+
 ## Verification
 
 Targeted tests cover single-pair casts, all six arena chemistries, confluences, immunity retargeting,
@@ -109,5 +119,9 @@ partner is visibly held; comparisons must account for that behaviour in the simu
 The final rules-52 sample ran 240 seeded runs (60 per profile), 1,965 cleared floors and 13,710 turns
 with zero invariant violations. Mean cleared floors: careful 16.2, average 7.6, sloppy 2.4, wild 6.7.
 This is more demanding than the earlier sparse-hold system; the simulator does not avoid opening
-the unblocked half of a pair whose partner is held. Holds remain capped at two and the guard always
-leaves a playable pair. The soak now resolves pending turns instead of spinning its study action.
+the unblocked half of a pair whose partner is held. Rules 53 raise the cap to six while preserving
+a playable pair before each hold. The soak resolves pending turns instead of spinning its study action.
+It also resolves immediately when an opener completes a previously half-open turn, before searching
+for another hidden card. The rules-53 sample finished all 240 runs naturally: 1,566 floors and 10,085
+turns, zero invariant violations. Mean floors: careful 10.7, average 7.1, sloppy 2.3, wild 6.1. The
+stronger holds make careless selection more costly; the simulation still deliberately makes mistakes.
