@@ -1,3 +1,4 @@
+import { isTileFlipBlocked } from './realm-weather-rules';
 import { describe, expect, it } from 'vitest';
 import type {
     BoardState,
@@ -358,10 +359,22 @@ const pairTileIds = (board: BoardState): string[][] => {
     return [...groups.values()];
 };
 
+/**
+ * Matches every pair still standing, never missing. A realm can hold a card for a while (a grove
+ * group snares one, a frost group freezes one), so a pair with a held card is left for a later
+ * pass: a match beside it cuts the vine, the ice runs out, or the realm's guard frees it. Measured
+ * 2026-10-02 over 600 seeds: one pass left floor 2 standing on 18 of them once a deep realm made
+ * more of the floor its own element, which pops more groups and so snares more cards.
+ */
 const clearRealPairs = (run: RunState): RunState => {
     let current = run;
-    for (const ids of pairTileIds(current.board!).filter((group) => group.length === 2)) {
-        current = resolveBoardTurn(flipTile(flipTile(current, ids[0]!), ids[1]!));
+    for (let pass = 0; pass < 12 && current.status === 'playing'; pass += 1) {
+        for (const ids of pairTileIds(current.board!).filter((group) => group.length === 2)) {
+            if (current.status !== 'playing') break;
+            const pair = ids.map((id) => current.board!.tiles.find((tile) => tile.id === id)!);
+            if (pair.some((tile) => tile.state !== 'hidden' || isTileFlipBlocked(tile))) continue;
+            current = resolveBoardTurn(flipTile(flipTile(current, ids[0]!), ids[1]!));
+        }
     }
     return current;
 };

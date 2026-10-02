@@ -9,7 +9,7 @@
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8653
+    "relationshipCount": 8655
   },
   "inventory": [
     {
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "6dc7877c9e68698b5f08f184f1d9b3a1f551000a2c6aaf9962cf87ca9df7ad6e"
+      "sha256": "aab6d57ef8cd9fde639c9c98b2cd9afd05337300688fc091ccc2995ea3897c4c"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -13437,8 +13437,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 67408,
-      "sha256": "a06c6b37e800388412325f885ae160f45b48c91680423ce6c432e3b6f022acf2"
+      "bytes": 68299,
+      "sha256": "ed856357d6120998c8f753800d25f26c5b95bfb550e3ab506dee7035f6bba31b"
     },
     {
       "path": "src/shared/game.ts",
@@ -31586,7 +31586,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1700,
+      "lineCount": 1713,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -31597,6 +31597,7 @@
         "file:src/shared/floor-par.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/pair-curve.ts",
+        "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/softlock-generator-contract.ts",
         "file:src/shared/test/game-fixtures.ts",
         "file:src/shared/tile-identity.ts",
@@ -34369,6 +34370,7 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-resonance-rules.test.ts",
+        "file:src/shared/game.test.ts",
         "file:src/shared/realm-weather-rules.test.ts"
       ]
     },
@@ -64473,7 +64475,7 @@
       "tests": [
         {
           "path": "src/shared/game.test.ts",
-          "line": 7
+          "line": 1
         },
         {
           "path": "src/shared/softlock-fairness.test.ts",
@@ -64539,7 +64541,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -64854,7 +64856,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
@@ -65169,7 +65171,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 132
+          "line": 133
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -65229,7 +65231,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 5
+          "line": 6
         }
       ],
       "enables": [
@@ -65477,7 +65479,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 11
+          "line": 12
         }
       ],
       "enables": [
@@ -65520,7 +65522,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 25
+          "line": 26
         },
         {
           "path": "src/shared/softlock-fairness.test.ts",
@@ -65562,7 +65564,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 10
+          "line": 11
         }
       ],
       "enables": [],
@@ -65608,7 +65610,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "enables": [
@@ -65837,7 +65839,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 12
+          "line": 1
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -66234,7 +66236,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
@@ -103497,6 +103499,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/game.test.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/game.test.ts->src/shared/softlock-generator-contract.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/softlock-generator-contract.ts",
@@ -117344,6 +117352,12 @@
       "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/element-resonance-rules.test.ts",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "file:src/shared/element-resonance-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "file:src/shared/game.test.ts",
       "kind": "tested_by"
     },
     {
