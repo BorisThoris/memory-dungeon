@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T01:37:23.210Z",
+  "generatedAt": "2026-10-02T12:49:02.310Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -46,6 +46,7 @@
       "build:cloudflare",
       "build:renderer",
       "deploy:pages",
+      "deploy:pages:test",
       "build:renderer:sourcemap",
       "analyze:bundle",
       "build:renderer:locked-dist",
@@ -298,28 +299,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 165343,
+        "bytes": 165595,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-01T01:37:01.456Z"
+        "capturedAt": "2026-10-02T12:48:39.837Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 156790,
+        "bytes": 156825,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-01T01:37:06.964Z"
+        "capturedAt": "2026-10-02T12:48:45.740Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130038,
+        "bytes": 130041,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-01T01:37:17.865Z"
+        "capturedAt": "2026-10-02T12:48:56.939Z"
       },
       {
         "profile": "mobile",
@@ -328,16 +329,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-01T01:37:11.692Z"
+        "capturedAt": "2026-10-02T12:48:50.556Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122804,
+        "bytes": 122975,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-01T01:37:22.978Z"
+        "capturedAt": "2026-10-02T12:49:02.072Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -346,7 +347,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-01T01:17:25.815Z"
+        "capturedAt": "2026-10-02T12:45:01.647Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -355,7 +356,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-01T01:17:25.815Z"
+        "capturedAt": "2026-10-02T12:45:01.647Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -364,7 +365,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-01T01:17:25.816Z"
+        "capturedAt": "2026-10-02T12:45:01.648Z"
       },
       {
         "profile": "reel-end-card",
@@ -373,7 +374,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-01T01:17:25.817Z"
+        "capturedAt": "2026-10-02T12:45:01.649Z"
       }
     ],
     "trailers": [
@@ -500,13 +501,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1264,
-    "testFiles": 541,
-    "sourceLines": 197631,
+    "sourceFiles": 1291,
+    "testFiles": 551,
+    "sourceLines": 203190,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1076
+        "files": 1102
       },
       {
         "directory": "scripts",
@@ -514,7 +515,7 @@
       },
       {
         "directory": "e2e",
-        "files": 69
+        "files": 70
       },
       {
         "directory": "packages",
@@ -541,10 +542,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "13329b4b",
-    "lastCommitDate": "2026-10-01T01:16:57Z",
-    "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 1896,
+    "head": "3335c0ab",
+    "lastCommitDate": "2026-10-02T15:44:34+03:00",
+    "lastCommitSubject": "The floor-clearing test helper waits out held cards",
+    "commitCount": 1910,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
