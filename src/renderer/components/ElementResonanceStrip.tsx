@@ -5,6 +5,7 @@ import { isStreakPrimed, resonanceOf, resonanceTier, runElementResonance, runEle
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
 import styles from './ElementResonanceStrip.module.css';
+import { ElementCastGuide } from './ElementCastGuide';
 
 /**
  * The resonance strip (2026-10-02, `element-resonance-rules.ts`): the four elements' stacks, which
@@ -15,20 +16,20 @@ import styles from './ElementResonanceStrip.module.css';
 const ElementResonanceStrip = ({
     run
 }: {
-    run: Pick<RunState, 'elementResonance' | 'elementStreak' | 'realmStillTurns'>;
+    run: Pick<RunState, 'elementResonance' | 'elementStreak' | 'realmStillTurns' | 'stats' | 'realmId' | 'realmSecondaryId'>;
 }): ReactElement | null => {
     const resonance = runElementResonance(run);
     const streak = runElementStreak(run);
     const still = runNonNegativeInteger(run.realmStillTurns ?? 0);
     const total = TILE_SUITS.reduce((sum, suit) => sum + resonanceOf(resonance, suit), 0);
-    if (total === 0 && !streak && still === 0) return null;
+    if (total === 0 && !streak && still === 0 && !run.realmId) return null;
     const primed = isStreakPrimed(streak);
     const label =
         TILE_SUITS.map((suit) => `${ELEMENT_NAMES[suit]} ${resonanceOf(resonance, suit)}`).join(', ') +
         (streak ? `. ${ELEMENT_NAMES[streak.suit]} in hand, ${streak.links} in a row${primed ? ': primed, a different element reacts' : ''}.` : '.') +
         (still > 0 ? ` The floor holds still for ${still} more ${still === 1 ? 'turn' : 'turns'}.` : '');
     return (
-        <span aria-label={`Resonance: ${label}`} className={styles.strip} data-primed={primed ? 'true' : undefined} data-testid="hud-resonance" role="img">
+        <span aria-label={`Resonance: ${label}`} className={styles.strip} data-primed={primed ? 'true' : undefined} data-testid="hud-resonance" role="group">
             {TILE_SUITS.map((suit) => {
                 const stacks = resonanceOf(resonance, suit);
                 const inHand = streak?.suit === suit;
@@ -61,6 +62,7 @@ const ElementResonanceStrip = ({
                     Still {still}
                 </span>
             ) : null}
+            <ElementCastGuide run={run} />
         </span>
     );
 };

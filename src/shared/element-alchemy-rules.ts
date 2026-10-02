@@ -30,8 +30,8 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * lightning moves cards of every kind.
  *
  * Alchemy answers an element only where it would have acted: a fire burning vines off cards
- * meets only the cards it would have cleared, a hold meets the one card it would have held (and is
- * spent on it, neutralized or drunk, rather than passing on to the next card), and a current meets
+ * meets only the cards it would have cleared, a cast's hold passes immune cards to find a vulnerable
+ * target (weather retains its own targeting), and a current meets
  * the cards it would have moved. A card that only stood in reach is not touched.
  */
 

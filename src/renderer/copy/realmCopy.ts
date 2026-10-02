@@ -1,6 +1,7 @@
 import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
 import { SMOKE_STUDY_CUT_PER_BURNOUT, attunementGoldBonus, realmBacklashRuns } from '../../shared/realm-carryover-rules';
 import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
+import { ARENA_GROUND_RULES } from '../../shared/element-ground-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
 export const REALM_HUD_COPY = {
@@ -77,7 +78,7 @@ export const REALM_TRAVEL_COPY = {
         door.confluence ? `Both realms' weather, one after the other, and both answer your turns.` : null,
     weatherLine: (door: RealmDoor): string =>
         !realmWeatherClockRuns(door.severity)
-            ? 'No weather of its own: your matches cast the elements'
+            ? `Every match casts. ${ARENA_GROUND_RULES[door.realmId]}`
             : door.confluence
             ? `${REALMS[door.realmId].weather} and ${REALMS[door.confluence].weather.toLowerCase()} by turns, every ${realmIntervalFor(door.realmId, door.severity)} turns`
             : `${REALMS[door.realmId].weather} every ${realmIntervalFor(door.realmId, door.severity)} turns · ${REALMS[door.realmId].peak} every third`,

@@ -306,6 +306,7 @@ export const freshRealmFloorCounters = (): Pick<
     | 'elementReactionsThisFloor'
     | 'realmStillTurns'
     | 'lastRealmEvent'
+    | 'lastElementCastEvent'
     | 'realmLitTileIds'
     | 'realmPeaksThisFloor'
 > => ({
@@ -323,6 +324,7 @@ export const freshRealmFloorCounters = (): Pick<
     elementReactionsThisFloor: 0,
     realmStillTurns: 0,
     lastRealmEvent: null,
+    lastElementCastEvent: null,
     realmLitTileIds: [],
     realmPeaksThisFloor: 0
 });

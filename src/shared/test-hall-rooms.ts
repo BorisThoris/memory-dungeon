@@ -119,6 +119,10 @@ export type TestHallRoomId =
     | 'realm-snare'
     | 'realm-sway'
     | 'element-fire'
+    | 'element-single-fire'
+    | 'element-single-water'
+    | 'element-single-frost'
+    | 'element-single-grove'
     | 'element-water'
     | 'element-frost'
     | 'element-grove'
@@ -373,6 +377,30 @@ const reactedOnce = (kind: NonNullable<RunState['lastRealmEvent']>['kind'], pote
     );
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
+    ...([
+        ['element-single-fire', 'Fire', 'e', 'b', 'scorch'],
+        ['element-single-water', 'Water', 't', 'b', 'wash'],
+        ['element-single-frost', 'Frost', 'b', 't', 'freeze'],
+        ['element-single-grove', 'Grove', 'm', 'e', 'entangle']
+    ] as const).map(([id, name, suit, neighbour, kind]): TestHallRoom => ({
+        id, title: `${name}: every pair casts`,
+        mechanic: 'One elemental pair, no pop and no built-up combo: the cast acts and leaves persistent ground.',
+        graphMechanicIds: ['board.element_groups'],
+        tryThis: 'Match a in the top-left corner. Watch the nearby cards and the ground left behind. Open Casts for the rules.',
+        build: () => room([
+            `a:${suit} a:${suit} b:${neighbour} b:${neighbour}`,
+            `c:${neighbour} c:${neighbour} d:${neighbour} d:${neighbour}`,
+            `e:${neighbour} e:${neighbour} f:${neighbour} f:${neighbour}`,
+            `g:${neighbour} g:${neighbour} h:${neighbour} h:${neighbour}`
+        ], { run: realmRun('storm', 'calm') }),
+        script: [{ step: { do: 'match', pairKey: 'a' }, says: 'one pair casts and paints five ground cells', expect: expectAll(
+            realmEventIs(kind),
+            (r) => r.board?.matchedPairs === 1 ? null : 'the single pair unexpectedly popped another pair',
+            (r) => r.elementCastsThisFloor === 1 ? null : 'single pair did not cast',
+            (r) => r.board?.elementalGround?.filter(Boolean).length === 5 ? null : 'ground footprint is missing',
+            finishable
+        ) }]
+    })),
     {
         id: 'pairs',
         title: 'Pairs',
@@ -1058,7 +1086,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'The Bounty pair pays 30 more and the Ward pair 22 less; every turn moves both.',
         graphMechanicIds: ['economy.score_and_rewards'],
         tryThis: 'Match the Bounty (b), then the new Ward, then miss: the two marks move every turn.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], run: { runSeed: 90_211 }, board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
+        // Keep this authored sequence's random marks stable when the production deal is reseeded.
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], run: { runSeed: 90_211, runRulesVersion: 51 }, board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
         script: [
             {
                 step: { do: 'match', pairKey: 'b' },
@@ -1354,7 +1383,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
             { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },
-            { step: { do: 'matchBurning' }, says: 'matched in time, the fire is doused for two gold', expect: expectAll(goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
+            { step: { do: 'matchBurning' }, says: 'matched in time, the fire is doused for two gold alongside elemental rewards', expect: expectAll((r, b) => (r.gold ?? 0) >= (b.gold ?? 0) + 2 ? null : 'dousing did not pay two gold', (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
         ]
     },
     {
@@ -1365,7 +1394,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         tryThis: 'Card c is on its last turn of fuse. Take any turn and watch it burn out and catch beside it.',
         build: () =>
             room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
-                run: realmRun('ember', 'calm', { gold: 5 }),
+                run: realmRun('ember', 'calm', { gold: 5, runRulesVersion: 51 }),
                 tiles: (tiles) => tiles.map((t) => (t.id === 'c-1' ? { ...t, fuse: 1 } : t))
             }),
         script: [
@@ -1386,7 +1415,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { misses: 4, run: realmRun('tide', 'raging', { turnsThisFloor: 1 }) }),
         script: [
             {
-                // A lone moss pair with nothing to pop casts no hold, so the current is all that moves.
+                // Grove can hold a card, but the elemental current still moves this unanchored column.
                 step: { do: 'match', pairKey: 'c' },
                 says: 'turn two: the first column runs down a step, the bottom card to the top',
                 expect: expectAll(realmEventIs('current'), (r, b) => {
@@ -1411,7 +1440,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 step: { do: 'match', pairKey: 'c' },
                 says: 'turn three: four cards swap and stay lit',
                 expect: expectAll(realmEventIs('lightning'), (r, b) => {
-                    const lit = r.realmLitTileIds ?? [];
+                    const lit = r.lastRealmEvent?.tileIds ?? [];
                     if (lit.length !== 4) return `${lit.length} lit`;
                     return lit.every((id) => positionOf(r, id) !== positionOf(b, id)) ? null : 'a lit card did not move';
                 })
@@ -1432,7 +1461,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             }),
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'the vined card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the vined card turned') },
-            { step: { do: 'match', pairKey: 'a' }, says: 'the match beside it cuts the vine for a gold', expect: expectAll(realmEventIs('harvest'), goldIs(1), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'b-1 is still vined')) }
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match beside it cuts the vine for a gold and casts fire', expect: expectAll(realmEventIs('scorch'), goldIs(1), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'b-1 is still vined')) }
         ]
     },
     {
@@ -1731,7 +1760,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.element_groups'],
         tryThis: 'e-1, a fire card, is burning. Match b: the water puts the fire out and the cards around it drift.',
         build: () =>
-            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm'), tiles: (tiles) => tiles.map((t) => (t.id === 'e-1' ? { ...t, fuse: 2 } : t)) }),
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('tide', 'calm'), tiles: (tiles) => tiles.map((t) => (t.id === 'e-1' ? { ...t, fuse: 2 } : t)) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'b' },
@@ -1746,15 +1775,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-frost',
         title: 'Frost',
-        mechanic: 'A bone group is Frost: it kills every fire it reaches, and a group the pop made freezes the nearest face-down card it reaches for a turn.',
+        mechanic: 'Every Frost match douses fires and freezes a vulnerable card for one turn. A pop, combo 6 or resonance tier 2 reaches two targets.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
         tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and the frost freezes the nearest card.',
         build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm') }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the frost group freezes one card, for a turn',
-                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 1 ? null : 'not exactly one frozen card'), finishable)
+                says: 'the popped frost group freezes two cards, for a turn',
+                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 2 ? null : 'not exactly two frozen cards'), finishable)
             },
             { step: { do: 'missAny' }, says: 'a turn later the ice is gone', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
         ]
@@ -1762,15 +1791,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-grove',
         title: 'Grove',
-        mechanic: 'A moss group is Grove: a group the pop made snares the nearest face-down card it reaches in vines, until a match beside it or a fire cuts it.',
+        mechanic: 'Every Grove match snares a vulnerable card. A pop, combo 6 or resonance tier 2 reaches two targets. Strong casts grow blooming vines.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
         tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and the vines take the nearest card.',
         build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm') }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the grove group snares one card',
-                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 1 ? null : 'not exactly one vined card'), finishable)
+                says: 'the popped grove group snares two cards',
+                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 2 ? null : 'not exactly two vined cards'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]

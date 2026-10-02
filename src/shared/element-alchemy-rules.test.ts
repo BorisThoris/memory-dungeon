@@ -118,7 +118,7 @@ describe('elemental alchemy', () => {
         expect(result.events.find((event) => event.kind === 'released')?.gold).toBe(1);
     });
 
-    it('a hold spent on an immune card holds nothing', () => {
+    it('a hold checks each immune candidate and never freezes an immune card', () => {
         // Two popped bone pairs; the nearest card is a fire card, which melts the frost.
         const tiles = [
             card('a1', 'a', 'bone', { state: 'matched' }),
@@ -131,7 +131,7 @@ describe('elemental alchemy', () => {
         const log = createAlchemyLog();
         castElement({ tiles, columns: 3, groupTileIds: ['a1', 'a2', 'b1', 'b2'], realmId: null, pinned: new Set(), alchemy: log });
         expect(tiles.some((tile) => (tile.frost ?? 0) > 0)).toBe(false);
-        expect(log.neutralized).toHaveLength(1);
+        expect(log.neutralized).toEqual(['c1', 'c2']);
     });
 
     it('the current flows around water and grove cards', () => {

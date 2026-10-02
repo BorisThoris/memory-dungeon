@@ -178,7 +178,7 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
         size: stamp.size,
         tone: (event.gold ?? 0) < 0 ? 'miss' : (event.gold ?? 0) > 0 ? 'gold' : 'cyan',
         title: stamp.title,
-        sub: stamp.sub(event),
+        sub: event.ground?.detail ?? stamp.sub(event),
         color
     };
 };
@@ -212,6 +212,7 @@ export interface RealmCalloutSnapshot {
     secondary: RealmId | null;
     playing: boolean;
     event: RealmEvent | null;
+    castEvent?: RealmEvent | null;
 }
 
 /**
@@ -227,6 +228,9 @@ export const deriveRealmCallouts = (previous: RealmCalloutSnapshot, next: RealmC
     }
     if (next.event && next.event.key !== previous.event?.key) {
         callouts.push(realmEventCallout(next.event, REALMS[next.realm].color));
+    }
+    if (next.castEvent && next.castEvent.key !== previous.castEvent?.key && next.castEvent.key !== next.event?.key) {
+        callouts.push(realmEventCallout(next.castEvent, REALMS[next.realm].color));
     }
     return callouts;
 };

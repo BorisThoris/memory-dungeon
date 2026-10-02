@@ -1,6 +1,7 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { castElement } from './element-group-rules';
+import { castElementalGround, groundAnchoredTileIds, readElementalGround } from './element-ground-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -130,12 +131,12 @@ export interface RealmTurnResult {
     burnouts: number;
     vinesCut: number;
     frozen: number;
-    /** A raging realm's backlash this turn (0 or 1). */
+    /** Backlashes this turn; both realms of a confluence can answer. */
     backlashes: number;
     /** The sway after the turn, and whether it tipped the floor (0 or 1). */
     sway: RealmSway;
     tips: number;
-    /** A matched group's element cast that changed the board this turn (0 or 1). */
+    /** An elemental match casts every time (0 or 1), even without a vulnerable card. */
     casts: number;
     /** Elemental alchemy this turn: cards that drank their own element, and elements a card put out. */
     empowered: number;
@@ -483,15 +484,13 @@ export const resolveRealmTurn = ({
         return empty;
     }
     const severity: RealmSeverity = runRealmSeverity(run);
-    // Depth (`realm-carryover-rules.ts`): the deeper in the realm, the further its raging weather reaches.
-    const depth = realmAttunementLevel(run, startRealm);
-    const reach = REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(depth) : 0);
     // A Freeze-over holds the floor still: no weather, no backlash, no frostbite, no fuse burns down.
     const stillBefore = runNonNegativeInteger(run.realmStillTurns ?? 0);
-    const still = stillBefore > 0;
+    let still = stillBefore > 0;
     const level = board.level;
     const turns = runNonNegativeInteger(turnsThisFloor);
-    const pinned = new Set(pinnedTileIds);
+    let ground = readElementalGround(board);
+    const pinned = new Set([...pinnedTileIds, ...groundAnchoredTileIds(board.tiles, ground)]);
     const tiles: Tile[] = [...board.tiles];
     const indexOf = new Map(tiles.map((tile, index) => [tile.id, index]));
     const events: RealmEvent[] = [];
@@ -539,6 +538,10 @@ export const resolveRealmTurn = ({
         });
     }
 
+    // A tip uses the new arena's depth immediately, not the arena that was here before it.
+    const depth = realmAttunementLevel(run, realmId);
+    const reach = REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(depth) : 0);
+
     // 1b. Before the realm answers a miss, what the miss itself costs the elements.
     if (outcome === 'miss') {
         // A missed card sheds a stack of its element and loses its charge; the streak breaks.
@@ -574,11 +577,14 @@ export const resolveRealmTurn = ({
             streak: runElementStreak(run),
             pairsBySuit,
             matchedTiles: matched,
-            extraPerPair: castSuit && SUIT_REALM[castSuit] === realmId ? realmResonanceBonus(depth) : 0,
+            extraPerPair: castSuit && (SUIT_REALM[castSuit] === realmId || SUIT_REALM[castSuit] === secondaryId)
+                ? realmResonanceBonus(realmAttunementLevel(run, SUIT_REALM[castSuit])) : 0,
             stormDepth: realmAttunementLevel(run, 'storm')
         });
         resonance = resonanceTurn.resonance;
         scoreDelta += resonanceTurn.score;
+        // Freeze-over protects the turn that creates it too, including this cast and its fuses.
+        if (resonanceTurn.reaction?.definition.kind === 'freezeover') still = true;
         const burningMatched = sourceTiles.filter((tile) => tile.fuse != null).length;
         if (burningMatched > 0) {
             doused += 1;
@@ -630,12 +636,16 @@ export const resolveRealmTurn = ({
             events.push({ key: eventKey(run, level, turns, 'frostbite'), kind: 'frostbite', tileIds: froze });
         }
     }
-    if (outcome === 'miss' && !still && realmBacklashRuns(severity, depth) && realmId !== 'frost') {
-        const lashed = resolveRealmBacklash(realmId, tiles, board.columns, pinned, tileIds, rngFor('backlash', run, level, turns), alchemy);
-        if (lashed) {
-            backlashes += 1;
-            for (const id of lashed.tileIds) touchedThisTurn.add(id);
-            events.push({ key: eventKey(run, level, turns, lashed.kind), kind: lashed.kind, tileIds: lashed.tileIds });
+    if (outcome === 'miss' && !still) {
+        for (const answeringRealm of [realmId, secondaryId]) {
+            if (!answeringRealm || answeringRealm === 'frost' || !realmBacklashRuns(severity, realmAttunementLevel(run, answeringRealm))) continue;
+            const lashed = resolveRealmBacklash(answeringRealm, tiles, board.columns, pinned, tileIds,
+                rngFor(answeringRealm === realmId ? 'backlash' : `backlash:${answeringRealm}`, run, level, turns), alchemy);
+            if (lashed) {
+                backlashes += 1;
+                for (const id of lashed.tileIds) touchedThisTurn.add(id);
+                events.push({ key: eventKey(run, level, turns, lashed.kind), kind: lashed.kind, tileIds: lashed.tileIds });
+            }
         }
     }
 
@@ -643,11 +653,28 @@ export const resolveRealmTurn = ({
     if (outcome === 'match' && groupTileIds.length > 0) {
         const castSuit = (Object.keys(pairsBySuit) as TileSuit[])[0];
         const tier = castSuit ? resonanceTier(resonanceOf(resonance, castSuit)) : 0;
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, pinned, alchemy, tier, still });
-        if (cast && cast.touchedTileIds.length > 0) {
+        const field = castSuit ? castElementalGround({
+            tiles, columns: board.columns, ground, groupTileIds, suit: castSuit,
+            realmId, secondaryId, alchemy
+        }) : null;
+        if (field) {
+            ground = field.ground;
+            goldDelta += field.gold;
+            litTileIds.push(...field.litTileIds);
+            for (const id of field.touchedTileIds) touchedThisTurn.add(id);
+            pinned.clear();
+            for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
+        }
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, secondaryId, pinned, alchemy, tier, still,
+            combo: run.stats.currentStreak, quenchFire: field?.quenchFire });
+        if (cast) {
             casts += 1;
             for (const id of cast.touchedTileIds) touchedThisTurn.add(id);
-            events.push({ key: eventKey(run, level, turns, cast.kind), kind: cast.kind, tileIds: [...cast.groupTileIds, ...cast.touchedTileIds] });
+            events.push({
+                key: eventKey(run, level, turns, cast.kind), kind: cast.kind,
+                tileIds: [...new Set([...cast.groupTileIds, ...cast.touchedTileIds, ...(field?.touchedTileIds ?? [])])],
+                ...(field ? { ground: { cells: field.cells, reaction: field.reaction, detail: `${cast.summary} · ${field.detail}` }, gold: field.gold } : {})
+            });
         }
     }
 
@@ -734,6 +761,7 @@ export const resolveRealmTurn = ({
     if (!still && isRealmWeatherTurn(realmId, severity, turns)) {
         const count = runNonNegativeInteger(run.realmWeatherThisFloor ?? 0);
         const weatherRealm: RealmId = secondaryId && count % 2 === 1 ? secondaryId : realmId;
+        const weatherReach = REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(realmAttunementLevel(run, weatherRealm)) : 0);
         const peak = isRealmPeak(count);
         const rng = rngFor(weatherRealm, run, level, turns);
         let touched: string[] = [];
@@ -756,7 +784,7 @@ export const resolveRealmTurn = ({
                 break;
             }
             case 'ember':
-                touched = wildfire(tiles, rng, reach, alchemy);
+                touched = wildfire(tiles, rng, weatherReach, alchemy);
                 if (peak) {
                     touched = [...touched, ...spreadEveryFire(tiles, board, rng, alchemy)];
                     kind = 'firestorm';
@@ -779,13 +807,13 @@ export const resolveRealmTurn = ({
                     touched = thunderclap(tiles, board);
                     kind = 'thunderclap';
                 } else {
-                    touched = lightning(tiles, pinned, rng, reach);
+                    touched = lightning(tiles, pinned, rng, weatherReach);
                     kind = 'lightning';
                 }
                 litTileIds = [...litTileIds, ...touched];
                 break;
             case 'grove':
-                touched = overgrowth(tiles, board, pinned, rng, reach, alchemy);
+                touched = overgrowth(tiles, board, pinned, rng, weatherReach, alchemy);
                 kind = 'overgrowth';
                 if (peak) {
                     tiles.forEach((tile, index) => {
@@ -819,7 +847,8 @@ export const resolveRealmTurn = ({
 
     const changed = tiles.some((tile, index) => tile !== board.tiles[index]);
     return {
-        board: changed ? { ...board, tiles } : board,
+        board: changed || ground.some((cell, index) => cell !== (board.elementalGround?.[index] ?? null))
+            ? { ...board, tiles, elementalGround: ground } : board,
         realmId,
         goldDelta,
         litTileIds: [...new Set(litTileIds)],
@@ -894,6 +923,7 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
             : {}),
         // The most telling event of the turn is the one the HUD names: a reaction over everything,
         // and the weather over the alchemy it met (the cards wear what they drank).
+        lastElementCastEvent: result.events.find((event) => event.ground) ?? run.lastElementCastEvent ?? null,
         lastRealmEvent:
             result.events.find((event) => event.kind === 'reaction') ??
             result.events.find((event) => ELEMENT_REACTION_EVENT_KINDS.has(event.kind)) ??

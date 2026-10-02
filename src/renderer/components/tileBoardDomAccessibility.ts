@@ -24,6 +24,8 @@ import {
 } from './tileBoardReadability';
 import { isTilePickable } from './tileBoardPick';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
+import { ELEMENT_GROUND_RULES, readElementalGround } from '../../shared/element-ground-rules';
+import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 
 const EMPTY_ROUTE_SETUP_TARGETS: ReadonlySet<string> = new Set();
 
@@ -232,7 +234,9 @@ export const getTileAriaLabel = (
         selectedFollowupTileIds: routeSetupContext.selectedFollowupTileIds,
         targetTileIds: routeSetupContext.targetTileIds
     });
-    return `${base}${suitNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
+    const ground = readElementalGround(board)[(row - 1) * board.columns + column - 1];
+    const groundNote = ground ? ` ${ELEMENT_NAMES[ground]} ground. ${ELEMENT_GROUND_RULES[ground]}` : '';
+    return `${base}${suitNote}${groundNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
 };
 
 export const getPowerTargetAriaText = (

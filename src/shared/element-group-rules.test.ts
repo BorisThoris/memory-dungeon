@@ -35,7 +35,8 @@ describe('elemental groups', () => {
         expect(at(tiles, 'c-2').vined).toBeUndefined();
         expect(at(tiles, 'd-2').frost).toBeUndefined();
         // The fire cards beside the match drink the cast (`chargeKin`): a charge each.
-        expect(cast.touchedTileIds.sort()).toEqual(['c-2', 'd-2', 'e-1', 'e-2']);
+        expect(cast.touchedTileIds.sort()).toEqual(['c-1', 'c-2', 'd-2', 'e-1', 'e-2']);
+        expect(at(tiles, 'c-1').fuse).toBe(3);
         expect(at(tiles, 'e-1').empowered).toBe(1);
     });
 
@@ -50,7 +51,7 @@ describe('elemental groups', () => {
         expect(tiles[0]!.id).toBe('a-1');
     });
 
-    it('Frost kills fire; only a popped group freezes, one card', () => {
+    it('Frost kills fire and freezes one card; a popped group freezes two', () => {
         let tiles = matched(board(ROWS), 'd');
         tiles = tiles.map((tile) => (tile.id === 'c-1' ? { ...tile, fuse: 2 } : tile));
         const single = castElement({ tiles, columns: 4, groupTileIds: ['d-1', 'd-2'], realmId: 'ember', pinned: new Set() })!;
@@ -62,7 +63,7 @@ describe('elemental groups', () => {
         expect(group.filter((tile) => (tile.frost ?? 0) > 0)).toHaveLength(ELEMENT_HOLD_CAP_GROUP);
     });
 
-    it('Grove: only a popped group snares, one card', () => {
+    it('Grove snares one card on every match and two on a popped group', () => {
         const single = matched(board(ROWS), 'c');
         expect(castElement({ tiles: single, columns: 4, groupTileIds: ['c-1', 'c-2'], realmId: 'tide', pinned: new Set() })!.kind).toBe('entangle');
         expect(single.filter((tile) => tile.vined)).toHaveLength(ELEMENT_HOLD_CAP);

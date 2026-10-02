@@ -13,8 +13,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 51;
+/** Bump when generation or player-visible gameplay rules change. 52: every-match casts and ground. */
+export const GAME_RULES_VERSION = 52;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -95,6 +95,8 @@ export interface RealmDoor {
 /** The last thing a realm did to the board, for the HUD to name. Keyed so it is said once. */
 export interface RealmEvent {
     key: string;
+    /** The local ground left by a cast, also used by its visible and spoken feedback. */
+    ground?: { cells: number; reaction: string | null; detail: string };
     kind:
         | 'blizzard'
         | 'frostbite'
@@ -423,6 +425,8 @@ export interface BoardState {
     columns: number;
     rows: number;
     tiles: Tile[];
+    /** Cell-bound elemental ground: stays in place when cards move, lasts until overwritten. */
+    elementalGround?: (TileSuit | null)[];
     flippedTileIds: string[];
     matchedPairs: number;
     /** GP-O02: optional pair key that grants a bonus if matched last among real pairs. */
@@ -890,6 +894,8 @@ export interface RunState {
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */
     lastRealmEvent?: RealmEvent | null;
+    /** Kept separately so simultaneous weather cannot hide the player's cast feedback. */
+    lastElementCastEvent?: RealmEvent | null;
     /** Storm: the cards lightning left lit; they show their faces until the next flip, like the lantern's. */
     realmLitTileIds?: string[];
 }

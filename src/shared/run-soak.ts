@@ -485,6 +485,10 @@ export const soakRun = ({
             if ((run as RunState).status === 'memorize') act('study', finishMemorizePhase(run));
             continue;
         }
+        if (run.status === 'resolving') {
+            act('resolve', resolveBoardTurn(run));
+            continue;
+        }
         if (run.status !== 'playing') {
             act('study', finishMemorizePhase(run));
             continue;

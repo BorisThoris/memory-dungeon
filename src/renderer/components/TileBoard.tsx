@@ -3294,7 +3294,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} />
                         ) : null}
                         <TileBoardErrorBoundary fallback={sceneErrorFallback}>
-                            <div className={styles.scene} data-testid="tile-board-stage">
+                            <div className={styles.scene} data-testid="tile-board-stage"
+                                data-element-ground={(board.elementalGround ?? []).map((cell) => cell ?? '-').join(',')}
+                                data-element-ground-cells={(board.elementalGround ?? []).filter(Boolean).length}>
                                 <Canvas
                                     aria-hidden
                                     className={styles.canvas}

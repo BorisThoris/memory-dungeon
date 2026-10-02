@@ -829,7 +829,7 @@ describe('useAppStore timers', () => {
                 pairGroups.set(tile.pairKey, ids);
             }
 
-            // A matched group casts its element (`element-group-rules.ts`): a popped Frost or Grove group can
+            // Every matched pair casts its element (`element-group-rules.ts`): Frost or Grove can
             // hold a card, so take the next pair whose two halves can both be turned, not a fixed order.
             for (let guard = 0; guard < 64 && useAppStore.getState().run?.status === 'playing'; guard += 1) {
                 const tiles = useAppStore.getState().run!.board!.tiles;
@@ -867,7 +867,9 @@ describe('useAppStore timers', () => {
         // to Fever, so a perfect floor two lands the first Fever and clears at it - Extreme Fever.
         // This case is about clear/continue/end and what gets persisted, so it asserts the
         // unlocks rather than pretending the chain still resets.
-        expect(state.newlyUnlockedAchievements).toEqual(['ACH_FIRST_FEVER', 'ACH_EXTREME_FEVER']);
+        expect(state.newlyUnlockedAchievements).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_EXTREME_FEVER']));
+        // The seeded layout can also unlock Chain Reaction; every reported unlock must persist.
+        for (const id of state.newlyUnlockedAchievements) expect(state.saveData.achievements[id]).toBe(true);
         expect(state.run?.stats.highestLevel).toBe(2);
         expect(state.run?.stats.levelsCleared).toBe(2);
         expect(state.run?.achievementsEnabled).toBe(true);
