@@ -13,7 +13,8 @@ describe('the elemental cast guide', () => {
         expect(guide).toHaveTextContent('Every elemental pair casts');
         expect(guide).toHaveTextContent('Fire · 2 targets · +0 reach');
         expect(guide).toHaveTextContent('The arena is wet');
-        expect(guide).toHaveTextContent('The last playable pair is always freed');
+        expect(guide).toHaveTextContent('Arena locks cover at least two complete pairs, with another pair free');
+        expect(guide).toHaveTextContent('Ordinary casts keep cards playable');
         expect(guide).toHaveAttribute('popover', 'auto');
     });
 

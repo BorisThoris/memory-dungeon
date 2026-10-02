@@ -52,9 +52,10 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         expect(result.impact?.contacts.length).toBeGreaterThan(0);
         expect(result.impact?.contacts.every(contact => result.tiles[contact.cell]?.id === contact.tileId)).toBe(true);
         expect(result.ground?.filter(Boolean).length).toBeGreaterThan(0);
+        expect(Number(await page.getByTestId('tile-board-stage').locator('canvas').getAttribute('data-particle-cast-bursts'))).toBe(0);
         if (suit === 'ember') expect(result.tiles.some((tile) => tile.fuse === 3)).toBe(true);
-        if (suit === 'bone') expect(result.tiles.some((tile) => tile.frost === 1)).toBe(true);
-        if (suit === 'moss') expect(result.tiles.some((tile) => tile.vined)).toBe(true);
+        if (suit === 'bone') expect(result.tiles.some((tile) => tile.rime === true)).toBe(true);
+        if (suit === 'moss') expect(result.tiles.some((tile) => tile.seeded)).toBe(true);
         if (suit === 'tide') expect(result.tiles.some((tile, index) => tile.id !== beforeIds[index])).toBe(true);
         await page.screenshot({ path: testInfo.outputPath(`${suit}-ground.png`) });
         await page.getByTestId('element-cast-guide').click();

@@ -263,6 +263,18 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (!run.board || run.status !== 'playing' || run.board.flippedTileIds.length > 0) return null;
         return boardHasTurnablePair(run.board.tiles) ? null : 'no pair left that can be turned';
     },
+    'arena holds cover complete cohorts of at least two pairs': (_b, run) => {
+        if (!run.board || run.status === 'resolving' || run.board.flippedTileIds.length) return null;
+        for (const kind of ['frost', 'vined'] as const) {
+            const held = run.board.tiles.filter(t => t.state === 'hidden' && t[kind]);
+            if (!held.length) continue;
+            const keys = new Set(held.map(t => t.pairKey));
+            if (keys.size < 2) return kind + ' exposed a single pair';
+            for (const key of keys) if (held.filter(t => t.pairKey === key).length !== 2) return kind + ' split pair ' + key;
+            if (kind === 'frost' && new Set(held.map(t => t.frost)).size !== 1) return 'ice expiry identifies partners';
+        }
+        return null;
+    },
     'a frozen or vined card is never turned face up': (before, run, action) => {
         if (!before?.board || !run.board || (action !== 'flip' && action !== 'zone-flip')) return null;
         const turned = run.board.tiles.filter((tile) => tile.state === 'flipped' && before.board!.tiles.find((was) => was.id === tile.id)?.state === 'hidden');
@@ -304,7 +316,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (action !== 'descend' || !before?.realmChill || !run.board) return null;
         const frozen = run.board.tiles.filter((tile) => (tile.frost ?? 0) > 0).length;
         if (run.realmChill) return `chill ${run.realmChill} still carried`;
-        return frozen >= Math.min(before.realmChill, 1) ? null : `${frozen} frozen against a chill of ${before.realmChill}`;
+        return frozen === 0 || frozen >= 4 ? null : `${frozen} frozen against a chill of ${before.realmChill}`;
     },
     /*
      * Elemental alchemy (`element-alchemy-rules.ts`): a card is untouched by its own element and by

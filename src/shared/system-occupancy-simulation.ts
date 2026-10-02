@@ -175,7 +175,9 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     // the floor curios (three grant a peek charge; 0.904 across a run) until 2026-09-29, when the
     // whole chain ladder began crossing floors: a floor opened at Fever is over before its peek
     // gets a turn, and it reads 0.871. Common, then - a tool spent on most floors, not every one.
-    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },
+    // Rules 54 measured 0.908 of run floors after the deal reseed: core again under the unchanged
+    // 0.9 threshold. This classifies observed tool use; it does not alter charge grants or the player.
+    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled', scope: 'run' },
     // Was `core` on the floor census's 1.000. A run starts with one shuffle charge and one curio
     // grants another, so it lands on 0.196 of a run's floors: a tool you keep for when you need it.
     { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },

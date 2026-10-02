@@ -50,7 +50,7 @@ export const realmCarryoverLines = (
         lines.push(`Smoke follows you: the next study is ${Math.round(result.realmSmoke * SMOKE_STUDY_CUT_PER_BURNOUT * 100)}% shorter`);
     }
     if (result.realmChill) {
-        lines.push(`The cold comes with you: ${result.realmChill} cards start the next floor frozen`);
+        lines.push('The cold comes with you: at least two complete pairs start frozen if another pair can stay free');
     }
     return lines;
 };

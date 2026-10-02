@@ -1059,7 +1059,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'After a match the floor marks one card of a face-down pair; match that pair for an extra chain link. Two matches without it and it moves on.',
         graphMechanicIds: ['board.n_back_anchor', 'board.chain_chunk_fever'],
         tryThis: 'Match any pair: one face-down card is marked. Find its partner and match them for two links instead of one.',
-        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t', 'g:m h:b g:m h:b'], { mutators: ['n_back_anchor'], run: { runSeed: 90_211 } }),
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t', 'g:m h:b g:m h:b', 'i:e j:t k:m l:b', 'i:e j:t k:m l:b'], { mutators: ['n_back_anchor'], run: { runSeed: 90_211 } }),
         script: [
             {
                 step: { do: 'matchOther' },
@@ -1340,14 +1340,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-frostbite',
         title: 'Frostbite',
-        mechanic: 'In the Frozen Reach a miss freezes both cards it showed for two turns: they cannot be turned until the ice goes.',
+        mechanic: 'In the Frozen Reach a miss can freeze at least two complete pairs together, with another pair free. New ice joins the current expiry.',
         graphMechanicIds: ['board.realm_weather'],
         tryThis: 'Miss a against b, then try to turn a: it is frozen. Two more turns and the ice is gone.',
         build: () => room(['a:m b:t c:t d:m', 'e:e f:b a:m b:t', 'c:t d:m e:e f:b'], { misses: 4, run: realmRun('frost', 'calm') }),
         script: [
-            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'both cards freeze for two turns', expect: expectAll(frostIs('a-1', 2), frostIs('b-1', 2), realmEventIs('frostbite'), (r) => (r.realmFrozenThisFloor === 2 ? null : `frozen ${r.realmFrozenThisFloor}`)) },
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'both cards freeze for two turns', expect: expectAll(frostIs('a-1', 2), frostIs('b-1', 2), realmEventIs('frostbite'), (r) => (r.realmFrozenThisFloor === 4 ? null : `frozen ${r.realmFrozenThisFloor}`)) },
             { step: { do: 'flip', tileId: 'a-1' }, says: 'a frozen card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the frozen card turned') },
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a turn later the ice is thinner', expect: expectAll(frostIs('a-1', 1), frostIs('c-1', 2)) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a turn later the ice is thinner', expect: expectAll(frostIs('a-1', 1), frostIs('c-1', 1)) },
             { step: { do: 'miss', a: 'e-1', b: 'f-1' }, says: 'and then it is gone', expect: expectAll(frostIs('a-1', undefined), frostIs('b-1', undefined)) }
         ]
     },
@@ -1360,7 +1360,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(EIGHT_PAIRS, { level: 6, misses: 5, run: realmRun('frost', 'raging') }),
         script: [
             { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'turn one, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn one') },
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'turn two, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn two') },
+            { step: { do: 'missAny' }, says: 'turn two, no weather', expect: (r) => (r.realmWeatherThisFloor === 0 ? null : 'weather on turn two') },
             {
                 step: { do: 'miss', a: 'e-1', b: 'f-1' },
                 says: 'turn three: a row slides and its backs are snowed over',
@@ -1468,16 +1468,16 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-overgrowth',
         title: 'Overgrowth',
-        mechanic: 'Every second turn on a raging Overgrown Crypt vines creep over two face-down cards, next to vines already there when they can.',
+        mechanic: 'Every second turn on a raging Overgrown Crypt vines spread into whole-pair cohorts: at least two complete pairs, with another pair free.',
         graphMechanicIds: ['board.realm_weather', 'safety.softlock_fairness'],
-        tryThis: 'One turn into a raging floor, match d: vines take two cards; the floor always keeps a pair you can turn.',
+        tryThis: 'One turn into a raging floor, match d: vines hold two complete pairs; the floor always keeps a pair you can turn.',
         build: () => room(['a:e b:t c:t d:e', 'e:e f:t a:e b:t', 'c:t d:e e:e f:t'], { misses: 4, run: realmRun('grove', 'raging', { turnsThisFloor: 1 }) }),
         script: [
             {
                 // A lone bone pair with nothing to pop holds nothing, so the vines are all the weather's.
                 step: { do: 'match', pairKey: 'd' },
-                says: 'turn two: vines take two cards, and the floor can still be finished',
-                expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 2 ? null : 'not two cards vined'), finishable)
+                says: 'turn two: vines hold two complete pairs, and the floor can still be finished',
+                expect: expectAll(realmEventIs('overgrowth'), (r) => ((r.board?.tiles ?? []).filter((t) => t.vined).length === 4 ? null : 'not two complete pairs vined'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor clears around the vines', expect: statusIs('levelComplete') }
         ]
@@ -1549,13 +1549,13 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Card b is vined. Take a turn and the vines bloom; then match a beside it for three gold.',
         build: () =>
-            room(['a:e b:t c:e d:t', 'a:e e:t f:e c:e', 'b:t d:t e:t f:e'], {
+            room(['a:m b:t c:e d:t', 'a:m e:t f:e c:e', 'b:t d:t e:t f:e'], {
                 misses: 3,
                 run: realmRun('grove', 'raging', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
-                tiles: (tiles) => tiles.map((t) => (t.id === 'b-1' ? { ...t, vined: true } : t))
+                tiles: (tiles) => tiles.map((t) => (['b', 'e'].includes(t.pairKey) ? { ...t, vined: true } : t))
             }),
         script: [
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'the peak: the vines bloom', expect: expectAll(realmEventIs('bloom'), (r) => (tileById(r, 'b-1')?.bloom === true ? null : 'b-1 did not bloom')) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'the peak: the vines bloom', expect: (r) => (tileById(r, 'b-1')?.bloom === true && (r.realmPeaksThisFloor ?? 0) > 0 ? null : 'the peak did not bloom the cohort') },
             { step: { do: 'match', pairKey: 'a' }, says: 'the bloom beside the match is cut for three gold', expect: expectAll((r) => ((r.realmVinesCutThisFloor ?? 0) >= 1 ? null : 'nothing cut'), (r) => (runGold(r) >= 3 ? null : `gold ${runGold(r)}`), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'still vined')) }
         ]
     },
@@ -1614,18 +1614,18 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'realm-chill',
         title: 'The chill',
-        mechanic: 'A floor that froze four cards or more sends the cold on: the next floor opens with two cards already frozen.',
+        mechanic: 'A floor that froze four cards or more sends the cold on: the next floor holds two complete pairs when another pair can stay playable.',
         graphMechanicIds: ['board.realm_weather', 'progression.run_flow'],
-        tryThis: 'Four cards froze on this floor. Clear it and descend: two cards on the next board start frozen.',
+        tryThis: 'Four cards froze on this floor. Clear it and descend: two complete pairs on the next board start frozen.',
         build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm', { realmFrozenThisFloor: 4 }) }),
         script: [
             { step: { do: 'clear' }, says: 'the clear sends the cold on', expect: (r) => (r.realmChill === 2 ? null : `chill ${r.realmChill}`) },
             {
                 step: { do: 'advance' },
-                says: 'two cards of the next floor start frozen, and the chill is spent',
+                says: 'two complete pairs of the next floor start frozen, and the chill is spent',
                 expect: (r) => {
                     const frozen = (r.board?.tiles ?? []).filter((t) => (t.frost ?? 0) > 0).length;
-                    return frozen === 2 && !r.realmChill ? null : `${frozen} frozen, chill ${r.realmChill}`;
+                    return frozen === 4 && !r.realmChill ? null : `${frozen} frozen, chill ${r.realmChill}`;
                 }
             }
         ]
@@ -1776,15 +1776,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-frost',
         title: 'Frost',
-        mechanic: 'Every Frost match douses fires and freezes two vulnerable cards for one turn. Combo, resonance, pops and multiplier add targets, up to six.',
+        mechanic: 'Every Frost match douses fires and adds protective, playable rime to two vulnerable cards. Combo, resonance, pops and multiplier add targets, up to six.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
-        tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and the frost freezes the nearest card.',
+        tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and rime anchors nearby cards without locking them.',
         build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm') }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the popped frost group freezes two cards, for a turn',
-                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 2 ? null : 'not exactly two frozen cards'), finishable)
+                says: 'the frost group coats two playable cards in rime',
+                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.rime).length === 2 ? null : 'not exactly two rimed cards'), finishable)
             },
             { step: { do: 'missAny' }, says: 'a turn later the ice is gone', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
         ]
@@ -1792,15 +1792,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-grove',
         title: 'Grove',
-        mechanic: 'Every Grove match snares two vulnerable cards. Combo, resonance, pops and multiplier add targets, up to six. Strong casts grow blooming vines.',
+        mechanic: 'Every Grove match plants gold-bearing seeds on two playable cards. Combo, resonance, pops and multiplier add targets, up to six. Strong casts grow 2-gold blooms.',
         graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
-        tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and the vines take the nearest card.',
+        tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and seeds appear on nearby playable cards.',
         build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm') }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the popped grove group snares three cards',
-                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 3 ? null : 'not exactly three vined cards'), finishable)
+                says: 'the popped grove group seeds three cards',
+                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.seeded).length === 3 ? null : 'not exactly three seeded cards'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
@@ -1808,17 +1808,17 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-blocks',
         title: 'Overgrowth: blocks answer a cast',
-        mechanic: 'A high-combo Grove cast binds six vulnerable cards in connected blocks. Frost blocks neutralize it, Grove blocks combine with it, and a playable pair stays free.',
+        mechanic: 'A high-combo Grove cast plants six blooms in connected blocks. Frost blocks neutralize it, Grove blocks absorb charges, and every coated card stays playable.',
         graphMechanicIds: ['board.element_groups', 'board.element_alchemy', 'safety.softlock_fairness'],
-        tryThis: 'Match the two Grove cards at the top left. Follow the beams: Fire and Water become entangled, Frost shields neutralize the cast, and the far Grove pair absorbs a charge.',
+        tryThis: 'Match the two Grove cards at the top left. Follow the leaf bursts: Fire and Water grow blooms, Frost neutralizes the cast, and the far Grove pair absorbs a charge.',
         build: () => room(['a:m a:m b:e b:e c:e c:e', 'd:t d:t e:t e:t f:b f:b', 'g:e g:e h:b h:b i:m i:m', 'k:b k:b l:e l:e j:m j:m'], {
             streak: 12, run: realmRun('storm', 'calm', { chunkPairsThisChain: 3 })
         }),
         script: [{
-            step: { do: 'match', pairKey: 'a' }, says: 'six vines, counter shields and kin charges are recorded as distinct contacts',
+            step: { do: 'match', pairKey: 'a' }, says: 'six blooms, counters and kin charges are recorded as distinct contacts',
             expect: expectAll((r) => {
                 const impact = r.board?.elementCast;
-                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.vined).length === 6 ? null : 'missing amplified block responses';
+                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.seeded === 2).length === 6 ? null : 'missing amplified block responses';
             }, finishable)
         }, { step: { do: 'clear' }, says: 'the amplified floor still clears', expect: statusIs('levelComplete') }]
     },
@@ -2027,6 +2027,7 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'matchOther': {
             const other = (run.board?.tiles ?? []).find(
                 (t) => t.state === 'hidden' && t.pairKey !== run.nBackAnchorPairKey && halvesOf(run, t.pairKey).length === 2
+                    && (!run.nBackAnchorPairKey || t.suit !== run.board?.tiles.find(a => a.pairKey === run.nBackAnchorPairKey)?.suit)
             );
             return other ? playTestHallStep(run, { do: 'match', pairKey: other.pairKey }) : null;
         }

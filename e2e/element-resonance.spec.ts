@@ -77,6 +77,20 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await expect.poll(() => runField<{ kind: string } | null>(page, 'lastRealmEvent').then((event) => event?.kind)).toBe('steam');
     await expect(page.getByTestId('hud-resonance-tide')).toHaveAttribute('data-in-hand', 'true');
     await page.screenshot({ path: 'output/playwright/element-steam.png' });
+    await gotoWithSaveAndQuery(page, JSON.stringify(save), 'hallRoom=element-blocks');
+    await expect(canvas(page)).toBeVisible({ timeout: 150_000 });
+    await pick(page, 'a-1'); await pick(page, 'a-2');
+    await expect.poll(() => count(page, 'cast-bursts')).toBeGreaterThan(0);
+    expect(await count(page, 'cast-bursts')).toBeLessThanOrEqual(19);
+    await page.screenshot({ path: 'output/playwright/quiet-cast-desktop.png' });
+    const impact = await page.evaluate(async () => {
+        const run = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
+        return { contacts: run.board!.elementCast!.contacts, blooms: run.board!.tiles.filter(t => t.seeded === 2).length,
+            locks: run.board!.tiles.filter(t => t.vined || t.frost).length };
+    });
+    expect(impact.blooms).toBe(6);
+    expect(impact.locks).toBe(0);
+    expect(new Set(impact.contacts.map(c => c.outcome)).size).toBe(3);
     expect(errors).toEqual([]);
 });
 
@@ -90,5 +104,10 @@ test.describe('on a phone', () => {
         await expect(page.getByTestId('hud-resonance')).toBeVisible({ timeout: 150_000 });
         await expect(page.getByTestId('hud-resonance-tide')).toContainText('6');
         await page.screenshot({ path: 'output/playwright/element-strip-phone.png' });
+        await gotoWithSaveAndQuery(page, JSON.stringify(save), 'hallRoom=element-blocks');
+        await expect(canvas(page)).toBeVisible({ timeout: 150_000 });
+        await pick(page, 'a-1'); await pick(page, 'a-2');
+        await expect.poll(() => count(page, 'cast-bursts')).toBeGreaterThan(0);
+        await page.screenshot({ path: 'output/playwright/quiet-cast-phone.png' });
     });
 });

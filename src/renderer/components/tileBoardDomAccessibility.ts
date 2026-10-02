@@ -236,7 +236,9 @@ export const getTileAriaLabel = (
     });
     const ground = readElementalGround(board)[(row - 1) * board.columns + column - 1];
     const groundNote = ground ? ` ${ELEMENT_NAMES[ground]} ground. ${ELEMENT_GROUND_RULES[ground]}` : '';
-    return `${base}${suitNote}${groundNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
+    const coatingNote = tile.rime ? ' Rime: playable, anchored against currents and protected from arena holds. Match to calm the next turn.'
+        : tile.seeded ? ` ${tile.seeded >= 2 ? 'Bloom' : 'Seed'}: playable. Match for ${Math.min(2, tile.seeded)} gold.` : '';
+    return `${base}${suitNote}${groundNote}${coatingNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
 };
 
 export const getPowerTargetAriaText = (

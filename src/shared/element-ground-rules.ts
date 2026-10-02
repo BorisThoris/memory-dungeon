@@ -33,7 +33,7 @@ export const readElementalGround = (board: Pick<BoardState, 'tiles' | 'elemental
     });
 
 export const groundAnchoredTileIds = (tiles: readonly Tile[], ground: readonly (TileSuit | null)[]): string[] =>
-    tiles.filter((tile, index) => tile.state === 'hidden' && ground[index] === 'bone').map((tile) => tile.id);
+    tiles.filter((tile, index) => tile.state === 'hidden' && (ground[index] === 'bone' || tile.rime)).map((tile) => tile.id);
 
 export interface GroundCastResult {
     ground: (TileSuit | null)[];

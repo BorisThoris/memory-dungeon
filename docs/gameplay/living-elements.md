@@ -1,3 +1,5 @@
+Current rules 54 supersede the cast holds and large overlay described below. See [Elemental agency review](element-agency-review.md) for playable coatings, paired arena holds and pooled particles.
+
 # Living elements: system review and cast contract
 
 ## Problem

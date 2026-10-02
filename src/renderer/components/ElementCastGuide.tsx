@@ -23,7 +23,7 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
             <span>Every elemental pair casts. No pop or random roll required.</span>
             <span>Base reach: 2 steps, or 3 in the element’s own arena.</span>
             <span>Spells spread through touching elemental blocks. Fire, Frost and Grove start with 2 targets; every 6 combo, 2 resonance tiers, extra popped pair, and multiplier doubling adds one, up to 6. Your current multiplier is ×{multiplier}.</span>
-            <span>Every 3 combo and every resonance tier adds one step of reach. One playable pair is kept free.</span>
+            <span>Every 3 combo and every resonance tier adds one step of reach. Ordinary casts keep cards playable.</span>
             <span>Water starts at 6 carried cards, plus 2 per added step of reach or target strength.</span>
             {TILE_SUITS.map((suit) => {
                 const power = elementCastPower(combo, resonanceTier(resonanceOf(resonance, suit)), 1, multiplier);
@@ -35,7 +35,7 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
             {run.realmId ? <span className={styles.arena}>{ARENA_GROUND_RULES[run.realmId]}</span> : null}
             {run.realmSecondaryId ? <span>{ARENA_GROUND_RULES[run.realmSecondaryId]}</span> : null}
             <span>Ground stays after cards leave. Match on roots for +1 gold. Ice anchors against elemental movement. Overlapping elements react locally; two consecutive matches also prime your stronger streak reaction.</span>
-            <span>Cards drink their own element and resist their counter. Casts seek vulnerable targets. If none remain, the ground still changes. The last playable pair is always freed.</span>
+            <span>Cards drink their own element and resist their counter. Casts seek vulnerable targets. If none remain, the ground still changes. Arena locks cover at least two complete pairs, with another pair free. Breaking a cohort frees it.</span>
             <button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back to the board</button>
         </span>
     </>;

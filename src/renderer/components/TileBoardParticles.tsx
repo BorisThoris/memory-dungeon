@@ -9,6 +9,7 @@ import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
 import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
+import { collectElementCastParticles } from './elementCastParticles';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
 import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, REALM_MOTE_SIZE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMote, type RealmMote } from './realmParticles';
@@ -50,6 +51,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const nextElementTick = useRef(0);
     const elementTick = useRef(0);
     const elementBursts = useRef(0);
+    const castBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useLayoutEffect(() => {
         system.configure(graphicsQuality);
@@ -101,10 +103,14 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 time: time.current, delay: MATCH_CONTACT_SECONDS, seed: transform.seed,
                 reduceMotion, quality: graphicsQuality, energy }) > 0) totals.current.ripple += 1;
         }
+        for (const cue of collectElementCastParticles(previous.current, board, graphicsQuality, compact, reduceMotion, time.current)) {
+            if (system.emit(cue) > 0) castBursts.current += 1;
+        }
         previous.current = board;
         const canvas = gl.domElement;
         canvas.setAttribute('data-particle-budget', String(boardParticleBudget(graphicsQuality)));
         canvas.setAttribute('data-particle-combo', String(Math.max(0, Math.floor(combo))));
+        canvas.setAttribute('data-particle-cast-bursts', String(castBursts.current));
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
@@ -163,7 +169,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         const pulse = useRealmEventPulse.getState().event;
         if (pulse && pulse.key !== realmEventKey.current) {
             realmEventKey.current = pulse.key;
-            if (!reduceMotion && playingNow) {
+            if (!reduceMotion && playingNow && pulse.key !== board.elementCast?.key) {
                 const mote = REALM_EVENT_MOTE[pulse.family];
                 const bursts = graphicsQuality === 'low' ? 1 : graphicsQuality === 'medium' ? 2 : 3;
                 for (const tileId of pulse.tileIds) {

@@ -20,16 +20,16 @@ import { chargeKin, createAlchemyLog, elementAlchemy, elementLands, elementWould
  * - **Fire** scorches: vines burn off, ice melts, snow is gone. It pays nothing (a harvest pays
  *   because the player's match cut the vine; a fire is the element doing it).
  * - **Water** washes: fires are put out, and the cards it reaches drift one place along.
- * - **Frost** freezes: a fire it reaches dies, and every match freezes a vulnerable card for a turn.
- * - **Grove** entangles: every match holds a vulnerable card in vines; stronger casts bloom.
+ * - **Frost** coats playable cards in rime: they resist movement and arena holds; matching banks a calm turn.
+ * - **Grove** seeds playable cards: matching harvests gold; Water nurtures seeds and Fire burns them away.
  *
  * Reach is counted in steps from every card of the group, so a bigger pop reaches further by having
  * more cards: two steps, three when the floor is in the element's own realm. Every match already
  * thaws and cuts what is right beside it (`realm-weather-rules.ts` step 2), so an element starts
  * where that ends. Every match acts on two targets at base strength, scaling to six with combo,
  * resonance, popped pairs and multiplier. Touching same-element blocks receive the spell together.
- * Every three combo and every resonance tier adds reach. Holds preserve a playable pair before
- * placement, so the final guard does not erase the whole cast. Water never moves a pinned card.
+ * Every three combo and every resonance tier adds reach. Ordinary casts never block flipping.
+ * Water never moves a pinned card. Only arena hazards create paired holds.
  *
  * Every card the cast would act on answers first (`element-alchemy-rules.ts`): a card of the
  * cast's own element drinks it and is empowered, a card of the element that puts it out is left
@@ -37,7 +37,7 @@ import { chargeKin, createAlchemyLog, elementAlchemy, elementLands, elementWould
  *
  * Since 2026-10-02 the cast grows with the element's resonance (`element-resonance-rules.ts`): a
  * step of reach and two more cards washed for every tier, and it charges every card of its own
- * element a step short of its reach (`ELEMENT_KIN_REACH_SHORT`), acted on or not. While the floor holds still (a Freeze-over) it holds nothing.
+ * element a step short of its reach (`ELEMENT_KIN_REACH_SHORT`), acted on or not. Freeze-over suppresses ignition, not beneficial coatings.
  */
 
 export type ElementCastKind = Extract<RealmEvent['kind'], 'scorch' | 'wash' | 'freeze' | 'entangle'>;
@@ -57,7 +57,6 @@ export const ELEMENT_WASH_CAP = 6;
 export const ELEMENT_WASH_PER_TIER = 2;
 /** How far short of the cast's reach it charges its own kind. */
 export const ELEMENT_KIN_REACH_SHORT = 1;
-export const ELEMENT_FREEZE_TURNS = 1;
 
 /** The same readable thresholds for every cast. Targets cap for fairness; reach keeps growing. */
 export const elementCastPower = (combo: number, tier: number, groupPairs = 1, multiplier = 1) => ({
@@ -72,9 +71,9 @@ export const elementWashCapacity = (power: ReturnType<typeof elementCastPower>):
 
 export const ELEMENT_MATCH_RULES: Readonly<Record<TileSuit, string>> = {
     ember: 'Every match scorches ice and vines, then ignites a vulnerable block. Steam or Thaw quenches the ignition.',
-    tide: 'Every match douses fires and carries vulnerable, unanchored cards one place along.',
-    bone: 'Every match douses fires and freezes a vulnerable block for one turn. Ice ground anchors cards against elemental movement.',
-    moss: 'Every match snares a vulnerable block until a match beside it cuts the vines. At combo 6 or resonance tier 2, the vines bloom for three gold.'
+    tide: 'Every match douses fires, waters seeds into 2-gold blooms and carries vulnerable, unanchored cards one place along.',
+    bone: 'Every match douses fires and coats a vulnerable block in rime. Cards stay playable and resist currents and arena holds. Match rime to calm the next turn.',
+    moss: 'Every match seeds a vulnerable block. Cards stay playable; matching harvests 1 gold per seed. At combo 6 or resonance tier 2, blooms pay 2 gold. Fire burns them away.'
 };
 
 const isReal = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
@@ -135,19 +134,6 @@ export const elementalContactGroups = (tiles: readonly Tile[], columns: number, 
     return groups;
 };
 
-/** Do not create a hold that would require the end-of-turn guard to erase the whole cast. */
-const leavesPlayablePair = (tiles: readonly Tile[], heldIndex: number): boolean => {
-    const counts = new Map<string, number>();
-    for (let index = 0; index < tiles.length; index += 1) {
-        const tile = tiles[index]!;
-        if (index === heldIndex || tile.state !== 'hidden' || !isReal(tile) || tile.vined || (tile.frost ?? 0) > 0) continue;
-        const count = (counts.get(tile.pairKey) ?? 0) + 1;
-        if (count >= 2) return true;
-        counts.set(tile.pairKey, count);
-    }
-    return false;
-};
-
 /**
  * Cast the element of a matched group on `tiles` (mutated in place, like the realm's other steps).
  * `groupTileIds` are the matched pair and the cards its pop took; their suit is the element.
@@ -176,7 +162,7 @@ export const castElement = ({
     alchemy?: AlchemyLog;
     /** The element's resonance tier: a step of reach each. */
     tier?: number;
-    /** The floor is holding still: the cast holds no card. */
+    /** Freeze-over suppresses ignition while beneficial coatings still land. */
     still?: boolean;
     combo?: number;
     quenchFire?: boolean;
@@ -196,7 +182,7 @@ export const castElement = ({
     // The visible wave meets counter-elements too. Their response must survive into the impact
     // record, even when another card receives the actual hold or ignition.
     for (const index of reached) if (elementAlchemy(tiles[index]!, suit) === 'neutralized') elementLands(tiles, index, suit, alchemy);
-    const holdCap = still ? 0 : power.targets;
+    const targetCap = power.targets;
     const outcomes: string[] = [];
     // The cast feeds its own kind first, a step short of its reach: the fire beside a fire match
     // gains a charge. Measured 2026-10-02: at the cast's full reach every card on a small floor was
@@ -207,9 +193,9 @@ export const castElement = ({
             let cleared = 0;
             for (const index of reached) {
                 const tile = tiles[index]!;
-                if (tile.vined == null && tile.frost == null && tile.snowed == null && tile.bloom == null) continue;
+                if (tile.vined == null && tile.frost == null && tile.snowed == null && tile.bloom == null && !tile.rime && !tile.seeded) continue;
                 if (!elementLands(tiles, index, suit, alchemy)) continue;
-                const { vined: _v, bloom: _b, frost: _f, snowed: _s, ...rest } = tile;
+                const { vined: _v, bloom: _b, frost: _f, snowed: _s, rime: _r, seeded: _seed, ...rest } = tile;
                 tiles[index] = rest;
                 touched.push(tile.id);
                 cleared += 1;
@@ -232,14 +218,18 @@ export const castElement = ({
             break;
         }
         case 'wash': {
+            let nurtured = 0;
             for (const index of reached) {
                 const tile = tiles[index]!;
-                if (tile.fuse == null || !elementLands(tiles, index, suit, alchemy)) continue;
+                if (tile.fuse == null && tile.seeded !== 1) continue;
+                if (!elementLands(tiles, index, suit, alchemy)) continue;
                 const { fuse: _fuse, ...rest } = tiles[index]!;
-                tiles[index] = rest;
+                tiles[index] = { ...rest, ...(tile.seeded === 1 ? { seeded: 2 } : {}) };
+                if (tile.seeded === 1) nurtured += 1;
                 touched.push(tile.id);
             }
-            const carried = reached.filter((index) => !pinned.has(tiles[index]!.id));
+            if (nurtured) outcomes.push(`${nurtured} seeds watered into 2-gold blooms`);
+            const carried = reached.filter((index) => !pinned.has(tiles[index]!.id) && !tiles[index]!.rime);
             // Water and grove cards are not carried: the water flows around them.
             const movable = carried.filter((index) => elementWouldLand(tiles[index]!, suit)).slice(0, elementWashCapacity(power));
             if (movable.length >= 2) {
@@ -262,29 +252,29 @@ export const castElement = ({
                     tiles[index] = rest;
                     touched.push(tile.id);
                 }
-                if (held >= holdCap || runNonNegativeInteger(tiles[index]!.frost ?? 0) > 0 || pinned.has(tile.id)) continue;
+                if (held >= targetCap || tiles[index]!.rime || pinned.has(tile.id)) continue;
                 if (!elementLands(tiles, index, suit, alchemy)) continue;
-                if (!leavesPlayablePair(tiles, index)) continue;
                 held += 1;
-                tiles[index] = { ...tiles[index]!, frost: ELEMENT_FREEZE_TURNS };
+                const { seeded: _seed, ...rest } = tiles[index]!;
+                tiles[index] = { ...rest, rime: true };
                 if (!touched.includes(tile.id)) touched.push(tile.id);
             }
-            if (held) outcomes.push(`${held} frozen for 1 turn`);
+            if (held) outcomes.push(`${held} protected by rime · playable, anchored · match for one calm turn`);
             break;
         }
         case 'entangle': {
             let held = 0;
             for (const index of reached) {
                 const tile = tiles[index]!;
-                if (held >= holdCap) break;
-                if (tile.vined === true || pinned.has(tile.id)) continue;
+                if (held >= targetCap) break;
+                if ((tile.seeded ?? 0) >= (power.blooming ? 2 : 1) || tile.rime || pinned.has(tile.id)) continue;
                 if (!elementLands(tiles, index, suit, alchemy)) continue;
-                if (!leavesPlayablePair(tiles, index)) continue;
                 held += 1;
-                tiles[index] = { ...tiles[index]!, vined: true, ...(power.blooming ? { bloom: true } : {}) };
+                const { rime: _rime, ...rest } = tiles[index]!;
+                tiles[index] = { ...rest, seeded: power.blooming ? 2 : 1 };
                 touched.push(tile.id);
             }
-            if (held) outcomes.push(`${held} ${power.blooming ? 'blooming vines · 3 gold when cut' : 'snared · match beside them to cut'}`);
+            if (held) outcomes.push(`${held} ${power.blooming ? 'blooms · match for 2 gold each' : 'seeds · match for 1 gold each'} · cards stay playable`);
             break;
         }
     }
@@ -296,7 +286,7 @@ export const castElement = ({
         const cell = tiles.findIndex(tile => tile.id === originalId);
         const outcome = alchemy.neutralized.includes(originalId) ? 'neutralized' : alchemy.empowered.includes(originalId) ? 'charged' : touched.includes(originalId) ? 'affected' : null;
         const tile = tiles[cell]!;
-        const effect = tile.vined ? 'entangled' : (tile.frost ?? 0) > 0 ? 'frozen' : tile.fuse != null ? 'ignited' : kind === 'wash' ? 'current' : 'cleared';
+        const effect = tile.vined ? 'entangled' : (tile.frost ?? 0) > 0 ? 'frozen' : tile.fuse != null ? 'ignited' : tile.rime ? 'rimed' : tile.seeded ? 'seeded' : kind === 'wash' ? 'current' : 'cleared';
         if (outcome && original.suit) contacts.push({ tileId: originalId, cell, suit: original.suit, outcome, effect, group: groupIndex });
     }));
     return { kind, suit, sourceCells: group, contacts, power: power.targets, multiplier, groupPairs, groupTileIds: group.map((index) => tiles[index]!.id), touchedTileIds: [...new Set(touched)], summary: outcomes.join(' · ') };

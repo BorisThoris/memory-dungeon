@@ -33,6 +33,35 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
+    // Soft coatings live at the edges; the element and hidden identity remain readable.
+    if (mark.rime) {
+        ctx.strokeStyle = 'rgba(175, 225, 255, 0.9)';
+        ctx.lineWidth = 5;
+        roundRect(ctx, 12, 12, w - 24, h - 24, 18);
+        ctx.stroke();
+        for (const x of [26, w - 26]) {
+            ctx.beginPath();
+            ctx.moveTo(x, 26); ctx.lineTo(x + 8, 36); ctx.lineTo(x, 46);
+            ctx.lineTo(x - 8, 36); ctx.closePath(); ctx.stroke();
+        }
+    }
+    if (mark.seeded) {
+        for (const x of [27, w - 27]) {
+            const y = h - 32;
+            ctx.strokeStyle = 'rgba(100, 177, 68, 0.95)';
+            ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x, y + 12); ctx.lineTo(x, y - 12); ctx.stroke();
+            ctx.fillStyle = 'rgba(145, 218, 93, 0.95)';
+            for (const side of [-1, 1]) {
+                ctx.beginPath(); ctx.ellipse(x + side * 8, y - 3, 10, 5, side * -0.6, 0, Math.PI * 2); ctx.fill();
+            }
+            if (mark.seeded >= 2) {
+                ctx.fillStyle = 'rgba(247, 193, 92, 0.98)';
+                ctx.beginPath(); ctx.arc(x, y - 15, 8, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+    }
+
     if (mark.vined) {
         ctx.strokeStyle = 'rgba(70, 140, 50, 0.95)';
         ctx.lineCap = 'round';
@@ -182,10 +211,12 @@ export const RealmTileMarks = ({ faceZ, tile, faceUp }: { faceZ: number; tile: T
             snowed: tile.snowed === true,
             fuse: Math.max(0, Math.floor(tile.fuse ?? 0)),
             vined: tile.vined === true,
-            bloom: tile.vined === true && tile.bloom === true
+            bloom: tile.vined === true && tile.bloom === true,
+            rime: tile.rime === true,
+            seeded: Math.min(2, Math.max(0, tile.seeded ?? 0))
         };
-        return mark.frost || mark.snowed || mark.fuse || mark.vined ? mark : null;
-    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.bloom]);
+        return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded ? mark : null;
+    }, [tile.state, tile.frost, tile.snowed, tile.fuse, tile.vined, tile.bloom, tile.rime, tile.seeded]);
     if (!back || faceUp) return null;
     return (
         <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>

@@ -68,7 +68,7 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
         weather: 'Blizzard',
         interval: 4,
         rules: [
-            'A miss freezes both cards for two turns: no turning them until the ice goes.',
+            'A miss can freeze a cohort for two turns: at least two complete pairs, with another pair free.',
             'Blizzards slide a row with the wind and snow over the backs.'
         ],
         peak: 'Whiteout',
@@ -132,7 +132,7 @@ export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
         weather: 'Overgrowth',
         interval: 3,
         rules: [
-            'Vines creep over a card: it cannot be turned while they hold.',
+            'Vines hold at least two complete pairs together, leaving another pair free. Breaking a cohort releases it.',
             'A match beside vines cuts them, a gold for every vine.'
         ],
         peak: 'Bloom',

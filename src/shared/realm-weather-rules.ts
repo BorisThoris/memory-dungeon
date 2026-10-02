@@ -3,6 +3,7 @@ import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from
 import { castElement } from './element-group-rules';
 import { runChainTier } from './chain-tier-rules';
 import { CHAIN_MULT } from './chunk-break-rules';
+import { reconcileRealmHolds } from './realm-hold-policy';
 import { castElementalGround, groundAnchoredTileIds, readElementalGround } from './element-ground-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -431,8 +432,8 @@ export const boardHasTurnablePair = (tiles: readonly Tile[]): boolean => {
  * the board outside a turn (a bomb) runs it too, or it could leave only held cards behind.
  */
 export const releaseRealmHoldsIfStuck = (tiles: Tile[]): string[] => {
-    if (boardHasTurnablePair(tiles)) return [];
-    const freed: string[] = [];
+    const freed = reconcileRealmHolds(tiles, 1).freed;
+    if (boardHasTurnablePair(tiles)) return freed;
     tiles.forEach((tile, index) => {
         if (tile.state === 'hidden' && (tile.frost != null || tile.vined != null)) {
             const { frost: _frost, vined: _vined, bloom: _bloom, ...rest } = tile;
@@ -564,6 +565,13 @@ export const resolveRealmTurn = ({
         const matchedIds = new Set([...tileIds, ...groupTileIds]);
         const matched = [...matchedIds].map((id) => sourceTiles.find((tile) => tile.id === id) ?? tiles[indexOf.get(id) ?? -1]).filter((tile): tile is Tile => tile != null);
         const released = empoweredMatchGold(matched);
+        const harvest = matched.reduce((sum, tile) => sum + Math.min(2, runNonNegativeInteger(tile.seeded ?? 0)), 0);
+        if (harvest > 0) {
+            goldDelta += harvest;
+            events.push({ key: eventKey(run, level, turns, 'seed-harvest'), kind: 'harvest',
+                tileIds: matched.filter(tile => tile.seeded).map(tile => tile.id), gold: harvest });
+        }
+        if (matched.some(tile => tile.rime)) stillTurns = Math.max(stillTurns, 1);
         if (released > 0) {
             goldDelta += released;
             events.push({
@@ -671,6 +679,8 @@ export const resolveRealmTurn = ({
         const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, secondaryId, pinned, alchemy, tier, still,
             combo: run.stats.currentStreak, quenchFire: field?.quenchFire, multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
+            pinned.clear();
+            for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
             castImpact = {
                 key: eventKey(run, level, turns, cast.kind), suit: cast.suit, sourceCells: cast.sourceCells,
                 contacts: cast.contacts, multiplier: cast.multiplier, power: cast.power, groupPairs: cast.groupPairs,
@@ -847,8 +857,24 @@ export const resolveRealmTurn = ({
         events.push({ key: eventKey(run, level, turns, 'empowered'), kind: 'empowered', tileIds: [...alchemy.empowered] });
     }
 
-    // 5. The guard.
-    const freed = releaseRealmHoldsIfStuck(tiles);
+    // 5. Holds are whole, ambiguous cohorts. A new request may recruit a second pair; a cut
+    // or expiry can only release a cohort, never silently replace it with another pair.
+    const holdPolicy = reconcileRealmHolds(tiles, board.columns, board.tiles, pinned);
+    const freed = [...new Set([...holdPolicy.freed, ...releaseRealmHoldsIfStuck(tiles)])];
+    frozen = tiles.filter(tile => tile.state === 'hidden' && (tile.frost ?? 0) > 0 &&
+        (board.tiles.find(old => old.id === tile.id)?.frost ?? 0) <= 0).length;
+    for (let index = events.length - 1; index >= 0; index -= 1) {
+        const event = events[index]!;
+        const frostEvent = event.kind === 'frostbite';
+        if (!frostEvent && !['overgrowth', 'snare', 'bloom'].includes(event.kind)) continue;
+        const isHeld = (id: string) => {
+            const tile = tiles.find(candidate => candidate.id === id);
+            return !!tile && tile.state === 'hidden' && (frostEvent ? (tile.frost ?? 0) > 0 : tile.vined === true);
+        };
+        const ids = [...new Set([...event.tileIds, ...holdPolicy.added])].filter(isHeld);
+        if (ids.length) events[index] = { ...event, tileIds: ids };
+        else events.splice(index, 1);
+    }
     if (freed.length > 0) {
         events.push({ key: eventKey(run, level, turns, 'thaw'), kind: 'thaw', tileIds: freed });
     }
@@ -860,7 +886,7 @@ export const resolveRealmTurn = ({
             const tile = tiles[cell];
             // A streak reaction or weather may clear the new hold before the frame is rendered.
             const effect = tile?.vined ? 'entangled' : (tile?.frost ?? 0) > 0 ? 'frozen'
-                : tile?.fuse != null ? 'ignited' : contact.effect === 'current' ? 'current' : 'cleared';
+                : tile?.fuse != null ? 'ignited' : tile?.rime ? 'rimed' : tile?.seeded ? 'seeded' : contact.effect === 'current' ? 'current' : 'cleared';
             return { ...contact, cell, effect };
         }) };
     }
