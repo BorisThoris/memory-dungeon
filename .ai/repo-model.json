@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2896,
-    "codeFileCount": 1064,
-    "exportedSymbolCount": 3327,
+    "trackedFileCount": 2897,
+    "codeFileCount": 1065,
+    "exportedSymbolCount": 3328,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8748
+    "relationshipCount": 8753
   },
   "inventory": [
     {
@@ -3849,8 +3849,8 @@
     {
       "path": "e2e/element-resonance.spec.ts",
       "category": "test",
-      "bytes": 6559,
-      "sha256": "da51deae78d5b95eef9355237153921efc2b42927789667482ac378710b1d184"
+      "bytes": 7949,
+      "sha256": "5a3153ec7d1450dcbb511a4a3144105dc13415833b024a1e4022e82c723b4ea1"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -9369,14 +9369,14 @@
     {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 9339,
-      "sha256": "83a2691c5ce596889be5cdb8cd7fb72165c5ea5c2b796f56a3d7f696620b165c"
+      "bytes": 10559,
+      "sha256": "b8535cc55d95360d0bf926123fb9c268d95168fd7ad385bd7183bac0b79cfca1"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 27137,
-      "sha256": "8b654eb57e628192a1640e42c149e6fac9172f239a9caae2862b972afc92269e"
+      "bytes": 28146,
+      "sha256": "1e86061e983b186d794ec497177359b73aa75dd9ada9ba6d6cbde6632c75a724"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -10287,8 +10287,8 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 2008,
-      "sha256": "461acd4603f456467450d44f8403798406870cb3528209c868feb4730fd3eaf1"
+      "bytes": 2231,
+      "sha256": "eb3a29eb4596edb5cd35e31a27713d8722d4ca720d34ba41b88be5a5593649b0"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
@@ -10299,14 +10299,14 @@
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 6071,
-      "sha256": "9c2cdcfa6c5c4b022fa2c8bbcbad363e1580894fb0a7fea6ac62e1fe44185742"
+      "bytes": 7212,
+      "sha256": "f674311e8a78bb6f6ae00d8b14f14e3f5a17e17fa19d480490605d15f49fb83f"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 47625,
-      "sha256": "6f69692863b861dda17cbe31522a073a8fde70073a7ce3494e72573d322b7f9e"
+      "bytes": 48627,
+      "sha256": "ba651182895b5ee3beaed928ee08f2057de4f46da25f9ccd494239ad731c9880"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -10791,8 +10791,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 16642,
-      "sha256": "c6325a5945d103931ec72b9ced3743aee51465e982eb2dcbfe9f4bc9042af102"
+      "bytes": 16920,
+      "sha256": "8011975250d89a8d3c2ef4cbd0f5d538e782605a09192980039c11cb1d19cb26"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -11711,6 +11711,12 @@
       "category": "source",
       "bytes": 1542,
       "sha256": "309140b64ba12795ec57b86d14ba00c5189f1f185a2751db63ff9877f240abec"
+    },
+    {
+      "path": "src/renderer/dev/useDevOptions.ts",
+      "category": "source",
+      "bytes": 780,
+      "sha256": "a427c3170f0e60fef73b7a234a5a9cbdb608d2a570f9dc8bbaa4a71348f9bec3"
     },
     {
       "path": "src/renderer/diagnostics/rendererErrorHooks.test.ts",
@@ -19925,7 +19931,7 @@
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 171,
+      "lineCount": 192,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts"
       ],
@@ -19937,7 +19943,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 475,
+      "lineCount": 496,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -22235,7 +22241,7 @@
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 64,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -22251,9 +22257,10 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 135,
+      "lineCount": 152,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
+        "file:src/renderer/dev/useDevOptions.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -22265,7 +22272,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 755,
+      "lineCount": 769,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -22275,6 +22282,7 @@
         "file:src/renderer/components/settingsNavigationModel.ts",
         "file:src/renderer/copy/diagnosticsSettings.ts",
         "file:src/renderer/copy/settingsHints.ts",
+        "file:src/renderer/dev/useDevOptions.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
@@ -23713,7 +23721,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 255,
+      "lineCount": 259,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -23725,6 +23733,7 @@
         "file:src/renderer/components/realmParticles.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/renderer/dev/useDevOptions.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
@@ -26281,6 +26290,20 @@
         "symbol:src/renderer/dev/testHallLoader.ts#testHallRoomFromUrl"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/dev/useDevOptions.ts",
+      "path": "src/renderer/dev/useDevOptions.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 21,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/dev/useDevOptions.ts#useDevOptions"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/SettingsScreen.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
@@ -40620,7 +40643,7 @@
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
       "line": 208,
-      "endLine": 474
+      "endLine": 495
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -42715,24 +42738,24 @@
       "name": "DEFAULT_SUBSECTION_BY_CATEGORY",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 52,
-      "endLine": 59
+      "line": 55,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_CATEGORIES",
       "name": "SETTINGS_CATEGORIES",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 17,
-      "endLine": 24
+      "line": 18,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_SUBSECTIONS",
       "name": "SETTINGS_SUBSECTIONS",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 26,
-      "endLine": 50
+      "line": 28,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SettingsCategory",
@@ -42748,15 +42771,15 @@
       "kind": "type",
       "file": "src/renderer/components/settingsNavigationModel.ts",
       "line": 3,
-      "endLine": 15
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/SettingsScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 754,
-      "endLine": 754
+      "line": 768,
+      "endLine": 768
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -44331,8 +44354,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 20,
-      "endLine": 254
+      "line": 21,
+      "endLine": 258
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -47405,6 +47428,14 @@
       "file": "src/renderer/dev/testHallLoader.ts",
       "line": 33,
       "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/dev/useDevOptions.ts#useDevOptions",
+      "name": "useDevOptions",
+      "kind": "value",
+      "file": "src/renderer/dev/useDevOptions.ts",
+      "line": 10,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
@@ -76558,6 +76589,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/dev/useDevOptions.ts->symbol:src/renderer/dev/useDevOptions.ts#useDevOptions",
+      "source": "file:src/renderer/dev/useDevOptions.ts",
+      "target": "symbol:src/renderer/dev/useDevOptions.ts#useDevOptions",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
       "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
       "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
@@ -95660,6 +95697,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/renderer/dev/useDevOptions.ts",
+      "source": "file:src/renderer/components/SettingsScreen.test.tsx",
+      "target": "file:src/renderer/dev/useDevOptions.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/SettingsScreen.test.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -95717,6 +95760,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/settingsHints.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/copy/settingsHints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/dev/useDevOptions.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/dev/useDevOptions.ts",
       "kind": "imports"
     },
     {
@@ -97493,6 +97542,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/dev/useDevOptions.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/dev/useDevOptions.ts",
       "kind": "imports"
     },
     {
@@ -114529,6 +114584,12 @@
       "id": "tested_by:src/renderer/dev/legacy/tileStepLegacy.ts->file:src/renderer/dev/legacy/tileStepLegacy.test.ts",
       "source": "file:src/renderer/dev/legacy/tileStepLegacy.ts",
       "target": "file:src/renderer/dev/legacy/tileStepLegacy.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/dev/useDevOptions.ts->file:src/renderer/components/SettingsScreen.test.tsx",
+      "source": "file:src/renderer/dev/useDevOptions.ts",
+      "target": "file:src/renderer/components/SettingsScreen.test.tsx",
       "kind": "tested_by"
     },
     {

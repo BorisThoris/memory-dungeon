@@ -47,8 +47,9 @@ const runField = <T>(page: Page, read: string): Promise<T> =>
 test('cards give off their element, the strip counts the stacks, and fire meeting water is Steam', async ({ page }) => {
     test.setTimeout(300_000);
     const errors: string[] = [];
-    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('pageerror', (error) => { errors.push(error.message); console.error('Browser page error:', error.message); });
     page.on('console', (message) => {
+        if (message.type() === 'error') console.error('Browser console:', message.text());
         if (message.type() === 'error' && /THREE|WebGL|shader/i.test(message.text())) errors.push(message.text());
     });
     const save = JSON.parse(buildVisualSaveJson(true, false));
@@ -91,6 +92,22 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     expect(impact.blooms).toBe(6);
     expect(impact.locks).toBe(0);
     expect(new Set(impact.contacts.map(c => c.outcome)).size).toBe(3);
+    await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openSettings('playing'));
+    await page.getByRole('button', { name: /dev options/i }).click();
+    const popToggle = page.getByRole('checkbox', { name: /combo pop effects/i });
+    await expect(popToggle).toBeChecked();
+    await page.getByText('Combo pop effects', { exact: true }).click();
+    await expect(popToggle).not.toBeChecked();
+    await page.screenshot({ path: 'output/playwright/dev-options-pop-off.png' });
+    await page.getByRole('button', { name: 'Back', exact: true }).click();
+    await expect(canvas(page)).toHaveAttribute('data-combo-pop-effects', 'false');
+    // Reload the authored room: the device-local choice survives, and gameplay still casts.
+    await page.reload();
+    await expect(canvas(page)).toHaveAttribute('data-combo-pop-effects', 'false', { timeout: 150_000 });
+    await pick(page, 'a-1'); await pick(page, 'a-2');
+    await expect.poll(() => count(page, 'cast-bursts')).toBeGreaterThan(0);
+    for (const kind of ['match', 'chain', 'ripple', 'arc']) expect(await count(page, kind + '-bursts')).toBe(0);
+    await page.screenshot({ path: 'output/playwright/element-cast-pop-off.png' });
     expect(errors).toEqual([]);
 });
 

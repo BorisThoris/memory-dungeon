@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { useAppStore } from '../store/useAppStore';
 import SettingsScreen from './SettingsScreen';
+import { useDevOptions } from '../dev/useDevOptions';
 
 vi.mock('../hooks/useViewportSize', () => ({
     useViewportSize: () => ({ width: 1280, height: 800 })
@@ -11,6 +12,7 @@ vi.mock('../hooks/useViewportSize', () => ({
 
 describe('SettingsScreen', () => {
     beforeEach(() => {
+        useDevOptions.getState().setComboPopEffects(true);
         const saveData = createDefaultSaveData();
         useAppStore.setState({
             hydrated: true,
@@ -21,6 +23,21 @@ describe('SettingsScreen', () => {
         });
     });
 
+    it('remembers the immediate combo pop switch in Dev Options without changing run settings', async () => {
+        const user = userEvent.setup();
+        const { unmount } = render(<SettingsScreen />);
+        await user.click(screen.getByRole('button', { name: /dev options/i }));
+        await user.click(screen.getByRole('checkbox', { name: /combo pop effects/i }));
+        expect(useDevOptions.getState().comboPopEffects).toBe(false);
+        expect(localStorage.getItem('memory-dungeon.dev.combo-pop-effects')).toBe('off');
+        expect(useAppStore.getState().updateSettings).not.toHaveBeenCalled();
+        unmount();
+        render(<SettingsScreen />);
+        await user.click(screen.getByRole('button', { name: /dev options/i }));
+        expect(screen.getByRole('checkbox', { name: /combo pop effects/i })).not.toBeChecked();
+        await user.click(screen.getByRole('checkbox', { name: /combo pop effects/i }));
+        expect(localStorage.getItem('memory-dungeon.dev.combo-pop-effects')).toBe('on');
+    });
     it('opens a confirmation when Back is pressed with a dirty draft', async () => {
         const user = userEvent.setup();
         render(<SettingsScreen presentation="page" />);
