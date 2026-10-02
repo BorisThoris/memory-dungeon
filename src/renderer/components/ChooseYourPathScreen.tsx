@@ -251,7 +251,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                     {freshClassic ? (
                         <ol className={styles.beats} data-testid="choose-path-first-run-beats">
                             <li>Remember the symbols, then find a pair.</li>
-                            <li>Match beside a clump to set off a cascade.</li>
+                            <li>Match one element twice, then another: they react and burst.</li>
                             <li>Build momentum: Clean → Sharp → Fever.</li>
                         </ol>
                     ) : null}

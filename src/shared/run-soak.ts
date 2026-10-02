@@ -42,13 +42,19 @@ export interface SoakPlayer {
     shuffleRate: number;
     /** Share of turns the player ignites the Zone, when the combo allows it. */
     zoneRate: number;
+    /**
+     * Share of turns the player plays the elements (`element-resonance-rules.ts`): the backs show
+     * every card's element, so they open on the element in hand until the streak is primed, and on a
+     * different one once it is, which is the reaction and, since 2026-10-02, the only pop.
+     */
+    elementRate: number;
 }
 
 export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild', SoakPlayer>> = {
-    careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5 },
-    average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5 },
-    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08, zoneRate: 0.5 },
-    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5 }
+    careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.9 },
+    average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 },
+    sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08, zoneRate: 0.5, elementRate: 0.2 },
+    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 }
 };
 
 export interface SoakViolation {
@@ -100,6 +106,8 @@ export interface SoakRunReport {
     elementNeutralized: number;
     /** Resonance (`element-resonance-rules.ts`): reactions two elements made, and the deepest stack, charge and realm depth a run reached. */
     elementReactions: number;
+    /** Pairs a reaction burst off the floor: the only pop a realm floor has. */
+    elementBurstPairs: number;
     elementResonancePeak: number;
     elementChargePeak: number;
     realmDepthPeak: number;
@@ -295,6 +303,9 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
             if (!isStreakPrimed(spent)) return `reaction on streak ${JSON.stringify(before.elementStreak)}`;
             if (run.elementStreak?.suit === spent!.suit) return `reaction kept the ${spent!.suit} streak`;
         }
+        // The pop is the reaction's: on a realm floor a turn that takes more than its own pair reacted.
+        const pairsGone = (run.board?.matchedPairs ?? 0) - (before.board?.matchedPairs ?? 0);
+        if (run.realmId && pairsGone > 1 && reacted <= 0) return `${pairsGone} pairs left the floor with no reaction`;
         if ((run.stats.mismatches ?? 0) > (before.stats.mismatches ?? 0) && run.elementStreak != null) {
             return `streak ${JSON.stringify(run.elementStreak)} survived a miss`;
         }
@@ -403,6 +414,7 @@ export const soakRun = ({
     let elementEmpowered = 0;
     let elementNeutralized = 0;
     let elementReactions = 0;
+    let elementBurstPairs = 0;
     let elementResonancePeak = 0;
     let elementChargePeak = 0;
     let realmDepthPeak = 0;
@@ -441,7 +453,9 @@ export const soakRun = ({
             elementEmpowered += Math.max(0, (next.elementEmpoweredThisFloor ?? 0) - (run.elementEmpoweredThisFloor ?? 0));
             elementNeutralized += Math.max(0, (next.elementNeutralizedThisFloor ?? 0) - (run.elementNeutralizedThisFloor ?? 0));
             realmPeaks += Math.max(0, (next.realmPeaksThisFloor ?? 0) - (run.realmPeaksThisFloor ?? 0));
-            elementReactions += Math.max(0, (next.elementReactionsThisFloor ?? 0) - (run.elementReactionsThisFloor ?? 0));
+            const reactedNow = Math.max(0, (next.elementReactionsThisFloor ?? 0) - (run.elementReactionsThisFloor ?? 0));
+            elementReactions += reactedNow;
+            if (reactedNow > 0 && action === 'resolve') elementBurstPairs += Math.max(0, (next.board?.matchedPairs ?? 0) - (run.board?.matchedPairs ?? 0) - 1);
         } else {
             if (next.realmSecondaryId) realmConfluences += 1;
             if ((next.realmSmoke ?? 0) > 0) realmSmokeFloors += 1;
@@ -525,7 +539,10 @@ export const soakRun = ({
             continue;
         }
         const pool = hiddenReal(run);
-        const first = pick(pool);
+        // Playing the elements: the element in hand again until it is primed, then another.
+        const inHand = runElementStreak(run);
+        const wanted = inHand && rng() < player.elementRate ? pool.filter((tile) => (tile.suit === inHand.suit) !== isStreakPrimed(inHand)) : [];
+        const first = pick(wanted.length > 0 ? wanted : pool);
         act('flip', flipTile(run, first.id));
         if (bombTargetTileId(run) === first.id && rng() < player.bombRate) {
             bombsUsed += 1;
@@ -569,6 +586,7 @@ export const soakRun = ({
         elementEmpowered,
         elementNeutralized,
         elementReactions,
+        elementBurstPairs,
         elementResonancePeak,
         elementChargePeak,
         realmDepthPeak,

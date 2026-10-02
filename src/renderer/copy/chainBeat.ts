@@ -85,9 +85,16 @@ export const CHAIN_BEAT_COPY = {
         suitName: string,
         size: number,
         now: { pairs: number },
-        next: { tier: ChainTier; addedPairs: number; pairs: number } | null
+        next: { tier: ChainTier; addedPairs: number; pairs: number } | null,
+        elemental?: { reacts: boolean }
     ): string => {
         const pairs = (count: number): string => `${count} ${count === 1 ? 'pair' : 'pairs'}`;
+        // On a realm floor the pop is the reaction's (`elementPopSpec`).
+        if (elemental) {
+            return elemental.reacts
+                ? `${suitName} — a match here reacts with the element in hand and bursts ${pairs(now.pairs)}.`
+                : `${suitName} — a match here takes its own pair. Match one element twice, then another, and they react.`;
+        }
         const nowLine = now.pairs > 0 ? `this match pops ${pairs(now.pairs)}` : 'this match pops nothing';
         const nextLine =
             next == null

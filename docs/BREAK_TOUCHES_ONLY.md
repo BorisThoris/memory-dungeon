@@ -119,3 +119,11 @@ rule that replaced it — a pop takes what it is touching, and a pair you have p
 remember. The **Chain reaction** achievement's three waves used to come from a suit laid as islands
 that the partner reach jumped between; it now comes from a long clump that takes three waves to walk.
 Both are still reachable on real boards, which `achievement-reachability.test.ts` proves.
+
+## 2026-10-02: on a realm floor the pop is the reaction's
+
+The owner's decision, recorded in `docs/REALMS.md` ("The pop is the reaction's"): on a realm floor
+- every floor of a run - a plain match takes its own pair and nothing pops; a match that reacts with
+the element in hand bursts the nearest pairs of the two elements that met. The contact rule in this
+document is unchanged in `chunk-break-rules.ts` and is what a run with no realm still plays by (the
+census, the sims, fixtures); the rungs still multiply what a burst pays.

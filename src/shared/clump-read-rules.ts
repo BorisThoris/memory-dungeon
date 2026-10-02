@@ -1,6 +1,7 @@
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { findSuitRegion, resolveChunkBreak } from './chunk-break-rules';
 import { getChainTier, nextChainTierAt, type ChainTier } from './chain-tier-rules';
+import { elementPopSpec, type ElementRunFields } from './element-resonance-rules';
 
 /**
  * The clump read: what a match on this tile would take, before the player commits to it.
@@ -21,7 +22,8 @@ export interface ClumpReadContext {
      */
     chain: number;
     /** Sticky toffee makes the clump stick diagonally, so the preview has to know the resident. */
-    run: Pick<RunState, 'floorCurioId'>;
+    /** And on a realm floor the pop is the reaction's, so it has to know the streak in hand too. */
+    run: Pick<RunState, 'floorCurioId'> & Partial<ElementRunFields>;
 }
 
 export interface ClumpReadTierPreview {
@@ -49,6 +51,11 @@ export interface ClumpRead {
     now: ClumpReadTierPreview;
     /** The next rung and what it adds; null at Fever, where there is no next rung. */
     next: ClumpReadNextTierPreview | null;
+    /**
+     * On a realm floor the pop is the reaction's (`elementPopSpec`): whether a match here would
+     * react with the streak in hand. Absent on a run with no realm, where the rungs decide.
+     */
+    elemental?: { reacts: boolean };
 }
 
 /** What a match on this pair takes at `chain`, read off the real break rule. */
@@ -63,7 +70,8 @@ const previewBreakAt = (
         // A singleton has no match to preview: the wild joker never pairs off.
         return { tier, tileIds: [], pairs: 0 };
     }
-    const broke = resolveChunkBreak({ board, run: context.run, matchedTileIds, chain });
+    const suit = board.tiles.find((tile) => tile.id === matchedTileIds[0])?.suit;
+    const broke = resolveChunkBreak({ board, run: context.run, matchedTileIds, chain, spec: elementPopSpec(context.run, suit) });
     return { tier, tileIds: broke.brokenTileIds, pairs: broke.brokenPairKeys.length };
 };
 
@@ -82,7 +90,9 @@ export const getClumpRead = (board: BoardState, tileId: string, context: ClumpRe
     const matchedTileIds = board.tiles.filter((tile) => tile.pairKey === seed.pairKey).map((tile) => tile.id);
 
     const now = previewBreakAt(board, matchedTileIds, context.chain, context);
-    const nextRung = nextChainTierAt(context.chain, board.pairCount);
+    const spec = elementPopSpec(context.run, seed.suit);
+    // A reaction's burst is sized by its potency, not the rung, so there is no next rung to show.
+    const nextRung = spec !== undefined ? null : nextChainTierAt(context.chain, board.pairCount);
     const nextPreview = nextRung == null ? null : previewBreakAt(board, matchedTileIds, nextRung, context);
     const takenNow = new Set(now.tileIds);
     const next =
@@ -99,6 +109,7 @@ export const getClumpRead = (board: BoardState, tileId: string, context: ClumpRe
         size: clump.length,
         tileIds: clump.map((tile) => tile.id),
         now,
-        next
+        next,
+        ...(spec !== undefined ? { elemental: { reacts: spec !== null } } : {})
     };
 };

@@ -249,3 +249,46 @@ element, a card holding ten charges, and depth 15 in one realm: nothing stops.
 - Eight test hall rooms: `element-resonance`, `element-steam`, `element-blaze`, `element-thaw`,
   `element-freezeover`, `element-flood`, `element-frostbloom`, `realm-depth`; and
   `e2e/element-resonance.spec.ts` plays Steam in a browser.
+
+## The pop is the reaction's (2026-10-02, the owner's decision)
+
+Shown the resonance build, the owner: "this should remove the chain reaction of cards
+popping/matching together, is what I meant" - and, asked which way, chose **the reactions do the
+popping**. Until then every match popped the cards of its element it was touching
+(`chunk-break-rules.ts`); `yarn sim:pop-share` put the matched share of a floor at 0.34, so two
+pairs in three left without being matched and a reaction was one more thing on a turn that already
+cleared the board.
+
+**The rule now, on a realm floor** (every floor of a run):
+
+- A plain match takes its own pair and nothing else. No pop, no drop.
+- A match that **reacts** (a primed streak of another element) **bursts** the nearest pairs of the
+  two elements that met: as many of each as the reaction's potency, counted in steps from the
+  matched pair. Whole pairs only; never the cursed pair, a findable or a singleton. The burst is
+  scored, counted for momentum and drawn as a pop at the combo's rung (`resolveReactionBurst`).
+- The combo's heat still adds its pair bonus to the burst. The rungs no longer decide reach; they
+  multiply what the burst pays. A burst's pairs are stacks of their own elements.
+- A run with **no realm** (fixtures, the census and its sims, a save from before realms) keeps the
+  contact pop it was built on, so the pair-curve measurements are what they were.
+
+**Measured before it was settled** (`yarn soak --seeds=60`; the soak's players now play the
+elements, opening on the element in hand until it is primed and on another after):
+
+| Cut | Careful floors | Average | Sloppy | Wild | Careful turns a floor |
+|-----|----------------|---------|--------|------|-----------------------|
+| The pop on every match (before) | 28.5 | 10.0 | 2.5 | 10.4 | 8.4 |
+| No pop; the reaction pops the matched element's clump by the old contact rule | 26.9 | 8.4 | 1.7 | 6.9 | 10.4 |
+| The same with twice the reach and pairs | 26.8 | 8.7 | 1.7 | 7.9 | 10.3 |
+| **Shipped**: the reaction bursts the nearest pairs of both elements | 30.8 | 11.2 | 1.7 | 8.8 | 6.9 |
+
+The contact rule was the wrong body for a reaction: 42% of reactions popped nothing, because a
+clump holding both halves of a pair was seldom touching the match, and doubling its size changed
+nothing. Bursting the nearest pairs, a reaction takes 4.8 pairs for the careful player and 3.1 for
+the average one, and 6% take nothing (no pair of either element left). What it does to play: the
+player who orders their matches clears faster than before, and the one who does not clears slower -
+sloppy play fell from 2.5 floors to 1.7. That is the punishing direction, recorded here so it can
+be weighed; the first lever, if it is too hard, is `REACTION_POP_PAIRS_PER_POTENCY`.
+
+The soak holds, every turn, that on a realm floor no turn takes more than its own pair without a
+reaction, and requires a reaction to burst a pair. The hover preview runs the same rule
+(`clump-read-rules.ts`): "a match here takes its own pair" or "a match here reacts and bursts N".

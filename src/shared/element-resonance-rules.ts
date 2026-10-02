@@ -99,6 +99,60 @@ export const elementReactionOf = (a: TileSuit, b: TileSuit): ElementReactionDefi
 export const reactionPotency = (streak: ElementStreak, resonance: ElementResonance, stormDepth: number): number =>
     streak.links + Math.floor(resonanceTier(resonanceOf(resonance, streak.suit)) / 2) + Math.floor(runNonNegativeInteger(stormDepth) / 2);
 
+/** The run fields the elements read: where the floor is, what is in hand, what has stacked. */
+export type ElementRunFields = Pick<RunState, 'realmId' | 'elementStreak' | 'elementResonance' | 'realmAttunement'>;
+
+export interface PendingElementReaction {
+    definition: ElementReactionDefinition;
+    potency: number;
+    spent: ElementStreak;
+}
+
+/** The reaction a match of `suit` would set off on this streak and these stacks, or null. */
+export const reactionFor = (streak: ElementStreak | null, resonance: ElementResonance, stormDepth: number, suit: TileSuit | null | undefined): PendingElementReaction | null => {
+    if (!suit || !streak || streak.suit === suit || !isStreakPrimed(streak)) return null;
+    const definition = elementReactionOf(streak.suit, suit);
+    return definition ? { definition, potency: reactionPotency(streak, resonance, stormDepth), spent: streak } : null;
+};
+
+/** The reaction the run's next match of `suit` would set off: the turn's, and the preview's. */
+export const pendingElementReaction = (run: Partial<ElementRunFields>, suit: TileSuit | null | undefined): PendingElementReaction | null =>
+    reactionFor(runElementStreak({ elementStreak: run.elementStreak }), runElementResonance({ elementResonance: run.elementResonance }), runNonNegativeInteger(run.realmAttunement?.storm ?? 0), suit);
+
+/**
+ * The pop is the reaction's (2026-10-02). The owner, shown resonance and the reactions: "this
+ * should remove the chain reaction of cards popping/matching together" - and, asked which way, that
+ * the reactions should do the popping. Until then every match popped the cards of its element it
+ * was touching (`chunk-break-rules.ts`), which made the reaction one more thing happening on a
+ * turn that already cleared two thirds of the floor (`yarn sim:pop-share`: matched share 0.34). Now,
+ * on a realm floor, a plain match takes its own pair and nothing else, and a match that reacts
+ * bursts both of the elements that met: as many pairs of each as the reaction's potency, the
+ * nearest to the match first. So the pop is earned twice over - the same element again to prime,
+ * then the other one - and it grows with everything that grows the potency, without a cap.
+ *
+ * Measured before it was settled (soak, 30 seeds): keeping the old contact rule on the matched
+ * element's clump, 42% of reactions popped nothing at all, because a clump with both halves of a
+ * pair in it was seldom touching the match; doubling its reach changed nothing. A reaction has to
+ * do what its stamp says every time, so it takes the nearest pairs of its two elements instead.
+ *
+ * `undefined`: a run with no realm (fixtures, the census, a save from before realms), which keeps
+ * the pop it was built on. `null`: a realm floor and no reaction in hand, so nothing pops.
+ */
+export interface ElementPopSpec {
+    /** The two elements that met, and the pairs of each the reaction bursts. */
+    suits: readonly TileSuit[];
+    pairsPerSuit: number;
+}
+
+/** Pairs of each reacting element a reaction bursts for each point of its potency. */
+export const REACTION_POP_PAIRS_PER_POTENCY = 1;
+
+export const elementPopSpec = (run: Partial<ElementRunFields>, suit: TileSuit | null | undefined): ElementPopSpec | null | undefined => {
+    if (run.realmId == null) return undefined;
+    const pending = pendingElementReaction(run, suit);
+    return pending ? { suits: pending.definition.elements, pairsPerSuit: pending.potency * REACTION_POP_PAIRS_PER_POTENCY } : null;
+};
+
 const isElemental = (tile: Tile | undefined): tile is Tile & { suit: TileSuit } =>
     tile != null && tile.suit != null && !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
 
@@ -111,7 +165,7 @@ export interface ResonanceTurn {
     gained: number;
     shed: number;
     /** The reaction the turn set off, and its potency, before it is carried out. */
-    reaction: { definition: ElementReactionDefinition; potency: number; spent: ElementStreak } | null;
+    reaction: PendingElementReaction | null;
 }
 
 /**
@@ -141,8 +195,11 @@ export const resonanceAfterMatch = ({
     const charge = matchedTiles.filter((tile) => isElemental(tile) && tile.suit === suit).reduce((sum, tile) => sum + tileCharge(tile), 0);
     const gained = pairs * (1 + runNonNegativeInteger(extraPerPair)) + charge;
     const next: ElementResonance = { ...resonance, [suit]: before + gained };
-    const definition = streak && streak.suit !== suit && isStreakPrimed(streak) ? elementReactionOf(streak.suit, suit) : null;
-    const reaction = definition && streak ? { definition, potency: reactionPotency(streak, resonance, stormDepth), spent: streak } : null;
+    // A reaction bursts pairs of the element it spent too: those are stacks of that element.
+    for (const other of Object.keys(pairsBySuit) as TileSuit[]) {
+        if (other !== suit) next[other] = resonanceOf(next, other) + runNonNegativeInteger(pairsBySuit[other] ?? 0);
+    }
+    const reaction = reactionFor(streak, resonance, stormDepth, suit);
     return {
         resonance: next,
         streak: streak && streak.suit === suit ? { suit, links: streak.links + 1 } : { suit, links: 1 },

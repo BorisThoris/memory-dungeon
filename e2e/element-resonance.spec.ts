@@ -67,7 +67,12 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await pick(page, 'a-2');
     await expect.poll(() => runField<{ links: number } | null>(page, 'elementStreak').then((streak) => streak?.links)).toBe(2);
     await expect(page.getByTestId('hud-resonance-ember')).toHaveAttribute('data-primed', 'true');
-    await expect(page.getByTestId('hud-resonance-ember')).toContainText('2');
+    // A plain match pops nothing: the other fire pair still stands.
+    await expect(page.getByTestId('hud-resonance-ember')).toContainText('1');
+    expect(await page.evaluate(async () => {
+        const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        return useAppStore.getState().run!.board!.tiles.filter((tile) => tile.pairKey === 'c').every((tile) => tile.state === 'hidden');
+    })).toBe(true);
     await page.screenshot({ path: 'output/playwright/element-primed.png' });
 
     // Water on the primed fire: Steam.
@@ -76,6 +81,12 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await expect.poll(() => runField<number>(page, 'elementReactionsThisFloor')).toBe(1);
     await expect.poll(() => runField<{ kind: string } | null>(page, 'lastRealmEvent').then((event) => event?.kind)).toBe('steam');
     await expect(page.getByTestId('hud-resonance-tide')).toHaveAttribute('data-in-hand', 'true');
+    // The reaction is the pop: the other fire pair and the other water pair burst with it.
+    const standing = await page.evaluate(async () => {
+        const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        return useAppStore.getState().run!.board!.tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.pairKey);
+    });
+    expect([...new Set(standing)].sort()).toEqual(['e', 'f']);
     await page.screenshot({ path: 'output/playwright/element-steam.png' });
     expect(errors).toEqual([]);
 });

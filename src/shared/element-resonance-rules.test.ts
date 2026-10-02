@@ -7,7 +7,9 @@ import {
     ELEMENT_REACTION_KINDS,
     RESONANCE_SCORE_PER_STACK,
     THAW_SCORE_PER_POTENCY_SQUARED,
+    elementPopSpec,
     elementReactionOf,
+    pendingElementReaction,
     reactionPotency,
     resolveElementReaction,
     resonanceAfterMatch,
@@ -17,6 +19,8 @@ import {
 } from './element-resonance-rules';
 import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { deepenFloorDeck } from './realm-rules';
+import { resolveChunkBreak } from './chunk-break-rules';
+import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 
 const card = (id: string, pairKey: string, suit?: TileSuit, extra: Partial<Tile> = {}): Tile => ({
     id,
@@ -204,6 +208,35 @@ describe('resonance, the streak and the reactions', () => {
             });
         expect(miss(5).backlashes).toBe(0);
         expect(miss(6).backlashes).toBe(1);
+    });
+
+    it('the pop is the reaction\u2019s: no realm keeps the old pop, a realm floor pops nothing until two elements meet', () => {
+        expect(elementPopSpec({}, 'ember')).toBeUndefined();
+        expect(elementPopSpec({ realmId: 'storm' }, 'ember')).toBeNull();
+        expect(elementPopSpec({ realmId: 'storm', elementStreak: { suit: 'ember', links: 5 } }, 'ember')).toBeNull();
+        expect(elementPopSpec({ realmId: 'storm', elementStreak: { suit: 'tide', links: 1 } }, 'ember')).toBeNull();
+        expect(elementPopSpec({ realmId: 'storm', elementStreak: { suit: 'tide', links: 3 }, elementResonance: { tide: 6 } }, 'ember')).toEqual({ suits: ['ember', 'tide'], pairsPerSuit: 4 });
+        expect(pendingElementReaction({ elementStreak: { suit: 'tide', links: 2 } }, 'bone')?.definition.kind).toBe('freezeover');
+    });
+
+    it('a plain match on a realm floor takes its own pair; a reacting one bursts the nearest pairs of both elements', () => {
+        // Fire a/e and water b/f all touch: off a realm floor, matching a pops its clump.
+        const tiles = (): Tile[] => floor().map((tile) => ({ ...tile, state: 'hidden' as const }));
+        const resolve = (run: RunState) => resolveTurnMatchBoardResolution({ run, board: board(tiles()), firstTileId: 'a1', secondTileId: 'a2' });
+        const gone = (result: ReturnType<typeof resolve>): string[] => result.chunkBreak.brokenPairKeys.slice().sort();
+        expect(gone(resolve(runIn('storm', 'calm')))).toEqual([]);
+        expect(gone(resolve(runIn('storm', 'calm', { elementStreak: { suit: 'ember', links: 4 } })))).toEqual([]);
+        // Water primed at two links: fire meets it, potency two, so up to two pairs of each. One fire pair and two water pairs stand.
+        const steam = resolve(runIn('storm', 'calm', { elementStreak: { suit: 'tide', links: 2 } }));
+        expect(gone(steam)).toEqual(['b', 'e', 'f']);
+        expect(steam.chunkBreak.waves).toBe(1);
+        expect(steam.chunkBreak.score).toBeGreaterThan(0);
+        expect(steam.board.tiles.filter((tile) => tile.state === 'removed')).toHaveLength(6);
+        // At one link of potency it takes the nearest pair of each and leaves the further water pair.
+        const one = resolveChunkBreak({ board: board(tiles().map((tile) => (tile.pairKey === 'a' ? { ...tile, state: 'matched' as const } : tile))), run: { floorCurioId: null }, matchedTileIds: ['a1', 'a2'], chain: 1, spec: { suits: ['ember', 'tide'], pairsPerSuit: 1 } });
+        expect(one.brokenPairKeys.slice().sort()).toEqual(['b', 'e']);
+        // Grove and frost stand through a fire-and-water reaction.
+        expect(steam.board.tiles.filter((tile) => tile.suit === 'moss' || tile.suit === 'bone').every((tile) => tile.state === 'hidden')).toBe(true);
     });
 
     it('the deeper the realm, the more of the floor is its element, to half the pairs', () => {

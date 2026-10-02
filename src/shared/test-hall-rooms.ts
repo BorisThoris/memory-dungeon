@@ -353,8 +353,8 @@ const EIGHT_PAIRS_GROWN = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m').repl
 const EIGHT_PAIRS_THAWED = EIGHT_PAIRS.map((row) => row.replace(/:e/g, ':m'));
 /**
  * The resonance rooms' floor (`element-resonance-rules.ts`): fire and water along the top and the
- * bottom, grove and frost between them. A fire or water match bridges the row between and takes
- * the other pair of its element with it (probed 2026-10-02), which is two stacks and one link.
+ * bottom, grove and frost between them. On a realm floor a plain match takes its own pair and
+ * nothing else; only a reaction bursts more (`elementPopSpec`).
  */
 const SIX_ELEMENTS = ['a:e b:t a:e b:t', 'e:m f:b e:m f:b', 'c:e d:t c:e d:t'];
 const resonanceIs = (suit: TileSuit, stacks: number) => (run: RunState) =>
@@ -1746,15 +1746,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-frost',
         title: 'Frost',
-        mechanic: 'A bone group is Frost: it kills every fire it reaches, and a group the pop made freezes the nearest face-down card it reaches for a turn.',
-        graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
-        tryThis: 'a and b are both bone and touch. Match a: the pop takes b, and the frost freezes the nearest card.',
-        build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm') }),
+        mechanic: 'A bone group is Frost: it kills every fire it reaches, and a group a reaction burst freezes the nearest face-down card it reaches for a turn.',
+        graphMechanicIds: ['board.element_groups', 'board.element_resonance', 'safety.softlock_fairness'],
+        tryThis: 'Two grove matches are in hand. Match a (frost): the Frostbloom bursts the other frost pair with it, and the frost group freezes the nearest card.',
+        build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm', { elementStreak: { suit: 'moss', links: 2 } }) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the frost group freezes one card, for a turn',
-                expect: expectAll(realmEventIs('freeze'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 1 ? null : 'not exactly one frozen card'), finishable)
+                says: 'the reaction bursts the other frost pair, and the frost group freezes one card, for a turn',
+                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && (t.frost ?? 0) > 0).length === 1 ? null : 'not exactly one frozen card'), finishable)
             },
             { step: { do: 'missAny' }, says: 'a turn later the ice is gone', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
         ]
@@ -1762,15 +1762,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-grove',
         title: 'Grove',
-        mechanic: 'A moss group is Grove: a group the pop made snares the nearest face-down card it reaches in vines, until a match beside it or a fire cuts it.',
-        graphMechanicIds: ['board.element_groups', 'safety.softlock_fairness'],
-        tryThis: 'a and b are both moss and touch. Match a: the pop takes b, and the vines take the nearest card.',
-        build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm') }),
+        mechanic: 'A moss group is Grove: a group a reaction burst snares the nearest face-down card it reaches in vines, until a match beside it or a fire cuts it.',
+        graphMechanicIds: ['board.element_groups', 'board.element_resonance', 'safety.softlock_fairness'],
+        tryThis: 'Two frost matches are in hand. Match a (grove): the Frostbloom bursts the other grove pair with it, and the vines take the nearest card.',
+        build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm', { elementStreak: { suit: 'bone', links: 2 } }) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the grove group snares one card',
-                expect: expectAll(realmEventIs('entangle'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 1 ? null : 'not exactly one vined card'), finishable)
+                says: 'the reaction bursts the other grove pair, and the grove group snares one card',
+                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).filter((t) => t.state === 'hidden' && t.vined).length === 1 ? null : 'not exactly one vined card'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
@@ -1810,30 +1810,30 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-resonance',
         title: 'Resonance: the elements stack',
-        mechanic: 'Every pair matched of an element is a stack of it for the run, with no cap, and the pairs a pop takes are stacks too; a turn is one link of the streak however many pairs it took. A missed card sheds a stack of its element and loses its charge, and the miss breaks the streak.',
+        mechanic: 'Every pair matched of an element is a stack of it for the run, with no cap; a plain match takes its own pair and nothing else, and is one link of the streak. A missed card sheds a stack of its element and loses its charge, and the miss breaks the streak.',
         graphMechanicIds: ['board.element_resonance'],
-        tryThis: 'Water already stands at 40 stacks. Match a (fire): its pop takes the other fire pair, two stacks and one link. Miss a water card: water sheds a stack and the streak is gone. Match water: it climbs again, past forty.',
+        tryThis: 'Water already stands at 40 stacks. Match a (fire): one pair, one stack, one link, and nothing pops with it. Miss a water card: water sheds a stack and the streak is gone. Match water: it climbs again, past forty.',
         build: () => room(SIX_ELEMENTS, { misses: 4, run: realmRun('storm', 'calm', { elementResonance: { tide: 40 } }) }),
         script: [
-            { step: { do: 'match', pairKey: 'a' }, says: 'the match and the pair its pop took are two stacks of fire, and one link in hand', expect: expectAll(isGone('c'), resonanceIs('ember', 2), streakIs('ember', 1)) },
-            { step: { do: 'miss', a: 'b-1', b: 'e-1' }, says: 'the missed water card sheds a stack of water, and the streak breaks', expect: expectAll(resonanceIs('tide', 39), resonanceIs('ember', 2), streakIs(null)) },
-            { step: { do: 'match', pairKey: 'b' }, says: 'water stacks on, two pairs deeper, with no cap to stop at', expect: expectAll(resonanceIs('tide', 41), streakIs('tide', 1)) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match is a stack of fire and a link in hand, and the other fire pair stands: nothing pops without a reaction', expect: expectAll(isStanding('c'), resonanceIs('ember', 1), streakIs('ember', 1)) },
+            { step: { do: 'miss', a: 'b-1', b: 'e-1' }, says: 'the missed water card sheds a stack of water, and the streak breaks', expect: expectAll(resonanceIs('tide', 39), resonanceIs('ember', 1), streakIs(null)) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'water stacks on, with no cap to stop at', expect: expectAll(isStanding('d'), resonanceIs('tide', 40), streakIs('tide', 1)) },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     },
     {
         id: 'element-steam',
         title: 'Steam: fire meets water',
-        mechanic: 'Two matches of one element in a row prime the streak. A different element matched next spends it: the two react, with a potency of the links in hand plus half the spent element\'s tier. Fire and water make Steam: that many face-down cards nearest the match show their faces until the next flip.',
+        mechanic: 'Two matches of one element in a row prime the streak. A different element matched next spends it: the two react, with a potency of the links in hand plus half the spent element\'s tier, and the reaction bursts that many of the nearest pairs of each of its two elements - the only pop there is. Fire and water make Steam: that many face-down cards nearest the match also show their faces until the next flip.',
         graphMechanicIds: ['board.element_resonance'],
-        tryThis: 'One fire match is in hand from the floor above. Match fire again (a), then a water pair (b): Steam lifts, and two cards beside the match show their faces.',
+        tryThis: 'One fire match is in hand from the floor above. Match fire again (a): nothing pops. Then a water pair (b): Steam bursts the other fire pair and the other water pair, and two cards beside the match show their faces.',
         build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'ember', links: 1 } }) }),
         script: [
-            { step: { do: 'match', pairKey: 'a' }, says: 'two links: the streak is primed, and nothing has reacted', expect: expectAll(streakIs('ember', 2), (r) => ((r.elementReactionsThisFloor ?? 0) === 0 ? null : 'reacted early')) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'two links: the streak is primed, nothing has reacted, and nothing popped', expect: expectAll(streakIs('ember', 2), isStanding('c'), (r) => ((r.elementReactionsThisFloor ?? 0) === 0 ? null : 'reacted early')) },
             {
                 step: { do: 'match', pairKey: 'b' },
-                says: 'water on the primed fire is Steam at potency two: two faces lit, and the hand is water now',
-                expect: expectAll(reactedOnce('steam', 2), streakIs('tide', 1), (r) => ((r.realmLitTileIds ?? []).length === 2 ? null : `lit ${(r.realmLitTileIds ?? []).length}`))
+                says: 'water on the primed fire is Steam at potency two: the other fire pair and the other water pair burst, two faces lit, and the hand is water now',
+                expect: expectAll(reactedOnce('steam', 2), isGone('c'), isGone('d'), streakIs('tide', 1), (r) => ((r.realmLitTileIds ?? []).length === 2 ? null : `lit ${(r.realmLitTileIds ?? []).length}`))
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
@@ -1883,12 +1883,12 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'Freeze-over: water meets frost',
         mechanic: 'Water and frost make a Freeze-over: the floor holds still for its potency plus one turns. No weather comes, no realm strikes back, a miss in the frost freezes nothing, and no fuse burns down.',
         graphMechanicIds: ['board.element_resonance', 'board.realm_weather'],
-        tryThis: 'In a raging Frozen Reach with two water matches in hand, match the frost pair (f): the floor holds still. Now miss: nothing freezes.',
+        tryThis: 'In a raging Frozen Reach with two water matches in hand, match the frost pair (f): the water pairs burst and the floor holds still. Now miss: nothing freezes.',
         build: () => room(SIX_ELEMENTS, { misses: 4, run: realmRun('frost', 'raging', { elementStreak: { suit: 'tide', links: 2 } }) }),
         script: [
             { step: { do: 'match', pairKey: 'f' }, says: 'the floor holds still for three turns', expect: expectAll(reactedOnce('freezeover', 2), (r) => (r.realmStillTurns === 3 ? null : `still ${r.realmStillTurns}`)) },
             {
-                step: { do: 'miss', a: 'b-1', b: 'e-1' },
+                step: { do: 'miss', a: 'e-1', b: 'c-1' },
                 says: 'a miss in the raging frost freezes nothing while it holds, and a turn of the stillness is spent',
                 expect: expectAll((r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'a card froze' : null), (r) => (r.realmStillTurns === 2 ? null : `still ${r.realmStillTurns}`), (r) => ((r.realmFrozenThisFloor ?? 0) === 0 ? null : `frozen ${r.realmFrozenThisFloor}`))
             },
@@ -1900,10 +1900,10 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'Flood: water meets grove',
         mechanic: 'Water and grove make a Flood: both elements gain its potency in resonance. The potency is the links in hand plus half the spent element\'s tier, so deep water floods deeper.',
         graphMechanicIds: ['board.element_resonance'],
-        tryThis: 'Two water matches are in hand and water stands at six stacks (tier two). Match the grove pair (e): the Flood is potency three, and both elements rise by three.',
+        tryThis: 'Two water matches are in hand and water stands at six stacks (tier two). Match the grove pair (e): the Flood is potency three, it bursts both water pairs, and both elements rise by three.',
         build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'tide', links: 2 }, elementResonance: { tide: 6, moss: 1 } }) }),
         script: [
-            { step: { do: 'match', pairKey: 'e' }, says: 'water rises by three, and grove by its pair and three', expect: expectAll(reactedOnce('flood', 3), resonanceIs('tide', 9), resonanceIs('moss', 5)) },
+            { step: { do: 'match', pairKey: 'e' }, says: 'water rises by three and by the two pairs the Flood burst, and grove by its pair and three', expect: expectAll(reactedOnce('flood', 3), isGone('b'), isGone('d'), resonanceIs('tide', 11), resonanceIs('moss', 5)) },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     },
@@ -1912,10 +1912,10 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: 'Frostbloom: frost meets grove',
         mechanic: 'Frost and grove make a Frostbloom: as many face-down cards as its potency, the nearest to the match, each gain a charge, whatever their element.',
         graphMechanicIds: ['board.element_resonance', 'board.element_alchemy'],
-        tryThis: 'Two grove matches are in hand. Match the frost pair (f): the two cards nearest it gain a charge, and they are water cards.',
+        tryThis: 'Two grove matches are in hand. Match the frost pair (f): the grove pair bursts with it, and the two cards nearest gain a charge, a fire card and a water card.',
         build: () => room(SIX_ELEMENTS, { run: realmRun('storm', 'calm', { elementStreak: { suit: 'moss', links: 2 } }) }),
         script: [
-            { step: { do: 'match', pairKey: 'f' }, says: 'the two nearest cards are charged', expect: expectAll(reactedOnce('frostbloom', 2), chargeIs('b-1', 1), chargeIs('b-2', 1)) },
+            { step: { do: 'match', pairKey: 'f' }, says: 'the grove pair bursts, and the two nearest cards are charged', expect: expectAll(reactedOnce('frostbloom', 2), isGone('e'), chargeIs('a-1', 1), chargeIs('b-1', 1)) },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     },

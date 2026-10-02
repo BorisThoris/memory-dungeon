@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 73 as const;
+export const ENCYCLOPEDIA_VERSION = 74 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -588,6 +588,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'chain_chunk_fever',
         title: 'Chain, chunk and Fever',
         description:
+            '**On a realm floor - every floor of a run - a match takes its own pair and nothing else. What pops is the reaction** (see **Resonance and reactions**): match one element twice, then another, and the reaction bursts the nearest pairs of both, as many of each as its potency. The rungs below still multiply what a burst pays and still climb with every pair it takes; the contact rule that follows is the old pop, which a floor outside any realm still plays by. ' +
             'A match on its own just matches. Build a chain of three (Clean) and matches start to **pop**: a same-suit pair the two tiles you matched are touching breaks away with them. ' +
             'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap - and it is capped by the rung: up to one extra pair at Clean, two at Sharp, four at Fever, nearest first. These are extra pairs beyond the pair you matched, and the layout decides how many are in reach. A **breather** allows one extra pair at every rung, including before Clean. ' +
             'Sharp, a little over half the floor\'s pairs of momentum and four at least, runs the reaction one wave on from where the pop stopped. ' +
@@ -630,6 +631,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         description:
             'The elements **stack, and never stop**. Every pair you match of an element - the pairs its pop takes too - is a stack of its **resonance** for the whole run, and the strip beside the board counts all four. Each stack is score on that element\u2019s matches, and every **tier** (at 2, 6, 12, 20, 30 stacks and on) widens its cast by a step. A card you miss sheds a stack of its element. ' +
             'Match the **same element again** and you build a **streak**, floor to floor; a miss breaks it. At two in a row the streak is **primed**, and the next match of a **different** element spends it: the two elements **react**. The potency is the streak, plus half the spent element\u2019s tier, plus half your depth in the Thunder Spire. ' +
+            '**Every reaction bursts cards, and nothing else does**: as many pairs of each of the two elements as its potency, the nearest to your match first, gone from the floor and paid as a pop at your combo\u2019s rung. A plain match pops nothing. On top of the burst, each reaction does its own thing. ' +
             '**Steam** (fire and water) shows that many of the nearest faces until your next flip. **Blaze** (fire and grove) burns every vine on the floor and pays a gold for every two of its potency. **Thaw** (fire and frost) frees every card of ice and snow and scores 25 times its potency squared. **Freeze-over** (water and frost) holds the floor still for its potency plus one turns: no weather, no backlash, no frostbite, no fuse burning down. **Flood** (water and grove) adds its potency to both elements\u2019 resonance. **Frostbloom** (frost and grove) charges that many of the nearest cards. ' +
             'So every turn asks: the same element again, and deeper - or a different one now, and the reaction.'
     },

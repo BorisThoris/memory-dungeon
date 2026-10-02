@@ -867,7 +867,9 @@ describe('useAppStore timers', () => {
         // to Fever, so a perfect floor two lands the first Fever and clears at it - Extreme Fever.
         // This case is about clear/continue/end and what gets persisted, so it asserts the
         // unlocks rather than pretending the chain still resets.
-        expect(state.newlyUnlockedAchievements).toEqual(['ACH_FIRST_FEVER', 'ACH_EXTREME_FEVER']);
+        // Since 2026-10-02 a plain match pops nothing on a realm floor (`elementPopSpec`), so how fast
+        // the ladder climbs depends on the reactions the seed deals; the clear still lands at Fever.
+        expect(state.newlyUnlockedAchievements).toContain('ACH_EXTREME_FEVER');
         expect(state.run?.stats.highestLevel).toBe(2);
         expect(state.run?.stats.levelsCleared).toBe(2);
         expect(state.run?.achievementsEnabled).toBe(true);

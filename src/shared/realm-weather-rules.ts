@@ -643,7 +643,9 @@ export const resolveRealmTurn = ({
     if (outcome === 'match' && groupTileIds.length > 0) {
         const castSuit = (Object.keys(pairsBySuit) as TileSuit[])[0];
         const tier = castSuit ? resonanceTier(resonanceOf(resonance, castSuit)) : 0;
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds, realmId, pinned, alchemy, tier, still });
+        // The cast is the matched element's: a reaction's burst takes cards of the element it spent too.
+        const castGroup = groupTileIds.filter((id) => tiles[indexOf.get(id) ?? -1]?.suit === castSuit);
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, pinned, alchemy, tier, still });
         if (cast && cast.touchedTileIds.length > 0) {
             casts += 1;
             for (const id of cast.touchedTileIds) touchedThisTurn.add(id);

@@ -17,6 +17,7 @@ import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus }
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { getChainTier } from '../../shared/chain-tier-rules';
 import { getClumpRead } from '../../shared/clump-read-rules';
+import type { ElementRunFields } from '../../shared/element-resonance-rules';
 import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 
@@ -384,6 +385,8 @@ interface TileBoardProps {
         momentum: number;
         /** Sticky toffee sticks the clump diagonally, so the aim guide has to know the resident. */
         floorCurioId: string | null;
+        /** On a realm floor the pop is the reaction's: the streak in hand and the stacks decide it. */
+        elements?: Partial<ElementRunFields>;
     };
     recoveryContext?: {
         action: string;
@@ -1296,7 +1299,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const clumpReadContext = useMemo(
         () => ({
             chain: (chainContext?.momentum ?? 0) + 1,
-            run: { floorCurioId: chainContext?.floorCurioId ?? null }
+            run: { floorCurioId: chainContext?.floorCurioId ?? null, ...(chainContext?.elements ?? {}) }
         }),
         [chainContext]
     );
@@ -1373,16 +1376,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 tone: 'pickup'
             };
         }
-        if (clumpRead && clumpRead.size > 1) {
+        if (clumpRead && (clumpRead.size > 1 || clumpRead.elemental?.reacts)) {
             return {
                 action: 'Preview',
-                eyebrow: 'Clump',
+                eyebrow: clumpRead.elemental ? (clumpRead.elemental.reacts ? 'Reaction' : 'Element') : 'Clump',
                 lines: [
                     CHAIN_BEAT_COPY.clumpRead(
                         getTileSuit(clumpRead.suit).name,
                         clumpRead.size,
                         clumpRead.now,
-                        clumpRead.next
+                        clumpRead.next,
+                        clumpRead.elemental
                     )
                 ],
                 kind: 'clump',

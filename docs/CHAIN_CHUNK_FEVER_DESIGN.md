@@ -506,3 +506,11 @@ cascade, difficulty curve, archetype pressure, both censuses, depth, health, the
 Deferred from the batch set after Gen 142, still wanted, now behind the census: a third island on
 boards of 32 tiles or more; the floor's suits on the floor-clear recap; the tutorial floor's first
 match laid to pop.
+
+## 2026-10-02: on a realm floor the pop is the reaction's
+
+The owner's decision, recorded in `docs/REALMS.md` ("The pop is the reaction's"): on a realm floor
+- every floor of a run - a plain match takes its own pair and nothing pops; a match that reacts with
+the element in hand bursts the nearest pairs of the two elements that met. The contact rule in this
+document is unchanged in `chunk-break-rules.ts` and is what a run with no realm still plays by (the
+census, the sims, fixtures); the rungs still multiply what a burst pays.

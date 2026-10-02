@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2882,
     "codeFileCount": 1054,
-    "exportedSymbolCount": 3312,
+    "exportedSymbolCount": 3319,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8655
+    "relationshipCount": 8670
   },
   "inventory": [
     {
@@ -303,14 +303,14 @@
     {
       "path": "docs/BREAK_TOUCHES_ONLY.md",
       "category": "documentation",
-      "bytes": 6999,
-      "sha256": "8e5d38cc240499976ec3033287ce457277c90232e632923e85de09aa1b03de12"
+      "bytes": 7532,
+      "sha256": "a18de77b7396639adc966c7dad833476620af98094f3b68e9b3f9a69da21c50f"
     },
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 77122,
-      "sha256": "8dc335d7ce902e3738f15d13e77c5fae49b6efa7e277dd97607498aabc934682"
+      "bytes": 77655,
+      "sha256": "2da8ccb4311d61fa7e8d249f5f3496202606cf7127643217163bca74d6794a48"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -795,8 +795,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 47476,
-      "sha256": "cbfc34d8b320a0a8aa67119dbe49e5de55b0d5c0f62637721bc30bd027ae5241"
+      "bytes": 48018,
+      "sha256": "7290621ba59349fab4a23268f59f0ccf2a616ab8d01e3816103e96c7620d044a"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -1287,8 +1287,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 22478,
-      "sha256": "7a5e2ec1f7dcdfe38576ed8e8ec987c698921d124e06642706acbd69db645827"
+      "bytes": 25547,
+      "sha256": "352cc4c7aab944f6c80dac7933346910f196605086b99aff58ae89ce3686239b"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -2386,7 +2386,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "aab6d57ef8cd9fde639c9c98b2cd9afd05337300688fc091ccc2995ea3897c4c"
+      "sha256": "df9477a7428d7ad92711c63267789201a3b81983d6503eab6e363741f2e6eece"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3837,8 +3837,8 @@
     {
       "path": "e2e/element-resonance.spec.ts",
       "category": "test",
-      "bytes": 5240,
-      "sha256": "889f37576cee7dddc6fec76e5bdbb3e1250ca855817b6093dfa6c103bb6f2221"
+      "bytes": 6024,
+      "sha256": "f93b3487a7f0e935abb4c9ec1a91a05e9f64c554ac90222ec62ee9444cf6f98a"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -5589,8 +5589,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 3328,
-      "sha256": "8bbee308902edc212f0b5e6057e23805948cd359fd9b30cbccfa546678650ae4"
+      "bytes": 3380,
+      "sha256": "ebefa51e77e1da57094f3e260f5e603f323d1525d1c09c097842f75371b061ac"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -9447,8 +9447,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35458,
-      "sha256": "d442da3314ff12942344697245bc2118cd5500eb85e0531d1e42a7e11db79e5e"
+      "bytes": 35476,
+      "sha256": "8f84c7768aa1aed5b718482902114a5cd28ceff446667a6c1970dda9719561b8"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9645,8 +9645,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 114686,
-      "sha256": "db8810326a091753a071dcbf367c12aefd69c74ec1624f89381069d1a53e707a"
+      "bytes": 114870,
+      "sha256": "a779fd39079df6c1c14bb4010ee3c584f66311f8d23f7ca943d340f4dfbb6356"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10221,8 +10221,8 @@
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 17136,
-      "sha256": "1cdbedae2e804d18b5744a63d807b5d143e5ed7b9f9a4f4bcbfbfdd51b4a7918"
+      "bytes": 17297,
+      "sha256": "7c3e9f76cb95b4a0fc11acee73841610d0275e96c45a3d8163ef881acc1afa5e"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -10389,8 +10389,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 150352,
-      "sha256": "8b52d9971be7397d7686ddd098c50e7b109eeafef2a70ba41192dcbd404c574b"
+      "bytes": 150771,
+      "sha256": "d6fe51cf05666a1e8a55bc5f8f4bb76d8de1f854233a2d436303ac7ab6db3be9"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -11259,8 +11259,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 8055,
-      "sha256": "e774b65b38bb9bb71ccbcfdb0e64deb201702f9c01f9ce2e847f093d5e10b7d6"
+      "bytes": 8479,
+      "sha256": "de8da896b32ef4e93820a1f759c3953f2131c483b215db8996abb90a27dac9d0"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -12393,8 +12393,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 38696,
-      "sha256": "831f47deb96ee4eb4948d1b6851d79356d0784d855c3fa25866af280cb295956"
+      "bytes": 38883,
+      "sha256": "3dd90c91f63ed26592007f91454ecb5e8fa3cb5e48632c25e66986a93f176eb7"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -12651,8 +12651,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 47790,
-      "sha256": "11cf5c8ab238252d736ff8e37ca8c1b0bfc2d15a5012acabfb6730e741a57b9e"
+      "bytes": 48332,
+      "sha256": "2b8c9893ba8f5da85ff884c34e2fcb423177c4c0d462fdff6b01ef7bf805dc90"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -13011,8 +13011,8 @@
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 32740,
-      "sha256": "7c7f52f3f1e51ce3507e2ad2450fd41832f734b2bd4e1179ace0abf350f4b419"
+      "bytes": 36430,
+      "sha256": "a0985ff90450ba191d477d5617e83ac46f1c05298d2e6a368bbb9ac4a0a1f341"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -13035,8 +13035,8 @@
     {
       "path": "src/shared/clump-read-rules.ts",
       "category": "source",
-      "bytes": 4661,
-      "sha256": "61028f5937e331049bfe2ab4347ecd8e005ac07bbc049064911808e703762490"
+      "bytes": 5504,
+      "sha256": "945838cd0d82fabe47bc476099fe03d62c671371ce4ca8e0ef023c7ae93e796e"
     },
     {
       "path": "src/shared/color-vision.test.ts",
@@ -13251,14 +13251,14 @@
     {
       "path": "src/shared/element-resonance-rules.test.ts",
       "category": "test",
-      "bytes": 11438,
-      "sha256": "262c8ded9b8534a717e9639d79ed3ddf1cf82a909880aecd7b9812db8e16259d"
+      "bytes": 14394,
+      "sha256": "bbefdb80a63e23805f1d882dfa9285509dc47807c302a34e0b73f79160b92308"
     },
     {
       "path": "src/shared/element-resonance-rules.ts",
       "category": "source",
-      "bytes": 11892,
-      "sha256": "54744499fe8f33324a7795a2ca6a32cf4d9facc8c5a2197555db9528b71febd7"
+      "bytes": 15411,
+      "sha256": "7ecb6753c251a0d9dd36e44ea82b284b259ab62db16c60dc17b01ede0163ecb6"
     },
     {
       "path": "src/shared/exploit-surface.test.ts",
@@ -13827,8 +13827,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 48768,
-      "sha256": "c3faaab641267ef639a3ee9f789875b4d5cc8d0d101a1b05760c7a051b6c65cf"
+      "bytes": 49556,
+      "sha256": "548bcbfee8bbefbe64181ea072c4cf37074e5e82020121017c9e01193e7c99d9"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14247,8 +14247,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 41891,
-      "sha256": "100d485fa3822c8c94c63c9f07a69216005d8705663f8093ff293c554cfba7e3"
+      "bytes": 42112,
+      "sha256": "a87ddba2fc6a7575db5e30d453113d37e4e1c46acc465c7d7380e8eac12f6992"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -14523,14 +14523,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 6650,
-      "sha256": "0a15bd2ce9f850734518fd5d7e9594b98ba7ffad14192ec44055c77b6f351684"
+      "bytes": 6780,
+      "sha256": "631f1033256553ea84333a27173490a7efd94deada5657f1a2313405b374c5d9"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 32998,
-      "sha256": "63694fab470b6207e2ffb3059a92d28a51657a6a89d53bfbe42dca756cf42071"
+      "bytes": 34409,
+      "sha256": "9e438bcdad9fc85085f13e42627cca3a28dc5e6d941bf0cdde876615f61b9a26"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -14799,8 +14799,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 64719,
-      "sha256": "07f5c37e7fa5c99cf5769c10573ea2588e4a3e68ee0abd544cf068e7598b7bd9"
+      "bytes": 65303,
+      "sha256": "1e3fac7d26597841e9f93051785f80d01093a1bf8c1fafa4349c17aa96a26551"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14823,8 +14823,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 129619,
-      "sha256": "a2082d044055dcdf77141ab8aa94c86a3aaebc705a10ea2bff9583b21bb3397f"
+      "bytes": 130387,
+      "sha256": "5709c512c8563a6360cfedb75aeafc5bd729b4d9cfa4f21cc985f8bbbacccad3"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -14985,8 +14985,8 @@
     {
       "path": "src/shared/turn-match-board-resolution-rules.ts",
       "category": "source",
-      "bytes": 1809,
-      "sha256": "7f40c7f1b39b458e3a97bc3f9cbf1ae8db8ef61d1de30302674ada40b6065ba7"
+      "bytes": 2536,
+      "sha256": "2883884147911b15c1dffc1a3c450a9a26493168bb694e506dab5613a174e812"
     },
     {
       "path": "src/shared/turn-match-followup-rules.test.ts",
@@ -20597,7 +20597,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2303,
+      "lineCount": 2304,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -22462,7 +22462,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3462,
+      "lineCount": 3466,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -22499,6 +22499,7 @@
         "file:src/shared/clump-read-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/findables.ts",
         "file:src/shared/graphicsQuality.ts",
         "file:src/shared/tile-suit-rules.ts",
@@ -25128,7 +25129,7 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 145,
+      "lineCount": 152,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -28164,7 +28165,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 947,
+      "lineCount": 949,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -29862,7 +29863,7 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 624,
+      "lineCount": 698,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -29913,6 +29914,7 @@
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
+        "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/score-terms-rules.test.ts"
       ]
@@ -29979,11 +29981,12 @@
       "path": "src/shared/clump-read-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 105,
+      "lineCount": 116,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/clump-read-rules.ts#ClumpRead",
@@ -30889,14 +30892,16 @@
       "path": "src/shared/element-resonance-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 221,
+      "lineCount": 254,
       "imports": [
+        "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/game.ts",
         "file:src/shared/realm-rules.ts",
         "file:src/shared/realm-weather-rules.ts",
-        "file:src/shared/tile-suit-rules.ts"
+        "file:src/shared/tile-suit-rules.ts",
+        "file:src/shared/turn-match-board-resolution-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -30906,7 +30911,7 @@
       "path": "src/shared/element-resonance-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 230,
+      "lineCount": 287,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -30917,13 +30922,20 @@
         "symbol:src/shared/element-resonance-rules.ts#BLAZE_POTENCY_PER_GOLD",
         "symbol:src/shared/element-resonance-rules.ts#ELEMENT_REACTION_KINDS",
         "symbol:src/shared/element-resonance-rules.ts#ELEMENT_REACTIONS",
+        "symbol:src/shared/element-resonance-rules.ts#elementPopSpec",
+        "symbol:src/shared/element-resonance-rules.ts#ElementPopSpec",
         "symbol:src/shared/element-resonance-rules.ts#ElementReactionDefinition",
         "symbol:src/shared/element-resonance-rules.ts#ElementReactionKind",
         "symbol:src/shared/element-resonance-rules.ts#elementReactionOf",
         "symbol:src/shared/element-resonance-rules.ts#ElementReactionOutcome",
         "symbol:src/shared/element-resonance-rules.ts#ElementResonance",
+        "symbol:src/shared/element-resonance-rules.ts#ElementRunFields",
         "symbol:src/shared/element-resonance-rules.ts#ElementStreak",
         "symbol:src/shared/element-resonance-rules.ts#isStreakPrimed",
+        "symbol:src/shared/element-resonance-rules.ts#pendingElementReaction",
+        "symbol:src/shared/element-resonance-rules.ts#PendingElementReaction",
+        "symbol:src/shared/element-resonance-rules.ts#REACTION_POP_PAIRS_PER_POTENCY",
+        "symbol:src/shared/element-resonance-rules.ts#reactionFor",
         "symbol:src/shared/element-resonance-rules.ts#reactionPotency",
         "symbol:src/shared/element-resonance-rules.ts#resolveElementReaction",
         "symbol:src/shared/element-resonance-rules.ts#RESONANCE_SCORE_PER_STACK",
@@ -32933,7 +32945,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 733,
+      "lineCount": 735,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34326,7 +34338,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 914,
+      "lineCount": 916,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -35250,7 +35262,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 85,
+      "lineCount": 86,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -35263,7 +35275,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 584,
+      "lineCount": 602,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -36923,12 +36935,14 @@
       "path": "src/shared/turn-match-board-resolution-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 53,
+      "lineCount": 62,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/match-claim-rules.ts",
+        "file:src/shared/realm-sway-rules.ts",
         "file:src/shared/session-stats-rules.ts"
       ],
       "exports": [
@@ -36937,6 +36951,7 @@
         "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionResult"
       ],
       "testedBy": [
+        "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/turn-match-board-resolution-rules.test.ts"
       ]
     },
@@ -40978,8 +40993,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2302,
-      "endLine": 2302
+      "line": 2303,
+      "endLine": 2303
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -42722,24 +42737,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3461,
-      "endLine": 3461
+      "line": 3465,
+      "endLine": 3465
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 329,
-      "endLine": 336
+      "line": 330,
+      "endLine": 337
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 338,
-      "endLine": 342
+      "line": 339,
+      "endLine": 343
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -46083,7 +46098,7 @@
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
       "line": 54,
-      "endLine": 144
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
@@ -51522,8 +51537,8 @@
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 438,
-      "endLine": 623
+      "line": 503,
+      "endLine": 697
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_WAVES",
@@ -51706,40 +51721,40 @@
       "name": "ClumpRead",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 42,
-      "endLine": 52
+      "line": 44,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadContext",
       "name": "ClumpReadContext",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 17,
-      "endLine": 25
+      "line": 18,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadNextTierPreview",
       "name": "ClumpReadNextTierPreview",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 37,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#ClumpReadTierPreview",
       "name": "ClumpReadTierPreview",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 27,
-      "endLine": 33
+      "line": 29,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#getClumpRead",
       "name": "getClumpRead",
       "kind": "value",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 70,
-      "endLine": 104
+      "line": 78,
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -53622,6 +53637,22 @@
       "endLine": 88
     },
     {
+      "id": "symbol:src/shared/element-resonance-rules.ts#elementPopSpec",
+      "name": "elementPopSpec",
+      "kind": "value",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 150,
+      "endLine": 154
+    },
+    {
+      "id": "symbol:src/shared/element-resonance-rules.ts#ElementPopSpec",
+      "name": "ElementPopSpec",
+      "kind": "interface",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 141,
+      "endLine": 145
+    },
+    {
       "id": "symbol:src/shared/element-resonance-rules.ts#ElementReactionDefinition",
       "name": "ElementReactionDefinition",
       "kind": "interface",
@@ -53650,8 +53681,8 @@
       "name": "ElementReactionOutcome",
       "kind": "interface",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 170,
-      "endLine": 181
+      "line": 227,
+      "endLine": 238
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#ElementResonance",
@@ -53660,6 +53691,14 @@
       "file": "src/shared/element-resonance-rules.ts",
       "line": 36,
       "endLine": 36
+    },
+    {
+      "id": "symbol:src/shared/element-resonance-rules.ts#ElementRunFields",
+      "name": "ElementRunFields",
+      "kind": "type",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 103,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#ElementStreak",
@@ -53678,6 +53717,38 @@
       "endLine": 68
     },
     {
+      "id": "symbol:src/shared/element-resonance-rules.ts#pendingElementReaction",
+      "name": "pendingElementReaction",
+      "kind": "value",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 119,
+      "endLine": 120
+    },
+    {
+      "id": "symbol:src/shared/element-resonance-rules.ts#PendingElementReaction",
+      "name": "PendingElementReaction",
+      "kind": "interface",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 105,
+      "endLine": 109
+    },
+    {
+      "id": "symbol:src/shared/element-resonance-rules.ts#REACTION_POP_PAIRS_PER_POTENCY",
+      "name": "REACTION_POP_PAIRS_PER_POTENCY",
+      "kind": "value",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 148,
+      "endLine": 148
+    },
+    {
+      "id": "symbol:src/shared/element-resonance-rules.ts#reactionFor",
+      "name": "reactionFor",
+      "kind": "value",
+      "file": "src/shared/element-resonance-rules.ts",
+      "line": 112,
+      "endLine": 116
+    },
+    {
       "id": "symbol:src/shared/element-resonance-rules.ts#reactionPotency",
       "name": "reactionPotency",
       "kind": "value",
@@ -53690,8 +53761,8 @@
       "name": "resolveElementReaction",
       "kind": "value",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 187,
-      "endLine": 229
+      "line": 244,
+      "endLine": 286
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#RESONANCE_SCORE_PER_STACK",
@@ -53706,16 +53777,16 @@
       "name": "resonanceAfterMatch",
       "kind": "value",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 122,
-      "endLine": 154
+      "line": 176,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#resonanceAfterMiss",
       "name": "resonanceAfterMiss",
       "kind": "value",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 157,
-      "endLine": 168
+      "line": 214,
+      "endLine": 225
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#resonanceOf",
@@ -53738,8 +53809,8 @@
       "name": "ResonanceTurn",
       "kind": "interface",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 105,
-      "endLine": 115
+      "line": 159,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#runElementResonance",
@@ -56938,16 +57009,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 700,
-      "endLine": 718
+      "line": 702,
+      "endLine": 720
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 721,
-      "endLine": 732
+      "line": 723,
+      "endLine": 734
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -56955,7 +57026,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 586,
-      "endLine": 697
+      "endLine": 699
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -59314,8 +59385,8 @@
       "name": "applyRealmTurnToRun",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 853,
-      "endLine": 906
+      "line": 855,
+      "endLine": 908
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
@@ -59443,7 +59514,7 @@
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
       "line": 444,
-      "endLine": 847
+      "endLine": 849
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#SCALD_FUSE",
@@ -59458,8 +59529,8 @@
       "name": "shedSnow",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 909,
-      "endLine": 913
+      "line": 911,
+      "endLine": 915
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#VINE_CUT_GOLD",
@@ -60674,16 +60745,16 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 132,
-      "endLine": 347
+      "line": 140,
+      "endLine": 358
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 47,
-      "endLine": 52
+      "line": 53,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
@@ -60691,31 +60762,31 @@
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
       "line": 32,
-      "endLine": 45
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 359,
-      "endLine": 583
+      "line": 370,
+      "endLine": 601
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 63,
-      "endLine": 115
+      "line": 69,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 54,
-      "endLine": 61
+      "line": 60,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -63258,24 +63329,24 @@
       "name": "resolveTurnMatchBoardResolution",
       "kind": "value",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 21,
-      "endLine": 52
+      "line": 23,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionInput",
       "name": "TurnMatchBoardResolutionInput",
       "kind": "interface",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 12,
-      "endLine": 18
+      "line": 14,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/turn-match-board-resolution-rules.ts#TurnMatchBoardResolutionResult",
       "name": "TurnMatchBoardResolutionResult",
       "kind": "interface",
       "file": "src/shared/turn-match-board-resolution-rules.ts",
-      "line": 7,
-      "endLine": 10
+      "line": 9,
+      "endLine": 12
     },
     {
       "id": "symbol:src/shared/turn-match-followup-rules.ts#resolveTurnMatchFollowup",
@@ -81025,6 +81096,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#elementPopSpec",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#elementPopSpec",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#ElementPopSpec",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#ElementPopSpec",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#ElementReactionDefinition",
       "source": "file:src/shared/element-resonance-rules.ts",
       "target": "symbol:src/shared/element-resonance-rules.ts#ElementReactionDefinition",
@@ -81055,6 +81138,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#ElementRunFields",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#ElementRunFields",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#ElementStreak",
       "source": "file:src/shared/element-resonance-rules.ts",
       "target": "symbol:src/shared/element-resonance-rules.ts#ElementStreak",
@@ -81064,6 +81153,30 @@
       "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#isStreakPrimed",
       "source": "file:src/shared/element-resonance-rules.ts",
       "target": "symbol:src/shared/element-resonance-rules.ts#isStreakPrimed",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#pendingElementReaction",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#pendingElementReaction",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#PendingElementReaction",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#PendingElementReaction",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#REACTION_POP_PAIRS_PER_POTENCY",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#REACTION_POP_PAIRS_PER_POTENCY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-resonance-rules.ts->symbol:src/shared/element-resonance-rules.ts#reactionFor",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "symbol:src/shared/element-resonance-rules.ts#reactionFor",
       "kind": "exports"
     },
     {
@@ -95831,6 +95944,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/element-resonance-rules.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/findables.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/shared/findables.ts",
@@ -102497,6 +102616,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/clump-read-rules.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/shared/clump-read-rules.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/color-vision.test.ts->src/shared/color-vision.ts",
       "source": "file:src/shared/color-vision.test.ts",
       "target": "file:src/shared/color-vision.ts",
@@ -102833,6 +102958,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/element-resonance-rules.test.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/element-resonance-rules.test.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/element-resonance-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/element-resonance-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -102866,6 +102997,12 @@
       "id": "imports:src/shared/element-resonance-rules.test.ts->src/shared/tile-suit-rules.ts",
       "source": "file:src/shared/element-resonance-rules.test.ts",
       "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-resonance-rules.test.ts->src/shared/turn-match-board-resolution-rules.ts",
+      "source": "file:src/shared/element-resonance-rules.test.ts",
+      "target": "file:src/shared/turn-match-board-resolution-rules.ts",
       "kind": "imports"
     },
     {
@@ -108473,9 +108610,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/turn-match-board-resolution-rules.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/turn-match-board-resolution-rules.ts->src/shared/match-claim-rules.ts",
       "source": "file:src/shared/turn-match-board-resolution-rules.ts",
       "target": "file:src/shared/match-claim-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/turn-match-board-resolution-rules.ts->src/shared/realm-sway-rules.ts",
+      "source": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "target": "file:src/shared/realm-sway-rules.ts",
       "kind": "imports"
     },
     {
@@ -114679,6 +114828,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/element-resonance-rules.test.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/element-resonance-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "file:src/shared/release-checklist.test.ts",
@@ -118732,6 +118887,12 @@
       "id": "tested_by:src/shared/turn-match-board-cleanup-rules.ts->file:src/shared/turn-match-board-cleanup-rules.test.ts",
       "source": "file:src/shared/turn-match-board-cleanup-rules.ts",
       "target": "file:src/shared/turn-match-board-cleanup-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/turn-match-board-resolution-rules.ts->file:src/shared/element-resonance-rules.test.ts",
+      "source": "file:src/shared/turn-match-board-resolution-rules.ts",
+      "target": "file:src/shared/element-resonance-rules.test.ts",
       "kind": "tested_by"
     },
     {

@@ -54,6 +54,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.elementNeutralized > 0), 'no card ever put an element out').toBe(true);
         // Resonance: two elements react on a primed streak, and the stacks pass every old cap.
         expect(reports.some((report) => report.elementReactions > 0), 'no two elements ever reacted').toBe(true);
+        expect(reports.some((report) => report.elementBurstPairs > 0), 'no reaction ever burst a pair off the floor').toBe(true);
         expect(reports.some((report) => report.elementResonancePeak > 5), 'no element ever stacked past five').toBe(true);
         expect(reports.some((report) => report.elementChargePeak > 1), 'no card ever held more than one charge').toBe(true);
         expect(reports.some((report) => report.realmDepthPeak > 3), 'no realm ever went deeper than the old cap of three').toBe(true);

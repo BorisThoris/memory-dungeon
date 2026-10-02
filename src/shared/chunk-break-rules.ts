@@ -435,16 +435,88 @@ export const suitCanStillPop = (
     return false;
 };
 
+/**
+ * A reaction's burst (2026-10-02): the pairs of the two elements that met, the nearest to the match
+ * first, as many of each as the reaction allows. Not the contact rule: a reaction is a named event
+ * with its own stamp, and it has to clear cards every time it fires. A pair goes only whole, never
+ * the cursed pair, a findable or a singleton, and the result has the pop's shape (one wave), so the
+ * score, the momentum and the board's burst read it as they read any break.
+ */
+const resolveReactionBurst = ({
+    board,
+    tier,
+    matchedTileIds,
+    spec,
+    bonusPairs
+}: {
+    board: BoardState;
+    tier: ChainTier;
+    matchedTileIds: readonly string[];
+    spec: { suits: readonly NonNullable<Tile['suit']>[]; pairsPerSuit: number };
+    bonusPairs: number;
+}): ChunkBreakResult | null => {
+    const columns = getSafeBoardColumns(board);
+    const matched = new Set(matchedTileIds);
+    const origins = board.tiles.map((tile, index) => (matched.has(tile.id) ? index : -1)).filter((index) => index >= 0);
+    const steps = (index: number): number =>
+        Math.min(...origins.map((origin) => Math.abs((index % columns) - (origin % columns)) + Math.abs(Math.floor(index / columns) - Math.floor(origin / columns))));
+    const halves = new Map<string, number[]>();
+    board.tiles.forEach((tile, index) => {
+        if (!matched.has(tile.id)) halves.set(tile.pairKey, [...(halves.get(tile.pairKey) ?? []), index]);
+    });
+    const brokenPairKeys: string[] = [];
+    for (const suit of spec.suits) {
+        const cap = runNonNegativeInteger(spec.pairsPerSuit) + runNonNegativeInteger(bonusPairs);
+        const pairs = [...halves.entries()]
+            .filter(([pairKey, indexes]) =>
+                indexes.length === 2 &&
+                pairKey !== board.cursedPairKey &&
+                indexes.every((index) => board.tiles[index]!.suit === suit && tileCanBreakInChunk(board.tiles[index]!))
+            )
+            .map(([pairKey, indexes]) => ({ pairKey, near: Math.min(...indexes.map(steps)), first: Math.min(...indexes) }))
+            .sort((a, b) => a.near - b.near || a.first - b.first);
+        brokenPairKeys.push(...pairs.slice(0, cap).map((pair) => pair.pairKey));
+    }
+    if (origins.length === 0 || brokenPairKeys.length === 0) return null;
+    const broken = new Set(brokenPairKeys);
+    return {
+        board: {
+            ...board,
+            matchedPairs: runNonNegativeInteger(board.matchedPairs) + brokenPairKeys.length,
+            tiles: board.tiles.map((tile) =>
+                broken.has(tile.pairKey)
+                    ? { ...tile, state: 'removed' as const, brokenByChunk: true, brokenAtTier: tier, brokenAtWave: 0, findableKind: undefined }
+                    : tile
+            )
+        },
+        tier,
+        brokenPairKeys,
+        brokenTileIds: board.tiles.filter((tile) => broken.has(tile.pairKey)).map((tile) => tile.id),
+        score: chunkBreakScore(board.level, brokenPairKeys.length, tier, 1),
+        claimedFindableKind: null,
+        droppedPairKeys: [],
+        waves: 1,
+        wavePairKeys: [brokenPairKeys]
+    };
+};
+
 export const resolveChunkBreak = ({
     board,
     run,
     matchedTileIds,
-    chain
+    chain,
+    spec
 }: {
     board: BoardState;
     run: Pick<RunState, 'floorCurioId'> & Partial<Pick<RunState, 'stats'>>;
     matchedTileIds: readonly string[];
     chain: number;
+    /**
+     * On a realm floor the pop is the reaction's (`elementPopSpec` in `element-resonance-rules.ts`):
+     * the nearest pairs of the two elements that met when the match reacts, `null` when it does not
+     * and nothing pops or drops. Left out, the contact rule and the tier decide, as they always did.
+     */
+    spec?: { suits: readonly NonNullable<Tile['suit']>[]; pairsPerSuit: number } | null;
 }): ChunkBreakResult => {
     const tier = getChainTier(chain, board.pairCount);
     // The heat the run carries into the turn lifts the cap and, from Inferno, the reach (`combo-heat-perks.ts`).
@@ -460,6 +532,8 @@ export const resolveChunkBreak = ({
         waves: 0,
         wavePairKeys: []
     };
+    if (spec === null) return nothing;
+    if (spec) return resolveReactionBurst({ board, tier, matchedTileIds, spec, bonusPairs: perks.breakPairBonus }) ?? nothing;
     const wavesAllowed = rippleWaves(tier);
     const diagonal = run.floorCurioId === 'sticky_toffee' || breakWalksDiagonals(tier);
     const byPairKey = new Map<string, Tile[]>();

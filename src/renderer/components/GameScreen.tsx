@@ -1932,7 +1932,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 chainContext={{
                                     currentStreak: run.stats.currentStreak,
                                     floorCurioId: run.floorCurioId ?? null,
-                                    momentum: chainMomentum(runLadderChain(run), runChainMomentumPairs(run))
+                                    momentum: chainMomentum(runLadderChain(run), runChainMomentumPairs(run)),
+                                    elements: { realmId: run.realmId, elementStreak: run.elementStreak, elementResonance: run.elementResonance, realmAttunement: run.realmAttunement }
                                 }}
                                 recoveryContext={boardRecoveryContext}
                                 interactive={run.status === 'playing' || gambitThirdPickActive || resolvingPairTappable}
