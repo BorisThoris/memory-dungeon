@@ -1,4 +1,4 @@
-export type SettingsCategory = 'gameplay' | 'audio' | 'video' | 'accessibility' | 'controls' | 'about';
+export type SettingsCategory = 'gameplay' | 'audio' | 'video' | 'accessibility' | 'controls' | 'about' | 'dev';
 
 export type SettingsSubsection =
     | 'board'
@@ -12,7 +12,8 @@ export type SettingsSubsection =
     | 'graphics'
     | 'accessibility'
     | 'build'
-    | 'reset';
+    | 'reset'
+    | 'effects';
 
 export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
     { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
@@ -20,7 +21,8 @@ export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: s
     { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
     { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
     { id: 'accessibility', label: 'Accessibility', note: 'Motion, clarity, and tutorial support.' },
-    { id: 'about', label: 'About', note: 'Build info, credits, and reset.' }
+    { id: 'about', label: 'About', note: 'Build info, credits, and reset.' },
+    { id: 'dev', label: 'Dev Options', note: 'Visual experiments. Changes apply immediately and are remembered on this device.' }
 ];
 
 export const SETTINGS_SUBSECTIONS: Record<
@@ -43,6 +45,7 @@ export const SETTINGS_SUBSECTIONS: Record<
         { id: 'graphics', label: 'Graphics' }
     ],
     accessibility: [{ id: 'accessibility', label: 'Accessibility' }],
+    dev: [{ id: 'effects', label: 'Effects' }],
     about: [
         { id: 'build', label: 'Build' },
         { id: 'reset', label: 'Reset' }
@@ -55,5 +58,6 @@ export const DEFAULT_SUBSECTION_BY_CATEGORY: Record<SettingsCategory, SettingsSu
     audio: 'volume',
     video: 'display',
     accessibility: 'accessibility',
-    about: 'build'
+    about: 'build',
+    dev: 'effects'
 };

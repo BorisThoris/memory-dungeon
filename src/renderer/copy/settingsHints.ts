@@ -6,6 +6,8 @@
  * keeps the mapping checkable against `Settings` in `contracts.ts`.
  */
 export const SETTINGS_HINTS = {
+    /** Dev: the combo pop's own visuals, off without touching the elements (`useDevOptions`). */
+    comboPopEffects: 'Match bursts, expanding rings and connecting arcs. Elemental effects and gameplay stay active. Applies immediately.',
     boardBloomEnabled: 'A soft glow around the board. Stays off on Low quality.',
     boardPresentation: 'How the board is framed on screen.',
     boardScreenSpaceAA: 'Smooths the edges of the cards. Auto follows Reduce Motion unless you choose.',

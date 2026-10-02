@@ -79,7 +79,7 @@ describe('realm weather', () => {
         const a1 = result.board.tiles.find((t) => t.id === 'a1')!;
         expect(a1.frost).toBe(FROSTBITE_TURNS);
         expect(isTileFlipBlocked(a1)).toBe(true);
-        expect(result.frozen).toBe(2);
+        expect(result.frozen).toBe(4);
         // Two turns later it has thawed.
         const after1 = turn(runIn('frost'), result.board, 'miss', ['c1', 'd1'], 2);
         expect(after1.board.tiles.find((t) => t.id === 'a1')!.frost).toBe(1);

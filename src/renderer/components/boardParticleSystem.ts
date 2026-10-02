@@ -245,6 +245,8 @@ export const createBoardParticleSystem = () => {
     rippleMesh.renderOrder = -5;
     rippleMesh.visible = false;
     const ends = new Float32Array(BOARD_PARTICLE_CAPACITY);
+    const comboPopSlots = new Uint8Array(BOARD_PARTICLE_CAPACITY);
+    let comboPopEffects = true;
     const color = new Color();
     const point = new Vector3();
     const direction = new Vector3();
@@ -269,10 +271,12 @@ export const createBoardParticleSystem = () => {
         tint.setXYZ(slot, arcColor.r, arcColor.g, arcColor.b);
         rotation.setXY(slot, Math.atan2(by - ay, bx - ax), 0);
         ends[slot] = start + life;
+        comboPopSlots[slot] = 1;
     };
 
     const clear = (): void => {
         ends.fill(0);
+        comboPopSlots.fill(0);
         lifetime.array.fill(0);
         lifetime.needsUpdate = true;
         cursor = 0;
@@ -289,7 +293,22 @@ export const createBoardParticleSystem = () => {
         rippleMesh,
         clear,
         configure,
+        setComboPopEffects(enabled: boolean): void {
+            comboPopEffects = enabled;
+            if (enabled) return;
+            // Remove pending and active pop particles without clearing elemental or input feedback.
+            for (let slot = 0; slot < budget; slot += 1) {
+                if (!comboPopSlots[slot]) continue;
+                ends[slot] = 0;
+                lifetime.setXYZW(slot, 0, 0, 0, 0);
+                comboPopSlots[slot] = 0;
+            }
+            lifetime.needsUpdate = true;
+        },
         emit(burst: BoardParticleBurst): number {
+            const pop = burst.kind === 'match' || burst.kind === 'chain' || burst.kind === 'ripple'
+                || (burst.kind === 'rim' && burst.rimMood === 'match');
+            if (pop && !comboPopEffects) return 0;
             configure(burst.quality);
             const rng = createMulberry32(burst.seed);
             const bomb = burst.kind === 'bomb';
@@ -393,6 +412,7 @@ export const createBoardParticleSystem = () => {
                 if (shaped) rotation.setXY(slot, shaped === 'flame' || shaped === 'droplet' ? 0 : angle, shaped === 'shard' ? (rng() - 0.5) * 1.2 : shaped === 'leaf' ? (rng() - 0.5) * 4 : 0);
                 else rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);
                 ends[slot] = start + life;
+                comboPopSlots[slot] = pop ? 1 : 0;
                 emitted += 1;
             }
             if (emitted > 0) {
@@ -407,6 +427,7 @@ export const createBoardParticleSystem = () => {
          * the top, each strand drawn tip-first so the charge is seen travelling. Returns quads used.
          */
         emitArc(arc: BoardArcBurst): number {
+            if (!comboPopEffects) return 0;
             configure(arc.quality);
             if (arc.reduceMotion) return 0;
             const intensity = Math.max(0, Math.min(1, arc.intensity));

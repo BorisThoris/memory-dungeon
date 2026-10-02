@@ -3,6 +3,7 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 import { elementWouldLand } from './element-alchemy-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { reconcileRealmHolds } from './realm-hold-policy';
 
 /**
  * What a realm floor leaves behind (2026-10-01): consequences that follow the player down the
@@ -12,7 +13,7 @@ import { runNonNegativeInteger } from './run-number-guards';
  *   cut by a share per burnout, up to three. A player who let the Cinder Deep burn studies the next
  *   board through smoke.
  * - **Chill.** A floor that froze four cards or more sends the cold on: the next floor opens with
- *   two cards already frozen, whatever realm it is in.
+ *   at least two complete pairs frozen, if another pair can remain playable.
  * - **Attunement, the realm's depth.** Every clear in a realm attunes the player to it by a level,
  *   two when the floor was clean by that realm's own measure, and every other realm fades by one.
  *   Since 2026-10-02 it has no cap: keep walking through the same realm's door and it stacks without
@@ -149,7 +150,7 @@ export const applyRealmChill = (board: BoardState, chill: number | undefined, ru
     if (count === 0) return board;
     const rng = createMulberry32(hashStringToSeed(`realm-chill:${Math.floor(runSeed)}:${rulesVersion}:${board.level}`));
     const candidates = board.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey) && elementWouldLand(tile, 'bone')).map((tile) => tile.id);
-    // Never both halves of one pair, so the chill delays a pair rather than locking it.
+    // Seed requested pairs; the cohort policy expands them without revealing a singular pair.
     const chosen: string[] = [];
     const keys = new Set<string>();
     for (const id of shuffleWithRng(rng, candidates)) {
@@ -159,8 +160,7 @@ export const applyRealmChill = (board: BoardState, chill: number | undefined, ru
         keys.add(tile.pairKey);
         chosen.push(id);
     }
-    return {
-        ...board,
-        tiles: board.tiles.map((tile): Tile => (chosen.includes(tile.id) ? { ...tile, frost: CHILL_FROST_TURNS } : tile))
-    };
+    const tiles = board.tiles.map((tile): Tile => (chosen.includes(tile.id) ? { ...tile, frost: CHILL_FROST_TURNS } : tile));
+    reconcileRealmHolds(tiles, board.columns, board.tiles);
+    return { ...board, tiles };
 };

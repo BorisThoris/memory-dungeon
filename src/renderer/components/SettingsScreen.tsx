@@ -49,6 +49,7 @@ import {
     type SettingsSubsection
 } from './settingsNavigationModel';
 import styles from './SettingsScreen.module.css';
+import { useDevOptions } from '../dev/useDevOptions';
 
 interface SettingsScreenProps {
     presentation?: 'page' | 'modal';
@@ -65,6 +66,8 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
  * reported on `data-settings-layout`; a stacked shell's category chooser is one <select>.
  */
 const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
+    const comboPopEffects = useDevOptions(state => state.comboPopEffects);
+    const setComboPopEffects = useDevOptions(state => state.setComboPopEffects);
     const {
         clearPersistenceWriteNotice,
         closeSettings,
@@ -591,6 +594,17 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     hint={SETTINGS_HINTS.tutorialHints}
                                                     label="Tutorial Hints"
                                                     options={['Off', 'On']}
+                                                />
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {activeCategory === 'dev' ? (
+                                            <SettingsSection title="Visual effects">
+                                                <ToggleRow
+                                                    label="Combo pop effects"
+                                                    hint={SETTINGS_HINTS.comboPopEffects}
+                                                    checked={comboPopEffects}
+                                                    onChange={setComboPopEffects}
                                                 />
                                             </SettingsSection>
                                         ) : null}

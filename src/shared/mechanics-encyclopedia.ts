@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 74 as const;
+export const ENCYCLOPEDIA_VERSION = 77 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -623,7 +623,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Every card is made of its element, and you can see which: **Fire** is char split by molten veins, **Water** is deep blue under a web of light, **Frost** is faceted ice, **Grove** is moss and leaves. When an element reaches a face-down card - your casts, the realm\u2019s weather, a raging backlash, the frostbite of a miss - the card answers first. ' +
             'Its **own** element it drinks: nothing happens to it, and it gains a **charge** and glows, brighter the more it holds - there is no limit. Every cast also charges the cards of its own element right beside it. Match a charged card and its charge joins its element\u2019s **resonance**, with a gold for every four charges; miss it and the charge is lost. ' +
             'The element its own **puts out** is **neutralized** and does nothing: **water puts out fire**, **fire melts frost**, **frost kills growth**, and **roots hold against water**. The other two elements land as always. ' +
-            'So a fire card never burns and never freezes, a water card is never carried off or set alight, and a frost or grove card shrugs off what its element beats. A freeze or a snare spent on a card that answers holds nothing.'
+            'So a fire card never burns and never freezes, a water card is never carried off or set alight, and a frost or grove card shrugs off what its element beats. Casts skip immune cards to find a vulnerable target; even when none remain, the ground changes.'
     },
     {
         id: 'element_resonance',
@@ -639,7 +639,9 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'element_groups',
         title: 'The elements',
         description:
-            'The four suits on the backs of the cards are the four elements: **ember is Fire**, **tide is Water**, **moss is Grove**, **bone is Frost**. Every match casts its element from the pair and from every card its pop took, onto the face-down cards up to two steps away - three when the floor is in that element\u2019s own realm, so a big pop reaches far. **Fire** burns vines, ice and snow away. **Water** puts fires out and washes the cards it reaches one place along. **Frost** kills fires, and a popped Frost group freezes the nearest card for a turn. A popped **Grove** group snares the nearest card in vines until a match beside it, or a fire, cuts it. Choosing which group to break, and where, is choosing what the board does next.'
+            'Every elemental match casts, even a single pair: **Fire** clears ice and vines and ignites a vulnerable block on three-turn fuses; **Water** douses fires and carries unanchored cards; **Frost** douses fires and adds playable rime that anchors cards and protects them from arena holds; matching rime calms the next turn. **Grove** plants playable seeds, worth 1 gold each when matched; strong casts or Water grow 2-gold blooms. Fire burns seeds away. ' +
+            'Casts start at two steps of reach, three in their own realm (either half of a confluence). Every three combo and every resonance tier adds a step. Casts start at two targets, spreading through touching same-element blocks. Every six combo, two resonance tiers, extra popped pair and multiplier doubling adds a target, up to six. Short material bursts show casts, muted sparks show counters, and gold motes show absorbed charges. Combo six or tier two makes Grove seeds bloom for two gold each. Ordinary casts keep cards playable. Arena holds cover at least two complete pairs with a common expiry, leaving another pair free; cutting an incomplete cohort releases it. ' +
+            'Every match leaves **ground** under its cells and their neighbours, surviving even after the cards leave. Ice anchors cards against elemental movement; a later match on planted roots harvests one gold. Overlapping ground reacts locally: Steam reveals faces, Thaw frees ice and reveals a face, Blaze clears vines, Ice bridges anchor, Irrigation plants roots and charges a card, Frostbloom charges two. Bare ground takes the arena\u2019s element; the Storm conducts a face reveal. These local reactions are separate from the stronger primed-streak reactions. Open **Casts** beside the element counters for the current strength and arena rules.'
     },
     {
         id: 'realm_sway',

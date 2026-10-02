@@ -13,8 +13,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 51;
+/** Bump when generation or player-visible gameplay rules change. 54: playable coatings and paired arena holds. */
+export const GAME_RULES_VERSION = 54;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -95,6 +95,8 @@ export interface RealmDoor {
 /** The last thing a realm did to the board, for the HUD to name. Keyed so it is said once. */
 export interface RealmEvent {
     key: string;
+    /** The local ground left by a cast, also used by its visible and spoken feedback. */
+    ground?: { cells: number; reaction: string | null; detail: string };
     kind:
         | 'blizzard'
         | 'frostbite'
@@ -384,6 +386,10 @@ export interface Tile {
     vined?: boolean;
     /** Grove realm: the vines on this card have bloomed, and cutting them pays three gold, not one. */
     bloom?: boolean;
+    /** Frost cast: remains flippable, anchors against elemental movement/holds; matching banks one calm turn. */
+    rime?: boolean;
+    /** Grove cast: remains flippable; matching harvests this many gold (one seed, two for a bloom). */
+    seeded?: number;
     /**
      * Elemental alchemy (`element-alchemy-rules.ts`): this card's charge, one for every time it drank
      * its own element, without a cap. Matched, the charge joins its element's resonance and pays a gold
@@ -417,12 +423,28 @@ export const FLOOR_ARCHETYPE_IDS = [
 ] as const;
 export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
+export interface ElementCastImpact {
+    key: string;
+    suit: TileSuit;
+    sourceCells: number[];
+    contacts: { tileId: string; cell: number; suit: TileSuit; outcome: 'charged' | 'neutralized' | 'affected'; effect?: 'ignited' | 'frozen' | 'entangled' | 'rimed' | 'seeded' | 'current' | 'cleared'; group: number }[];
+    multiplier: number;
+    power: number;
+    groupPairs: number;
+    reaction: string | null;
+    detail: string;
+}
+
 export interface BoardState {
     level: number;
     pairCount: number;
     columns: number;
     rows: number;
     tiles: Tile[];
+    /** Cell-bound elemental ground: stays in place when cards move, lasts until overwritten. */
+    elementalGround?: (TileSuit | null)[];
+    /** Actual cast contacts, retained independently of weather for the board's impact animation. */
+    elementCast?: ElementCastImpact;
     flippedTileIds: string[];
     matchedPairs: number;
     /** GP-O02: optional pair key that grants a bonus if matched last among real pairs. */
@@ -890,6 +912,8 @@ export interface RunState {
     realmFloorsThisRun?: Partial<Record<RealmId, number>>;
     /** What the realm last did, for the HUD to say once. */
     lastRealmEvent?: RealmEvent | null;
+    /** Kept separately so simultaneous weather cannot hide the player's cast feedback. */
+    lastElementCastEvent?: RealmEvent | null;
     /** Storm: the cards lightning left lit; they show their faces until the next flip, like the lantern's. */
     realmLitTileIds?: string[];
 }

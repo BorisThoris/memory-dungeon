@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
-import { derivePurchaseCallouts, deriveTurnCallouts } from './screenCallouts';
+import { derivePurchaseCallouts, deriveTurnCallouts, deriveRealmCallouts, type RealmCalloutSnapshot } from './screenCallouts';
 
 const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventFixture>[0]> & { before: number; after: number }): BoardTurnResolvedEvent =>
     createBoardTurnResolvedEventFixture({
@@ -12,6 +12,15 @@ const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventF
     }) as BoardTurnResolvedEvent;
 
 describe('the screen stamps a turn earns', () => {
+    it('weather cannot hide a cast, and a cast shown as the main event is not repeated', () => {
+        const before: RealmCalloutSnapshot = { runSeed: 1, level: 1, realm: 'ember', severity: 'wild', secondary: null, playing: true, event: null };
+        const cast = { key: 'cast:1', kind: 'entangle' as const, tileIds: ['a'], ground: { cells: 5, reaction: null, detail: '1 snared · Roots planted' } };
+        const after = { ...before, event: { key: 'weather:1', kind: 'wildfire' as const, tileIds: ['b'] }, castEvent: cast };
+        expect(deriveRealmCallouts(before, after).map(c => c.key)).toEqual(['realm:weather:1', 'realm:cast:1']);
+        expect(deriveRealmCallouts(before, after)[1]?.sub).toBe(cast.ground.detail);
+        expect(deriveRealmCallouts(after, after)).toEqual([]);
+        expect(deriveRealmCallouts(before, { ...after, event: cast })).toHaveLength(1);
+    });
     it('stamps the rank a match reached, with the combo under it', () => {
         const callouts = deriveTurnCallouts(turn({ before: 5, after: 6 }), 3);
         expect(callouts).toHaveLength(1);

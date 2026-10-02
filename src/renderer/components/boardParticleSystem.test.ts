@@ -6,6 +6,27 @@ const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, 
     reduceMotion: false, quality: 'high' };
 
 describe('the shared board particle pool', () => {
+    it('disables existing and future pop effects while preserving elemental particles', () => {
+        const pool = createBoardParticleSystem();
+        const elemental = pool.emit({ ...burst, kind: 'ember', shape: 'leaf' });
+        expect(elemental).toBeGreaterThan(0);
+        expect(pool.emit({ ...burst, kind: 'match' })).toBeGreaterThan(0);
+        expect(pool.emit({ ...burst, kind: 'ripple', delay: 0.2 })).toBeGreaterThan(0);
+        pool.setComboPopEffects(false);
+        expect(pool.advance(1.01)).toBe(elemental);
+        for (const kind of ['match', 'chain', 'ripple'] as const) {
+            expect(pool.emit({ ...burst, kind })).toBe(0);
+        }
+        expect(pool.emitArc({ from: { x: 0, y: 0, z: 0 }, to: { x: 1, y: 1, z: 0 },
+            time: 1, seed: 1, intensity: 1, reduceMotion: false, quality: 'high' })).toBe(0);
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'flame' })).toBeGreaterThan(0);
+        expect(pool.emit({ ...burst, kind: 'flip' })).toBeGreaterThan(0);
+        pool.clear();
+        pool.setComboPopEffects(true);
+        expect(pool.advance(1.01)).toBe(0);
+        expect(pool.emit({ ...burst, kind: 'match' })).toBeGreaterThan(0);
+        pool.dispose();
+    });
     it('lifts combo embers off a card in free slots, in the heat\'s colour, and none under reduced motion', () => {
         const pool = createBoardParticleSystem();
         const emitted = pool.emit({ ...burst, kind: 'ember', energy: 0.8, tint: '#ff4d5e' });

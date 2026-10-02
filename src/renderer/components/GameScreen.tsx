@@ -332,17 +332,18 @@ const useRealmCallouts = (run: RunState): ScreenCallout[] => {
         severity: runRealmSeverity(run),
         secondary: runRealmSecondaryId(run),
         playing,
-        event: run.lastRealmEvent ?? null
+        event: run.lastRealmEvent ?? null,
+        castEvent: run.lastElementCastEvent ?? null
     };
     const previous = useRef<RealmCalloutSnapshot>(snapshot);
     const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
-    const { runSeed, level, realm, severity, secondary, event } = snapshot;
+    const { runSeed, level, realm, severity, secondary, event, castEvent } = snapshot;
     useEffect(() => {
-        const next: RealmCalloutSnapshot = { runSeed, level, realm, severity, secondary, playing, event };
+        const next: RealmCalloutSnapshot = { runSeed, level, realm, severity, secondary, playing, event, castEvent };
         const fresh = deriveRealmCallouts(previous.current, next);
         previous.current = next;
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
-    }, [runSeed, level, realm, severity, secondary, playing, event]);
+    }, [runSeed, level, realm, severity, secondary, playing, event, castEvent]);
     return callouts;
 };
 
@@ -837,6 +838,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (event.code !== 'KeyP' && event.key !== 'Escape') {
                 return;
             }
+            // The native cast guide owns Escape. Preventing its default would pause the game
+            // while leaving the popover open inside the now-inert gameplay surface.
+            if (event.key === 'Escape' && document.querySelector('[data-cast-guide-open="true"]')) return;
             const target = event.target;
             if (target instanceof HTMLElement) {
                 if (target.closest('input, textarea, select') || target.isContentEditable) {

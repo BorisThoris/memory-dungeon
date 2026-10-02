@@ -68,17 +68,18 @@ describe('what a realm floor sends on', () => {
         expect(getMemorizeDurationForRun({ ...run, realmSmoke: 1 }, 6)).toBeLessThan(getMemorizeDurationForRun(run, 6));
     });
 
-    it('chill freezes cards of different pairs on the next board', () => {
+    it('chill freezes two complete pairs on the next board', () => {
         const board = applyRealmChill(buildBoard(6, { runSeed: 4, runRulesVersion: 51 }), 2, 4, 51);
         const frozen = board.tiles.filter((t) => t.frost);
-        expect(frozen).toHaveLength(2);
-        expect(frozen[0]!.pairKey).not.toBe(frozen[1]!.pairKey);
+        expect(frozen).toHaveLength(4);
+        expect(new Set(frozen.map(t => t.pairKey)).size).toBe(2);
+        for (const tile of frozen) expect(frozen.filter(t => t.pairKey === tile.pairKey)).toHaveLength(2);
     });
 
     it('carries through the stairs: the chill lands on the next floor and is spent', () => {
         const cleared: RunState = { ...base(), status: 'levelComplete', realmChill: 2, realmDoors: [{ realmId: 'tide', severity: 'calm' }] };
         const next = advanceToNextLevel(cleared);
-        expect(next.board!.tiles.filter((t) => t.frost).length).toBe(2);
+        expect(next.board!.tiles.filter((t) => t.frost).length).toBe(4);
         expect(next.realmChill).toBe(0);
     });
 });

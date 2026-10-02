@@ -29,10 +29,9 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * can read a card's material can read what the weather can do to it. The storm is no element: its
  * lightning moves cards of every kind.
  *
- * Alchemy answers an element only where it would have acted: a fire burning vines off cards
- * meets only the cards it would have cleared, a hold meets the one card it would have held (and is
- * spent on it, neutralized or drunk, rather than passing on to the next card), and a current meets
- * the cards it would have moved. A card that only stood in reach is not touched.
+ * A travelling cast visibly meets counter-elements throughout its reach, including on a clean
+ * board. Holds pass those immune cards to find a vulnerable target; kin charging has its own
+ * shorter reach. Weather retains its own targeting and only meets the cards it tries to affect.
  */
 
 /** The element a card's suit puts out: a card of the key is untouched by the value. */
