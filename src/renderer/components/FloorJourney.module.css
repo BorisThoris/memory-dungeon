@@ -1,0 +1,19 @@
+.journey { width: min(72rem, 100%); box-sizing: border-box; margin-inline: auto; padding: 0.8rem 1rem; border-block: 1px solid #dac49a40; background: #111217dc; text-align: left; }
+.path, .rewards { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.8rem; line-height: 1.5; }
+.path { color: #c7c3bb; }
+.path strong { color: #f7e1b8; font-weight: 500; }
+.next { margin-left: auto; color: #e5c28a; }
+.rewards { margin-top: 0.55rem; }
+.rewards strong { color: #f6ce8a; font-weight: 500; }
+.rewards > span { color: color-mix(in srgb, var(--reward-color) 75%, white); }
+.carry { margin-top: 0.55rem; font-size: 0.8rem; line-height: 1.5; color: #d3cec3; }
+.carry summary { width: fit-content; cursor: pointer; min-height: 1.5rem; }
+.carry summary:focus-visible { outline: 2px solid #f6ce8a; outline-offset: 3px; }
+.carry ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+@media (max-width: 40rem) { .journey { padding: 0.7rem; } .path { gap: 0.3rem 0.6rem; } .next { width: 100%; margin: 0; } .rewards { gap: 0.3rem 0.7rem; } }
+
+@media (min-width: 641px) {
+    .journey { display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; padding: 0.35rem 0.8rem; }
+    .path { grid-column: 1 / -1; }
+    .rewards, .carry { margin-top: 0; }
+}

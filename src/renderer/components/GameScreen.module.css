@@ -239,7 +239,8 @@
 }
 
 /* The store is a place (`StoreVault`): while it is open the board and the HUD step back so the room reads. */
-.shell[data-store-open='true'] .gameplayInertScope {
+.shell[data-store-open='true'] .gameplayInertScope,
+.shell[data-travel-open='true'] .gameplayInertScope {
     opacity: 0.08;
     transition: opacity 600ms ease;
 }

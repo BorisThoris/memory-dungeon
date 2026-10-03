@@ -43,3 +43,13 @@
 .overlay[data-leaving='true'] { opacity: 0; transition: opacity 1s; }
 @keyframes realmBreathe { 40% { opacity: 0.85; } }
 @media (prefers-reduced-motion: reduce) { .overlay .vignette { animation: none !important; } }
+
+.edge { position: absolute; bottom: 7%; width: clamp(3rem, 10vw, 10rem); height: min(38%, 23rem); color: var(--realm-edge-color); opacity: calc(0.22 + var(--realm-strength) * 0.25); overflow: visible; }
+.edge[data-side='left'] { left: 0; }
+.edge[data-side='right'] { right: 0; transform: scaleX(-1); }
+.edge path { stroke: currentColor; stroke-width: 1.8; vector-effect: non-scaling-stroke; }
+.overlay[data-realm='frost'] .edge path:first-child, .overlay[data-realm='ember'] .edge path:first-child { fill: currentColor; fill-opacity: 0.12; }
+.overlay[data-realm='grove'] .edge path:last-child { fill: currentColor; fill-opacity: 0.28; }
+.overlay[data-surge='true']:not([data-reduce-motion='true']) .edge { animation: realmEdgeSurge 1.3s ease-out; }
+@keyframes realmEdgeSurge { 35% { opacity: 0.8; } }
+@media (prefers-reduced-motion: reduce) { .overlay .edge { animation: none !important; } }

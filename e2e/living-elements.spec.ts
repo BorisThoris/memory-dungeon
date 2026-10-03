@@ -58,10 +58,10 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         if (suit === 'bone') expect(result.tiles.some((tile) => tile.rime === true)).toBe(true);
         if (suit === 'moss') expect(result.tiles.some((tile) => tile.seeded)).toBe(true);
         if (suit === 'tide') expect(result.tiles.some((tile, index) => tile.id !== beforeIds[index])).toBe(true);
-        await page.screenshot({ path: testInfo.outputPath(`${suit}-ground.png`) });
+        await page.screenshot({ path: `output/playwright/${suit}-terrain.png` });
         await page.getByTestId('element-cast-guide').click();
         await expect(page.getByTestId('element-cast-rules')).toBeVisible();
-        await expect(page.getByTestId('element-cast-rules')).toContainText('Every elemental pair casts');
+        await expect(page.getByTestId('element-cast-rules')).toContainText('Every pair casts. Combos make it stronger.');
         await page.keyboard.press('Escape');
         await expect(page.getByTestId('element-cast-rules')).not.toBeVisible();
         expect(await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status)).toBe('playing');
@@ -81,6 +81,6 @@ test('the cast guide fits a phone and closes without losing the board', async ({
     expect(rect!.x + rect!.width).toBeLessThanOrEqual(390);
     expect(rect!.height).toBeLessThan(844);
     await page.screenshot({ path: testInfo.outputPath('cast-guide-phone.png') });
-    await page.getByRole('button', { name: 'Back to the board' }).click();
+    await page.getByRole('button', { name: 'Back', exact: true }).click();
     await expect(guide).not.toBeVisible();
 });

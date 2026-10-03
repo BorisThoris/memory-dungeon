@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2902,
-    "codeFileCount": 1069,
+    "trackedFileCount": 2906,
+    "codeFileCount": 1072,
     "exportedSymbolCount": 3355,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8828
+    "relationshipCount": 8842
   },
   "inventory": [
     {
@@ -3771,8 +3771,8 @@
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
       "category": "test",
-      "bytes": 7352,
-      "sha256": "3632368783b3b4844ae1597b141340f3652a1314f91b111135dc549ed10abc3a"
+      "bytes": 9033,
+      "sha256": "d4782c3961eb3dbbe745c14d00db3af89f634cb00e7166d900f9f38e025f74a8"
     },
     {
       "path": "e2e/ambiguousControls.ts",
@@ -3897,8 +3897,8 @@
     {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
-      "bytes": 5899,
-      "sha256": "628952dc7ccddbe56bf60865204b34bf904f71cdd3963a4a91a90cf83ceabf2b"
+      "bytes": 5999,
+      "sha256": "aa717a0f05f73621806a2f3a6909d8823a0b6e6d3a69a6e29ef82e369b49e90f"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -4455,8 +4455,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122800,
-      "sha256": "e6b8e09ab95ab3e4928893d0c702d81efd37c868a07dec82152c0e322b427ae7"
+      "bytes": 122929,
+      "sha256": "a101074c485ea9d90ea10bfd0abb5dc98193a446ff641be9b6a8cbc74f69cd97"
     },
     {
       "path": "public/site.webmanifest",
@@ -9531,8 +9531,8 @@
     {
       "path": "src/renderer/components/ElementalForgeWares.tsx",
       "category": "source",
-      "bytes": 2798,
-      "sha256": "a1b145d822a99ef30cba10923dc956339b4b66b8379c4abd3f2adf2ddf0ad3af"
+      "bytes": 2822,
+      "sha256": "496bc0dc7b277d7e740b2f8ab7513843f650047a52f3959871646453431a5353"
     },
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
@@ -9579,8 +9579,8 @@
     {
       "path": "src/renderer/components/ElementGround.tsx",
       "category": "source",
-      "bytes": 3287,
-      "sha256": "4883e2ee8dde0ab00418838902ff065d4bda8691329e1d2c971f9157b214170b"
+      "bytes": 5722,
+      "sha256": "c403e649a1dd9e6be4d3ba0e0302cabd839a1c78f04dea8e6125239823e3f331"
     },
     {
       "path": "src/renderer/components/ElementResonanceStrip.module.css",
@@ -9641,6 +9641,24 @@
       "category": "source",
       "bytes": 5321,
       "sha256": "6e2aec17ee7c77d6fc608f8c33bebe54c6cff1a1283c0a94d6db13e17d5e167b"
+    },
+    {
+      "path": "src/renderer/components/FloorJourney.module.css",
+      "category": "source",
+      "bytes": 1287,
+      "sha256": "2694a8eedb6e924a7d5167560af9c33b9b0aa113a9b4f9c818382ea7bf86bbb5"
+    },
+    {
+      "path": "src/renderer/components/FloorJourney.test.tsx",
+      "category": "test",
+      "bytes": 1339,
+      "sha256": "e150fd77d9a86137220b32eb1f0ba0f71fd46fb24ea1a0c4e8323c0790cc89b0"
+    },
+    {
+      "path": "src/renderer/components/FloorJourney.tsx",
+      "category": "source",
+      "bytes": 2150,
+      "sha256": "e27f9d2881eeb0d4d2084e32814b5c5a1d586dc4caeeb326cda08fa2315efe47"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -9705,8 +9723,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 58232,
-      "sha256": "e778781811c95b713b959bdfd410b59a8d06df43d2dc3faf5c293e684a444e94"
+      "bytes": 58286,
+      "sha256": "ae01f0ac17678b5991b52d45ae01b5ce53ebdd4c1264add224c3330e919fee7d"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9717,8 +9735,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 117179,
-      "sha256": "99d9d9e051e0c6dceb493bb553bb7f9a660b35f1823b5d6c165ab1be4c313cf5"
+      "bytes": 117418,
+      "sha256": "080043a0a211a08e53f8f7162d74a4b8fb93918fc3a0dd178e675eabe91bdd7b"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10041,14 +10059,14 @@
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
       "category": "source",
-      "bytes": 1732,
-      "sha256": "2e41222717ff2a267de74b857c4fdd72e896aad2ffb4fffc4550961b9d765a99"
+      "bytes": 2635,
+      "sha256": "72981d94908540e8fda680b662d73f955b030d91e1df845128701e1cefb4c305"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.tsx",
       "category": "source",
-      "bytes": 1349,
-      "sha256": "29b6d092b8dda70c48ba78e3980d9d2532683cd80123163c77091195d763a667"
+      "bytes": 2466,
+      "sha256": "f619a7e511a8d9d72e26241ea0910a373abc90d519dc82d7d9a37308c8cd2c84"
     },
     {
       "path": "src/renderer/components/realmTileMarkKey.ts",
@@ -10059,20 +10077,26 @@
     {
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "category": "source",
-      "bytes": 4969,
-      "sha256": "7a83becc892bdb78c0cddfc51acccd85cc0334cff14e5fbde4ba4f5b94ae04fc"
+      "bytes": 7478,
+      "sha256": "a95d4192dfb8b8af69f3c82ce24d71330e7f928a8e0b8e22249902ac62ffe425"
     },
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 5667,
-      "sha256": "2ffa6d3d6ec2dbbc96c884209aa9e62592c6261ca2225fa6de30b2b9c4045826"
+      "bytes": 7438,
+      "sha256": "0885ac5bdb773f83efbc9b55d99c988036878fd3f826093ccdfbc05b14014b23"
+    },
+    {
+      "path": "src/renderer/components/RealmTravel.test.tsx",
+      "category": "test",
+      "bytes": 1346,
+      "sha256": "b76bf1260739e3830b0bfbe7f5798462bccb65f297b2920e2958d87cda5d061c"
     },
     {
       "path": "src/renderer/components/RealmTravel.tsx",
       "category": "source",
-      "bytes": 6831,
-      "sha256": "42838bc08f6321ec417235765ecc2fd77cf8d0cb0f69c6d4e33a6f039cf8cb22"
+      "bytes": 7468,
+      "sha256": "80e5a0b58ae667a17688589cd9f67d434ba354622504ddbd99137f768c51406a"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
@@ -10383,8 +10407,8 @@
     {
       "path": "src/renderer/components/StoreVault.module.css",
       "category": "source",
-      "bytes": 11016,
-      "sha256": "8a70c65d537599513640c2fc4a57e74371c5aac7f292df2dd15dc2b1fa634029"
+      "bytes": 12883,
+      "sha256": "e48ffb4659209020aa74e35b70e34d687e0a8edb4975936da34edf732eac2261"
     },
     {
       "path": "src/renderer/components/StoreVault.test.tsx",
@@ -10395,8 +10419,8 @@
     {
       "path": "src/renderer/components/StoreVault.tsx",
       "category": "source",
-      "bytes": 9401,
-      "sha256": "b214c52dad7721f96bcf3dfc78174d03b0868333d75bd695225237f0345df218"
+      "bytes": 9960,
+      "sha256": "bd564b33883ca54fed7946bad558981217c4b9d7be976af7845d664b915f05a2"
     },
     {
       "path": "src/renderer/components/storeVaultLayout.ts",
@@ -11391,8 +11415,8 @@
     {
       "path": "src/renderer/copy/elementClarity.ts",
       "category": "source",
-      "bytes": 1052,
-      "sha256": "39686b19039e463a3ec8eb961bf373fb308a0f0cb7d58ecb822cb832fb0912bd"
+      "bytes": 994,
+      "sha256": "32a50066e2875c2c367e31adcba7369d88f4e4740466d6f7f9262e655f7f0a07"
     },
     {
       "path": "src/renderer/copy/elementCopy.ts",
@@ -20514,7 +20538,7 @@
       "path": "src/renderer/components/ElementGround.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 68,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -20640,6 +20664,39 @@
       ],
       "testedBy": [
         "file:src/renderer/components/FloorClearBeat.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/FloorJourney.test.tsx",
+      "path": "src/renderer/components/FloorJourney.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 21,
+      "imports": [
+        "file:src/renderer/components/FloorJourney.tsx",
+        "file:src/shared/game-core.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/FloorJourney.tsx",
+      "path": "src/renderer/components/FloorJourney.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/copy/realmCopy.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/elemental-loot-rules.ts",
+        "file:src/shared/tile-suit-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/FloorJourney.test.tsx"
       ]
     },
     {
@@ -20852,7 +20909,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2301,
+      "lineCount": 2305,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20861,6 +20918,7 @@
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/boardFloaterPlacement.ts",
         "file:src/renderer/components/FloorClearBeat.tsx",
+        "file:src/renderer/components/FloorJourney.tsx",
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
@@ -21709,10 +21767,11 @@
       "path": "src/renderer/components/RealmScreenOverlay.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 28,
+      "lineCount": 40,
       "imports": [
         "file:src/renderer/components/useSceneBeat.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/realm-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
@@ -21738,7 +21797,7 @@
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 115,
+      "lineCount": 163,
       "imports": [
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -21751,11 +21810,23 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/RealmTravel.test.tsx",
+      "path": "src/renderer/components/RealmTravel.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 24,
+      "imports": [
+        "file:src/renderer/components/RealmTravel.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/RealmTravel.tsx",
       "path": "src/renderer/components/RealmTravel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 125,
+      "lineCount": 133,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/elementClarity.ts",
@@ -21767,7 +21838,9 @@
       "exports": [
         "symbol:src/renderer/components/RealmTravel.tsx#default"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/RealmTravel.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/RunEndCinematic.test.tsx",
@@ -22540,11 +22613,12 @@
       "path": "src/renderer/components/StoreVault.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 171,
+      "lineCount": 175,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/components/ElementalForgeWares.tsx",
+        "file:src/renderer/components/FloorJourney.tsx",
         "file:src/renderer/components/storeVaultLayout.ts",
         "file:src/renderer/components/storeWareGlyphs.tsx",
         "file:src/renderer/copy/storeSheet.ts",
@@ -25541,14 +25615,13 @@
       "path": "src/renderer/copy/elementClarity.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 22,
+      "lineCount": 18,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/elementClarity.ts#ARENA_ACTION",
         "symbol:src/renderer/copy/elementClarity.ts#ELEMENT_ACTION",
-        "symbol:src/renderer/copy/elementClarity.ts#FOCUS_ACTION",
         "symbol:src/renderer/copy/elementClarity.ts#focusSummary"
       ],
       "testedBy": []
@@ -31916,6 +31989,7 @@
         "file:src/renderer/App.test.tsx",
         "file:src/renderer/audio/feverDuck.test.ts",
         "file:src/renderer/audio/resolutionGapDuck.test.ts",
+        "file:src/renderer/components/FloorJourney.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/InventoryScreen.test.tsx",
@@ -41284,8 +41358,8 @@
       "name": "ElementGround",
       "kind": "function",
       "file": "src/renderer/components/ElementGround.tsx",
-      "line": 57,
-      "endLine": 67
+      "line": 107,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
@@ -41366,6 +41440,14 @@
       "file": "src/renderer/components/FloorClearBeat.tsx",
       "line": 20,
       "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
+      "name": "FloorJourney",
+      "kind": "function",
+      "file": "src/renderer/components/FloorJourney.tsx",
+      "line": 10,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -41492,40 +41574,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2300,
-      "endLine": 2300
+      "line": 2304,
+      "endLine": 2304
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 253,
-      "endLine": 253
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 255,
-      "endLine": 255
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 245,
-      "endLine": 245
+      "line": 246,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -42276,16 +42358,16 @@
       "name": "RealmScreenOverlay",
       "kind": "function",
       "file": "src/renderer/components/RealmScreenOverlay.tsx",
-      "line": 18,
-      "endLine": 27
+      "line": 27,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlayProps",
       "name": "RealmScreenOverlayProps",
       "kind": "interface",
       "file": "src/renderer/components/RealmScreenOverlay.tsx",
-      "line": 6,
-      "endLine": 15
+      "line": 7,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/realmTileMarkKey.ts#RealmTileMark",
@@ -42308,16 +42390,16 @@
       "name": "RealmTileMarks",
       "kind": "value",
       "file": "src/renderer/components/RealmTileMarks.tsx",
-      "line": 94,
-      "endLine": 114
+      "line": 142,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/components/RealmTravel.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RealmTravel.tsx",
-      "line": 124,
-      "endLine": 124
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
@@ -43132,8 +43214,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StoreVault.tsx",
-      "line": 170,
-      "endLine": 170
+      "line": 174,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/components/storeVaultLayout.ts#STORE_HOTSPOTS",
@@ -46724,8 +46806,8 @@
       "name": "ARENA_ACTION",
       "kind": "value",
       "file": "src/renderer/copy/elementClarity.ts",
-      "line": 12,
-      "endLine": 16
+      "line": 8,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/copy/elementClarity.ts#ELEMENT_ACTION",
@@ -46736,20 +46818,12 @@
       "endLine": 7
     },
     {
-      "id": "symbol:src/renderer/copy/elementClarity.ts#FOCUS_ACTION",
-      "name": "FOCUS_ACTION",
-      "kind": "value",
-      "file": "src/renderer/copy/elementClarity.ts",
-      "line": 8,
-      "endLine": 11
-    },
-    {
       "id": "symbol:src/renderer/copy/elementClarity.ts#focusSummary",
       "name": "focusSummary",
       "kind": "value",
       "file": "src/renderer/copy/elementClarity.ts",
-      "line": 18,
-      "endLine": 21
+      "line": 14,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/copy/elementCopy.ts#ELEMENT_NAME",
@@ -72297,6 +72371,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/FloorJourney.tsx->symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/GameOverScreen.tsx->symbol:src/renderer/components/GameOverScreen.tsx#default",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -76320,12 +76400,6 @@
       "id": "exports:src/renderer/copy/elementClarity.ts->symbol:src/renderer/copy/elementClarity.ts#ELEMENT_ACTION",
       "source": "file:src/renderer/copy/elementClarity.ts",
       "target": "symbol:src/renderer/copy/elementClarity.ts#ELEMENT_ACTION",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/elementClarity.ts->symbol:src/renderer/copy/elementClarity.ts#FOCUS_ACTION",
-      "source": "file:src/renderer/copy/elementClarity.ts",
-      "target": "symbol:src/renderer/copy/elementClarity.ts#FOCUS_ACTION",
       "kind": "exports"
     },
     {
@@ -94009,6 +94083,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FloorJourney.test.tsx->src/renderer/components/FloorJourney.tsx",
+      "source": "file:src/renderer/components/FloorJourney.test.tsx",
+      "target": "file:src/renderer/components/FloorJourney.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.test.tsx->src/shared/game-core.ts",
+      "source": "file:src/renderer/components/FloorJourney.test.tsx",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.tsx->src/renderer/copy/realmCopy.ts",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/renderer/copy/realmCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.tsx->src/shared/element-alchemy-rules.ts",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.tsx->src/shared/elemental-loot-rules.ts",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/shared/elemental-loot-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorJourney.tsx->src/shared/tile-suit-rules.ts",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -94444,6 +94560,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/FloorJourney.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/FloorJourney.tsx",
       "kind": "imports"
     },
     {
@@ -95647,6 +95769,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RealmScreenOverlay.tsx->src/shared/realm-rules.ts",
+      "source": "file:src/renderer/components/RealmScreenOverlay.tsx",
+      "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/renderer/components/realmTileMarkKey.ts",
       "source": "file:src/renderer/components/RealmTileMarks.tsx",
       "target": "file:src/renderer/components/realmTileMarkKey.ts",
@@ -95668,6 +95796,12 @@
       "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/RealmTileMarks.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmTravel.test.tsx->src/renderer/components/RealmTravel.tsx",
+      "source": "file:src/renderer/components/RealmTravel.test.tsx",
+      "target": "file:src/renderer/components/RealmTravel.tsx",
       "kind": "imports"
     },
     {
@@ -96646,6 +96780,12 @@
       "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/components/ElementalForgeWares.tsx",
       "source": "file:src/renderer/components/StoreVault.tsx",
       "target": "file:src/renderer/components/ElementalForgeWares.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/components/FloorJourney.tsx",
+      "source": "file:src/renderer/components/StoreVault.tsx",
+      "target": "file:src/renderer/components/FloorJourney.tsx",
       "kind": "imports"
     },
     {
@@ -114315,6 +114455,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/FloorJourney.tsx->file:src/renderer/components/FloorJourney.test.tsx",
+      "source": "file:src/renderer/components/FloorJourney.tsx",
+      "target": "file:src/renderer/components/FloorJourney.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/GameOverScreen.tsx->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -114528,6 +114674,12 @@
       "id": "tested_by:src/renderer/components/realmParticles.ts->file:src/renderer/components/realmParticles.test.ts",
       "source": "file:src/renderer/components/realmParticles.ts",
       "target": "file:src/renderer/components/realmParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/RealmTravel.tsx->file:src/renderer/components/RealmTravel.test.tsx",
+      "source": "file:src/renderer/components/RealmTravel.tsx",
+      "target": "file:src/renderer/components/RealmTravel.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -117912,6 +118064,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/audio/resolutionGapDuck.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/audio/resolutionGapDuck.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/FloorJourney.test.tsx",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/components/FloorJourney.test.tsx",
       "kind": "tested_by"
     },
     {

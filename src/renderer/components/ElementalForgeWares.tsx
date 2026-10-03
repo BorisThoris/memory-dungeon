@@ -6,7 +6,7 @@ import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
 import type { StoreOfferRow } from '../../shared/run-store-rules';
 import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import styles from './StoreVault.module.css';
-import { FOCUS_ACTION } from '../copy/elementClarity';
+import { focusSummary } from '../copy/elementClarity';
 
 export function ElementalForgeWares({ run, offer, onBuy }: { run: RunState; offer: StoreOfferRow[]; onBuy: (row: StoreOfferRow) => void }) {
     return <div className={styles.forgeGrid} data-testid="elemental-forge">
@@ -16,7 +16,7 @@ export function ElementalForgeWares({ run, offer, onBuy }: { run: RunState; offe
                 <p data-testid={`forge-pouch-${suit}`}>{essenceOf(run.elementalEssence, suit)} essence · Focus {focusOf(run, suit)}</p></header>
             {offer.filter(row => isElementalStoreId(row.id) && storeElement(row.id) === suit).map(row => <div className={styles.forgeRecipe} key={row.id}>
                 <strong>{row.kind === 'focus' ? `Focus ${focusOf(run, suit)} → ${focusOf(run, suit) + 1}` : 'Prime ×2'}</strong>
-                <p id={`forge-${row.id}`}>{row.kind === 'focus' ? FOCUS_ACTION[suit] : 'Next different element reacts'}
+                <p id={`forge-${row.id}`}>{row.kind === 'focus' ? focusSummary(suit, focusOf(run, suit) + 1) : 'Next different element reacts'}
                     <small>{row.kind === 'focus' ? '+1 reach · Lasts this run' : 'One bottle per stop · Miss breaks it'}</small>
                 </p>
                 <button type="button" data-testid={`store-buy-${row.id}`} data-blocked={row.blocked ?? 'none'}

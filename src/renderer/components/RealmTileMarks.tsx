@@ -5,8 +5,8 @@ import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
 
-/** Tiny factual badges, never painted coatings. Status motion is emitted by the
- * shared particle pool. These counters remain readable with reduced motion. */
+/** Persistent edge silhouettes make holds readable between bursts. The center stays clear;
+ * counters and shapes also work with reduced motion and without relying on color. */
 const CANVAS_W = 256;
 const CANVAS_H = Math.round(CANVAS_W * (CARD_PLANE_HEIGHT / CARD_PLANE_WIDTH));
 
@@ -23,6 +23,54 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
     ctx.clearRect(0, 0, w, h);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (mark.frost > 0 || mark.rime) {
+        // Ice grips the edges, leaving the central elemental rune readable.
+        ctx.fillStyle = mark.frost ? '#b4e4fb80' : '#b4e4fb45';
+        ctx.strokeStyle = '#e0f5ffe0';
+        ctx.lineWidth = 2;
+        for (const side of [0, 1]) {
+            ctx.save();
+            if (side) { ctx.translate(w, h); ctx.rotate(Math.PI); }
+            ctx.beginPath();
+            ctx.moveTo(7, 60); ctx.lineTo(28, 82); ctx.lineTo(15, 115); ctx.lineTo(38, 152);
+            ctx.lineTo(20, 178); ctx.lineTo(30, 216); ctx.lineTo(7, 252); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(10, 130); ctx.lineTo(28, 151); ctx.lineTo(14, 174); ctx.stroke();
+            ctx.restore();
+        }
+    }
+    if (mark.vined || mark.seeded) {
+        const vine = mark.vined;
+        ctx.strokeStyle = '#b1cf76';
+        ctx.lineWidth = vine ? 7 : 4;
+        ctx.beginPath();
+        ctx.moveTo(8, h - 16);
+        ctx.bezierCurveTo(52, h - 72, w - 70, h - 3, w - 12, h - 68);
+        if (vine) ctx.bezierCurveTo(w - 42, h * 0.57, w + 3, h * 0.44, w - 18, 76);
+        ctx.stroke();
+        if (vine) {
+            ctx.strokeStyle = '#456e37'; ctx.lineWidth = 5;
+            ctx.beginPath(); ctx.moveTo(15, h - 45); ctx.bezierCurveTo(45, h * 0.65, -3, h * 0.42, 25, 72); ctx.stroke();
+        }
+        ctx.fillStyle = '#82be55';
+        for (const [x, y, angle] of [[36, h - 43, -0.6], [w - 38, h - 54, 0.6], ...(vine ? [[20, h * 0.54, -0.8], [w - 21, h * 0.49, 0.7]] : [])]) {
+            ctx.save(); ctx.translate(x!, y!); ctx.rotate(angle!);
+            ctx.beginPath(); ctx.ellipse(0, 0, 9, 19, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        }
+        if (mark.bloom || mark.seeded === 2) {
+            ctx.fillStyle = '#ffe19a';
+            for (const x of [43, w - 46]) { ctx.beginPath(); ctx.arc(x, h - 62, 8, 0, Math.PI * 2); ctx.fill(); }
+        }
+    }
+    if (mark.fuse > 0) {
+        ctx.strokeStyle = '#ff914ccc'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(8, 80); ctx.lineTo(15, 118); ctx.lineTo(9, 157); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(w - 9, 96); ctx.lineTo(w - 22, 126); ctx.lineTo(w - 9, 175); ctx.stroke();
+        ctx.fillStyle = '#ffbb68';
+        for (const y of [100, 153, 205]) { ctx.beginPath(); ctx.arc(w - 13, y, 3, 0, Math.PI * 2); ctx.fill(); }
+    }
     if (mark.snowed) {
         // Conceal identity even when all motion is disabled.
         ctx.fillStyle = '#23313c';

@@ -10,6 +10,7 @@ import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './StoreVault.module.css';
 import { usesElementalLoot } from '../../shared/elemental-loot-rules';
 import { ElementalForgeWares } from './ElementalForgeWares';
+import { FloorJourney } from './FloorJourney';
 
 interface StoreVaultProps {
     run: RunState;
@@ -85,10 +86,10 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                     {elemental ? `${gold} gold · Upgrade a cast or prime a reaction` : STORE_SHEET_COPY.subtitle(floor, gold)}
                 </p>
             </div>
+            {elemental ? <FloorJourney run={run} phase="forge" /> : null}
             <div className={styles.stage}>
                 {elemental ? <div className={styles.forgeBody} ref={spotsRef}>
                     <ElementalForgeWares run={run} offer={offer} onBuy={row => { if (onBuy(row.id)) setReceipt(row); }} />
-                    <button className={styles.forgeDescend} data-modal-initial-focus data-testid="store-descend" ref={descendRef} type="button" onClick={onDescend}>Descend</button>
                 </div> :
                 <div className={styles.plate} data-testid="store-rows" ref={spotsRef} style={{ '--store-plate-aspect': STORE_VAULT_ASPECT } as CSSProperties}>
                     {/* Descend first in the DOM (Tab from it reaches the wares), last on the floor. Only
@@ -156,10 +157,13 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                     })}
                 </div>}
             </div>
-            {/* Present and empty from the moment the vault opens, so the first purchase is a change. */}
-            <p aria-atomic="true" aria-live="polite" className={styles.srOnly} data-testid="store-receipt" role="status">
-                {receipt ? STORE_SHEET_COPY.receipt(receipt, gold) : ''}
+            {/* The receipt stays mounted so each purchase is announced once. */}
+            <footer className={elemental ? styles.forgeFooter : undefined}>
+            <p aria-atomic="true" aria-live="polite" className={elemental ? styles.forgeReceipt : styles.srOnly} data-testid="store-receipt" role="status">
+                {receipt ? STORE_SHEET_COPY.receipt(receipt, gold) : elemental ? 'Spend only what helps your next floor. Unspent gold and essence travel with you.' : ''}
             </p>
+            {elemental ? <button className={styles.forgeDescend} data-modal-initial-focus data-testid="store-descend" ref={descendRef} type="button" onClick={onDescend}>Choose next arena <span aria-hidden="true">→</span></button> : null}
+            </footer>
         </div>
     );
 };

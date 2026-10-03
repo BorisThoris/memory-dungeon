@@ -40,6 +40,7 @@ import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
 import StoreVault from './StoreVault';
 import RealmTravel from './RealmTravel';
+import { FloorJourney } from './FloorJourney';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1760,6 +1761,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-testid="game-shell"
             data-combo-stage={comboHeatLevelsNow.stage}
             data-combo-theme={comboTemper.id}
+            data-travel-open={travelOpen ? 'true' : 'false'}
             data-store-open={storeSheetOpen ? 'true' : 'false'}
             data-zone={isZoneActive(run) ? 'true' : 'false'}
             ref={shellRef}
@@ -2201,6 +2203,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 {!suppressStatusOverlays && travelOpen && run.realmDoors ? (
                     <RealmTravel
                         doors={run.realmDoors}
+                        summary={<FloorJourney run={run} phase="route" />}
+                        reduceMotion={reduceMotion}
                         endedIn={runRealmId(run)}
                         floorsIn={run.realmFloorsThisRun ?? {}}
                         attunement={run.realmAttunement ?? {}}

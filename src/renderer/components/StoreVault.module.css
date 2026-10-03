@@ -15,33 +15,38 @@
     color: var(--margin-paper, #f8f4f4);
 }
 
-.forge { background: rgba(10, 12, 18, 0.9); }
-.forge .head { position: relative; padding-top: 1rem; }
-.forge .stage { top: 7rem; bottom: 5rem; overflow: auto; container-type: normal; }
-.forgeBody { max-width: 76rem; margin: auto; padding: 1rem 1.5rem; }
+.forge { display: flex; flex-direction: column; gap: 0.9rem; box-sizing: border-box; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: radial-gradient(ellipse at 50% 0%, #4b34344d, transparent 65%), #0d1016f5; }
+.forge .head { position: static; flex: 0 0 auto; transform: none; width: 100%; }
+.forge .stage { position: relative; inset: auto; flex: 1 1 auto; min-height: 0; overflow: auto; container-type: normal; scrollbar-gutter: stable; }
+.forgeBody { max-width: 72rem; margin: auto; padding: 0.25rem 0.25rem 1rem; }
 .forgeGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-.forgeElement { position: relative; border-top: 2px solid var(--forge-color); background: rgba(20, 23, 32, 0.9); padding: 1rem; }
-.forgePrimed { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; color: #fff0d9; }
-.forgeElement header { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 0.65rem; color: var(--forge-color); }
-.forgeElement h3 { font-size: 1.4rem; font-weight: 400; margin: 0.3rem 0; }
-.forgeElement header p { grid-column: 1 / -1; color: #ede4d6; font-size: 0.85rem; margin: 0.5rem 0; }
-.forgeRune { font-size: 2rem; }
-.forgeRecipe { border-top: 1px solid #ffffff20; padding-top: 0.75rem; margin-top: 0.75rem; }
-.forgeRecipe p { min-height: 3.5rem; margin: 0.6rem 0; font-size: 0.9rem; line-height: 1.5; color: #f0e8dc; }
+.forgeElement { position: relative; border: 1px solid color-mix(in srgb, var(--forge-color) 35%, transparent); border-top: 3px solid var(--forge-color); border-radius: 0.45rem; background: linear-gradient(160deg, color-mix(in srgb, var(--forge-color) 12%, transparent), transparent 45%), #151a23; padding: 0.75rem; }
+.forgePrimed { grid-column: 1 / -1; padding: 0.25rem 0.5rem; border: 1px solid var(--forge-color); border-radius: 0.25rem; width: fit-content; font-size: 0.75rem; color: #fff0d9; }
+.forgeElement header { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 0.65rem; color: color-mix(in srgb, var(--forge-color) 75%, white); }
+.forgeElement h3 { font-family: var(--margin-heading-font, Georgia, serif); font-size: 1.8rem; font-weight: 400; margin: 0.3rem 0; }
+.forgeElement header p { grid-column: 1 / -1; color: #ede4d6; font-size: 0.85rem; margin: 0.35rem 0; }
+.forgeRune { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border: 1px solid color-mix(in srgb, var(--forge-color) 50%, transparent); border-radius: 50%; font-size: 1.7rem; background: color-mix(in srgb, var(--forge-color) 15%, transparent); }
+.forgeRecipe { border-top: 1px solid #ffffff20; padding-top: 0.6rem; margin-top: 0.6rem; }
+.forgeRecipe p { min-height: 2.5rem; margin: 0.45rem 0; font-size: 0.85rem; line-height: 1.5; color: #f0e8dc; }
 .forgeRecipe small { display: block; margin-top: 0.4rem; font-size: 0.75rem; color: #c8c0b6; }
 .forgeBlocked { min-height: 1.2rem; }
-.forgeRecipe button, .forgeDescend { min-height: 44px; padding: 0.7rem; border: 1px solid var(--forge-color, #e1ad66); color: #fff0d9; background: #24232a; font: inherit; cursor: pointer; }
+.forgeRecipe button, .forgeDescend { min-height: 44px; padding: 0.7rem; border: 1px solid var(--forge-color, #e1ad66); color: #fff0d9; background: #24232a; font: inherit; cursor: pointer; transition: background 150ms; }
 .forgeRecipe button { width: 100%; font-size: 0.8rem; }
-.forgeRecipe button:disabled { opacity: 0.48; cursor: default; }
+.forgeRecipe button:hover:enabled { background: color-mix(in srgb, var(--forge-color) 22%, #20232a); }
+.forgeRecipe button:disabled { color: #b4b1af; border-color: #686663; background: #191c22; cursor: default; }
 .forgeRecipe button:focus-visible, .forgeDescend:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.forgeDescend { position: fixed; z-index: 3; bottom: 1rem; right: 1.5rem; min-width: 12rem; box-shadow: 0 0 1rem #000; }
-@media (max-width: 900px) { .forgeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.forgeFooter { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex: 0 0 auto; width: min(72rem, 100%); margin-inline: auto; border-top: 1px solid #dac49a40; padding-top: 0.8rem; }
+.forgeReceipt { margin: 0; max-width: 42rem; color: #e1d4bb; font-size: 0.85rem; line-height: 1.5; }
+.forgeDescend { flex: 0 0 auto; min-width: 12rem; background: #3a2e20; }
+@media (max-width: 1000px) { .forgeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 500px) {
     .forgeGrid { grid-template-columns: 1fr; }
-    .forge .stage { top: 8.5rem; }
-    .forgeRecipe p { min-height: 0; }
-    .forgeBody { padding: 1rem; }
+    .forge { padding: 0.8rem; gap: 0.7rem; }
+    .forgeBody { padding: 0.2rem 0.2rem 0.8rem; }
+    .forgeFooter { flex-wrap: wrap; gap: 0.6rem; }
+    .forgeDescend { width: 100%; }
 }
+@media (max-height: 500px) { .forge { gap: 0.4rem; } .forge .title { font-size: 1.5rem; } .forgeFooter { padding-top: 0.4rem; } }
 
 .head {
     position: absolute;
@@ -330,4 +335,9 @@
     .glint {
         animation: none;
     }
+}
+
+@media (min-width: 641px) {
+    .forge .head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; width: min(72rem, 100%); margin-inline: auto; text-align: left; }
+    .forge .subtitle { margin: 0; }
 }

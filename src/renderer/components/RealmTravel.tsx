@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type CSSProperties, type ReactElement } from 'react';
+import { useEffect, useId, useRef, type CSSProperties, type ReactElement, type ReactNode } from 'react';
 import type { RealmDoor, RealmId } from '../../shared/contracts';
 import { ARENA_ACTION } from '../copy/elementClarity';
 import { REALMS } from '../../shared/realm-rules';
@@ -9,6 +9,8 @@ import styles from './RealmTravel.module.css';
 
 interface RealmTravelProps {
     doors: readonly RealmDoor[];
+    summary?: ReactNode;
+    reduceMotion?: boolean;
     /** The realm the floor ended in: its door is the way you came (the sway may have tipped it). */
     endedIn: RealmId | null;
     /** Floors this run has cleared in each realm, to say where the player has been. */
@@ -36,7 +38,7 @@ const SIGILS: Readonly<Record<RealmId, string>> = {
  * Escape: a floor has to be somewhere, and Escape picking a door for the player would be a door
  * they did not choose.
  */
-const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTravelProps): ReactElement => {
+const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, reduceMotion = false }: RealmTravelProps): ReactElement => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const firstRef = useRef<HTMLButtonElement | null>(null);
     const titleId = useId();
@@ -52,9 +54,11 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
             aria-modal="true"
             className={styles.travel}
             data-testid="realm-travel"
+            data-reduce-motion={reduceMotion}
             ref={rootRef}
             role="dialog"
         >
+            {summary}
             <div className={styles.head}>
                 <h2 className={styles.title} id={titleId}>
                     {REALM_TRAVEL_COPY.title}
@@ -80,7 +84,7 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
                             key={`${door.realmId}:${door.severity}`}
                             onClick={() => onChoose(index)}
                             ref={index === 0 ? firstRef : undefined}
-                            style={{ '--realm-color': realm.color, '--door-index': index } as CSSProperties}
+                            style={{ '--realm-color': realm.color, '--door-index': index, '--second-color': REALMS[door.confluence ?? door.realmId].color } as CSSProperties}
                             type="button"
                         >
                             <span aria-hidden="true" className={styles.arch} data-confluence={door.confluence ? 'true' : undefined}>
@@ -103,15 +107,19 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
                                     {REALM_TRAVEL_COPY.depthWarning(door, attunement[door.realmId] ?? 0)}
                                 </span>
                             ) : null}
+                            <span className={styles.sectionLabel}>Clear reward</span>
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>
+                            <span className={styles.sectionLabel}>Weather</span>
                             <span className={styles.weather}>{REALM_TRAVEL_COPY.weatherLine(door)}</span>
                             <span className={styles.rules} id={`realm-choice-${index}`}>
+                                <span className={styles.sectionLabel}>Your matches change the arena</span>
                                 <span className={styles.rule}>{ARENA_ACTION[door.realmId]}</span>
                                 {door.confluence ? <span className={styles.rule}>{ARENA_ACTION[door.confluence]}</span> : null}
                                 {REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0) ? <span className={styles.rule}>{REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0)}</span> : null}
                             </span>
+                            <span className={styles.enter}>Enter {realm.title} <span aria-hidden="true">→</span></span>
                             {been > 0 ? <span className={styles.been}>{`${been} ${been === 1 ? 'floor' : 'floors'} here this run`}</span> : null}
                         </button>
                     );
