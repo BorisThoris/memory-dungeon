@@ -2,7 +2,7 @@ import type { RealmId, TileSuit } from '../../shared/contracts';
 
 /** Short outcomes for decisions; exact rules remain in the optional guide. */
 export const ELEMENT_ACTION: Record<TileSuit, string> = {
-    ember: 'Burn vines · Melt ice', tide: 'Douse fire · Move cards',
+    ember: 'Burn vines and seeds · Melt ice · Ignite blocks', tide: 'Douse fire · Move cards',
     bone: 'Anchor cards · Bank calm', moss: 'Plant seeds · Harvest gold'
 };
 export const ARENA_ACTION: Record<RealmId, string> = {

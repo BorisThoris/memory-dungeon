@@ -16,7 +16,7 @@ import { ElementCastGuide } from './ElementCastGuide';
 const ElementResonanceStrip = ({
     run
 }: {
-    run: Pick<RunState, 'elementResonance' | 'elementStreak' | 'realmStillTurns' | 'stats' | 'board' | 'chunkPairsThisChain' | 'skipMomentumThisChain' | 'realmId' | 'realmSecondaryId' | 'elementalFocus' | 'elementalEssence'>;
+    run: Pick<RunState, 'elementResonance' | 'elementStreak' | 'realmStillTurns' | 'stats' | 'board' | 'chunkPairsThisChain' | 'skipMomentumThisChain' | 'realmId' | 'realmSecondaryId' | 'elementalFocus' | 'elementalEssence' | 'realmAttunement'>;
 }): ReactElement | null => {
     const resonance = runElementResonance(run);
     const streak = runElementStreak(run);

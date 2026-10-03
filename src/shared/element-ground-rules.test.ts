@@ -5,6 +5,7 @@ import { castElement, elementCastPower } from './element-group-rules';
 import { castElementalGround, groundAnchoredTileIds, readElementalGround } from './element-ground-rules';
 import { applyRealmTurnToRun, boardHasTurnablePair, resolveRealmTurn } from './realm-weather-rules';
 import { createNewRun } from './game';
+import { isRealmWeatherTurn } from './realm-rules';
 
 const makeTiles = (suit: TileSuit): Tile[] => Array.from({ length: 16 }, (_, i) => ({
     id: `t${i}`, pairKey: `p${Math.floor(i / 2)}`, symbol: `${i}`, label: `${i}`,
@@ -33,7 +34,7 @@ describe('a living elemental field', () => {
 
     it.each([
         ['ember', 'tide', 'Steam'], ['ember', 'frost', 'Thaw'], ['ember', 'grove', 'Blaze'],
-        ['tide', 'frost', 'Ice bridges'], ['tide', 'grove', 'Irrigation'], ['moss', 'frost', 'Frostbloom']
+        ['tide', 'frost', 'Freeze-over'], ['tide', 'grove', 'Flood'], ['moss', 'frost', 'Frostbloom']
     ] as const)('%s reacts with the underlying %s arena as %s', (suit, realm, reaction) => {
         expect(castGround(suit, realm).result.reaction).toBe(reaction);
     });
@@ -67,11 +68,11 @@ describe('a living elemental field', () => {
     it('Steam reveals live neighbours; Frostbloom charges them once through the shared ledger', () => {
         const steam = castGround('ember', 'tide');
         expect(steam.result.quenchFire).toBe(true);
-        expect(steam.result.litTileIds).toEqual(['t4', 't5']);
+        expect(steam.result.litTileIds).toEqual(['t4']);
         const tiles = makeTiles('moss');
         const alchemy = createAlchemyLog();
         const result = castElementalGround({ tiles, columns: 4, ground: tiles.map(() => null), groupTileIds: ['t0', 't1'], suit: 'moss', realmId: 'frost', secondaryId: null, alchemy });
-        expect(result.touchedTileIds).toHaveLength(2);
+        expect(result.touchedTileIds).toHaveLength(1);
         castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'frost', pinned: new Set(), alchemy });
         expect(tiles[4]!.empowered).toBe(1);
     });
@@ -126,10 +127,10 @@ describe('every match casts, with transparent scaling', () => {
         expect(elementCastPower(9000, 200).extraReach).toBe(3200);
     });
 
-    it('a stronger Grove cast produces three playable blooms, not a silent numeric bonus', () => {
+    it('a stronger Grove cast finishes the next two-card block with four playable blooms', () => {
         const tiles = makeTiles('moss');
         castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'grove', pinned: new Set(), combo: 6 });
-        expect(tiles.filter((tile) => tile.seeded === 2)).toHaveLength(3);
+        expect(tiles.filter((tile) => tile.seeded === 2)).toHaveLength(4);
     });
 
     it('the full resolver keeps one playable pair, records every cast, and preserves tile identity', () => {
@@ -151,6 +152,24 @@ describe('every match casts, with transparent scaling', () => {
         }
     });
 
+    it('amplified Thaw suppresses Fire ignition just like local Thaw', () => {
+        const tiles = makeTiles('ember');
+        const run = { ...createNewRun(0, { realm: { realmId: 'storm', severity: 'calm' } }), elementStreak: { suit: 'bone' as const, links: 2 } };
+        const result = resolveRealmTurn({ run, board: board(tiles), outcome: 'match', tileIds: ['t0', 't1'], groupTileIds: ['t0', 't1'], sourceTiles: tiles.slice(0, 2), turnsThisFloor: 1, pinnedTileIds: [], pairsBySuit: { ember: 1 } });
+        expect(result.board.tiles.some(tile => tile.fuse != null)).toBe(false);
+        expect(result.board.elementCast?.detail).toContain('Amplified Thaw ×2');
+        expect(result.scoreDelta).toBe(100);
+    });
+
+    it('rime melted by a reaction stops anchoring cards before the same turn’s lightning', () => {
+        const tiles = makeTiles('ember').map(tile => ({ ...tile, suit: 'ember' as const, ...(tile.state === 'hidden' ? { rime: true } : {}) }));
+        const run = { ...createNewRun(0, { realm: { realmId: 'storm', severity: 'raging' } }), elementStreak: { suit: 'bone' as const, links: 2 } };
+        const turn = [1, 2, 3, 4, 5, 6].find(value => isRealmWeatherTurn('storm', 'raging', value))!;
+        const result = resolveRealmTurn({ run, board: board(tiles), outcome: 'match', tileIds: ['t0', 't1'], groupTileIds: ['t0', 't1'], sourceTiles: tiles.slice(0, 2), turnsThisFloor: turn, pinnedTileIds: [], pairsBySuit: { ember: 1 } });
+        expect(result.board.tiles.some(tile => tile.rime)).toBe(false);
+        expect(result.events.find(event => event.kind === 'lightning')?.tileIds.length).toBeGreaterThan(0);
+    });
+
     it('a Freeze-over protects its creation turn from weather and a far-away expiring fuse', () => {
         const tiles = makeTiles('bone');
         tiles[15] = { ...tiles[15]!, suit: 'moss', fuse: 1 };
@@ -158,7 +177,7 @@ describe('every match casts, with transparent scaling', () => {
         const result = resolveRealmTurn({ run, board: board(tiles), outcome: 'match', tileIds: ['t0', 't1'], groupTileIds: ['t0', 't1'], sourceTiles: tiles.slice(0, 2), turnsThisFloor: 2, pinnedTileIds: [], pairsBySuit: { bone: 1 } });
         expect(result.weather).toBe(0);
         expect(result.burnouts).toBe(0);
-        expect(result.board.tiles[15]!.fuse).toBe(1);
+        expect(result.board.tiles[15]!.fuse).toBeUndefined();
         expect(result.stillTurns).toBe(3);
     });
 });

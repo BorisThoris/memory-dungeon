@@ -1462,7 +1462,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             }),
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'the vined card will not turn', expect: (r) => ((r.board?.flippedTileIds.length ?? 0) === 0 ? null : 'the vined card turned') },
-            { step: { do: 'match', pairKey: 'a' }, says: 'the match beside it cuts the vine for a gold and casts fire', expect: expectAll(realmEventIs('scorch'), goldIs(1), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'b-1 is still vined')) }
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match cuts a vine for one gold and Fire on Grove ground pays another from Blaze', expect: expectAll(realmEventIs('scorch'), goldIs(2), (r) => (tileById(r, 'b-1')?.vined == null ? null : 'b-1 is still vined')) }
         ]
     },
     {
@@ -1643,7 +1643,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'the miss is scalded: both cards burn on a two-turn fuse',
                 expect: expectAll(realmEventIs('scald'), (r) => (tileById(r, 'a-1')?.fuse === 2 && tileById(r, 'b-1')?.fuse === 2 ? null : `fuses ${tileById(r, 'a-1')?.fuse},${tileById(r, 'b-1')?.fuse}`), (r) => (r.realmBacklashesThisFloor === 1 ? null : `backlashes ${r.realmBacklashesThisFloor}`))
             },
-            { step: { do: 'match', pairKey: 'a' }, says: 'matched in time, the scald is doused for two gold (the weather comes on this turn too)', expect: expectAll(goldIs(2), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
+            { step: { do: 'match', pairKey: 'a' }, says: 'matching douses the scald for two gold; Grove on Fire ground adds one Blaze gold', expect: expectAll(goldIs(3), (r) => (r.realmDousedThisFloor === 1 ? null : `doused ${r.realmDousedThisFloor}`)) }
         ]
     },
     {
@@ -1808,17 +1808,17 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-blocks',
         title: 'Overgrowth: blocks answer a cast',
-        mechanic: 'A high-combo Grove cast plants six blooms in connected blocks. Frost blocks neutralize it, Grove blocks absorb charges, and every coated card stays playable.',
+        mechanic: 'A high-combo Grove cast plants eight blooms by finishing connected blocks. Frost blocks neutralize it, Grove blocks absorb charges, and every coated card stays playable.',
         graphMechanicIds: ['board.element_groups', 'board.element_alchemy', 'safety.softlock_fairness'],
         tryThis: 'Match the two Grove cards at the top left. Follow the leaf bursts: Fire and Water grow blooms, Frost neutralizes the cast, and the far Grove pair absorbs a charge.',
         build: () => room(['a:m a:m b:e b:e c:e c:e', 'd:t d:t e:t e:t f:b f:b', 'g:e g:e h:b h:b i:m i:m', 'k:b k:b l:e l:e j:m j:m'], {
             streak: 12, run: realmRun('storm', 'calm', { chunkPairsThisChain: 3 })
         }),
         script: [{
-            step: { do: 'match', pairKey: 'a' }, says: 'six blooms, counters and kin charges are recorded as distinct contacts',
+            step: { do: 'match', pairKey: 'a' }, says: 'eight blooms, counters and kin charges are recorded as distinct contacts',
             expect: expectAll((r) => {
                 const impact = r.board?.elementCast;
-                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.seeded === 2).length === 6 ? null : 'missing amplified block responses';
+                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.seeded === 2).length === 8 ? null : 'missing amplified block responses';
             }, finishable)
         }, { step: { do: 'clear' }, says: 'the amplified floor still clears', expect: statusIs('levelComplete') }]
     },

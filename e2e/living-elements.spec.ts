@@ -69,18 +69,29 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
     });
 }
 
-test('the cast guide fits a phone and closes without losing the board', async ({ page }, testInfo) => {
+test('the cast guide fits desktop, phone and landscape with Back always visible', async ({ page }) => {
     test.setTimeout(180_000);
-    await page.setViewportSize({ width: 390, height: 844 });
     await gotoWithSaveAndQuery(page, buildVisualSaveJson(true, false), 'hallRoom=element-flood');
-    await page.getByTestId('element-cast-guide').click({ timeout: 90_000 });
-    const guide = page.getByTestId('element-cast-rules');
-    await expect(guide).toBeVisible();
-    const rect = await guide.boundingBox();
-    expect(rect!.x).toBeGreaterThanOrEqual(0);
-    expect(rect!.x + rect!.width).toBeLessThanOrEqual(390);
-    expect(rect!.height).toBeLessThan(844);
-    await page.screenshot({ path: testInfo.outputPath('cast-guide-phone.png') });
-    await page.getByRole('button', { name: 'Back', exact: true }).click();
-    await expect(guide).not.toBeVisible();
+    for (const [name, width, height] of [['desktop', 1280, 800], ['phone', 390, 844], ['landscape', 812, 375]] as const) {
+        await page.setViewportSize({ width, height });
+        await page.getByTestId('element-cast-guide').click({ timeout: 90_000 });
+        const guide = page.getByTestId('element-cast-rules');
+        const back = guide.getByRole('button', { name: 'Back', exact: true });
+        await expect(guide).toBeVisible();
+        const rect = await guide.boundingBox();
+        expect(rect!.x).toBeGreaterThanOrEqual(0);
+        expect(rect!.x + rect!.width).toBeLessThanOrEqual(width);
+        expect(rect!.height).toBeLessThan(height);
+        const visibleBack = async () => {
+            const button = await back.boundingBox();
+            expect(button!.y).toBeGreaterThanOrEqual(rect!.y);
+            expect(button!.y + button!.height).toBeLessThanOrEqual(rect!.y + rect!.height);
+        };
+        await visibleBack();
+        await page.screenshot({ path: `output/playwright/cast-guide-${name}-fixed-footer.png` });
+        await page.getByTestId('element-cast-scroll').evaluate(node => { node.scrollTop = node.scrollHeight; });
+        await visibleBack();
+        await back.click();
+        await expect(guide).not.toBeVisible();
+    }
 });

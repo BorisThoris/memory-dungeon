@@ -51,34 +51,34 @@ describe('elemental groups', () => {
         expect(tiles[0]!.id).toBe('a-1');
     });
 
-    it('Frost kills fire and coats two playable cards; a popped group coats three', () => {
+    it('Frost kills fire and finishes the receiving block even past its two-card budget', () => {
         let tiles = matched(board(ROWS), 'd');
         tiles = tiles.map((tile) => (tile.id === 'c-1' ? { ...tile, fuse: 2 } : tile));
         const single = castElement({ tiles, columns: 4, groupTileIds: ['d-1', 'd-2'], realmId: 'ember', pinned: new Set() })!;
         expect(single.kind).toBe('freeze');
         expect(at(tiles, 'c-1').fuse).toBeUndefined();
-        expect(tiles.filter((tile) => tile.rime)).toHaveLength(ELEMENT_HOLD_CAP);
+        expect(tiles.filter((tile) => tile.rime).map(tile => tile.id).sort()).toEqual(['b-1', 'c-1', 'f-1']);
         const group = matched(matched(board(ROWS), 'd'), 'h');
         castElement({ tiles: group, columns: 4, groupTileIds: ['d-1', 'd-2', 'h-1', 'h-2'], realmId: 'ember', pinned: new Set() });
         expect(group.filter((tile) => tile.rime)).toHaveLength(3);
     });
 
-    it('Grove seeds two playable cards on every match and three on a popped group', () => {
+    it('Grove finishes whole blocks for both single matches and popped groups', () => {
         const single = matched(board(ROWS), 'c');
         expect(castElement({ tiles: single, columns: 4, groupTileIds: ['c-1', 'c-2'], realmId: 'tide', pinned: new Set() })!.kind).toBe('entangle');
         expect(single.filter((tile) => tile.seeded)).toHaveLength(ELEMENT_HOLD_CAP);
         const group = matched(matched(board(ROWS), 'c'), 'g');
         castElement({ tiles: group, columns: 4, groupTileIds: ['c-1', 'c-2', 'g-1', 'g-2'], realmId: 'tide', pinned: new Set() });
-        expect(group.filter((tile) => tile.seeded)).toHaveLength(3);
+        expect(group.filter((tile) => tile.seeded)).toHaveLength(4);
     });
 
     it('receiving blocks are connected by element, never through a gap or a different suit', () => {
         const tiles = board(['a:e b:t b:t c:m', 'a:e d:t c:m d:t']);
-        expect(elementalContactGroups(tiles, 4, [1, 2, 3, 4, 5, 6, 7])).toEqual([[1, 5, 2], [3], [4], [6], [7]]);
+        expect(elementalContactGroups(tiles, 4, [1, 2, 3, 4, 5, 6, 7])).toEqual([[1, 5, 2], [3], [4, 0], [6], [7]]);
     });
 
     it('a higher multiplier carries more of the same reachable water targets', () => {
-        const rows = ['a:t a:t b:e b:e c:e c:e', 'd:e d:e e:e e:e f:e f:e', 'g:e g:e h:e h:e i:e i:e'];
+        const rows = ['a:t a:t b:e c:b b:e c:b', 'd:b e:e d:b e:e f:b g:e', 'g:e f:b h:e i:b h:e i:b'];
         const castAt = (multiplier: number) => {
             const tiles = matched(board(rows), 'a');
             return castElement({ tiles, columns: 6, groupTileIds: ['a-1', 'a-2'], realmId: 'tide', pinned: new Set(), tier: 1, multiplier })!;
@@ -87,12 +87,12 @@ describe('elemental groups', () => {
         expect(castAt(8).touchedTileIds.length).toBeGreaterThan(8);
     });
 
-    it('an amplified cast plants six blooms and leaves every card playable', () => {
+    it('an amplified cast finishes a ten-card block beyond its six-card budget', () => {
         const tiles = matched(board(['a:m a:m b:e b:e', 'c:e c:e d:e d:e', 'e:e e:e f:e f:e']), 'a');
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'grove', pinned: new Set(), combo: 12, multiplier: 8 })!;
-        expect(tiles.filter(t => t.seeded)).toHaveLength(6);
+        expect(tiles.filter(t => t.seeded)).toHaveLength(10);
         expect(cast.power).toBe(6);
-        expect(cast.contacts.filter(c => c.outcome === 'affected')).toHaveLength(6);
+        expect(cast.contacts.filter(c => c.outcome === 'affected')).toHaveLength(10);
         const free = tiles.filter(t => t.state === 'hidden' && !t.vined);
         expect(free.some(a => free.some(b => a.id !== b.id && a.pairKey === b.pairKey))).toBe(true);
     });

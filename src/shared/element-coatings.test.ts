@@ -18,13 +18,13 @@ describe('playable elemental preparations', () => {
         const tiles = deal();
         cast(tiles, 'moss');
         const seeded = tiles.filter(t => t.seeded);
-        expect(seeded).toHaveLength(2);
+        expect(seeded).toHaveLength(14);
         expect(seeded.every(t => !isTileFlipBlocked(t))).toBe(true);
         cast(tiles, 'tide');
-        expect(tiles.filter(t => t.seeded === 2)).toHaveLength(2);
-        const sourceTiles = tiles.filter(t => t.seeded);
+        expect(tiles.filter(t => t.seeded === 2)).toHaveLength(14);
+        const sourceTiles = tiles.filter(t => t.pairKey === '1');
         const board: BoardState = { level: 1, pairCount: 8, columns: 4, rows: 4, matchedPairs: 1,
-            flippedTileIds: [], tiles: tiles.map(t => t.seeded ? { ...t, state: 'matched' } : t),
+            flippedTileIds: [], tiles: tiles.map(t => t.pairKey === '1' ? { ...t, state: 'matched' } : t),
             floorArchetypeId: null, featuredObjectiveId: null };
         const run = createNewRun(0, { runSeed: 1, realm: { realmId: 'storm', severity: 'calm' } });
         const result = resolveRealmTurn({ run, board, sourceTiles, tileIds: sourceTiles.map(t => t.id),
@@ -41,7 +41,7 @@ describe('playable elemental preparations', () => {
         const tiles = deal().map(t => t.state === 'hidden' ? { ...t, suit: 'tide' as const, seeded: 1 } : t);
         cast(tiles, 'bone');
         const rimed = tiles.filter(t => t.rime);
-        expect(rimed).toHaveLength(2);
+        expect(rimed).toHaveLength(14);
         expect(rimed.every(t => !t.seeded && !isTileFlipBlocked(t))).toBe(true);
         const cells = rimed.map(t => tiles.indexOf(t));
         cast(tiles, 'tide'); cast(tiles, 'moss');

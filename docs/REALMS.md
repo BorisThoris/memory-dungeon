@@ -1,23 +1,15 @@
 # Realms, elements and travel
 
-## Current cast contract: every match changes the field (2026-10-02)
+## Current cast contract (rules 56, 2026-10-03)
 
-**Every elemental pair casts, including a single pair without a pop.** Frost and Grove no longer
-require a popped group, and an immune neighbour no longer consumes the cast's target. This replaces
-the older targeting/balance descriptions below; those measurements describe the earlier rules.
-See [the system review and current rules](gameplay/living-elements.md) for the implementation map,
-ground chemistry, scaling, validation and tradeoffs.
+**Every elemental pair casts and leaves ground.** Connected blocks now conduct the whole cast;
+local and amplified reactions use the same six recipes. Fire brings burn pressure, Water moves
+cards, Frost protects at the cost of seeds, and Grove prepares harvests. Ordinary coatings keep
+cards playable. Ground under the matched pair chooses chemistry; adjacent patches cannot change
+that choice. The Casts guide retains the actual last result and previews primed reactions.
 
-- Fire clears ice/vines and kindles one vulnerable card on a three-turn fuse.
-- Water douses fires and carries vulnerable, unanchored cards.
-- Frost douses fires and freezes one vulnerable card for a turn.
-- Grove snares one vulnerable card until an adjacent match cuts the vine.
-- Every three combo and every resonance tier adds a step of reach. Combo six, resonance tier two,
-  or a multi-pair pop allows two targets. Combo six/tier two gives Grove blooming vines.
-- Every match paints persistent cell-bound ground. Ice anchors against elemental movement;
-  matching later on planted roots harvests one gold. Existing ground, or the underlying arena on
-  an unpainted cell, reacts locally with the cast. The primed-streak reactions remain separate.
-- The **Casts** button beside the element counters explains the current strength and arena.
+See [the current rules and verification](gameplay/living-elements.md) for the full contract.
+The design history and measurements below describe earlier versions, not current targeting.
 
 The owner's brief (2026-09-30): the filler text over the board goes, and **environments become a
 prominent factor that changes how a floor plays**. The player picks where to go next, the way Shape

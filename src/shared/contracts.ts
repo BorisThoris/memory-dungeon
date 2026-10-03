@@ -16,7 +16,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 55: elemental finds and the forge economy. */
-export const GAME_RULES_VERSION = 55;
+export const GAME_RULES_VERSION = 56;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;

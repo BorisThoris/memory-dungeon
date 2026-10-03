@@ -134,7 +134,7 @@ describe('resonance, the streak and the reactions', () => {
     });
 
     it('each reaction pays in its own resource', () => {
-        const nearest = [2, 3, 4, 5, 6, 7];
+        const nearest = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
         const steam = resolveElementReaction('steam', 3, floor(), nearest);
         expect(steam.litTileIds).toEqual(['b1', 'b2', 'c1']);
         const vined = floor().map((tile) => (tile.id === 'c1' || tile.id === 'f2' ? { ...tile, vined: true, bloom: true } : tile));

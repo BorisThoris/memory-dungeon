@@ -75,6 +75,11 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
         const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
         return useAppStore.getState().run!.board!.tiles.filter((tile) => tile.pairKey === 'c').every((tile) => tile.state === 'hidden');
     })).toBe(true);
+    await page.getByTestId('element-cast-guide').click();
+    await expect(page.getByTestId('element-next-tide')).toContainText('Steam ×2');
+    await expect(page.getByTestId('element-next-tide')).toContainText('reveal up to 2 faces');
+    await page.screenshot({ path: 'output/playwright/element-next-reaction.png' });
+    await page.keyboard.press('Escape');
     await page.screenshot({ path: 'output/playwright/element-primed.png' });
 
     // Capture the actual reaction frames, before the transient steam has dissipated.
@@ -123,7 +128,7 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
         return { contacts: run.board!.elementCast!.contacts, blooms: run.board!.tiles.filter(t => t.seeded === 2).length,
             locks: run.board!.tiles.filter(t => t.vined || t.frost).length };
     });
-    expect(impact.blooms).toBe(6);
+    expect(impact.blooms).toBe(8);
     expect(impact.locks).toBe(0);
     expect(new Set(impact.contacts.map(c => c.outcome)).size).toBe(3);
     await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openSettings('playing'));
@@ -146,7 +151,8 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await page.screenshot({ path: 'output/playwright/element-cast-pop-off.png' });
     await page.getByTestId('element-cast-guide').click();
     await expect(page.getByTestId('element-cast-rules')).toBeVisible();
-    await expect(page.getByTestId('element-cast-rules').locator('details')).not.toHaveAttribute('open', '');
+    await expect(page.getByTestId('element-cast-rules').locator('details').first()).not.toHaveAttribute('open', '');
+    await expect(page.getByTestId('element-cast-receipt')).toContainText('8 blooms');
     await page.screenshot({ path: 'output/playwright/element-guide-compact.png' });
     await page.keyboard.press('Escape');
     // Hazard counters and silhouettes remain legible without any moving effects.

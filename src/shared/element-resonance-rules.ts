@@ -1,7 +1,7 @@
 import type { RunState, Tile, TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
-import { tileCharge } from './element-alchemy-rules';
+import { tileCharge, type AlchemyLog } from './element-alchemy-rules';
 
 /**
  * Resonance, the streak and the reactions (2026-10-02): the elements stack without end, and two of
@@ -79,11 +79,11 @@ export interface ElementReactionDefinition {
 }
 
 export const ELEMENT_REACTIONS: Readonly<Record<ElementReactionKind, ElementReactionDefinition>> = {
-    steam: { kind: 'steam', name: 'Steam', elements: ['ember', 'tide'], effect: 'the p face-down cards nearest the match show their faces until the next flip' },
-    blaze: { kind: 'blaze', name: 'Blaze', elements: ['ember', 'moss'], effect: 'every vine and bloom burns away, and it pays a gold for every two of p, rounded up' },
-    melt: { kind: 'melt', name: 'Thaw', elements: ['ember', 'bone'], effect: 'every card is freed of ice and snow, and it scores 25 times p squared' },
-    freezeover: { kind: 'freezeover', name: 'Freeze-over', elements: ['tide', 'bone'], effect: 'the floor holds still for p + 1 turns: no weather, no backlash, no frostbite, no fuse burns down' },
-    flood: { kind: 'flood', name: 'Flood', elements: ['tide', 'moss'], effect: 'both elements gain p resonance' },
+    steam: { kind: 'steam', name: 'Steam', elements: ['ember', 'tide'], effect: 'douse fires and reveal p nearby faces until the next flip' },
+    blaze: { kind: 'blaze', name: 'Blaze', elements: ['ember', 'moss'], effect: 'burn vines, seeds and blooms; gain one gold per two power, rounded up' },
+    melt: { kind: 'melt', name: 'Thaw', elements: ['ember', 'bone'], effect: 'melt ice, snow and rime; gain 25 × p² score' },
+    freezeover: { kind: 'freezeover', name: 'Freeze-over', elements: ['tide', 'bone'], effect: 'douse fires and calm the arena for p + 1 turns' },
+    flood: { kind: 'flood', name: 'Flood', elements: ['tide', 'moss'], effect: 'ripen seeds into 2-gold blooms; Water and Grove each gain p resonance' },
     frostbloom: { kind: 'frostbloom', name: 'Frostbloom', elements: ['moss', 'bone'], effect: 'the p face-down cards nearest the match each gain a charge' }
 };
 
@@ -241,46 +241,70 @@ export interface ElementReactionOutcome {
  * Carry a reaction out on `tiles` (mutated in place, like the realm's other steps). `nearest` are
  * the face-down real cards around the match, nearest first.
  */
-export const resolveElementReaction = (kind: ElementReactionKind, potency: number, tiles: Tile[], nearest: readonly number[]): ElementReactionOutcome => {
+export const resolveElementReaction = (kind: ElementReactionKind, potency: number, tiles: Tile[], nearest: readonly number[], alchemy?: AlchemyLog): ElementReactionOutcome => {
     const p = Math.max(1, runNonNegativeInteger(potency));
     const outcome: ElementReactionOutcome = { kind, potency: p, touchedTileIds: [], litTileIds: [], gold: 0, score: 0, stillTurns: 0, resonanceGain: 0 };
+    // The same recipe applies to local ground and amplified reactions. Only scope and power differ.
+    const scope = [...new Set(nearest)].filter(index => tiles[index]?.state === 'hidden' && isElemental(tiles[index]));
+    const clear = (keys: readonly ('fuse' | 'vined' | 'bloom' | 'seeded' | 'frost' | 'snowed' | 'rime')[]) => {
+        for (const index of scope) {
+            const tile = tiles[index]!;
+            if (!keys.some(key => tile[key] != null)) continue;
+            const next = { ...tile };
+            for (const key of keys) delete next[key];
+            tiles[index] = next;
+            outcome.touchedTileIds.push(tile.id);
+        }
+    };
     switch (kind) {
         case 'steam':
-            outcome.litTileIds = nearest.slice(0, p).map((index) => tiles[index]!.id);
-            outcome.touchedTileIds = [...outcome.litTileIds];
+            clear(['fuse']);
+            outcome.litTileIds = scope.slice(0, p).map(index => tiles[index]!.id);
+            outcome.touchedTileIds.push(...outcome.litTileIds);
             break;
         case 'blaze':
-            tiles.forEach((tile, index) => {
-                if (tile.state !== 'hidden' || (tile.vined == null && tile.bloom == null)) return;
-                const { vined: _vined, bloom: _bloom, ...rest } = tile;
-                tiles[index] = rest;
-                outcome.touchedTileIds.push(tile.id);
-            });
+            clear(['vined', 'bloom', 'seeded']);
             outcome.gold = Math.ceil(p / BLAZE_POTENCY_PER_GOLD);
             break;
         case 'melt':
-            tiles.forEach((tile, index) => {
-                if (tile.state !== 'hidden' || (tile.frost == null && tile.snowed == null)) return;
-                const { frost: _frost, snowed: _snowed, ...rest } = tile;
-                tiles[index] = rest;
-                outcome.touchedTileIds.push(tile.id);
-            });
+            clear(['frost', 'snowed', 'rime']);
             outcome.score = THAW_SCORE_PER_POTENCY_SQUARED * p * p;
             break;
         case 'freezeover':
+            clear(['fuse']);
             outcome.stillTurns = p + 1;
             break;
         case 'flood':
+            for (const index of scope) {
+                const tile = tiles[index]!;
+                if (tile.seeded !== 1) continue;
+                tiles[index] = { ...tile, seeded: 2 };
+                outcome.touchedTileIds.push(tile.id);
+            }
             outcome.resonanceGain = p;
             break;
         case 'frostbloom':
-            for (const index of nearest.slice(0, p)) {
+            for (const index of scope.filter(index => !alchemy?.empowered.includes(tiles[index]!.id)).slice(0, p)) {
                 const tile = tiles[index]!;
-                if (!isElemental(tile)) continue;
                 tiles[index] = { ...tile, empowered: tileCharge(tile) + 1 };
+                alchemy?.empowered.push(tile.id);
                 outcome.touchedTileIds.push(tile.id);
             }
             break;
     }
+    outcome.touchedTileIds = [...new Set(outcome.touchedTileIds)];
     return outcome;
+};
+
+/** Player-facing receipt and preview use the exact power passed to the resolver. */
+export const elementReactionSummary = (kind: ElementReactionKind, potency: number): string => {
+    const p = Math.max(1, runNonNegativeInteger(potency));
+    return {
+        steam: `Douse fire · reveal up to ${p} ${p === 1 ? 'face' : 'faces'}`,
+        blaze: `Burn vines, seeds and blooms · +${Math.ceil(p / BLAZE_POTENCY_PER_GOLD)} gold`,
+        melt: `Melt ice, snow and rime · +${THAW_SCORE_PER_POTENCY_SQUARED * p * p} score`,
+        freezeover: `Douse fire · calm arena for ${p + 1} turns`,
+        flood: `Ripen seeds · +${p} Water and Grove resonance`,
+        frostbloom: `Charge up to ${p} ${p === 1 ? 'card' : 'cards'} · charges add resonance when matched`
+    }[kind];
 };

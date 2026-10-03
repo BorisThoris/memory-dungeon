@@ -16,8 +16,7 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * - **Kin, charged.** An element does not act on a card made of it: the card drinks it instead
  *   and gains a charge (`Tile.empowered`, a count with no cap since 2026-10-02). Fire does not burn
  *   a fire card, frost does not freeze a frost card, vines do not hold a grove card, water does not
- *   carry a water card off. A matched group's cast charges every card of its own element a step
- *   short of its reach, whether or not it would have acted on it (`chargeKin`). A charged card matched adds
+ *   carry a water card off. A matched group's cast charges every connected card of its own element reached by the wave, whether or not it would have acted on it (`chargeKin`). A charged card matched adds
  *   its charge to its element's resonance (`element-resonance-rules.ts`) and pays a gold for every
  *   `CHARGES_PER_GOLD` charges; it glows until then, brighter the more it holds.
  * - **Counter, neutralized.** Each element puts out one other (`ELEMENT_NEUTRALIZES`): water puts
@@ -30,8 +29,7 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * lightning moves cards of every kind.
  *
  * A travelling cast visibly meets counter-elements throughout its reach, including on a clean
- * board. Holds pass those immune cards to find a vulnerable target; kin charging has its own
- * shorter reach. Weather retains its own targeting and only meets the cards it tries to affect.
+ * board. Holds pass those immune cards to find a vulnerable target; kin charging follows the same reached blocks. Weather retains its own targeting and only meets the cards it tries to affect.
  */
 
 /** The element a card's suit puts out: a card of the key is untouched by the value. */

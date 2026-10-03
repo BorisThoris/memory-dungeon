@@ -16,6 +16,7 @@ import { createAlchemyLog, elementLands, elementWouldLand, empoweredMatchGold, t
 import { cardsWithinReach } from './element-group-rules';
 import {
     ELEMENT_REACTION_KINDS,
+    elementReactionSummary,
     resolveElementReaction,
     resonanceAfterMatch,
     resonanceAfterMiss,
@@ -669,19 +670,26 @@ export const resolveRealmTurn = ({
         // too (`elementPopSpec`), and those are not part of this element's group.
         const castGroup = groupTileIds.filter((id) => tiles[indexOf.get(id) ?? -1]?.suit === castSuit);
         const field = castSuit ? castElementalGround({
-            tiles, columns: board.columns, ground, groupTileIds: castGroup, suit: castSuit,
+            tiles, columns: board.columns, ground, groupTileIds: castGroup, reactionTileIds: tileIds, suit: castSuit,
             realmId, secondaryId, alchemy
         }) : null;
         if (field) {
             ground = field.ground;
             goldDelta += field.gold;
+            scoreDelta += field.score;
+            stillTurns = Math.max(stillTurns, field.stillTurns);
+            if (field.stillTurns > 0) still = true;
+            if (field.resonanceGain > 0) {
+                resonance = { ...resonance };
+                for (const suit of field.reactionElements) resonance[suit] = resonanceOf(resonance, suit) + field.resonanceGain;
+            }
             litTileIds.push(...field.litTileIds);
             for (const id of field.touchedTileIds) touchedThisTurn.add(id);
             pinned.clear();
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
         }
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned, alchemy, tier, still,
-            combo: run.stats.currentStreak, quenchFire: field?.quenchFire, multiplier: CHAIN_MULT[runChainTier(run)] });
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned: new Set(pinnedTileIds), anchored: pinned, alchemy, tier, still,
+            combo: run.stats.currentStreak, quenchFire: field?.quenchFire || ['steam', 'melt'].includes(resonanceTurn.reaction?.definition.kind ?? ''), multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
             const forged = applyForgedCast(tiles, cast.touchedTileIds, cast.suit, focusOf(run, cast.suit));
             litTileIds.push(...forged.lit);
@@ -713,7 +721,14 @@ export const resolveRealmTurn = ({
         const { definition, potency, spent } = resonanceTurn.reaction;
         const group = groupTileIds.map((id) => indexOf.get(id)).filter((index): index is number => index != null);
         const nearest = cardsWithinReach(tiles, Math.max(1, board.columns), group, tiles.length);
-        const reaction = resolveElementReaction(definition.kind, potency, tiles, nearest);
+        const reaction = resolveElementReaction(definition.kind, potency, tiles, nearest, alchemy);
+        for (const id of reaction.touchedTileIds) touchedThisTurn.add(id);
+        if (castImpact) {
+            const detail = `Amplified ${definition.name} ×${potency}: ${elementReactionSummary(definition.kind, potency)}`;
+            castImpact = { ...castImpact, detail: `${castImpact.detail} · ${detail}` };
+            const castEvent = events.find(event => event.key === castImpact!.key);
+            if (castEvent?.ground) castEvent.ground = { ...castEvent.ground, detail: `${castEvent.ground.detail} · ${detail}` };
+        }
         elementReactions += 1;
         goldDelta += reaction.gold;
         scoreDelta += reaction.score;
@@ -733,6 +748,10 @@ export const resolveRealmTurn = ({
             ...(reaction.gold > 0 ? { gold: reaction.gold } : {})
         });
     }
+
+    // A reaction can remove rime after the ordinary cast; weather must read the resulting anchors.
+    pinned.clear();
+    for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
 
     // 3. The clocks tick.
     const burntOut: number[] = [];
