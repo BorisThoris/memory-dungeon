@@ -8,9 +8,10 @@ import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import { runChainTier, type ChainMomentumRun } from '../../shared/chain-tier-rules';
 import { CHAIN_MULT } from '../../shared/chunk-break-rules';
 import styles from './ElementCastGuide.module.css';
+import { essenceOf, focusOf, FOCUS_EFFECTS } from '../../shared/elemental-loot-rules';
 
 /** Native popover: keyboard, Escape and outside dismissal without taking over board input. */
-export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board' | 'realmId' | 'realmSecondaryId' | 'elementResonance'> & ChainMomentumRun }) {
+export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board' | 'realmId' | 'realmSecondaryId' | 'elementResonance' | 'elementalFocus' | 'elementalEssence'> & ChainMomentumRun }) {
     const id = useId();
     const combo = run.stats.currentStreak;
     const resonance = runElementResonance(run);
@@ -26,13 +27,15 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
             <span>Every 3 combo and every resonance tier adds one step of reach. Ordinary casts keep cards playable.</span>
             <span>Water starts at 6 carried cards, plus 2 per added step of reach or target strength.</span>
             {TILE_SUITS.map((suit) => {
-                const power = elementCastPower(combo, resonanceTier(resonanceOf(resonance, suit)), 1, multiplier);
+                const power = elementCastPower(combo, resonanceTier(resonanceOf(resonance, suit)) + focusOf(run, suit), 1, multiplier);
                 return <span className={styles.rule} key={suit}>
                     <strong>{ELEMENT_NAMES[suit]} · {suit === 'tide' ? `up to ${elementWashCapacity(power)} carried` : `${power.targets} target${power.targets === 1 ? '' : 's'}`} · +{power.extraReach} reach</strong>
-                    <span>{ELEMENT_MATCH_RULES[suit]}</span>
+                    <span>{essenceOf(run.elementalEssence, suit)} essence held · Forged focus {focusOf(run, suit)}</span>
+                    <span>{ELEMENT_MATCH_RULES[suit]}{focusOf(run, suit) > 0 ? ` Forged focus: +${focusOf(run, suit)} cast tiers. ${FOCUS_EFFECTS[suit]}` : ''}</span>
                 </span>;
             })}
             {run.realmId ? <span className={styles.arena}>{ARENA_GROUND_RULES[run.realmId]}</span> : null}
+            <span>Floors drop essence: one of the arena’s element and one random find (two random finds in Storm). A reaction earns another. Spend essence and gold at the forge every third floor to deepen a cast or bottle a primed element.</span>
             {run.realmSecondaryId ? <span>{ARENA_GROUND_RULES[run.realmSecondaryId]}</span> : null}
             <span>Ground stays after cards leave. Match on roots for +1 gold. Ice anchors against elemental movement. Overlapping elements react locally; two consecutive matches also prime your stronger streak reaction.</span>
             <span>Cards drink their own element and resist their counter. Casts seek vulnerable targets. If none remain, the ground still changes. Arena locks cover at least two complete pairs, with another pair free. Breaking a cohort frees it.</span>

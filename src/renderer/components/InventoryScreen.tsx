@@ -11,6 +11,9 @@ import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
+import { essenceOf, focusOf, usesElementalLoot, FOCUS_EFFECTS } from '../../shared/elemental-loot-rules';
+import { TILE_SUITS } from '../../shared/tile-suit-rules';
+import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 
 /**
  * Inventory. Two sections that matter mid-run: mutators, charges and tokens. The
@@ -110,6 +113,16 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
             <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.columns}`}>
                 <div className={styles.main}>
+                    {usesElementalLoot(run) ? <Panel className={panelClassName} padding="lg" variant="default">
+                        <section aria-label="Elemental build" className={styles.section}>
+                            <h2 className={styles.sectionTitle}>Essence and forged focus</h2>
+                            <p>Floors drop essence. The forge opens every third floor: deepen your casts or prepare a reaction.</p>
+                            <dl className={styles.charges}>{TILE_SUITS.map(suit => <div className={styles.chargeRow} key={suit}>
+                                <dt title={FOCUS_EFFECTS[suit]}>{ELEMENT_NAMES[suit]}</dt>
+                                <dd>{essenceOf(run.elementalEssence, suit)} essence · Focus {focusOf(run, suit)}</dd>
+                            </div>)}</dl>
+                        </section>
+                    </Panel> : null}
                     <MetaFrame data-testid="inventory-meta-frame-mutators">
                         <Panel className={panelClassName} padding="lg" variant="default">
                             <section aria-labelledby="inventory-mutators-title" className={styles.section}>

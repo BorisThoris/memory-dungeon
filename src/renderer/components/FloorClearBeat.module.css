@@ -189,3 +189,5 @@
 :global([data-shell-layout='phone-landscape']) .notes {
     display: none;
 }
+.essence { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin: 0.8rem 0; font-size: 0.9rem; }
+.essence > span { color: var(--loot-color, #e5d6b8); }

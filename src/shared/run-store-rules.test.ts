@@ -40,7 +40,7 @@ describe('gold at the floor clear', () => {
 
 describe('the store', () => {
     const run = (overrides: Partial<RunState> = {}): RunState => ({
-        ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }),
+        ...createNewRun(0, { runSeed: 7, gameMode: 'endless', runRulesVersionOverride: 54 }),
         gold: 10,
         missBank: [{ floor: 1, misses: 2 }],
         ...overrides
@@ -89,7 +89,7 @@ describe('the store stop', () => {
     });
 
     it('sells bombs, dearer each time', () => {
-        const run: RunState = { ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }), gold: 20 };
+        const run: RunState = { ...createNewRun(0, { runSeed: 7, gameMode: 'endless', runRulesVersionOverride: 54 }), gold: 20 };
         const first = buyStoreItem(run, 'bomb')!;
         expect(first.bombCharges).toBe(run.bombCharges + 1);
         const second = buyStoreItem(first, 'bomb')!;

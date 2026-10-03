@@ -4,25 +4,16 @@ import { grantMisses, missBankCap, missesLeft } from './miss-bank';
 import { hasRelic, isRelicId, RELICS, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_COST, isElementalStoreId, storeElement, usesElementalLoot, type ElementalStoreId } from './elemental-loot-rules';
+import { TILE_SUITS } from './tile-suit-rules';
+import { ELEMENT_NAMES } from './element-alchemy-rules';
 
 /**
- * The store, back - one mechanic, on its own, measured against the loop.
- *
- * Gen 174 took the shop out with the gold it spent, because the floor-clear vendor and the door
- * it stood behind were stops in a loop of momentum (`docs/REMOVED_DUNGEON_LAYER.md`). What made
- * it worth bringing back on 2026-09-23 is the miss bank: for the first time a run has one thing
- * worth buying - another miss before the run ends - and a floor cleared well has something to
- * earn toward it. So gold is back as a run currency, earned only at a floor clear.
- *
- * Prices climb with each purchase of the same thing in a run, so gold is a decision and not a
- * subscription: the first extra miss is cheap, the fourth is not.
- *
- * Where it opens changed on 2026-09-24. It began as a sheet on the pause menu, so that the game
- * never waited for the player to shop - and nobody found it there. The player asked for shopping
- * to be "a gameplay thing, not hidden away, every so levels", so it is a **store stop**: after every
- * third floor's clear the store opens by itself, with a Descend button. That is the stop Gen 174
- * removed, back on the player's word and once every three floors rather than after every one. A
- * shared game at one screen never stops for it: the table is not one player's run.
+ * Every third floor is a stop. Rules 55 turn it into the elemental forge:
+ * found essence and earned gold buy a lasting cast specialization or a prepared reaction.
+ * Prices increase per recipe, so preparation competes with investing in the run's build.
+ * Older rules keep their charge/relic stock. See docs/ELEMENTAL_FORGE.md.
+ * A shared game at one screen never stops: the table is not one player's run.
  */
 export const STORE_STOP_EVERY_FLOORS = 3;
 
@@ -44,7 +35,7 @@ export const floorClearGold = ({ tier, turnsUnderPar }: { tier: ChainTier; turns
     GOLD_BY_CLEAR_TIER[tier] +
     Math.min(GOLD_UNDER_PAR_CAP, runNonNegativeInteger(turnsUnderPar)) * GOLD_PER_TURN_UNDER_PAR;
 
-export type StoreItemId = 'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId;
+export type StoreItemId = 'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId;
 
 export interface StoreItemDefinition {
     id: StoreItemId;
@@ -54,7 +45,7 @@ export interface StoreItemDefinition {
     /** Added to the price for every earlier purchase of this item in the run. */
     priceStep: number;
     /** A consumable can be bought again; a relic once, and kept to the end of the run. */
-    kind: 'consumable' | 'relic';
+    kind: 'consumable' | 'relic' | 'focus' | 'prime';
 }
 
 export const STORE_ITEMS: readonly StoreItemDefinition[] = [
@@ -103,9 +94,21 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     )
 ];
 
+/** All four elements are available: the finds constrain the build, not another stock roll. */
+export const ELEMENTAL_STORE_ITEMS: readonly StoreItemDefinition[] = TILE_SUITS.flatMap(suit => [
+    { id: `focus_${suit}` as const, title: `${ELEMENT_NAMES[suit]} focus`,
+        body: `${FOCUS_EFFECTS[suit]} +1 cast tier for reach and targets. Lasts this run.`,
+        basePrice: 6, priceStep: 3, kind: 'focus' as const },
+    { id: `prime_${suit}` as const, title: `Bottle ${ELEMENT_NAMES[suit]}`,
+        body: `Prime ${ELEMENT_NAMES[suit]} for the next floor. Match another element to react. A miss breaks it. Replaces your streak; one bottle per stop.`,
+        basePrice: 3, priceStep: 1, kind: 'prime' as const }
+]);
+const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
+
 export type StoreRun = Pick<
     RunState,
     'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics' | 'storeStock'
+    | 'runRulesVersion' | 'elementalEssence' | 'elementalFocus' | 'elementStreak' | 'elementalPrimeFloor'
 >;
 
 /**
@@ -121,7 +124,8 @@ export type StoreRun = Pick<
  * The vault draws what is stocked and leaves the shelf bare for what is not (`StoreVault`), so
  * the stops read as different rooms and a relic is something you find rather than pick.
  */
-export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[]): StoreItemId[] => {
+export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[], rulesVersion = 54): StoreItemId[] => {
+    if (usesElementalLoot({ runRulesVersion: rulesVersion })) return ELEMENTAL_STORE_ITEMS.map(item => item.id);
     const rng = createMulberry32(hashStringToSeed(`store-stock:${Math.floor(runSeed)}:${Math.floor(floor)}`));
     const stock: StoreItemId[] = ['miss'];
     for (const id of ['peek', 'shuffle', 'bomb'] as const) {
@@ -142,7 +146,7 @@ export const storePurchaseCount = (run: Pick<RunState, 'storePurchases'>, id: St
     runNonNegativeInteger(run.storePurchases?.[id] ?? 0);
 
 export const storePrice = (run: Pick<RunState, 'storePurchases'>, id: StoreItemId): number => {
-    const item = STORE_ITEMS.find((candidate) => candidate.id === id)!;
+    const item = ALL_STORE_ITEMS.find((candidate) => candidate.id === id)!;
     return item.basePrice + item.priceStep * storePurchaseCount(run, id);
 };
 
@@ -152,15 +156,28 @@ export interface StoreOfferRow {
     body: string;
     price: number;
     /** Why it cannot be bought right now, or `null` when it can. */
-    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | null;
+    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | 'essence' | 'prepared' | null;
     kind: StoreItemDefinition['kind'];
+    essenceCost?: number;
+    essenceHeld?: number;
 }
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    STORE_ITEMS.filter((item) => isStocked(run, item.id)).map((item) => {
+    (usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
         const price = storePrice(run, item.id);
         let blocked: StoreOfferRow['blocked'] = null;
+        let essenceCost: number | undefined;
+        let essenceHeld: number | undefined;
+        let body = item.body;
+        if (isElementalStoreId(item.id)) {
+            const suit = storeElement(item.id);
+            essenceCost = item.kind === 'focus' ? FOCUS_ESSENCE_COST : PRIME_ESSENCE_COST;
+            essenceHeld = essenceOf(run.elementalEssence, suit);
+            if (item.kind === 'prime' && run.elementalPrimeFloor === run.board?.level) blocked = 'prepared';
+            else if (essenceHeld < essenceCost) blocked = 'essence';
+            if (item.kind === 'focus') body = `Rank ${focusOf(run, suit)} → ${focusOf(run, suit) + 1}. ${body}`;
+        }
         if (item.id === 'miss') {
             const left = missesLeft(run);
             if (left == null) blocked = 'no_bank';
@@ -168,7 +185,7 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
         }
         if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';
         if (blocked === null && runGold(run) < price) blocked = 'gold';
-        return { id: item.id, title: item.title, body: item.body, price, blocked, kind: item.kind };
+        return { id: item.id, title: item.title, body, price, blocked, kind: item.kind, ...(essenceCost === undefined ? {} : { essenceCost, essenceHeld }) };
     });
 
 /** The purchase, or `null` when the sheet would have said no. */
@@ -182,6 +199,13 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
         gold: runGold(run) - row.price,
         storePurchases: { ...run.storePurchases, [id]: storePurchaseCount(run, id) + 1 }
     };
+    if (isElementalStoreId(id)) {
+        const suit = storeElement(id);
+        const elementalEssence = { ...run.elementalEssence, [suit]: essenceOf(run.elementalEssence, suit) - row.essenceCost! };
+        return row.kind === 'focus'
+            ? { ...paid, elementalEssence, elementalFocus: { ...run.elementalFocus, [suit]: focusOf(run, suit) + 1 } }
+            : { ...paid, elementalEssence, elementStreak: { suit, links: 2 }, elementalPrimeFloor: run.board?.level ?? 0 };
+    }
     switch (id) {
         case 'miss':
             // Bought on this floor, so it lasts as long as a miss earned here would.

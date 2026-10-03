@@ -8,7 +8,7 @@ import StoreVault from './StoreVault';
 import { STORE_HOTSPOTS } from './storeVaultLayout';
 
 const Vault = ({ gold, onDescend = vi.fn() }: { gold: number; onDescend?: () => void }) => {
-    const [run, setRun] = useState<RunState>(() => ({ ...createNewRun(0), gold }));
+    const [run, setRun] = useState<RunState>(() => ({ ...createNewRun(0, { runRulesVersionOverride: 54 }), gold }));
     return (
         <StoreVault
             floor={3}
@@ -24,6 +24,28 @@ const Vault = ({ gold, onDescend = vi.fn() }: { gold: number; onDescend?: () => 
 };
 
 describe('the store as a place', () => {
+    it('offers elemental forging with visible costs and explanations, and announces a purchase', () => {
+        const Forge = () => {
+            const [run, setRun] = useState<RunState>({ ...createNewRun(0), gold: 6, elementalEssence: { tide: 2 } });
+            return <StoreVault run={run} floor={3} onDescend={() => {}} onBuy={id => {
+                const next = buyStoreItem(run, id);
+                if (next) setRun(next);
+                return !!next;
+            }} />;
+        };
+        render(<Forge />);
+        expect(screen.getByRole('dialog')).toHaveAccessibleName('Elemental forge');
+        expect(screen.queryByTestId('store-buy-bomb')).toBeNull();
+        expect(screen.getByTestId('forge-pouch-tide')).toHaveTextContent('2 essence · Focus 0');
+        expect(screen.getByTestId('store-buy-focus_ember')).toBeDisabled();
+        const buy = screen.getByTestId('store-buy-focus_tide');
+        expect(buy).toHaveAccessibleName('Buy water focus for 6 gold and 2 essence');
+        act(() => buy.focus());
+        fireEvent.click(buy);
+        expect(screen.getByTestId('forge-pouch-tide')).toHaveTextContent('0 essence · Focus 1');
+        expect(screen.getByTestId('store-receipt')).toHaveTextContent('Forged Water focus');
+        expect(document.activeElement).toBe(screen.getByTestId('store-descend'));
+    });
     it('is a labelled dialog whose wares are buttons on the room\'s objects, opening on Descend', () => {
         render(<Vault gold={12} />);
         const dialog = screen.getByTestId('store-sheet');
@@ -79,7 +101,7 @@ describe('the store as a place', () => {
     });
 
     it('draws only what the stop stocked, and leaves the rest of the shelves bare', () => {
-        const run: RunState = { ...createNewRun(0), gold: 20, storeStock: ['miss', 'bomb', 'long_look'] };
+        const run: RunState = { ...createNewRun(0, { runRulesVersionOverride: 54 }), gold: 20, storeStock: ['miss', 'bomb', 'long_look'] };
         render(<StoreVault floor={3} onBuy={() => false} onDescend={vi.fn()} run={run} />);
         expect(screen.getByTestId('store-buy-miss')).toBeInTheDocument();
         expect(screen.getByTestId('store-buy-bomb')).toBeInTheDocument();

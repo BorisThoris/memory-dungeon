@@ -1,6 +1,7 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { castElement } from './element-group-rules';
+import { applyForgedCast, focusOf } from './elemental-loot-rules';
 import { runChainTier } from './chain-tier-rules';
 import { CHAIN_MULT } from './chunk-break-rules';
 import { reconcileRealmHolds } from './realm-hold-policy';
@@ -571,7 +572,7 @@ export const resolveRealmTurn = ({
             events.push({ key: eventKey(run, level, turns, 'seed-harvest'), kind: 'harvest',
                 tileIds: matched.filter(tile => tile.seeded).map(tile => tile.id), gold: harvest });
         }
-        if (matched.some(tile => tile.rime)) stillTurns = Math.max(stillTurns, 1);
+        if (matched.some(tile => tile.rime)) stillTurns = Math.max(stillTurns, 1 + focusOf(run, 'bone'));
         if (released > 0) {
             goldDelta += released;
             events.push({
@@ -663,7 +664,7 @@ export const resolveRealmTurn = ({
     // 2b. The matched group casts its element on the cards around it (`element-group-rules.ts`).
     if (outcome === 'match' && groupTileIds.length > 0) {
         const castSuit = (Object.keys(pairsBySuit) as TileSuit[])[0];
-        const tier = castSuit ? resonanceTier(resonanceOf(resonance, castSuit)) : 0;
+        const tier = castSuit ? resonanceTier(resonanceOf(resonance, castSuit)) + focusOf(run, castSuit) : 0;
         // The cast is the matched element's: a reaction's burst takes cards of the element it spent
         // too (`elementPopSpec`), and those are not part of this element's group.
         const castGroup = groupTileIds.filter((id) => tiles[indexOf.get(id) ?? -1]?.suit === castSuit);
@@ -682,6 +683,14 @@ export const resolveRealmTurn = ({
         const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned, alchemy, tier, still,
             combo: run.stats.currentStreak, quenchFire: field?.quenchFire, multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
+            const forged = applyForgedCast(tiles, cast.touchedTileIds, cast.suit, focusOf(run, cast.suit));
+            litTileIds.push(...forged.lit);
+            alchemy.empowered.push(...forged.charged);
+            for (const contact of cast.contacts) if (forged.charged.includes(contact.tileId)) contact.outcome = 'charged';
+            const forgeDetail = [forged.charged.length ? `${forged.charged.length} fires converted to charge` : '',
+                forged.lit.length ? `${forged.lit.length} faces revealed by the current` : '',
+                forged.bloomed.length ? `${forged.bloomed.length} seeds ripened` : ''].filter(Boolean).join(' · ');
+            if (forgeDetail) cast.summary += ` · Focus: ${forgeDetail}`;
             pinned.clear();
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
             castImpact = {

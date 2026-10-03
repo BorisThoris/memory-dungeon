@@ -32,11 +32,11 @@ describe('what a stop has on its shelves', () => {
     it('reads a run stocked before stops were rolled as selling everything', () => {
         expect(isStocked({}, 'tallow_candle')).toBe(true);
         expect(isStocked({ storeStock: ['miss'] }, 'tallow_candle')).toBe(false);
-        expect(storeOffer({ ...createNewRun(0), storeStock: undefined }).map((row) => row.id)).toEqual(STORE_ITEMS.map((item) => item.id));
+        expect(storeOffer({ ...createNewRun(0, { runRulesVersionOverride: 54 }), storeStock: undefined }).map((row) => row.id)).toEqual(STORE_ITEMS.map((item) => item.id));
     });
 
     it('stocks the shelves as the stop opens, and sells only what is on them', () => {
-        const run = finishMemorizePhase(createNewRun(0, { runSeed: 77 }));
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 77, runRulesVersionOverride: 54 }));
         const board = { ...run.board!, level: STORE_STOP_EVERY_FLOORS, matchedPairs: run.board!.pairCount, tiles: run.board!.tiles.map((tile) => ({ ...tile, state: 'matched' as const })) };
         const cleared = finalizeLevel({ ...run, board }, board);
         expect(cleared.storeStock).toEqual(rollStoreStock(77, STORE_STOP_EVERY_FLOORS, []));

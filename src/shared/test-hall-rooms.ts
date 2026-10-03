@@ -566,14 +566,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'store-stop',
-        title: 'The store stop',
-        mechanic: 'Every third floor, the store opens before the next floor; purchases cost their price.',
+        title: 'The elemental forge',
+        mechanic: 'Every third floor, turn found essence and gold into a lasting elemental build or a prepared reaction.',
         graphMechanicIds: ['progression.store_stop', 'economy.gold'],
-        tryThis: 'Clear the floor: the store opens because this is floor 3. Buy a bomb and Descend.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
+        tryThis: 'Clear floor 3. Forge Water focus to reveal cards in its currents, or bottle an element to prepare a reaction.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12, elementalEssence: { tide: 4, ember: 2 } } }),
         script: [
             { step: { do: 'clear' }, says: 'floor 3 clears and is a store stop', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
-            { step: { do: 'buy', item: 'bomb' }, says: 'a bomb costs 4 gold', expect: (r, b) => (r.bombCharges === b.bombCharges + 1 && runGold(b) - runGold(r) === 4 ? null : `bombs ${r.bombCharges}, gold ${runGold(b)} -> ${runGold(r)}`) }
+            { step: { do: 'buy', item: 'focus_tide' }, says: 'Water focus costs 6 gold and 2 Water essence', expect: (r, b) => (r.elementalFocus?.tide === 1 && runGold(b) - runGold(r) === 6 && (b.elementalEssence?.tide ?? 0) - (r.elementalEssence?.tide ?? 0) === 2 ? null : 'forge payout differs from its price') }
         ]
     },
     {
@@ -582,7 +582,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'The relic lifts the miss bank to five.',
         graphMechanicIds: ['inventory.relics', 'economy.miss_bank'],
         tryThis: 'You hold Deep Pockets and four misses. Clear the floor, then buy another miss at the stop.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { gold: 20, relics: ['deep_pockets'] } }),
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { gold: 20, relics: ['deep_pockets'], runRulesVersion: 54 } }),
         script: [
             { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') },
             { step: { do: 'buy', item: 'miss' }, says: 'a fifth miss fits', expect: (r) => (missesLeft(r) === 5 && missBankCap(r) === 5 ? null : `misses ${missesLeft(r)}, cap ${missBankCap(r)}`) }

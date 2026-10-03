@@ -6,6 +6,8 @@
  * (`.github/pull_request_template.md`). See docs/refinement-tasks REF-066. For optional payloads, consider aligning
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
+import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
+
 export const SAVE_SCHEMA_VERSION = 8;
 
 /** One deposit in the miss bank (`miss-bank.ts`): how many misses, and the floor they were earned on. */
@@ -13,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 54: playable coatings and paired arena holds. */
-export const GAME_RULES_VERSION = 54;
+/** Bump when generation or player-visible gameplay rules change. 55: elemental finds and the forge economy. */
+export const GAME_RULES_VERSION = 55;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -513,6 +515,7 @@ export interface LevelResult {
     chainTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Gold the clear paid into the purse (`run-store-rules.ts`). */
     goldEarned?: number;
+    elementalDrops?: ElementalPouch;
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
     momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
@@ -824,13 +827,18 @@ export interface RunState {
      * run has bought, which is what the prices climb on.
      */
     gold?: number;
-    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId, number>>;
+    storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId, number>>;
+    /** Found at floor clears; spent at the elemental forge. Both persist for this run. */
+    elementalEssence?: ElementalPouch;
+    elementalFocus?: ElementalPouch;
+    /** A prepared reaction can be bought only once per stop. */
+    elementalPrimeFloor?: number;
     /**
      * What this stop has on its shelves (`rollStoreStock`), rolled from the seed and the floor
-     * when the stop opens: a miss always, the rest by the roll. Absent on runs saved before
-     * stops were stocked, and read as everything.
+     * when the stop opens: the four elemental recipes in rules 55, legacy stock before that.
+     * Absent stock reads as that rule version's complete catalog.
      */
-    storeStock?: Array<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId>;
+    storeStock?: Array<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId>;
     /** Relics bought in the store this run (`run-relic-rules.ts`), kept to the end of it. */
     relics?: RelicId[];
     /** The biggest single break's score this floor: what band N5 reads the largest break's share from. */

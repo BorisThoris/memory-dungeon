@@ -14,7 +14,7 @@ const PARCHMENT = '#f1e3c4';
 const CYAN = '#8fdcff';
 const INK = '#2a1e16';
 
-const glyphs: Record<StoreItemId, ReactElement> = {
+const glyphs: Partial<Record<StoreItemId, ReactElement>> = {
     miss: (
         <g>
             <ellipse cx="20" cy="30" fill={GOLD_DARK} rx="12" ry="4" />
@@ -87,4 +87,4 @@ const glyphs: Record<StoreItemId, ReactElement> = {
 };
 
 /** The drawing for a ware, in a 40x40 viewBox. */
-export const storeWareGlyph = (id: StoreItemId): ReactElement => glyphs[id];
+export const storeWareGlyph = (id: StoreItemId): ReactElement => glyphs[id] ?? <circle cx="20" cy="20" r="12" fill={CYAN} />;

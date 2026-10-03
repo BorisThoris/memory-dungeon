@@ -15,6 +15,32 @@
     color: var(--margin-paper, #f8f4f4);
 }
 
+.forge { background: rgba(10, 12, 18, 0.9); }
+.forge .head { position: relative; padding-top: 1rem; }
+.forge .stage { top: 7rem; bottom: 5rem; overflow: auto; container-type: normal; }
+.forgeBody { max-width: 76rem; margin: auto; padding: 1rem 1.5rem; }
+.forgeGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.forgeElement { position: relative; border-top: 2px solid var(--forge-color); background: rgba(20, 23, 32, 0.9); padding: 1rem; }
+.forgePrimed { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; color: #fff0d9; }
+.forgeElement header { text-align: center; color: var(--forge-color); }
+.forgeElement h3 { font-size: 1.5rem; font-weight: 400; margin: 0.3rem 0; }
+.forgeElement header p { color: #ede4d6; font-size: 0.85rem; margin: 0.5rem 0 1rem; }
+.forgeRune { font-size: 2rem; }
+.forgeRecipe { border-top: 1px solid #ffffff20; padding-top: 1rem; margin-top: 1rem; }
+.forgeRecipe p { min-height: 6rem; margin: 0.6rem 0; font-size: 0.82rem; line-height: 1.5; color: #d9d4cb; }
+.forgeRecipe button, .forgeDescend { min-height: 44px; padding: 0.7rem; border: 1px solid var(--forge-color, #e1ad66); color: #fff0d9; background: #24232a; font: inherit; cursor: pointer; }
+.forgeRecipe button { width: 100%; font-size: 0.8rem; }
+.forgeRecipe button:disabled { opacity: 0.48; cursor: default; }
+.forgeRecipe button:focus-visible, .forgeDescend:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.forgeDescend { position: fixed; z-index: 3; bottom: 1rem; right: 1.5rem; min-width: 12rem; box-shadow: 0 0 1rem #000; }
+@media (max-width: 900px) { .forgeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 500px) {
+    .forgeGrid { grid-template-columns: 1fr; }
+    .forge .stage { top: 8.5rem; }
+    .forgeRecipe p { min-height: 0; }
+    .forgeBody { padding: 1rem; }
+}
+
 .head {
     position: absolute;
     top: max(0.9rem, env(safe-area-inset-top, 0px));

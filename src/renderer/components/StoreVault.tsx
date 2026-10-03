@@ -5,9 +5,11 @@ import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
-import { STORE_HOTSPOTS, STORE_VAULT_ASPECT, storeHotspot } from './storeVaultLayout';
+import { STORE_VAULT_ASPECT, storeHotspot } from './storeVaultLayout';
 import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './StoreVault.module.css';
+import { usesElementalLoot } from '../../shared/elemental-loot-rules';
+import { ElementalForgeWares } from './ElementalForgeWares';
 
 interface StoreVaultProps {
     run: RunState;
@@ -42,6 +44,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
     const [shown, setShown] = useState<StoreItemId | null>(null);
     const offer = storeOffer(run);
     const gold = runGold(run);
+    const elemental = usesElementalLoot(run);
 
     useModalFocusTrap({
         containerRef: rootRef,
@@ -69,20 +72,24 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
             aria-describedby={subtitleId}
             aria-labelledby={titleId}
             aria-modal="true"
-            className={styles.vault}
+            className={`${styles.vault} ${elemental ? styles.forge : ''}`}
             data-testid="store-sheet"
             ref={rootRef}
             role="dialog"
         >
             <div className={styles.head}>
                 <h2 className={styles.title} id={titleId}>
-                    {STORE_SHEET_COPY.title}
+                    {elemental ? 'Elemental forge' : STORE_SHEET_COPY.title}
                 </h2>
                 <p className={styles.subtitle} data-testid="store-subtitle" id={subtitleId}>
-                    {STORE_SHEET_COPY.subtitle(floor, gold)}
+                    {elemental ? `Floor ${floor} cleared · ${gold} gold. Spend the essence you found: deepen a cast for this run, or bottle a reaction for the next floor.` : STORE_SHEET_COPY.subtitle(floor, gold)}
                 </p>
             </div>
             <div className={styles.stage}>
+                {elemental ? <div className={styles.forgeBody} ref={spotsRef}>
+                    <ElementalForgeWares run={run} offer={offer} onBuy={row => { if (onBuy(row.id)) setReceipt(row); }} />
+                    <button className={styles.forgeDescend} data-modal-initial-focus data-testid="store-descend" ref={descendRef} type="button" onClick={onDescend}>Descend</button>
+                </div> :
                 <div className={styles.plate} data-testid="store-rows" ref={spotsRef} style={{ '--store-plate-aspect': STORE_VAULT_ASPECT } as CSSProperties}>
                     {/* Descend first in the DOM (Tab from it reaches the wares), last on the floor. Only
                         what the stop stocked is here at all (`rollStoreStock`): a bare shelf is a bare shelf. */}
@@ -147,7 +154,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                             </button>
                         );
                     })}
-                </div>
+                </div>}
             </div>
             {/* Present and empty from the moment the vault opens, so the first purchase is a change. */}
             <p aria-atomic="true" aria-live="polite" className={styles.srOnly} data-testid="store-receipt" role="status">

@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 77 as const;
+export const ENCYCLOPEDIA_VERSION = 78 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -362,14 +362,15 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
     },
     {
         id: 'store',
-        title: 'Gold and the store',
+        title: 'Essence and the elemental forge',
         description:
             'New runs start with **one bomb**: press **Bomb**, then choose a card to remove its pair. Press Bomb again or Escape to cancel. You can also flip one card first and then press Bomb. The last pair must be matched. ' +
             'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
-            'The **store** opens by itself after every third floor, with a **Descend** button when you are done. It sells another **miss** (into the bank, up to what it holds), a **peek** charge, a **shuffle** charge and a **bomb** - flip a card, then bomb it, and its pair leaves the board with no miss and no turn spent, though never the floor\'s last pair; ' +
-            'each thing you buy costs more the next time this run. ' +
-            'It also sells four **relics**, once each, kept to the end of the run: **Deep Pockets** (the miss bank holds five), **Gilded Chain** (every fifth match in a row also pays two gold), **Long Look** (a second more to study every floor) and **Tallow Candle** (your first match on every floor lights the face-down cards beside it until your next flip). ' +
-            'Gold is the run\'s, not the profile\'s: it ends with the run.'
+            'Every floor also drops **essence**: one of the arena\'s element and one random find; Storm gives two random finds. Trigger a reaction during the floor to find a third. ' +
+            'The **elemental forge** opens after every third floor. Spend **2 essence** of an element and **6 gold** to forge its focus; repeat ranks cost 3 more gold each. Every rank adds a cast tier for reach and targets. ' +
+            '**Fire focus** converts burning cards reached by its cast into charge. **Water focus** reveals cards affected by its current until the next flip. **Frost focus** extends calm earned by harvesting rime. **Grove focus** ripens seeds into blooms. Each rank affects one more card or adds one calm turn. ' +
+            'Or **bottle an element** for 1 essence and 3 gold (one more gold each repeat): replace your streak with two matches of that element, ready to react with the next different match. A miss breaks it. Only one bottle per stop. ' +
+            'Essence, forged focus and gold last for this run. Older rules retain their original store and purchased relics.'
     },
     {
         id: 'miss_budget',

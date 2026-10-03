@@ -16,8 +16,11 @@ import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } 
 import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
 import { realmClearGold, rollRealmDoors, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
 import { realmAttunementLevel, realmCarryoverAtClear } from './realm-carryover-rules';
+import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-loot-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
+    if (run.status === 'levelComplete' && run.lastLevelResult?.level === clearedBoard.level) return run;
+    const elementalDrops = floorElementalDrops(run, clearedBoard.level);
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
     const stats = normalizeSessionStats(run.stats);
     const tries = runNonNegativeInteger(stats.tries);
@@ -132,6 +135,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         },
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
+        ...(usesElementalLoot(run) ? { elementalEssence: addEssence(run.elementalEssence, elementalDrops) } : {}),
         // The travel doors: where the next floor can be, the realm this one ended in among them.
         ...(realmId
             ? {
@@ -145,11 +149,12 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
               }
             : {}),
         // The stop's shelves are stocked as it opens, from the seed and the floor.
-        ...(isStoreStopFloor(board.level) ? { storeStock: rollStoreStock(run.runSeed, board.level, run.relics ?? []) } : {}),
+        ...(isStoreStopFloor(board.level) ? { storeStock: rollStoreStock(run.runSeed, board.level, run.relics ?? [], run.runRulesVersion) } : {}),
         timerState: clearResolveState(run),
         lastLevelResult: {
             ...lastLevelResult,
             goldEarned,
+            ...(usesElementalLoot(run) ? { elementalDrops } : {}),
             ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }),
             ...(realmId
                 ? {

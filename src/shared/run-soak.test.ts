@@ -35,7 +35,8 @@ describe('the run soak', () => {
            shops), so this is where `scripts/mechanic-accountability.ts` points for proof they happen. */
         expect(reports.some((report) => report.goldEarned > 0), 'no run ever earned gold').toBe(true);
         expect(reports.some((report) => report.missesGranted > 0), 'no run ever had a miss granted').toBe(true);
-        expect(reports.some((report) => report.relicsBought > 0), 'no run ever bought a relic').toBe(true);
+        expect(reports.some((report) => report.focusesForged > 0), 'no run ever forged an elemental focus').toBe(true);
+        expect(reports.every((report) => report.essenceFound > 0), 'a cleared run found no essence').toBe(true);
         // The void: a careful player reaches Inferno, misses, and the black hole spits new pairs.
         expect(reports.some((report) => report.voidSpews > 0), 'the void never spat').toBe(true);
         // The careful player runs hot: the combo's perks change the board on some of its matches.

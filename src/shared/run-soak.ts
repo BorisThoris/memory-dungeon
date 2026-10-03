@@ -8,6 +8,8 @@ import { hasMutator } from './mutators';
 import { hasRelic } from './run-relic-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
+import { essenceOf, focusOf, isElementalStoreId, storeElement } from './elemental-loot-rules';
+import { TILE_SUITS } from './tile-suit-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { canIgniteZone, igniteZone, isZoneActive, resolveZone, zoneFlipTile, zoneFlipsLeft } from './zone-rules';
 import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
@@ -79,6 +81,8 @@ export interface SoakRunReport {
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
     missesGranted: number;
     relicsBought: number;
+    focusesForged: number;
+    essenceFound: number;
     /** Misses that opened the void and spat new pairs onto a reshuffled board. */
     voidSpews: number;
     /** Jokers spent: every fall in wildMatchesRemaining. */
@@ -263,6 +267,20 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const price = storeOffer(before).find((row) => row.id === id)?.price ?? Number.NaN;
         return runGold(before) - runGold(run) === price ? null : `gold ${runGold(before)} -> ${runGold(run)} for ${id} at ${price}`;
     },
+    'elemental purchases spend exactly their essence and never create negative resources': (before, run, action) => {
+        for (const suit of TILE_SUITS) {
+            for (const value of [run.elementalEssence?.[suit] ?? 0, run.elementalFocus?.[suit] ?? 0]) {
+                if (!Number.isSafeInteger(value) || value < 0) return `invalid ${suit} resource ${value}`;
+            }
+        }
+        if (!before || !action.startsWith('buy:')) return null;
+        const id = action.slice(4);
+        if (!isElementalStoreId(id)) return null;
+        const cost = storeOffer(before).find(row => row.id === id)?.essenceCost;
+        const suit = storeElement(id);
+        return essenceOf(before.elementalEssence, suit) - essenceOf(run.elementalEssence, suit) === cost
+            ? null : `wrong essence debit for ${id}`;
+    },
     /*
      * The realms (`realm-rules.ts`). The weather may freeze, vine, burn and move cards, and none
      * of it may leave a floor that cannot be finished or turn a card the rules say cannot be turned.
@@ -408,6 +426,8 @@ export const soakRun = ({
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
+    let focusesForged = 0;
+    let essenceFound = 0;
     let voidSpews = 0;
     let wildMatches = 0;
     let heatPerkTurns = 0;
@@ -446,6 +466,8 @@ export const soakRun = ({
         goldEarned += Math.max(0, runGold(next) - runGold(run));
         missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
+        focusesForged += TILE_SUITS.reduce((sum, suit) => sum + Math.max(0, focusOf(next, suit) - focusOf(run, suit)), 0);
+        essenceFound += TILE_SUITS.reduce((sum, suit) => sum + Math.max(0, essenceOf(next.elementalEssence, suit) - essenceOf(run.elementalEssence, suit)), 0);
         voidSpews += Math.max(0, (next.voidSpewsThisFloor ?? 0) - (run.voidSpewsThisFloor ?? 0));
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
@@ -592,6 +614,8 @@ export const soakRun = ({
         goldEarned,
         missesGranted,
         relicsBought,
+        focusesForged,
+        essenceFound,
         voidSpews,
         wildMatches,
         heatPerkTurns,

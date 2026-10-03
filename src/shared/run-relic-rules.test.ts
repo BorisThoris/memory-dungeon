@@ -13,7 +13,7 @@ import { makeRun, makeTile } from './test/game-fixtures';
  * on a clock the player winds. These drive the real store purchase and the real turn path.
  */
 const rich = (overrides: Partial<RunState> = {}): RunState => ({
-    ...createNewRun(0, { runSeed: 7, gameMode: 'endless' }),
+    ...createNewRun(0, { runSeed: 7, gameMode: 'endless', runRulesVersionOverride: 54 }),
     gold: 40,
     ...overrides
 });

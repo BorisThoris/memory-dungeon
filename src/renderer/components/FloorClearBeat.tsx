@@ -1,8 +1,11 @@
-import { memo } from 'react';
+import { memo, type CSSProperties } from 'react';
 import type { LevelResult } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { FLOOR_CLEAR_COPY } from '../copy/floorClearChain';
 import styles from './FloorClearBeat.module.css';
+import { essenceOf } from '../../shared/elemental-loot-rules';
+import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
+import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
 
 /**
  * The floor-clear beat. A floor ends on the board, not on a screen (thesis §41.4): the last pair
@@ -96,6 +99,12 @@ const FloorClearBeat = ({ notes, personalBest, result, totalScore }: FloorClearB
                         {bonusLine}
                     </p>
                 ) : null}
+                {result.elementalDrops && Object.values(result.elementalDrops).some(value => value > 0) ? <p className={styles.essence} data-testid="floor-clear-essence">
+                    <span>Essence found</span>
+                    {TILE_SUITS.filter(suit => essenceOf(result.elementalDrops, suit) > 0).map(suit => <span key={suit} style={{ '--loot-color': getTileSuit(suit).hue } as CSSProperties}>
+                        <span aria-hidden="true">{getTileSuit(suit).rune}</span> +{essenceOf(result.elementalDrops, suit)} {ELEMENT_NAMES[suit]}
+                    </span>)}
+                </p> : null}
                 {notes.length > 0 ? (
                     <>
                         <span aria-hidden="true" className={styles.rule} />

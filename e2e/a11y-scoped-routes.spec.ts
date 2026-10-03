@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { dismissStartupIntro } from './startupIntroHelpers';
 import { buildVisualSaveJson, gotoWithSaveAndQuery } from './visualScreenHelpers';
+test.use({ headless: true, launchOptions: { args: ['--mute-audio'] } });
 
 const seriousOnly = (violations: { impact?: string | null }[]): typeof violations =>
     violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
@@ -49,6 +50,10 @@ test.describe('a11y — scoped axe (REF-094)', () => {
                 store.pressTile(`${key}-1`);
                 store.pressTile(`${key}-2`);
             }, pair);
+            if (pair === 'b') {
+                await expect(page.getByTestId('floor-clear-essence')).toBeVisible({ timeout: 30_000 });
+                await page.screenshot({ path: 'output/playwright/elemental-essence-drop.png' });
+            }
             await page.waitForTimeout(1200);
         }
         const sheet = page.getByTestId('store-sheet');
@@ -58,15 +63,18 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         expect(seriousOnly(violations)).toEqual([]);
 
         // Tab reaches a buy button from Descend; Enter buys it and the receipt says so, once.
-        const bomb = page.getByTestId('store-buy-bomb');
-        await expect(bomb).toHaveAccessibleName(/^Buy a bomb for \d+ gold$/);
+        const bomb = page.getByTestId('store-buy-focus_tide');
+        await expect(bomb).toHaveAccessibleName(/^Buy water focus for \d+ gold and 2 essence$/);
+        await expect(page.getByTestId('store-buy-bomb')).toHaveCount(0);
+        await page.screenshot({ path: 'output/playwright/elemental-forge-desktop.png' });
         for (let step = 0; step < 8; step += 1) {
             if (await bomb.evaluate((node) => node === document.activeElement)) break;
             await page.keyboard.press('Tab');
         }
         await expect(bomb).toBeFocused();
         await page.keyboard.press('Enter');
-        await expect(page.getByTestId('store-receipt')).toHaveText(/^Bought a bomb\. \d+ gold left\.$/);
+        await expect(page.getByTestId('store-receipt')).toHaveText(/^Forged Water focus\. Its casts are stronger for this run\. \d+ gold left\.$/);
+        await expect(page.getByTestId('forge-pouch-tide')).toContainText('Focus 1');
 
         // Keep buying bombs until the price outruns the purse: the button goes disabled under
         // focus, and focus has to go on to something still for sale, or Descend, never the page.
@@ -84,6 +92,13 @@ test.describe('a11y — scoped axe (REF-094)', () => {
             };
         });
         expect(landing, 'the spent buy button dropped focus on the page').toEqual({ inSheet: true, enabled: true });
+
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.getByTestId('elemental-forge').evaluate(node => node.parentElement!.parentElement!.scrollTo(0, 0));
+        await page.screenshot({ path: 'output/playwright/elemental-forge-phone.png' });
+        await page.getByTestId('store-descend').scrollIntoViewIfNeeded();
+        await expect(page.getByTestId('store-descend')).toBeInViewport();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
         await page.keyboard.press('Escape');
         await expect(sheet).toBeHidden({ timeout: 20_000 });

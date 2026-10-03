@@ -13,7 +13,7 @@ import {
     type ComboHeatTheme
 } from '../../shared/combo-heat-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
-import { STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
+import { ELEMENTAL_STORE_ITEMS, STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
 import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
@@ -265,7 +265,7 @@ export const derivePurchaseCallouts = (
     next: RunState['storePurchases'] | undefined
 ): ScreenCallout[] => {
     const callouts: ScreenCallout[] = [];
-    for (const item of STORE_ITEMS) {
+    for (const item of [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS]) {
         const was = previous?.[item.id as StoreItemId] ?? 0;
         const now = next?.[item.id as StoreItemId] ?? 0;
         for (let count = was + 1; count <= now; count += 1) {
@@ -275,7 +275,7 @@ export const derivePurchaseCallouts = (
                 size: 'minor',
                 tone: 'gold',
                 title: item.title.toUpperCase(),
-                sub: item.kind === 'relic' ? 'Relic · kept to the end of the run' : 'Bought'
+                sub: item.kind === 'focus' ? 'Forged · kept for this run' : item.kind === 'prime' ? 'Primed · match another element' : item.kind === 'relic' ? 'Relic · kept to the end of the run' : 'Bought'
             });
         }
     }
