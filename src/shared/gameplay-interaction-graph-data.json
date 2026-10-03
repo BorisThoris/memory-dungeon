@@ -2176,7 +2176,7 @@
                 "src/shared/realm-sway-rules.ts",
                 "src/shared/realm-weather-rules.ts",
                 "src/shared/board-turn-transition.ts",
-                "src/renderer/components/RealmAmbientBackPlane.tsx"
+                "src/renderer/components/TileBoardParticles.tsx"
             ],
             "reads": [
                 "tileStates",

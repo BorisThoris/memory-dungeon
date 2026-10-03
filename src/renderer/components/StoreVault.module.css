@@ -22,12 +22,14 @@
 .forgeGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .forgeElement { position: relative; border-top: 2px solid var(--forge-color); background: rgba(20, 23, 32, 0.9); padding: 1rem; }
 .forgePrimed { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; color: #fff0d9; }
-.forgeElement header { text-align: center; color: var(--forge-color); }
-.forgeElement h3 { font-size: 1.5rem; font-weight: 400; margin: 0.3rem 0; }
-.forgeElement header p { color: #ede4d6; font-size: 0.85rem; margin: 0.5rem 0 1rem; }
+.forgeElement header { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 0.65rem; color: var(--forge-color); }
+.forgeElement h3 { font-size: 1.4rem; font-weight: 400; margin: 0.3rem 0; }
+.forgeElement header p { grid-column: 1 / -1; color: #ede4d6; font-size: 0.85rem; margin: 0.5rem 0; }
 .forgeRune { font-size: 2rem; }
-.forgeRecipe { border-top: 1px solid #ffffff20; padding-top: 1rem; margin-top: 1rem; }
-.forgeRecipe p { min-height: 6rem; margin: 0.6rem 0; font-size: 0.82rem; line-height: 1.5; color: #d9d4cb; }
+.forgeRecipe { border-top: 1px solid #ffffff20; padding-top: 0.75rem; margin-top: 0.75rem; }
+.forgeRecipe p { min-height: 3.5rem; margin: 0.6rem 0; font-size: 0.9rem; line-height: 1.5; color: #f0e8dc; }
+.forgeRecipe small { display: block; margin-top: 0.4rem; font-size: 0.75rem; color: #c8c0b6; }
+.forgeBlocked { min-height: 1.2rem; }
 .forgeRecipe button, .forgeDescend { min-height: 44px; padding: 0.7rem; border: 1px solid var(--forge-color, #e1ad66); color: #fff0d9; background: #24232a; font: inherit; cursor: pointer; }
 .forgeRecipe button { width: 100%; font-size: 0.8rem; }
 .forgeRecipe button:disabled { opacity: 0.48; cursor: default; }

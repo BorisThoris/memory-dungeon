@@ -3,7 +3,7 @@ import type { RealmEvent, RealmId, RealmSeverity, TileSuit } from '../../shared/
 import { REALM_JOLT_FAMILY, REALM_JOLT_MS, type RealmJoltFamily } from './realmCardMotion';
 
 /**
- * Which realm the board is in, for the cards themselves (`RealmAmbientBackPlane`). The game screen
+ * Which realm the board is in, for the board particles (`TileBoardParticles`). The game screen
  * sets it; every card reads it. A tiny store rather than a prop threaded through the board's four
  * layers, and it reaches inside the 3D canvas because it is an external store, not React context.
  */

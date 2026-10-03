@@ -1,7 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { uploadBoardTileTextures } from './tileTextureWarmup';
 import { prewarmPairProximityBadges } from './pairProximityBadges';
-import { prewarmRealmBackTextures } from './RealmAmbientBackPlane';
 import { prewarmElementCardTextures } from './ElementCardBack';
 import {
     forwardRef,
@@ -235,7 +234,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         warmedFloorRef.current = key;
         uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture));
         prewarmPairProximityBadges(board.columns + board.rows);
-        prewarmRealmBackTextures((texture) => gl.initTexture(texture));
         prewarmElementCardTextures((texture) => gl.initTexture(texture));
         try {
             gl.compile(scene, camera);

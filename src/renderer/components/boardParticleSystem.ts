@@ -57,6 +57,7 @@ export interface BoardParticleBurst {
      * as its material does, whatever `emberMode` says.
      */
     shape?: BoardParticleShape;
+    placement?: 'edge' | 'ground';
 }
 
 export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf';
@@ -408,6 +409,16 @@ export const createBoardParticleSystem = () => {
                     origin.setXYZ(slot, burst.x + Math.cos(angle) * offset, burst.y + Math.sin(angle) * offset, ripple ? -0.025 : burst.z + 0.06);
                     movement.setXYZW(slot, Math.cos(angle) * speed, Math.sin(angle) * speed + (kind === 2 ? 0.35 : 0),
                         kind === 0 ? (bomb ? 1.2 : 0.25) : 0, bomb ? 2.1 : 1.2);
+                }
+                if (shaped && burst.placement) {
+                    sampleCardRim(rng(), rimSample);
+                    const ground = burst.placement === 'ground';
+                    const spread = ground ? 1.15 : 1;
+                    origin.setXYZ(slot, burst.x + rimSample.x * spread, burst.y + rimSample.y * spread, burst.z + (ground ? 0.02 : 0.09));
+                    if (shaped === 'leaf' || ground) {
+                        // Leaves lace the edge; floor motes stay close to the affected cell.
+                        movement.setXYZW(slot, rimSample.ny * 0.1, -rimSample.nx * 0.1, ground ? 0 : 0.025, 1.5);
+                    }
                 }
                 lifetime.setXYZW(slot, start, life, shaped ? (0.085 + rng() * 0.05 + energy * 0.05) * (shaped === 'flame' ? 1.5 : 1) * (burst.sizeScale ?? 1) : ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
                 color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);

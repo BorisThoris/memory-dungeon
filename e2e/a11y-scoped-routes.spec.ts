@@ -44,6 +44,11 @@ test.describe('a11y — scoped axe (REF-094)', () => {
             null,
             { timeout: 60_000, polling: 500 }
         );
+        // Exercise the normal arena → forge → travel loop in this small authored room.
+        await page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            useAppStore.setState(state => ({ run: { ...state.run!, realmId: 'tide', realmSeverity: 'calm' } }));
+        });
         for (const pair of ['a', 'b']) {
             await page.evaluate(async (key) => {
                 const store = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();
@@ -66,6 +71,7 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         const bomb = page.getByTestId('store-buy-focus_tide');
         await expect(bomb).toHaveAccessibleName(/^Buy water focus for \d+ gold and 2 essence$/);
         await expect(page.getByTestId('store-buy-bomb')).toHaveCount(0);
+        for (const button of await sheet.locator('[data-testid^=store-buy-]').all()) await expect(button).toBeInViewport({ ratio: 1 });
         await page.screenshot({ path: 'output/playwright/elemental-forge-desktop.png' });
         for (let step = 0; step < 8; step += 1) {
             if (await bomb.evaluate((node) => node === document.activeElement)) break;
@@ -102,6 +108,8 @@ test.describe('a11y — scoped axe (REF-094)', () => {
 
         await page.keyboard.press('Escape');
         await expect(sheet).toBeHidden({ timeout: 20_000 });
+        await expect(page.getByTestId('realm-travel')).toBeVisible({ timeout: 20_000 });
+        await page.screenshot({ path: 'output/playwright/arena-choices-compact.png' });
     });
 
     test('in-run level 1: serious violations only', async ({ page }) => {

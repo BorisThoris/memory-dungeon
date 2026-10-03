@@ -1,7 +1,7 @@
 import type { RealmEvent, RealmId } from '../../shared/contracts';
 
 /**
- * The realm in the cards' bodies (2026-10-01). `RealmAmbientBackPlane` paints the realm on every
+ * The realm in the cards' bodies (2026-10-01). `TileBoardParticles` carries the realm around every
  * face-down card and `tileCellGlide` flies the cards the weather moves, but a card the weather only
  * touched (frozen, set alight, vined, struck) sat as still as one it never reached. Two motions:
  *

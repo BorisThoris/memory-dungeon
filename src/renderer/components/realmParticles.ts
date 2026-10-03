@@ -31,17 +31,19 @@ export interface RealmMote {
     energy: number;
     /** Against the combo's sparks; omitted is the realm default (`REALM_MOTE_SIZE`). */
     size?: number;
+    shape?: BoardParticleShape;
+    placement?: 'edge' | 'ground';
 }
 
 /** Realm motes are bigger than the combo's sparks: snow, drops and leaves read at arm's length. */
 export const REALM_MOTE_SIZE = 2.4;
 
 export const REALM_AMBIENT_MOTE: Readonly<Record<RealmId, RealmMote>> = {
-    ember: { tint: '#ff9a3c', mode: 'rise', energy: 0.45 },
-    tide: { tint: '#8fd0ff', mode: 'fall', energy: 0.35 },
-    frost: { tint: '#e6f6ff', mode: 'fall', energy: 0.3 },
+    ember: { tint: '#ff9a3c', mode: 'rise', energy: 0.45, shape: 'flame' },
+    tide: { tint: '#8fd0ff', mode: 'fall', energy: 0.35, shape: 'droplet' },
+    frost: { tint: '#e6f6ff', mode: 'fall', energy: 0.3, shape: 'shard' },
     storm: { tint: '#c9a8ff', mode: 'spark', energy: 0.4 },
-    grove: { tint: '#8fd86a', mode: 'fall', energy: 0.25 }
+    grove: { tint: '#8fd86a', mode: 'fall', energy: 0.25, shape: 'leaf' }
 };
 
 export const REALM_EVENT_MOTE: Readonly<Record<RealmJoltFamily, RealmMote>> = {
@@ -53,15 +55,19 @@ export const REALM_EVENT_MOTE: Readonly<Record<RealmJoltFamily, RealmMote>> = {
     pop: { tint: '#fff2b0', mode: 'rise', energy: 0.8 }
 };
 
-/** What a card's own realm status gives off, if anything: fire over ice over snow over vines. */
-export const realmStatusMote = (tile: Pick<Tile, 'state' | 'fuse' | 'frost' | 'snowed' | 'vined'>, lit: boolean): RealmMote | null => {
-    if (tile.state !== 'hidden') return null;
-    if (tile.fuse != null) return { tint: '#ff7a1a', mode: 'rise', energy: tile.fuse <= 1 ? 1 : 0.65 };
-    if ((tile.frost ?? 0) > 0) return { tint: '#d8f2ff', mode: 'fall', energy: 0.45 };
-    if (tile.snowed) return { tint: '#ffffff', mode: 'fall', energy: 0.25 };
-    if (tile.vined) return { tint: '#6fcf4a', mode: 'fall', energy: 0.3 };
-    if (lit) return { tint: '#d9c8ff', mode: 'spark', energy: 0.5 };
-    return null;
+type StatusTile = Pick<Tile, 'state' | 'fuse' | 'frost' | 'snowed' | 'vined' | 'bloom' | 'rime' | 'seeded'>;
+/** Every simultaneous status is visible, without covering the card's identity. */
+export const realmStatusMotes = (tile: StatusTile, lit: boolean): RealmMote[] => {
+    if (tile.state !== 'hidden') return [];
+    const motes: RealmMote[] = [];
+    if (tile.fuse != null) motes.push({ tint: '#ff7a1a', mode: 'rise', energy: tile.fuse <= 1 ? 1 : 0.65, shape: 'flame', placement: 'edge' });
+    if ((tile.frost ?? 0) > 0) motes.push({ tint: '#d8f2ff', mode: 'fall', energy: 0.45, shape: 'shard', placement: 'edge' });
+    if (tile.snowed) motes.push({ tint: '#ffffff', mode: 'fall', energy: 0.25, shape: 'shard' });
+    if (tile.vined) motes.push({ tint: tile.bloom ? '#ffb9db' : '#6fcf4a', mode: 'fall', energy: 0.45, shape: 'leaf', placement: 'edge' });
+    if (tile.rime) motes.push({ tint: '#a9dfff', mode: 'fall', energy: 0.25, shape: 'shard', placement: 'edge' });
+    if (tile.seeded) motes.push({ tint: tile.seeded >= 2 ? '#f6cc75' : '#a6df77', mode: 'rise', energy: 0.25, shape: 'leaf', placement: 'edge' });
+    if (lit) motes.push({ tint: '#d9c8ff', mode: 'spark', energy: 0.5 });
+    return motes;
 };
 
 export interface ElementMote {
@@ -89,7 +95,7 @@ export const elementCardMote = (tile: Pick<Tile, 'state' | 'suit' | 'pairKey' | 
 };
 
 /** How many cards give off their element a tick, by graphics quality. */
-export const elementMoteCards = (quality: 'low' | 'medium' | 'high'): number => (quality === 'low' ? 1 : quality === 'medium' ? 3 : 5);
+export const elementMoteCards = (quality: 'low' | 'medium' | 'high'): number => (quality === 'low' ? 4 : quality === 'medium' ? 8 : 12);
 
 /** Seconds between realm particle ticks, by graphics quality. */
 export const realmMoteInterval = (quality: 'low' | 'medium' | 'high'): number => (quality === 'low' ? 0.5 : quality === 'medium' ? 0.3 : 0.18);

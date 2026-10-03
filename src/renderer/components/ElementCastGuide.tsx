@@ -4,13 +4,14 @@ import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 import { ELEMENT_MATCH_RULES, elementWashCapacity, elementCastPower } from '../../shared/element-group-rules';
 import { ARENA_GROUND_RULES } from '../../shared/element-ground-rules';
 import { resonanceOf, resonanceTier, runElementResonance } from '../../shared/element-resonance-rules';
-import { TILE_SUITS } from '../../shared/tile-suit-rules';
+import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
 import { runChainTier, type ChainMomentumRun } from '../../shared/chain-tier-rules';
 import { CHAIN_MULT } from '../../shared/chunk-break-rules';
+import { focusOf } from '../../shared/elemental-loot-rules';
+import { ELEMENT_ACTION, ARENA_ACTION, focusSummary } from '../copy/elementClarity';
 import styles from './ElementCastGuide.module.css';
-import { essenceOf, focusOf, FOCUS_EFFECTS } from '../../shared/elemental-loot-rules';
 
-/** Native popover: keyboard, Escape and outside dismissal without taking over board input. */
+/** The glance view explains decisions; precise rules are one optional disclosure away. */
 export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board' | 'realmId' | 'realmSecondaryId' | 'elementResonance' | 'elementalFocus' | 'elementalEssence'> & ChainMomentumRun }) {
     const id = useId();
     const combo = run.stats.currentStreak;
@@ -18,28 +19,35 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
     const multiplier = CHAIN_MULT[runChainTier(run)];
     return <>
         <button className={styles.trigger} type="button" popoverTarget={id} aria-label="How elemental matches work" data-testid="element-cast-guide">Casts</button>
-        <span id={id} className={styles.panel} popover="auto" role="dialog" aria-label="Elemental cast rules" data-testid="element-cast-rules"
+        <div id={id} className={styles.panel} popover="auto" role="dialog" aria-label="Elemental cast rules" data-testid="element-cast-rules"
             onToggle={(event) => { event.currentTarget.dataset.castGuideOpen = String(event.newState === 'open'); }}>
-            <strong className={styles.heading}>Every match changes the world</strong>
-            <span>Every elemental pair casts. No pop or random roll required.</span>
-            <span>Base reach: 2 steps, or 3 in the element’s own arena.</span>
-            <span>Spells spread through touching elemental blocks. Fire, Frost and Grove start with 2 targets; every 6 combo, 2 resonance tiers, extra popped pair, and multiplier doubling adds one, up to 6. Your current multiplier is ×{multiplier}.</span>
-            <span>Every 3 combo and every resonance tier adds one step of reach. Ordinary casts keep cards playable.</span>
-            <span>Water starts at 6 carried cards, plus 2 per added step of reach or target strength.</span>
-            {TILE_SUITS.map((suit) => {
-                const power = elementCastPower(combo, resonanceTier(resonanceOf(resonance, suit)) + focusOf(run, suit), 1, multiplier);
-                return <span className={styles.rule} key={suit}>
-                    <strong>{ELEMENT_NAMES[suit]} · {suit === 'tide' ? `up to ${elementWashCapacity(power)} carried` : `${power.targets} target${power.targets === 1 ? '' : 's'}`} · +{power.extraReach} reach</strong>
-                    <span>{essenceOf(run.elementalEssence, suit)} essence held · Forged focus {focusOf(run, suit)}</span>
-                    <span>{ELEMENT_MATCH_RULES[suit]}{focusOf(run, suit) > 0 ? ` Forged focus: +${focusOf(run, suit)} cast tiers. ${FOCUS_EFFECTS[suit]}` : ''}</span>
-                </span>;
-            })}
-            {run.realmId ? <span className={styles.arena}>{ARENA_GROUND_RULES[run.realmId]}</span> : null}
-            <span>Floors drop essence: one of the arena’s element and one random find (two random finds in Storm). A reaction earns another. Spend essence and gold at the forge every third floor to deepen a cast or bottle a primed element.</span>
-            {run.realmSecondaryId ? <span>{ARENA_GROUND_RULES[run.realmSecondaryId]}</span> : null}
-            <span>Ground stays after cards leave. Match on roots for +1 gold. Ice anchors against elemental movement. Overlapping elements react locally; two consecutive matches also prime your stronger streak reaction.</span>
-            <span>Cards drink their own element and resist their counter. Casts seek vulnerable targets. If none remain, the ground still changes. Arena locks cover at least two complete pairs, with another pair free. Breaking a cohort frees it.</span>
-            <button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back to the board</button>
-        </span>
+            <strong className={styles.heading}>Match → Cast</strong>
+            <span>Every pair casts. Combos make it stronger.</span>
+            <div className={styles.grid}>{TILE_SUITS.map((suit) => {
+                const focus = focusOf(run, suit);
+                const power = elementCastPower(combo, resonanceTier(resonanceOf(resonance, suit)) + focus, 1, multiplier);
+                return <div className={styles.rule} key={suit}>
+                    <strong><span aria-hidden="true">{getTileSuit(suit).rune} </span>{ELEMENT_NAMES[suit]}</strong>
+                    <span>{ELEMENT_ACTION[suit]}</span>
+                    <small>{suit === 'tide' ? `${elementWashCapacity(power)} carried` : `${power.targets} targets`} · +{power.extraReach} reach</small>
+                    {focus > 0 ? <small>{focusSummary(suit, focus)}</small> : null}
+                </div>;
+            })}</div>
+            <span>Same element ×2 → different element → reaction</span>
+            {run.realmId ? <span className={styles.arena}>{ARENA_ACTION[run.realmId]}</span> : null}
+            {run.realmSecondaryId ? <span>{ARENA_ACTION[run.realmSecondaryId]}</span> : null}
+            <details className={styles.details}>
+                <summary>Details & status key</summary>
+                <p>▲ number: burning · ◆ number: frozen turns · ♣ ×: vines hold · ♣ +: harvest gold · ◆ +: calm on match.</p>
+                <p>Base reach: 2 steps; 3 in the matching arena. Each 3 combo and each resonance or focus tier adds a step.</p>
+                <p>Fire, Frost and Grove start at 2 targets. Each 6 combo, 2 tiers, extra popped pair or multiplier doubling adds 1, up to 6. Multiplier now: ×{multiplier}. Water starts at 6 cards, plus 2 per extra reach or target.</p>
+                {TILE_SUITS.map(suit => <p key={suit}><strong>{ELEMENT_NAMES[suit]}: </strong>{ELEMENT_MATCH_RULES[suit]}</p>)}
+                {run.realmId ? <p>{ARENA_GROUND_RULES[run.realmId]}</p> : null}
+                {run.realmSecondaryId ? <p>{ARENA_GROUND_RULES[run.realmSecondaryId]}</p> : null}
+                <p>Own element charges; counter-element resists. Touching blocks share a cast. Ordinary casts keep cards playable. Arena holds leave another pair free; breaking a held group frees it.</p>
+                <p>Ground persists. Roots yield +1 gold; ice anchors. Floors drop 2 essence, +1 for a reaction. Forge every 3 floors.</p>
+            </details>
+            <button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back</button>
+        </div>
     </>;
 }

@@ -43,7 +43,12 @@
 }
 
 .heading { font-size: 1.2rem; }
-.rule { display: grid; gap: 0.2rem; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+.rule { display: grid; gap: 0.25rem; padding: 0.75rem; background: #ffffff06; border: 1px solid #ffffff18; }
+.rule small { color: #c8bdad; }
+.details summary { cursor: pointer; color: #d4c4af; }
+.details p { margin: 0.6rem 0; }
+@media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
 .rule strong { color: #f7d799; }
 .arena { border-top: 1px solid #74644e; padding-top: 0.7rem; }
 .close { padding: 0.6rem; color: #f4dfba; background: #302638; border: 1px solid #957856; border-radius: 0.35rem; font: inherit; cursor: pointer; }

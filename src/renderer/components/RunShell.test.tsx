@@ -191,7 +191,7 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-full', 'false');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 7 of 9.'));
         const goal = screen.getByTestId('hud-chain-goal');
-        expect(goal).toHaveTextContent('2 momentum to Fever');
+        expect(goal).toHaveTextContent('2 → Fever');
         expect(goal).toHaveTextContent('Pops ×8');
     });
 
@@ -554,7 +554,7 @@ describe('RunShell — The Margin', () => {
         expect(screen.getByTestId('hud-combo-stage')).toHaveTextContent('Combo · Hot');
         // Hot buys the afterglow, and the rail says so under the combo.
         expect(screen.getByTestId('hud-combo-perks')).toHaveAttribute('data-perks-active', 'true');
-        expect(screen.getByTestId('hud-combo-perks')).toHaveTextContent('Afterglow 1');
+        expect(screen.getByTestId('hud-combo-perks')).toHaveTextContent('Reveal +1');
         expect(screen.getByTestId('hud-chain-flames')).toBeInTheDocument();
         // The ladder came down the stairs with it: nine on twelve pairs is Fever.
         expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'fever');

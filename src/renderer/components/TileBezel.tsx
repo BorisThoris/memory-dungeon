@@ -29,7 +29,6 @@ import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
 import { RealmTileMarks } from './RealmTileMarks';
-import { RealmAmbientBackPlane } from './RealmAmbientBackPlane';
 import { ElementCardBack } from './ElementCardBack';
 import { ElementCardMaterial } from './ElementCardMaterial';
 import { getBreakWaveDelaySec } from './tileBoardBreakWave';
@@ -802,12 +801,10 @@ const TileBezelInner = ({
                     {tile.suit && !(tile.snowed && tile.state === 'hidden') ? (
                         <>
                             <ElementCardBack empowered={tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
-                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} seed={transform.seed} animated={cardGlowAnimated && !faceUp} reduceMotion={reduceMotion} />
-                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} seed={transform.seed} animated={cardGlowAnimated && faceUp} reduceMotion={reduceMotion} />
+                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} />
+                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} />
                         </>
                     ) : null}
-                    {/* The realm on every face-down back (`RealmAmbientBackPlane`): the place, not only what its weather did. */}
-                    {tile.state === 'hidden' ? <RealmAmbientBackPlane faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} /> : null}
                     <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} />
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}

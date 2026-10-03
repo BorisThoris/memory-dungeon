@@ -82,7 +82,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend }: StoreVaultProps): ReactEle
                     {elemental ? 'Elemental forge' : STORE_SHEET_COPY.title}
                 </h2>
                 <p className={styles.subtitle} data-testid="store-subtitle" id={subtitleId}>
-                    {elemental ? `Floor ${floor} cleared · ${gold} gold. Spend the essence you found: deepen a cast for this run, or bottle a reaction for the next floor.` : STORE_SHEET_COPY.subtitle(floor, gold)}
+                    {elemental ? `${gold} gold · Upgrade a cast or prime a reaction` : STORE_SHEET_COPY.subtitle(floor, gold)}
                 </p>
             </div>
             <div className={styles.stage}>

@@ -92,7 +92,7 @@ export const TileBoardSceneBoardGroup = ({
     tileFieldParallaxEnabled
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
-        <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} lowQuality={graphicsQuality === 'low'} />
+        <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} />
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />

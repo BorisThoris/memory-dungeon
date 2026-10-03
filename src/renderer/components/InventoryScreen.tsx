@@ -115,8 +115,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 <div className={styles.main}>
                     {usesElementalLoot(run) ? <Panel className={panelClassName} padding="lg" variant="default">
                         <section aria-label="Elemental build" className={styles.section}>
-                            <h2 className={styles.sectionTitle}>Essence and forged focus</h2>
-                            <p>Floors drop essence. The forge opens every third floor: deepen your casts or prepare a reaction.</p>
+                            <h2 className={styles.sectionTitle}>Elements</h2>
+                            <p>Forge every 3 floors</p>
                             <dl className={styles.charges}>{TILE_SUITS.map(suit => <div className={styles.chargeRow} key={suit}>
                                 <dt title={FOCUS_EFFECTS[suit]}>{ELEMENT_NAMES[suit]}</dt>
                                 <dd>{essenceOf(run.elementalEssence, suit)} essence · Focus {focusOf(run, suit)}</dd>

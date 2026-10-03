@@ -6,6 +6,21 @@ const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, 
     reduceMotion: false, quality: 'high' };
 
 describe('the shared board particle pool', () => {
+    it('keeps ground particles at the cell edge at every quality without using pop effects', () => {
+        for (const quality of ['low', 'medium', 'high'] as const) {
+            const pool = createBoardParticleSystem();
+            pool.setComboPopEffects(false);
+            const n = pool.emit({ ...burst, kind: 'ember', shape: 'leaf', placement: 'ground', quality, z: -0.04, energy: 0.3 });
+            expect(n).toBeGreaterThan(0);
+            const origin = pool.mesh.geometry.getAttribute('origin');
+            for (let i = 0; i < n; i += 1) {
+                expect(origin.getZ(i)).toBeCloseTo(-0.02);
+                expect(Math.hypot(origin.getX(i) - burst.x, origin.getY(i) - burst.y)).toBeGreaterThan(0.3);
+            }
+            expect(pool.emit({ ...burst, kind: 'ember', shape: 'leaf', placement: 'ground', quality, reduceMotion: true })).toBe(0);
+            pool.dispose();
+        }
+    });
     it('disables existing and future pop effects while preserving elemental particles', () => {
         const pool = createBoardParticleSystem();
         const elemental = pool.emit({ ...burst, kind: 'ember', shape: 'leaf' });

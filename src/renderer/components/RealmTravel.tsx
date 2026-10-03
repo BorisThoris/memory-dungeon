@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type CSSProperties, type ReactElement } from 'react';
 import type { RealmDoor, RealmId } from '../../shared/contracts';
+import { ARENA_ACTION } from '../copy/elementClarity';
 import { REALMS } from '../../shared/realm-rules';
 import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { REALM_TRAVEL_COPY } from '../copy/realmCopy';
@@ -69,6 +70,7 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
                     return (
                         <button
                             aria-label={REALM_TRAVEL_COPY.choose(door)}
+                            aria-describedby={`realm-choice-${index}`}
                             className={styles.door}
                             data-modal-initial-focus={index === 0 ? true : undefined}
                             data-realm={door.realmId}
@@ -105,15 +107,10 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose }: RealmTr
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>
                             <span className={styles.weather}>{REALM_TRAVEL_COPY.weatherLine(door)}</span>
-                            <span className={styles.rules}>
-                                {(door.confluence
-                                    ? [REALM_TRAVEL_COPY.confluenceRule(door)!, realm.rules[0], REALMS[door.confluence].rules[0]]
-                                    : [...realm.rules, `${realm.peak}: ${realm.peakRule}`]
-                                ).map((rule) => (
-                                    <span className={styles.rule} key={rule}>
-                                        {rule}
-                                    </span>
-                                ))}
+                            <span className={styles.rules} id={`realm-choice-${index}`}>
+                                <span className={styles.rule}>{ARENA_ACTION[door.realmId]}</span>
+                                {door.confluence ? <span className={styles.rule}>{ARENA_ACTION[door.confluence]}</span> : null}
+                                {REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0) ? <span className={styles.rule}>{REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0)}</span> : null}
                             </span>
                             {been > 0 ? <span className={styles.been}>{`${been} ${been === 1 ? 'floor' : 'floors'} here this run`}</span> : null}
                         </button>

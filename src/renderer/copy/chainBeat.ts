@@ -57,7 +57,7 @@ export const CHAIN_BEAT_COPY = {
      * it buys. `null` is the top of the ladder, where the goal is to stay there.
      */
     goalLabel: (momentumLeft: number, nextTier: Exclude<ChainTier, 'none'> | null): string =>
-        nextTier ? `${momentumLeft} momentum to ${CHAIN_TIER_LABELS[nextTier]}` : 'Fever active',
+        nextTier ? `${momentumLeft} → ${CHAIN_TIER_LABELS[nextTier]}` : 'Fever active',
     goalBenefit: (nextTier: Exclude<ChainTier, 'none'> | null): string =>
         nextTier === 'clean'
             ? 'Matches can pop a nearby pair'

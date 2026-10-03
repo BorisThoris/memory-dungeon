@@ -1,7 +1,6 @@
 import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
 import { SMOKE_STUDY_CUT_PER_BURNOUT, attunementGoldBonus, realmBacklashRuns } from '../../shared/realm-carryover-rules';
 import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
-import { ARENA_GROUND_RULES } from '../../shared/element-ground-rules';
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
 export const REALM_HUD_COPY = {
@@ -58,7 +57,7 @@ export const realmCarryoverLines = (
 /** The travel screen (`RealmTravel`): the doors at a floor clear. */
 export const REALM_TRAVEL_COPY = {
     title: 'Where now?',
-    subtitle: 'Three ways down. Harder weather pays more gold at the clear.',
+    subtitle: 'Choose your next arena',
     doorKicker: (door: RealmDoor, endedIn: RealmId | null): string =>
         door.realmId === endedIn ? 'The way you came' : REALMS[door.realmId].title,
     severityLine: (door: RealmDoor): string => {
@@ -71,17 +70,26 @@ export const REALM_TRAVEL_COPY = {
         level > 0 ? `Depth ${attunementNumeral(level)} · +${attunementGoldPercent(level)}% gold` : null,
     /** What going deeper behind this door costs: the realm bites back at misses sooner. */
     depthWarning: (door: RealmDoor, level: number): string | null =>
-        door.severity !== 'raging' && realmBacklashRuns(door.severity, level) ? 'This deep, it strikes back at a miss' : null,
+        door.severity !== 'raging' && realmBacklashRuns(door.severity, level) ? 'Misses trigger hazards' : null,
     placeLine: (door: RealmDoor): string =>
         door.confluence ? `${REALMS[door.realmId].place} meets ${REALMS[door.confluence].place.replace(/^The /, 'the ')}` : REALMS[door.realmId].place,
     confluenceRule: (door: RealmDoor): string | null =>
         door.confluence ? `Both realms' weather, one after the other, and both answer your turns.` : null,
     weatherLine: (door: RealmDoor): string =>
         !realmWeatherClockRuns(door.severity)
-            ? `Every match casts. ${ARENA_GROUND_RULES[door.realmId]}`
+            ? 'No timed hazards'
             : door.confluence
-            ? `${REALMS[door.realmId].weather} and ${REALMS[door.confluence].weather.toLowerCase()} by turns, every ${realmIntervalFor(door.realmId, door.severity)} turns`
-            : `${REALMS[door.realmId].weather} every ${realmIntervalFor(door.realmId, door.severity)} turns · ${REALMS[door.realmId].peak} every third`,
+            ? `${REALMS[door.realmId].weather} / ${REALMS[door.confluence].weather} · every ${realmIntervalFor(door.realmId, door.severity)} turns`
+            : `${REALMS[door.realmId].weather} · every ${realmIntervalFor(door.realmId, door.severity)} turns`,
+    risk: (door: RealmDoor, level: number): string | null => {
+        if (!realmWeatherClockRuns(door.severity) && !realmBacklashRuns(door.severity, level)) return null;
+        const risks: Record<RealmId, string> = {
+            ember: 'Fires spread and burn gold. Match to douse.',
+            tide: 'Currents move columns.', frost: 'Freezes groups; snow hides elements.',
+            grove: 'Vines hold groups. Match beside them to cut.', storm: 'Lightning swaps and reveals cards.'
+        };
+        return risks[door.realmId] + (door.confluence ? ` ${risks[door.confluence]}` : '');
+    },
     choose: (door: RealmDoor): string =>
         door.confluence
             ? `Go to the confluence of ${REALMS[door.realmId].place} and ${REALMS[door.confluence].place}`

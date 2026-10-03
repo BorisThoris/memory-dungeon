@@ -5,16 +5,8 @@ import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
 
-/**
- * What a realm has done to a card, drawn on it (`realm-weather-rules.ts`): ice over a frozen card
- * with the turns it has left, snow over a back whose suit a blizzard buried, a flame and its fuse
- * on a burning card, vines over a held one. (The omen's sigil in the top corner went with the omen
- * cards: every card is its element now, `ElementCardBack`.)
- *
- * One canvas per combination of marks, shared by every card that shows it, so a board of frozen
- * cards paints the ice once. Painted, not modelled: the marks have to read at a glance on a phone,
- * the way the suit does, and a number on the ice says more than any shader could.
- */
+/** Tiny factual badges, never painted coatings. Status motion is emitted by the
+ * shared particle pool. These counters remain readable with reduced motion. */
 const CANVAS_W = 256;
 const CANVAS_H = Math.round(CANVAS_W * (CARD_PLANE_HEIGHT / CARD_PLANE_WIDTH));
 
@@ -27,138 +19,34 @@ const roundRect = (ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const w = canvas.width;
-    const h = canvas.height;
+    const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-
-    // Soft coatings live at the edges; the element and hidden identity remain readable.
-    if (mark.rime) {
-        ctx.strokeStyle = 'rgba(175, 225, 255, 0.9)';
-        ctx.lineWidth = 5;
-        roundRect(ctx, 12, 12, w - 24, h - 24, 18);
-        ctx.stroke();
-        for (const x of [26, w - 26]) {
-            ctx.beginPath();
-            ctx.moveTo(x, 26); ctx.lineTo(x + 8, 36); ctx.lineTo(x, 46);
-            ctx.lineTo(x - 8, 36); ctx.closePath(); ctx.stroke();
-        }
-    }
-    if (mark.seeded) {
-        for (const x of [27, w - 27]) {
-            const y = h - 32;
-            ctx.strokeStyle = 'rgba(100, 177, 68, 0.95)';
-            ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(x, y + 12); ctx.lineTo(x, y - 12); ctx.stroke();
-            ctx.fillStyle = 'rgba(145, 218, 93, 0.95)';
-            for (const side of [-1, 1]) {
-                ctx.beginPath(); ctx.ellipse(x + side * 8, y - 3, 10, 5, side * -0.6, 0, Math.PI * 2); ctx.fill();
-            }
-            if (mark.seeded >= 2) {
-                ctx.fillStyle = 'rgba(247, 193, 92, 0.98)';
-                ctx.beginPath(); ctx.arc(x, y - 15, 8, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-    }
-
-    if (mark.vined) {
-        ctx.strokeStyle = 'rgba(70, 140, 50, 0.95)';
-        ctx.lineCap = 'round';
-        ctx.lineWidth = 16;
-        for (const [x0, y0, x1, y1, cx, cy] of [
-            [0, h * 0.15, w, h * 0.55, w * 0.4, h * 0.05],
-            [w, h * 0.3, 0, h * 0.85, w * 0.7, h * 0.75],
-            [w * 0.2, h, w * 0.85, 0, w * 0.1, h * 0.4]
-        ] as const) {
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.quadraticCurveTo(cx, cy, x1, y1);
-            ctx.stroke();
-        }
-        ctx.fillStyle = 'rgba(140, 214, 90, 0.95)';
-        for (const [x, y] of [[0.3, 0.2], [0.7, 0.45], [0.25, 0.65], [0.6, 0.8], [0.5, 0.33]] as const) {
-            ctx.beginPath();
-            ctx.ellipse(x * w, y * h, 16, 9, 0.6, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        if (mark.bloom) {
-            // Bloomed: flowers on the vine, worth three gold to cut.
-            for (const [x, y] of [[0.5, 0.45], [0.28, 0.72], [0.74, 0.22]] as const) {
-                ctx.fillStyle = 'rgba(255, 150, 210, 0.98)';
-                for (let petal = 0; petal < 5; petal += 1) {
-                    const angle = (petal / 5) * Math.PI * 2;
-                    ctx.beginPath();
-                    ctx.ellipse(x * w + Math.cos(angle) * 14, y * h + Math.sin(angle) * 14, 11, 8, angle, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.fillStyle = 'rgba(255, 230, 120, 1)';
-                ctx.beginPath();
-                ctx.arc(x * w, y * h, 8, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-    }
-
-    if (mark.frost > 0) {
-        ctx.fillStyle = 'rgba(170, 222, 255, 0.62)';
-        roundRect(ctx, 6, 6, w - 12, h - 12, 22);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 5;
-        ctx.stroke();
-        ctx.lineWidth = 3;
-        for (const [x0, y0, x1, y1] of [[0.1, 0.2, 0.45, 0.5], [0.9, 0.15, 0.55, 0.42], [0.15, 0.85, 0.5, 0.6], [0.88, 0.8, 0.6, 0.62]] as const) {
-            ctx.beginPath();
-            ctx.moveTo(x0 * w, y0 * h);
-            ctx.lineTo(x1 * w, y1 * h);
-            ctx.stroke();
-        }
-        ctx.fillStyle = 'rgba(16, 40, 64, 0.92)';
-        ctx.font = 'bold 150px system-ui, "Segoe UI", sans-serif';
-        ctx.fillText(String(mark.frost), w / 2, h * 0.5);
-    }
-
     if (mark.snowed) {
-        // A drift over the lower third, where the suit is painted: the suit cannot be read.
-        ctx.fillStyle = 'rgba(246, 250, 255, 0.97)';
-        ctx.beginPath();
-        ctx.moveTo(0, h);
-        ctx.lineTo(0, h * 0.58);
-        for (let i = 0; i <= 6; i += 1) {
-            const x = (w * i) / 6;
-            ctx.quadraticCurveTo(x - w / 12, h * (0.5 + (i % 2) * 0.06), x, h * 0.56);
-        }
-        ctx.lineTo(w, h);
-        ctx.closePath();
+        // Conceal identity even when all motion is disabled.
+        ctx.fillStyle = '#23313c';
+        roundRect(ctx, 5, 5, w - 10, h - 10, 18);
         ctx.fill();
-        ctx.fillStyle = 'rgba(150, 180, 210, 0.9)';
-        ctx.font = 'bold 54px system-ui, "Segoe UI", sans-serif';
-        ctx.fillText('?', w / 2, h * 0.8);
+        ctx.fillStyle = '#e4f3ff';
+        ctx.font = 'bold 96px system-ui, sans-serif';
+        ctx.fillText('?', w / 2, h / 2);
     }
-
-    if (mark.fuse > 0) {
-        // The burning card: a hot rim and a flame with the turns left on its fuse.
-        ctx.strokeStyle = 'rgba(255, 110, 40, 0.98)';
-        ctx.lineWidth = 14;
-        roundRect(ctx, 8, 8, w - 16, h - 16, 22);
-        ctx.stroke();
-        ctx.fillStyle = 'rgba(255, 150, 50, 0.95)';
-        ctx.beginPath();
-        const cx = w / 2;
-        const top = h * 0.12;
-        ctx.moveTo(cx, top);
-        ctx.bezierCurveTo(cx + 70, h * 0.3, cx + 60, h * 0.46, cx, h * 0.5);
-        ctx.bezierCurveTo(cx - 60, h * 0.46, cx - 70, h * 0.3, cx, top);
-        ctx.fill();
-        ctx.fillStyle = 'rgba(255, 230, 120, 0.95)';
-        ctx.beginPath();
-        ctx.ellipse(cx, h * 0.38, 26, 40, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = 'rgba(40, 12, 4, 0.95)';
-        ctx.font = 'bold 72px system-ui, "Segoe UI", sans-serif';
-        ctx.fillText(String(mark.fuse), cx, h * 0.38);
-    }
+    const badge = (label: string, color: string, x: number, y: number): void => {
+        ctx.fillStyle = '#10171eee';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        roundRect(ctx, x - 51, y - 28, 102, 56, 12);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = color;
+        ctx.font = 'bold 38px system-ui, sans-serif';
+        ctx.fillText(label, x, y);
+    };
+    if (mark.frost > 0) badge(`◆ ${mark.frost}`, '#d8f2ff', 62, 42);
+    if (mark.fuse > 0) badge(`▲ ${mark.fuse}`, '#ffad67', w - 62, 42);
+    if (mark.vined) badge(mark.bloom ? '♣ +3' : '♣ ×', '#a6e67f', mark.rime ? 62 : w / 2, h - 44);
+    else if (mark.seeded) badge(`♣ +${mark.seeded}`, '#c0ef96', mark.rime ? 62 : w / 2, h - 44);
+    if (mark.rime) badge('◆ +', '#b7e8ff', mark.vined || mark.seeded ? w - 62 : w / 2, h - 44);
 };
 
 const textures = new Map<string, CanvasTexture>();

@@ -31,3 +31,9 @@ Gold, essence and focus belong to the run. There is no permanent profile currenc
 ## Verification
 
 The rules tests cover seeded finds, arena identity, reaction bonuses, exact costs, insufficient funds, one preparation per stop, duplicate clear delivery, next-floor carryover, serialization and actual reaction/cast resolution. The run soak checks essence debits and resource validity on every action, and requires real runs to acquire essence and forge focus. The store browser regression covers keyboard purchase, focus recovery, announcements, accessibility and narrow-screen scrolling.
+
+## Readability
+
+The forge shows an upgrade outcome, duration, cost and any missing resource. The Casts panel starts with four short action summaries and live target/reach counts; precise formulas and status keys are optional details. Arena doors show ground behavior, weather cadence and risks.
+
+Element motion uses the bounded board particle pool. Flat element bodies, thin rims and rune silhouettes remain visible with reduced motion. Flame tongues, droplets, shards and leaves replace the old painted material layers, realm veils and full-screen weather drawings. Coatings and hazards emit distinct edge particles; small badges retain fuse/freeze counts, harvest values and holds. Ground emits at its fixed cells, including after a card leaves. Combo-pop suppression does not suppress elemental particles.

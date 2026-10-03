@@ -118,7 +118,21 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await pick(page, 'a-1'); await pick(page, 'a-2');
     await expect.poll(() => count(page, 'cast-bursts')).toBeGreaterThan(0);
     for (const kind of ['match', 'chain', 'ripple', 'arc']) expect(await count(page, kind + '-bursts')).toBe(0);
+    await expect.poll(() => count(page, 'status-bursts')).toBeGreaterThan(0);
+    await expect.poll(() => count(page, 'ground-bursts')).toBeGreaterThan(0);
     await page.screenshot({ path: 'output/playwright/element-cast-pop-off.png' });
+    await page.getByTestId('element-cast-guide').click();
+    await expect(page.getByTestId('element-cast-rules')).toBeVisible();
+    await expect(page.getByTestId('element-cast-rules').locator('details')).not.toHaveAttribute('open', '');
+    await page.screenshot({ path: 'output/playwright/element-guide-compact.png' });
+    await page.keyboard.press('Escape');
+    // Hazard counters and silhouettes remain legible without any moving effects.
+    save.settings.reduceMotion = true;
+    await gotoWithSaveAndQuery(page, JSON.stringify(save), 'hallRoom=element-thaw');
+    await expect(canvas(page)).toBeVisible({ timeout: 150_000 });
+    expect(await count(page, 'element-bursts')).toBe(0);
+    expect(await count(page, 'status-bursts')).toBe(0);
+    await page.screenshot({ path: 'output/playwright/element-reduced-motion.png' });
     expect(errors).toEqual([]);
 });
 
