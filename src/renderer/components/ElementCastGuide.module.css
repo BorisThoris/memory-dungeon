@@ -7,6 +7,10 @@
     font: inherit;
     padding: 0.2em 0.65em;
     cursor: pointer;
+    max-width: min(18rem, calc(100vw - 10rem));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .trigger:focus-visible,

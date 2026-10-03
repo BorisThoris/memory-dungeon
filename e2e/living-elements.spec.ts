@@ -55,9 +55,25 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         expect(result.ground?.filter(Boolean).length).toBeGreaterThan(0);
         expect(Number(await page.getByTestId('tile-board-stage').locator('canvas').getAttribute('data-particle-cast-bursts'))).toBe(0);
         if (suit === 'ember') expect(result.tiles.some((tile) => tile.fuse === 3)).toBe(true);
-        if (suit === 'bone') expect(result.tiles.some((tile) => tile.rime === true)).toBe(true);
-        if (suit === 'moss') expect(result.tiles.some((tile) => tile.seeded)).toBe(true);
+        if (suit === 'bone') expect(result.tiles.some((tile) => (tile.frost ?? 0) > 0)).toBe(true);
+        if (suit === 'moss') expect(result.tiles.some((tile) => tile.vined)).toBe(true);
         if (suit === 'tide') expect(result.tiles.some((tile, index) => tile.id !== beforeIds[index])).toBe(true);
+        await expect(page.getByTestId('element-cast-guide')).toHaveText(result.impact!.headline!);
+        if (suit === 'bone' || suit === 'moss') {
+            const held = result.tiles.findIndex(tile => tile.vined || (tile.frost ?? 0) > 0);
+            expect(held).toBeGreaterThanOrEqual(0);
+            const point = await page.evaluate(index => {
+                const api = window as unknown as { __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } };
+                const rect = api.__e2eGetTileClientRectAtGrid1(Math.floor(index / 4) + 1, index % 4 + 1);
+                return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+            }, held);
+            await page.mouse.click(point.x, point.y);
+            const flipped = await page.evaluate(async () => {
+                const run = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
+                return run.board!.flippedTileIds;
+            });
+            expect(flipped).toEqual([]);
+        }
         await page.screenshot({ path: `output/playwright/${suit}-terrain.png` });
         await page.getByTestId('element-cast-guide').click();
         await expect(page.getByTestId('element-cast-rules')).toBeVisible();

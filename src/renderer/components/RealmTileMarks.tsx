@@ -51,6 +51,11 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
         if (vine) ctx.bezierCurveTo(w - 42, h * 0.57, w + 3, h * 0.44, w - 18, 76);
         ctx.stroke();
         if (vine) {
+            // Two broad bindings cross the back: this is a lock, not a harvest sprout.
+            ctx.strokeStyle = '#87b95bea'; ctx.lineWidth = 9;
+            for (const y of [h * 0.34, h * 0.68]) {
+                ctx.beginPath(); ctx.moveTo(4, y); ctx.bezierCurveTo(w * 0.3, y - 24, w * 0.68, y + 25, w - 4, y); ctx.stroke();
+            }
             ctx.strokeStyle = '#456e37'; ctx.lineWidth = 5;
             ctx.beginPath(); ctx.moveTo(15, h - 45); ctx.bezierCurveTo(45, h * 0.65, -3, h * 0.42, 25, 72); ctx.stroke();
         }
@@ -65,6 +70,17 @@ const paint = (canvas: HTMLCanvasElement, mark: RealmTileMark): void => {
         }
     }
     if (mark.fuse > 0) {
+        // Persistent flame tongues remain obvious with motion and combo pops disabled.
+        for (const side of [0, 1]) {
+            ctx.save();
+            if (side) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+            ctx.fillStyle = '#ef762abb';
+            ctx.beginPath(); ctx.moveTo(6, h - 70); ctx.bezierCurveTo(44, h - 115, 4, h - 150, 34, h - 200);
+            ctx.bezierCurveTo(27, h - 156, 75, h - 129, 47, h - 83); ctx.closePath(); ctx.fill();
+            ctx.fillStyle = '#ffd37acc';
+            ctx.beginPath(); ctx.moveTo(10, h - 79); ctx.quadraticCurveTo(35, h - 106, 29, h - 141); ctx.quadraticCurveTo(60, h - 100, 10, h - 79); ctx.fill();
+            ctx.restore();
+        }
         ctx.strokeStyle = '#ff914ccc'; ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(8, 80); ctx.lineTo(15, 118); ctx.lineTo(9, 157); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(w - 9, 96); ctx.lineTo(w - 22, 126); ctx.lineTo(w - 9, 175); ctx.stroke();

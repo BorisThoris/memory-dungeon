@@ -19,7 +19,7 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
     const lastCast = run.board?.elementCast;
     const multiplier = CHAIN_MULT[runChainTier(run)];
     return <>
-        <button className={styles.trigger} type="button" popoverTarget={id} aria-label="How elemental matches work" data-testid="element-cast-guide">Casts</button>
+        <button className={styles.trigger} type="button" popoverTarget={id} aria-label="How elemental matches work" data-testid="element-cast-guide" title={lastCast?.detail}>{lastCast?.headline ?? 'Casts'}</button>
         <div id={id} className={styles.panel} popover="auto" role="dialog" aria-label="Elemental cast rules" data-testid="element-cast-rules"
             onToggle={(event) => { event.currentTarget.dataset.castGuideOpen = String(event.newState === 'open'); }}>
             <div className={styles.content} data-testid="element-cast-scroll">
@@ -59,7 +59,7 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
                 {TILE_SUITS.map(suit => <p key={suit}><strong>{ELEMENT_NAMES[suit]}: </strong>{ELEMENT_MATCH_RULES[suit]}</p>)}
                 {run.realmId ? <p>{ARENA_GROUND_RULES[run.realmId]}</p> : null}
                 {run.realmSecondaryId ? <p>{ARENA_GROUND_RULES[run.realmSecondaryId]}</p> : null}
-                <p>Own element charges; counter-element resists. Blocks connect through touching edges, never diagonals or empty cells. One charge per card per turn; every 4 charges matched pays 1 gold and all charges add resonance. Ordinary casts keep cards playable. Arena holds leave another pair free; breaking a held group frees it.</p>
+                <p>Own element charges; counter-element resists. Blocks connect through touching edges, never diagonals or empty cells. One charge per card per turn; every 4 charges matched pays 1 gold and all charges add resonance. Ice and vines block turning. Holds cover at least two complete pairs and leave another pair free; breaking a held group frees it. Blocked attempts stay visible with their reason.</p>
                 <p>Ground persists. Roots yield +1 gold; ice anchors. Floors drop 2 essence, +1 for an amplified reaction. Forge every 3 floors.</p>
             </details>
             </div>

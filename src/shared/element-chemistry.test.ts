@@ -79,7 +79,7 @@ describe('one predictable elemental chemistry', () => {
             const tiles = field(suit).map(tile => ({ id: tile.id, pairKey: tile.pairKey, symbol: tile.symbol, label: tile.label, state: tile.state, suit: tile.suit }));
             const anchored = new Set(tiles.slice(2).map(tile => tile.id));
             castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'storm', pinned: new Set(), anchored });
-            expect(tiles.slice(2).every(tile => suit === 'moss' ? 'seeded' in tile : 'rime' in tile)).toBe(true);
+            expect(tiles.slice(2).filter(tile => suit === 'moss' ? 'vined' in tile : 'frost' in tile)).toHaveLength(8);
         }
         const tiles = field('tide').map(tile => ({ id: tile.id, pairKey: tile.pairKey, symbol: tile.symbol, label: tile.label, state: tile.state, suit: (tile.state === 'matched' ? 'tide' : 'ember') as TileSuit }));
         const before = tiles.map(tile => tile.id);
@@ -100,11 +100,12 @@ describe('one predictable elemental chemistry', () => {
         const vulnerable = suit === 'ember' ? 'moss' : 'tide';
         const tiles = field(suit).map((tile, i) => ({ id: tile.id, pairKey: tile.pairKey, symbol: tile.symbol, label: tile.label, state: tile.state, suit: i < 2 ? suit : vulnerable } as Tile));
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'storm', pinned: new Set() })!;
-        const status = suit === 'ember' ? 'fuse' : suit === 'bone' ? 'rime' : 'seeded';
-        expect(tiles.slice(2).every(tile => Boolean(tile[status]))).toBe(true);
+        const status = suit === 'ember' ? 'fuse' : suit === 'bone' ? 'frost' : 'vined';
+        expect(tiles.slice(2).filter(tile => tile[status])).toHaveLength(suit === 'ember' ? 10 : 8);
+        expect(cast.contacts.filter(c => c.outcome === 'blocked')).toHaveLength(suit === 'ember' ? 0 : 2);
         expect(cast.contacts).toHaveLength(10);
         expect(new Set(cast.contacts.map(contact => contact.group)).size).toBe(1);
         expect(cast.power).toBe(2);
-        expect(tiles.slice(2).every(tile => !tile.vined && !tile.frost && tile.state === 'hidden')).toBe(true);
+        expect(tiles.slice(2).every(tile => tile.state === 'hidden')).toBe(true);
     });
 });

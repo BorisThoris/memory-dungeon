@@ -26,6 +26,15 @@ describe('quiet elemental casts in the shared particle pool', () => {
         expect(pool.advance(4)).toBe(0);
         pool.dispose();
     });
+    it('shows blocked attempts even at low quality', () => {
+        const room = testHallRoom('element-single-grove').build();
+        room.board = { ...room.board!, tiles: room.board!.tiles.slice(0, 6), pairCount: 3, rows: 2 };
+        const resolved = playTestHallStep(room, { do: 'match', pairKey: 'a' })!;
+        expect(resolved.board!.elementCast!.contacts.some(c => c.outcome === 'blocked')).toBe(true);
+        const cues = collectElementCastParticles(room.board, resolved.board!, 'low', false, false, 1);
+        expect(cues.some(c => c.tint === '#aebfca')).toBe(true);
+        expect(cues.some(c => c.shape === 'leaf')).toBe(true);
+    });
     it('keeps casts visible when cosmetic match bursts fill the pool', () => {
         const pool = createBoardParticleSystem();
         for (let i = 0; i < 20; i += 1) pool.emit({ kind: 'match', x: 0, y: 0, z: 0,

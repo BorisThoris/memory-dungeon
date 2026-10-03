@@ -41,8 +41,8 @@ describe('the elemental cast guide', () => {
         expect(guide).toHaveTextContent('Every pair casts');
         expect(guide).toHaveTextContent('2+ cards · +0 reach');
         expect(guide).toHaveTextContent('The arena is wet');
-        expect(guide).toHaveTextContent('Arena holds leave another pair free');
-        expect(guide).toHaveTextContent('Ordinary casts keep cards playable');
+        expect(guide).toHaveTextContent('Holds cover at least two complete pairs and leave another pair free');
+        expect(guide).toHaveTextContent('Ice and vines block turning');
         expect(guide).toHaveAttribute('popover', 'auto');
     });
 

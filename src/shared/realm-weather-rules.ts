@@ -1,5 +1,6 @@
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
+import { finishElementCast } from './element-cast-feedback';
 import { castElement } from './element-group-rules';
 import { applyForgedCast, focusOf } from './elemental-loot-rules';
 import { runChainTier } from './chain-tier-rules';
@@ -695,7 +696,9 @@ export const resolveRealmTurn = ({
             litTileIds.push(...forged.lit);
             alchemy.empowered.push(...forged.charged);
             for (const contact of cast.contacts) if (forged.charged.includes(contact.tileId)) contact.outcome = 'charged';
-            const forgeDetail = [forged.charged.length ? `${forged.charged.length} fires converted to charge` : '',
+            const focusCalm = cast.suit === 'bone' ? focusOf(run, 'bone') : 0;
+            if (focusCalm > 0) { stillTurns = Math.max(stillTurns, focusCalm); still = true; }
+            const forgeDetail = [focusCalm ? `${focusCalm} calm turns banked by Frost focus` : '', forged.charged.length ? `${forged.charged.length} fires converted to charge` : '',
                 forged.lit.length ? `${forged.lit.length} faces revealed by the current` : '',
                 forged.bloomed.length ? `${forged.bloomed.length} seeds ripened` : ''].filter(Boolean).join(' · ');
             if (forgeDetail) cast.summary += ` · Focus: ${forgeDetail}`;
@@ -704,7 +707,7 @@ export const resolveRealmTurn = ({
             castImpact = {
                 key: eventKey(run, level, turns, cast.kind), suit: cast.suit, sourceCells: cast.sourceCells,
                 contacts: cast.contacts, multiplier: cast.multiplier, power: cast.power, groupPairs: cast.groupPairs,
-                reaction: field?.reaction ?? null, detail: `${cast.summary}${field ? ` · ${field.detail}` : ''}`
+                reaction: field?.reaction ?? null, detail: [field?.detail, forgeDetail].filter(Boolean).join(' · ')
             };
             casts += 1;
             for (const id of cast.touchedTileIds) touchedThisTurn.add(id);
@@ -890,7 +893,8 @@ export const resolveRealmTurn = ({
 
     // 5. Holds are whole, ambiguous cohorts. A new request may recruit a second pair; a cut
     // or expiry can only release a cohort, never silently replace it with another pair.
-    const holdPolicy = reconcileRealmHolds(tiles, board.columns, board.tiles, pinned);
+    const holdPins = new Set([...pinnedTileIds, ...tiles.filter(tile => tile.rime).map(tile => tile.id)]);
+    const holdPolicy = reconcileRealmHolds(tiles, board.columns, board.tiles, holdPins);
     const freed = [...new Set([...holdPolicy.freed, ...releaseRealmHoldsIfStuck(tiles)])];
     frozen = tiles.filter(tile => tile.state === 'hidden' && (tile.frost ?? 0) > 0 &&
         (board.tiles.find(old => old.id === tile.id)?.frost ?? 0) <= 0).length;
@@ -912,14 +916,9 @@ export const resolveRealmTurn = ({
 
     const changed = tiles.some((tile, index) => tile !== board.tiles[index]);
     if (castImpact && castImpact !== board.elementCast) {
-        castImpact = { ...castImpact, contacts: castImpact.contacts.map(contact => {
-            const cell = tiles.findIndex(tile => tile.id === contact.tileId);
-            const tile = tiles[cell];
-            // A streak reaction or weather may clear the new hold before the frame is rendered.
-            const effect = tile?.vined ? 'entangled' : (tile?.frost ?? 0) > 0 ? 'frozen'
-                : tile?.fuse != null ? 'ignited' : tile?.rime ? 'rimed' : tile?.seeded ? 'seeded' : contact.effect === 'current' ? 'current' : 'cleared';
-            return { ...contact, cell, effect };
-        }) };
+        castImpact = finishElementCast(castImpact, tiles);
+        const castEvent = events.find(event => event.key === castImpact!.key);
+        if (castEvent?.ground) castEvent.ground = { ...castEvent.ground, detail: castImpact.detail };
     }
     return {
         board: changed || castImpact !== board.elementCast || ground.some((cell, index) => cell !== (board.elementalGround?.[index] ?? null))

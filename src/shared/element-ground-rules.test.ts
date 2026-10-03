@@ -112,8 +112,8 @@ describe('every match casts, with transparent scaling', () => {
     it.each(['ember', 'bone', 'moss'] as const)('a single %s pair acts without a pop, skipping immune cards', (suit) => {
         const tiles = makeTiles(suit);
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'storm', pinned: new Set() })!;
-        const status = suit === 'ember' ? 'fuse' : suit === 'bone' ? 'rime' : 'seeded';
-        expect(tiles.filter((tile) => tile[status])).toHaveLength(2);
+        const status = suit === 'ember' ? 'fuse' : suit === 'bone' ? 'frost' : 'vined';
+        expect(tiles.filter((tile) => tile[status])).toHaveLength(suit === 'ember' ? 2 : 4);
         expect(cast.touchedTileIds.length).toBeGreaterThan(0);
     });
 
@@ -127,7 +127,7 @@ describe('every match casts, with transparent scaling', () => {
         expect(elementCastPower(9000, 200).extraReach).toBe(3200);
     });
 
-    it('a stronger Grove cast finishes the next two-card block with four playable blooms', () => {
+    it('a stronger Grove cast finishes the next two-card block with four cards bound by blooming vines', () => {
         const tiles = makeTiles('moss');
         castElement({ tiles, columns: 4, groupTileIds: ['t0', 't1'], realmId: 'grove', pinned: new Set(), combo: 6 });
         expect(tiles.filter((tile) => tile.seeded === 2)).toHaveLength(4);

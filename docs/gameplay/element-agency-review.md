@@ -1,5 +1,7 @@
 # Elemental agency and visual hierarchy
 
+Historical design review. The owner subsequently requested real freeze and vine attempts on every match; rules 57 supersede the ordinary-coating design below. See [current rules](living-elements.md). Whole-cohort ambiguity, a free pair, clear feedback and reduced-motion support still apply.
+
 ## Evidence, not a universal formula
 
 Riot's [Clarity in League](https://www.leagueoflegends.com/en-us/news/dev/clarity-in-league/)

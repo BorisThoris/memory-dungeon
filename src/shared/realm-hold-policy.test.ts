@@ -51,6 +51,22 @@ describe('holds preserve the memory puzzle', () => {
         expect(tiles.slice(0, 4).every(t => t.frost === 1)).toBe(true);
         expect(new Set(tiles.filter(held).map(t => t.frost))).toEqual(new Set([1]));
     });
+    it.each(['frost', 'vined'] as const)('a rejected new hold preserves an established %s cohort', kind => {
+        const other = kind === 'frost' ? 'vined' : 'frost';
+        const before = deal(7).map((t, i) => i < 12 ? { ...t, [kind]: kind === 'frost' ? 2 : true } : t);
+        const tiles = before.map((t, i) => i >= 12 ? { ...t, [other]: other === 'frost' ? 2 : true } : t);
+        reconcileRealmHolds(tiles, 4, before);
+        expect(tiles.slice(0, 12).every(t => t[kind])).toBe(true);
+        expect(tiles.slice(12).some(held)).toBe(false);
+        expect(tiles.some(t => t[other])).toBe(false);
+    });
+    it('repairing ice cannot steal cards from an established vine cohort', () => {
+        const before = deal(6).map((t, i) => i < 4 ? { ...t, frost: 1 } : i < 8 ? { ...t, vined: true } : t);
+        const tiles = before.map((t, i) => i < 2 ? { ...t, state: 'matched' as const } : i === 8 ? { ...t, frost: 2 } : t);
+        reconcileRealmHolds(tiles, 4, before, new Set(['9', '10']));
+        expect(tiles.slice(4, 8).every(t => t.vined && !t.frost)).toBe(true);
+        expect(tiles.filter(t => t.state === 'hidden').some(t => t.frost)).toBe(false);
+    });
     it('uses one duration for the whole cohort, and keeps no-op tile references', () => {
         const tiles = deal().map((t, i) => i < 4 ? { ...t, frost: i < 2 ? 1 : 2 } : t);
         reconcileRealmHolds(tiles, 4);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile, TileSuit } from './contracts';
-import { ELEMENT_HOLD_CAP, ELEMENT_REACH, castElement, cardsWithinReach, elementalContactGroups } from './element-group-rules';
+import { ELEMENT_REACH, castElement, cardsWithinReach, elementalContactGroups } from './element-group-rules';
 
 const SUITS: Record<string, TileSuit> = { e: 'ember', t: 'tide', m: 'moss', b: 'bone' };
 /** A 4-column board from rows like 'a:e b:t c:m d:b'; ids are `${pairKey}-1` then `-2`. */
@@ -57,19 +57,19 @@ describe('elemental groups', () => {
         const single = castElement({ tiles, columns: 4, groupTileIds: ['d-1', 'd-2'], realmId: 'ember', pinned: new Set() })!;
         expect(single.kind).toBe('freeze');
         expect(at(tiles, 'c-1').fuse).toBeUndefined();
-        expect(tiles.filter((tile) => tile.rime).map(tile => tile.id).sort()).toEqual(['b-1', 'c-1', 'f-1']);
+        expect(tiles.filter((tile) => tile.frost).map(tile => tile.id).sort()).toEqual(['b-1', 'b-2', 'c-1', 'c-2', 'f-1', 'f-2']);
         const group = matched(matched(board(ROWS), 'd'), 'h');
         castElement({ tiles: group, columns: 4, groupTileIds: ['d-1', 'd-2', 'h-1', 'h-2'], realmId: 'ember', pinned: new Set() });
-        expect(group.filter((tile) => tile.rime)).toHaveLength(3);
+        expect(group.filter((tile) => tile.frost)).toHaveLength(6);
     });
 
     it('Grove finishes whole blocks for both single matches and popped groups', () => {
         const single = matched(board(ROWS), 'c');
         expect(castElement({ tiles: single, columns: 4, groupTileIds: ['c-1', 'c-2'], realmId: 'tide', pinned: new Set() })!.kind).toBe('entangle');
-        expect(single.filter((tile) => tile.seeded)).toHaveLength(ELEMENT_HOLD_CAP);
+        expect(single.filter((tile) => tile.vined && tile.seeded)).toHaveLength(4);
         const group = matched(matched(board(ROWS), 'c'), 'g');
         castElement({ tiles: group, columns: 4, groupTileIds: ['c-1', 'c-2', 'g-1', 'g-2'], realmId: 'tide', pinned: new Set() });
-        expect(group.filter((tile) => tile.seeded)).toHaveLength(4);
+        expect(group.filter((tile) => tile.vined && tile.seeded)).toHaveLength(8);
     });
 
     it('receiving blocks are connected by element, never through a gap or a different suit', () => {
@@ -90,9 +90,10 @@ describe('elemental groups', () => {
     it('an amplified cast finishes a ten-card block beyond its six-card budget', () => {
         const tiles = matched(board(['a:m a:m b:e b:e', 'c:e c:e d:e d:e', 'e:e e:e f:e f:e']), 'a');
         const cast = castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'grove', pinned: new Set(), combo: 12, multiplier: 8 })!;
-        expect(tiles.filter(t => t.seeded)).toHaveLength(10);
+        expect(tiles.filter(t => t.vined && t.bloom && t.seeded === 2)).toHaveLength(8);
         expect(cast.power).toBe(6);
-        expect(cast.contacts.filter(c => c.outcome === 'affected')).toHaveLength(10);
+        expect(cast.contacts.filter(c => c.outcome === 'affected')).toHaveLength(8);
+        expect(cast.contacts.filter(c => c.outcome === 'blocked')).toHaveLength(2);
         const free = tiles.filter(t => t.state === 'hidden' && !t.vined);
         expect(free.some(a => free.some(b => a.id !== b.id && a.pairKey === b.pairKey))).toBe(true);
     });
@@ -105,16 +106,16 @@ describe('elemental groups', () => {
         expect(cast.contacts.every(c => tiles[c.cell]?.id === c.tileId)).toBe(true);
     });
 
-    it('soft coatings can cover every remaining card without preventing a flip', () => {
+    it('holds cover complete pairs while leaving a free pair', () => {
         for (const suit of ['moss', 'bone'] as const) {
             const tiles = matched(board(['a:m a:m b:t b:t', 'c:t c:t d:t d:t']), 'a');
             tiles[0] = { ...tiles[0]!, suit };
             tiles[1] = { ...tiles[1]!, suit };
             castElement({ tiles, columns: 4, groupTileIds: ['a-1', 'a-2'], realmId: 'storm', pinned: new Set(), combo: 12, multiplier: 8 });
-            expect(tiles.filter(t => t.vined || t.frost)).toHaveLength(0);
-            expect(tiles.filter(t => t.rime || t.seeded)).toHaveLength(6);
+            expect(tiles.filter(t => t.vined || t.frost)).toHaveLength(4);
             const free = tiles.filter(t => t.state === 'hidden' && !t.vined && !t.frost);
-            expect(free).toHaveLength(6);
+            expect(free).toHaveLength(2);
+            expect(free[0]!.pairKey).toBe(free[1]!.pairKey);
         }
     });
 

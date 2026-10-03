@@ -15,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 55: elemental finds and the forge economy. */
-export const GAME_RULES_VERSION = 56;
+/** Bump when generation or player-visible gameplay rules change. 57: every-match ice/vine holds and explicit blocked-cast feedback. */
+export const GAME_RULES_VERSION = 57;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -426,10 +426,11 @@ export const FLOOR_ARCHETYPE_IDS = [
 export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
 export interface ElementCastImpact {
+    headline?: string;
     key: string;
     suit: TileSuit;
     sourceCells: number[];
-    contacts: { tileId: string; cell: number; suit: TileSuit; outcome: 'charged' | 'neutralized' | 'affected'; effect?: 'ignited' | 'frozen' | 'entangled' | 'rimed' | 'seeded' | 'current' | 'cleared'; group: number }[];
+    contacts: { tileId: string; cell: number; suit: TileSuit; outcome: 'charged' | 'neutralized' | 'affected' | 'blocked'; attempt?: 'ignited' | 'frozen' | 'entangled'; reason?: string; effect?: 'ignited' | 'frozen' | 'entangled' | 'rimed' | 'seeded' | 'current' | 'cleared'; group: number }[];
     multiplier: number;
     power: number;
     groupPairs: number;

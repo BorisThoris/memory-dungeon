@@ -35,32 +35,40 @@ export function reconcileRealmHolds(tiles: Tile[], columns: number, before?: rea
         if (kind === 'frost') { const { frost: _f, ...rest } = tile; tiles[index] = rest; }
         else { const { vined: _v, bloom: _b, ...rest } = tile; tiles[index] = rest; }
     });
-    for (const kind of ['frost', 'vined'] as const) {
-        const requested = tiles.flatMap((tile, cell) => tile.state === 'hidden' && has(tile, kind) ? [cell] : []);
+    // Plan both kinds from the same snapshot, then rebuild established cohorts first.
+    // A tentative new vine must not make an existing ice cohort appear to block the last free pair.
+    const kinds: Hold[] = ['frost', 'vined'];
+    kinds.sort((a, b) => Number(original.some(tile => has(tile, b) && !!prior.get(tile.id) && has(prior.get(tile.id)!, b)))
+        - Number(original.some(tile => has(tile, a) && !!prior.get(tile.id) && has(prior.get(tile.id)!, a))));
+    clear('frost');
+    clear('vined');
+    for (const kind of kinds) {
+        const requested = original.flatMap((tile, cell) => tile.state === 'hidden' && has(tile, kind) ? [cell] : []);
         if (!requested.length) continue;
         const fresh = !!before && requested.some(cell => !prior.get(tiles[cell]!.id) || !has(prior.get(tiles[cell]!.id)!, kind));
         const requestedKeys = new Set(requested.map(cell => tiles[cell]!.pairKey));
         const existingDurations = requested.filter(cell => prior.get(tiles[cell]!.id)?.frost)
-            .map(cell => tiles[cell]!.frost ?? 0).filter(n => n > 0);
+            .map(cell => original[cell]!.frost ?? 0).filter(n => n > 0);
         // New hazards join the current expiry; they cannot keep refreshing an old lock.
         const duration = existingDurations.length ? Math.min(...existingDurations)
-            : Math.max(1, ...requested.map(cell => tiles[cell]!.frost ?? 0));
-        const bloom = requested.some(cell => tiles[cell]!.bloom);
+            : Math.max(1, ...requested.map(cell => original[cell]!.frost ?? 0));
+        const bloom = requested.some(cell => original[cell]!.bloom);
         const width = Math.max(1, columns);
         const existingPair = (cells: number[]) => cells.every(cell => {
             const old = prior.get(tiles[cell]!.id);
-            return old && has(old, kind) && has(tiles[cell]!, kind);
+            return old && has(old, kind) && has(original[cell]!, kind);
         });
         const distance = (cells: number[]) => Math.min(...cells.flatMap(cell => requested.map(from =>
             Math.abs(Math.floor(cell / width) - Math.floor(from / width)) + Math.abs(cell % width - from % width))));
         const candidates = [...pairs.values()].filter(cells => cells.length === 2 && cells.every(cell => {
             const tile = tiles[cell]!;
-            return !pinned.has(tile.id) && elementWouldLand(tile, kind === 'frost' ? 'bone' : 'moss')
-                && !has(tile, kind === 'frost' ? 'vined' : 'frost') && (fresh || has(tile, kind));
+            const other = kind === 'frost' ? 'vined' : 'frost';
+            const establishedOther = has(original[cell]!, other) && (!before || !!prior.get(tile.id) && has(prior.get(tile.id)!, other));
+            return !establishedOther && !pinned.has(tile.id) && elementWouldLand(tile, kind === 'frost' ? 'bone' : 'moss')
+                && !has(tile, kind === 'frost' ? 'vined' : 'frost') && (fresh || has(original[cell]!, kind));
         })).sort((a, b) => Number(existingPair(b)) - Number(existingPair(a)) ||
             Number(requestedKeys.has(tiles[b[0]!]!.pairKey)) - Number(requestedKeys.has(tiles[a[0]!]!.pairKey)) || distance(a) - distance(b));
-        clear(kind);
-        const target = fresh ? Math.min(3, Math.max(MIN_HELD_PAIRS, requestedKeys.size)) : candidates.length;
+        const target = fresh ? Math.max(MIN_HELD_PAIRS, requestedKeys.size) : candidates.length;
         let chosen = 0;
         for (const cells of candidates) {
             if (chosen >= target) break;

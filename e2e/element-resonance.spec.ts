@@ -129,7 +129,7 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
             locks: run.board!.tiles.filter(t => t.vined || t.frost).length };
     });
     expect(impact.blooms).toBe(8);
-    expect(impact.locks).toBe(0);
+    expect(impact.locks).toBe(8);
     expect(new Set(impact.contacts.map(c => c.outcome)).size).toBe(3);
     await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openSettings('playing'));
     await page.getByRole('button', { name: /dev options/i }).click();
@@ -152,7 +152,7 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     await page.getByTestId('element-cast-guide').click();
     await expect(page.getByTestId('element-cast-rules')).toBeVisible();
     await expect(page.getByTestId('element-cast-rules').locator('details').first()).not.toHaveAttribute('open', '');
-    await expect(page.getByTestId('element-cast-receipt')).toContainText('8 blooms');
+    await expect(page.getByTestId('element-cast-receipt')).toContainText('8 tied down');
     await page.screenshot({ path: 'output/playwright/element-guide-compact.png' });
     await page.keyboard.press('Escape');
     // Hazard counters and silhouettes remain legible without any moving effects.

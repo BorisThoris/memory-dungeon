@@ -1,11 +1,11 @@
 # Realms, elements and travel
 
-## Current cast contract (rules 56, 2026-10-03)
+## Current cast contract (rules 57, 2026-10-03)
 
 **Every elemental pair casts and leaves ground.** Connected blocks now conduct the whole cast;
 local and amplified reactions use the same six recipes. Fire brings burn pressure, Water moves
-cards, Frost protects at the cost of seeds, and Grove prepares harvests. Ordinary coatings keep
-cards playable. Ground under the matched pair chooses chemistry; adjacent patches cannot change
+cards, Frost freezes cards and Grove binds them with vines. Every match attempts its effect;
+blocked attempts show a reason, and holds always retain a free pair. Ground under the matched pair chooses chemistry; adjacent patches cannot change
 that choice. The Casts guide retains the actual last result and previews primed reactions.
 
 See [the current rules and verification](gameplay/living-elements.md) for the full contract.

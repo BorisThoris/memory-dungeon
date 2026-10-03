@@ -1446,7 +1446,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return lit.every((id) => positionOf(r, id) !== positionOf(b, id)) ? null : 'a lit card did not move';
                 })
             },
-            { step: { do: 'flip', tileId: 'b-2' }, says: 'the next flip puts the light out', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'still lit') }
+            { step: { do: 'flip', tileId: 'd-1' }, says: 'the next flip puts the light out', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'still lit') }
         ]
     },
     {
@@ -1549,7 +1549,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Card b is vined. Take a turn and the vines bloom; then match a beside it for three gold.',
         build: () =>
-            room(['a:m b:t c:e d:t', 'a:m e:t f:e c:e', 'b:t d:t e:t f:e'], {
+            room(['a:t b:t c:e d:t', 'a:t e:t f:e c:e', 'b:t d:t e:t f:e'], {
                 misses: 3,
                 run: realmRun('grove', 'raging', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
                 tiles: (tiles) => tiles.map((t) => (['b', 'e'].includes(t.pairKey) ? { ...t, vined: true } : t))
@@ -1776,31 +1776,31 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-frost',
         title: 'Frost',
-        mechanic: 'Every Frost match douses fires and adds protective, playable rime to vulnerable cards. Combo, resonance, a reaction\'s burst and multiplier add targets, up to six.',
+        mechanic: 'Every Frost match attempts to freeze vulnerable blocks. Frozen cards cannot turn; matching nearby or casting Fire breaks the ice. Combo, resonance, popped pairs and multiplier strengthen the cast.',
         graphMechanicIds: ['board.element_groups', 'board.element_resonance', 'safety.softlock_fairness'],
-        tryThis: 'Two grove matches are in hand. Match a (frost): the Frostbloom bursts the other frost pair with it, and rime anchors nearby cards without locking them.',
+        tryThis: 'Two grove matches are in hand. Match a (frost): the Frostbloom bursts the other frost pair with it, and ice freezes nearby cards while keeping a free pair.',
         build: () => room(['a:b b:b c:m d:e', 'e:t f:t c:m d:e', 'a:b b:b e:t f:t'], { run: realmRun('ember', 'calm', { elementStreak: { suit: 'moss', links: 2 } }) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the reaction bursts the other frost pair, and the frost group coats playable cards in rime',
-                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).some((t) => t.state === 'hidden' && t.rime) ? null : 'no rimed card'), finishable)
+                says: 'the reaction bursts the other frost pair, and the frost group freezes vulnerable cards',
+                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).some((t) => t.state === 'hidden' && (t.frost ?? 0) > 0) ? null : 'no frozen card'), finishable)
             },
-            { step: { do: 'missAny' }, says: 'a turn later the ice is gone', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
+            { step: { do: 'match', pairKey: 'd' }, says: 'the free Fire pair melts the ice', expect: (r) => ((r.board?.tiles ?? []).some((t) => (t.frost ?? 0) > 0) ? 'still frozen' : null) }
         ]
     },
     {
         id: 'element-grove',
         title: 'Grove',
-        mechanic: 'Every Grove match plants gold-bearing seeds on playable cards. Combo, resonance, a reaction\'s burst and multiplier add targets, up to six. Strong casts grow 2-gold blooms.',
+        mechanic: 'Every Grove match attempts to bind vulnerable blocks. Vined cards cannot turn or drift. Match nearby to cut them for gold; strong casts grow blooming vines.',
         graphMechanicIds: ['board.element_groups', 'board.element_resonance', 'safety.softlock_fairness'],
-        tryThis: 'Two frost matches are in hand. Match a (grove): the Frostbloom bursts the other grove pair with it, and seeds appear on nearby playable cards.',
-        build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b'], { run: realmRun('frost', 'calm', { elementStreak: { suit: 'bone', links: 2 } }) }),
+        tryThis: 'Two frost matches are in hand. Match a (grove): the Frostbloom bursts the other grove pair with it, and vines bind nearby vulnerable cards.',
+        build: () => room(['a:m b:m c:e d:t', 'e:b f:b c:e d:t', 'a:m b:m e:b f:b', 'g:b g:b h:e h:e'], { run: realmRun('frost', 'calm', { elementStreak: { suit: 'bone', links: 2 } }) }),
         script: [
             {
                 step: { do: 'match', pairKey: 'a' },
-                says: 'the reaction bursts the other grove pair, and the grove group seeds playable cards',
-                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).some((t) => t.state === 'hidden' && t.seeded) ? null : 'no seeded card'), finishable)
+                says: 'the reaction bursts the other grove pair, and the grove group binds vulnerable cards',
+                expect: expectAll(isGone('b'), (r) => ((r.board?.tiles ?? []).some((t) => t.state === 'hidden' && t.vined) ? null : 'no vined card'), finishable)
             },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
@@ -1808,17 +1808,17 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'element-blocks',
         title: 'Overgrowth: blocks answer a cast',
-        mechanic: 'A high-combo Grove cast plants eight blooms by finishing connected blocks. Frost blocks neutralize it, Grove blocks absorb charges, and every coated card stays playable.',
+        mechanic: 'A high-combo Grove cast ties down eight cards with blooming vines by finishing connected blocks. Frost blocks neutralize it, Grove blocks absorb charges, and a free pair remains.',
         graphMechanicIds: ['board.element_groups', 'board.element_alchemy', 'safety.softlock_fairness'],
-        tryThis: 'Match the two Grove cards at the top left. Follow the leaf bursts: Fire and Water grow blooms, Frost neutralizes the cast, and the far Grove pair absorbs a charge.',
+        tryThis: 'Match the two Grove cards at the top left. Follow the leaf bursts: Fire and Water become bound by blooming vines, Frost neutralizes the cast, and the far Grove pair absorbs a charge.',
         build: () => room(['a:m a:m b:e b:e c:e c:e', 'd:t d:t e:t e:t f:b f:b', 'g:e g:e h:b h:b i:m i:m', 'k:b k:b l:e l:e j:m j:m'], {
             streak: 12, run: realmRun('storm', 'calm', { chunkPairsThisChain: 3 })
         }),
         script: [{
-            step: { do: 'match', pairKey: 'a' }, says: 'eight blooms, counters and kin charges are recorded as distinct contacts',
+            step: { do: 'match', pairKey: 'a' }, says: 'eight bindings, counters and kin charges are recorded as distinct contacts',
             expect: expectAll((r) => {
                 const impact = r.board?.elementCast;
-                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.seeded === 2).length === 8 ? null : 'missing amplified block responses';
+                return impact?.power === 6 && impact.contacts.some(c => c.outcome === 'neutralized') && impact.contacts.some(c => c.outcome === 'charged') && r.board!.tiles.filter(t => t.vined && t.bloom && t.seeded === 2).length === 8 ? null : 'missing amplified block responses';
             }, finishable)
         }, { step: { do: 'clear' }, says: 'the amplified floor still clears', expect: statusIs('levelComplete') }]
     },
@@ -2086,7 +2086,9 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return next === run ? null : next;
         }
         case 'matchBurning': {
-            const burning = (run.board?.tiles ?? []).find((t) => t.state === 'hidden' && t.fuse != null);
+            const tiles = run.board?.tiles ?? [];
+            const burning = tiles.find(t => t.state === 'hidden' && t.fuse != null && !isTileFlipBlocked(t)
+                && tiles.some(partner => partner.id !== t.id && partner.pairKey === t.pairKey && partner.state === 'hidden' && !isTileFlipBlocked(partner)));
             return burning ? playTestHallStep(run, { do: 'match', pairKey: burning.pairKey }) : null;
         }
         case 'study':

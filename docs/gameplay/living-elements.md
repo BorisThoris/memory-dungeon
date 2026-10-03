@@ -1,4 +1,4 @@
-# Living elements: current rules (version 56)
+# Living elements: current rules (version 57)
 
 Every elemental match casts and paints the field. There is no random activation chance. The card
 identity, matched pair, board geometry and next legal pair remain intact. Casts can change resources,
@@ -8,10 +8,10 @@ positions, protection, hazards and the chemistry of later matches.
 
 | Match | Benefit | Cost or limitation |
 | --- | --- | --- |
-| Fire | Burns vines, seeds and ice; ignites vulnerable blocks. Matching a burning pair pays +2 gold. | Burns potential harvests. Each expired fuse costs 1 gold and can spread fire. Steam, Thaw and calm suppress ignition. |
-| Water | Douses fire, ripens seeds into 2-gold blooms, rotates vulnerable cards one place. | Changes positions you memorized. Ice, rime and pinned cards anchor against movement. |
-| Frost | Douses fire and coats vulnerable blocks in playable rime; matching rime banks a calm turn. | Replaces seeds, losing their harvest. Rime anchors the cards against movement. |
-| Grove | Plants playable seeds worth 1 gold each when matched; combo 6 or effective tier 2 creates 2-gold blooms. | Fire destroys the harvest; frost replaces it with protection. |
+| Fire | Burns vines, seeds and ice; ignites vulnerable blocks. Matching a burning pair pays +2 gold. | Burns potential harvests. Each expired fuse costs 1 gold and can spread fire. Steam and Thaw quench ignition with a visible blocked attempt; calm only pauses clocks and weather. |
+| Water | Douses fire, ripens seeds into 2-gold blooms, rotates vulnerable cards one place. | Changes positions you memorized. Ice, vines, rime and pinned cards anchor against movement. |
+| Frost | Freezes vulnerable blocks; frozen cards cannot turn. Accepted freezes remove fire and seeds. | Lasts 1 turn at base power, 2 at power 3, 3 at power 6. Match nearby or use Fire to break ice. Frost focus banks its rank in calm turns on every cast. |
+| Grove | Ties down vulnerable blocks. Vined cards cannot turn or drift. Matching nearby cuts vines for gold; combo 6 or tier 2 makes blooming vines worth 3 gold when cut. | Bindings carry seeds worth 1 gold when eventually matched, 2 after strong casts or Water cultivation. Fire burns vines and seeds away. |
 
 The incoming element charges cards of its own kind once per turn. Water resists Fire, Fire resists
 Frost, Frost resists Grove, Grove resists Water. Other cards receive the cast. Resistance preserves
@@ -29,7 +29,7 @@ Fire, Frost and Grove have a two-card starting budget. Every six combo, two effe
 popped pair and multiplier doubling adds one, up to six. The last selected block always finishes:
 a two-card budget can affect ten cards when they form one connected block. Water starts at six
 cards, plus two for each extra reach step or budget point, also finishing whole blocks. Pins and
-existing protection still apply to individual cards. Normal coatings never prevent flipping.
+existing protection still apply to individual cards. Ice and vines block flipping. Holds cover at least two complete pairs with identical treatment, while leaving a free pair. A large block can be mostly held, with the last pair visibly spared. If those conditions cannot be met, the attempt is recorded as blocked with its reason. Established cohorts take priority over new holds; a rejected new hold cannot loosen the existing cohort.
 
 ## One chemistry, two scales
 
@@ -69,7 +69,7 @@ are rebuilt after reactions, so melting rime affects the current turn's weather.
 `ElementCastGuide` remains available before the first match. It shows the actual last cast receipt,
 current strength, all counter relationships, and the name, power, resource outcome and burst size
 of each available amplified reaction. The six-combination table and status rules are expandable.
-The receipt persists after particles disappear and includes both local and amplified effects.
+The button retains a compact result such as “Frost: 4 frozen” or “Grove: cast blocked”. The receipt persists after particles disappear and includes local and amplified effects, blocked reasons and card counters. Counts reflect the final board after reactions and the safety guard.
 
 Terrain, persistent status marks, reaction particles, connected-block beams, counter shields and
 charge labels show the same board state. Reduced motion retains static markings. The device-local
@@ -86,13 +86,8 @@ Settings → Dev Options → Combo pop effects toggle controls decorative match 
 Tests cover all six recipes in both element orders and both scopes, resource scaling, ground
 selection independent of click order, neighbour isolation, large-block propagation, protection,
 charge deduplication, harvest payouts and retained tile identity. Authored hall rooms exercise
-playable casts, counter/kin blocks and reaction bursts. Browser verification uses real in-game
+real cast holds, blocked flips, nearby release, counter/kin blocks and reaction bursts. Browser verification uses real in-game
 matches with desktop and phone layouts, headless in a separate context inside the noninteractive
 Windows isolation launcher. Run simulations check currency, identity, legal play and progression.
 
-The final rules-56 soak (`tsx scripts/soak-runs.ts --seeds=60 --floors=40 --check`) covered 240
-runs, 3,117 floors and 22,681 turns with zero invariant violations. Each run was capped at 40 floors;
-34 runs reached that horizon, and the rest exhausted their miss budget. Mean cleared floors were
-30.1 careful, 10.2 average, 1.9 sloppy and 9.8 wild. This checks deterministic gameplay invariants,
-not human difficulty or universal balance. Authored scenarios and browser play cover what the
-simulation cannot: visible blocks, reaction explanations, pop-toggle persistence and responsive UI.
+The rules-57 acceptance suite covers all four suits on all five arenas, consecutive same-element matches, real blocked flips, safe-hold refusal, ignition during calm, Frost focus, and truthful final receipts. Broader realm, hall, chemistry and simulation checks accompany the isolated browser run. The final rules-57 soak (`tsx scripts/soak-runs.ts --seeds=60 --floors=40 --check`) completed 240 runs, 3,580 floors and 26,662 turns with zero invariant violations. It exercised 23,283 casts, 7,109 vine cuts and 7,953 freezes. Forty-six runs reached the 40-floor horizon; the others exhausted their miss budgets. These are deterministic invariants, not a claim about human difficulty. All seven isolated browser checks passed, including actual blocked clicks, four single-pair casts, persistent labels, pop-toggle persistence and responsive guide layout.

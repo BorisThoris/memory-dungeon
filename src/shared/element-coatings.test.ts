@@ -13,15 +13,20 @@ const cast = (tiles: Tile[], suit: Tile['suit']) => {
     tiles[0] = { ...tiles[0]!, suit }; tiles[1] = { ...tiles[1]!, suit };
     return castElement({ tiles, columns: 4, groupTileIds: ['0', '1'], realmId: 'storm', pinned: new Set(groundAnchoredTileIds(tiles, [])) });
 };
-describe('playable elemental preparations', () => {
-    it('Grove plants, Water cultivates, and matching harvests without ever locking a flip', () => {
+describe('elemental holds and their harvests', () => {
+    it('Grove binds whole pairs, and Water cultivates their seeds without moving the holds', () => {
         const tiles = deal();
         cast(tiles, 'moss');
         const seeded = tiles.filter(t => t.seeded);
-        expect(seeded).toHaveLength(14);
-        expect(seeded.every(t => !isTileFlipBlocked(t))).toBe(true);
+        expect(seeded).toHaveLength(12);
+        expect(seeded.every(t => t.vined && isTileFlipBlocked(t))).toBe(true);
+        const positions = seeded.map(t => tiles.indexOf(t));
         cast(tiles, 'tide');
-        expect(tiles.filter(t => t.seeded === 2)).toHaveLength(14);
+        expect(tiles.filter(t => t.seeded === 2 && t.vined)).toHaveLength(12);
+        expect(positions.map(i => tiles[i]!.id)).toEqual(seeded.map(t => t.id));
+    });
+    it('matching released, cultivated seeds harvests their gold', () => {
+        const tiles = deal().map(t => ({ ...t, seeded: 2 }));
         const sourceTiles = tiles.filter(t => t.pairKey === '1');
         const board: BoardState = { level: 1, pairCount: 8, columns: 4, rows: 4, matchedPairs: 1,
             flippedTileIds: [], tiles: tiles.map(t => t.pairKey === '1' ? { ...t, state: 'matched' } : t),
@@ -37,16 +42,16 @@ describe('playable elemental preparations', () => {
         expect(tiles.find(t => t.id === '2')?.seeded).toBeUndefined();
         expect(tiles.find(t => t.id === '2')?.rime).toBeUndefined();
     });
-    it('Frost replaces seeds with playable anchors; Water and Grove respect the anchor', () => {
+    it('Frost replaces seeds with real ice; Water and Grove respect frozen cards', () => {
         const tiles = deal().map(t => t.state === 'hidden' ? { ...t, suit: 'tide' as const, seeded: 1 } : t);
         cast(tiles, 'bone');
-        const rimed = tiles.filter(t => t.rime);
-        expect(rimed).toHaveLength(14);
-        expect(rimed.every(t => !t.seeded && !isTileFlipBlocked(t))).toBe(true);
-        const cells = rimed.map(t => tiles.indexOf(t));
+        const frozen = tiles.filter(t => t.frost);
+        expect(frozen).toHaveLength(12);
+        expect(frozen.every(t => !t.seeded && isTileFlipBlocked(t))).toBe(true);
+        const cells = frozen.map(t => tiles.indexOf(t));
         cast(tiles, 'tide'); cast(tiles, 'moss');
-        expect(cells.map(i => tiles[i]!.id)).toEqual(rimed.map(t => t.id));
-        expect(cells.every(i => tiles[i]!.rime && !tiles[i]!.seeded)).toBe(true);
+        expect(cells.map(i => tiles[i]!.id)).toEqual(frozen.map(t => t.id));
+        expect(cells.every(i => tiles[i]!.frost && !tiles[i]!.seeded)).toBe(true);
     });
     it('matching rime banks a calm turn that suppresses the next arena hazard', () => {
         const tiles = deal();
