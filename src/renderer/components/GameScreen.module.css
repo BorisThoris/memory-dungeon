@@ -643,9 +643,9 @@
    flattened it to `position: relative` it kept its class, its label and its place in the tree and
    simply stopped having any area - a control the tests still found and no finger could ever hit.
    The double tap that ends the study period died that way. `gameScreenSrOnlyCss.test.ts` guards
-   all four exclusions now. */
+   these exclusions. The floor-clear beat also owns its absolute position and stacking layer. */
 .boardStage
-    > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer) {
+    > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer):not(:global([data-board-overlay='floor-clear'])) {
     position: relative;
     z-index: 1;
 }

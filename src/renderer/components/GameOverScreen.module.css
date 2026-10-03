@@ -1,8 +1,4 @@
-/*
- * The run's last page, in "The Margin": the score as the largest number on the page over a
- * gold rule, the run's facts as a ruled table, the next move as outlined words in the side
- * column. Ink, hairlines, display type; nothing plated.
- */
+/* A single outcome panel with secondary run information available on demand. */
 .shell {
     position: relative;
     color: var(--margin-paper);
@@ -47,519 +43,177 @@
         radial-gradient(ellipse 60% 50% at 50% 30%, color-mix(in srgb, var(--margin-gold) 6%, transparent), transparent 70%);
 }
 
+
 .foreground {
     position: relative;
     z-index: 1;
     flex: 1 1 auto;
     min-height: 0;
-    /* No scrollbar: the layout fits the viewport and long lists clamp. */
-    overflow: hidden;
+    overflow-y: auto;
     overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
-    gap: max(var(--theme-space-lg), calc(var(--ui-shell-screen-gap) * 0.92));
-    padding:
-        max(var(--ui-shell-screen-pad-block), env(safe-area-inset-top, 0px))
-        max(var(--ui-shell-screen-pad-inline), env(safe-area-inset-right, 0px))
-        max(calc(var(--ui-shell-screen-pad-block) + 0.2rem), env(safe-area-inset-bottom, 0px))
-        max(var(--ui-shell-screen-pad-inline), env(safe-area-inset-left, 0px));
+    width: 100%;
     box-sizing: border-box;
-    width: min(1180px, 100%);
-    margin: 0 auto;
+    padding: max(1.25rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
 }
-
+.layout, .achievementPanel, .passAndPlay {
+    width: min(100%, 44rem);
+    box-sizing: border-box;
+    margin-inline: auto;
+}
 .layout {
     display: grid;
-    grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
-    gap: clamp(0.85rem, 2vw, var(--ui-shell-screen-gap));
+    gap: 1rem;
 }
-
-/* The pages lie flat; the tilt was the old plates' conceit. */
-.heroPanel,
-.actionPanel {
-    transform: none;
+.heroPanel {
+    padding: clamp(1rem, 3vw, 2rem);
 }
-
-.heroLockup {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--theme-space-sm);
-    width: 100%;
-}
-
-.brandCrest {
-    width: clamp(2.5rem, 6vh, 3.5rem);
-    height: auto;
-    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--margin-gold) 35%, transparent));
-}
-
-.scoreHero {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.12rem;
-}
-
-.scoreHeroLabel {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--margin-paper-dim);
-}
-
-.scoreHeroValue {
-    font-family: var(--margin-heading-font);
-    font-size: clamp(2.6rem, 8vh, 4rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.01em;
-    color: var(--margin-gold);
-    font-variant-numeric: tabular-nums;
-}
-
-/* The ornament is a rule now. */
-.divider {
-    display: block;
-    width: min(100%, 18rem);
-    height: 1px;
-    margin-top: 0.6rem;
-    background: var(--margin-rule);
-    box-shadow: 0 0 14px color-mix(in srgb, var(--margin-gold) 40%, transparent);
-    /* The ornament itself is pushed out of the box; the box draws the rule. */
-    object-fit: none;
-    object-position: 9999px 9999px;
-    overflow: hidden;
-}
-
 .copy {
-    margin: 0.55rem 0 0;
+    margin: 0.75rem 0 0;
     color: var(--margin-paper-soft);
-    font-family: var(--margin-heading-font);
-    font-style: italic;
-    font-size: clamp(1rem, 2.3vh, 1.15rem);
-    line-height: 1.45;
-    max-width: 44rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
-
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+.personalBest {
+    margin: 1rem 0 0;
+    color: var(--margin-gold);
+    font-size: 0.85rem;
+}
+.runDetails {
+    border-top: 1px solid var(--margin-hairline);
+}
+.runDetails > summary {
+    cursor: pointer;
+    padding: 0.9rem 0.25rem;
+    color: var(--margin-paper-soft);
+    font-size: 0.9rem;
+}
+.runDetails > summary:focus-visible {
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 2px;
+}
+.detailsBody {
+    display: grid;
+    gap: 1rem;
+    padding: 0 0.25rem 1rem;
+}
+.detailsBody .copy, .note {
+    margin: 0;
+    color: var(--margin-paper-dim);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
 .metaStrip {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-top: 1rem;
 }
-
 .metaChip {
-    padding: 0.1rem 0 0.1rem 0.7rem;
-    border-left: 1px solid var(--margin-rule);
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--margin-hairline);
+    border-radius: 4px;
+    font-size: 0.8rem;
     color: var(--margin-paper-soft);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
 }
-
-.summaryGrid {
-    margin-top: 1rem;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--theme-space-sm);
-}
-
-.note {
-    margin: 1rem 0 0;
-    color: var(--margin-paper-dim);
-    font-size: 0.86rem;
-    line-height: 1.45;
-    max-width: 42rem;
-}
-
-.sideRail {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
-}
-
-.mobileActionDock,
-.mobileOutcomeSummary {
-    display: none;
-}
-
-.actionHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.actionSeal {
-    display: none;
-}
-
-.panelKicker {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--margin-gold);
-}
-
-.panelHeading {
-    display: block;
-    margin: 0.2rem 0 0;
-    font-family: var(--margin-heading-font);
-    font-size: clamp(1.4rem, 3.4vh, 1.8rem);
-    font-weight: 500;
-    line-height: 1.1;
-    color: var(--margin-paper);
-}
-
-.panelCopy {
-    margin: 0.8rem 0 0;
-    color: var(--margin-paper-soft);
-    line-height: 1.45;
-}
-
 .actionButtons {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 0.85rem;
-    padding-top: 0.85rem;
-    border-top: 1px solid var(--margin-hairline);
+    max-width: 16rem;
 }
-
-.nextRunLoop,
 .nextRunGrid {
-    margin-top: 1rem;
     display: grid;
-    gap: 0.55rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
 }
-
-.nextRunRow,
 .nextRunCard {
     display: grid;
-    gap: 0.12rem;
-    padding: 0.45rem 0.2rem 0.5rem;
-    border-bottom: 1px solid var(--margin-hairline-soft);
+    align-content: start;
+    gap: 0.4rem;
 }
-
-.nextRunRow strong,
 .nextRunCard strong {
-    color: var(--margin-paper-dim);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-}
-
-.nextRunRow span,
-.nextRunCard span {
-    display: block;
-    color: var(--margin-paper);
-    font-family: var(--margin-heading-font);
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.nextRunCard p {
-    color: var(--margin-paper-dim);
-    font-style: italic;
     font-size: 0.8rem;
-    line-height: 1.36;
-}
-
-.journalRows {
-    display: grid;
-    gap: 0.42rem;
-    margin-top: 0.78rem;
-}
-
-.journalRow {
-    display: grid;
-    gap: 0.12rem;
-    padding: 0.4rem 0.2rem;
-    border-bottom: 1px solid var(--margin-hairline-soft);
-}
-
-.journalRow strong {
-    color: var(--margin-gold);
-    font-size: 0.75rem;
+    color: var(--margin-paper-dim);
     font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
 }
-
-.journalRow span {
+.nextRunCard span {
+    color: var(--margin-gold);
+    font-size: 1rem;
+}
+.nextRunCard p {
+    margin: 0;
     color: var(--margin-paper-soft);
-    font-size: 0.82rem;
-    line-height: 1.3;
+    font-size: 0.875rem;
+    line-height: 1.5;
 }
-
-.mobileActionDock {
-    display: none;
+.achievementPanel {
+    margin-top: 1rem;
+    padding: 1rem;
 }
-
-.aboveFoldSummary {
-    display: none;
-}
-
-.achievementPanel,
-.detailsPanel {
-    max-width: 100%;
-}
-
-.detailsPanel {
-    opacity: 0.98;
-}
-
 .achievementHeading {
-    margin-top: 0.2rem;
+    margin: 0;
+    font: 500 1.25rem var(--margin-heading-font);
+    color: var(--margin-gold);
 }
-
 .achievementList {
-    margin: 1rem 0 0;
-    padding: 0;
     list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
     display: grid;
     gap: 0.75rem;
 }
-
 .achievementItem {
     display: grid;
-    gap: 0.15rem;
-    padding: 0.6rem 0.85rem 0.7rem;
-    border: 1px solid var(--margin-hairline-soft);
-    border-top: 2px solid var(--margin-gold);
-    border-radius: 3px;
-    background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
+    gap: 0.2rem;
 }
-
 .achievementItem strong {
-    color: var(--margin-fever);
-    font-family: var(--margin-heading-font);
-    font-size: 1.15rem;
+    color: var(--margin-paper);
     font-weight: 600;
 }
-
 .achievementItem span {
-    color: var(--margin-paper-soft);
-    font-size: 0.88rem;
-    line-height: 1.45;
-}
-
-.timelineDetails summary {
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
     color: var(--margin-paper-dim);
+    font-size: 0.875rem;
+    line-height: 1.4;
 }
-
-.timelineDetails {
-    margin: 0;
-}
-
-.ghostSteps {
-    margin: 0.65rem 0 0;
-    padding-left: 1.2rem;
-    max-height: 10rem;
-    overflow: hidden;
-    columns: 2;
-    column-gap: 1.25rem;
-}
-
-.ghostSteps li {
-    margin: 0.14rem 0;
+.demoLedger {
+    margin: 0.5rem 0;
+    padding-left: 1rem;
     color: var(--margin-paper-soft);
-    break-inside: avoid;
+    line-height: 1.5;
 }
-
-.ghostStepIndex {
-    display: inline-block;
-    min-width: 1.5rem;
-    margin-right: 0.4rem;
-    color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+.wishlistLink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--margin-gold);
 }
-
-.ghostSteps code {
-    font-size: 0.75rem;
+.panelKicker {
+    color: var(--margin-paper);
 }
-
-:global([data-reduce-motion='true']) .heroPanel,
-:global([data-reduce-motion='true']) .actionPanel {
-    transform: none;
+.passAndPlay {
+    margin-bottom: 1rem;
 }
-
-@media (max-width: 960px) {
-    .layout {
+@media (max-width: 480px) {
+    .foreground {
+        padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+    }
+    .summaryGrid {
+        gap: 0.4rem;
+    }
+    .nextRunGrid {
         grid-template-columns: 1fr;
     }
-
-    .summaryGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /*
-     * The rail has the whole width once the layout stacks, so the two next-run cards sit side by
-     * side in it. Stacked they added 83px to a column that already ran 44px past the bottom of a
-     * 834x1112 window, and the chain target sat there with nothing able to scroll it into view.
-     */
-    .nextRunGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /*
-     * The next moves go two-up once the window is this narrow, for the same reason the next-run
-     * cards above do: the rail has the width and does not have the height.
-     *
-     * Measured stacked, they are 231px of buttons in a rail 350-365px wide, and that is what puts
-     * the screen over the edge at both of the sizes still failing - 866px of page in an 844px
-     * phone, 419px of rail in a 375px landscape. Two columns turn four rows into two and give back
-     * about 110px, which is more than either needs. The rail is wide enough for it at both: 365px
-     * on the phone, 350px in the landscape column.
-     *
-     * Width was never the problem on these two screens; height was, and a column of full-width
-     * buttons spends the one to save nothing of the other.
-     */
-    .actionButtons {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
 }
-
-/*
- * A tablet held upright: 834px of width, 1112 of height. The width is there, so do not stack.
- *
- * This is the same argument the short-landscape rule below already makes in words - "the width is
- * there, so the result and the next move stay side by side rather than stacking into a page twice
- * the window's height" - keyed on the width it actually talks about rather than on a height. It
- * had been keyed at `max-height: 560px`, so a tall tablet never reached it: 834x1112 stacked into
- * a 1133px page in a 1112px window and dropped the chain target off the bottom.
- *
- * The block above records the previous attempt at this, and records it honestly: putting the two
- * next-run cards side by side in the stacked rail saved 83px off a column that "already ran 44px
- * past the bottom". Shaving 83 off 127 leaves 44, which is why the panel was still over the edge
- * and why this fixes the stacking instead of shaving it again. With two columns the page is the
- * taller of the two (666px measured), not their sum.
- */
-@media (min-width: 700px) and (max-width: 960px) {
-    .layout {
-        grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
-    }
-
-    /* The rail is a narrow column again, so its cards stack inside it as they do on a desktop. */
-    .nextRunGrid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
-@media (max-width: 760px) {
+@media (max-height: 560px) {
     .foreground {
-        gap: 0.55rem;
-        padding-block:
-            max(0.42rem, env(safe-area-inset-top, 0px))
-            max(0.56rem, env(safe-area-inset-bottom, 0px));
+        padding-block: 0.75rem;
     }
-
-    .layout {
-        gap: 0.55rem;
-    }
-
-    .heroPanel,
-    .actionPanel,
-    .achievementPanel,
-    .detailsPanel {
-        padding: 0.7rem;
-        transform: none;
-    }
-
-    .heroLockup {
-        gap: 0.34rem;
-    }
-
-    .brandCrest,
-    .divider,
-    .metaStrip,
-    .note {
-        display: none;
-    }
-
-    .scoreHero {
-        margin-top: 0.15rem;
-    }
-
-    .scoreHeroValue {
-        font-size: clamp(1.82rem, 9.5vw, 2.35rem);
-    }
-
-    .copy,
-    .panelCopy,
-    .achievementItem span {
-        font-size: 0.88rem;
-        line-height: 1.42;
-    }
-
-    .metaStrip {
-        gap: 0.35rem;
-    }
-
-    .metaChip {
-        padding: 0.28rem 0.56rem 0.32rem;
-        font-size: 0.75rem;
-    }
-
-    .summaryGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.42rem;
-        margin-top: 0.55rem;
-    }
-
-    .sideRail {
-        gap: 0.55rem;
-    }
-
-    .actionPanel:first-child {
-        order: -1;
-        position: sticky;
-        top: max(0.35rem, env(safe-area-inset-top, 0px));
-        z-index: 2;
-    }
-
-    .actionHeader {
-        gap: 0.5rem;
-    }
-
-    .actionSeal {
-        width: 2rem;
-        height: 2rem;
-    }
-
-    .actionButtons {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-top: 0.62rem;
-    }
-
-    .ghostSteps {
-        columns: 1;
+    .heroPanel {
+        padding: 1rem;
     }
 }
-
-@media (max-width: 430px) {
-    .summaryGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .actionButtons {
-        gap: var(--theme-space-sm);
-    }
-}
-
-/* A11Y-031: polite summary for SR without duplicating the hero visually. */
 .visuallyHidden {
     position: absolute;
     width: 1px;
@@ -572,200 +226,6 @@
     border: 0;
 }
 
-/* Demo: what the full game adds, and the one outbound link. */
-.demoLedger {
-    display: grid;
-    gap: 0.35rem;
-    margin: 0.4rem 0 0;
-    padding: 0 0 0 1.1rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    color: var(--margin-paper-soft);
-}
-
-.demoLedger li::marker {
-    color: var(--margin-gold);
-}
-
-.wishlistLink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    margin-top: 0.8rem;
-    padding: 0 1.1rem;
-    border: 1px solid var(--margin-gold);
-    border-radius: 4px;
-    color: var(--margin-gold);
-    font-family: var(--margin-heading-font);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-}
-
-.wishlistLink:hover,
-.wishlistLink:focus-visible {
-    background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
-    color: var(--margin-fever);
-    outline: none;
-}
-
-/*
- * The rail carries two rows now, not five, so each reads in full. It used to clamp because
- * "Run it back", "Build recap" and the share string were stacked above these.
- */
-.nextRunCard p {
-    margin: 0;
-}
-
-.nextRunGrid {
-    min-height: 0;
-    overflow: hidden;
-}
-
-@media (max-height: 820px) {
-    .nextRunGrid > *:nth-child(n + 4) {
-        display: none;
-    }
-}
-
-/*
- * The mode identity line goes on a phone too, for the reason the short-landscape block below
- * already gives: the heading directly above it names the mode, so the line spends its height
- * saying the same thing twice. Measured at 390x844 it is 40px of a page that is 866 in an 844
- * window - the overflow is 29, so this alone clears it, and the two next-run cards and the action
- * buttons are already two-up here and had nothing left to give.
- *
- * It stays wherever there is room for it, which is every window that is not a phone or a short
- * landscape: the line is the one place a run summary says what the mode's contract actually was.
- */
-@media (max-width: 430px) {
-    .modeIdentity {
-        display: none;
-    }
-}
-
-@media (max-width: 560px) {
-    /* Too narrow to sit two abreast; back to one card per row. */
-    .nextRunGrid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .layout {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.5rem;
-    }
-
-    /* Phones show the two rows that change what the player does next; the rest is the archive. */
-    .nextRunGrid > *:nth-child(n + 3) {
-        display: none;
-    }
-
-    .heroPanel,
-    .actionPanel {
-        padding: 0.7rem 0.8rem;
-    }
-
-    /* The archive panels are the desktop read; a phone shows the score and the next move. */
-    .note,
-    .achievementPanel,
-    .detailsPanel {
-        display: none;
-    }
-
-    .summaryGrid {
-        gap: 0.35rem;
-    }
-}
-
-
-/*
- * A phone held sideways: 375px of height, 800 of width. The width is there, so the result
- * and the next move stay side by side rather than stacking into a page twice the window's
- * height. The crest, the divider and the score's display size are what give way.
- */
-@media (max-height: 560px) and (min-width: 700px) {
-    .layout {
-        grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
-        gap: 0.6rem;
-    }
-
-    .brandCrest,
-    .divider {
-        display: none;
-    }
-
-    .heroPanel,
-    .actionPanel {
-        padding: 0.6rem 0.75rem;
-    }
-
-    .scoreHeroValue {
-        font-size: 2rem;
-    }
-
-    /* The achievement footnote is a status line, and the panel that lists real unlocks
-       carries the news itself. */
-    .note {
-        display: none;
-    }
-
-    /* Five numbers in one band rather than two rows: the height is what is scarce here. */
-    .summaryGrid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 0.3rem;
-    }
-
-    .mobileActionDock {
-        display: none;
-    }
-
-    /*
-     * One row on 375px of height: the chain target is the thing to do differently next run.
-     * The profile's next goal is on the Profile screen, which is where it is acted on.
-     */
-    .nextRunGrid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .nextRunGrid > *:nth-child(n + 2) {
-        display: none;
-    }
-
-    /*
-     * The mode identity line goes. In this column it wraps to two lines and costs 56px of the
-     * 375 there are — and the heading directly above it already names the mode, so it was
-     * spending a seventh of the window saying the same thing twice.
-     */
-    .modeIdentity {
-        display: none;
-    }
-}
-
-
-/* The one line that says the run mattered. Loud enough to see, quiet enough not to shout. */
-.personalBest {
-    margin: 0.6rem 0 0;
-    align-self: flex-start;
-    padding: 0.1rem 0 0.1rem 0.7rem;
-    border-left: 1px solid var(--margin-gold);
-    color: var(--margin-gold);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-}
-
-.personalBest[data-personal-best='matched'] {
-    color: var(--margin-paper-dim);
-    border-left-color: var(--margin-hairline);
-}
-
-/*
- * The shared-game result. It sits above the run's own numbers because at a device two people just
- * played on, the first question is who won.
- */
 .passAndPlay {
     display: flex;
     flex-direction: column;

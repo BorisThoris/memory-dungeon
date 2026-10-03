@@ -18,22 +18,19 @@ import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { getChainTier } from '../../shared/chain-tier-rules';
 import { getClumpRead } from '../../shared/clump-read-rules';
 import type { ElementRunFields } from '../../shared/element-resonance-rules';
-import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
-import { getTileSuit } from '../../shared/tile-suit-rules';
 
 /** The pointer has to rest on a tile this long before the clump read follows it. */
 const HOVER_CLUMP_READ_DELAY_MS = 160;
 const EMPTY_CLUMP_READ: ReadonlySet<string> = new Set();
 import { getRenderPixelRatio, resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
-import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
+import { getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { BOARD_ROUTE_COACHING } from '../copy/boardRouteCoaching';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitOpportunitySummary,
-    getTraitOpportunityTileIds,
-    getTraitSwapOpportunityPreview
+    getTraitOpportunityTileIds
 } from '../../shared/trait-opportunities';
 import { getChainMilestonePreview } from '../copy/chainMomentum';
 import {
@@ -173,39 +170,6 @@ const getBoardOpportunityBeatCount = (row: BoardOpportunityCompassRow): 2 | 3 | 
     }
     return 2;
 };
-
-/** Every focused preview is a four-beat read now; the five-beat cashout preview left with the shard forecast. */
-const FOCUSED_PREVIEW_BEAT_COUNT = 4;
-
-const getFocusedPreviewAudioCue = ({
-    kind,
-    tone
-}: {
-    kind: 'pickup' | 'trait' | 'clump';
-    tone: 'pickup' | 'setup' | 'trait';
-}): 'preview-pickup' | 'preview-route' => {
-    if (kind === 'pickup' || tone === 'pickup') {
-        return 'preview-pickup';
-    }
-    return 'preview-route';
-};
-
-const getFocusedPreviewScreenCue = ({
-    kind,
-    tone
-}: {
-    kind: 'pickup' | 'trait' | 'clump';
-    tone: 'pickup' | 'setup' | 'trait';
-}): BoardFeedbackScreenCue => {
-    if (kind === 'pickup' || tone === 'pickup') {
-        return 'snap';
-    }
-    return 'pulse';
-};
-
-
-
-
 
 const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'recover', 'tool'];
 
@@ -481,23 +445,6 @@ const BOARD_MARKER_CADENCE_CONTRACT = CARD_FEEDBACK_CADENCE_CONTRACT;
 const BOARD_MARKER_ROUTE_GLYPH_CONTRACT = CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT;
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
-
-/**
- * A label and its rows as one spoken paragraph. A row that already ends a sentence keeps its own
- * stop: the preview lines do ("...Clean reaches no further here."), and adding another made the
- * chip's accessible name end in "..".
- */
-const formatBoardFeedbackLabel = (
-    label: string,
-    rows: readonly (string | null | undefined)[]
-): string => {
-    const sentences = rows
-        .filter((row): row is string => Boolean(row))
-        .map((row) => row.trim())
-        .map((row) => (/[.!?]$/u.test(row) ? row : `${row}.`));
-    return sentences.length > 0 ? `${label}. ${sentences.join(' ')}` : label;
-};
-
 
 const CARD_ACTION_PRIORITY_LABELS: Record<string, string> = {
     'bank-lane': 'Bank lane',
@@ -1065,7 +1012,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return () => {
             active = false;
         };
-    }, [board, interactive, allowGambitThirdFlip]);
+    }, [board, interactive, allowGambitThirdFlip, zoneFlipCapacity]);
 
     const focusedTileLabel = useMemo(() => {
         return getFocusedTileLiveLabel({
@@ -1270,7 +1217,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         },
         []
     );
-    const selectedPreviewTileId = useMemo(() => {
+    const selectedTileId = useMemo(() => {
         if (boardApplicationFocused || board.flippedTileIds.length !== 1) {
             return null;
         }
@@ -1283,9 +1230,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
      * appear after any tap and stay over the bottom of the board and the caption until the next one -
      * reported as blocking play on a phone. Touch reads the card actually turned (or focused), not hover.
      */
-    const previewChipTileId = boardApplicationFocused
+    const consideredTileId = boardApplicationFocused
         ? focusedTileId
-        : (selectedPreviewTileId ?? (touchPrimary ? null : hoveredTileId));
+        : (selectedTileId ?? (touchPrimary ? null : hoveredTileId));
     /*
      * The clump the considered tile stands in: outlined on the board and named in the chip. Read
      * from the live board through the same region rule the break uses, so what is promised is
@@ -1305,10 +1252,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
     const clumpRead = useMemo(
         () =>
-            previewChipTileId && runStatus === 'playing'
-                ? getClumpRead(board, previewChipTileId, clumpReadContext)
+            consideredTileId && runStatus === 'playing'
+                ? getClumpRead(board, consideredTileId, clumpReadContext)
                 : null,
-        [board, clumpReadContext, previewChipTileId, runStatus]
+        [board, clumpReadContext, consideredTileId, runStatus]
     );
     /** Solid: what this match takes now. */
     const clumpReadTileIds = useMemo(
@@ -1323,87 +1270,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : EMPTY_CLUMP_READ,
         [clumpRead]
     );
-    const focusedPreviewChip = useMemo((): {
-        action: 'Claim' | 'Preview' | 'Route';
-        eyebrow: string;
-        lines: string[];
-        kind: 'trait' | 'pickup' | 'clump';
-        source: 'focus' | 'selected';
-        tone: 'pickup' | 'setup' | 'trait';
-    } | null => {
-        if (!previewChipTileId) {
-            return null;
-        }
-        const focusedTile = board.tiles.find((tile) => tile.id === previewChipTileId);
-        if (!focusedTile) {
-            return null;
-        }
-        const source = boardApplicationFocused ? 'focus' as const : 'selected' as const;
-        if (tileSwapPowerVisualActive && tileSwapFirstTileId && previewChipTileId !== tileSwapFirstTileId) {
-            const routePreview = getTraitSwapOpportunityPreview(board, tileSwapFirstTileId, previewChipTileId).routeText;
-            const lines = [
-                ...new Set([
-                    ...(routePreview ? [routePreview] : []),
-                    ...getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, previewChipTileId)
-                ])
-            ].slice(0, 2);
-            return lines.length > 0
-                ? { action: 'Route', eyebrow: 'Swap preview', lines, kind: 'trait', source, tone: 'setup' }
-                : null;
-        }
-        const traitLines = [
-            ...new Set([
-                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id])
-            ])
-        ].slice(0, 2);
-        if (traitLines.length > 0) {
-            return {
-                action: 'Preview',
-                eyebrow: 'Trait combo',
-                lines: traitLines,
-                kind: 'trait',
-                source,
-                tone: 'trait'
-            };
-        }
-        if (focusedTile.findableKind != null) {
-            return {
-                action: 'Claim',
-                eyebrow: 'Pickup',
-                lines: [getFindableRewardText(focusedTile.findableKind)],
-                kind: 'pickup',
-                source,
-                tone: 'pickup'
-            };
-        }
-        if (clumpRead && (clumpRead.size > 1 || clumpRead.elemental?.reacts)) {
-            return {
-                action: 'Preview',
-                eyebrow: clumpRead.elemental ? (clumpRead.elemental.reacts ? 'Reaction' : 'Element') : 'Clump',
-                lines: [
-                    CHAIN_BEAT_COPY.clumpRead(
-                        getTileSuit(clumpRead.suit).name,
-                        clumpRead.size,
-                        clumpRead.now,
-                        clumpRead.next,
-                        clumpRead.elemental
-                    )
-                ],
-                kind: 'clump',
-                source,
-                tone: 'setup'
-            };
-        }
-        return null;
-    }, [
-        board,
-        boardApplicationFocused,
-        clumpRead,
-        previewChipTileId,
-        tileSwapFirstTileId,
-        tileSwapPowerVisualActive
-    ]);
-
     const boardPickupOpportunity = useMemo((): {
         count: number;
         examples: string[];
@@ -2079,22 +1945,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardTraitInteractionLaneMapAttrValue = traitInteractionLaneMapAttr(boardTraitInteractionLaneMap);
     const boardTraitInteractionLaneActionMapAttrValue = traitInteractionLaneActionMapAttr(boardTraitInteractionLaneMap);
     const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
-    const focusedPreviewChipLabel = focusedPreviewChip
-        ? formatBoardFeedbackLabel(
-              `${focusedPreviewChip.eyebrow} ${
-                  focusedPreviewChip.kind === 'pickup'
-                      ? 'reward'
-                      : /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '')
-                        ? 'stack'
-                        : 'combo'
-              } preview`,
-              [
-              focusedPreviewChip.action,
-              ...focusedPreviewChip.lines
-              ]
-          )
-        : undefined;
-
     useEffect(() => {
         let active = true;
         queueMicrotask(() => {
@@ -2327,7 +2177,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
             return pickable[0];
         });
-    }, [board, interactive, allowGambitThirdFlip, setBoardApplicationFocused, setFocusedTileId]);
+    }, [board, interactive, allowGambitThirdFlip, zoneFlipCapacity, setBoardApplicationFocused, setFocusedTileId]);
 
     const handleBoardApplicationBlur = useCallback((event: FocusEvent<HTMLDivElement>): void => {
         const related = event.relatedTarget;
@@ -3379,84 +3229,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 </Canvas>
                             </div>
                         </TileBoardErrorBoundary>
-                        {focusedPreviewChip ? (() => {
-                            const beatCount = FOCUSED_PREVIEW_BEAT_COUNT;
-                            const previewDensity =
-                                focusedPreviewChip.kind === 'trait'
-                                    ? traitOpportunitySummary.tiles.length
-                                    : focusedPreviewChip.kind === 'pickup'
-                                      ? 1
-                                      : 0;
-                            const previewDensityTone =
-                                previewDensity >= 3
-                                    ? 'cashout'
-                                    : previewDensity === 2
-                                      ? 'surge'
-                                      : previewDensity === 1
-                                        ? 'ready'
-                                        : focusedPreviewChip.tone;
-                            const traitPreviewSummaryLabel =
-                                focusedPreviewChip.kind === 'pickup'
-                                    ? 'Reward'
-                                    : cardFeedbackTraitPayoffStackActive
-                                      ? 'Stack'
-                                      : 'Combo';
-                            const traitPreviewDensityTone =
-                                focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
-                                    ? 'cashout'
-                                    : previewDensityTone;
-                            const traitPreviewSignalFill = Math.min(100, Math.round((beatCount / 5) * 100));
-                            const traitPreviewMeterFill = previewDensity > 0 ? Math.min(100, Math.round((previewDensity / 4) * 100)) : 0;
-                            return (
-                                <div
-                                    aria-label={focusedPreviewChipLabel}
-                                    className={styles.traitPreviewChip}
-                                    data-preview-action={focusedPreviewChip.action}
-                                    data-preview-audio={getFocusedPreviewAudioCue(focusedPreviewChip)}
-                                    data-preview-beats={beatCount}
-                                    data-preview-density={previewDensity}
-                                    data-preview-density-tone={traitPreviewDensityTone}
-                                    data-preview-kind={focusedPreviewChip.kind}
-                                    data-preview-screen-cue={getFocusedPreviewScreenCue(focusedPreviewChip)}
-                                    data-preview-source={focusedPreviewChip.source}
-                                    data-preview-signal-fill={traitPreviewSignalFill}
-                                    data-preview-tone={focusedPreviewChip.tone}
-                                    data-preview-meter-fill={traitPreviewMeterFill}
-                                    data-testid="trait-preview-chip"
-                                    role="status"
-                                    style={traitPreviewSignalFill > 0 ? ({ '--trait-preview-signal-fill': `${traitPreviewSignalFill}%` } as CSSProperties) : undefined}
-                                >
-                                    <span
-                                        className={styles.traitPreviewSummary}
-                                        data-preview-summary-kind={focusedPreviewChip.kind}
-                                        data-testid="trait-preview-summary"
-                                    >
-                                        <small>{focusedPreviewChip.eyebrow}</small>
-                                        <b>{traitPreviewSummaryLabel}</b>
-                                    </span>
-                                    {/* The signal pill says how much is lit. With nothing lit it only
-                                        repeated the summary's word one line down, so it waits. */}
-                                    {previewDensity > 0 ? (
-                                        <span className={styles.traitPreviewSignal}>
-                                            {focusedPreviewChip.kind === 'pickup' ? 'Reward' : 'Combo'}
-                                            {focusedPreviewChip.kind === 'trait'
-                                                ? ` · ${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
-                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`}
-                                        </span>
-                                    ) : null}
-                                    <b className={styles.traitPreviewAction}>{focusedPreviewChip.action}</b>
-                                    {focusedPreviewChip.lines.map((line, index) => (
-                                        <span
-                                            className={styles.traitPreviewLine}
-                                            data-preview-line={index + 1}
-                                            key={line}
-                                        >
-                                            {line}
-                                        </span>
-                                    ))}
-                                </div>
-                            );
-                        })() : null}
+
                     </div>
                 </div>
             )}

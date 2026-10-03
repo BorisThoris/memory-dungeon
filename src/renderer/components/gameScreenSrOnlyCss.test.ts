@@ -12,7 +12,7 @@ const css = readFileSync(
  * formatter wraps it, and a guard that a reformat can break is a guard that gets deleted.
  */
 const STAGE_CHILD_LAYER_SELECTOR =
-    '.boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer)';
+    ".boardStage > :global(*):not(.srOnly):not(.matchScoreFloater):not(.mismatchScoreFloater):not(.distractionHud):not(.memorizeSkipLayer):not(:global([data-board-overlay='floor-clear']))";
 
 const collapsed = css.replace(/\s+/gu, ' ');
 

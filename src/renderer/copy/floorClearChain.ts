@@ -27,23 +27,20 @@ export const FLOOR_CLEAR_COPY = {
         return `${turns} ${turns === 1 ? 'turn' : 'turns'}, par ${runNonNegativeInteger(result.parTurns)}`;
     },
     /**
-     * The floor-end bonus, term by term: what the clear paid, the tier that multiplied it, and
-     * the turns under par that added to it. Nothing when the result predates the bonus.
+     * The earned tier, efficiency and gold. The main score already includes the bonus.
      */
     bonusLine: (result: LevelResult): string | null => {
-        if (result.floorBonus == null) return null;
+        if (result.floorBonus == null && !result.goldEarned) return null;
         const tier = result.momentumBonusTier ?? 'none';
         const efficiency = runNonNegativeInteger(result.floorEfficiencyBonus);
         const under = Math.max(0, runNonNegativeInteger(result.parTurns) - runNonNegativeInteger(result.turnsTaken));
-        const terms = [`Floor bonus +${runNonNegativeInteger(result.floorBonus).toLocaleString()}: ${TIER_MULT_WORD[tier]}`];
-        if (efficiency > 0) {
-            terms.push(`${under} under par +${efficiency.toLocaleString()}`);
-        }
+        const terms = [tier === 'none' ? null : TIER_MULT_WORD[tier],
+            efficiency > 0 ? `${under} under par` : null].filter(Boolean);
         // The purse (run-store-rules.ts): what this clear paid toward the store.
         const gold = runNonNegativeInteger(result.goldEarned);
         if (gold > 0) {
             terms.push(`+${gold} gold`);
         }
-        return `${terms.join(' · ')}.`;
+        return terms.length > 0 ? terms.join(' \u00b7 ') : null;
     }
 } as const;

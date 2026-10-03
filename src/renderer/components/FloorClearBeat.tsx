@@ -22,7 +22,7 @@ export interface FloorClearBeatProps {
     totalScore: number;
     /** The cleared floor is deeper than any this profile has cleared before. */
     personalBest: boolean;
-    /** Small notes under the bonus: the objective's outcome, who is downstairs. */
+    /** The objective outcome and rewards carried into the next floor. */
     notes: readonly string[];
 }
 
@@ -68,6 +68,7 @@ const FloorClearBeat = ({ notes, personalBest, result, totalScore }: FloorClearB
             className={styles.beat}
             data-personal-best={personalBest ? 'true' : undefined}
             data-testid="floor-clear-beat"
+            data-board-overlay="floor-clear"
             data-tier={tier}
             role="status"
         >
@@ -100,7 +101,6 @@ const FloorClearBeat = ({ notes, personalBest, result, totalScore }: FloorClearB
                     </p>
                 ) : null}
                 {result.elementalDrops && Object.values(result.elementalDrops).some(value => value > 0) ? <p className={styles.essence} data-testid="floor-clear-essence">
-                    <span>Essence found</span>
                     {TILE_SUITS.filter(suit => essenceOf(result.elementalDrops, suit) > 0).map(suit => <span key={suit} style={{ '--loot-color': getTileSuit(suit).hue } as CSSProperties}>
                         <span aria-hidden="true">{getTileSuit(suit).rune}</span> +{essenceOf(result.elementalDrops, suit)} {ELEMENT_NAMES[suit]}
                     </span>)}

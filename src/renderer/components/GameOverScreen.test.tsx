@@ -244,7 +244,8 @@ describe('GameOverScreen (REF-031)', () => {
         expect(polite).toHaveTextContent('Your turns ran out on floor');
 
         expect(screen.getAllByRole('button', { name: 'Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
-        expect(screen.getAllByRole('button', { name: 'Mobile Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
+        expect(screen.getAllByRole('button', { name: 'Play Again - start a new run after this expedition' })).toHaveLength(1);
+        expect(screen.queryByRole('button', { name: /Mobile Play Again/ })).toBeNull();
         expect(screen.getAllByRole('button', { name: 'Return to the main menu' })[0]).toBeInTheDocument();
     });
 
@@ -286,12 +287,23 @@ describe('GameOverScreen (REF-031)', () => {
         renderScreen(gameOverRunFixture());
 
         const topSummary = screen.getByTestId('game-over-above-fold-summary');
-        expect(topSummary).toHaveTextContent('score');
-        expect(topSummary).toHaveTextContent('Play Again');
-        expect(topSummary).toHaveTextContent('Main Menu');
+        expect(screen.getByTestId('run-end-score-line')).toHaveTextContent('0');
+        expect(topSummary).toHaveTextContent('PLAY AGAIN');
+        expect(topSummary).toHaveTextContent('MAIN MENU');
         // The journal id, share string and flip-timeline drawer were telemetry, not a result.
         expect(screen.queryByText(/Journal/)).toBeNull();
         expect(screen.queryByTestId('game-over-detail-drawer')).toBeNull();
+    });
+
+    it('keeps secondary information collapsed and makes it available on demand', async () => {
+        renderScreen(gameOverRunFixture());
+        const details = screen.getByTestId('game-over-run-details');
+        expect(details).not.toHaveAttribute('open');
+        expect(screen.getByTestId('game-over-next-run-loop')).not.toBeVisible();
+        fireEvent.click(screen.getByText('Run details'));
+        expect(details).toHaveAttribute('open');
+        expect(screen.getByTestId('game-over-next-run-loop')).toBeVisible();
+        expect(screen.queryByTestId('run-end-flourish')).toBeNull();
     });
 
     it('REG-096 surfaces next-run loop reasons from local summary data', () => {

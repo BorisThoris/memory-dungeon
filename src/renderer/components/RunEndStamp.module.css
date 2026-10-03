@@ -1,365 +1,72 @@
-/*
- * The run's end as stamps (`RunEndStamp.tsx`): the in-run stamp's recipe - heavy italic type on a
- * skew, a sheen swept across the letters as it lands, speed lines and a flash behind it - held at
- * rest instead of gone, with the choices in the same type, pressable. Colours come from the run's
- * temper (`--temper`, `--temper-hot`) and the reason (`data-tone`).
- */
+
 .stampHero {
-    --stamp: var(--margin-gold, #e1ad66);
-    --stamp-ms: 1100ms;
-    position: relative;
+    --stamp: var(--margin-paper);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.3rem;
+    gap: 0.5rem;
     width: 100%;
-    isolation: isolate;
 }
-
 .stampHero[data-tone='miss'] {
-    --stamp: var(--margin-miss, #e0655a);
+    --stamp: var(--margin-miss);
 }
-
-.stampHero[data-tone='paper'] {
-    --stamp: var(--margin-paper, #f8f4f4);
-}
-
 .stampHero[data-tone='gold'] {
-    --stamp: var(--temper, var(--margin-gold, #e1ad66));
+    --stamp: var(--margin-gold);
 }
-
-.kicker {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--margin-paper-dim, #b8b0aa);
-}
-
 .verdict {
-    margin: 0.2rem 0 0;
-    padding: 0 0.15em 0 0;
-    transform: skewX(-9deg);
-    transform-origin: left center;
-    animation: runEndStamp var(--stamp-ms) cubic-bezier(0.2, 1.4, 0.3, 1) both;
-}
-
-.stampText {
-    position: relative;
-    display: inline-block;
-    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-weight: 700;
-    font-style: italic;
-    line-height: 1;
-    letter-spacing: 0.04em;
+    margin: 0;
     color: var(--stamp);
-    -webkit-text-stroke: 1px color-mix(in srgb, var(--margin-paper, #f8f4f4) 50%, transparent);
-    text-shadow:
-        0 0 16px color-mix(in srgb, var(--stamp) 80%, transparent),
-        0 0 50px color-mix(in srgb, var(--stamp) 45%, transparent),
-        0.1em 0.1em 0 color-mix(in srgb, var(--margin-ink, #131111) 92%, transparent);
+    font: 600 clamp(2rem, 6vw, 3.25rem)/1.05 var(--margin-heading-font);
 }
-
-.verdict .stampText {
-    font-size: clamp(2.4rem, 7.2vi, 4.8rem);
+.stampText {
+    color: inherit;
 }
-
-/* The sheen: the same word in a band of light, clipped to the letters, swept once as it lands. */
-.stampText::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    color: transparent;
-    -webkit-text-stroke: 0;
-    text-shadow: none;
-    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.95) 48%, rgba(255, 255, 255, 0.55) 52%, transparent 62%);
-    background-size: 260% 100%;
-    background-position: 120% 0;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: runEndSheen calc(var(--stamp-ms) * 0.6) ease-out calc(var(--stamp-ms) * 0.15) both;
-}
-
 .scoreLine {
-    margin: 0.1rem 0 0;
-    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-size: clamp(1.3rem, 3.2vi, 2.1rem);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    color: var(--margin-gold, #e1ad66);
+    margin: 0.25rem 0 0;
+    color: var(--margin-gold);
+    font: 500 clamp(1.3rem, 4vw, 1.8rem)/1.2 var(--margin-heading-font);
     font-variant-numeric: tabular-nums;
-    text-shadow: 0 2px 12px color-mix(in srgb, var(--margin-ink, #131111) 90%, transparent);
-    animation: runEndRise calc(var(--stamp-ms) * 0.7) ease-out calc(var(--stamp-ms) * 0.3) both;
 }
-
 .flourish {
-    --stamp: var(--margin-fever, #facb8d);
-    display: inline-block;
-    margin-top: 0.1rem;
-    transform: skewX(-9deg);
-    transform-origin: left center;
-    animation: runEndStampMinor calc(var(--stamp-ms) * 0.8) cubic-bezier(0.2, 1.4, 0.3, 1) calc(var(--stamp-ms) * 0.55) both;
+    color: var(--margin-gold);
+    font-size: 0.9rem;
 }
-
-.flourish[data-tone='legendary'] {
-    --stamp: #e2b3ff;
-}
-
-.flourish[data-tone='inferno'] {
-    --stamp: #ff4d5e;
-}
-
-.flourish[data-tone='blazing'] {
-    --stamp: #ff7a3d;
-}
-
-.flourish .stampText {
-    font-size: clamp(1.1rem, 2.6vi, 1.8rem);
-}
-
 .actions {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4rem 1.4rem;
-    margin-top: 0.55rem;
-    padding-top: 0.55rem;
-    border-top: 1px solid var(--margin-hairline, rgba(248, 244, 244, 0.18));
+    gap: 0.5rem;
+    margin-top: 0.75rem;
     width: 100%;
 }
-
-/* The choices: the same stamp, pressable. Skewed at rest, upright and lit on hover or focus. */
 .stampButton {
-    --stamp: var(--margin-paper, #f8f4f4);
     appearance: none;
+    border: 1px solid var(--margin-hairline);
+    border-radius: 5px;
+    padding: 0.65rem 1rem;
+    min-height: 44px;
     background: transparent;
-    border: 0;
-    padding: 0.2rem 0.3rem;
-    margin: 0;
+    color: var(--margin-paper-soft);
+    font: 500 0.875rem var(--margin-body-font);
     cursor: pointer;
-    transform: skewX(-9deg);
-    transition: transform 180ms ease, filter 180ms ease;
-    animation: runEndStampMinor calc(var(--stamp-ms) * 0.7) cubic-bezier(0.2, 1.4, 0.3, 1) calc(var(--stamp-ms) * 0.75 + var(--i, 0) * 140ms) both;
 }
-
-.stampButton .stampText {
-    font-size: clamp(1.25rem, 3vi, 2rem);
-}
-
 .stampButton[data-action='play-again'] {
-    --stamp: var(--temper-hot, var(--margin-fever, #facb8d));
+    background: var(--margin-gold);
+    color: var(--margin-ink);
+    border-color: var(--margin-gold);
 }
-
-.stampButton:hover,
+.stampButton:hover {
+    filter: brightness(1.15);
+}
 .stampButton:focus-visible {
-    transform: skewX(-9deg) scale(1.08);
-    filter: brightness(1.25);
-    outline: 0;
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 3px;
 }
-
-.stampButton:focus-visible .stampText {
-    -webkit-text-stroke: 1.5px color-mix(in srgb, white 85%, transparent);
-}
-
-/* The sheen sweeps again on hover, the card's holographic flash when it is picked up. */
-.stampButton:hover .stampText::after,
-.stampButton:focus-visible .stampText::after {
-    animation: runEndSheen 700ms ease-out both;
-}
-
-.stampButton:active {
-    transform: skewX(-9deg) scale(0.96);
-}
-
-.flash {
-    position: absolute;
-    inset: -1rem -2rem;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(ellipse 60% 70% at 20% 40%, color-mix(in srgb, var(--stamp) 22%, transparent), transparent 70%);
-    opacity: 0;
-    animation: runEndFlash var(--stamp-ms) ease-out both;
-}
-
-.lines {
-    position: absolute;
-    inset: -0.5rem -1rem;
-    z-index: -1;
-    pointer-events: none;
-    background: repeating-linear-gradient(-12deg, transparent 0 14px, color-mix(in srgb, var(--stamp) 10%, transparent) 14px 16px);
-    mask-image: radial-gradient(ellipse 70% 60% at 20% 45%, black 20%, transparent 70%);
-    opacity: 0;
-    animation: runEndLines var(--stamp-ms) ease-out both;
-}
-
-@keyframes runEndStamp {
-    0% {
-        opacity: 0;
-        transform: skewX(-9deg) scale(2.2);
-        filter: blur(6px) brightness(2);
-    }
-
-    16% {
-        opacity: 1;
-        transform: skewX(-9deg) scale(1);
-        filter: blur(0) brightness(1.4);
-    }
-
-    26% {
-        transform: skewX(-9deg) scale(1.05);
-    }
-
-    40%,
-    100% {
-        opacity: 1;
-        transform: skewX(-9deg) scale(1);
-        filter: brightness(1);
-    }
-}
-
-@keyframes runEndStampMinor {
-    0% {
-        opacity: 0;
-        transform: skewX(-9deg) translateX(-2rem) scale(1.5);
-        filter: blur(4px) brightness(1.8);
-    }
-
-    40% {
-        opacity: 1;
-        transform: skewX(-9deg) translateX(0) scale(1);
-        filter: blur(0) brightness(1.3);
-    }
-
-    100% {
-        opacity: 1;
-        transform: skewX(-9deg) translateX(0) scale(1);
-        filter: brightness(1);
-    }
-}
-
-@keyframes runEndSheen {
-    from {
-        background-position: 120% 0;
-    }
-
-    to {
-        background-position: -60% 0;
-    }
-}
-
-@keyframes runEndRise {
-    from {
-        opacity: 0;
-        transform: translateY(0.6rem);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes runEndFlash {
-    0% {
-        opacity: 0;
-    }
-
-    14% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.35;
-    }
-}
-
-@keyframes runEndLines {
-    0% {
-        opacity: 0;
-        transform: translateX(-2rem);
-    }
-
-    16% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateX(1.5rem);
-    }
-}
-
-/* At rest for reduced motion: the words, their colour, no slam, sweep, lines or flash. */
-.stampHero[data-reduce-motion='true'] .verdict,
-.stampHero[data-reduce-motion='true'] .scoreLine,
-.stampHero[data-reduce-motion='true'] .flourish,
-.stampHero[data-reduce-motion='true'] .stampButton,
-.stampHero[data-reduce-motion='true'] .stampText::after,
-.stampHero[data-reduce-motion='true'] .flash,
-.stampHero[data-reduce-motion='true'] .lines {
-    animation: none;
-}
-
-.stampHero[data-reduce-motion='true'] .lines,
-.stampHero[data-reduce-motion='true'] .flash {
-    opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .verdict,
-    .scoreLine,
-    .flourish,
-    .stampButton,
-    .stampText::after,
-    .flash,
-    .lines {
-        animation: none;
-    }
-}
-
-@media (max-width: 760px) {
-    .verdict .stampText {
-        font-size: clamp(1.9rem, 9vw, 2.6rem);
-    }
-
-    .stampButton .stampText {
-        font-size: clamp(1.05rem, 4.2vw, 1.4rem);
-    }
-
+@media (max-width: 430px) {
     .actions {
-        gap: 0.3rem 1rem;
-        margin-top: 0.4rem;
-        padding-top: 0.4rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
-}
-
-/* A short window (a phone held sideways): the verdict at a third of its size, no flourish, the
-   choices on one line, so the numbers below still fit above the fold. */
-@media (max-height: 560px) {
-    .verdict .stampText {
-        font-size: 1.6rem;
-    }
-
-    .scoreLine {
-        font-size: 1.05rem;
-    }
-
-    .flourish {
-        display: none;
-    }
-
-    .stampButton .stampText {
-        font-size: 1rem;
-    }
-
-    .actions {
-        gap: 0.2rem 0.9rem;
-        margin-top: 0.3rem;
-        padding-top: 0.3rem;
-    }
-
-    .stampHero {
-        gap: 0.15rem;
+    .stampButton[data-action='play-again'] {
+        grid-column: 1 / -1;
     }
 }

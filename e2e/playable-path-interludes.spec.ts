@@ -20,29 +20,57 @@ import { STORAGE_KEY } from './tileBoardGameFlow';
 test.describe('Expanded playable interludes and post-run loop', () => {
     test.describe.configure({ retries: 0, timeout: 150_000 });
 
-    test('floor clear offers no route and goes straight on', async ({ page }) => {
-        await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
-
-        // No door between floors (Gen 173) and no screen either (Gen 182): the beat shows the
-        // result over the board, has nothing to press, and the run goes on by itself. The screen
-        // opens already complete, so the beat is up at once and gone ~1.6s later.
-        const floorClearBeat = page.getByTestId('floor-clear-beat');
-        await expect(floorClearBeat).toBeVisible({ timeout: 10_000 });
-        await expect(page.getByTestId('floor-clear-title')).toContainText(/floor \d+ cleared/i);
-        await expect(page.getByTestId('floor-clear-par')).toContainText(/par \d+/i);
-        await expect(page.getByTestId('floor-clear-score')).toBeVisible();
-        await expect(floorClearBeat.getByRole('button')).toHaveCount(0);
-        await expect(floorClearBeat).toBeHidden({ timeout: 15_000 });
-        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
-        await expectHudFloor(page, 2, 30_000);
-    });
-
+    for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }, { width: 800, height: 375 }]) {
+        test(`floor clear shows the payout then offers the next arena at ${viewport.width}`, async ({ page }) => {
+            await page.setViewportSize(viewport);
+            await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            const floorClearBeat = page.getByTestId('floor-clear-beat');
+            await expect(floorClearBeat).toBeVisible({ timeout: 10_000 });
+            await expect(floorClearBeat).toHaveCSS('position', 'absolute');
+            await expect(floorClearBeat).toHaveCSS('z-index', '6');
+            await expect(page.getByTestId('floor-clear-title')).toContainText(/floor \d+ cleared/i);
+            await expect(page.getByTestId('floor-clear-par')).toContainText(/par \d+/i);
+            await expect(page.getByTestId('floor-clear-score')).toBeVisible();
+            await expect(floorClearBeat.getByRole('button')).toHaveCount(0);
+            await page.screenshot({ path: `output/playwright/floor-clear-${viewport.width}.png` });
+            await expect(floorClearBeat).toBeHidden({ timeout: 15_000 });
+            const travel = page.getByRole('dialog', { name: 'Where now?' });
+            await expect(travel).toBeVisible({ timeout: 30_000 });
+            await travel.getByRole('button', { name: /^Go to/ }).first().click();
+            await expectHudFloor(page, 2, 30_000);
+        });
+    }
 
     test('game over actions restart and return to menu', async ({ page }) => {
         test.setTimeout(260_000);
         await forceGameOverViaE2eHook(page);
         // The end is a cut-scene first; the ledger is its last choice.
-        await page.getByTestId('run-end-cinematic-record').click({ timeout: 60_000 });
+        await expect(page.getByTestId('run-end-cinematic-record')).toBeVisible({ timeout: 60_000 });
+        for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 800, height: 375 }]) {
+            await page.setViewportSize(viewport);
+            await expect(page.getByTestId('run-end-cinematic-record')).toBeInViewport();
+            await page.screenshot({ path: `output/playwright/result-choices-${viewport.width}.png` });
+        }
+        await page.getByTestId('run-end-cinematic-record').click();
+        await expect(page.getByTestId('run-end-verdict')).toBeFocused();
+        const details = page.getByTestId('game-over-run-details');
+        await expect(details).not.toHaveAttribute('open');
+        await expect(page.getByTestId('game-over-next-run-loop')).toBeHidden();
+        for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 800, height: 375 }]) {
+            await page.setViewportSize(viewport);
+            const retry = page.getByRole('button', { name: /play again.*start a new run/i });
+            await expect(retry).toHaveCount(1);
+            await expect(retry).toBeInViewport();
+            await page.screenshot({ path: `output/playwright/results-${viewport.width}.png` });
+            await details.locator('summary').click();
+            await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
+            await page.getByTestId('game-over-copy-result').scrollIntoViewIfNeeded();
+            await expect(page.getByTestId('game-over-copy-result')).toBeInViewport();
+            await page.screenshot({ path: `output/playwright/result-details-${viewport.width}.png` });
+            await details.locator('summary').click();
+            await retry.scrollIntoViewIfNeeded();
+        }
+        await details.locator('summary').click();
         await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Chain target/i);
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Reach Clean|Reach Sharp|Reach Fever|Hold Fever/i);

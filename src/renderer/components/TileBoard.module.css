@@ -332,242 +332,13 @@ block board gestures so pan/zoom does not fight the deal. */
 @media (hover: hover) and (pointer: fine) {
     .chainOpportunityChip {
         pointer-events: auto;
-    }}
+    }
+}
 
 .frame[data-opportunity-payoff-crescendo-screen-cue='burst'],
 .frame[data-opportunity-payoff-crescendo-screen-cue='super'] {
     outline: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     outline-offset: -1px;
-}
-
-.traitPreviewChip {
-    position: absolute;
-    left: var(--ui-space-xs);
-    /* Above the action dock, which reaches 80px up the board it is drawn over. */
-    bottom: calc(var(--gameplay-dock-bottom-clearance, 0px) + var(--ui-space-xs));
-    z-index: 5;
-    display: flex;
-    max-width: min(22rem, calc(100% - 1rem));
-    flex-direction: column;
-    gap: 0.16rem;
-    padding: 0.42rem 0.56rem;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 48%, transparent);
-    border-radius: 0.42rem;
-    background:
-        linear-gradient(135deg, rgba(14, 21, 28, 0.88), rgba(24, 17, 28, 0.86)),
-        var(--theme-panel-solid);
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 18px color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
-    color: var(--theme-text);
-    pointer-events: none;
-}
-
-.traitPreviewSummary {
-    display: inline-grid;
-    grid-template-columns: auto auto auto auto;
-    align-items: center;
-    gap: 0.12rem 0.28rem;
-    width: 100%;
-    padding: 0.08rem 0.24rem 0.12rem;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 28%, transparent);
-    border-radius: 0.34rem;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 10%, transparent), transparent 72%),
-        color-mix(in srgb, var(--theme-void) 26%, transparent);
-}
-
-.traitPreviewChip[data-preview-density-tone='surge'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-border-cyan) 22%);
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-}
-
-.traitPreviewChip[data-preview-density-tone='cashout'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-gold-bright) 28%);
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.32),
-        0 0 28px color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
-    animation: boardOpportunityPulse 1.16s ease-in-out infinite, boardOpportunityShimmer 2.35s ease-in-out infinite;
-}
-
-.traitPreviewSummary strong {
-    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 940;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.traitPreviewSummary small,
-.traitPreviewSummary b,
-.traitPreviewSummary em {
-    min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.traitPreviewSummary small {
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 920;
-    text-transform: uppercase;
-}
-
-.traitPreviewSummary b {
-    color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
-    font-size: 0.75rem;
-    font-weight: 950;
-    text-transform: uppercase;
-}
-
-.traitPreviewSummary em {
-    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.75rem;
-    font-style: normal;
-    font-weight: 820;
-    text-transform: uppercase;
-}
-
-.traitPreviewChip[data-preview-kind='pickup'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
-    background:
-        linear-gradient(110deg, transparent 0 34%, color-mix(in srgb, var(--theme-gold-bright) 9%, transparent) 45%, transparent 58%),
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-glow-gold) 16%, transparent), transparent 64%),
-        linear-gradient(135deg, rgba(26, 22, 14, 0.9), rgba(28, 18, 13, 0.86)),
-        var(--theme-panel-solid);
-    background-size: 220% 100%, auto, auto, auto;
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 18px color-mix(in srgb, var(--theme-glow-gold) 28%, transparent);
-    animation: boardOpportunityShimmer 2.5s ease-in-out infinite;
-}
-
-.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewLine {
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-}
-
-.traitPreviewSignal {
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.1rem 0.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 36%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-border-cyan) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-border-cyan) 82%, white);
-    font-size: 0.75rem;
-    font-weight: 920;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.traitPreviewAction {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.08rem;
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.1rem 0.36rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-border-cyan) 26%);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-border-cyan) 7%);
-    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.75rem;
-    font-weight: 950;
-    line-height: 1;
-    overflow-wrap: anywhere;
-    text-transform: uppercase;
-}
-
-.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignal {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-}
-
-.traitPreviewChip[data-preview-tone='setup'] .traitPreviewAction {
-    border-color: color-mix(in srgb, var(--theme-border-cyan) 44%, transparent);
-    background: color-mix(in srgb, var(--theme-border-cyan) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
-}
-
-.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewAction,
-.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewAction {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
-    background:
-        radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 68%),
-        color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-}
-
-.traitPreviewChip[data-preview-screen-cue='burst'] {
-    animation: boardOpportunityPulse 1.18s ease-in-out infinite, boardOpportunityShimmer 2.2s ease-in-out infinite;
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.34),
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
-        0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-}
-
-.traitPreviewChip[data-preview-screen-cue='snap'] {
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
-        0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
-}
-
-.traitPreviewChip[data-preview-screen-cue='guard'] {
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent),
-        0 0 0.86rem color-mix(in srgb, var(--theme-danger) 22%, transparent);
-}
-
-.traitPreviewLine {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.08rem;
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    color: var(--theme-text);
-    font-size: clamp(0.75rem, 1.35vmin, 0.78rem);
-    font-weight: 720;
-    line-height: 1.2;
-}
-
-.traitPreviewLine[data-preview-line-focus='primary'] {
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.1rem 0.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 30%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-border-cyan) 9%, transparent);
-    color: color-mix(in srgb, var(--theme-border-cyan) 86%, white);
-    font-weight: 900;
-    line-height: 1.05;
-}
-
-.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewLine[data-preview-line-focus='primary'],
-.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewLine[data-preview-line-focus='primary'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 16%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
-        color-mix(in srgb, var(--theme-void) 18%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
-}
-
-.traitPreviewChip[data-preview-tone='setup'] .traitPreviewLine[data-preview-line-focus='primary'],
-.traitPreviewChip[data-preview-tone='trait'] .traitPreviewLine[data-preview-line-focus='primary'] {
-    border-color: color-mix(in srgb, var(--theme-border-cyan) 40%, transparent);
-    color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
-}
-
-:global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],
-:global([data-reduce-motion='true']) .traitPreviewChip[data-preview-screen-cue='burst'] {
-    animation: none;
 }
 
 @media (max-width: 640px) {
@@ -576,7 +347,8 @@ block board gestures so pan/zoom does not fight the deal. */
         align-items: stretch;
         flex-direction: column;
         max-width: min(18rem, calc(100% - 1rem));
-    }}
+    }
+}
 
 .scene {
     position: absolute;
@@ -600,12 +372,14 @@ block board gestures so pan/zoom does not fight the deal. */
 @media (max-width: 760px) {
     .stage {
         inset: 0.3rem;
-    }}
+    }
+}
 
 @media (max-width: 430px) {
     .stage {
         inset: 0.2rem;
-    }}
+    }
+}
 
 .prestageOverlay {
     position: absolute;
@@ -783,7 +557,8 @@ block board gestures so pan/zoom does not fight the deal. */
         filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
         transform: translate3d(var(--stack-x), var(--stack-y), var(--stack-z))
             rotateX(44deg) rotateY(-24deg) rotateZ(calc(-5deg + var(--deck-i, 0) * 0.65deg));
-    }}
+    }
+}
 /*
  * The pass. Anchored under the HUD by the clearance the chrome publishes about itself, for the same
  * reason the trap toast is: a fixed offset here landed on the score at 1280x800.
@@ -835,27 +610,4 @@ block board gestures so pan/zoom does not fight the deal. */
  */
 [data-mobile-camera-mode='false'] .passHandoff {
     top: var(--ui-space-sm);
-}
-
-[data-mobile-camera-mode='false'] .traitPreviewChip {
-    bottom: var(--ui-space-xs);
-}
-
-/*
- * Narrow screens: the chip sat above the tool dock, which on a phone is on top of the bottom row of
- * cards and the caption. It moves to just under the HUD - above the cards, where a portrait layout
- * leaves room - and drops its summary row to stay one or two lines.
- */
-@media (max-width: 720px) {
-    .traitPreviewChip,
-    [data-mobile-camera-mode='false'] .traitPreviewChip,
-    [data-mobile-camera-mode='true'] .traitPreviewChip {
-        /* Just under the HUD, which measures itself (`useGameplayChromeClearance`); the fallback is its usual height. */
-        top: calc(var(--gameplay-hud-top-clearance, clamp(3.1rem, 9vmin, 4.6rem)) + var(--ui-space-xs));
-        bottom: auto;
-    }
-
-    .traitPreviewSummary {
-        display: none;
-    }
 }

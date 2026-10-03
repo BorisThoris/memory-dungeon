@@ -73,8 +73,6 @@ import { resolveBoardFloaterAnchor, type BoardFloaterAnchor, type StageRelativeR
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
-import { floorClearResidentLine } from '../copy/floorCurioBeat';
-import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import {
     chainMomentum,
@@ -1290,12 +1288,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         };
     }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey, travelDue, travelKey]);
 
-    const nextFloorResidentLine = run.lastLevelResult
-        ? floorClearResidentLine(
-              pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
-          )
-        : null;
-    const floorClearNotes = [floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement), nextFloorResidentLine].filter(
+    const floorClearNotes = [floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement)].filter(
         (line): line is string => typeof line === 'string' && line.length > 0
     );
     const nextFloorIdentity = nextFloorPreview

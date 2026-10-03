@@ -7,7 +7,6 @@ import { getSteamStorePageUrl } from '../steamStorePage';
 import type { MutatorId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
-import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
@@ -17,7 +16,7 @@ import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
-import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
+import { Eyebrow, Panel, StatTile, UiButton } from '../ui';
 import { RunEndStamp, type RunEndStampAction } from './RunEndStamp';
 import { RunEndCinematic } from './RunEndCinematic';
 import { RUN_END_STAMP_COPY } from '../copy/runEndStamp';
@@ -106,6 +105,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
      * then the choices. The ledger of numbers is one of those choices, not the page you land on.
      */
     const [page, setPage] = useState<'cinematic' | 'record'>('cinematic');
+    useEffect(() => {
+        if (page === 'record') shellRef.current?.querySelector('h1')?.focus({ preventScroll: true });
+    }, [page]);
     useEffect(() => {
         const timer = window.setTimeout(() => setSpokenRunSummary(politeRunSummaryText), 0);
         return () => window.clearTimeout(timer);
@@ -231,35 +233,6 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 />
             ) : (
             <div className={styles.foreground}>
-                <section
-                    aria-label={GAME_OVER_LABELS.region}
-                    className={styles.mobileActionDock}
-                    data-testid="game-over-above-fold-summary"
-                >
-                    <div className={styles.mobileOutcomeCopy}>
-                        <strong>{summary.totalScore.toLocaleString()} score</strong>
-                        <span>Floor {summary.highestLevel} / {summary.levelsCleared} clears / {summary.bestStreak} streak</span>
-                    </div>
-                    <UiButton
-                        fullWidth
-                        aria-label={GAME_OVER_LABELS.playAgainMobile}
-                        size="lg"
-                        variant="primary"
-                        onClick={restartRun}
-                    >
-                        {gameOverScreenCopy.playAgainLabel}
-                    </UiButton>
-                    <UiButton
-                        fullWidth
-                        aria-label={GAME_OVER_LABELS.returnToMenuMobile}
-                        size="lg"
-                        variant="secondary"
-                        onClick={leaveToMenu}
-                    >
-                        {gameOverScreenCopy.mainMenuLabel}
-                    </UiButton>
-                </section>
-
                 {/* The result the table came for, above the run's own numbers: at a shared device
                     the first question is who won, and only then how the run went. */}
                 {passAndPlayOutcome ? (
@@ -303,11 +276,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 ) : null}
 
                 <div className={styles.layout}>
-                    <Panel className={styles.heroPanel} padding="lg" variant="strong">
-                        {/* The end, stamped (`RunEndStamp`): the verdict word, the score line, a flourish, and
-                            the choices as stamps you can press - the in-run stamps' register, held at rest. */}
+                    <Panel aria-label={GAME_OVER_LABELS.region} className={styles.heroPanel} data-testid="game-over-above-fold-summary" padding="lg" variant="strong">
+                        {/* Outcome and next action share one layout on desktop and mobile. */}
                         <RunEndStamp
                             actions={stampActions}
+                            showFlourish={false}
                             eyebrow={
                                 <Eyebrow data-testid="game-over-mode-heading">
                                     {gameOverScreenCopy.heroEyebrow} · {runModeHeading(summary)}
@@ -325,35 +298,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 {endReasonLine}
                             </p>
                         ) : null}
-                        <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
-                        {/* The end reason already names the floor, and so does the Highest Floor tile
-                            below; the caption is for a summary too old to carry a reason. Beside
-                            "You stopped on floor 3." it said the floor a second time, and that the
-                            archive had sealed on a player who had chosen to stop. */}
+                        {/* Old summaries may not include an ending reason. */}
                         {endReasonLine ? null : (
                             <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
                         )}
-                        {/* The rules this run ran under: a fact the score means nothing without. */}
-                        <p className={`${styles.copy} ${styles.modeIdentity}`} data-testid="game-over-mode-identity">
-                            {runModeIdentityLine(summary)}
-                        </p>
-
-                        {mutatorChips.length > 0 ? (
-                            <div className={styles.metaStrip} data-testid="game-over-meta-strip">
-                                {mutatorChips.map((label) => (
-                                    <span className={styles.metaChip} data-testid="game-over-mutator-chip" key={label}>
-                                        {label}
-                                    </span>
-                                ))}
-                            </div>
-                        ) : null}
-
                         <div className={styles.summaryGrid}>
-                            <StatTile
-                                density="minimal"
-                                label={gameOverScreenCopy.statLabels.highestFloor}
-                                value={summary.highestLevel}
-                            />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.bestStreak}
@@ -369,11 +318,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 label={gameOverScreenCopy.statLabels.largestBreak}
                                 value={gameOverScreenCopy.largestBreakValue(summary.biggestChunk ?? 0)}
                             />
-                            <StatTile
-                                density="minimal"
-                                label={gameOverScreenCopy.statLabels.bestScore}
-                                value={summary.bestScore.toLocaleString()}
-                            />
+
                         </div>
 
                         {personalBest === null ? null : (
@@ -388,31 +333,42 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </p>
                         )}
 
-                        <p className={styles.note}>
-                            {achievementsNote({
-                                achievementsEnabled: summary.achievementsEnabled,
-                                practiceMode: summary.practiceMode,
-                                sharedTable: passAndPlayOutcome !== null
-                            })}
-                        </p>
                     </Panel>
 
-                    <aside className={styles.sideRail}>
-                        <Panel className={styles.actionPanel} padding="lg" variant="default">
-                            <div className={styles.actionHeader}>
-                                <img alt="" className={styles.actionSeal} src={UI_ART.menuSeal} />
-                                <div>
-                                    <span className={styles.panelKicker}>{gameOverScreenCopy.actionKicker}</span>
-                                    <h2 className={styles.panelHeading}>{gameOverScreenCopy.actionHeading}</h2>
+                    <details className={styles.runDetails} data-testid="game-over-run-details">
+                        <summary>Run details</summary>
+                        <div className={styles.detailsBody}>
+                            {/* The rules this run ran under: a fact the score means nothing without. */}
+                            <p className={styles.copy} data-testid="game-over-mode-identity">
+                                {runModeIdentityLine(summary)}
+                            </p>
+
+                            {mutatorChips.length > 0 ? (
+                                <div className={styles.metaStrip} data-testid="game-over-meta-strip">
+                                    {mutatorChips.map((label) => (
+                                        <span className={styles.metaChip} data-testid="game-over-mutator-chip" key={label}>
+                                            {label}
+                                        </span>
+                                    ))}
                                 </div>
-                            </div>
-                            {/* Play again, the rematch and the menu are the stamps in the hero now; the
-                                ledger keeps the one action that is about the record: handing it on. */}
+                            ) : null}
+
+                                <StatTile
+                                    density="minimal"
+                                    label={gameOverScreenCopy.statLabels.bestScore}
+                                    value={summary.bestScore.toLocaleString()}
+                                />
+                            <p className={styles.note}>
+                                {achievementsNote({
+                                    achievementsEnabled: summary.achievementsEnabled,
+                                    practiceMode: summary.practiceMode,
+                                    sharedTable: passAndPlayOutcome !== null
+                                })}
+                            </p>
                             <div className={styles.actionButtons}>
                                 <UiButton
                                     fullWidth
                                     aria-label={gameOverScreenCopy.copyResultAriaLabel}
-                                    className={styles.desktopActionButton}
                                     data-copy-state={copyState}
                                     data-testid="game-over-copy-result"
                                     disabled={!runShare.shareable}
@@ -440,38 +396,37 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                         </div>
                                     ))}
                             </div>
-                        </Panel>
 
-                        {contentLock.flavour === 'demo' ? (
-                            <Panel className={styles.actionPanel} padding="lg" variant="default" data-testid="game-over-demo-ledger">
-                                <span className={styles.panelKicker}>The full game adds</span>
-                                <ul className={styles.demoLedger}>
-                                    {contentLock.fullGameLedger.map((line) => (
-                                        <li key={line}>{line}</li>
-                                    ))}
-                                </ul>
-                                {steamStoreUrl ? (
-                                    <a
-                                        className={styles.wishlistLink}
-                                        data-testid="game-over-wishlist"
-                                        href={steamStoreUrl}
-                                        rel="noopener noreferrer"
-                                        target="_blank"
-                                    >
-                                        Wishlist on Steam
-                                    </a>
-                                ) : null}
-                            </Panel>
-                        ) : null}
-                    </aside>
+                            {contentLock.flavour === 'demo' ? (
+                                <Panel padding="lg" variant="default" data-testid="game-over-demo-ledger">
+                                    <span className={styles.panelKicker}>The full game adds</span>
+                                    <ul className={styles.demoLedger}>
+                                        {contentLock.fullGameLedger.map((line) => (
+                                            <li key={line}>{line}</li>
+                                        ))}
+                                    </ul>
+                                    {steamStoreUrl ? (
+                                        <a
+                                            className={styles.wishlistLink}
+                                            data-testid="game-over-wishlist"
+                                            href={steamStoreUrl}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                        >
+                                            Wishlist on Steam
+                                        </a>
+                                    ) : null}
+                                </Panel>
+                            ) : null}
+                        </div>
+                    </details>
                 </div>
 
                 {unlockedAchievements.length > 0 ? (
                     <Panel className={styles.achievementPanel} padding="lg" variant="default">
-                        <Eyebrow>{gameOverScreenCopy.achievementEyebrow}</Eyebrow>
-                        <ScreenTitle as="h2" className={styles.achievementHeading} role="screen">
+                        <h2 className={styles.achievementHeading}>
                             {gameOverScreenCopy.achievementHeading}
-                        </ScreenTitle>
+                        </h2>
                         <ul className={styles.achievementList}>
                             {unlockedAchievements.map((achievement) => (
                                 <li className={styles.achievementItem} key={achievement.id}>

@@ -30,7 +30,7 @@ describe('FloorClearBeat', () => {
         expect(screen.getByTestId('floor-clear-par')).toHaveTextContent('3 turns, par 5');
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+2,400');
         expect(beat).toHaveTextContent('Run total 12,340');
-        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Floor bonus +2,100: Fever ×5 · 2 under par +600.');
+        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Fever \u00d75 \u00b7 2 under par');
         expect(screen.queryByTestId('floor-clear-notes')).toBeNull();
         expect(screen.queryByTestId('floor-clear-personal-best')).toBeNull();
     });
@@ -47,10 +47,17 @@ describe('FloorClearBeat', () => {
         expect(screen.getByTestId('floor-clear-beat')).toHaveAttribute('data-personal-best', 'true');
         expect(screen.getByTestId('floor-clear-personal-best')).toHaveTextContent('New deepest floor');
         expect(screen.getByTestId('floor-clear-par')).toHaveTextContent('6 turns, par 4');
-        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Floor bonus +300: cleared cold.');
+        expect(screen.queryByTestId('floor-clear-bonus')).toBeNull();
         const notes = screen.getByTestId('floor-clear-notes');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
         expect(notes).toHaveTextContent('Someone is waiting downstairs.');
+    });
+
+    it('shows the gold and elemental rewards without repeating the score formula', () => {
+        render(<FloorClearBeat notes={[]} personalBest={false} result={{ ...result, goldEarned: 6, elementalDrops: { ember: 2 } }} totalScore={2400} />);
+        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('+6 gold');
+        expect(screen.getByTestId('floor-clear-essence')).toHaveTextContent('+2 Fire');
+        expect(screen.getByTestId('floor-clear-beat')).not.toHaveTextContent('Floor bonus');
     });
 
     it('says nothing it cannot read: a result from before the par has no par line or bonus line, and never NaN', () => {

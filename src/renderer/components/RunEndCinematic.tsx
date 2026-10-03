@@ -72,15 +72,15 @@ export function RunEndCinematic({ summary, reason, reasonLine, runSeed, personal
             {phase === 'choices' ? (
                 <>
                     {/* The verdict, held small above the choices once it has had its moment. */}
-                    <p className={styles.held} data-testid="run-end-cinematic-held">
-                        <span className={styles.heldVerdict}>{verdict}</span>
+                    <div className={styles.held} data-testid="run-end-cinematic-held">
+                        <h1 className={styles.heldVerdict}>{verdict}</h1>
                         <span className={styles.heldLine}>{runEndScoreLine(summary.totalScore, summary.highestLevel)}</span>
                         {reasonLine ? (
                             <span className={styles.heldReason} data-testid="game-over-end-reason">
                                 {reasonLine}
                             </span>
                         ) : null}
-                    </p>
+                    </div>
                     <div className={styles.choices} data-testid="run-end-cinematic-choices" role="group" aria-label="What next">
                         {actions.map((action, index) => (
                             <button

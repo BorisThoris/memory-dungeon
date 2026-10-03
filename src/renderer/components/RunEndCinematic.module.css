@@ -186,6 +186,7 @@
 }
 
 .heldVerdict {
+    margin: 0;
     font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
     font-weight: 700;
     font-style: italic;
@@ -433,5 +434,84 @@
 
     .held {
         margin-bottom: 0.2rem;
+    }
+}
+
+/* Once the beat ends, the outcome leads and the choices settle into a quiet menu. */
+.cinematic[data-phase='choices'] {
+    overflow-y: auto;
+    padding-block: max(2.5rem, env(safe-area-inset-top));
+}
+.cinematic[data-phase='choices'] .burst,
+.cinematic[data-phase='choices'] .flash {
+    display: none;
+}
+.cinematic[data-phase='choices'] .held {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    animation: none;
+}
+.cinematic[data-phase='choices'] .heldVerdict {
+    transform: none;
+    text-shadow: none;
+    font-style: normal;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+}
+.cinematic[data-phase='choices'] .choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    width: min(100%, 24rem);
+}
+.cinematic[data-phase='choices'] .choice {
+    min-height: 44px;
+    padding: 0.8rem;
+    border: 1px solid var(--margin-hairline);
+    border-radius: 5px;
+    transform: none;
+    animation: none;
+}
+.cinematic[data-phase='choices'] .choice .stampText {
+    color: var(--margin-paper);
+    font: 500 0.9rem var(--margin-body-font);
+    text-shadow: none;
+    -webkit-text-stroke: 0;
+    opacity: 1;
+}
+.cinematic[data-phase='choices'] .choice .stampText::after {
+    display: none;
+}
+.cinematic[data-phase='choices'] .choice[data-action='play-again'] {
+    grid-column: 1 / -1;
+    background: var(--margin-gold);
+    border-color: var(--margin-gold);
+}
+.cinematic[data-phase='choices'] .choice[data-action='play-again'] .stampText {
+    color: var(--margin-ink);
+}
+.cinematic[data-phase='choices'] .choice[data-action='record'] {
+    grid-column: 1 / -1;
+    border-color: transparent;
+    padding: 0.4rem;
+}
+.cinematic[data-phase='choices'] .choice:focus-visible {
+    outline: 2px solid var(--margin-gold);
+    outline-offset: 3px;
+}
+@media (max-height: 560px) {
+    .cinematic[data-phase='choices'] {
+        justify-content: flex-start;
+        padding-block: 2.25rem 0.75rem;
+        gap: 0.4rem;
+    }
+    .cinematic[data-phase='choices'] .held {
+        margin-bottom: 0.25rem;
+        gap: 0.25rem;
+    }
+    .cinematic[data-phase='choices'] .choices {
+        gap: 0.35rem;
+    }
+    .cinematic[data-phase='choices'] .choice {
+        padding: 0.5rem;
     }
 }

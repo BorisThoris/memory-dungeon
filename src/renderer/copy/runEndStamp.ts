@@ -44,6 +44,6 @@ export const RUN_END_STAMP_COPY = {
     playAgain: 'PLAY AGAIN',
     rematch: 'REMATCH',
     mainMenu: 'MAIN MENU',
-    record: 'THE RECORD',
+    record: 'RESULTS',
     skipHint: 'Press anything to continue'
 } as const;

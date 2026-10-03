@@ -35,8 +35,8 @@
 
 .colophon {
     position: relative;
-    width: min(40rem, 100%);
-    padding: 2.1rem 1rem 1.9rem;
+    width: min(32rem, 100%);
+    padding: 1.4rem 1rem;
     border-top: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
     border-bottom: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
     background: color-mix(in srgb, var(--margin-ink, #131111) 88%, transparent);
@@ -104,7 +104,7 @@
 }
 
 .score {
-    margin: 1.4rem 0 0;
+    margin: 0.8rem 0 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -116,7 +116,7 @@
 .scoreValue {
     font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
     font-weight: 400;
-    font-size: clamp(3.6rem, 10vmin, 5.5rem);
+    font-size: clamp(2.8rem, 8vmin, 4rem);
     line-height: 1;
     color: var(--margin-fever, #facb8d);
 }
@@ -129,7 +129,7 @@
 .bonus {
     margin: 1rem 0 0;
     font-style: italic;
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
     color: var(--margin-paper, #f8f4f4);
     font-variant-numeric: tabular-nums;
 }
@@ -191,3 +191,22 @@
 }
 .essence { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin: 0.8rem 0; font-size: 0.9rem; }
 .essence > span { color: var(--loot-color, #e5d6b8); }
+
+/* Desktop stages already exclude the HUD and dock; apply their clearance only once. */
+:global([data-mobile-camera-mode='false']) .beat {
+    inset: 0;
+}
+
+:global([data-shell-layout='phone-landscape']) .colophon {
+    padding: 0.65rem 0.75rem;
+}
+:global([data-shell-layout='phone-landscape']) .title {
+    font-size: 1.75rem;
+}
+:global([data-shell-layout='phone-landscape']) .scoreValue {
+    font-size: 2.6rem;
+}
+:global([data-shell-layout='phone-landscape']) .bonus,
+:global([data-shell-layout='phone-landscape']) .essence {
+    margin-block: 0.5rem 0;
+}
