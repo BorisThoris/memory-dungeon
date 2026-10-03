@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { REALM_IDS } from '../../shared/contracts';
 import { REALM_JOLT_FAMILY } from './realmCardMotion';
-import { ELEMENT_CARD_MOTE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMotes } from './realmParticles';
+import { ELEMENT_CARD_MOTE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMotes, realmEventMote } from './realmParticles';
 
 describe('the realm in the air', () => {
     it('carries simultaneous hazards and useful coatings as separate shaped motes', () => {
@@ -41,6 +41,14 @@ describe('the realm in the air', () => {
         expect(elementCardMote({ state: 'removed', suit: 'tide', pairKey: 'a' })).toBeNull();
         expect(elementCardMote({ state: 'hidden', pairKey: 'a' })).toBeNull();
         expect(elementMoteCards('low')).toBeLessThan(elementMoteCards('high'));
+    });
+
+    it('gives steam, melting, frostbloom and lightning distinct materials', () => {
+        expect(realmEventMote('steam', 'surge').shape).toBe('vapor');
+        expect(realmEventMote('flood', 'surge').shape).toBe('droplet');
+        expect(realmEventMote('melt', 'pop').shape).toBe('droplet');
+        expect(realmEventMote('frostbloom', 'creep').shape).toBe('shard');
+        expect(realmEventMote('lightning', 'flash').shape).toBe('spark');
     });
 
     it('ticks slower on lower graphics', () => {

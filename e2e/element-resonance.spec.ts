@@ -1,3 +1,4 @@
+import { writeFileSync } from 'node:fs';
 import { expect as baseExpect, test, type Page } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSaveAndQuery } from './visualScreenHelpers';
 
@@ -76,6 +77,24 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     })).toBe(true);
     await page.screenshot({ path: 'output/playwright/element-primed.png' });
 
+    // Capture the actual reaction frames, before the transient steam has dissipated.
+    await page.evaluate(async () => {
+        const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        const stop = useAppStore.subscribe(state => {
+            if (state.run?.lastRealmEvent?.kind !== 'steam') return;
+            stop();
+            const frames: string[] = [];
+            (window as unknown as { __steamShaderFrames: string[] }).__steamShaderFrames = frames;
+            let frame = 0;
+            const sample = () => {
+                frame += 1;
+                const node = document.querySelector('[data-testid="tile-board-stage"] canvas') as HTMLCanvasElement;
+                if ([3, 7, 12].includes(frame)) frames.push(node.toDataURL());
+                if (frame < 12) requestAnimationFrame(sample);
+            };
+            requestAnimationFrame(sample);
+        });
+    });
     // Water on the primed fire: Steam.
     await pick(page, 'b-1');
     await pick(page, 'b-2');
@@ -88,6 +107,10 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
         return useAppStore.getState().run!.board!.tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.pairKey);
     });
     expect([...new Set(standing)].sort()).toEqual(['e', 'f']);
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __steamShaderFrames?: string[] }).__steamShaderFrames?.length)).toBe(3);
+    const steamFrames = await page.evaluate(() => (window as unknown as { __steamShaderFrames: string[] }).__steamShaderFrames);
+    steamFrames.forEach((frame, i) => writeFileSync(`output/playwright/steam-shader-${i}.png`, Buffer.from(frame.split(',')[1]!, 'base64')));
+    expect(await count(page, 'peak')).toBeLessThanOrEqual(640);
     await page.screenshot({ path: 'output/playwright/element-steam.png' });
     await gotoWithSaveAndQuery(page, JSON.stringify(save), 'hallRoom=element-blocks');
     await expect(canvas(page)).toBeVisible({ timeout: 150_000 });

@@ -58,35 +58,43 @@ export interface BoardParticleBurst {
      */
     shape?: BoardParticleShape;
     placement?: 'edge' | 'ground';
+    /** Casts and realm events may reclaim ambient slots, so weather never hides a decision. */
+    priority?: 'event';
 }
 
-export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf';
+export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf' | 'vapor' | 'spark';
 /** The shader's kind code for each shape, after the bolt's seven. */
-export const BOARD_PARTICLE_SHAPE_KIND: Readonly<Record<BoardParticleShape, number>> = { flame: 8, droplet: 9, shard: 10, leaf: 11 };
+export const BOARD_PARTICLE_SHAPE_KIND: Readonly<Record<BoardParticleShape, number>> = { flame: 8, droplet: 9, shard: 10, leaf: 11, vapor: 12, spark: 13 };
 
-const vertexShader = `
+const vertexShader = /* glsl */ `
     attribute vec3 origin;
     attribute vec4 movement;
     attribute vec4 lifetime;
     attribute vec3 tint;
     attribute vec2 rotation;
+    // Independent phase, energy, and the board/foreground layer, all fixed at emission.
+    attribute vec3 appearance;
     uniform float time;
     uniform float rippleLayer;
     varying vec2 vUv;
     varying vec3 vTint;
     varying float vAge;
     varying float vKind;
+    varying float vPhase;
+    varying float vSeconds;
+    varying float vEnergy;
     void main() {
-        float seconds = time - lifetime.x;
-        float age = seconds / max(0.001, lifetime.y);
+        float seconds = max(0.0, time - lifetime.x);
+        float age = (time - lifetime.x) / max(0.001, lifetime.y);
         vUv = uv; vTint = tint; vAge = age; vKind = lifetime.w;
+        vPhase = appearance.x; vEnergy = appearance.y; vSeconds = seconds;
         bool ripple = vKind > 5.5 && vKind < 6.5;
-        if ((ripple && rippleLayer < 0.5) || (!ripple && rippleLayer > 0.5) || lifetime.y <= 0.0 || age < 0.0 || age >= 1.0) {
+        bool ground = ripple || appearance.z > 0.5;
+        if ((ground && rippleLayer < 0.5) || (!ground && rippleLayer > 0.5) || lifetime.y <= 0.0 || age < 0.0 || age >= 1.0) {
             gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
             return;
         }
         if (vKind > 6.5 && vKind < 7.5) {
-            // A bolt segment: a fixed quad from one path point to the next, length by width.
             vec2 segment = vec2(position.x * lifetime.z, position.y * movement.z);
             segment = mat2(cos(rotation.x), sin(rotation.x), -sin(rotation.x), cos(rotation.x)) * segment;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(origin + vec3(segment, 0.0), 1.0);
@@ -95,115 +103,157 @@ const vertexShader = `
         float travel = (1.0 - exp(-movement.w * seconds)) / max(movement.w, 0.001);
         vec3 center = origin + vec3(movement.xy * travel, 0.0);
         center.y -= movement.z * seconds * seconds * 0.5;
-        // Material-specific drift, anchored at birth (no sideways teleport on spawn).
-        if (vKind > 7.5 && vKind < 8.5) center.x += sin(seconds * 9.0 + origin.x * 13.0) * seconds * 0.035;
-        if (vKind > 10.5) center.x += (sin(seconds * 3.5 + rotation.x) - sin(rotation.x)) * 0.09;
+        bool flame = vKind > 7.5 && vKind < 8.5;
+        bool drop = vKind > 8.5 && vKind < 9.5;
+        bool ice = vKind > 9.5 && vKind < 10.5;
+        bool leaf = vKind > 10.5 && vKind < 11.5;
+        bool vapor = vKind > 11.5 && vKind < 12.5;
+        bool spark = vKind > 12.5;
+        // Smooth per-particle turbulence, with zero displacement at birth.
+        if (flame || vapor || leaf) {
+            float frequency = flame ? 6.0 : leaf ? 3.2 : 2.0;
+            float amplitude = flame ? 0.045 : leaf ? 0.09 : 0.12;
+            center.x += (sin(seconds * frequency + vPhase) - sin(vPhase)) * amplitude * min(seconds * 3.0, 1.0);
+        }
         float scale = lifetime.z * mix(1.0, 0.22, age);
         if (vKind > 0.5 && vKind < 1.5) scale = lifetime.z * mix(0.45, 2.1, age);
         if (vKind > 1.5 && vKind < 2.5) scale = lifetime.z * mix(0.5, 1.5, age);
         if (vKind > 2.5 && vKind < 3.5) scale = lifetime.z;
         if (vKind > 3.5) scale = lifetime.z * mix(1.0, 0.35, age);
-        // The elements: a flame thins as it climbs, a drop and a shard keep their size, a leaf too.
-        if (vKind > 7.5 && vKind < 8.5) scale = lifetime.z * mix(1.15, 0.5, age);
-        if (vKind > 8.5) scale = lifetime.z;
+        if (flame) scale = lifetime.z * mix(1.15, 0.4, age);
+        if (drop || ice || leaf) scale = lifetime.z * (0.85 + 0.15 * sin(age * 3.14159));
+        if (vapor) scale = lifetime.z * mix(0.35, 1.7, age);
         if (ripple) scale = lifetime.z * mix(0.3, 1.0, 1.0 - pow(1.0 - age, 3.0));
         float angle = rotation.x + rotation.y * seconds;
         vec2 local = position.xy * scale;
-        if (vKind < 0.5) local.y *= 2.2;
-        if (vKind > 7.5 && vKind < 8.5) local.y *= 1.9;
-        // A drop stretches as it falls.
-        if (vKind > 8.5 && vKind < 9.5) local.y *= 1.25 + min(0.9, movement.z * seconds * 0.9);
-        if (vKind > 9.5 && vKind < 10.5) local.y *= 1.5;
-        // A leaf rolls in the air, presenting its broad side and then its thin edge.
-        if (vKind > 10.5) local.x *= 0.35 + 0.65 * abs(cos(seconds * 3.0 + rotation.x));
+        if (vKind < 0.5 || spark) {
+            // A short, velocity-aligned streak rather than a spinning round point.
+            vec2 velocity = movement.xy * exp(-movement.w * seconds) - vec2(0.0, movement.z * seconds);
+            angle = atan(velocity.y, velocity.x) - 1.570796;
+            local.y *= 1.0 + min(3.0, length(velocity) * 2.5);
+        }
+        if (flame) local.y *= 1.9;
+        if (drop) local.y *= 1.2 + min(1.2, movement.z * seconds);
+        if (ice) local.y *= 1.5;
+        if (leaf) local.x *= 0.22 + 0.78 * abs(cos(seconds * 3.0 + vPhase));
         if (ripple) local.y *= 0.72;
-        local = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * local;
+        local = mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * local;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(center + vec3(local, 0.0), 1.0);
     }
 `;
-const fragmentShader = `
+const fragmentShader = /* glsl */ `
     varying vec2 vUv;
     varying vec3 vTint;
     varying float vAge;
     varying float vKind;
-    uniform float time;
+    varying float vPhase;
+    varying float vSeconds;
+    varying float vEnergy;
+    float hash21(vec2 p) {
+        p = fract(p * vec2(123.34, 345.45));
+        p += dot(p, p + 34.345);
+        return fract(p.x * p.y);
+    }
+    float noise(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash21(i), hash21(i + vec2(1, 0)), f.x),
+            mix(hash21(i + vec2(0, 1)), hash21(i + vec2(1, 1)), f.x), f.y);
+    }
+    // Two octaves only; no textures, extra passes, or full-screen distortion.
+    float flow(vec2 p) { return noise(p) * 0.67 + noise(p * 2.03 + 13.7) * 0.33; }
+    float coverage(float distance) {
+        float aa = max(fwidth(distance), 0.012);
+        return 1.0 - smoothstep(-aa, aa, distance);
+    }
     void main() {
         if (vAge < 0.0 || vAge >= 1.0) discard;
         vec2 p = vUv * 2.0 - 1.0;
         float radius = length(p);
-        float shape = pow(max(0.0, 1.0 - radius), 2.0);
+        float shape = exp(-dot(p * vec2(2.5, 1.3), p * vec2(2.5, 1.3)) * 2.0);
         float strength = 0.9;
         vec3 color = vTint;
         if (vKind > 0.5 && vKind < 1.5) {
-            shape = 1.0 - smoothstep(0.035, 0.1, abs(radius - 0.72));
+            shape = coverage(abs(radius - 0.72) - 0.035);
             strength = 0.58;
         }
-        if (vKind > 1.5 && vKind < 2.5) { shape = pow(max(0.0, 1.0 - radius), 1.6); strength = 0.32; }
-        if (vKind > 2.5 && vKind < 3.5) { shape = 1.0 - smoothstep(0.05, 0.2, abs(radius - 0.7)); strength = 0.3; }
+        if (vKind > 1.5 && vKind < 2.5) {
+            shape = pow(max(0.0, 1.0 - radius), 1.6) * (0.65 + flow(p * 3.0 + vPhase));
+            strength = 0.32;
+        }
+        if (vKind > 2.5 && vKind < 3.5) { shape = coverage(abs(radius - 0.7) - 0.07); strength = 0.3; }
         if (vKind > 3.5 && vKind < 5.5) {
             float core = exp(-radius * radius * 18.0);
             float rays = exp(-abs(p.x * p.y) * 55.0) * pow(max(0.0, 1.0 - radius), 2.0);
             shape = core + rays * 0.6;
-            strength = 1.0;
-        }
-        if (vKind > 6.5 && vKind < 7.5) {
-            float d = abs(vUv.y * 2.0 - 1.0);
-            float core = exp(-d * d * 28.0);
-            float glow = exp(-d * d * 3.0) * 0.6;
-            // Lightning strobes: each bolt strobes on a beat keyed to its tint.
-            float beat = fract(sin(floor(vAge * 20.0) * 12.9898 + vTint.g * 78.233) * 43758.5453);
-            shape = (core + glow) * (0.55 + 0.45 * step(0.3, beat));
-            strength = 1.0;
-            color = mix(vTint, vec3(1.0), core * 0.7);
+            color = mix(vTint, vec3(1.0), core * 0.45);
         }
         if (vKind > 5.5 && vKind < 6.5) {
             float band = abs(radius - 0.76);
-            shape = exp(-band * band * 1800.0) + exp(-band * band * 110.0) * 0.3;
-            strength = 0.72;
+            shape = coverage(band - 0.018) + exp(-band * band * 110.0) * 0.22;
+            strength = 0.65;
+        }
+        if (vKind > 6.5 && vKind < 7.5) {
+            float d = abs(p.y);
+            float core = exp(-d * d * 28.0);
+            shape = (core + exp(-d * d * 3.0) * 0.5) * (0.85 + 0.15 * sin(vSeconds * 15.0 + vPhase));
+            color = mix(vTint, vec3(1.0), core * 0.7);
         }
         if (vKind > 7.5 && vKind < 8.5) {
-            // Fire: a tongue, wide at the foot and pointed at the tip, that wavers; white-hot in
-            // the core, its own colour in the body, red at the tip.
-            float up = p.y * 0.5 + 0.5;
-            float sway = sin(p.y * 5.0 + time * 13.0 + vTint.g * 40.0) * 0.16 * up;
-            float d = length(vec2((p.x + sway) * (1.25 + 2.4 * up * up), p.y * 0.92 + 0.08));
-            shape = smoothstep(1.0, 0.35, d);
-            float core = smoothstep(0.55, 0.0, d + up * 0.35);
-            color = mix(mix(vTint, vec3(0.9, 0.16, 0.04), up * 0.7), vec3(1.0, 0.95, 0.75), core);
+            float up = vUv.y;
+            float turbulence = flow(vec2(p.x * 3.0 + vPhase, p.y * 2.5 - vSeconds * 5.0));
+            float bend = (turbulence - 0.5) * (0.15 + up * 0.5);
+            float body = length(vec2((p.x + bend) * (1.3 + 3.0 * up * up), p.y + 0.12));
+            float edge = body - 0.82 + (turbulence - 0.5) * up * 0.45;
+            shape = coverage(edge) * (1.0 - smoothstep(0.2, 0.92, body));
+            float core = (1.0 - smoothstep(0.12, 0.58, body)) * (1.0 - up * 0.65);
+            color = mix(vTint, vec3(0.95, 0.085, 0.008), up * 0.7);
+            color = mix(color, vec3(1.0, 0.92, 0.55), core);
             strength = 0.95;
         }
         if (vKind > 8.5 && vKind < 9.5) {
-            // Liquid: a drop with a round belly and a drawn-out neck, a hard edge, a dark rim where
-            // the light bends, and one bright highlight.
             float neck = max(0.0, p.y);
-            float d = length(vec2(p.x * (1.15 + 1.7 * neck * neck), p.y * 0.95 + 0.05));
-            shape = smoothstep(0.95, 0.82, d);
-            float rim = smoothstep(0.45, 0.9, d);
-            float highlight = exp(-dot(p - vec2(-0.28, -0.22), p - vec2(-0.28, -0.22)) * 22.0);
-            float caustic = 0.5 + 0.5 * sin(p.x * 7.0 + p.y * 5.0 + time * 5.0 + vTint.b * 30.0);
-            color = mix(vTint * (0.85 + 0.25 * caustic), vTint * 0.45, rim) + vec3(highlight);
-            strength = 0.88;
+            float d = length(vec2(p.x * (1.15 + 1.9 * neck * neck), p.y + 0.08));
+            shape = coverage(d - 0.86);
+            float rim = smoothstep(0.42, 0.85, d);
+            vec2 light = p - vec2(-0.24, 0.15);
+            float highlight = exp(-dot(light * vec2(1.5, 0.75), light * vec2(1.5, 0.75)) * 34.0);
+            float caustic = pow(0.5 + 0.5 * sin(p.y * 8.0 + p.x * 4.0 - vSeconds * 4.0 + vPhase), 8.0);
+            color = vTint * (0.75 + rim * 0.4 + caustic * 0.35) + vec3(highlight * 0.85);
+            strength = 0.5 + rim * 0.35;
         }
         if (vKind > 9.5 && vKind < 10.5) {
-            // Ice: a cut crystal, hard-edged, each facet its own brightness, with a glint that comes and goes.
-            float d = abs(p.x) * 1.7 + abs(p.y);
-            shape = smoothstep(1.0, 0.92, d);
-            float facet = 0.62 + 0.2 * step(0.0, p.x) + 0.18 * step(0.0, p.y * p.x);
-            float glint = pow(max(0.0, sin(time * 4.0 + vTint.r * 60.0 + p.y * 3.0)), 10.0);
-            float spine = exp(-abs(p.x) * 26.0) * 0.5;
-            color = mix(vTint * facet, vec3(1.0), spine + glint * 0.8);
-            strength = 0.9;
+            // Six cut facets, a bevel, and a glint moving across the crystal.
+            float d = max(abs(p.x) * 1.65, abs(p.x) * 0.85 + abs(p.y)) - 0.82;
+            shape = coverage(d);
+            float facet = 0.5 + 0.22 * step(0.0, p.x) + 0.2 * step(0.0, p.y * p.x);
+            float bevel = exp(-abs(d + 0.06) * 35.0);
+            float glint = exp(-pow(p.x + p.y * 0.45 - sin(vSeconds * 2.5 + vPhase) * 0.9, 2.0) * 110.0);
+            color = mix(vTint * facet, vec3(1.0), clamp(bevel * 0.55 + glint * 0.7, 0.0, 1.0));
         }
-        if (vKind > 10.5) {
-            // Growth: a leaf, two arcs meeting at a point, with a midrib and a lighter side.
-            float blade = abs(p.x) - (1.0 - p.y * p.y) * 0.5;
-            shape = smoothstep(0.04, -0.06, blade);
-            float midrib = exp(-abs(p.x) * 30.0) * 0.45;
-            color = vTint * (0.78 + 0.3 * step(0.0, p.x)) - vec3(midrib * 0.35);
-            strength = 0.92;
+        if (vKind > 10.5 && vKind < 11.5) {
+            float blade = max(abs(p.x + p.y * 0.12) - (1.0 - p.y * p.y) * 0.5, abs(p.y) - 0.95);
+            shape = coverage(blade);
+            float stem = exp(-abs(p.x + p.y * 0.12) * 55.0);
+            float veins = pow(max(0.0, cos((p.y - abs(p.x) * 0.85) * 26.0)), 12.0);
+            float translucency = 0.85 + 0.25 * sin(vSeconds * 3.0 + vPhase);
+            color = vTint * translucency * (0.85 + 0.22 * step(0.0, p.x)) + vTint * (stem + veins * 0.25) * 0.3;
         }
-        float fade = smoothstep(0.0, 0.06, vAge) * pow(1.0 - vAge, 1.5);
-        float alpha = shape * fade * strength;
+        if (vKind > 11.5 && vKind < 12.5) {
+            // Steam curls outwards, with holes opening as its soft billows dissipate.
+            float n = flow(p * 2.8 + vec2(vPhase, -vSeconds * 0.7));
+            shape = (1.0 - smoothstep(0.25, 0.95, radius + (n - 0.5) * 0.45)) * smoothstep(0.12, 0.7, n);
+            color = mix(vTint * 0.65, vec3(1.0), n * 0.65);
+            strength = 0.42;
+        }
+        if (vKind > 12.5) {
+            float zig = sin(p.y * 12.0 + vPhase) * 0.1 * (1.0 - abs(p.y));
+            float core = exp(-pow(p.x + zig, 2.0) * 240.0);
+            shape = (core + exp(-pow(p.x + zig, 2.0) * 25.0) * 0.35) * (1.0 - smoothstep(0.5, 1.0, abs(p.y)));
+            color = mix(vTint, vec3(1.0), core * 0.75);
+        }
+        float fade = smoothstep(0.0, 0.07, vAge) * (1.0 - smoothstep(0.35, 1.0, vAge));
+        float alpha = clamp(shape * fade * strength * (0.85 + vEnergy * 0.15), 0.0, 1.0);
         if (alpha < 0.003) discard;
         gl_FragColor = vec4(color, alpha);
         #include <colorspace_fragment>
@@ -229,7 +279,8 @@ export const createBoardParticleSystem = () => {
     const lifetime = attribute('lifetime', 4);
     const tint = attribute('tint', 3);
     const rotation = attribute('rotation', 2);
-    const attributes = [origin, movement, lifetime, tint, rotation];
+    const appearance = attribute('appearance', 3);
+    const attributes = [origin, movement, lifetime, tint, rotation, appearance];
     geometry.instanceCount = BOARD_PARTICLE_CAPACITY;
     const material = new ShaderMaterial({
         vertexShader, fragmentShader, uniforms: { time: { value: 0 }, rippleLayer: { value: 0 } },
@@ -252,6 +303,7 @@ export const createBoardParticleSystem = () => {
     rippleMesh.visible = false;
     const ends = new Float32Array(BOARD_PARTICLE_CAPACITY);
     const comboPopSlots = new Uint8Array(BOARD_PARTICLE_CAPACITY);
+    const priorities = new Uint8Array(BOARD_PARTICLE_CAPACITY);
     let comboPopEffects = true;
     const color = new Color();
     const point = new Vector3();
@@ -263,8 +315,22 @@ export const createBoardParticleSystem = () => {
     /** The next slot a one-shot effect may take: never a contact ring that is still showing. */
     const claimSlot = (time: number): number | null => {
         let checked = 0;
-        while (ends[cursor % budget]! > time && lifetime.getW(cursor % budget) === 6 && checked++ < budget) cursor += 1;
+        while (ends[cursor % budget]! > time && (lifetime.getW(cursor % budget) === 6 || priorities[cursor % budget] === 3) && checked++ < budget) cursor += 1;
         return checked >= budget ? null : cursor++ % budget;
+    };
+    /** Current decisions reclaim ambience first, then the oldest cosmetic burst. Rings keep their contact beat. */
+    const claimEventSlot = (time: number): number | null => {
+        let candidate = -1;
+        for (let n = 0; n < budget; n += 1) {
+            const slot = (cursor + n) % budget;
+            if (ends[slot]! <= time) { cursor = slot + 1; return slot; }
+            if (lifetime.getW(slot) === 6) continue;
+            if (candidate < 0 || priorities[slot]! < priorities[candidate]!
+                || (priorities[slot] === priorities[candidate] && ends[slot]! < ends[candidate]!)) candidate = slot;
+        }
+        if (candidate < 0) return null;
+        cursor = candidate + 1;
+        return candidate;
     };
     /** One bolt segment from (ax, ay) to (bx, by). */
     const writeSegment = (slot: number, ax: number, ay: number, bx: number, by: number, z: number,
@@ -278,11 +344,14 @@ export const createBoardParticleSystem = () => {
         rotation.setXY(slot, Math.atan2(by - ay, bx - ax), 0);
         ends[slot] = start + life;
         comboPopSlots[slot] = 1;
+        priorities[slot] = 2;
+        appearance.setXYZ(slot, start * 7.1, 1, 0);
     };
 
     const clear = (): void => {
         ends.fill(0);
         comboPopSlots.fill(0);
+        priorities.fill(0);
         lifetime.array.fill(0);
         lifetime.needsUpdate = true;
         cursor = 0;
@@ -335,21 +404,23 @@ export const createBoardParticleSystem = () => {
             let emitted = 0;
             for (let index = 0; index < count; index += 1) {
                 // Ambient rim trails use only free slots, so hovering cannot erase an explosion.
-                if (rim || ember) {
+                if ((rim || ember) && burst.priority !== 'event') {
                     let checked = 0;
                     while (ends[cursor % budget]! > burst.time && checked++ < budget) cursor += 1;
                     if (checked >= budget) break;
                 }
                 if (!rim && !ripple && !ember) {
                     let checked = 0;
-                    while (ends[cursor % budget]! > burst.time && lifetime.getW(cursor % budget) === 6 && checked++ < budget) cursor += 1;
+                    while (ends[cursor % budget]! > burst.time && (lifetime.getW(cursor % budget) === 6 || priorities[cursor % budget] === 3) && checked++ < budget) cursor += 1;
                     if (checked >= budget) break;
                 }
-                const slot = cursor++ % budget;
+                const slot = burst.priority === 'event' ? claimEventSlot(burst.time) : cursor++ % budget;
+                if (slot === null) break;
                 const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : shaped ? BOARD_PARTICLE_SHAPE_KIND[shaped] : ember ? 0 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
                 const angle = ripple ? 0 : rng() * Math.PI * 2;
                 const speed = kind === 0 ? (bomb ? 1.2 : 0.45) * (0.35 + rng()) : kind === 2 ? 0.28 : 0;
                 const life = burst.reduceMotion ? 0.5 : ripple ? 0.65 + index * 0.08 : rim ? 0.3 + rng() * 0.3
+                    : shaped === 'vapor' ? 1.2 + rng() * 0.6 : shaped === 'spark' ? 0.25 + rng() * 0.3
                     : shaped === 'flame' ? 0.55 + rng() * 0.5 : shaped === 'droplet' ? 0.8 + rng() * 0.5 : shaped === 'shard' ? 1.1 + rng() * 0.8 : shaped === 'leaf' ? 1.3 + rng() * 0.9
                     : ember ? 0.9 + rng() * 0.8 : kind === 1 ? 0.65 : kind === 2 ? 1.1 : 0.45 + rng() * 0.65;
                 const start = burst.time + (burst.reduceMotion ? 0 : burst.delay ?? 0) + (ripple ? index * 0.085 : kind === 2 ? 0.05 : edge && !rim ? index / Math.max(1, sparks) * 0.16 : 0);
@@ -385,6 +456,13 @@ export const createBoardParticleSystem = () => {
                         const theta = rng() * Math.PI * 2;
                         origin.setXYZ(slot, px, burst.y + (rng() - 0.5) * 0.75, burst.z + 0.07);
                         movement.setXYZW(slot, Math.cos(theta) * (0.06 + energy * 0.1), Math.sin(theta) * (0.06 + energy * 0.1), 0.03, 0.7);
+                    } else if (shaped === 'vapor') {
+                        origin.setXYZ(slot, px, burst.y + (rng() - 0.5) * 0.4, burst.z + 0.07);
+                        movement.setXYZW(slot, (rng() - 0.5) * 0.18, 0.2 + energy * 0.18, -0.08, 0.6);
+                    } else if (shaped === 'spark') {
+                        const theta = rng() * Math.PI * 2;
+                        origin.setXYZ(slot, px, burst.y + (rng() - 0.5) * 0.6, burst.z + 0.07);
+                        movement.setXYZW(slot, Math.cos(theta) * (0.5 + energy * 0.5), Math.sin(theta) * (0.5 + energy * 0.5), 0, 2.5);
                     } else {
                         // Shed from the top, falling and swaying.
                         origin.setXYZ(slot, px, burst.y + 0.1 + rng() * 0.4, burst.z + 0.07);
@@ -420,7 +498,7 @@ export const createBoardParticleSystem = () => {
                         movement.setXYZW(slot, rimSample.ny * 0.1, -rimSample.nx * 0.1, ground ? 0 : 0.025, 1.5);
                     }
                 }
-                lifetime.setXYZW(slot, start, life, shaped ? (0.085 + rng() * 0.05 + energy * 0.05) * (shaped === 'flame' ? 1.5 : 1) * (burst.sizeScale ?? 1) : ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
+                lifetime.setXYZW(slot, start, life, shaped ? (0.085 + rng() * 0.05 + energy * 0.05) * (shaped === 'flame' ? 1.5 : shaped === 'vapor' ? 2.6 : 1) * (burst.sizeScale ?? 1) : ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
                 color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);
                 if (kind === 0 && rng() > 0.7) color.set('#fff2ce');
                 tint.setXYZ(slot, color.r, color.g, color.b);
@@ -429,6 +507,8 @@ export const createBoardParticleSystem = () => {
                 else rotation.setXY(slot, angle, kind === 0 ? (rng() - 0.5) * 3 : 0);
                 ends[slot] = start + life;
                 comboPopSlots[slot] = pop ? 1 : 0;
+                priorities[slot] = burst.priority === 'event' ? 3 : rim || ember ? 1 : 2;
+                appearance.setXYZ(slot, rng() * Math.PI * 2, energy, burst.placement === 'ground' ? 1 : 0);
                 emitted += 1;
             }
             if (emitted > 0) {

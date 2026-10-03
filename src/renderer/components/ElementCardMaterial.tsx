@@ -11,9 +11,11 @@ const fragmentShader = `uniform vec3 uColor; uniform float uCharge; varying vec2
 void main() {
     vec2 p = abs(vUv * 2.0 - 1.0) - vec2(0.84, 0.88);
     float d = length(max(p, 0.0)) + min(max(p.x, p.y), 0.0) - 0.08;
-    float edge = 1.0 - smoothstep(0.012, 0.035, abs(d + 0.025));
+    float aa = max(fwidth(d), 0.004);
+    float edge = 1.0 - smoothstep(0.015 - aa, 0.015 + aa, abs(d + 0.025));
     if (edge < 0.01) discard;
     gl_FragColor = vec4(mix(uColor, vec3(1.0), uCharge * 0.25), edge * 0.8);
+    #include <colorspace_fragment>
 }`;
 
 /** A quiet rim keeps the front legible. All elemental motion belongs to the particle pool. */

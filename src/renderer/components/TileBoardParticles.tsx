@@ -14,7 +14,7 @@ import { collectElementCastParticles } from './elementCastParticles';
 import { useDevOptions } from '../dev/useDevOptions';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import { useRealmAmbience, useRealmEventPulse, useRealmSwayLean } from './realmAmbience';
-import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, REALM_EVENT_MOTE, REALM_MOTE_SIZE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMotes, ELEMENT_CARD_MOTE, type RealmMote } from './realmParticles';
+import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, realmEventMote, REALM_MOTE_SIZE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMotes, ELEMENT_CARD_MOTE, type RealmMote } from './realmParticles';
 
 const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
 const themeOf = (id: ComboHeatThemeId | undefined) => heatThemeById(id);
@@ -173,9 +173,9 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         }
         // The realm in the air (`realmParticles.ts`): statuses, the realm itself, and its events.
         const playingNow = runStatus === 'playing' || runStatus === 'resolving';
-        const emitMote = (group: { position: { x: number; y: number; z: number } }, mote: RealmMote, seed: number): number => {
+        const emitMote = (group: { position: { x: number; y: number; z: number } }, mote: RealmMote, seed: number, priority?: 'event'): number => {
             const emitted = system.emit({ kind: 'ember', x: group.position.x, y: group.position.y, z: group.position.z,
-                time: time.current, seed, reduceMotion, quality: graphicsQuality, energy: mote.energy, tint: mote.tint, emberMode: mote.mode, sizeScale: mote.size ?? REALM_MOTE_SIZE, shape: mote.shape, placement: mote.placement });
+                time: time.current, seed, reduceMotion, quality: graphicsQuality, energy: mote.energy, tint: mote.tint, emberMode: mote.mode, sizeScale: mote.size ?? REALM_MOTE_SIZE, shape: mote.shape, placement: mote.placement, priority });
             if (emitted) realmBursts.current += 1;
             return emitted;
         };
@@ -183,12 +183,16 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         if (pulse && pulse.key !== realmEventKey.current) {
             realmEventKey.current = pulse.key;
             if (!reduceMotion && playingNow && pulse.key !== board.elementCast?.key) {
-                const mote = REALM_EVENT_MOTE[pulse.family];
+                const mote = realmEventMote(pulse.kind, pulse.family);
                 const bursts = graphicsQuality === 'low' ? 1 : graphicsQuality === 'medium' ? 2 : 3;
-                for (const tileId of pulse.tileIds) {
+                const tileLimit = graphicsQuality === 'low' ? 4 : graphicsQuality === 'medium' ? 8 : 12;
+                for (const tileId of [...pulse.tileIds].slice(0, tileLimit)) {
                     const group = frames.current.get(tileId)?.groupRef.current;
-                    if (!group?.visible) continue;
-                    for (let n = 0; n < bursts; n += 1) emitMote(group, mote, hashStringToSeed(`${pulse.key}:${tileId}:${n}`));
+                    const cell = board.tiles.findIndex(tile => tile.id === tileId);
+                    if (cell < 0) continue;
+                    const pos = getTileTransform(board.tiles[cell]!, cell, board.columns, board.rows, compact, false, reduceMotion);
+                    const anchor = group?.visible ? group : { position: { x: pos.baseX, y: pos.baseY, z: 0.05 } };
+                    for (let n = 0; n < bursts; n += 1) emitMote(anchor, mote, hashStringToSeed(`${pulse.key}:${tileId}:${n}`), 'event');
                 }
             }
         }

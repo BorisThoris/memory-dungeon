@@ -1,5 +1,6 @@
 import {
     AdditiveBlending,
+    Color,
     DoubleSide,
     MathUtils,
     ShaderMaterial,
@@ -40,13 +41,12 @@ export interface CardArcaneGlowUniforms {
 
 const colorToVec3 = (hex: string): Vector3 => {
     const color = RENDERER_THEME.colors[hex as keyof typeof RENDERER_THEME.colors] ?? hex;
-    const c = new Vector3();
     const n = Number.parseInt(color.replace('#', ''), 16);
     if (!Number.isFinite(n)) {
         return new Vector3(1, 0.82, 0.42);
     }
-    c.set(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
-    return c;
+    const linear = new Color(n);
+    return new Vector3(linear.r, linear.g, linear.b);
 };
 
 export const clampCardArcaneGlowDriverUniforms = (

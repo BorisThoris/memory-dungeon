@@ -18,6 +18,7 @@ export interface RealmAmbience {
 export interface RealmAmbienceEvent {
     key: string;
     family: RealmJoltFamily;
+    kind?: RealmEvent['kind'];
     tileIds: ReadonlySet<string>;
     /** `performance.now()` when it reached the screen. */
     at: number;
@@ -63,7 +64,7 @@ export const pulseRealmEvent = (event: Pick<RealmEvent, 'key' | 'kind' | 'tileId
     }
     if (now?.key === event.key) return;
     useRealmEventPulse.setState({
-        event: { key: event.key, family: REALM_JOLT_FAMILY[event.kind] ?? 'pop', tileIds: new Set(event.tileIds), at: performance.now() }
+        event: { key: event.key, kind: event.kind, family: REALM_JOLT_FAMILY[event.kind] ?? 'pop', tileIds: new Set(event.tileIds), at: performance.now() }
     });
 };
 

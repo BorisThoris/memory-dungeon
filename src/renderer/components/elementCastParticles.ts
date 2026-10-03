@@ -20,7 +20,7 @@ export function collectElementCastParticles(before: BoardState | null, board: Bo
     const strong = cast.power >= 4;
     const cues: BoardParticleBurst[] = [];
     const emit = (cell: number, tag: string, delay: number, response?: 'charged' | 'neutralized', at = point(cell)) => {
-        cues.push({ kind: 'ember', ...at, time, delay, seed: hashStringToSeed(`${cast.key}:${cell}:${tag}`),
+        cues.push({ kind: 'ember', priority: 'event', ...at, time, delay, seed: hashStringToSeed(`${cast.key}:${cell}:${tag}`),
             quality, reduceMotion: false, energy: response === 'neutralized' ? 0.05 : strong ? 0.4 : 0.2,
             shape: response === 'neutralized' ? undefined : material.shape,
             tint: response === 'charged' ? '#e7c879' : response === 'neutralized' ? '#aebfca' : material.tint,

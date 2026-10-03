@@ -1,4 +1,4 @@
-import type { RealmId, Tile, TileSuit } from '../../shared/contracts';
+import type { RealmEvent, RealmId, Tile, TileSuit } from '../../shared/contracts';
 import { tileCharge } from '../../shared/element-alchemy-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from '../../shared/tile-identity';
 import type { BoardParticleShape } from './boardParticleSystem';
@@ -42,17 +42,25 @@ export const REALM_AMBIENT_MOTE: Readonly<Record<RealmId, RealmMote>> = {
     ember: { tint: '#ff9a3c', mode: 'rise', energy: 0.45, shape: 'flame' },
     tide: { tint: '#8fd0ff', mode: 'fall', energy: 0.35, shape: 'droplet' },
     frost: { tint: '#e6f6ff', mode: 'fall', energy: 0.3, shape: 'shard' },
-    storm: { tint: '#c9a8ff', mode: 'spark', energy: 0.4 },
+    storm: { tint: '#c9a8ff', mode: 'spark', energy: 0.4, shape: 'spark' },
     grove: { tint: '#8fd86a', mode: 'fall', energy: 0.25, shape: 'leaf' }
 };
 
 export const REALM_EVENT_MOTE: Readonly<Record<RealmJoltFamily, RealmMote>> = {
-    flash: { tint: '#ece4ff', mode: 'spark', energy: 1, size: 1.6 },
-    flare: { tint: '#ff7a1a', mode: 'rise', energy: 1 },
-    gust: { tint: '#f4fbff', mode: 'fall', energy: 1 },
-    surge: { tint: '#7cc8ff', mode: 'spark', energy: 0.8 },
-    creep: { tint: '#5fbf3f', mode: 'fall', energy: 0.9 },
+    flash: { tint: '#ece4ff', mode: 'spark', energy: 1, size: 1.6, shape: 'spark' },
+    flare: { tint: '#ff7a1a', mode: 'rise', energy: 1, shape: 'flame' },
+    gust: { tint: '#f4fbff', mode: 'fall', energy: 1, shape: 'shard' },
+    surge: { tint: '#7cc8ff', mode: 'spark', energy: 0.8, shape: 'droplet' },
+    creep: { tint: '#5fbf3f', mode: 'fall', energy: 0.9, shape: 'leaf' },
     pop: { tint: '#fff2b0', mode: 'rise', energy: 0.8 }
+};
+
+/** Reactions keep their own material even when their card-motion family is shared. */
+export const realmEventMote = (kind: RealmEvent['kind'] | undefined, family: RealmJoltFamily): RealmMote => {
+    if (kind === 'steam' || kind === 'doused' || kind === 'scald') return { tint: '#b8e3f4', mode: 'rise', energy: 0.8, shape: 'vapor', size: 2.2 };
+    if (kind === 'melt' || kind === 'thaw') return { tint: '#b9eaff', mode: 'fall', energy: 0.7, shape: 'droplet', size: 2 };
+    if (kind === 'frostbloom') return { tint: '#c0f6e5', mode: 'fall', energy: 0.85, shape: 'shard', size: 2 };
+    return REALM_EVENT_MOTE[family];
 };
 
 type StatusTile = Pick<Tile, 'state' | 'fuse' | 'frost' | 'snowed' | 'vined' | 'bloom' | 'rime' | 'seeded'>;

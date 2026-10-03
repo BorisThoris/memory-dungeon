@@ -26,14 +26,16 @@ describe('quiet elemental casts in the shared particle pool', () => {
         expect(pool.advance(4)).toBe(0);
         pool.dispose();
     });
-    it('never replaces existing match particles when the pool is busy', () => {
+    it('keeps casts visible when cosmetic match bursts fill the pool', () => {
         const pool = createBoardParticleSystem();
         for (let i = 0; i < 20; i += 1) pool.emit({ kind: 'match', x: 0, y: 0, z: 0,
             time: 1, seed: i, reduceMotion: false, quality: 'low' });
         const data = pool.mesh.geometry.getAttribute('lifetime').array.slice();
         const cues = collectElementCastParticles(before.board!, after.board!, 'low', false, false, 1);
-        expect(cues.reduce((n, c) => n + pool.emit(c), 0)).toBe(0);
-        expect(pool.mesh.geometry.getAttribute('lifetime').array).toEqual(data);
+        expect(cues.reduce((n, c) => n + pool.emit(c), 0)).toBeGreaterThan(0);
+        expect(pool.mesh.geometry.getAttribute('lifetime').array).not.toEqual(data);
+        expect(pool.advance(1.3)).toBeLessThanOrEqual(boardParticleBudget('low'));
+        expect(pool.advance(4)).toBe(0);
         pool.dispose();
     });
 });

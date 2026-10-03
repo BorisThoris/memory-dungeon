@@ -62,7 +62,7 @@ void main() {
 
   float outerSdf = sdRoundedRect(vLocal, uOuterHalfSize, uOuterCorner);
   float innerSdf = sdRoundedRect(vLocal, uInnerHalfSize, uInnerCorner);
-  float softness = 0.012 + pulse * 0.004;
+  float softness = max(fwidth(outerSdf), 0.008 + pulse * 0.004);
   float outerMask = 1.0 - smoothstep(-softness, softness * 1.45, outerSdf);
   float innerMask = smoothstep(-softness * 1.25, softness, innerSdf);
   float ringMask = outerMask * innerMask;
@@ -82,7 +82,7 @@ void main() {
   float bandT = clamp(innerGap / max(innerGap + outerGap, 0.0001), 0.0, 1.0);
   float centerBand = 1.0 - abs(bandT * 2.0 - 1.0);
 
-  float t = uTime * mix(0.06, 1.0, motion);
+  float t = uTime * motion;
   vec2 flowUv = vec2(phase * (4.0 + uMode * 0.9) + uSeed * 23.0, bandT * 8.0 - t * (1.6 + uMode * 0.55));
   float flow = fbm(flowUv + fbm(flowUv * 0.58 + vec2(t * 0.42, uSeed)) * 0.72);
   float travel = 0.5 + 0.5 * sin(phase * (10.0 + uMode * 2.0) - t * (2.6 + uMode) + uSeed * 41.0);
@@ -102,5 +102,6 @@ void main() {
   }
 
   gl_FragColor = vec4(color, alpha);
+  #include <colorspace_fragment>
 }
 `;

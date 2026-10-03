@@ -156,7 +156,7 @@ export const applyCardGlowVisualState = ({
     u.uTime.value = elapsedTime;
     u.uIntensity.value = shaderGlowEnabled ? glow.intensity : 0;
     u.uPulse.value = glow.pulse;
-    u.uMotion.value = reduceMotion ? Math.min(renderQuality.cardGlowMotion, 0.08) : renderQuality.cardGlowMotion;
+    u.uMotion.value = reduceMotion ? 0 : renderQuality.cardGlowMotion;
     u.uMode.value = glow.mode;
     setUniformColor(u.uPrimaryColor, glow.primary);
     setUniformColor(u.uSecondaryColor, glow.secondary);

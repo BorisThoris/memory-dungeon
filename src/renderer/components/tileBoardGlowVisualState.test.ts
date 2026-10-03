@@ -192,7 +192,7 @@ describe('tileBoardGlowVisualState', () => {
         target.dispose();
     });
 
-    it('caps reduced-motion glow motion and clamps driver uniforms', () => {
+    it('holds reduced-motion glow still and clamps driver uniforms', () => {
         const target = createGlowTarget();
 
         applyCardGlowVisualState({
@@ -214,7 +214,7 @@ describe('tileBoardGlowVisualState', () => {
 
         expect(target.material.uniforms.uIntensity.value).toBe(3);
         expect(target.material.uniforms.uPulse.value).toBe(2);
-        expect(target.material.uniforms.uMotion.value).toBe(0.08);
+        expect(target.material.uniforms.uMotion.value).toBe(0);
 
         target.dispose();
     });

@@ -93,6 +93,42 @@ describe('the shared board particle pool', () => {
         pool.dispose();
     });
 
+    it('reclaims ambient particles for a new reaction without allocating or reviving disabled pop effects', () => {
+        const pool = createBoardParticleSystem();
+        pool.setComboPopEffects(false);
+        const geometry = pool.mesh.geometry;
+        for (let i = 0; i < 200; i += 1) pool.emit({ ...burst, kind: 'ember', shape: 'leaf', energy: 0.8, quality: 'low', seed: i });
+        expect(pool.advance(1.1)).toBe(boardParticleBudget('low'));
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'vapor', priority: 'event', energy: 1, quality: 'low' })).toBeGreaterThan(0);
+        expect(pool.mesh.geometry).toBe(geometry);
+        const life = geometry.getAttribute('lifetime');
+        expect(Array.from({ length: boardParticleBudget('low') }, (_, i) => life.getW(i))).toContain(BOARD_PARTICLE_SHAPE_KIND.vapor);
+        expect(pool.emit({ ...burst, kind: 'match', quality: 'low' })).toBe(0);
+        expect(pool.advance(1.2)).toBeLessThanOrEqual(boardParticleBudget('low'));
+        expect(pool.advance(4)).toBe(0);
+        pool.dispose();
+    });
+
+    it('separates ground from airborne materials and varies particles within one burst', () => {
+        const pool = createBoardParticleSystem();
+        const count = pool.emit({ ...burst, kind: 'ember', shape: 'vapor', priority: 'event', energy: 1, placement: 'ground' });
+        const appearance = pool.mesh.geometry.getAttribute('appearance');
+        expect(count).toBeGreaterThan(1);
+        const phases = new Set<number>();
+        for (let i = 0; i < count; i += 1) {
+            expect(appearance.getZ(i)).toBe(1);
+            expect(appearance.getY(i)).toBe(1);
+            phases.add(appearance.getX(i));
+        }
+        expect(phases.size).toBe(count);
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'spark', priority: 'event', energy: 1 })).toBeGreaterThan(0);
+        expect(appearance.getZ(count)).toBe(0);
+        const life = pool.mesh.geometry.getAttribute('lifetime');
+        expect(life.getY(count)).toBeLessThan(life.getY(0));
+        expect(pool.emit({ ...burst, kind: 'ember', shape: 'vapor', priority: 'event', reduceMotion: true })).toBe(0);
+        pool.dispose();
+    });
+
     it('places staggered contact ripples on the board using the same bounded buffers', () => {
         const pool = createBoardParticleSystem();
         expect(pool.emit({ ...burst, kind: 'ripple', delay: 0.14 })).toBe(3);
