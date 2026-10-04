@@ -5,7 +5,7 @@ import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, f
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';
 import { hasMutator } from './mutators';
-import { hasRelic } from './run-relic-rules';
+import { hasRelic, usesCampUpgrades } from './run-relic-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { essenceOf, focusOf, isElementalStoreId, storeElement } from './elemental-loot-rules';
@@ -310,8 +310,9 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
-    'a floor clear offers three doors, the realm it ended in among them': (before, run) => {
+    'a floor clear selects the next arena; historical runs offer doors': (before, run) => {
         if (run.status !== 'levelComplete' || before?.status === 'levelComplete' || !run.realmId) return null;
+        if (usesCampUpgrades(run)) return run.nextRealm && !run.realmDoors?.length ? null : 'next arena missing or choices still offered';
         const doors = run.realmDoors ?? [];
         if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
         return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
@@ -524,7 +525,8 @@ export const soakRun = ({
                     act(`buy:${row.id}`, bought);
                 }
             }
-            // The travel doors: a player picks one, the way the travel screen asks them to.
+            // Current runs already have a seed-random destination. Legacy replays retain doors.
+            if (usesCampUpgrades(run) && run.nextRealm) realmDoors += 1;
             if (Array.isArray(run.realmDoors) && run.realmDoors.length > 0) {
                 realmDoors += 1;
                 act('travel', chooseRealmDoor(run, pickRngIndex(rng, run.realmDoors.length)));

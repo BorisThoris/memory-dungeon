@@ -8,7 +8,7 @@ import { tileCharge } from './element-alchemy-rules';
 export type ElementalPouch = Partial<Record<TileSuit, number>>;
 export type ElementalStoreId = `focus_${TileSuit}` | `prime_${TileSuit}`;
 export const ELEMENTAL_LOOT_RULES_VERSION = 55;
-export const usesElementalLoot = (run: Pick<RunState, 'runRulesVersion'>): boolean => run.runRulesVersion >= ELEMENTAL_LOOT_RULES_VERSION;
+export const usesElementalLoot = (run: Pick<RunState, 'runRulesVersion'>): boolean => run.runRulesVersion >= ELEMENTAL_LOOT_RULES_VERSION && run.runRulesVersion < 58;
 export const essenceOf = (pouch: ElementalPouch | undefined, suit: TileSuit): number => runNonNegativeInteger(pouch?.[suit]);
 export const focusOf = (run: Pick<RunState, 'elementalFocus'>, suit: TileSuit): number => essenceOf(run.elementalFocus, suit);
 export const isElementalStoreId = (id: string): id is ElementalStoreId =>

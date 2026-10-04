@@ -157,7 +157,7 @@ describe('mechanics-encyclopedia', () => {
         expect(bank).toContain(`every **fifth match in a row**`);
         expect(MISS_BANK_COMBO_RUNG).toBe(5);
         expect(bank).toContain(`lasts **${words[MISS_BANK_LIFETIME_FLOORS]} floors**`);
-        expect(bank).toContain(`holds **${words[MISS_BANK_CAP]}** at most (**${words[DEEP_POCKETS_CAP]}** with Deep Pockets)`);
+        expect(bank).toContain(`holds **${words[MISS_BANK_CAP]}** at most (**${words[DEEP_POCKETS_CAP]}** with Deep Pockets at rank 1, up to **seven** at rank 3)`);
         const profile = getDefaultDifficultyProfile().playerCopy;
         expect(profile).toContain(`opens with ${words[MISS_BANK_OPENING]}`);
         expect(profile).toContain(`never holds more than ${words[MISS_BANK_CAP]}`);

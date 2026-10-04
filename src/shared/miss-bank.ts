@@ -1,7 +1,7 @@
 import type { MissBankGrant, RunState } from './contracts';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
-import { DEEP_POCKETS_CAP, GILDED_CHAIN_GOLD, hasRelic } from './run-relic-rules';
+import { relicRank, gildedChainGold } from './run-relic-rules';
 
 /**
  * The miss bank: the run's budget for being wrong, counted in misses - and, since 2026-09-24,
@@ -56,9 +56,9 @@ export const MISS_BANK_COMBO_RUNG = 5;
 export const MISS_BANK_LIFETIME_FLOORS = 3;
 export const MISS_BANK_CAP = 4;
 
-/** The cap this run is held to: four, or five with Deep Pockets (`run-relic-rules.ts`). */
-export const missBankCap = (run: Pick<RunState, 'relics'>): number =>
-    hasRelic(run, 'deep_pockets') ? DEEP_POCKETS_CAP : MISS_BANK_CAP;
+/** The cap this run is held to: four plus the Deep Pockets rank (`run-relic-rules.ts`). */
+export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion'>>): number =>
+    MISS_BANK_CAP + relicRank(run, 'deep_pockets');
 
 export type { MissBankGrant };
 
@@ -164,7 +164,7 @@ export const applyMissBudget = (before: RunState, after: RunState): RunState => 
     const earned = comboMissesEarned(before.stats.currentStreak, after.stats.currentStreak);
     if (earned > 0) {
         // Gilded Chain (`run-relic-rules.ts`) pays gold on the same rung that earns the miss.
-        const gilded = hasRelic(after, 'gilded_chain') ? GILDED_CHAIN_GOLD * earned : 0;
+        const gilded = gildedChainGold(after) * earned;
         return {
             ...after,
             missBank: grantMisses(after.missBank, level, earned, missBankCap(after)),

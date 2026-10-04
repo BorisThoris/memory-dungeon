@@ -136,12 +136,13 @@ test.describe('The store stop, in the store-stop room', () => {
         for (const id of ids) {
             const buy = page.getByTestId(`store-buy-${id}`);
             await expect(buy).toBeVisible();
+            await buy.scrollIntoViewIfNeeded();
             const box = (await buy.boundingBox())!;
             expect(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width && box.y + box.height <= viewport.height, `${id} on screen`).toBe(true);
             await buy.hover();
             await expect(page.getByTestId(`store-row-${id}`)).toBeVisible();
         }
-        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
+        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Continue to floor 4 →');
     });
 });
 
@@ -175,6 +176,7 @@ test.describe('The store stop on a phone', () => {
         for (const id of stocked) {
             const buy = page.getByTestId(`store-buy-${id}`);
             const viewport = page.viewportSize()!;
+            await buy.scrollIntoViewIfNeeded();
             const button = (await buy.boundingBox())!;
             expect(button.x >= 0 && button.y >= 0 && button.x + button.width <= viewport.width && button.y + button.height <= viewport.height, `${id} on screen`).toBe(true);
             await expect(buy).toBeEnabled();
@@ -184,7 +186,7 @@ test.describe('The store stop on a phone', () => {
                 return useAppStore.getState().run?.storePurchases?.[item];
             }, id), { timeout: 30_000 }).toBe(1);
         }
-        await expect(page.getByRole('button', { name: 'Descend' })).toBeInViewport();
+        await expect(page.getByTestId('store-descend')).toBeInViewport();
         const inventory = () => page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             const run = useAppStore.getState().run!;
@@ -198,7 +200,7 @@ test.describe('The store stop on a phone', () => {
         if (stocked.includes('shuffle')) expect(bought.shuffles).toBeGreaterThan(0);
         expect([...(bought.relics ?? [])].sort()).toEqual(stocked.filter((id) => !['miss', 'peek', 'shuffle', 'bomb'].includes(id)).sort());
         expect(bought.gold).toBeLessThan(100);
-        await page.getByRole('button', { name: 'Descend' }).click();
+        await page.getByTestId('store-descend').click();
         await expect.poll(async () => (await inventory()).level, { timeout: 30_000 }).toBe(4);
         const carried = await inventory();
         expect(carried.bombs).toBe(bought.bombs);

@@ -16,6 +16,7 @@ import { getChainTier, higherChainTier, runChainMomentumPairs, runLadderChain } 
 import { floorClearGold, isStoreStopFloor, rollStoreStock, runGold } from './run-store-rules';
 import { realmClearGold, rollRealmDoors, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
 import { realmAttunementLevel, realmCarryoverAtClear } from './realm-carryover-rules';
+import { usesCampUpgrades } from './run-relic-rules';
 import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-loot-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
@@ -136,11 +137,11 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
         ...(usesElementalLoot(run) ? { elementalEssence: addEssence(run.elementalEssence, elementalDrops) } : {}),
-        // The travel doors: where the next floor can be, the realm this one ended in among them.
+        // Select the destination once at clear; legacy rules retain their door choices.
         ...(realmId
             ? {
-                  realmDoors: rollRealmDoors(run.runSeed, board.level, realmId),
-                  nextRealm: null,
+                  realmDoors: usesCampUpgrades(run) ? null : rollRealmDoors(run.runSeed, board.level, realmId),
+                  nextRealm: usesCampUpgrades(run) ? rollRealmDoors(run.runSeed, board.level, realmId)[0]! : null,
                   realmFloorsThisRun: { ...(run.realmFloorsThisRun ?? {}), [realmId]: runNonNegativeInteger(run.realmFloorsThisRun?.[realmId] ?? 0) + 1 },
                   realmSmoke: carryover.realmSmoke,
                   realmChill: carryover.realmChill,

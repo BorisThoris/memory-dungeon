@@ -548,21 +548,21 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 261,
         present: ['STORE_STOP_EVERY_FLOORS', 'isStoreStopFloor', 'buyStoreItem'],
-        note: 'Rules 55 replace generic stock with the elemental forge every third floor. Arena-linked and seeded essence finds fund lasting focus or one prepared reaction per stop. The test hall clears floor 3 and forges Water; the soak verifies exact gold and essence costs.'
+        note: 'Rules 58 replace elemental purchases with camp every third floor. Gold buys three ranked run upgrades or misses, peeks and bombs. Descriptions show each next benefit and exact shortfall. The practice room buys Long Look; the soak verifies spending and the new economy.'
     },
     {
         id: 'power.bomb',
         verdict: 'changed',
         generation: 261,
         present: ['bombTargetTileId', 'applyBomb', 'bombCharges'],
-        note: 'Rules 51 start normal runs with one bomb. Aim it with one face-up card, and its pair goes with no turn, miss or score, never the floor’s last pair. The forge replaces charge purchases in rules 55; older stores still replenish it. The soak holds every bomb to costing exactly one charge.'
+        note: 'Rules 51 start normal runs with one bomb. Aim it with one face-up card, and its pair goes with no turn, miss or score, never the floor’s last pair. Rules 58 camps replenish bombs with gold; rules 55–57 retain their historical elemental economy. The soak holds every bomb to costing exactly one charge.'
     },
     {
         id: 'inventory.relics',
         verdict: 'changed',
         generation: 261,
         present: ['RELICS', 'hasRelic', 'DEEP_POCKETS_CAP', 'LONG_LOOK_MS', 'tallow_candle'],
-        note: 'Legacy relics remain effective in older runs. Rules 55 replace their shop stock with elemental focus: Fire converts fuses to charge, Water reveals current targets, Frost banks calm on each Frost cast, Grove ripens seeds. Ranks also strengthen cast reach and targets. The soak requires forging to happen in real runs.'
+        note: 'Rules 58 camps sell three ranks of Long Look, Deep Pockets and Gilded Chain. Ranks add study time, miss capacity or gold on every fifth consecutive match. Gold and ranks persist across floors and reset with a new run. Historical relics remain effective under their original rules.'
     },
     {
         id: 'surface.codex',

@@ -17,3 +17,12 @@
     .path { grid-column: 1 / -1; }
     .rewards, .carry { margin-top: 0; }
 }
+
+.destination { grid-column: 1 / -1; font-size: 0.8rem; line-height: 1.5; color: #ddd3c4; }
+.destination summary { cursor: pointer; min-height: 44px; align-content: center; }
+.destination summary:focus-visible { outline: 2px solid #f6ce8a; outline-offset: 2px; }
+.destination p { margin: 0.25rem 0; }
+.destination ul { margin: 0.4rem 0; padding-left: 1.2rem; }
+.journey[data-phase='camp'] .path { display: none; }
+.journey[data-phase='camp'] .rewards { grid-column: 1 / -1; margin-top: 0; }
+.journey[data-phase='camp'] .next { width: auto; margin-left: auto; color: #e5c28a; }

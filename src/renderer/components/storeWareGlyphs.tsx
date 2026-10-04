@@ -6,7 +6,7 @@ import type { StoreItemId } from '../../shared/run-store-rules';
  * counter; when it is not, the shelf is bare. Each is a small hand-set SVG in a 40x40 box in the
  * room's own inks - gold, cyan, parchment - so a ware reads as an object in the painting and not
  * as a button on it. The ring around it is gone; a lit glint under it and a thin outline on hover
- * or focus are all the chrome there is (`StoreVault.module.css`).
+ * or focus are all the chrome there is (`Camp.module.css`).
  */
 const GOLD = '#e8b96a';
 const GOLD_DARK = '#8a5a12';

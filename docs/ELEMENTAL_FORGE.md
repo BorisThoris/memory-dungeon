@@ -1,4 +1,6 @@
-# Elemental finds and the forge
+# Elemental finds and the forge (historical rules 55–57)
+
+Rules 58 remove essence drops and elemental purchases from new runs. The current economy is described in [CAMP_ECONOMY.md](CAMP_ECONOMY.md). This document records the old replay rules.
 
 Rules 55 turn the store into a place to shape the same elements the player matches. The game's decision is which pair to remember and match next, in an arena that answers. Purchases should change that decision and its aftermath.
 

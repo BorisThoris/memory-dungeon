@@ -5,118 +5,52 @@ import type { RunState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { buyStoreItem } from '../../shared/run-store-rules';
 import StoreVault from './StoreVault';
-import { STORE_HOTSPOTS } from './storeVaultLayout';
 
-const Vault = ({ gold, onDescend = vi.fn() }: { gold: number; onDescend?: () => void }) => {
-    const [run, setRun] = useState<RunState>(() => ({ ...createNewRun(0, { runRulesVersionOverride: 54 }), gold }));
-    return (
-        <StoreVault
-            floor={3}
-            onBuy={(id) => {
-                const bought = buyStoreItem(run, id);
-                if (bought) setRun(bought);
-                return bought !== null;
-            }}
-            onDescend={onDescend}
-            run={run}
-        />
-    );
+const Camp = ({ gold, onDescend = vi.fn() }: { gold: number; onDescend?: () => void }) => {
+    const [run, setRun] = useState<RunState>(() => ({ ...createNewRun(0), gold }));
+    return <StoreVault floor={3} run={run} onDescend={onDescend} onBuy={id => {
+        const bought = buyStoreItem(run, id);
+        if (bought) setRun(bought);
+        return bought !== null;
+    }} />;
 };
 
-describe('the store as a place', () => {
-    it('offers elemental forging with visible costs and explanations, and announces a purchase', () => {
-        const Forge = () => {
-            const [run, setRun] = useState<RunState>({ ...createNewRun(0), gold: 6, elementalEssence: { tide: 2 } });
-            return <StoreVault run={run} floor={3} onDescend={() => {}} onBuy={id => {
-                const next = buyStoreItem(run, id);
-                if (next) setRun(next);
-                return !!next;
-            }} />;
-        };
-        render(<Forge />);
-        expect(screen.getByRole('dialog')).toHaveAccessibleName('Elemental forge');
-        expect(screen.queryByTestId('store-buy-bomb')).toBeNull();
-        expect(screen.getByTestId('forge-pouch-tide')).toHaveTextContent('2 essence · Focus 0');
-        expect(screen.getByTestId('store-buy-focus_ember')).toBeDisabled();
-        const buy = screen.getByTestId('store-buy-focus_tide');
-        expect(buy).toHaveAccessibleName('Buy water focus for 6 gold and 2 essence');
+describe('camp', () => {
+    it('explains each upgrade without hovering, with ranks, costs and no element purchases', () => {
+        render(<Camp gold={12} />);
+        expect(screen.getByRole('dialog')).toHaveAccessibleName('Make the next floors yours');
+        expect(screen.getByTestId('store-row-long_look')).toHaveTextContent('Study time: +0 → +1 seconds');
+        expect(screen.getByTestId('store-row-gilded_chain')).toHaveTextContent('2 gold every 5 matches in a row');
+        expect(screen.getByTestId('store-buy-long_look')).toHaveAccessibleName('Buy long look for 8 gold');
+        expect(screen.getAllByLabelText('Rank 0 of 3')).toHaveLength(3);
+        expect(screen.queryByText(/essence|elemental forge/i)).toBeNull();
+        expect(screen.getByTestId('store-descend')).toHaveFocus();
+    });
+    it('announces upgrades, updates the purse and rank, and recovers focus when gold runs out', () => {
+        render(<Camp gold={8} />);
+        const buy = screen.getByTestId('store-buy-long_look');
         act(() => buy.focus());
         fireEvent.click(buy);
-        expect(screen.getByTestId('forge-pouch-tide')).toHaveTextContent('0 essence · Focus 1');
-        expect(screen.getByTestId('store-receipt')).toHaveTextContent('Forged Water focus');
-        expect(document.activeElement).toBe(screen.getByTestId('store-descend'));
+        expect(screen.getByTestId('camp-gold')).toHaveTextContent('0 gold');
+        expect(screen.getByTestId('store-row-long_look')).toHaveTextContent('1/3');
+        expect(screen.getByTestId('store-receipt')).toHaveTextContent('Upgraded Long Look to rank 1 of 3. 0 gold left.');
+        expect(buy).toBeDisabled();
+        expect(screen.getByTestId('store-descend')).toHaveFocus();
     });
-    it('is a labelled dialog whose wares are buttons on the room\'s objects, opening on Descend', () => {
-        render(<Vault gold={12} />);
-        const dialog = screen.getByTestId('store-sheet');
-        expect(dialog).toHaveAttribute('role', 'dialog');
-        expect(dialog).toHaveAccessibleName('Store');
-        expect(document.activeElement).toBe(screen.getByTestId('store-descend'));
-        expect(screen.getByTestId('store-descend')).toHaveTextContent('Descend');
-        for (const spot of STORE_HOTSPOTS) {
-            if (spot.id === 'descend') continue;
-            const button = screen.getByTestId(`store-buy-${spot.id}`);
-            // The ware is drawn on its spot: a shelf with something on it.
-            expect(screen.getByTestId(`store-ware-${spot.id}`).querySelector('svg')).not.toBeNull();
-            expect(button).toHaveAttribute('style', expect.stringContaining('--spot-x'));
-            expect(button.getAttribute('aria-label')).toMatch(/^Buy .* for \d+ gold$|: owned$/);
-        }
-        expect(screen.getByTestId('store-buy-bomb')).toHaveAccessibleName('Buy a bomb for 4 gold');
-    });
-
-    it('shows what a thing does on hover and on focus, and hides it again', () => {
-        render(<Vault gold={12} />);
-        const bomb = screen.getByTestId('store-buy-bomb');
-        expect(bomb).toHaveAttribute('data-shown', 'false');
-        fireEvent.mouseEnter(bomb);
-        expect(bomb).toHaveAttribute('data-shown', 'true');
-        expect(screen.getByTestId('store-row-bomb')).toHaveTextContent(/Flip a card, then bomb it/);
-        fireEvent.mouseLeave(bomb);
-        expect(bomb).toHaveAttribute('data-shown', 'false');
-        act(() => bomb.focus());
-        expect(bomb).toHaveAttribute('data-shown', 'true');
-    });
-
-    it('says a purchase once, in a status line inside the dialog, and never one that did not go through', () => {
-        render(<Vault gold={12} />);
-        const receipt = screen.getByTestId('store-receipt');
-        expect(receipt).toHaveAttribute('role', 'status');
-        expect(receipt.textContent).toBe('');
-        act(() => screen.getByTestId('store-buy-bomb').click());
-        expect(receipt).toHaveTextContent(/^Bought a bomb\. 8 gold left\.$/);
-        act(() => screen.getByTestId('store-buy-peek').click());
-        expect(receipt).toHaveTextContent(/^Bought a peek\. 5 gold left\.$/);
-        expect(screen.getByTestId('store-subtitle')).toHaveTextContent('5 gold');
-    });
-
-    it('moves focus on when the button that held it goes disabled, and to Descend when nothing is left', () => {
-        render(<Vault gold={10} />);
-        const longLook = screen.getByTestId('store-buy-long_look');
-        expect(longLook).not.toBeDisabled();
-        act(() => longLook.focus());
-        act(() => longLook.click());
-        expect(longLook).toBeDisabled();
-        expect(longLook).toHaveAttribute('data-blocked', 'owned');
-        expect(document.activeElement).toBe(screen.getByTestId('store-descend'));
-    });
-
-    it('draws only what the stop stocked, and leaves the rest of the shelves bare', () => {
-        const run: RunState = { ...createNewRun(0, { runRulesVersionOverride: 54 }), gold: 20, storeStock: ['miss', 'bomb', 'long_look'] };
-        render(<StoreVault floor={3} onBuy={() => false} onDescend={vi.fn()} run={run} />);
-        expect(screen.getByTestId('store-buy-miss')).toBeInTheDocument();
-        expect(screen.getByTestId('store-buy-bomb')).toBeInTheDocument();
-        expect(screen.getByTestId('store-buy-long_look')).toBeInTheDocument();
-        expect(screen.queryByTestId('store-buy-peek')).toBeNull();
-        expect(screen.queryByTestId('store-ware-peek')).toBeNull();
-        expect(screen.queryByTestId('store-buy-gilded_chain')).toBeNull();
-    });
-
-    it('descends on Escape and on the trapdoor', () => {
+    it('shows exact gold shortfalls and lets an empty purse continue', () => {
         const onDescend = vi.fn();
-        render(<Vault gold={5} onDescend={onDescend} />);
-        act(() => screen.getByTestId('store-descend').click());
-        expect(onDescend).toHaveBeenCalledTimes(1);
+        render(<Camp gold={0} onDescend={onDescend} />);
+        expect(screen.getByTestId('store-row-long_look')).toHaveTextContent('Need 8 more gold');
+        fireEvent.click(screen.getByTestId('store-descend'));
+        expect(onDescend).toHaveBeenCalledOnce();
+    });
+    it('caps ranks visibly and supports Escape to continue', () => {
+        const onDescend = vi.fn();
+        render(<Camp gold={100} onDescend={onDescend} />);
+        for (let rank = 0; rank < 3; rank++) fireEvent.click(screen.getByTestId('store-buy-long_look'));
+        expect(screen.getByTestId('store-buy-long_look')).toBeDisabled();
+        expect(screen.getByTestId('store-buy-long_look')).toHaveTextContent('Max rank');
         fireEvent.keyDown(document, { key: 'Escape' });
-        expect(onDescend).toHaveBeenCalledTimes(2);
+        expect(onDescend).toHaveBeenCalledOnce();
     });
 });

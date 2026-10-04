@@ -566,14 +566,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'store-stop',
-        title: 'The elemental forge',
-        mechanic: 'Every third floor, turn found essence and gold into a lasting elemental build or a prepared reaction.',
+        title: 'Camp upgrades',
+        mechanic: 'Every third floor, spend gold on upgrades for this run or emergency supplies.',
         graphMechanicIds: ['progression.store_stop', 'economy.gold'],
-        tryThis: 'Clear floor 3. Forge Water focus to reveal cards in its currents, or bottle an element to prepare a reaction.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12, elementalEssence: { tide: 4, ember: 2 } } }),
+        tryThis: 'Clear floor 3. Buy Long Look for one extra second to study every floor. Save gold for its next rank or buy supplies.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
         script: [
-            { step: { do: 'clear' }, says: 'floor 3 clears and is a store stop', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
-            { step: { do: 'buy', item: 'focus_tide' }, says: 'Water focus costs 6 gold and 2 Water essence', expect: (r, b) => (r.elementalFocus?.tide === 1 && runGold(b) - runGold(r) === 6 && (b.elementalEssence?.tide ?? 0) - (r.elementalEssence?.tide ?? 0) === 2 ? null : 'forge payout differs from its price') }
+            { step: { do: 'clear' }, says: 'floor 3 clears and opens camp', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
+            { step: { do: 'buy', item: 'long_look' }, says: 'Long Look costs 8 gold and adds a second to study', expect: (r, b) => (r.storePurchases?.long_look === 1 && runGold(b) - runGold(r) === 8 && getMemorizeDurationForRun(r, 4) - getMemorizeDurationForRun(b, 4) === 1000 ? null : 'camp upgrade differs from its description') }
         ]
     },
     {
@@ -1484,28 +1484,14 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'realm-travel',
-        title: 'The travel doors',
-        mechanic: 'A floor clear offers three doors - three realms, one calm, one wild, one raging - and the next floor is built behind the one walked through.',
+        title: 'Random next arena',
+        mechanic: 'Clearing a floor selects the next arena automatically. The same seed gives the same journey.',
         graphMechanicIds: ['economy.realm_travel', 'progression.run_flow'],
-        tryThis: 'Clear the floor, pick the second door and descend: the next floor is in that realm.',
+        tryThis: 'Clear the floor and continue: the next floor is already selected.',
         build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('frost', 'calm') }),
         script: [
-            {
-                step: { do: 'clear' },
-                says: 'the clear offers three doors, the frost among them',
-                expect: expectAll(statusIs('levelComplete'), (r) => {
-                    const doors = r.realmDoors ?? [];
-                    if (doors.length !== 3) return `${doors.length} doors`;
-                    if (doors.map((d) => d.severity).sort().join(',') !== 'calm,raging,wild') return 'not one of each severity';
-                    return doors.some((d) => d.realmId === 'frost') ? null : 'the realm the floor ended in is not a door';
-                })
-            },
-            { step: { do: 'travel', door: 1 }, says: 'the second door is walked through', expect: (r) => (r.nextRealm?.realmId === r.realmDoors?.[1]?.realmId ? null : 'the door was not taken') },
-            {
-                step: { do: 'advance' },
-                says: 'the next floor is built in that realm, at that severity',
-                expect: (r, b) => (r.realmId === b.realmDoors?.[1]?.realmId && r.realmSeverity === b.realmDoors?.[1]?.severity ? null : `built in ${r.realmId}/${r.realmSeverity}`)
-            }
+            { step: { do: 'clear' }, says: 'the clear selects one arena with no choices', expect: expectAll(statusIs('levelComplete'), r => r.nextRealm && !r.realmDoors?.length ? null : 'no random destination') },
+            { step: { do: 'advance' }, says: 'the next floor uses the selected arena', expect: (r, b) => r.realmId === b.nextRealm?.realmId && r.realmSeverity === b.nextRealm?.severity ? null : 'destination changed' }
         ]
     },
     {
@@ -1551,7 +1537,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () =>
             room(['a:t b:t c:e d:t', 'a:t e:t f:e c:e', 'b:t d:t e:t f:e'], {
                 misses: 3,
-                run: realmRun('grove', 'raging', { gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
+                run: realmRun('grove', 'raging', { runSeed: 2, gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
                 tiles: (tiles) => tiles.map((t) => (['b', 'e'].includes(t.pairKey) ? { ...t, vined: true } : t))
             }),
         script: [

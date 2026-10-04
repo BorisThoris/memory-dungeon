@@ -29,9 +29,8 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
  * - every card is made of its suit's element (`element-alchemy-rules.ts`): a card is untouched by
  *   its own element (it drinks it and is empowered) and by the one its element puts out, and the
  *   sway of the player's matches can turn the floor into another realm (`realm-sway-rules.ts`);
- * - at every floor clear the player walks through one of three **doors**: a realm and how hard
- *   its weather blows. Harder weather comes sooner and pays more gold at the clear. The realm the
- *   floor ended in is always one of the doors, so a floor tipped is a route chosen.
+ * - rules 58 automatically select the first of the seeded shuffled destinations at each clear.
+ *   Historical replays retain the three-door choice. Difficulty affects weather and gold payouts.
  *
  * Seeded throughout, so a shared seed is the same weather for everyone who plays it.
  */

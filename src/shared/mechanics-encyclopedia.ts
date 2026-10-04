@@ -362,21 +362,19 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
     },
     {
         id: 'store',
-        title: 'Essence and the elemental forge',
+        title: 'Gold and camp upgrades',
         description:
-            'New runs start with **one bomb**: press **Bomb**, then choose a card to remove its pair. Press Bomb again or Escape to cancel. You can also flip one card first and then press Bomb. The last pair must be matched. ' +
-            'A floor clear pays **gold**: two, plus one for each rung of the chain it cleared at (Clean, Sharp, Fever), plus one for every turn under par, three at most. ' +
-            'Every floor also drops **essence**: one of the arena\'s element and one random find; Storm gives two random finds. Trigger a reaction during the floor to find a third. ' +
-            'The **elemental forge** opens after every third floor. Spend **2 essence** of an element and **6 gold** to forge its focus; repeat ranks cost 3 more gold each. Every rank adds a cast tier for reach and targets. ' +
-            '**Fire focus** converts burning cards reached by its cast into charge. **Water focus** reveals cards affected by its current until the next flip. **Frost focus** banks one calm turn per rank on every Frost cast. **Grove focus** ripens seeds into blooms. Each rank affects one more card or adds one calm turn. ' +
-            'Or **bottle an element** for 1 essence and 3 gold (one more gold each repeat): replace your streak with two matches of that element, ready to react with the next different match. A miss breaks it. Only one bottle per stop. ' +
-            'Essence, forged focus and gold last for this run. Older rules retain their original store and purchased relics.'
+            'Clear floors and build combos to earn **gold**. A clear pays two gold, plus one per chain rung and up to three for turns under par. Arena difficulty can increase the payout. ' +
+            '**Camp** opens after every third floor. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
+            '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). Each upgrade has three ranks and lasts this run. ' +
+            'Need help immediately? Buy a miss for 4 gold, a peek for 3 or a bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
+            'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is selected randomly; no route choice is needed.'
     },
     {
         id: 'miss_budget',
         title: 'Misses',
         description:
-            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and so does every **fifth match in a row**. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most (**five** with Deep Pockets). A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
+            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and so does every **fifth match in a row**. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most (**five** with Deep Pockets at rank 1, up to **seven** at rank 3). A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
     },
     {
         id: 'scoring',
@@ -654,9 +652,10 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'realm_travel',
         title: 'Travel',
         description:
-            'Every floor clear opens **three doors**: three realms, one **Calm**, one **Wild** and one **Raging**. Calm weather comes a turn later and the clear pays its usual gold; Wild pays a quarter more; Raging comes a turn sooner, takes two cards at a time and pays half again. The realm the floor ended in - tipped or not - is always one of the doors. A run opens somewhere calm. ' +
-            'From the fourth floor the wild door is sometimes a **confluence**: two realms at once. Their weather comes by turns, both answer your turns - a miss freezes if either is the frost - and the clear pays **double**. Matching an omen settles the floor on the omen\u2019s realm alone. ' +
-            'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you go deeper twice as fast. Every clear in a realm takes you a level **deeper** into it, and every other realm fades by one; there is no limit. Each level is a quarter more gold on that realm\u2019s clears up to three and a twentieth after, one more pair of the floor made of the realm\u2019s element (up to half the floor), and more resonance from it. But a deep realm bites: it strikes back at a miss on a **wild** floor from depth three, and even a **calm** one from depth six, and its raging weather reaches further. The doors show your depth.'
+            'The next arena is selected **randomly** when a floor clears. Continue automatically, or leave camp after every third clear. A shared seed repeats the same journey. A run opens somewhere calm. ' +
+            'A **Calm** arena pays normal clear gold, **Wild** pays a quarter more and **Raging** pays half again. Only raging arenas have a regular weather clock; the others react to your matches and misses. ' +
+            'From the fourth floor a wild arena can be a **confluence**: two realms at once. Both affect the floor and the clear pays **double**. Matching an omen settles the floor on its realm alone. ' +
+            'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you go deeper twice as fast. Every clear in a realm takes you a level **deeper** into it, and every other realm fades by one; there is no limit. Each level is a quarter more gold on that realm\u2019s clears up to three and a twentieth after, one more pair of the floor made of the realm\u2019s element (up to half the floor), and more resonance from it. But a deep realm bites: it strikes back at a miss on a **wild** floor from depth three, and even a **calm** one from depth six, and its raging weather reaches further. The arena HUD shows your current realm.'
     },
     {
         id: 'tile_suits',

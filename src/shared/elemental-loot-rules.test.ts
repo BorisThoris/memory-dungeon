@@ -8,7 +8,7 @@ import { testHallRoom } from './test-hall-rooms';
 import { TILE_SUITS } from './tile-suit-rules';
 import type { RunState } from './contracts';
 
-const rich = (): RunState => ({ ...createNewRun(0, { runSeed: 17 }), gold: 100,
+const rich = (): RunState => ({ ...createNewRun(0, { runSeed: 17, runRulesVersionOverride: 57 }), gold: 100,
     elementalEssence: { ember: 8, tide: 8, moss: 8, bone: 8 } });
 
 describe('elemental finds and forging', () => {
@@ -61,7 +61,7 @@ describe('elemental finds and forging', () => {
 
     it('allows one prepared reaction per stop and actually reacts on the next different match', () => {
         const base = testHallRoom('element-steam').build();
-        const run = { ...base, gold: 30, elementalEssence: { tide: 2 }, elementStreak: null };
+        const run = { ...base, runRulesVersion: 57, gold: 30, elementalEssence: { tide: 2 }, elementStreak: null };
         const bottled = buyStoreItem(run, 'prime_tide')!;
         expect(bottled.elementalEssence?.tide).toBe(1);
         expect(bottled.gold).toBe(27);

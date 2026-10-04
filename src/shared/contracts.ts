@@ -15,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 57: every-match ice/vine holds and explicit blocked-cast feedback. */
-export const GAME_RULES_VERSION = 57;
+/** Bump when generation or player-visible gameplay rules change. 58: automatic random arenas and gold-funded camp upgrades replace elemental purchases. */
+export const GAME_RULES_VERSION = 58;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -825,18 +825,18 @@ export interface RunState {
     /**
      * The purse (`run-store-rules.ts`): gold earned at floor clears and spent at the store stop
      * every third floor. Absent on a run built before it, read as nought. `storePurchases` counts what this
-     * run has bought, which is what the prices climb on.
+     * run has bought, which prices climb on and which stores camp upgrade ranks.
      */
     gold?: number;
     storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId, number>>;
-    /** Found at floor clears; spent at the elemental forge. Both persist for this run. */
+    /** Historical rules 55–57: essence finds and focus purchases. Not awarded in current runs. */
     elementalEssence?: ElementalPouch;
     elementalFocus?: ElementalPouch;
     /** A prepared reaction can be bought only once per stop. */
     elementalPrimeFloor?: number;
     /**
      * What this stop has on its shelves (`rollStoreStock`), rolled from the seed and the floor
-     * when the stop opens: the four elemental recipes in rules 55, legacy stock before that.
+     * when the stop opens: six camp wares in rules 58, elemental recipes in rules 55–57, legacy stock before that.
      * Absent stock reads as that rule version's complete catalog.
      */
     storeStock?: Array<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId>;

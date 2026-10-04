@@ -37,10 +37,8 @@ import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-powe
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
-import { BOMB_TOOL_COPY, STORE_SHEET_COPY } from '../copy/storeSheet';
+import { BOMB_TOOL_COPY } from '../copy/storeSheet';
 import StoreVault from './StoreVault';
-import RealmTravel from './RealmTravel';
-import { FloorJourney } from './FloorJourney';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -127,7 +125,7 @@ import { IceSheetOverlay } from './IceSheetOverlay';
 import { SceneWipe } from './SceneWipe';
 import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
-import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { REALMS, REALM_SEVERITIES, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
@@ -431,11 +429,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * that cleared, so it opens once per stop.
      */
     const [storeStopKey, setStoreStopKey] = useState<string | null>(null);
-    /*
-     * The travel doors (`realm-rules.ts`): after the beat - and after the store, on a store floor -
-     * the player picks where the next floor is. Keyed on the floor that cleared, like the store.
-     */
-    const [travelKey, setTravelKey] = useState<string | null>(null);
+
     const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (!compactTouchChrome) {
@@ -451,7 +445,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
             continueToNextLevel: state.continueToNextLevel,
-            travelThroughRealmDoor: state.travelThroughRealmDoor,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
@@ -758,7 +751,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         applyFlashPairPower,
         greetFloorResident,
         continueToNextLevel,
-        travelThroughRealmDoor,
         dismissPowersFtue,
         goToMenu,
         buyStoreItem,
@@ -1222,8 +1214,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const storeStopDue = isStoreStopFloor(run.lastLevelResult?.level) && !isPassAndPlayRun(run.passAndPlay);
-    // A shared table does not stop for doors either: the next floor builds behind the first one.
-    const travelDue = (run.realmDoors?.length ?? 0) > 0 && !isPassAndPlayRun(run.passAndPlay);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1245,7 +1235,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * was cut short by anything else is harmless.
      */
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey || travelKey === floorClearKey) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1260,10 +1250,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const afterBeat = (): void => {
             if (storeStopDue) {
                 setStoreStopKey(floorClearKey);
-                return;
-            }
-            if (travelDue) {
-                setTravelKey(floorClearKey);
                 return;
             }
             continueToNextLevel();
@@ -1288,9 +1274,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey, travelDue, travelKey]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey]);
 
-    const floorClearNotes = [floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement)].filter(
+    const floorClearNotes = [
+        storeStopDue ? 'Camp next · Spend gold on run upgrades or supplies.' : run.nextRealm ? `Next: ${REALMS[run.nextRealm.realmId].title} · ${REALM_SEVERITIES[run.nextRealm.severity].title}. Arena selected automatically.` : null,
+        floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement)].filter(
         (line): line is string => typeof line === 'string' && line.length > 0
     );
     const nextFloorIdentity = nextFloorPreview
@@ -1716,8 +1704,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The store stop is a dialog over the cleared board like pause is, so the board goes inert under
     // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
-    const travelOpen = run.status === 'levelComplete' && travelKey === floorClearKey;
-    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey && !travelOpen;
+    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
     /*
      * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
      * collapses it into the void for the floor, and the store stop is the merchant's vault.
@@ -1748,7 +1735,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [run, storeSheetOpen, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
     );
     const gameplayShellInert =
-        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen || travelOpen);
+        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1762,7 +1749,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-testid="game-shell"
             data-combo-stage={comboHeatLevelsNow.stage}
             data-combo-theme={comboTemper.id}
-            data-travel-open={travelOpen ? 'true' : 'false'}
+            data-travel-open="false"
             data-store-open={storeSheetOpen ? 'true' : 'false'}
             data-zone={isZoneActive(run) ? 'true' : 'false'}
             ref={shellRef}
@@ -1905,7 +1892,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
-                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen && !travelOpen ? (
+                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen ? (
                                 <FloorClearBeat
                                     notes={floorClearNotes}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
@@ -2201,24 +2188,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </dl>
                     </OverlayModal>
                 )}
-                {!suppressStatusOverlays && travelOpen && run.realmDoors ? (
-                    <RealmTravel
-                        doors={run.realmDoors}
-                        summary={<FloorJourney run={run} phase="route" />}
-                        reduceMotion={reduceMotion}
-                        endedIn={runRealmId(run)}
-                        floorsIn={run.realmFloorsThisRun ?? {}}
-                        attunement={run.realmAttunement ?? {}}
-                        onChoose={(index) => {
-                            playMenuOpen();
-                            travelThroughRealmDoor(index);
-                        }}
-                    />
-                ) : null}
                 {!suppressStatusOverlays && storeSheetOpen && (
                     <StoreVault
                         floor={run.lastLevelResult?.level ?? 0}
-                        onDescend={() => (travelDue ? setTravelKey(floorClearKey) : continueToNextLevel())}
+                        onDescend={continueToNextLevel}
                         onBuy={(id) => {
                                 const before = useAppStore.getState().run;
                                 playMenuOpen();

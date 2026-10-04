@@ -68,3 +68,29 @@ export const isRelicId = (value: unknown): value is RelicId => RELIC_IDS.include
 export const hasRelic = (run: Pick<RunState, 'relics'>, id: RelicId): boolean => (run.relics ?? []).includes(id);
 
 export const relicDefinition = (id: RelicId): RelicDefinition => RELICS.find((relic) => relic.id === id)!;
+
+/** Rules 58: camp upgrades have three ranks, bought with gold and kept for this run. */
+export const CAMP_RULES_VERSION = 58;
+export const CAMP_UPGRADE_MAX_RANK = 3;
+export const CAMP_UPGRADE_IDS = ['long_look', 'deep_pockets', 'gilded_chain'] as const;
+export type CampUpgradeId = typeof CAMP_UPGRADE_IDS[number];
+type RelicRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion'>>;
+export const usesCampUpgrades = (run: Partial<Pick<RunState, 'runRulesVersion'>>): boolean =>
+    (run.runRulesVersion ?? 0) >= CAMP_RULES_VERSION;
+export const isCampUpgrade = (id: string): id is CampUpgradeId =>
+    (CAMP_UPGRADE_IDS as readonly string[]).includes(id);
+export const relicRank = (run: RelicRun, id: RelicId): number => {
+    if (!hasRelic(run, id)) return 0;
+    const bought = run.storePurchases?.[id] ?? 1;
+    return usesCampUpgrades(run) && isCampUpgrade(id)
+        ? Math.min(CAMP_UPGRADE_MAX_RANK, Math.max(1, Number.isFinite(bought) ? Math.floor(bought) : 1)) : 1;
+};
+export const gildedChainGold = (run: RelicRun): number => {
+    const rank = relicRank(run, 'gilded_chain');
+    return rank > 0 ? GILDED_CHAIN_GOLD + rank - 1 : 0;
+};
+export const campUpgradeBenefit = (id: CampUpgradeId, rank: number): string => {
+    if (id === 'long_look') return `+${rank} sec to study every floor`;
+    if (id === 'deep_pockets') return `${4 + rank} miss capacity`;
+    return `${rank ? GILDED_CHAIN_GOLD + rank - 1 : 0} gold per 5 matches in a row`;
+};

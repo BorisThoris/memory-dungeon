@@ -35,102 +35,105 @@ test.describe('a11y — scoped axe (REF-094)', () => {
      * said nothing at all, the button that bought the last thing the gold covered went disabled
      * under focus and dropped it on <body>, and the board under the sheet was not inert.
      */
-    test('store stop: axe clean, a keyboard buy is said once, focus survives, Escape descends', async ({ page }) => {
-        test.setTimeout(360_000);
+    test('camp: ranks and costs are clear, keyboard focus survives, mobile scrolls, Escape continues', async ({ page }) => {
+        test.setTimeout(600_000);
+        const errors: string[] = [];
+        page.on('pageerror', error => errors.push(error.message));
+        await page.setViewportSize({ width: 1280, height: 800 });
         await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
-        await page.waitForFunction(
-            async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status === 'playing',
-            null,
-            { timeout: 60_000, polling: 500 }
-        );
-        // Exercise the normal arena → forge → travel loop in this small authored room.
+        await page.waitForFunction(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status === 'playing', null, { timeout: 60_000 });
         await page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             useAppStore.setState(state => ({ run: { ...state.run!, realmId: 'tide', realmSeverity: 'calm' } }));
         });
         for (const pair of ['a', 'b']) {
-            await page.evaluate(async (key) => {
+            await page.evaluate(async key => {
                 const store = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();
                 store.pressTile(`${key}-1`);
                 store.pressTile(`${key}-2`);
             }, pair);
-            if (pair === 'b') {
-                await expect(page.getByTestId('floor-clear-essence')).toBeVisible({ timeout: 30_000 });
-                await page.screenshot({ path: 'output/playwright/elemental-essence-drop.png' });
-            }
             await page.waitForTimeout(1200);
         }
         const sheet = page.getByTestId('store-sheet');
         await expect(sheet).toBeVisible({ timeout: 30_000 });
+        await expect(page.getByTestId('realm-travel')).toHaveCount(0);
+        await expect(page.getByTestId('floor-clear-essence')).toHaveCount(0);
+        await expect(sheet).not.toContainText(/essence|forge|choose.*arena/i);
         await expect(page.locator('[data-a11y-gameplay-inert="true"]')).toHaveCount(1);
-        const { violations } = await new AxeBuilder({ page }).include('[data-testid="store-sheet"]').disableRules(['color-contrast']).analyze();
+        const { violations } = await new AxeBuilder({ page }).include('[data-testid="store-sheet"]').analyze();
         expect(seriousOnly(violations)).toEqual([]);
-
-        // Tab reaches a buy button from Descend; Enter buys it and the receipt says so, once.
-        const bomb = page.getByTestId('store-buy-focus_tide');
-        await expect(bomb).toHaveAccessibleName(/^Buy water focus for \d+ gold and 2 essence$/);
-        await expect(page.getByTestId('store-buy-bomb')).toHaveCount(0);
-        await expect(page.getByTestId('floor-journey')).toContainText('gold earned');
-        await expect(page.getByTestId('store-descend')).toBeInViewport({ ratio: 1 });
-        for (const button of await sheet.locator('[data-testid^=store-buy-]').all()) await expect(button).toBeInViewport({ ratio: 1 });
-        await page.getByTestId('elemental-forge').evaluate(node => node.parentElement!.parentElement!.scrollTo(0, 0));
+        await expect(page.getByTestId('camp-next-arena')).toContainText('Randomly selected');
+        const destination = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.nextRealm!);
+        const buy = page.getByTestId('store-buy-long_look');
+        await expect(buy).toHaveAccessibleName('Buy long look for 8 gold');
         await page.getByTestId('store-descend').focus();
-        await page.screenshot({ path: 'output/playwright/elemental-forge-desktop.png' });
-        for (let step = 0; step < 8; step += 1) {
-            if (await bomb.evaluate((node) => node === document.activeElement)) break;
-            await page.keyboard.press('Tab');
-        }
-        await expect(bomb).toBeFocused();
+        for (let i = 0; i < 10 && !await buy.evaluate(node => node === document.activeElement); i++) await page.keyboard.press('Tab');
+        await expect(buy).toBeFocused();
         await page.keyboard.press('Enter');
-        await expect(page.getByTestId('store-receipt')).toHaveText(/^Forged Water focus\. Its casts are stronger for this run\. \d+ gold left\.$/);
-        await expect(page.getByTestId('forge-pouch-tide')).toContainText('Focus 1');
-
-        // Keep buying bombs until the price outruns the purse: the button goes disabled under
-        // focus, and focus has to go on to something still for sale, or Descend, never the page.
-        for (let step = 0; step < 6 && (await bomb.isEnabled()); step += 1) {
-            await bomb.focus();
+        await expect(page.getByTestId('store-receipt')).toContainText('Upgraded Long Look to rank 1 of 3.');
+        await expect(page.getByTestId('store-row-long_look')).toContainText('1/3');
+        for (let i = 0; i < 3 && await buy.isEnabled(); i++) {
+            await buy.focus();
             await page.keyboard.press('Enter');
-            await page.waitForTimeout(150);
         }
-        await expect(bomb).toBeDisabled();
-        const landing = await page.evaluate(() => {
-            const active = document.activeElement as HTMLButtonElement | null;
-            return {
-                inSheet: Boolean(active?.closest('[data-testid="store-sheet"]')),
-                enabled: active instanceof HTMLButtonElement && !active.disabled
-            };
-        });
-        expect(landing, 'the spent buy button dropped focus on the page').toEqual({ inSheet: true, enabled: true });
-
-        await page.setViewportSize({ width: 812, height: 375 });
-        await expect(page.getByTestId('store-descend')).toBeInViewport({ ratio: 1 });
-        await page.screenshot({ path: 'output/playwright/forge-landscape.png' });
-        await page.setViewportSize({ width: 390, height: 844 });
-        await page.getByTestId('elemental-forge').evaluate(node => node.parentElement!.parentElement!.scrollTo(0, 0));
-        await page.screenshot({ path: 'output/playwright/elemental-forge-phone.png' });
-        await page.getByTestId('store-descend').scrollIntoViewIfNeeded();
-        await expect(page.getByTestId('store-descend')).toBeInViewport();
-        expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-
+        await expect(buy).toBeDisabled();
+        expect(await page.evaluate(() => {
+            const active = document.activeElement;
+            return active instanceof HTMLButtonElement && !active.disabled && !!active.closest('[data-testid="store-sheet"]');
+        })).toBe(true);
+        for (const [name, width, height] of [['desktop', 1280, 800], ['phone', 390, 844], ['small-phone', 320, 568], ['landscape', 812, 375]] as const) {
+            await page.setViewportSize({ width, height });
+            await expect(page.getByTestId('store-descend')).toBeInViewport({ ratio: 1 });
+            // Batch geometry reads and real scrolls inside the page: low-CPU isolated runners
+            // otherwise spend most of this check taking protocol snapshots of each assertion.
+            const buttons = await sheet.evaluate(async node => {
+                const scroller = node.querySelector('[data-testid="store-rows"]')!;
+                const checks = [];
+                for (const button of node.querySelectorAll<HTMLButtonElement>('[data-testid^="store-buy-"]')) {
+                    button.scrollIntoView({ block: 'nearest' });
+                    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+                    const r = button.getBoundingClientRect();
+                    const viewport = scroller.getBoundingClientRect();
+                    checks.push({ id: button.dataset.testid, reachable: r.top >= viewport.top - 1 && r.bottom <= viewport.bottom + 1 && r.left >= 0 && r.right <= innerWidth, touchSize: r.height >= 44 && r.width >= 44 });
+                }
+                return checks;
+            });
+            expect(buttons).toHaveLength(6);
+            for (const button of buttons) expect(button, button.id).toMatchObject({ reachable: true, touchSize: true });
+            await page.getByTestId('store-rows').evaluate(node => node.scrollTo(0, 0));
+            expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+            await page.screenshot({ path: `output/playwright/camp-${name}.png` });
+        }
+        const remainingGold = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.gold);
         await page.keyboard.press('Escape');
         await expect(sheet).toBeHidden({ timeout: 20_000 });
-        await expect(page.getByTestId('realm-travel')).toBeVisible({ timeout: 20_000 });
-        await expect(page.getByTestId('floor-journey')).toContainText('Floor 4 ahead');
-        await page.screenshot({ path: 'output/playwright/arena-choices-compact.png' });
-        await page.setViewportSize({ width: 1280, height: 800 });
-        await page.screenshot({ path: 'output/playwright/arena-choices-desktop.png' });
-        await page.setViewportSize({ width: 812, height: 375 });
-        await page.getByTestId('realm-door-2').scrollIntoViewIfNeeded();
-        await expect(page.getByTestId('realm-door-2')).toBeInViewport();
-        await page.screenshot({ path: 'output/playwright/arena-choices-landscape.png' });
-        const chosenRealm = await page.getByTestId('realm-door-2').getAttribute('data-realm');
-        await page.getByTestId('realm-door-2').click();
-        await expect(page.getByTestId('realm-travel')).toBeHidden();
+        await expect(page.getByTestId('realm-travel')).toHaveCount(0);
         await expect.poll(async () => page.evaluate(async () => {
             const run = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
-            return { level: run.board?.level, realm: run.realmId };
-        }), { timeout: 45_000 }).toEqual({ level: 4, realm: chosenRealm });
+            return { floor: run.board?.level, realm: run.realmId, gold: run.gold, rank: run.storePurchases?.long_look };
+        }), { timeout: 45_000 }).toEqual({ floor: 4, realm: destination.realmId, gold: remainingGold, rank: 1 });
+        expect(errors).toEqual([]);
+    });
+
+    test('ordinary floor clears continue automatically without a route choice', async ({ page }) => {
+        test.setTimeout(180_000);
+        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 90_000 });
+        await page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            useAppStore.setState(state => ({ run: { ...state.run!, realmId: 'tide', board: { ...state.run!.board!, level: 1 } } }));
+        });
+        for (const pair of ['a', 'b']) {
+            await page.evaluate(async key => {
+                const store = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();
+                store.pressTile(`${key}-1`); store.pressTile(`${key}-2`);
+            }, pair);
+            await page.waitForTimeout(1200);
+        }
+        await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level), { timeout: 45_000 }).toBe(2);
+        await expect(page.getByTestId('store-sheet')).toHaveCount(0);
+        await expect(page.getByTestId('realm-travel')).toHaveCount(0);
     });
 
     test('in-run level 1: serious violations only', async ({ page }) => {

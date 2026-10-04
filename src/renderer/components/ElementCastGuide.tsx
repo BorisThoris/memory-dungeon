@@ -60,7 +60,7 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
                 {run.realmId ? <p>{ARENA_GROUND_RULES[run.realmId]}</p> : null}
                 {run.realmSecondaryId ? <p>{ARENA_GROUND_RULES[run.realmSecondaryId]}</p> : null}
                 <p>Own element charges; counter-element resists. Blocks connect through touching edges, never diagonals or empty cells. One charge per card per turn; every 4 charges matched pays 1 gold and all charges add resonance. Ice and vines block turning. Holds cover at least two complete pairs and leave another pair free; breaking a held group frees it. Blocked attempts stay visible with their reason.</p>
-                <p>Ground persists. Roots yield +1 gold; ice anchors. Floors drop 2 essence, +1 for an amplified reaction. Forge every 3 floors.</p>
+                <p>Ground persists. Roots yield +1 gold; ice anchors. Spend gold at camp every 3 floors: upgrade your memory time, miss capacity or combo earnings. Upgrades last this run.</p>
             </details>
             </div>
             <button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back</button>

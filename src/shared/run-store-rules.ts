@@ -1,20 +1,15 @@
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
 import { grantMisses, missBankCap, missesLeft } from './miss-bank';
-import { hasRelic, isRelicId, RELICS, type RelicId } from './run-relic-rules';
+import { hasRelic, isRelicId, RELICS, usesCampUpgrades, isCampUpgrade, relicRank, campUpgradeBenefit, CAMP_UPGRADE_MAX_RANK, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_COST, isElementalStoreId, storeElement, usesElementalLoot, type ElementalStoreId } from './elemental-loot-rules';
 import { TILE_SUITS } from './tile-suit-rules';
 import { ELEMENT_NAMES } from './element-alchemy-rules';
 
-/**
- * Every third floor is a stop. Rules 55 turn it into the elemental forge:
- * found essence and earned gold buy a lasting cast specialization or a prepared reaction.
- * Prices increase per recipe, so preparation competes with investing in the run's build.
- * Older rules keep their charge/relic stock. See docs/ELEMENTAL_FORGE.md.
- * A shared game at one screen never stops: the table is not one player's run.
- */
+/** Every third clear opens camp. Rules 58 spend gold on three ranked upgrades or supplies.
+ * Legacy stores remain deterministic for older replay rules. Shared tables skip the stop. */
 export const STORE_STOP_EVERY_FLOORS = 3;
 
 export const isStoreStopFloor = (clearedLevel: number | null | undefined): boolean => {
@@ -103,6 +98,13 @@ export const ELEMENTAL_STORE_ITEMS: readonly StoreItemDefinition[] = TILE_SUITS.
         body: `Prime ${ELEMENT_NAMES[suit]} for the next floor. Match another element to react. A miss breaks it. Replaces your streak; one bottle per stop.`,
         basePrice: 3, priceStep: 1, kind: 'prime' as const }
 ]);
+/** Always available at camp: build a run, or spend on immediate help. */
+export const CAMP_ITEMS: readonly StoreItemDefinition[] = [
+    { id: 'long_look', title: 'Long Look', body: 'More time to memorize every board.', basePrice: 8, priceStep: 6, kind: 'relic' },
+    { id: 'deep_pockets', title: 'Deep Pockets', body: 'Also restores 1 miss now, lasting three floors.', basePrice: 8, priceStep: 6, kind: 'relic' },
+    { id: 'gilded_chain', title: 'Gilded Chain', body: 'Earn extra gold as you keep matching without a miss.', basePrice: 6, priceStep: 5, kind: 'relic' },
+    ...STORE_ITEMS.filter(item => ['miss', 'peek', 'bomb'].includes(item.id))
+];
 const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
 
 export type StoreRun = Pick<
@@ -125,6 +127,7 @@ export type StoreRun = Pick<
  * the stops read as different rooms and a relic is something you find rather than pick.
  */
 export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[], rulesVersion = 54): StoreItemId[] => {
+    if (usesCampUpgrades({ runRulesVersion: rulesVersion })) return CAMP_ITEMS.map(item => item.id);
     if (usesElementalLoot({ runRulesVersion: rulesVersion })) return ELEMENTAL_STORE_ITEMS.map(item => item.id);
     const rng = createMulberry32(hashStringToSeed(`store-stock:${Math.floor(runSeed)}:${Math.floor(floor)}`));
     const stock: StoreItemId[] = ['miss'];
@@ -145,8 +148,8 @@ export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeIn
 export const storePurchaseCount = (run: Pick<RunState, 'storePurchases'>, id: StoreItemId): number =>
     runNonNegativeInteger(run.storePurchases?.[id] ?? 0);
 
-export const storePrice = (run: Pick<RunState, 'storePurchases'>, id: StoreItemId): number => {
-    const item = ALL_STORE_ITEMS.find((candidate) => candidate.id === id)!;
+export const storePrice = (run: Pick<RunState, 'storePurchases'> & Partial<Pick<RunState, 'runRulesVersion'>>, id: StoreItemId): number => {
+    const item = (usesCampUpgrades(run) ? CAMP_ITEMS : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
     return item.basePrice + item.priceStep * storePurchaseCount(run, id);
 };
 
@@ -156,15 +159,17 @@ export interface StoreOfferRow {
     body: string;
     price: number;
     /** Why it cannot be bought right now, or `null` when it can. */
-    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | 'essence' | 'prepared' | null;
+    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | 'essence' | 'prepared' | 'max_rank' | null;
     kind: StoreItemDefinition['kind'];
+    rank?: number;
+    goldShortfall?: number;
     essenceCost?: number;
     essenceHeld?: number;
 }
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    (usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
+    (usesCampUpgrades(run) ? CAMP_ITEMS : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
         const price = storePrice(run, item.id);
         let blocked: StoreOfferRow['blocked'] = null;
         let essenceCost: number | undefined;
@@ -183,9 +188,17 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
             if (left == null) blocked = 'no_bank';
             else if (left >= missBankCap(run)) blocked = 'full';
         }
-        if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';
+        const rank = usesCampUpgrades(run) && isCampUpgrade(item.id) ? relicRank(run, item.id) : undefined;
+        if (rank !== undefined && isCampUpgrade(item.id)) {
+            body = rank >= CAMP_UPGRADE_MAX_RANK ? `${campUpgradeBenefit(item.id, rank)}. Maximum rank.`
+                : item.id === 'long_look' ? `Study time: +${rank} → +${rank + 1} seconds on every floor.`
+                : item.id === 'deep_pockets' ? `Miss capacity: ${4 + rank} → ${5 + rank}. Restores 1 miss now, lasting three floors.`
+                : `Combo payout: ${rank ? rank + 1 : 0} → ${rank + 2} gold every 5 matches in a row.`;
+            if (item.id === 'deep_pockets' && missesLeft(run) == null) blocked = 'no_bank';
+            if (rank >= CAMP_UPGRADE_MAX_RANK) blocked = 'max_rank';
+        } else if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';
         if (blocked === null && runGold(run) < price) blocked = 'gold';
-        return { id: item.id, title: item.title, body, price, blocked, kind: item.kind, ...(essenceCost === undefined ? {} : { essenceCost, essenceHeld }) };
+        return { id: item.id, title: item.title, body, price, blocked, kind: item.kind, rank, goldShortfall: Math.max(0, price - runGold(run)), ...(essenceCost === undefined ? {} : { essenceCost, essenceHeld }) };
     });
 
 /** The purchase, or `null` when the sheet would have said no. */
@@ -217,6 +230,10 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
         case 'bomb':
             return { ...paid, bombCharges: runNonNegativeInteger(run.bombCharges) + 1 };
         default:
-            return { ...paid, relics: [...(run.relics ?? []), id] };
+            return {
+                ...paid, relics: [...new Set([...(run.relics ?? []), id])],
+                ...(usesCampUpgrades(run) && id === 'deep_pockets'
+                    ? { missBank: grantMisses(run.missBank ?? [], run.board?.level ?? 1, 1, 4 + (row.rank ?? 0) + 1) } : {})
+            };
     }
 };
