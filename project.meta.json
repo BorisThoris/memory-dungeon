@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-03T18:35:09.769Z",
+  "generatedAt": "2026-10-04T16:34:07.560Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -299,28 +299,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 166234,
+        "bytes": 167295,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-03T18:34:46.451Z"
+        "capturedAt": "2026-10-04T16:33:47.772Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157085,
+        "bytes": 157549,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-03T18:34:52.271Z"
+        "capturedAt": "2026-10-04T16:33:52.803Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 130350,
+        "bytes": 131547,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-03T18:35:04.220Z"
+        "capturedAt": "2026-10-04T16:34:02.467Z"
       },
       {
         "profile": "mobile",
@@ -329,16 +329,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-03T18:34:58.308Z"
+        "capturedAt": "2026-10-04T16:33:57.360Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122885,
+        "bytes": 122982,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-03T18:35:09.493Z"
+        "capturedAt": "2026-10-04T16:34:07.368Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -347,7 +347,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-03T18:31:14.457Z"
+        "capturedAt": "2026-10-04T16:31:49.942Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -356,7 +356,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-03T18:31:14.457Z"
+        "capturedAt": "2026-10-04T16:31:49.943Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -365,7 +365,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-03T18:31:14.458Z"
+        "capturedAt": "2026-10-04T16:31:49.943Z"
       },
       {
         "profile": "reel-end-card",
@@ -374,7 +374,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-03T18:31:14.459Z"
+        "capturedAt": "2026-10-04T16:31:49.944Z"
       }
     ],
     "trailers": [
@@ -501,13 +501,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1312,
-    "testFiles": 560,
-    "sourceLines": 203490,
+    "sourceFiles": 1315,
+    "testFiles": 564,
+    "sourceLines": 203752,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1122
+        "files": 1124
       },
       {
         "directory": "scripts",
@@ -515,7 +515,7 @@
       },
       {
         "directory": "e2e",
-        "files": 71
+        "files": 72
       },
       {
         "directory": "packages",
@@ -542,10 +542,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "ff308185",
-    "lastCommitDate": "2026-10-03T21:30:41+03:00",
-    "lastCommitSubject": "Clarify between-floor decisions and render lasting elemental terrain",
-    "commitCount": 1926,
+    "head": "9e890598",
+    "lastCommitDate": "2026-10-04T19:30:59+03:00",
+    "lastCommitSubject": "Replace arena choices and elemental purchases with camp upgrades",
+    "commitCount": 1931,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
