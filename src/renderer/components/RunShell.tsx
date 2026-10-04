@@ -457,6 +457,7 @@ const RunShell = ({
             className={styles.shell}
             data-chain-tier={tier}
             data-combo-stage={heat.stage}
+            data-paused={run.status === 'paused' ? 'true' : 'false'}
             data-combo-theme={temper.id}
             data-memorize={memorize ? 'true' : 'false'}
             data-testid="run-shell"

@@ -57,6 +57,7 @@ float fbm(vec2 p) {
 
 void main() {
   float intensity = clamp(uIntensity, 0.0, 3.0);
+  if (intensity <= 0.001) discard;
   float pulse = clamp(uPulse, 0.0, 2.0);
   float motion = clamp(uMotion, 0.0, 1.5);
 

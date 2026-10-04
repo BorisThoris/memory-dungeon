@@ -150,14 +150,20 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     </MetaFrame>
                 </div>
 
-                <Panel className={panelClassName} padding="lg" variant="default">
+                <Panel className={`${panelClassName} ${styles.supplies}`} padding="lg" variant="default">
                     <section aria-labelledby="inventory-charges-title" className={styles.section} data-testid="inventory-charges-panel">
                         <h2 className={styles.sectionTitle} id="inventory-charges-title">
                             Charges and tokens
                         </h2>
-                        <p>Match a Meteor shard pickup to store a strike. You choose when to use it.</p>
-                        <UiButton type="button" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
-                            onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
+                        <div className={styles.meteorCallout}>
+                            <span className={styles.meteorGlyph} aria-hidden="true">☄</span>
+                            <div className={styles.meteorCopy}>
+                                <strong>Meteor strike</strong>
+                                <p>Match shards to store a strike. Choose a card when you’re ready.</p>
+                            </div>
+                            <UiButton type="button" variant="primary" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
+                                onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
+                        </div>
                         <dl className={styles.charges}>
                             {CHARGE_ROWS.map((row) => (
                                 <div className={styles.chargeRow} key={row.id}>

@@ -335,6 +335,11 @@ block board gestures so pan/zoom does not fight the deal. */
     }
 }
 
+:global([data-reduce-motion='true']) .frame .stage::after { animation: none; transition: none; }
+@media (prefers-reduced-motion: reduce) {
+    .frame[data-chain-opportunity-hot-band] .stage::after { animation: none; transition: none; }
+}
+
 .frame[data-opportunity-payoff-crescendo-screen-cue='burst'],
 .frame[data-opportunity-payoff-crescendo-screen-cue='super'] {
     outline: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);

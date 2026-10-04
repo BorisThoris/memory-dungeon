@@ -1129,7 +1129,20 @@
 
 /* ---- motion ------------------------------------------------------------------------ */
 
+.shell[data-paused='true'] :is(.comboCount, .ladderFlames, .ladderFill, .ladderMarker, .rungLabel, .memorizeBar, .realm, .realmSway) {
+    animation-play-state: paused;
+}
+
+/* The game's motion setting must silence the same pulses as the OS preference. Keep the
+   colors and meter positions: they communicate readiness even without animation. */
+:global([data-reduce-motion='true']) .shell :is(.caption, .ladderFill, .ladderMarker, .rungLabel, .memorizeBar, .comboCount, .ladderFlames, .realm) {
+    animation: none;
+    transition: none;
+}
+:global([data-reduce-motion='true']) .chainRead { transition: none; }
+
 @media (prefers-reduced-motion: reduce) {
+    .shell[data-combo-stage] :is(.comboCount, .ladderFlames) { animation: none; transition: none; }
     /*
      * The arrival is named here rather than left to the `data-meter-full` rule below it. Both are
      * true at the same moment today, so the fill's rule already silenced the flash — by coincidence,
@@ -1801,6 +1814,8 @@
 .realmSway[data-sway-near='true'] {
     animation: realmSwayNear 1.1s ease-in-out infinite alternate;
 }
+
+:global([data-reduce-motion='true']) .realmSway[data-sway-near='true'] { animation: none; }
 
 @keyframes realmSwayNear {
     from {

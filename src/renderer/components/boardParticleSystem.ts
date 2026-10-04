@@ -73,7 +73,7 @@ const vertexShader = /* glsl */ `
     attribute vec3 tint;
     attribute vec2 rotation;
     // Independent phase, energy, and the board/foreground layer, all fixed at emission.
-    attribute vec3 appearance;
+    attribute vec4 appearance;
     uniform float time;
     uniform float rippleLayer;
     varying vec2 vUv;
@@ -83,11 +83,12 @@ const vertexShader = /* glsl */ `
     varying float vPhase;
     varying float vSeconds;
     varying float vEnergy;
+    varying float vEmphasis;
     void main() {
         float seconds = max(0.0, time - lifetime.x);
         float age = (time - lifetime.x) / max(0.001, lifetime.y);
         vUv = uv; vTint = tint; vAge = age; vKind = lifetime.w;
-        vPhase = appearance.x; vEnergy = appearance.y; vSeconds = seconds;
+        vPhase = appearance.x; vEnergy = appearance.y; vSeconds = seconds; vEmphasis = appearance.w;
         bool ripple = vKind > 5.5 && vKind < 6.5;
         bool ground = ripple || appearance.z > 0.5;
         if ((ground && rippleLayer < 0.5) || (!ground && rippleLayer > 0.5) || lifetime.y <= 0.0 || age < 0.0 || age >= 1.0) {
@@ -149,6 +150,7 @@ const fragmentShader = /* glsl */ `
     varying float vPhase;
     varying float vSeconds;
     varying float vEnergy;
+    varying float vEmphasis;
     float hash21(vec2 p) {
         p = fract(p * vec2(123.34, 345.45));
         p += dot(p, p + 34.345);
@@ -259,7 +261,8 @@ const fragmentShader = /* glsl */ `
             color = mix(vTint, vec3(1.0), core * 0.75);
         }
         float fade = smoothstep(0.0, 0.07, vAge) * (1.0 - smoothstep(0.35, 1.0, vAge));
-        float alpha = clamp(shape * fade * strength * (0.85 + vEnergy * 0.15), 0.0, 1.0);
+        // Ambient weather sits behind decision feedback in contrast as well as emission priority.
+        float alpha = clamp(shape * fade * strength * (0.85 + vEnergy * 0.15) * vEmphasis, 0.0, .92);
         if (alpha < 0.003) discard;
         gl_FragColor = vec4(color, alpha);
         #include <colorspace_fragment>
@@ -285,7 +288,7 @@ export const createBoardParticleSystem = () => {
     const lifetime = attribute('lifetime', 4);
     const tint = attribute('tint', 3);
     const rotation = attribute('rotation', 2);
-    const appearance = attribute('appearance', 3);
+    const appearance = attribute('appearance', 4);
     const attributes = [origin, movement, lifetime, tint, rotation, appearance];
     geometry.instanceCount = BOARD_PARTICLE_CAPACITY;
     const material = new ShaderMaterial({
@@ -351,7 +354,7 @@ export const createBoardParticleSystem = () => {
         ends[slot] = start + life;
         comboPopSlots[slot] = 1;
         priorities[slot] = 2;
-        appearance.setXYZ(slot, start * 7.1, 1, 0);
+        appearance.setXYZW(slot, start * 7.1, 1, 0, 1);
     };
 
     const clear = (): void => {
@@ -514,7 +517,8 @@ export const createBoardParticleSystem = () => {
                 ends[slot] = start + life;
                 comboPopSlots[slot] = pop ? 1 : 0;
                 priorities[slot] = burst.priority === 'event' ? 3 : rim || ember ? 1 : 2;
-                appearance.setXYZ(slot, rng() * Math.PI * 2, energy, burst.placement === 'ground' ? 1 : 0);
+                const emphasis = burst.priority === 'event' ? 1 : ember ? .58 : rim ? .72 : 1;
+                appearance.setXYZW(slot, rng() * Math.PI * 2, energy, burst.placement === 'ground' ? 1 : 0, emphasis);
                 emitted += 1;
             }
             if (emitted > 0) {

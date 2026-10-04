@@ -447,6 +447,12 @@
        type stands on a page, and the dais and the ring under them stay faint. */
 }
 
+.boardStage[data-targeting='meteor'] {
+    box-shadow: inset 0 0 0 1px rgb(255 181 97 / 45%), inset 0 0 28px rgb(255 130 45 / 8%);
+}
+
+.boardStage[data-targeting='meteor'] :global(canvas) { cursor: crosshair; }
+
 /* REG-002: desktop stage density — avoid a board floating in an oversized frame on 1366×768+.
    Mobile camera keeps its full-bleed rules below; this applies only to the non-camera desktop/tablet layout. */
 .shell:not([data-mobile-camera-mode='true']) .boardStage {

@@ -259,10 +259,23 @@
 
 /* ------------------------------------------------------------------ the contents */
 .contents {
+    position: relative;
+    isolation: isolate;
     width: 100%;
     max-width: 34rem;
     min-width: 0;
     justify-self: center;
+}
+
+/* Keep the portal visible around the page while giving the run description a quiet ground. */
+.contents::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -0.75rem -1rem;
+    pointer-events: none;
+    border-radius: 1rem;
+    background: radial-gradient(ellipse at 50% 45%, rgb(12 12 16 / 58%), rgb(12 12 16 / 28%) 65%, transparent 100%);
 }
 
 .contentsHead {

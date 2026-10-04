@@ -555,6 +555,13 @@
     box-shadow: none;
 }
 
+@media (pointer: coarse) {
+    .modalMargin .actions .modalAction {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+}
+
 /* A phone: the dialog sits low as a sheet, one action to a row. The backdrop keeps the shell's
    gutter (never under 14 px, more inside a safe area) so the sheet floats clear of the edges
    and the notch; the sheet itself no longer carries the safe-area inset. */

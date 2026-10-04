@@ -4197,8 +4197,8 @@
     {
       "path": "e2e/visual-upgrade.spec.ts",
       "category": "test",
-      "bytes": 2774,
-      "sha256": "0aaaa5c56daaab58bad192218541f0fa42d6c592d8e1b6039c08e1863ea9dd2b"
+      "bytes": 3188,
+      "sha256": "9e2ff03801973e35ada7cb832c22dc328897cfaccceee3f132c2a83cbce00531"
     },
     {
       "path": "e2e/visualInventoryDevices.ts",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122726,
-      "sha256": "43059ea3baa685d6b2753e43620f9e06bc80193399165374b6245604400027f8"
+      "bytes": 121829,
+      "sha256": "b0b2e9a00878af5229077989888d715a19550c949ab17c93b7c57b1df9703d77"
     },
     {
       "path": "public/site.webmanifest",
@@ -9405,8 +9405,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 34179,
-      "sha256": "96369d46eb9940e3d5bbc8793d22f806a5d5919bde7107b9c663c5cf9717fa3b"
+      "bytes": 34484,
+      "sha256": "706766479d760f463c78e870df739c942262a3fe37d215b973700500d6710032"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9453,8 +9453,8 @@
     {
       "path": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "category": "source",
-      "bytes": 3954,
-      "sha256": "f253b53b9c0638a3c718316d1959081fa6b580df11d6bf48333e6e518884ea5c"
+      "bytes": 3989,
+      "sha256": "d5e5fbf5bfb579b4f2d45e66b92cfbe035c1e1b03599fb43a91acecd46a91780"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -9489,8 +9489,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 21765,
-      "sha256": "efc4a47bf8d8645d6ee6928f959f6890ef1bd3d440e4f73bea0ed2cb0b5b1156"
+      "bytes": 22184,
+      "sha256": "9af85d662c67d240241b307f1776db7f8917433dfa0c0a688048e9f0b3ce4dd6"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -9753,8 +9753,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 56601,
-      "sha256": "e39ab8dccf7733e69681905dd15f778a21cfddb2b7b877df107b0c29cd2ec973"
+      "bytes": 56812,
+      "sha256": "9bdcc761d5b7b7aaf73dbe096d4fc347338e431a828609df4340dca6f104e223"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9765,8 +9765,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 115030,
-      "sha256": "2c4b01e6e91db71b3889b186d4da0cd009ff7c1d9f04e469a7bb81f10a122ed8"
+      "bytes": 115133,
+      "sha256": "747b4df733e78157cfd0214fd1f7d08207a59697e68091c24fa41f89fa388ce0"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9837,8 +9837,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 6249,
-      "sha256": "d9e903e25c508642c034b4bb4253b1d481dda6853f5d7ab13482b7e3399b2f68"
+      "bytes": 6981,
+      "sha256": "4a7deee84367eedb23ef03da9a54a1548c8f4dfe14ff561b91417f70ebecbc00"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -9849,8 +9849,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 9298,
-      "sha256": "1b703e5e379e1a25fc46a393e326dae3d066084fd00025825d200b47b64ec273"
+      "bytes": 9700,
+      "sha256": "ba51b2281e58cef6295544435b453f2685b756fb70f1dcbbf57bb8b925ff107c"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -9867,8 +9867,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 11621,
-      "sha256": "c90ec6644aba0447fba425d481e7a9c6871112a3f0c3286f88e0cd45375aef3e"
+      "bytes": 12446,
+      "sha256": "3f316eab09af64cd2d5e1258b7d6c94fdde2a3c68eff54c436cbc544054dfc8b"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -9981,14 +9981,14 @@
     {
       "path": "src/renderer/components/MeteorStrike.tsx",
       "category": "source",
-      "bytes": 2600,
-      "sha256": "eef26f66bad8d18dc52330da3d52092c22b7fd181cac75b266237c18a8be4763"
+      "bytes": 3746,
+      "sha256": "0b18bfd8d62b284f7c4f8b06d0b0f2d36b1b8f8d2cf7f37126fe37b197851588"
     },
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 22040,
-      "sha256": "f36dc3540d77809078fdcc81f1199cd1bccee5f63031dfda26432610c1e7b540"
+      "bytes": 22179,
+      "sha256": "54ce01d4bd7b20ed4fbcaf115b80982138ec955d4c08d748cb0301fdd0711abd"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -10191,8 +10191,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 55877,
-      "sha256": "55b298c065ece30f5a5b2d4def9c97e7b6418cb43a69e4a36ee1ee2c5bcb178e"
+      "bytes": 56682,
+      "sha256": "3e91cb70ccc32df404d9f65fa230bc25ad363788d48a5b1b141f3ea45a8e9e61"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10203,8 +10203,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 47691,
-      "sha256": "50de98e84725d6924d2dfba0675f5f7e7ca792d5ff828d3a1ee8f6126883824b"
+      "bytes": 47760,
+      "sha256": "5c01db3868917ee56d53b12e3f6849505a1ad7aecdf0188a9ef0027fb2db75df"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10365,8 +10365,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 29979,
-      "sha256": "c64866bb632eb40fb9249254e7f9798a87348c2ad1134c484fb4b3bbef70ef68"
+      "bytes": 30795,
+      "sha256": "b6ef29f648f8a6dff65ec4fa0b35032be8403f345855260a46330406a6dbfbce"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -10491,8 +10491,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 21661,
-      "sha256": "b9f344cbf230c276ec9d59b81bcd1d9819f0d0c35a3cb3f3a0f99ab9afaf476f"
+      "bytes": 21900,
+      "sha256": "aeb6128d8221797a0c5d9ae152f7900716bbbab4f42fc4cde3fafb95ba8b4633"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -11001,8 +11001,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 23944,
-      "sha256": "4d43829be116df37ff8b4b99f4ede5fbdae7e48547dc145982352bcea83c3ae5"
+      "bytes": 24085,
+      "sha256": "97e5ad51ce08b6e477e97cb9006e0592f1b075676d82ecaa94a1e92c27b34bc0"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -12699,8 +12699,8 @@
     {
       "path": "src/renderer/ui/Panel.module.css",
       "category": "source",
-      "bytes": 1643,
-      "sha256": "9ab910a7e046d21da7f90e5655263b84be281574a9689e7cbc89a0da059f0d14"
+      "bytes": 1938,
+      "sha256": "07ffbeaada0f6ab1a79560aa79f1a78440cef30b1717fd1e05f84fb6b3c174fc"
     },
     {
       "path": "src/renderer/ui/Panel.tsx",
@@ -12759,8 +12759,8 @@
     {
       "path": "src/renderer/ui/UiButton.module.css",
       "category": "source",
-      "bytes": 2569,
-      "sha256": "abf3c574bf4b7c7bd08791394f35386270b407ddb99adf54f7b67f299f1f5d4f"
+      "bytes": 3718,
+      "sha256": "868d425204bf403589c9dd90d22f4efed20c15b123211f979e0b44d8c9fc0afb"
     },
     {
       "path": "src/renderer/ui/UiButton.tsx",
@@ -20081,7 +20081,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 598,
+      "lineCount": 602,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -20233,7 +20233,7 @@
       "path": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 112,
+      "lineCount": 113,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/cardArcaneGlowShaderGlsl.ts#CARD_ARCANE_GLOW_FRAGMENT_SHADER"
@@ -20997,7 +20997,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2297,
+      "lineCount": 2299,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21247,7 +21247,7 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 181,
+      "lineCount": 187,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
@@ -21560,7 +21560,7 @@
       "path": "src/renderer/components/MeteorStrike.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 42,
+      "lineCount": 75,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -22068,7 +22068,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 860,
+      "lineCount": 861,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -24401,7 +24401,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 559,
+      "lineCount": 560,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -41190,8 +41190,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 270,
-      "endLine": 597
+      "line": 273,
+      "endLine": 601
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -41463,7 +41463,7 @@
       "kind": "value",
       "file": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "line": 6,
-      "endLine": 111
+      "endLine": 112
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -41910,8 +41910,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2296,
-      "endLine": 2296
+      "line": 2298,
+      "endLine": 2298
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -42086,8 +42086,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 180,
-      "endLine": 180
+      "line": 186,
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -42286,8 +42286,8 @@
       "name": "MeteorStrike",
       "kind": "function",
       "file": "src/renderer/components/MeteorStrike.tsx",
-      "line": 9,
-      "endLine": 41
+      "line": 49,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#default",
@@ -42830,8 +42830,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 859,
-      "endLine": 859
+      "line": 860,
+      "endLine": 860
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -45510,8 +45510,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 558,
-      "endLine": 558
+      "line": 559,
+      "endLine": 559
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",

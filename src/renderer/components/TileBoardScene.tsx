@@ -452,7 +452,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             boardGroup,
             computeInitialTileBoardViewportMotionState({ boardViewport })
         );
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps -- mount-only; useFrame updates boardGroup each frame
+        boardPanRef.current = { x: boardViewport.panX, y: boardViewport.panY };
+    }, [boardViewport.fitZoom]); // eslint-disable-line react-hooks/exhaustive-deps -- resize must fit immediately, including while paused; gesture pan/zoom remains frame-damped
 
     useFrame((_, delta) => {
         if (runStatus !== 'paused') visualTime.current += Math.max(0, Math.min(delta, 0.1));

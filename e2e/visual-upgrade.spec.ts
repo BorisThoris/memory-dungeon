@@ -23,6 +23,13 @@ test('arcane materials and mobile controls render without shader errors at every
 
     for (const [name, width, height] of [['desktop', 1440, 900], ['phone', 390, 844], ['landscape', 844, 390]] as const) {
         await page.setViewportSize({ width, height });
+        if (name !== 'desktop') {
+            // Viewport state commits on the next animation frame; wait for the responsive
+            // shell before measuring its controls, especially on an isolated software GPU.
+            await expect(page.locator('[data-shell-layout]')).toHaveAttribute(
+                'data-shell-layout', name === 'phone' ? 'phone-portrait' : 'phone-landscape'
+            );
+        }
         await expectNoHorizontalOverflow(page);
         const dock = page.getByTestId('game-action-dock');
         await expect(dock).toBeVisible();
