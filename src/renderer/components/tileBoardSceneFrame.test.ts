@@ -118,9 +118,9 @@ describe('tileBoardSceneFrame', () => {
         });
 
         expect(result.runeFieldUpdated).toBe(true);
-        expect(uniforms.uTime.value).toBe(22);
+        expect(uniforms.uTime.value).toBe(0);
         expect(uniforms.uIntensity.value).toBeCloseTo(gameplayRenderQualityProfile('high').stageRuneFieldIntensity * 0.46);
-        expect(uniforms.uMotion.value).toBe(0.06);
+        expect(uniforms.uMotion.value).toBe(0);
         expect(uniforms.grid).toEqual({ x: 12, y: 8 });
     });
 

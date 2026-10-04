@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { Color } from 'three';
 import {
     clampCardArcaneGlowDriverUniforms,
     createCardArcaneGlowMaterial
 } from './cardArcaneGlowMaterial';
 import {
     clampBoardRuneFieldDriverUniforms,
-    createBoardRuneFieldMaterial
+    createBoardRuneFieldMaterial,
+    setBoardRuneFieldPalette
 } from './boardRuneFieldMaterial';
 
 describe('card arcane glow shader material', () => {
@@ -44,6 +46,19 @@ describe('card arcane glow shader material', () => {
 });
 
 describe('board rune field shader material', () => {
+    it('updates the realm palette in linear color space without replacing uniforms', () => {
+        const material = createBoardRuneFieldMaterial();
+        const primary = material.uniforms.uGoldColor.value;
+        const secondary = material.uniforms.uCyanColor.value;
+        setBoardRuneFieldPalette(material, '#80c0ff', '#a0ffee');
+        expect(material.uniforms.uGoldColor.value).toBe(primary);
+        expect(material.uniforms.uCyanColor.value).toBe(secondary);
+        const expected = new Color('#80c0ff');
+        expect(primary.x).toBeCloseTo(expected.r);
+        expect(primary.y).toBeCloseTo(expected.g);
+        expect(primary.z).toBeCloseTo(expected.b);
+        material.dispose();
+    });
     it('creates a low-alpha additive rune field with clamped motion uniforms', () => {
         const material = createBoardRuneFieldMaterial();
         const u = material.uniforms;
@@ -57,7 +72,7 @@ describe('board rune field shader material', () => {
 
         expect(material.transparent).toBe(true);
         expect(material.depthTest).toBe(false);
-        expect(material.fragmentShader).toContain('lineGrid');
+        expect(material.fragmentShader).toContain('fwidth(distance)');
         expect(u.uIntensity.value).toBe(1.4);
         expect(u.uMotion.value).toBe(0);
 

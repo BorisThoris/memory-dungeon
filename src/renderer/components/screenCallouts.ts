@@ -34,7 +34,7 @@ import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } fro
  * - `bought`: a store purchase. Minor, gold, derived from the purchase count going up.
  *
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
- * several, they play in this order, which is the order of what the player most needs to know.
+ * several, only the first fresh stamp in this priority order is shown. New events replace it.
  */
 export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'realm';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';

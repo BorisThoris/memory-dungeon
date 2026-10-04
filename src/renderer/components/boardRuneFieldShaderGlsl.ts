@@ -16,14 +16,10 @@ float hash21(vec2 p) {
   return fract(p.x * p.y);
 }
 
-float lineGrid(vec2 p, float width) {
-  vec2 g = abs(fract(p) - 0.5);
-  float l = min(g.x, g.y);
-  return 1.0 - smoothstep(width, width + 0.012, l);
-}
-
-float ring(vec2 p, float radius, float width) {
-  return 1.0 - smoothstep(width, width + 0.018, abs(length(p) - radius));
+// Pixel-aware engraving stays crisp at phone DPR without shimmering at desktop scale.
+float stroke(float distance, float width) {
+  float aa = max(fwidth(distance), 0.0015);
+  return 1.0 - smoothstep(width - aa, width + aa, abs(distance));
 }
 
 void main() {
@@ -36,28 +32,34 @@ void main() {
   float aspect = max(uGrid.x / max(uGrid.y, 0.001), 0.001);
   centered.x *= aspect;
   float motion = clamp(uMotion, 0.0, 1.3);
-  float t = uTime * mix(0.035, 0.42, motion);
-
-  vec2 gridUv = centered * vec2(3.2, 2.4) + vec2(t * 0.08, -t * 0.05);
-  float grid = lineGrid(gridUv, 0.022);
-  float coarse = lineGrid(centered * vec2(1.45, 1.1) + vec2(-t * 0.04, t * 0.06), 0.018);
-  float r1 = ring(centered, 0.72 + sin(t + 1.7) * 0.018, 0.018);
-  float r2 = ring(centered * vec2(1.0, 1.22), 0.42 + cos(t * 1.2) * 0.012, 0.014);
-  float diagonals = 1.0 - smoothstep(0.018, 0.045, min(abs(centered.x + centered.y * 0.66), abs(centered.x - centered.y * 0.66)));
-  float runes = 0.0;
-  vec2 cell = floor((vUv + vec2(t * 0.014, -t * 0.01)) * vec2(9.0, 5.0));
-  float h = hash21(cell);
-  runes = step(0.77, h) * lineGrid(fract(vUv * vec2(9.0, 5.0)) * 2.0 - 0.5, 0.032);
-
-  float vignette = smoothstep(1.15, 0.18, length(centered * vec2(0.88, 1.12)));
-  float pulse = 0.76 + 0.24 * sin(t * 3.1);
-  float mask = (grid * 0.22 + coarse * 0.18 + r1 * 0.5 + r2 * 0.38 + diagonals * 0.12 + runes * 0.34) * vignette;
-  vec3 color = mix(uCyanColor, uGoldColor, 0.44 + 0.32 * sin(centered.x * 2.4 + t));
-  float alpha = clamp(mask * intensity * pulse, 0.0, 0.42);
+  float t = uTime * motion * 0.18;
+  float radius = length(centered);
+  float angle = atan(centered.y, centered.x);
+  float outer = stroke(radius - 0.78, 0.0035);
+  float inner = stroke(radius - 0.69, 0.0025);
+  float orbit = stroke(radius - 0.48, 0.003);
+  // Engraved radial ticks, with a slow traveling light instead of a moving grid.
+  float sectors = angle * 12.0 / 3.141593;
+  float ticks = stroke(sin(angle * 24.0) * radius, 0.007)
+    * smoothstep(0.70, 0.72, radius) * (1.0 - smoothstep(0.75, 0.77, radius));
+  float arc = pow(0.5 + 0.5 * cos(angle - t), 12.0);
+  float counterArc = pow(0.5 + 0.5 * cos(angle + t * 0.7 + 2.4), 16.0);
+  float halo = exp(-abs(radius - 0.78) * 42.0) * arc * 0.13;
+  vec2 cell = floor(centered * 4.0);
+  vec2 local = fract(centered * 4.0) - 0.5;
+  float rune = stroke(abs(local.x) + abs(local.y) - 0.12, 0.016)
+    * step(0.72, hash21(cell)) * 0.13;
+  float vignette = 1.0 - smoothstep(0.82, 1.16, radius);
+  float edgeFade = smoothstep(0.0, 0.12, min(min(vUv.x, vUv.y), min(1.0 - vUv.x, 1.0 - vUv.y)));
+  float mask = (outer * (0.22 + arc * 0.6) + inner * 0.17
+    + orbit * (0.12 + counterArc * 0.32) + ticks * 0.28 + halo + rune) * vignette * edgeFade;
+  vec3 color = mix(uCyanColor, uGoldColor, 0.5 + 0.35 * sin(sectors * 0.25 + t));
+  float alpha = clamp(mask * intensity, 0.0, 0.38);
   if (alpha < 0.006) {
     discard;
   }
 
   gl_FragColor = vec4(color, alpha);
+  #include <colorspace_fragment>
 }
 `;

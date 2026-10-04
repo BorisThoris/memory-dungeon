@@ -16,6 +16,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: clip;
     pointer-events: none;
 }
 
@@ -56,6 +59,8 @@
 .stamp {
     position: relative;
     display: block;
+    max-width: 100%;
+    text-align: center;
     transform: skewX(-9deg) rotate(-3deg);
     animation: calloutStamp var(--stamp-ms) cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
 }
@@ -72,6 +77,8 @@
     font-style: italic;
     font-size: clamp(3rem, 11vi, 7.5rem);
     line-height: 1;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
     letter-spacing: 0.05em;
     color: var(--stamp);
     -webkit-text-stroke: 1px color-mix(in srgb, var(--margin-paper, #f8f4f4) 55%, transparent);
@@ -107,6 +114,9 @@
 }
 
 .sub {
+    max-width: min(34rem, 90%);
+    text-align: center;
+    text-wrap: balance;
     font-family: var(--margin-body-font, 'Lora', Georgia, serif);
     font-size: clamp(0.85rem, 1.6vi, 1.1rem);
     letter-spacing: 0.24em;
@@ -353,6 +363,10 @@
     transform: none;
 }
 
+.callout[data-reduce-motion='true'] .stampText {
+    animation: none;
+}
+
 .callout[data-reduce-motion='true'] .stampText::after,
 .callout[data-reduce-motion='true'] .flash,
 .callout[data-reduce-motion='true'] .ring,
@@ -376,8 +390,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .stamp,
-    .sub {
+    .callout[data-callout-rare] .stampText {
+        animation: none;
+    }
+    .callout[data-callout-size] .stamp,
+    .callout[data-callout-size] .sub {
         animation: calloutStill var(--stamp-ms) ease-out forwards;
     }
 
@@ -390,5 +407,49 @@
     .ring,
     .lines {
         display: none;
+    }
+}
+
+/* Phone stamps sit above the board centre; their entrance never sweeps across the whole hand. */
+@media (max-width: 600px), (max-height: 500px) {
+    .callout {
+        justify-content: flex-start;
+        padding-top: max(24dvh, calc(env(safe-area-inset-top, 0px) + 5.5rem));
+    }
+
+    .callout[data-callout-size='minor'] {
+        padding-top: max(24dvh, calc(env(safe-area-inset-top, 0px) + 5.5rem));
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .callout[data-reduce-motion='false'] .stamp {
+            animation-name: calloutStampMinor;
+        }
+    }
+
+    .stampText {
+        font-size: clamp(1.75rem, 8vi, 3.5rem);
+        letter-spacing: 0.025em;
+        -webkit-text-stroke-width: 0.5px;
+    }
+
+    .callout[data-callout-size='minor'] .stampText {
+        font-size: clamp(1.5rem, 6vi, 2.75rem);
+    }
+
+    .sub {
+        font-size: 0.8125rem;
+        letter-spacing: 0.1em;
+    }
+
+    .flash,
+    .lines {
+        display: none;
+    }
+
+    .ring {
+        width: 20vmin;
+        height: 20vmin;
+        border-width: 1px;
     }
 }

@@ -1108,7 +1108,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     /*
      * The screen stamps (`screenCallouts.ts`): what the latest turn earned - a rank, a lost
      * combo, the last miss, a banked one, a pickup - plus every store purchase made on this
-     * screen. The queue plays each key once, so the turn's set is recomputed freely and the
+     * screen. The latest event replaces the stamp, consuming sibling keys without a queue. The
+     * turn's set is recomputed freely and the
      * purchases are accumulated on the count going up, never re-derived from a restore.
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);

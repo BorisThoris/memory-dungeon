@@ -88,7 +88,7 @@ describe('tileBoardRuneField', () => {
         });
     });
 
-    it('softens rune-field intensity and caps motion for reduced motion', () => {
+    it('softens the rune field and freezes its clock for reduced motion', () => {
         const state = computeTileBoardRuneFieldUniformState({
             elapsedTime: 8,
             metrics: { centerX: 1, centerY: 2, height: 5, width: 6 },
@@ -100,7 +100,8 @@ describe('tileBoardRuneField', () => {
         });
 
         expect(state.intensity).toBeCloseTo(0.23);
-        expect(state.motion).toBe(0.06);
+        expect(state.motion).toBe(0);
+        expect(state.time).toBe(0);
         expect(state.gridWidth).toBe(6);
         expect(state.gridHeight).toBe(5);
     });
@@ -117,7 +118,7 @@ describe('tileBoardRuneField', () => {
         });
 
         expect(state.intensity).toBe(0);
-        expect(state.motion).toBe(0.02);
+        expect(state.motion).toBe(0);
     });
 
     it('applies rune-field uniform state to shader uniforms', () => {

@@ -12,8 +12,8 @@
     width: var(--mote-size, 2px);
     height: var(--mote-size, 2px);
     border-radius: 50%;
-    background: var(--mote-color, #fff);
-    box-shadow: 0 0 8px 2px var(--mote-glow, rgba(255, 255, 255, 0.7));
+    background: radial-gradient(circle, #fff 0 12%, var(--mote-color, #fff) 32%, transparent 72%);
+    box-shadow: 0 0 6px 1px var(--mote-glow, rgba(255, 255, 255, 0.7));
     mix-blend-mode: plus-lighter;
     opacity: 0;
     animation: sceneMote var(--mote-duration, 9000ms) ease-in-out infinite;
@@ -21,8 +21,28 @@
     will-change: transform, opacity;
 }
 
+/* Foreground dust glints; the smaller points stay in the distance. No extra DOM or textures. */
+.mote:nth-child(3n) {
+    border-radius: 30% 70%;
+    scale: 1.35;
+    opacity: 0;
+}
+
+.mote:nth-child(3n + 1) {
+    scale: 0.7;
+    box-shadow: none;
+}
+
 .motes[data-still='true'] .mote {
     animation: none;
+    will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mote {
+        animation: none;
+        will-change: auto;
+    }
 }
 
 @keyframes sceneMote {

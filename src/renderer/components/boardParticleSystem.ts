@@ -185,12 +185,18 @@ const fragmentShader = /* glsl */ `
         if (vKind > 3.5 && vKind < 5.5) {
             float core = exp(-radius * radius * 18.0);
             float rays = exp(-abs(p.x * p.y) * 55.0) * pow(max(0.0, 1.0 - radius), 2.0);
-            shape = core + rays * 0.6;
-            color = mix(vTint, vec3(1.0), core * 0.45);
+            float diamond = coverage(abs(p.x) + abs(p.y) - 0.34);
+            shape = core * 0.65 + rays * 0.45 + diamond * 0.32;
+            color = mix(vTint, vec3(1.0, 0.97, 0.9), core * (0.4 + 0.25 * vEnergy));
         }
         if (vKind > 5.5 && vKind < 6.5) {
             float band = abs(radius - 0.76);
-            shape = coverage(band - 0.018) + exp(-band * band * 110.0) * 0.22;
+            float angle = atan(p.y, p.x);
+            float crests = 0.72 + 0.28 * sin(angle * 12.0 + vPhase);
+            float echo = abs(radius - 0.59 - vAge * 0.05);
+            shape = coverage(band - 0.012) * crests + exp(-band * band * 160.0) * 0.18
+                + coverage(echo - 0.007) * (1.0 - vAge) * 0.24;
+            color = mix(vTint, vec3(1.0), exp(-band * band * 2200.0) * 0.24);
             strength = 0.65;
         }
         if (vKind > 6.5 && vKind < 7.5) {

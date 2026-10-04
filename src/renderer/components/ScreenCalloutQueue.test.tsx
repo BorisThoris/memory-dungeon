@@ -10,7 +10,7 @@ describe('the screen stamp queue', () => {
     beforeEach(() => vi.useFakeTimers());
     afterEach(() => vi.useRealTimers());
 
-    it('stays quiet about the moments the screen opened on, then plays new ones in order, one at a time', () => {
+    it('stays quiet on mount and consumes simultaneous receipts without a backlog', () => {
         const { rerender } = render(<ScreenCalloutQueue callouts={[rank]} reduceMotion={false} />);
         expect(screen.queryByTestId('screen-callout')).toBeNull();
         rerender(<ScreenCalloutQueue callouts={[{ ...rank, key: 'rank:2' }, { ...banked, key: 'banked:2' }]} reduceMotion={false} />);
@@ -23,14 +23,39 @@ describe('the screen stamp queue', () => {
         act(() => {
             vi.advanceTimersByTime(SCREEN_CALLOUT_MAJOR_MS + 70);
         });
-        expect(screen.getByTestId('screen-callout')).toHaveAttribute('data-callout-kind', 'banked');
-        act(() => {
-            vi.advanceTimersByTime(SCREEN_CALLOUT_MINOR_MS + 70);
-        });
         expect(screen.queryByTestId('screen-callout')).toBeNull();
         // The same keys again are the same moments: nothing replays.
         rerender(<ScreenCalloutQueue callouts={[{ ...rank, key: 'rank:2' }, { ...banked, key: 'banked:2' }]} reduceMotion={false} />);
         expect(screen.queryByTestId('screen-callout')).toBeNull();
+    });
+
+    it('replaces an active stamp immediately and gives the replacement its full lifetime', () => {
+        const { rerender } = render(<ScreenCalloutQueue callouts={[]} reduceMotion={false} />);
+        rerender(<ScreenCalloutQueue callouts={[rank, banked]} reduceMotion={false} />);
+        act(() => vi.advanceTimersByTime(900));
+        const broken: ScreenCallout = { ...rank, key: 'broken:2', kind: 'broken', title: 'COMBO BROKEN' };
+        rerender(<ScreenCalloutQueue callouts={[broken]} reduceMotion={false} />);
+        expect(screen.getByTestId('screen-callout-stamp')).toHaveTextContent('COMBO BROKEN');
+        act(() => vi.advanceTimersByTime(400));
+        expect(screen.getByTestId('screen-callout-stamp')).toHaveTextContent('COMBO BROKEN');
+        act(() => vi.advanceTimersByTime(SCREEN_CALLOUT_MAJOR_MS));
+        expect(screen.queryByTestId('screen-callout')).toBeNull();
+        act(() => vi.advanceTimersByTime(60_000));
+        expect(screen.queryByTestId('screen-callout')).toBeNull();
+    });
+
+    it('keeps up with rapid events and does not restart on equivalent rerenders', () => {
+        const { rerender, unmount } = render(<ScreenCalloutQueue callouts={[]} reduceMotion />);
+        for (let event = 0; event < 100; event += 1) {
+            rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: `banked:${event}`, sub: `Event ${event}` }]} reduceMotion />);
+        }
+        expect(screen.getByTestId('screen-callout-sub')).toHaveTextContent('Event 99');
+        act(() => vi.advanceTimersByTime(600));
+        rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: 'banked:99', sub: 'Event 99' }]} reduceMotion />);
+        act(() => vi.advanceTimersByTime(SCREEN_CALLOUT_MINOR_MS - 500));
+        expect(screen.queryByTestId('screen-callout')).toBeNull();
+        unmount();
+        expect(vi.getTimerCount()).toBe(0);
     });
 
     it('carries the reduced-motion flag onto the stamp', () => {

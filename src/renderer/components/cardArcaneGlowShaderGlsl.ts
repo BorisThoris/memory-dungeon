@@ -47,7 +47,7 @@ float noise(vec2 p) {
 float fbm(vec2 p) {
   float value = 0.0;
   float amplitude = 0.52;
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 3; i++) {
     value += noise(p) * amplitude;
     p = p * 2.08 + vec2(19.2, 7.7);
     amplitude *= 0.5;
@@ -84,16 +84,20 @@ void main() {
 
   float t = uTime * motion;
   vec2 flowUv = vec2(phase * (4.0 + uMode * 0.9) + uSeed * 23.0, bandT * 8.0 - t * (1.6 + uMode * 0.55));
-  float flow = fbm(flowUv + fbm(flowUv * 0.58 + vec2(t * 0.42, uSeed)) * 0.72);
+  // One cheap warp sample keeps the molten edge without nesting two full fractal fields.
+  float flow = fbm(flowUv + noise(flowUv * 0.58 + vec2(t * 0.42, uSeed)) * 0.72);
   float travel = 0.5 + 0.5 * sin(phase * (10.0 + uMode * 2.0) - t * (2.6 + uMode) + uSeed * 41.0);
   float runeBeat = pow(clamp(axisRune * (0.45 + flow * 0.75), 0.0, 1.0), 2.2);
   float core = smoothstep(0.08, 0.92, centerBand) * (0.54 + 0.26 * flow);
   float edge = smoothstep(0.54, 1.0, bandT) * (0.42 + 0.42 * travel + 0.28 * cornerness);
   float flare = (cornerness * 0.64 + runeBeat * 0.7) * (0.42 + pulse * 0.52);
+  float filamentDistance = (bandT - 0.48 - (flow - 0.5) * 0.16) * 28.0;
+  float filament = exp(-filamentDistance * filamentDistance);
+  float glint = pow(0.5 + 0.5 * cos(phase - t * 1.4 + uSeed * 6.28), 18.0);
 
   vec3 color = uPrimaryColor * (core + flare * 0.42) +
     uSecondaryColor * (edge + runeBeat * 0.35) +
-    uAccentColor * (flare * 0.34);
+    uAccentColor * (flare * 0.34 + filament * (0.18 + glint * 0.4));
   float alpha = ringMask * intensity * (0.24 + core * 0.34 + edge * 0.36 + flare * 0.28);
   alpha *= 0.88 + pulse * 0.22;
   alpha = clamp(alpha, 0.0, 1.0);

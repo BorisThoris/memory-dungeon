@@ -1,5 +1,6 @@
 import {
     AdditiveBlending,
+    Color,
     DoubleSide,
     MathUtils,
     ShaderMaterial,
@@ -19,11 +20,14 @@ void main() {
 `;
 
 const hexToVec3 = (hex: string): Vector3 => {
-    const n = Number.parseInt(hex.replace('#', ''), 16);
-    if (!Number.isFinite(n)) {
-        return new Vector3(1, 0.78, 0.42);
-    }
-    return new Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
+    const color = new Color(hex);
+    return new Vector3(color.r, color.g, color.b);
+};
+
+/** Update palette on a stage/realm change, keeping the material and its uniform storage alive. */
+export const setBoardRuneFieldPalette = (material: ShaderMaterial, primary: string, secondary: string): void => {
+    material.uniforms.uGoldColor.value.copy(hexToVec3(primary));
+    material.uniforms.uCyanColor.value.copy(hexToVec3(secondary));
 };
 
 type BoardRuneFieldUniforms = {

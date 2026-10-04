@@ -54,7 +54,8 @@ import {
     sampleTraumaShake,
     TRAUMA_STAGE_UP
 } from './boardTrauma';
-import { comboHeatLevels, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
+import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
+import { setBoardRuneFieldPalette } from './boardRuneFieldMaterial';
 import {
     applyInitialTileBoardViewportMotionState,
     computeInitialTileBoardViewportMotionState,
@@ -391,6 +392,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         overlayPrewarmDemandPairKeys,
         textureRevision
     });
+    useEffect(() => {
+        const palette = heatThemeById(comboTheme);
+        setBoardRuneFieldPalette(boardRuneFieldMaterial, palette.colors[comboHeatNow.stageIndex], palette.arcTints[1]);
+    }, [boardRuneFieldMaterial, comboTheme, comboHeatNow.stageIndex]);
     const boardGroupRef = useRef<Group | null>(null);
     const tileFrameBagsRef = useRef(new Map<string, TileBezelFrameBag>());
     const visualTime = useRef(0);

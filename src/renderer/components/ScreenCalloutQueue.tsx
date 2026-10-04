@@ -3,13 +3,9 @@ import type { ScreenCallout } from './screenCallouts';
 import styles from './ScreenCalloutQueue.module.css';
 
 /**
- * The stamps, played one at a time.
- *
- * The arcade tables this is modelled on stamp the screen with a word the moment something
- * happens - a rank reached, a streak lost, a prize taken - big, italic, swept with a sheen of
- * light, slammed in and gone. One at a time, because two stamps at once are none: the queue
- * takes every callout it is handed, plays the ones it has not played, and lets a major hold the
- * centre longer than a minor.
+ * One live stamp, with no backlog. A new event immediately replaces the previous stamp.
+ * Callers order simultaneous receipts by importance; only the first fresh receipt is shown.
+ * All its siblings are consumed too, so a rank-up never trails behind stale pickup receipts.
  *
  * Keys are the contract. A callout is played once per key, so a re-render with the same turn
  * behind it shows nothing new, and a run that opens on a turn already made (a resumed save)
@@ -25,7 +21,6 @@ export interface ScreenCalloutQueueProps {
 
 export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueueProps) {
     const seen = useRef<Set<string> | null>(null);
-    const pending = useRef<ScreenCallout[]>([]);
     const [showing, setShowing] = useState<ScreenCallout | null>(null);
     // The first render's callouts are the state the screen opened on, not moments to stamp.
     if (seen.current === null) seen.current = new Set(callouts.map((callout) => callout.key));
@@ -33,13 +28,12 @@ export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueu
         const fresh = callouts.filter((callout) => !seen.current!.has(callout.key));
         if (fresh.length === 0) return;
         for (const callout of fresh) seen.current!.add(callout.key);
-        pending.current.push(...fresh);
-        setShowing((current) => current ?? pending.current.shift() ?? null);
+        setShowing(fresh[0]!);
     }, [callouts]);
     useEffect(() => {
         if (!showing) return undefined;
         const timer = window.setTimeout(
-            () => setShowing(pending.current.shift() ?? null),
+            () => setShowing((current) => current?.key === showing.key ? null : current),
             (showing.size === 'major' ? SCREEN_CALLOUT_MAJOR_MS : SCREEN_CALLOUT_MINOR_MS) + 60
         );
         return () => window.clearTimeout(timer);

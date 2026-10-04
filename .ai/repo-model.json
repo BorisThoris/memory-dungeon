@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2909,
+    "trackedFileCount": 2910,
     "codeFileCount": 1075,
-    "exportedSymbolCount": 3356,
+    "exportedSymbolCount": 3357,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8873
+    "relationshipCount": 8875
   },
   "inventory": [
     {
@@ -333,8 +333,8 @@
     {
       "path": "docs/ELEMENTAL_FORGE.md",
       "category": "documentation",
-      "bytes": 4277,
-      "sha256": "e6ebed05b9243367222e236e4b0fa209cdafb7c2c90c2e1bf957df7be0a5bb86"
+      "bytes": 4238,
+      "sha256": "2e71d2aab263f29b9b0749ad02c42212f2f177bbaf0898abfbb04af3a2b434f6"
     },
     {
       "path": "docs/ENDPRODUCTIMAGE.png",
@@ -693,14 +693,14 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 25523,
-      "sha256": "8e4f9fe2b8498d75bd1fec6c6def207b7777765db9ea0e4884c955b426380931"
+      "bytes": 26069,
+      "sha256": "2ba1b635859f18d5085a2485041526338d82c6bfc23c419be35fdf4d0f295fd7"
     },
     {
       "path": "docs/gameplay/element-agency-review.md",
       "category": "documentation",
-      "bytes": 5482,
-      "sha256": "52e0ded50dfaa0425347ec3335f0181c91b4c23db9030e8e22fe4b3e078b00f1"
+      "bytes": 5409,
+      "sha256": "5af4fc1294b14bbddf9f505858c778b7abf62c6bb793ed63444e48633bf9d202"
     },
     {
       "path": "docs/gameplay/epic-audio-feedback.md",
@@ -825,8 +825,8 @@
     {
       "path": "docs/gameplay/living-elements.md",
       "category": "documentation",
-      "bytes": 8694,
-      "sha256": "7ae9f942a2092db0e536e116a4ed24394ce11076c9aa7160403f18d2b7aecf0c"
+      "bytes": 8601,
+      "sha256": "442ed15735e34507ac0251404ae9c7826c9b99888dc505c523dae6eda9b85334"
     },
     {
       "path": "docs/gameplay/README.md",
@@ -1305,8 +1305,8 @@
     {
       "path": "docs/REALMS.md",
       "category": "documentation",
-      "bytes": 26571,
-      "sha256": "41319354a96ff2a1d6ab47833fa2c716ab43b63cb6583df36fc6980b1a8d2d8b"
+      "bytes": 26266,
+      "sha256": "b9add39aad3df6fd30c21757a0333874923c8f9871c29d62b77c9733c9e54ffb"
     },
     {
       "path": "docs/reference-comparison/captures/desktop/landscape/00-startup-intro.png",
@@ -3771,8 +3771,8 @@
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
       "category": "test",
-      "bytes": 9033,
-      "sha256": "d4782c3961eb3dbbe745c14d00db3af89f634cb00e7166d900f9f38e025f74a8"
+      "bytes": 8886,
+      "sha256": "f4c3a526d14bb7e183e50b43e641752496fc53d601590cfbd18e305428cca926"
     },
     {
       "path": "e2e/ambiguousControls.ts",
@@ -3855,8 +3855,8 @@
     {
       "path": "e2e/element-resonance.spec.ts",
       "category": "test",
-      "bytes": 11805,
-      "sha256": "f55be8704c17e0536e85899a4b1e5f26bb8bd65c3e07f75c394ba485bb7f6091"
+      "bytes": 11621,
+      "sha256": "4e6fb7ce6c385e06fec49946557a6380d7eb2e4612827a78f9b9c219be177a87"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -3897,8 +3897,8 @@
     {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
-      "bytes": 7752,
-      "sha256": "801fdd36233e9bd4f17e58b8b5151b7c0369ee45b6bf844333c465311704434c"
+      "bytes": 7639,
+      "sha256": "b7e55a99b4df8a6989b2ed8d92cf34e08ead707f3ec80e2a08684c412846e81f"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -3957,8 +3957,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 6689,
-      "sha256": "83faba5dc418dce1e84f104167fbdba8a17cc368cdb4ef5cbf629c013926bc3e"
+      "bytes": 6570,
+      "sha256": "ec14433d38afb8c629bafa258c939bc72d14c5ac66c0b2edd5895c54743bea0d"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -4047,8 +4047,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 13888,
-      "sha256": "a5a5a6575d9ce4f458650ddeb781b91f770e9a08d4dbe593709fc5f75909aea9"
+      "bytes": 13652,
+      "sha256": "fa89f90e3fafbe6ac941318fc030d212e47c0148f11930693ba833f1a8f1d510"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -4175,6 +4175,12 @@
       "category": "test",
       "bytes": 292,
       "sha256": "bcf8ae7c8e2f5680ca31198117608ee2ff9aeabae8934df69c12e2f90657eb9d"
+    },
+    {
+      "path": "e2e/visual-upgrade.spec.ts",
+      "category": "test",
+      "bytes": 2774,
+      "sha256": "0aaaa5c56daaab58bad192218541f0fa42d6c592d8e1b6039c08e1863ea9dd2b"
     },
     {
       "path": "e2e/visualInventoryDevices.ts",
@@ -9375,26 +9381,26 @@
     {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 13903,
-      "sha256": "eda7af462709bcefd730720e096d47f69b135031b0000229da566902cb22501a"
+      "bytes": 13661,
+      "sha256": "c2dabfa524b8dce7b3f12a108efe3fc0c3e3c1d9794379b2f4cf4eb6412f6a8b"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 34330,
-      "sha256": "36e05488a9ff582b206601e5563218723a1677b6fc4c51d139a1c4bcf92db7d4"
+      "bytes": 34179,
+      "sha256": "96369d46eb9940e3d5bbc8793d22f806a5d5919bde7107b9c663c5cf9717fa3b"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "category": "source",
-      "bytes": 1977,
-      "sha256": "b1cd0d72668aff0c5305c1190bc3ea4535c3b26596160244e0098177498e9bf5"
+      "bytes": 2195,
+      "sha256": "1750244fc09e75b02bc720b715d36dfc04ef03ea90236a8568c00a63aacbb2b3"
     },
     {
       "path": "src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "category": "source",
-      "bytes": 2110,
-      "sha256": "5ea2579e9b47f7664a89383604aec4078a58f6040420484a0d16ba56e14e2552"
+      "bytes": 2323,
+      "sha256": "1609abf9333919bcec4e9ee180ec7878d07512fc0a456f78869f9601fe6ad39e"
     },
     {
       "path": "src/renderer/components/boardTrauma.test.ts",
@@ -9411,20 +9417,20 @@
     {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "category": "test",
-      "bytes": 2142,
-      "sha256": "ab5a7a61e8d824c8015b6b33ed9fb4c065ea97dfbca7a88d9881df50ee7aeeab"
+      "bytes": 2919,
+      "sha256": "2593507156ab89dfff444a4dafeb1ead5d964e3ba31981c84df2b6ab647daa55"
     },
     {
       "path": "src/renderer/components/cardArcaneGlowMaterial.ts",
       "category": "source",
-      "bytes": 3247,
-      "sha256": "2d7eaf8a481642024afb1a1c5ff40f695c4aef8758a9b9fa577f51ea1d22bad1"
+      "bytes": 3156,
+      "sha256": "190973db442881e697e3566f5f1a6689bfb5b97b9e8b62484850f5a65cd2a93a"
     },
     {
       "path": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "category": "source",
-      "bytes": 3725,
-      "sha256": "124d96688349477d6252b9dc384537754f89d8364595b38ce976ea25e55f56b6"
+      "bytes": 3954,
+      "sha256": "f253b53b9c0638a3c718316d1959081fa6b580df11d6bf48333e6e518884ea5c"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -9531,56 +9537,56 @@
     {
       "path": "src/renderer/components/ElementalForgeWares.tsx",
       "category": "source",
-      "bytes": 2822,
-      "sha256": "496bc0dc7b277d7e740b2f8ab7513843f650047a52f3959871646453431a5353"
+      "bytes": 2791,
+      "sha256": "bcbf01e116086b19cde48975e96d730b1c739a9520110b5cdbcdf5a7fccd085a"
     },
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
       "category": "source",
-      "bytes": 7037,
-      "sha256": "e2d61fc32970ff668e049361cdd7836ad375ec9e505ca2471c54d966b4b8e38e"
+      "bytes": 6866,
+      "sha256": "53d8a3332048b9cb80e9a56cc5b54c57d287da194facea28fd92a3f1440fbf59"
     },
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
       "category": "source",
-      "bytes": 1828,
-      "sha256": "6827de51dd9bfc9c5b90853d18faecca1cf9107cc282d15368ecd0f74cd738ee"
+      "bytes": 1794,
+      "sha256": "0e3078d0238a466e52394ff2e0c29d794ac98dca2752cb4501ebd95638eb9597"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.module.css",
       "category": "source",
-      "bytes": 2073,
-      "sha256": "1a410c36ef540e7ec9d8f7054d7e7a61279ccb759a944688beb19406a2fe5e26"
+      "bytes": 2009,
+      "sha256": "7d524572369b07810d518cf288c1cf7274439d48901ad22dbc8e9dd17df5fd4c"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.test.tsx",
       "category": "test",
-      "bytes": 3683,
-      "sha256": "d5a1ccc53608d183ac21701a3df167a0886fc28be46baa3de1151216fb753293"
+      "bytes": 3626,
+      "sha256": "a85af1ee8c2e9059cb883c493fc125d589b51f68b690db46ab579cc096dc11c9"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.tsx",
       "category": "source",
-      "bytes": 6848,
-      "sha256": "86c95e8ce5e550a1024220f122f1e9ac6c949da3e110f2a76f0f2b470e9452b1"
+      "bytes": 6779,
+      "sha256": "5726122643a77316d591be635403be09ee99bb68a28eb688dad6275cba71d05f"
     },
     {
       "path": "src/renderer/components/elementCastParticles.test.ts",
       "category": "test",
-      "bytes": 3242,
-      "sha256": "dd571697eb56ba8d7f26279db40ff673cfdb0ea9013d15ca8cc417e386dbe77c"
+      "bytes": 3192,
+      "sha256": "ba2244f58cce684ad1b82131252debfd85ef54b2304ca534eb5c2df1ace9abd6"
     },
     {
       "path": "src/renderer/components/elementCastParticles.ts",
       "category": "source",
-      "bytes": 3947,
-      "sha256": "c81316a09d1d05ef78b26568580b98ad0350768e12afe4a5353517e957689153"
+      "bytes": 3889,
+      "sha256": "992b9b87d88a8adee804c455f077c650560d8a7199788dddb14fd4d28cdd458f"
     },
     {
       "path": "src/renderer/components/ElementGround.tsx",
       "category": "source",
-      "bytes": 5722,
-      "sha256": "c403e649a1dd9e6be4d3ba0e0302cabd839a1c78f04dea8e6125239823e3f331"
+      "bytes": 5605,
+      "sha256": "c3bf533e87f76cd573daa936cb0efab26bdf83ca058ed486809407969a00b2c4"
     },
     {
       "path": "src/renderer/components/ElementResonanceStrip.module.css",
@@ -9591,8 +9597,8 @@
     {
       "path": "src/renderer/components/ElementResonanceStrip.tsx",
       "category": "source",
-      "bytes": 4031,
-      "sha256": "56e1dc2f87f0b1eda05f152afa5e5c22063fa790217c5d468f33ce1ccd489cf6"
+      "bytes": 3961,
+      "sha256": "e8dbdd023f4d212c4953ff7abf451f6555ac3a82be9033bbe552746861f1a575"
     },
     {
       "path": "src/renderer/components/emberDrift.test.ts",
@@ -9627,26 +9633,26 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 7013,
-      "sha256": "da66aad186175f8e7a26993951f986b65a05ba325767f10aab0078185f862347"
+      "bytes": 6801,
+      "sha256": "88e42663d5edfe579a9338d53f36c4d8c17f84cb6fcad9d8b39c61252a2a8e02"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "category": "test",
-      "bytes": 4183,
-      "sha256": "c38839d2e1d471466a3cda99649cafbfe0dde400766892f927f1579a59b6714a"
+      "bytes": 4104,
+      "sha256": "fe3c9f530d6f20389995a69cb6e9a5ff607a25764e09af4a022d573a7885004a"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 5321,
-      "sha256": "6e2aec17ee7c77d6fc608f8c33bebe54c6cff1a1283c0a94d6db13e17d5e167b"
+      "bytes": 5198,
+      "sha256": "5b9f1c975e2d5116c5ddfb7d2ece8466eb1dcd98a0b5f7ce1ec42ed68c4c3544"
     },
     {
       "path": "src/renderer/components/FloorJourney.module.css",
       "category": "source",
-      "bytes": 1287,
-      "sha256": "2694a8eedb6e924a7d5167560af9c33b9b0aa113a9b4f9c818382ea7bf86bbb5"
+      "bytes": 1268,
+      "sha256": "c08dbc5f08c7f9e6309977d8377328bf08d60e06af4ecfcb65d383dd2a893afa"
     },
     {
       "path": "src/renderer/components/FloorJourney.test.tsx",
@@ -9657,26 +9663,26 @@
     {
       "path": "src/renderer/components/FloorJourney.tsx",
       "category": "source",
-      "bytes": 2150,
-      "sha256": "e27f9d2881eeb0d4d2084e32814b5c5a1d586dc4caeeb326cda08fa2315efe47"
+      "bytes": 2119,
+      "sha256": "711e6b293ffcb1f36555daf703d27c1858f0e4f81d721ba48325608d950fd8d6"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 6799,
-      "sha256": "9f4d139b6dedf7313acd4e89b7995e67cbf7118cedec1726e3a9572cf24f3f08"
+      "bytes": 6515,
+      "sha256": "bcf7adc5fc0590ae7462865b564fe1d768f792814deedcb6dc29025c1941ef35"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 17013,
-      "sha256": "df7c17049d19b38ad29a1abd1e9d5ee2a0e0a6caf54a6f3286dcf43d91cc8653"
+      "bytes": 16663,
+      "sha256": "bb95a85ba37f7fb744bb3c1a8aeabe78b88acffedc3fd645555d9429d0f441f1"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 23006,
-      "sha256": "f3a950fceafab96550251d71b439e34577fc90eb13f519e7c6270882d32f719f"
+      "bytes": 22559,
+      "sha256": "00a9fcce32a41b101b19cf8672409365514a6851805ab35dba72a031731167c3"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9723,8 +9729,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 58286,
-      "sha256": "ae01f0ac17678b5991b52d45ae01b5ce53ebdd4c1264add224c3330e919fee7d"
+      "bytes": 56601,
+      "sha256": "e39ab8dccf7733e69681905dd15f778a21cfddb2b7b877df107b0c29cd2ec973"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9735,8 +9741,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 117418,
-      "sha256": "080043a0a211a08e53f8f7162d74a4b8fb93918fc3a0dd178e675eabe91bdd7b"
+      "bytes": 115164,
+      "sha256": "3ae75252ab9b3fac287a1cabc6d995f488fbc5a280a82086cd579549b01b8230"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9753,8 +9759,8 @@
     {
       "path": "src/renderer/components/gameScreenSrOnlyCss.test.ts",
       "category": "test",
-      "bytes": 4426,
-      "sha256": "f9f396f511964d9506a5a8a20c236a1c2d26e866ee0d890a7fcc259664116b3f"
+      "bytes": 4336,
+      "sha256": "106a2ccdd50a5f22c90fb7d836eb92b0ebde7ae562bc68186702da7650083235"
     },
     {
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
@@ -10029,8 +10035,8 @@
     {
       "path": "src/renderer/components/realmAmbience.ts",
       "category": "source",
-      "bytes": 3571,
-      "sha256": "f8de9764e3bab4223a2dc98c88edf80c7fc2a519b68263db4743d7776b086eca"
+      "bytes": 3488,
+      "sha256": "33615e13d0e1434f8e7f671b713b34030f2c11d0a40d6e39a036adfc2b8f0ed3"
     },
     {
       "path": "src/renderer/components/realmCardMotion.test.ts",
@@ -10041,32 +10047,32 @@
     {
       "path": "src/renderer/components/realmCardMotion.ts",
       "category": "source",
-      "bytes": 8400,
-      "sha256": "3eb05da7e98d6553031c5d478299ff97a47422046f29cd3b88e21b8de52045f4"
+      "bytes": 8203,
+      "sha256": "bc8264be5f47ddae389cf2d9eaff829dc84ded2c02d862d50ffc740323cadd5c"
     },
     {
       "path": "src/renderer/components/realmParticles.test.ts",
       "category": "test",
-      "bytes": 4237,
-      "sha256": "16c579357d634a35316767248ad84a82d7a381aba52e9d98cc907585a7cd50bb"
+      "bytes": 4179,
+      "sha256": "b76df38e61185ff68c0b2dae910f2de2ef58095d4d0c82d0a836e9418279892e"
     },
     {
       "path": "src/renderer/components/realmParticles.ts",
       "category": "source",
-      "bytes": 6651,
-      "sha256": "2cfc6ff655b1b31fac952c3fdc05dcfb2f58b75c4dc25faa9bbc2c1a80d11eb2"
+      "bytes": 6542,
+      "sha256": "d8ffb721207a7e835f7f2e626dba684fa6e846dafd8a2d4c36d6cef8afacd413"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
       "category": "source",
-      "bytes": 2635,
-      "sha256": "72981d94908540e8fda680b662d73f955b030d91e1df845128701e1cefb4c305"
+      "bytes": 2580,
+      "sha256": "08d23127924eb3a676126f35a872bbe5d442e0bea6eb9d5b3316ffd0ae995108"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.tsx",
       "category": "source",
-      "bytes": 2466,
-      "sha256": "f619a7e511a8d9d72e26241ea0910a373abc90d519dc82d7d9a37308c8cd2c84"
+      "bytes": 2427,
+      "sha256": "fe488e60bcab7879d568293dba19090a4bb6808d914d0422f1e58c785518f961"
     },
     {
       "path": "src/renderer/components/realmTileMarkKey.ts",
@@ -10077,14 +10083,14 @@
     {
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "category": "source",
-      "bytes": 8539,
-      "sha256": "bf5ba7af17f3757e6cae3071230116a2d848f6c7dd373933163c182d0006602b"
+      "bytes": 8361,
+      "sha256": "a0b00afa230316eef7e7c3711116db4c0b733d75e3856611a4b5bea35c669c18"
     },
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 7438,
-      "sha256": "0885ac5bdb773f83efbc9b55d99c988036878fd3f826093ccdfbc05b14014b23"
+      "bytes": 7184,
+      "sha256": "7658126b995169201aea487e73b6ebcfd73147b64cc2ce140b35c2506bdb2b49"
     },
     {
       "path": "src/renderer/components/RealmTravel.test.tsx",
@@ -10095,14 +10101,14 @@
     {
       "path": "src/renderer/components/RealmTravel.tsx",
       "category": "source",
-      "bytes": 7468,
-      "sha256": "80e5a0b58ae667a17688589cd9f67d434ba354622504ddbd99137f768c51406a"
+      "bytes": 7336,
+      "sha256": "7a4d7472c2ea6f8a574ba11dab5c7745656bdeaa74c45fc9e1cd82a6d59f97d1"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
       "category": "source",
-      "bytes": 13397,
-      "sha256": "1d5e23c034b43d6f9077a8d6ae049e1f6de32a7b37fc426e8be8593526a7ac49"
+      "bytes": 12880,
+      "sha256": "010059755760f8c33dc9daefb148397007593daa564f1829c0a625eb7debdad5"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
@@ -10113,14 +10119,14 @@
     {
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "category": "source",
-      "bytes": 6923,
-      "sha256": "304b35c90ab841dc19b4c75dce7119d3ec936cd9881790f6c36af4b6c5f111d9"
+      "bytes": 6794,
+      "sha256": "d2bc48e82fd49b5abaf14ff3ff73513401aee8affb2ecbbccd99c20fddf8a7f3"
     },
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
       "category": "source",
-      "bytes": 1675,
-      "sha256": "a67f9cb1dd24aa10e5c452845aaa5b69d66c1cad08c874aed142a02d4657de43"
+      "bytes": 1603,
+      "sha256": "ec532934d6d998ad2d7a8315fc21e116c88b06d89dee2c401b9353645a06e17b"
     },
     {
       "path": "src/renderer/components/RunEndStamp.test.tsx",
@@ -10131,8 +10137,8 @@
     {
       "path": "src/renderer/components/RunEndStamp.tsx",
       "category": "source",
-      "bytes": 3574,
-      "sha256": "3caea1dbae001d3fa53b68715864dae494a17b6e7e034667c5369725d035a79e"
+      "bytes": 3495,
+      "sha256": "ae74e4ce75f997e5724331751fcbfd30a2bf77ff1814f3d45d920c68477ca546"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
@@ -10155,14 +10161,14 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 54589,
-      "sha256": "515626ad872de9e8716ea0df36f33f9bca093eac8d01bf927e0e1c7d1844fced"
+      "bytes": 55877,
+      "sha256": "55b298c065ece30f5a5b2d4def9c97e7b6418cb43a69e4a36ee1ee2c5bcb178e"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 34791,
-      "sha256": "c42ef517c67cbb72c792713f3c4beef5a9f270f6587b5e3f4c701ecd72786d1b"
+      "bytes": 34176,
+      "sha256": "bcab70e110925efdfeb555e99a2d02b0b8086a979f37ea798fe641e7b95d3080"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -10209,8 +10215,8 @@
     {
       "path": "src/renderer/components/SceneMotes.module.css",
       "category": "source",
-      "bytes": 1217,
-      "sha256": "5dc4ea72e9c78c03a164e03586c11119d2e76e0b82339c7f563162518faf7094"
+      "bytes": 1663,
+      "sha256": "07b8ecf5a1bc1cd62639a3a130e7fe1811836c894b430df3cc7e9a009875ce36"
     },
     {
       "path": "src/renderer/components/SceneMotes.tsx",
@@ -10287,20 +10293,20 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 9082,
-      "sha256": "2a2da94d12acbf26cd5aea4077dd5d18a1221d48863d56cad156c5caf2c66e74"
+      "bytes": 10600,
+      "sha256": "77184fba2a92d187e3228421010a49a5d7a532eb7d1a317e5a20e64feca85cdf"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
       "category": "test",
-      "bytes": 2553,
-      "sha256": "82dc9b2ace9cccf93c68f8dd32177badf06909ccbdf6def75a1ba7b2526e996e"
+      "bytes": 4203,
+      "sha256": "fda4f80132ce79ddaab4d23430671e673b536e22be87d529e6df2492e7dca639"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3329,
-      "sha256": "3a37e5d4fe85c4d8d3f0797c2390138cc841d5aadf9effaea691c8978e87f348"
+      "bytes": 3050,
+      "sha256": "395f83a56ddfb4881a136ca9ad24b8be2f13e2ab9393fc40bc51f04f4b58d3f5"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
@@ -10311,8 +10317,8 @@
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 18001,
-      "sha256": "1d5965b9b19d2d85328c48616d2eb84cdabff28b8ceac5a8e2276fc45801d207"
+      "bytes": 17713,
+      "sha256": "e3fbdb1040ac185f1c834b8c81ae207cec63570ae9467a4139a92f572164d94e"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -10407,8 +10413,8 @@
     {
       "path": "src/renderer/components/StoreVault.module.css",
       "category": "source",
-      "bytes": 12883,
-      "sha256": "e48ffb4659209020aa74e35b70e34d687e0a8edb4975936da34edf732eac2261"
+      "bytes": 12540,
+      "sha256": "385fe4e9f1c7d98ad5407ab842af660bf018bc3653c26e3c8b6c7ee38a2132d1"
     },
     {
       "path": "src/renderer/components/StoreVault.test.tsx",
@@ -10419,8 +10425,8 @@
     {
       "path": "src/renderer/components/StoreVault.tsx",
       "category": "source",
-      "bytes": 9960,
-      "sha256": "bd564b33883ca54fed7946bad558981217c4b9d7be976af7845d664b915f05a2"
+      "bytes": 9786,
+      "sha256": "4163bc77ed8556e538576e16a955b680925b6c9d2250ed1142fd6f2d3c4d470d"
     },
     {
       "path": "src/renderer/components/storeVaultLayout.ts",
@@ -10461,14 +10467,14 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 36029,
-      "sha256": "ea9fff13be07d553150e84cfd3a4004390b89659740dd6257cc138fcc7f7ec2f"
+      "bytes": 35138,
+      "sha256": "97e345ce6dce2573f961b01c805783a1f48ad5d670777ee0c8268c6219305770"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 22274,
-      "sha256": "d986591cb89f323ab13af07e03501925d9cfeb8f318a117b6c4e40439971a48f"
+      "bytes": 21661,
+      "sha256": "b9f344cbf230c276ec9d59b81bcd1d9819f0d0c35a3cb3f3a0f99ab9afaf476f"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -10479,8 +10485,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 144013,
-      "sha256": "4b30023f420a9983869972a6cc0a16ff8348bf520c3c86d30f937fe7e7b6c94b"
+      "bytes": 140771,
+      "sha256": "4c3666d26c4cb2a7573291bf41365cb60ad1d0d632008d5034d2c55b1624b6c6"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -10713,14 +10719,14 @@
     {
       "path": "src/renderer/components/tileBoardGlowVisualState.test.ts",
       "category": "test",
-      "bytes": 6995,
-      "sha256": "dcd9696451e4c59ea1eb1655e192d6737923d1442303d2ef0b7eb2a5657a8728"
+      "bytes": 6774,
+      "sha256": "8645c78f3fdb00e1104ecfdd178a915ee4f42acf2a152295371100a86f4d87dd"
     },
     {
       "path": "src/renderer/components/tileBoardGlowVisualState.ts",
       "category": "source",
-      "bytes": 5763,
-      "sha256": "f59c9030be943f2316bbf54b0e9649284ae302a9ba001e6255bbb40f01200fed"
+      "bytes": 5598,
+      "sha256": "dacb82eec057f7524a403ee9965c4f0d7a7e5ee172ae6ccc404b1796665455da"
     },
     {
       "path": "src/renderer/components/tileBoardHiddenBackAccents.test.ts",
@@ -10827,8 +10833,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 19836,
-      "sha256": "b923ede8357bbcc9aec140f168a90b21dcf8826c5c7d6350cfa2a163cdc90bf2"
+      "bytes": 19549,
+      "sha256": "1a4a9a95d00a5b289632bba7c1d2d693e62e3a9a5480baf195f4189e8166e29c"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -10953,32 +10959,32 @@
     {
       "path": "src/renderer/components/tileBoardRuneField.test.ts",
       "category": "test",
-      "bytes": 5521,
-      "sha256": "862b7b77a3dcf1a40f29562fd57e333b5e6b9f8714d8c695131828f7cf29fefd"
+      "bytes": 5551,
+      "sha256": "a89d63e7e45c7b1b060a2ce89cae0f435ebba1d8bf686700d8310f73b9af830c"
     },
     {
       "path": "src/renderer/components/tileBoardRuneField.ts",
       "category": "source",
-      "bytes": 3199,
-      "sha256": "dde29df47ff065a15da582fdb22340fdab6350cc5b3856a389960e8137903310"
+      "bytes": 3153,
+      "sha256": "fdd26780e54b13f9af3746dcde4b85c70f9acd3ed1df1932ba851314e780755b"
     },
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 22703,
-      "sha256": "ec34ac48786386b9bda3be5d2339a58dabd0ab53379ed84021b60a3de5cab202"
+      "bytes": 22516,
+      "sha256": "17dcd3d647f048e91d8245028f659bf4728fa7be987751c2b9e0b2ab0186f5a7"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 8533,
-      "sha256": "3800dbad9a16544ced2fc80c59551912a7df7ec40c6bd576b1df96a1d06e444b"
+      "bytes": 8334,
+      "sha256": "2f5ff5482bbfe0ecb2c4c09956200cce615868b0ba052274f75f9d2788c25e87"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
       "category": "test",
-      "bytes": 7396,
-      "sha256": "637e1facd0d6f54bac3101f8e55f3a2c1c056eac5f0d54e25ea0070eeb3dd818"
+      "bytes": 7392,
+      "sha256": "f2ab25362ad4b21c87c74dab611f5a876db661eda927fc82376cc6792b945e39"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.ts",
@@ -11349,8 +11355,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 8622,
-      "sha256": "b82345cf648e8bbcddfceba026eddd777454477ac6e97bbc87616cdf2f27d893"
+      "bytes": 8471,
+      "sha256": "cb097eb58e259f0c48bd943bfae1f9b9b705e2cfc8cd07db1e095cd7fc5d1721"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -11403,8 +11409,8 @@
     {
       "path": "src/renderer/copy/comboHeatPerksCopy.ts",
       "category": "source",
-      "bytes": 749,
-      "sha256": "47804a794200eda78edfe3d3acadc18f9fff2f483cf41c59fb25f09a00979005"
+      "bytes": 735,
+      "sha256": "6e1f408d52ff79cad3a1fb6a0ab38cab7c44d32e8b4efc63d91383d06fc62680"
     },
     {
       "path": "src/renderer/copy/diagnosticsSettings.ts",
@@ -11415,8 +11421,8 @@
     {
       "path": "src/renderer/copy/elementClarity.ts",
       "category": "source",
-      "bytes": 1051,
-      "sha256": "1616088b0f5e6aa6aa77b790a11f41c6a8ab2c463f32e133955913a80f5c1d36"
+      "bytes": 1034,
+      "sha256": "e1ad8b6df18f4049901f5dc54b15d551450a318d3988a55883b5ad8126d2f4ac"
     },
     {
       "path": "src/renderer/copy/elementCopy.ts",
@@ -11427,8 +11433,8 @@
     {
       "path": "src/renderer/copy/floorClearChain.ts",
       "category": "source",
-      "bytes": 2465,
-      "sha256": "fc1dff9c71e4fd4b3c1d233bb72e48e5922b1b90ea2a9e081ae7644922cff390"
+      "bytes": 2419,
+      "sha256": "30879caf0c019bd4368c602110439e9b108bafefd2d73190f52fd872df3244b7"
     },
     {
       "path": "src/renderer/copy/floorCurioBeat.test.ts",
@@ -11451,8 +11457,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 7487,
-      "sha256": "741d553b16a40f63cd762a252a3ccbf61e2083bb4d7510d37be08b18defdf0fa"
+      "bytes": 7344,
+      "sha256": "4832d262b9be8b3a148a5e8f0ee1dafb76b00fa0bf9df07ea5fa190acb296649"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -11541,8 +11547,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 6269,
-      "sha256": "b1fdb07468abd014a9a9ca43eff2a7f7057c6dff6ecdd0c2fe3a7ef22f84213f"
+      "bytes": 6172,
+      "sha256": "cfa2e207790ca5d40d843ee04cfc822be8d6d7871f6c231f4c4eb97f59eb6cf3"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -11565,8 +11571,8 @@
     {
       "path": "src/renderer/copy/runEndStamp.ts",
       "category": "source",
-      "bytes": 2302,
-      "sha256": "a21a4518f12e54a09ed5d6f19584f6b583d0ac5fb577ad24fb9e31891227bc10"
+      "bytes": 2253,
+      "sha256": "1a2fa41a90e94422d2909d57a97a2f1a2dacf1f95ba0bf5fed6f357795c68cb2"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -13215,8 +13221,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 49060,
-      "sha256": "4809360e12de8bc64bb0b91b9d0355811209dfa0eed73c1fc6e88be611a1f2ee"
+      "bytes": 48008,
+      "sha256": "67cee3747864b04a31489b6ce3d5dbe09328d630252889853cbedc9896031044"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13335,68 +13341,68 @@
     {
       "path": "src/shared/element-alchemy-rules.ts",
       "category": "source",
-      "bytes": 6193,
-      "sha256": "92da83a3611ffdaf04c8dcc5afc08e657c6b0bae7b4455a22264b9e0da77ec69"
+      "bytes": 6073,
+      "sha256": "fa5399e2be62c4476745111992ce334b9205b09efe3a5476c579765bfddf3d35"
     },
     {
       "path": "src/shared/element-cast-feedback.ts",
       "category": "source",
-      "bytes": 2801,
-      "sha256": "2ac0b964b8c6c675a2361e38699171f9b70dcb24d8f53656232ce8fd24086996"
+      "bytes": 2764,
+      "sha256": "c5f2b0623663cac19b61ca54cf888028218122af87a95c5e1f5db2af7ab3c4a2"
     },
     {
       "path": "src/shared/element-chemistry.test.ts",
       "category": "test",
-      "bytes": 7845,
-      "sha256": "9fb57d0314ca67bcc06ab7474221d50f186e560cd644ff8332b52271f93e3f0b"
+      "bytes": 7734,
+      "sha256": "b9d3df7a78d7f3f7737489887e3f2b7f7fd481d14019f192c491368459cda48c"
     },
     {
       "path": "src/shared/element-coatings.test.ts",
       "category": "test",
-      "bytes": 4502,
-      "sha256": "1d5fb28ba70c91a4c5d218191971537b3ca7b6c5c1fe8e26d691e4d2f8618548"
+      "bytes": 4432,
+      "sha256": "58fd49c7cf4ad5fa37a986f135503e68124518da834af4dac29b2bbf8a89ed8f"
     },
     {
       "path": "src/shared/element-every-match.test.ts",
       "category": "test",
-      "bytes": 6850,
-      "sha256": "326835d7031c0defad9cd3d2df629f442801e91d6e381c7f6c68fd18fdb91267"
+      "bytes": 6746,
+      "sha256": "d945c8d2d3d08be65b7dff88983e17ee7db0b200c951c7a3bbdbff934355f5d8"
     },
     {
       "path": "src/shared/element-ground-rules.test.ts",
       "category": "test",
-      "bytes": 12929,
-      "sha256": "d5fe30f076fda27e421a17bb96e57998895c94aecd9ddbe378ca7649178287ce"
+      "bytes": 12746,
+      "sha256": "6f18401aa8fe258c32febb3ca48841a05f51d01a004b08f757ec1eeae95dd02e"
     },
     {
       "path": "src/shared/element-ground-rules.ts",
       "category": "source",
-      "bytes": 6639,
-      "sha256": "6c0a42ab321796141d85111841c862faaa97df21556994e5a6f36eea6d88d5e9"
+      "bytes": 6531,
+      "sha256": "30a413e6e9bd195bb606b03d71f1f75b3bc5e42ea985bbe6eb4f1975c347e3a5"
     },
     {
       "path": "src/shared/element-group-rules.test.ts",
       "category": "test",
-      "bytes": 8329,
-      "sha256": "436e310fd0ef4fc33a5a28185a76818093b7992e6ea7e05f63a024b24d3c0ab2"
+      "bytes": 8198,
+      "sha256": "d9632dad394acc5cd8ee73bf00be5ef8fb2ec1f999684e6ad4856ec0bf335ed6"
     },
     {
       "path": "src/shared/element-group-rules.ts",
       "category": "source",
-      "bytes": 17937,
-      "sha256": "ac1061c7848c88a43215b1a01dc7c1a70c7ab6b91e35e88f56ebc8023f1b4846"
+      "bytes": 17630,
+      "sha256": "a60b55d4c803dfeaba13a71e3a142e17eac982046ce4a39610ba8986555fa6ff"
     },
     {
       "path": "src/shared/element-resonance-rules.test.ts",
       "category": "test",
-      "bytes": 14661,
-      "sha256": "19633b6677d0e57bff9dbd0bc2da1b7a236463346cb0e02f93abc47c35110d62"
+      "bytes": 14408,
+      "sha256": "3cf03b9f783b01ecd0995813a0452f56ae402547286645531a468c66a1866098"
     },
     {
       "path": "src/shared/element-resonance-rules.ts",
       "category": "source",
-      "bytes": 17029,
-      "sha256": "2dacb5a792edea6a1906a05f60c0556b118850c5a97a117989c24b7d9e60000e"
+      "bytes": 16719,
+      "sha256": "c84ebac83b53943ffbd70445f0c1ac009d774508f0b1b864d2299e0911e5e7e4"
     },
     {
       "path": "src/shared/elemental-loot-rules.test.ts",
@@ -13407,8 +13413,8 @@
     {
       "path": "src/shared/elemental-loot-rules.ts",
       "category": "source",
-      "bytes": 4162,
-      "sha256": "89af93d469a909b656ad195871884e539c2d4005ab613b22e2d3067bde7ee609"
+      "bytes": 4090,
+      "sha256": "83b7f99759cd02fc80d265b7670e1e967928d6921ec0992df4da041d9dc9cbf9"
     },
     {
       "path": "src/shared/exploit-surface.test.ts",
@@ -13695,8 +13701,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 116484,
-      "sha256": "5f64e705a8ee8e01da961b065cfe3e27d8483c5595db3d0e77944fd7fd439286"
+      "bytes": 113161,
+      "sha256": "bea8a5612655d12bbbeab1f56fe497c4335a9761f74116d0f24a24c8f34a5f79"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -13977,8 +13983,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 52308,
-      "sha256": "1c24176e93d739191baca51f8e7d5f3c90c0b96927738dea7ccb1134c7b96cd2"
+      "bytes": 51571,
+      "sha256": "c28096aeb035f380584e5a5c39b42bb4fd571fe81f2a30322d3c4d59561fb855"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14361,14 +14367,14 @@
     {
       "path": "src/shared/realm-hold-policy.test.ts",
       "category": "test",
-      "bytes": 4736,
-      "sha256": "504d70e184b16d71656e95dd6cd43dfe7b3c340aea1e5ada6417b4c90669f4f0"
+      "bytes": 4659,
+      "sha256": "fd1e6da3e40de63c4f64631a89780fe3e01f690516c8bc7bbc110418f95ca05b"
     },
     {
       "path": "src/shared/realm-hold-policy.ts",
       "category": "source",
-      "bytes": 5916,
-      "sha256": "d95cd418baa97145eaba99d72fc6222d45d4c8ef1def14c88481213a3a5afe59"
+      "bytes": 5825,
+      "sha256": "d719c131546a6144bcadcf6c9bb6e11db498072b7fa5bdc98960a6aeac54248a"
     },
     {
       "path": "src/shared/realm-omen-rules.ts",
@@ -14409,8 +14415,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 50590,
-      "sha256": "33d404057bbda2368586f9e4cac609973d2013aca9cd73b03bd08354d2e47514"
+      "bytes": 49573,
+      "sha256": "2a0418cebd9922e37075e243ae0996d45ec27f11e462365e2fa894a12fa00c54"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -14961,8 +14967,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 71803,
-      "sha256": "aa0629c4d2c1dd162e45e83852a36f8ce940127b3692f5cd5b32e514910094b5"
+      "bytes": 71178,
+      "sha256": "42d1cb89d4b732726fcf0b71532c4d071c4a83133ebf5b48a3c6613a99381978"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -14985,8 +14991,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 136734,
-      "sha256": "36a1a0ba6c54c75d1e5493fdec9e8cf8f62f123459aeb5fd9b5e87c4e7c786d9"
+      "bytes": 134613,
+      "sha256": "f61143d94a7c7cd0313e4049c20aaa5449d2f6e3fd665c1d6b5ee102890afa91"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -15231,8 +15237,8 @@
     {
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
-      "bytes": 7504,
-      "sha256": "b0c2fd772fbfac6ecfd262c84b8bd6af0e20e69ebaa5a5b54a5dad92b39ad39b"
+      "bytes": 7336,
+      "sha256": "847e891970057a1f28a56169d4052915d4c4d06532a158d98d0d69a56c49d60e"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -20015,7 +20021,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 592,
+      "lineCount": 598,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -20044,14 +20050,15 @@
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 67,
+      "lineCount": 71,
       "imports": [
         "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
         "file:src/renderer/styles/theme.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
-        "symbol:src/renderer/components/boardRuneFieldMaterial.ts#createBoardRuneFieldMaterial"
+        "symbol:src/renderer/components/boardRuneFieldMaterial.ts#createBoardRuneFieldMaterial",
+        "symbol:src/renderer/components/boardRuneFieldMaterial.ts#setBoardRuneFieldPalette"
       ],
       "testedBy": [
         "file:src/renderer/components/cardArcaneGlowMaterial.test.ts"
@@ -20062,7 +20069,7 @@
       "path": "src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 66,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/boardRuneFieldShaderGlsl.ts#BOARD_RUNE_FIELD_FRAGMENT_SHADER"
@@ -20132,7 +20139,7 @@
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 67,
+      "lineCount": 82,
       "imports": [
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
         "file:src/renderer/components/cardArcaneGlowMaterial.ts"
@@ -20166,7 +20173,7 @@
       "path": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 108,
+      "lineCount": 112,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/cardArcaneGlowShaderGlsl.ts#CARD_ARCANE_GLOW_FRAGMENT_SHADER"
@@ -20927,7 +20934,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2305,
+      "lineCount": 2306,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -22289,7 +22296,7 @@
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 42,
+      "lineCount": 67,
       "imports": [
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/screenCallouts.ts"
@@ -22302,7 +22309,7 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 75,
+      "lineCount": 69,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts"
       ],
@@ -24269,7 +24276,7 @@
       "path": "src/renderer/components/tileBoardRuneField.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 179,
+      "lineCount": 180,
       "imports": [
         "file:src/renderer/components/tileBoardRuneField.ts",
         "file:src/renderer/components/tileBoardTransform.ts"
@@ -24282,7 +24289,7 @@
       "path": "src/renderer/components/tileBoardRuneField.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 103,
+      "lineCount": 101,
       "imports": [
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
         "file:src/renderer/components/tileBoardTransform.ts"
@@ -24304,10 +24311,11 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 536,
+      "lineCount": 541,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
+        "file:src/renderer/components/boardRuneFieldMaterial.ts",
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/ElementCardBack.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -40954,24 +40962,32 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 264,
-      "endLine": 591
+      "line": 270,
+      "endLine": 597
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
       "name": "clampBoardRuneFieldDriverUniforms",
       "kind": "value",
       "file": "src/renderer/components/boardRuneFieldMaterial.ts",
-      "line": 38,
-      "endLine": 43
+      "line": 42,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#createBoardRuneFieldMaterial",
       "name": "createBoardRuneFieldMaterial",
       "kind": "value",
       "file": "src/renderer/components/boardRuneFieldMaterial.ts",
-      "line": 45,
-      "endLine": 66
+      "line": 49,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#setBoardRuneFieldPalette",
+      "name": "setBoardRuneFieldPalette",
+      "kind": "value",
+      "file": "src/renderer/components/boardRuneFieldMaterial.ts",
+      "line": 28,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldShaderGlsl.ts#BOARD_RUNE_FIELD_FRAGMENT_SHADER",
@@ -40979,7 +40995,7 @@
       "kind": "value",
       "file": "src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "line": 1,
-      "endLine": 63
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/boardTrauma.ts#addTrauma",
@@ -41219,7 +41235,7 @@
       "kind": "value",
       "file": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
       "line": 6,
-      "endLine": 107
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -41658,8 +41674,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2304,
-      "endLine": 2304
+      "line": 2305,
+      "endLine": 2305
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -42906,32 +42922,32 @@
       "name": "SCREEN_CALLOUT_MAJOR_MS",
       "kind": "value",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 18,
-      "endLine": 18
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MINOR_MS",
       "name": "SCREEN_CALLOUT_MINOR_MS",
       "kind": "value",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 19,
-      "endLine": 19
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueue",
       "name": "ScreenCalloutQueue",
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 26,
-      "endLine": 74
+      "line": 22,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
       "name": "ScreenCalloutQueueProps",
       "kind": "interface",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 21,
-      "endLine": 24
+      "line": 17,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
@@ -45218,8 +45234,8 @@
       "name": "applyTileBoardRuneFieldUniformState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardRuneField.ts",
-      "line": 93,
-      "endLine": 102
+      "line": 91,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRuneField.ts#computeTileBoardRuneFieldMetrics",
@@ -45235,7 +45251,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardRuneField.ts",
       "line": 68,
-      "endLine": 91
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRuneField.ts#TileBoardRuneFieldMetrics",
@@ -45258,24 +45274,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 535,
-      "endLine": 535
+      "line": 540,
+      "endLine": 540
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 163,
-      "endLine": 163
+      "line": 164,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 80,
-      "endLine": 80
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -72049,6 +72065,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/boardRuneFieldMaterial.ts->symbol:src/renderer/components/boardRuneFieldMaterial.ts#setBoardRuneFieldPalette",
+      "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
+      "target": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#setBoardRuneFieldPalette",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/boardRuneFieldShaderGlsl.ts->symbol:src/renderer/components/boardRuneFieldShaderGlsl.ts#BOARD_RUNE_FIELD_FRAGMENT_SHADER",
       "source": "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "target": "symbol:src/renderer/components/boardRuneFieldShaderGlsl.ts#BOARD_RUNE_FIELD_FRAGMENT_SHADER",
@@ -98816,6 +98838,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/cardFace/cardIllustrationRegistry.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/boardRuneFieldMaterial.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "kind": "imports"
     },
     {

@@ -35,6 +35,13 @@ in `boardTrauma.ts`).
 
 ## What this game maps them to
 
+Callouts show the latest event immediately. `ScreenCalloutQueue` holds one visible stamp and
+no pending stamps; a new event replaces the current one and receives its full display time.
+When an event earns several receipts, the first in the existing priority order wins and all
+sibling keys are consumed. Re-renders and restored runs do not replay them. Detailed receipts
+remain in the HUD and accessible announcements. Phone callouts use smaller type and omit the
+full-screen flash and speed lines; reduced motion also stops rare color cycling.
+
 | Reference | Memory Dungeon |
 | --- | --- |
 | Streak counter as the headline | The combo (`stats.currentStreak`) is the big number in the chain column (`RunShell`), bumping on every link, with how much came down the stairs beside it |

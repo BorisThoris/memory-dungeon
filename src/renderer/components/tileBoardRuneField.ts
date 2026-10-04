@@ -84,10 +84,8 @@ export const computeTileBoardRuneFieldUniformState = ({
     intensity: reduceMotion
         ? renderQuality.stageRuneFieldIntensity * 0.46
         : renderQuality.stageRuneFieldIntensity,
-    motion: reduceMotion
-        ? Math.min(renderQuality.stageRuneFieldMotion, 0.06)
-        : renderQuality.stageRuneFieldMotion,
-    time: elapsedTime
+    motion: reduceMotion ? 0 : renderQuality.stageRuneFieldMotion,
+    time: reduceMotion ? 0 : elapsedTime
 });
 
 export const applyTileBoardRuneFieldUniformState = (
