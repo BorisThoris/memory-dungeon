@@ -9,6 +9,7 @@ import {
     Texture
 } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
+import { elementTexture } from './ElementCardBack';
 import { RENDERER_THEME } from '../styles/theme';
 import referenceBackTextureUrl from '../assets/textures/cards/card-back-painted.webp';
 import cardBackGlowTextureUrl from '../assets/textures/cards/card-back-glow-runes.webp';
@@ -1209,7 +1210,7 @@ const drawCardBackPattern = (
     drawCardOuterFramesAndNoise(context, canvas, hiddenPanel, rng, metrics);
 };
 
-const drawCardFrontOverlay = (
+const drawCardFrontArtwork = (
     context: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
     tile: Tile,
@@ -1250,6 +1251,18 @@ const drawCardFrontOverlay = (
     drawProceduralIllustrationInCanvasOverlay(context, canvas, tile.pairKey, tier, c, {
         matFeatherStrength: 0.92
     });
+};
+
+const drawCardFrontOverlay = (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, tile: Tile,
+    variant: Exclude<FaceVariant, 'hidden'>, tier: OverlayDrawTier): void => {
+    drawCardFrontArtwork(context, canvas, tile, variant, tier);
+    if (tile.edition == null) return;
+    const { width, height } = canvas;
+    context.fillStyle = '#15131eee';
+    context.fillRect(width*.16, height*.76, width*.68, height*.16);
+    context.fillStyle = '#f8e5b7'; context.textAlign = 'center'; context.textBaseline = 'middle';
+    context.font = `bold ${Math.round(height*.105)}px serif`;
+    context.fillText(String(tile.edition), width*.5, height*.84, width*.6);
 };
 
 const drawEdgeFace = (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, palette: CardPalette, face: TileFace): void => {
@@ -1490,12 +1503,15 @@ export const getTileFaceRoughnessTexture = (
     face: TileFace,
     variant: FaceVariant,
     layer: TileLayer = 'panel'
-): CanvasTexture | null =>
-    createTexture(
+): CanvasTexture | null => {
+    const texture = createTexture(
         `${buildKey(tile, face, variant, layer)}:roughness`,
         (context, canvas) => drawRoughnessFace(context, canvas, tile, face, variant, layer),
         NoColorSpace
     );
+    if (texture && !(face === 'back' && variant === 'hidden')) texture.userData.cardId = tile.id;
+    return texture;
+};
 
 export const getTileFaceOverlayTexture = (
     tile: Tile,
@@ -1504,13 +1520,45 @@ export const getTileFaceOverlayTexture = (
 ): CanvasTexture | null => {
     syncIllustrationOverlayCacheVersion();
     const tier = overlayDrawTierFromGraphicsQuality(graphicsQuality);
-    return createTexture(
+    const texture = createTexture(
         getTileFaceOverlayTextureCacheKey(tile, variant, graphicsQuality),
         (context, canvas) => drawCardFrontOverlay(context, canvas, tile, variant, tier),
         SRGBColorSpace,
         STATIC_CARD_TEXTURE_WIDTH,
         STATIC_CARD_TEXTURE_HEIGHT
     );
+    if (texture) texture.userData.cardId = tile.id;
+    return texture;
+};
+
+/** Called after React commits a card window, when its old materials have unmounted. */
+export const retainTileTextureWorkingSet = (cardIds: ReadonlySet<string>): void => {
+    for (const [key, texture] of textureCache) {
+        const id: unknown = texture.userData.cardId;
+        if (typeof id === 'string' && !cardIds.has(id)) disposeCachedTexture(key);
+    }
+};
+
+/** Paint the same face/back assets into a small atlas slot without allocating a cached GPU texture per card. */
+export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: boolean): void => {
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    const base = faceUp ? getCardFaceStaticTexture() : tile.suit ? elementTexture(tile.suit, false) : getTileFaceTexture(tile, 'back', 'hidden', 'panel');
+    if (base?.image) context.drawImage(base.image as CanvasImageSource, 0, 0, canvas.width, canvas.height);
+    if (faceUp) {
+        const overlay = document.createElement('canvas');
+        overlay.width = canvas.width; overlay.height = canvas.height;
+        const overlayContext = overlay.getContext('2d');
+        if (overlayContext) {
+            drawCardFrontOverlay(overlayContext, overlay, tile, 'active', 'standard');
+            context.drawImage(overlay, 0, 0);
+        }
+    }
+    if (tile.findableKind) {
+        context.fillStyle = tile.findableKind === 'meteor_shard' ? '#ffb561' : '#87eafa';
+        context.beginPath(); context.arc(canvas.width*.8, canvas.height*.12, canvas.width*.05, 0, Math.PI*2); context.fill();
+    }
 };
 
 

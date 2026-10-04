@@ -6,9 +6,11 @@ export interface ClientRectLike {
 }
 
 export interface TilePickIntersectionLike {
+    instanceId?: number;
     object: {
         userData?: {
             tileId?: unknown;
+            tileIds?: unknown;
         };
     };
 }
@@ -33,6 +35,10 @@ export const clientPointToNormalizedDeviceCoordinates = (
 export const firstTileIdFromPickIntersections = (
     intersections: readonly TilePickIntersectionLike[]
 ): string | null => {
-    const hit = intersections.find((intersection) => typeof intersection.object.userData?.tileId === 'string');
-    return hit ? String(hit.object.userData?.tileId) : null;
+    for (const hit of intersections) {
+        const data = hit.object.userData;
+        const id = hit.instanceId != null && Array.isArray(data?.tileIds) ? data.tileIds[hit.instanceId] : data?.tileId;
+        if (typeof id === 'string') return id;
+    }
+    return null;
 };

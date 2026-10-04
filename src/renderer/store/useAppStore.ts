@@ -1,5 +1,6 @@
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
-import { applyGodRunCommand } from '../../shared/god-run-adapter';
+import { canAimMeteor } from '../../shared/meteor-rules';
+import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contracts';
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
@@ -587,15 +588,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         runTimerController.skipMemorizePhase();
     },
 
-    godCommand: (command) => {
-        const { run, view } = get();
-        if (!run?.godRun || view !== 'playing' || run.status === 'paused') return;
-        const next = applyGodRunCommand(run, command);
-        if (next === run) return;
-        if (next.status === 'gameOver') applyResolvedRun(next);
-        else set({ run: next });
-    },
-
     buyStoreItem: (id) => {
         const { run } = get();
         // The store stop opens at a cleared floor (`isStoreStopFloor`), before the next one builds.
@@ -620,6 +612,24 @@ export const useAppStore = create<AppState>((set, get) => ({
         get().continueToNextLevel();
     },
 
+    armMeteor: () => {
+        if (get().view === 'inventory') get().closeSubscreen();
+        const {run,view}=get();
+        if (!run || view !== 'playing') return;
+        if (run.meteorArmed) { set({run:{...run,meteorArmed:false}}); return; }
+        if (!canAimMeteor(run)) return;
+        set({run:{...run,meteorArmed:true},boardPinMode:false,peekModeArmed:false,regionShuffleArmed:false,tileSwapArmed:false,tileSwapFirstTileId:null});
+    },
+    useMeteor: (tileId) => {
+        const {run,view}=get();
+        if (!run?.meteorArmed || view !== 'playing') return;
+        const command = createGameplayMeteorCommand(`meteor:${run.runSeed}:${run.board?.level}:${run.meteorCharges}:${tileId}`, tileId);
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        applyResolvedRun(appendGameplayJournal(result.run, [command], result.events));
+    },
     useBomb: () => {
         const { run, view } = get();
         if (!run || view !== 'playing') {

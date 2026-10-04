@@ -117,7 +117,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
             // Gen 184: one kind, so its share is the whole of the spawn.
             const bounds: Record<FindableKind, { min: number; max: number }> = {
-                score_glint: { min: 1, max: 1 }
+                score_glint: { min: .65, max: .95 }, meteor_shard: { min: .05, max: .35 }
             };
 
             for (const row of getFindableSpawnWeightRows()) {
@@ -130,8 +130,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     );
 
     it('summarizes findable kind shares from aggregate counts', () => {
-        expect(getFindableKindShares({ score_glint: 70 })).toEqual({ score_glint: 1 });
-        expect(getFindableKindShares({ score_glint: 0 })).toEqual({ score_glint: 0 });
+        expect(getFindableKindShares({ score_glint: 70, meteor_shard: 30 })).toEqual({ score_glint: .7, meteor_shard: .3 });
+        expect(getFindableKindShares({ score_glint: 0, meteor_shard: 0 })).toEqual({ score_glint: 0, meteor_shard: 0 });
     });
 
     it('guards the shipped balance baseline against large drift', () => {

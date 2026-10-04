@@ -148,7 +148,7 @@ describe('tileBoardViewport', () => {
 
     it('clamps raw zoom values and anchored zoom resolutions', () => {
         expect(clampBoardZoom(-1)).toBeGreaterThan(0);
-        expect(clampBoardZoom(99)).toBeLessThan(3);
+        expect(clampBoardZoom(99)).toBe(64);
 
         const next = resolveAnchoredBoardViewport({
             boardHeight: 400,

@@ -89,7 +89,8 @@ const GLOW_SPILL = 1.12;
 
 const textureCache = new Map<string, CanvasTexture>();
 
-const elementTexture = (suit: TileSuit, empowered: boolean): CanvasTexture => {
+// eslint-disable-next-line react-refresh/only-export-components -- Atlas LOD reuses the original card back.
+export const elementTexture = (suit: TileSuit, empowered: boolean): CanvasTexture => {
     const key = `${suit}:${empowered ? 'e' : 'b'}`;
     const cached = textureCache.get(key);
     if (cached) return cached;
@@ -122,7 +123,7 @@ const EmpoweredGlow = ({ suit, reduceMotion }: { suit: TileSuit; reduceMotion: b
         material.current.opacity = reduceMotion ? 0.95 : 0.7 + 0.3 * Math.sin(clock.elapsedTime * 3.2);
     });
     return (
-        <mesh position={[0, 0, 0.0505]} raycast={noopMeshRaycast} renderOrder={10}>
+        <mesh position={[0, 0, 0.0505]} raycast={noopMeshRaycast} renderOrder={7}>
             <planeGeometry args={[CARD_PLANE_WIDTH * GLOW_SPILL, CARD_PLANE_HEIGHT * GLOW_SPILL]} />
             <meshBasicMaterial
                 blending={AdditiveBlending}
@@ -152,7 +153,7 @@ export const ElementCardBack = ({
     reduceMotion: boolean;
 }): ReactElement => (
     <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
-        <mesh position={[0, 0, 0.05]} raycast={noopMeshRaycast} renderOrder={10}>
+        <mesh position={[0, 0, 0.05]} raycast={noopMeshRaycast} renderOrder={7}>
             <planeGeometry args={[CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT]} />
             <meshBasicMaterial
                 depthTest

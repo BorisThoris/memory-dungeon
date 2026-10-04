@@ -10,10 +10,15 @@ export interface FindableRewardRow {
     breakRule: string;
 }
 
-/** Gen 184: one kind. The Shard Spark paid a combo shard, and the shard is gone (docs/REMOVED_LIVES.md). */
-const FINDABLE_REWARD_ROW_ORDER = ['score_glint'] as const satisfies readonly FindableKind[];
+/** Match rewards: immediate score or a player-triggered inventory item. */
+const FINDABLE_REWARD_ROW_ORDER = ['score_glint', 'meteor_shard'] as const satisfies readonly FindableKind[];
 
 const FINDABLE_REWARD_ROW_BY_KIND = {
+    meteor_shard: {
+        kind: 'meteor_shard', label: 'Meteor shard', marker: 'Amber meteor corner glyph',
+        rewardText: '+1 meteor in your inventory', claimRule: 'Match the carrier pair, then call the meteor yourself.',
+        breakRule: 'Destroyed shards are lost; meteors never refill themselves.'
+    },
     score_glint: {
         kind: 'score_glint',
         label: 'Score glint',
@@ -44,7 +49,7 @@ export const getFindableRows = () =>
         rewardText: row.rewardText,
         score: FINDABLE_MATCH_SCORE[row.kind],
         spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[row.kind],
-        breakText: 'A break that takes the carrier spills the glint and pays it.'
+        breakText: row.breakRule
     }));
 
 export const getFindableSpawnWeightRows = () =>

@@ -1,5 +1,4 @@
 import type { SaveData } from '../../shared/contracts';
-import GodResumeButton from './GodResumeButton';
 import { getFirstRunHelpCenterRows } from '../../shared/first-run-help-center';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
 import { useRef } from 'react';
@@ -191,7 +190,6 @@ const MainMenu = ({
 
                     <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
                         <p className={styles.contentsHead}>Contents</p>
-                        <GodResumeButton />
                         <div aria-label="Primary actions" className={styles.ladder} role="group">
                             <button
                                 aria-label="Play"

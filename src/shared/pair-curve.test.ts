@@ -46,13 +46,13 @@ describe('the pair curve', () => {
         expect(pairsForFloor(-4)).toBe(AUTHORED_FLOOR_PAIRS[0]);
         expect(pairsForFloor(Number.NaN)).toBe(AUTHORED_FLOOR_PAIRS[0]);
         expect(pairsForFloor(1.9)).toBe(pairsForFloor(1));
-        expect(pairsForFloor(200)).toBe(PAIRS_MAX);
-        expect(pairsForFloor(Number.POSITIVE_INFINITY)).toBe(PAIRS_MAX);
+        expect(pairsForFloor(200,58)).toBe(PAIRS_MAX);
+        expect(pairsForFloor(Number.POSITIVE_INFINITY,58)).toBe(PAIRS_MAX);
         for (let floor = 1; floor <= 400; floor += 1) {
-            const pairs = pairsForFloor(floor);
+            const pairs = pairsForFloor(floor,58);
             expect(pairs).toBeGreaterThanOrEqual(PAIRS_MIN);
             expect(pairs).toBeLessThanOrEqual(PAIRS_MAX);
-            expect(pairs).toBeGreaterThanOrEqual(pairsForFloor(floor - 1));
+            expect(pairs).toBeGreaterThanOrEqual(pairsForFloor(floor - 1,58));
         }
     });
 });

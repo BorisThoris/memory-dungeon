@@ -18,6 +18,7 @@ export {
 } from './tile-trait-interaction-copy';
 import { formatTileTraitInteractionTags, type TileTraitInteractionTag } from './tile-trait-interaction-copy';
 import { describeTraitMark, tileTraitMark } from './tile-trait-marks';
+import { boardTileIndex, getBoardReadIndex } from './board-read-index';
 
 /*
  * Gen 201 cut a clause from Heavy's mismatch line. It read "costs +1 extra try but never drains
@@ -116,7 +117,7 @@ const collectTileTraitInteractionTags = ({
 
 export const getTileTraitInteractionPreviewLines = (board: BoardState, sourceTileIds: readonly string[]): string[] => {
     const sourceTiles = sourceTileIds
-        .map((tileId) => board.tiles.find((tile) => tile.id === tileId))
+        .map((tileId) => board.tiles[boardTileIndex(board, tileId)])
         .filter((tile): tile is Tile => tile != null);
     if (sourceTiles.length === 0) {
         return [];
@@ -521,7 +522,7 @@ export const assignTileTraitsToGeneratedBoard = (
     return assignedTiles;
 };
 
-const getTileIndex = (board: BoardState, tile: Tile): number => board.tiles.findIndex((candidate) => candidate.id === tile.id);
+const getTileIndex = (board: BoardState, tile: Tile): number => boardTileIndex(board, tile.id);
 
 const getOrthogonalNeighborIndexes = (board: BoardState, index: number): number[] => {
     const columns = Math.max(1, board.columns);
@@ -574,6 +575,7 @@ const collectAdjacentTraitTiles = (board: BoardState, sourceTiles: readonly Tile
 };
 
 const countRemainingFullyHiddenPairs = (board: BoardState): number => {
+    if (board.tiles.length > 48) return getBoardReadIndex(board).fullyHiddenPairs;
     const byPair = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey)) {

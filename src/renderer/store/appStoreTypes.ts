@@ -1,6 +1,5 @@
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
-import type { GodRunCommand } from '../../shared/god-run-engine';
 import type {
     AchievementId,
     RunState,
@@ -13,7 +12,6 @@ import type { MetaProgressionUnlockResult } from '../../shared/meta-progression'
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 
 export interface AppState {
-    godCommand: (command: GodRunCommand) => void;
     hydrated: boolean;
     hydrating: boolean;
     steamConnected: boolean;
@@ -82,6 +80,8 @@ export interface AppState {
     travelThroughRealmDoor: (index: number) => void;
     /** Spends a bomb on the one card face up (`applyBomb`), or does nothing when it cannot. */
     useBomb: () => void;
+    armMeteor: () => void;
+    useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */
     igniteZone: () => void;
     /** Ends an open Zone early (`resolveZone`): everything face up plays at once. */

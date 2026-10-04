@@ -36,13 +36,18 @@ export const AUTHORED_FLOOR_PAIRS: readonly number[] = [4, 6, 7];
 export const PAIRS_BASE = AUTHORED_FLOOR_PAIRS[AUTHORED_FLOOR_PAIRS.length - 1]!;
 export const PAIRS_GROWTH = 2.4;
 export const PAIRS_MAX = 24;
+/** Late floors retain real pairs; this memory bound also limits the simulation and save size. */
+export const LATE_PAIRS_MAX = 4096;
 export const PAIRS_MIN = 2;
 
-export const pairsForFloor = (level: number): number => {
+export const pairsForFloor = (level: number, rulesVersion = 60): number => {
     const floor = Number.isNaN(level) ? 1 : Math.max(1, Math.floor(level));
     const authored = AUTHORED_FLOOR_PAIRS[floor - 1];
     if (authored != null) {
         return authored;
+    }
+    if (rulesVersion >= 60 && floor > 60) {
+        return Math.min(LATE_PAIRS_MAX, Math.round(PAIRS_MAX * 2 ** ((floor - 60) / 30)));
     }
     const raw = Math.round(PAIRS_BASE + PAIRS_GROWTH * Math.sqrt(floor - AUTHORED_FLOOR_PAIRS.length));
     return Math.min(PAIRS_MAX, Math.max(PAIRS_MIN, raw));

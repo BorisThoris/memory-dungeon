@@ -72,6 +72,9 @@ import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImage
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
 import { TileBoardSceneBoardGroup } from './TileBoardSceneBoardGroup';
+import { getTileBoardCardWindow } from './tileBoardCardWindow';
+import { DistantCards } from './DistantCards';
+import { retainTileTextureWorkingSet } from './tileTextures';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -221,7 +224,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     traitRouteTargetTileIds = [],
     stickyBlockedTileId = null
 }: TileBoardSceneProps, ref) => {
-    const { camera, gl, scene, viewport } = useThree();
+    const { camera, gl, scene, viewport, size } = useThree();
     /*
      * Before a floor's first frame: every texture its tiles will use - backs, and faces in all three
      * face-up states - is on the GPU, and the scene's shaders are compiled. The first floor's
@@ -296,6 +299,14 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
     const tileStepLegacy = useMemo(() => readTileStepLegacy(), []);
     const hostConsolidatesTileFrames = !tileStepLegacy;
+    const cardWindow = useMemo(() => getTileBoardCardWindow(board, compact, boardViewport,
+        viewport, size.height), [board, compact, boardViewport, viewport, size.height]);
+    useEffect(() => {
+        retainTileTextureWorkingSet(new Set(cardWindow.detailed.map(index => board.tiles[index]!.id)));
+        Object.assign(gl.domElement.dataset, { detailedCards: String(cardWindow.detailed.length), distantCards: String(cardWindow.distant.length),
+            visibleCards: String(cardWindow.visible.length), logicalCards: String(board.tiles.length) });
+    }, [board, cardWindow, gl]);
+    useEffect(() => () => retainTileTextureWorkingSet(new Set()), []);
     const {
         boardRuneFieldMetrics,
         flipLocked,
@@ -303,6 +314,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         tileBezelRows
     } = useMemo(() => {
         return buildTileBoardSceneModel({
+            visibleIndices: cardWindow.detailed,
             allowGambitThirdFlip,
             zoneFlipCapacity,
             board,
@@ -344,6 +356,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             wideRecallInPlay
         });
     }, [
+        cardWindow,
         allowGambitThirdFlip,
         zoneFlipCapacity,
         board,
@@ -491,6 +504,11 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             <TileBoardSceneLights colors={colors} compact={compact} renderQuality={sceneRenderQuality} />
 
             <TileBoardSceneBoardGroup
+                distantCards={<DistantCards board={board} indices={cardWindow.distant} compact={compact}
+                    tileSize={cardWindow.visible.length > 2000 ? 16 : cardWindow.visible.length > 384 ? 32 : 64}
+                    reduceMotion={reduceMotion} previewActive={previewActive} debugPeekActive={debugPeekActive}
+                    peekRevealedTileIds={peekRevealedTileIds} interactive={interactive && !interactionSuppressed && !flipLocked}
+                    textureRevision={textureRevision} />}
                 board={board}
                 compact={compact}
                 runStatus={runStatus}

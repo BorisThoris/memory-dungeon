@@ -26,8 +26,6 @@ import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
 import { tileCharge } from './element-alchemy-rules';
-import { createGodRun, reduceGodRun, type GodRunCommand } from './god-run-engine';
-import { GOD_BUILD_FAMILIES, simulateGodRun } from './god-run-simulation';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -59,8 +57,6 @@ export type TestHallRoomId =
     | 'bomb'
     | 'bomb-last-pair'
     | 'store-stop'
-    | 'endless-forge'
-    | 'million-card-field'
     | 'deep-pockets'
     | 'long-look'
     | 'tallow-candle'
@@ -143,7 +139,6 @@ export type TestHallRoomId =
     | 'realm-depth';
 
 export type TestHallStep =
-    | { readonly do: 'god'; readonly command: GodRunCommand }
     | { readonly do: 'match'; readonly pairKey: string }
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
@@ -571,33 +566,15 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'store-stop',
-        title: 'Legacy camp upgrades (rules 58)',
+        title: 'Camp upgrades',
         mechanic: 'Every third floor, spend gold on upgrades for this run or emergency supplies.',
         graphMechanicIds: ['progression.store_stop', 'economy.gold'],
         tryThis: 'Clear floor 3. Buy Long Look for one extra second to study every floor. Save gold for its next rank or buy supplies.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12, runRulesVersion: 58 } }),
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
         script: [
             { step: { do: 'clear' }, says: 'floor 3 clears and opens camp', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
             { step: { do: 'buy', item: 'long_look' }, says: 'Long Look costs 8 gold and adds a second to study', expect: (r, b) => (r.storePurchases?.long_look === 1 && runGold(b) - runGold(r) === 8 && getMemorizeDurationForRun(r, 4) - getMemorizeDurationForRun(b, 4) === 1000 ? null : 'camp upgrade differs from its description') }
         ]
-    },
-    {
-        id: 'endless-forge',
-        title: 'The constellation forge',
-        mechanic: 'Three random stackable perks offer real advantages, costs and combinations.',
-        graphMechanicIds: ['progression.store_stop', 'economy.gold'],
-        tryThis: 'Read each tradeoff. Take a perk, enter the field, remember the hand, and match real pairs to charge meteors.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { godRun: createGodRun(90_210,24) } }),
-        script: [{step:{do:'god',command:{type:'continue'}},says:'the first field has 64 real cards and a focused hand',expect:r=>r.godRun?.field.livePairs===32&&r.godRun.hand.length===12?null:'field did not start'}]
-    },
-    {
-        id: 'million-card-field',
-        title: 'Two million memories',
-        mechanic: 'A simulated comet build reaches millions of real cards, rendered in one draw.',
-        graphMechanicIds: ['progression.store_stop', 'economy.gold'],
-        tryThis: 'Zoom into the card field. Match the hand, aim at survivors, and call a charged meteor. Save and resume this constellation.',
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { godRun: simulateGodRun(90_210,GOD_BUILD_FAMILIES.comet!,16).run } }),
-        script: [{step:{do:'god',command:{type:'tick',ms:250}},says:'millions of cards remain real while the study clock advances',expect:r=>(r.godRun?.field.livePairs??0)>=1_048_576?null:'population missing'}]
     },
     {
         id: 'deep-pockets',
@@ -2071,8 +2048,6 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'buy':
             return buyStoreItem(run, step.item);
-        case 'god':
-            return run.godRun ? { ...run, godRun: reduceGodRun(run.godRun,step.command) } : run;
         case 'clear': {
             // Real pairs only: a joker left standing is the Wild run's to carry, not a pair to clear.
             let next = run;

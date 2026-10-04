@@ -73,6 +73,13 @@ describe('the region', () => {
 });
 
 describe('what breaks', () => {
+    it('destroys a meteor carrier without claiming an inventory pickup', () => {
+        const tiles=layout().map(tile=>tile.pairKey==='B'?{...tile,findableKind:'meteor_shard' as const}:tile);
+        const result=resolveChunkBreak({board:board(tiles),run:endless,matchedTileIds:['A1','A2'],chain:3});
+        expect(result.brokenPairKeys).toContain('B');
+        expect(result.claimedFindableKind).toBeNull();
+        expect(result.board.tiles.filter(tile=>tile.pairKey==='B').every(tile=>tile.state==='removed' && !tile.findableKind)).toBe(true);
+    });
     /*
      * 2026-09-23: the pop is Clean's, capped by rung, and a lone match takes nothing. Six pairs on
      * this board: Clean from 3, Sharp from 4, Fever from 7 (floor-relative rungs).

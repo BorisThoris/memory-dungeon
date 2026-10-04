@@ -34,6 +34,7 @@ import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { isStoreStopFloor, runGold } from '../../shared/run-store-rules';
 import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
+import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
@@ -839,6 +840,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 }
             }
             const state = pauseShortcutStateRef.current;
+            if (event.key === 'Escape' && useAppStore.getState().view === 'playing' && useAppStore.getState().run?.meteorArmed) {
+                event.preventDefault(); useAppStore.getState().armMeteor(); return;
+            }
             if (event.key === 'Escape' && state.bombArmed) {
                 event.preventDefault();
                 setBombArmedFor(null);
@@ -1390,6 +1394,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const handleTileSelect = useCallback((tileId: string): void => {
         const { bombArmed, bombChoices, run } = bombPickState.current;
         const state = useAppStore.getState();
+        if (state.run?.meteorArmed) { state.useMeteor(tileId); return; }
         if (bombArmed && state.run === run) {
             if (!bombChoices.includes(tileId)) return;
             state.pressTile(tileId);
@@ -1598,6 +1603,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     : !canPeekAtBoard(run) ? PEEK_COPY.noTargets
                     : PEEK_COPY.idle,
                 onClick: togglePeekMode
+            },
+            {
+                ...toolSpec('meteor'),
+                glyph: <span aria-hidden="true">☄</span>,
+                charges: meteorCharges(run),
+                armed: run.meteorArmed === true,
+                disabled: !canAimMeteor(run),
+                title: run.meteorArmed ? 'Select a card for the meteor strike. Click Meteor again or press Escape to cancel without spending.' : 'Spend one stored meteor: choose a card and strike the surrounding area.',
+                onClick: () => useAppStore.getState().armMeteor()
             },
             {
                 ...toolSpec('bomb'),
@@ -1836,20 +1850,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
-                            feedback={bombArmed ? BOMB_TOOL_COPY.armed : visualHudAnnouncement}
+                            feedback={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : visualHudAnnouncement}
                             feedbackPriority={actionFeedbackPriority}
                             onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
-                            politeAnnouncement={bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
+                            politeAnnouncement={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
                             sfxGain={shuffleSfxGain}
                             shellLayout={shellProfile.layout}
-                            tools={runShellTools.map((tool) => tool.id === 'bomb' ? tool : {
+                            tools={runShellTools.map((tool) => ({
                                 ...tool,
-                                onClick: () => { setBombArmedFor(null); tool.onClick(); }
-                            })}
+                                onClick: () => {
+                                    if (tool.id !== 'bomb') setBombArmedFor(null);
+                                    if (tool.id !== 'meteor' && useAppStore.getState().run?.meteorArmed) useAppStore.getState().armMeteor();
+                                    tool.onClick();
+                                }
+                            }))}
                         />
 
                         {/* Shown, not spoken: the HUD announcer queues this same line (keyed per

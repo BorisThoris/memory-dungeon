@@ -310,7 +310,7 @@ export const TileBoardReadabilityMarkers = ({
     return (
         <>
             {showHiddenReadabilityMarkers ? (
-                <group position={[0, 0, -faceZ - 0.00033]} rotation={[0, Math.PI, 0]}>
+                <group position={[0, 0, -faceZ - 0.056]} rotation={[0, Math.PI, 0]}>
                     {showHiddenReadabilityRing ? (
                         <>
                             <mesh

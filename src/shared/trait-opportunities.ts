@@ -1,4 +1,5 @@
 import type { BoardState, RunState, TileTraitKind } from './contracts';
+import { boardTileIndex } from './board-read-index';
 import {
     getBoardTraitInteractionPreviewKeys,
     getBoardTraitInteractionPreviewLines,
@@ -70,7 +71,7 @@ interface TraitSwapPreviewContext {
 const unique = <T>(items: readonly T[]): T[] => [...new Set(items)];
 
 const getAdjacentTileIds = (board: BoardState, tileId: string): string[] => {
-    const index = board.tiles.findIndex((tile) => tile.id === tileId);
+    const index = boardTileIndex(board, tileId);
     if (index < 0) {
         return [];
     }
@@ -95,11 +96,18 @@ const getAdjacentTileIds = (board: BoardState, tileId: string): string[] => {
     return ids;
 };
 
+const largeBoardSummaries = new WeakMap<BoardState, TraitOpportunitySummary>();
 export const getTraitOpportunitySummary = (board: BoardState | null | undefined): TraitOpportunitySummary => {
     if (!board) {
         return { tiles: [], interactionLines: [], reason: null };
     }
 
+    const cached = largeBoardSummaries.get(board);
+    if (cached) return cached;
+    const finish = (summary: TraitOpportunitySummary): TraitOpportunitySummary => {
+        if (board.tiles.length > 48) largeBoardSummaries.set(board, summary);
+        return summary;
+    };
     const tiles = board.tiles
         .filter((tile) => tile.tileTraitKind && tile.state !== 'matched' && tile.state !== 'removed')
         .map((tile): TraitOpportunityTile | null => {
@@ -122,7 +130,7 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
         })
         .filter((tile): tile is TraitOpportunityTile => tile != null);
     if (tiles.length === 0) {
-        return { tiles: [], interactionLines: [], reason: null };
+        return finish({ tiles: [], interactionLines: [], reason: null });
     }
     const boardInteractionLines = getBoardTraitInteractionPreviewLines(board).slice(0, 4);
     const interactionLines = boardInteractionLines.length > 0
@@ -130,11 +138,7 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
         : unique(tiles.flatMap((tile) => tile.previewLines)).slice(0, 4);
     const reason = interactionLines.length > 0 ? `Offered for current trait route: ${interactionLines[0]}` : null;
 
-    return {
-        tiles,
-        interactionLines,
-        reason
-    };
+    return finish({ tiles, interactionLines, reason });
 };
 
 export const getTraitOpportunityTileIds = (board: BoardState | null | undefined): Set<string> =>
@@ -214,6 +218,8 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
     };
 };
 
+const largeBoardSwapHints = new WeakMap<BoardState, TraitSwapRouteHint[]>();
+
 export const getTraitSwapRouteHints = (
     board: BoardState | null | undefined,
     limit = 3
@@ -221,7 +227,24 @@ export const getTraitSwapRouteHints = (
     if (!board || limit <= 0) {
         return [];
     }
-    const hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
+    const cached = largeBoardSwapHints.get(board);
+    if (cached) return cached.slice(0, limit);
+    let hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
+    if (hiddenTiles.length > 48) {
+        // Suggestions are a bounded search near trait cards. Every real swap remains available;
+        // trying every pair of an 8,192-card board in the HUD would perform 33 million previews.
+        const budget = board.tiles.length > 256 ? 12 : 24;
+        const traits = hiddenTiles.filter(tile => tile.tileTraitKind).slice(0, budget / 2);
+        const candidateIds = new Set(traits.map(tile => tile.id));
+        for (const tile of traits) for (const id of getAdjacentTileIds(board, tile.id)) {
+            if (candidateIds.size < budget) candidateIds.add(id);
+        }
+        for (const tile of hiddenTiles) {
+            if (candidateIds.size >= budget) break;
+            candidateIds.add(tile.id);
+        }
+        hiddenTiles = hiddenTiles.filter(tile => candidateIds.has(tile.id));
+    }
     const hints: Array<TraitSwapRouteHint & { order: number }> = [];
     const seen = new Set<string>();
     const context: TraitSwapPreviewContext = {
@@ -258,13 +281,12 @@ export const getTraitSwapRouteHints = (
             order += 1;
         }
     }
-    return hints
+    const result = hints
         .sort((a, b) =>
             b.createdLines.length - a.createdLines.length ||
             a.brokenLines.length - b.brokenLines.length ||
             a.order - b.order
         )
-        .slice(0, limit)
         .map((hint) => ({
             firstTileId: hint.firstTileId,
             secondTileId: hint.secondTileId,
@@ -274,6 +296,8 @@ export const getTraitSwapRouteHints = (
             brokenLines: hint.brokenLines,
             text: hint.text
         }));
+    if (board.tiles.length > 48) largeBoardSwapHints.set(board, result);
+    return result.slice(0, limit);
 };
 
 export const getTraitOpportunityHudModel = (

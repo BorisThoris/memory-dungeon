@@ -11,6 +11,7 @@ import {
     type RefObject
 } from 'react';
 import {
+    DoubleSide,
     PlaneGeometry,
     Vector3,
     type Group,
@@ -755,6 +756,12 @@ const TileBezelInner = ({
             {!hostConsolidatesTileFrames ? <TileBezelLegacyFrameDriver bagRef={bagRef} /> : null}
             <group ref={groupRef}>
                 <group scale={[transform.bezelScale, transform.bezelScale, transform.bezelScale]}>
+                    {tile.findableKind === 'meteor_shard' && tile.state !== 'matched' && tile.state !== 'removed' && <>
+                        {[1,-1].map(side => <mesh key={side} geometry={findableCornerRingGeometry}
+                            position={[CARD_WIDTH*.34,CARD_HEIGHT*.39,side*(faceZ+.02)]} raycast={noopMeshRaycast} renderOrder={10}>
+                            <meshBasicMaterial color="#ffb561" side={DoubleSide} transparent opacity={.95} depthWrite={false} toneMapped={false} />
+                        </mesh>)}
+                    </>}
                     <mesh
                         ref={pickSlabRef}
                         key={`card-pick-${tile.id}-${forceTextureRefreshKey}`}

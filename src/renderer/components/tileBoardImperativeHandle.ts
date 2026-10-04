@@ -1,4 +1,4 @@
-import type { Camera, Object3D, Raycaster, Vector2 } from 'three';
+import { InstancedMesh, Matrix4, Mesh, type Camera, type Object3D, type Raycaster, type Vector2 } from 'three';
 import {
     clientPointToNormalizedDeviceCoordinates,
     firstTileIdFromPickIntersections,
@@ -45,6 +45,16 @@ export const getTileClientRectByIdFromBoard = ({
         return null;
     }
 
+    if (tileObject instanceof InstancedMesh) {
+        const instance = (tileObject.userData.tileIds as string[]).indexOf(tileId);
+        if (instance < 0) return null;
+        tileObject.updateWorldMatrix(true, false);
+        const local = new Matrix4(); tileObject.getMatrixAt(instance, local);
+        const proxy = new Mesh(tileObject.geometry, tileObject.material);
+        proxy.matrixAutoUpdate = false;
+        proxy.matrix.copy(tileObject.matrixWorld).multiply(local);
+        return objectClientRectFromCameraProjection({ camera, object: proxy, rect });
+    }
     return objectClientRectFromCameraProjection({ camera, object: tileObject, rect });
 };
 
@@ -83,7 +93,7 @@ export const pickTileAtClientPointFromBoard = ({
     pickPointer.set(pointer.x, pointer.y);
     raycaster.setFromCamera(pickPointer, camera);
 
-    const tileId = firstTileIdFromPickIntersections(raycaster.intersectObjects([...tileObjects.values()], false));
+    const tileId = firstTileIdFromPickIntersections(raycaster.intersectObjects([...new Set(tileObjects.values())], false));
 
     if (!tileId) {
         return false;

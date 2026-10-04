@@ -1,4 +1,5 @@
 export type RunInventoryItemId =
+    | 'meteor_charge'
     | 'shuffle_charge'
     | 'region_shuffle_charge'
     | 'peek_charge'
@@ -10,6 +11,7 @@ export type RunInventoryItemId =
     | 'contract_loadout';
 
 export const RUN_INVENTORY_ITEM_IDS = [
+    'meteor_charge',
     'shuffle_charge',
     'region_shuffle_charge',
     'peek_charge',

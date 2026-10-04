@@ -131,6 +131,9 @@ export const createResolveBoardTurnTransition = ({
             matchedPairKey,
             usedWild
         } = deriveMatchClaimContext(firstTile, secondTile);
+        if (claimedFindableKind === 'meteor_shard') {
+            run = { ...run, meteorCharges: runNonNegativeInteger(run.meteorCharges) + 1 };
+        }
         const matchResolutions = runNonNegativeInteger(run.matchResolutionsThisFloor);
         const findableReward = resolveFindableMatchRewardThroughGameplayCore(
             run,

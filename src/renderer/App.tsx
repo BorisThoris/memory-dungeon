@@ -8,7 +8,6 @@ import ProfileScreen from './components/ProfileScreen';
 import GameOverScreen from './components/GameOverScreen';
 import InventoryScreen from './components/InventoryScreen';
 import MainMenu from './components/MainMenu';
-const GodRunScreen = lazy(() => import('./components/GodRunScreen'));
 import { RunLoadingScreen } from './components/RunLoadingScreen';
 import SettingsScreen from './components/SettingsScreen';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './components/gameplayVisualConfig';
@@ -29,7 +28,7 @@ import { useFeverDuck } from './audio/feverDuck';
 import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
-import type { MutatorId, RunState } from '../shared/contracts';
+import type { MutatorId } from '../shared/contracts';
 import type { TestHallRoomId } from '../shared/test-hall-rooms';
 import {
     createPlayablePathFixture,
@@ -472,11 +471,11 @@ const App = () => {
                                         className={styles.gameplayLayer}
                                         inert={inGameShellOverlay}
                                     >
-                                        {run?.godRun ? <GodRunScreen run={run as RunState & { godRun: NonNullable<RunState['godRun']> }} /> : <GameScreen
+                                        <GameScreen
                                             achievements={newlyUnlockedAchievements}
                                             run={run}
                                             suppressStatusOverlays={suppressGameplayStatusOverlays}
-                                        />}
+                                        />
                                     </div>
                                 </Suspense>
                             )}
@@ -502,9 +501,7 @@ const App = () => {
                             </div>
                         ) : null}
 
-                        {hydrated && view === 'gameOver' && run?.lastRunSummary && (run.godRun
-                            ? <Suspense fallback={null}><GodRunScreen run={run as RunState & { godRun: NonNullable<RunState['godRun']> }} /></Suspense>
-                            : <GameOverScreen run={run} />)}
+                        {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
 
                         {hallRoomId !== null && DevTestHallBadge && view === 'playing' ? (
                             <Suspense fallback={null}>

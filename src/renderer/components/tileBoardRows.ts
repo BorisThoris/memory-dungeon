@@ -82,6 +82,8 @@ export interface TileBoardRow {
 }
 
 export interface BuildTileBoardRowsInput {
+    /** Global board positions in the current GPU working set. */
+    visibleIndices?: readonly number[];
     allowGambitThirdFlip: boolean;
     /** Cards a Zone lets stand face up at once (`zone-rules.ts`); 0 outside one. */
     zoneFlipCapacity?: number;
@@ -121,6 +123,7 @@ export interface BuildTileBoardRowsInput {
 }
 
 export const buildTileBoardRows = ({
+    visibleIndices,
     allowGambitThirdFlip,
     zoneFlipCapacity,
     board,
@@ -169,7 +172,8 @@ export const buildTileBoardRows = ({
     const selectedTraitFollowupTileIdSet = selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board);
 
     const nBackAnchorMarkedTileId = anchorMarkedTileId(board, nBackAnchorPairKey);
-    return board.tiles.map((tile, index) => {
+    return (visibleIndices ?? board.tiles.map((_, index) => index)).map((index) => {
+        const tile = board.tiles[index]!;
         const traitOpportunity = traitOpportunityByTileId.get(tile.id) ?? null;
         const faceUp = isTileBoardFaceUp({ debugPeekActive, peekRevealedTileIds, previewActive, tile });
         const memorizeCurseHighlight = isMemorizeCurseHighlighted({

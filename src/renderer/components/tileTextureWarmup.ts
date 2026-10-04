@@ -57,6 +57,7 @@ export const drawBoardTileTextures = async (
     // first, or the board's first sync would discard all the faces drawn here (measured: 7 of them).
     setTileTextureSamplingQuality(graphicsQuality);
     sharedTextures();
+    if (board.tiles.length > 48) return;
     const tiles = liveTiles(board);
     for (let index = 0; index < tiles.length; index += 1) {
         texturesForTile(tiles[index]!, graphicsQuality);
@@ -73,7 +74,7 @@ export const uploadBoardTileTextures = (
     initTexture: (texture: Texture) => void
 ): number => {
     const textures = new Set<Texture>(sharedTextures());
-    for (const tile of liveTiles(board)) {
+    for (const tile of board.tiles.length > 48 ? [] : liveTiles(board)) {
         for (const texture of texturesForTile(tile, graphicsQuality)) textures.add(texture);
     }
     for (const texture of textures) {

@@ -2130,6 +2130,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         viewportState.zoom
     ]);
 
+    useEffect(() => {
+        if (!boardApplicationFocused || !focusedTileId || board.tiles.length <= 48) return;
+        const metrics = viewportMetricsRef.current;
+        if (!metrics) return;
+        const index = board.tiles.findIndex(tile => tile.id === focusedTileId);
+        if (index < 0) return;
+        const current = viewportStateRef.current;
+        const scale = current.fitZoom * current.zoom;
+        const x = (index % board.columns - (board.columns - 1) / 2) * getTileColumnSpacing(compact);
+        const y = ((board.rows - 1) / 2 - Math.floor(index / board.columns)) * TILE_SPACING;
+        if (Math.abs(x * scale + current.panX) + scale < metrics.viewportWidth / 2 &&
+            Math.abs(y * scale + current.panY) + scale < metrics.viewportHeight / 2) return;
+        const next = clampBoardViewport({ ...metrics, ...current, panX: -x * scale, panY: -y * scale });
+        viewportStateRef.current = next;
+        setViewportState(next); // eslint-disable-line react-hooks/set-state-in-effect -- keep a newly keyboard-focused virtual card on screen
+    }, [board, boardApplicationFocused, compact, focusedTileId]);
+
     const syncGestureActive = useCallback((active: boolean): void => {
         gestureActiveRef.current = active;
         setGestureActive((current) => (current === active ? current : active));
@@ -2209,9 +2226,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             else if (event.key === 'ArrowRight') dir = 'right';
             else if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                if (focusedTileId) {
-                    handleTileSelect(focusedTileId);
-                }
+                // A resumed or replaced board can have focus before its focus-id effect commits.
+                // Confirm should still select its first legal card, as arrow navigation does.
+                handleTileSelect(focusedTileId && pickable.includes(focusedTileId) ? focusedTileId : pickable[0]!);
                 return;
             }
             if (dir) {

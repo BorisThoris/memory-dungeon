@@ -13,6 +13,7 @@ import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
 import { CAMP_UPGRADE_IDS, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit } from '../../shared/run-relic-rules';
 import { runGold } from '../../shared/run-store-rules';
+import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 
 /**
  * Inventory. Two sections that matter mid-run: mutators, charges and tokens. The
@@ -26,6 +27,7 @@ interface InventoryScreenProps {
 }
 
 const CHARGE_ROWS: readonly { id: string; label: string }[] = [
+    { id:'meteor_charge',label:'Meteors' },
     { id: 'shuffle_charge', label: 'Full shuffle' },
     { id: 'region_shuffle_charge', label: 'Row / swap' },
     { id: 'peek_charge', label: 'Peek' },
@@ -153,6 +155,9 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                         <h2 className={styles.sectionTitle} id="inventory-charges-title">
                             Charges and tokens
                         </h2>
+                        <p>Match a Meteor shard pickup to store a strike. You choose when to use it.</p>
+                        <UiButton type="button" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
+                            onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
                         <dl className={styles.charges}>
                             {CHARGE_ROWS.map((row) => (
                                 <div className={styles.chargeRow} key={row.id}>

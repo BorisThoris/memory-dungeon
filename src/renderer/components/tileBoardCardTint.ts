@@ -55,7 +55,7 @@ export const applyTileBoardCardTint = (
     } else if (nonPickableBack) {
         target.set('#9a94a3');
     } else if (!faceUp && tile.state === 'hidden' && tile.findableKind != null) {
-        target.lerp(scratch.set('#5ee0c8'), 0.12);
+        target.lerp(scratch.set(tile.findableKind === 'meteor_shard' ? '#ffb561' : '#5ee0c8'), 0.12);
     } else if (tile.state === 'matched' && faceUp) {
         if (graphicsQuality === 'low') {
             target.lerp(MATCH_FACE_GLOW, 0.32);

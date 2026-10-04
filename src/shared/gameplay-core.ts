@@ -8,6 +8,7 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
+import { callMeteor, meteorCharges } from './meteor-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { type FindableKind, type RunState } from './contracts';
@@ -972,6 +973,15 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
         return rejectedResult(run, 'invalid-command', 'Command failed schema validation.', null);
     }
     const command = parsed.data;
+    if (command.type === 'board.meteor') {
+        const next = callMeteor(run, command.targetTileId);
+        if (next === run) return rejectedResult(run, command.commandId, 'A meteor needs a stored charge and a living target during play.', command);
+        const events: GameplayEvent[] = [];
+        const writeEvent = makeEventWriter(command.commandId, { kind: 'power', id: 'meteor' }, events);
+        writeEvent({ type: 'feedback.requested', cue: 'power.meteor.used', tone: 'information',
+            message: `Meteor cleared ${next.board?.meteorImpact?.cards ?? 0} cards; ${chargesLeft(meteorCharges(next), 'meteor')}.` });
+        return { run: next, command, events, accepted: true };
+    }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
     }

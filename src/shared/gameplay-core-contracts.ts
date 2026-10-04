@@ -5,7 +5,7 @@ import { MEMORIZE_SKIP_MOMENTUM_MAX } from './memorize-skip-reward-rules';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
-export const GAMEPLAY_FINDABLE_KINDS = ['score_glint'] as const satisfies readonly FindableKind[];
+export const GAMEPLAY_FINDABLE_KINDS = ['score_glint', 'meteor_shard'] as const satisfies readonly FindableKind[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = ['echo', 'heavy', 'conduit', 'stasis'] as const satisfies readonly TileTraitKind[];
 
@@ -316,6 +316,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             targetTileId: z.string().min(1).max(160)
         })
         .strict(),
+    z.object({ ...commandBase, type: z.literal('board.meteor'), targetTileId: z.string().min(1).max(160) }).strict(),
     z
         .object({
             ...commandBase,
@@ -752,6 +753,9 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
         type: 'board.bomb',
         targetTileId
     });
+
+export const createGameplayMeteorCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.meteor', targetTileId });
 
 export const createGameplayPinToggleCommand = (commandId: string, targetTileId: string): GameplayCommand =>
     gameplayCommandSchema.parse({

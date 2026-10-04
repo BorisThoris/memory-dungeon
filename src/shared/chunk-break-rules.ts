@@ -590,12 +590,12 @@ export const resolveChunkBreak = ({
             // One findable pair per break goes with the chunk: drop the treasure. The turn awards it
             // through the same path a matched findable takes, so nothing is paid twice or never.
             if (
-                claimedFindableKind === null &&
+                (claimedFindableKind === null || tile.findableKind === 'meteor_shard') &&
                 tile.findableKind &&
                 pair.length === 2 &&
                 pair.every((half) => tileIsPlainApartFromFindable(half) && half.findableKind)
             ) {
-                claimedFindableKind = tile.findableKind;
+                if (tile.findableKind === 'score_glint') claimedFindableKind = tile.findableKind;
                 take();
                 continue;
             }

@@ -118,7 +118,7 @@ const floorBandFor = (floor: number): BalanceSimulationFloorBand =>
 export const BALANCE_SIMULATION_FINDABLE_KINDS: readonly FindableKind[] = FINDABLE_REWARD_ROWS.map((row) => row.kind);
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
-    score_glint: 0
+    score_glint: 0, meteor_shard: 0
 });
 
 export const BALANCE_SIMULATION_TILE_TRAIT_KINDS: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];

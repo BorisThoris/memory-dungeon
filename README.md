@@ -4,6 +4,8 @@ Windows-first desktop arcade rebuild of Memory Dungeon, packaged with Electron a
 
 The active application lives under `src/`. An older Expo/roguelike prototype was removed from `legacy/`; see [`legacy/README.md`](./legacy/README.md) and git history if needed.
 
+Late floors retain the original card board with viewport streaming and instanced artwork. Meteor pickups are stored in inventory and fired by the player. See [card streaming and meteors](./docs/CARD_STREAMING_AND_METEORS.md) for the rules, rendering budgets and validation.
+
 ## Stack
 
 - Electron for the desktop shell
@@ -94,8 +96,6 @@ Also:
 - Mouse + keyboard (responsive layout for different window sizes)
 - Local saves, settings, and achievements
 - Windows x64 only
-
-Current solo endless progression: [random perks, million-card fields, meteors and checkpoints](docs/ENDLESS_GOD_RUNS.md). Reproduce scale and build simulations with `node node_modules/tsx/dist/cli.mjs scripts/benchmark-god-run.ts`.
 
 Current project report and design details: [docs/MEMORY_DUNGEON_PROJECT_REPORT.md](docs/MEMORY_DUNGEON_PROJECT_REPORT.md), [docs/MUTATORS.md](docs/MUTATORS.md), [docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md](docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md) (full rules matrix), [docs/GAMEPLAY_SYSTEMS_ANALYSIS.md](docs/GAMEPLAY_SYSTEMS_ANALYSIS.md).
 

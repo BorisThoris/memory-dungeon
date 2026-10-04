@@ -134,6 +134,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         // A normal run must let players try the bomb before reaching the first store.
         // Shared runs from older rules retain their original starting inventory.
         bombCharges: rulesVersion >= 51 ? 1 : 0,
+        meteorCharges: 0,
+        meteorArmed: false,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,

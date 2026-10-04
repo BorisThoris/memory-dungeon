@@ -2,6 +2,7 @@ import type { BuildTileBoardRowsInput, TileBoardRow } from './tileBoardRows';
 import { buildTileBoardRows, getTileBoardOverlayPrewarmDemandPairKeys } from './tileBoardRows';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
 import { computeTileBoardRuneFieldMetrics, type TileBoardRuneFieldMetrics } from './tileBoardRuneField';
+import { getTileTransform } from './tileBoardTransform';
 
 interface TileBoardSceneModel {
     boardRuneFieldMetrics: TileBoardRuneFieldMetrics;
@@ -49,7 +50,10 @@ export const buildTileBoardSceneModel = ({
         cardHeight,
         cardWidth,
         tileSpacing,
-        transforms: tileBezelRows.map((row) => row.transform)
+        transforms: rowInput.visibleIndices && rowInput.board.tiles.length > 48
+            ? [0, rowInput.board.columns - 1, Math.max(0, rowInput.board.tiles.length - rowInput.board.columns), rowInput.board.tiles.length - 1]
+                .map(index => getTileTransform(rowInput.board.tiles[index]!, index, rowInput.board.columns, rowInput.board.rows, rowInput.compact, false, rowInput.reduceMotion))
+            : tileBezelRows.map((row) => row.transform)
     });
 
     return {

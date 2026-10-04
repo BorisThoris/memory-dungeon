@@ -1,8 +1,9 @@
-import type { MutableRefObject, RefObject } from 'react';
+import type { MutableRefObject, RefObject, ReactNode } from 'react';
 import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { TileBoardParticles } from './TileBoardParticles';
 import { ElementGround } from './ElementGround';
+import { MeteorStrike } from './MeteorStrike';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -12,6 +13,7 @@ import type { TileBoardRow } from './tileBoardRows';
 import type { TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneBoardGroupProps {
+    distantCards?: ReactNode;
     board: BoardState;
     compact: boolean;
     runStatus: RunStatus;
@@ -53,6 +55,7 @@ interface TileBoardSceneBoardGroupProps {
 }
 
 export const TileBoardSceneBoardGroup = ({
+    distantCards,
     board,
     compact,
     runStatus,
@@ -92,7 +95,9 @@ export const TileBoardSceneBoardGroup = ({
     tileFieldParallaxEnabled
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
+        {distantCards}
         <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} />
+        {board.meteorImpact && <MeteorStrike key={board.meteorImpact.key} board={board} compact={compact} reduceMotion={reduceMotion} time={visualTime} />}
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />

@@ -7,7 +7,6 @@
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
-import type { GodRun } from './god-run-engine';
 
 export const SAVE_SCHEMA_VERSION = 8;
 
@@ -16,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 59: stackable random perks and compact endless card fields after solo floor three. */
-export const GAME_RULES_VERSION = 59;
+/** Bump when generation or player-visible gameplay rules change. 60: original boards, stored meteor pickups and late-floor growth. */
+export const GAME_RULES_VERSION = 60;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -239,15 +238,17 @@ export type MutatorId = (typeof MUTATOR_IDS)[number];
  * nothing, and a pickup that pays nothing is a stop. Two kinds remain, both paying on the spot.
  */
 /** Gen 184: one kind. The Shard Spark went with the shard it paid; see docs/REMOVED_LIVES.md. */
-export type FindableKind = 'score_glint';
+export type FindableKind = 'score_glint' | 'meteor_shard';
 
 /** Flat score added on top of normal match score when a findable pair is matched. */
 export const FINDABLE_MATCH_SCORE: Record<FindableKind, number> = {
-    score_glint: 25
+    score_glint: 25,
+    meteor_shard: 0
 };
 /** Relative spawn weights for current-rules findable kind assignment. */
 export const FINDABLE_KIND_SPAWN_WEIGHTS: Record<FindableKind, number> = {
-    score_glint: 100
+    score_glint: 80,
+    meteor_shard: 20
 };
 
 /** Hidden shuffle: full Fisher–Yates vs row-preserving permute. */
@@ -360,6 +361,8 @@ export interface Settings {
 }
 
 export interface Tile {
+    /** Pair identity badge on very large decks that reuse the original illustrations. */
+    edition?: number;
     id: string;
     pairKey: string;
     symbol: string;
@@ -440,6 +443,7 @@ export interface ElementCastImpact {
 }
 
 export interface BoardState {
+    meteorImpact?: { key: number; cell: number; radius: number; cards: number };
     level: number;
     pairCount: number;
     columns: number;
@@ -651,8 +655,9 @@ export interface PassAndPlayState {
 }
 
 export interface RunState {
-    /** Rules 59: the solo endless descent expands into compact mass-card fields after floor three. */
-    godRun?: GodRun;
+    /** Stored pickup; never fires automatically. */
+    meteorCharges?: number;
+    meteorArmed?: boolean;
     status: RunStatus;
     /** Set once the run is over, and only then: what ended it. */
     runEndReason: RunEndReason | null;

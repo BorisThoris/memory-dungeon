@@ -57,7 +57,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         const exactFixedTiles = options.fixedTilesMode === 'exact';
         const plannedTiles = options.fixedTiles.map((t) => ({ ...t }));
         const tileCount = plannedTiles.length;
-        const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
+        const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, rulesVersion >= 60 ? 128 : 8);
         // Authored boards placed exactly stay exactly as authored; everything else gets its suits.
         const tiles = exactFixedTiles
             ? plannedTiles
@@ -88,9 +88,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         };
     }
 
-    // The pair curve (`pair-curve.ts`): square-root-tempered, so the floors a player meets first
-    // are real boards and the deep ones do not run away. It caps well inside the symbol catalog.
-    const pairCount = pairsForFloor(level);
+    // Preserve the established early curve; later decks reuse the art with numbered pair badges.
+    const pairCount = pairsForFloor(level, rulesVersion);
     /*
      * The dungeon layer used to sit here: a card recipe, a filler pass, an exit tile, a shop tile,
      * a room tile, a hazard pass and a layout plan that pinned all of them (Gen 172). The six route
@@ -148,7 +147,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
               ]
           })
         : null;
-    const columns = authoredTiles && authored ? authored.columns : clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
+    const columns = authoredTiles && authored ? authored.columns : clamp(Math.ceil(Math.sqrt(tileCount)), 2, rulesVersion >= 60 ? 128 : 8);
     // Suits go on before anything reads positions. Gen 204: shuffled, then repaired so no run of
     // one suit is long enough to read as a painted zone (`tile-suit-rules.ts`).
     const tiles =

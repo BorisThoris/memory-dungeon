@@ -14,6 +14,7 @@ import {
     subscribeTextureImageUpdates,
     TILE_TEXTURE_IMAGE_IDS
 } from './tileTextures';
+import { retainTileTextureWorkingSet } from './tileTextures';
 
 vi.mock('../cardFace/proceduralIllustration/drawProceduralTarotIllustration', () => ({
     drawProceduralTarotIllustration: vi.fn()
@@ -77,6 +78,17 @@ describe('tileTextures layout', () => {
         expect(state.overlayTexture.createdCount).toBe(1);
         expect(state.overlayTexture.hitCount).toBe(1);
         expect(state.illustrationBitmap.createdCount).toBe(1);
+    });
+
+    it('disposes offscreen card textures but preserves the mounted working set', () => {
+        const first=baseTile('first','pair-first'), second=baseTile('second','pair-second');
+        const active=getTileFaceOverlayTexture(first,'active','medium')!;
+        const offscreen=getTileFaceOverlayTexture(second,'active','medium')!;
+        const activeDispose=vi.spyOn(active,'dispose'); const offscreenDispose=vi.spyOn(offscreen,'dispose');
+        retainTileTextureWorkingSet(new Set(['first']));
+        expect(activeDispose).not.toHaveBeenCalled(); expect(offscreenDispose).toHaveBeenCalledOnce();
+        expect(getTileFaceOverlayTexture(first,'active','medium')).toBe(active);
+        expect(getTileFaceOverlayTexture(second,'active','medium')).not.toBe(offscreen);
     });
 
     it('prewarms only one center-art bitmap per unique pairKey and tier', async () => {

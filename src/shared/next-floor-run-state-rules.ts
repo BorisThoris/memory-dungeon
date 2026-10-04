@@ -35,6 +35,7 @@ export const createNextFloorRunState = (
     const nextRun: RunState = {
         ...run,
         status: 'memorize',
+        meteorArmed: false,
         activeMutators: options.activeMutators,
         board: nextBoard,
         debugPeekActive: false,

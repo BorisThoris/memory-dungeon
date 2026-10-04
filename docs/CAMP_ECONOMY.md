@@ -1,6 +1,4 @@
-# Camp economy (historical rules 58)
-
-Current solo endless runs use rules 59: randomized stackable perks, mass-card fields, automated harvest and meteors. See [Endless god runs](ENDLESS_GOD_RUNS.md). This document preserves the preceding three-rank economy for legacy runs and practice fixtures.
+# Camp economy (rules 58)
 
 Clears select the next arena from the run seed automatically. The reward beat leads directly into the next floor; every third clear opens camp. Its Continue button and Escape both enter the selected arena. Pass-and-play skips camp.
 

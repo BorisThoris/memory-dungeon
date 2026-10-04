@@ -59,26 +59,29 @@ export const createTiles = (
 ): Tile[] => {
     const rng = createMulberry32(deriveLevelTileRngSeed(runSeed, level, rulesVersion));
     const symbolSource = getSymbolSetForLevel(level);
-    const symbols = symbolSource.slice(0, pairCount);
+    const symbols = Array.from({ length: pairCount }, (_, index) => symbolSource[index % symbolSource.length]!);
     const pairs: Tile[] = symbols.flatMap((entry, index) => {
         const pairKey = `${level}-${index}`;
         const atomicVariant = atomicVariantForPairKey(pairKey);
+        const edition = pairCount > symbolSource.length ? index + 1 : undefined;
         return [
             {
                 id: `${pairKey}-A`,
                 pairKey,
                 state: 'hidden' as const,
                 symbol: entry.symbol,
-                label: entry.label,
-                atomicVariant
+                label: edition == null ? entry.label : `${entry.label} ${edition}`,
+                atomicVariant,
+                edition
             },
             {
                 id: `${pairKey}-B`,
                 pairKey,
                 state: 'hidden' as const,
                 symbol: entry.symbol,
-                label: entry.label,
-                atomicVariant
+                label: edition == null ? entry.label : `${entry.label} ${edition}`,
+                atomicVariant,
+                edition
             }
         ];
     });
@@ -146,6 +149,7 @@ export const assignFindableKindsToTiles = (
     } else {
         pairCountTarget = rng() < 0.5 ? 1 : 2;
     }
+    if (rulesVersion >= 60 && eligibleKeys.length > 24) pairCountTarget = Math.max(pairCountTarget, Math.ceil(eligibleKeys.length / 24));
     const n = Math.min(pairCountTarget, eligibleKeys.length);
     if (n === 0) {
         return tiles;
@@ -163,7 +167,8 @@ export const assignFindableKindsToTiles = (
     const picked = keys.slice(0, n);
     const kindByKey = new Map<string, FindableKind>();
     for (const key of picked) {
-        kindByKey.set(key, pickFindableKind(rng()));
+        const roll = rng();
+        kindByKey.set(key, rulesVersion < 60 ? 'score_glint' : pickFindableKind(roll));
     }
     return tiles.map((t) => {
         const kind = kindByKey.get(t.pairKey);
