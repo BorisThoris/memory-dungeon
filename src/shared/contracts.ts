@@ -7,6 +7,7 @@
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
+import type { GodRun } from './god-run-engine';
 
 export const SAVE_SCHEMA_VERSION = 8;
 
@@ -15,8 +16,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 58: automatic random arenas and gold-funded camp upgrades replace elemental purchases. */
-export const GAME_RULES_VERSION = 58;
+/** Bump when generation or player-visible gameplay rules change. 59: stackable random perks and compact endless card fields after solo floor three. */
+export const GAME_RULES_VERSION = 59;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -650,6 +651,8 @@ export interface PassAndPlayState {
 }
 
 export interface RunState {
+    /** Rules 59: the solo endless descent expands into compact mass-card fields after floor three. */
+    godRun?: GodRun;
     status: RunStatus;
     /** Set once the run is over, and only then: what ended it. */
     runEndReason: RunEndReason | null;

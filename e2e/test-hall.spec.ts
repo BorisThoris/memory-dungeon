@@ -50,9 +50,8 @@ test.describe('Test hall', () => {
 
             await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), `hallRoom=${hallRoom.id}`);
             await expect(page.getByTestId('test-hall-badge')).toContainText(hallRoom.title, { timeout: 120_000 });
-            await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
-
             const expected = hallRoom.build();
+            await expect(expected.godRun ? page.locator('[data-god-run]') : page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
             const booted = await readRun(page);
             expect(booted.view).toBe('playing');
             expect(booted.tiles).toBe(expected.board?.tiles.length ?? 0);

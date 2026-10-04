@@ -1,4 +1,5 @@
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
+import { applyGodRunCommand } from '../../shared/god-run-adapter';
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
@@ -584,6 +585,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     skipMemorizePhase: () => {
         runTimerController.skipMemorizePhase();
+    },
+
+    godCommand: (command) => {
+        const { run, view } = get();
+        if (!run?.godRun || view !== 'playing' || run.status === 'paused') return;
+        const next = applyGodRunCommand(run, command);
+        if (next === run) return;
+        if (next.status === 'gameOver') applyResolvedRun(next);
+        else set({ run: next });
     },
 
     buyStoreItem: (id) => {

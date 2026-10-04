@@ -1,4 +1,6 @@
 import type { BoardState, RunState } from './contracts';
+import { createGodRun } from './god-run-engine';
+import { missesLeft } from './miss-bank';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
 import { EXTREME_FEVER_BONUS_TAG, getFloorClearMomentumBonus } from './floor-clear-momentum-bonus-rules';
@@ -136,6 +138,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         },
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
+        ...(run.runRulesVersion >= 59 && run.gameMode === 'endless' && !run.passAndPlay && !run.wildMenuRun && board.level === 3
+            ? { godRun: createGodRun(run.runSeed, runGold(run) + goldEarned, missesLeft(run) ?? 3) } : {}),
         ...(usesElementalLoot(run) ? { elementalEssence: addEssence(run.elementalEssence, elementalDrops) } : {}),
         // Select the destination once at clear; legacy rules retain their door choices.
         ...(realmId

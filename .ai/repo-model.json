@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2910,
-    "codeFileCount": 1074,
-    "exportedSymbolCount": 3362,
+    "trackedFileCount": 2928,
+    "codeFileCount": 1088,
+    "exportedSymbolCount": 3428,
     "contentItemCount": 10,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8885
+    "relationshipCount": 9016
   },
   "inventory": [
     {
@@ -309,8 +309,8 @@
     {
       "path": "docs/CAMP_ECONOMY.md",
       "category": "documentation",
-      "bytes": 2119,
-      "sha256": "4af53de2eb76b305bf6e221d6ca53d2101865b13166281784d043a53e97fe9d0"
+      "bytes": 2389,
+      "sha256": "3a355a9f8aded943448cd81e7a3cd26003ad4ee1e8ff7c36c4c6d951df3da9d3"
     },
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
@@ -341,6 +341,12 @@
       "category": "documentation",
       "bytes": 4451,
       "sha256": "f61b43df0faca372ab68ebbceb036b61bd00ad7c564b6c5a463bf45c485faff5"
+    },
+    {
+      "path": "docs/ENDLESS_GOD_RUNS.md",
+      "category": "documentation",
+      "bytes": 11465,
+      "sha256": "13dc97186accbb0cfda673ec15150ada45d5fcbba3e67c66fa3b0c08d4fbe046"
     },
     {
       "path": "docs/ENDPRODUCTIMAGE.png",
@@ -3901,6 +3907,12 @@
       "sha256": "9e8bdf47bf4dd2bc8033433c7c2f9bcc03088f2540de2fda4b0a5b93a8d81af4"
     },
     {
+      "path": "e2e/god-run.spec.ts",
+      "category": "test",
+      "bytes": 10042,
+      "sha256": "438228af034322268b2b4875c4e91b8bee5e8dcbcfceb524e952bbfb26636119"
+    },
+    {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
       "bytes": 7639,
@@ -4053,8 +4065,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 13740,
-      "sha256": "175333f9aff899beafdcb9c4d36317cafdc595403e82fb319856b9ce5e2f2f22"
+      "bytes": 13790,
+      "sha256": "9ade778a51c8f754c55dbf7c2522c08fcd5b948e279cb7d26801e62d555ae767"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -4467,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122885,
-      "sha256": "47d498aab3d771c6c0af84a657ad146a3fe9c065068238faf343e06e41d7149f"
+      "bytes": 122982,
+      "sha256": "c0e18bfd5dc70d44db0b42f4067e5780c77e924c357af4420c5abfb0361df382"
     },
     {
       "path": "public/site.webmanifest",
@@ -4557,8 +4569,8 @@
     {
       "path": "README.md",
       "category": "documentation",
-      "bytes": 6832,
-      "sha256": "9cfd6bee852712afe9bb292578707802cf4d2f56b1abfba77ccd4792cab5fec3"
+      "bytes": 7065,
+      "sha256": "ee8bf6af040603cfb80fa4db9b3b7fdb7fdb40067dbe92de8a680c3e49d1a049"
     },
     {
       "path": "scripts/accessibility-targets.ts",
@@ -4853,6 +4865,12 @@
       "category": "script",
       "bytes": 10313,
       "sha256": "b8b11d3e992ae48f23ebfb3783851a4a0a0ab05eaa4ea194474c1240f814314e"
+    },
+    {
+      "path": "scripts/benchmark-god-run.ts",
+      "category": "script",
+      "bytes": 1578,
+      "sha256": "6793dbb3a1342f99b8dbef236dca87c07d54fd20082e5337e29b1a23647833d9"
     },
     {
       "path": "scripts/blueprint-codegen.mjs",
@@ -5949,14 +5967,14 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 28217,
-      "sha256": "5ce760b0e19b0dffac93a8a061f481ed97dc99c2b69fa359b611db30c84c342b"
+      "bytes": 28410,
+      "sha256": "88e5d477e7a055713615e6401a4ca9bb5bbe4bdbc020784bdda2513950caabf9"
     },
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 25531,
-      "sha256": "df49787b49d355b8eea078e46b91cd86c0db4a5a09ba05e520f6c3973671f47b"
+      "bytes": 25909,
+      "sha256": "633592bde4570307a7caef886903b6ab04b7d1a210bf6356dfea8c2f1ef9ab06"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9775,6 +9793,30 @@
       "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
     },
     {
+      "path": "src/renderer/components/godFieldRenderer.ts",
+      "category": "source",
+      "bytes": 9242,
+      "sha256": "dee90bbe2fa6cee55f9df08321fad5aedb24cd23d0ef74ae18dc605b3387d96c"
+    },
+    {
+      "path": "src/renderer/components/GodResumeButton.tsx",
+      "category": "source",
+      "bytes": 973,
+      "sha256": "ebbc1f29deb4a80372e4c60fe12e6ff461b8c558e91920753a1974c187932519"
+    },
+    {
+      "path": "src/renderer/components/GodRunScreen.module.css",
+      "category": "source",
+      "bytes": 7036,
+      "sha256": "aeab30bdc98958e99ae1c675dc7a7f027a942c1f96fc91b71b106dff850f1f45"
+    },
+    {
+      "path": "src/renderer/components/GodRunScreen.tsx",
+      "category": "source",
+      "bytes": 16216,
+      "sha256": "a748415daede9c758a9b069860f3cca1fd39e503ac5fe585204fd6ea2ff2a9d3"
+    },
+    {
       "path": "src/renderer/components/GoldRain.module.css",
       "category": "source",
       "bytes": 1051,
@@ -9861,8 +9903,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 14293,
-      "sha256": "9ec855edf35145c942ac4fc2d5d503fa7b11f8b69d3ac7f1c9a8512cf664a73c"
+      "bytes": 14386,
+      "sha256": "049f9d07b4ad1c967f0d6a139d1e84e578c37730c958006917fe939113f6c1a8"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -11559,8 +11601,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7209,
-      "sha256": "a7bd5902a82095ca32bcfc6358a69a50452af335eed7f6b63c8b2cd5067d9257"
+      "bytes": 7244,
+      "sha256": "107445bb5399116d942e8973c90b91aa51e39cc017349414c6132db760168c9a"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -12165,8 +12207,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 5060,
-      "sha256": "b68b1d55524d50b01de59a7bdb41750f281a0367387b6daacb8a933ccf9da190"
+      "bytes": 5176,
+      "sha256": "a903db5636d34fce69af55081af31639e51039199c3352c9d2b6a62346a40106"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -12197,6 +12239,12 @@
       "category": "source",
       "bytes": 5095,
       "sha256": "8e8f6b48c16c9c43cc96fc8010c41b8f16f52664829f318ad9d611a5df669906"
+    },
+    {
+      "path": "src/renderer/store/godRunCheckpoint.ts",
+      "category": "source",
+      "bytes": 2057,
+      "sha256": "a9629be664f2a5b250164f06a223e8d3c54bba370880b3a6b1601236fdb7e0f9"
     },
     {
       "path": "src/renderer/store/hydrationController.test.ts",
@@ -12501,8 +12549,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 25113,
-      "sha256": "b894afdef546b3b98ac1b07d24084dc2e399238ada5db37f2343660ae5079c1c"
+      "bytes": 25525,
+      "sha256": "a5427d087bef96f7255147c9a406a23521ccca5cba6e678c18e064e4fc1bd7fd"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -13027,6 +13075,18 @@
       "sha256": "b80d61d3131485f76c9ad2bc384e8c3feb57949a2d08c88627304599673129a1"
     },
     {
+      "path": "src/shared/card-field.test.ts",
+      "category": "test",
+      "bytes": 6781,
+      "sha256": "1f92d57403481aa07e9bf90d0b7e5219434a7838228841ca39458b5a372ae796"
+    },
+    {
+      "path": "src/shared/card-field.ts",
+      "category": "source",
+      "bytes": 11145,
+      "sha256": "556900c0e3ad7512df1bdf9a612d120969c64a7025ecc356f6788209702867ec"
+    },
+    {
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "category": "test",
       "bytes": 5208,
@@ -13221,8 +13281,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 48086,
-      "sha256": "8373987ecd2d73f7708fda9eb4e735097ff5d5726c84a831c3ab60c633a58ef1"
+      "bytes": 48254,
+      "sha256": "7dafd3f4af58963da9889291407ba4c5b32538d08ea8716b80844db1b8771c95"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13479,8 +13539,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 8800,
-      "sha256": "44c74603e3123d13251f12b3aec190b37f204415ed7921c03b0701ed4c9c4e24"
+      "bytes": 9128,
+      "sha256": "80bd9c05165dc944f25792c42a12c044722b968be772b43da33cd02cb9f8cae0"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -13781,6 +13841,54 @@
       "category": "test",
       "bytes": 6516,
       "sha256": "fc20cd0f93724625e345c3f95be7b0dfd3db0c06ceb26f3596c206feda3a428e"
+    },
+    {
+      "path": "src/shared/god-run-adapter.test.ts",
+      "category": "test",
+      "bytes": 1915,
+      "sha256": "f2b1c7992e8e292ac4b09bbfc2e3f961b72c50670a6522cc84e5ba66fcfd85d5"
+    },
+    {
+      "path": "src/shared/god-run-adapter.ts",
+      "category": "source",
+      "bytes": 1249,
+      "sha256": "d55344757847e3655e49af3820ce133e5a1b867c8bb516ec5da8ae24322c3331"
+    },
+    {
+      "path": "src/shared/god-run-engine.test.ts",
+      "category": "test",
+      "bytes": 5405,
+      "sha256": "3064f18a07cc4803835b6707946aa4068de67e31d74db622911ed677eb6f19ea"
+    },
+    {
+      "path": "src/shared/god-run-engine.ts",
+      "category": "source",
+      "bytes": 16111,
+      "sha256": "b90fa8a4271f538953773628fc10a8e1715b6a9dcc224d3229d7252f0adba0ac"
+    },
+    {
+      "path": "src/shared/god-run-perks.ts",
+      "category": "source",
+      "bytes": 8502,
+      "sha256": "6ae820bd46e8c3119f18a665b926abd9181d3cb3cd9cd6d9d08ae7d9ae1d74e2"
+    },
+    {
+      "path": "src/shared/god-run-save.test.ts",
+      "category": "test",
+      "bytes": 1454,
+      "sha256": "29b65cc76017f765d957d23313a22e75f3f862da7fd863ae43f14c70cfe08d83"
+    },
+    {
+      "path": "src/shared/god-run-save.ts",
+      "category": "source",
+      "bytes": 3051,
+      "sha256": "3e45e5a995c27b067091d8a03667d64a335e30116b0d493dbc507329d8d6d7bb"
+    },
+    {
+      "path": "src/shared/god-run-simulation.ts",
+      "category": "source",
+      "bytes": 2570,
+      "sha256": "b7aef616cdf45e7710f302bae8e99f51a3f683f3fb5e672254fe7baa3350bd8a"
     },
     {
       "path": "src/shared/graphicsQuality.test.ts",
@@ -14109,8 +14217,8 @@
     {
       "path": "src/shared/next-floor-transition-rules.ts",
       "category": "source",
-      "bytes": 2957,
-      "sha256": "c5233de2d216ccd3c6fa648b0088357f362fe1ad13caa79608348d95bbedcc52"
+      "bytes": 2989,
+      "sha256": "84cd5d78ddcd6c0b1887acf7cb5d6a69628fe2f84dd0baefd4579c3f5e675767"
     },
     {
       "path": "src/shared/objective-board.test.ts",
@@ -14991,8 +15099,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 133800,
-      "sha256": "a5d348468fbcf04aaac4d41301263e0de5e465bdabe831959c89fc53b729faed"
+      "bytes": 135677,
+      "sha256": "46fdb97ac38a75fba41d3250291db6b4af8bff4f9ae9ef44b332d3a7ad2dcd90"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -15238,7 +15346,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7336,
-      "sha256": "6cd1e84827c4080b7336106968ff04c13ed4ab746a9351e6c6045113e549fdf2"
+      "sha256": "179e3b1fc97dda6a529b0764854c45132258746c66b17c24a6f22da64b10fe7b"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -18141,7 +18249,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 654,
+      "lineCount": 655,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/assets/preloadStartupAssets.ts",
@@ -18161,7 +18269,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 519,
+      "lineCount": 522,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -21071,6 +21179,62 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/godFieldRenderer.ts",
+      "path": "src/renderer/components/godFieldRenderer.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 144,
+      "imports": [
+        "file:src/shared/card-field.ts",
+        "file:src/shared/god-run-engine.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/godFieldRenderer.ts#createGodFieldRenderer",
+        "symbol:src/renderer/components/godFieldRenderer.ts#drawGodFieldFallback",
+        "symbol:src/renderer/components/godFieldRenderer.ts#FieldFrame",
+        "symbol:src/renderer/components/godFieldRenderer.ts#FieldView"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GodResumeButton.tsx",
+      "path": "src/renderer/components/GodResumeButton.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 15,
+      "imports": [
+        "file:src/renderer/store/godRunCheckpoint.ts",
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/GodResumeButton.tsx#default"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GodRunScreen.tsx",
+      "path": "src/renderer/components/GodRunScreen.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 172,
+      "imports": [
+        "file:src/renderer/components/godFieldRenderer.ts",
+        "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+        "file:src/renderer/store/godRunCheckpoint.ts",
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/card-field.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-perks.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/GodRunScreen.tsx#default"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/GoldRain.test.tsx",
       "path": "src/renderer/components/GoldRain.test.tsx",
       "layer": "renderer",
@@ -21235,11 +21399,12 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 293,
+      "lineCount": 295,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/GodResumeButton.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/desktop-client.ts",
@@ -27474,11 +27639,12 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 116,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/god-run-engine.ts",
         "file:src/shared/meta-progression.ts",
         "file:src/shared/run-store-rules.ts"
       ],
@@ -27566,6 +27732,23 @@
         "file:src/renderer/store/matchScorePop.test.ts",
         "file:src/renderer/store/passAndPlayProjection.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/store/godRunCheckpoint.ts",
+      "path": "src/renderer/store/godRunCheckpoint.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 35,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/god-run-save.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/store/godRunCheckpoint.ts#clearGodCheckpoint",
+        "symbol:src/renderer/store/godRunCheckpoint.ts#loadGodCheckpoint",
+        "symbol:src/renderer/store/godRunCheckpoint.ts#saveGodCheckpoint"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/store/hydrationController.test.ts",
@@ -28520,7 +28703,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 746,
+      "lineCount": 756,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -28554,6 +28737,7 @@
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-journal.ts",
+        "file:src/shared/god-run-adapter.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/realm-rules.ts",
         "file:src/shared/run-share-key.ts",
@@ -29908,6 +30092,50 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/card-field.test.ts",
+      "path": "src/shared/card-field.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 116,
+      "imports": [
+        "file:src/shared/card-field.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/card-field.ts",
+      "path": "src/shared/card-field.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 222,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/card-field.ts#CardField",
+        "symbol:src/shared/card-field.ts#clearFieldBudget",
+        "symbol:src/shared/card-field.ts#clearFieldCircle",
+        "symbol:src/shared/card-field.ts#clearFieldPairs",
+        "symbol:src/shared/card-field.ts#createCardField",
+        "symbol:src/shared/card-field.ts#fieldCellAlive",
+        "symbol:src/shared/card-field.ts#FieldClear",
+        "symbol:src/shared/card-field.ts#fieldHash",
+        "symbol:src/shared/card-field.ts#fieldPairAlive",
+        "symbol:src/shared/card-field.ts#fieldPairAtCell",
+        "symbol:src/shared/card-field.ts#fieldPairCells",
+        "symbol:src/shared/card-field.ts#findLiveFieldPair",
+        "symbol:src/shared/card-field.ts#MAX_FIELD_CARD_EXPONENT",
+        "symbol:src/shared/card-field.ts#MIN_FIELD_CARD_EXPONENT",
+        "symbol:src/shared/card-field.ts#popcount32",
+        "symbol:src/shared/card-field.ts#restoreCardField",
+        "symbol:src/shared/card-field.ts#serializeCardField",
+        "symbol:src/shared/card-field.ts#SerializedCardField"
+      ],
+      "testedBy": [
+        "file:src/shared/card-field.test.ts",
+        "file:src/shared/god-run-engine.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/cascade-balance-simulation.test.ts",
       "path": "src/shared/cascade-balance-simulation.test.ts",
       "layer": "shared",
@@ -30601,9 +30829,10 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1053,
+      "lineCount": 1056,
       "imports": [
-        "file:src/shared/elemental-loot-rules.ts"
+        "file:src/shared/elemental-loot-rules.ts",
+        "file:src/shared/god-run-engine.ts"
       ],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -30820,6 +31049,7 @@
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
+        "file:src/shared/god-run-adapter.test.ts",
         "file:src/shared/held-pair-rules.test.ts",
         "file:src/shared/lantern-light-rules.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
@@ -31662,14 +31892,16 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 171,
+      "lineCount": 175,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/elemental-loot-rules.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.ts",
         "file:src/shared/floor-par.ts",
+        "file:src/shared/god-run-engine.ts",
         "file:src/shared/level-clear-rules.ts",
+        "file:src/shared/miss-bank.ts",
         "file:src/shared/realm-carryover-rules.ts",
         "file:src/shared/realm-rules.ts",
         "file:src/shared/run-number-guards.ts",
@@ -31687,6 +31919,7 @@
       "testedBy": [
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
+        "file:src/shared/god-run-engine.test.ts",
         "file:src/shared/store-stock.test.ts"
       ]
     },
@@ -32274,6 +32507,8 @@
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-journal-cost.test.ts",
         "file:src/shared/gameplay-journal-trust.test.ts",
+        "file:src/shared/god-run-adapter.test.ts",
+        "file:src/shared/god-run-engine.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
         "file:src/shared/miss-bank.test.ts",
         "file:src/shared/next-floor-run-state-rules.test.ts",
@@ -32905,6 +33140,176 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/god-run-adapter.test.ts",
+      "path": "src/shared/god-run-adapter.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 28,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/god-run-adapter.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/run-summary-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/god-run-adapter.ts",
+      "path": "src/shared/god-run-adapter.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 21,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/god-run-engine.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/god-run-adapter.ts#applyGodRunCommand"
+      ],
+      "testedBy": [
+        "file:src/shared/god-run-adapter.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/god-run-engine.test.ts",
+      "path": "src/shared/god-run-engine.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 80,
+      "imports": [
+        "file:src/shared/card-field.ts",
+        "file:src/shared/floor-clear-transition.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-perks.ts",
+        "file:src/shared/god-run-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/god-run-engine.ts",
+      "path": "src/shared/god-run-engine.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 259,
+      "imports": [
+        "file:src/shared/card-field.ts",
+        "file:src/shared/god-run-perks.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/god-run-engine.ts#buyGodMiss",
+        "symbol:src/shared/god-run-engine.ts#buyGodPerk",
+        "symbol:src/shared/god-run-engine.ts#canCastGodMeteor",
+        "symbol:src/shared/god-run-engine.ts#castGodMeteor",
+        "symbol:src/shared/god-run-engine.ts#createGodRun",
+        "symbol:src/shared/god-run-engine.ts#dealGodHand",
+        "symbol:src/shared/god-run-engine.ts#flipGodCard",
+        "symbol:src/shared/god-run-engine.ts#GOD_TICK_MAX_MS",
+        "symbol:src/shared/god-run-engine.ts#GodEffectKind",
+        "symbol:src/shared/god-run-engine.ts#GodFieldEffect",
+        "symbol:src/shared/god-run-engine.ts#godPerkPrice",
+        "symbol:src/shared/god-run-engine.ts#godRerollPrice",
+        "symbol:src/shared/god-run-engine.ts#GodRun",
+        "symbol:src/shared/god-run-engine.ts#GodRunCommand",
+        "symbol:src/shared/god-run-engine.ts#GodRunPhase",
+        "symbol:src/shared/god-run-engine.ts#godSupplyPrice",
+        "symbol:src/shared/god-run-engine.ts#matchGodPair",
+        "symbol:src/shared/god-run-engine.ts#missGodPair",
+        "symbol:src/shared/god-run-engine.ts#reconcileGodHand",
+        "symbol:src/shared/god-run-engine.ts#reduceGodRun",
+        "symbol:src/shared/god-run-engine.ts#rerollGodPerks",
+        "symbol:src/shared/god-run-engine.ts#startNextGodWave",
+        "symbol:src/shared/god-run-engine.ts#tickGodRun"
+      ],
+      "testedBy": [
+        "file:src/shared/god-run-adapter.test.ts",
+        "file:src/shared/god-run-engine.test.ts",
+        "file:src/shared/god-run-save.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/god-run-perks.ts",
+      "path": "src/shared/god-run-perks.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 104,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/god-run-perks.ts#GOD_PERK_IDS",
+        "symbol:src/shared/god-run-perks.ts#GOD_PERKS",
+        "symbol:src/shared/god-run-perks.ts#godBuildEffects",
+        "symbol:src/shared/god-run-perks.ts#GodBuildEffects",
+        "symbol:src/shared/god-run-perks.ts#godBuildSynergies",
+        "symbol:src/shared/god-run-perks.ts#GodPerkId",
+        "symbol:src/shared/god-run-perks.ts#godPerkPotentialSynergies",
+        "symbol:src/shared/god-run-perks.ts#godPerkRank",
+        "symbol:src/shared/god-run-perks.ts#GodPerks",
+        "symbol:src/shared/god-run-perks.ts#isGodPerkId",
+        "symbol:src/shared/god-run-perks.ts#rollGodPerks"
+      ],
+      "testedBy": [
+        "file:src/shared/god-run-engine.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/god-run-save.test.ts",
+      "path": "src/shared/god-run-save.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 21,
+      "imports": [
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-save.ts",
+        "file:src/shared/god-run-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/god-run-save.ts",
+      "path": "src/shared/god-run-save.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 33,
+      "imports": [
+        "file:src/shared/card-field.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-perks.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/god-run-save.ts#restoreGodRun",
+        "symbol:src/shared/god-run-save.ts#serializeGodRun"
+      ],
+      "testedBy": [
+        "file:src/shared/god-run-save.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/god-run-simulation.ts",
+      "path": "src/shared/god-run-simulation.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 42,
+      "imports": [
+        "file:src/shared/card-field.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-perks.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/god-run-simulation.ts#GOD_BUILD_FAMILIES",
+        "symbol:src/shared/god-run-simulation.ts#simulateGodRun"
+      ],
+      "testedBy": [
+        "file:src/shared/god-run-engine.test.ts",
+        "file:src/shared/god-run-save.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/graphicsQuality.test.ts",
@@ -33924,7 +34329,7 @@
       "path": "src/shared/next-floor-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 66,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/content-lock-state.ts",
@@ -36017,6 +36422,7 @@
         "symbol:src/shared/run-summary-rules.ts#createValidatedGameOverRunSummary"
       ],
       "testedBy": [
+        "file:src/shared/god-run-adapter.test.ts",
         "file:src/shared/run-summary-rules.test.ts"
       ]
     },
@@ -36936,7 +37342,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2108,
+      "lineCount": 2133,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -36948,6 +37354,8 @@
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
+        "file:src/shared/god-run-engine.ts",
+        "file:src/shared/god-run-simulation.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/n-back-anchor-rules.ts",
         "file:src/shared/realm-rules.ts",
@@ -38590,16 +38998,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 42,
-      "endLine": 42
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 518,
-      "endLine": 518
+      "line": 521,
+      "endLine": 521
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -41754,6 +42162,54 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/components/godFieldRenderer.ts#createGodFieldRenderer",
+      "name": "createGodFieldRenderer",
+      "kind": "value",
+      "file": "src/renderer/components/godFieldRenderer.ts",
+      "line": 70,
+      "endLine": 126
+    },
+    {
+      "id": "symbol:src/renderer/components/godFieldRenderer.ts#drawGodFieldFallback",
+      "name": "drawGodFieldFallback",
+      "kind": "value",
+      "file": "src/renderer/components/godFieldRenderer.ts",
+      "line": 129,
+      "endLine": 143
+    },
+    {
+      "id": "symbol:src/renderer/components/godFieldRenderer.ts#FieldFrame",
+      "name": "FieldFrame",
+      "kind": "interface",
+      "file": "src/renderer/components/godFieldRenderer.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/components/godFieldRenderer.ts#FieldView",
+      "name": "FieldView",
+      "kind": "interface",
+      "file": "src/renderer/components/godFieldRenderer.ts",
+      "line": 4,
+      "endLine": 4
+    },
+    {
+      "id": "symbol:src/renderer/components/GodResumeButton.tsx#default",
+      "name": "default",
+      "kind": "function",
+      "file": "src/renderer/components/GodResumeButton.tsx",
+      "line": 7,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/GodRunScreen.tsx#default",
+      "name": "default",
+      "kind": "function",
+      "file": "src/renderer/components/GodRunScreen.tsx",
+      "line": 67,
+      "endLine": 171
+    },
+    {
       "id": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
       "name": "buildGoldRain",
       "kind": "value",
@@ -41862,8 +42318,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 292,
-      "endLine": 292
+      "line": 294,
+      "endLine": 294
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -48670,8 +49126,8 @@
       "name": "AppState",
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
-      "line": 14,
-      "endLine": 113
+      "line": 15,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -48736,6 +49192,30 @@
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "line": 105,
       "endLine": 123
+    },
+    {
+      "id": "symbol:src/renderer/store/godRunCheckpoint.ts#clearGodCheckpoint",
+      "name": "clearGodCheckpoint",
+      "kind": "value",
+      "file": "src/renderer/store/godRunCheckpoint.ts",
+      "line": 27,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/store/godRunCheckpoint.ts#loadGodCheckpoint",
+      "name": "loadGodCheckpoint",
+      "kind": "value",
+      "file": "src/renderer/store/godRunCheckpoint.ts",
+      "line": 28,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/store/godRunCheckpoint.ts#saveGodCheckpoint",
+      "name": "saveGodCheckpoint",
+      "kind": "value",
+      "file": "src/renderer/store/godRunCheckpoint.ts",
+      "line": 23,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -49726,8 +50206,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 233,
-      "endLine": 739
+      "line": 234,
+      "endLine": 749
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -51578,6 +52058,150 @@
       "endLine": 6
     },
     {
+      "id": "symbol:src/shared/card-field.ts#CardField",
+      "name": "CardField",
+      "kind": "interface",
+      "file": "src/shared/card-field.ts",
+      "line": 10,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#clearFieldBudget",
+      "name": "clearFieldBudget",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 159,
+      "endLine": 164
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#clearFieldCircle",
+      "name": "clearFieldCircle",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 170,
+      "endLine": 192
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#clearFieldPairs",
+      "name": "clearFieldPairs",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 152,
+      "endLine": 156
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#createCardField",
+      "name": "createCardField",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 56,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#fieldCellAlive",
+      "name": "fieldCellAlive",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 81,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#FieldClear",
+      "name": "FieldClear",
+      "kind": "interface",
+      "file": "src/shared/card-field.ts",
+      "line": 23,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#fieldHash",
+      "name": "fieldHash",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 37,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#fieldPairAlive",
+      "name": "fieldPairAlive",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 79,
+      "endLine": 80
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#fieldPairAtCell",
+      "name": "fieldPairAtCell",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 70,
+      "endLine": 74
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#fieldPairCells",
+      "name": "fieldPairCells",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 75,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#findLiveFieldPair",
+      "name": "findLiveFieldPair",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 195,
+      "endLine": 204
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#MAX_FIELD_CARD_EXPONENT",
+      "name": "MAX_FIELD_CARD_EXPONENT",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 7,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#MIN_FIELD_CARD_EXPONENT",
+      "name": "MIN_FIELD_CARD_EXPONENT",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 6,
+      "endLine": 6
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#popcount32",
+      "name": "popcount32",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 43,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#restoreCardField",
+      "name": "restoreCardField",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 207,
+      "endLine": 221
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#serializeCardField",
+      "name": "serializeCardField",
+      "kind": "value",
+      "file": "src/shared/card-field.ts",
+      "line": 206,
+      "endLine": 206
+    },
+    {
+      "id": "symbol:src/shared/card-field.ts#SerializedCardField",
+      "name": "SerializedCardField",
+      "kind": "interface",
+      "file": "src/shared/card-field.ts",
+      "line": 30,
+      "endLine": 35
+    },
+    {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#assertCascadeBalanceWithinBands",
       "name": "assertCascadeBalanceWithinBands",
       "kind": "value",
@@ -52966,760 +53590,760 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 264,
-      "endLine": 296
+      "line": 265,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 930,
-      "endLine": 930
+      "line": 933,
+      "endLine": 933
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1000,
-      "endLine": 1002
+      "line": 1003,
+      "endLine": 1005
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 305,
-      "endLine": 305
+      "line": 306,
+      "endLine": 306
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 319,
-      "endLine": 319
+      "line": 320,
+      "endLine": 320
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 441,
-      "endLine": 473
+      "line": 442,
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
       "name": "BOSS_FLOOR_SCORE_MULTIPLIER",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 61,
-      "endLine": 61
+      "line": 62,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/contracts.ts#BuiltinPuzzleDefinition",
       "name": "BuiltinPuzzleDefinition",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 204,
-      "endLine": 215
+      "line": 205,
+      "endLine": 216
     },
     {
       "id": "symbol:src/shared/contracts.ts#CameraViewportModePreference",
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 312,
-      "endLine": 312
+      "line": 313,
+      "endLine": 313
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 255,
-      "endLine": 260
+      "line": 256,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1008,
-      "endLine": 1013
+      "line": 1011,
+      "endLine": 1016
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
       "name": "CURSED_LAST_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/contracts.ts#DEBUG_REVEAL_MS",
       "name": "DEBUG_REVEAL_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/contracts.ts#DebugFlags",
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 298,
-      "endLine": 302
+      "line": 299,
+      "endLine": 303
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1026,
-      "endLine": 1052
+      "line": 1029,
+      "endLine": 1055
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
       "name": "DisplayMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementCastImpact",
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 428,
-      "endLine": 439
+      "line": 429,
+      "endLine": 440
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
       "name": "FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP",
       "name": "FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_MISS_DECAY",
       "name": "FEATURED_OBJECTIVE_STREAK_MISS_DECAY",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/contracts.ts#FeaturedObjectiveId",
       "name": "FeaturedObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 158,
-      "endLine": 158
+      "line": 159,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_KIND_SPAWN_WEIGHTS",
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 248,
-      "endLine": 250
+      "line": 249,
+      "endLine": 251
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
       "name": "FINDABLE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 244,
-      "endLine": 246
+      "line": 245,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
       "name": "FindableKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 241,
-      "endLine": 241
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
       "name": "FLIP_PAR_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 412,
-      "endLine": 425
+      "line": 413,
+      "endLine": 426
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 426,
-      "endLine": 426
+      "line": 427,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 403,
-      "endLine": 403
+      "line": 404,
+      "endLine": 404
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
       "name": "GAME_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameMode",
       "name": "GameMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 198,
-      "endLine": 198
+      "line": 199,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayCommandJournalEntry",
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 594,
-      "endLine": 598
+      "line": 595,
+      "endLine": 599
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 600,
-      "endLine": 610
+      "line": 601,
+      "endLine": 611
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 322,
-      "endLine": 322
+      "line": 323,
+      "endLine": 323
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
       "name": "INITIAL_RECALL_FOCUS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_REGION_SHUFFLE_CHARGES",
       "name": "INITIAL_REGION_SHUFFLE_CHARGES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_SHUFFLE_CHARGES",
       "name": "INITIAL_SHUFFLE_CHARGES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/contracts.ts#LevelResult",
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 493,
-      "endLine": 538
+      "line": 494,
+      "endLine": 539
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
       "name": "MATCH_DELAY_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/contracts.ts#MAX_PINNED_TILES",
       "name": "MAX_PINNED_TILES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_BASE_MS",
       "name": "MEMORIZE_BASE_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_DECAY_EVERY_N_LEVELS",
       "name": "MEMORIZE_DECAY_EVERY_N_LEVELS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_MAX_MS",
       "name": "MEMORIZE_MAX_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_MIN_MS",
       "name": "MEMORIZE_MIN_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_BASE_MS",
       "name": "MEMORIZE_PER_TILE_BASE_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_MIN_MS",
       "name": "MEMORIZE_PER_TILE_MIN_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_STEP_MS",
       "name": "MEMORIZE_PER_TILE_STEP_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_STEP_MS",
       "name": "MEMORIZE_STEP_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/contracts.ts#MissBankGrant",
       "name": "MissBankGrant",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 14,
-      "endLine": 17
+      "line": 15,
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/contracts.ts#MUTATOR_IDS",
       "name": "MUTATOR_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 217,
-      "endLine": 230
+      "line": 218,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/contracts.ts#MutatorId",
       "name": "MutatorId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 231,
-      "endLine": 231
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlaySeat",
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 623,
-      "endLine": 635
+      "line": 624,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 637,
-      "endLine": 650
+      "line": 638,
+      "endLine": 651
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 932,
-      "endLine": 945
+      "line": 935,
+      "endLine": 948
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
       "name": "PuzzleDifficulty",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 200,
-      "endLine": 200
+      "line": 201,
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleGoal",
       "name": "PuzzleGoal",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 201,
-      "endLine": 201
+      "line": 202,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzlePackId",
       "name": "PuzzlePackId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 202,
-      "endLine": 202
+      "line": 203,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/contracts.ts#Rating",
       "name": "Rating",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/contracts.ts#REALM_IDS",
       "name": "REALM_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 86,
-      "endLine": 86
+      "line": 87,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmDoor",
       "name": "RealmDoor",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 91,
-      "endLine": 96
+      "line": 92,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmEvent",
       "name": "RealmEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 98,
-      "endLine": 155
+      "line": 99,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmId",
       "name": "RealmId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 87,
-      "endLine": 87
+      "line": 88,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmSeverity",
       "name": "RealmSeverity",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_CLUE_MATCH_SCORE",
       "name": "RECALL_CLUE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_FOCUS_MATCH_SCORE",
       "name": "RECALL_FOCUS_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 48,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_FOCUS_MAX",
       "name": "RECALL_FOCUS_MAX",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/contracts.ts#RelicId",
       "name": "RelicId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 157,
-      "endLine": 157
+      "line": 158,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1016,
-      "endLine": 1016
+      "line": 1019,
+      "endLine": 1019
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1019,
-      "endLine": 1024
+      "line": 1022,
+      "endLine": 1027
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
       "name": "RESOLVE_DELAY_MULTIPLIER_MIN",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/contracts.ts#ResumableRunStatus",
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 261,
-      "endLine": 261
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 993,
-      "endLine": 997
+      "line": 996,
+      "endLine": 1000
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 991,
-      "endLine": 991
+      "line": 994,
+      "endLine": 994
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
       "name": "RunEndReason",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 80,
-      "endLine": 80
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunHistoryRecord",
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 952,
-      "endLine": 964
+      "line": 955,
+      "endLine": 967
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 652,
-      "endLine": 928
+      "line": 653,
+      "endLine": 931
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 262,
-      "endLine": 262
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 555,
-      "endLine": 592
+      "line": 556,
+      "endLine": 593
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 612,
-      "endLine": 617
+      "line": 613,
+      "endLine": 618
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
       "name": "SAVE_SCHEMA_VERSION",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 11,
-      "endLine": 11
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/shared/contracts.ts#SaveData",
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 966,
-      "endLine": 985
+      "line": 969,
+      "endLine": 988
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
       "name": "SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 53,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/contracts.ts#SessionStats",
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 475,
-      "endLine": 491
+      "line": 476,
+      "endLine": 492
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 324,
-      "endLine": 359
+      "line": 325,
+      "endLine": 360
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
       "name": "SHIFTING_BOUNTY_MATCH_BONUS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_WARD_MATCH_PENALTY",
       "name": "SHIFTING_WARD_MATCH_PENALTY",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 61,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/contracts.ts#SubscreenReturnView",
       "name": "SubscreenReturnView",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 183,
-      "endLine": 183
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/contracts.ts#Tile",
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 361,
-      "endLine": 401
+      "line": 362,
+      "endLine": 402
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
       "name": "TileState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 64,
-      "endLine": 64
+      "line": 65,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileSuit",
       "name": "TileSuit",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 69,
-      "endLine": 69
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileTraitKind",
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 554,
-      "endLine": 554
+      "line": 555,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
       "name": "VIEW_STATES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 167,
-      "endLine": 178
+      "line": 168,
+      "endLine": 179
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
       "name": "ViewState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 180,
-      "endLine": 180
+      "line": 181,
+      "endLine": 181
     },
     {
       "id": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 253,
-      "endLine": 253
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 545,
-      "endLine": 552
+      "line": 546,
+      "endLine": 553
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 540,
-      "endLine": 543
+      "line": 541,
+      "endLine": 544
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -54878,8 +55502,8 @@
       "name": "finalizeLevel",
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
-      "line": 22,
-      "endLine": 170
+      "line": 24,
+      "endLine": 174
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -57074,6 +57698,318 @@
       "endLine": 6
     },
     {
+      "id": "symbol:src/shared/god-run-adapter.ts#applyGodRunCommand",
+      "name": "applyGodRunCommand",
+      "kind": "value",
+      "file": "src/shared/god-run-adapter.ts",
+      "line": 5,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#buyGodMiss",
+      "name": "buyGodMiss",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 79,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#buyGodPerk",
+      "name": "buyGodPerk",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 65,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#canCastGodMeteor",
+      "name": "canCastGodMeteor",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 145,
+      "endLine": 149
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#castGodMeteor",
+      "name": "castGodMeteor",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 150,
+      "endLine": 173
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#createGodRun",
+      "name": "createGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 50,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#dealGodHand",
+      "name": "dealGodHand",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 212,
+      "endLine": 234
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#flipGodCard",
+      "name": "flipGodCard",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 241,
+      "endLine": 245
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GOD_TICK_MAX_MS",
+      "name": "GOD_TICK_MAX_MS",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 42,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GodEffectKind",
+      "name": "GodEffectKind",
+      "kind": "type",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GodFieldEffect",
+      "name": "GodFieldEffect",
+      "kind": "interface",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 6,
+      "endLine": 6
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#godPerkPrice",
+      "name": "godPerkPrice",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 60,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#godRerollPrice",
+      "name": "godRerollPrice",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 62,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GodRun",
+      "name": "GodRun",
+      "kind": "interface",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 7,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GodRunCommand",
+      "name": "GodRunCommand",
+      "kind": "type",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 247,
+      "endLine": 247
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#GodRunPhase",
+      "name": "GodRunPhase",
+      "kind": "type",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 4,
+      "endLine": 4
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#godSupplyPrice",
+      "name": "godSupplyPrice",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 63,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#matchGodPair",
+      "name": "matchGodPair",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 120,
+      "endLine": 136
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#missGodPair",
+      "name": "missGodPair",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 137,
+      "endLine": 143
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#reconcileGodHand",
+      "name": "reconcileGodHand",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 235,
+      "endLine": 240
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#reduceGodRun",
+      "name": "reduceGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 248,
+      "endLine": 258
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#rerollGodPerks",
+      "name": "rerollGodPerks",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 73,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#startNextGodWave",
+      "name": "startNextGodWave",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 86,
+      "endLine": 95
+    },
+    {
+      "id": "symbol:src/shared/god-run-engine.ts#tickGodRun",
+      "name": "tickGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-engine.ts",
+      "line": 176,
+      "endLine": 209
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#GOD_PERK_IDS",
+      "name": "GOD_PERK_IDS",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#GOD_PERKS",
+      "name": "GOD_PERKS",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 3,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#godBuildEffects",
+      "name": "godBuildEffects",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 49,
+      "endLine": 77
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#GodBuildEffects",
+      "name": "GodBuildEffects",
+      "kind": "interface",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 26,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#godBuildSynergies",
+      "name": "godBuildSynergies",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 87,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#GodPerkId",
+      "name": "GodPerkId",
+      "kind": "type",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#godPerkPotentialSynergies",
+      "name": "godPerkPotentialSynergies",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 88,
+      "endLine": 88
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#godPerkRank",
+      "name": "godPerkRank",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 20,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#GodPerks",
+      "name": "GodPerks",
+      "kind": "type",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#isGodPerkId",
+      "name": "isGodPerkId",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/shared/god-run-perks.ts#rollGodPerks",
+      "name": "rollGodPerks",
+      "kind": "value",
+      "file": "src/shared/god-run-perks.ts",
+      "line": 93,
+      "endLine": 103
+    },
+    {
+      "id": "symbol:src/shared/god-run-save.ts#restoreGodRun",
+      "name": "restoreGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-save.ts",
+      "line": 6,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/god-run-save.ts#serializeGodRun",
+      "name": "serializeGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-save.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/shared/god-run-simulation.ts#GOD_BUILD_FAMILIES",
+      "name": "GOD_BUILD_FAMILIES",
+      "kind": "value",
+      "file": "src/shared/god-run-simulation.ts",
+      "line": 5,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/shared/god-run-simulation.ts#simulateGodRun",
+      "name": "simulateGodRun",
+      "kind": "value",
+      "file": "src/shared/god-run-simulation.ts",
+      "line": 12,
+      "endLine": 41
+    },
+    {
       "id": "symbol:src/shared/graphicsQuality.ts#ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD",
       "name": "ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD",
       "kind": "value",
@@ -58631,7 +59567,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-transition-rules.ts",
       "line": 20,
-      "endLine": 65
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/objective-board.ts#buildObjectiveBoardRows",
@@ -63278,72 +64214,72 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1984,
-      "endLine": 2083
+      "line": 2007,
+      "endLine": 2108
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 380,
-      "endLine": 1971
+      "line": 385,
+      "endLine": 1994
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2107,
-      "endLine": 2107
+      "line": 2132,
+      "endLine": 2132
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 181,
-      "endLine": 192
+      "line": 186,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 48,
-      "endLine": 139
+      "line": 50,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2085,
-      "endLine": 2088
+      "line": 2110,
+      "endLine": 2113
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 174,
-      "endLine": 179
+      "line": 179,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 141,
-      "endLine": 172
+      "line": 145,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2090,
-      "endLine": 2105
+      "line": 2115,
+      "endLine": 2130
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -65747,7 +66683,7 @@
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
-          "line": 17
+          "line": 19
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -66501,7 +67437,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 31
+          "line": 32
         }
       ],
       "tests": [
@@ -66548,7 +67484,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 31
+          "line": 32
         }
       ],
       "tests": [
@@ -66910,7 +67846,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -67213,7 +68149,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "tests": [
@@ -72683,6 +73619,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/godFieldRenderer.ts->symbol:src/renderer/components/godFieldRenderer.ts#createGodFieldRenderer",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "symbol:src/renderer/components/godFieldRenderer.ts#createGodFieldRenderer",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/godFieldRenderer.ts->symbol:src/renderer/components/godFieldRenderer.ts#drawGodFieldFallback",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "symbol:src/renderer/components/godFieldRenderer.ts#drawGodFieldFallback",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/godFieldRenderer.ts->symbol:src/renderer/components/godFieldRenderer.ts#FieldFrame",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "symbol:src/renderer/components/godFieldRenderer.ts#FieldFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/godFieldRenderer.ts->symbol:src/renderer/components/godFieldRenderer.ts#FieldView",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "symbol:src/renderer/components/godFieldRenderer.ts#FieldView",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GodResumeButton.tsx->symbol:src/renderer/components/GodResumeButton.tsx#default",
+      "source": "file:src/renderer/components/GodResumeButton.tsx",
+      "target": "symbol:src/renderer/components/GodResumeButton.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GodRunScreen.tsx->symbol:src/renderer/components/GodRunScreen.tsx#default",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "symbol:src/renderer/components/GodRunScreen.tsx#default",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
       "source": "file:src/renderer/components/GoldRain.tsx",
       "target": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
@@ -77921,6 +78893,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/store/godRunCheckpoint.ts->symbol:src/renderer/store/godRunCheckpoint.ts#clearGodCheckpoint",
+      "source": "file:src/renderer/store/godRunCheckpoint.ts",
+      "target": "symbol:src/renderer/store/godRunCheckpoint.ts#clearGodCheckpoint",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/godRunCheckpoint.ts->symbol:src/renderer/store/godRunCheckpoint.ts#loadGodCheckpoint",
+      "source": "file:src/renderer/store/godRunCheckpoint.ts",
+      "target": "symbol:src/renderer/store/godRunCheckpoint.ts#loadGodCheckpoint",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/godRunCheckpoint.ts->symbol:src/renderer/store/godRunCheckpoint.ts#saveGodCheckpoint",
+      "source": "file:src/renderer/store/godRunCheckpoint.ts",
+      "target": "symbol:src/renderer/store/godRunCheckpoint.ts#saveGodCheckpoint",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/store/hydrationController.ts->symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
       "source": "file:src/renderer/store/hydrationController.ts",
       "target": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -80048,6 +81038,114 @@
       "id": "exports:src/shared/cameraViewportMode.ts->symbol:src/shared/cameraViewportMode.ts#MOBILE_CAMERA_WIDTH_HYSTERESIS_PX",
       "source": "file:src/shared/cameraViewportMode.ts",
       "target": "symbol:src/shared/cameraViewportMode.ts#MOBILE_CAMERA_WIDTH_HYSTERESIS_PX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#CardField",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#CardField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#clearFieldBudget",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#clearFieldBudget",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#clearFieldCircle",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#clearFieldCircle",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#clearFieldPairs",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#clearFieldPairs",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#createCardField",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#createCardField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#fieldCellAlive",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#fieldCellAlive",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#FieldClear",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#FieldClear",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#fieldHash",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#fieldHash",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#fieldPairAlive",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#fieldPairAlive",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#fieldPairAtCell",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#fieldPairAtCell",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#fieldPairCells",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#fieldPairCells",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#findLiveFieldPair",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#findLiveFieldPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#MAX_FIELD_CARD_EXPONENT",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#MAX_FIELD_CARD_EXPONENT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#MIN_FIELD_CARD_EXPONENT",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#MIN_FIELD_CARD_EXPONENT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#popcount32",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#popcount32",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#restoreCardField",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#restoreCardField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#serializeCardField",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#serializeCardField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/card-field.ts->symbol:src/shared/card-field.ts#SerializedCardField",
+      "source": "file:src/shared/card-field.ts",
+      "target": "symbol:src/shared/card-field.ts#SerializedCardField",
       "kind": "exports"
     },
     {
@@ -84170,6 +85268,240 @@
       "id": "exports:src/shared/generated/blueprintGlossaryGen.ts->symbol:src/shared/generated/blueprintGlossaryGen.ts#BLUEPRINT_GLOSSARY",
       "source": "file:src/shared/generated/blueprintGlossaryGen.ts",
       "target": "symbol:src/shared/generated/blueprintGlossaryGen.ts#BLUEPRINT_GLOSSARY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-adapter.ts->symbol:src/shared/god-run-adapter.ts#applyGodRunCommand",
+      "source": "file:src/shared/god-run-adapter.ts",
+      "target": "symbol:src/shared/god-run-adapter.ts#applyGodRunCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#buyGodMiss",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#buyGodMiss",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#buyGodPerk",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#buyGodPerk",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#canCastGodMeteor",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#canCastGodMeteor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#castGodMeteor",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#castGodMeteor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#createGodRun",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#createGodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#dealGodHand",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#dealGodHand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#flipGodCard",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#flipGodCard",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GOD_TICK_MAX_MS",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GOD_TICK_MAX_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GodEffectKind",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GodEffectKind",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GodFieldEffect",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GodFieldEffect",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#godPerkPrice",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#godPerkPrice",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#godRerollPrice",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#godRerollPrice",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GodRun",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GodRunCommand",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GodRunCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#GodRunPhase",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#GodRunPhase",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#godSupplyPrice",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#godSupplyPrice",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#matchGodPair",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#matchGodPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#missGodPair",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#missGodPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#reconcileGodHand",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#reconcileGodHand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#reduceGodRun",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#reduceGodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#rerollGodPerks",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#rerollGodPerks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#startNextGodWave",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#startNextGodWave",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-engine.ts->symbol:src/shared/god-run-engine.ts#tickGodRun",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "symbol:src/shared/god-run-engine.ts#tickGodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#GOD_PERK_IDS",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#GOD_PERK_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#GOD_PERKS",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#GOD_PERKS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#godBuildEffects",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#godBuildEffects",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#GodBuildEffects",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#GodBuildEffects",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#godBuildSynergies",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#godBuildSynergies",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#GodPerkId",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#GodPerkId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#godPerkPotentialSynergies",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#godPerkPotentialSynergies",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#godPerkRank",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#godPerkRank",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#GodPerks",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#GodPerks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#isGodPerkId",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#isGodPerkId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-perks.ts->symbol:src/shared/god-run-perks.ts#rollGodPerks",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "symbol:src/shared/god-run-perks.ts#rollGodPerks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-save.ts->symbol:src/shared/god-run-save.ts#restoreGodRun",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "symbol:src/shared/god-run-save.ts#restoreGodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-save.ts->symbol:src/shared/god-run-save.ts#serializeGodRun",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "symbol:src/shared/god-run-save.ts#serializeGodRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-simulation.ts->symbol:src/shared/god-run-simulation.ts#GOD_BUILD_FAMILIES",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "symbol:src/shared/god-run-simulation.ts#GOD_BUILD_FAMILIES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/god-run-simulation.ts->symbol:src/shared/god-run-simulation.ts#simulateGodRun",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "symbol:src/shared/god-run-simulation.ts#simulateGodRun",
       "kind": "exports"
     },
     {
@@ -95199,6 +96531,90 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/godFieldRenderer.ts->src/shared/card-field.ts",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/godFieldRenderer.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/renderer/components/godFieldRenderer.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodResumeButton.tsx->src/renderer/store/godRunCheckpoint.ts",
+      "source": "file:src/renderer/components/GodResumeButton.tsx",
+      "target": "file:src/renderer/store/godRunCheckpoint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodResumeButton.tsx->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/components/GodResumeButton.tsx",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodResumeButton.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/GodResumeButton.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/renderer/components/godFieldRenderer.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/renderer/components/godFieldRenderer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/renderer/components/OverlayModal.tsx",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/renderer/components/OverlayModal.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/renderer/hooks/useEffectiveReducedMotion.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/renderer/store/godRunCheckpoint.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/renderer/store/godRunCheckpoint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/shared/card-field.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/shared/god-run-engine.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GodRunScreen.tsx->src/shared/god-run-perks.ts",
+      "source": "file:src/renderer/components/GodRunScreen.tsx",
+      "target": "file:src/shared/god-run-perks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GoldRain.test.tsx->src/renderer/components/GoldRain.tsx",
       "source": "file:src/renderer/components/GoldRain.test.tsx",
       "target": "file:src/renderer/components/GoldRain.tsx",
@@ -95358,6 +96774,12 @@
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/CathedralScene.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/CathedralScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/GodResumeButton.tsx",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/components/GodResumeButton.tsx",
       "kind": "imports"
     },
     {
@@ -100971,6 +102393,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/appStoreTypes.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/renderer/store/appStoreTypes.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/appStoreTypes.ts->src/shared/meta-progression.ts",
       "source": "file:src/renderer/store/appStoreTypes.ts",
       "target": "file:src/shared/meta-progression.ts",
@@ -101022,6 +102450,18 @@
       "id": "imports:src/renderer/store/gameplayFeedbackAdapter.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/godRunCheckpoint.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/store/godRunCheckpoint.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/godRunCheckpoint.ts->src/shared/god-run-save.ts",
+      "source": "file:src/renderer/store/godRunCheckpoint.ts",
+      "target": "file:src/shared/god-run-save.ts",
       "kind": "imports"
     },
     {
@@ -102399,6 +103839,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/god-run-adapter.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/god-run-adapter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/pass-and-play-rules.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/pass-and-play-rules.ts",
@@ -103761,6 +105207,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/card-field.test.ts->src/shared/card-field.ts",
+      "source": "file:src/shared/card-field.test.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/cascade-balance-simulation.test.ts->src/shared/cascade-balance-simulation.ts",
       "source": "file:src/shared/cascade-balance-simulation.test.ts",
       "target": "file:src/shared/cascade-balance-simulation.ts",
@@ -104292,6 +105744,12 @@
       "id": "imports:src/shared/contracts.ts->src/shared/elemental-loot-rules.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/elemental-loot-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/contracts.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/god-run-engine.ts",
       "kind": "imports"
     },
     {
@@ -105003,9 +106461,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-clear-transition.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/floor-clear-transition.ts->src/shared/level-clear-rules.ts",
       "source": "file:src/shared/floor-clear-transition.ts",
       "target": "file:src/shared/level-clear-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-clear-transition.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/miss-bank.ts",
       "kind": "imports"
     },
     {
@@ -106332,6 +107802,156 @@
       "id": "imports:src/shared/gameplay-property-invariants.test.ts->src/shared/turn-resolution.ts",
       "source": "file:src/shared/gameplay-property-invariants.test.ts",
       "target": "file:src/shared/turn-resolution.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/god-run-adapter.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/god-run-adapter.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.test.ts->src/shared/god-run-adapter.ts",
+      "source": "file:src/shared/god-run-adapter.test.ts",
+      "target": "file:src/shared/god-run-adapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.test.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-adapter.test.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.test.ts->src/shared/run-summary-rules.ts",
+      "source": "file:src/shared/god-run-adapter.test.ts",
+      "target": "file:src/shared/run-summary-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/god-run-adapter.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-adapter.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-adapter.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/card-field.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/floor-clear-transition.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/floor-clear-transition.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/god-run-perks.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/god-run-perks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.test.ts->src/shared/god-run-simulation.ts",
+      "source": "file:src/shared/god-run-engine.test.ts",
+      "target": "file:src/shared/god-run-simulation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.ts->src/shared/card-field.ts",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-engine.ts->src/shared/god-run-perks.ts",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "file:src/shared/god-run-perks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-perks.ts->src/shared/rng.ts",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.test.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-save.test.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.test.ts->src/shared/god-run-save.ts",
+      "source": "file:src/shared/god-run-save.test.ts",
+      "target": "file:src/shared/god-run-save.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.test.ts->src/shared/god-run-simulation.ts",
+      "source": "file:src/shared/god-run-save.test.ts",
+      "target": "file:src/shared/god-run-simulation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.ts->src/shared/card-field.ts",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-save.ts->src/shared/god-run-perks.ts",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "file:src/shared/god-run-perks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-simulation.ts->src/shared/card-field.ts",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "file:src/shared/card-field.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-simulation.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/god-run-simulation.ts->src/shared/god-run-perks.ts",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "file:src/shared/god-run-perks.ts",
       "kind": "imports"
     },
     {
@@ -110028,6 +111648,18 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/game.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/god-run-engine.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/god-run-engine.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/god-run-simulation.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/god-run-simulation.ts",
       "kind": "imports"
     },
     {
@@ -116645,6 +118277,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/card-field.ts->file:src/shared/card-field.test.ts",
+      "source": "file:src/shared/card-field.ts",
+      "target": "file:src/shared/card-field.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/card-field.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/card-field.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/cascade-balance-simulation.ts->file:src/shared/cascade-balance-simulation.test.ts",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "file:src/shared/cascade-balance-simulation.test.ts",
@@ -117641,6 +119285,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/god-run-adapter.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/god-run-adapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/held-pair-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/held-pair-rules.test.ts",
@@ -118202,6 +119852,12 @@
       "id": "tested_by:src/shared/floor-clear-transition.ts->file:src/shared/elemental-loot-rules.test.ts",
       "source": "file:src/shared/floor-clear-transition.ts",
       "target": "file:src/shared/elemental-loot-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-clear-transition.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
       "kind": "tested_by"
     },
     {
@@ -118781,6 +120437,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/god-run-adapter.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/god-run-adapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -119078,6 +120746,54 @@
       "id": "tested_by:src/shared/generated/blueprintGlossaryGen.ts->file:src/shared/blueprintGlossaryGen.test.ts",
       "source": "file:src/shared/generated/blueprintGlossaryGen.ts",
       "target": "file:src/shared/blueprintGlossaryGen.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-adapter.ts->file:src/shared/god-run-adapter.test.ts",
+      "source": "file:src/shared/god-run-adapter.ts",
+      "target": "file:src/shared/god-run-adapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-engine.ts->file:src/shared/god-run-adapter.test.ts",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "file:src/shared/god-run-adapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-engine.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-engine.ts->file:src/shared/god-run-save.test.ts",
+      "source": "file:src/shared/god-run-engine.ts",
+      "target": "file:src/shared/god-run-save.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-perks.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/god-run-perks.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-save.ts->file:src/shared/god-run-save.test.ts",
+      "source": "file:src/shared/god-run-save.ts",
+      "target": "file:src/shared/god-run-save.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-simulation.ts->file:src/shared/god-run-engine.test.ts",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "file:src/shared/god-run-engine.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/god-run-simulation.ts->file:src/shared/god-run-save.test.ts",
+      "source": "file:src/shared/god-run-simulation.ts",
+      "target": "file:src/shared/god-run-save.test.ts",
       "kind": "tested_by"
     },
     {
@@ -120122,6 +121838,12 @@
       "id": "tested_by:src/shared/run-store-rules.ts->file:src/shared/store-stock.test.ts",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "file:src/shared/store-stock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-summary-rules.ts->file:src/shared/god-run-adapter.test.ts",
+      "source": "file:src/shared/run-summary-rules.ts",
+      "target": "file:src/shared/god-run-adapter.test.ts",
       "kind": "tested_by"
     },
     {

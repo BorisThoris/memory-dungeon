@@ -18,6 +18,7 @@ import { enterRealmFloor, nextFloorRealmDoor } from './realm-rules';
 import { applyRealmChill } from './realm-carryover-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
+    if (run.godRun) return run;
     if (run.status !== 'levelComplete' || !run.board) {
         return run;
     }

@@ -594,13 +594,14 @@ describe('desktop app flow', () => {
         await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
         await user.click(await screen.findByRole('button', { name: /^inventory$/i }));
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
-        await user.click(screen.getByRole('button', { name: /^back$/i }));
+        // JSDOM also exposes the closed native popover's Back button; use the active sheet.
+        await user.click(within(screen.getByRole('region', { name: /inventory/i })).getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();
 
         await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
         await user.click(await screen.findByRole('button', { name: /^codex$/i }));
         expect(await screen.findByRole('region', { name: /codex/i })).toBeInTheDocument();
-        await user.click(screen.getByRole('button', { name: /^back$/i }));
+        await user.click(within(screen.getByRole('region', { name: /codex/i })).getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();
     }, 30_000);
 

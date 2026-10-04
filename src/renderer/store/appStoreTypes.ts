@@ -1,5 +1,6 @@
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
+import type { GodRunCommand } from '../../shared/god-run-engine';
 import type {
     AchievementId,
     RunState,
@@ -12,6 +13,7 @@ import type { MetaProgressionUnlockResult } from '../../shared/meta-progression'
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 
 export interface AppState {
+    godCommand: (command: GodRunCommand) => void;
     hydrated: boolean;
     hydrating: boolean;
     steamConnected: boolean;
