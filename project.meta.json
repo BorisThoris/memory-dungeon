@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-04T16:34:07.560Z",
+  "generatedAt": "2026-10-04T17:55:40.568Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -299,28 +299,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 167295,
+        "bytes": 167116,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-04T16:33:47.772Z"
+        "capturedAt": "2026-10-04T17:55:19.164Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 157549,
+        "bytes": 156532,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-04T16:33:52.803Z"
+        "capturedAt": "2026-10-04T17:55:24.586Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 131547,
+        "bytes": 130853,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-04T16:34:02.467Z"
+        "capturedAt": "2026-10-04T17:55:35.203Z"
       },
       {
         "profile": "mobile",
@@ -329,16 +329,16 @@
         "bytes": 51915,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-04T16:33:57.360Z"
+        "capturedAt": "2026-10-04T17:55:29.359Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 122982,
+        "bytes": 122726,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-04T16:34:07.368Z"
+        "capturedAt": "2026-10-04T17:55:40.350Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -347,7 +347,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-04T16:31:49.942Z"
+        "capturedAt": "2026-10-04T17:53:47.668Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -356,7 +356,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-04T16:31:49.943Z"
+        "capturedAt": "2026-10-04T17:53:47.668Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -365,7 +365,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-04T16:31:49.943Z"
+        "capturedAt": "2026-10-04T17:53:47.669Z"
       },
       {
         "profile": "reel-end-card",
@@ -374,7 +374,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-04T16:31:49.944Z"
+        "capturedAt": "2026-10-04T17:53:47.671Z"
       }
     ],
     "trailers": [
@@ -501,21 +501,21 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1315,
-    "testFiles": 564,
-    "sourceLines": 203752,
+    "sourceFiles": 1332,
+    "testFiles": 569,
+    "sourceLines": 205332,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1124
+        "files": 1139
       },
       {
         "directory": "scripts",
-        "files": 99
+        "files": 100
       },
       {
         "directory": "e2e",
-        "files": 72
+        "files": 73
       },
       {
         "directory": "packages",
@@ -542,10 +542,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "9e890598",
-    "lastCommitDate": "2026-10-04T19:30:59+03:00",
-    "lastCommitSubject": "Replace arena choices and elemental purchases with camp upgrades",
-    "commitCount": 1931,
+    "head": "6ed12365",
+    "lastCommitDate": "2026-10-04T20:51:41+03:00",
+    "lastCommitSubject": "Build endless perk constellations and million-card fields",
+    "commitCount": 1933,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
