@@ -4,14 +4,26 @@
 This document defines the shared art-direction system that the redesign should implement once and reuse across screens.
 
 ## Design Intent
-The target is premium fantasy UI with cinematic dungeon atmosphere. The UI should feel forged, framed, and illuminated, not flat or generic.
+The target is a readable fantasy game with a cinematic dungeon atmosphere. Gameplay state must remain clear before the player studies fine detail. Materials and effects support that read.
 
 Key goals:
-- Environment-first presentation
+- Gameplay-first presentation; environment is the supporting layer
 - Premium materials and depth
 - High-contrast state feedback
 - Cohesive cross-screen chrome
 - Strong hierarchy between hero content and support information
+
+## Gameplay Read Hierarchy
+
+Apply these rules across card meshes, distant-card atlases, shaders, particles, overlays, and mobile layouts. They follow the shape, value, and detail hierarchy described in [Valve's Illustrative Rendering in Team Fortress 2](https://cdn.steamstatic.com/apps/valve/2007/NPAR07_IllustrativeRenderingInTeamFortress2.pdf).
+
+1. **Actionability first.** A blocked card has a persistent lock silhouette. Vines use broad crossed bindings; ice uses broken angular edges. A tiny corner icon, tint, or transient particle burst cannot carry this information alone.
+2. **Identity second.** Keep element and revealed artwork readable. A peek does not remove a lock; the lock disappears only when the rules release it. Snow conceals identity but must not imply a turn lock by itself.
+3. **Rewards and protection third.** Small round reward badges and protection shields stay distinct from full-card binding shapes. Color reinforces each symbol; it never replaces it.
+4. **Effects support state.** Bound cards stop their idle sway and suppress decorative charge halos. Impact and release effects may punctuate changes but cannot erase persistent state. The room and elemental ground have lower contrast than the cards.
+5. **Scale removes detail, never meaning.** Low quality, distant atlases, reduced motion, study, and peeks retain the same status vocabulary. Validate actual phone sizes, grayscale, crowded boards, and combined statuses, alongside desktop beauty shots.
+
+The same restraint applies to menus: primary actions have the highest contrast, secondary options stay quiet, and ornamental frames never compete with controls or text.
 
 ---
 

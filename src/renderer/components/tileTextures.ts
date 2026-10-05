@@ -10,6 +10,8 @@ import {
 } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { elementTexture } from './ElementCardBack';
+import { cardStatusMark } from './realmTileMarkKey';
+import { paintCardStatus } from './cardStatusPaint';
 import { RENDERER_THEME } from '../styles/theme';
 import referenceBackTextureUrl from '../assets/textures/cards/card-back-painted.webp';
 import cardBackGlowTextureUrl from '../assets/textures/cards/card-back-glow-runes.webp';
@@ -1540,7 +1542,7 @@ export const retainTileTextureWorkingSet = (cardIds: ReadonlySet<string>): void 
 };
 
 /** Paint the same face/back assets into a small atlas slot without allocating a cached GPU texture per card. */
-export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: boolean): void => {
+export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: boolean, openingLocked = false): void => {
     const context = canvas.getContext('2d');
     if (!context) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -1559,6 +1561,8 @@ export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: 
         context.fillStyle = tile.findableKind === 'meteor_shard' ? '#ffb561' : '#87eafa';
         context.beginPath(); context.arc(canvas.width*.8, canvas.height*.12, canvas.width*.05, 0, Math.PI*2); context.fill();
     }
+    const status = cardStatusMark(tile, openingLocked);
+    if (status) paintCardStatus(context, canvas.width, canvas.height, status, faceUp);
 };
 
 

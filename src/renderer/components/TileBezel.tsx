@@ -30,6 +30,7 @@ import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
 import { RealmTileMarks } from './RealmTileMarks';
+import { cardStatusBlocksTurning, cardStatusMark } from './realmTileMarkKey';
 import { ElementCardBack } from './ElementCardBack';
 import { ElementCardMaterial } from './ElementCardMaterial';
 import { getBreakWaveDelaySec } from './tileBoardBreakWave';
@@ -750,6 +751,7 @@ const TileBezelInner = ({
     const faceZ = halfDepth + 0.0004;
     const overlayZ = halfDepth + 0.004;
     const renderQuality = gameplayRenderQualityProfile(graphicsQuality);
+    const statusBlocksTurning = cardStatusBlocksTurning(cardStatusMark(tile, stickyFingerSlotMark));
 
     return (
         <>
@@ -784,8 +786,8 @@ const TileBezelInner = ({
                         cardBackSpinTexture={cardBackSpinTexture}
                         cardBackVisible={!faceUp}
                         cardFaceGlowTexture={cardFaceGlowTexture}
-                        cardGlowAnimated={cardGlowAnimated}
-                        cardHeat={cardHeat}
+                        cardGlowAnimated={cardGlowAnimated && !statusBlocksTurning}
+                        cardHeat={statusBlocksTurning ? 0 : cardHeat}
                         cardMatched={isMatched}
                         backNormalMap={backNormalMapEffective}
                         backRoughnessMap={backRoughnessMap}
@@ -807,12 +809,12 @@ const TileBezelInner = ({
                     {/* The card is made of its element (`ElementCardBack`); a blizzard's snow buries it until the card is turned. */}
                     {tile.suit && !(tile.snowed && tile.state === 'hidden') ? (
                         <>
-                            <ElementCardBack empowered={tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
+                            <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
                             <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} />
                             <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} />
                         </>
                     ) : null}
-                    <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} />
+                    <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} openingLocked={stickyFingerSlotMark} />
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}
                         face="back"

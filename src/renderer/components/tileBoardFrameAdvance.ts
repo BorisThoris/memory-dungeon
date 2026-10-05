@@ -243,7 +243,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     if (!p.reduceMotion) {
         const ambience = useRealmAmbience.getState();
         const phase = (p.transform.seed % 997) * 0.0063;
-        const sway = p.graphicsQuality !== 'low' && p.tile.state === 'hidden' && !p.faceUp
+        const sway = p.graphicsQuality !== 'low' && p.tile.state === 'hidden' && !p.faceUp && !p.tile.vined && !(p.tile.frost ?? 0)
             ? sampleRealmSway(ambience.realm, ambience.strength, time, phase, p.transform.baseX / 1.18, -p.transform.baseY / 1.18)
             : ZERO_REALM_OFFSET;
         const jolt = jolting ? sampleRealmJolt(realmEvent.family, joltMs, phase) : ZERO_REALM_OFFSET;

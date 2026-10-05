@@ -506,6 +506,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
             <TileBoardSceneBoardGroup
                 distantCards={<DistantCards board={board} indices={cardWindow.distant} compact={compact}
+                    stickyBlockedTileId={stickyBlockedTileId}
                     tileSize={cardWindow.visible.length > 2000 ? 16 : cardWindow.visible.length > 384 ? 32 : 64}
                     reduceMotion={reduceMotion} previewActive={previewActive} debugPeekActive={debugPeekActive}
                     peekRevealedTileIds={peekRevealedTileIds} interactive={interactive && !interactionSuppressed && !flipLocked}

@@ -104,7 +104,7 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: linear-gradient(
+    background: radial-gradient(ellipse 52% 44% at 50% 51%, rgb(12 16 22 / 38%), transparent 100%), linear-gradient(
         180deg,
         color-mix(in srgb, var(--margin-ink) 85%, transparent) 0%,
         color-mix(in srgb, var(--margin-ink) 15%, transparent) 18%,

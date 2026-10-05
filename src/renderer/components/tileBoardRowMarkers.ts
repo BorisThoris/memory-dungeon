@@ -15,7 +15,6 @@ export const isMemorizeCurseHighlighted = ({
     tile.state === 'hidden';
 
 export const isStickyFingerSlotMarked = ({
-    faceUp,
     flippedTileCount,
     stickyBlockedTileId,
     tile
@@ -28,4 +27,5 @@ export const isStickyFingerSlotMarked = ({
     stickyBlockedTileId != null &&
     stickyBlockedTileId === tile.id &&
     flippedTileCount === 0 &&
-    (tile.state === 'matched' || (tile.state === 'hidden' && !faceUp));
+    // A peek reveals identity, but does not release an opening lock.
+    (tile.state === 'matched' || tile.state === 'hidden');

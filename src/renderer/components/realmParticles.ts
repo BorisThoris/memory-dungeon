@@ -97,7 +97,9 @@ export const ELEMENT_MOTE_BASE_ENERGY = 0.22;
 export const ELEMENT_MOTE_ENERGY_PER_CHARGE = 0.16;
 
 /** Both playable sides carry the material; snow conceals a hidden card's identity. */
-export const elementCardMote = (tile: Pick<Tile, 'state' | 'suit' | 'pairKey' | 'empowered' | 'snowed'>): (ElementMote & { energy: number }) | null => {
+export const elementCardMote = (tile: Pick<Tile, 'state' | 'suit' | 'pairKey' | 'empowered' | 'snowed' | 'vined' | 'frost'>): (ElementMote & { energy: number }) | null => {
+    // Held cards advertise the hold, rather than competing with an empowered-element halo.
+    if (tile.state === 'hidden' && (tile.vined || (tile.frost ?? 0) > 0)) return null;
     if ((tile.state !== 'hidden' && tile.state !== 'flipped') || (tile.state === 'hidden' && tile.snowed) || !tile.suit || isSingletonUtilityPairKey(tile.pairKey) || isWildPairKey(tile.pairKey)) return null;
     return { ...ELEMENT_CARD_MOTE[tile.suit], energy: Math.min(1, ELEMENT_MOTE_BASE_ENERGY + ELEMENT_MOTE_ENERGY_PER_CHARGE * tileCharge(tile)) };
 };

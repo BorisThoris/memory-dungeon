@@ -37,6 +37,8 @@ describe('the realm in the air', () => {
         expect(elementCardMote({ state: 'matched', suit: 'ember', pairKey: 'a' })).toBeNull();
         expect(elementCardMote({ state: 'flipped', suit: 'tide', pairKey: 'a' })).toEqual(plain);
         expect(elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a', snowed: true })).toBeNull();
+        expect(elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a', vined: true, empowered: 3 })).toBeNull();
+        expect(elementCardMote({ state: 'hidden', suit: 'tide', pairKey: 'a', frost: 2, empowered: 3 })).toBeNull();
         expect(elementCardMote({ state: 'flipped', suit: 'tide', pairKey: 'a', snowed: true })).toEqual(plain);
         expect(elementCardMote({ state: 'removed', suit: 'tide', pairKey: 'a' })).toBeNull();
         expect(elementCardMote({ state: 'hidden', pairKey: 'a' })).toBeNull();

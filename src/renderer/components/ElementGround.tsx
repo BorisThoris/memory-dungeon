@@ -59,7 +59,8 @@ void main() {
         pattern = max(line(sin(q.x + stem), 0.055), line(sin(q.x * 1.6 - q.y * 1.5), 0.035) * 0.6);
         color = mix(uColor * 0.45, uColor, pattern);
     }
-    float alpha = mask * (0.1 + pattern * 0.22 + rim * 0.32);
+    // Ground supports the card silhouette; its small-scale detail must not rival status marks.
+    float alpha = mask * (0.07 + pattern * 0.13 + rim * 0.20);
     if (alpha < 0.01) discard;
     gl_FragColor = vec4(color, alpha);
     #include <colorspace_fragment>

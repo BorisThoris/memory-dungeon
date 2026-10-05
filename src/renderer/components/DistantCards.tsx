@@ -7,17 +7,18 @@ import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { TilePickMeshRegistryContext } from './tileBoardSceneRegistries';
 import { isTileBoardFaceUp } from './tileBoardFaceUp';
 import { initialTileBoardCardTint } from './tileBoardInitialCardTint';
+import { isStickyFingerSlotMarked } from './tileBoardRowMarkers';
 
 interface Props {
     board: BoardState; indices: readonly number[]; compact: boolean; reduceMotion: boolean;
     previewActive: boolean; debugPeekActive: boolean; peekRevealedTileIds: readonly string[];
-    interactive: boolean; textureRevision: number; tileSize: 16 | 32 | 64;
+    interactive: boolean; textureRevision: number; tileSize: 16 | 32 | 64; stickyBlockedTileId?: string | null;
 }
 const PAGE = 64;
 
 /** Original artwork at screen-appropriate resolution. One draw call and atlas for 64 real cards. */
 function CardPageView({ board, indices, compact, reduceMotion, previewActive, debugPeekActive, peekRevealedTileIds,
-    interactive, textureRevision, tileSize }: Props) {
+    interactive, textureRevision, tileSize, stickyBlockedTileId }: Props) {
     const registry = useContext(TilePickMeshRegistryContext);
     const mesh = useMemo(() => {
         void textureRevision;
@@ -44,7 +45,9 @@ function CardPageView({ board, indices, compact, reduceMotion, previewActive, de
         indices.forEach((index,instance)=>{
             const tile=board.tiles[index]!;
             const faceUp=isTileBoardFaceUp({tile,previewActive,debugPeekActive,peekRevealedTileIds:revealed});
-            paintDistantCard(slot,tile,faceUp);
+            paintDistantCard(slot,tile,faceUp,isStickyFingerSlotMarked({
+                tile, faceUp, flippedTileCount: board.flippedTileIds.length, stickyBlockedTileId: stickyBlockedTileId ?? null
+            }));
             context.drawImage(slot,(instance%8)*slot.width,Math.floor(instance/8)*slot.height);
             offsets[instance*2]=instance%8; offsets[instance*2+1]=7-Math.floor(instance/8);
             const tint=new Color(initialTileBoardCardTint({faceUp,isPinned:false,resolvingSelection:null,tile}));
@@ -61,7 +64,7 @@ function CardPageView({ board, indices, compact, reduceMotion, previewActive, de
         instanced.instanceMatrix.needsUpdate=true;
         instanced.computeBoundingSphere();
         return instanced;
-    },[board,indices,compact,reduceMotion,previewActive,debugPeekActive,peekRevealedTileIds,textureRevision,tileSize]);
+    },[board,indices,compact,reduceMotion,previewActive,debugPeekActive,peekRevealedTileIds,textureRevision,tileSize,stickyBlockedTileId]);
     useLayoutEffect(()=>{
         if (!interactive || !registry) return;
         const ids=mesh.userData.tileIds as string[];
@@ -77,10 +80,12 @@ function CardPageView({ board, indices, compact, reduceMotion, previewActive, de
 
 const CardPage = memo(CardPageView, (previous, next) =>
     previous.board.columns === next.board.columns && previous.board.rows === next.board.rows &&
+    previous.board.flippedTileIds.length === next.board.flippedTileIds.length &&
     previous.compact === next.compact && previous.reduceMotion === next.reduceMotion &&
     previous.previewActive === next.previewActive && previous.debugPeekActive === next.debugPeekActive &&
     previous.peekRevealedTileIds === next.peekRevealedTileIds && previous.interactive === next.interactive &&
     previous.textureRevision === next.textureRevision && previous.tileSize === next.tileSize &&
+    previous.stickyBlockedTileId === next.stickyBlockedTileId &&
     previous.indices.length === next.indices.length && previous.indices.every((index, offset) =>
         index === next.indices[offset] && previous.board.tiles[index] === next.board.tiles[index]));
 

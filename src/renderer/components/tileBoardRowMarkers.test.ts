@@ -68,7 +68,7 @@ describe('tileBoardRowMarkers', () => {
         ).toBe(true);
     });
 
-    it('does not mark sticky finger slots after a flip, on the wrong tile, or face-up hidden tiles', () => {
+    it('clears opening locks after a flip, but keeps them on peeked hidden tiles', () => {
         expect(
             isStickyFingerSlotMarked({
                 faceUp: false,
@@ -94,6 +94,6 @@ describe('tileBoardRowMarkers', () => {
                 stickyBlockedTileId: 'tile-a',
                 tile: tile()
             })
-        ).toBe(false);
+        ).toBe(true);
     });
 });

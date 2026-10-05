@@ -47,7 +47,8 @@ const BOARD_CAMERA_FIT_ZOOM = 1;
 const MOBILE_CAMERA_MIN_ZOOM = 0.01;
 const MOBILE_CAMERA_MAX_ZOOM = 64;
 /** REG-001: phone camera mode is board-first; fit the board between fixed HUD/dock chrome before pinch zoom. */
-export const MOBILE_CAMERA_FIT_MARGIN = 0.76;
+// Leave room for the realm controls above the cards on short landscape screens.
+export const MOBILE_CAMERA_FIT_MARGIN = 0.70;
 /**
  * A phone held upright: the width is the scarce axis and nothing sits beside the board, so the
  * bleed margin that keeps a sideways phone's board clear of its chrome only made the tiles small.
