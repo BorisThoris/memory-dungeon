@@ -110,8 +110,8 @@ const FittedGrid = <T,>({
     const renderedRowHeight = frameFit ? growRowHeight(frameFit, visible.length, gap, frameFit.height) : rowHeight;
 
     return (
-        <div className={styles.root}>
-            <div className={styles.frame} ref={frameRef}>
+        <div className={styles.root} style={{ minHeight: rowHeight + 58 }}>
+            <div className={styles.frame} ref={frameRef} style={{ minHeight: rowHeight }}>
                 <ul
                     aria-label={ariaLabel}
                     className={styles.grid}
@@ -119,7 +119,7 @@ const FittedGrid = <T,>({
                     style={{
                         gap: `${gap}px`,
                         gridAutoRows: `${renderedRowHeight}px`,
-                        gridTemplateColumns: `repeat(auto-fill, minmax(${minColumnWidth}px, 1fr))`
+                        gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${minColumnWidth}px), 1fr))`
                     }}
                 >
                     {visible.map((item, index) => (

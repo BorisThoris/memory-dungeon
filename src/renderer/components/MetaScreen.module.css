@@ -1,7 +1,7 @@
 /*
  * The shared meta-screen shell in "The Margin" (the Inventory page, and the plate the in-run
  * Codex and Inventory sit on over the board): a page of ink with a running head on one gold
- * rule, and a body that clips — screens fit the shell or page their content.
+ * rule, and a body that scrolls when the viewport cannot fit a readable card.
  */
 
 /* The dim stage behind a meta shell opened from the menu. */
@@ -32,7 +32,7 @@
 }
 
 .shell {
-    /* Flex child of `main`: min-height 0 so long pages shrink and `.body` clips instead of running below the viewport. */
+    /* Flex child of `main`: the bounded body scrolls instead of running below the viewport. */
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
@@ -81,8 +81,9 @@
     gap: clamp(0.6rem, 1.8vh, 1rem);
     width: min(72rem, 100%);
     margin: 0 auto;
-    /* No scrollbars: screens fit the shell or page their content (see ui/FittedGrid). */
-    overflow: hidden;
+    /* Preserve access when text, accessibility scaling or a short viewport outgrows the page. */
+    overflow: auto;
+    overscroll-behavior: contain;
 }
 
 @media (max-height: 720px) {
@@ -292,4 +293,18 @@
     .modalInnerDesk .header {
         gap: 0.5rem;
     }
+}
+
+@media (max-height: 560px) and (min-width: 500px) {
+    .modalInnerDesk .header {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+    .modalInnerDesk .headerText { min-width: 0; text-align: left; }
+    .modalInnerDesk .headerText :is(h1, h2) { font-size: 1.6rem; }
+    .modalInnerDesk .headerText > :first-child:not(h1, h2) { display: none; }
+    .modalInnerDesk .header :global(button) { width: auto; flex: 0 0 auto; }
+    .modalInnerDesk .subtitle { font-size: 0.8125rem; }
 }

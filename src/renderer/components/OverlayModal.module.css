@@ -40,6 +40,7 @@
 }
 
 .modal {
+    box-sizing: border-box;
     --overlay-accent: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
     --overlay-accent-soft: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
     width: min(820px, 100%);
@@ -263,8 +264,9 @@
     flex: 1;
     display: grid;
     gap: 0.72rem;
-    /* No scrollbar: dialogs are built to fit, and their content clamps on short screens. */
-    overflow: hidden;
+    /* The body owns scrolling; the title and action rail remain reachable. */
+    overflow: auto;
+    align-content: start;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
@@ -317,7 +319,7 @@
  */
 @media (max-height: 560px) {
     .modal {
-        max-height: calc(100dvh - 0.5rem);
+        max-height: min(100%, calc(100dvh - 0.5rem));
         gap: 0.5rem;
         padding: 0.6rem 0.75rem;
     }
@@ -506,8 +508,7 @@
     font-size: 0.9rem;
     line-height: 1.5;
     color: var(--margin-paper-soft, #d7d3d3);
-    /* No scrollbar: a dialog is built to fit, and its content clamps on short screens. */
-    overflow: hidden;
+    overflow: auto;
 }
 
 .modalMargin .body p {
@@ -665,7 +666,7 @@
     .modalMargin,
     .modalMargin[data-overlay-size],
     .modalMargin[data-action-placement] {
-        max-height: calc(100dvh - 0.5rem);
+        max-height: min(100%, calc(100dvh - 0.5rem));
         padding: 0.7rem 1rem 0.8rem;
         gap: 0.4rem 1rem;
     }

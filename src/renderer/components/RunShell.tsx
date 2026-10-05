@@ -455,6 +455,7 @@ const RunShell = ({
     return (
         <div
             className={styles.shell}
+            data-layout={shellLayout}
             data-chain-tier={tier}
             data-combo-stage={heat.stage}
             data-paused={run.status === 'paused' ? 'true' : 'false'}

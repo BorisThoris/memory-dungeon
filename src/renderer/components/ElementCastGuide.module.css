@@ -1,5 +1,6 @@
 .trigger {
     pointer-events: auto;
+    min-height: 44px;
     border: 1px solid #857a6e;
     border-radius: 1rem;
     background: #17131eed;
@@ -21,8 +22,8 @@
 
 .panel {
     width: min(34rem, calc(100vw - 2rem));
-    max-height: min(80vh, 48rem);
-    overflow: hidden;
+    max-height: min(calc(100dvh - 1rem), 48rem);
+    overflow: auto;
     margin: auto;
     padding: 1.2rem;
     box-sizing: border-box;

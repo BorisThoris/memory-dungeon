@@ -605,7 +605,7 @@
 
 .boardStageCamera {
     position: absolute;
-    inset: 0;
+    inset: var(--gameplay-hud-top-clearance, 0px) 0 var(--gameplay-dock-bottom-clearance, 0px);
     width: 100%;
     padding: 0;
     display: block;

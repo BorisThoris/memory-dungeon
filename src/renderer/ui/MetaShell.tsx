@@ -7,8 +7,8 @@ import styles from './MetaShell.module.css';
 
 /**
  * The frame every meta screen sits in: one header line, an optional toolbar, and a content
- * area that fits the viewport. Nothing here scrolls — content that does not fit is paged by
- * `FittedGrid` or collapsed into the toolbar, so the screen never grows a scrollbar.
+ * area that fits the viewport. Lists page through `FittedGrid`; the body can scroll when
+ * large text or a short viewport cannot accommodate even one complete readable row.
  */
 
 export interface MetaShellProps {

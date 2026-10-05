@@ -100,7 +100,7 @@ describe('tileBoardViewport', () => {
         expect(zoom).toBeCloseTo((360 * MOBILE_CAMERA_FIT_MARGIN) / 360, 5);
     });
 
-    it('REG-002 keeps desktop stage dense without using the mobile bleed margin', () => {
+    it('REG-002 keeps the measured stage dense with a small camera-edge reserve', () => {
         const zoom = getBoardFitZoom({
             boardHeight: 640,
             boardWidth: 640,
@@ -110,7 +110,8 @@ describe('tileBoardViewport', () => {
         });
 
         expect(DESKTOP_STAGE_FIT_MARGIN).toBeGreaterThan(0.9);
-        expect(DESKTOP_STAGE_FIT_MARGIN).toBeGreaterThan(MOBILE_CAMERA_FIT_MARGIN);
+        // Both stage rectangles already exclude HUD and dock. Neither needs a second chrome reserve.
+        expect(MOBILE_CAMERA_FIT_MARGIN).toBeGreaterThan(0.9);
         expect(zoom).toBeCloseTo((768 * DESKTOP_STAGE_FIT_MARGIN) / 640, 5);
     });
 

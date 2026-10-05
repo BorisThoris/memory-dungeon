@@ -1199,3 +1199,7 @@
         transition: none;
     }
 }
+
+@media (pointer: coarse) {
+    .shell :is(button, select, [role='switch']) { min-height: 44px; touch-action: manipulation; }
+}

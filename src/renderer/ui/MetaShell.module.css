@@ -105,7 +105,8 @@
     gap: 0.7rem;
     width: min(72rem, 100%);
     margin: 0 auto;
-    overflow: hidden;
+    overflow: auto;
+    overscroll-behavior: contain;
 }
 
 @media (max-height: 700px) {

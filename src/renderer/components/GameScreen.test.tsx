@@ -1085,6 +1085,25 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
+    it('lets Escape dismiss a native cast guide before its toggle event updates the dataset', () => {
+        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
+        try {
+            render(
+                <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={finishMemorizePhase(createNewRun(0))} /></NotificationHost></PlatformTiltProvider>
+            );
+            const guide = screen.getByTestId('element-cast-rules');
+            guide.dataset.castGuideOpen = 'false';
+            const matches = vi.spyOn(guide, 'matches').mockImplementation(selector => selector === ':popover-open');
+            const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+            document.dispatchEvent(escape);
+            expect(pauseSpy).not.toHaveBeenCalled();
+            expect(escape.defaultPrevented).toBe(false);
+            matches.mockRestore();
+        } finally {
+            pauseSpy.mockRestore();
+        }
+    });
+
     it('keyboard shortcuts overlay lists board navigation and Gambit tip after F1', () => {
         const playing = finishMemorizePhase(createNewRun(0));
         render(

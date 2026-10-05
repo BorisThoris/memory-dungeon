@@ -19,6 +19,7 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 import { isCompactUiViewport, safeUiScaleFor } from './uiScaleLimits';
 import { useViewportSize } from './hooks/useViewportSize';
 import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
+import { UiInteractionParticles } from './components/UiInteractionParticles';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
 import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
@@ -390,6 +391,7 @@ const App = () => {
                 Skip to main content
             </a>
             <div className={styles.ambientGlow} />
+            <UiInteractionParticles reduceMotion={reduceMotion} lowQuality={settings.graphicsQuality === 'low'} />
             <main className={styles.content} data-app-scrollport id={APP_MAIN_LANDMARK_ID} tabIndex={-1}>
                 {showDevBlueprintExplorer && DevBlueprintExplorer ? (
                     <Suspense fallback={<div role="status">Loading blueprint explorer...</div>}>

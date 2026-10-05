@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ScreenCallout } from './screenCallouts';
 import styles from './ScreenCalloutQueue.module.css';
+import { ActionTextCanvas } from './ActionTextCanvas';
 
 /**
  * One live stamp, with no backlog. A new event immediately replaces the previous stamp.
@@ -11,15 +12,16 @@ import styles from './ScreenCalloutQueue.module.css';
  * behind it shows nothing new, and a run that opens on a turn already made (a resumed save)
  * seeds its keys as seen and stays quiet until the next turn.
  */
-export const SCREEN_CALLOUT_MAJOR_MS = 1150;
-export const SCREEN_CALLOUT_MINOR_MS = 820;
+export const SCREEN_CALLOUT_MAJOR_MS = 1450;
+export const SCREEN_CALLOUT_MINOR_MS = 1050;
 
 export interface ScreenCalloutQueueProps {
     callouts: readonly ScreenCallout[];
     reduceMotion: boolean;
+    lowQuality?: boolean;
 }
 
-export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueueProps) {
+export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false }: ScreenCalloutQueueProps) {
     const seen = useRef<Set<string> | null>(null);
     const [showing, setShowing] = useState<ScreenCallout | null>(null);
     // The first render's callouts are the state the screen opened on, not moments to stamp.
@@ -38,8 +40,11 @@ export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueu
         );
         return () => window.clearTimeout(timer);
     }, [showing]);
-    if (!showing) return null;
+    const duration = showing?.size === 'major' ? SCREEN_CALLOUT_MAJOR_MS : SCREEN_CALLOUT_MINOR_MS;
     return (
+        <div className={styles.layer}>
+        <ActionTextCanvas callout={showing} duration={duration} reduceMotion={reduceMotion} lowQuality={lowQuality} />
+        {showing ?
         <div
             aria-hidden="true"
             className={styles.callout}
@@ -52,9 +57,6 @@ export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueu
             key={showing.key}
             style={showing.color ? ({ '--stamp': showing.color } as CSSProperties) : undefined}
         >
-            <span className={styles.flash} />
-            <span className={styles.ring} />
-            <span className={styles.lines} />
             <span className={styles.stamp} data-testid="screen-callout-stamp">
                 <span className={styles.stampText} data-text={showing.title}>
                     {showing.title}
@@ -63,6 +65,8 @@ export function ScreenCalloutQueue({ callouts, reduceMotion }: ScreenCalloutQueu
             <span className={styles.sub} data-testid="screen-callout-sub">
                 {showing.sub}
             </span>
+        </div>
+        : null}
         </div>
     );
 }

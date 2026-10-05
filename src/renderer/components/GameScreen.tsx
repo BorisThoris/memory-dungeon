@@ -820,7 +820,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             }
             // The native cast guide owns Escape. Preventing its default would pause the game
             // while leaving the popover open inside the now-inert gameplay surface.
-            if (event.key === 'Escape' && document.querySelector('[data-cast-guide-open="true"]')) return;
+            if (event.key === 'Escape') {
+                const guide = document.querySelector<HTMLElement>('[data-testid="element-cast-rules"]');
+                if (guide?.dataset.castGuideOpen === 'true') return;
+                // Toggle events are coalesced; the native state is authoritative between events.
+                try { if (guide?.matches(':popover-open')) return; } catch { /* DOMs without native popovers use the dataset. */ }
+            }
             const target = event.target;
             if (target instanceof HTMLElement) {
                 if (target.closest('input, textarea, select') || target.isContentEditable) {
@@ -1777,7 +1782,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             {/* The Zone's veil: time stopped, the room held in a cold light until the resolve. */}
             <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
-            <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
+            <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
             {comboTemper.id === 'frost' ? (

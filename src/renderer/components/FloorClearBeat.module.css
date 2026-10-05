@@ -10,19 +10,8 @@
 
 .beat {
     position: absolute;
-    /*
-     * Inset by the chrome the shell publishes, not by the stage's raw edges. The beat is read over
-     * a live board with the HUD above it and the dock below, and `inset: 0` centred it in the whole
-     * stage as though neither were there - on a 390x844 phone that put the title straight through
-     * the HUD's floor row and the par line under the run bar. It went unseen because the watermark
-     * was accidentally in the flow (see `.colophon > :not(.watermark)` below) and its 406px were
-     * acting as a spacer that happened to push the title clear; fixing the watermark took the
-     * spacer away and the collision became visible, which is the only reason it is fixed here too.
-     * `--gameplay-hud-top-clearance` and `--gameplay-dock-bottom-clearance` are what
-     * `useGameplayChromeClearance` measures for exactly this, and four other rules already read
-     * them; this one had been guessing.
-     */
-    inset: var(--gameplay-hud-top-clearance, 0px) 0px var(--gameplay-dock-bottom-clearance, 0px);
+    /* The board stage already excludes the measured HUD and dock. */
+    inset: 0;
     z-index: 6;
     display: grid;
     place-items: center;
@@ -39,7 +28,7 @@
     padding: 1.4rem 1rem;
     border-top: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
     border-bottom: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
-    background: color-mix(in srgb, var(--margin-ink, #131111) 88%, transparent);
+    background: radial-gradient(ellipse at 50% 0%, #e1ad6620, transparent 70%), color-mix(in srgb, var(--margin-ink, #131111) 88%, transparent);
     backdrop-filter: blur(6px);
     animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
@@ -114,8 +103,8 @@
 }
 
 .scoreValue {
-    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-weight: 400;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 800;
     font-size: clamp(2.8rem, 8vmin, 4rem);
     line-height: 1;
     color: var(--margin-fever, #facb8d);
@@ -181,10 +170,6 @@
     padding: 0.5rem 1rem;
 }
 
-:global([data-shell-layout='phone-landscape']) .score {
-    margin-top: 0.6rem;
-}
-
 :global([data-shell-layout='phone-landscape']) .rule,
 :global([data-shell-layout='phone-landscape']) .notes {
     display: none;
@@ -199,10 +184,21 @@
 
 :global([data-shell-layout='phone-landscape']) .colophon {
     padding: 0.65rem 0.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: 'title score' 'par score' 'best bonus' 'essence essence';
+    align-items: center;
+    gap: 0.3rem 0.6rem;
 }
 :global([data-shell-layout='phone-landscape']) .title {
+    grid-area: title;
     font-size: 1.75rem;
 }
+:global([data-shell-layout='phone-landscape']) .par { grid-area: par; margin: 0; }
+:global([data-shell-layout='phone-landscape']) .personalBest { grid-area: best; margin: 0; letter-spacing: 0.08em; }
+:global([data-shell-layout='phone-landscape']) .score { grid-area: score; margin: 0; gap: 0.2rem 0.6rem; }
+:global([data-shell-layout='phone-landscape']) .bonus { grid-area: bonus; }
+:global([data-shell-layout='phone-landscape']) .essence { grid-area: essence; }
 :global([data-shell-layout='phone-landscape']) .scoreValue {
     font-size: 2.6rem;
 }

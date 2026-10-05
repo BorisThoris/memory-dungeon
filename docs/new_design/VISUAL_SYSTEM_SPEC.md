@@ -25,6 +25,14 @@ Apply these rules across card meshes, distant-card atlases, shaders, particles, 
 
 The same restraint applies to menus: primary actions have the highest contrast, secondary options stay quiet, and ornamental frames never compete with controls or text.
 
+### Screen Space and Feedback
+
+- The HUD owns measured rows. The board and action effects consume the remaining rectangle; neither guesses the HUD's height or reserves it twice.
+- Small menus use compact destination tiles. Dialog bodies and reference pages can scroll while their navigation remains reachable. Never squeeze a card below the height required for its contents to preserve an unscrollable layout.
+- Preserve the DMC-style action vocabulary: oversized italic ranks, a tilted impact entrance, rich rank colors, speed slashes, a light sweep and sparks. Measure text before animation and reserve space for its impact envelope. The retained WebGL compositor renders only during the current event. A new event replaces the current one without a backlog. Reduced motion and context loss retain readable text without the shader movement.
+- UI controls share a bounded canvas particle response to activation. The pool sleeps between inputs, clears when the page is hidden, and is disabled with reduced motion.
+- Validate 320×568 and 568×320 alongside larger phones, tablets and desktop, including expanded details, long counters and active run overlays. A page with no horizontal overflow can still contain clipped or overlapping text; inspect the rendered result.
+
 ---
 
 ## Palette

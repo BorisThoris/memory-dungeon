@@ -481,3 +481,30 @@
 :global([data-reduce-motion='true']) .entry,
 :global([data-reduce-motion='true']) .entryTitle { transition: none; }
 :global([data-reduce-motion='true']) .entry:hover .entryTitle { transform: none; }
+
+/* Compact menus read as a set of destinations, with Play given the full-width primary lane. */
+@media (max-width: 600px) {
+    .spread { gap: 0.8rem; }
+    .titleBlock { gap: 0; }
+    .crest { width: 1.8rem; margin-bottom: 0.2rem; }
+    .contentsHead { display: none; }
+    .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; margin-top: 0.65rem; }
+    .entries .entry { grid-template-columns: 1.1rem minmax(0, 1fr); align-items: center; gap: 0.5rem; padding: 0.65rem 0.5rem; border: 1px solid var(--margin-hairline); border-radius: 6px; background: linear-gradient(130deg, #e1ad660e, #131111a8); }
+    .entries .entryTitle { font-size: 1.125rem; }
+    .entries .entryNote, .entries .leader { display: none; }
+    .entryPlay { min-height: 3.8rem; }
+    .playRow { padding: 0.25rem 0.65rem; border: 1px solid var(--margin-rule); border-radius: 8px; background: radial-gradient(ellipse at left, #e1ad661d, #131111a8); box-shadow: inset 0 1px 0 #ffe0a827, 0 8px 28px #0005; }
+    .helpSummary { grid-template-columns: minmax(0, 1fr) auto; gap: 0.35rem; }
+    .helpKicker { display: none; }
+    .helpTitle { font: 600 0.875rem/1.25 'Source Sans 3', sans-serif; }
+    .helpSummary .leader { display: none; }
+    .colophon { margin-top: 0.65rem; letter-spacing: 0.12em; }
+}
+@media (max-height: 450px) and (min-width: 500px) {
+    .spread { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: 1rem; }
+    .crest, .eyebrow, .contentsHead { display: none; }
+    .entryNote { display: none; }
+    .entry { grid-template-columns: 1.5rem 1fr; }
+    .leader { display: none; }
+    .help { margin-top: 0.5rem; }
+}
