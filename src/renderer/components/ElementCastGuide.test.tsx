@@ -33,16 +33,15 @@ describe('element decision guide', () => {
 });
 
 describe('the elemental cast guide', () => {
-    it('explains guaranteed casts, current power, arena and immunity before the first match', () => {
+    it('keeps cast power and arena effects concise before the first match', () => {
         const run = createNewRun(0, { realm: { realmId: 'tide', severity: 'calm' } });
         render(<ElementResonanceStrip run={run} />);
         expect(screen.getByRole('button', { name: 'How elemental matches work' })).toBeInTheDocument();
         const guide = screen.getByTestId('element-cast-rules');
         expect(guide).toHaveTextContent('Every pair casts');
         expect(guide).toHaveTextContent('2+ cards · +0 reach');
-        expect(guide).toHaveTextContent('The arena is wet');
-        expect(guide).toHaveTextContent('Holds cover at least two complete pairs and leave another pair free');
-        expect(guide).toHaveTextContent('Ice and vines block turning');
+        expect(guide).toHaveTextContent('Wet ground');
+        expect(guide).not.toHaveTextContent('Holds cover at least two complete pairs');
         expect(guide).toHaveAttribute('popover', 'auto');
     });
 
@@ -51,7 +50,7 @@ describe('the elemental cast guide', () => {
         render(<ElementCastGuide run={{ ...run, stats: { ...run.stats, currentStreak: 6 }, elementResonance: { moss: 6 }, realmId: 'grove', realmSecondaryId: 'storm' }} />);
         const guide = screen.getByTestId('element-cast-rules');
         expect(guide).toHaveTextContent('6+ cards · +4 reach');
-        expect(guide).toHaveTextContent('The arena is fertile');
-        expect(guide).toHaveTextContent('The arena conducts every cast');
+        expect(guide).toHaveTextContent('Rooted ground');
+        expect(guide).toHaveTextContent('Every cast reveals a nearby card');
     });
 });

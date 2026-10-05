@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type MouseEvent } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useShallow } from 'zustand/react/shallow';
 import ChooseYourPathScreen from './components/ChooseYourPathScreen';
@@ -20,6 +20,7 @@ import { isCompactUiViewport, safeUiScaleFor } from './uiScaleLimits';
 import { useViewportSize } from './hooks/useViewportSize';
 import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
 import { UiInteractionParticles } from './components/UiInteractionParticles';
+import { TutorialHallContext } from './components/tutorialHallContext';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
 import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
@@ -63,12 +64,34 @@ const GameScreen = lazy(async () => {
 const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
 const DevTestHall = import.meta.env.DEV ? lazy(() => import('./dev/TestHall')) : null;
 const DevTestHallBadge = import.meta.env.DEV ? lazy(() => import('./dev/TestHallBadge')) : null;
+const TutorialHall = lazy(async () => {
+    const [module] = await Promise.all([import('./components/TutorialHall'), preloadRunAssets()]);
+    return module;
+});
 
 const focusAppMainLandmark = (): void => {
     document.getElementById(APP_MAIN_LANDMARK_ID)?.focus({ preventScroll: true });
 };
 
 const App = () => {
+    const [tutorial, setTutorial] = useState<{ lessonId?: string; resume: boolean; runSeed?: number } | null>(null);
+    const tutorialReturnFocus = useRef<HTMLElement | null>(null);
+    const openTutorial = useCallback((lessonId?: string) => {
+        const state = useAppStore.getState();
+        const resume = state.view === 'playing' && state.run != null && state.run.status !== 'paused';
+        tutorialReturnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        if (resume) state.pause();
+        setTutorial({ lessonId, resume, runSeed: state.run?.runSeed });
+    }, []);
+    const closeTutorial = useCallback(() => {
+        const state = useAppStore.getState();
+        if (tutorial?.resume && state.view === 'playing' && state.run?.runSeed === tutorial.runSeed && state.run?.status === 'paused') state.resume();
+        setTutorial(null);
+        requestAnimationFrame(() => {
+            if (tutorialReturnFocus.current?.isConnected) tutorialReturnFocus.current.focus();
+            else focusAppMainLandmark();
+        });
+    }, [tutorial]);
     // Every interactive surface here is a real focusable element, so one directional focus driver
     // gives the whole game controller support rather than each screen needing its own.
     useGamepadNavigation();
@@ -367,6 +390,7 @@ const App = () => {
      *       the pair for touch / phone upright, a docked strip under the HUD for a phone sideways.
      */
     return (
+        <TutorialHallContext.Provider value={openTutorial}>
         <div
             className={styles.app}
             data-ambient-grid={ambientGridState}
@@ -393,7 +417,11 @@ const App = () => {
             <div className={styles.ambientGlow} />
             <UiInteractionParticles reduceMotion={reduceMotion} lowQuality={settings.graphicsQuality === 'low'} />
             <main className={styles.content} data-app-scrollport id={APP_MAIN_LANDMARK_ID} tabIndex={-1}>
-                {showDevBlueprintExplorer && DevBlueprintExplorer ? (
+                {tutorial ? (
+                    <Suspense fallback={<div role="status">Opening Tutorial Hall…</div>}>
+                        <TutorialHall initialLessonId={tutorial.lessonId} onClose={closeTutorial} reduceMotion={reduceMotion} graphicsQuality={settings.graphicsQuality} />
+                    </Suspense>
+                ) : showDevBlueprintExplorer && DevBlueprintExplorer ? (
                     <Suspense fallback={<div role="status">Loading blueprint explorer...</div>}>
                         <DevBlueprintExplorer />
                     </Suspense>
@@ -518,6 +546,7 @@ const App = () => {
                 )}
             </main>
         </div>
+        </TutorialHallContext.Provider>
     );
 };
 

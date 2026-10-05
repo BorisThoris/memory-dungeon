@@ -5,9 +5,9 @@
  * destroys progress, so the sentence explaining that has to stay blunt through translation.
  */
 export const PAUSE_DIALOG_COPY = {
-    subtitle: 'The board and its timers stay frozen. Press P to resume.',
+    subtitle: 'Press P to resume.',
     /** A finger has no P key; the shell picks this line when its input is touch. */
-    subtitleTouch: 'The board and its timers stay frozen.'
+    subtitleTouch: ''
 } as const;
 
 export const ABANDON_DIALOG_COPY = {
@@ -16,8 +16,8 @@ export const ABANDON_DIALOG_COPY = {
 
 export const SHORTCUTS_COPY = {
     /** Shown when a controller is connected. */
-    touch: 'The run is paused. Close Controls, then resume when you are ready.',
-    withKeyboard: 'The run is paused. Close Controls, then resume when you are ready. Shortcuts do not apply while typing.'
+    touch: 'Run paused.',
+    withKeyboard: 'Run paused. Shortcuts stay off while typing.'
 } as const;
 
 /** Lines the board shows about the floor itself rather than about a power. */
@@ -55,7 +55,7 @@ export const RUN_SHELL_PAR_COPY = {
     /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
     leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'miss left' : 'misses left'),
     /** On hover, where there is room to say which rule the count belongs to. */
-    title: 'Misses you can still make. A miss with none left ends the run. Clearing a floor earns one, every five matches in a row earns one, each lasts three floors, and you hold four at most.',
+    title: 'A miss with none left ends the run.',
     /** The pause sheet's note under the count: the misses that go first, and the last floor they last through. */
     soonestToGo: (misses: number, lastFloor: number): string =>
         `${misses} ${misses === 1 ? 'lasts' : 'last'} through floor ${lastFloor}`,
@@ -68,7 +68,7 @@ export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
     /** The purse on the head, and what it is for on hover. */
     gold: 'gold',
-    goldTitle: 'Every 3 floors, gold automatically funds a run upgrade or a needed supply. Unspent gold carries forward.',
+    goldTitle: 'Gold funds automatic upgrades every 3 floors.',
     /** The tag on the Floor stat once this run is the deepest the profile has seen. */
     personalBest: 'Best',
     personalBestAria: 'Deepest floor yet'

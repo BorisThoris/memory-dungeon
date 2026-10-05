@@ -69,20 +69,20 @@ const getStepCopy = (
             return {
                 title: 'One pair cleared',
                 prompt: 'Match the next marked pair',
-                detail: 'The bomb cleared a pair without spending a turn. Match the marked cards to earn score and build your chain.'
+                detail: 'Bomb used no turn. Match the marked pair next.'
             };
         }
         if (stats.mismatches > 0) {
             return {
                 title: 'Recover and continue',
                 prompt: 'Stabilize the next pair',
-                detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
+                detail: 'Match the marked pair to rebuild your combo.'
             };
         }
         return {
             title: 'First reward banked',
             prompt: 'Keep the streak clean',
-            detail: 'The first match paid score and streak. Make one more clean pair before the guide hands control back.'
+            detail: 'One more match builds your combo.'
         };
     }
 
@@ -102,20 +102,20 @@ const getStepCopy = (
         return {
             title: 'Recover from the miss',
             prompt: 'Use the marked pair to stabilize',
-            detail: 'The miss reset the flip. Follow the marked pair, then keep matching for streak and score.'
+            detail: 'Try the marked pair.'
         };
     }
     if (flippedCount === 1) {
         return {
             title: 'Find its twin',
             prompt: 'Pick the matching tile',
-            detail: 'One tile is open; the guide marks the safe twin so your first action teaches score and streak.'
+            detail: 'Its matching card is highlighted.'
         };
     }
     return {
         title: step.title,
         prompt: 'Flip a marked tile',
-        detail: 'The first floor starts with ordinary pairs. Match the marked pair, then use the same read on the rest of the board.'
+        detail: 'Turn both highlighted cards.'
     };
 };
 
@@ -145,7 +145,7 @@ export const getPlayableOnboardingScenario = ({
         {
             id: 'first_match',
             title: 'Make your first match',
-            body: 'Flip the highlighted pair. Matching teaches score and streak faster than a rules modal.',
+            body: 'Flip the highlighted pair.',
             status: activeId === 'first_match' ? 'active' : stepIndex > 0 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'
@@ -161,7 +161,7 @@ export const getPlayableOnboardingScenario = ({
         {
             id: 'handoff',
             title: 'You have control',
-            body: 'Tutorial prompts stay off in normal runs. Replay or reset onboarding from the profile flow later.',
+            body: 'Practise more in the Tutorial Hall.',
             status: activeId === 'handoff' ? 'active' : 'locked',
             targetTileIds: [],
             mobilePlacement: 'top'

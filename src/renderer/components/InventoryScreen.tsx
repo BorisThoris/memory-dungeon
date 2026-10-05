@@ -117,7 +117,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     {usesCampUpgrades(run) ? <Panel className={panelClassName} padding="lg" variant="default">
                         <section aria-label="Run upgrades" className={styles.section}>
                             <h2 className={styles.sectionTitle}>Run upgrades · {runGold(run)} gold</h2>
-                            <p>Every 3 floors, gold automatically funds an upgrade or a needed supply. Unspent gold carries forward. Upgrades last for this run.</p>
+                            <p>Gold buys automatic upgrades every 3 floors.</p>
                             <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
                                 <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
                                 <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
@@ -159,7 +159,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                             <span className={styles.meteorGlyph} aria-hidden="true">☄</span>
                             <div className={styles.meteorCopy}>
                                 <strong>Meteor strike</strong>
-                                <p>Match shards to store a strike. Choose a card when you’re ready.</p>
+                                <p>Collect shards, then choose a target.</p>
                             </div>
                             <UiButton type="button" variant="primary" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
                                 onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>

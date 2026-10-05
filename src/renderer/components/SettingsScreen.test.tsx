@@ -77,17 +77,11 @@ describe('SettingsScreen', () => {
         expect(screen.getByText(/Save data, profile level, history, honors, and cosmetics are not deleted/)).toBeInTheDocument();
     });
 
-    it('REG-036 labels reference controls as non-persisted future rows', async () => {
-        const user = userEvent.setup();
+    it('leaves unavailable settings and implementation notes out of player controls', () => {
         render(<SettingsScreen presentation="page" />);
-
-        await user.click(screen.getByRole('button', { name: /^gameplay reference$/i }));
-
-        const reference = screen.getByTestId('settings-gameplay-reference');
-        expect(reference).toHaveTextContent(/Difficulty/);
-        expect(reference).toHaveTextContent(/Not in Steam demo/);
-        expect(reference).toHaveTextContent(/GAME_RULES_VERSION/);
-        expect(reference).toHaveTextContent(/Card theme/);
+        expect(screen.queryByRole('button', { name: /^gameplay reference$/i })).not.toBeInTheDocument();
+        expect(screen.queryByTestId('settings-gameplay-reference')).not.toBeInTheDocument();
+        expect(screen.queryByText(/GAME_RULES_VERSION/)).not.toBeInTheDocument();
     });
 
     it('REG-054 surfaces premium economy policy without ad or IAP promises', async () => {

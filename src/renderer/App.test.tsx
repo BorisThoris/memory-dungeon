@@ -175,30 +175,44 @@ describe('desktop app flow', () => {
         });
     });
 
-    it('dismisses the how-to panel without completing playable onboarding', async () => {
+    it('opens practice from the menu without changing the run or profile', async () => {
         const user = userEvent.setup();
 
         renderApp();
 
         await dismissStartupIntro(user);
-        expect(await screen.findByText(/read, match, and protect the streak/i)).toBeInTheDocument();
-        await user.click(screen.getByText(/^open$/i));
-        expect(screen.getByText(/score and recover/i)).toBeInTheDocument();
-        expect(screen.getByText(/Codex is the deeper reference/i)).toBeInTheDocument();
-
-        await user.click(screen.getByRole('button', { name: /dismiss/i }));
-
-        await waitFor(() => {
-            expect(screen.queryByText(/read, match, and protect the streak/i)).not.toBeInTheDocument();
-        });
-
-        const rawSave = window.localStorage.getItem('memory-dungeon-save-data');
-        expect(rawSave).not.toBeNull();
-
-        const parsed = JSON.parse(rawSave ?? '{}') as ReturnType<typeof createDefaultSaveData>;
-        expect(parsed.firstRunHelpDismissed).toBe(true);
-        expect(parsed.onboardingDismissed).toBe(false);
+        const saved = useAppStore.getState().saveData;
+        await user.click(screen.getByRole('button', { name: 'Tutorial Hall' }));
+        expect(await screen.findByTestId('tutorial-hall')).toBeInTheDocument();
+        expect(screen.queryByTestId('main-menu-help-center')).not.toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Back' }));
+        expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+        expect(useAppStore.getState().saveData).toEqual(saved);
+        expect(useAppStore.getState().run).toBeNull();
     });
+
+    it('pauses the live run for a recipe lesson and restores the same board and profile', async () => {
+        const user = userEvent.setup();
+        const saveData = createDefaultSaveData();
+        const run = finishMemorizePhase(createNewRun(0));
+        act(() => useAppStore.setState({ hydrated: true, hydrating: false, view: 'playing',
+            saveData, settings: saveData.settings, run, hydrate: async () => {} }));
+        renderApp();
+        await findGameplayBoardStage();
+        const before = useAppStore.getState();
+        // jsdom does not implement native popover visibility; exercise its actual recipe button.
+        await user.click(screen.getByRole('button', { name: /Fire \+ Water Steam/ }));
+        expect(await screen.findByTestId('tutorial-hall')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Steam' })).toBeInTheDocument();
+        expect(useAppStore.getState().run?.status).toBe('paused');
+        expect(useAppStore.getState().run?.board).toEqual(before.run?.board);
+        await user.click(screen.getByRole('button', { name: 'Lessons' }));
+        await user.click(screen.getByRole('button', { name: 'Back' }));
+        await findGameplayBoardStage();
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.board).toEqual(before.run?.board);
+        expect(useAppStore.getState().saveData).toEqual(before.saveData);
+    }, 45_000);
 
     it('hides the forgiveness hint after the floor has started', async () => {
         const saveData = createDefaultSaveData();

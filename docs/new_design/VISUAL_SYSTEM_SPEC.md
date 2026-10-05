@@ -214,3 +214,12 @@ The target look cannot be reached with CSS polish alone. Required asset classes:
 - ornamental separators or frame assets where CSS/SVG alone is insufficient
 
 Detailed asset handling lives in `ASSET_AND_ART_PIPELINE.md`.
+
+
+## Teaching and gameplay copy
+
+Teach mechanics through the player-facing Tutorial Hall: a small practice board, one highlighted card at a time, and a short result after the move. The Hall covers matching, combo streaks, four elemental casts, and all six elemental combinations through the same turn engine as live play. Practice has local state, pauses a live run, and never awards profile progress.
+
+The main menu links to the Hall. The Casts reference keeps current power and reaction previews visible, with recipe links opening the corresponding lesson. Keep routine controls and status copy brief; leave detailed receipts and the Codex available on demand. Do not show disabled future settings or internal implementation policy in player settings.
+
+Preserve the DMC-style action stamps. New events replace the active stamp immediately; no queued backlog. Tutorial results use the same rendering and reduced-motion settings as gameplay.

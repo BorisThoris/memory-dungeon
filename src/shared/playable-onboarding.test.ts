@@ -61,7 +61,7 @@ describe('REG-026 playable onboarding', () => {
         const step = getPlayableOnboardingStep(afterResolve, { onboardingDismissed: false, powersFtueSeen: false });
 
         expect(step?.title).toBe('Recover from the miss');
-        expect(step?.detail).toMatch(/reset the flip/i);
+        expect(step?.detail).toMatch(/marked pair/i);
         expect(step?.targetTileIds).toHaveLength(2);
     });
 
@@ -179,7 +179,7 @@ describe('REG-026 playable onboarding', () => {
 
         expect(step?.title).toBe('First reward banked');
         expect(step?.prompt).toBe('Keep the streak clean');
-        expect(step?.detail).toMatch(/one more clean pair/i);
+        expect(step?.detail).toMatch(/One more match builds your combo/i);
 
         // The guide hands control back after the second match; the last pair is the player's.
         const lastKey = run.board!.tiles.find((tile) => !first.targetTileIds.includes(tile.id))!.pairKey;

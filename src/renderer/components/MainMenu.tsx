@@ -1,5 +1,4 @@
 import type { SaveData } from '../../shared/contracts';
-import { getFirstRunHelpCenterRows } from '../../shared/first-run-help-center';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -10,14 +9,13 @@ import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import {
     playMenuOpenSfx,
     playUiBackSfx,
-    playUiClickSfx,
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { CathedralScene } from './CathedralScene';
 import MainMenuBackground from './MainMenuBackground';
 import { SAVE_RECOVERY_COPY } from '../copy/saveRecoveryNotice';
-import { runPersistenceInBackground } from '../store/backgroundPersistence';
+import { useTutorialHall } from './tutorialHallContext';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
 
@@ -36,7 +34,7 @@ interface MainMenuProps {
     onOpenSettings: () => void;
 }
 
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'] as const;
 
 /**
  * The start menu as the title page of the book the run is set in ("The Margin"): the title on
@@ -51,9 +49,7 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
 const MainMenu = ({
     saveData,
     reduceMotion,
-    showHowToPlay,
     suppressMenuBackgroundFallback = false,
-    onDismissHowToPlay,
     onPlay,
     onOpenPlayOptions,
     onOpenCollection,
@@ -62,6 +58,7 @@ const MainMenu = ({
     onOpenInventory,
     onOpenSettings
 }: MainMenuProps) => {
+    const openTutorial = useTutorialHall();
     const {
         achievementBridgeNotice,
         clearAchievementBridgeNotice,
@@ -89,12 +86,12 @@ const MainMenu = ({
         strength: 1
     });
     const { height, width } = useViewportSize();
-    const helpCenterRows = getFirstRunHelpCenterRows(saveData);
     const profileRows = getProfileSummaryRows(saveData);
     const profileLevel = profileRows.find((row) => row.id === 'profile_level')?.value ?? '1';
     const bestScore = profileRows.find((row) => row.id === 'best_score')?.value ?? '0';
     const lastRun = saveData.lastRunSummary;
     const entries = [
+        { label: 'Tutorial Hall', note: 'Learn by playing', onClick: () => openTutorial?.() },
         { label: 'Collection', note: 'Cards and relics', onClick: onOpenCollection },
         { label: 'Profile', note: 'Marks and records', onClick: onOpenProfile },
         { label: 'Inventory', note: 'What you carry', onClick: onOpenInventory },
@@ -102,10 +99,6 @@ const MainMenu = ({
         { label: 'Settings', note: 'Sound, motion, display', onClick: onOpenSettings }
     ];
     const uiGain = uiSfxGainFromSettings(saveData.settings.masterVolume, saveData.settings.sfxVolume);
-    const playUiClick = (): void => {
-        resumeUiSfxContext();
-        playUiClickSfx(uiGain);
-    };
     const playMenuOpen = (): void => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
@@ -257,35 +250,6 @@ const MainMenu = ({
                         </div>
                     </main>
                 </div>
-
-                {showHowToPlay ? (
-                    <details className={styles.help} data-testid="main-menu-howto-details">
-                        <summary className={styles.helpSummary}>
-                            <span className={styles.helpKicker}>How to play</span>
-                            <span className={styles.helpTitle}>Read, match, and protect the streak</span>
-                            <span aria-hidden="true" className={styles.leader} />
-                            <span className={styles.helpOpen}>Open</span>
-                        </summary>
-                        <p className={styles.helpLead}>Skippable help center - guided prompts continue inside the first run.</p>
-                        <div className={styles.helpRows} data-testid="main-menu-help-center">
-                            {helpCenterRows.map((row) => (
-                                <p key={row.id}>
-                                    <strong>{row.title}:</strong> {row.body}
-                                </p>
-                            ))}
-                        </div>
-                        <button
-                            className={styles.helpDismiss}
-                            type="button"
-                            onClick={() => {
-                                playUiClick();
-                                runPersistenceInBackground(onDismissHowToPlay);
-                            }}
-                        >
-                            Dismiss
-                        </button>
-                    </details>
-                ) : null}
 
                 <footer className={styles.colophon} data-testid="main-menu-colophon">
                     <span>Level {profileLevel}</span>

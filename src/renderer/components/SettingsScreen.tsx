@@ -12,7 +12,7 @@ import {
 import { FEATURE_CLOUD_SAVE } from '../../shared/feature-flags';
 import { getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
 import { getPremiumEconomyPolicyRows } from '../../shared/premium-economy-policy';
-import { getReferenceOnlySettingsRows } from '../../shared/settings-control-model';
+
 import { DEFAULT_SETTINGS, SETTINGS_NUMERIC_RANGES } from '../../shared/save-data';
 import {
     isNarrowShortLandscapeForMenuStack,
@@ -40,7 +40,7 @@ import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
 import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
-import { PlaceholderControl, SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
+import { SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
 import {
     DEFAULT_SUBSECTION_BY_CATEGORY,
     SETTINGS_CATEGORIES,
@@ -103,7 +103,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const profileSummaryRows = getProfileSummaryRows(saveData);
     const saveTrustRows = getSaveTrustRows(saveData);
     const premiumEconomyRows = getPremiumEconomyPolicyRows();
-    const referenceControlRows = getReferenceOnlySettingsRows();
+
     const isDirty = JSON.stringify(draft) !== JSON.stringify(settings);
     const [unsavedBackOpen, setUnsavedBackOpen] = useState(false);
     const lastCounterTickAtRef = useRef(0);
@@ -427,53 +427,11 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                             </SettingsSection>
                                         ) : null}
 
-                                        {activeCategory === 'gameplay' && showSubsection('reference') ? (
-                                            <SettingsSection title="Gameplay reference">
-                                                <p className={styles.headerCopy}>
-                                                    Reference comparison controls with no live save keys in this build.
-                                                    Segments are disabled; the shipped Steam demo ignores these fields.
-                                                </p>
-                                                <div className={styles.toggleStack} data-testid="settings-gameplay-reference">
-                                                    {referenceControlRows.map((row) => (
-                                                        <PlaceholderControl
-                                                            honestFuturePlaceholder={row.persistedSettingKey === null}
-                                                            hint={`${row.hint} ${row.ruleImpact}`}
-                                                            key={row.id}
-                                                            label={row.label}
-                                                            options={[...row.options]}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </SettingsSection>
-                                        ) : null}
-
                                         {activeCategory === 'controls' && showSubsection('input') ? (
                                             <SettingsSection title="Input">
                                                 <p className={styles.headerCopy}>
-                                                    Click or tap a hidden card to flip it. With one card face-up, the next
-                                                    flip attempts a match. The board powers sit on the dock under the
-                                                    board. Press P to pause or resume; pausing freezes the timers. Opening
-                                                    Settings during a run does not end the run.
+                                                    Tap two cards to match. Arrow keys move focus; Enter flips. P pauses.
                                                 </p>
-                                            </SettingsSection>
-                                        ) : null}
-
-                                        {activeCategory === 'controls' && showSubsection('tuning') ? (
-                                            <SettingsSection title="Future Tuning">
-                                                <p className={styles.headerCopy}>
-                                                    Reference-only balance and presentation selectors are grouped under
-                                                    Gameplay → Gameplay reference as honest "Coming soon" placeholders
-                                                    (not persisted).
-                                                </p>
-                                                <div className={styles.saveTrustGrid} data-testid="settings-reference-control-policy">
-                                                    {referenceControlRows.map((row) => (
-                                                        <div className={styles.saveTrustRow} key={row.id}>
-                                                            <strong>{row.label}</strong>
-                                                            <span>{row.copy}</span>
-                                                            <em>{row.migrationRequiredWhenEnabled ? 'Migration required before enabling' : 'No migration while placeholder'}</em>
-                                                        </div>
-                                                    ))}
-                                                </div>
                                             </SettingsSection>
                                         ) : null}
 
@@ -590,11 +548,6 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         onChange={(next) => patchSettings('tileFocusAssist', next)}
                                                     />
                                                 </div>
-                                                <PlaceholderControl
-                                                    hint={SETTINGS_HINTS.tutorialHints}
-                                                    label="Tutorial Hints"
-                                                    options={['Off', 'On']}
-                                                />
                                             </SettingsSection>
                                         ) : null}
 

@@ -68,7 +68,7 @@ describe('MainMenu REG-009 mobile landscape density', () => {
         expect(onOpenProfile).toHaveBeenCalledTimes(1);
     });
 
-    it('REG-098 surfaces skippable first-run help center beats', () => {
+    it('offers the Tutorial Hall instead of a long first-run help panel', () => {
         render(
             <MainMenu
                 onDismissHowToPlay={async () => undefined}
@@ -84,9 +84,8 @@ describe('MainMenu REG-009 mobile landscape density', () => {
             />
         );
 
-        const help = screen.getByTestId('main-menu-help-center');
-        expect(help).toHaveTextContent(/Flip and match/);
-        expect(screen.getByText(/Skippable help center/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Tutorial Hall' })).toBeInTheDocument();
+        expect(screen.queryByTestId('main-menu-help-center')).not.toBeInTheDocument();
     });
 });
 
@@ -107,9 +106,9 @@ describe('MainMenu as a title page', () => {
         render(<MainMenu {...props} saveData={createDefaultSaveData()} />);
         const group = screen.getByRole('group', { name: /primary actions/i });
         const names = [...group.querySelectorAll('button')].map((button) => button.getAttribute('aria-label'));
-        expect(names).toEqual(['Play', 'Collection', 'Profile', 'Inventory', 'Codex', 'Settings']);
+        expect(names).toEqual(['Play', 'Tutorial Hall', 'Collection', 'Profile', 'Inventory', 'Codex', 'Settings']);
         expect(group.textContent).toMatch(/^I\s*Play/);
-        expect(group.textContent).toContain('VISettings');
+        expect(group.textContent).toContain('VIISettings');
         // The one document heading is the title; nothing in the contents is a heading.
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Memory\s*Dungeon/);
         expect(screen.queryAllByRole('heading')).toHaveLength(1);

@@ -28,7 +28,7 @@ export const CHOOSE_YOUR_PATH_COPY = {
 export const CODEX_SCREEN_COPY = {
     demoSubtitle: 'Demo build: Act I mutators are in play.',
     subtitle: (version: string | number): string =>
-        `Everything the run can put in front of you, in the words the run uses. Version ${version}.`
+        `Rules reference · v${version}`
 } as const;
 
 export const GAME_OVER_LABELS = {
@@ -46,9 +46,9 @@ export const GAME_OVER_LABELS = {
  */
 export const CLASSIC_SETUP_COPY = {
     title: 'Set up your run',
-    subtitle: 'Everything here is optional. Start plays the plain descent.',
+    subtitle: 'Optional challenges and pacing.',
     vowsLabel: 'Vows',
-    vowsHint: 'Self-imposed restrictions. Harder, and yours to choose.',
+    vowsHint: 'Extra restrictions.',
     scholarLabel: 'Scholar: no shuffle, no destroy',
     pinVowLabel: 'Pin vow: ten pins for the whole run',
     pacingLabel: 'Pacing',

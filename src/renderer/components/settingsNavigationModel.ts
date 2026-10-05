@@ -4,9 +4,7 @@ export type SettingsSubsection =
     | 'board'
     | 'timing'
     | 'assist'
-    | 'reference'
     | 'input'
-    | 'tuning'
     | 'volume'
     | 'display'
     | 'graphics'
@@ -17,12 +15,12 @@ export type SettingsSubsection =
 
 export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
     { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
-    { id: 'controls', label: 'Controls', note: 'How to play with pointer, touch, or pad, and tuning still to come.' },
+    { id: 'controls', label: 'Controls', note: 'Pointer, touch and keyboard.' },
     { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
     { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
-    { id: 'accessibility', label: 'Accessibility', note: 'Motion, clarity, and tutorial support.' },
+    { id: 'accessibility', label: 'Accessibility', note: 'Motion and clarity.' },
     { id: 'about', label: 'About', note: 'Build info, credits, and reset.' },
-    { id: 'dev', label: 'Dev Options', note: 'Visual experiments. Changes apply immediately and are remembered on this device.' }
+    { id: 'dev', label: 'Dev Options', note: 'Visual experiments. Applies immediately.' }
 ];
 
 export const SETTINGS_SUBSECTIONS: Record<
@@ -32,12 +30,10 @@ export const SETTINGS_SUBSECTIONS: Record<
     gameplay: [
         { id: 'board', label: 'Board' },
         { id: 'timing', label: 'Timing' },
-        { id: 'assist', label: 'Assist' },
-        { id: 'reference', label: 'Gameplay reference' }
+        { id: 'assist', label: 'Assist' }
     ],
     controls: [
-        { id: 'input', label: 'Input' },
-        { id: 'tuning', label: 'Tuning' }
+        { id: 'input', label: 'Input' }
     ],
     audio: [{ id: 'volume', label: 'Volume' }],
     video: [
