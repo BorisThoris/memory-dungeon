@@ -99,8 +99,6 @@ async function expectMainMenu(page: Page) {
 
 async function startPortfolioRun(page: Page) {
     await mainMenuPlayButton(page).click();
-    await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible({ timeout: 20_000 });
-    await page.getByRole('button', { name: /^start run$/i }).click();
 }
 
 async function expectInteractiveBoard(page: Page) {

@@ -72,7 +72,6 @@ const dismissStartupIntro = async (user: ReturnType<typeof userEvent.setup>): Pr
 
 const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promise<void> => {
     await user.click(await screen.findByRole('button', { name: /^play$/i }));
-    await user.click(await screen.findByRole('button', { name: /^start run$/i }));
 };
 
 const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 30_000 });
@@ -543,23 +542,19 @@ describe('desktop app flow', () => {
         expect(within(pause).getByText(/press p to resume/i)).toBeInTheDocument();
     });
 
-    it('opens Choose Your Path from Play and keeps Endless Mode locked in Browse modes', async () => {
+    it('starts immediately and keeps setup in an optional dialog', async () => {
         const user = userEvent.setup();
         renderApp();
         await dismissStartupIntro(user);
-        await user.click(await screen.findByRole('button', { name: /^play$/i }));
-        const choosePath = await screen.findByRole('region', { name: /choose your path/i });
-        expect(choosePath).toBeInTheDocument();
-        expect(await screen.findByRole('region', { name: /browse modes/i })).toBeInTheDocument();
-        // Endless was a locked card promising a longer Classic and never became one; the browse
-        // grid now holds Pass and Play, the one entry that is a different proposition rather than
-        // the same board with a setting changed.
-        expect(screen.queryByRole('button', { name: /endless mode/i })).toBeNull();
-        await waitFor(() => {
-            expect(within(choosePath).getAllByText(/pass and play/i).length).toBeGreaterThan(0);
-        });
+        await user.click(screen.getByRole('button', { name: 'Play options' }));
+        expect(await screen.findByRole('dialog', { name: 'Play options' })).toBeInTheDocument();
+        expect(useAppStore.getState().run).toBeNull();
+        await user.click(screen.getByRole('button', { name: 'Back' }));
+        await user.click(screen.getByRole('button', { name: 'Play' }));
+        await findGameplayBoardStage();
+        expect(screen.queryByRole('dialog', { name: 'Play options' })).toBeNull();
+        expect(useAppStore.getState().view).toBe('playing');
     }, 30_000);
-
 
     it('opens Collection from the main menu and returns', async () => {
         const user = userEvent.setup();

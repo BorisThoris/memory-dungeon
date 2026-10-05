@@ -30,90 +30,64 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         expect(seriousOnly(violations)).toEqual([]);
     });
 
-    /*
-     * The store stop, with a keyboard and a screen reader's ears. Measured before the fix: a buy
-     * said nothing at all, the button that bought the last thing the gold covered went disabled
-     * under focus and dropped it on <body>, and the board under the sheet was not inert.
-     */
-    test('camp: ranks and costs are clear, keyboard focus survives, mobile scrolls, Escape continues', async ({ page }) => {
-        test.setTimeout(600_000);
-        const errors: string[] = [];
-        page.on('pageerror', error => errors.push(error.message));
-        await page.setViewportSize({ width: 1280, height: 800 });
-        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
-        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
-        await page.waitForFunction(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status === 'playing', null, { timeout: 60_000 });
-        await page.evaluate(async () => {
-            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            useAppStore.setState(state => ({ run: { ...state.run!, realmId: 'tide', realmSeverity: 'calm' } }));
+    test('camp rewards apply once and floors continue without buying or choosing', async ({ page }) => {
+        test.setTimeout(240_000);
+        await page.setViewportSize({width:390,height:844});
+        const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+        await gotoWithSaveAndQuery(page,buildVisualSaveJson(true),'hallRoom=store-stop');
+        await expect(page.getByTestId('game-hud')).toBeVisible({timeout:120000});
+        await page.evaluate(async()=>{
+            const {useAppStore}=await import('/src/renderer/store/useAppStore.ts');
+            useAppStore.setState(state=>({run:{...state.run!,runRulesVersion:61,realmId:'tide',realmSeverity:'calm',gold:20,missBank:[{floor:3,misses:4}]}}));
         });
-        for (const pair of ['a', 'b']) {
-            await page.evaluate(async key => {
-                const store = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();
-                store.pressTile(`${key}-1`);
-                store.pressTile(`${key}-2`);
-            }, pair);
+        for(const pair of ['a','b']) {
+            await page.evaluate(async key=>{const s=(await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState();s.pressTile(key+'-1');s.pressTile(key+'-2');},pair);
             await page.waitForTimeout(1200);
         }
-        const sheet = page.getByTestId('store-sheet');
-        await expect(sheet).toBeVisible({ timeout: 30_000 });
+        await expect(page.getByTestId('floor-clear-beat')).toContainText('used automatically',{timeout:30000});
+        await page.screenshot({path:'output/playwright/flow-camp-receipt.png'});
+        await expect.poll(()=>page.evaluate(async()=>{
+            const run=(await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
+            return {floor:run.board?.level,rank:run.storePurchases?.long_look};
+        }),{timeout:60000}).toEqual({floor:4,rank:1});
+        await expect(page.getByTestId('store-sheet')).toHaveCount(0);
         await expect(page.getByTestId('realm-travel')).toHaveCount(0);
-        await expect(page.getByTestId('floor-clear-essence')).toHaveCount(0);
-        await expect(sheet).not.toContainText(/essence|forge|choose.*arena/i);
-        await expect(page.locator('[data-a11y-gameplay-inert="true"]')).toHaveCount(1);
-        const { violations } = await new AxeBuilder({ page }).include('[data-testid="store-sheet"]').analyze();
+        const before=await page.evaluate(async()=>{
+            const {useAppStore}=await import('/src/renderer/store/useAppStore.ts');const s=useAppStore.getState();
+            const gold=s.run!.gold;s.continueToNextLevel();return {gold,after:useAppStore.getState().run!.gold};
+        });expect(before.gold).toBe(before.after);expect(errors).toEqual([]);
+        await page.screenshot({path:'output/playwright/flow-next-floor-phone.png'});
+    });
+
+    test('Play starts immediately and optional setup stays reachable on touch screens', async ({ browser }) => {
+        test.setTimeout(240_000);
+        const context=await browser.newContext({hasTouch:true,isMobile:true,viewport:{width:390,height:844}});
+        const page=await context.newPage();
+        await page.goto('/');await dismissStartupIntro(page);
+        await page.getByRole('button',{name:'Play options',exact:true}).click();
+        const options=page.getByRole('dialog',{name:'Play options'});
+        await expect(options).toBeVisible();
+        for(const [name,width,height] of [['phone',390,844],['landscape',844,390],['desktop',1440,900]] as const){
+            await page.setViewportSize({width,height});
+            await page.screenshot({path:'output/playwright/flow-options-'+name+'.png'});
+            const controls=await options.getByRole('button').evaluateAll(elements=>elements.map(el=>({text:el.textContent,...el.getBoundingClientRect().toJSON()})));
+            for(const c of controls){expect(c.height).toBeGreaterThanOrEqual(44);expect(c.x).toBeGreaterThanOrEqual(0);expect(c.right).toBeLessThanOrEqual(width);}
+        }
+        await page.getByText('Customize a solo run',{exact:true}).click();
+        await page.setViewportSize({width:844,height:390});
+        await options.getByRole('button',{name:'Start custom run'}).scrollIntoViewIfNeeded();
+        await page.screenshot({path:'output/playwright/flow-options-expanded-landscape.png'});
+        const {violations}=await new AxeBuilder({page}).include('[data-testid="play-options"]').analyze();
         expect(seriousOnly(violations)).toEqual([]);
-        await expect(page.getByTestId('camp-next-arena')).toContainText('Randomly selected');
-        const destination = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.nextRealm!);
-        const buy = page.getByTestId('store-buy-long_look');
-        await expect(buy).toHaveAccessibleName('Buy long look for 8 gold');
-        await page.getByTestId('store-descend').focus();
-        for (let i = 0; i < 10 && !await buy.evaluate(node => node === document.activeElement); i++) await page.keyboard.press('Tab');
-        await expect(buy).toBeFocused();
-        await page.keyboard.press('Enter');
-        await expect(page.getByTestId('store-receipt')).toContainText('Upgraded Long Look to rank 1 of 3.');
-        await expect(page.getByTestId('store-row-long_look')).toContainText('1/3');
-        for (let i = 0; i < 3 && await buy.isEnabled(); i++) {
-            await buy.focus();
-            await page.keyboard.press('Enter');
-        }
-        await expect(buy).toBeDisabled();
-        expect(await page.evaluate(() => {
-            const active = document.activeElement;
-            return active instanceof HTMLButtonElement && !active.disabled && !!active.closest('[data-testid="store-sheet"]');
-        })).toBe(true);
-        for (const [name, width, height] of [['desktop', 1280, 800], ['phone', 390, 844], ['small-phone', 320, 568], ['landscape', 812, 375]] as const) {
-            await page.setViewportSize({ width, height });
-            await expect(page.getByTestId('store-descend')).toBeInViewport({ ratio: 1 });
-            // Batch geometry reads and real scrolls inside the page: low-CPU isolated runners
-            // otherwise spend most of this check taking protocol snapshots of each assertion.
-            const buttons = await sheet.evaluate(async node => {
-                const scroller = node.querySelector('[data-testid="store-rows"]')!;
-                const checks = [];
-                for (const button of node.querySelectorAll<HTMLButtonElement>('[data-testid^="store-buy-"]')) {
-                    button.scrollIntoView({ block: 'nearest' });
-                    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
-                    const r = button.getBoundingClientRect();
-                    const viewport = scroller.getBoundingClientRect();
-                    checks.push({ id: button.dataset.testid, reachable: r.top >= viewport.top - 1 && r.bottom <= viewport.bottom + 1 && r.left >= 0 && r.right <= innerWidth, touchSize: r.height >= 44 && r.width >= 44 });
-                }
-                return checks;
-            });
-            expect(buttons).toHaveLength(6);
-            for (const button of buttons) expect(button, button.id).toMatchObject({ reachable: true, touchSize: true });
-            await page.getByTestId('store-rows').evaluate(node => node.scrollTo(0, 0));
-            expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-            await page.screenshot({ path: `output/playwright/camp-${name}.png` });
-        }
-        const remainingGold = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.gold);
-        await page.keyboard.press('Escape');
-        await expect(sheet).toBeHidden({ timeout: 20_000 });
-        await expect(page.getByTestId('realm-travel')).toHaveCount(0);
-        await expect.poll(async () => page.evaluate(async () => {
-            const run = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
-            return { floor: run.board?.level, realm: run.realmId, gold: run.gold, rank: run.storePurchases?.long_look };
-        }), { timeout: 45_000 }).toEqual({ floor: 4, realm: destination.realmId, gold: remainingGold, rank: 1 });
-        expect(errors).toEqual([]);
+        await options.getByRole('button',{name:'Back',exact:true}).click();
+        await page.screenshot({path:'output/playwright/flow-menu-landscape.png'});
+        await page.setViewportSize({width:390,height:844});
+        await page.screenshot({path:'output/playwright/flow-menu-phone.png'});
+        await page.getByRole('button',{name:'Play',exact:true}).click();
+        await expect(page.getByTestId('game-hud')).toBeVisible({timeout:120000});
+        await expect(page.getByRole('dialog',{name:'Play options'})).toHaveCount(0);
+        await page.screenshot({path:'output/playwright/flow-direct-play-phone.png'});
+        await context.close();
     });
 
     test('ordinary floor clears continue automatically without a route choice', async ({ page }) => {
@@ -140,7 +114,6 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
         await dismissStartupIntro(page);
         await page.getByRole('button', { name: /^play$/i }).click();
-        await page.getByRole('button', { name: /start run/i }).click();
         await expect(page.getByRole('heading', { name: /level 1/i })).toBeVisible({ timeout: 30_000 });
         const { violations } = await new AxeBuilder({ page })
             .disableRules(['color-contrast'])

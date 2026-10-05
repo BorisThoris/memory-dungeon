@@ -67,31 +67,15 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         }
     },
     {
-        fileBase: '01a-choose-your-path',
-        name: 'choose your path',
+        fileBase: '01a-play-options',
+        name: 'optional play options',
         run: async (page, capture) => {
-            await openMainMenuFromSave(page, true);
-            await openChooseYourPath(page);
+            await openMainMenuFromSave(page,true);await openChooseYourPath(page);
             await expectNoHorizontalOverflow(page);
-            await expectAppScrollportHasNoVerticalOverflow(page);
-            const sceneLayer = page.getByTestId('choose-path-scene-layer');
-            await expect(sceneLayer).toBeVisible();
-            // A still poster paints the layer itself; the living portal paints its plate's base inside it.
-            const sceneBackground = await sceneLayer.evaluate((element) => {
-                const painted = element.querySelector('[data-testid="portal-scene-plate"] > *') ?? element;
-                return getComputedStyle(painted).backgroundImage;
-            });
-            expect(sceneBackground).toContain('url(');
-            const inlineBack = page.getByTestId('choose-path-inline-back');
-            await expect(inlineBack).toBeVisible();
-            await expect(inlineBack).toBeInViewport();
-            const startRun = page.getByRole('button', { name: /start run/i });
-            await expect(startRun).toBeInViewport();
-            const browseModes = page.getByTestId('choose-path-more-modes');
-            await expect(browseModes).toBeVisible();
-            await expect(browseModes).toBeInViewport();
-            await expectCoarsePointerTarget(page, startRun);
-            await capture('01a-choose-your-path');
+            const dialog=page.getByRole('dialog',{name:'Play options'});
+            await expect(dialog).toBeVisible();
+            await expectCoarsePointerTarget(page,dialog.getByRole('button',{name:'Play now'}));
+            await capture('01a-play-options');
         }
     },
     {

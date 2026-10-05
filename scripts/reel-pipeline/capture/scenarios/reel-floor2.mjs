@@ -2,16 +2,17 @@
 // camera — the study period, matched pairs with a natural cadence, the break, the floor-clear colophon.
 export async function run(api) {
     const { page } = api;
-    await page.getByRole('group', { name: /primary actions/i }).getByRole('button', { name: /^play$/i }).evaluate((el) => el.click());
-    await page.getByRole('region', { name: /choose your path/i }).waitFor();
     if (api.args.runKey) {
+        await page.getByRole('button', { name: 'Play options', exact: true }).evaluate((el) => el.click());
+        await page.getByRole('dialog', { name: 'Play options' }).waitFor();
+        await page.getByText('Use a shared run key', { exact: true }).click();
         // A shared-run key (md1:<variant>:<rulesVersion>:<seed>) replays one exact board under the
         // rules version it names, so the take is the same run every time the reel is rebuilt.
         const form = page.getByTestId('choose-path-shared-run');
         await form.getByRole('textbox').fill(String(api.args.runKey));
         await form.evaluate((el) => el.requestSubmit());
     } else {
-        await page.getByRole('button', { name: /start run/i }).evaluate((el) => el.click());
+        await page.getByRole('group', { name: /primary actions/i }).getByRole('button', { name: /^play$/i }).evaluate((el) => el.click());
     }
     await api.until((s) => s.hud, 10, false);
     await api.hide();

@@ -32,14 +32,13 @@ import {
 } from '../copy/runDialogCopy';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
-import { isStoreStopFloor, runGold } from '../../shared/run-store-rules';
+import { runGold } from '../../shared/run-store-rules';
+import { automaticCampReward } from '../../shared/automatic-camp-rules';
 import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
-import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
-import StoreVault from './StoreVault';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -123,8 +122,6 @@ import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun, comboStageR
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
-import { SceneWipe } from './SceneWipe';
-import { useSceneWipe } from './useSceneWipe';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { REALMS, REALM_SEVERITIES, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
@@ -425,13 +422,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             setBombArmedFor(null);
         }
     }), []);
-    /*
-     * The store stop (`isStoreStopFloor`): after every third floor's clear the beat hands over to
-     * the store sheet instead of building the next floor, and Descend continues. Keyed on the floor
-     * that cleared, so it opens once per stop.
-     */
-    const [storeStopKey, setStoreStopKey] = useState<string | null>(null);
-
     const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (!compactTouchChrome) {
@@ -450,7 +440,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
-            buyStoreItem: state.buyStoreItem,
             useBomb: state.useBomb,
             igniteZone: state.igniteZone,
             resolveZone: state.resolveZone,
@@ -754,7 +743,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         continueToNextLevel,
         dismissPowersFtue,
         goToMenu,
-        buyStoreItem,
         useBomb: spendBomb,
         igniteZone,
         resolveZone,
@@ -1217,7 +1205,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
-    const storeStopDue = isStoreStopFloor(run.lastLevelResult?.level) && !isPassAndPlayRun(run.passAndPlay);
+    const campReward = useMemo(() => automaticCampReward(run), [run]);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1239,7 +1227,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * was cut short by anything else is harmless.
      */
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen || storeStopKey === floorClearKey) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1250,14 +1238,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         let elapsed = 0;
         let last: number | null = null;
         let frame = 0;
-        // A store floor hands the beat to the store sheet; every other floor builds the next board.
-        const afterBeat = (): void => {
-            if (storeStopDue) {
-                setStoreStopKey(floorClearKey);
-                return;
-            }
-            continueToNextLevel();
-        };
+        const afterBeat = continueToNextLevel;
         const tick = (now: number) => {
             if (last !== null) {
                 elapsed += Math.min(now - last, FLOOR_CLEAR_BEAT_FRAME_CAP_MS);
@@ -1278,10 +1259,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, storeStopDue, storeStopKey]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
     const floorClearNotes = [
-        storeStopDue ? 'Camp next · Spend gold on run upgrades or supplies.' : run.nextRealm ? `Next: ${REALMS[run.nextRealm.realmId].title} · ${REALM_SEVERITIES[run.nextRealm.severity].title}. Arena selected automatically.` : null,
+        campReward.receipt,
+        run.nextRealm ? `Next: ${REALMS[run.nextRealm.realmId].title} · ${REALM_SEVERITIES[run.nextRealm.severity].title}. Arena selected automatically.` : null,
         floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement)].filter(
         (line): line is string => typeof line === 'string' && line.length > 0
     );
@@ -1476,13 +1458,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         tileSwapPowerVisualActive
     });
 
-    const storeSheetOpen = run.status === 'levelComplete' && storeStopKey === floorClearKey;
     /*
      * What the room has become (`sceneMood.ts`): the temper grades it, a great combo's death
-     * collapses it into the void for the floor, and the store stop is the merchant's vault.
+     * collapses it into the void for the floor.
      */
-    // The wipe between rooms: once on the way into the shop, once on the way out (`useSceneWipe`).
-    const sceneWipe = useSceneWipe(storeSheetOpen ? 'shop' : 'dungeon');
     // What the run just paid: a floor's gold on its clear (keyed by the floor), or the last purchase.
     const lastPurchase = purchaseCallouts[purchaseCallouts.length - 1] ?? null;
     const scenePayout =
@@ -1499,12 +1478,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             missesLeft: missesLeft(run),
             payout: scenePayout,
             run,
-            storeOpen: storeSheetOpen,
+            storeOpen: false,
             temper: comboTemper
         }),
         // The payout is read by its key and gold; the object is rebuilt each render.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [run, storeSheetOpen, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
+        [run, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
     );
 
     if (!run.board) {
@@ -1747,10 +1726,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * - Do not wrap modal markup in this subtree: nesting focused dialogs inside `aria-hidden` breaks SR semantics.
      * - `inert` alone should block pointer events on descendants; keep modal siblings outside this wrapper.
      */
-    // The store stop is a dialog over the cleared board like pause is, so the board goes inert under
-    // it too: it was the one modal a screen reader could still browse out of into the dock and HUD.
     const gameplayShellInert =
-        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused' || storeSheetOpen);
+        !suppressStatusOverlays && (abandonRunConfirmOpen || shortcutsHelpOpen || run.status === 'paused');
     const reg104GameplayShellVariant =
         run.status === 'paused' ? 'paused' : run.status === 'levelComplete' ? 'floor_clear' : 'playing';
     return (
@@ -1765,7 +1742,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             data-combo-stage={comboHeatLevelsNow.stage}
             data-combo-theme={comboTemper.id}
             data-travel-open="false"
-            data-store-open={storeSheetOpen ? 'true' : 'false'}
+            data-store-open="false"
             data-zone={isZoneActive(run) ? 'true' : 'false'}
             ref={shellRef}
             style={{ ...GAMEPLAY_VISUAL_CSS_VARS, '--combo-heat': comboHeatLevelsNow.heat, '--combo-aura': comboHeatLevelsNow.aura, '--combo-hue': `${comboHeatLevelsNow.hueDeg}deg`, '--combo-flame': comboTemper.colors[comboHeatLevelsNow.stageIndex], '--combo-surge': comboHeatLevelsNow.surge } as CSSProperties}
@@ -1802,7 +1779,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
             <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
-            {sceneWipe ? <SceneWipe direction={sceneWipe.direction} key={sceneWipe.key} reduceMotion={reduceMotion} wipeKey={sceneWipe.key} /> : null}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
             {comboTemper.id === 'frost' ? (
                 <div
@@ -1912,7 +1888,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
-                            {floorClearBeatShown && run.lastLevelResult && !storeSheetOpen ? (
+                            {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
                                     notes={floorClearNotes}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
@@ -2208,21 +2184,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </dl>
                     </OverlayModal>
                 )}
-                {!suppressStatusOverlays && storeSheetOpen && (
-                    <StoreVault
-                        floor={run.lastLevelResult?.level ?? 0}
-                        onDescend={continueToNextLevel}
-                        onBuy={(id) => {
-                                const before = useAppStore.getState().run;
-                                playMenuOpen();
-                                buyStoreItem(id);
-                                return useAppStore.getState().run !== before;
-                            }}
-                        run={run}
-                    />
-                )}
-
-
                 {!suppressStatusOverlays && shortcutsHelpOpen ? (
                     <OverlayModal
                         actions={[

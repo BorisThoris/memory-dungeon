@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2920,
-    "codeFileCount": 1082,
-    "exportedSymbolCount": 3377,
+    "trackedFileCount": 2918,
+    "codeFileCount": 1081,
+    "exportedSymbolCount": 3378,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 8964
+    "relationshipCount": 8954
   },
   "inventory": [
     {
@@ -3783,8 +3783,8 @@
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
       "category": "test",
-      "bytes": 9575,
-      "sha256": "1796fbe5a832e1e360356bccd2955c1ec9b14310db4b7485c0a1104f6aa5aa54"
+      "bytes": 7814,
+      "sha256": "81f97f45fa7aa03567b597e9b67b4862c36797066111f0df6258abf6ff110b21"
     },
     {
       "path": "e2e/ambiguousControls.ts",
@@ -3861,8 +3861,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 6788,
-      "sha256": "b71c10a99fe8eca4875104234f0d6cc2b9c1c35cbbea6cfad5cc1d4462faf320"
+      "bytes": 6610,
+      "sha256": "a30131420acbf9f9636237da9cfab9e0bf56d8dff761720eacbd68fdcee58a8d"
     },
     {
       "path": "e2e/element-resonance.spec.ts",
@@ -3945,8 +3945,8 @@
     {
       "path": "e2e/navigation-flow.spec.ts",
       "category": "test",
-      "bytes": 5620,
-      "sha256": "36146b133ee7518367119afa72ce0d6f665047a44f063013dd1706020c03ed35"
+      "bytes": 5710,
+      "sha256": "bf64d45c38d91e731454c5dbecf67c320ed430316699037cd4bd6befd009ba96"
     },
     {
       "path": "e2e/original-cards-meteor.spec.ts",
@@ -3993,8 +3993,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 12777,
-      "sha256": "97f047064b4a2927e3cdf413220e52136750efecef51926f312e8d78d1a83f0a"
+      "bytes": 12347,
+      "sha256": "06cab5b81cfe59675d4ca04f1c7b19414ecd8a81737f8957ced289a7aabc4a3c"
     },
     {
       "path": "e2e/playtest.spec.ts",
@@ -4041,8 +4041,8 @@
     {
       "path": "e2e/shared-run-key.spec.ts",
       "category": "test",
-      "bytes": 2695,
-      "sha256": "d34c014ea6f10b7c2c806e8068d53879044f7e4805b1f9af8ac7677d53d4cc9f"
+      "bytes": 2773,
+      "sha256": "6c86c717cb2975aab4b93c9709270ee35960441e66d34f9814cd647304e6b150"
     },
     {
       "path": "e2e/startup-budget.spec.ts",
@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 15286,
-      "sha256": "f9046d914fb011d59a58fa2e71519f4b09a074635eab245f77a645032ec3332a"
+      "bytes": 13755,
+      "sha256": "ee3b5eaf6343783d5606b948a94c8c56afdd9475e708072b034c9a46f3f6a8c5"
     },
     {
       "path": "e2e/tools-usable.spec.ts",
@@ -4125,8 +4125,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 14081,
-      "sha256": "16c47e709b5ec29a69b44616ed197fb3d4500da1a232f38218b700ce73cb4035"
+      "bytes": 14120,
+      "sha256": "49b7a742c41e0ad5c1518b1735d65f8f7bba801808a641928ecba2449aca2bb0"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4209,14 +4209,14 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 11376,
-      "sha256": "7c01ed7fe77e56569c31c9190e14af3524702e002299e08e60029912f08b31d6"
+      "bytes": 10391,
+      "sha256": "31327b3fc710be1425bad40101a37d6e37b0fd18b6d13c5ba0de6ebc89e72dbf"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 36841,
-      "sha256": "8c47896d0f23a0bdc4f2452c517f6b3df860e29f2b9527bf15008578cf0f94c5"
+      "bytes": 34856,
+      "sha256": "273b4a2cac4a5c6b4393352d822b2fe91a406672b22b5c6a21e095e48384e6d9"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 121829,
-      "sha256": "b0b2e9a00878af5229077989888d715a19550c949ab17c93b7c57b1df9703d77"
+      "bytes": 122836,
+      "sha256": "1a6c8b9e3becb4a99167329de4639125fa284bfca83d4f3b936759ba407d34ea"
     },
     {
       "path": "public/site.webmanifest",
@@ -5139,8 +5139,8 @@
     {
       "path": "scripts/e2e-surface-coverage.ts",
       "category": "script",
-      "bytes": 6316,
-      "sha256": "d6242bfcba8d0ad53904049c2385e3160e8a3299f3b9df3ebf6632942767e0d1"
+      "bytes": 6321,
+      "sha256": "4558bf29d87c7ae163f1fe10470525a7f7bcaee4eb5df04d8ead3ca5e7e3340c"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -5223,8 +5223,8 @@
     {
       "path": "scripts/generate-visual-inventory-md.mjs",
       "category": "script",
-      "bytes": 8886,
-      "sha256": "f7b23556949e2d4e2a5478810bcd236f91754c8899e60da9854a0403002f2dc4"
+      "bytes": 8887,
+      "sha256": "693a8a14e40949d82eee9d501522b59808fff044bad92405efc66c0100e89cc9"
     },
     {
       "path": "scripts/graph-project.mjs",
@@ -5367,8 +5367,8 @@
     {
       "path": "scripts/reel-pipeline/capture/scenarios/reel-floor2.mjs",
       "category": "script",
-      "bytes": 2975,
-      "sha256": "9ab74a9fbd594777882203ababdc403b12098ab67f8ae8bc7371009814c81c51"
+      "bytes": 3072,
+      "sha256": "fab8dd7fc5764916dd80c39033c8e9a54b2a459dc29841074fa4550ddaea2135"
     },
     {
       "path": "scripts/reel-pipeline/cards2.mjs",
@@ -5961,14 +5961,14 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 28410,
-      "sha256": "88e5d477e7a055713615e6401a4ca9bb5bbe4bdbc020784bdda2513950caabf9"
+      "bytes": 28074,
+      "sha256": "1a91aa225372680192e86e88cec603404a5202fa74f559d9aa10d5758e05af8c"
     },
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 25531,
-      "sha256": "df49787b49d355b8eea078e46b91cd86c0db4a5a09ba05e520f6c3973671f47b"
+      "bytes": 25795,
+      "sha256": "6477aca390ca738672c6356e97811c56f767f44732b93180f763fec0bc4787f4"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9433,12 +9433,6 @@
       "sha256": "2436989f6dd73b2a4cfbb99194a15f4b17afb7893ed25889b95f083cd9b88004"
     },
     {
-      "path": "src/renderer/components/Camp.module.css",
-      "category": "source",
-      "bytes": 4201,
-      "sha256": "057297f32d54e2d0ec7329e805d0998e00f0d62d3ca292547dad52ccabbf1b8e"
-    },
-    {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "category": "test",
       "bytes": 2919,
@@ -9489,20 +9483,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 22184,
-      "sha256": "9af85d662c67d240241b307f1776db7f8917433dfa0c0a688048e9f0b3ce4dd6"
+      "bytes": 1700,
+      "sha256": "26d50da948ca09c3a54f4197c21b758f4b408173a67cf2d9253f9288b061c819"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 8635,
-      "sha256": "5c9617b99f02db8fd68b8b879e410097c782ff9b6d90105c7c51b1e08921384d"
+      "bytes": 3574,
+      "sha256": "6f8700151138b989abdc4884a10e1e968e0259270168f1b9420b8bd71f3186ea"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 35476,
-      "sha256": "8f84c7768aa1aed5b718482902114a5cd28ceff446667a6c1970dda9719561b8"
+      "bytes": 4959,
+      "sha256": "191df6efa7796cfd94d856096830d0cbfcdf8eecccbe8797a9cb9ab205387e03"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9765,8 +9759,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 115133,
-      "sha256": "747b4df733e78157cfd0214fd1f7d08207a59697e68091c24fa41f89fa388ce0"
+      "bytes": 112812,
+      "sha256": "a90f970bd8fee9c3c7b1ee65c8868ea2b5b967ae146dcc60e51b84ad04f42ab2"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9849,8 +9843,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 9700,
-      "sha256": "ba51b2281e58cef6295544435b453f2685b756fb70f1dcbbf57bb8b925ff107c"
+      "bytes": 9760,
+      "sha256": "4fb8642d948ce9c65158920babe053ca95c73b75a7f3feaa7c56085270abf98f"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -9867,8 +9861,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 12446,
-      "sha256": "3f316eab09af64cd2d5e1258b7d6c94fdde2a3c68eff54c436cbc544054dfc8b"
+      "bytes": 13064,
+      "sha256": "0b1e4feb7105476681331d355b7c4d80a5da265a39e6e40c8e0c26ddbc4b2047"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -9879,8 +9873,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 14293,
-      "sha256": "9ec855edf35145c942ac4fc2d5d503fa7b11f8b69d3ac7f1c9a8512cf664a73c"
+      "bytes": 15069,
+      "sha256": "590e3e7ba8316588263028342455a676d8516090bad6242cfdbec721cec67ec0"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -10439,24 +10433,6 @@
       "category": "source",
       "bytes": 12267,
       "sha256": "fbceb58fdbd4ffd0875f4b38bb1a17e3f60702bcc2b8c62a5e08f942dfefd2e0"
-    },
-    {
-      "path": "src/renderer/components/StoreVault.test.tsx",
-      "category": "test",
-      "bytes": 3163,
-      "sha256": "ac8854d96c3e147d136f0c5be3cd74da08e57eac7725f377365a4a89ad1d6a4c"
-    },
-    {
-      "path": "src/renderer/components/StoreVault.tsx",
-      "category": "source",
-      "bytes": 6115,
-      "sha256": "a2ec472548a76bf5d617cae0bc6f9a0201bfb446662d731cb1ff53545d2d4724"
-    },
-    {
-      "path": "src/renderer/components/storeWareGlyphs.tsx",
-      "category": "source",
-      "bytes": 4703,
-      "sha256": "e2ebd3020834ccc25a30643a20d055e0626c51b9f4cba2d89a70c2168f94eaba"
     },
     {
       "path": "src/renderer/components/stormBolts.test.ts",
@@ -11595,8 +11571,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7209,
-      "sha256": "a7bd5902a82095ca32bcfc6358a69a50452af335eed7f6b63c8b2cd5067d9257"
+      "bytes": 7213,
+      "sha256": "6756f5a5225acace26e556fc1edadbf401c8509fcab0c8243b00091e6115cb4d"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -12423,8 +12399,8 @@
     {
       "path": "src/renderer/store/runStartState.test.ts",
       "category": "test",
-      "bytes": 4779,
-      "sha256": "efde57f9018e05ed49dc28edcd224e1d6e47b5f0ffe12f3918ac4ceaa229f242"
+      "bytes": 5400,
+      "sha256": "ab15d25da81f6b835c11627bd91ffc1bebd2be8e488c619f4921250b5fc1ec15"
     },
     {
       "path": "src/renderer/store/runStartState.ts",
@@ -12847,6 +12823,18 @@
       "sha256": "31347ef175503ee990ad07b8bb9d7ca8e6fe3a20004e317f2dfaea4e6e18e21d"
     },
     {
+      "path": "src/shared/automatic-camp-rules.test.ts",
+      "category": "test",
+      "bytes": 3294,
+      "sha256": "468da9fcfcf0fa3218d7ad33e242ab398456553f118cb67b59d33014eace6df9"
+    },
+    {
+      "path": "src/shared/automatic-camp-rules.ts",
+      "category": "source",
+      "bytes": 2101,
+      "sha256": "538ef980380a1debb7bf60399b5dcd1934f8ee80e3eb4e001cb0c1f6d9772b46"
+    },
+    {
       "path": "src/shared/bad-floor-is-quiet.test.ts",
       "category": "test",
       "bytes": 7420,
@@ -13065,8 +13053,8 @@
     {
       "path": "src/shared/camp-upgrades.test.ts",
       "category": "test",
-      "bytes": 5420,
-      "sha256": "b80d61d3131485f76c9ad2bc384e8c3feb57949a2d08c88627304599673129a1"
+      "bytes": 5449,
+      "sha256": "0a31af6525461ec7cf60a06c000cc9848bc2f306a1a7ad239ab68730249687ec"
     },
     {
       "path": "src/shared/cascade-balance-simulation.test.ts",
@@ -13263,8 +13251,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 48425,
-      "sha256": "99f786cdba5fbc4cce34b207e78728f4c0965761a5a005691879c91e483403c8"
+      "bytes": 48407,
+      "sha256": "2928fc7f17eaa0d1bcc0cb1630ab5effcfd45afd1c3c5b2b01e78e49e20bbd61"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14031,8 +14019,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 50991,
-      "sha256": "244ec05e52ca12d8e9b264c1722bf4d995b8ab1824ac5c08ec34a7027f318de6"
+      "bytes": 51255,
+      "sha256": "d84076c988c0b801ae2c9883d2f004acdaa0ecd559efffcfff9f8e7256ed4e8d"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -14169,8 +14157,8 @@
     {
       "path": "src/shared/next-floor-transition-rules.ts",
       "category": "source",
-      "bytes": 2957,
-      "sha256": "c5233de2d216ccd3c6fa648b0088357f362fe1ad13caa79608348d95bbedcc52"
+      "bytes": 3034,
+      "sha256": "0ef30051795626f24d465644126c8220dd81dd54dca5b91b6f42eaeb65946cd1"
     },
     {
       "path": "src/shared/objective-board.test.ts",
@@ -14721,8 +14709,8 @@
     {
       "path": "src/shared/run-settings-rules.ts",
       "category": "source",
-      "bytes": 382,
-      "sha256": "22641132cea3fcd91355a41e41318cf8b69e97c4433681d919dea1f5634484b6"
+      "bytes": 542,
+      "sha256": "13f5d0ae6f751f8bebaeb0ac9103f4363d86629e0b962948ddb23c66a04b669e"
     },
     {
       "path": "src/shared/run-share-key.test.ts",
@@ -14769,8 +14757,8 @@
     {
       "path": "src/shared/run-store-rules.ts",
       "category": "source",
-      "bytes": 12619,
-      "sha256": "149e10d67f440348b8ade9a326671a774e53eca6a6053007c5d5777fe67eaefb"
+      "bytes": 12520,
+      "sha256": "cad6b0ad1b0cada5d77583220f4d9b5e1e672affaa9ed08ec5024855da0e50ed"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -15051,8 +15039,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 133800,
-      "sha256": "a5d348468fbcf04aaac4d41301263e0de5e465bdabe831959c89fc53b729faed"
+      "bytes": 133760,
+      "sha256": "9d6f0f1c2aec92edd560fabe76c48cf888064cc4af442a82aed19d51f9693fa9"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -15298,7 +15286,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7353,
-      "sha256": "a9dd0e2fbfb145e7f339c240b713711d34652e31b5aa75f94ec97eee82f2d8b9"
+      "sha256": "d45991f6bcfd4238c19c5fe84501bbac7e9acf36bf8ce51d31e1abc7b3bf6b4d"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -18201,7 +18189,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 655,
+      "lineCount": 650,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/assets/preloadStartupAssets.ts",
@@ -18221,7 +18209,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 519,
+      "lineCount": 523,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -20316,13 +20304,9 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 185,
+      "lineCount": 76,
       "imports": [
-        "file:src/renderer/components/ChooseYourPathScreen.tsx",
-        "file:src/renderer/components/chooseYourPathScreenModel.ts",
-        "file:src/renderer/copy/screenCopy.ts",
-        "file:src/shared/game-catalog.ts",
-        "file:src/shared/run-mode-catalog.ts"
+        "file:src/renderer/components/ChooseYourPathScreen.tsx"
       ],
       "exports": [],
       "testedBy": []
@@ -20332,23 +20316,13 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 692,
+      "lineCount": 70,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
-        "file:src/renderer/assets/ui/modeArt.ts",
-        "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/OverlayModal.tsx",
-        "file:src/renderer/components/PortalScene.tsx",
-        "file:src/renderer/copy/passAndPlay.ts",
-        "file:src/renderer/copy/screenCopy.ts",
-        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/shared/challenge-progression.ts",
+        "file:src/renderer/ui/index.ts",
         "file:src/shared/classic-run-setup.ts",
-        "file:src/shared/pass-and-play-rules.ts",
-        "file:src/shared/run-mode-catalog.ts",
-        "file:src/shared/run-share-key.ts",
-        "file:src/shared/social-play-scope.ts"
+        "file:src/shared/run-share-key.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default"
@@ -20369,9 +20343,7 @@
       "exports": [
         "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows"
       ],
-      "testedBy": [
-        "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
-      ]
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/CodexScreen.test.tsx",
@@ -20997,7 +20969,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2299,
+      "lineCount": 2260,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21020,14 +20992,11 @@
         "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/components/sceneMood.ts",
-        "file:src/renderer/components/SceneWipe.tsx",
         "file:src/renderer/components/ScoreTermsLine.tsx",
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/screenCallouts.ts",
-        "file:src/renderer/components/StoreVault.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
-        "file:src/renderer/components/useSceneWipe.ts",
         "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/matchScoreFloater.ts",
@@ -21057,6 +21026,7 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/boss-encounters.ts",
@@ -21318,7 +21288,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 293,
+      "lineCount": 307,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -22692,58 +22662,6 @@
         "symbol:src/renderer/components/startupIntroTextures.ts#hasWebGLSupport",
         "symbol:src/renderer/components/startupIntroTextures.ts#loadRelicTextures",
         "symbol:src/renderer/components/startupIntroTextures.ts#RelicTextureSet"
-      ],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/StoreVault.test.tsx",
-      "path": "src/renderer/components/StoreVault.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 57,
-      "imports": [
-        "file:src/renderer/components/StoreVault.tsx",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/run-store-rules.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/StoreVault.tsx",
-      "path": "src/renderer/components/StoreVault.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 103,
-      "imports": [
-        "file:src/renderer/a11y/focusLossRecovery.ts",
-        "file:src/renderer/a11y/toolbarRoving.ts",
-        "file:src/renderer/components/FloorJourney.tsx",
-        "file:src/renderer/components/storeWareGlyphs.tsx",
-        "file:src/renderer/copy/storeSheet.ts",
-        "file:src/renderer/hooks/useModalFocusTrap.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-store-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/StoreVault.tsx#default"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/StoreVault.test.tsx"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/storeWareGlyphs.tsx",
-      "path": "src/renderer/components/storeWareGlyphs.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 91,
-      "imports": [
-        "file:src/shared/run-store-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph"
       ],
       "testedBy": []
     },
@@ -26201,9 +26119,7 @@
         "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
         "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS"
       ],
-      "testedBy": [
-        "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
-      ]
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/settingsHints.ts",
@@ -28301,11 +28217,12 @@
       "path": "src/renderer/store/runStartState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 122,
+      "lineCount": 134,
       "imports": [
         "file:src/renderer/store/runStartState.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/game-core.ts",
+        "file:src/shared/run-settings-rules.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [],
@@ -29325,6 +29242,48 @@
       "testedBy": [
         "file:src/shared/authored-floors.test.ts",
         "file:src/shared/pair-curve.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/automatic-camp-rules.test.ts",
+      "path": "src/shared/automatic-camp-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 59,
+      "imports": [
+        "file:src/shared/automatic-camp-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-clear-transition.ts",
+        "file:src/shared/floor-curio-rules.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/pass-and-play-rules.ts",
+        "file:src/shared/run-relic-rules.ts",
+        "file:src/shared/scoring-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/automatic-camp-rules.ts",
+      "path": "src/shared/automatic-camp-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 42,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/pass-and-play-rules.ts",
+        "file:src/shared/run-relic-rules.ts",
+        "file:src/shared/run-store-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/automatic-camp-rules.ts#AUTOMATIC_CAMP_RULES_VERSION",
+        "symbol:src/shared/automatic-camp-rules.ts#automaticCampReward",
+        "symbol:src/shared/automatic-camp-rules.ts#CampReward"
+      ],
+      "testedBy": [
+        "file:src/shared/automatic-camp-rules.test.ts"
       ]
     },
     {
@@ -30889,7 +30848,6 @@
         "file:src/renderer/components/realmParticles.test.ts",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
-        "file:src/renderer/components/StoreVault.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
         "file:src/renderer/components/tileBoardBreakWave.test.ts",
         "file:src/renderer/components/tileBoardCardTint.test.ts",
@@ -30935,6 +30893,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/authored-floors.test.ts",
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/balance-simulation.test.ts",
         "file:src/shared/board-build-rules.test.ts",
@@ -31846,6 +31805,7 @@
         "symbol:src/shared/floor-clear-transition.ts#finalizeLevel"
       ],
       "testedBy": [
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
         "file:src/shared/meteor-rules.test.ts",
@@ -31931,6 +31891,7 @@
       ],
       "testedBy": [
         "file:src/renderer/copy/floorCurioBeat.test.ts",
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/floor-curio-rules.test.ts",
         "file:src/shared/game.test.ts",
@@ -32183,7 +32144,6 @@
         "symbol:src/shared/game-catalog.ts#MUTATOR_CATALOG"
       ],
       "testedBy": [
-        "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
         "file:src/shared/game-catalog.test.ts"
       ]
     },
@@ -32225,7 +32185,6 @@
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/RunShellItemTray.test.tsx",
-        "file:src/renderer/components/StoreVault.test.tsx",
         "file:src/renderer/store/runLifecycleController.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/renderer/store/runStartState.test.ts",
@@ -32235,6 +32194,7 @@
         "file:src/renderer/store/tilePressController.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievements.test.ts",
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/board-turn-event-facts.chunk-style.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
@@ -33980,6 +33940,7 @@
         "symbol:src/shared/miss-bank.ts#spendMiss"
       ],
       "testedBy": [
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
@@ -34147,8 +34108,9 @@
       "path": "src/shared/next-floor-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 66,
+      "lineCount": 67,
       "imports": [
+        "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
@@ -34370,6 +34332,7 @@
       "testedBy": [
         "file:src/renderer/store/levelCompleteContinuationExecutor.test.ts",
         "file:src/renderer/store/passAndPlayProjection.test.ts",
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/pass-and-play-rules.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
@@ -35807,7 +35770,6 @@
       ],
       "testedBy": [
         "file:src/renderer/assets/ui/modeArt.test.ts",
-        "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-mode-catalog.test.ts",
@@ -35983,6 +35945,7 @@
         "symbol:src/shared/run-relic-rules.ts#usesCampUpgrades"
       ],
       "testedBy": [
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/run-relic-rules.test.ts"
@@ -36008,7 +35971,7 @@
       "path": "src/shared/run-settings-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 10,
+      "lineCount": 11,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -36016,6 +35979,7 @@
         "symbol:src/shared/run-settings-rules.ts#applyRunSettings"
       ],
       "testedBy": [
+        "file:src/renderer/store/runStartState.test.ts",
         "file:src/shared/run-settings-rules.test.ts"
       ]
     },
@@ -36160,7 +36124,7 @@
       "path": "src/shared/run-store-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 240,
+      "lineCount": 239,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -36196,7 +36160,6 @@
         "symbol:src/shared/run-store-rules.ts#StoreRun"
       ],
       "testedBy": [
-        "file:src/renderer/components/StoreVault.test.tsx",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
         "file:src/shared/run-relic-rules.test.ts",
@@ -36539,6 +36502,7 @@
       ],
       "testedBy": [
         "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/scoring-rules.test.ts",
@@ -38830,8 +38794,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 518,
-      "endLine": 518
+      "line": 522,
+      "endLine": 522
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -41534,8 +41498,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 691,
-      "endLine": 691
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -41910,40 +41874,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2298,
-      "endLine": 2298
+      "line": 2259,
+      "endLine": 2259
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 253,
-      "endLine": 253
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 248,
+      "endLine": 248
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 255,
-      "endLine": 255
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 245,
-      "endLine": 245
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -42110,8 +42074,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 292,
-      "endLine": 292
+      "line": 306,
+      "endLine": 306
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -43552,22 +43516,6 @@
       "file": "src/renderer/components/startupIntroTextures.ts",
       "line": 9,
       "endLine": 17
-    },
-    {
-      "id": "symbol:src/renderer/components/StoreVault.tsx#default",
-      "name": "default",
-      "kind": "ExportAssignment",
-      "file": "src/renderer/components/StoreVault.tsx",
-      "line": 102,
-      "endLine": 102
-    },
-    {
-      "id": "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
-      "name": "storeWareGlyph",
-      "kind": "value",
-      "file": "src/renderer/components/storeWareGlyphs.tsx",
-      "line": 90,
-      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
@@ -51056,6 +51004,30 @@
       "file": "src/shared/authored-floors.ts",
       "line": 245,
       "endLine": 323
+    },
+    {
+      "id": "symbol:src/shared/automatic-camp-rules.ts#AUTOMATIC_CAMP_RULES_VERSION",
+      "name": "AUTOMATIC_CAMP_RULES_VERSION",
+      "kind": "value",
+      "file": "src/shared/automatic-camp-rules.ts",
+      "line": 7,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/shared/automatic-camp-rules.ts#automaticCampReward",
+      "name": "automaticCampReward",
+      "kind": "function",
+      "file": "src/shared/automatic-camp-rules.ts",
+      "line": 17,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/automatic-camp-rules.ts#CampReward",
+      "name": "CampReward",
+      "kind": "interface",
+      "file": "src/shared/automatic-camp-rules.ts",
+      "line": 8,
+      "endLine": 11
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -58974,8 +58946,8 @@
       "name": "advanceToNextLevel",
       "kind": "value",
       "file": "src/shared/next-floor-transition-rules.ts",
-      "line": 20,
-      "endLine": 65
+      "line": 21,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/objective-board.ts#buildObjectiveBoardRows",
@@ -61967,7 +61939,7 @@
       "kind": "value",
       "file": "src/shared/run-settings-rules.ts",
       "line": 3,
-      "endLine": 9
+      "endLine": 10
     },
     {
       "id": "symbol:src/shared/run-share-key.ts#describeRunShareKey",
@@ -62094,8 +62066,8 @@
       "name": "buyStoreItem",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 205,
-      "endLine": 239
+      "line": 204,
+      "endLine": 238
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#CAMP_ITEMS",
@@ -62158,8 +62130,8 @@
       "name": "isStocked",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 143,
-      "endLine": 144
+      "line": 142,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
@@ -62174,16 +62146,16 @@
       "name": "rollStoreStock",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 129,
-      "endLine": 140
+      "line": 128,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#runGold",
       "name": "runGold",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#STORE_ITEMS",
@@ -62222,32 +62194,32 @@
       "name": "storeOffer",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 171,
-      "endLine": 202
+      "line": 170,
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreOfferRow",
       "name": "StoreOfferRow",
       "kind": "interface",
       "file": "src/shared/run-store-rules.ts",
-      "line": 156,
-      "endLine": 168
+      "line": 155,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePrice",
       "name": "storePrice",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 151,
-      "endLine": 154
+      "line": 150,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#storePurchaseCount",
       "name": "storePurchaseCount",
       "kind": "value",
       "file": "src/shared/run-store-rules.ts",
-      "line": 148,
-      "endLine": 149
+      "line": 147,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#StoreRun",
@@ -66047,7 +66019,7 @@
       "evidence": [
         {
           "path": "src/shared/run-store-rules.ts",
-          "line": 11
+          "line": 20
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -66875,7 +66847,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 31
+          "line": 32
         }
       ],
       "tests": [
@@ -66922,7 +66894,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 31
+          "line": 32
         }
       ],
       "tests": [
@@ -67769,7 +67741,7 @@
         },
         {
           "path": "src/renderer/store/runStartState.test.ts",
-          "line": 4
+          "line": 5
         }
       ],
       "enables": [
@@ -74245,18 +74217,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/StoreVault.tsx->symbol:src/renderer/components/StoreVault.tsx#default",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "symbol:src/renderer/components/StoreVault.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/storeWareGlyphs.tsx->symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
-      "source": "file:src/renderer/components/storeWareGlyphs.tsx",
-      "target": "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/stormBolts.ts->symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
       "source": "file:src/renderer/components/stormBolts.ts",
       "target": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
@@ -79870,6 +79830,24 @@
       "id": "exports:src/shared/authored-floors.ts->symbol:src/shared/authored-floors.ts#layAuthoredFloorTiles",
       "source": "file:src/shared/authored-floors.ts",
       "target": "symbol:src/shared/authored-floors.ts#layAuthoredFloorTiles",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/automatic-camp-rules.ts->symbol:src/shared/automatic-camp-rules.ts#AUTOMATIC_CAMP_RULES_VERSION",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "symbol:src/shared/automatic-camp-rules.ts#AUTOMATIC_CAMP_RULES_VERSION",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/automatic-camp-rules.ts->symbol:src/shared/automatic-camp-rules.ts#automaticCampReward",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "symbol:src/shared/automatic-camp-rules.ts#automaticCampReward",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/automatic-camp-rules.ts->symbol:src/shared/automatic-camp-rules.ts#CampReward",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "symbol:src/shared/automatic-camp-rules.ts#CampReward",
       "kind": "exports"
     },
     {
@@ -94085,75 +94063,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/components/chooseYourPathScreenModel.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "target": "file:src/renderer/components/chooseYourPathScreenModel.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/copy/screenCopy.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "target": "file:src/renderer/copy/screenCopy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/shared/game-catalog.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "target": "file:src/shared/game-catalog.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/shared/run-mode-catalog.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "target": "file:src/shared/run-mode-catalog.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/assets/ui/modeArt.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/assets/ui/modeArt.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/audio/uiSfx.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/audio/uiSfx.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/OverlayModal.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/OverlayModal.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/PortalScene.tsx",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/components/PortalScene.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/passAndPlay.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/copy/passAndPlay.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/screenCopy.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/copy/screenCopy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -94163,9 +94075,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/challenge-progression.ts",
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/ui/index.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/shared/challenge-progression.ts",
+      "target": "file:src/renderer/ui/index.ts",
       "kind": "imports"
     },
     {
@@ -94175,27 +94087,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/pass-and-play-rules.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/shared/pass-and-play-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/run-mode-catalog.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/shared/run-mode-catalog.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/run-share-key.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/run-share-key.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/social-play-scope.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/shared/social-play-scope.ts",
       "kind": "imports"
     },
     {
@@ -95321,12 +95215,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/SceneWipe.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/SceneWipe.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/ScoreTermsLine.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/ScoreTermsLine.tsx",
@@ -95345,12 +95233,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/StoreVault.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/StoreVault.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/TileBoard.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/TileBoard.tsx",
@@ -95360,12 +95242,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/useGameScreenPowerTileHints.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/useSceneWipe.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/useSceneWipe.ts",
       "kind": "imports"
     },
     {
@@ -95540,6 +95416,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/automatic-camp-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/automatic-camp-rules.ts",
       "kind": "imports"
     },
     {
@@ -97418,84 +97300,6 @@
       "id": "imports:src/renderer/components/startupIntroContract.ts->src/renderer/components/startupIntroConfig.ts",
       "source": "file:src/renderer/components/startupIntroContract.ts",
       "target": "file:src/renderer/components/startupIntroConfig.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.test.tsx->src/renderer/components/StoreVault.tsx",
-      "source": "file:src/renderer/components/StoreVault.test.tsx",
-      "target": "file:src/renderer/components/StoreVault.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.test.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/StoreVault.test.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.test.tsx->src/shared/game-core.ts",
-      "source": "file:src/renderer/components/StoreVault.test.tsx",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.test.tsx->src/shared/run-store-rules.ts",
-      "source": "file:src/renderer/components/StoreVault.test.tsx",
-      "target": "file:src/shared/run-store-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/a11y/focusLossRecovery.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/a11y/focusLossRecovery.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/a11y/toolbarRoving.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/a11y/toolbarRoving.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/components/FloorJourney.tsx",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/components/FloorJourney.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/components/storeWareGlyphs.tsx",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/components/storeWareGlyphs.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/copy/storeSheet.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/copy/storeSheet.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/renderer/hooks/useModalFocusTrap.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/hooks/useModalFocusTrap.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StoreVault.tsx->src/shared/run-store-rules.ts",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/shared/run-store-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/storeWareGlyphs.tsx->src/shared/run-store-rules.ts",
-      "source": "file:src/renderer/components/storeWareGlyphs.tsx",
-      "target": "file:src/shared/run-store-rules.ts",
       "kind": "imports"
     },
     {
@@ -102359,6 +102163,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runStartState.test.ts->src/shared/run-settings-rules.ts",
+      "source": "file:src/renderer/store/runStartState.test.ts",
+      "target": "file:src/shared/run-settings-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runStartState.test.ts->src/shared/save-data.ts",
       "source": "file:src/renderer/store/runStartState.test.ts",
       "target": "file:src/shared/save-data.ts",
@@ -103448,6 +103258,90 @@
       "id": "imports:src/shared/authored-floors.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/authored-floors.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/automatic-camp-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/automatic-camp-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/floor-clear-transition.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/floor-clear-transition.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/pass-and-play-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/pass-and-play-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.test.ts",
+      "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/pass-and-play-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/pass-and-play-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/run-store-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/run-store-rules.ts",
       "kind": "imports"
     },
     {
@@ -107912,6 +107806,12 @@
       "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/automatic-camp-rules.ts",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.ts",
       "kind": "imports"
     },
     {
@@ -115429,12 +115329,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/chooseYourPathScreenModel.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "source": "file:src/renderer/components/chooseYourPathScreenModel.ts",
-      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/CodexScreen.tsx->file:src/renderer/components/CodexScreen.test.tsx",
       "source": "file:src/renderer/components/CodexScreen.tsx",
       "target": "file:src/renderer/components/CodexScreen.test.tsx",
@@ -115858,12 +115752,6 @@
       "id": "tested_by:src/renderer/components/startupIntroContract.ts->file:src/renderer/components/startupIntroContract.test.ts",
       "source": "file:src/renderer/components/startupIntroContract.ts",
       "target": "file:src/renderer/components/startupIntroContract.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/StoreVault.tsx->file:src/renderer/components/StoreVault.test.tsx",
-      "source": "file:src/renderer/components/StoreVault.tsx",
-      "target": "file:src/renderer/components/StoreVault.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -116458,12 +116346,6 @@
       "id": "tested_by:src/renderer/copy/saveRecoveryNotice.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "file:src/shared/release-checklist.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/copy/screenCopy.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "source": "file:src/renderer/copy/screenCopy.ts",
-      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -117160,6 +117042,12 @@
       "id": "tested_by:src/shared/authored-floors.ts->file:src/shared/pair-curve.test.ts",
       "source": "file:src/shared/authored-floors.ts",
       "target": "file:src/shared/pair-curve.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/automatic-camp-rules.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117871,12 +117759,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/StoreVault.test.tsx",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/StoreVault.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/TileBoard.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/TileBoard.test.tsx",
@@ -118144,6 +118026,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/authored-floors.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/authored-floors.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -118975,6 +118863,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-clear-transition.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-clear-transition.ts->file:src/shared/camp-upgrades.test.ts",
       "source": "file:src/shared/floor-clear-transition.ts",
       "target": "file:src/shared/camp-upgrades.test.ts",
@@ -119008,6 +118902,12 @@
       "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/renderer/copy/floorCurioBeat.test.ts",
       "source": "file:src/shared/floor-curio-rules.ts",
       "target": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -119161,12 +119061,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/game-catalog.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "source": "file:src/shared/game-catalog.ts",
-      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/game-catalog.ts->file:src/shared/game-catalog.test.ts",
       "source": "file:src/shared/game-catalog.ts",
       "target": "file:src/shared/game-catalog.test.ts",
@@ -119239,12 +119133,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/StoreVault.test.tsx",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/renderer/components/StoreVault.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/store/runLifecycleController.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/store/runLifecycleController.test.ts",
@@ -119296,6 +119184,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/achievements.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/achievements.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -120067,6 +119961,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/bad-floor-is-quiet.test.ts",
       "source": "file:src/shared/miss-bank.ts",
       "target": "file:src/shared/bad-floor-is-quiet.test.ts",
@@ -120250,6 +120150,12 @@
       "id": "tested_by:src/shared/pass-and-play-rules.ts->file:src/renderer/store/passAndPlayProjection.test.ts",
       "source": "file:src/shared/pass-and-play-rules.ts",
       "target": "file:src/renderer/store/passAndPlayProjection.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/pass-and-play-rules.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/pass-and-play-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -120793,12 +120699,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "source": "file:src/shared/run-mode-catalog.ts",
-      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/content-lock.test.ts",
@@ -120859,6 +120759,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-relic-rules.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-relic-rules.ts->file:src/shared/camp-upgrades.test.ts",
       "source": "file:src/shared/run-relic-rules.ts",
       "target": "file:src/shared/camp-upgrades.test.ts",
@@ -120874,6 +120780,12 @@
       "id": "tested_by:src/shared/run-relic-rules.ts->file:src/shared/run-relic-rules.test.ts",
       "source": "file:src/shared/run-relic-rules.ts",
       "target": "file:src/shared/run-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-settings-rules.ts->file:src/renderer/store/runStartState.test.ts",
+      "source": "file:src/shared/run-settings-rules.ts",
+      "target": "file:src/renderer/store/runStartState.test.ts",
       "kind": "tested_by"
     },
     {
@@ -120910,12 +120822,6 @@
       "id": "tested_by:src/shared/run-soak.ts->file:src/shared/run-soak.test.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/run-soak.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/run-store-rules.ts->file:src/renderer/components/StoreVault.test.tsx",
-      "source": "file:src/shared/run-store-rules.ts",
-      "target": "file:src/renderer/components/StoreVault.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -121330,6 +121236,12 @@
       "id": "tested_by:src/shared/scoring-rules.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/scoring-rules.ts->file:src/shared/automatic-camp-rules.test.ts",
+      "source": "file:src/shared/scoring-rules.ts",
+      "target": "file:src/shared/automatic-camp-rules.test.ts",
       "kind": "tested_by"
     },
     {

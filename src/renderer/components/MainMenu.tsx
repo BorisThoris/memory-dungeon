@@ -28,6 +28,7 @@ interface MainMenuProps {
     suppressMenuBackgroundFallback?: boolean;
     onDismissHowToPlay: () => Promise<void>;
     onPlay: () => void;
+    onOpenPlayOptions?: () => void;
     onOpenCollection: () => void;
     onOpenProfile: () => void;
     onOpenCodex: () => void;
@@ -54,6 +55,7 @@ const MainMenu = ({
     suppressMenuBackgroundFallback = false,
     onDismissHowToPlay,
     onPlay,
+    onOpenPlayOptions,
     onOpenCollection,
     onOpenProfile,
     onOpenCodex,
@@ -191,20 +193,32 @@ const MainMenu = ({
                     <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
                         <p className={styles.contentsHead}>Contents</p>
                         <div aria-label="Primary actions" className={styles.ladder} role="group">
-                            <button
-                                aria-label="Play"
-                                className={`${styles.entry} ${styles.entryPlay}`}
-                                type="button"
-                                onClick={() => {
-                                    playMenuOpen();
-                                    onPlay();
-                                }}
-                            >
-                                <span className={styles.numeral}>{NUMERALS[0]}</span>
-                                <span className={styles.entryTitle}>Play</span>
-                                <span aria-hidden="true" className={styles.leader} />
-                                <span className={styles.entryNote}>{lastRun ? `Floor ${lastRun.highestLevel} last time` : 'Begin the descent'}</span>
-                            </button>
+                            <div className={styles.playRow}>
+                                <button
+                                    aria-label="Play"
+                                    className={`${styles.entry} ${styles.entryPlay}`}
+                                    type="button"
+                                    onClick={() => {
+                                        playMenuOpen();
+                                        onPlay();
+                                    }}
+                                >
+                                    <span className={styles.numeral}>{NUMERALS[0]}</span>
+                                    <span className={styles.entryTitle}>Play</span>
+                                    <span aria-hidden="true" className={styles.leader} />
+                                    {!onOpenPlayOptions && (
+                                        <span className={styles.entryNote}>
+                                            {lastRun ? `Floor ${lastRun.highestLevel} last time` : 'Begin the descent'}
+                                        </span>
+                                    )}
+                                </button>
+                                {onOpenPlayOptions && (
+                                    <button className={styles.playOptions} type="button" onClick={() => {
+                                        playMenuOpen();
+                                        onOpenPlayOptions();
+                                    }}>Play options</button>
+                                )}
+                            </div>
                             <div className={styles.entries} data-testid="main-menu-secondary-actions">
                                 {entries.map((entry, index) => (
                                     <button

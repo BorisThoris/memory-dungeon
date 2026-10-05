@@ -197,6 +197,23 @@
     gap: 0;
 }
 
+.playRow { display: flex; align-items: stretch; border-bottom: 1px solid var(--margin-hairline); }
+.playRow .entry { flex: 1; min-width: 0; border-bottom: 0; }
+.playOptions {
+    align-self: center;
+    min-height: 44px;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--margin-hairline);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--margin-ink) 70%, transparent);
+    color: var(--margin-paper-soft);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+.playOptions:focus-visible { outline: 2px solid var(--margin-gold); outline-offset: 2px; }
+
 /* An entry is a line of the contents: numeral, title, a leader rule, a note. The whole line is
    the button; its height is the touch target. */
 .entry {

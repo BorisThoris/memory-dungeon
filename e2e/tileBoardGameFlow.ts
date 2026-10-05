@@ -82,37 +82,8 @@ export async function navigateToLevel1PlayPhase(
     );
     await page.goto('/');
     await dismissStartupIntro(page);
-    let openedViaFixture = false;
-    try {
-        await expect(async () => {
-            const playButton = page.getByRole('button', { name: /^play$/i });
-            await expect(playButton).toBeVisible({ timeout: 5_000 });
-            await playButton.evaluate((el) => (el as HTMLButtonElement).click());
-            await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible({ timeout: 5_000 });
-        }).toPass({ timeout: 12_000 });
-        await expect(async () => {
-            if (await page.getByTestId('game-hud').isVisible().catch(() => false)) {
-                return;
-            }
-            const startRunButton = page.getByRole('button', { name: /start run/i });
-            await expect(startRunButton).toBeVisible({ timeout: 5_000 });
-            await startRunButton.evaluate((el) => (el as HTMLButtonElement).click());
-            await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 5_000 });
-        }).toPass({ timeout: 12_000 });
-    } catch {
-        await page.evaluate(async () => {
-            const w = window as Window & {
-                __memoryDungeonE2e?: {
-                    startFixture?: (id: 'cascadeClump') => Promise<void>;
-                };
-            };
-            if (!w.__memoryDungeonE2e?.startFixture) {
-                throw new Error('window.__memoryDungeonE2e.startFixture missing; cannot open fallback gameplay fixture.');
-            }
-            await w.__memoryDungeonE2e.startFixture('cascadeClump');
-        });
-        openedViaFixture = true;
-    }
+    await page.getByRole('button', { name: /^play$/i }).click();
+    await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
     // Level title can be sr-only on compact viewports; attached is enough to proceed.
     await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15_000 });
     await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15_000 });
@@ -126,10 +97,6 @@ export async function navigateToLevel1PlayPhase(
 
     /** Capture memorize-phase pair map before `waitForBoardPlayPhase` — afterward aria labels are hidden-tile text. */
     let memorizePairs: MemorizePairPositions | null = null;
-    if (openedViaFixture) {
-        await waitForBoardPlayPhase(page);
-        return null;
-    }
     const captureDeadline = Date.now() + 45_000;
     while (Date.now() < captureDeadline) {
         const status = await page.getByTestId('tile-board-frame').getAttribute('data-board-run-status');

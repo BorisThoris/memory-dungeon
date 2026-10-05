@@ -371,20 +371,10 @@ export function mainMenuPlayButton(page: Page) {
 }
 
 export async function openChooseYourPath(page: Page): Promise<void> {
-    const chooseYourPath = page.getByRole('region', { name: /choose your path/i });
-    if (await chooseYourPath.isVisible().catch(() => false)) {
-        return;
-    }
-    await expect(async () => {
-        const playButton = mainMenuPlayButton(page);
-        await expect(playButton).toBeVisible({ timeout: 5_000 });
-        await expect(playButton).toBeEnabled({ timeout: 5_000 });
-        await playButton.click({ force: true, timeout: 10_000 });
-        if (!(await chooseYourPath.isVisible().catch(() => false))) {
-            await playButton.evaluate((el) => (el as HTMLButtonElement).click());
-        }
-        await expect(chooseYourPath).toBeVisible({ timeout: 10_000 });
-    }).toPass({ timeout: 30_000 });
+    const options=page.getByRole('dialog',{name:'Play options'});
+    if(await options.isVisible().catch(()=>false))return;
+    await page.getByRole('button',{name:'Play options',exact:true}).click();
+    await expect(options).toBeVisible();
 }
 
 export async function ensureModeLibraryVisible(page: Page): Promise<void> {
@@ -520,44 +510,20 @@ export async function openMainMenuFromSave(page: Page, onboardingDismissed: bool
 }
 
 export async function startClassicRunFromModeSelect(page: Page): Promise<void> {
-    const recommended = page.getByRole('region', { name: /recommended run/i });
-    const recommendedClassic = recommended.getByRole('heading', { name: /^classic run$/i });
-    if (await recommendedClassic.isVisible().catch(() => false)) {
-        const classicBtn = recommended.getByRole('button', { name: /start run/i });
-        await expect(classicBtn).toBeVisible({ timeout: 15_000 });
-        await classicBtn.scrollIntoViewIfNeeded();
-        // Long serial visual runs against Vite can see `element was detached` / stability timeouts on animated cards.
-        await classicBtn.click({ force: true });
-    } else {
-        await ensureModeLibraryVisible(page);
-        const search = page.getByRole('searchbox', { name: /filter modes/i });
-        if (await search.isVisible().catch(() => false)) {
-            await search.fill('Classic Run');
-        }
-        const classicTile = page.getByRole('button', { name: /^Classic Run\. Open details\.$/i });
-        await expect(classicTile).toBeVisible({ timeout: 15_000 });
-        await classicTile.click({ force: true });
-        const modal = page.getByTestId('library-mode-detail-modal');
-        await expect(modal).toBeVisible({ timeout: 15_000 });
-        await modal.getByRole('button', { name: /^play$/i }).click();
-    }
-    // GameScreen level title is `srOnly` (screen-reader-only); visible checks time out on narrow viewports.
-    await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15000 });
-    await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15000 });
+    await page.getByRole('dialog',{name:'Play options'}).getByRole('button',{name:'Play now',exact:true}).click();
+    await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
 export async function openLevel1Play(page: Page): Promise<void> {
-    await openMainMenuFromSave(page, true);
-    await openChooseYourPath(page);
-    await startClassicRunFromModeSelect(page);
+    await openMainMenuFromSave(page,true);
+    await mainMenuPlayButton(page).click();
+    await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
 export async function openLevel1PlayWithSave(page: Page, saveJson: string): Promise<void> {
-    await gotoWithSave(page, saveJson);
-    await dismissStartupIntro(page);
-    await mainMenuPlayButton(page).click({ force: true });
-    await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-    await startClassicRunFromModeSelect(page);
+    await gotoWithSave(page,saveJson);await dismissStartupIntro(page);
+    await mainMenuPlayButton(page).click();
+    await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
 type PairPositions = MemorizePairPositions;
@@ -754,8 +720,7 @@ export async function completeLevel1Play(page: Page, pairs: PairPositions | null
 async function restartLevel1FromMainMenu(page: Page): Promise<void> {
     await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 15000 });
     await mainMenuPlayButton(page).click();
-    await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-    await startClassicRunFromModeSelect(page);
+    await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
     await waitForPlayingAndHiddenCount(page, 4);
 }
 

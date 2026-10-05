@@ -9,7 +9,6 @@ import {
     buildVisualSaveJson,
     expectHudFloor,
     gotoWithSave,
-    startClassicRunFromModeSelect,
     waitLevel1PlayReady
 } from './visualScreenHelpers';
 import { readDevPairPositionsFromFrame } from './memorizeSnapshot';
@@ -30,13 +29,7 @@ export async function expectGameplayReady(page: Page): Promise<void> {
 }
 
 export async function openModeLibrary(page: Page): Promise<void> {
-    await openMainMenuFromSave(page, true);
-    await openChooseYourPath(page);
-    const library = page.getByRole('region', { name: /browse modes/i });
-    if (!(await library.isVisible().catch(() => false))) {
-        await page.getByRole('button', { name: /browse modes/i }).click();
-    }
-    await expect(library).toBeVisible();
+    await openMainMenuFromSave(page,true);await openChooseYourPath(page);
 }
 
 export async function openModeDetail(page: Page, modeTitle: string): Promise<Locator> {
@@ -231,8 +224,7 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
 export async function startClassicFromMenu(page: Page): Promise<void> {
     await openMainMenuFromSave(page, true);
     await mainMenuPlayButton(page).click({ force: true });
-    await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-    await startClassicRunFromModeSelect(page);
+
     await expectGameplayReady(page);
 }
 

@@ -365,9 +365,9 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         title: 'Gold and camp upgrades',
         description:
             'Clear floors and build combos to earn **gold**. A clear pays two gold, plus one per chain rung and up to three for turns under par. Arena difficulty can increase the payout. ' +
-            '**Camp** opens after every third floor. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
+            'After every third floor, **camp automatically spends gold** on one useful reward. It restores a miss first when only one remains; otherwise it chooses the lowest-rank affordable upgrade, then a missing supply. There is no shop screen. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
             '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). Each upgrade has three ranks and lasts this run. ' +
-            'Need help immediately? Buy a miss for 4 gold, a peek for 3 or a bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
+            'When an upgrade is not affordable, camp can restore a miss for 4 gold, a missing peek for 3 or a missing bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
             'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is selected randomly; no route choice is needed.'
     },
     {
@@ -652,7 +652,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'realm_travel',
         title: 'Travel',
         description:
-            'The next arena is selected **randomly** when a floor clears. Continue automatically, or leave camp after every third clear. A shared seed repeats the same journey. A run opens somewhere calm. ' +
+            'The next arena is selected **randomly** when a floor clears. Floors continue automatically, including every third clear when camp supplies are applied. A shared seed repeats the same journey. A run opens somewhere calm. ' +
             'A **Calm** arena pays normal clear gold, **Wild** pays a quarter more and **Raging** pays half again. Only raging arenas have a regular weather clock; the others react to your matches and misses. ' +
             'From the fourth floor a wild arena can be a **confluence**: two realms at once. Both affect the floor and the clear pays **double**. Matching an omen settles the floor on its realm alone. ' +
             'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you go deeper twice as fast. Every clear in a realm takes you a level **deeper** into it, and every other realm fades by one; there is no limit. Each level is a quarter more gold on that realm\u2019s clears up to three and a twentieth after, one more pair of the floor made of the realm\u2019s element (up to half the floor), and more resonance from it. But a deep realm bites: it strikes back at a miss on a **wild** floor from depth three, and even a **calm** one from depth six, and its raging weather reaches further. The arena HUD shows your current realm.'

@@ -16,6 +16,7 @@ import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runArray } from './run-array-guards';
 import { enterRealmFloor, nextFloorRealmDoor } from './realm-rules';
 import { applyRealmChill } from './realm-carryover-rules';
+import { automaticCampReward } from './automatic-camp-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -37,7 +38,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         nextCycleFloor = entry.cycleFloor;
     }
 
-    const transitionRun: RunState = run;
+    const transitionRun = automaticCampReward(run).run;
 
     const builtBoard = buildBoard(nextLevelNum, {
         runSeed: run.runSeed,

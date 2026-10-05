@@ -68,7 +68,7 @@ export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
     /** The purse on the head, and what it is for on hover. */
     gold: 'gold',
-    goldTitle: 'Gold: spend at camp every 3 floors on run upgrades or supplies. Saving it lets you buy higher ranks.',
+    goldTitle: 'Every 3 floors, gold automatically funds a run upgrade or a needed supply. Unspent gold carries forward.',
     /** The tag on the Floor stat once this run is the deepest the profile has seen. */
     personalBest: 'Best',
     personalBestAria: 'Deepest floor yet'

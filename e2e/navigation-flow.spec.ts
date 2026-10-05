@@ -1,11 +1,9 @@
 import { openRunMenuItem } from './playablePathHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import {
-    ensureModeLibraryVisible,
     openChooseYourPath,
     openMainMenuFromSave,
     openLevel1Play,
-    startClassicRunFromModeSelect,
     waitLevel1PlayReady
 } from './visualScreenHelpers';
 
@@ -19,31 +17,32 @@ async function expectGameplayHudWithWings(page: Page): Promise<void> {
 test.describe('Navigation shells', () => {
     test.describe.configure({ retries: 1 });
     test.setTimeout(120_000);
-    test('Play opens Choose Your Path then Classic Run starts level 1', async ({ page }) => {
+    test('Play starts level 1 directly', async ({ page }) => {
         await openMainMenuFromSave(page, true);
-        await openChooseYourPath(page);
-        await startClassicRunFromModeSelect(page);
+        await page.getByRole('button', { name: 'Play', exact: true }).click();
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
+        await expect(page.getByRole('dialog', { name: 'Play options' })).toHaveCount(0);
     });
 
-    test('Endless Mode stays locked behind Browse modes', async ({ page }) => {
-        test.setTimeout(60_000);
+    test('optional setup applies a custom solo run', async ({ page }) => {
+        test.setTimeout(120_000);
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
-        await ensureModeLibraryVisible(page);
-        await page.getByRole('button', { name: /endless mode/i }).click();
-        await expect(page.getByTestId('library-mode-detail-modal').getByText(/locked intentionally/i)).toBeVisible();
+        await page.getByText('Customize a solo run', { exact: true }).click();
+        await page.getByLabel('More time to study the cards').check();
+        await page.getByRole('button', { name: 'Start custom run' }).click();
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
+        const pacing = await page.evaluate(async () =>
+            (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.resolveDelayMultiplier);
+        expect(pacing).toBeGreaterThan(1);
     });
 
-    test('Settings opened from Choose Your Path returns to Choose Your Path', async ({ page }) => {
+    test('optional setup returns focus to its menu button on Escape', async ({ page }) => {
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
-        await page.getByTestId('choose-path-settings').click();
-        await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
-        if (process.env.REG044_CAPTURE === '1') {
-            await page.screenshot({ path: '/opt/cursor/artifacts/reg-044-mode-settings-return.png', fullPage: true });
-        }
-        await page.getByRole('button', { name: /^back$/i }).click();
-        await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
+        await page.keyboard.press('Escape');
+        await expect(page.getByRole('dialog', { name: 'Play options' })).toHaveCount(0);
+        await expect(page.getByRole('button', { name: 'Play options', exact: true })).toBeFocused();
     });
 
     test('Collection from main menu returns to menu on Back', async ({ page }) => {
@@ -101,14 +100,15 @@ test.describe('Navigation shells', () => {
         await expectGameplayHudWithWings(page);
     });
 
-    test('Daily Challenge from Choose Your Path starts a run', async ({ page }) => {
+    test('optional setup starts a shared-device run directly', async ({ page }) => {
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
-        await ensureModeLibraryVisible(page);
-        await page.getByRole('button', { name: /daily challenge/i }).click();
-        await page.getByTestId('library-mode-detail-modal').getByRole('button', { name: /^play$/i }).click();
-        await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15_000 });
-        await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15_000 });
+        await page.getByText('Play together on this device', { exact: true }).click();
+        await page.getByRole('button', { name: '3 players' }).click();
+        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
+        const seats = await page.evaluate(async () =>
+            (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.passAndPlay?.seats.length);
+        expect(seats).toBe(3);
     });
 
 });

@@ -15,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 60: original boards, stored meteor pickups and late-floor growth. */
-export const GAME_RULES_VERSION = 60;
+/** Bump when generation or player-visible gameplay rules change. 61: automatic camp rewards without a shop stop. */
+export const GAME_RULES_VERSION = 61;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;

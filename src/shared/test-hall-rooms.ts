@@ -567,13 +567,13 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'store-stop',
         title: 'Camp upgrades',
-        mechanic: 'Every third floor, spend gold on upgrades for this run or emergency supplies.',
+        mechanic: 'Every third clear automatically funds one useful upgrade or supply with your gold.',
         graphMechanicIds: ['progression.store_stop', 'economy.gold'],
-        tryThis: 'Clear floor 3. Buy Long Look for one extra second to study every floor. Save gold for its next rank or buy supplies.',
+        tryThis: 'Clear floor 3. The reward appears on the clear beat and floor 4 starts automatically. No buying or route screen.',
         build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 12 } }),
         script: [
-            { step: { do: 'clear' }, says: 'floor 3 clears and opens camp', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
-            { step: { do: 'buy', item: 'long_look' }, says: 'Long Look costs 8 gold and adds a second to study', expect: (r, b) => (r.storePurchases?.long_look === 1 && runGold(b) - runGold(r) === 8 && getMemorizeDurationForRun(r, 4) - getMemorizeDurationForRun(b, 4) === 1000 ? null : 'camp upgrade differs from its description') }
+            { step: { do: 'clear' }, says: 'floor 3 clears and prepares an automatic reward', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
+            { step: { do: 'advance' }, says: 'floor 4 starts with Long Look funded automatically', expect: (r, b) => (r.board?.level === 4 && r.storePurchases?.long_look === 1 && runGold(b) - runGold(r) === 8 ? null : 'automatic camp reward differs from its description') }
         ]
     },
     {

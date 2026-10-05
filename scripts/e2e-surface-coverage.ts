@@ -26,7 +26,7 @@ export const UNREACHED_VIEW_EXEMPTIONS: Record<ViewState, string> | Record<strin
     boot: 'A frame before hydration finishes, not a screen a player acts on.',
     menu: 'Every visual and gate spec starts here; it needs no fixture of its own.',
     settings: 'Reached by navigation in the reachability gate and the fit contract, not by a fixture.',
-    modeSelect: 'Choose Your Path, reached by pressing Play in the gate and the fit contract.',
+    modeSelect: 'Optional Play options dialog, reached from the menu in navigation and fit checks.',
     collection: 'Reached by navigation from the menu in both gates.',
     profile: 'Reached by navigation from the menu in both gates.',
     inventory: 'Reached by navigation from the menu and from the run menu.',

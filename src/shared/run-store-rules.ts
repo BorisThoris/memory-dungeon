@@ -8,7 +8,7 @@ import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_CO
 import { TILE_SUITS } from './tile-suit-rules';
 import { ELEMENT_NAMES } from './element-alchemy-rules';
 
-/** Every third clear opens camp. Rules 58 spend gold on three ranked upgrades or supplies.
+/** Every third clear is a camp reward point. Rules 61 fund one reward automatically.
  * Legacy stores remain deterministic for older replay rules. Shared tables skip the stop. */
 export const STORE_STOP_EVERY_FLOORS = 3;
 
@@ -123,8 +123,7 @@ export type StoreRun = Pick<
  * - of the other consumables, each is in about two stops of three;
  * - of the relics not yet owned, two.
  *
- * The vault draws what is stocked and leaves the shelf bare for what is not (`StoreVault`), so
- * the stops read as different rooms and a relic is something you find rather than pick.
+ * Older rules retain their seeded stock; current camp rewards use the fixed upgrade stock.
  */
 export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[], rulesVersion = 54): StoreItemId[] => {
     if (usesCampUpgrades({ runRulesVersion: rulesVersion })) return CAMP_ITEMS.map(item => item.id);

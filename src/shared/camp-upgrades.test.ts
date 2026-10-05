@@ -10,7 +10,7 @@ import { chooseRealmDoor } from './realm-rules';
 import type { RunState } from './contracts';
 
 const camp = (seed = 17): RunState => {
-    const run = createNewRun(0, { runSeed: seed, gameMode: 'endless' });
+    const run = createNewRun(0, { runSeed: seed, gameMode: 'endless', runRulesVersionOverride: 60 });
     const board = { ...run.board!, level: 3, matchedPairs: run.board!.pairCount,
         tiles: run.board!.tiles.map(tile => ({ ...tile, state: 'matched' as const })) };
     return { ...finalizeLevel({ ...run, board }, board), gold: 200, missBank: [{ floor: 3, misses: 4 }] };

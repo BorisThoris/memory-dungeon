@@ -137,13 +137,13 @@ test.describe('UI fit contract', () => {
         });
     }
 
-    test('choose your path fits every window', async ({ page }) => {
+    test('optional play options fit every window', async ({ page }) => {
         test.setTimeout(300_000);
         const save = buildVisualSaveJson(true);
-        await atEverySize(page, 'choose your path', async () => {
+        await atEverySize(page, 'play options', async () => {
             await gotoWithSave(page, save);
             await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-            await mainMenuPlayButton(page).click();
+            await page.getByRole('button', { name: 'Play options', exact: true }).click();
             await page.waitForTimeout(800);
         });
     });

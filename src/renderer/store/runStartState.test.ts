@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun, createWildRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { applyRunSettings } from '../../shared/run-settings-rules';
 import { buildClassicRunOptions, DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import {
     createRestartRun,
@@ -71,6 +72,17 @@ describe('runStartState', () => {
                 settings
             })?.run.activeMutators
         ).toEqual(['wide_recall', 'n_back_anchor']);
+    });
+
+    it('keeps the selected calm pace when applying global settings and restarting', () => {
+        const saveData = createDefaultSaveData();
+        const plan = createRunStartPlan({
+            request: { kind: 'endless', setup: { ...DEFAULT_CLASSIC_RUN_SETUP, pacing: 'calm' } },
+            saveData,
+            settings: saveData.settings
+        });
+        expect(plan?.run.resolveDelayMultiplier).toBe(1.35);
+        expect(applyRunSettings(createRestartRun(plan!.run, saveData), saveData.settings).resolveDelayMultiplier).toBe(1.35);
     });
 
 
