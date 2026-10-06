@@ -707,6 +707,7 @@ export const resolveRealmTurn = ({
             castImpact = {
                 key: eventKey(run, level, turns, cast.kind), suit: cast.suit, sourceCells: cast.sourceCells,
                 contacts: cast.contacts, multiplier: cast.multiplier, power: cast.power, groupPairs: cast.groupPairs,
+                reactions: field?.reactionImpact ? [{ ...field.reactionImpact, eventKey: `${eventKey(run, level, turns, cast.kind)}:ground` }] : [],
                 reaction: field?.reaction ?? null, detail: [field?.detail, forgeDetail].filter(Boolean).join(' · ')
             };
             casts += 1;
@@ -728,7 +729,11 @@ export const resolveRealmTurn = ({
         for (const id of reaction.touchedTileIds) touchedThisTurn.add(id);
         if (castImpact) {
             const detail = `Amplified ${definition.name} ×${potency}: ${elementReactionSummary(definition.kind, potency)}`;
-            castImpact = { ...castImpact, detail: `${castImpact.detail} · ${detail}` };
+            castImpact = { ...castImpact, reaction: definition.name,
+                reactions: [...(castImpact.reactions ?? []), { eventKey: eventKey(run, level, turns, definition.kind), kind: definition.kind, scope: 'streak', potency,
+                    sourceCells: group, changes: reaction.changes, gold: reaction.gold, score: reaction.score,
+                    stillTurns: reaction.stillTurns, resonanceGain: reaction.resonanceGain }],
+                detail: `${castImpact.detail} · ${detail}` };
             const castEvent = events.find(event => event.key === castImpact!.key);
             if (castEvent?.ground) castEvent.ground = { ...castEvent.ground, detail: `${castEvent.ground.detail} · ${detail}` };
         }

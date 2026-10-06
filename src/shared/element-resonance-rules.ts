@@ -1,4 +1,4 @@
-import type { RunState, Tile, TileSuit } from './contracts';
+import type { ElementReactionImpact, RunState, Tile, TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { tileCharge, type AlchemyLog } from './element-alchemy-rules';
@@ -225,6 +225,7 @@ export const resonanceAfterMiss = (resonance: ElementResonance, missedTiles: rea
 };
 
 export interface ElementReactionOutcome {
+    changes: ElementReactionImpact['changes'];
     kind: ElementReactionKind;
     potency: number;
     /** The cards it changed, lit or charged. */
@@ -243,10 +244,10 @@ export interface ElementReactionOutcome {
  */
 export const resolveElementReaction = (kind: ElementReactionKind, potency: number, tiles: Tile[], nearest: readonly number[], alchemy?: AlchemyLog): ElementReactionOutcome => {
     const p = Math.max(1, runNonNegativeInteger(potency));
-    const outcome: ElementReactionOutcome = { kind, potency: p, touchedTileIds: [], litTileIds: [], gold: 0, score: 0, stillTurns: 0, resonanceGain: 0 };
+    const outcome: ElementReactionOutcome = { kind, potency: p, changes: [], touchedTileIds: [], litTileIds: [], gold: 0, score: 0, stillTurns: 0, resonanceGain: 0 };
     // The same recipe applies to local ground and amplified reactions. Only scope and power differ.
     const scope = [...new Set(nearest)].filter(index => tiles[index]?.state === 'hidden' && isElemental(tiles[index]));
-    const clear = (keys: readonly ('fuse' | 'vined' | 'bloom' | 'seeded' | 'frost' | 'snowed' | 'rime')[]) => {
+    const clear = (keys: readonly ('fuse' | 'vined' | 'bloom' | 'seeded' | 'frost' | 'snowed' | 'rime')[], effect: ElementReactionImpact['changes'][number]['effect']) => {
         for (const index of scope) {
             const tile = tiles[index]!;
             if (!keys.some(key => tile[key] != null)) continue;
@@ -254,24 +255,26 @@ export const resolveElementReaction = (kind: ElementReactionKind, potency: numbe
             for (const key of keys) delete next[key];
             tiles[index] = next;
             outcome.touchedTileIds.push(tile.id);
+            outcome.changes.push({ tileId: tile.id, effect });
         }
     };
     switch (kind) {
         case 'steam':
-            clear(['fuse']);
+            clear(['fuse'], 'doused');
             outcome.litTileIds = scope.slice(0, p).map(index => tiles[index]!.id);
             outcome.touchedTileIds.push(...outcome.litTileIds);
+            outcome.changes.push(...outcome.litTileIds.map(tileId => ({ tileId, effect: 'revealed' as const })));
             break;
         case 'blaze':
-            clear(['vined', 'bloom', 'seeded']);
+            clear(['vined', 'bloom', 'seeded'], 'growth-cleared');
             outcome.gold = Math.ceil(p / BLAZE_POTENCY_PER_GOLD);
             break;
         case 'melt':
-            clear(['frost', 'snowed', 'rime']);
+            clear(['frost', 'snowed', 'rime'], 'thawed');
             outcome.score = THAW_SCORE_PER_POTENCY_SQUARED * p * p;
             break;
         case 'freezeover':
-            clear(['fuse']);
+            clear(['fuse'], 'doused');
             outcome.stillTurns = p + 1;
             break;
         case 'flood':
@@ -280,6 +283,7 @@ export const resolveElementReaction = (kind: ElementReactionKind, potency: numbe
                 if (tile.seeded !== 1) continue;
                 tiles[index] = { ...tile, seeded: 2 };
                 outcome.touchedTileIds.push(tile.id);
+                outcome.changes.push({ tileId: tile.id, effect: 'ripened' });
             }
             outcome.resonanceGain = p;
             break;
@@ -289,6 +293,7 @@ export const resolveElementReaction = (kind: ElementReactionKind, potency: numbe
                 tiles[index] = { ...tile, empowered: tileCharge(tile) + 1 };
                 alchemy?.empowered.push(tile.id);
                 outcome.touchedTileIds.push(tile.id);
+                outcome.changes.push({ tileId: tile.id, effect: 'charged' });
             }
             break;
     }

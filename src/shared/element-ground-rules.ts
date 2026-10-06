@@ -1,4 +1,4 @@
-import type { BoardState, RealmId, Tile, TileSuit } from './contracts';
+import type { BoardState, ElementReactionImpact, RealmId, Tile, TileSuit } from './contracts';
 import { ELEMENT_NAMES, type AlchemyLog } from './element-alchemy-rules';
 import { elementReactionOf, resolveElementReaction, elementReactionSummary } from './element-resonance-rules';
 import { SUIT_REALM } from './realm-sway-rules';
@@ -36,6 +36,7 @@ export const groundAnchoredTileIds = (tiles: readonly Tile[], ground: readonly (
     tiles.filter((tile, index) => tile.state === 'hidden' && (ground[index] === 'bone' || tile.rime)).map((tile) => tile.id);
 
 export interface GroundCastResult {
+    reactionImpact?: ElementReactionImpact;
     ground: (TileSuit | null)[];
     cells: number;
     touchedTileIds: string[];
@@ -104,5 +105,5 @@ export const castElementalGround = ({
     for (const id of lit) touched.add(id);
     const name = reaction?.name ?? null;
     if (notes.length === 0) notes.push(suit === 'bone' ? 'Ice anchors the ground' : suit === 'moss' ? 'Roots planted for your next match' : `${ELEMENT_NAMES[suit]} ground spreads`);
-    return { ground, cells: footprint.length, touchedTileIds: [...touched], litTileIds: [...lit], gold, score: chemistry?.score ?? 0, stillTurns: chemistry?.stillTurns ?? 0, resonanceGain: chemistry?.resonanceGain ?? 0, reactionElements: reaction?.elements ?? [], reaction: name, detail: notes.join(' · '), quenchFire: reaction?.kind === 'steam' || reaction?.kind === 'melt' };
+    return { ...(chemistry ? { reactionImpact: { kind: chemistry.kind, scope: 'ground' as const, potency: chemistry.potency, sourceCells: origins, changes: chemistry.changes, gold: chemistry.gold, score: chemistry.score, stillTurns: chemistry.stillTurns, resonanceGain: chemistry.resonanceGain } } : {}), ground, cells: footprint.length, touchedTileIds: [...touched], litTileIds: [...lit], gold, score: chemistry?.score ?? 0, stillTurns: chemistry?.stillTurns ?? 0, resonanceGain: chemistry?.resonanceGain ?? 0, reactionElements: reaction?.elements ?? [], reaction: name, detail: notes.join(' · '), quenchFire: reaction?.kind === 'steam' || reaction?.kind === 'melt' };
 };

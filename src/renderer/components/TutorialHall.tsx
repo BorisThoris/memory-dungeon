@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { advanceTutorial, resolveTutorial, selectTutorialTile, startTutorial, TUTORIAL_LESSONS, tutorialTarget, type TutorialLesson, type TutorialSession } from '../../shared/tutorial-hall';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
+import { elementReactionResult } from '../../shared/element-reaction-feedback';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
@@ -9,7 +10,7 @@ import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import styles from './TutorialHall.module.css';
 
 interface Props { initialLessonId?: string; onClose: () => void; reduceMotion: boolean; graphicsQuality: GraphicsQualityPreset }
-const categories = ['Essentials', 'Elements', 'Combinations'] as const;
+const categories = ['Essentials', 'Elements', 'Combinations', 'Interactions'] as const;
 
 export default function TutorialHall({ initialLessonId, onClose, reduceMotion, graphicsQuality }: Props) {
     const [session, setSession] = useState<TutorialSession | null>(() => {
@@ -71,6 +72,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         setSession(advanced);
     };
     const step = session?.lesson.steps[session.step];
+    const reactionResult = session?.run.board?.elementCast?.reactions?.find(reaction => reaction.scope === 'streak');
     const targetTile = session?.run.board?.tiles.find(tile => tile.id === target);
     const callouts = session?.phase === 'result' ? [{
         key: `${attempt}:${session.lesson.id}:${session.step}`, kind: 'rank' as const, size: 'major' as const, tone: 'gold' as const,
@@ -109,7 +111,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
                 <ScreenCalloutQueue callouts={callouts} reduceMotion={reduceMotion} lowQuality={graphicsQuality === 'low'} />
             </div>
             <div className={styles.coach}>
-                <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? 'You’ve got it.' : session.phase === 'result' ? step?.result : session.hint || (session.phase === 'resolve' ? 'Watch what happens…' : session.half === 1 ? 'Tap the next highlighted card.' : step?.instruction)}</p>
+                <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? 'You’ve got it.' : session.phase === 'result' ? reactionResult ? `${session.lesson.title}: ${elementReactionResult(reactionResult)}.` : step?.result : session.hint || (session.phase === 'resolve' ? 'Watch what happens…' : session.half === 1 ? 'Tap the next highlighted card.' : step?.instruction)}</p>
                 {session.phase === 'result' ? <button type="button" className={styles.primary} onClick={next} autoFocus>{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</button> : null}
                 {session.phase === 'complete' ? <button type="button" className={styles.primary} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }}>Choose a lesson</button> : null}
             </div>

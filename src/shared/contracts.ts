@@ -429,8 +429,23 @@ export const FLOOR_ARCHETYPE_IDS = [
 ] as const;
 export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
+/** Committed chemistry receipts. Presentation reads outcomes, never guesses from a recipe. */
+export interface ElementReactionImpact {
+    eventKey?: string;
+    kind: 'steam' | 'blaze' | 'melt' | 'freezeover' | 'flood' | 'frostbloom';
+    scope: 'ground' | 'streak';
+    potency: number;
+    sourceCells: number[];
+    changes: { tileId: string; effect: 'doused' | 'revealed' | 'growth-cleared' | 'thawed' | 'ripened' | 'charged' }[];
+    gold: number;
+    score: number;
+    stillTurns: number;
+    resonanceGain: number;
+}
+
 export interface ElementCastImpact {
     headline?: string;
+    reactions?: ElementReactionImpact[];
     key: string;
     suit: TileSuit;
     sourceCells: number[];

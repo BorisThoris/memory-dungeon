@@ -109,6 +109,8 @@ interface SurfaceProfile {
 const { colors } = RENDERER_THEME;
 const RELIC_FILL_WIDTH_RATIO = 0.92;
 const RELIC_FILL_HEIGHT_RATIO = 0.88;
+// Intro input belongs to its DOM overlay. Avoid an async Canvas event connection after dismissal.
+const introCanvasEvents = () => ({ enabled: false, priority: 0 });
 
 const toHex = (color: Color): string => `#${color.getHexString()}`;
 
@@ -528,6 +530,7 @@ const RelicIntroScene = ({
 
     return (
         <Canvas
+            events={introCanvasEvents}
             camera={{ fov: 26, near: 0.1, far: 40, position: [0, 0, 5.4] }}
             className={styles.canvas}
             dpr={dpr}

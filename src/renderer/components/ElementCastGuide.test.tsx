@@ -3,8 +3,21 @@ import { describe, expect, it } from 'vitest';
 import { createNewRun } from '../../shared/game';
 import { ElementCastGuide } from './ElementCastGuide';
 import ElementResonanceStrip from './ElementResonanceStrip';
+import { advanceTutorial, resolveTutorial, selectTutorialTile, startTutorial, TUTORIAL_LESSONS } from '../../shared/tutorial-hall';
 
 describe('element decision guide', () => {
+    it('separates ground chemistry from amplified chemistry using real results', () => {
+        let session = startTutorial(TUTORIAL_LESSONS.find(lesson => lesson.id === 'steam')!);
+        for (const step of session.lesson.steps) {
+            for (const id of step.cards) session = selectTutorialTile(session, id);
+            session = advanceTutorial(resolveTutorial(session));
+        }
+        render(<ElementCastGuide run={session.run} />);
+        expect(screen.getByTestId('reaction-result-ground')).toHaveTextContent('Ground · Steam ×1');
+        expect(screen.getByTestId('reaction-result-ground')).toHaveTextContent('1 revealed');
+        expect(screen.getByTestId('reaction-result-streak')).toHaveTextContent('Amplified · Steam ×2');
+        expect(screen.getByTestId('reaction-result-streak')).toHaveTextContent('2 revealed');
+    });
     it('previews actual reaction power and consequences from the primed streak', () => {
         const run = { ...createNewRun(0), elementStreak: { suit: 'ember' as const, links: 3 }, elementResonance: { ember: 6 }, realmAttunement: { storm: 4 } };
         render(<ElementCastGuide run={run} />);

@@ -1,4 +1,4 @@
-# Living elements: current rules (version 57)
+# Living elements: current rules
 
 Every elemental match casts and paints the field. There is no random activation chance. The card
 identity, matched pair, board geometry and next legal pair remain intact. Casts can change resources,
@@ -66,14 +66,27 @@ cast, amplified chemistry, clocks, weather and the hold fairness guard. Reaction
 uses a nearby scope; amplified chemistry supplies the whole floor in nearest-first order. Anchors
 are rebuilt after reactions, so melting rime affects the current turn's weather.
 
-`ElementCastGuide` remains available before the first match. It shows the actual last cast receipt,
-current strength, all counter relationships, and the name, power, resource outcome and burst size
-of each available amplified reaction. The six-combination table and status rules are expandable.
-The button retains a compact result such as “Frost: 4 frozen” or “Grove: cast blocked”. The receipt persists after particles disappear and includes local and amplified effects, blocked reasons and card counters. Counts reflect the final board after reactions and the safety guard.
+The compact **Casts** button opens current strength, primed reaction previews and links to the
+six combination lessons. Its expandable last-match receipt distinguishes **Ground** chemistry
+from **Amplified** chemistry. Each reports its actual changed cards and awarded resources;
+the preview continues to show potential effects. Cast details retain blocked reasons and counters.
+The receipt remains available after particles disappear.
 
-Terrain, persistent status marks, reaction particles, connected-block beams, counter shields and
+The Tutorial Hall teaches all four counter/absorption relationships, charge payouts, Water
+cultivation followed by a harvest, first-match ground chemistry, and ice anchoring without
+blocking flips. These join matching, combo, cast and combination lessons. Each practice uses
+the real turn engine with local state and guided card targets; no profile rewards are awarded.
+
+Terrain, persistent status marks, reaction particles, short cast trails, counter shields and
 charge labels show the same board state. Reduced motion retains static markings. The device-local
 Settings → Dev Options → Combo pop effects toggle controls decorative match pops independently.
+
+Both chemistry scopes now emit their own material cues from committed reaction receipts, even
+when later weather replaces the last realm event. Contacts follow card identities after movement;
+ground-source cues stay at their cells. At most two reactions contribute 6/10/14 pooled bursts
+at low/medium/high quality. The generic realm pulse skips those same recorded events so they do
+not play twice. Mounting, restoring and reduced motion do not replay the effects. This feedback
+does not change reaction rewards, cast ordering, card identities or the hold safety rules.
 
 ## Implementation and verification
 

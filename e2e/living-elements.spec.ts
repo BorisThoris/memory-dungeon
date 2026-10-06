@@ -58,7 +58,7 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         if (suit === 'bone') expect(result.tiles.some((tile) => (tile.frost ?? 0) > 0)).toBe(true);
         if (suit === 'moss') expect(result.tiles.some((tile) => tile.vined)).toBe(true);
         if (suit === 'tide') expect(result.tiles.some((tile, index) => tile.id !== beforeIds[index])).toBe(true);
-        await expect(page.getByTestId('element-cast-guide')).toHaveText(result.impact!.headline!);
+        await expect(page.getByTestId('element-cast-guide')).toHaveText('Casts');
         if (suit === 'bone' || suit === 'moss') {
             const held = result.tiles.findIndex(tile => tile.vined || (tile.frost ?? 0) > 0);
             expect(held).toBeGreaterThanOrEqual(0);
@@ -77,7 +77,9 @@ for (const suit of ['ember', 'tide', 'bone', 'moss'] as const) {
         await page.screenshot({ path: `output/playwright/${suit}-terrain.png` });
         await page.getByTestId('element-cast-guide').click();
         await expect(page.getByTestId('element-cast-rules')).toBeVisible();
-        await expect(page.getByTestId('element-cast-rules')).toContainText('Every pair casts. Combos make it stronger.');
+        await expect(page.getByTestId('element-cast-rules')).toContainText('Every pair casts');
+        await page.getByTestId('element-cast-receipt').locator('summary').click();
+        await expect(page.getByTestId('element-cast-receipt')).toContainText(result.impact!.headline!);
         await page.keyboard.press('Escape');
         await expect(page.getByTestId('element-cast-rules')).not.toBeVisible();
         expect(await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status)).toBe('playing');

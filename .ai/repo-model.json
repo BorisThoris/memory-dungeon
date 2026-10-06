@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2931,
-    "codeFileCount": 1092,
-    "exportedSymbolCount": 3399,
+    "trackedFileCount": 2935,
+    "codeFileCount": 1096,
+    "exportedSymbolCount": 3402,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9011
+    "relationshipCount": 9045
   },
   "inventory": [
     {
@@ -837,8 +837,8 @@
     {
       "path": "docs/gameplay/living-elements.md",
       "category": "documentation",
-      "bytes": 8601,
-      "sha256": "442ed15735e34507ac0251404ae9c7826c9b99888dc505c523dae6eda9b85334"
+      "bytes": 9378,
+      "sha256": "d0627e1ca58b14ba31fdc3e339bafa9100f71e082b057e4e3fd58f2d864c4235"
     },
     {
       "path": "docs/gameplay/README.md",
@@ -3909,8 +3909,8 @@
     {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
-      "bytes": 7639,
-      "sha256": "b7e55a99b4df8a6989b2ed8d92cf34e08ead707f3ec80e2a08684c412846e81f"
+      "bytes": 7783,
+      "sha256": "3232aa17f68bc502906ff430ed000a1a9d8e7151921552891b3828819de0ab52"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 122836,
-      "sha256": "1a6c8b9e3becb4a99167329de4639125fa284bfca83d4f3b936759ba407d34ea"
+      "bytes": 118933,
+      "sha256": "9ebd44784e4395d7f1be76a245867cc1aececb4ffbe319227c5f1bbfadd020f9"
     },
     {
       "path": "public/site.webmanifest",
@@ -9603,20 +9603,20 @@
     {
       "path": "src/renderer/components/ElementCastGuide.module.css",
       "category": "source",
-      "bytes": 2628,
-      "sha256": "311ca8eb40726d9ccb56d2f7c7a913b46f7439e69a99acdf3f3909adf9d82b0e"
+      "bytes": 2778,
+      "sha256": "a906a9361846fd6abb6a900192ec79889f03821170fe8b21b1fdabca267b45e8"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.test.tsx",
       "category": "test",
-      "bytes": 3502,
-      "sha256": "d039b92c28320d1a3bac917a13378dc28810b821a8d07d1ad4e8f3276ce693e6"
+      "bytes": 4488,
+      "sha256": "6938003b07cd5292ac3d701042f7e1262388aaaa9e8cc1231cc70a8d784ff6ec"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.tsx",
       "category": "source",
-      "bytes": 4444,
-      "sha256": "30b80c71ca048af37765fca1feaa04e2ca56043ff106f763b1a5d26fe0821aeb"
+      "bytes": 5013,
+      "sha256": "cd91459e8d8cf9c7faec6bf0a3fd0cde62301f8424ffb89d67754ad9b4493f24"
     },
     {
       "path": "src/renderer/components/elementCastParticles.test.ts",
@@ -9635,6 +9635,18 @@
       "category": "source",
       "bytes": 5702,
       "sha256": "1e4bb294afd49128aea1b6eba209e491626825d7064f3ea01d41c6f9f3459db8"
+    },
+    {
+      "path": "src/renderer/components/elementReactionParticles.test.ts",
+      "category": "test",
+      "bytes": 3256,
+      "sha256": "3747268b4ad4f10e7cb2046655cbbefcc54858b8bf4945f5fd5994a75ad4dccd"
+    },
+    {
+      "path": "src/renderer/components/elementReactionParticles.ts",
+      "category": "source",
+      "bytes": 2385,
+      "sha256": "912245169f876af0ddd6bdd788b4a8603686668997740737d3f10a951fd0b9a8"
     },
     {
       "path": "src/renderer/components/ElementResonanceStrip.module.css",
@@ -10437,8 +10449,8 @@
     {
       "path": "src/renderer/components/StartupIntro.tsx",
       "category": "source",
-      "bytes": 37979,
-      "sha256": "5c386ef7acb64b16d3ba95c264bc46c19db7260fe29a0cc5bd783140241671c7"
+      "bytes": 38184,
+      "sha256": "7976b4834129bd5a253816f1bcb794487d6dc98a78eeda5c579fe4318ea67cde"
     },
     {
       "path": "src/renderer/components/startupIntroComponent.test.tsx",
@@ -10875,8 +10887,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 19549,
-      "sha256": "1a4a9a95d00a5b289632bba7c1d2d693e62e3a9a5480baf195f4189e8166e29c"
+      "bytes": 20060,
+      "sha256": "a69690b244c9c4cf9fe9bcefad5997783bd2eea669de7f2b9f9334b2995cfe3b"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -11301,14 +11313,14 @@
     {
       "path": "src/renderer/components/TutorialHall.module.css",
       "category": "source",
-      "bytes": 4258,
-      "sha256": "c6867df9975e0f7ce8760fe8f6ba641e3b06a8c17d2f039049cfe3be2b376ca6"
+      "bytes": 4218,
+      "sha256": "1f2fd4f721da4b79399a57749744bb4496bd3c8be37193a2c55de59a72ef5f06"
     },
     {
       "path": "src/renderer/components/TutorialHall.tsx",
       "category": "source",
-      "bytes": 9459,
-      "sha256": "43cd3f49709c804ae7907c87ded9cd7c4227d34f0ebe92449c2bc83f14c59bfd"
+      "bytes": 9643,
+      "sha256": "be454f375173577a90b9cc13772b46c03a3ec6467eff22894dd1ffa67a58e161"
     },
     {
       "path": "src/renderer/components/tutorialHallContext.ts",
@@ -13317,8 +13329,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 48407,
-      "sha256": "2928fc7f17eaa0d1bcc0cb1630ab5effcfd45afd1c3c5b2b01e78e49e20bbd61"
+      "bytes": 48976,
+      "sha256": "06e1ee0f2fb9b30974fa87e9631f813846059b1007c6434c5d93faf14c0ca468"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -13473,8 +13485,8 @@
     {
       "path": "src/shared/element-ground-rules.ts",
       "category": "source",
-      "bytes": 6531,
-      "sha256": "30a413e6e9bd195bb606b03d71f1f75b3bc5e42ea985bbe6eb4f1975c347e3a5"
+      "bytes": 6890,
+      "sha256": "1705d430e8cda583f4bdbfb4c32bb4b0c66ba0b52ac16a590dc327ab1fece2eb"
     },
     {
       "path": "src/shared/element-group-rules.test.ts",
@@ -13489,6 +13501,18 @@
       "sha256": "a60b55d4c803dfeaba13a71e3a142e17eac982046ce4a39610ba8986555fa6ff"
     },
     {
+      "path": "src/shared/element-reaction-feedback.test.ts",
+      "category": "test",
+      "bytes": 3601,
+      "sha256": "29f722ae1032a1b64f1a1e296c01362f1c82fe2782c660cc0d99f66ce26622f3"
+    },
+    {
+      "path": "src/shared/element-reaction-feedback.ts",
+      "category": "source",
+      "bytes": 1059,
+      "sha256": "83ecac0873b0cb17cec67058fe59c385b4772c547c5a8eb5a903498036e3454f"
+    },
+    {
       "path": "src/shared/element-resonance-rules.test.ts",
       "category": "test",
       "bytes": 14408,
@@ -13497,8 +13521,8 @@
     {
       "path": "src/shared/element-resonance-rules.ts",
       "category": "source",
-      "bytes": 16719,
-      "sha256": "c84ebac83b53943ffbd70445f0c1ac009d774508f0b1b864d2299e0911e5e7e4"
+      "bytes": 17243,
+      "sha256": "83f463052c64e28fb0278960cc1c35de768a05a1f98f3d3817f9d8fa356a8e8f"
     },
     {
       "path": "src/shared/elemental-loot-rules.test.ts",
@@ -14529,8 +14553,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 49573,
-      "sha256": "2a0418cebd9922e37075e243ae0996d45ec27f11e462365e2fa894a12fa00c54"
+      "bytes": 50139,
+      "sha256": "f557e978458b0332960fd0525ae7438bf1dd115bced8e4ab889feac704b73800"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -15105,8 +15129,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 133760,
-      "sha256": "9d6f0f1c2aec92edd560fabe76c48cf888064cc4af442a82aed19d51f9693fa9"
+      "bytes": 133855,
+      "sha256": "230935d8eff2c03e2da0755e66dad9667aac47e5fafd220b7d018c6b580e4868"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -15339,14 +15363,14 @@
     {
       "path": "src/shared/tutorial-hall.test.ts",
       "category": "test",
-      "bytes": 2564,
-      "sha256": "5efb97550b60da26709b25612281401980663ebc2759b40d58f3828e950e9740"
+      "bytes": 4518,
+      "sha256": "e1878432f271bbe0d78c27e4c022821033253ce9d65b1b7af36c8380f25246a4"
     },
     {
       "path": "src/shared/tutorial-hall.ts",
       "category": "source",
-      "bytes": 6853,
-      "sha256": "b5eb9b8474581c81ace065dc896480ca374761749336a9559a53204ae6d7a867"
+      "bytes": 9134,
+      "sha256": "360a9ebcbeb56a714818c2d23b3498b3354792873e448ce75b80bf8eb8b3a441"
     },
     {
       "path": "src/shared/ui-state-copy.test.ts",
@@ -20227,7 +20251,8 @@
       "testedBy": [
         "file:src/renderer/components/boardGroupArcs.test.ts",
         "file:src/renderer/components/boardParticleSystem.test.ts",
-        "file:src/renderer/components/elementCastParticles.test.ts"
+        "file:src/renderer/components/elementCastParticles.test.ts",
+        "file:src/renderer/components/elementReactionParticles.test.ts"
       ]
     },
     {
@@ -20674,11 +20699,12 @@
       "path": "src/renderer/components/ElementCastGuide.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 57,
+      "lineCount": 70,
       "imports": [
         "file:src/renderer/components/ElementCastGuide.tsx",
         "file:src/renderer/components/ElementResonanceStrip.tsx",
-        "file:src/shared/game.ts"
+        "file:src/shared/game.ts",
+        "file:src/shared/tutorial-hall.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -20688,7 +20714,7 @@
       "path": "src/renderer/components/ElementCastGuide.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 50,
+      "lineCount": 58,
       "imports": [
         "file:src/renderer/components/tutorialHallContext.ts",
         "file:src/renderer/copy/elementClarity.ts",
@@ -20697,6 +20723,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/element-group-rules.ts",
+        "file:src/shared/element-reaction-feedback.ts",
         "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/elemental-loot-rules.ts",
         "file:src/shared/tile-suit-rules.ts"
@@ -20761,6 +20788,43 @@
         "symbol:src/renderer/components/ElementGround.tsx#ElementGround"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "path": "src/renderer/components/elementReactionParticles.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 52,
+      "imports": [
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/elementReactionParticles.ts",
+        "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/tutorial-hall.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/elementReactionParticles.ts",
+      "path": "src/renderer/components/elementReactionParticles.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 36,
+      "imports": [
+        "file:src/renderer/components/boardParticleCues.ts",
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/realmCardMotion.ts",
+        "file:src/renderer/components/realmParticles.ts",
+        "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/elementReactionParticles.ts#collectElementReactionParticles"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/elementReactionParticles.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/ElementResonanceStrip.tsx",
@@ -22728,7 +22792,7 @@
       "path": "src/renderer/components/StartupIntro.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 979,
+      "lineCount": 982,
       "imports": [
         "file:src/renderer/a11y/focusables.ts",
         "file:src/renderer/assets/preloadStartupAssets.ts",
@@ -24055,7 +24119,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 288,
+      "lineCount": 294,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -24063,6 +24127,7 @@
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/elementCastParticles.ts",
+        "file:src/renderer/components/elementReactionParticles.ts",
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/realmParticles.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -24919,6 +24984,7 @@
         "symbol:src/renderer/components/tileBoardTransform.ts#TileTransform"
       ],
       "testedBy": [
+        "file:src/renderer/components/elementReactionParticles.test.ts",
         "file:src/renderer/components/tileBoardRuneField.test.ts",
         "file:src/renderer/components/tileBoardTransform.test.ts"
       ]
@@ -25400,13 +25466,14 @@
       "path": "src/renderer/components/TutorialHall.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 121,
       "imports": [
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/element-reaction-feedback.ts",
         "file:src/shared/tile-suit-rules.ts",
         "file:src/shared/tutorial-hall.ts"
       ],
@@ -30942,7 +31009,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1061,
+      "lineCount": 1076,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -30964,6 +31031,7 @@
         "symbol:src/shared/contracts.ts#DesktopApi",
         "symbol:src/shared/contracts.ts#DisplayMode",
         "symbol:src/shared/contracts.ts#ElementCastImpact",
+        "symbol:src/shared/contracts.ts#ElementReactionImpact",
         "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
         "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP",
         "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_MISS_DECAY",
@@ -31141,6 +31209,7 @@
         "file:src/shared/element-every-match.test.ts",
         "file:src/shared/element-ground-rules.test.ts",
         "file:src/shared/element-group-rules.test.ts",
+        "file:src/shared/element-reaction-feedback.test.ts",
         "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
@@ -31542,7 +31611,8 @@
       "testedBy": [
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-chemistry.test.ts",
-        "file:src/shared/element-ground-rules.test.ts"
+        "file:src/shared/element-ground-rules.test.ts",
+        "file:src/shared/element-reaction-feedback.test.ts"
       ]
     },
     {
@@ -31635,7 +31705,7 @@
       "path": "src/shared/element-ground-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 109,
+      "lineCount": 110,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -31713,6 +31783,38 @@
       ]
     },
     {
+      "id": "file:src/shared/element-reaction-feedback.test.ts",
+      "path": "src/shared/element-reaction-feedback.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/element-reaction-feedback.ts",
+        "file:src/shared/element-resonance-rules.ts",
+        "file:src/shared/tutorial-hall.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/element-reaction-feedback.ts",
+      "path": "src/shared/element-reaction-feedback.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 17,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/element-reaction-feedback.ts#elementReactionResult"
+      ],
+      "testedBy": [
+        "file:src/shared/element-reaction-feedback.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/element-resonance-rules.test.ts",
       "path": "src/shared/element-resonance-rules.test.ts",
       "layer": "shared",
@@ -31736,7 +31838,7 @@
       "path": "src/shared/element-resonance-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 311,
+      "lineCount": 316,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -31778,6 +31880,7 @@
       ],
       "testedBy": [
         "file:src/shared/element-chemistry.test.ts",
+        "file:src/shared/element-reaction-feedback.test.ts",
         "file:src/shared/element-resonance-rules.test.ts"
       ]
     },
@@ -35336,7 +35439,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1018,
+      "lineCount": 1023,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -37349,7 +37452,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2108,
+      "lineCount": 2109,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -38214,7 +38317,7 @@
       "path": "src/shared/tutorial-hall.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 45,
+      "lineCount": 74,
       "imports": [
         "file:src/shared/tutorial-hall.ts"
       ],
@@ -38226,7 +38329,7 @@
       "path": "src/shared/tutorial-hall.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 109,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -38248,6 +38351,9 @@
         "symbol:src/shared/tutorial-hall.ts#tutorialTarget"
       ],
       "testedBy": [
+        "file:src/renderer/components/ElementCastGuide.test.tsx",
+        "file:src/renderer/components/elementReactionParticles.test.ts",
+        "file:src/shared/element-reaction-feedback.test.ts",
         "file:src/shared/tutorial-hall.test.ts"
       ]
     },
@@ -41947,8 +42053,8 @@
       "name": "ElementCastGuide",
       "kind": "function",
       "file": "src/renderer/components/ElementCastGuide.tsx",
-      "line": 15,
-      "endLine": 50
+      "line": 16,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/elementCastParticles.ts#collectElementCastParticles",
@@ -41965,6 +42071,14 @@
       "file": "src/renderer/components/ElementGround.tsx",
       "line": 108,
       "endLine": 118
+    },
+    {
+      "id": "symbol:src/renderer/components/elementReactionParticles.ts#collectElementReactionParticles",
+      "name": "collectElementReactionParticles",
+      "kind": "function",
+      "file": "src/renderer/components/elementReactionParticles.ts",
+      "line": 10,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
@@ -43723,8 +43837,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StartupIntro.tsx",
-      "line": 978,
-      "endLine": 978
+      "line": 981,
+      "endLine": 981
     },
     {
       "id": "symbol:src/renderer/components/startupIntroConfig.ts#createIntroSeed",
@@ -45203,8 +45317,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 22,
-      "endLine": 287
+      "line": 23,
+      "endLine": 293
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -47043,8 +47157,8 @@
       "name": "default",
       "kind": "function",
       "file": "src/renderer/components/TutorialHall.tsx",
-      "line": 14,
-      "endLine": 118
+      "line": 15,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/components/tutorialHallContext.ts#TutorialHallContext",
@@ -53611,16 +53725,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 938,
-      "endLine": 938
+      "line": 953,
+      "endLine": 953
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1008,
-      "endLine": 1010
+      "line": 1023,
+      "endLine": 1025
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -53643,8 +53757,8 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 445,
-      "endLine": 478
+      "line": 460,
+      "endLine": 493
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -53683,8 +53797,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1016,
-      "endLine": 1021
+      "line": 1031,
+      "endLine": 1036
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -53715,8 +53829,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1034,
-      "endLine": 1060
+      "line": 1049,
+      "endLine": 1075
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -53731,8 +53845,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 432,
-      "endLine": 443
+      "line": 446,
+      "endLine": 458
+    },
+    {
+      "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
+      "name": "ElementReactionImpact",
+      "kind": "interface",
+      "file": "src/shared/contracts.ts",
+      "line": 433,
+      "endLine": 444
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -53843,16 +53965,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 599,
-      "endLine": 603
+      "line": 614,
+      "endLine": 618
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 605,
-      "endLine": 615
+      "line": 620,
+      "endLine": 630
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -53891,8 +54013,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 498,
-      "endLine": 543
+      "line": 513,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -54003,24 +54125,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 628,
-      "endLine": 640
+      "line": 643,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 642,
-      "endLine": 655
+      "line": 657,
+      "endLine": 670
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 940,
-      "endLine": 953
+      "line": 955,
+      "endLine": 968
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -54131,16 +54253,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1024,
-      "endLine": 1024
+      "line": 1039,
+      "endLine": 1039
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1027,
-      "endLine": 1032
+      "line": 1042,
+      "endLine": 1047
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -54163,16 +54285,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1001,
-      "endLine": 1005
+      "line": 1016,
+      "endLine": 1020
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 999,
-      "endLine": 999
+      "line": 1014,
+      "endLine": 1014
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -54187,16 +54309,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 960,
-      "endLine": 972
+      "line": 975,
+      "endLine": 987
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 657,
-      "endLine": 936
+      "line": 672,
+      "endLine": 951
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -54211,16 +54333,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 560,
-      "endLine": 597
+      "line": 575,
+      "endLine": 612
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 617,
-      "endLine": 622
+      "line": 632,
+      "endLine": 637
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -54235,8 +54357,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 974,
-      "endLine": 993
+      "line": 989,
+      "endLine": 1008
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -54251,8 +54373,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 480,
-      "endLine": 496
+      "line": 495,
+      "endLine": 511
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -54315,8 +54437,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 559,
-      "endLine": 559
+      "line": 574,
+      "endLine": 574
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -54347,16 +54469,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 550,
-      "endLine": 557
+      "line": 565,
+      "endLine": 572
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 545,
-      "endLine": 548
+      "line": 560,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -54835,8 +54957,8 @@
       "name": "castElementalGround",
       "kind": "value",
       "file": "src/shared/element-ground-rules.ts",
-      "line": 60,
-      "endLine": 108
+      "line": 61,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/element-ground-rules.ts#ELEMENT_GROUND_RULES",
@@ -54860,7 +54982,7 @@
       "kind": "interface",
       "file": "src/shared/element-ground-rules.ts",
       "line": 38,
-      "endLine": 51
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/element-ground-rules.ts#readElementalGround",
@@ -54991,6 +55113,14 @@
       "endLine": 38
     },
     {
+      "id": "symbol:src/shared/element-reaction-feedback.ts#elementReactionResult",
+      "name": "elementReactionResult",
+      "kind": "function",
+      "file": "src/shared/element-reaction-feedback.ts",
+      "line": 4,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/shared/element-resonance-rules.ts#BLAZE_POTENCY_PER_GOLD",
       "name": "BLAZE_POTENCY_PER_GOLD",
       "kind": "value",
@@ -55060,15 +55190,15 @@
       "kind": "interface",
       "file": "src/shared/element-resonance-rules.ts",
       "line": 227,
-      "endLine": 238
+      "endLine": 239
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#elementReactionSummary",
       "name": "elementReactionSummary",
       "kind": "value",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 300,
-      "endLine": 310
+      "line": 305,
+      "endLine": 315
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#ElementResonance",
@@ -55147,8 +55277,8 @@
       "name": "resolveElementReaction",
       "kind": "value",
       "file": "src/shared/element-resonance-rules.ts",
-      "line": 244,
-      "endLine": 297
+      "line": 245,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/element-resonance-rules.ts#RESONANCE_SCORE_PER_STACK",
@@ -60939,8 +61069,8 @@
       "name": "applyRealmTurnToRun",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 956,
-      "endLine": 1010
+      "line": 961,
+      "endLine": 1015
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
@@ -61068,7 +61198,7 @@
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
       "line": 451,
-      "endLine": 950
+      "endLine": 955
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#SCALD_FUSE",
@@ -61083,8 +61213,8 @@
       "name": "shedSnow",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 1013,
-      "endLine": 1017
+      "line": 1018,
+      "endLine": 1022
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#VINE_CUT_GOLD",
@@ -63955,8 +64085,8 @@
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 1984,
-      "endLine": 2083
+      "line": 1985,
+      "endLine": 2084
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
@@ -63964,15 +64094,15 @@
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 380,
-      "endLine": 1971
+      "endLine": 1972
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2107,
-      "endLine": 2107
+      "line": 2108,
+      "endLine": 2108
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
@@ -63995,8 +64125,8 @@
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2085,
-      "endLine": 2088
+      "line": 2086,
+      "endLine": 2089
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
@@ -64019,8 +64149,8 @@
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2090,
-      "endLine": 2105
+      "line": 2091,
+      "endLine": 2106
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -65211,48 +65341,48 @@
       "name": "advanceTutorial",
       "kind": "function",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 104,
-      "endLine": 108
+      "line": 132,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#createTutorialRun",
       "name": "createTutorialRun",
       "kind": "function",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 58,
-      "endLine": 78
+      "line": 81,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#resolveTutorial",
       "name": "resolveTutorial",
       "kind": "function",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 100,
-      "endLine": 103
+      "line": 128,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#selectTutorialTile",
       "name": "selectTutorialTile",
       "kind": "function",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 91,
-      "endLine": 99
+      "line": 119,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#startTutorial",
       "name": "startTutorial",
       "kind": "value",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 88,
-      "endLine": 88
+      "line": 116,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#TUTORIAL_LESSONS",
       "name": "TUTORIAL_LESSONS",
       "kind": "value",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 38,
-      "endLine": 55
+      "line": 39,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#TutorialLesson",
@@ -65260,15 +65390,15 @@
       "kind": "interface",
       "file": "src/shared/tutorial-hall.ts",
       "line": 13,
-      "endLine": 21
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#TutorialSession",
       "name": "TutorialSession",
       "kind": "interface",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 80,
-      "endLine": 87
+      "line": 108,
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/tutorial-hall.ts#TutorialStep",
@@ -65283,8 +65413,8 @@
       "name": "tutorialTarget",
       "kind": "value",
       "file": "src/shared/tutorial-hall.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 117,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/ui-state-copy.ts#getUiStateCopy",
@@ -66183,7 +66313,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 16
+          "line": 17
         }
       ],
       "tests": [
@@ -73285,6 +73415,12 @@
       "id": "exports:src/renderer/components/ElementGround.tsx->symbol:src/renderer/components/ElementGround.tsx#ElementGround",
       "source": "file:src/renderer/components/ElementGround.tsx",
       "target": "symbol:src/renderer/components/ElementGround.tsx#ElementGround",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementReactionParticles.ts->symbol:src/renderer/components/elementReactionParticles.ts#collectElementReactionParticles",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "symbol:src/renderer/components/elementReactionParticles.ts#collectElementReactionParticles",
       "kind": "exports"
     },
     {
@@ -82114,6 +82250,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#ElementReactionImpact",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#ElementReactionImpact",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -83053,6 +83195,12 @@
       "id": "exports:src/shared/element-group-rules.ts->symbol:src/shared/element-group-rules.ts#elementWashCapacity",
       "source": "file:src/shared/element-group-rules.ts",
       "target": "symbol:src/shared/element-group-rules.ts#elementWashCapacity",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/element-reaction-feedback.ts->symbol:src/shared/element-reaction-feedback.ts#elementReactionResult",
+      "source": "file:src/shared/element-reaction-feedback.ts",
+      "target": "symbol:src/shared/element-reaction-feedback.ts#elementReactionResult",
       "kind": "exports"
     },
     {
@@ -94994,6 +95142,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ElementCastGuide.test.tsx->src/shared/tutorial-hall.ts",
+      "source": "file:src/renderer/components/ElementCastGuide.test.tsx",
+      "target": "file:src/shared/tutorial-hall.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ElementCastGuide.tsx->src/renderer/components/tutorialHallContext.ts",
       "source": "file:src/renderer/components/ElementCastGuide.tsx",
       "target": "file:src/renderer/components/tutorialHallContext.ts",
@@ -95033,6 +95187,12 @@
       "id": "imports:src/renderer/components/ElementCastGuide.tsx->src/shared/element-group-rules.ts",
       "source": "file:src/renderer/components/ElementCastGuide.tsx",
       "target": "file:src/shared/element-group-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCastGuide.tsx->src/shared/element-reaction-feedback.ts",
+      "source": "file:src/renderer/components/ElementCastGuide.tsx",
+      "target": "file:src/shared/element-reaction-feedback.ts",
       "kind": "imports"
     },
     {
@@ -95141,6 +95301,72 @@
       "id": "imports:src/renderer/components/ElementGround.tsx->src/shared/tile-suit-rules.ts",
       "source": "file:src/renderer/components/ElementGround.tsx",
       "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/elementReactionParticles.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/tileBoardTransform.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/shared/tutorial-hall.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/shared/tutorial-hall.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/boardParticleCues.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/boardParticleCues.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/realmCardMotion.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/realmCardMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/realmParticles.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/realmParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/tileBoardTransform.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/shared/rng.ts",
       "kind": "imports"
     },
     {
@@ -99404,6 +99630,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/elementReactionParticles.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/elementReactionParticles.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/realmAmbience.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/realmAmbience.ts",
@@ -100787,6 +101019,12 @@
       "id": "imports:src/renderer/components/TutorialHall.tsx->src/shared/element-alchemy-rules.ts",
       "source": "file:src/renderer/components/TutorialHall.tsx",
       "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TutorialHall.tsx->src/shared/element-reaction-feedback.ts",
+      "source": "file:src/renderer/components/TutorialHall.tsx",
+      "target": "file:src/shared/element-reaction-feedback.ts",
       "kind": "imports"
     },
     {
@@ -105935,6 +106173,42 @@
       "id": "imports:src/shared/element-group-rules.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/element-group-rules.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/element-reaction-feedback.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.test.ts->src/shared/element-alchemy-rules.ts",
+      "source": "file:src/shared/element-reaction-feedback.test.ts",
+      "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.test.ts->src/shared/element-reaction-feedback.ts",
+      "source": "file:src/shared/element-reaction-feedback.test.ts",
+      "target": "file:src/shared/element-reaction-feedback.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.test.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/shared/element-reaction-feedback.test.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.test.ts->src/shared/tutorial-hall.ts",
+      "source": "file:src/shared/element-reaction-feedback.test.ts",
+      "target": "file:src/shared/tutorial-hall.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/element-reaction-feedback.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/element-reaction-feedback.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -116026,6 +116300,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/boardParticleSystem.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/renderer/components/boardParticleSystem.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/boardRuneFieldMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -116113,6 +116393,12 @@
       "id": "tested_by:src/renderer/components/elementCastParticles.ts->file:src/renderer/components/elementCastParticles.test.ts",
       "source": "file:src/renderer/components/elementCastParticles.ts",
       "target": "file:src/renderer/components/elementCastParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/elementReactionParticles.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
       "kind": "tested_by"
     },
     {
@@ -116821,6 +117107,12 @@
       "id": "tested_by:src/renderer/components/tileBoardTextureVariant.ts->file:src/renderer/components/tileBoardTextureVariant.test.ts",
       "source": "file:src/renderer/components/tileBoardTextureVariant.ts",
       "target": "file:src/renderer/components/tileBoardTextureVariant.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardTransform.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/renderer/components/tileBoardTransform.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
       "kind": "tested_by"
     },
     {
@@ -118948,6 +119240,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/element-reaction-feedback.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/element-reaction-feedback.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/element-resonance-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/element-resonance-rules.test.ts",
@@ -119500,6 +119798,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/element-alchemy-rules.ts->file:src/shared/element-reaction-feedback.test.ts",
+      "source": "file:src/shared/element-alchemy-rules.ts",
+      "target": "file:src/shared/element-reaction-feedback.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/element-cast-feedback.ts->file:src/shared/element-every-match.test.ts",
       "source": "file:src/shared/element-cast-feedback.ts",
       "target": "file:src/shared/element-every-match.test.ts",
@@ -119560,9 +119864,21 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/element-reaction-feedback.ts->file:src/shared/element-reaction-feedback.test.ts",
+      "source": "file:src/shared/element-reaction-feedback.ts",
+      "target": "file:src/shared/element-reaction-feedback.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/shared/element-chemistry.test.ts",
       "source": "file:src/shared/element-resonance-rules.ts",
       "target": "file:src/shared/element-chemistry.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/shared/element-reaction-feedback.test.ts",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "file:src/shared/element-reaction-feedback.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122743,6 +123059,24 @@
       "id": "tested_by:src/shared/turn-resolution.ts->file:src/shared/tile-trait-rules.test.ts",
       "source": "file:src/shared/turn-resolution.ts",
       "target": "file:src/shared/tile-trait-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tutorial-hall.ts->file:src/renderer/components/ElementCastGuide.test.tsx",
+      "source": "file:src/shared/tutorial-hall.ts",
+      "target": "file:src/renderer/components/ElementCastGuide.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tutorial-hall.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/shared/tutorial-hall.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tutorial-hall.ts->file:src/shared/element-reaction-feedback.test.ts",
+      "source": "file:src/shared/tutorial-hall.ts",
+      "target": "file:src/shared/element-reaction-feedback.test.ts",
       "kind": "tested_by"
     },
     {

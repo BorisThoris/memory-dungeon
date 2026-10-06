@@ -1535,7 +1535,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Card b is vined. Take a turn and the vines bloom; then match a beside it for three gold.',
         build: () =>
-            room(['a:t b:t c:e d:t', 'a:t e:t f:e c:e', 'b:t d:t e:t f:e'], {
+            // Frost resists Grove, so the demonstration pair remains playable after the peak.
+            room(['a:b b:t c:e d:t', 'a:b e:t f:e c:e', 'b:t d:t e:t f:e'], {
                 misses: 3,
                 run: realmRun('grove', 'raging', { runSeed: 2, gold: 0, realmWeatherThisFloor: 2, turnsThisFloor: 1 }),
                 tiles: (tiles) => tiles.map((t) => (['b', 'e'].includes(t.pairKey) ? { ...t, vined: true } : t))

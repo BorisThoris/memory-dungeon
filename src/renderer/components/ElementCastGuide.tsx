@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
+import { elementReactionResult } from '../../shared/element-reaction-feedback';
 import { elementWashCapacity, elementCastPower } from '../../shared/element-group-rules';
 import { resonanceOf, resonanceTier, runElementResonance, pendingElementReaction, elementReactionSummary, ELEMENT_REACTIONS } from '../../shared/element-resonance-rules';
 import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
@@ -42,7 +43,13 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
                 </button>)}</div> : null}
                 {run.realmId ? <span className={styles.arena}>{ARENA_ACTION[run.realmId]}</span> : null}
                 {run.realmSecondaryId ? <span>{ARENA_ACTION[run.realmSecondaryId]}</span> : null}
-                {lastCast ? <details className={styles.receipt} data-testid="element-cast-receipt"><summary>Last match · {ELEMENT_NAMES[lastCast.suit]}{lastCast.reaction ? ` + ${lastCast.reaction}` : ''}</summary><p>{lastCast.detail}</p></details> : null}
+                {lastCast ? <details className={styles.receipt} data-testid="element-cast-receipt"><summary>Last match · {ELEMENT_NAMES[lastCast.suit]}{lastCast.reaction ? ` + ${lastCast.reaction}` : ''}</summary>
+                    {lastCast.reactions?.map(reaction => <div className={styles.reactionResult} key={`${reaction.scope}:${reaction.kind}`} data-testid={`reaction-result-${reaction.scope}`}>
+                        <strong>{reaction.scope === 'ground' ? 'Ground' : 'Amplified'} · {ELEMENT_REACTIONS[reaction.kind].name} ×{reaction.potency}</strong>
+                        <span>{elementReactionResult(reaction)}</span>
+                    </div>)}
+                    <p>{lastCast.detail}</p>
+                </details> : null}
             </div>
             <div className={styles.actions}>{openTutorial ? <button className={styles.close} type="button" onClick={() => openTutorial()}>Tutorial Hall</button> : null}<button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back</button></div>
         </div>
