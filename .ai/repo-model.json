@@ -10209,8 +10209,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 61996,
-      "sha256": "3ccddb55652048e4c963fff7364eab8a4129aae9b56b441455b39708fce46cab"
+      "bytes": 62138,
+      "sha256": "529a60110ed694c73ae79261ea759187fd649769b51e4b05b30d103732a0940a"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10221,8 +10221,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 48528,
-      "sha256": "0162d0f107523a36d411e66f3265c3c1fa115bbc8971bb5c78e2d31951cd86ec"
+      "bytes": 49454,
+      "sha256": "3557356fa886fb77d937988a8def2fca66feec6b81d5440038067f5b94e350ec"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -22212,7 +22212,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 862,
+      "lineCount": 871,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -43139,8 +43139,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 861,
-      "endLine": 861
+      "line": 870,
+      "endLine": 870
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",

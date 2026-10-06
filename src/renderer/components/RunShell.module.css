@@ -1860,12 +1860,12 @@
 .shell .gold { font-size: 0.75rem; gap: 0.2rem; }
 .shell .goldValue { font-size: 0.875rem; }
 .shell .headRule { display: none; }
-.lives { grid-area: 1 / 2; display: inline-flex; gap: 0.35rem; align-items: center; color: #ffd6d0; white-space: nowrap; position: relative; font-family: 'Source Sans 3', sans-serif; }
-.lives svg { width: 1.3rem; height: 1.3rem; fill: #f27485; filter: drop-shadow(0 0 5px #db34474d); }
+.lives { --life-stone: #963c46; --life-light: #db9683; grid-area: 1 / 2; display: inline-flex; gap: 0.35rem; align-items: center; color: #f4e4cb; white-space: nowrap; position: relative; font-family: 'Source Sans 3', sans-serif; }
+.lives svg { width: 1.4rem; height: 1.6rem; flex: none; filter: drop-shadow(0 2px 2px #000) drop-shadow(0 0 4px #bd78452e); }
 .lifeCount { font-size: 1.65rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
 .lifeLabel { font-size: 0.75rem; }
 .lives[data-low='true'] { color: #fff; text-shadow: 0 0 9px #ed384f; }
-.lives[data-low='true'] svg { fill: #ff405a; }
+.lives[data-low='true'] svg { --life-stone: #d04443; --life-light: #ffd2a1; filter: drop-shadow(0 0 5px #c84432a6); }
 .lives[data-miss-earned='true'] { color: #beffcd; }
 .lives .parEarned { position: absolute; top: 100%; left: 0; font-size: 0.75rem; }
 .context { grid-area: 1 / 4; pointer-events: auto; }

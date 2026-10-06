@@ -500,7 +500,16 @@ const RunShell = ({
                                 data-miss-earned={missesEarned > 0 ? 'true' : undefined}
                                 role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left`}
                                 title="A mismatch spends one life. Earn more through combos and floor clears.">
-                                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.2 12.3C-2 7 5.3-.8 12 6c6.7-6.8 14 1 8.8 6.3Z" /></svg>
+                                <svg aria-hidden="true" viewBox="0 0 32 36" data-life-icon="relic-heart">
+                                    <path d="m16 33-12-13-2-10 5-6 5-1 4 5 4-5 5 1 5 6-2 10Z" fill="#2b1c20" stroke="#ae8247" strokeWidth="1.5" strokeLinejoin="round" />
+                                    <path d="m16 29-10-11-1-7 4-5 3-.5 4 6 4-6 3 .5 4 5-1 7Z" fill="var(--life-stone)" />
+                                    <path d="m5 11 7-5.5 4 6-7 4Z" fill="var(--life-light)" />
+                                    <path d="m16 11.5 4-6 7 5.5-4 4.5Z" fill="#bb6557" />
+                                    <path d="m9 15.5 7-4 7 4L16 29Z" fill="var(--life-stone)" />
+                                    <path d="m6 18 3-2.5L16 29Zm17-2.5 3 2.5-10 11Z" fill="#491f2d" />
+                                    <path d="m4 10 4-5 4-1m8 0 5 1 3 5M16 29V15" fill="none" stroke="#edc58a" strokeWidth=".8" strokeLinecap="round" opacity=".8" />
+                                    <path d="m16 1 1.5 2L16 5l-1.5-2Z" fill="#edc58a" />
+                                </svg>
                                 <span className={styles.lifeCount}>{missesRemaining}</span>
                                 <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
                                 {missesEarned > 0 ? <span className={styles.parEarned} data-testid="hud-miss-earned">{RUN_SHELL_PAR_COPY.earned(missesEarned)}</span> : null}
