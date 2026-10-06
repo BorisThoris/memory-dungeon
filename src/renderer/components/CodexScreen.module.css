@@ -55,6 +55,7 @@
     padding: 0.7rem 0.85rem 0.8rem;
     border: 1px solid var(--margin-hairline);
     border-top-width: 2px;
+    border-radius: 3px;
     background: color-mix(in srgb, var(--margin-ink) 55%, transparent);
     color: var(--margin-paper);
     font-family: var(--margin-body-font);
@@ -63,8 +64,6 @@
     transition:
         background-color 160ms ease,
         border-color 160ms ease;
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 15px / 0 stretch;
 }
 
 .card:hover,

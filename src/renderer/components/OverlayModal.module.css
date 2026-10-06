@@ -57,11 +57,10 @@
     isolation: isolate;
     background: var(--gameplay-overlay-surface, var(--theme-surface-glass-strong, var(--theme-panel-surface-strong)));
     border: var(--gameplay-overlay-border, var(--theme-overlay-plate-border, 1px solid var(--theme-border-strong)));
+    border-radius: calc(var(--theme-overlay-plate-radius, calc(var(--ui-radius-modal) + 0.18rem)) + 0.08rem);
     box-shadow:
         var(--gameplay-overlay-shadow, var(--theme-overlay-plate-shadow)),
         0 0 44px color-mix(in srgb, var(--overlay-accent) 18%, transparent);
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 24px / 0 stretch;
 }
 
 /* Body-only layouts (e.g. relic draft cards) — drop empty action column. */
@@ -89,18 +88,19 @@
 
 .modal::before {
     border-radius: inherit;
+    background:
+        radial-gradient(ellipse 90% 58% at 50% 0%, var(--overlay-accent-soft), transparent 58%),
+        linear-gradient(180deg, rgba(255, 243, 217, 0.04), transparent 26%);
     opacity: 0.62;
-    background: none;
 }
 
 .modal::after {
     inset: 0.35rem;
     border-radius: calc(var(--theme-overlay-plate-radius, calc(var(--ui-radius-modal) + 0.18rem)) - 0.02rem);
+    border: 1px solid color-mix(in srgb, var(--overlay-accent) 28%, transparent);
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.05) 80%, transparent),
         inset 0 0 0 1px color-mix(in srgb, var(--theme-shadow) 10%, transparent);
-    border: 0;
-    background: none;
 }
 
 .mainColumn {
@@ -447,12 +447,11 @@
     gap: 0.9rem 1.4rem;
     padding: clamp(1.4rem, 3vw, 1.75rem);
     border: 1px solid var(--overlay-accent);
+    border-radius: 7px;
     background: var(--margin-ink, #131111);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
     color: var(--margin-paper, #f8f4f4);
     font-family: var(--margin-body-font, 'Lora', Georgia, serif);
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 24px / 0 stretch;
 }
 
 /* One width whatever the dialog's kind or placement; the plated sizes above do not apply. */
@@ -526,6 +525,7 @@
     min-width: 0;
     padding: 0.6rem 1.05rem;
     border: 1px solid color-mix(in srgb, var(--margin-paper, #f8f4f4) 28%, transparent);
+    border-radius: 4px;
     background: transparent;
     box-shadow: none;
     color: var(--margin-paper-2, #d7d3d3);
@@ -535,8 +535,6 @@
     letter-spacing: 0.02em;
     text-transform: none;
     text-shadow: none;
-    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
-    border-radius: 0;
 }
 
 .modalMargin .modalAction:hover:not(:disabled) {
@@ -545,10 +543,7 @@
 
 .modalMargin .modalAction[data-variant='primary'] {
     border-color: var(--margin-gold, #e1ad66);
-    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
-    border-radius: 0;
-    color: var(--margin-paper);
-    text-shadow: 0 1px 3px #000;
+    color: var(--margin-gold, #e1ad66);
 }
 
 .modalMargin .modalAction[data-variant='primary']:hover:not(:disabled) {
@@ -704,10 +699,4 @@
         padding: 0.35rem 0.9rem;
         font-size: 0.95rem;
     }
-}
-.modalMargin .modalAction[data-variant='danger'] {
-    text-shadow: 0 1px 3px #000;
-    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
-    border-radius: 0;
-    color: #ffc9b9;
 }

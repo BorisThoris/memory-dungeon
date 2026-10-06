@@ -53,8 +53,6 @@
     gap: clamp(0.6rem, 1.8vh, 1.1rem);
     width: min(360px, 100%);
     text-align: center;
-    padding: 1.4rem;
-    border-image: var(--relic-frame) 20% fill / 24px / 0 stretch;
 }
 
 .eyebrow {

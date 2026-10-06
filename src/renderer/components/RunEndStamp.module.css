@@ -41,22 +41,18 @@
 .stampButton {
     appearance: none;
     border: 1px solid var(--margin-hairline);
+    border-radius: 5px;
     padding: 0.65rem 1rem;
     min-height: 44px;
     background: transparent;
     color: var(--margin-paper-soft);
     font: 500 0.875rem var(--margin-body-font);
     cursor: pointer;
-    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
-    border-radius: 0;
 }
 .stampButton[data-action='play-again'] {
     background: var(--margin-gold);
+    color: var(--margin-ink);
     border-color: var(--margin-gold);
-    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
-    border-radius: 0;
-    color: var(--margin-paper);
-    text-shadow: 0 1px 3px #000;
 }
 .stampButton:hover {
     filter: brightness(1.15);

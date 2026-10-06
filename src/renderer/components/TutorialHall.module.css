@@ -1,5 +1,5 @@
-.hall { width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 0.75rem; padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left)); box-sizing: border-box; overflow: hidden; color: #f5ecd9; --gameplay-hud-top-clearance: 0px; --gameplay-dock-bottom-clearance: 0px; border-radius: 0; border-image: var(--relic-frame) 20% fill / 14px / 0 stretch; font-family: var(--margin-body-font); border-image-slice: 20%; background: radial-gradient(ellipse at 50% 0%, #b8863b0d, transparent 65%), var(--relic-vellum) center / 308px 308px repeat, #131111; }
-.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex: 0 0 auto; background: var(--relic-divider) bottom center / min(20rem, 45%) 8px no-repeat; }
+.hall { width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 0.75rem; padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left)); box-sizing: border-box; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #30304350, transparent 65%), #100f13; color: #f5ecd9; font-family: 'Source Sans 3', sans-serif; --gameplay-hud-top-clearance: 0px; --gameplay-dock-bottom-clearance: 0px; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex: 0 0 auto; }
 .header h1 { margin: 0; font: 600 clamp(1.5rem, 4vw, 2.3rem)/1.1 'Cormorant Garamond', serif; }
 .header h1:focus { outline: none; }
 .eyebrow { font-size: 0.75rem; letter-spacing: 0.17em; color: #d6ab6d; text-transform: uppercase; }
@@ -7,10 +7,10 @@
 .hall button:hover { border-color: #e6be7f; background: #332d35; }
 .hall button:focus-visible { outline: 2px solid #fbd9a3; outline-offset: 3px; }
 .tabs { display: flex; flex: 0 0 auto; gap: 0.4rem; flex-wrap: wrap; }
-.tabs button[aria-pressed='true'] { background: #e3b778; border-color: #e3b778; border-radius: 0; border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch; text-shadow: 0 2px 3px #000; color: var(--margin-paper); }
+.tabs button[aria-pressed='true'] { background: #e3b778; color: #191418; border-color: #e3b778; }
 .lessons { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 0.7rem; grid-auto-rows: max-content; align-content: start; overflow: auto; min-height: 0; flex: 1; }
-.lessons .lesson { display: grid; justify-items: start; align-content: start; gap: 0.4rem; text-align: left; background: linear-gradient(135deg, #34304377, #17161b); border-radius: 0; border-image: var(--relic-frame) 20% fill / 18px / 0 stretch; padding: 1.15rem; }
-.lesson strong { font-family: var(--margin-heading-font); font-size: 1.45rem; }
+.lessons .lesson { display: grid; justify-items: start; align-content: start; gap: 0.4rem; text-align: left; padding: 1rem; background: linear-gradient(135deg, #34304377, #17161b); }
+.lesson strong { font-size: 1.25rem; }
 .lesson > span:not(.elements) { font-weight: 400; color: #c9c3c7; }
 .lesson small { font-size: 0.75rem; color: #deb986; }
 .elements { font-size: 1.7rem; letter-spacing: 0.1em; }
@@ -20,14 +20,14 @@
 .progress > span[data-current='true'], .progress > span[data-done='true'] { color: #171219; background: #e5b777; }
 .progress button { margin-left: auto; }
 .readout { color: #e0c5a2; font-size: 0.875rem; }
-.stage { flex: 1; min-height: 0; position: relative; overflow: hidden; border: 1px solid #9a806138; background: radial-gradient(ellipse at 50% 65%, #e3b77815, transparent 65%); border-radius: 0; border-image: var(--relic-frame) 20% / 10px / 0 stretch; }
+.stage { flex: 1; min-height: 0; position: relative; overflow: hidden; border: 1px solid #9a806138; border-radius: 10px; background: radial-gradient(ellipse at 50% 65%, #e3b77815, transparent 65%); }
 .stage .target { position: absolute; z-index: 8; border: 2px solid #ffe4a3; padding: 0; min-height: 0; border-radius: 8px; background: transparent; box-shadow: 0 0 18px #efb46077, inset 0 0 12px #efb46044; }
 .stage .target:hover { background: #ffe4a312; }
 .target span { position: absolute; bottom: calc(100% + 0.3rem); left: 50%; transform: translateX(-50%); padding: 0.25rem 0.5rem; border-radius: 4px; color: #21151b; background: #ffe4a3; white-space: nowrap; font-size: 0.8125rem; }
 .target[data-label-inside='true'] span { bottom: auto; top: 2px; }
-.coach { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; min-height: 64px; flex: 0 0 auto; padding: 0.7rem 0.9rem; background: #211c25; border-left: 3px solid #e3b778; border-radius: 0; border: 1px solid var(--margin-rule); border-image: var(--relic-frame) 20% fill / 16px / 0 stretch; }
+.coach { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; min-height: 64px; flex: 0 0 auto; padding: 0.7rem 0.9rem; background: #211c25; border-left: 3px solid #e3b778; }
 .coach p { margin: 0; font-size: clamp(0.9375rem, 2vw, 1.125rem); line-height: 1.35; }
-.coach .primary { background: #e3b778; flex: 0 0 auto; border-radius: 0; border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch; text-shadow: 0 2px 3px #000; color: var(--margin-paper); }
+.coach .primary { background: #e3b778; color: #1a111a; flex: 0 0 auto; }
 @media (max-width: 420px) { .coach { flex-direction: column; align-items: stretch; } .coach .primary { width: 100%; } .readout { font-size: 0.75rem; } }
 @media (max-height: 480px) and (min-width: 500px) {
     .hall { gap: 0.3rem; padding-block: 0.4rem; }
@@ -38,6 +38,3 @@
     .coach { min-height: 44px; padding: 0.4rem 0.7rem; }
     .coach p { font-size: 0.875rem; }
 }
-.hall button:not(.target) { border-radius: 0; border-image: var(--relic-frame) 20% fill / 10px / 0 stretch; font-family: var(--margin-heading-font); font-size: 1.05rem; }
-.hall .tabs button[aria-pressed='true'] { border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch; border-radius: 0; color: var(--margin-paper); text-shadow: 0 1px 3px #000; border-image-width: 7px 12px; }
-.hall .coach .primary { border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch; border-radius: 0; color: var(--margin-paper); text-shadow: 0 1px 3px #000; }

@@ -1658,15 +1658,13 @@ where that rule
     min-height: 2.25rem;
     padding: 0.3rem 0.7rem;
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 55%, transparent);
+    border-radius: 3px;
     background: transparent;
+    color: var(--theme-gold-bright);
     font: inherit;
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
-    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
-    border-radius: 0;
-    color: var(--margin-paper);
-    text-shadow: 0 1px 3px #000;
 }
 
 .storeBuy:hover:not(:disabled),

@@ -2,6 +2,7 @@
     pointer-events: auto;
     min-height: 44px;
     border: 1px solid #857a6e;
+    border-radius: 1rem;
     background: #17131eed;
     color: #f2dec2;
     font: inherit;
@@ -11,9 +12,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
-    border-radius: 0;
-    font-family: var(--margin-heading-font);
 }
 
 .trigger:focus-visible,
@@ -30,6 +28,7 @@
     padding: 1.2rem;
     box-sizing: border-box;
     border: 1px solid #9d8869;
+    border-radius: 0.75rem;
     background: #17131ef5;
     color: #f3e6d3;
     box-shadow: 0 1rem 5rem #000b;
@@ -37,9 +36,6 @@
     white-space: normal;
     letter-spacing: normal;
     pointer-events: auto;
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 20px / 0 stretch;
-    font-family: var(--margin-body-font);
 }
 
 .panel:popover-open {
@@ -54,14 +50,14 @@
 
 .heading { font-size: 1.2rem; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-.rule { display: grid; align-content: start; gap: 0.25rem; padding: 0.75rem; background: #ffffff06; border: 1px solid #ffffff18; border-image: var(--relic-frame) 20% fill / 12px / 0 stretch; border-radius: 0; }
+.rule { display: grid; align-content: start; gap: 0.25rem; padding: 0.75rem; background: #ffffff06; border: 1px solid #ffffff18; }
 .rule small { color: #c8bdad; }
 .details summary { cursor: pointer; color: #d4c4af; }
 .details p { margin: 0.6rem 0; }
 @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
 .rule strong { color: #f7d799; }
 .arena { border-top: 1px solid #74644e; padding-top: 0.7rem; }
-.close { padding: 0.6rem; color: #f4dfba; background: #302638; border: 1px solid #957856; font: inherit; cursor: pointer; border-image: var(--relic-frame) 20% fill / 12px / 0 stretch; border-radius: 0; }
+.close { padding: 0.6rem; color: #f4dfba; background: #302638; border: 1px solid #957856; border-radius: 0.35rem; font: inherit; cursor: pointer; }
 
 .receipt { display: grid; gap: 0.35rem; padding: 0.75rem; border-left: 3px solid #b8dab2; background: #b8dab20b; }
 .preview { border-top: 1px solid #74644e; padding-top: 0.5rem; color: #ece3b8; }
@@ -69,7 +65,7 @@
 .content { min-height: 0; overflow: auto; display: grid; gap: 0.85rem; padding-right: 0.25rem; }
 .formula { margin: 0; color: #e8c788; }
 .recipes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem; }
-.recipes button { display: grid; gap: 0.2rem; text-align: left; min-height: 44px; padding: 0.5rem; color: #f3e6d3; background: #ffffff06; border: 1px solid #957856; font: inherit; cursor: pointer; border-image: var(--relic-frame) 20% fill / 12px / 0 stretch; border-radius: 0; }
+.recipes button { display: grid; gap: 0.2rem; text-align: left; min-height: 44px; padding: 0.5rem; color: #f3e6d3; background: #ffffff06; border: 1px solid #957856; border-radius: 4px; font: inherit; cursor: pointer; }
 .recipes button span { font-size: 0.8125rem; color: #c8bdad; }
 .recipes button:focus-visible { outline: 2px solid #f6dc95; outline-offset: 2px; }
 .actions { display: flex; gap: 0.5rem; }

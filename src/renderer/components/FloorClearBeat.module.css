@@ -31,7 +31,6 @@
     background: radial-gradient(ellipse at 50% 0%, #e1ad6620, transparent 70%), color-mix(in srgb, var(--margin-ink, #131111) 88%, transparent);
     backdrop-filter: blur(6px);
     animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-    border-image: var(--relic-frame) 20% fill / 20px / 0 stretch;
 }
 
 .beat[data-tier='fever'] .colophon {

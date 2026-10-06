@@ -244,11 +244,10 @@
 .rule {
     display: block;
     width: clamp(4rem, 12vw, 8rem);
+    height: 1px;
     margin: clamp(0.5rem, 1.6vh, 1rem) auto;
+    background: var(--margin-rule);
     box-shadow: 0 0 14px color-mix(in srgb, var(--margin-gold) 40%, transparent);
-    background: var(--relic-divider) center / contain no-repeat;
-    height: 12px;
-    border: 0;
 }
 
 .tagline {
@@ -265,9 +264,6 @@
     max-width: 34rem;
     min-width: 0;
     justify-self: center;
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 22px / 0 stretch;
-    padding: 1rem;
 }
 
 .contentsHead {
@@ -394,6 +390,7 @@
     min-height: var(--margin-touch);
     padding: 0 1.1rem;
     border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
+    border-radius: 4px;
     background: transparent;
     color: var(--margin-paper-soft);
     font-family: var(--margin-heading-font);
@@ -406,8 +403,6 @@
         background-color 160ms ease,
         border-color 160ms ease,
         color 160ms ease;
-    border-radius: 0;
-    border-image: var(--relic-frame) 20% fill / 10px / 0 stretch;
 }
 
 .word:hover:not(:disabled),
@@ -430,10 +425,7 @@
 .wordGold {
     min-width: 9.5rem;
     border-color: var(--margin-gold);
-    border-radius: 0;
-    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
-    text-shadow: 0 2px 3px #000;
-    color: var(--margin-paper);
+    color: var(--margin-gold);
 }
 
 .wordGold:hover:not(:disabled),
