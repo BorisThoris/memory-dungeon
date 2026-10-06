@@ -226,7 +226,6 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     ]}
                     personalBest={personalBest}
                     reason={summary.runEndReason}
-                    reasonLine={endReasonLine}
                     reduceMotion={settings.reduceMotion}
                     runSeed={run.runSeed}
                     summary={summary}

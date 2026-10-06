@@ -29,7 +29,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
             await expect(floorClearBeat).toHaveCSS('position', 'absolute');
             await expect(floorClearBeat).toHaveCSS('z-index', '6');
             await expect(page.getByTestId('floor-clear-title')).toContainText(/floor \d+ cleared/i);
-            await expect(page.getByTestId('floor-clear-par')).toContainText(/par \d+/i);
+            await expect(page.getByTestId('floor-clear-par')).toHaveCount(0);
             await expect(page.getByTestId('floor-clear-score')).toBeVisible();
             await expect(floorClearBeat.getByRole('button')).toHaveCount(0);
             await page.screenshot({ path: `output/playwright/floor-clear-${viewport.width}.png` });

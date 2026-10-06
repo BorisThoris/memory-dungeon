@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2931,
-    "codeFileCount": 1092,
-    "exportedSymbolCount": 3398,
+    "trackedFileCount": 2929,
+    "codeFileCount": 1090,
+    "exportedSymbolCount": 3396,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9055
+    "relationshipCount": 9036
   },
   "inventory": [
     {
@@ -3975,8 +3975,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 6570,
-      "sha256": "ec14433d38afb8c629bafa258c939bc72d14c5ac66c0b2edd5895c54743bea0d"
+      "bytes": 6559,
+      "sha256": "c785e5a6da55aae67e558467b09a8a9c38b40d2f2d807855792229e087e08d90"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -9669,20 +9669,20 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 6542,
-      "sha256": "998b09f8779d49f58754f914bdf08eb444f3649d299dde1306a59ac4d3cf0674"
+      "bytes": 1688,
+      "sha256": "bfca110e1a1f57ee87df41aed16e09e4a77cd81f9afb584b70dd3412c583d5e0"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "category": "test",
-      "bytes": 4104,
-      "sha256": "fe3c9f530d6f20389995a69cb6e9a5ff607a25764e09af4a022d573a7885004a"
+      "bytes": 3545,
+      "sha256": "d1e39ecc8f7a4822b1654fa29079f2bcb69e76bb7cedceaeeb3b786e98cd70ae"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 5198,
-      "sha256": "5b9f1c975e2d5116c5ddfb7d2ece8466eb1dcd98a0b5f7ce1ec42ed68c4c3544"
+      "bytes": 1369,
+      "sha256": "0ab96fa7d50cb2f1f59307ff7a4fe78cf3ebb2bcb1041ac1c9ed8b9bb8569d53"
     },
     {
       "path": "src/renderer/components/FloorJourney.module.css",
@@ -9717,8 +9717,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 22559,
-      "sha256": "00a9fcce32a41b101b19cf8672409365514a6851805ab35dba72a031731167c3"
+      "bytes": 22512,
+      "sha256": "82e93541c1dc4f89e0e90be0eee9ace7c840987c7a0f5a699b9cb8c571149eb7"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -9765,20 +9765,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 56445,
-      "sha256": "7dcf902f1de66ee6dfe76fd32dfa07ad230a880987da54e2894f1f079c63d807"
+      "bytes": 55596,
+      "sha256": "55026da3d6de11a51357934dc5525b604bc8bb2695c2f473090336f32ef1db5a"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 77149,
-      "sha256": "148f1789a786dbeaf0b3b55dfdc921a9598a4fe9895574bf2643f4efe72d57ec"
+      "bytes": 77113,
+      "sha256": "68fc95f7c7755d147d7956e87a56efc9d751754e2eed726b4ad46ef5031e11b6"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 113521,
-      "sha256": "afa0bcd86a11b49be3a491c0b2f04c859c59656a8d3b5164d3ccc13a241cc10a"
+      "bytes": 111028,
+      "sha256": "4da52fce6b3047a135b9a11efae996165c7119d3cd2f256b447b2414f3557cf9"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10155,20 +10155,20 @@
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
       "category": "source",
-      "bytes": 12880,
-      "sha256": "010059755760f8c33dc9daefb148397007593daa564f1829c0a625eb7debdad5"
+      "bytes": 10470,
+      "sha256": "29ab1b0bc40f8458cc6d045dfbf3950df8be921d8b9734fab3496e226633c0ff"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
       "category": "test",
-      "bytes": 3978,
-      "sha256": "0bc8c78f225b6a8990fdae2d1de78e54790ecb0e613f1e9651ba42a182e08399"
+      "bytes": 3828,
+      "sha256": "45b4f8965f63f610579b5ca8c82e13b2ae3d8ddf940a09b8e71d6992b0bdb457"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "category": "source",
-      "bytes": 6794,
-      "sha256": "d2bc48e82fd49b5abaf14ff3ff73513401aee8affb2ecbbccd99c20fddf8a7f3"
+      "bytes": 6141,
+      "sha256": "fcf7c92f37556ca544c08525d6d5e4406167ea994086f5d715fe0b01bced0268"
     },
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
@@ -10209,20 +10209,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 62138,
-      "sha256": "529a60110ed694c73ae79261ea759187fd649769b51e4b05b30d103732a0940a"
+      "bytes": 60255,
+      "sha256": "17f5f96c3d5ada8f0ec28c481517d2a4cea36df2758e104f3f4605bdeae1dd77"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 34914,
-      "sha256": "9262fca53072601ad004a9e9c3c768c011c794e86e6c1bfe1c21d800fe8c56de"
+      "bytes": 34071,
+      "sha256": "2c0352cb7a3e60e754a85c321b56a5f2c7c9ed092f16e21a4752887b8a0be614"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 49454,
-      "sha256": "3557356fa886fb77d937988a8def2fca66feec6b81d5440038067f5b94e350ec"
+      "bytes": 46995,
+      "sha256": "804e20231e360653637751a7266fd3a13926f197148033a78c9df0dbdf7348c3"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -10327,34 +10327,22 @@
       "sha256": "eaf0b6a2b66f7c400d20e5f6d72a99c5ff48a630a5b81c346cddcfccaa2d1010"
     },
     {
-      "path": "src/renderer/components/ScoreTermsLine.test.tsx",
-      "category": "test",
-      "bytes": 2168,
-      "sha256": "72b6a655ddd97dbfbea3264f36c4eb5b157aee9e555bf56f5ab81a6489f8916b"
-    },
-    {
-      "path": "src/renderer/components/ScoreTermsLine.tsx",
-      "category": "source",
-      "bytes": 2588,
-      "sha256": "6496d8e26b3a873d8fcd6d50a2118d71362efcdb6b11754f37b3dd4ef67beb46"
-    },
-    {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 9796,
-      "sha256": "526541fcfcfc079cd7c4c2cf0de7fd03bce45b2dad4456c2f86c573ffbaca24e"
+      "bytes": 9004,
+      "sha256": "3e0c10ee7f9ec5d24404336a60753da9802d51ddf83604677c9574b0bf66cb34"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
       "category": "test",
-      "bytes": 4203,
-      "sha256": "fda4f80132ce79ddaab4d23430671e673b536e22be87d529e6df2492e7dca639"
+      "bytes": 4190,
+      "sha256": "7a5cee288858cc915b01646227a427563c196c9fd2f857c23cfb87b1089170be"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3215,
-      "sha256": "fb85d7eeab1fc888b2745f52b3ead7504ac28976d7f67e8718d089555964a918"
+      "bytes": 3090,
+      "sha256": "eab597a0fd8ec1664e11dacb4794a59fe4e2c239e778c05a6bc4e4835ef2ce5f"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
@@ -20846,7 +20834,7 @@
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 80,
+      "lineCount": 74,
       "imports": [
         "file:src/renderer/components/FloorClearBeat.tsx",
         "file:src/shared/contracts.ts"
@@ -20859,14 +20847,10 @@
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 39,
       "imports": [
         "file:src/renderer/copy/floorClearChain.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/element-alchemy-rules.ts",
-        "file:src/shared/elemental-loot-rules.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/tile-suit-rules.ts"
+        "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/FloorClearBeat.tsx#default",
@@ -20932,7 +20916,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 448,
+      "lineCount": 447,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -21121,7 +21105,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2273,
+      "lineCount": 2235,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21144,7 +21128,6 @@
         "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/components/sceneMood.ts",
-        "file:src/renderer/components/ScoreTermsLine.tsx",
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/components/TileBoard.tsx",
@@ -21154,7 +21137,6 @@
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
         "file:src/renderer/copy/passAndPlay.ts",
-        "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/copy/skittishCardsBeat.ts",
         "file:src/renderer/copy/storeSheet.ts",
@@ -21178,7 +21160,6 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/boss-encounters.ts",
@@ -21205,7 +21186,6 @@
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
-        "file:src/shared/secondary-objectives.ts",
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
@@ -22107,7 +22087,7 @@
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 130,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/runEndStamp.ts",
@@ -22197,7 +22177,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 632,
+      "lineCount": 622,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -22212,7 +22192,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 871,
+      "lineCount": 837,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -22220,18 +22200,15 @@
         "file:src/renderer/components/ElementResonanceStrip.tsx",
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/copy/chainBeat.ts",
-        "file:src/renderer/copy/comboHeatPerksCopy.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
-        "file:src/renderer/copy/zoneToolCopy.ts",
         "file:src/renderer/gameShellLayout.ts",
         "file:src/renderer/hooks/useCountUp.ts",
         "file:src/renderer/input/touchHaptics.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
-        "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -22483,37 +22460,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "path": "src/renderer/components/ScoreTermsLine.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 48,
-      "imports": [
-        "file:src/renderer/components/ScoreTermsLine.tsx",
-        "file:src/shared/score-terms-rules.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "path": "src/renderer/components/ScoreTermsLine.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 65,
-      "imports": [
-        "file:src/renderer/copy/matchScoreFloater.ts",
-        "file:src/shared/score-terms-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
-        "symbol:src/renderer/components/ScoreTermsLine.tsx#SCORE_TERM_STEP_MS"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/ScoreTermsLine.test.tsx"
-      ]
-    },
-    {
       "id": "file:src/renderer/components/ScreenCalloutQueue.test.tsx",
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
       "layer": "renderer",
@@ -22531,7 +22477,7 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 71,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts"
       ],
@@ -36720,7 +36666,6 @@
         "symbol:src/shared/score-terms-rules.ts#ScoreTerm"
       ],
       "testedBy": [
-        "file:src/renderer/components/ScoreTermsLine.test.tsx",
         "file:src/shared/score-terms-rules.test.ts"
       ]
     },
@@ -42059,16 +42004,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 123,
-      "endLine": 123
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
       "name": "FloorClearBeatProps",
       "kind": "interface",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 20,
-      "endLine": 27
+      "line": 6,
+      "endLine": 9
     },
     {
       "id": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
@@ -42083,8 +42028,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 447,
-      "endLine": 447
+      "line": 446,
+      "endLine": 446
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -42203,40 +42148,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2272,
-      "endLine": 2272
+      "line": 2234,
+      "endLine": 2234
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 248,
-      "endLine": 248
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 252,
-      "endLine": 252
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 242,
-      "endLine": 242
+      "line": 237,
+      "endLine": 237
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -43075,8 +43020,8 @@
       "name": "RunEndCinematic",
       "kind": "function",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 36,
-      "endLine": 129
+      "line": 34,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
@@ -43092,7 +43037,7 @@
       "kind": "interface",
       "file": "src/renderer/components/RunEndCinematic.tsx",
       "line": 25,
-      "endLine": 34
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
@@ -43139,24 +43084,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 870,
-      "endLine": 870
+      "line": 836,
+      "endLine": 836
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 64,
-      "endLine": 94
+      "line": 60,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 51,
-      "endLine": 62
+      "line": 47,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -43455,22 +43400,6 @@
       "endLine": 15
     },
     {
-      "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
-      "name": "default",
-      "kind": "ExportAssignment",
-      "file": "src/renderer/components/ScoreTermsLine.tsx",
-      "line": 64,
-      "endLine": 64
-    },
-    {
-      "id": "symbol:src/renderer/components/ScoreTermsLine.tsx#SCORE_TERM_STEP_MS",
-      "name": "SCORE_TERM_STEP_MS",
-      "kind": "value",
-      "file": "src/renderer/components/ScoreTermsLine.tsx",
-      "line": 10,
-      "endLine": 10
-    },
-    {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MAJOR_MS",
       "name": "SCREEN_CALLOUT_MAJOR_MS",
       "kind": "value",
@@ -43492,7 +43421,7 @@
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
       "line": 23,
-      "endLine": 73
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
@@ -65847,7 +65776,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 99
+          "line": 95
         }
       ],
       "tests": [
@@ -66496,7 +66425,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 35
+          "line": 34
         }
       ],
       "tests": [
@@ -66639,7 +66568,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 16
+          "line": 13
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -67068,7 +66997,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 13
+          "line": 10
         }
       ],
       "tests": [
@@ -68242,7 +68171,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 35
+          "line": 34
         }
       ],
       "tests": [
@@ -68436,7 +68365,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 360
+          "line": 352
         }
       ],
       "tests": [
@@ -68475,7 +68404,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 360
+          "line": 352
         }
       ],
       "tests": [
@@ -68509,7 +68438,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 360
+          "line": 352
         }
       ],
       "tests": [
@@ -68543,7 +68472,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 360
+          "line": 352
         }
       ],
       "tests": [
@@ -74405,18 +74334,6 @@
       "id": "exports:src/renderer/components/sceneWipeFrames.ts->symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob",
       "source": "file:src/renderer/components/sceneWipeFrames.ts",
       "target": "symbol:src/renderer/components/sceneWipeFrames.ts#WipeBlob",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/ScoreTermsLine.tsx->symbol:src/renderer/components/ScoreTermsLine.tsx#default",
-      "source": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "target": "symbol:src/renderer/components/ScoreTermsLine.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/ScoreTermsLine.tsx->symbol:src/renderer/components/ScoreTermsLine.tsx#SCORE_TERM_STEP_MS",
-      "source": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "target": "symbol:src/renderer/components/ScoreTermsLine.tsx#SCORE_TERM_STEP_MS",
       "kind": "exports"
     },
     {
@@ -95400,30 +95317,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/FloorClearBeat.tsx->src/shared/element-alchemy-rules.ts",
-      "source": "file:src/renderer/components/FloorClearBeat.tsx",
-      "target": "file:src/shared/element-alchemy-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/FloorClearBeat.tsx->src/shared/elemental-loot-rules.ts",
-      "source": "file:src/renderer/components/FloorClearBeat.tsx",
-      "target": "file:src/shared/elemental-loot-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/FloorClearBeat.tsx->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/FloorClearBeat.tsx",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/FloorClearBeat.tsx->src/shared/tile-suit-rules.ts",
-      "source": "file:src/renderer/components/FloorClearBeat.tsx",
-      "target": "file:src/shared/tile-suit-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/FloorJourney.test.tsx->src/renderer/components/FloorJourney.tsx",
       "source": "file:src/renderer/components/FloorJourney.test.tsx",
       "target": "file:src/renderer/components/FloorJourney.tsx",
@@ -96000,12 +95893,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/ScoreTermsLine.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/ScreenCalloutQueue.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/ScreenCalloutQueue.tsx",
@@ -96057,12 +95944,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/realmCopy.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/copy/realmCopy.ts",
       "kind": "imports"
     },
     {
@@ -96201,12 +96082,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/automatic-camp-rules.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/automatic-camp-rules.ts",
       "kind": "imports"
     },
     {
@@ -96363,12 +96238,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/run-store-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/run-store-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/secondary-objectives.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/secondary-objectives.ts",
       "kind": "imports"
     },
     {
@@ -97386,12 +97255,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/comboHeatPerksCopy.ts",
-      "source": "file:src/renderer/components/RunShell.tsx",
-      "target": "file:src/renderer/copy/comboHeatPerksCopy.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
@@ -97407,12 +97270,6 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/runDialogCopy.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/runDialogCopy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/zoneToolCopy.ts",
-      "source": "file:src/renderer/components/RunShell.tsx",
-      "target": "file:src/renderer/copy/zoneToolCopy.ts",
       "kind": "imports"
     },
     {
@@ -97449,12 +97306,6 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-tier-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/chain-tier-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/combo-heat-perks.ts",
-      "source": "file:src/renderer/components/RunShell.tsx",
-      "target": "file:src/shared/combo-heat-perks.ts",
       "kind": "imports"
     },
     {
@@ -97689,30 +97540,6 @@
       "id": "imports:src/renderer/components/sceneWipeFrames.ts->src/shared/rng.ts",
       "source": "file:src/renderer/components/sceneWipeFrames.ts",
       "target": "file:src/shared/rng.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ScoreTermsLine.test.tsx->src/renderer/components/ScoreTermsLine.tsx",
-      "source": "file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "target": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ScoreTermsLine.test.tsx->src/shared/score-terms-rules.ts",
-      "source": "file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "target": "file:src/shared/score-terms-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ScoreTermsLine.tsx->src/renderer/copy/matchScoreFloater.ts",
-      "source": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "target": "file:src/renderer/copy/matchScoreFloater.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ScoreTermsLine.tsx->src/shared/score-terms-rules.ts",
-      "source": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "target": "file:src/shared/score-terms-rules.ts",
       "kind": "imports"
     },
     {
@@ -116678,12 +116505,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/ScoreTermsLine.tsx->file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "source": "file:src/renderer/components/ScoreTermsLine.tsx",
-      "target": "file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/ScreenCalloutQueue.tsx->file:src/renderer/components/ScreenCalloutQueue.test.tsx",
       "source": "file:src/renderer/components/ScreenCalloutQueue.tsx",
       "target": "file:src/renderer/components/ScreenCalloutQueue.test.tsx",
@@ -122273,12 +122094,6 @@
       "id": "tested_by:src/shared/save-location.ts->file:src/shared/save-location.test.ts",
       "source": "file:src/shared/save-location.ts",
       "target": "file:src/shared/save-location.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/score-terms-rules.ts->file:src/renderer/components/ScoreTermsLine.test.tsx",
-      "source": "file:src/shared/score-terms-rules.ts",
-      "target": "file:src/renderer/components/ScoreTermsLine.test.tsx",
       "kind": "tested_by"
     },
     {

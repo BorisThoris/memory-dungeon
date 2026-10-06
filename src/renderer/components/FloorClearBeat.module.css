@@ -1,204 +1,62 @@
-/*
- * The floor-clear beat as a colophon: a ruled block in the middle of the stage, the floor's
- * numeral as a watermark behind it, the payout in display type. Nothing to press. It is read
- * while the next board builds underneath, so it stays out of the way of input (pointer-events
- * none) and off the tab order (no controls). Type floor 12px.
- *
- * Drawn in the run shell's own tokens (`--margin-*`, declared on the game shell); the fallbacks
- * are the same values, for the beat rendered on its own.
- */
-
+/* The payout floats directly over the board; no plate or receipt. */
 .beat {
     position: absolute;
-    /* Keep the result readable while cards draw behind the surrounding chrome. */
     inset: var(--gameplay-hud-top-clearance, 0px) var(--margin-stage-inline-end, 0px) var(--gameplay-dock-bottom-clearance, 0px) var(--margin-stage-inline-start, 0px);
     z-index: 6;
     display: grid;
     place-items: center;
     padding: 1rem;
     color: var(--margin-paper, #f8f4f4);
-    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
     text-align: center;
     pointer-events: none;
 }
 
-.colophon {
-    position: relative;
-    width: min(32rem, 100%);
-    padding: 1.4rem 1rem;
-    border-top: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
-    border-bottom: 1px solid color-mix(in srgb, var(--margin-gold, #e1ad66) 55%, transparent);
-    background: radial-gradient(ellipse at 50% 0%, #e1ad6620, transparent 70%), color-mix(in srgb, var(--margin-ink, #131111) 88%, transparent);
-    backdrop-filter: blur(6px);
-    animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.beat[data-tier='fever'] .colophon {
-    border-color: var(--margin-fever, #facb8d);
-}
-
-/* The floor's numeral, set huge and almost not there. */
-.watermark {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -52%);
+.stamp {
+    max-width: 100%;
     font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-weight: 400;
-    font-size: clamp(12rem, 38vmin, 21rem);
-    line-height: 1;
-    color: var(--margin-gold, #e1ad66);
-    opacity: 0.09;
-    pointer-events: none;
-    user-select: none;
-}
-
-/*
- * Everything EXCEPT the watermark, and the exception is the whole point.
- *
- * This rule exists to lift the real children above the watermark, and as `.colophon > *` it also
- * matched the watermark itself - same specificity as `.watermark` (one class each) and later in
- * the file, so it won, and `position: absolute` became `position: relative`. The floor's numeral
- * stopped being a watermark behind the text and became a 406px block in the flow above it,
- * pushing the card to 719px in a stage 691px tall: the beat then overhung the stage's clip and the
- * "Downstairs:" note - the line that tells you who you are about to share a room with - was cut
- * off the bottom on a 1440x900 desktop. One `:not()` is the difference between a watermark and a
- * banner, and nothing said which one it was rendering.
- */
-.colophon > :not(.watermark) {
-    position: relative;
+    text-shadow: 0 2px 4px #131111, 0 0 20px #131111;
+    animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .title {
     margin: 0;
-    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-weight: 400;
-    font-size: clamp(2rem, 5vmin, 2.75rem);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.8rem, 6vmin, 3.5rem);
     line-height: 1.1;
-    color: var(--margin-paper, #f8f4f4);
-}
-
-.par,
-.personalBest {
-    margin: 0.4rem 0 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--margin-paper-2, #d7d3d3);
-    font-variant-numeric: tabular-nums;
-}
-
-.personalBest {
-    color: var(--margin-gold, #e1ad66);
+    transform: skewX(-9deg);
 }
 
 .score {
-    margin: 0.8rem 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 0.3rem 1.1rem;
-    font-variant-numeric: tabular-nums;
-}
-
-.scoreValue {
-    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
-    font-weight: 400;
-    font-size: clamp(2.8rem, 8vmin, 4rem);
+    margin: 0.3rem 0 0;
+    font-weight: 700;
+    font-size: clamp(2.8rem, 9vmin, 5rem);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
     color: var(--margin-fever, #facb8d);
 }
 
-.scoreTotal {
-    font-size: 0.875rem;
-    color: var(--margin-paper-2, #d7d3d3);
-}
-
-.bonus {
-    margin: 1rem 0 0;
-    font-style: italic;
-    font-size: 0.875rem;
-    color: var(--margin-paper, #f8f4f4);
-    font-variant-numeric: tabular-nums;
-}
-
-.rule {
-    display: block;
-    width: min(26rem, 80%);
-    height: 1px;
-    margin: 1.1rem auto 0;
-    background: var(--margin-hairline, rgba(248, 244, 244, 0.18));
-}
-
-.notes {
-    margin: 0.9rem 0 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    font-size: 0.8125rem;
-    color: var(--margin-paper-2, #d7d3d3);
+.personalBest {
+    margin: 0.5rem 0 0;
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--margin-gold, #e1ad66);
 }
 
 @keyframes floorClearBeatIn {
-    from {
-        opacity: 0;
-        transform: translateY(0.5rem);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: scale(1.15) translateY(0.5rem); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .colophon {
-        animation: none;
-    }
+    .stamp { animation: none; }
 }
 
-/* A phone: the block runs edge to edge inside the margins, the numbers a size down. */
-:global([data-shell-layout='phone-portrait']) .colophon,
-:global([data-shell-layout='phone-landscape']) .colophon {
-    padding: 1.6rem 0.75rem 1.4rem;
-}
-
-:global([data-shell-layout='phone-landscape']) .beat {
-    padding: 0.5rem 1rem;
-}
-
-:global([data-shell-layout='phone-landscape']) .rule,
-:global([data-shell-layout='phone-landscape']) .notes {
-    display: none;
-}
-.essence { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin: 0.8rem 0; font-size: 0.9rem; }
-.essence > span { color: var(--loot-color, #e5d6b8); }
-
-
-:global([data-shell-layout='phone-landscape']) .colophon {
-    padding: 0.65rem 0.75rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas: 'title score' 'par score' 'best bonus' 'essence essence';
-    align-items: center;
-    gap: 0.3rem 0.6rem;
-}
-:global([data-shell-layout='phone-landscape']) .title {
-    grid-area: title;
-    font-size: 1.75rem;
-}
-:global([data-shell-layout='phone-landscape']) .par { grid-area: par; margin: 0; }
-:global([data-shell-layout='phone-landscape']) .personalBest { grid-area: best; margin: 0; letter-spacing: 0.08em; }
-:global([data-shell-layout='phone-landscape']) .score { grid-area: score; margin: 0; gap: 0.2rem 0.6rem; }
-:global([data-shell-layout='phone-landscape']) .bonus { grid-area: bonus; }
-:global([data-shell-layout='phone-landscape']) .essence { grid-area: essence; }
-:global([data-shell-layout='phone-landscape']) .scoreValue {
-    font-size: 2.6rem;
-}
-:global([data-shell-layout='phone-landscape']) .bonus,
-:global([data-shell-layout='phone-landscape']) .essence {
-    margin-block: 0.5rem 0;
+@media (max-height: 400px) {
+    .beat { padding: 0.5rem; }
+    .title { font-size: 1.8rem; }
+    .score { font-size: 2.8rem; }
 }

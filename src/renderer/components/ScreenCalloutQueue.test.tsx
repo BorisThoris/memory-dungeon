@@ -19,7 +19,7 @@ describe('the screen stamp queue', () => {
         expect(first).toHaveAttribute('data-callout-size', 'major');
         expect(first).toHaveAttribute('data-callout-tone', 'blazing');
         expect(screen.getByTestId('screen-callout-stamp')).toHaveTextContent('BLAZING!');
-        expect(screen.getByTestId('screen-callout-sub')).toHaveTextContent('Combo ×10');
+        expect(screen.queryByTestId('screen-callout-sub')).toBeNull();
         act(() => {
             vi.advanceTimersByTime(SCREEN_CALLOUT_MAJOR_MS + 70);
         });
@@ -47,11 +47,11 @@ describe('the screen stamp queue', () => {
     it('keeps up with rapid events and does not restart on equivalent rerenders', () => {
         const { rerender, unmount } = render(<ScreenCalloutQueue callouts={[]} reduceMotion />);
         for (let event = 0; event < 100; event += 1) {
-            rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: `banked:${event}`, sub: `Event ${event}` }]} reduceMotion />);
+            rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: `banked:${event}`, title: `Event ${event}` }]} reduceMotion />);
         }
-        expect(screen.getByTestId('screen-callout-sub')).toHaveTextContent('Event 99');
+        expect(screen.getByTestId('screen-callout-stamp')).toHaveTextContent('Event 99');
         act(() => vi.advanceTimersByTime(600));
-        rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: 'banked:99', sub: 'Event 99' }]} reduceMotion />);
+        rerender(<ScreenCalloutQueue callouts={[{ ...banked, key: 'banked:99', title: 'Event 99' }]} reduceMotion />);
         act(() => vi.advanceTimersByTime(SCREEN_CALLOUT_MINOR_MS - 500));
         expect(screen.queryByTestId('screen-callout')).toBeNull();
         unmount();

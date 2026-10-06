@@ -63,9 +63,6 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
                     {showing.title}
                 </span>
             </span>
-            <span className={styles.sub} data-testid="screen-callout-sub">
-                {showing.sub}
-            </span>
         </div>
         : null}
         </div>

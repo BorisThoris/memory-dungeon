@@ -19,54 +19,48 @@ const result: LevelResult = {
 };
 
 describe('FloorClearBeat', () => {
-    it('is a status, not a dialog: nothing to press, four things said', () => {
-        render(<FloorClearBeat notes={[]} personalBest={false} result={result} totalScore={12_340} />);
+    it('shows only the floor and payout, with nothing to press', () => {
+        render(<FloorClearBeat personalBest={false} result={result} />);
         const beat = screen.getByTestId('floor-clear-beat');
         expect(beat).toHaveAttribute('role', 'status');
         expect(beat).toHaveAttribute('data-tier', 'fever');
         expect(screen.queryByRole('button')).toBeNull();
         expect(screen.queryByRole('dialog')).toBeNull();
         expect(screen.getByTestId('floor-clear-title')).toHaveTextContent('Floor 3 cleared');
-        expect(screen.getByTestId('floor-clear-par')).toHaveTextContent('3 turns, par 5');
+        expect(screen.queryByTestId('floor-clear-par')).toBeNull();
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+2,400');
-        expect(beat).toHaveTextContent('Run total 12,340');
-        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('Fever \u00d75 \u00b7 2 under par');
+        expect(beat).not.toHaveTextContent('Run total');
+        expect(screen.queryByTestId('floor-clear-bonus')).toBeNull();
         expect(screen.queryByTestId('floor-clear-notes')).toBeNull();
         expect(screen.queryByTestId('floor-clear-personal-best')).toBeNull();
     });
 
-    it('marks a new deepest floor and lists the notes it was given', () => {
+    it('marks a new deepest floor without a receipt', () => {
         render(
             <FloorClearBeat
-                notes={['Flip par: Complete (+30 score)', 'Someone is waiting downstairs.']}
                 personalBest
                 result={{ ...result, parTurns: 4, turnsTaken: 6, floorBonus: 300, floorBonusTierMult: 1, floorEfficiencyBonus: undefined, momentumBonusTier: undefined }}
-                totalScore={300}
             />
         );
         expect(screen.getByTestId('floor-clear-beat')).toHaveAttribute('data-personal-best', 'true');
         expect(screen.getByTestId('floor-clear-personal-best')).toHaveTextContent('New deepest floor');
-        expect(screen.getByTestId('floor-clear-par')).toHaveTextContent('6 turns, par 4');
+        expect(screen.queryByTestId('floor-clear-par')).toBeNull();
         expect(screen.queryByTestId('floor-clear-bonus')).toBeNull();
-        const notes = screen.getByTestId('floor-clear-notes');
-        expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
-        expect(notes).toHaveTextContent('Someone is waiting downstairs.');
+        expect(screen.queryByTestId('floor-clear-notes')).toBeNull();
     });
 
-    it('shows the gold and elemental rewards without repeating the score formula', () => {
-        render(<FloorClearBeat notes={[]} personalBest={false} result={{ ...result, goldEarned: 6, elementalDrops: { ember: 2 } }} totalScore={2400} />);
-        expect(screen.getByTestId('floor-clear-bonus')).toHaveTextContent('+6 gold');
-        expect(screen.getByTestId('floor-clear-essence')).toHaveTextContent('+2 Fire');
+    it('keeps gold and elemental breakdowns out of the payoff', () => {
+        render(<FloorClearBeat personalBest={false} result={{ ...result, goldEarned: 6, elementalDrops: { ember: 2 } }} />);
+        expect(screen.queryByTestId('floor-clear-bonus')).toBeNull();
+        expect(screen.queryByTestId('floor-clear-essence')).toBeNull();
         expect(screen.getByTestId('floor-clear-beat')).not.toHaveTextContent('Floor bonus');
     });
 
     it('says nothing it cannot read: a result from before the par has no par line or bonus line, and never NaN', () => {
         render(
             <FloorClearBeat
-                notes={[]}
                 personalBest={false}
                 result={{ ...result, level: Number.POSITIVE_INFINITY, scoreGained: Number.NaN, parTurns: undefined, turnsTaken: undefined, floorBonus: undefined }}
-                totalScore={Number.NaN}
             />
         );
         const beat = screen.getByTestId('floor-clear-beat');

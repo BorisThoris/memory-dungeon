@@ -10,7 +10,6 @@ import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { useGameplayChromeClearance } from '../hooks/useGameplayChromeClearance';
-import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
@@ -33,7 +32,6 @@ import {
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
-import { automaticCampReward } from '../../shared/automatic-camp-rules';
 import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
@@ -62,7 +60,6 @@ import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
 import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
-    formatHudActionFeedbackText,
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -123,13 +120,12 @@ import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
-import { REALMS, REALM_SEVERITIES, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
 import { RealmScreenOverlay } from './RealmScreenOverlay';
 import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
-import { realmCarryoverLines } from '../copy/realmCopy';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -145,7 +141,6 @@ import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '.
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText, scoreTermsLiveRegionText } from '../copy/matchScoreFloater';
-import ScoreTermsLine from './ScoreTermsLine';
 import {
     mismatchFloaterLiveRegionText,
     mismatchFloaterNextAction,
@@ -1047,8 +1042,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
-    const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
-    const floorClearObjectiveLine = featuredObjectiveResultLine;
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -1218,7 +1211,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
-    const campReward = useMemo(() => automaticCampReward(run), [run]);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1274,12 +1266,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         };
     }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
-    const floorClearNotes = [
-        campReward.receipt,
-        run.nextRealm ? `Next: ${REALMS[run.nextRealm.realmId].title} · ${REALM_SEVERITIES[run.nextRealm.severity].title}. Arena selected automatically.` : null,
-        floorClearObjectiveLine, ...realmCarryoverLines(run.lastLevelResult, run.realmAttunement)].filter(
-        (line): line is string => typeof line === 'string' && line.length > 0
-    );
     const nextFloorIdentity = nextFloorPreview
         ? getFloorIdentityContract({
               floorTag: nextFloorPreview.floorTag,
@@ -1356,7 +1342,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     const {
         message: politeHudAnnouncement,
-        priority: politeHudAnnouncementPriority,
         queuePoliteAnnouncement
     } = useHudPoliteLiveAnnouncement({
         boardTurnEvent: typedBoardTurnEvent,
@@ -1376,12 +1361,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             gambitThirdPickActive && run.board ? run.board.flippedTileIds : null,
         reduceMotion
     });
-    const actionFeedbackAnnouncement = boardFloaterLiveText || politeHudAnnouncement;
-    const actionFeedbackPriority =
-        boardFloaterPayload?.kind === 'miss' ? 'error' : politeHudAnnouncementPriority;
-    const visualHudAnnouncement = actionFeedbackAnnouncement
-        ? formatHudActionFeedbackText(actionFeedbackAnnouncement)
-        : '';
 
     // R3F commits separately from the dock. A stable callback reads the current arm state even
     // when a fast card click reaches a canvas frame from before the Bomb button was pressed.
@@ -1840,8 +1819,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
-                            feedback={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : visualHudAnnouncement}
-                            feedbackPriority={actionFeedbackPriority}
+                            feedback={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : ''}
                             onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
@@ -1903,10 +1881,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             <div className={styles.boardGlow} aria-hidden="true" />
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
-                                    notes={floorClearNotes}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
-                                    totalScore={run.stats.totalScore}
                                 />
                             ) : null}
                             <MemoTileBoard
@@ -2028,20 +2004,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-amount"
                                         >
                                             +{runNonNegativeInteger(boardFloaterPayload.amount).toLocaleString()}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.scoreTerms ? (
-                                        <ScoreTermsLine
-                                            breakdown={boardFloaterPayload.scoreTerms}
-                                            reduceMotion={reduceMotion}
-                                        />
-                                    ) : null}
-                                    {boardFloaterReason ? (
-                                        <span
-                                            className={styles.boardFloaterReason}
-                                            data-testid="board-floater-reason"
-                                        >
-                                            {boardFloaterReason}
                                         </span>
                                     ) : null}
                                 </div>

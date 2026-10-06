@@ -506,7 +506,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(beat).toHaveAttribute('role', 'status');
         expect(screen.getByTestId('floor-clear-title')).toHaveTextContent('Floor 1 cleared');
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
-        expect(beat).toHaveTextContent('Run total 120');
+        expect(beat).not.toHaveTextContent('Run total');
         // No screen between floors: no dialog, no Continue, no Main Menu, and the board underneath is not inert.
         expect(screen.queryByRole('dialog', { name: /floor cleared/i })).toBeNull();
         expect(screen.queryByRole('button', { name: /^continue$/i })).toBeNull();
@@ -552,7 +552,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-title')).toHaveTextContent('Floor 0 cleared');
         expect(screen.getByTestId('floor-clear-beat')).not.toHaveTextContent(/NaN|Infinity/);
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+0');
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
+        expect(screen.queryByTestId('floor-clear-notes')).toBeNull();
     });
 
     it('pulses the stage with the break tier for one beat after a chunk breaks, then lets it go', () => {
@@ -1144,7 +1144,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByText(GAMBIT_KEYBOARD_HELP_TIP)).toBeTruthy();
     });
 
-    it('states a match once: signal, amount, and the one reason worth naming', async () => {
+    it('shows the match payout without explanatory captions', async () => {
         vi.useFakeTimers();
         try {
             render(
@@ -1179,7 +1179,9 @@ describe('GameScreen (OVR-014)', () => {
             const floater = screen.getByTestId('match-score-floater');
             expect(floater.querySelector('[data-floater-signal="chain"]')).toHaveTextContent('Chain');
             expect(screen.getByTestId('match-score-floater-amount')).toHaveTextContent('+25');
-            expect(screen.getByTestId('board-floater-reason')).toHaveTextContent('Pickup: shard cache');
+            expect(screen.queryByTestId('board-floater-reason')).toBeNull();
+            expect(screen.queryByTestId('board-floater-score-terms')).toBeNull();
+            expect(screen.queryByTestId('run-shell-line')).not.toHaveTextContent('Pickup: shard cache');
             expect(floater).toHaveAttribute('data-match-floater-heat', 'prime');
             // The forecast, ladder, lane-map, chip and crescendo layers restated this and are gone.
             for (const gone of [
@@ -1300,7 +1302,7 @@ describe('GameScreen (OVR-014)', () => {
             expect(floater).toHaveAttribute('data-feedback-intensity', 'break');
             expect(floater).toHaveAttribute('data-mismatch-floater-heat', 'break');
             expect(floater.querySelector('[data-floater-signal="break"]')).toHaveTextContent('Break');
-            expect(screen.getByTestId('board-floater-reason')).toHaveTextContent('Recover - safe match');
+            expect(screen.queryByTestId('board-floater-reason')).toBeNull();
             expect(screen.queryByTestId('mismatch-score-floater-recovery-chips')).toBeNull();
             expect(screen.queryByTestId('mismatch-score-floater-recovery-lane-map')).toBeNull();
             expect(screen.queryByTestId('mismatch-score-floater-next-action')).toBeNull();
@@ -1699,9 +1701,7 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
-        const notes = screen.getByTestId('floor-clear-notes');
-        expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
-        expect(notes).not.toHaveTextContent(/life/i);
+        expect(screen.queryByTestId('floor-clear-notes')).toBeNull();
         // No route is offered between floors any more (Gen 173), and no screen at all since
         // Gen 182: the beat sits on the board and the floor clear goes straight on.
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();

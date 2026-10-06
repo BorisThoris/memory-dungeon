@@ -116,19 +116,6 @@
     -webkit-text-stroke: 1.5px color-mix(in srgb, white 80%, transparent);
 }
 
-.sub {
-    max-width: 90%;
-    text-align: center;
-    text-wrap: balance;
-    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
-    font-size: clamp(0.85rem, 1.6vi, 1.1rem);
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--margin-paper, #f8f4f4);
-    text-shadow: 0 2px 12px color-mix(in srgb, var(--margin-ink, #131111) 90%, transparent);
-    animation: calloutSub var(--stamp-ms) ease-out forwards;
-}
-
 .flash {
     position: absolute;
     inset: 0;
@@ -253,28 +240,6 @@
     }
 }
 
-@keyframes calloutSub {
-    0%,
-    16% {
-        opacity: 0;
-        transform: translateY(0.6rem);
-    }
-
-    30% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    76% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(-0.6rem);
-    }
-}
-
 @keyframes calloutFlash {
     0% {
         opacity: 0;
@@ -357,8 +322,7 @@
 }
 
 /* Reduced motion: the type and its colour, fading; nothing moves. */
-.callout[data-reduce-motion='true'] .stamp,
-.callout[data-reduce-motion='true'] .sub {
+.callout[data-reduce-motion='true'] .stamp {
     animation: calloutStill var(--stamp-ms) ease-out forwards;
 }
 
@@ -394,8 +358,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .callout[data-callout-rare='true'] .stampText { animation: none; }
-    .stamp,
-    .sub {
+    .stamp {
         animation: calloutStill var(--stamp-ms) ease-out forwards;
     }
 

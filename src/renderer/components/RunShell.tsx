@@ -3,9 +3,6 @@ import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
-import { comboHeatPerks, comboHeatPerksActive, nextComboHeatPerkAt } from '../../shared/combo-heat-perks';
-import { comboHeatPerksLine } from '../copy/comboHeatPerksCopy';
-import { zoneRailLine } from '../copy/zoneToolCopy';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
@@ -29,8 +26,7 @@ import {
     chainRungApproach,
     chainTierRungs,
     runChainMeter,
-    runChainTier,
-    runLadderChain
+    runChainTier
 } from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { tapStudyClosing } from '../input/touchHaptics';
@@ -299,9 +295,6 @@ const RunShell = ({
     // Links the combo brought down the stairs: the whole ladder carries until a miss, and saying
     // how much of it arrived with the player is what makes a floor opening at Fever read as earned.
     const carried = Math.min(chain, runNonNegativeInteger(run.comboLinksCarried));
-    // What the heat changes about the board (`combo-heat-perks.ts`), or how far the next change is.
-    const perks = comboHeatPerks(chain);
-    const perksLine = comboHeatPerksLine(perks, nextComboHeatPerkAt(chain));
     // The ladder above the ladder: the combo's heat stage (`combo-heat-rules.ts`), which keeps the
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
@@ -311,7 +304,6 @@ const RunShell = ({
     // below can never disagree about which rung is next or how far off it is.
     const approach = chainRungApproach(meter.momentum, run.board?.pairCount ?? null);
     const nextTier = approach.next;
-    const nextTierLabel = CHAIN_BEAT_COPY.goalLabel(approach.away, nextTier);
     const chainMeterDropping = useChainMeterDrop(meter.momentum, rungs.clean);
     const chainMeterArriving = useChainMeterFeverArrival(meter.full);
     const memorize = useMemorizeCountdown(run);
@@ -696,18 +688,9 @@ const RunShell = ({
                                     <span data-testid="hud-combo-stage">
                                         {temper.labels[heat.stage] ? `Combo · ${comboStageLabel(temper.labels, chain)}` : 'Combo'}
                                     </span>
-                                    {carried > 0 ? (
-                                        <span className={styles.comboCarried} data-testid="hud-combo-carried">
-                                            {`${carried} carried`}
-                                        </span>
-                                    ) : null}
                                     {isZoneActive(run) ? (
                                         <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-zone">
-                                            {zoneRailLine(run.board?.flippedTileIds.length ?? 0, (run.zone?.pairs ?? 0) * 2)}
-                                        </span>
-                                    ) : perksLine ? (
-                                        <span className={styles.comboPerks} data-perks-active={comboHeatPerksActive(perks) ? 'true' : 'false'} data-testid="hud-combo-perks">
-                                            {perksLine}
+                                            ZONE
                                         </span>
                                     ) : null}
                                 </span>
@@ -723,23 +706,6 @@ const RunShell = ({
                                 >
                                     {`×${chainRungScoreMultiplier(tier)}`}
                                 </span>
-                                <span
-                                    className={styles.chainDepth}
-                                    data-chain-tier={tier}
-                                    title={`${CHAIN_BEAT_COPY.momentumHint(
-                                        runLadderChain(run),
-                                        runNonNegativeInteger(run.chunkPairsThisChain),
-                                        runNonNegativeInteger(run.skipMomentumThisChain),
-                                        rungs,
-                                        run.board?.floorArchetypeId
-                                    )} ${CHAIN_BEAT_COPY.rungLadder()}`}
-                                >
-                                    {`Pops · ${CHAIN_TIER_LABELS[tier] || 'Lone'}`}
-                                </span>
-                            </span>
-                            <span className={styles.chainGoal} data-chain-tier={nextTier ?? 'fever'} data-testid="hud-chain-goal">
-                                <em>{nextTierLabel}</em>
-                                <span className={styles.chainGoalValue}>Pops ×{chainRungScoreMultiplier(nextTier ?? 'fever')}</span>
                             </span>
                         </div>
                     </div>

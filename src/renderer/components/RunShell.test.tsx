@@ -183,7 +183,7 @@ describe('RunShell', () => {
         await waitFor(() => expect(screen.queryByTestId('hud-miss-earned')).toBeNull());
     });
 
-    it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {
+    it('keeps the multiplier and accessible momentum without explanatory labels', () => {
         const base = playingRun();
         const run: RunState = {
             ...base,
@@ -194,21 +194,14 @@ describe('RunShell', () => {
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
         expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo', '3');
-        const chain = within(screen.getByTestId('hud-chain')).getByText(/Pops · Sharp/);
-        // Twelve pairs: Sharp from 7, Fever from 9. A chain of 3 plus 4 cascaded pairs is Sharp.
-        expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
-        expect(chain).toHaveTextContent(/Sharp/);
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 7/));
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 7 .* Fever from 9/));
+        expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'sharp');
         // The meter reads the same ladder: momentum 7 of 9, Sharp, not yet full.
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-chain-tier', 'sharp');
         expect(meter).toHaveAttribute('data-meter-fill', '0.778');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter: momentum 7 of 9.'));
-        const goal = screen.getByTestId('hud-chain-goal');
-        expect(goal).toHaveTextContent('2 → Fever');
-        expect(goal).toHaveTextContent('Pops ×8');
+        expect(screen.queryByTestId('hud-chain-goal')).toBeNull();
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
@@ -249,8 +242,6 @@ describe('RunShell', () => {
         expect(meter).toHaveAttribute('data-meter-full', 'true');
         expect(meter).toHaveAttribute('data-meter-fill', '1.000');
         expect(meter).toHaveAttribute('aria-label', expect.stringContaining('Fever meter full: momentum 10.'));
-        expect(screen.getByTestId('hud-chain-goal')).toHaveTextContent('Fever active');
-        expect(screen.getByTestId('hud-chain-goal')).not.toHaveTextContent('momentum to');
     });
 
     it('marks the Floor stat as a personal best only when told the run is the deepest yet', () => {
@@ -553,10 +544,10 @@ describe('RunShell — The Margin', () => {
         // A chain of three stands on Clean: that rung and the ones below read as reached.
         expect(ladder.querySelector('[data-rung="clean"]')).toHaveAttribute('data-rung-reached', 'true');
         expect(ladder.querySelector('[data-rung="sharp"]')).toHaveAttribute('data-rung-reached', 'false');
-        expect(screen.getByTestId('hud-chain')).toHaveTextContent('Pops · Clean');
+        expect(screen.getByTestId('hud-chain-rung-value')).toHaveTextContent('×2');
     });
 
-    it('headlines the combo, and says how much of it came down the stairs', () => {
+    it('headlines the carried combo without perk explanations', () => {
         // The combo carries whole until a miss while the ladder restarts each floor; a rail back on
         // Lone under a small "Chain 9" read as a lost combo, so the combo is the big number now.
         const base = playingRun();
@@ -564,13 +555,12 @@ describe('RunShell — The Margin', () => {
         const { rerender } = render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={carried} tools={[]} />);
         expect(screen.getByTestId('hud-combo')).toHaveAttribute('data-combo', '9');
         expect(screen.getByTestId('hud-combo')).toHaveTextContent(/9\s*Combo/);
-        expect(screen.getByTestId('hud-combo-carried')).toHaveTextContent('8 carried');
+        expect(screen.queryByTestId('hud-combo-carried')).toBeNull();
         // Nine is Hot: the shell carries the heat stage and the label says it beside the combo.
         expect(screen.getByTestId('run-shell')).toHaveAttribute('data-combo-stage', 'hot');
         expect(screen.getByTestId('hud-combo-stage')).toHaveTextContent('Combo · Hot');
-        // Hot buys the afterglow, and the rail says so under the combo.
-        expect(screen.getByTestId('hud-combo-perks')).toHaveAttribute('data-perks-active', 'true');
-        expect(screen.getByTestId('hud-combo-perks')).toHaveTextContent('Reveal +1');
+        // The heat stays visible without a perk receipt.
+        expect(screen.queryByTestId('hud-combo-perks')).toBeNull();
         expect(screen.getByTestId('hud-chain-flames')).toBeInTheDocument();
         // The ladder came down the stairs with it: nine on twelve pairs is Fever.
         expect(screen.getByTestId('hud-chain-rung-value')).toHaveAttribute('data-chain-tier', 'fever');

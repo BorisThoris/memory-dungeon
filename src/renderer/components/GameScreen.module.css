@@ -1055,13 +1055,6 @@ subdued cool palette. */
     font-size: 1.22em;
 }
 
-[data-floater-placement='stage-top'] .boardFloaterReason,
-[data-floater-placement='stage-top'] .boardFloaterTerms {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: 18rem;
-}
-
 [data-floater-placement='stage-top'] .boardFloaterSignal {
     flex: 0 0 auto;
 }
@@ -1077,20 +1070,6 @@ subdued cool palette. */
 }
 
 /* One reason under the number, clamped to a single line so the board stays visible. */
-.boardFloaterReason {
-    max-width: 100%;
-    overflow: hidden;
-    color: var(--margin-paper-2);
-    font-size: 0.9375rem;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    text-transform: none;
-    text-shadow: 0 1px 8px color-mix(in srgb, var(--margin-ink) 90%, transparent);
-    white-space: nowrap;
-}
 
 /* The signal over the number: a small-caps word, no pill. Its colour says what kind of news it is. */
 .boardFloaterSignal {
@@ -1562,18 +1541,6 @@ where that rule
 }
 
 /* The break's score being built: one term per beat, the total climbing with them (thesis §40.4). */
-.boardFloaterTerms {
-    max-width: 100%;
-    overflow: hidden;
-    color: var(--margin-gold);
-    font-size: 0.9375rem;
-    font-weight: 400;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 /*
  * The board's margins on a desktop: the ladder's column at the left (the rung labels, the

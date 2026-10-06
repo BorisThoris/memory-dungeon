@@ -15,13 +15,13 @@ describe('the end as a cut-scene', () => {
 
     it('plasters the verdict, then the flourish, then the choices, on its own clock', () => {
         render(
-            <RunEndCinematic actions={actions()} personalBest="beaten" reason="miss_budget" reasonLine="You ran out of misses on floor 9." reduceMotion={false} runSeed={14} summary={{ totalScore: 12_345, highestLevel: 9, bestStreak: 12 }} />
+            <RunEndCinematic actions={actions()} personalBest="beaten" reason="miss_budget" reduceMotion={false} runSeed={14} summary={{ totalScore: 12_345, highestLevel: 9, bestStreak: 12 }} />
         );
         const stage = screen.getByTestId('run-end-cinematic');
         expect(stage).toHaveAttribute('data-phase', 'verdict');
         expect(stage).toHaveAttribute('data-temper', 'frost');
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('JOURNEY OVER');
-        expect(screen.getByTestId('game-over-end-reason')).toHaveTextContent('You ran out of misses on floor 9.');
+        expect(screen.queryByTestId('game-over-end-reason')).toBeNull();
         expect(screen.queryByRole('button')).toBeNull();
         act(() => vi.advanceTimersByTime(RUN_END_VERDICT_MS + 5));
         expect(stage).toHaveAttribute('data-phase', 'flourish');
@@ -31,13 +31,13 @@ describe('the end as a cut-scene', () => {
         expect(screen.getAllByRole('button')).toHaveLength(3);
         // The verdict is held small above the choices, with the reason still on it.
         expect(screen.getByTestId('run-end-cinematic-held')).toHaveTextContent('JOURNEY OVER');
-        expect(screen.getByTestId('game-over-end-reason')).toBeInTheDocument();
+        expect(screen.queryByTestId('game-over-end-reason')).toBeNull();
     });
 
     it('skips straight to the choices on a press, and never on Escape', () => {
         const onRecord = vi.fn();
         render(
-            <RunEndCinematic actions={actions(vi.fn(), onRecord)} personalBest={null} reason="quit" reasonLine={null} reduceMotion={false} runSeed={90_210} summary={{ totalScore: 0, highestLevel: 2, bestStreak: 0 }} />
+            <RunEndCinematic actions={actions(vi.fn(), onRecord)} personalBest={null} reason="quit" reduceMotion={false} runSeed={90_210} summary={{ totalScore: 0, highestLevel: 2, bestStreak: 0 }} />
         );
         const stage = screen.getByTestId('run-end-cinematic');
         fireEvent.keyDown(window, { key: 'Escape' });
@@ -52,7 +52,7 @@ describe('the end as a cut-scene', () => {
 
     it('opens on the choices under reduced motion, verdict held above them', () => {
         render(
-            <RunEndCinematic actions={actions()} personalBest={null} reason="contract" reasonLine="The contract ended it." reduceMotion runSeed={30} summary={{ totalScore: 10, highestLevel: 3, bestStreak: 3 }} />
+            <RunEndCinematic actions={actions()} personalBest={null} reason="contract" reduceMotion runSeed={30} summary={{ totalScore: 10, highestLevel: 3, bestStreak: 3 }} />
         );
         expect(screen.getByTestId('run-end-cinematic')).toHaveAttribute('data-phase', 'choices');
         expect(screen.getByTestId('run-end-cinematic-held')).toHaveTextContent('CONTRACT SEALED');

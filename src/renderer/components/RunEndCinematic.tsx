@@ -25,15 +25,13 @@ export const RUN_END_FLOURISH_MS = 1400;
 export interface RunEndCinematicProps {
     summary: Pick<RunSummary, 'totalScore' | 'highestLevel' | 'bestStreak'>;
     reason: RunEndReason | null | undefined;
-    /** How the run ended, in words, under the verdict; null for a summary that predates the reason. */
-    reasonLine: string | null;
     runSeed: number;
     personalBest: 'beaten' | 'matched' | null;
     actions: readonly RunEndStampAction[];
     reduceMotion: boolean;
 }
 
-export function RunEndCinematic({ summary, reason, reasonLine, runSeed, personalBest, actions, reduceMotion }: RunEndCinematicProps) {
+export function RunEndCinematic({ summary, reason, runSeed, personalBest, actions, reduceMotion }: RunEndCinematicProps) {
     const temper = comboHeatThemeForSeed(runSeed);
     const verdict = runEndVerdict(reason);
     const flourish = runEndFlourish(summary, personalBest);
@@ -75,11 +73,6 @@ export function RunEndCinematic({ summary, reason, reasonLine, runSeed, personal
                     <div className={styles.held} data-testid="run-end-cinematic-held">
                         <h1 className={styles.heldVerdict}>{verdict}</h1>
                         <span className={styles.heldLine}>{runEndScoreLine(summary.totalScore, summary.highestLevel)}</span>
-                        {reasonLine ? (
-                            <span className={styles.heldReason} data-testid="game-over-end-reason">
-                                {reasonLine}
-                            </span>
-                        ) : null}
                     </div>
                     <div className={styles.choices} data-testid="run-end-cinematic-choices" role="group" aria-label="What next">
                         {actions.map((action, index) => (
@@ -115,11 +108,6 @@ export function RunEndCinematic({ summary, reason, reasonLine, runSeed, personal
                     </h1>
                     <p className={styles.line}>
                         <span className={styles.scoreLine}>{runEndScoreLine(summary.totalScore, summary.highestLevel)}</span>
-                        {reasonLine ? (
-                            <span className={styles.reason} data-testid="game-over-end-reason">
-                                {reasonLine}
-                            </span>
-                        ) : null}
                     </p>
                     <span className={styles.skipHint}>{RUN_END_STAMP_COPY.skipHint}</span>
                 </>

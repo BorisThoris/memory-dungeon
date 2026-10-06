@@ -98,7 +98,6 @@
 .mutator,
 .scoreLabel,
 .rungLabel,
-.chainDepth,
 .kicker,
 .toolLabel,
 .seatLabel,
@@ -726,11 +725,6 @@
     color: var(--paper);
 }
 
-.comboCarried {
-    color: var(--marker);
-    letter-spacing: 0.1em;
-}
-
 /* What the fire buys on the board, or how far off it is; lit in the temper's colour once a perk is on. */
 .comboPerks {
     font-size: 0.75rem;
@@ -759,33 +753,6 @@
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-}
-
-.chainDepth {
-    letter-spacing: 0.16em;
-    color: var(--paper);
-    font-variant-numeric: tabular-nums;
-}
-
-.chainGoal {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--paper-2);
-}
-
-.chainGoal em {
-    font-style: italic;
-}
-
-.chainGoalValue {
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.chainGoalValue::before {
-    content: '·';
-    margin-right: 0.5rem;
 }
 
 /* Fever: the ladder itself breathes. */
@@ -1115,9 +1082,6 @@
     .chain[data-meter-arrive='true'] .ladderMarker,
     .chain[data-meter-full='true'] .ladderFill,
     .chain[data-meter-full='true'] .ladderMarker,
-    /* Only the pulses. The imminent rung stays lit and the closing bar stays red: which rung the
-       next pair buys, and how little of the study window is left, are information — and a player
-       getting none of the transients needs them more than anyone, not less. */
     .rung[data-rung-imminent='true'] .rungLabel,
     .memorizeBar[data-closing='true'],
     .comboCount,
@@ -1245,22 +1209,6 @@
     text-shadow: none;
 }
 
-:global([data-shell-layout='tablet']) .chainDepth,
-:global([data-shell-layout='phone-portrait']) .chainDepth,
-:global([data-shell-layout='phone-landscape']) .chainDepth {
-    grid-area: read;
-    justify-self: start;
-    letter-spacing: 0.1em;
-}
-
-:global([data-shell-layout='tablet']) .chainGoal,
-:global([data-shell-layout='phone-portrait']) .chainGoal,
-:global([data-shell-layout='phone-landscape']) .chainGoal {
-    grid-area: read;
-    justify-self: end;
-    font-size: 0.75rem;
-}
-
 /*
  * A phone held sideways: the read is two lines, not two ends of one.
  *
@@ -1289,16 +1237,7 @@
         'mult ladder';
 }
 
-:global([data-shell-layout='phone-landscape']) .chainGoal {
-    grid-area: goal;
-    justify-self: start;
-}
-
 /* The goal's worth is the ladder's own labels on a phone; the sentence is the goal. */
-:global([data-shell-layout='phone-portrait']) .chainGoalValue,
-:global([data-shell-layout='phone-landscape']) .chainGoalValue {
-    display: none;
-}
 
 :global([data-shell-layout='tablet']) .ladder,
 :global([data-shell-layout='phone-portrait']) .ladder,
@@ -1700,12 +1639,6 @@
 
 :global([data-shell-layout='phone-portrait']) .ladder,
 :global([data-shell-layout='phone-landscape']) .ladder,
-:global([data-shell-layout='phone-portrait']) .chainGoal,
-:global([data-shell-layout='phone-landscape']) .chainGoal,
-:global([data-shell-layout='phone-portrait']) .chainDepth,
-:global([data-shell-layout='phone-landscape']) .chainDepth,
-:global([data-shell-layout='phone-portrait']) .comboCarried,
-:global([data-shell-layout='phone-landscape']) .comboCarried,
 :global([data-shell-layout='phone-portrait']) .comboPerks[data-perks-active='false'],
 :global([data-shell-layout='phone-landscape']) .comboPerks[data-perks-active='false'] {
     display: none;
