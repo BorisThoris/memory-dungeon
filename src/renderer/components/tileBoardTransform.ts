@@ -55,8 +55,9 @@ export const getTileTransform = (
     const row = Math.floor(index / totalColumns);
     const compactMul = compact ? 0.85 : 1;
     let baseX = (column - (totalColumns - 1) / 2) * getTileColumnSpacing(compact);
-    if (!reduceMotion && row % 2 === 1) {
-        baseX += BOARD_LAYOUT_ROW_STAGGER_X * compactMul;
+    if (!reduceMotion && totalRows > 1) {
+        // Balance both sides of the camera instead of shifting half the deal to the right.
+        baseX += (row % 2 === 1 ? 0.5 : -0.5) * BOARD_LAYOUT_ROW_STAGGER_X * compactMul;
     }
     const baseY = ((totalRows - 1) / 2 - row) * TILE_SPACING;
     const imperfectionX = (((seed % 19) - 9) * 0.0025) / (compact ? 1.2 : 1);

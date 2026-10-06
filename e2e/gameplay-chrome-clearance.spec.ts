@@ -170,28 +170,12 @@ test.describe('the in-run chrome clearance', () => {
                 return cards === 8 ? errors : ['not the complete opening board'];
             }), { timeout: 15_000 }).toEqual([]);
         }
-        await expect(frame).toHaveAttribute('data-board-columns', '2');
+        // The shorter phone gains larger cards from three columns; tall phones still use two.
+        await expect(frame).toHaveAttribute('data-board-columns', '3');
+        await expect(frame).toHaveAttribute('data-board-rows', '3');
     });
 
-    /**
-     * The floor-clear beat and the chain read are two live surfaces in the same strip.
-     *
-     * #250 reported the rail drawn over the beat at 1.1, and it was: Gen 240 measured the beat's
-     * title starting 21px inside a read that ends at 408. What made that unreachable was the cap
-     * coming down to 1.05 in Gen 238 - not anything about this pair. Re-measured at the scales the
-     * slider actually offers, on a 1280x800 Deck panel, the title cleared the read by 37px at 1.0,
-     * 21px at 1.025 and **6px at 1.05**. Six px is not clearance, it is a coincidence that survived
-     * a cap change.
-     *
-     * So the pair is held apart here, at every scale `SETTINGS_NUMERIC_RANGES` allows, and the
-     * chain box is required to contain its own read - the thing that was actually wrong, and what
-     * made the beat's inset a lie: the box declared 13rem while its content painted to 21.5rem, so
-     * anything positioned against it was off by 136px (Gen 257).
-     *
-     * The negative control is the scale this started at. 1.1 is past the cap, so it is forced
-     * directly rather than stored, and the same assertion has to report the overlap Gen 240 found -
-     * a bar that only ever sees passing geometry is a bar nobody has checked.
-     */
+    // The compact desktop rail must contain long combo reads and leave the clear beat room.
     test('the floor-clear beat and the chain read never meet', async ({ page }) => {
         test.setTimeout(300_000);
         await page.setViewportSize({ width: 1280, height: 800 });
@@ -260,14 +244,13 @@ test.describe('the in-run chrome clearance', () => {
         }
         expect(failures, 'the floor-clear beat and the chain read share the strip').toEqual([]);
 
-        // The control: past the cap this pair is known to collide, so the check has to say so.
+        // Extra scale headroom: the compact rail should also clear the beat beyond the settings cap.
         const pastCap = await overlapAtScale(1.1);
         expect(pastCap, 'the probe measured nothing at the control scale').not.toBeNull();
         console.log(`BEAT control x1.1: title clears read by ${(pastCap?.titleGap ?? 0).toFixed(2)}px`);
         expect(
             pastCap?.titleGap ?? 0,
-            'at 1.1 - past the shipped cap - Gen 240 measured the beat 21px inside the read; a check that ' +
-                'cannot see that is not measuring this pair'
-        ).toBeLessThan(-SPILL_TOLERANCE_PX);
+            'the compact combo rail should leave room for the floor-clear title even at 1.1 scale'
+        ).toBeGreaterThanOrEqual(-SPILL_TOLERANCE_PX);
     });
 });

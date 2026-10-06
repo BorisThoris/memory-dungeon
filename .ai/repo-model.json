@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9066
+    "relationshipCount": 9068
   },
   "inventory": [
     {
@@ -3885,8 +3885,8 @@
     {
       "path": "e2e/gameplay-chrome-clearance.spec.ts",
       "category": "test",
-      "bytes": 14682,
-      "sha256": "3fd1a53d3fb5001f03f69471562e5a927385dd796186d3e7a371f0731f428f48"
+      "bytes": 13604,
+      "sha256": "b4af6b140dd93e6102ca5712650c56b4f1f3f3440a165194282836890b6aeb63"
     },
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
@@ -10209,8 +10209,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 60255,
-      "sha256": "17f5f96c3d5ada8f0ec28c481517d2a4cea36df2758e104f3f4605bdeae1dd77"
+      "bytes": 61121,
+      "sha256": "d3a76b52cb50e5178b54270ceacfbcabae649903e6113da2d4dcfccc25b4c285"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10935,8 +10935,8 @@
     {
       "path": "src/renderer/components/tileBoardResponsiveLayout.ts",
       "category": "source",
-      "bytes": 2637,
-      "sha256": "334af64e7ab0f964ee7f18a4e0da15e8cdf7154d9cb403c26245917118540cf6"
+      "bytes": 2705,
+      "sha256": "584367ee8193515447ec575dbcf8e8d80d1a6783aba3f8becbef274fce2d0091"
     },
     {
       "path": "src/renderer/components/tileBoardRimGeometry.test.ts",
@@ -11139,14 +11139,14 @@
     {
       "path": "src/renderer/components/tileBoardTransform.test.ts",
       "category": "test",
-      "bytes": 1698,
-      "sha256": "1779d5f2d1d4a24b22640f815e93b28089fc02d46b1871e3298081bae180c127"
+      "bytes": 3714,
+      "sha256": "30fdaf907d98421e28834f434aa8307beb48b1e83a498ceb84fa3c3859b5d197"
     },
     {
       "path": "src/renderer/components/tileBoardTransform.ts",
       "category": "source",
-      "bytes": 3032,
-      "sha256": "88bb1bb90e3c841242a65675b6cf5a96051962e093e1505ac5cabcaf33211900"
+      "bytes": 3155,
+      "sha256": "149dd07fd6f10a87a9834f1ddc64fedd0cc56f09d55f89ea7f3a1936dda24fd2"
     },
     {
       "path": "src/renderer/components/tileBoardTutorialMarkers.test.ts",
@@ -11265,8 +11265,8 @@
     {
       "path": "src/renderer/components/tileShatter.ts",
       "category": "source",
-      "bytes": 11466,
-      "sha256": "3fc816172b5c271d457e3082ca3b19e94e9bc9d35535e6c2637adf5d7844cc27"
+      "bytes": 11456,
+      "sha256": "ca3e3952ba00da53ef54fc2c8f9e60ca25c5c253ff1ab6f878bd39534b80cd77"
     },
     {
       "path": "src/renderer/components/tileTextures.test.ts",
@@ -24291,7 +24291,8 @@
         "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#responsiveBoardColumns"
       ],
       "testedBy": [
-        "file:src/renderer/components/tileBoardResponsiveLayout.test.ts"
+        "file:src/renderer/components/tileBoardResponsiveLayout.test.ts",
+        "file:src/renderer/components/tileBoardTransform.test.ts"
       ]
     },
     {
@@ -24903,8 +24904,9 @@
       "path": "src/renderer/components/tileBoardTransform.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 44,
+      "lineCount": 75,
       "imports": [
+        "file:src/renderer/components/tileBoardResponsiveLayout.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts"
@@ -24917,7 +24919,7 @@
       "path": "src/renderer/components/tileBoardTransform.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 97,
+      "lineCount": 98,
       "imports": [
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts"
@@ -46077,7 +46079,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardTransform.ts",
       "line": 44,
-      "endLine": 96
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTransform.ts#hashTileLayoutSeed",
@@ -100635,6 +100637,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardTransform.test.ts->src/renderer/components/tileBoardResponsiveLayout.ts",
+      "source": "file:src/renderer/components/tileBoardTransform.test.ts",
+      "target": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardTransform.test.ts->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/tileBoardTransform.test.ts",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
@@ -117104,6 +117112,12 @@
       "id": "tested_by:src/renderer/components/tileBoardResponsiveLayout.ts->file:src/renderer/components/tileBoardResponsiveLayout.test.ts",
       "source": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
       "target": "file:src/renderer/components/tileBoardResponsiveLayout.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardResponsiveLayout.ts->file:src/renderer/components/tileBoardTransform.test.ts",
+      "source": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
+      "target": "file:src/renderer/components/tileBoardTransform.test.ts",
       "kind": "tested_by"
     },
     {

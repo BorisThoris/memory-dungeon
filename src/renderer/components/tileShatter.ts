@@ -7,19 +7,19 @@ import { RENDERER_THEME } from '../styles/theme';
  * Pooling would reduce GC on low-end GPUs but adds lifecycle coupling to Three materials; profile before changing.
  * Dev frame budgeting uses `boardWebglPerfSample` in `TileBoardScene`, not per-shard counters here.
  */
-export const TILE_SPACING = 1.18;
+export const TILE_SPACING = 1.24;
 /** Narrow stages spend less width between cards so the fitted suits and tap targets stay legible. */
-export const getTileColumnSpacing = (compact: boolean): number => compact ? 1 : TILE_SPACING;
+export const getTileColumnSpacing = (compact: boolean): number => compact ? 0.92 : 0.98;
 /** Organic layout: max XY offset from nominal grid (world units); deterministic per tile id. */
-export const BOARD_LAYOUT_JITTER_XY = 0.092;
+export const BOARD_LAYOUT_JITTER_XY = 0.028;
 /** Organic layout: max idle Y rotation (rad) for a scattered-table read. */
 export const BOARD_LAYOUT_YAW_MAX = 0.1;
 /** Organic layout: subtle depth variation (world units). */
 export const BOARD_LAYOUT_JITTER_Z = 0.0045;
-/** Odd rows shift X (brick) to break column lines; scales with `TILE_SPACING`. */
-export const BOARD_LAYOUT_ROW_STAGGER_X = TILE_SPACING * 0.32;
+/** Small alternating row offset keeps the dealt feel without obscuring column adjacency. */
+export const BOARD_LAYOUT_ROW_STAGGER_X = 0.10;
 /** Extra half-extent on boardWorldWidth/Height so fit-zoom does not clip jittered corners. */
-export const BOARD_LAYOUT_VIEWPORT_PADDING = 0.24;
+export const BOARD_LAYOUT_VIEWPORT_PADDING = 0.16;
 /**
  * Card art planes in `TileBoardScene` — keep textures’ canvas aspect in sync to avoid stretching square PNGs.
  * Pipeline: `scripts/card-pipeline/cardTextureConstants.mjs`, `yarn imagegen --resolution card-plane`, `scripts/card-pipeline/normalize-card-texture.ps1`.

@@ -1,8 +1,8 @@
-import { BOARD_LAYOUT_VIEWPORT_PADDING, BOARD_LAYOUT_ROW_STAGGER_X, getTileColumnSpacing, TILE_SPACING } from './tileShatter';
+import { BOARD_LAYOUT_VIEWPORT_PADDING, BOARD_LAYOUT_ROW_STAGGER_X, CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT, getTileColumnSpacing, TILE_SPACING } from './tileShatter';
 
 export const boardGridWorldSize = (columns: number, rows: number, compact: boolean) => ({
-    width: (columns - 1) * getTileColumnSpacing(compact) + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING + (rows > 1 ? BOARD_LAYOUT_ROW_STAGGER_X * (compact ? 0.85 : 1) : 0),
-    height: (rows - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING
+    width: (columns - 1) * getTileColumnSpacing(compact) + CARD_PLANE_WIDTH + 2 * BOARD_LAYOUT_VIEWPORT_PADDING + (rows > 1 ? BOARD_LAYOUT_ROW_STAGGER_X * (compact ? 0.85 : 1) : 0),
+    height: (rows - 1) * TILE_SPACING + CARD_PLANE_HEIGHT + 2 * BOARD_LAYOUT_VIEWPORT_PADDING
 });
 
 /** Maximize the uniform card scale, accounting for card spacing and the incomplete last row. */
