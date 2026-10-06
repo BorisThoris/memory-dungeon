@@ -1,3 +1,4 @@
+import { reflowRunBoard } from './board-layout-rules';
 import {
     applyFlashPair,
     applyBomb,
@@ -973,6 +974,14 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
         return rejectedResult(run, 'invalid-command', 'Command failed schema validation.', null);
     }
     const command = parsed.data;
+    if (command.type === 'board.reflow') {
+        const next = reflowRunBoard(run, command.columns);
+        if (next === run) return rejectedResult(run, command.commandId, 'The board cannot change shape now or already has this shape.', command);
+        const events: GameplayEvent[] = [];
+        const writeEvent = makeEventWriter(command.commandId, { kind: 'system', id: 'board_layout' }, events);
+        writeEvent({ type: 'board.reflowed', columns: next.board!.columns, rows: next.board!.rows });
+        return { run: next, command, events, accepted: true };
+    }
     if (command.type === 'board.meteor') {
         const next = callMeteor(run, command.targetTileId);
         if (next === run) return rejectedResult(run, command.commandId, 'A meteor needs a stored charge and a living target during play.', command);

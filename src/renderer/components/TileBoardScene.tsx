@@ -441,6 +441,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         tilePickMeshesRef
     });
 
+    const viewportAtFit = boardViewport.zoom === 1;
+    const fittedPanX = viewportAtFit ? boardViewport.panX : null;
+    const fittedPanY = viewportAtFit ? boardViewport.panY : null;
     useLayoutEffect(() => {
         const boardGroup = boardGroupRef.current;
 
@@ -453,7 +456,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             computeInitialTileBoardViewportMotionState({ boardViewport })
         );
         boardPanRef.current = { x: boardViewport.panX, y: boardViewport.panY };
-    }, [boardViewport.fitZoom]); // eslint-disable-line react-hooks/exhaustive-deps -- resize must fit immediately, including while paused; gesture pan/zoom remains frame-damped
+    }, [boardViewport.fitZoom, viewportAtFit, fittedPanX, fittedPanY, board.level, board.columns, board.rows]); // eslint-disable-line react-hooks/exhaustive-deps -- resize must fit immediately, including while paused; gesture pan/zoom remains frame-damped
 
     useFrame((_, delta) => {
         if (runStatus !== 'paused') visualTime.current += Math.max(0, Math.min(delta, 0.1));

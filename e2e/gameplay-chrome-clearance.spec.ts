@@ -138,6 +138,41 @@ test.describe('the in-run chrome clearance', () => {
         });
     }
 
+    test('rotation rearranges the grid and refits every card clear of the chrome', async ({ page }) => {
+        test.setTimeout(180_000);
+        await startRun(page, 390, 844);
+        const frame = page.getByTestId('tile-board-frame');
+        await expect(frame).toHaveAttribute('data-board-columns', '2');
+        for (const viewport of [{ width: 568, height: 320 }, { width: 1280, height: 800 }, { width: 320, height: 568 }]) {
+            await page.setViewportSize(viewport);
+            await expect(frame).toHaveAttribute('data-board-zoom', '1.0000');
+            await expect.poll(() => page.evaluate(() => {
+                const frame = document.querySelector<HTMLElement>('[data-testid="tile-board-frame"]')!;
+                const hud = document.querySelector('[data-testid="game-hud"]')!.getBoundingClientRect();
+                const dock = document.querySelector('[data-testid="game-action-dock"]')!.getBoundingClientRect();
+                const rail = document.querySelector('[data-testid="hud-chain"]')!.getBoundingClientRect();
+                const left = rail.bottom > hud.bottom + 1 && rail.width > 0 && rail.width < innerWidth / 2 ? rail.right : 0;
+                const hooks = window as Window & {
+                    __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
+                    __e2eGetTileClientRectAtGrid1?: (row: number, col: number) => DOMRect | null;
+                };
+                if (!hooks.__e2eGetTileClientRectAtGrid1 || !hooks.__e2eGetTileIdAtGrid1) return ['missing board hooks'];
+                const errors: string[] = [];
+                let cards = 0;
+                for (let row = 1; row <= Number(frame.dataset.boardRows); row++) {
+                    for (let col = 1; col <= Number(frame.dataset.boardColumns); col++) {
+                        if (!hooks.__e2eGetTileIdAtGrid1(row, col)) continue;
+                        cards++;
+                        const rect = hooks.__e2eGetTileClientRectAtGrid1(row, col);
+                        if (!rect || rect.left < left - 2 || rect.right > innerWidth || rect.top < hud.bottom - 2 || rect.bottom > dock.top + 2) errors.push(`${row},${col}`);
+                    }
+                }
+                return cards === 8 ? errors : ['not the complete opening board'];
+            }), { timeout: 15_000 }).toEqual([]);
+        }
+        await expect(frame).toHaveAttribute('data-board-columns', '2');
+    });
+
     /**
      * The floor-clear beat and the chain read are two live surfaces in the same strip.
      *

@@ -43,6 +43,26 @@ afterEach(() => {
 });
 
 describe('runTimerController', () => {
+    it('accepts a reflowed board-ready key and never restarts an active study timer', async () => {
+        vi.useFakeTimers();
+        const base = createNewRun(0);
+        const run = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 500 } };
+        const harness = createHarnessWithCallbacks(run);
+        harness.timer.prepareMemorizeTimerForBoardReady(run);
+        const resized = { ...run, board: { ...run.board!, columns: 2, rows: Math.ceil(run.board!.tiles.length / 2) } };
+        harness.setState({ run: resized });
+        harness.timer.refreshPendingMemorizeBoard(resized);
+        harness.timer.notifyMemorizeBoardReady(harness.timer.getMemorizeBoardKey(resized)!);
+        await vi.advanceTimersByTimeAsync(300);
+        const again = { ...resized, board: { ...resized.board, columns: 1, rows: resized.board.tiles.length } };
+        harness.setState({ run: again });
+        harness.timer.refreshPendingMemorizeBoard(again);
+        harness.timer.notifyMemorizeBoardReady(harness.timer.getMemorizeBoardKey(again)!);
+        await vi.advanceTimersByTimeAsync(201);
+        expect(harness.state.run?.status).toBe('playing');
+        expect(harness.state.run?.board?.columns).toBe(1);
+    });
+
     it('starts memorize countdown only after the matching board-ready key arrives', async () => {
         vi.useFakeTimers();
         const base = createNewRun(0, { echoFeedbackEnabled: false });

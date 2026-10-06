@@ -281,6 +281,7 @@ export const boardTurnAnnouncementFactsSchema = z
     .strict();
 
 export const gameplayCommandSchema = z.discriminatedUnion('type', [
+    z.object({ ...commandBase, type: z.literal('board.reflow'), columns: z.number().int().positive() }).strict(),
     z
         .object({
             ...commandBase,
@@ -447,6 +448,7 @@ const eventBase = {
 };
 
 export const gameplayEventSchema = z.discriminatedUnion('type', [
+    z.object({ ...eventBase, type: z.literal('board.reflowed'), columns: z.number().int().positive(), rows: z.number().int().positive() }).strict(),
     z
         .object({
             ...eventBase,
@@ -914,3 +916,7 @@ export const createGameplayDebugRevealDeactivateCommand = (
         type: 'debug.reveal_deactivate',
         reason
     });
+
+/** Screen layout is recorded so adjacency remains deterministic when a run is replayed. */
+export const createGameplayReflowCommand = (commandId: string, columns: number): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.reflow', columns });

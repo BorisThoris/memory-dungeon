@@ -1,3 +1,4 @@
+import { boardFitFrame, boardGridWorldSize } from './tileBoardResponsiveLayout';
 import { Canvas } from '@react-three/fiber';
 import {
     forwardRef,
@@ -56,9 +57,7 @@ import { getResolvingSelectionState } from './tileResolvingSelection';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY, DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET } from './tileBoardStageLayers';
 import {
     isBoardViewportAtRest,
-    COMPACT_BOARD_FIT_MARGIN,
     getCameraFitMargin,
-    ROOMY_BOARD_FIT_MARGIN,
     carryBoardViewportForward,
     clampBoardViewport,
     createPinchBoardGestureSnapshot,
@@ -81,7 +80,7 @@ import {
     twoFingerContactIsACameraGesture,
     type TileBoardGesturePointPair
 } from './tileBoardGestureCommit';
-import { BOARD_LAYOUT_VIEWPORT_PADDING, getTileColumnSpacing, TILE_SPACING } from './tileShatter';
+import { getTileColumnSpacing, TILE_SPACING } from './tileShatter';
 import { computeBoardEntranceMotionBudgetMs, computeShuffleMotionBudgetMs } from './shuffleFlipAnimation';
 import { boardWebglPerfSampleRecordReactCommit, boardWebglPerfSampleVerboseEnabled } from '../dev/boardWebglPerfSample';
 import { preloadTileTextureImages } from './tileTextures';
@@ -724,31 +723,34 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [gestureActive, setGestureActive] = useState(false);
     const [selectionSuppressed, setSelectionSuppressed] = useState(false);
     const [stageWorldViewport, setStageWorldViewport] = useState<StageWorldViewport>({ height: 0, width: 0 });
-    const [fitHeightFraction, setFitHeightFraction] = useState(1);
+    const [fitFrame, setFitFrame] = useState({ heightFraction: 1, centerYFraction: 0, widthFraction: 1, centerXFraction: 0 });
     useEffect(() => {
         const stage = stageRef.current;
         const shell = stage?.closest('[data-testid="game-shell"]');
         const hud = shell?.querySelector('[data-testid="game-hud"]');
         const dock = shell?.querySelector('[data-testid="game-action-dock"]');
+        const rail = shell?.querySelector('[data-testid="hud-chain"]');
         if (!stage || !hud || !dock || typeof ResizeObserver === 'undefined') return;
         // Fit keeps cards clear of the chrome. The canvas and zoom/pan bounds still fill the screen.
         const measure = (): void => {
             const rect = stage.getBoundingClientRect();
             if (rect.height <= 0) return;
-            const edge = Math.max(0, hud.getBoundingClientRect().bottom - rect.top, rect.bottom - dock.getBoundingClientRect().top);
-            const fraction = Math.max(0.1, 1 - 2 * edge / rect.height);
-            setFitHeightFraction(current => Math.abs(current - fraction) < 0.001 ? current : fraction);
+            const next = boardFitFrame(rect, hud.getBoundingClientRect().bottom, dock.getBoundingClientRect().top, rail?.getBoundingClientRect());
+            setFitFrame(current => Object.keys(next).every(key => Math.abs(current[key as keyof typeof current] - next[key as keyof typeof next]) < 0.001) ? current : next);
         };
+        measure();
         const observer = new ResizeObserver(measure);
         observer.observe(stage);
         observer.observe(hud);
         observer.observe(dock);
+        if (rail) observer.observe(rail);
         return () => observer.disconnect();
     }, [boardGraphicsOk]);
     const [viewportState, setViewportState] = useState<TileBoardViewportState>(() => createFittedBoardViewport(1));
     const viewportStateRef = useRef<TileBoardViewportState>(viewportState);
     const viewportMetricsRef = useRef<TileBoardViewportMetrics | null>(null);
     const viewportResetTokenRef = useRef(viewportResetToken);
+    const fittedGeometryRef = useRef<string | null>(null);
     const [focusedTileId, setFocusedTileId] = useState<string | null>(null);
     /** When false, no tile should show the keyboard focus ring (avoids a permanent “hover” on first pickable tile). */
     const [boardApplicationFocused, setBoardApplicationFocused] = useState(false);
@@ -2102,30 +2104,24 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */
     const glPowerPreference: WebGLPowerPreference = graphicsQuality === 'high' ? 'high-performance' : 'default';
-    const boardWorldWidth = (board.columns - 1) * getTileColumnSpacing(compact) + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING;
-    const boardWorldHeight = useMemo(
-        () => (board.rows - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING,
-        [board.rows]
-    );
-    const fitMargin = cameraViewportMode
-        ? getCameraFitMargin({ viewportHeight: stageWorldViewport.height, viewportWidth: stageWorldViewport.width })
-        : compact
-          ? COMPACT_BOARD_FIT_MARGIN
-          : ROOMY_BOARD_FIT_MARGIN;
+    const { width: boardWorldWidth, height: boardWorldHeight } = boardGridWorldSize(board.columns, board.rows, compact);
+    const fitPanY = stageWorldViewport.height * fitFrame.centerYFraction;
+    const fitPanX = stageWorldViewport.width * fitFrame.centerXFraction;
+    const fitMargin = getCameraFitMargin({ viewportHeight: stageWorldViewport.height * fitFrame.heightFraction, viewportWidth: stageWorldViewport.width });
     const fitZoom = useMemo(
         () =>
             getBoardFitZoom({
                 boardHeight: boardWorldHeight,
                 boardWidth: boardWorldWidth,
                 margin: fitMargin,
-                viewportHeight: stageWorldViewport.height * fitHeightFraction,
-                viewportWidth: stageWorldViewport.width
+                viewportHeight: stageWorldViewport.height * fitFrame.heightFraction,
+                viewportWidth: stageWorldViewport.width * fitFrame.widthFraction
             }),
-        [boardWorldHeight, boardWorldWidth, fitMargin, fitHeightFraction, stageWorldViewport.height, stageWorldViewport.width]
+        [boardWorldHeight, boardWorldWidth, fitMargin, fitFrame.heightFraction, fitFrame.widthFraction, stageWorldViewport.height, stageWorldViewport.width]
     );
     const renderedViewportState = useMemo(() => {
         if (!cameraViewportMode && !desktopCameraMode) {
-            return createFittedBoardViewport(fitZoom);
+            return createFittedBoardViewport(fitZoom, fitPanY, fitPanX);
         }
 
         return clampBoardViewport({
@@ -2142,6 +2138,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardWorldHeight,
         boardWorldWidth,
         fitZoom,
+        fitPanY,
+        fitPanX,
         cameraViewportMode,
         desktopCameraMode,
         stageWorldViewport.height,
@@ -2383,37 +2381,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [setStageWorldViewport]);
 
     useEffect(() => {
-        onViewportRestChange?.(isBoardViewportAtRest(renderedViewportState));
-    }, [onViewportRestChange, renderedViewportState]);
+        onViewportRestChange?.(isBoardViewportAtRest(renderedViewportState, fitPanY, fitPanX));
+    }, [onViewportRestChange, renderedViewportState, fitPanY, fitPanX]);
 
     useEffect(() => {
         viewportStateRef.current = renderedViewportState;
-        viewportMetricsRef.current = {
-            boardHeight: boardWorldHeight,
-            boardWidth: boardWorldWidth,
-            fitZoom,
-            viewportHeight: stageWorldViewport.height,
-            viewportWidth: stageWorldViewport.width
-        };
-    }, [
-        renderedViewportState,
-        boardWorldHeight,
-        boardWorldWidth,
-        fitZoom,
-        stageWorldViewport.height,
-        stageWorldViewport.width
-    ]);
+    }, [renderedViewportState]);
 
     useEffect(() => {
         hoverTiltRef.current = { tileId: null, x: 0, y: 0 };
     }, [board.level, board.tiles.length, reduceMotion, selectionSuppressed]);
 
     /* eslint-disable react-hooks/set-state-in-effect -- viewport React state must track fitted board geometry when the stage or board changes */
-    useEffect(() => {
-        const resetRequested = viewportResetToken !== viewportResetTokenRef.current;
+    useLayoutEffect(() => {
+        const geometry = `${board.level}:${board.columns}:${board.rows}:${stageWorldViewport.width}:${stageWorldViewport.height}`;
+        const resetRequested = viewportResetToken !== viewportResetTokenRef.current || geometry !== fittedGeometryRef.current;
+        fittedGeometryRef.current = geometry;
         const previousViewport = viewportStateRef.current;
         const previousMetrics = viewportMetricsRef.current;
         const nextMetrics: TileBoardViewportMetrics = {
+            fitPanY,
+            fitPanX,
             boardHeight: boardWorldHeight,
             boardWidth: boardWorldWidth,
             fitZoom,
@@ -2428,7 +2416,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             stageWorldViewport.width <= 0 ||
             stageWorldViewport.height <= 0
         ) {
-            const nextViewport = createFittedBoardViewport(fitZoom);
+            const nextViewport = createFittedBoardViewport(fitZoom, fitPanY, fitPanX);
             viewportStateRef.current = nextViewport;
             viewportMetricsRef.current = nextMetrics;
             setViewportState(nextViewport);
@@ -2438,7 +2426,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
         const nextViewport =
             resetRequested || !previousMetrics
-                ? createFittedBoardViewport(fitZoom)
+                ? createFittedBoardViewport(fitZoom, fitPanY, fitPanX)
                 : carryBoardViewportForward({
                       nextMetrics,
                       previousMetrics,
@@ -2456,6 +2444,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardWorldHeight,
         boardWorldWidth,
         fitZoom,
+        fitPanY,
+        fitPanX,
         cameraViewportMode,
         desktopCameraMode,
         stageWorldViewport.height,

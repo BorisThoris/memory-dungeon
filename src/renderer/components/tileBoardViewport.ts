@@ -14,6 +14,8 @@ export interface TileBoardViewportState {
 
 export interface TileBoardViewportMetrics extends TileBoardWorldMetrics {
     fitZoom: number;
+    fitPanY?: number;
+    fitPanX?: number;
 }
 
 interface TileBoardPanBounds {
@@ -47,7 +49,7 @@ const BOARD_CAMERA_FIT_ZOOM = 1;
 const MOBILE_CAMERA_MIN_ZOOM = 0.01;
 const MOBILE_CAMERA_MAX_ZOOM = 64;
 /** REG-001: phone camera mode is board-first; fit the board between fixed HUD/dock chrome before pinch zoom. */
-// The stage now excludes measured HUD/dock bounds; do not reserve that space twice.
+// Fit uses the measured clear rectangle; the canvas itself still spans the full screen.
 export const MOBILE_CAMERA_FIT_MARGIN = 0.94;
 /**
  * A phone held upright: the width is the scarce axis and nothing sits beside the board, so the
@@ -84,16 +86,16 @@ export const getBoardFitZoom = ({
     return Math.min((viewportWidth * margin) / boardWidth, (viewportHeight * margin) / boardHeight);
 };
 
-export const createFittedBoardViewport = (fitZoom: number): TileBoardViewportState => ({
+export const createFittedBoardViewport = (fitZoom: number, fitPanY = 0, fitPanX = 0): TileBoardViewportState => ({
     fitZoom,
-    panX: 0,
-    panY: 0,
+    panX: fitPanX,
+    panY: fitPanY,
     zoom: BOARD_CAMERA_FIT_ZOOM
 });
 
 /** True when nothing has zoomed or panned the board away from its fitted frame (what Fit board restores). */
-export const isBoardViewportAtRest = (viewport: Pick<TileBoardViewportState, 'panX' | 'panY' | 'zoom'>): boolean =>
-    Math.abs(viewport.zoom - BOARD_CAMERA_FIT_ZOOM) < 0.005 && Math.abs(viewport.panX) < 0.005 && Math.abs(viewport.panY) < 0.005;
+export const isBoardViewportAtRest = (viewport: Pick<TileBoardViewportState, 'panX' | 'panY' | 'zoom'>, fitPanY = 0, fitPanX = 0): boolean =>
+    Math.abs(viewport.zoom - BOARD_CAMERA_FIT_ZOOM) < 0.005 && Math.abs(viewport.panX - fitPanX) < 0.005 && Math.abs(viewport.panY - fitPanY) < 0.005;
 
 export const clampBoardZoom = (zoom: number): number => clamp(zoom, MOBILE_CAMERA_MIN_ZOOM, MOBILE_CAMERA_MAX_ZOOM);
 
@@ -189,6 +191,9 @@ export const carryBoardViewportForward = ({
     previousMetrics: TileBoardViewportMetrics;
     previousViewport: TileBoardViewportState;
 }): TileBoardViewportState => {
+    if (isBoardViewportAtRest(previousViewport, previousMetrics.fitPanY ?? 0, previousMetrics.fitPanX ?? 0)) {
+        return createFittedBoardViewport(nextMetrics.fitZoom, nextMetrics.fitPanY ?? 0, nextMetrics.fitPanX ?? 0);
+    }
     const previousZoom = clampBoardZoom(previousViewport.zoom);
     const previousBounds = getBoardPanBounds({
         boardHeight: previousMetrics.boardHeight,

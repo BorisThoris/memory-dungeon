@@ -37,6 +37,7 @@ interface RunTimerController {
     freezeRunSnapshotForPlayingMetaOverlay: (run: RunState) => RunState;
     getMemorizeBoardKey: (run: RunState) => string | null;
     notifyMemorizeBoardReady: (boardKey: string) => void;
+    refreshPendingMemorizeBoard: (run: RunState) => void;
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
     resumeRunWithTimers: (run: RunState) => RunState;
     scheduleDebugRevealTimer: (duration: number) => void;
@@ -311,6 +312,9 @@ export const createRunTimerController = ({
         freezeRunSnapshotForPlayingMetaOverlay,
         getMemorizeBoardKey,
         notifyMemorizeBoardReady,
+        refreshPendingMemorizeBoard: (run) => {
+            if (pendingMemorizeBoardKey !== null) pendingMemorizeBoardKey = getMemorizeBoardKey(run);
+        },
         prepareMemorizeTimerForBoardReady,
         resumeRunWithTimers,
         scheduleDebugRevealTimer,

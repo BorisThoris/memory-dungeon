@@ -108,6 +108,7 @@ export interface AppState {
     toggleBoardPinMode: () => void;
     pause: () => void;
     resume: () => void;
+    reflowBoard: (columns: number) => void;
     continueToNextLevel: () => void;
     restartRun: () => void;
     endRun: () => void;

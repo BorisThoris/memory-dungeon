@@ -1,3 +1,5 @@
+import { reflowRunBoard } from '../../shared/board-layout-rules';
+import { createGameplayReflowCommand } from '../../shared/gameplay-core-contracts';
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
 import { canAimMeteor } from '../../shared/meteor-rules';
 import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contracts';
@@ -732,6 +734,18 @@ export const useAppStore = create<AppState>((set, get) => ({
             resumeUiSfxContext,
             setState: set
         });
+    },
+
+    reflowBoard: (columns) => {
+        const run = get().run;
+        if (!run) return;
+        const next = reflowRunBoard(run, columns);
+        if (next === run) return;
+        const command = createGameplayReflowCommand(`board-reflow:${run.runSeed}:${run.board!.level}:${run.gameplayCommandJournal?.length ?? 0}`, columns);
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        runTimerController.refreshPendingMemorizeBoard(result.run);
+        set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 
     continueToNextLevel: () => {
