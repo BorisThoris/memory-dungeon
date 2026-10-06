@@ -1,4 +1,5 @@
 import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
+import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { isTileFlipBlocked } from '../../shared/realm-weather-rules';
 import { MISS_DECISION_HOLD_MS } from '../../shared/scoring-rules';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
@@ -137,6 +138,37 @@ describe('useAppStore timers', () => {
         vi.runOnlyPendingTimers();
         vi.useRealTimers();
         vi.clearAllMocks();
+    });
+
+    it('auto-matches the final pair once through the normal resolve timer', () => {
+        const run = makeRun(makePair('ember', 'ember'));
+        useAppStore.setState({ run, view: 'playing' });
+        useAppStore.getState().autoMatchFinalPair();
+        expect(useAppStore.getState().run?.status).toBe('resolving');
+        expect(useAppStore.getState().run?.board?.flippedTileIds).toHaveLength(2);
+        useAppStore.getState().autoMatchFinalPair();
+        vi.advanceTimersByTime(300);
+        const cleared = useAppStore.getState().run!;
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.stats.matchesFound).toBe(run.stats.matchesFound + 1);
+        expect(cleared.gameplayCommandJournal?.map(command => command.type)).toEqual(['board.final_pair_reveal', 'board.turn_resolve']);
+        expect(gameSfxMocks.playFloorClearSfx).toHaveBeenCalledTimes(1);
+        useAppStore.getState().autoMatchFinalPair();
+        expect(useAppStore.getState().run).toBe(cleared);
+    });
+
+    it('freezes an automatic final pair on pause and finishes it on resume', () => {
+        useAppStore.setState({ run: makeRun(makePair('ember', 'ember')), view: 'playing' });
+        useAppStore.getState().autoMatchFinalPair();
+        vi.advanceTimersByTime(100);
+        useAppStore.getState().pause();
+        vi.advanceTimersByTime(1000);
+        expect(useAppStore.getState().run?.status).toBe('paused');
+        useAppStore.getState().autoMatchFinalPair();
+        expect(useAppStore.getState().run?.status).toBe('paused');
+        useAppStore.getState().resume();
+        vi.advanceTimersByTime(200);
+        expect(useAppStore.getState().run?.status).toBe('levelComplete');
     });
 
     it.each([

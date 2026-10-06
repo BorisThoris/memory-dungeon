@@ -109,6 +109,7 @@ export interface AppState {
     pause: () => void;
     resume: () => void;
     reflowBoard: (columns: number) => void;
+    autoMatchFinalPair: () => void;
     continueToNextLevel: () => void;
     restartRun: () => void;
     endRun: () => void;

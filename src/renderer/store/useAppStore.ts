@@ -1,4 +1,6 @@
 import { reflowRunBoard } from '../../shared/board-layout-rules';
+import { createGameplayFinalPairRevealCommand } from '../../shared/gameplay-core-contracts';
+import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { createGameplayReflowCommand } from '../../shared/gameplay-core-contracts';
 import { buyStoreItem, isStoreStopFloor } from '../../shared/run-store-rules';
 import { canAimMeteor } from '../../shared/meteor-rules';
@@ -734,6 +736,20 @@ export const useAppStore = create<AppState>((set, get) => ({
             resumeUiSfxContext,
             setState: set
         });
+    },
+
+    autoMatchFinalPair: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing') return;
+        const command = createGameplayFinalPairRevealCommand(`final-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.gameplayCommandJournal?.length ?? 0}`);
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        set({ ...BOARD_FLOATER_POP_CLEAR, boardPinMode: false, peekModeArmed: false, tileSwapArmed: false,
+            tileSwapFirstTileId: null, regionShuffleArmed: false,
+            run: appendGameplayJournal(result.run, [command], result.events) });
+        void resumeAudioContext();
+        playFlipSfx(sfxGainFromStore(), comboMeterFromStore());
+        scheduleResolveTimer(result.run.timerState.resolveRemainingMs ?? 0);
     },
 
     reflowBoard: (columns) => {

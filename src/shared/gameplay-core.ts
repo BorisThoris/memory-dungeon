@@ -1,4 +1,5 @@
 import { reflowRunBoard } from './board-layout-rules';
+import { revealFinalPair } from './final-pair-rules';
 import {
     applyFlashPair,
     applyBomb,
@@ -974,6 +975,18 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
         return rejectedResult(run, 'invalid-command', 'Command failed schema validation.', null);
     }
     const command = parsed.data;
+    if (command.type === 'board.final_pair_reveal') {
+        const next = revealFinalPair(run);
+        if (next === run) return rejectedResult(run, command.commandId, 'No final pair is ready.', command);
+        const events: GameplayEvent[] = [];
+        const writeEvent = makeEventWriter(command.commandId, { kind: 'system', id: 'final_pair' }, events);
+        let flippedCount = run.board!.tiles.filter(tile => tile.state === 'flipped').length;
+        for (const tileId of next.board!.flippedTileIds) {
+            if (run.board!.tiles.find(tile => tile.id === tileId)?.state !== 'hidden') continue;
+            writeEvent({ type: 'board.tile_flipped', tileId, outcome: 'flipped', flippedCountAfter: ++flippedCount, statusAfter: next.status });
+        }
+        return { run: next, command, events, accepted: true };
+    }
     if (command.type === 'board.reflow') {
         const next = reflowRunBoard(run, command.columns);
         if (next === run) return rejectedResult(run, command.commandId, 'The board cannot change shape now or already has this shape.', command);

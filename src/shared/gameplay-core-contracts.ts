@@ -282,6 +282,7 @@ export const boardTurnAnnouncementFactsSchema = z
 
 export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z.object({ ...commandBase, type: z.literal('board.reflow'), columns: z.number().int().positive() }).strict(),
+    z.object({ ...commandBase, type: z.literal('board.final_pair_reveal') }).strict(),
     z
         .object({
             ...commandBase,
@@ -920,3 +921,6 @@ export const createGameplayDebugRevealDeactivateCommand = (
 /** Screen layout is recorded so adjacency remains deterministic when a run is replayed. */
 export const createGameplayReflowCommand = (commandId: string, columns: number): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.reflow', columns });
+
+export const createGameplayFinalPairRevealCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.final_pair_reveal' });

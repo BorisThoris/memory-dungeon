@@ -1,4 +1,5 @@
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
+import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
 import { describeHeldPair } from '../../shared/held-pair-rules';
 import {
     MAX_PINNED_TILES,
@@ -974,6 +975,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // Publishes how much room the HUD deck and the action dock actually take, so the
     // floating board overlays position against measured chrome instead of each guessing.
     useResponsiveBoardLayout(shellRef, run, shellProfile.layout);
+    useFinalPairAutoMatch(run);
     useGameplayChromeClearance({
         dockTestId: 'game-action-dock',
         hudTestId: 'game-hud',

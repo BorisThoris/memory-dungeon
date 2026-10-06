@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2934,
-    "codeFileCount": 1095,
-    "exportedSymbolCount": 3403,
+    "trackedFileCount": 2938,
+    "codeFileCount": 1099,
+    "exportedSymbolCount": 3407,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9068
+    "relationshipCount": 9094
   },
   "inventory": [
     {
@@ -9777,8 +9777,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 111172,
-      "sha256": "0d93f509bce9107134c4111d99e8cd1a890ecb9575c31e51f46a2b61d44072f4"
+      "bytes": 111276,
+      "sha256": "8e4368f56a9ae7be9315c93b615d20c46c4e76b77d132652515db94d508fb7e0"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11959,6 +11959,18 @@
       "sha256": "6f7714df95ed6aceaac71c7f98b2b525e6899b161e4336927adca6b9c4e873ed"
     },
     {
+      "path": "src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "category": "test",
+      "bytes": 2007,
+      "sha256": "e0ea41745787b4bf6ab9e8656b0f72a9000c97a432480f639e14c6e303067eea"
+    },
+    {
+      "path": "src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "category": "source",
+      "bytes": 705,
+      "sha256": "2ad91b81528b0ca6c39edc2f6997c79f3215270671ba75e5b0aa17f7c72344a7"
+    },
+    {
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "category": "test",
       "bytes": 5174,
@@ -12237,8 +12249,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 5172,
-      "sha256": "5a5e7ef27624adb4b4aeea8d67c7e26413c7bfa0f5250ff0c02f060b03b0a8a8"
+      "bytes": 5208,
+      "sha256": "500c485e22c746e24d5a9348ad9c1fb16e192dfa24fcb312078b621868a63651"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -12567,14 +12579,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 39078,
-      "sha256": "79265afbee80b06d33e379c27dc6a1944df9ff6719f52f8c98aed50f9fec2ee5"
+      "bytes": 40848,
+      "sha256": "1ac185286c475693a9f6efcd0b49f6f8ad8d10b67c47cbc1343442ef1deffad6"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 26972,
-      "sha256": "c46425b8afd74c06a49c1b1f468edc4980e16b6ee78c1bb7020d7fe99d3487c8"
+      "bytes": 27936,
+      "sha256": "6e1dc459c64a5bb2f81605eec645cc3b04196e07322005d4a4844c9bdf999734"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -13543,6 +13555,18 @@
       "sha256": "10dfc498f13278b5d0296eff89fbe2f274c607e56ded8aa2184832b2c6febdb8"
     },
     {
+      "path": "src/shared/final-pair-rules.test.ts",
+      "category": "test",
+      "bytes": 3895,
+      "sha256": "59bade59e9f09337ccbdb8b861f8e707c8607998d6cafe860155c44d7867118e"
+    },
+    {
+      "path": "src/shared/final-pair-rules.ts",
+      "category": "source",
+      "bytes": 1529,
+      "sha256": "64d587eb54df50d3bbd28f1d464a256f74e1acaed03b07d5ddce11ca62c8cbe8"
+    },
+    {
       "path": "src/shared/findables.test.ts",
       "category": "test",
       "bytes": 1393,
@@ -13737,8 +13761,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 33413,
-      "sha256": "8850a489bc501756771909f6a25023dcc1b6e67248167bc46b63412a090a5f93"
+      "bytes": 33719,
+      "sha256": "c991a3cf71b01d86e37f0b42532f6f2a3b3381ab3669dbb9e4a9a30cfa8bda5b"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -13779,8 +13803,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 44987,
-      "sha256": "48270465930635c11f38ac427b0ab886c97888d6e2ca7557f3131cde2cd4eb14"
+      "bytes": 45873,
+      "sha256": "8688f63f0307314b7330304c5daee3b7182974ae93d15007ab1e2eaa995ef6c8"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -21135,7 +21159,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2237,
+      "lineCount": 2239,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21178,6 +21202,7 @@
         "file:src/renderer/hooks/useCoarsePointer.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+        "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
         "file:src/renderer/hooks/useGamepadNavigation.ts",
         "file:src/renderer/hooks/useGameplayChromeClearance.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
@@ -27050,6 +27075,37 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "path": "src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 41,
+      "imports": [
+        "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "path": "src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 16,
+      "imports": [
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/final-pair-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useFinalPairAutoMatch.ts#useFinalPairAutoMatch"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
       "layer": "renderer",
@@ -27790,7 +27846,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 117,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -28813,7 +28869,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 951,
+      "lineCount": 983,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -28827,6 +28883,7 @@
         "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/scoring-rules.ts",
+        "file:src/shared/test/game-fixtures.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [],
@@ -28837,7 +28894,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 780,
+      "lineCount": 796,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -28849,6 +28906,7 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/hydrationController.ts",
         "file:src/renderer/store/levelCompleteContinuationExecutor.ts",
+        "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/menuSurfaceState.ts",
         "file:src/renderer/store/metaOverlayExecutor.ts",
         "file:src/renderer/store/metaOverlayState.ts",
@@ -31972,6 +32030,39 @@
       ]
     },
     {
+      "id": "file:src/shared/final-pair-rules.test.ts",
+      "path": "src/shared/final-pair-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 62,
+      "imports": [
+        "file:src/shared/final-pair-rules.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/final-pair-rules.ts",
+      "path": "src/shared/final-pair-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 38,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/scoring-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/final-pair-rules.ts#getFinalPair",
+        "symbol:src/shared/final-pair-rules.ts#revealFinalPair"
+      ],
+      "testedBy": [
+        "file:src/shared/final-pair-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/findables.test.ts",
       "path": "src/shared/findables.test.ts",
       "layer": "shared",
@@ -32820,7 +32911,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 923,
+      "lineCount": 927,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/memorize-skip-reward-rules.ts",
@@ -32833,6 +32924,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
@@ -32877,6 +32969,7 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
         "file:src/shared/board-layout-rules.test.ts",
         "file:src/shared/bomb-power.test.ts",
+        "file:src/shared/final-pair-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
         "file:src/shared/gameplay-core.test.ts",
@@ -33013,7 +33106,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1080,
+      "lineCount": 1093,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
@@ -33023,6 +33116,7 @@
         "file:src/shared/board-turn-event-facts.ts",
         "file:src/shared/board-turn-transition.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/final-pair-rules.ts",
         "file:src/shared/flip-tile-transition.ts",
         "file:src/shared/floor-clear-transition.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
@@ -33051,6 +33145,7 @@
       "testedBy": [
         "file:src/shared/board-layout-rules.test.ts",
         "file:src/shared/bomb-power.test.ts",
+        "file:src/shared/final-pair-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-effect-transition.test.ts",
@@ -37537,11 +37632,14 @@
         "file:src/renderer/components/boardParticleCues.test.ts",
         "file:src/renderer/components/boardParticleRim.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
+        "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/bomb-power.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
+        "file:src/shared/final-pair-rules.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/late-board.test.ts",
         "file:src/shared/meteor-rules.test.ts",
@@ -42270,40 +42368,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2236,
-      "endLine": 2236
+      "line": 2238,
+      "endLine": 2238
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 246,
-      "endLine": 246
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 244,
-      "endLine": 244
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 248,
-      "endLine": 248
+      "line": 249,
+      "endLine": 249
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 238,
-      "endLine": 238
+      "line": 239,
+      "endLine": 239
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -48770,6 +48868,14 @@
       "endLine": 67
     },
     {
+      "id": "symbol:src/renderer/hooks/useFinalPairAutoMatch.ts#useFinalPairAutoMatch",
+      "name": "useFinalPairAutoMatch",
+      "kind": "value",
+      "file": "src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "line": 6,
+      "endLine": 15
+    },
+    {
       "id": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "name": "useGamepadConnected",
       "kind": "value",
@@ -49375,7 +49481,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 14,
-      "endLine": 116
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -50430,8 +50536,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 237,
-      "endLine": 773
+      "line": 239,
+      "endLine": 789
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -55514,6 +55620,22 @@
       "endLine": 10
     },
     {
+      "id": "symbol:src/shared/final-pair-rules.ts#getFinalPair",
+      "name": "getFinalPair",
+      "kind": "value",
+      "file": "src/shared/final-pair-rules.ts",
+      "line": 5,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/shared/final-pair-rules.ts#revealFinalPair",
+      "name": "revealFinalPair",
+      "kind": "value",
+      "file": "src/shared/final-pair-rules.ts",
+      "line": 18,
+      "endLine": 37
+    },
+    {
       "id": "symbol:src/shared/findables.ts#FINDABLE_REWARD_ROWS",
       "name": "FINDABLE_REWARD_ROWS",
       "kind": "value",
@@ -57118,176 +57240,184 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 834,
-      "endLine": 843
+      "line": 835,
+      "endLine": 844
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
       "name": "createGameplayBombCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 751,
-      "endLine": 757
+      "line": 752,
+      "endLine": 758
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 898,
-      "endLine": 907
+      "line": 899,
+      "endLine": 908
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 909,
-      "endLine": 918
+      "line": 910,
+      "endLine": 919
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 724,
-      "endLine": 741
+      "line": 725,
+      "endLine": 742
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
+      "name": "createGameplayFinalPairRevealCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 925,
+      "endLine": 926
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 806,
-      "endLine": 811
+      "line": 807,
+      "endLine": 812
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 827,
-      "endLine": 832
+      "line": 828,
+      "endLine": 833
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 770,
-      "endLine": 776
+      "line": 771,
+      "endLine": 777
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGreetCurioCommand",
       "name": "createGameplayGreetCurioCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 813,
-      "endLine": 818
+      "line": 814,
+      "endLine": 819
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 866,
-      "endLine": 875
+      "line": 867,
+      "endLine": 876
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMeteorCommand",
       "name": "createGameplayMeteorCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 759,
-      "endLine": 760
+      "line": 760,
+      "endLine": 761
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 877,
-      "endLine": 888
+      "line": 878,
+      "endLine": 889
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 743,
-      "endLine": 749
+      "line": 744,
+      "endLine": 750
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 762,
-      "endLine": 768
+      "line": 763,
+      "endLine": 769
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayReflowCommand",
       "name": "createGameplayReflowCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 921,
-      "endLine": 922
+      "line": 922,
+      "endLine": 923
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 785,
-      "endLine": 791
+      "line": 786,
+      "endLine": 792
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 890,
-      "endLine": 896
+      "line": 891,
+      "endLine": 897
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 778,
-      "endLine": 783
+      "line": 779,
+      "endLine": 784
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 858,
-      "endLine": 864
+      "line": 859,
+      "endLine": 865
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 793,
-      "endLine": 804
+      "line": 794,
+      "endLine": 805
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 820,
-      "endLine": 825
+      "line": 821,
+      "endLine": 826
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 845,
-      "endLine": 856
+      "line": 846,
+      "endLine": 857
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
@@ -57334,8 +57464,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 716,
-      "endLine": 716
+      "line": 717,
+      "endLine": 717
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -57343,7 +57473,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 283,
-      "endLine": 440
+      "endLine": 441
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -57398,16 +57528,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 717,
-      "endLine": 717
+      "line": 718,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 450,
-      "endLine": 714
+      "line": 451,
+      "endLine": 715
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -57462,8 +57592,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 721,
-      "endLine": 722
+      "line": 722,
+      "endLine": 723
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreBoundedMemoryPolicy",
@@ -57582,32 +57712,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 63,
-      "endLine": 68
+      "line": 64,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 70,
-      "endLine": 75
+      "line": 71,
+      "endLine": 76
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 971,
-      "endLine": 1064
+      "line": 972,
+      "endLine": 1077
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1066,
-      "endLine": 1079
+      "line": 1079,
+      "endLine": 1092
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -66538,7 +66668,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -66603,7 +66733,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 35
+          "line": 36
         }
       ],
       "tests": [
@@ -67076,7 +67206,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 2
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -67221,7 +67351,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/shared/power-verbs.ts",
@@ -67264,7 +67394,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -67336,7 +67466,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         }
       ],
       "tests": [
@@ -67423,7 +67553,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 40
+          "line": 41
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -67558,7 +67688,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 11
+          "line": 12
         }
       ],
       "tests": [
@@ -67690,7 +67820,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -67730,7 +67860,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 2
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -67771,7 +67901,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 14
+          "line": 15
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -67809,7 +67939,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 2
+          "line": 3
         }
       ],
       "enables": [
@@ -67836,7 +67966,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 8
+          "line": 10
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -67889,7 +68019,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -67943,7 +68073,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -67985,7 +68115,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -68080,7 +68210,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -68131,7 +68261,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -68139,7 +68269,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 8
+          "line": 10
         }
       ],
       "tests": [
@@ -68180,7 +68310,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 40
+          "line": 41
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -68349,7 +68479,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 35
+          "line": 36
         }
       ],
       "tests": [
@@ -68422,7 +68552,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 806
+          "line": 807
         }
       ],
       "tests": [
@@ -68452,7 +68582,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -78451,6 +78581,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useFinalPairAutoMatch.ts->symbol:src/renderer/hooks/useFinalPairAutoMatch.ts#useFinalPairAutoMatch",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "target": "symbol:src/renderer/hooks/useFinalPairAutoMatch.ts#useFinalPairAutoMatch",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useGamepadNavigation.ts->symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
@@ -83509,6 +83645,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/final-pair-rules.ts->symbol:src/shared/final-pair-rules.ts#getFinalPair",
+      "source": "file:src/shared/final-pair-rules.ts",
+      "target": "symbol:src/shared/final-pair-rules.ts#getFinalPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/final-pair-rules.ts->symbol:src/shared/final-pair-rules.ts#revealFinalPair",
+      "source": "file:src/shared/final-pair-rules.ts",
+      "target": "symbol:src/shared/final-pair-rules.ts#revealFinalPair",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/findables.ts->symbol:src/shared/findables.ts#FINDABLE_REWARD_ROWS",
       "source": "file:src/shared/findables.ts",
       "target": "symbol:src/shared/findables.ts#FINDABLE_REWARD_ROWS",
@@ -84736,6 +84884,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
       "kind": "exports"
     },
     {
@@ -96233,6 +96387,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useGamepadNavigation.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
@@ -101819,6 +101979,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useFinalPairAutoMatch.test.tsx->src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "target": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useFinalPairAutoMatch.test.tsx->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useFinalPairAutoMatch.ts->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useFinalPairAutoMatch.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useFinalPairAutoMatch.ts->src/shared/final-pair-rules.ts",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "target": "file:src/shared/final-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/renderer/hooks/useGamepadNavigation.ts",
       "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
@@ -103625,6 +103815,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/store/useAppStore.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/tile-trait-rules.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/tile-trait-rules.ts",
@@ -103688,6 +103884,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/levelCompleteContinuationExecutor.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/store/levelCompleteContinuationExecutor.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/matchScorePop.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/store/matchScorePop.ts",
       "kind": "imports"
     },
     {
@@ -106475,6 +106677,42 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/final-pair-rules.test.ts->src/shared/final-pair-rules.ts",
+      "source": "file:src/shared/final-pair-rules.test.ts",
+      "target": "file:src/shared/final-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/final-pair-rules.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/final-pair-rules.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/final-pair-rules.test.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/final-pair-rules.test.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/final-pair-rules.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/shared/final-pair-rules.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/final-pair-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/final-pair-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/final-pair-rules.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/shared/final-pair-rules.ts",
+      "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/findables.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/findables.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -107540,6 +107778,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/contracts.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/final-pair-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/final-pair-rules.ts",
       "kind": "imports"
     },
     {
@@ -117673,6 +117917,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/hooks/useFinalPairAutoMatch.ts->file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "source": "file:src/renderer/hooks/useFinalPairAutoMatch.ts",
+      "target": "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/hooks/useGamepadNavigation.ts->file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
@@ -120037,6 +120287,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/final-pair-rules.ts->file:src/shared/final-pair-rules.test.ts",
+      "source": "file:src/shared/final-pair-rules.ts",
+      "target": "file:src/shared/final-pair-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/findables.ts->file:src/shared/balance-simulation.test.ts",
       "source": "file:src/shared/findables.ts",
       "target": "file:src/shared/balance-simulation.test.ts",
@@ -120817,6 +121073,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/final-pair-rules.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/final-pair-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -120898,6 +121160,12 @@
       "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/bomb-power.test.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/bomb-power.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/final-pair-rules.test.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/final-pair-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122701,6 +122969,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/store/useAppStore.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/achievement-reachability.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/shared/achievement-reachability.test.ts",
@@ -122728,6 +123008,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/elemental-loot-rules.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/shared/elemental-loot-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/final-pair-rules.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/shared/final-pair-rules.test.ts",
       "kind": "tested_by"
     },
     {
