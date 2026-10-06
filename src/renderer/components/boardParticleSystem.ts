@@ -62,9 +62,9 @@ export interface BoardParticleBurst {
     priority?: 'event';
 }
 
-export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf' | 'vapor' | 'spark';
+export type BoardParticleShape = 'flame' | 'droplet' | 'shard' | 'leaf' | 'vapor' | 'spark' | 'petal';
 /** The shader's kind code for each shape, after the bolt's seven. */
-export const BOARD_PARTICLE_SHAPE_KIND: Readonly<Record<BoardParticleShape, number>> = { flame: 8, droplet: 9, shard: 10, leaf: 11, vapor: 12, spark: 13 };
+export const BOARD_PARTICLE_SHAPE_KIND: Readonly<Record<BoardParticleShape, number>> = { flame: 8, droplet: 9, shard: 10, leaf: 11, vapor: 12, spark: 13, petal: 14 };
 
 const vertexShader = /* glsl */ `
     attribute vec3 origin;
@@ -109,9 +109,10 @@ const vertexShader = /* glsl */ `
         bool ice = vKind > 9.5 && vKind < 10.5;
         bool leaf = vKind > 10.5 && vKind < 11.5;
         bool vapor = vKind > 11.5 && vKind < 12.5;
-        bool spark = vKind > 12.5;
+        bool spark = vKind > 12.5 && vKind < 13.5;
+        bool petal = vKind > 13.5;
         // Smooth per-particle turbulence, with zero displacement at birth.
-        if (flame || vapor || leaf) {
+        if (flame || vapor || leaf || petal) {
             float frequency = flame ? 6.0 : leaf ? 3.2 : 2.0;
             float amplitude = flame ? 0.045 : leaf ? 0.09 : 0.12;
             center.x += (sin(seconds * frequency + vPhase) - sin(vPhase)) * amplitude * min(seconds * 3.0, 1.0);
@@ -137,6 +138,7 @@ const vertexShader = /* glsl */ `
         if (drop) local.y *= 1.2 + min(1.2, movement.z * seconds);
         if (ice) local.y *= 1.5;
         if (leaf) local.x *= 0.22 + 0.78 * abs(cos(seconds * 3.0 + vPhase));
+        if (petal) local *= 0.75 + 0.25 * sin(age * 3.14159);
         if (ripple) local.y *= 0.72;
         local = mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * local;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(center + vec3(local, 0.0), 1.0);
@@ -254,11 +256,21 @@ const fragmentShader = /* glsl */ `
             color = mix(vTint * 0.65, vec3(1.0), n * 0.65);
             strength = 0.42;
         }
-        if (vKind > 12.5) {
+        if (vKind > 12.5 && vKind < 13.5) {
             float zig = sin(p.y * 12.0 + vPhase) * 0.1 * (1.0 - abs(p.y));
             float core = exp(-pow(p.x + zig, 2.0) * 240.0);
             shape = (core + exp(-pow(p.x + zig, 2.0) * 25.0) * 0.35) * (1.0 - smoothstep(0.5, 1.0, abs(p.y)));
             color = mix(vTint, vec3(1.0), core * 0.75);
+        }
+        if (vKind > 13.5) {
+            // Frostbloom's six crystalline petals open, drift and dissolve in the same pool.
+            float angle = atan(p.y, p.x);
+            float petals = 0.45 + 0.32 * pow(abs(cos(angle * 3.0)), 1.5);
+            float edge = radius - petals;
+            shape = coverage(edge);
+            float facets = 0.62 + 0.22 * cos(angle * 6.0 + vPhase);
+            float rim = exp(-abs(edge + 0.035) * 45.0);
+            color = vTint * facets + vec3(0.72, 0.95, 1.0) * (rim * 0.5 + exp(-radius * radius * 40.0) * 0.55);
         }
         float fade = smoothstep(0.0, 0.07, vAge) * (1.0 - smoothstep(0.35, 1.0, vAge));
         // Ambient weather sits behind decision feedback in contrast as well as emission priority.
@@ -415,7 +427,7 @@ export const createBoardParticleSystem = () => {
             if (removed) lifetime.needsUpdate = true;
         },
         emit(burst: BoardParticleBurst): number {
-            const pop = burst.kind === 'match' || burst.kind === 'chain' || burst.kind === 'ripple'
+            const pop = burst.kind === 'match' || burst.kind === 'chain' || (burst.kind === 'ripple' && burst.priority !== 'event')
                 || (burst.kind === 'rim' && burst.rimMood === 'match');
             if (pop && !comboPopEffects) return 0;
             configure(burst.quality);
@@ -533,7 +545,7 @@ export const createBoardParticleSystem = () => {
                     }
                 }
                 lifetime.setXYZW(slot, start, life, shaped ? (0.085 + rng() * 0.05 + energy * 0.05) * (shaped === 'flame' ? 1.5 : shaped === 'vapor' ? 2.6 : 1) * (burst.sizeScale ?? 1) : ember ? (0.03 + rng() * 0.045 + energy * 0.03) * (burst.sizeScale ?? 1) : size, kind);
-                color.set(kind === 2 ? '#795a44' : ember && burst.tint ? burst.tint : warm);
+                color.set(kind === 2 ? '#795a44' : burst.tint ?? warm);
                 if (kind === 0 && rng() > 0.7) color.set('#fff2ce');
                 tint.setXYZ(slot, color.r, color.g, color.b);
                 // A flame and a drop stay upright; a shard turns slowly and a leaf tumbles.

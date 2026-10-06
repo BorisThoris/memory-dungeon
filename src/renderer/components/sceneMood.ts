@@ -2,6 +2,7 @@ import type { RelicId, RunState } from '../../shared/contracts';
 import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { REALM_JOLT_FAMILY, type RealmJoltFamily } from './realmCardMotion';
+import { deriveElementScene, type ElementSceneState } from './elementScene';
 
 /**
  * What the room becomes, read off the run.
@@ -25,6 +26,7 @@ export type ScenePlateId = 'dungeon' | 'shop' | 'void';
 export type SceneDriftTone = 'ember' | 'spore' | 'bubble';
 
 export interface SceneMood {
+    elements: ElementSceneState;
     plate: ScenePlateId;
     /** Identity of the miss that opened the black hole, for the collapse animation; null when none. */
     blackHoleKey: string | null;
@@ -128,11 +130,12 @@ export const deriveSceneMood = ({
     missesLeft?: number | null;
     /** A payout to rain gold on (a floor clear, a purchase), keyed by what paid it. */
     payout?: { key: string; gold: number } | null;
-    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor' | 'lastRealmEvent'>>;
+    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor' | 'lastRealmEvent' | 'realmId' | 'realmSecondaryId' | 'realmSeverity' | 'realmSway' | 'elementResonance'>>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
 }): SceneMood => {
     const heat = comboHeat(combo);
+    const elements = deriveElementScene(run);
     const surge = comboSurge(combo);
     const relics = run.relics ?? [];
     const turn = latestTurn;
@@ -161,14 +164,14 @@ export const deriveSceneMood = ({
      */
     const weather = WEATHER_FLOOR + (1 - WEATHER_FLOOR) * heat;
     // A frost run stays frozen through every room: the snow masks are per plate, the pane is the screen's.
-    const frost = temper.id === 'frost' && plate === 'dungeon' ? round(Math.min(1, weather * 1.15)) : 0;
+    const frost = plate === 'dungeon' ? round(Math.max(temper.id === 'frost' ? Math.min(1, weather * 1.15) : 0, elements.elements.bone * 0.5)) : 0;
     // Snow settles first, the pane follows, the cracks run last: the room freezes in that order.
     // The pane over the screen waits for the heat: it covers the board, so it is earned.
     const cold = temper.id === 'frost' ? heat : 0;
-    const snow = temper.id === 'frost' ? round(Math.min(1, weather * 1.6)) : 0;
+    const snow = round(Math.max(temper.id === 'frost' ? Math.min(1, weather * 1.6) : 0, elements.elements.bone * 0.6));
     const ice = round(Math.max(0, Math.min(1, (cold - 0.15) * 1.4)));
     const iceCracks = round(Math.max(0, Math.min(1, (cold - 0.35) * 1.8)));
-    const storm = temper.id === 'storm' && plate === 'dungeon' ? round(weather) : 0;
+    const storm = plate === 'dungeon' ? round(Math.max(temper.id === 'storm' ? weather : 0, elements.storm)) : 0;
     // The drift is the ember run's, and the grove's spores and the tide's bubbles (`realm-rules.ts`).
     const drifts = temper.id === 'ember' || temper.id === 'prismatic' || temper.id === 'grove' || temper.id === 'tide';
     const ash = drifts && plate !== 'shop' ? round(weather) : 0;
@@ -178,6 +181,7 @@ export const deriveSceneMood = ({
     const voidReturnKey = voidReturnKeyFor(run, latestLoss);
     const graded = plate === 'dungeon';
     return {
+        elements,
         plate,
         blackHoleKey,
         frost,
@@ -189,7 +193,7 @@ export const deriveSceneMood = ({
         iceCracks,
         iceGlow: round(iceCracks * (0.4 + 0.6 * cold)),
         storm,
-        wet: round((temper.id === 'storm' || temper.id === 'tide') && plate === 'dungeon' ? Math.min(1, 0.3 + heat) : 0),
+        wet: round(plate === 'dungeon' ? Math.max(temper.id === 'storm' || temper.id === 'tide' ? Math.min(1, 0.3 + heat) : 0, elements.elements.tide * 0.8, elements.storm * 0.6) : 0),
         voidReturnKey,
         hueDeg: graded ? Math.round(temper.ringHueDeg * (realmTint * 0.5 + 0.35 * heat)) + 0 : 0,
         saturate: round(graded ? (temper.id === 'frost' ? 1 - 0.45 * heat : 1 + 0.25 * heat) : plate === 'void' ? 0.8 : 1),

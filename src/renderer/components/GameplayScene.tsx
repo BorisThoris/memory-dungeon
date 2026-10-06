@@ -15,6 +15,7 @@ import { GoldRain } from './GoldRain';
 import { useBeat } from './useSceneBeat';
 import { SceneMotes } from './SceneMotes';
 import { SceneSprites } from './SceneSprites';
+import { ElementSceneLayers } from './ElementSceneLayers';
 import { ringMotes } from './sceneSpriteClocks';
 import plate from './scenePlate.module.css';
 import styles from './GameplayScene.module.css';
@@ -128,6 +129,7 @@ export function GameplayScene({
     const alive = effectTier === 'full';
     const lightPasses = alive;
     const flames = SCENE_SPRITES.gameplayFlames;
+    const chemistryPainted = (mood?.elements.reactions.reduce((sum, reaction) => sum + reaction.weight, 0) ?? 0) > 0.2;
     useSceneLook(sceneRef, alive);
     return (
         <div
@@ -143,7 +145,7 @@ export function GameplayScene({
             data-scene-tier={tier}
             data-combo-stage={comboStage}
             data-scene-plate={mood?.plate ?? 'dungeon'}
-            data-scene-prismatic={mood?.prismatic ? 'true' : 'false'}
+            data-scene-prismatic={mood?.prismatic && !chemistryPainted ? 'true' : 'false'}
             data-scene-hit={hitting && !still ? 'true' : 'false'}
             data-scene-spew={spewing && !still ? 'true' : 'false'}
             data-scene-realm-event={realmStruck && !still ? mood?.realmEventFamily ?? 'none' : 'none'}
@@ -171,9 +173,9 @@ export function GameplayScene({
                     '--scene-wet': mood?.wet ?? 0,
                     '--scene-ash': mood?.ash ?? 0,
                     '--scene-tempo': mood?.tempo ?? 1,
-                    '--scene-grade-hue': `${mood?.hueDeg ?? 0}deg`,
-                    '--scene-grade-saturate': mood?.saturate ?? 1,
-                    '--scene-grade-brightness': mood?.brightness ?? 1,
+                    '--scene-grade-hue': `${chemistryPainted ? 0 : mood?.hueDeg ?? 0}deg`,
+                    '--scene-grade-saturate': chemistryPainted ? 1 : mood?.saturate ?? 1,
+                    '--scene-grade-brightness': chemistryPainted ? 1 : mood?.brightness ?? 1,
                     '--scene-plate-aspect': `${flames.plate[0]} / ${flames.plate[1]}`
                 } as CSSProperties
             }
@@ -184,6 +186,7 @@ export function GameplayScene({
                     void after a great combo died. The light passes below belong to the dungeon and fade with it. */}
                 <div className={`${plate.base} ${styles.altPlate}`} data-testid="gameplay-scene-shop" data-shown={mood?.plate === 'shop' ? 'true' : 'false'} style={bg(UI_ART.gameplaySceneShop)} />
                 <div className={`${plate.base} ${styles.altPlate}`} data-testid="gameplay-scene-void" data-shown={mood?.plate === 'void' ? 'true' : 'false'} style={bg(UI_ART.gameplaySceneVoid)} />
+                {mood?.elements ? <ElementSceneLayers scene={mood.elements} still={still} alive={alive} plate={mood.plate} /> : null}
                 {lightPasses ? (
                     <>
                         <div className={`${plate.layer} ${styles.layer} ${styles.torchLightL}`} style={bg(UI_ART.gameplaySceneLightTorchesL)} />

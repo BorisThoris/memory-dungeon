@@ -3,6 +3,8 @@ import { advanceTutorial, resolveTutorial, selectTutorialTile, startTutorial, TU
 import { collectElementReactionParticles } from './elementReactionParticles';
 import { boardParticleBudget, createBoardParticleSystem } from './boardParticleSystem';
 import { getTileTransform } from './tileBoardTransform';
+import { ELEMENT_REACTION_KINDS } from '../../shared/element-resonance-rules';
+import { ELEMENT_REACTION_VISUALS } from './elementScene';
 
 function steamTurn() {
     let session = startTutorial(TUTORIAL_LESSONS.find(lesson => lesson.id === 'steam')!);
@@ -19,14 +21,38 @@ describe('chemistry in the shared particle pool', () => {
         const { before, after } = steamTurn();
         const cues = collectElementReactionParticles(before, after, quality, false, false, 1);
         expect(cues.length).toBeGreaterThan(1);
-        expect(cues.length).toBeLessThanOrEqual(quality === 'low' ? 6 : quality === 'medium' ? 10 : 14);
-        expect(cues.every(cue => cue.shape === 'vapor' && cue.priority === 'event')).toBe(true);
+        expect(cues.length).toBeLessThanOrEqual(quality === 'low' ? 10 : quality === 'medium' ? 16 : 20);
+        expect(cues.every(cue => cue.priority === 'event')).toBe(true);
+        expect(cues.some(cue => cue.shape === 'vapor')).toBe(true);
+        expect(cues.some(cue => cue.shape === 'droplet')).toBe(true);
+        expect(cues.some(cue => cue.kind === 'ripple' && cue.placement === 'ground')).toBe(true);
         expect(cues.some(cue => cue.delay! < 0.3)).toBe(true);
         expect(cues.some(cue => cue.delay! >= 0.3)).toBe(true);
         const pool = createBoardParticleSystem();
         for (const cue of cues) pool.emit(cue);
         expect(pool.advance(1.5)).toBeLessThanOrEqual(boardParticleBudget(quality));
         expect(pool.advance(5)).toBe(0);
+        pool.dispose();
+    });
+    it.each(ELEMENT_REACTION_KINDS)('gives %s both of its own materials and a delayed contact wave', kind => {
+        const { before, after } = steamTurn();
+        const changed = { ...after, elementCast: { ...after.elementCast!, reactions: [{ ...after.elementCast!.reactions![0]!, kind }] } };
+        const cues = collectElementReactionParticles(before, changed, 'high', false, false, 1);
+        for (const material of ELEMENT_REACTION_VISUALS[kind].materials) {
+            expect(cues.some(cue => cue.shape === material.shape && cue.tint === material.tint)).toBe(true);
+        }
+        expect(cues.find(cue => cue.shape === ELEMENT_REACTION_VISUALS[kind].materials[1].shape)!.delay)
+            .toBeGreaterThan(cues[0]!.delay!);
+    });
+    it.each(['low', 'medium', 'high'] as const)('represents every simultaneous reaction within the %s pool even with combo sparks off', quality => {
+        const { before, after } = steamTurn();
+        const changed = { ...after, elementCast: { ...after.elementCast!, reactions: ELEMENT_REACTION_KINDS.map(kind => ({ ...after.elementCast!.reactions![0]!, kind })) } };
+        const cues = collectElementReactionParticles(before, changed, quality, false, false, 1);
+        const pool = createBoardParticleSystem();
+        pool.setComboPopEffects(false);
+        for (const cue of cues) expect(pool.emit(cue)).toBeGreaterThan(0);
+        expect(cues.filter(cue => cue.kind === 'ripple')).toHaveLength(ELEMENT_REACTION_KINDS.length);
+        expect(pool.advance(1.5)).toBeLessThanOrEqual(boardParticleBudget(quality));
         pool.dispose();
     });
     it('never replays when mounting, resuming, or using reduced motion', () => {

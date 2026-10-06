@@ -1,0 +1,77 @@
+{
+  "generator": "Built-in image_gen",
+  "reference": "src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v1.webp",
+  "constraints": "Preserve camera, arches, pillars, torches, floor rune circle, wide framing and hand-painted style. Dark quiet center for cards. No UI, text, characters or new architecture.",
+  "variants": [
+    {
+      "kind": "steam",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-460fc8ef-b94a-4cfa-928a-5197d86671c3.png",
+      "file": "bg-gameplay-element-steam-v1.webp",
+      "prompt": "Fire + Water: turquoise pools, damp stone, amber reflections and pale steam.",
+      "mobileFile": "bg-gameplay-element-steam-v1-mobile.webp"
+    },
+    {
+      "kind": "blaze",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-5213e7ff-2ef8-4c13-bbbc-6c609a5c7034.png",
+      "file": "bg-gameplay-element-blaze-v1.webp",
+      "prompt": "Fire + Grove: smouldering roots and vines, charred moss, ember seams and thin smoke.",
+      "mobileFile": "bg-gameplay-element-blaze-v1-mobile.webp"
+    },
+    {
+      "kind": "melt",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-e7278c40-2784-45a9-ae05-ac171588a2ec.png",
+      "file": "bg-gameplay-element-melt-v1.webp",
+      "prompt": "Fire + Frost: surviving ice on pillars melting into warm reflective pools, icicles and delicate steam.",
+      "mobileFile": "bg-gameplay-element-melt-v1-mobile.webp"
+    },
+    {
+      "kind": "freezeover",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-dce0be7e-8567-49bf-8d32-5c34b93a5dec.png",
+      "file": "bg-gameplay-element-freezeover-v1.webp",
+      "prompt": "Water + Frost: glassy frozen floor with branching cracks, iced walls and snow on ledges.",
+      "mobileFile": "bg-gameplay-element-freezeover-v1-mobile.webp"
+    },
+    {
+      "kind": "flood",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-8b03e38c-cece-4c71-91e3-f2dd114b3f88.png",
+      "file": "bg-gameplay-element-flood-v1.webp",
+      "prompt": "Water + Grove: clear teal pools feeding lush roots, ferns and wet moss, rippling reflections.",
+      "mobileFile": "bg-gameplay-element-flood-v1-mobile.webp"
+    },
+    {
+      "kind": "frostbloom",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-82e44150-d661-4282-ab0c-f2071fd20ebe.png",
+      "file": "bg-gameplay-element-frostbloom-v1.webp",
+      "prompt": "Frost + Grove: living vines encased in hoarfrost, mint and lavender crystalline flowers, emerald growth inside clear ice.",
+      "mobileFile": "bg-gameplay-element-frostbloom-v1-mobile.webp"
+    },
+    {
+      "kind": "firestorm",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-c0d11a9c-cfcb-42a6-9352-27d929af5042.png",
+      "file": "bg-gameplay-element-firestorm-v1.webp",
+      "prompt": "Storm + Fire: wind-torn embers, scorched stone, hot cracks and violet electrical forks.",
+      "mobileFile": "bg-gameplay-element-firestorm-v1-mobile.webp"
+    },
+    {
+      "kind": "downpour",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-3796d4c5-9644-4a17-beb5-0426b61ca613.png",
+      "file": "bg-gameplay-element-downpour-v1.webp",
+      "prompt": "Storm + Water: rain down stone walls, shallow indigo pools and violet branching reflections.",
+      "mobileFile": "bg-gameplay-element-downpour-v1-mobile.webp"
+    },
+    {
+      "kind": "hailstorm",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-de64979a-930e-4543-85e5-8c31a7972b5a.png",
+      "file": "bg-gameplay-element-hailstorm-v1.webp",
+      "prompt": "Storm + Frost: fine blowing snow, clear hail crystals, ice crust and white-blue electrical veins.",
+      "mobileFile": "bg-gameplay-element-hailstorm-v1-mobile.webp"
+    },
+    {
+      "kind": "thornstorm",
+      "source": "C:/Users/Gaming PC/.codex/generated_images/01a10772-cb67-7272-b436-6bf8e3ef1b68/exec-5d71b7ba-5ad8-46e1-9d83-cf41ed2995fc.png",
+      "file": "bg-gameplay-element-thornstorm-v1.webp",
+      "prompt": "Storm + Grove: charged thorny roots and ivy, fluttering leaves, emerald buds and violet electrical veins.",
+      "mobileFile": "bg-gameplay-element-thornstorm-v1-mobile.webp"
+    }
+  ]
+}

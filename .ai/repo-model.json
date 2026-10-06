@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2940,
-    "codeFileCount": 1101,
-    "exportedSymbolCount": 3410,
+    "trackedFileCount": 2968,
+    "codeFileCount": 1107,
+    "exportedSymbolCount": 3419,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9105
+    "relationshipCount": 9149
   },
   "inventory": [
     {
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 117944,
-      "sha256": "e35f568ab8c1f865429ce9704d418e9ec00ed9d5b447b49438c6aba6bf6287ce"
+      "bytes": 118869,
+      "sha256": "f8ea3da69b8d624e8bfa8d4b55f29d1cf4c6c134a9baff268360275b5d3630ab"
     },
     {
       "path": "public/site.webmanifest",
@@ -5495,6 +5495,12 @@
       "category": "script",
       "bytes": 14279,
       "sha256": "dc44768db363f8660fddcb8dbb4a78c9005d5b9e06c59e4c432b64673665910c"
+    },
+    {
+      "path": "scripts/scene-pipeline/element-art-manifest.json",
+      "category": "script",
+      "bytes": 3844,
+      "sha256": "4c4db4e2969e41840f66bc9771904666c81fd92026eb9a29655fc67f8d5ed142"
     },
     {
       "path": "scripts/scene-pipeline/find_candles.py",
@@ -7909,6 +7915,126 @@
       "sha256": "3fe7b080d00f7aa01305da1504b586619f90702d627344734fa83c2f2c663898"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-blaze-v1-mobile.webp",
+      "category": "source",
+      "bytes": 104268,
+      "sha256": "1c23f3958accd18b4c6fb14283340dde7b3c6c11d34de071747964a2efae97a6"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-blaze-v1.webp",
+      "category": "source",
+      "bytes": 255760,
+      "sha256": "610399f3f44d74d48172db67df4221f47af8f546c749d04bbaec3c82714e26f5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-downpour-v1-mobile.webp",
+      "category": "source",
+      "bytes": 107630,
+      "sha256": "71c0632f4bded5b21f5b30a916fea34c72079ae57af9beb9bb082069e0058391"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-downpour-v1.webp",
+      "category": "source",
+      "bytes": 275780,
+      "sha256": "fb88efb88e8820cc1d6d5458fb995f7ae2e62bbbfea6e7294f792d19dab575fe"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-firestorm-v1-mobile.webp",
+      "category": "source",
+      "bytes": 89498,
+      "sha256": "12d9ff66c0ebc067afb0b33fc26b547ead933a58a942637c4d26fc21b631e139"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-firestorm-v1.webp",
+      "category": "source",
+      "bytes": 217832,
+      "sha256": "94d2b2251d242fc36db56c9aca6af97628a2fa6707a1c7ae63f90e8d28280f16"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-flood-v1-mobile.webp",
+      "category": "source",
+      "bytes": 107726,
+      "sha256": "04926f818f4a0d6e75824b93289aa9dc441df6916a2e9010144bd4474d3e8275"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-flood-v1.webp",
+      "category": "source",
+      "bytes": 254834,
+      "sha256": "fc947a4dd0b7278359e485ce42ccb676dad1ebd9ae0f5a0ea21b54802c218374"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-freezeover-v1-mobile.webp",
+      "category": "source",
+      "bytes": 94458,
+      "sha256": "273ea7c5031248d3db8f695249ae91fc65409852cc1193923e60f9c2720681b2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-freezeover-v1.webp",
+      "category": "source",
+      "bytes": 229072,
+      "sha256": "e3e459edea332d26ffbcc794310d835fdbe341d11a0a3993acfed8461e7898c5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-frostbloom-v1-mobile.webp",
+      "category": "source",
+      "bytes": 113842,
+      "sha256": "2209657e97b77a67f0f0bed4379572a0f67e125852575a1ac5da912502e22949"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-frostbloom-v1.webp",
+      "category": "source",
+      "bytes": 279314,
+      "sha256": "51b4f535514d595732958a4658b40c3375884169b074c2543d96a0ac56ff0eb4"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-hailstorm-v1-mobile.webp",
+      "category": "source",
+      "bytes": 110348,
+      "sha256": "426b3b2a1a2b7312e707951b88059202b99e71ba77a68ae7fa3a5aea24b3133f"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-hailstorm-v1.webp",
+      "category": "source",
+      "bytes": 275986,
+      "sha256": "c1326c77bccc3a38bc5e3b20bc809036e43870a68c62be5b917b7afe17ff3d1b"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-melt-v1-mobile.webp",
+      "category": "source",
+      "bytes": 118608,
+      "sha256": "00091ea9d63bc0b2c7fa150171c5fe341ddb3ff9033860b7391a9b621d1601f6"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-melt-v1.webp",
+      "category": "source",
+      "bytes": 298106,
+      "sha256": "358439ff866bf7d0ff8c453caadd6951d47ebf416a90c8b7f69a772155163826"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-steam-v1-mobile.webp",
+      "category": "source",
+      "bytes": 97686,
+      "sha256": "766ca864a7ebcc91fd7629f38a6ca6eaa3305fc0ce45072805c884042da95f4d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-steam-v1.webp",
+      "category": "source",
+      "bytes": 234164,
+      "sha256": "9572446e7123ca91c3df493a445199b38f483b3933d5e08e319709b7fc9420e2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-thornstorm-v1-mobile.webp",
+      "category": "source",
+      "bytes": 99428,
+      "sha256": "8e54feacbfa45c37ba10dd044eccd7a79782fd3458709cb2766d361d311dd152"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-element-thornstorm-v1.webp",
+      "category": "source",
+      "bytes": 229216,
+      "sha256": "93cd1490e32c4daeac1dc6b9614bae0dfddc8801045614db106ba0225a610df8"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
       "category": "source",
       "bytes": 1333430,
@@ -9405,8 +9531,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 36177,
-      "sha256": "97a83e39ecb23ba16816094adf88e8b36dc424875b5339c77755b6f7dda8177c"
+      "bytes": 36909,
+      "sha256": "a72697fed185371fdfba21c0b047e92d472f77b93c22b0580088f4c96cea9a5b"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -9627,14 +9753,14 @@
     {
       "path": "src/renderer/components/elementReactionParticles.test.ts",
       "category": "test",
-      "bytes": 3256,
-      "sha256": "3747268b4ad4f10e7cb2046655cbbefcc54858b8bf4945f5fd5994a75ad4dccd"
+      "bytes": 5206,
+      "sha256": "f820c7f4fa1862a21989ab97ba1a28aa67414e2366361754be0c45afc35725af"
     },
     {
       "path": "src/renderer/components/elementReactionParticles.ts",
       "category": "source",
-      "bytes": 2463,
-      "sha256": "47759121987f74cf0d84092603c089e11fdf20964e82df0c90895767fda5bba0"
+      "bytes": 3304,
+      "sha256": "c41620aa30e1d5c39591cf799f6d33df5467e3b9d25afe3399382c3f1a1c0680"
     },
     {
       "path": "src/renderer/components/ElementResonanceStrip.module.css",
@@ -9647,6 +9773,42 @@
       "category": "source",
       "bytes": 3961,
       "sha256": "e8dbdd023f4d212c4953ff7abf451f6555ac3a82be9033bbe552746861f1a575"
+    },
+    {
+      "path": "src/renderer/components/elementScene.test.ts",
+      "category": "test",
+      "bytes": 4255,
+      "sha256": "a8d6cabb64c479cdf1fa2ac38dce6da5a290481282b9ab21904ea3481d4e9687"
+    },
+    {
+      "path": "src/renderer/components/elementScene.ts",
+      "category": "source",
+      "bytes": 7151,
+      "sha256": "c86c0be42bc41d31a181c30b5eea67e3d82d575651db5fc3d0e0ad527aa03cb6"
+    },
+    {
+      "path": "src/renderer/components/elementSceneArt.ts",
+      "category": "source",
+      "bytes": 470,
+      "sha256": "d0e402819c40c2c9d42a31559657e547b62982b8b5c5fbd2c1b513b8e987344e"
+    },
+    {
+      "path": "src/renderer/components/ElementSceneLayers.module.css",
+      "category": "source",
+      "bytes": 2185,
+      "sha256": "2ad7d50812507495e875e84e2fca6771d8d1d91aff7dc4d5b61e1624fa561326"
+    },
+    {
+      "path": "src/renderer/components/ElementSceneLayers.test.tsx",
+      "category": "test",
+      "bytes": 1969,
+      "sha256": "535cb0e6972c9c134f23727b52fcdcb1422fd4ab6899a8e79ca8dd93edbcc636"
+    },
+    {
+      "path": "src/renderer/components/ElementSceneLayers.tsx",
+      "category": "source",
+      "bytes": 2216,
+      "sha256": "68fcc39fa498fb53942f6cd5eba230e02ed66722acd520750d8cd03ae8d8906d"
     },
     {
       "path": "src/renderer/components/emberDrift.test.ts",
@@ -9753,8 +9915,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 16675,
-      "sha256": "55080b5b7a0270d1f85347215c2f2cb611afae8b9888138ab37728f5121bd5d0"
+      "bytes": 17078,
+      "sha256": "70954cb9af46c2757eeb78c9eb1832891b5ad1f011cbf0467dc4edc076272b27"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -10269,8 +10431,8 @@
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 12039,
-      "sha256": "3458d89d90b90ef81377f705737b4711eee8aff33bd57eca51c8e3d73bcbfbd2"
+      "bytes": 12474,
+      "sha256": "b914a311c2d7c5a3380e9f9de72548a3b3d2e891aed035aed23d48f4a29ae360"
     },
     {
       "path": "src/renderer/components/SceneMotes.module.css",
@@ -11341,10 +11503,16 @@
       "sha256": "b6333c942d82f45d6f94742834677a871167f2574a4a7cd130e0b368000c5094"
     },
     {
+      "path": "src/renderer/components/useSceneBeat.test.tsx",
+      "category": "test",
+      "bytes": 1083,
+      "sha256": "2cb5f8f4d79fe35b34ca8c0c2721229feacecb3bdda3a507571892525b0546ef"
+    },
+    {
       "path": "src/renderer/components/useSceneBeat.ts",
       "category": "source",
-      "bytes": 836,
-      "sha256": "644474c76c934cd2b606326e2af3c0e2589d9b6a4840bd8964e9d74a5baeec52"
+      "bytes": 855,
+      "sha256": "f41883e9d213c3f88bb61ac71239d062a467bc89f61e42c9b488b6db6f7464e1"
     },
     {
       "path": "src/renderer/components/useSceneWipe.ts",
@@ -20205,7 +20373,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 640,
+      "lineCount": 652,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -20816,11 +20984,13 @@
       "path": "src/renderer/components/elementReactionParticles.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 52,
+      "lineCount": 78,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/elementReactionParticles.ts",
+        "file:src/renderer/components/elementScene.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/tutorial-hall.ts"
       ],
       "exports": [],
@@ -20831,12 +21001,11 @@
       "path": "src/renderer/components/elementReactionParticles.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 37,
+      "lineCount": 48,
       "imports": [
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
-        "file:src/renderer/components/realmCardMotion.ts",
-        "file:src/renderer/components/realmParticles.ts",
+        "file:src/renderer/components/elementScene.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
@@ -20867,6 +21036,100 @@
       ],
       "testedBy": [
         "file:src/renderer/components/ElementCastGuide.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/elementScene.test.ts",
+      "path": "src/renderer/components/elementScene.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 68,
+      "imports": [
+        "file:src/renderer/components/elementScene.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts",
+        "file:src/shared/realm-sway-rules.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/elementScene.ts",
+      "path": "src/renderer/components/elementScene.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 108,
+      "imports": [
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts",
+        "file:src/shared/realm-sway-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/elementScene.ts#deriveElementScene",
+        "symbol:src/renderer/components/elementScene.ts#ELEMENT_REACTION_VISUALS",
+        "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_KINDS",
+        "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_SUITS",
+        "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_VISUALS",
+        "symbol:src/renderer/components/elementScene.ts#ElementSceneKind",
+        "symbol:src/renderer/components/elementScene.ts#ElementSceneState"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/elementReactionParticles.test.ts",
+        "file:src/renderer/components/elementScene.test.ts",
+        "file:src/renderer/components/ElementSceneLayers.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/elementSceneArt.ts",
+      "path": "src/renderer/components/elementSceneArt.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 8,
+      "imports": [
+        "file:src/renderer/assets/ui/modeArt.ts",
+        "file:src/renderer/components/elementScene.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/ElementSceneLayers.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "path": "src/renderer/components/ElementSceneLayers.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 30,
+      "imports": [
+        "file:src/renderer/components/elementScene.ts",
+        "file:src/renderer/components/elementSceneArt.ts",
+        "file:src/renderer/components/ElementSceneLayers.tsx",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "path": "src/renderer/components/ElementSceneLayers.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 33,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/components/elementScene.ts",
+        "file:src/renderer/components/elementSceneArt.ts",
+        "file:src/renderer/components/useSceneBeat.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/ElementSceneLayers.test.tsx"
       ]
     },
     {
@@ -21088,10 +21351,11 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 271,
+      "lineCount": 274,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/ElementSceneLayers.tsx",
         "file:src/renderer/components/emberDrift.ts",
         "file:src/renderer/components/EmberDriftOverlay.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts",
@@ -22414,8 +22678,9 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 220,
+      "lineCount": 224,
       "imports": [
+        "file:src/renderer/components/elementScene.ts",
         "file:src/renderer/components/realmCardMotion.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -25558,16 +25823,30 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/useSceneBeat.test.tsx",
+      "path": "src/renderer/components/useSceneBeat.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 24,
+      "imports": [
+        "file:src/renderer/components/useSceneBeat.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/useSceneBeat.ts",
       "path": "src/renderer/components/useSceneBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 23,
+      "lineCount": 18,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/useSceneBeat.ts#useBeat"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/useSceneBeat.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/useSceneWipe.ts",
@@ -31235,6 +31514,7 @@
         "file:src/renderer/components/boardTrauma.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
+        "file:src/renderer/components/elementScene.test.ts",
         "file:src/renderer/components/FloorClearBeat.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
@@ -31985,6 +32265,8 @@
         "symbol:src/shared/element-resonance-rules.ts#THAW_SCORE_PER_POTENCY_SQUARED"
       ],
       "testedBy": [
+        "file:src/renderer/components/elementReactionParticles.test.ts",
+        "file:src/renderer/components/elementScene.test.ts",
         "file:src/shared/element-chemistry.test.ts",
         "file:src/shared/element-reaction-feedback.test.ts",
         "file:src/shared/element-resonance-rules.test.ts"
@@ -35565,6 +35847,7 @@
         "symbol:src/shared/realm-sway-rules.ts#swayTip"
       ],
       "testedBy": [
+        "file:src/renderer/components/elementScene.test.ts",
         "file:src/shared/element-chemistry.test.ts",
         "file:src/shared/realm-sway-rules.test.ts"
       ]
@@ -37677,6 +37960,8 @@
         "file:src/renderer/components/boardParticleCues.test.ts",
         "file:src/renderer/components/boardParticleRim.test.ts",
         "file:src/renderer/components/distantCardPage.test.ts",
+        "file:src/renderer/components/elementScene.test.ts",
+        "file:src/renderer/components/ElementSceneLayers.test.tsx",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
@@ -41679,8 +41964,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 273,
-      "endLine": 639
+      "line": 285,
+      "endLine": 651
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -42223,8 +42508,8 @@
       "name": "collectElementReactionParticles",
       "kind": "function",
       "file": "src/renderer/components/elementReactionParticles.ts",
-      "line": 10,
-      "endLine": 36
+      "line": 9,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
@@ -42233,6 +42518,78 @@
       "file": "src/renderer/components/ElementResonanceStrip.tsx",
       "line": 70,
       "endLine": 70
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#deriveElementScene",
+      "name": "deriveElementScene",
+      "kind": "function",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 44,
+      "endLine": 107
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ELEMENT_REACTION_VISUALS",
+      "name": "ELEMENT_REACTION_VISUALS",
+      "kind": "value",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 9,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_KINDS",
+      "name": "ELEMENT_SCENE_KINDS",
+      "kind": "value",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_SUITS",
+      "name": "ELEMENT_SCENE_SUITS",
+      "kind": "value",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 6,
+      "endLine": 6
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_VISUALS",
+      "name": "ELEMENT_SCENE_VISUALS",
+      "kind": "value",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 22,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ElementSceneKind",
+      "name": "ElementSceneKind",
+      "kind": "type",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/elementScene.ts#ElementSceneState",
+      "name": "ElementSceneState",
+      "kind": "interface",
+      "file": "src/renderer/components/elementScene.ts",
+      "line": 27,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART",
+      "name": "ELEMENT_SCENE_ART",
+      "kind": "value",
+      "file": "src/renderer/components/elementSceneArt.ts",
+      "line": 4,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
+      "name": "ElementSceneLayers",
+      "kind": "function",
+      "file": "src/renderer/components/ElementSceneLayers.tsx",
+      "line": 10,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
@@ -42351,16 +42708,16 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 101,
-      "endLine": 270
+      "line": 102,
+      "endLine": 273
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 64,
-      "endLine": 97
+      "line": 65,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -43455,64 +43812,64 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 90,
-      "endLine": 96
+      "line": 92,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 112,
-      "endLine": 210
+      "line": 114,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 213,
-      "endLine": 219
+      "line": 217,
+      "endLine": 223
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneDriftTone",
       "name": "SceneDriftTone",
       "kind": "type",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneMood",
       "name": "SceneMood",
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 27,
-      "endLine": 79
+      "line": 28,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
       "name": "ScenePlateId",
       "kind": "type",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#voidReturnKeyFor",
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 102,
-      "endLine": 107
+      "line": 104,
+      "endLine": 109
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "name": "WEATHER_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 110,
-      "endLine": 110
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
@@ -47360,7 +47717,7 @@
       "kind": "value",
       "file": "src/renderer/components/useSceneBeat.ts",
       "line": 7,
-      "endLine": 22
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/components/useSceneWipe.ts#useSceneWipe",
@@ -67177,7 +67534,7 @@
         },
         {
           "path": "src/renderer/components/sceneMood.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/renderer/components/tileCellGlide.ts",
@@ -73639,6 +73996,60 @@
       "id": "exports:src/renderer/components/ElementResonanceStrip.tsx->symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
       "source": "file:src/renderer/components/ElementResonanceStrip.tsx",
       "target": "symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#deriveElementScene",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#deriveElementScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ELEMENT_REACTION_VISUALS",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ELEMENT_REACTION_VISUALS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_KINDS",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_KINDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_SUITS",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_SUITS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_VISUALS",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ELEMENT_SCENE_VISUALS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ElementSceneKind",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ElementSceneKind",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementScene.ts->symbol:src/renderer/components/elementScene.ts#ElementSceneState",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "symbol:src/renderer/components/elementScene.ts#ElementSceneState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementSceneArt.ts->symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ElementSceneLayers.tsx->symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
       "kind": "exports"
     },
     {
@@ -95666,9 +96077,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/elementReactionParticles.test.ts",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
       "kind": "imports"
     },
     {
@@ -95690,15 +96113,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/realmCardMotion.ts",
+      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/elementScene.ts",
       "source": "file:src/renderer/components/elementReactionParticles.ts",
-      "target": "file:src/renderer/components/realmCardMotion.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/elementReactionParticles.ts->src/renderer/components/realmParticles.ts",
-      "source": "file:src/renderer/components/elementReactionParticles.ts",
-      "target": "file:src/renderer/components/realmParticles.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
       "kind": "imports"
     },
     {
@@ -95753,6 +96170,120 @@
       "id": "imports:src/renderer/components/ElementResonanceStrip.tsx->src/shared/tile-suit-rules.ts",
       "source": "file:src/renderer/components/ElementResonanceStrip.tsx",
       "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.test.ts->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/elementScene.test.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/elementScene.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.test.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/renderer/components/elementScene.test.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.test.ts->src/shared/realm-sway-rules.ts",
+      "source": "file:src/renderer/components/elementScene.test.ts",
+      "target": "file:src/shared/realm-sway-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/elementScene.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementScene.ts->src/shared/realm-sway-rules.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/shared/realm-sway-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementSceneArt.ts->src/renderer/assets/ui/modeArt.ts",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "file:src/renderer/assets/ui/modeArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/elementSceneArt.ts->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.test.tsx->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.test.tsx->src/renderer/components/elementSceneArt.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "target": "file:src/renderer/components/elementSceneArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.test.tsx->src/renderer/components/ElementSceneLayers.tsx",
+      "source": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "target": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.test.tsx->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/elementSceneArt.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "file:src/renderer/components/elementSceneArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/useSceneBeat.ts",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "file:src/renderer/components/useSceneBeat.ts",
       "kind": "imports"
     },
     {
@@ -96071,6 +96602,12 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/ElementSceneLayers.tsx",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/ElementSceneLayers.tsx",
       "kind": "imports"
     },
     {
@@ -97937,6 +98474,12 @@
       "id": "imports:src/renderer/components/sceneMood.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/components/sceneMood.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneMood.ts->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
       "kind": "imports"
     },
     {
@@ -101357,6 +101900,12 @@
       "id": "imports:src/renderer/components/useGameScreenPowerTileHints.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useSceneBeat.test.tsx->src/renderer/components/useSceneBeat.ts",
+      "source": "file:src/renderer/components/useSceneBeat.test.tsx",
+      "target": "file:src/renderer/components/useSceneBeat.ts",
       "kind": "imports"
     },
     {
@@ -116866,6 +117415,36 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/elementScene.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/elementScene.ts->file:src/renderer/components/elementScene.test.ts",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/renderer/components/elementScene.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/elementScene.ts->file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "source": "file:src/renderer/components/elementScene.ts",
+      "target": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/elementSceneArt.ts->file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/ElementSceneLayers.tsx->file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
+      "target": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/emberDrift.ts->file:src/renderer/components/emberDrift.test.ts",
       "source": "file:src/renderer/components/emberDrift.ts",
       "target": "file:src/renderer/components/emberDrift.test.ts",
@@ -117697,6 +118276,12 @@
       "id": "tested_by:src/renderer/components/TutorialHall.tsx->file:src/renderer/App.test.tsx",
       "source": "file:src/renderer/components/TutorialHall.tsx",
       "target": "file:src/renderer/App.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/useSceneBeat.ts->file:src/renderer/components/useSceneBeat.test.tsx",
+      "source": "file:src/renderer/components/useSceneBeat.ts",
+      "target": "file:src/renderer/components/useSceneBeat.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -119266,6 +119851,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/elementScene.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/elementScene.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/FloorClearBeat.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/FloorClearBeat.test.tsx",
@@ -120373,6 +120964,18 @@
       "id": "tested_by:src/shared/element-reaction-feedback.ts->file:src/shared/element-reaction-feedback.test.ts",
       "source": "file:src/shared/element-reaction-feedback.ts",
       "target": "file:src/shared/element-reaction-feedback.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/renderer/components/elementReactionParticles.test.ts",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "file:src/renderer/components/elementReactionParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/renderer/components/elementScene.test.ts",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "file:src/renderer/components/elementScene.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122014,6 +122617,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/realm-sway-rules.ts->file:src/renderer/components/elementScene.test.ts",
+      "source": "file:src/shared/realm-sway-rules.ts",
+      "target": "file:src/renderer/components/elementScene.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/realm-sway-rules.ts->file:src/shared/element-chemistry.test.ts",
       "source": "file:src/shared/realm-sway-rules.ts",
       "target": "file:src/shared/element-chemistry.test.ts",
@@ -123091,6 +123700,18 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/distantCardPage.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/distantCardPage.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/elementScene.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/elementScene.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/ElementSceneLayers.test.tsx",
       "kind": "tested_by"
     },
     {

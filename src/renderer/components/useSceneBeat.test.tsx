@@ -1,0 +1,23 @@
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, expect, it, vi } from 'vitest';
+import { useBeat } from './useSceneBeat';
+afterEach(() => vi.useRealTimers());
+it('does not replay a restored key, replaces rapid beats and cancels when the floor resets', () => {
+    vi.useFakeTimers();
+    const { result, rerender } = renderHook(({ event }: { event: string | null }) => useBeat(event, 1000), { initialProps: { event: 'restored' } as { event: string | null } });
+    expect(result.current).toBe(false);
+    rerender({ event: 'steam' });
+    expect(result.current).toBe(true);
+    act(() => vi.advanceTimersByTime(500));
+    rerender({ event: 'blaze' });
+    act(() => vi.advanceTimersByTime(600));
+    expect(result.current).toBe(true);
+    rerender({ event: null });
+    expect(result.current).toBe(false);
+    act(() => vi.advanceTimersByTime(2000));
+    expect(result.current).toBe(false);
+    rerender({ event: 'blaze' });
+    expect(result.current).toBe(true);
+    act(() => vi.advanceTimersByTime(1000));
+    expect(result.current).toBe(false);
+});
