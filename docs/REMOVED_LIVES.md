@@ -25,6 +25,12 @@ where it says *how well*, not *how much longer*.
 board at all - three times par means missing two-thirds of your flips, which is a floor under
 competence and not a difficulty gate.
 
+## Update 2026-10-06: a visible lives counter
+
+The gameplay HUD now presents the existing miss bank as a heart and a lives count. Its earning,
+expiry, and spending rules are unchanged. Floor, lives, and score stay visible; turns, realm,
+and modifiers open through Run details. The former life economy below remains archived.
+
 ## Update 2026-09-24: misses are earned, and they expire
 
 The flat two-a-floor deposit made the bank a subscription: a run that banked four by floor 3 kept

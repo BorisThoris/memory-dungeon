@@ -10,8 +10,8 @@
 
 .beat {
     position: absolute;
-    /* The board stage already excludes the measured HUD and dock. */
-    inset: 0;
+    /* Keep the result readable while cards draw behind the surrounding chrome. */
+    inset: var(--gameplay-hud-top-clearance, 0px) var(--margin-stage-inline-end, 0px) var(--gameplay-dock-bottom-clearance, 0px) var(--margin-stage-inline-start, 0px);
     z-index: 6;
     display: grid;
     place-items: center;
@@ -177,10 +177,6 @@
 .essence { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin: 0.8rem 0; font-size: 0.9rem; }
 .essence > span { color: var(--loot-color, #e5d6b8); }
 
-/* Desktop stages already exclude the HUD and dock; apply their clearance only once. */
-:global([data-mobile-camera-mode='false']) .beat {
-    inset: 0;
-}
 
 :global([data-shell-layout='phone-landscape']) .colophon {
     padding: 0.65rem 0.75rem;

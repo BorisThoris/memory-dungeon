@@ -639,11 +639,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             height: rect.height
         }));
         /*
-         * In camera mode the stage runs under the HUD; otherwise the stage already starts below it.
+         * The full-screen canvas runs under the HUD in every camera mode.
          * Measured here rather than read from the clearance the shell publishes: the HUD grows by a
          * feedback line on the same commit as the match, and the published number is a frame behind.
          */
-        const hud = cameraViewportMode ? shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]') : null;
+        const hud = shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]');
         const hudClearance = hud ? Math.max(0, hud.getBoundingClientRect().bottom - stageRect.top) : 0;
 
         setBoardFloaterPos(
@@ -655,7 +655,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 viewportWidth: width
             })
         );
-    }, [boardFloaterPayload, cameraViewportMode, shellProfile, width]);
+    }, [boardFloaterPayload, shellProfile, width]);
 
     useEffect(() => {
         if (!boardFloaterPayload || !boardFloaterPos) {
@@ -825,6 +825,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 if (guide?.dataset.castGuideOpen === 'true') return;
                 // Toggle events are coalesced; the native state is authoritative between events.
                 try { if (guide?.matches(':popover-open')) return; } catch { /* DOMs without native popovers use the dataset. */ }
+                const details = document.querySelector<HTMLDetailsElement>('[data-testid="run-details"][open]');
+                if (details) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    details.open = false;
+                    details.querySelector('summary')?.focus();
+                    return;
+                }
             }
             const target = event.target;
             if (target instanceof HTMLElement) {

@@ -1085,6 +1085,24 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
+    it('closes run details before Escape can pause the game', () => {
+        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
+        try {
+            render(
+                <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={finishMemorizePhase(createNewRun(0))} /></NotificationHost></PlatformTiltProvider>
+            );
+            const details = screen.getByTestId('run-details') as HTMLDetailsElement;
+            fireEvent.click(screen.getByLabelText('Run details'));
+            expect(details.open).toBe(true);
+            fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+            expect(details.open).toBe(false);
+            expect(pauseSpy).not.toHaveBeenCalled();
+            expect(screen.getByLabelText('Run details')).toHaveFocus();
+        } finally {
+            pauseSpy.mockRestore();
+        }
+    });
+
     it('lets Escape dismiss a native cast guide before its toggle event updates the dataset', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
         try {

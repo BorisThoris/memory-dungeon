@@ -173,45 +173,6 @@
     color: var(--miss);
 }
 
-/*
- * What the run has left before the ceiling ends it. Set off from the par by a middot rather than
- * a rule or a box, because it is the same sentence: how this floor is going, then how much of it
- * there is. The old hearts were a row that emptied; this is a number that falls, which says the
- * same thing in the type the rest of the head is set in.
- */
-.parLeft {
-    margin-left: 0.55rem;
-}
-
-.parLeft::before {
-    content: '·';
-    margin-right: 0.55rem;
-    color: var(--rule);
-}
-
-/*
- * The count carries the head's full paper, a step up from the par it sits beside: of the two
- * numbers on this stat it is the one that ends the run. Inside the ceiling-near state it takes
- * the miss colour with everything else in the stat.
- */
-.parLeftNumber {
-    color: inherit;
-    font-weight: 500;
-}
-
-.par:not([data-ceiling-near='true']) .parLeftNumber {
-    color: var(--paper);
-}
-
-/*
- * A miss earned by the chain: the count takes the gold of the thing that paid for it, for a beat,
- * and says what it gained beside itself. The one moment the run's life goes up mid-floor, and it
- * is the chain's doing, so it wears the chain's colour.
- */
-.parLeft[data-miss-earned='true'] .parLeftNumber {
-    color: var(--gold);
-}
-
 .parEarned {
     color: var(--gold);
     font-weight: 500;
@@ -1246,20 +1207,6 @@
     padding-left: 0.65rem;
 }
 
-/*
- * "4 / 9 · 17 left" on a phone. The word stays where the par's did not: a bare number here reads
- * as part of the par, and the one thing this count must never be is mistaken for the target.
- */
-:global([data-shell-layout='phone-portrait']) .parLeft,
-:global([data-shell-layout='phone-landscape']) .parLeft {
-    margin-left: 0.35rem;
-}
-
-:global([data-shell-layout='phone-portrait']) .parLeft::before,
-:global([data-shell-layout='phone-landscape']) .parLeft::before {
-    margin-right: 0.35rem;
-}
-
 /* The ladder on its side: one row under the head. */
 :global([data-shell-layout='tablet']) .chain,
 :global([data-shell-layout='phone-portrait']) .chain,
@@ -1841,21 +1788,15 @@
 /* Compact instruments share measured rows. No status is hung outside the HUD's bounds. */
 .shell[data-layout^='phone'] .stats {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0.28rem 0.5rem;
 }
 .shell[data-layout^='phone'] .identity { display: contents; }
 .shell[data-layout^='phone'] .floor { grid-area: 1 / 1; font-weight: 600; font-size: 1.5rem; }
 .shell[data-layout^='phone'] .score {
-    grid-area: 1 / 2;
-    gap: 0.4rem;
-    flex-wrap: wrap;
     justify-content: flex-end;
-    max-width: 52vw;
     font-variant-numeric: tabular-nums;
 }
-.shell[data-layout^='phone'] .scoreValue { font: 600 1.375rem/1 var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif); overflow-wrap: anywhere; }
+.shell[data-layout^='phone'] .scoreValue { font: 600 1.125rem/1 'Source Sans 3', sans-serif; white-space: nowrap; }
 .shell[data-layout^='phone'] .gold { font-size: 0.75rem; gap: 0.2rem; }
 .shell[data-layout^='phone'] .goldValue { font: 600 0.875rem/1 var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif); }
 .shell[data-layout^='phone'] .goldLabel { display: none; }
@@ -1902,3 +1843,45 @@
 .shell[data-layout='phone-landscape'] .realmAnchor { grid-area: 2 / 1 / auto / 3; }
 .shell[data-layout='phone-landscape'] .chain { grid-area: 2 / 3; align-self: center; border: 0; padding: 0; }
 .shell[data-layout^='phone'] .tray { grid-template-columns: repeat(auto-fit, minmax(3.2rem, 1fr)); max-height: min(48dvh, 18rem); overflow: auto; }
+
+/* Essential readings stay on one line; the rest opens on demand above the board. */
+.shell .head {
+    padding: max(0.45rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px)) 0.4rem max(1rem, env(safe-area-inset-left, 0px));
+    background: linear-gradient(180deg, #101016ed, #101016a8 64%, transparent);
+    text-shadow: 0 2px 8px #000;
+}
+.shell .stats { display: grid; grid-template-columns: auto auto minmax(0, 1fr) 2.75rem; gap: 0.25rem 1.2rem; align-items: center; }
+.shell .identity { display: contents; }
+.shell .floor { grid-area: 1 / 1; font-size: 1.5rem; white-space: nowrap; }
+.shell .floorWord { font: 600 0.75rem/1 'Source Sans 3', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+.shell .score { grid-area: 1 / 3; justify-self: end; max-width: 100%; gap: 0.45rem; margin: 0; }
+.shell .scoreValue { font: 600 1.375rem/1 'Source Sans 3', sans-serif; font-variant-numeric: tabular-nums; }
+.shell .scoreLabel { font: 400 0.75rem/1 'Source Sans 3', sans-serif; letter-spacing: 0.04em; }
+.shell .gold { font-size: 0.75rem; gap: 0.2rem; }
+.shell .goldValue { font-size: 0.875rem; }
+.shell .headRule { display: none; }
+.lives { grid-area: 1 / 2; display: inline-flex; gap: 0.35rem; align-items: center; color: #ffd6d0; white-space: nowrap; position: relative; font-family: 'Source Sans 3', sans-serif; }
+.lives svg { width: 1.3rem; height: 1.3rem; fill: #f27485; filter: drop-shadow(0 0 5px #db34474d); }
+.lifeCount { font-size: 1.65rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.lifeLabel { font-size: 0.75rem; }
+.lives[data-low='true'] { color: #fff; text-shadow: 0 0 9px #ed384f; }
+.lives[data-low='true'] svg { fill: #ff405a; }
+.lives[data-miss-earned='true'] { color: #beffcd; }
+.lives .parEarned { position: absolute; top: 100%; left: 0; font-size: 0.75rem; }
+.context { grid-area: 1 / 4; pointer-events: auto; }
+.context > summary { display: flex; justify-content: center; align-items: center; width: 2.75rem; height: 2.75rem; cursor: pointer; list-style: none; color: var(--gold); font: 700 1.5rem/1 'Source Sans 3', sans-serif; border-radius: 50%; }
+.context > summary::-webkit-details-marker { display: none; }
+.context > summary:hover, .context[open] > summary { background: #e1ad661a; }
+.context > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+.contextPanel { position: absolute; right: 1rem; top: calc(100% + 0.25rem); z-index: 8; display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem 1rem; max-width: min(34rem, calc(100% - 2rem)); padding: 0.85rem 1rem; max-height: min(45dvh, 18rem); overflow: auto; background: #131117; border-top: 1px solid var(--gold); box-shadow: 0 12px 32px #0009; }
+.shell .contextPanel .par, .shell .contextPanel .realmAnchor, .shell .contextPanel .mutator { display: inline-flex; grid-area: auto; white-space: normal; margin: 0; }
+.shell .contextPanel .realmAnchor { flex-wrap: wrap; }
+.shell .contextPanel .parWord { display: inline; }
+.shell .seats { grid-column: 1 / -1; }
+.shell[data-layout^='phone'] .stats { grid-template-columns: auto auto minmax(0, 1fr) 2.75rem; gap: 0.1rem 0.65rem; }
+.shell[data-layout^='phone'] .score { grid-area: 1 / 3; flex-wrap: wrap; max-width: 100%; gap: 0.2rem 0.35rem; }
+.shell[data-layout^='phone'] .scoreLabel { display: none; }
+.shell[data-layout^='phone'] .chain { grid-area: 2 / 1 / auto / -1; border: 0; padding: 0; }
+.shell[data-layout^='phone'] .chain[data-chain-active='false'] { display: none; }
+.shell[data-layout^='phone'] .lifeLabel { display: none; }
+.shell[data-layout^='phone'] .head { padding-left: max(0.75rem, env(safe-area-inset-left, 0px)); padding-right: max(0.75rem, env(safe-area-inset-right, 0px)); }

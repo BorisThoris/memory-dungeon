@@ -457,17 +457,8 @@
    Mobile camera keeps its full-bleed rules below; this applies only to the non-camera desktop/tablet layout. */
 .shell:not([data-mobile-camera-mode='true']) .boardStage {
     position: absolute;
-    /*
-     * Full-bleed, but clear of the chrome drawn over it. At 1280x800 the top row of cards reached
-     * under the HUD and the run's score and mutator were printed across two card faces — both
-     * harder to read for it. The clearances are the ones the chrome publishes about itself; with
-     * no measurement yet, this is the full bleed it was.
-     */
-    inset:
-        var(--gameplay-hud-top-clearance, 0px)
-        var(--margin-stage-inline-end)
-        var(--gameplay-dock-bottom-clearance, 0px)
-        var(--margin-stage-inline-start);
+    /* The camera draws behind every HUD layer; zoom is clipped only at the screen edge. */
+    inset: 0;
     display: block;
     width: auto;
     max-width: none;
@@ -605,7 +596,7 @@
 
 .boardStageCamera {
     position: absolute;
-    inset: var(--gameplay-hud-top-clearance, 0px) 0 var(--gameplay-dock-bottom-clearance, 0px);
+    inset: 0;
     width: 100%;
     padding: 0;
     display: block;

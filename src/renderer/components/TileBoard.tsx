@@ -724,6 +724,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [gestureActive, setGestureActive] = useState(false);
     const [selectionSuppressed, setSelectionSuppressed] = useState(false);
     const [stageWorldViewport, setStageWorldViewport] = useState<StageWorldViewport>({ height: 0, width: 0 });
+    const [fitHeightFraction, setFitHeightFraction] = useState(1);
+    useEffect(() => {
+        const stage = stageRef.current;
+        const shell = stage?.closest('[data-testid="game-shell"]');
+        const hud = shell?.querySelector('[data-testid="game-hud"]');
+        const dock = shell?.querySelector('[data-testid="game-action-dock"]');
+        if (!stage || !hud || !dock || typeof ResizeObserver === 'undefined') return;
+        // Fit keeps cards clear of the chrome. The canvas and zoom/pan bounds still fill the screen.
+        const measure = (): void => {
+            const rect = stage.getBoundingClientRect();
+            if (rect.height <= 0) return;
+            const edge = Math.max(0, hud.getBoundingClientRect().bottom - rect.top, rect.bottom - dock.getBoundingClientRect().top);
+            const fraction = Math.max(0.1, 1 - 2 * edge / rect.height);
+            setFitHeightFraction(current => Math.abs(current - fraction) < 0.001 ? current : fraction);
+        };
+        const observer = new ResizeObserver(measure);
+        observer.observe(stage);
+        observer.observe(hud);
+        observer.observe(dock);
+        return () => observer.disconnect();
+    }, [boardGraphicsOk]);
     const [viewportState, setViewportState] = useState<TileBoardViewportState>(() => createFittedBoardViewport(1));
     const viewportStateRef = useRef<TileBoardViewportState>(viewportState);
     const viewportMetricsRef = useRef<TileBoardViewportMetrics | null>(null);
@@ -2097,10 +2118,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 boardHeight: boardWorldHeight,
                 boardWidth: boardWorldWidth,
                 margin: fitMargin,
-                viewportHeight: stageWorldViewport.height,
+                viewportHeight: stageWorldViewport.height * fitHeightFraction,
                 viewportWidth: stageWorldViewport.width
             }),
-        [boardWorldHeight, boardWorldWidth, fitMargin, stageWorldViewport.height, stageWorldViewport.width]
+        [boardWorldHeight, boardWorldWidth, fitMargin, fitHeightFraction, stageWorldViewport.height, stageWorldViewport.width]
     );
     const renderedViewportState = useMemo(() => {
         if (!cameraViewportMode && !desktopCameraMode) {
@@ -2144,7 +2165,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             Math.abs(y * scale + current.panY) + scale < metrics.viewportHeight / 2) return;
         const next = clampBoardViewport({ ...metrics, ...current, panX: -x * scale, panY: -y * scale });
         viewportStateRef.current = next;
-        setViewportState(next); // eslint-disable-line react-hooks/set-state-in-effect -- keep a newly keyboard-focused virtual card on screen
+        setViewportState(next);
     }, [board, boardApplicationFocused, compact, focusedTileId]);
 
     const syncGestureActive = useCallback((active: boolean): void => {

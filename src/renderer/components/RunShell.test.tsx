@@ -38,7 +38,7 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
 });
 
 describe('RunShell', () => {
-    it('renders the four run numbers as one stats group, with no hearts among them', () => {
+    it('keeps lives prominent beside the floor and score', () => {
         const run = playingRun();
         render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
 
@@ -47,10 +47,23 @@ describe('RunShell', () => {
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(within(stats).getByTestId('hud-par')).toHaveTextContent(/turns/i);
         expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/combo/i);
-        // There are no lives (Gen 183): no hearts, no life count, and the mutator stat only
-        // appears when it carries a value; there is no clock to show.
-        expect(stats).not.toHaveTextContent(/lives|\u2665/i);
+        expect(within(stats).getByTestId('hud-misses-left')).toHaveAccessibleName('3 lives left');
         expect(screen.queryByRole('timer')).not.toBeInTheDocument();
+    });
+
+    it('opens secondary stats and closes them with Escape', async () => {
+        const user = userEvent.setup();
+        render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+        const toggle = screen.getByLabelText('Run details');
+        const details = toggle.closest('details')!;
+        expect(details.open).toBe(false);
+        await user.click(toggle);
+        expect(details.open).toBe(true);
+        expect(screen.getByTestId('hud-par')).toBeVisible();
+        await user.keyboard('{Escape}');
+        expect(details.open).toBe(false);
+        expect(toggle).toHaveFocus();
+        expect(screen.getByTestId('hud-misses-left')).toBeVisible();
     });
 
     it('says what the rung the player is standing on pays, and grows it as they climb', () => {
@@ -135,13 +148,16 @@ describe('RunShell', () => {
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={early} tools={[]} />);
 
         const left = (): HTMLElement => screen.getByTestId('hud-misses-left');
-        expect(left()).toHaveTextContent('3 misses left');
+        expect(left()).toHaveAccessibleName('3 lives left');
+        expect(left()).not.toHaveAttribute('data-low');
 
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: [{ floor: 1, misses: 1 }] }} tools={[]} />);
-        expect(left()).toHaveTextContent('1 miss left');
+        expect(left()).toHaveAccessibleName('1 life left');
+        expect(left()).toHaveAttribute('data-low', 'true');
 
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: [] }} tools={[]} />);
-        expect(left()).toHaveTextContent('0 misses left');
+        expect(left()).toHaveAccessibleName('0 lives left');
+        expect(left()).toHaveAttribute('data-low', 'true');
         expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, no misses left');
 
         // A run built without a bank shows no count at all rather than a number it does not have.

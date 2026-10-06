@@ -101,6 +101,7 @@ const CHAIN_METER_FEVER_MS = 1100;
 
 /** How often the memorize count in the head is refreshed. Four ticks a second reads as a clock. */
 const MEMORIZE_TICK_MS = 250;
+const compactStat = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
 /**
  * The chain-drop beat on the ladder. When momentum falls from Clean or better to nothing, the
@@ -290,6 +291,8 @@ const RunShell = ({
     // The total counts up to what a break paid (thesis §45.2): the rise is the part the player
     // watches land, and a number that snaps from 70 to 575 gives it nothing to look at.
     const shownScore = useCountUp(runNonNegativeInteger(run.stats.totalScore), { reduceMotion });
+    const compactHud = shellLayout?.startsWith('phone') ?? false;
+    const formatStat = (value: number): string => compactHud && value >= 10_000 ? compactStat.format(value) : value.toLocaleString();
     const meter = runChainMeter(run);
     const tier = runChainTier(run);
     const chain = runNonNegativeInteger(run.stats.currentStreak);
@@ -487,98 +490,94 @@ const RunShell = ({
                                     data-testid="hud-personal-best"
                                     role="img"
                                 >
-                                    {RUN_SHELL_LABELS.personalBest}
+                                    {compactHud ? '✦' : RUN_SHELL_LABELS.personalBest}
                                 </span>
                             ) : null}
                         </span>
-                        {/* The par: a visible goal at every moment. Turns resolved on this floor over
-                            the turns a competent player needs; beating it pays the floor-end
-                            efficiency bonus, missing it costs nothing else. The ceiling, three times
-                            the par, is where the run ends if the floor is still open (§42.2), and the
-                            pressure of thesis §43 reads here once it is two turns away.
-
-                            The count beside it is what the run has left before that ceiling, and it
-                            is the only thing in the head that says the run can end at all. Lives
-                            went in Gen 183 and the ceiling that replaced them was spoken to a
-                            screen reader and drawn to nobody; a player watching a number climb
-                            toward a limit they were never shown is not being given the pressure,
-                            only the surprise. It falls rather than climbs, because that is the half
-                            of a life counter worth keeping. */}
-                        <span
-                            className={styles.par}
-                            data-ceiling-near={missesRemaining != null && missesRemaining <= 1 ? 'true' : undefined}
-                            data-testid="hud-par"
-                        >
-                            <span
-                                aria-label={RUN_SHELL_PAR_COPY.aria(turnsTaken, parTurns, missesRemaining)}
-                                role="img"
-                                title={RUN_SHELL_PAR_COPY.title}
-                            >
-                                <span className={styles.parNumbers}>
-                                    {turnsTaken} of {parTurns}
-                                </span>
-                                <span className={styles.parWord}> turns</span>
-                                {missesRemaining != null ? (
+                        {missesRemaining != null ? (
+                            <span className={styles.lives} data-testid="hud-misses-left"
+                                data-low={missesRemaining <= 1 ? 'true' : undefined}
+                                data-miss-earned={missesEarned > 0 ? 'true' : undefined}
+                                role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left`}
+                                title="A mismatch spends one life. Earn more through combos and floor clears.">
+                                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.2 12.3C-2 7 5.3-.8 12 6c6.7-6.8 14 1 8.8 6.3Z" /></svg>
+                                <span className={styles.lifeCount}>{missesRemaining}</span>
+                                <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
+                                {missesEarned > 0 ? <span className={styles.parEarned} data-testid="hud-miss-earned">{RUN_SHELL_PAR_COPY.earned(missesEarned)}</span> : null}
+                            </span>
+                        ) : null}
+                        <details className={styles.context} data-testid="run-details" onKeyDown={(event) => {
+                            if (event.key !== 'Escape') return;
+                            event.preventDefault();
+                            event.stopPropagation();
+                            event.currentTarget.open = false;
+                            event.currentTarget.querySelector('summary')?.focus();
+                        }}>
+                            <summary tabIndex={0} aria-label="Run details" title="Turns, realm and modifiers"><span aria-hidden="true">···</span></summary>
+                            <div className={styles.contextPanel}>
+                                {/* Secondary run readings remain available without filling the top bar. */}
+                                <span
+                                    className={styles.par}
+                                    data-ceiling-near={missesRemaining != null && missesRemaining <= 1 ? 'true' : undefined}
+                                    data-testid="hud-par"
+                                >
                                     <span
-                                        className={styles.parLeft}
-                                        data-miss-earned={missesEarned > 0 ? 'true' : undefined}
-                                        data-testid="hud-misses-left"
+                                        aria-label={RUN_SHELL_PAR_COPY.aria(turnsTaken, parTurns, missesRemaining)}
+                                        role="img"
+                                        title={RUN_SHELL_PAR_COPY.title}
                                     >
-                                        <span className={styles.parLeftNumber}>{missesRemaining}</span>{' '}
-                                        {RUN_SHELL_PAR_COPY.leftWord(missesRemaining)}
-                                        {missesEarned > 0 ? (
-                                            <span className={styles.parEarned} data-testid="hud-miss-earned">
-                                                {' '}
-                                                {RUN_SHELL_PAR_COPY.earned(missesEarned)}
+                                        <span className={styles.parNumbers}>
+                                            {turnsTaken} of {parTurns}
+                                        </span>
+                                        <span className={styles.parWord}> turns</span>
+
+                                    </span>
+                                </span>
+                                {/* The realm (`realm-rules.ts`): where this floor is, how hard the weather blows,
+                                    and how many turns until it comes, available in the details disclosure. */}
+                                {realm ? (
+                                    <span className={styles.realmAnchor}>
+                                    <span
+                                        aria-label={realmWeatherClockRuns(realmSeverity) ? REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary) : REALM_HUD_COPY.ariaNoClock(realm, realmSeverity, realmSecondary)}
+                                        className={styles.realm}
+                                        data-peak-next={comingWeather?.peak ? 'true' : undefined}
+                                        data-realm={realm}
+                                        data-weather-soon={weatherIn === 1 ? 'true' : undefined}
+                                        data-testid="hud-realm"
+                                        role="img"
+                                        style={{ '--realm-color': REALMS[realm].color } as CSSProperties}
+                                    >
+                                        <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity, realmSecondary)}</span>
+                                        {/* The weather's own clock runs on a raging floor only; elsewhere the cards make the weather. */}
+                                        {realmWeatherClockRuns(realmSeverity) ? (
+                                            <span className={styles.realmClock} data-testid="hud-realm-clock">
+                                                {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
+                                            </span>
+                                        ) : null}
+                                        {/* The sway: the realm the player's matches lean the floor toward, from two pairs. */}
+                                        {swayLead && swayLead.pairs >= 2 ? (
+                                            <span
+                                                className={styles.realmSway}
+                                                data-sway-near={swayLead.pairs >= REALM_SWAY_TIP - 1 ? 'true' : undefined}
+                                                data-testid="hud-realm-sway"
+                                                style={{ '--sway-color': REALMS[swayLead.realm].color } as CSSProperties}
+                                            >
+                                                {REALM_HUD_COPY.sway(swayLead.realm, swayLead.pairs, REALM_SWAY_TIP)}
                                             </span>
                                         ) : null}
                                     </span>
-                                ) : null}
-                            </span>
-                        </span>
-                        {/* The realm (`realm-rules.ts`): where this floor is, how hard the weather blows,
-                            and how many turns until it comes. The one clock on the board the player
-                            is winding themselves, so it is always shown. */}
-                        {realm ? (
-                            <span className={styles.realmAnchor}>
-                            <span
-                                aria-label={realmWeatherClockRuns(realmSeverity) ? REALM_HUD_COPY.aria(realm, realmSeverity, comingWeather?.name ?? REALMS[realm].weather, weatherIn, realmSecondary) : REALM_HUD_COPY.ariaNoClock(realm, realmSeverity, realmSecondary)}
-                                className={styles.realm}
-                                data-peak-next={comingWeather?.peak ? 'true' : undefined}
-                                data-realm={realm}
-                                data-weather-soon={weatherIn === 1 ? 'true' : undefined}
-                                data-testid="hud-realm"
-                                role="img"
-                                style={{ '--realm-color': REALMS[realm].color } as CSSProperties}
-                            >
-                                <span className={styles.realmName}>{REALM_HUD_COPY.name(realm, realmSeverity, realmSecondary)}</span>
-                                {/* The weather's own clock runs on a raging floor only; elsewhere the cards make the weather. */}
-                                {realmWeatherClockRuns(realmSeverity) ? (
-                                    <span className={styles.realmClock} data-testid="hud-realm-clock">
-                                        {REALM_HUD_COPY.clock(comingWeather?.name ?? REALMS[realm].weather, weatherIn)}
+                                    {/* The elements' stacks and the streak in hand (`element-resonance-rules.ts`), hung under the chip. */}
+                                    <ElementResonanceStrip run={run} />
                                     </span>
                                 ) : null}
-                                {/* The sway: the realm the player's matches lean the floor toward, from two pairs. */}
-                                {swayLead && swayLead.pairs >= 2 ? (
-                                    <span
-                                        className={styles.realmSway}
-                                        data-sway-near={swayLead.pairs >= REALM_SWAY_TIP - 1 ? 'true' : undefined}
-                                        data-testid="hud-realm-sway"
-                                        style={{ '--sway-color': REALMS[swayLead.realm].color } as CSSProperties}
-                                    >
-                                        {REALM_HUD_COPY.sway(swayLead.realm, swayLead.pairs, REALM_SWAY_TIP)}
+                                {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
+                                    <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
+                                        {mutatorTitles.join(' · ')}
                                     </span>
                                 ) : null}
-                            </span>
-                            {/* The elements' stacks and the streak in hand (`element-resonance-rules.ts`), hung under the chip. */}
-                            <ElementResonanceStrip run={run} />
-                            </span>
-                        ) : null}
-                        {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
-                            <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
-                                {mutatorTitles.join(' · ')}
-                            </span>
-                        ) : null}
+
+                            </div>
+                        </details>
                         {/* Only on a shared game. The run's own score stays: the table is still playing
                             one run together, and these say who has earned which part of it. */}
                         {isPassAndPlayRun(run.passAndPlay) ? (
@@ -630,10 +629,10 @@ const RunShell = ({
 
                     <span className={styles.score} data-testid="hud-score">
                         <span className={styles.scoreLabel}>Score</span>
-                        <span className={styles.scoreValue}>{shownScore.toLocaleString()}</span>
+                        <span className={styles.scoreValue} title={shownScore.toLocaleString()} aria-label={`${shownScore.toLocaleString()} points`}>{formatStat(shownScore)}</span>
                         {/* The purse (run-store-rules.ts), beside the score it is earned with. */}
                         <span className={styles.gold} data-testid="hud-gold" title={RUN_SHELL_LABELS.goldTitle}>
-                            <span className={styles.goldValue}>{runGold(run)}</span>{' '}
+                            <span className={styles.goldValue} title={runGold(run).toLocaleString()}>{formatStat(runGold(run))}</span>{' '}
                             <span className={styles.goldLabel}>{RUN_SHELL_LABELS.gold}</span>
                         </span>
                     </span>
@@ -645,6 +644,7 @@ const RunShell = ({
                         player never planned around. */}
                     <div
                         className={styles.chain}
+                        data-chain-active={chain > 0 || isZoneActive(run) ? 'true' : 'false'}
                         data-chain-tier={tier}
                         data-meter-arrive={chainMeterArriving ? 'true' : 'false'}
                         data-meter-drop={chainMeterDropping ? 'true' : 'false'}
