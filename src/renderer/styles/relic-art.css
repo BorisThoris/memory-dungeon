@@ -1,0 +1,9 @@
+/* Original painted UI assets. Nine-slice borders preserve the engraved corners at any
+ * aspect ratio; semantic HTML remains the readable, keyboard-operable content layer. */
+:root {
+    --relic-frame: url('../assets/ui/relic/relic-frame-v1.webp');
+    --relic-command: url('../assets/ui/relic/relic-command-v1.webp');
+    --relic-vellum: url('../assets/ui/relic/relic-vellum-v1.webp');
+    --relic-divider: url('../assets/ui/divider-ornament.svg');
+    --relic-crown: url('../assets/ui/brand-crest.svg');
+}

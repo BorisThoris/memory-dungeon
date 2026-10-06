@@ -283,8 +283,8 @@
     flex: 1 1 3rem;
     align-self: baseline;
     min-width: 2rem;
-    height: 1px;
-    background: var(--rule);
+    background: var(--relic-divider) center / 100% 100% no-repeat;
+    height: 7px;
 }
 
 /* The study period's clock, drawn along the rule. */
@@ -971,9 +971,9 @@
 .footRule {
     flex: 1 1 2rem;
     min-width: 1rem;
-    height: 1px;
     margin-bottom: 1.4rem;
-    background: var(--rule);
+    background: var(--relic-divider) center / 100% 100% no-repeat;
+    height: 7px;
 }
 
 .dock {
@@ -982,6 +982,9 @@
     align-items: flex-start;
     gap: 2px;
     pointer-events: auto;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 10px / 0 stretch;
+    padding: 3px;
 }
 
 .tool {
@@ -994,7 +997,6 @@
     min-height: 2.75rem;
     padding: 0.4rem 0 0.15rem;
     border: 1px solid transparent;
-    border-radius: 4px;
     background: transparent;
     color: var(--paper);
     font: inherit;
@@ -1002,6 +1004,8 @@
     transition:
         background 120ms ease,
         border-color 120ms ease;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 8px / 0 stretch;
 }
 
 .tool:hover:not(:disabled),
@@ -1579,10 +1583,11 @@
     gap: 0.2rem;
     padding: 0.4rem 0 0.15rem;
     pointer-events: auto;
-    border-radius: 9px;
     border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
     background: linear-gradient(160deg, color-mix(in srgb, var(--gold) 9%, var(--ink)), var(--ink));
     touch-action: manipulation;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 9px / 0 stretch;
 }
 
 :global([data-shell-layout='phone-portrait']) .toolTray,
@@ -1631,11 +1636,12 @@
     gap: 0.3rem;
     padding: 0.5rem;
     border: 1px solid var(--rule);
-    border-radius: 12px;
     background: linear-gradient(155deg, color-mix(in srgb, var(--gold) 7%, var(--ink)), var(--ink) 65%);
     box-shadow: 0 -10px 32px #0006, inset 0 1px 0 color-mix(in srgb, var(--gold) 14%, transparent);
     pointer-events: auto;
     animation: captionIn 140ms ease-out;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 16px / 0 stretch;
 }
 
 /* A phone sideways has width and no height: the bag is one row, so it covers as little board as it can. */

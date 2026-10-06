@@ -17,6 +17,8 @@
 @import '@fontsource/lora/latin-500-italic.css';
 @import '@fontsource/lora/latin-600.css';
 
+@import './relic-art.css';
+
 :root {
     /*
      * The Margin: the palette and type the run shell, the title page, the mode page, the

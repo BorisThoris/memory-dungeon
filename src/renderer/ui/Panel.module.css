@@ -1,8 +1,5 @@
 /*
- * A panel in "The Margin" is a ruled region of the page, not a plate: ink under one hairline,
- * no glass, no inner rim. `strong` carries the gold rule and a solid ink ground (dialogs, the
- * page that sits over the board); `muted` is a lighter hairline for a section inside another;
- * `accent` is a gold hairline for the one region the page is about.
+ Reusable relic plate: original painted brass corners around a quiet black vellum face. Nested muted sections retain simple rules.
  */
 .root {
     position: relative;
@@ -12,9 +9,10 @@
     min-height: 0;
     overflow: hidden;
     border: 1px solid var(--margin-hairline);
-    border-radius: 4px;
     color: var(--margin-paper);
     font-family: var(--margin-body-font);
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 18px / 0 stretch;
 }
 
 .default {
@@ -32,6 +30,8 @@
 .muted {
     border-color: var(--margin-hairline-soft);
     background: transparent;
+    border-image: none;
+    border-radius: 0;
 }
 
 .accent {

@@ -1,7 +1,5 @@
 /*
- * A button in "The Margin" is an outlined word: display type inside one hairline, gold for
- * the action the page is for, paper for the rest, the dangerous one no louder. No plate, no
- * glow, no capitals.
+ Painted iron seals and oxblood command plaques. Keep real labels and native button states above the artwork.
  */
 .root {
     position: relative;
@@ -12,7 +10,6 @@
     min-width: 0;
     padding: 0;
     border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
-    border-radius: 4px;
     background: linear-gradient(180deg, color-mix(in srgb, var(--margin-paper) 3%, transparent), transparent);
     color: var(--margin-paper-soft);
     font-family: var(--margin-heading-font);
@@ -31,6 +28,11 @@
         opacity 160ms ease,
         box-shadow 160ms ease,
         transform 120ms ease;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 10px / 0 stretch;
+    background-color: var(--margin-ink);
+    border-color: var(--margin-rule);
+    text-shadow: 0 1px 3px #000;
 }
 
 .root > * {
@@ -59,9 +61,12 @@
 
 .primary {
     border-color: var(--margin-gold);
-    color: var(--margin-gold);
     background-color: color-mix(in srgb, var(--margin-gold) 7%, transparent);
     box-shadow: inset 0 1px 0 color-mix(in srgb, var(--margin-gold) 12%, transparent);
+    border-radius: 0;
+    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
+    text-shadow: 0 2px 3px #000;
+    color: var(--margin-paper);
 }
 
 .secondary {
@@ -71,11 +76,17 @@
 .ghost {
     border-color: transparent;
     color: var(--margin-paper-dim);
+    border-image: none;
+    background: transparent;
+    box-shadow: none;
 }
 
 .danger {
     border-color: color-mix(in srgb, var(--margin-paper) 28%, transparent);
-    color: var(--margin-paper-soft);
+    text-shadow: 0 2px 3px #000;
+    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
+    border-radius: 0;
+    color: #ffc9b9;
 }
 
 .debug {
@@ -85,6 +96,7 @@
     font-size: 0.75rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
+    border-image: none;
 }
 
 .root:focus-visible {
@@ -97,6 +109,8 @@
 .primary:focus-visible {
     background: color-mix(in srgb, var(--margin-gold) 12%, transparent);
     color: var(--margin-fever);
+    outline: 2px solid var(--margin-fever);
+    outline-offset: 3px;
 }
 
 .root:active:not(:disabled) {
@@ -122,6 +136,7 @@
 .root:disabled {
     opacity: 0.45;
     cursor: default;
+    filter: grayscale(0.75);
 }
 
 .fullWidth {
@@ -136,4 +151,8 @@
         transition: none;
     }
     .root:active { transform: none; }
+}
+
+.root:hover:not(:disabled) {
+    filter: brightness(1.2);
 }

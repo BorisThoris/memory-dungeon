@@ -31,10 +31,11 @@
     overflow: hidden;
     isolation: isolate;
     color: var(--margin-paper);
-    background:
-        radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--margin-gold) 7%, transparent), transparent 70%),
-        var(--margin-ink);
     font-family: var(--margin-body-font);
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / clamp(10px, 2vw, 28px) / 0 stretch;
+    border-image-slice: 20%;
+    background: radial-gradient(ellipse at 50% 0%, #b8863b0d, transparent 65%), var(--relic-vellum) center / 308px 308px repeat, #131111;
 }
 
 /* In a run: the same page as a dialog over the board. */
@@ -141,9 +142,10 @@
 .shellModal .panel.panelModal {
     padding: clamp(0.9rem, 2.4vh, 1.6rem) clamp(1rem, 2.6vw, 1.75rem);
     border: 1px solid var(--margin-rule);
-    border-radius: 7px;
     background: var(--margin-ink);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 20px / 0 stretch;
 }
 
 .frame {
@@ -287,7 +289,6 @@
     padding: 0 2rem 0 0.2rem;
     border: 0;
     border-bottom: 1px solid var(--margin-rule);
-    border-radius: 0;
     background:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e1ad66' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
         right 0.3rem center / 1.1rem no-repeat;
@@ -298,6 +299,10 @@
     letter-spacing: 0.04em;
     appearance: none;
     cursor: pointer;
+    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
+    border-radius: 0;
+    border-image-slice: 20%;
+    background-color: #171310;
 }
 
 .categorySelect:focus-visible {
@@ -327,6 +332,7 @@
     gap: 0.15rem;
     padding-bottom: 0.45rem;
     border-bottom: 1px solid var(--margin-rule);
+    background: var(--relic-divider) bottom right / min(18rem, 45%) 9px no-repeat;
 }
 
 .contentTitle {
@@ -604,11 +610,11 @@
     width: 2.4rem;
     height: 1.2rem;
     border: 1px solid color-mix(in srgb, var(--margin-paper) 40%, transparent);
-    border-radius: 999px;
     background: transparent;
     transition:
         border-color 160ms ease,
         background-color 160ms ease;
+    border-radius: 2px;
 }
 
 .toggleTrack::after {
@@ -618,12 +624,13 @@
     left: 0.2rem;
     width: 0.7rem;
     height: 0.7rem;
-    border-radius: 50%;
     background: var(--margin-paper-dim);
     transform: translateY(-50%);
     transition:
         transform 160ms ease,
         background-color 160ms ease;
+    border-radius: 1px;
+    box-shadow: inset 0 0 0 2px #171310;
 }
 
 .toggleShell input:checked + .toggleTrack {
@@ -703,18 +710,20 @@
     height: 0.8rem;
     margin-top: calc(-0.4rem + 0.5px);
     border: 1px solid var(--margin-gold);
-    border-radius: 50%;
-    background: var(--margin-ink);
     appearance: none;
     transition: background-color 160ms ease;
+    border-radius: 2px;
+    background: var(--margin-gold);
+    box-shadow: inset 0 0 0 2px #171310;
 }
 
 .rangeInput::-moz-range-thumb {
     width: 0.8rem;
     height: 0.8rem;
     border: 1px solid var(--margin-gold);
-    border-radius: 50%;
-    background: var(--margin-ink);
+    border-radius: 2px;
+    background: var(--margin-gold);
+    box-shadow: inset 0 0 0 2px #171310;
 }
 
 .rangeInput:hover::-webkit-slider-thumb,
@@ -786,7 +795,6 @@
     margin: 0.6rem 0.2rem 0.3rem;
     padding: 0 1.1rem;
     border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
-    border-radius: 4px;
     background: transparent;
     color: var(--margin-paper-soft);
     font-family: var(--margin-heading-font);
@@ -798,6 +806,8 @@
     transition:
         background-color 160ms ease,
         color 160ms ease;
+    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
+    border-radius: 0;
 }
 
 .word:hover,
@@ -852,7 +862,6 @@
     min-height: var(--settings-row);
     padding: 0 1.15rem;
     border: 1px solid color-mix(in srgb, var(--margin-paper) 28%, transparent);
-    border-radius: 4px;
     background: transparent;
     box-shadow: none;
     color: var(--margin-paper-soft);
@@ -862,6 +871,8 @@
     letter-spacing: 0.03em;
     text-transform: none;
     text-shadow: none;
+    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
+    border-radius: 0;
 }
 
 .footer .footerActions .footerWord::before,
@@ -876,7 +887,10 @@
 
 .footer .footerActions .footerWord[data-variant='primary'] {
     border-color: var(--margin-gold);
-    color: var(--margin-gold);
+    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
+    border-radius: 0;
+    color: var(--margin-paper);
+    text-shadow: 0 1px 3px #000;
 }
 
 .footer .footerActions .footerWord[data-variant='primary']:hover:not(:disabled) {
@@ -1202,4 +1216,18 @@
 
 @media (pointer: coarse) {
     .shell :is(button, select, [role='switch']) { min-height: 44px; touch-action: manipulation; }
+}
+
+.categoryButtonActive {
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 12px / 0 stretch;
+    color: var(--margin-fever);
+}
+
+.segmentButtonActive {
+    border-radius: 0;
+    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
+    text-shadow: 0 2px 3px #000;
+    color: var(--margin-paper);
+    border-image-width: 6px 10px;
 }

@@ -50,12 +50,14 @@
     min-height: 44px;
     padding: 0.65rem 1.4rem;
     border: 1px solid var(--theme-gold-bright);
-    border-radius: var(--ui-radius-pill);
     background: var(--theme-panel-solid);
-    color: var(--theme-gold-bright);
     font: 700 0.95rem var(--theme-body-font);
     white-space: nowrap;
     cursor: pointer;
+    border-radius: 0;
+    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
+    text-shadow: 0 2px 3px #000;
+    color: var(--margin-paper);
 }
 
 .continueButton:focus-visible { outline: 2px solid var(--theme-cyan-bright); outline-offset: 4px; }

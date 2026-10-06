@@ -35,11 +35,11 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    --scene-base-opacity: 0.34;
     --scene-light-opacity: 0.6;
     --scene-plate-anchor-y: 40%;
     filter: saturate(0.85) contrast(1.05);
     mask-image: radial-gradient(ellipse 100% 90% at 50% 45%, black 25%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+    --scene-base-opacity: 0.46;
 }
 
 .scrim {
@@ -173,6 +173,9 @@
     max-width: 30rem;
     justify-self: center;
     min-width: 0;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 24px / 0 stretch;
+    padding: 1rem 1.25rem;
 }
 
 .contentsHead {
@@ -312,7 +315,11 @@
     padding-top: clamp(0.45rem, 1.4vh, 0.9rem);
     padding-bottom: clamp(0.45rem, 1.4vh, 0.9rem);
     border-bottom: 1px solid var(--margin-rule);
-    color: var(--margin-gold);
+    border-radius: 0;
+    border-image: var(--relic-command) 22% 24% fill / 10px 25px / 0 stretch;
+    text-shadow: 0 2px 3px #000;
+    color: var(--margin-paper);
+    padding-inline: 0.7rem;
 }
 
 .entryPlay .entryTitle {
@@ -339,7 +346,6 @@
     margin: 0.35rem 0.25rem 0.25rem;
     padding: 0 0.9rem;
     border: 1px solid var(--margin-rule);
-    border-radius: 2px;
     background: transparent;
     color: var(--margin-gold);
     font-family: var(--margin-body-font);
@@ -347,6 +353,8 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     cursor: pointer;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 10px / 0 stretch;
 }
 
 .noteAction:hover,

@@ -1,7 +1,5 @@
 /*
- * Section chooser in "The Margin": small capitals on one rule, the open section underlined in
- * gold. Tabs when there is room, a field on a hairline when there is not — a long rail must
- * never wrap into five rows and push the content off the screen.
+ Engraved chapter tabs; on narrow screens they become one accessible select.
  */
 
 .root {
@@ -11,10 +9,10 @@
 .tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 1.4rem;
     width: 100%;
     padding: 0 0.2rem;
     border-bottom: 1px solid var(--margin-hairline);
+    gap: 0 0.5rem;
 }
 
 .tab {
@@ -38,6 +36,7 @@
     transition:
         color 160ms ease,
         border-color 160ms ease;
+    padding-inline: 0.7rem;
 }
 
 .tab:hover,
@@ -55,6 +54,9 @@
 .tab[aria-selected='true'] {
     border-bottom-color: var(--margin-gold);
     color: var(--margin-gold);
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 10px / 0 stretch;
+    border: 1px solid var(--margin-rule);
 }
 
 .badge {
@@ -81,7 +83,6 @@
     padding: 0 2rem 0 0.2rem;
     border: 0;
     border-bottom: 1px solid var(--margin-rule);
-    border-radius: 0;
     background:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e1ad66' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
         right 0.3rem center / 1.1rem no-repeat;
@@ -92,6 +93,11 @@
     letter-spacing: 0.04em;
     appearance: none;
     cursor: pointer;
+    background-color: #171310;
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / 9px / 0 stretch;
+    padding-left: 0.7rem;
+    border-image-slice: 20%;
 }
 
 .select:focus-visible {

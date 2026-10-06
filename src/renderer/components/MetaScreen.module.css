@@ -43,6 +43,10 @@
     overflow: hidden;
     color: var(--margin-paper);
     font-family: var(--margin-body-font);
+    border-radius: 0;
+    border-image: var(--relic-frame) 20% fill / clamp(12px, 2.4vw, 32px) / 0 stretch;
+    border-image-slice: 20%;
+    background: radial-gradient(ellipse at 50% 0%, #b8863b0d, transparent 65%), var(--relic-vellum) center / 308px 308px repeat, #131111;
 }
 
 .header {
@@ -53,8 +57,9 @@
     gap: 0.5rem 1rem;
     width: min(72rem, 100%);
     margin: 0 auto;
-    padding-bottom: clamp(0.4rem, 1.2vh, 0.7rem);
-    border-bottom: 1px solid var(--margin-rule);
+    background: var(--relic-divider) bottom center / min(22rem, 65%) 10px no-repeat;
+    border-bottom: 0;
+    padding-bottom: 0.8rem;
 }
 
 .headerText {

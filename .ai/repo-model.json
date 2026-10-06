@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2931,
+    "trackedFileCount": 2936,
     "codeFileCount": 1092,
     "exportedSymbolCount": 3398,
     "contentItemCount": 12,
@@ -1061,6 +1061,12 @@
       "category": "documentation",
       "bytes": 1812,
       "sha256": "4e7865f013211009ac96102160b8b22030bd90de3c00c2398d8415435ede4ad1"
+    },
+    {
+      "path": "docs/new_design/RELIC_UI_ART_DIRECTION.md",
+      "category": "documentation",
+      "bytes": 6915,
+      "sha256": "6e31f49ff06aa00c997855958413b55dddff1ac4c9e29acc4721da9101a5bad9"
     },
     {
       "path": "docs/new_design/SCREEN_SPEC_GAMEPLAY.md",
@@ -8383,6 +8389,24 @@
       "sha256": "3ce9bdb7891147baedfe0ade8423f059e8f63d4f19f20a3362bb24f011aad0e7"
     },
     {
+      "path": "src/renderer/assets/ui/relic/relic-command-v1.webp",
+      "category": "source",
+      "bytes": 41256,
+      "sha256": "7b6108a32362f157bb8d9d4c4f843724e609803822fe8b9eb3b3684c617bc6c1"
+    },
+    {
+      "path": "src/renderer/assets/ui/relic/relic-frame-v1.webp",
+      "category": "source",
+      "bytes": 56754,
+      "sha256": "877d2149c89fd72a41fe0b11128e36719025ad652ff05cde3b776b062d6b2dae"
+    },
+    {
+      "path": "src/renderer/assets/ui/relic/relic-vellum-v1.webp",
+      "category": "source",
+      "bytes": 1128,
+      "sha256": "5e480267024601c159e107d854ea529b646b1e3406ae1f47fd5f54007f7d2f76"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-00.png",
       "category": "source",
       "bytes": 85438,
@@ -9489,8 +9513,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 22345,
-      "sha256": "235bd55f19ae42cdc457603b909161419ab5b4001a42f1ed1fb97269ece2623c"
+      "bytes": 22694,
+      "sha256": "538b2d82a7d62cbe58c52e1338bb20b02d9b8c5a4048b59807509318ab979fd2"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -9513,8 +9537,8 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 3655,
-      "sha256": "8ae083e911f5c4b0c1e9d0885d36c9c6a6b1056c2c3a1d571e218b5623881da8"
+      "bytes": 3719,
+      "sha256": "b83f4e27520a6c6cfb06ead566d2953bdf4401be02fcaf7c8d35ba2cdf7c4b67"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
@@ -9543,8 +9567,8 @@
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
       "category": "source",
-      "bytes": 2030,
-      "sha256": "ec6a2341ea9d14dbc46d3521c8bdad5bfc293772c9bdc89423e6518d9563afbe"
+      "bytes": 2094,
+      "sha256": "ba7f3115d26ab30920890423962f98178b0eba45403bf2fbd9545d50ca685e61"
     },
     {
       "path": "src/renderer/components/CollectionScreen.test.tsx",
@@ -9579,8 +9603,8 @@
     {
       "path": "src/renderer/components/ElementCastGuide.module.css",
       "category": "source",
-      "bytes": 2778,
-      "sha256": "a906a9361846fd6abb6a900192ec79889f03821170fe8b21b1fdabca267b45e8"
+      "bytes": 3184,
+      "sha256": "3037c73495004664ee0fad9ac8745e78bc0998bd994577f9c3ba87fcc139c737"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.test.tsx",
@@ -9669,8 +9693,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 6530,
-      "sha256": "c22c37cdc7ff98db64c9dde8438235a10c0e543327a9113e27684b6cf8c31446"
+      "bytes": 6596,
+      "sha256": "2b5df880862562fcefe99b8e8f9ce3bb61548f11c5d12cdc35f4cbb1f0916fde"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
@@ -9765,8 +9789,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 56978,
-      "sha256": "2c033920f47d55c73b420e70c89b5c9a1086a81c3c6e5d03ef8fe19ff8f0ac4f"
+      "bytes": 57081,
+      "sha256": "dfd8b5d681648ff686a5fa119dde3444bf6cec11dd9b2bb6476f4e52b6338b35"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -9879,8 +9903,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 12958,
-      "sha256": "400515d31f35410869dba807fdb2b050d87647d957697f26f1a21b15ba85885b"
+      "bytes": 13298,
+      "sha256": "49e6560622df271a04ea0b25919a76a5c9926e05fb46d210250c7e56bff8c751"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -9975,8 +9999,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 7808,
-      "sha256": "1361fcd55d7197ab21871ece3f8b41d3419066400d063454d7bb8084f812ae91"
+      "bytes": 8119,
+      "sha256": "22b5bd8dfcaf4326ad9f315d30af62174eca4cc8aef29c8ce0614c1522af1667"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
@@ -9999,8 +10023,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 22146,
-      "sha256": "7c1efbdd19ca4b5921ea1d4d4984b5515250977048d89611cfeb03f2f437ce02"
+      "bytes": 22357,
+      "sha256": "a0b6e0229675c630117e1f3a3a913fa0130ec88ae46a44d373a6cad5be3f83be"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -10059,8 +10083,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 11867,
-      "sha256": "60b671e79095ccdb82da4eefea459f0cbe48d51465e33ecbbd5ef76ca693b92b"
+      "bytes": 12200,
+      "sha256": "e3079a3ab3c1e3f3771625133e80682bd9d56ee5a6da764bec16bdb72fddb38d"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
@@ -10137,8 +10161,8 @@
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 7184,
-      "sha256": "7658126b995169201aea487e73b6ebcfd73147b64cc2ce140b35c2506bdb2b49"
+      "bytes": 7240,
+      "sha256": "897bec12ba52f320e70800ee24abe2a40273987a440a2835a6ec36dcd24bea63"
     },
     {
       "path": "src/renderer/components/RealmTravel.test.tsx",
@@ -10173,8 +10197,8 @@
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
       "category": "source",
-      "bytes": 1603,
-      "sha256": "ec532934d6d998ad2d7a8315fc21e116c88b06d89dee2c401b9353645a06e17b"
+      "bytes": 1801,
+      "sha256": "fcbc84d9ad054f4472bcb7aa57ee497122e2a7e6df02427bd92aada8cf7d8c71"
     },
     {
       "path": "src/renderer/components/RunEndStamp.test.tsx",
@@ -10191,8 +10215,8 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
       "category": "source",
-      "bytes": 5034,
-      "sha256": "8158d8652396f70e7a30a63890b4ce6197689d1f50762bfc681859ccc5bdd4fe"
+      "bytes": 5121,
+      "sha256": "29ec6d532f240934460dc2e91abbf2cd848857d20371994ebf8eb2864b13c1d9"
     },
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
@@ -10209,8 +10233,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 60189,
-      "sha256": "566c676291beed975ea0812c078a756a321ebf1afaf47e6ab16d2109c7866382"
+      "bytes": 60560,
+      "sha256": "9cc514cf87961a943194bdcece5b16f91614b9ffc54e1c3d1964eb4045a75d3c"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10383,8 +10407,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 30923,
-      "sha256": "5ed947744cf34fa91d37ec0ba2b9eb747c6f8c184399bf32b9221252b799fb7d"
+      "bytes": 32056,
+      "sha256": "71ac52b4406e98fbdcf7f3e6c030167794c82f99aaf914d621b2c73e11cdba7d"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -10413,8 +10437,8 @@
     {
       "path": "src/renderer/components/StartupIntro.module.css",
       "category": "source",
-      "bytes": 11965,
-      "sha256": "94dd9f1ac8dc8e480288ba4ed2131031312db954108fcc0b01c5387eef5f75ed"
+      "bytes": 12050,
+      "sha256": "89b2654c8d9b4d8d8b0cec9b8497606efb8c8b3a9e5414b8e367aa17be602714"
     },
     {
       "path": "src/renderer/components/startupIntro.test.ts",
@@ -11289,8 +11313,8 @@
     {
       "path": "src/renderer/components/TutorialHall.module.css",
       "category": "source",
-      "bytes": 4218,
-      "sha256": "1f2fd4f721da4b79399a57749744bb4496bd3c8be37193a2c55de59a72ef5f06"
+      "bytes": 5574,
+      "sha256": "d64e0b02906cd72bfd86e7029435a06fef3181db63e29d1449d97191dfc3b7f6"
     },
     {
       "path": "src/renderer/components/TutorialHall.tsx",
@@ -12579,14 +12603,20 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 7853,
-      "sha256": "1e38ef243fc2be6d9229f91cc1859633d2586c350a72c45138cb4ed87684b64e"
+      "bytes": 7881,
+      "sha256": "579b56d13552b970b63f7f64c3bc4cab88cc56acccf3ceeafca6ff56b21d34bb"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
       "category": "source",
       "bytes": 5527,
       "sha256": "9e245f9a19ecc6562bb65008cf526cd126164f1412cb7ec107928c37c70f5e27"
+    },
+    {
+      "path": "src/renderer/styles/relic-art.css",
+      "category": "source",
+      "bytes": 509,
+      "sha256": "7ef7e8ce6dfe1d14338a7c7df8fa80195f728e1d01b7013d0880fddf3524f975"
     },
     {
       "path": "src/renderer/styles/theme.parity.test.ts",
@@ -12705,8 +12735,8 @@
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 4237,
-      "sha256": "f94c04035f5936d533b3ea23c98c8ce0ea8b8fb8cfeb6fd767c713529e43bd51"
+      "bytes": 4225,
+      "sha256": "ccffc446c61c877cdd6c35b556671fa8365e7bf4d994f9da7161314c2a09448b"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
@@ -12729,8 +12759,8 @@
     {
       "path": "src/renderer/ui/Panel.module.css",
       "category": "source",
-      "bytes": 1938,
-      "sha256": "07ffbeaada0f6ab1a79560aa79f1a78440cef30b1717fd1e05f84fb6b3c174fc"
+      "bytes": 1825,
+      "sha256": "a9bf5e40eee81983cd5a07a5b45327faeb4bec1ff77b4568e7ed6da2f8ed791c"
     },
     {
       "path": "src/renderer/ui/Panel.tsx",
@@ -12753,8 +12783,8 @@
     {
       "path": "src/renderer/ui/SectionRail.module.css",
       "category": "source",
-      "bytes": 2934,
-      "sha256": "3fd84fd86b243dca1f3797c29bf1c30bbf891fd25f63f45d6926ee8780e67d62"
+      "bytes": 3064,
+      "sha256": "2f1ab8edd4284217bdd26dc7fa202d5e70282326ae9cf66e22d76038e09136af"
     },
     {
       "path": "src/renderer/ui/SectionRail.tsx",
@@ -12789,8 +12819,8 @@
     {
       "path": "src/renderer/ui/UiButton.module.css",
       "category": "source",
-      "bytes": 3718,
-      "sha256": "868d425204bf403589c9dd90d22f4efed20c15b123211f979e0b44d8c9fc0afb"
+      "bytes": 4292,
+      "sha256": "4e690984148487e4c7e08432be9f87ebe4db1696f22efe11738734d07295004e"
     },
     {
       "path": "src/renderer/ui/UiButton.tsx",
