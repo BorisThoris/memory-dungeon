@@ -290,7 +290,24 @@ export const createBoardParticleSystem = () => {
     const rotation = attribute('rotation', 2);
     const appearance = attribute('appearance', 4);
     const attributes = [origin, movement, lifetime, tint, rotation, appearance];
-    geometry.instanceCount = BOARD_PARTICLE_CAPACITY;
+    let dirtyStart = BOARD_PARTICLE_CAPACITY;
+    let dirtyEnd = -1;
+    const markSlotWritten = (slot: number): void => {
+        dirtyStart = Math.min(dirtyStart, slot);
+        dirtyEnd = Math.max(dirtyEnd, slot);
+        geometry.instanceCount = Math.max(geometry.instanceCount, slot + 1);
+    };
+    // A frame can emit many bursts. Upload one contiguous range per attribute, once before drawing.
+    const flushWrites = (): void => {
+        if (dirtyEnd < dirtyStart) return;
+        for (const value of attributes) {
+            value.addUpdateRange(dirtyStart * value.itemSize, (dirtyEnd - dirtyStart + 1) * value.itemSize);
+            value.needsUpdate = true;
+        }
+        dirtyStart = BOARD_PARTICLE_CAPACITY;
+        dirtyEnd = -1;
+    };
+    geometry.instanceCount = 0;
     const material = new ShaderMaterial({
         vertexShader, fragmentShader, uniforms: { time: { value: 0 }, rippleLayer: { value: 0 } },
         transparent: true, depthWrite: false, depthTest: false, toneMapped: false, blending: NormalBlending
@@ -355,6 +372,7 @@ export const createBoardParticleSystem = () => {
         comboPopSlots[slot] = 1;
         priorities[slot] = 2;
         appearance.setXYZW(slot, start * 7.1, 1, 0, 1);
+        markSlotWritten(slot);
     };
 
     const clear = (): void => {
@@ -362,7 +380,12 @@ export const createBoardParticleSystem = () => {
         comboPopSlots.fill(0);
         priorities.fill(0);
         lifetime.array.fill(0);
+        lifetime.clearUpdateRanges();
+        lifetime.addUpdateRange(0, lifetime.array.length);
         lifetime.needsUpdate = true;
+        dirtyStart = BOARD_PARTICLE_CAPACITY;
+        dirtyEnd = -1;
+        geometry.instanceCount = 0;
         cursor = 0;
         mesh.visible = false;
         rippleMesh.visible = false;
@@ -370,7 +393,6 @@ export const createBoardParticleSystem = () => {
     const configure = (quality: GraphicsQualityPreset): void => {
         const nextBudget = boardParticleBudget(quality);
         if (nextBudget !== budget) { clear(); budget = nextBudget; }
-        geometry.instanceCount = budget;
     };
     return {
         mesh,
@@ -381,13 +403,16 @@ export const createBoardParticleSystem = () => {
             comboPopEffects = enabled;
             if (enabled) return;
             // Remove pending and active pop particles without clearing elemental or input feedback.
+            let removed = false;
             for (let slot = 0; slot < budget; slot += 1) {
                 if (!comboPopSlots[slot]) continue;
                 ends[slot] = 0;
                 lifetime.setXYZW(slot, 0, 0, 0, 0);
                 comboPopSlots[slot] = 0;
+                lifetime.addUpdateRange(slot * lifetime.itemSize, lifetime.itemSize);
+                removed = true;
             }
-            lifetime.needsUpdate = true;
+            if (removed) lifetime.needsUpdate = true;
         },
         emit(burst: BoardParticleBurst): number {
             const pop = burst.kind === 'match' || burst.kind === 'chain' || burst.kind === 'ripple'
@@ -423,7 +448,7 @@ export const createBoardParticleSystem = () => {
                     while (ends[cursor % budget]! > burst.time && (lifetime.getW(cursor % budget) === 6 || priorities[cursor % budget] === 3) && checked++ < budget) cursor += 1;
                     if (checked >= budget) break;
                 }
-                const slot = burst.priority === 'event' ? claimEventSlot(burst.time) : cursor++ % budget;
+                const slot = burst.priority === 'event' ? claimEventSlot(burst.time) : ripple ? claimSlot(burst.time) : cursor++ % budget;
                 if (slot === null) break;
                 const kind = burst.reduceMotion ? 3 : ripple ? 6 : edge ? 4 : shaped ? BOARD_PARTICLE_SHAPE_KIND[shaped] : ember ? 0 : index >= sparks + smoke ? 1 : index >= sparks ? 2 : 0;
                 const angle = ripple ? 0 : rng() * Math.PI * 2;
@@ -519,10 +544,10 @@ export const createBoardParticleSystem = () => {
                 priorities[slot] = burst.priority === 'event' ? 3 : rim || ember ? 1 : 2;
                 const emphasis = burst.priority === 'event' ? 1 : ember ? .58 : rim ? .72 : 1;
                 appearance.setXYZW(slot, rng() * Math.PI * 2, energy, burst.placement === 'ground' ? 1 : 0, emphasis);
+                markSlotWritten(slot);
                 emitted += 1;
             }
             if (emitted > 0) {
-                for (const value of attributes) value.needsUpdate = true;
                 mesh.visible = true;
                 rippleMesh.visible = true;
             }
@@ -555,7 +580,7 @@ export const createBoardParticleSystem = () => {
                     arc.seed + strand * 7919, segments, 0.1 + intensity * 0.08 + strand * 0.04);
                 const strandWidth = strand === 0 ? width : width * 0.55;
                 for (let index = 0; index < segments; index += 1) {
-                    const slot = claimSlot(start);
+                    const slot = claimSlot(arc.time);
                     if (slot === null) break;
                     writeSegment(slot, path[index * 2]!, path[index * 2 + 1]!, path[index * 2 + 2]!, path[index * 2 + 3]!, z,
                         strandWidth, start + index / segments * travel + strand * 0.03, life - strand * 0.05);
@@ -571,7 +596,7 @@ export const createBoardParticleSystem = () => {
                     const branch = buildLightningPath(ax, ay, ax + Math.cos(heading) * reach, ay + Math.sin(heading) * reach,
                         arc.seed + 131 * (fork + 1), 2, 0.25);
                     for (let index = 0; index < 2; index += 1) {
-                        const slot = claimSlot(start);
+                        const slot = claimSlot(arc.time);
                         if (slot === null) break;
                         writeSegment(slot, branch[index * 2]!, branch[index * 2 + 1]!, branch[index * 2 + 2]!, branch[index * 2 + 3]!, z,
                             width * 0.45, start + at / segments * travel + 0.02, life * 0.6);
@@ -580,20 +605,33 @@ export const createBoardParticleSystem = () => {
                 }
             }
             if (emitted > 0) {
-                for (const value of attributes) value.needsUpdate = true;
                 mesh.visible = true;
                 rippleMesh.visible = true;
             }
             return emitted;
         },
         advance(time: number): number {
-            if (!mesh.visible) return 0;
+            flushWrites();
             material.uniforms.time.value = time;
             rippleMaterial.uniforms.time.value = time;
             let active = 0;
-            for (let index = 0; index < budget; index += 1) if (ends[index]! > time) active += 1;
-            mesh.visible = active > 0;
-            rippleMesh.visible = active > 0;
+            let occupiedEnd = 0;
+            let airborne = false;
+            let ground = false;
+            for (let index = 0; index < geometry.instanceCount; index += 1) {
+                if (ends[index]! <= time) continue;
+                active += 1;
+                occupiedEnd = index + 1;
+                // Pending bursts keep their slots but should not submit an invisible draw call.
+                if (lifetime.getX(index) > time) continue;
+                if (lifetime.getW(index) === 6 || appearance.getZ(index) > 0.5) ground = true;
+                else airborne = true;
+            }
+            geometry.instanceCount = occupiedEnd;
+            mesh.visible = airborne;
+            rippleMesh.visible = ground;
+            // Start a new idle sequence at slot zero instead of carrying a sparse high-water mark.
+            if (!active) cursor = 0;
             return active;
         },
         dispose(): void { geometry.dispose(); material.dispose(); rippleMaterial.dispose(); }

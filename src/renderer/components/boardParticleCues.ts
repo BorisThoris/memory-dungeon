@@ -4,10 +4,15 @@ import { getBreakWaveDelaySec } from './tileBoardBreakWave';
 
 export interface BoardParticleCue { tileId: string; kind: BoardParticleKind; delay: number }
 
-export const particleBoardChanged = (before: BoardState | null, board: BoardState): boolean =>
-    !before || before.level !== board.level || before.columns !== board.columns ||
-    before.tiles.length !== board.tiles.length || before.matchedPairs > board.matchedPairs ||
-    before.tiles.some((tile) => !board.tiles.some((next) => next.id === tile.id));
+export const particleBoardChanged = (before: BoardState | null, board: BoardState): boolean => {
+    if (!before || before.level !== board.level || before.columns !== board.columns ||
+        before.tiles.length !== board.tiles.length || before.matchedPairs > board.matchedPairs) return true;
+    // Flips and pauses keep card order. Avoid an all-pairs identity search on every committed turn.
+    if (before.tiles === board.tiles || before.tiles.every((tile, index) => tile.id === board.tiles[index]!.id)) return false;
+    // Currents can move cards without beginning a new board; identity, not cell, decides a reset.
+    const currentIds = new Set(board.tiles.map(tile => tile.id));
+    return before.tiles.some(tile => !currentIds.has(tile.id));
+};
 
 /** Compare committed card states: no replay on mount, preview, pause, shuffle, or context recovery. */
 export const collectBoardParticleCues = (before: BoardState | null, board: BoardState): BoardParticleCue[] => {

@@ -109,6 +109,7 @@ export const AnimatedCardGlow = memo(
                             depthWrite={false}
                             map={glowTexture}
                             opacity={restingGlow}
+                            forceSinglePass
                             side={DoubleSide}
                             toneMapped={false}
                             transparent
@@ -129,6 +130,7 @@ export const AnimatedCardGlow = memo(
                             depthWrite={false}
                             map={spinTexture}
                             opacity={0}
+                            forceSinglePass
                             side={DoubleSide}
                             toneMapped={false}
                             transparent

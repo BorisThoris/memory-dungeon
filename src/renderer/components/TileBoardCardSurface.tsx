@@ -82,6 +82,8 @@ export const TileBoardCardSurface = memo(
              * The face is the painted plate with the per-tile illustration drawn over it
              * (`getTileFaceOverlayTexture`). It used to be this plus six SVG frame meshes, which
              * put a third frame on a card that already had two painted ones.
+             * Each surface is a single sheet: forceSinglePass keeps both viewing directions
+             * during flips without Three's redundant back/front transparency passes.
              */}
             <mesh geometry={frontGeometry} position={[0, 0, faceZ]} raycast={noopMeshRaycast}>
                 <meshStandardMaterial
@@ -98,6 +100,7 @@ export const TileBoardCardSurface = memo(
                     normalScale={renderQuality.cardNormalScale}
                     roughness={renderQuality.cardRoughness}
                     roughnessMap={frontRoughnessMap ?? undefined}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -152,6 +155,7 @@ export const TileBoardCardSurface = memo(
                     normalScale={renderQuality.cardNormalScale}
                     roughness={renderQuality.cardRoughness}
                     roughnessMap={backRoughnessMap ?? undefined}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent

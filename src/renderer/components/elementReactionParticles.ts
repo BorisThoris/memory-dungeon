@@ -12,12 +12,13 @@ export function collectElementReactionParticles(before: BoardState | null, board
     const cast = board.elementCast;
     if (reduceMotion || !cast || cast.key === before?.elementCast?.key || particleBoardChanged(before, board)) return [];
     const cues: BoardParticleBurst[] = [];
+    const cellById = new Map(board.tiles.map((tile, cell) => [tile.id, cell]));
     for (const reaction of (cast.reactions ?? []).slice(0, 2)) {
         const mote = realmEventMote(reaction.kind, REALM_JOLT_FAMILY[reaction.kind]);
         const maxContacts = quality === 'low' ? 2 : quality === 'medium' ? 4 : 6;
         // Resolve identity after currents and weather. Ground sources remain fixed cells.
         const targets = [...new Set(reaction.changes.map(change => change.tileId))]
-            .map(id => board.tiles.findIndex(tile => tile.id === id)).filter(cell => cell >= 0).slice(0, maxContacts);
+            .map(id => cellById.get(id)).filter((cell): cell is number => cell !== undefined).slice(0, maxContacts);
         const cells = [...new Set([...reaction.sourceCells.slice(0, 1), ...targets])];
         for (const [index, cell] of cells.entries()) {
             const tile = board.tiles[cell];

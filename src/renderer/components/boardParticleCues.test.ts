@@ -9,6 +9,22 @@ const board = (): BoardState => makeRun([
 ]).board!;
 
 describe('card transitions feed the particle system', () => {
+    it('checks maximum-size boards and shuffled boards in linear identity work', () => {
+        let reads = 0;
+        const tiles = Array.from({ length: 8192 }, (_, index) => {
+            const tile = makeTile(`card-${index}`, `pair-${Math.floor(index / 2)}`, 'A');
+            Object.defineProperty(tile, 'id', { get: () => { reads += 1; return `card-${index}`; } });
+            return tile;
+        });
+        const before = { ...board(), tiles };
+        expect(particleBoardChanged(before, { ...before, tiles: [...tiles] })).toBe(false);
+        expect(reads).toBeLessThanOrEqual(tiles.length * 2);
+        reads = 0;
+        expect(particleBoardChanged(before, { ...before, tiles: [...tiles].reverse() })).toBe(false);
+        expect(reads).toBeLessThanOrEqual(tiles.length * 3);
+        expect(particleBoardChanged(before, { ...before, tiles: [...tiles.slice(1), makeTile('new-card', 'new', 'A')] })).toBe(true);
+    });
+
     it('emits both bomb sites even when React batches the opening flip and bomb together', () => {
         const before = board();
         const after: BoardState = { ...before, matchedPairs: 1, tiles: before.tiles.map((tile) =>

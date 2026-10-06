@@ -44,6 +44,8 @@ export interface CardGlowFrameMemory {
     snuffedAt: number | null;
     /** When the meter last filled, so the arrival is thrown once rather than held. */
     feverAt: number | null;
+    lastTime: number | null;
+    spinRotation: number | null;
 }
 
 export interface CardGlowFrame {
@@ -57,7 +59,9 @@ export const initialCardGlowMemory = (heat: number): CardGlowFrameMemory => ({
     heat,
     matchedAt: null,
     snuffedAt: null,
-    feverAt: null
+    feverAt: null,
+    lastTime: null,
+    spinRotation: null
 });
 
 const fract = (value: number): number => value - Math.floor(value);
@@ -86,6 +90,12 @@ export const advanceCardGlowFrame = (
 
     const levels = cardHeatLevels(heat);
     const phase = cardGlowPhase(seed);
+    // Integrate speed: multiplying a changing speed by the whole run clock made every
+    // landed pair snap the medallion to a different angle, especially on long runs.
+    // A hidden card/tab resumes where it left off instead of catching up in one frame.
+    const delta = memory.lastTime == null ? 0 : Math.min(0.1, Math.max(0, time - memory.lastTime));
+    const spinRotation = reduceMotion ? 0 :
+        (memory.spinRotation ?? phase * 0.2) - delta * levels.spinRate * Math.PI * 2;
     // A slow breath per card so a still board is never dead, and never a single pulse.
     const breath = reduceMotion ? 1 : 1 + 0.12 * Math.sin(time * 0.9 + phase);
     const flare = matchedAt == null || reduceMotion ? 0 : cardMatchFlare(time - matchedAt, heat);
@@ -94,8 +104,8 @@ export const advanceCardGlowFrame = (
         frame: {
             glowOpacity: Math.min(1.6, levels.runeGlow * breath * snuff + flare + arrival),
             spinOpacity: Math.min(1.4, levels.spin * breath * snuff + flare * 0.6 + arrival * 0.5),
-            spinRotation: reduceMotion ? 0 : -time * levels.spinRate * Math.PI * 2 + phase * 0.2
+            spinRotation
         },
-        memory: { heat, matchedAt, snuffedAt, feverAt }
+        memory: { heat, matchedAt, snuffedAt, feverAt, lastTime: time, spinRotation }
     };
 };

@@ -89,6 +89,7 @@ export const TileBoardHoverChrome = ({
                     polygonOffset
                     polygonOffsetFactor={-1}
                     polygonOffsetUnits={-1}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -108,6 +109,7 @@ export const TileBoardHoverChrome = ({
                     polygonOffset
                     polygonOffsetFactor={-1}
                     polygonOffsetUnits={-1}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -127,6 +129,7 @@ export const TileBoardHoverChrome = ({
                     polygonOffset
                     polygonOffsetFactor={-1}
                     polygonOffsetUnits={-1}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -146,6 +149,7 @@ export const TileBoardHoverChrome = ({
                     polygonOffset
                     polygonOffsetFactor={-1}
                     polygonOffsetUnits={-1}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent

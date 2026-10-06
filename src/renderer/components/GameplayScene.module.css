@@ -77,7 +77,7 @@
     transition: filter 900ms ease;
 }
 
-.scene[data-scene-prismatic='true'] .plate {
+.scene[data-alive='true'][data-scene-prismatic='true'][data-scene-hit='false'][data-scene-spew='false'][data-scene-realm-event='none'] .plate {
     animation: scenePrismatic 12s linear infinite;
 }
 
@@ -507,13 +507,16 @@
 }
 
 /* Tempo: the surge past Legendary speeds the room up - the drift, the mist, the runes' breath. */
-.scene[data-alive='true'] .plate {
+.scene[data-alive='true'][data-scene-prismatic='false'][data-scene-hit='false'][data-scene-spew='false'][data-scene-realm-event='none'] .plate {
     animation-duration: calc(48s / var(--scene-tempo, 1));
 }
 
-.mistNear,
+.mistNear {
+    animation-duration: calc(34s / var(--scene-tempo, 1));
+}
+
 .mistFar {
-    animation-duration: calc(34s / var(--scene-tempo, 1)), calc(51s / var(--scene-tempo, 1));
+    animation-duration: calc(51s / var(--scene-tempo, 1));
 }
 
 /* Relics light fixtures of the room for good: the run carries them, so the room shows them. */
@@ -535,6 +538,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .scene[data-alive='true'][data-scene-prismatic='true'][data-scene-hit='false'][data-scene-spew='false'][data-scene-realm-event='none'] .plate,
     .scene[data-scene-hit='true'] .plate,
     .scene[data-scene-spew='true'] .plate,
     .scene:not([data-scene-realm-event='none']) .plate,
@@ -654,6 +658,7 @@
 }
 
 /* ------------------------------------------------------------------ still */
+.scene[data-still='true'] .plate,
 .scene[data-still='true'] .layer,
 .scene[data-still='true'] .ringPulse,
 .scene[data-still='true'] .torchFlare,

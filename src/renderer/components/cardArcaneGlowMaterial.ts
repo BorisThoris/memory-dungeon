@@ -83,6 +83,7 @@ export const createCardArcaneGlowMaterial = (seed: number): ShaderMaterial => {
         depthTest: true,
         blending: AdditiveBlending,
         side: DoubleSide,
+        forceSinglePass: true,
         toneMapped: false,
         polygonOffset: true,
         polygonOffsetFactor: -1,

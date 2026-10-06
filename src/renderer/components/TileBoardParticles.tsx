@@ -58,6 +58,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const groundBursts = useRef(0);
     const statusBursts = useRef(0);
     const nextGroundTick = useRef(0);
+    const cellById = useMemo(() => new Map(board.tiles.map((tile, cell) => [tile.id, cell])), [board.tiles]);
     const groundCells = useMemo(() => readElementalGround(board).flatMap((suit, cell) => suit ? [{ suit, cell }] : []), [board]);
     const elementBursts = useRef(0);
     const castBursts = useRef(0);
@@ -75,7 +76,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         const surge = comboHeatLevels(combo).surge;
         // Where a card stands now: its live group if it has one, its layout slot if not.
         const anchorOf = (tileId: string) => {
-            const index = board.tiles.findIndex((tile) => tile.id === tileId);
+            const index = cellById.get(tileId)!;
             const tile = board.tiles[index]!;
             const transform = getTileTransform(tile, index, board.columns, board.rows, compact, true, reduceMotion);
             const position = frames.current?.get(tileId)?.groupRef.current?.position;
@@ -92,7 +93,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             if (emitted > 0) totals.current.arc += 1;
         }
         for (const cue of collectBoardParticleCues(previous.current, board)) {
-            const index = board.tiles.findIndex((tile) => tile.id === cue.tileId);
+            const index = cellById.get(cue.tileId)!;
             const tile = board.tiles[index]!;
             const transform = getTileTransform(tile, index, board.columns, board.rows, compact, true, reduceMotion);
             const frame = frames.current?.get(tile.id);
@@ -132,7 +133,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
+    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
     useFrame(() => {
         if (!reduceMotion && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextRimTick.current) {
             nextRimTick.current = time.current + (graphicsQuality === 'low' ? 0.24 : graphicsQuality === 'medium' ? 0.16 : 0.1);
@@ -194,8 +195,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 const tileLimit = graphicsQuality === 'low' ? 4 : graphicsQuality === 'medium' ? 8 : 12;
                 for (const tileId of [...pulse.tileIds].slice(0, tileLimit)) {
                     const group = frames.current.get(tileId)?.groupRef.current;
-                    const cell = board.tiles.findIndex(tile => tile.id === tileId);
-                    if (cell < 0) continue;
+                    const cell = cellById.get(tileId);
+                    if (cell === undefined) continue;
                     const pos = getTileTransform(board.tiles[cell]!, cell, board.columns, board.rows, compact, false, reduceMotion);
                     const anchor = group?.visible ? group : { position: { x: pos.baseX, y: pos.baseY, z: 0.05 } };
                     for (let n = 0; n < bursts; n += 1) emitMote(anchor, mote, hashStringToSeed(`${pulse.key}:${tileId}:${n}`), 'event');

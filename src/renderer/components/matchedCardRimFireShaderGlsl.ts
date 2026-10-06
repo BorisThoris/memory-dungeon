@@ -31,12 +31,16 @@ float noise(vec2 p) {
 }
 void main() {
     float intensity = clamp(uIntensity, 0.0, 4.0);
+    if (intensity <= 0.001) discard;
     float burst = clamp(uBurst, 0.0, 2.0);
     float motion = clamp(uMotion, 0.0, 2.0);
     float edge = sdRoundedRect(vLocal, uInnerHalfSize, uInnerCorner);
     float outer = sdRoundedRect(vLocal, uOuterHalfSize, uOuterCorner);
-    float softness = max(uSoftness, 0.003);
-    float mask = smoothstep(-softness, softness, edge) * (1.0 - smoothstep(-0.035, 0.0, outer));
+    // Keep the hollow rim stable as cards shrink on dense boards or during camera motion.
+    float softness = max(max(uSoftness, 0.003), fwidth(edge));
+    float outerSoftness = max(0.0175, fwidth(outer));
+    float mask = smoothstep(-softness, softness, edge)
+        * (1.0 - smoothstep(-0.0175 - outerSoftness, -0.0175 + outerSoftness, outer));
     if (mask < 0.002) discard;
     float t = uTime * motion;
     vec2 flow = vLocal * vec2(15.0, 9.0) + vec2(uSeed * 37.0, -t * 2.8);

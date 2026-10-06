@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { GameplayScene, type GameplaySceneProps } from './GameplayScene';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
+import sharedPlate from './scenePlate.module.css';
+import sceneStyles from './GameplayScene.module.css';
 
 const base: GameplaySceneProps = {
     fill: 0,
@@ -18,6 +20,11 @@ const plateLayers = () =>
 const layerCount = () => plateLayers().length;
 
 describe('GameplayScene', () => {
+    it('connects mood lighting and room transitions to the shared plate and flames', () => {
+        render(<GameplayScene {...base} />);
+        expect(screen.getByTestId('gameplay-scene-plate')).toHaveClass(sharedPlate.plate, sceneStyles.plate);
+        expect(screen.getByTestId('scene-sprites').parentElement).toHaveClass(sharedPlate.things, sceneStyles.things);
+    });
     it('is decoration: hidden from assistive tech, the room as data attributes', () => {
         render(<GameplayScene {...base} tier="sharp" memorize />);
         const scene = screen.getByTestId('gameplay-scene');

@@ -1,11 +1,66 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Matrix4, Vector3 } from 'three';
+import { Matrix4, Vector3, type InstancedBufferAttribute } from 'three';
 import { BOARD_PARTICLE_SHAPE_KIND, boardParticleBudget, createBoardParticleSystem, type BoardParticleBurst } from './boardParticleSystem';
 
 const burst: BoardParticleBurst = { kind: 'bomb', x: 1, y: 2, z: 0.1, seed: 41, time: 1,
     reduceMotion: false, quality: 'high' };
 
 describe('the shared board particle pool', () => {
+    it('submits only occupied instances and only layers that have started', () => {
+        const pool = createBoardParticleSystem();
+        expect(pool.mesh.geometry.instanceCount).toBe(0);
+        const sparks = pool.emit({ ...burst, kind: 'ember', shape: 'spark', energy: 0 });
+        expect(pool.advance(1.01)).toBe(sparks);
+        expect(pool.mesh.geometry.instanceCount).toBe(sparks);
+        expect(pool.mesh.visible).toBe(true);
+        expect(pool.rippleMesh.visible).toBe(false);
+        pool.clear();
+        const rings = pool.emit({ ...burst, kind: 'ripple', delay: 1 });
+        expect(pool.advance(1.1)).toBe(rings);
+        expect(pool.mesh.visible).toBe(false);
+        expect(pool.rippleMesh.visible).toBe(false);
+        expect(pool.advance(2.01)).toBe(rings);
+        expect(pool.mesh.visible).toBe(false);
+        expect(pool.rippleMesh.visible).toBe(true);
+        expect(pool.advance(4)).toBe(0);
+        expect(pool.mesh.geometry.instanceCount).toBe(0);
+        const next = pool.emit({ ...burst, kind: 'ember', time: 4 });
+        pool.advance(4.01);
+        expect(pool.mesh.geometry.instanceCount).toBe(next);
+        pool.dispose();
+    });
+
+    it('coalesces small bursts into partial buffer uploads and does not upload idle frames', () => {
+        const pool = createBoardParticleSystem();
+        const origin = pool.mesh.geometry.getAttribute('origin') as InstancedBufferAttribute;
+        const version = origin.version;
+        const a = pool.emit({ ...burst, kind: 'ember', shape: 'spark', energy: 0 });
+        const b = pool.emit({ ...burst, kind: 'ember', shape: 'flame', energy: 0 });
+        expect(origin.version).toBe(version);
+        pool.advance(1.01);
+        expect(origin.version).toBe(version + 1);
+        expect(origin.updateRanges).toEqual([{ start: 0, count: (a + b) * origin.itemSize }]);
+        expect(origin.updateRanges[0]!.count).toBeLessThan(origin.array.length);
+        pool.advance(1.02);
+        expect(origin.version).toBe(version + 1);
+        pool.dispose();
+    });
+
+    it('does not erase current elemental decisions to reserve delayed arcs or contact rings', () => {
+        const pool = createBoardParticleSystem();
+        for (let i = 0; i < 150; i += 1) {
+            pool.emit({ ...burst, kind: 'ember', shape: 'leaf', priority: 'event', energy: 1, quality: 'low', seed: i });
+        }
+        expect(pool.advance(1.01)).toBe(boardParticleBudget('low'));
+        const before = pool.mesh.geometry.getAttribute('lifetime').array.slice();
+        expect(pool.emitArc({ from: { x: 0, y: 0, z: 0 }, to: { x: 1, y: 1, z: 0 },
+            time: 1.01, delay: 3, seed: 1, intensity: 1, reduceMotion: false, quality: 'low' })).toBe(0);
+        expect(pool.emit({ ...burst, kind: 'ripple', time: 1.01, quality: 'low' })).toBe(0);
+        expect(pool.mesh.geometry.getAttribute('lifetime').array).toEqual(before);
+        expect(pool.emit({ ...burst, kind: 'ripple', time: 5, quality: 'low' })).toBeGreaterThan(0);
+        pool.dispose();
+    });
+
     it('keeps ground particles at the cell edge at every quality without using pop effects', () => {
         for (const quality of ['low', 'medium', 'high'] as const) {
             const pool = createBoardParticleSystem();
@@ -172,7 +227,7 @@ describe('the shared board particle pool', () => {
         for (let i = 0; i < 20; i += 1) pool.emit({ ...burst, quality: 'low' });
         expect(pool.advance(1.1)).toBe(boardParticleBudget('low'));
         pool.configure('medium');
-        expect(pool.mesh.geometry.instanceCount).toBe(boardParticleBudget('medium'));
+        expect(pool.mesh.geometry.instanceCount).toBe(0);
         expect(pool.advance(1.1)).toBe(0);
         pool.dispose();
     });

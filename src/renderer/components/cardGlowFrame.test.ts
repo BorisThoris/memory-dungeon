@@ -133,6 +133,30 @@ describe('advanceCardGlowFrame', () => {
         expect(hot[0]).toBeGreaterThan(afterBreak[0]!);
     });
 
+    it('changes spin speed without snapping the medallion after a long run', () => {
+        const initial = advanceCardGlowFrame({ ...rest, heat: 0.5, time: 1800 }, initialCardGlowMemory(0.5));
+        const faster = advanceCardGlowFrame({ ...rest, heat: 1, time: 1800 + 1 / 60 }, initial.memory);
+        const slower = advanceCardGlowFrame({ ...rest, heat: 0.2, time: 1800 + 2 / 60 }, faster.memory);
+        expect(faster.frame.spinRotation).toBeLessThan(initial.frame.spinRotation);
+        expect(slower.frame.spinRotation).toBeLessThan(faster.frame.spinRotation);
+        expect(initial.frame.spinRotation - faster.frame.spinRotation).toBeLessThan(0.02);
+        expect(faster.frame.spinRotation - slower.frame.spinRotation).toBeLessThan(0.02);
+    });
+
+    it('resumes a hidden card without a clock-sized jump and integrates at different frame rates', () => {
+        const first = advanceCardGlowFrame({ ...rest, heat: 1, time: 2 }, initialCardGlowMemory(1));
+        const resumed = advanceCardGlowFrame({ ...rest, heat: 1, time: 62 }, first.memory);
+        expect(first.frame.spinRotation - resumed.frame.spinRotation).toBeLessThan(0.11);
+        const rotationAfterSecond = (fps: number) => {
+            let step = first;
+            for (let i = 1; i <= fps; i++) {
+                step = advanceCardGlowFrame({ ...rest, heat: 1, time: 2 + i / fps }, step.memory);
+            }
+            return step.frame.spinRotation;
+        };
+        expect(rotationAfterSecond(30)).toBeCloseTo(rotationAfterSecond(120), 8);
+    });
+
     it('gives two cards different breaths from their seeds, and repeats for one', () => {
         const a = play([{ seconds: 0.5, input: { ...rest, heat: 0.5, seed: 3 } }]).frames;
         const b = play([{ seconds: 0.5, input: { ...rest, heat: 0.5, seed: 44 } }]).frames;

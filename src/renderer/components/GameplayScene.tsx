@@ -178,7 +178,7 @@ export function GameplayScene({
                 } as CSSProperties
             }
         >
-            <div className={plate.plate} data-testid="gameplay-scene-plate">
+            <div className={`${plate.plate} ${styles.plate}`} data-testid="gameplay-scene-plate">
                 <div className={`${plate.base} ${styles.dungeonBase}`} style={bg(UI_ART.gameplaySceneBase)} />
                 {/* The other rooms, crossfaded over the dungeon: the shop while the store is open, the
                     void after a great combo died. The light passes below belong to the dungeon and fade with it. */}
@@ -250,7 +250,7 @@ export function GameplayScene({
                         <div className={`${styles.mistBank} ${styles.mistFar}`} />
                     </div>
                 ) : null}
-                <div className={plate.things}>
+                <div className={`${plate.things} ${styles.things}`}>
                     <SceneSprites comboHeat={comboHeat} embers={alive} heat={fill} imminent={imminent} set={flames} still={still} tempo={mood?.tempo ?? 1} />
                     {alive ? (
                         <div className={styles.ringMotes}>

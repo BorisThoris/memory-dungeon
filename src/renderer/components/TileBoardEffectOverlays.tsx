@@ -88,6 +88,7 @@ export const TileBoardEffectOverlays = ({
                     depthTest
                     depthWrite={false}
                     opacity={0.88}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -106,6 +107,7 @@ export const TileBoardEffectOverlays = ({
                     depthTest
                     depthWrite={false}
                     opacity={0.9}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -124,6 +126,7 @@ export const TileBoardEffectOverlays = ({
                     depthTest
                     depthWrite={false}
                     opacity={0.9}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -142,6 +145,7 @@ export const TileBoardEffectOverlays = ({
                     depthTest
                     depthWrite={false}
                     opacity={0.87}
+                    forceSinglePass
                     side={DoubleSide}
                     toneMapped={false}
                     transparent
@@ -196,6 +200,7 @@ export const TileBoardEffectOverlays = ({
                 polygonOffset
                 polygonOffsetFactor={-1}
                 polygonOffsetUnits={-1}
+                forceSinglePass
                 side={DoubleSide}
                 toneMapped={false}
                 transparent
@@ -221,6 +226,7 @@ export const TileBoardEffectOverlays = ({
                 polygonOffset
                 polygonOffsetFactor={-1}
                 polygonOffsetUnits={-1}
+                forceSinglePass
                 side={DoubleSide}
                 toneMapped={false}
                 transparent

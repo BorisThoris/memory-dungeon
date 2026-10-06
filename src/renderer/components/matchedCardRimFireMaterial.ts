@@ -109,6 +109,7 @@ export const createMatchedCardRimFireMaterial = (seed: number): ShaderMaterial =
         depthTest: false,
         blending: AdditiveBlending,
         side: DoubleSide,
+        forceSinglePass: true,
         toneMapped: false,
         polygonOffset: true,
         polygonOffsetFactor: -1,

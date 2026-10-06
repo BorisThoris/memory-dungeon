@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2938,
-    "codeFileCount": 1099,
-    "exportedSymbolCount": 3407,
+    "trackedFileCount": 2940,
+    "codeFileCount": 1101,
+    "exportedSymbolCount": 3410,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9094
+    "relationshipCount": 9105
   },
   "inventory": [
     {
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 117478,
-      "sha256": "b4f500f19cb9d0db33c9906a2b11462c2592f58c9c6307c16471e9c47d8a28dc"
+      "bytes": 117944,
+      "sha256": "e35f568ab8c1f865429ce9704d418e9ec00ed9d5b447b49438c6aba6bf6287ce"
     },
     {
       "path": "public/site.webmanifest",
@@ -9315,8 +9315,8 @@
     {
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "category": "source",
-      "bytes": 5821,
-      "sha256": "d171a74aaf3d0a5b761aa5f6e736e9ff542b684d01e025eb36f4384743adb9a5"
+      "bytes": 5909,
+      "sha256": "e7c3e3201f8c612a526127990b2c5a1176d1845f570563e0b766628437bc05f7"
     },
     {
       "path": "src/renderer/components/AppErrorBoundary.module.css",
@@ -9375,14 +9375,14 @@
     {
       "path": "src/renderer/components/boardParticleCues.test.ts",
       "category": "test",
-      "bytes": 2292,
-      "sha256": "01b1beb71d73cfc04c17be82c4277859affbc856b129ce3d0022e44f18e60938"
+      "bytes": 3225,
+      "sha256": "6a0152cf27c0aaa5707706e342a97c245912cd02acd9dd496cc75382c21e7d17"
     },
     {
       "path": "src/renderer/components/boardParticleCues.ts",
       "category": "source",
-      "bytes": 1589,
-      "sha256": "a1fa996cfd4d44cd5997a044e52af97a80c18b3ee84527657a38040f6c8a5b3c"
+      "bytes": 1987,
+      "sha256": "2ef8dfea7f9111688bdb7b0af0341deaa551b07bf49a200ddf0e4a57feefd3c6"
     },
     {
       "path": "src/renderer/components/boardParticleRim.test.ts",
@@ -9399,20 +9399,20 @@
     {
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "category": "test",
-      "bytes": 13661,
-      "sha256": "c2dabfa524b8dce7b3f12a108efe3fc0c3e3c1d9794379b2f4cf4eb6412f6a8b"
+      "bytes": 16681,
+      "sha256": "80229e2cd2c4d0bf6b24fb84df95053f94da2de0181c95e780497874994d7af3"
     },
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 34484,
-      "sha256": "706766479d760f463c78e870df739c942262a3fe37d215b973700500d6710032"
+      "bytes": 36177,
+      "sha256": "97a83e39ecb23ba16816094adf88e8b36dc424875b5339c77755b6f7dda8177c"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "category": "source",
-      "bytes": 2195,
-      "sha256": "1750244fc09e75b02bc720b715d36dfc04ef03ea90236a8568c00a63aacbb2b3"
+      "bytes": 2226,
+      "sha256": "da961a2ec860b76f539ca8cd16cadcad3ca3333e69c3c85c4dd0922a2dcf5a62"
     },
     {
       "path": "src/renderer/components/boardRuneFieldShaderGlsl.ts",
@@ -9441,8 +9441,8 @@
     {
       "path": "src/renderer/components/cardArcaneGlowMaterial.ts",
       "category": "source",
-      "bytes": 3156,
-      "sha256": "190973db442881e697e3566f5f1a6689bfb5b97b9e8b62484850f5a65cd2a93a"
+      "bytes": 3187,
+      "sha256": "0e02a553f526048b327fca9c7c4b8c556b3c439951c7ca5bfabac218d9250b1a"
     },
     {
       "path": "src/renderer/components/cardArcaneGlowShaderGlsl.ts",
@@ -9453,14 +9453,14 @@
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
       "category": "test",
-      "bytes": 9186,
-      "sha256": "2bde62c516f697602a73c31abdc7146a9bbd6e9b478b6f8573e1496311b34a4a"
+      "bytes": 10726,
+      "sha256": "b2c2e7e01b37d7aa62d13b592ac4dd2df32d298fd4970000199b7966bcbe8051"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.ts",
       "category": "source",
-      "bytes": 4697,
-      "sha256": "620ad80dcb74bd1ff501a2b55e2f3edb8ea355944e99afbb6e2c3a08d9423b67"
+      "bytes": 5251,
+      "sha256": "de54ae578cc86e6ab0f16ba94c18b8b6ad8d6a506e64342a5efe076e173342a2"
     },
     {
       "path": "src/renderer/components/cardStatusPaint.ts",
@@ -9559,10 +9559,22 @@
       "sha256": "1028aec5fd203d6f99f911bad542616098f1ca6b68d83e140e5b2338d899a92b"
     },
     {
+      "path": "src/renderer/components/distantCardPage.test.ts",
+      "category": "test",
+      "bytes": 5391,
+      "sha256": "bb7d29f6c8775f44761d4e32caedc9c51f75c4b2d5af3060b046612c1d745cb9"
+    },
+    {
+      "path": "src/renderer/components/distantCardPage.ts",
+      "category": "source",
+      "bytes": 6143,
+      "sha256": "63ada861a70e5472296fb6b657c4dbf6dc720e687e38c84791bb2ce4d4ed86e7"
+    },
+    {
       "path": "src/renderer/components/DistantCards.tsx",
       "category": "source",
-      "bytes": 6724,
-      "sha256": "e28abd4de588418948f74a9ab99d5ada7076f32fa991d7b2cb48718ddec68f4e"
+      "bytes": 2822,
+      "sha256": "d4aedce0f75c1b4d416ac5b0ae9fc944dc8f31738b6090ce3d0bfa8a63778f41"
     },
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
@@ -9621,8 +9633,8 @@
     {
       "path": "src/renderer/components/elementReactionParticles.ts",
       "category": "source",
-      "bytes": 2385,
-      "sha256": "912245169f876af0ddd6bdd788b4a8603686668997740737d3f10a951fd0b9a8"
+      "bytes": 2463,
+      "sha256": "47759121987f74cf0d84092603c089e11fdf20964e82df0c90895767fda5bba0"
     },
     {
       "path": "src/renderer/components/ElementResonanceStrip.module.css",
@@ -9729,20 +9741,20 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 19120,
-      "sha256": "cdf31ca6aba89dd5020bf253b8c5b7c2a9b61e9d5e95b858a41ab5e4b1895abd"
+      "bytes": 19538,
+      "sha256": "7ed21159848333001a2ce58e5b32a70ad43077130a2499c862a1d63ad7f28e65"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 14695,
-      "sha256": "d66abf9d26aa2037ae45dd3187e9e746c6929f3a6df3fd27ef050ca72e1c2544"
+      "bytes": 15175,
+      "sha256": "8415d242584a08d9215fb9009ca28996eaa9cd106e8a9e6a4b9a91fafe4d0607"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 16632,
-      "sha256": "c37aa5feef569af091369d509eb3c9dd50c97337d2dd2d16f6c8c5e52ca9885c"
+      "bytes": 16675,
+      "sha256": "55080b5b7a0270d1f85347215c2f2cb611afae8b9888138ab37728f5121bd5d0"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9921,14 +9933,14 @@
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
       "category": "source",
-      "bytes": 4443,
-      "sha256": "edbf9fe8cb125562aafd2b415ca63941efe52e789b6a701f5e0fc37ef026d5b8"
+      "bytes": 4474,
+      "sha256": "8b364966b12b548c2a1cc91b7252c670c606cb99d584605be4c9c1c63606086b"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
       "category": "source",
-      "bytes": 2475,
-      "sha256": "8d8eafe34a0a0d7913af851fd8203272607b8c85ea8afea75225e411ce621a8b"
+      "bytes": 2721,
+      "sha256": "a87f97a0ed1476c871bcaa860eb9d8e839874e721bbc18335cf3d67a6bd83456"
     },
     {
       "path": "src/renderer/components/matchScoreFloaterTiming.test.ts",
@@ -10545,8 +10557,8 @@
     {
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "category": "source",
-      "bytes": 8310,
-      "sha256": "c2954b08fb5f6defa9f318652a5e887f05735bca05e0d83fb733f41d1009dd5c"
+      "bytes": 8561,
+      "sha256": "9848af53d8647fb006c578b163393b6b3aae42adf0e533b47420da2a10cd47e1"
     },
     {
       "path": "src/renderer/components/tileBoardCardTint.test.ts",
@@ -10623,8 +10635,8 @@
     {
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "category": "source",
-      "bytes": 8382,
-      "sha256": "bbadd3d21a789a01863ba9b906e93bbf346e856f40e3f3e541ee4127a33a9f3d"
+      "bytes": 8590,
+      "sha256": "ce0918a90015bfed741a2bf360cc4ad7b144dcbd2b2cfee98185921675129b63"
     },
     {
       "path": "src/renderer/components/tileBoardFaceUp.test.ts",
@@ -10761,8 +10773,8 @@
     {
       "path": "src/renderer/components/TileBoardHoverChrome.tsx",
       "category": "source",
-      "bytes": 5315,
-      "sha256": "833eca6587c0e4119a5e5b1310ae92170a67112fd76daca435777d45d34c4008"
+      "bytes": 5459,
+      "sha256": "534782ea04da31dc1000dd71e9b255f4505a0bd5820a4f55a84528cf3bf0bb6a"
     },
     {
       "path": "src/renderer/components/tileBoardHoverGoldVisualState.test.ts",
@@ -10851,8 +10863,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 20060,
-      "sha256": "a69690b244c9c4cf9fe9bcefad5997783bd2eea669de7f2b9f9334b2995cfe3b"
+      "bytes": 20101,
+      "sha256": "805b1a3df9d77ac67e19b75a77153d4cb4b6c90232412a522181715f1c5f22f0"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -19965,7 +19977,7 @@
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 143,
+      "lineCount": 145,
       "imports": [
         "file:src/renderer/components/cardGlowFrame.ts",
         "file:src/renderer/components/tileBoardCardHeat.ts",
@@ -20113,7 +20125,7 @@
       "path": "src/renderer/components/boardParticleCues.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 41,
+      "lineCount": 57,
       "imports": [
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/shared/contracts.ts",
@@ -20127,7 +20139,7 @@
       "path": "src/renderer/components/boardParticleCues.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 25,
+      "lineCount": 30,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/tileBoardBreakWave.ts",
@@ -20181,7 +20193,7 @@
       "path": "src/renderer/components/boardParticleSystem.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 243,
+      "lineCount": 298,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts"
       ],
@@ -20193,7 +20205,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 602,
+      "lineCount": 640,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -20223,7 +20235,7 @@
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 72,
       "imports": [
         "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
         "file:src/renderer/styles/theme.ts"
@@ -20325,7 +20337,7 @@
       "path": "src/renderer/components/cardArcaneGlowMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 93,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowShaderGlsl.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -20358,7 +20370,7 @@
       "path": "src/renderer/components/cardGlowFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 191,
+      "lineCount": 215,
       "imports": [
         "file:src/renderer/components/cardGlowFrame.ts"
       ],
@@ -20370,7 +20382,7 @@
       "path": "src/renderer/components/cardGlowFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 112,
       "imports": [
         "file:src/renderer/components/tileBoardCardHeat.ts"
       ],
@@ -20616,20 +20628,52 @@
       ]
     },
     {
-      "id": "file:src/renderer/components/DistantCards.tsx",
-      "path": "src/renderer/components/DistantCards.tsx",
+      "id": "file:src/renderer/components/distantCardPage.test.ts",
+      "path": "src/renderer/components/distantCardPage.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 96,
+      "imports": [
+        "file:src/renderer/components/distantCardPage.ts",
+        "file:src/renderer/components/tileTextures.ts",
+        "file:src/shared/test/game-fixtures.ts",
+        "file:src/test/installCanvas2dMock.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/distantCardPage.ts",
+      "path": "src/renderer/components/distantCardPage.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 106,
+      "lineCount": 113,
       "imports": [
         "file:src/renderer/components/tileBoardFaceUp.ts",
-        "file:src/renderer/components/tileBoardInitialCardTint.ts",
         "file:src/renderer/components/tileBoardRowMarkers.ts",
-        "file:src/renderer/components/tileBoardSceneRegistries.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
         "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
+        "symbol:src/renderer/components/distantCardPage.ts#DISTANT_CARD_PAGE_SIZE",
+        "symbol:src/renderer/components/distantCardPage.ts#DistantCardPageInput"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/distantCardPage.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/DistantCards.tsx",
+      "path": "src/renderer/components/DistantCards.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 51,
+      "imports": [
+        "file:src/renderer/components/distantCardPage.ts",
+        "file:src/renderer/components/tileBoardSceneRegistries.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/DistantCards.tsx#DistantCards"
@@ -20787,7 +20831,7 @@
       "path": "src/renderer/components/elementReactionParticles.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 37,
       "imports": [
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
@@ -21031,7 +21075,7 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 259,
+      "lineCount": 266,
       "imports": [
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
@@ -21554,7 +21598,7 @@
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 119,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/matchedCardRimFireShaderGlsl.ts",
@@ -21574,7 +21618,7 @@
       "path": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 57,
+      "lineCount": 61,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/matchedCardRimFireShaderGlsl.ts#MATCHED_RIM_FIRE_FRAGMENT_SHADER"
@@ -23170,7 +23214,7 @@
       "path": "src/renderer/components/TileBoardCardSurface.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 204,
+      "lineCount": 208,
       "imports": [
         "file:src/renderer/components/AnimatedCardGlow.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -23421,7 +23465,7 @@
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 241,
+      "lineCount": 247,
       "imports": [
         "file:src/renderer/components/PairProximityHintPlane.tsx",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -23812,7 +23856,7 @@
       "path": "src/renderer/components/TileBoardHoverChrome.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 157,
+      "lineCount": 161,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -24058,7 +24102,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 294,
+      "lineCount": 295,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -25415,6 +25459,7 @@
         "symbol:src/renderer/components/tileTextures.ts#TileLayer"
       ],
       "testedBy": [
+        "file:src/renderer/components/distantCardPage.test.ts",
         "file:src/renderer/components/tileTextures.test.ts"
       ]
     },
@@ -37631,6 +37676,7 @@
         "file:src/renderer/components/boardGroupArcs.test.ts",
         "file:src/renderer/components/boardParticleCues.test.ts",
         "file:src/renderer/components/boardParticleRim.test.ts",
+        "file:src/renderer/components/distantCardPage.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
@@ -38646,6 +38692,7 @@
       ],
       "testedBy": [
         "file:src/renderer/cardFace/cardIllustrationDraw.test.ts",
+        "file:src/renderer/components/distantCardPage.test.ts",
         "file:src/renderer/components/tileTextures.test.ts"
       ]
     }
@@ -41393,7 +41440,7 @@
       "kind": "value",
       "file": "src/renderer/components/AnimatedCardGlow.tsx",
       "line": 48,
-      "endLine": 141
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
@@ -41528,8 +41575,8 @@
       "name": "collectBoardParticleCues",
       "kind": "value",
       "file": "src/renderer/components/boardParticleCues.ts",
-      "line": 13,
-      "endLine": 24
+      "line": 18,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/boardParticleCues.ts#particleBoardChanged",
@@ -41537,7 +41584,7 @@
       "kind": "value",
       "file": "src/renderer/components/boardParticleCues.ts",
       "line": 7,
-      "endLine": 10
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/boardParticleRim.ts#getRimParticleMood",
@@ -41633,7 +41680,7 @@
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
       "line": 273,
-      "endLine": 601
+      "endLine": 639
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -41649,7 +41696,7 @@
       "kind": "value",
       "file": "src/renderer/components/boardRuneFieldMaterial.ts",
       "line": 49,
-      "endLine": 70
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#setBoardRuneFieldPalette",
@@ -41897,7 +41944,7 @@
       "kind": "value",
       "file": "src/renderer/components/cardArcaneGlowMaterial.ts",
       "line": 60,
-      "endLine": 91
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/cardArcaneGlowShaderGlsl.ts#CARD_ARCANE_GLOW_FRAGMENT_SHADER",
@@ -41912,16 +41959,16 @@
       "name": "advanceCardGlowFrame",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 67,
-      "endLine": 101
+      "line": 71,
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrame",
       "name": "CardGlowFrame",
       "kind": "interface",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 49,
-      "endLine": 54
+      "line": 51,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#CardGlowFrameInput",
@@ -41937,23 +41984,23 @@
       "kind": "interface",
       "file": "src/renderer/components/cardGlowFrame.ts",
       "line": 41,
-      "endLine": 47
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#cardGlowPhase",
       "name": "cardGlowPhase",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 65,
-      "endLine": 65
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#initialCardGlowMemory",
       "name": "initialCardGlowMemory",
       "kind": "value",
       "file": "src/renderer/components/cardGlowFrame.ts",
-      "line": 56,
-      "endLine": 61
+      "line": 58,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
@@ -42084,12 +42131,36 @@
       "endLine": 157
     },
     {
+      "id": "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
+      "name": "createDistantCardPage",
+      "kind": "function",
+      "file": "src/renderer/components/distantCardPage.ts",
+      "line": 24,
+      "endLine": 112
+    },
+    {
+      "id": "symbol:src/renderer/components/distantCardPage.ts#DISTANT_CARD_PAGE_SIZE",
+      "name": "DISTANT_CARD_PAGE_SIZE",
+      "kind": "value",
+      "file": "src/renderer/components/distantCardPage.ts",
+      "line": 9,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/components/distantCardPage.ts#DistantCardPageInput",
+      "name": "DistantCardPageInput",
+      "kind": "interface",
+      "file": "src/renderer/components/distantCardPage.ts",
+      "line": 11,
+      "endLine": 21
+    },
+    {
       "id": "symbol:src/renderer/components/DistantCards.tsx#DistantCards",
       "name": "DistantCards",
       "kind": "function",
       "file": "src/renderer/components/DistantCards.tsx",
-      "line": 92,
-      "endLine": 105
+      "line": 38,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#ElementCardBack",
@@ -42153,7 +42224,7 @@
       "kind": "function",
       "file": "src/renderer/components/elementReactionParticles.ts",
       "line": 10,
-      "endLine": 35
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/components/ElementResonanceStrip.tsx#default",
@@ -42593,7 +42664,7 @@
       "kind": "value",
       "file": "src/renderer/components/matchedCardRimFireMaterial.ts",
       "line": 66,
-      "endLine": 117
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/components/matchedCardRimFireMaterial.ts#MatchedCardRimFireUniforms",
@@ -42609,7 +42680,7 @@
       "kind": "value",
       "file": "src/renderer/components/matchedCardRimFireShaderGlsl.ts",
       "line": 2,
-      "endLine": 56
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/matchScoreFloaterTiming.ts#MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS",
@@ -44529,7 +44600,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardCardSurface.tsx",
       "line": 51,
-      "endLine": 202
+      "endLine": 206
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardTint.ts#applyTileBoardCardTint",
@@ -44881,7 +44952,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "line": 53,
-      "endLine": 240
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFaceUp.ts#isTileBoardFaceUp",
@@ -45201,7 +45272,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardHoverChrome.tsx",
       "line": 51,
-      "endLine": 156
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/components/tileBoardHoverGoldVisualState.ts#applyHoverGoldRimOpacity",
@@ -45377,7 +45448,7 @@
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
       "line": 23,
-      "endLine": 293
+      "endLine": 294
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -73493,6 +73564,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/distantCardPage.ts->symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/distantCardPage.ts->symbol:src/renderer/components/distantCardPage.ts#DISTANT_CARD_PAGE_SIZE",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "symbol:src/renderer/components/distantCardPage.ts#DISTANT_CARD_PAGE_SIZE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/distantCardPage.ts->symbol:src/renderer/components/distantCardPage.ts#DistantCardPageInput",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "symbol:src/renderer/components/distantCardPage.ts#DistantCardPageInput",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/DistantCards.tsx->symbol:src/renderer/components/DistantCards.tsx#DistantCards",
       "source": "file:src/renderer/components/DistantCards.tsx",
       "target": "symbol:src/renderer/components/DistantCards.tsx#DistantCards",
@@ -95265,51 +95354,75 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardFaceUp.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
+      "id": "imports:src/renderer/components/distantCardPage.test.ts->src/renderer/components/distantCardPage.ts",
+      "source": "file:src/renderer/components/distantCardPage.test.ts",
+      "target": "file:src/renderer/components/distantCardPage.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.test.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/components/distantCardPage.test.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/distantCardPage.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.test.ts->src/test/installCanvas2dMock.ts",
+      "source": "file:src/renderer/components/distantCardPage.test.ts",
+      "target": "file:src/test/installCanvas2dMock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/renderer/components/tileBoardFaceUp.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
       "target": "file:src/renderer/components/tileBoardFaceUp.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardInitialCardTint.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/renderer/components/tileBoardInitialCardTint.ts",
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/renderer/components/tileBoardRowMarkers.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/renderer/components/tileBoardRowMarkers.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardRowMarkers.ts",
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/renderer/components/tileBoardTransform.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/distantCardPage.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/distantCardPage.ts",
       "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/renderer/components/tileBoardRowMarkers.ts",
+      "target": "file:src/renderer/components/distantCardPage.ts",
       "kind": "imports"
     },
     {
       "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardSceneRegistries.ts",
       "source": "file:src/renderer/components/DistantCards.tsx",
       "target": "file:src/renderer/components/tileBoardSceneRegistries.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardTransform.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/renderer/components/tileBoardTransform.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileShatter.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/renderer/components/tileShatter.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileTextures.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/renderer/components/tileTextures.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/DistantCards.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/DistantCards.tsx",
-      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -116723,6 +116836,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/distantCardPage.ts->file:src/renderer/components/distantCardPage.test.ts",
+      "source": "file:src/renderer/components/distantCardPage.ts",
+      "target": "file:src/renderer/components/distantCardPage.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/ElementCastGuide.tsx->file:src/renderer/components/ElementCastGuide.test.tsx",
       "source": "file:src/renderer/components/ElementCastGuide.tsx",
       "target": "file:src/renderer/components/ElementCastGuide.test.tsx",
@@ -117560,6 +117679,12 @@
       "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/tileTextures.test.ts",
       "source": "file:src/renderer/components/tileShatter.ts",
       "target": "file:src/renderer/components/tileTextures.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileTextures.ts->file:src/renderer/components/distantCardPage.test.ts",
+      "source": "file:src/renderer/components/tileTextures.ts",
+      "target": "file:src/renderer/components/distantCardPage.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122963,6 +123088,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/distantCardPage.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/distantCardPage.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/tileBoardCardWindow.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/tileBoardCardWindow.test.ts",
@@ -123560,6 +123691,12 @@
       "id": "tested_by:src/test/installCanvas2dMock.ts->file:src/renderer/cardFace/cardIllustrationDraw.test.ts",
       "source": "file:src/test/installCanvas2dMock.ts",
       "target": "file:src/renderer/cardFace/cardIllustrationDraw.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/test/installCanvas2dMock.ts->file:src/renderer/components/distantCardPage.test.ts",
+      "source": "file:src/test/installCanvas2dMock.ts",
+      "target": "file:src/renderer/components/distantCardPage.test.ts",
       "kind": "tested_by"
     },
     {
