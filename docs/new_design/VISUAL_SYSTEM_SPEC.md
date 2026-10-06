@@ -29,7 +29,7 @@ The same restraint applies to menus: primary actions have the highest contrast, 
 
 - The HUD owns measured rows. The board and action effects consume the remaining rectangle; neither guesses the HUD's height or reserves it twice.
 - Small menus use compact destination tiles. Dialog bodies and reference pages can scroll while their navigation remains reachable. Never squeeze a card below the height required for its contents to preserve an unscrollable layout.
-- Preserve the DMC-style action vocabulary: oversized italic ranks, a tilted impact entrance, rich rank colors, speed slashes, a light sweep and sparks. Measure text before animation and reserve space for its impact envelope. The retained WebGL compositor renders only during the current event. A new event replaces the current one without a backlog. Reduced motion and context loss retain readable text without the shader movement.
+- Preserve the DMC-style action vocabulary from the test deployment: oversized italic serif ranks, a tilted impact entrance, rich rank colors, speed lines, a light sweep and a shock ring. Use the original layered text treatment inside the measured gameplay area; size text to that area on phones. A new event replaces the current one without a backlog. Reduced motion retains readable text and rank colors without the moving layers.
 - UI controls share a bounded canvas particle response to activation. The pool sleeps between inputs, clears when the page is hidden, and is disabled with reduced motion.
 - Validate 320×568 and 568×320 alongside larger phones, tablets and desktop, including expanded details, long counters and active run overlays. A page with no horizontal overflow can still contain clipped or overlapping text; inspect the rendered result.
 

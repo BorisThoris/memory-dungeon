@@ -106,7 +106,6 @@ const App = () => {
         openCodexFromMenu,
         openInventoryFromMenu,
         openModeSelect,
-        startRun,
         openSettings,
         run,
         saveData,
@@ -125,7 +124,6 @@ const App = () => {
             openCodexFromMenu: state.openCodexFromMenu,
             openInventoryFromMenu: state.openInventoryFromMenu,
             openModeSelect: state.openModeSelect,
-            startRun: state.startRun,
             openSettings: state.openSettings,
             run: state.run,
             saveData: state.saveData,
@@ -209,8 +207,8 @@ const App = () => {
         view
     });
     const introOverlayVisible = startupIntroContract.overlayVisible;
-    const showMainMenu = hydrated && (view === 'menu' || view === 'modeSelect');
-    const showMenuShell = startupIntroContract.renderMenuShell || view === 'modeSelect';
+    const showMainMenu = hydrated && view === 'menu';
+    const showMenuShell = startupIntroContract.renderMenuShell;
     const menuShellBlurred = showMainMenu && startupIntroContract.menuPointerState === 'blocked';
 
     useEffect(() => {
@@ -433,8 +431,7 @@ const App = () => {
                     <>
                         {showMenuShell && (
                             <div
-                                aria-hidden={introOverlayVisible || view === 'modeSelect'}
-                                inert={view === 'modeSelect'}
+                                aria-hidden={introOverlayVisible}
                                 className={`${styles.menuLayer} ${menuShellBlurred ? styles.menuLayerIntro : ''}`}
                                 data-e2e-menu-pointer={startupIntroContract.menuPointerState}
                                 data-startup-hydration={startupIntroContract.hydrationState}
@@ -453,8 +450,7 @@ const App = () => {
                                         onOpenCollection={openCollection}
                                         onOpenCodex={openCodexFromMenu}
                                         onOpenInventory={openInventoryFromMenu}
-                                        onPlay={startRun}
-                                        onOpenPlayOptions={openModeSelect}
+                                        onPlay={openModeSelect}
                                         showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
                                     />
                                 ) : null}

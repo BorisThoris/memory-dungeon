@@ -143,7 +143,7 @@ test.describe('UI fit contract', () => {
         await atEverySize(page, 'play options', async () => {
             await gotoWithSave(page, save);
             await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-            await page.getByRole('button', { name: 'Play options', exact: true }).click();
+            await page.getByRole('button', { name: 'Play', exact: true }).click();
             await page.waitForTimeout(800);
         });
     });

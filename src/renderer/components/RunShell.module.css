@@ -1855,9 +1855,9 @@
     max-width: 52vw;
     font-variant-numeric: tabular-nums;
 }
-.shell[data-layout^='phone'] .scoreValue { font: 600 1.375rem/1 'Source Sans 3', sans-serif; overflow-wrap: anywhere; }
+.shell[data-layout^='phone'] .scoreValue { font: 600 1.375rem/1 var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif); overflow-wrap: anywhere; }
 .shell[data-layout^='phone'] .gold { font-size: 0.75rem; gap: 0.2rem; }
-.shell[data-layout^='phone'] .goldValue { font: 600 0.875rem/1 'Source Sans 3', sans-serif; }
+.shell[data-layout^='phone'] .goldValue { font: 600 0.875rem/1 var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif); }
 .shell[data-layout^='phone'] .goldLabel { display: none; }
 .shell[data-layout^='phone'] .gold::before { content: '◆'; color: var(--gold); }
 .shell[data-layout^='phone'] .par {

@@ -20,7 +20,7 @@ const CAPTURE_ROOT_LABEL = relative(REPO_ROOT, CAPTURE_ROOT).replace(/\\/g, '/')
 const SCENARIO_LABELS = {
     '00-startup-intro': 'Startup relic intro',
     '01-main-menu': 'Main menu',
-    '01a-play-options': 'Optional play options',
+    '01a-choose-your-path': 'Choose Your Path',
     '01b-collection': 'Collection',
     '01c-inventory-empty': 'Inventory (no active run)',
     '01d-inventory-active': 'Inventory (active run)',

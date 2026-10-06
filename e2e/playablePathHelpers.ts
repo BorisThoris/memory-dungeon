@@ -224,6 +224,7 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
 export async function startClassicFromMenu(page: Page): Promise<void> {
     await openMainMenuFromSave(page, true);
     await mainMenuPlayButton(page).click({ force: true });
+    await page.getByRole('button', { name: 'Start run', exact: true }).click();
 
     await expectGameplayReady(page);
 }

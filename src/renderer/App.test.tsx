@@ -17,6 +17,9 @@ vi.mock('./assets/preloadStartupAssets', async (importOriginal) => {
 });
 
 import App, { APP_MAIN_LANDMARK_ID } from './App';
+// Preload the real lazy screens so timed navigation assertions measure the rendered flow.
+import './components/GameScreen';
+import './components/TutorialHall';
 import type { RunState } from '../shared/contracts';
 import { createNewRun, finishMemorizePhase, pauseRun } from '../shared/game-core';
 import { createWildRun } from '../shared/run-creation-rules';
@@ -72,6 +75,7 @@ const dismissStartupIntro = async (user: ReturnType<typeof userEvent.setup>): Pr
 
 const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promise<void> => {
     await user.click(await screen.findByRole('button', { name: /^play$/i }));
+    await user.click(await screen.findByRole('button', { name: /^start run$/i }));
 };
 
 const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 30_000 });
@@ -556,17 +560,19 @@ describe('desktop app flow', () => {
         expect(within(pause).getByText(/press p to resume/i)).toBeInTheDocument();
     });
 
-    it('starts immediately and keeps setup in an optional dialog', async () => {
+    it('opens Choose Your Path before starting and returns to the menu', async () => {
         const user = userEvent.setup();
         renderApp();
         await dismissStartupIntro(user);
-        await user.click(screen.getByRole('button', { name: 'Play options' }));
-        expect(await screen.findByRole('dialog', { name: 'Play options' })).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Play' }));
+        expect(await screen.findByRole('region', { name: /choose your path/i })).toBeInTheDocument();
+        expect(screen.queryByTestId('main-menu-focus-root')).not.toBeInTheDocument();
         expect(useAppStore.getState().run).toBeNull();
         await user.click(screen.getByRole('button', { name: 'Back' }));
         await user.click(screen.getByRole('button', { name: 'Play' }));
+        await user.click(screen.getByRole('button', { name: 'Start run' }));
         await findGameplayBoardStage();
-        expect(screen.queryByRole('dialog', { name: 'Play options' })).toBeNull();
+        expect(screen.queryByRole('region', { name: /choose your path/i })).toBeNull();
         expect(useAppStore.getState().view).toBe('playing');
     }, 30_000);
 

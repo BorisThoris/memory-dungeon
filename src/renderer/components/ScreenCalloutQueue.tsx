@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ScreenCallout } from './screenCallouts';
 import styles from './ScreenCalloutQueue.module.css';
-import { ActionTextCanvas } from './ActionTextCanvas';
 
 /**
  * One live stamp, with no backlog. A new event immediately replaces the previous stamp.
@@ -12,8 +11,8 @@ import { ActionTextCanvas } from './ActionTextCanvas';
  * behind it shows nothing new, and a run that opens on a turn already made (a resumed save)
  * seeds its keys as seen and stays quiet until the next turn.
  */
-export const SCREEN_CALLOUT_MAJOR_MS = 1450;
-export const SCREEN_CALLOUT_MINOR_MS = 1050;
+export const SCREEN_CALLOUT_MAJOR_MS = 1150;
+export const SCREEN_CALLOUT_MINOR_MS = 820;
 
 export interface ScreenCalloutQueueProps {
     callouts: readonly ScreenCallout[];
@@ -40,10 +39,8 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
         );
         return () => window.clearTimeout(timer);
     }, [showing]);
-    const duration = showing?.size === 'major' ? SCREEN_CALLOUT_MAJOR_MS : SCREEN_CALLOUT_MINOR_MS;
     return (
         <div className={styles.layer}>
-        <ActionTextCanvas callout={showing} duration={duration} reduceMotion={reduceMotion} lowQuality={lowQuality} />
         {showing ?
         <div
             aria-hidden="true"
@@ -53,10 +50,14 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
             data-callout-tone={showing.tone}
             data-callout-rare={showing.rare ? 'true' : 'false'}
             data-reduce-motion={reduceMotion ? 'true' : 'false'}
+            data-low-quality={lowQuality ? 'true' : 'false'}
             data-testid="screen-callout"
             key={showing.key}
             style={showing.color ? ({ '--stamp': showing.color } as CSSProperties) : undefined}
         >
+            <span className={styles.flash} />
+            <span className={styles.ring} />
+            <span className={styles.lines} />
             <span className={styles.stamp} data-testid="screen-callout-stamp">
                 <span className={styles.stampText} data-text={showing.title}>
                     {showing.title}

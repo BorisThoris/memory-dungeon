@@ -14,11 +14,10 @@ import { expectGameplayReady, expectRunIdentity, openModeLibrary } from './playa
 const SEED = 912_345;
 
 const pasteAndPlay = async (page: import('@playwright/test').Page, text: string): Promise<void> => {
-    await page.getByText('Use a shared run key',{exact:true}).click();
     const form = page.getByTestId('choose-path-shared-run');
     await expect(form).toBeVisible();
     await form.getByRole('textbox').fill(text);
-    await form.getByRole('button', { name: 'Play shared run' }).click();
+    await form.getByRole('button', { name: 'Play it' }).click();
 };
 
 test.describe('Playing a shared run', () => {

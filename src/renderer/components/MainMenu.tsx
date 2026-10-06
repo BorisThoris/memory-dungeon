@@ -26,7 +26,6 @@ interface MainMenuProps {
     suppressMenuBackgroundFallback?: boolean;
     onDismissHowToPlay: () => Promise<void>;
     onPlay: () => void;
-    onOpenPlayOptions?: () => void;
     onOpenCollection: () => void;
     onOpenProfile: () => void;
     onOpenCodex: () => void;
@@ -51,7 +50,6 @@ const MainMenu = ({
     reduceMotion,
     suppressMenuBackgroundFallback = false,
     onPlay,
-    onOpenPlayOptions,
     onOpenCollection,
     onOpenProfile,
     onOpenCodex,
@@ -199,18 +197,10 @@ const MainMenu = ({
                                     <span className={styles.numeral}>{NUMERALS[0]}</span>
                                     <span className={styles.entryTitle}>Play</span>
                                     <span aria-hidden="true" className={styles.leader} />
-                                    {!onOpenPlayOptions && (
-                                        <span className={styles.entryNote}>
-                                            {lastRun ? `Floor ${lastRun.highestLevel} last time` : 'Begin the descent'}
-                                        </span>
-                                    )}
+                                    <span className={styles.entryNote}>
+                                        {lastRun ? `Floor ${lastRun.highestLevel} last time` : 'Begin the descent'}
+                                    </span>
                                 </button>
-                                {onOpenPlayOptions && (
-                                    <button className={styles.playOptions} type="button" onClick={() => {
-                                        playMenuOpen();
-                                        onOpenPlayOptions();
-                                    }}>Play options</button>
-                                )}
                             </div>
                             <div className={styles.entries} data-testid="main-menu-secondary-actions">
                                 {entries.map((entry, index) => (

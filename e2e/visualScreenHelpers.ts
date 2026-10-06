@@ -371,9 +371,9 @@ export function mainMenuPlayButton(page: Page) {
 }
 
 export async function openChooseYourPath(page: Page): Promise<void> {
-    const options=page.getByRole('dialog',{name:'Play options'});
+    const options=page.getByRole('region',{name:/choose your path/i});
     if(await options.isVisible().catch(()=>false))return;
-    await page.getByRole('button',{name:'Play options',exact:true}).click();
+    await mainMenuPlayButton(page).click();
     await expect(options).toBeVisible();
 }
 
@@ -510,19 +510,21 @@ export async function openMainMenuFromSave(page: Page, onboardingDismissed: bool
 }
 
 export async function startClassicRunFromModeSelect(page: Page): Promise<void> {
-    await page.getByRole('dialog',{name:'Play options'}).getByRole('button',{name:'Play now',exact:true}).click();
+    await page.getByRole('region',{name:/choose your path/i}).getByRole('button',{name:'Start run',exact:true}).click();
     await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
 export async function openLevel1Play(page: Page): Promise<void> {
     await openMainMenuFromSave(page,true);
     await mainMenuPlayButton(page).click();
+    await startClassicRunFromModeSelect(page);
     await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
 export async function openLevel1PlayWithSave(page: Page, saveJson: string): Promise<void> {
     await gotoWithSave(page,saveJson);await dismissStartupIntro(page);
     await mainMenuPlayButton(page).click();
+    await startClassicRunFromModeSelect(page);
     await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
 }
 
@@ -720,6 +722,7 @@ export async function completeLevel1Play(page: Page, pairs: PairPositions | null
 async function restartLevel1FromMainMenu(page: Page): Promise<void> {
     await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 15000 });
     await mainMenuPlayButton(page).click();
+    await startClassicRunFromModeSelect(page);
     await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
     await waitForPlayingAndHiddenCount(page, 4);
 }

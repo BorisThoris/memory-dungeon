@@ -67,15 +67,15 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         }
     },
     {
-        fileBase: '01a-play-options',
-        name: 'optional play options',
+        fileBase: '01a-choose-your-path',
+        name: 'Choose Your Path',
         run: async (page, capture) => {
             await openMainMenuFromSave(page,true);await openChooseYourPath(page);
             await expectNoHorizontalOverflow(page);
-            const dialog=page.getByRole('dialog',{name:'Play options'});
+            const dialog=page.getByRole('region',{name:/choose your path/i});
             await expect(dialog).toBeVisible();
-            await expectCoarsePointerTarget(page,dialog.getByRole('button',{name:'Play now'}));
-            await capture('01a-play-options');
+            await expectCoarsePointerTarget(page,dialog.getByRole('button',{name:'Start run'}));
+            await capture('01a-choose-your-path');
         }
     },
     {

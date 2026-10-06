@@ -59,13 +59,13 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         await page.screenshot({path:'output/playwright/flow-next-floor-phone.png'});
     });
 
-    test('Play starts immediately and optional setup stays reachable on touch screens', async ({ browser }) => {
+    test('Choose Your Path and custom setup stay reachable on touch screens', async ({ browser }) => {
         test.setTimeout(240_000);
         const context=await browser.newContext({hasTouch:true,isMobile:true,viewport:{width:390,height:844}});
         const page=await context.newPage();
         await page.goto('/');await dismissStartupIntro(page);
-        await page.getByRole('button',{name:'Play options',exact:true}).click();
-        const options=page.getByRole('dialog',{name:'Play options'});
+        await page.getByRole('button',{name:'Play',exact:true}).click();
+        const options=page.getByRole('region',{name:/choose your path/i});
         await expect(options).toBeVisible();
         for(const [name,width,height] of [['phone',390,844],['landscape',844,390],['desktop',1440,900]] as const){
             await page.setViewportSize({width,height});
@@ -73,19 +73,21 @@ test.describe('a11y — scoped axe (REF-094)', () => {
             const controls=await options.getByRole('button').evaluateAll(elements=>elements.map(el=>({text:el.textContent,...el.getBoundingClientRect().toJSON()})));
             for(const c of controls){expect(c.height).toBeGreaterThanOrEqual(44);expect(c.x).toBeGreaterThanOrEqual(0);expect(c.right).toBeLessThanOrEqual(width);}
         }
-        await page.getByText('Customize a solo run',{exact:true}).click();
+        await page.getByRole('button',{name:'Set up your run',exact:true}).click();
         await page.setViewportSize({width:844,height:390});
-        await options.getByRole('button',{name:'Start custom run'}).scrollIntoViewIfNeeded();
+        await page.getByTestId('classic-setup-sheet').getByRole('button',{name:'Start run',exact:true}).scrollIntoViewIfNeeded();
         await page.screenshot({path:'output/playwright/flow-options-expanded-landscape.png'});
-        const {violations}=await new AxeBuilder({page}).include('[data-testid="play-options"]').analyze();
+        const {violations}=await new AxeBuilder({page}).include('[data-testid="classic-setup-sheet"]').analyze();
         expect(seriousOnly(violations)).toEqual([]);
+        await page.getByRole('button',{name:'Cancel',exact:true}).click();
         await options.getByRole('button',{name:'Back',exact:true}).click();
         await page.screenshot({path:'output/playwright/flow-menu-landscape.png'});
         await page.setViewportSize({width:390,height:844});
         await page.screenshot({path:'output/playwright/flow-menu-phone.png'});
         await page.getByRole('button',{name:'Play',exact:true}).click();
+        await page.getByRole('button',{name:'Start run',exact:true}).click();
         await expect(page.getByTestId('game-hud')).toBeVisible({timeout:120000});
-        await expect(page.getByRole('dialog',{name:'Play options'})).toHaveCount(0);
+        await expect(options).toHaveCount(0);
         await page.screenshot({path:'output/playwright/flow-direct-play-phone.png'});
         await context.close();
     });
@@ -114,6 +116,7 @@ test.describe('a11y — scoped axe (REF-094)', () => {
         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
         await dismissStartupIntro(page);
         await page.getByRole('button', { name: /^play$/i }).click();
+        await page.getByRole('button', { name: /^start run$/i }).click();
         await expect(page.getByRole('heading', { name: /level 1/i })).toBeVisible({ timeout: 30_000 });
         const { violations } = await new AxeBuilder({ page })
             .disableRules(['color-contrast'])

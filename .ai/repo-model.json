@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2935,
-    "codeFileCount": 1096,
-    "exportedSymbolCount": 3402,
+    "trackedFileCount": 2931,
+    "codeFileCount": 1092,
+    "exportedSymbolCount": 3398,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9045
+    "relationshipCount": 9055
   },
   "inventory": [
     {
@@ -1270,7 +1270,7 @@
       "path": "docs/new_design/VISUAL_SYSTEM_SPEC.md",
       "category": "documentation",
       "bytes": 10455,
-      "sha256": "562a3f438c489e8b40c8f8250d39ec371ed6813f06a51e36a634a7c75697f29e"
+      "sha256": "68a20890c51b930a37b136a4722d889598954a9497824666cb82f3280912753b"
     },
     {
       "path": "docs/performance/BOARD_DRAW_CALL_SPIKE.md",
@@ -3783,8 +3783,8 @@
     {
       "path": "e2e/a11y-scoped-routes.spec.ts",
       "category": "test",
-      "bytes": 7814,
-      "sha256": "81f97f45fa7aa03567b597e9b67b4862c36797066111f0df6258abf6ff110b21"
+      "bytes": 8041,
+      "sha256": "8439d1e88efe1eae66fcd230002005ccbc05734a88b6f362bcaa08b0eebf73eb"
     },
     {
       "path": "e2e/ambiguousControls.ts",
@@ -3945,8 +3945,8 @@
     {
       "path": "e2e/navigation-flow.spec.ts",
       "category": "test",
-      "bytes": 5710,
-      "sha256": "bf64d45c38d91e731454c5dbecf67c320ed430316699037cd4bd6befd009ba96"
+      "bytes": 6039,
+      "sha256": "8b4b2e3d560b55204684de8c8026ebb978d518b1408427de9ae04df26de54eda"
     },
     {
       "path": "e2e/original-cards-meteor.spec.ts",
@@ -3993,8 +3993,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 12347,
-      "sha256": "06cab5b81cfe59675d4ca04f1c7b19414ecd8a81737f8957ced289a7aabc4a3c"
+      "bytes": 12427,
+      "sha256": "9bb09817c9a0243c3072e8091441e59a421f4bf13532d7747c3e6ed792b88de3"
     },
     {
       "path": "e2e/playtest.spec.ts",
@@ -4041,8 +4041,8 @@
     {
       "path": "e2e/shared-run-key.spec.ts",
       "category": "test",
-      "bytes": 2773,
-      "sha256": "6c86c717cb2975aab4b93c9709270ee35960441e66d34f9814cd647304e6b150"
+      "bytes": 2694,
+      "sha256": "e4911cd7ab59479a48c557ed340f4c5aa86731b20478ef89b3cdfc6c6580084a"
     },
     {
       "path": "e2e/startup-budget.spec.ts",
@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 13755,
-      "sha256": "ee3b5eaf6343783d5606b948a94c8c56afdd9475e708072b034c9a46f3f6a8c5"
+      "bytes": 13825,
+      "sha256": "43bedd96aba6024db7ee2e317f82eb3b30d3185ddc0c42e3c8eacef7907cfb31"
     },
     {
       "path": "e2e/tools-usable.spec.ts",
@@ -4125,8 +4125,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 14120,
-      "sha256": "49b7a742c41e0ad5c1518b1735d65f8f7bba801808a641928ecba2449aca2bb0"
+      "bytes": 14112,
+      "sha256": "2bb0d58bccc5904101d33e7d31280a0e3686754cb9d467644d73b4184fe3b4e3"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4209,14 +4209,14 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 10391,
-      "sha256": "31327b3fc710be1425bad40101a37d6e37b0fd18b6d13c5ba0de6ebc89e72dbf"
+      "bytes": 10400,
+      "sha256": "28e9688500139b31b69b41bb79ac3cb5e2a35f834e1e8480947de3989a8c876c"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 34856,
-      "sha256": "273b4a2cac4a5c6b4393352d822b2fe91a406672b22b5c6a21e095e48384e6d9"
+      "bytes": 34975,
+      "sha256": "793547647195b2ddae302f85c2a912c5a384e1f108e716af37089e6641aba7cc"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 118933,
-      "sha256": "9ebd44784e4395d7f1be76a245867cc1aececb4ffbe319227c5f1bbfadd020f9"
+      "bytes": 117478,
+      "sha256": "b4f500f19cb9d0db33c9906a2b11462c2592f58c9c6307c16471e9c47d8a28dc"
     },
     {
       "path": "public/site.webmanifest",
@@ -5139,8 +5139,8 @@
     {
       "path": "scripts/e2e-surface-coverage.ts",
       "category": "script",
-      "bytes": 6321,
-      "sha256": "4558bf29d87c7ae163f1fe10470525a7f7bcaee4eb5df04d8ead3ca5e7e3340c"
+      "bytes": 6305,
+      "sha256": "d95f9b9bb91d14cd8d0e9be1aee131d599eb3067e8a81c9714359ec2ed8e8cf5"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -5223,8 +5223,8 @@
     {
       "path": "scripts/generate-visual-inventory-md.mjs",
       "category": "script",
-      "bytes": 8887,
-      "sha256": "693a8a14e40949d82eee9d501522b59808fff044bad92405efc66c0100e89cc9"
+      "bytes": 8886,
+      "sha256": "f7b23556949e2d4e2a5478810bcd236f91754c8899e60da9854a0403002f2dc4"
     },
     {
       "path": "scripts/graph-project.mjs",
@@ -5367,8 +5367,8 @@
     {
       "path": "scripts/reel-pipeline/capture/scenarios/reel-floor2.mjs",
       "category": "script",
-      "bytes": 3072,
-      "sha256": "fab8dd7fc5764916dd80c39033c8e9a54b2a459dc29841074fa4550ddaea2135"
+      "bytes": 3085,
+      "sha256": "6c977716bd4f013417ed131890b8089588a65e747c505f925f52131b5ebcb3ba"
     },
     {
       "path": "scripts/reel-pipeline/cards2.mjs",
@@ -5961,14 +5961,14 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 29235,
-      "sha256": "b3758e324e225b7dc7ca517e01645dd2735fb23ca59ff0f86dfb91af82d546aa"
+      "bytes": 29650,
+      "sha256": "834241a7d6d1eac8775302617df4ac26f31d6fccccff35c1c669d78e636d73de"
     },
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 27778,
-      "sha256": "c3234a5270209e61a8eff50b8afac612e1c7fcca53143b18ac86d451e1e67aad"
+      "bytes": 27514,
+      "sha256": "1dc881cf4cf20ebfef2aa4630fe2ef90af16b54e0e650d8b01486c2e17e154ef"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9313,30 +9313,6 @@
       "sha256": "f2852435f84a167b415ffbc6e23549f209ba3a6cef5205cfa3cc22220a3628d0"
     },
     {
-      "path": "src/renderer/components/ActionTextCanvas.tsx",
-      "category": "source",
-      "bytes": 2416,
-      "sha256": "9dc873db0840687a717cb57c7f361fabca6ca153aaa785d2c4537e5a24e3493e"
-    },
-    {
-      "path": "src/renderer/components/actionTextLayout.test.ts",
-      "category": "test",
-      "bytes": 1024,
-      "sha256": "4a481cec9dd46a69f42985037bfb66f2c8191498e2e73d6ad27824bf80847fc7"
-    },
-    {
-      "path": "src/renderer/components/actionTextLayout.ts",
-      "category": "source",
-      "bytes": 1561,
-      "sha256": "c6679d2b739e13d4441606490ff9fc425e11d7d4d44ddd3b3d8aa9309578732a"
-    },
-    {
-      "path": "src/renderer/components/actionTextRenderer.ts",
-      "category": "source",
-      "bytes": 7635,
-      "sha256": "d307eecca73cee84d893cbb8afcc0d6fb0859db4c8cb7ec14e23d3b9ef1ff2ba"
-    },
-    {
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "category": "source",
       "bytes": 5821,
@@ -9513,20 +9489,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 1700,
-      "sha256": "26d50da948ca09c3a54f4197c21b758f4b408173a67cf2d9253f9288b061c819"
+      "bytes": 22345,
+      "sha256": "235bd55f19ae42cdc457603b909161419ab5b4001a42f1ed1fb97269ece2623c"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 3574,
-      "sha256": "6f8700151138b989abdc4884a10e1e968e0259270168f1b9420b8bd71f3186ea"
+      "bytes": 8612,
+      "sha256": "53b62bcede9529a02cf4229600cb68bd0bc180d087a45d40b8edd3e5a3d127f3"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 4959,
-      "sha256": "191df6efa7796cfd94d856096830d0cbfcdf8eecccbe8797a9cb9ab205387e03"
+      "bytes": 33932,
+      "sha256": "d104151bb8d34d89e1b6a78e546283eaee2d0f018a9395d66f6c08b347a2ece9"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9693,8 +9669,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 6493,
-      "sha256": "c0c098c805fe98c67f169391a23f5206b6512d6986949793a801f45ecec3fa36"
+      "bytes": 6530,
+      "sha256": "c22c37cdc7ff98db64c9dde8438235a10c0e543327a9113e27684b6cf8c31446"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
@@ -9915,8 +9891,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13312,
-      "sha256": "da9fe42a27fea9f11a0eabd39ffc49a3c6939d30d5b61d9b7d4f953830795444"
+      "bytes": 12766,
+      "sha256": "6cfe63cb6c1921437dded2b884d4a0d9baf209353e09618c4800edeb87deeca6"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -10233,8 +10209,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 60115,
-      "sha256": "d74c0f035a48d5d594bc9ff72cc27ad4c1d0d6c86a562e72f0d0d859b4e3e2ac"
+      "bytes": 60189,
+      "sha256": "566c676291beed975ea0812c078a756a321ebf1afaf47e6ab16d2109c7866382"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10365,8 +10341,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 2596,
-      "sha256": "42c3fa03e5f43e1a2f18f33a72afacec59c7ad11468a035f51f539604c373d12"
+      "bytes": 9796,
+      "sha256": "526541fcfcfc079cd7c4c2cf0de7fd03bce45b2dad4456c2f86c573ffbaca24e"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
@@ -10377,8 +10353,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3292,
-      "sha256": "5a7c1345e912f82965c6f1b90d736aa76debdaae2b8297a026b5ba12a157f4aa"
+      "bytes": 3215,
+      "sha256": "fb85d7eeab1fc888b2745f52b3ead7504ac28976d7f67e8718d089555964a918"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
@@ -18291,10 +18267,12 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 664,
+      "lineCount": 670,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/assets/preloadStartupAssets.ts",
+        "file:src/renderer/components/GameScreen.tsx",
+        "file:src/renderer/components/TutorialHall.tsx",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -18311,7 +18289,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 554,
+      "lineCount": 550,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -19941,63 +19919,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/components/ActionTextCanvas.tsx",
-      "path": "src/renderer/components/ActionTextCanvas.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 39,
-      "imports": [
-        "file:src/renderer/components/actionTextRenderer.ts",
-        "file:src/renderer/components/screenCallouts.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/ActionTextCanvas.tsx#ActionTextCanvas"
-      ],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/actionTextLayout.test.ts",
-      "path": "src/renderer/components/actionTextLayout.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 17,
-      "imports": [
-        "file:src/renderer/components/actionTextLayout.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/actionTextLayout.ts",
-      "path": "src/renderer/components/actionTextLayout.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 24,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/components/actionTextLayout.ts#ActionTextLayout",
-        "symbol:src/renderer/components/actionTextLayout.ts#layoutActionText"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/actionTextLayout.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/actionTextRenderer.ts",
-      "path": "src/renderer/components/actionTextRenderer.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 104,
-      "imports": [
-        "file:src/renderer/components/actionTextLayout.ts",
-        "file:src/renderer/components/screenCallouts.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/actionTextRenderer.ts#createActionTextRenderer"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/renderer/components/AnimatedCardGlow.tsx",
       "path": "src/renderer/components/AnimatedCardGlow.tsx",
       "layer": "renderer",
@@ -20480,9 +20401,13 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 76,
+      "lineCount": 185,
       "imports": [
-        "file:src/renderer/components/ChooseYourPathScreen.tsx"
+        "file:src/renderer/components/ChooseYourPathScreen.tsx",
+        "file:src/renderer/components/chooseYourPathScreenModel.ts",
+        "file:src/renderer/copy/screenCopy.ts",
+        "file:src/shared/game-catalog.ts",
+        "file:src/shared/run-mode-catalog.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -20492,12 +20417,21 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 70,
+      "lineCount": 667,
       "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/modeArt.ts",
+        "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/components/PortalScene.tsx",
+        "file:src/renderer/copy/passAndPlay.ts",
+        "file:src/renderer/copy/screenCopy.ts",
+        "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/renderer/ui/index.ts",
+        "file:src/shared/challenge-progression.ts",
         "file:src/shared/classic-run-setup.ts",
+        "file:src/shared/pass-and-play-rules.ts",
+        "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/run-share-key.ts"
       ],
       "exports": [
@@ -20519,7 +20453,9 @@
       "exports": [
         "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/CodexScreen.test.tsx",
@@ -21280,6 +21216,7 @@
         "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS"
       ],
       "testedBy": [
+        "file:src/renderer/App.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx"
       ]
     },
@@ -21504,7 +21441,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 271,
+      "lineCount": 261,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -22594,9 +22531,8 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 73,
+      "lineCount": 74,
       "imports": [
-        "file:src/renderer/components/ActionTextCanvas.tsx",
         "file:src/renderer/components/screenCallouts.ts"
       ],
       "exports": [
@@ -25480,7 +25416,9 @@
       "exports": [
         "symbol:src/renderer/components/TutorialHall.tsx#default"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/App.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/tutorialHallContext.ts",
@@ -26407,7 +26345,9 @@
         "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
         "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/settingsHints.ts",
@@ -32469,6 +32409,7 @@
         "symbol:src/shared/game-catalog.ts#MUTATOR_CATALOG"
       ],
       "testedBy": [
+        "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
         "file:src/shared/game-catalog.test.ts"
       ]
     },
@@ -36096,6 +36037,7 @@
       ],
       "testedBy": [
         "file:src/renderer/assets/ui/modeArt.test.ts",
+        "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-mode-catalog.test.ts",
@@ -39165,8 +39107,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 553,
-      "endLine": 553
+      "line": 549,
+      "endLine": 549
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -41281,38 +41223,6 @@
       "endLine": 10
     },
     {
-      "id": "symbol:src/renderer/components/ActionTextCanvas.tsx#ActionTextCanvas",
-      "name": "ActionTextCanvas",
-      "kind": "function",
-      "file": "src/renderer/components/ActionTextCanvas.tsx",
-      "line": 7,
-      "endLine": 38
-    },
-    {
-      "id": "symbol:src/renderer/components/actionTextLayout.ts#ActionTextLayout",
-      "name": "ActionTextLayout",
-      "kind": "interface",
-      "file": "src/renderer/components/actionTextLayout.ts",
-      "line": 1,
-      "endLine": 1
-    },
-    {
-      "id": "symbol:src/renderer/components/actionTextLayout.ts#layoutActionText",
-      "name": "layoutActionText",
-      "kind": "function",
-      "file": "src/renderer/components/actionTextLayout.ts",
-      "line": 13,
-      "endLine": 23
-    },
-    {
-      "id": "symbol:src/renderer/components/actionTextRenderer.ts#createActionTextRenderer",
-      "name": "createActionTextRenderer",
-      "kind": "function",
-      "file": "src/renderer/components/actionTextRenderer.ts",
-      "line": 49,
-      "endLine": 103
-    },
-    {
       "id": "symbol:src/renderer/components/AnimatedCardGlow.tsx#AnimatedCardGlow",
       "name": "AnimatedCardGlow",
       "kind": "value",
@@ -41909,8 +41819,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 69,
-      "endLine": 69
+      "line": 666,
+      "endLine": 666
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -42493,8 +42403,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 270,
-      "endLine": 270
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -43565,32 +43475,32 @@
       "name": "SCREEN_CALLOUT_MAJOR_MS",
       "kind": "value",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 15,
-      "endLine": 15
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MINOR_MS",
       "name": "SCREEN_CALLOUT_MINOR_MS",
       "kind": "value",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 16,
-      "endLine": 16
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueue",
       "name": "ScreenCalloutQueue",
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 24,
-      "endLine": 72
+      "line": 23,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
       "name": "ScreenCalloutQueueProps",
       "kind": "interface",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 18,
-      "endLine": 22
+      "line": 17,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
@@ -72824,30 +72734,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/ActionTextCanvas.tsx->symbol:src/renderer/components/ActionTextCanvas.tsx#ActionTextCanvas",
-      "source": "file:src/renderer/components/ActionTextCanvas.tsx",
-      "target": "symbol:src/renderer/components/ActionTextCanvas.tsx#ActionTextCanvas",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/actionTextLayout.ts->symbol:src/renderer/components/actionTextLayout.ts#ActionTextLayout",
-      "source": "file:src/renderer/components/actionTextLayout.ts",
-      "target": "symbol:src/renderer/components/actionTextLayout.ts#ActionTextLayout",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/actionTextLayout.ts->symbol:src/renderer/components/actionTextLayout.ts#layoutActionText",
-      "source": "file:src/renderer/components/actionTextLayout.ts",
-      "target": "symbol:src/renderer/components/actionTextLayout.ts#layoutActionText",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/actionTextRenderer.ts->symbol:src/renderer/components/actionTextRenderer.ts#createActionTextRenderer",
-      "source": "file:src/renderer/components/actionTextRenderer.ts",
-      "target": "symbol:src/renderer/components/actionTextRenderer.ts#createActionTextRenderer",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/AnimatedCardGlow.tsx->symbol:src/renderer/components/AnimatedCardGlow.tsx#AnimatedCardGlow",
       "source": "file:src/renderer/components/AnimatedCardGlow.tsx",
       "target": "symbol:src/renderer/components/AnimatedCardGlow.tsx#AnimatedCardGlow",
@@ -93078,6 +92964,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.test.tsx->src/renderer/components/GameScreen.tsx",
+      "source": "file:src/renderer/App.test.tsx",
+      "target": "file:src/renderer/components/GameScreen.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/App.test.tsx->src/renderer/components/TutorialHall.tsx",
+      "source": "file:src/renderer/App.test.tsx",
+      "target": "file:src/renderer/components/TutorialHall.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.test.tsx->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/App.test.tsx",
       "target": "file:src/renderer/desktop-client.ts",
@@ -94404,36 +94302,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ActionTextCanvas.tsx->src/renderer/components/actionTextRenderer.ts",
-      "source": "file:src/renderer/components/ActionTextCanvas.tsx",
-      "target": "file:src/renderer/components/actionTextRenderer.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ActionTextCanvas.tsx->src/renderer/components/screenCallouts.ts",
-      "source": "file:src/renderer/components/ActionTextCanvas.tsx",
-      "target": "file:src/renderer/components/screenCallouts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/actionTextLayout.test.ts->src/renderer/components/actionTextLayout.ts",
-      "source": "file:src/renderer/components/actionTextLayout.test.ts",
-      "target": "file:src/renderer/components/actionTextLayout.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/actionTextRenderer.ts->src/renderer/components/actionTextLayout.ts",
-      "source": "file:src/renderer/components/actionTextRenderer.ts",
-      "target": "file:src/renderer/components/actionTextLayout.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/actionTextRenderer.ts->src/renderer/components/screenCallouts.ts",
-      "source": "file:src/renderer/components/actionTextRenderer.ts",
-      "target": "file:src/renderer/components/screenCallouts.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/AnimatedCardGlow.tsx->src/renderer/components/cardGlowFrame.ts",
       "source": "file:src/renderer/components/AnimatedCardGlow.tsx",
       "target": "file:src/renderer/components/cardGlowFrame.ts",
@@ -94818,9 +94686,75 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/components/chooseYourPathScreenModel.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "target": "file:src/renderer/components/chooseYourPathScreenModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/shared/game-catalog.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "target": "file:src/shared/game-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/shared/run-mode-catalog.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "target": "file:src/shared/run-mode-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/assets/ui/modeArt.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/assets/ui/modeArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/audio/uiSfx.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/audio/uiSfx.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/OverlayModal.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/OverlayModal.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/PortalScene.tsx",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/components/PortalScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/passAndPlay.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/copy/passAndPlay.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
       "kind": "imports"
     },
     {
@@ -94830,15 +94764,27 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/ui/index.ts",
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/challenge-progression.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/ui/index.ts",
+      "target": "file:src/shared/challenge-progression.ts",
       "kind": "imports"
     },
     {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/classic-run-setup.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/classic-run-setup.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/pass-and-play-rules.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/pass-and-play-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/run-mode-catalog.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/run-mode-catalog.ts",
       "kind": "imports"
     },
     {
@@ -97779,12 +97725,6 @@
       "id": "imports:src/renderer/components/ScreenCalloutQueue.test.tsx->src/renderer/components/screenCallouts.ts",
       "source": "file:src/renderer/components/ScreenCalloutQueue.test.tsx",
       "target": "file:src/renderer/components/screenCallouts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ScreenCalloutQueue.tsx->src/renderer/components/ActionTextCanvas.tsx",
-      "source": "file:src/renderer/components/ScreenCalloutQueue.tsx",
-      "target": "file:src/renderer/components/ActionTextCanvas.tsx",
       "kind": "imports"
     },
     {
@@ -116234,12 +116174,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/actionTextLayout.ts->file:src/renderer/components/actionTextLayout.test.ts",
-      "source": "file:src/renderer/components/actionTextLayout.ts",
-      "target": "file:src/renderer/components/actionTextLayout.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/AppErrorBoundary.tsx->file:src/renderer/components/AppErrorBoundary.test.tsx",
       "source": "file:src/renderer/components/AppErrorBoundary.tsx",
       "target": "file:src/renderer/components/AppErrorBoundary.test.tsx",
@@ -116356,6 +116290,12 @@
     {
       "id": "tested_by:src/renderer/components/ChooseYourPathScreen.tsx->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/chooseYourPathScreenModel.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "source": "file:src/renderer/components/chooseYourPathScreenModel.ts",
       "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "kind": "tested_by"
     },
@@ -116513,6 +116453,12 @@
       "id": "tested_by:src/renderer/components/gameplayVisualConfig.ts->file:src/shared/graphicsQuality.test.ts",
       "source": "file:src/renderer/components/gameplayVisualConfig.ts",
       "target": "file:src/shared/graphicsQuality.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/GameScreen.tsx->file:src/renderer/App.test.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/App.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -117212,6 +117158,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/TutorialHall.tsx->file:src/renderer/App.test.tsx",
+      "source": "file:src/renderer/components/TutorialHall.tsx",
+      "target": "file:src/renderer/App.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/useSceneWipe.ts->file:src/renderer/components/sceneWipeFrames.test.tsx",
       "source": "file:src/renderer/components/useSceneWipe.ts",
       "target": "file:src/renderer/components/sceneWipeFrames.test.tsx",
@@ -117395,6 +117347,12 @@
       "id": "tested_by:src/renderer/copy/saveRecoveryNotice.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/screenCopy.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -120140,6 +120098,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-catalog.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "source": "file:src/shared/game-catalog.ts",
+      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-catalog.ts->file:src/shared/game-catalog.test.ts",
       "source": "file:src/shared/game-catalog.ts",
       "target": "file:src/shared/game-catalog.test.ts",
@@ -121781,6 +121745,12 @@
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/renderer/assets/ui/modeArt.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/renderer/assets/ui/modeArt.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "source": "file:src/shared/run-mode-catalog.ts",
+      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "kind": "tested_by"
     },
     {

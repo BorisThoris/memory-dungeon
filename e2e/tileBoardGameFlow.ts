@@ -83,6 +83,7 @@ export async function navigateToLevel1PlayPhase(
     await page.goto('/');
     await dismissStartupIntro(page);
     await page.getByRole('button', { name: /^play$/i }).click();
+    await page.getByRole('button', { name: /^start run$/i }).click();
     await expect(page.getByTestId('game-hud')).toBeVisible({timeout:60000});
     // Level title can be sr-only on compact viewports; attached is enough to proceed.
     await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15_000 });

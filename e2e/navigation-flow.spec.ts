@@ -17,32 +17,35 @@ async function expectGameplayHudWithWings(page: Page): Promise<void> {
 test.describe('Navigation shells', () => {
     test.describe.configure({ retries: 1 });
     test.setTimeout(120_000);
-    test('Play starts level 1 directly', async ({ page }) => {
+    test('Play opens Choose Your Path before level 1', async ({ page }) => {
         await openMainMenuFromSave(page, true);
         await page.getByRole('button', { name: 'Play', exact: true }).click();
+        await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
+        await page.getByRole('button', { name: 'Start run', exact: true }).click();
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
-        await expect(page.getByRole('dialog', { name: 'Play options' })).toHaveCount(0);
+        await expect(page.getByRole('region', { name: /choose your path/i })).toHaveCount(0);
     });
 
     test('optional setup applies a custom solo run', async ({ page }) => {
         test.setTimeout(120_000);
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
-        await page.getByText('Customize a solo run', { exact: true }).click();
-        await page.getByLabel('More time to study the cards').check();
-        await page.getByRole('button', { name: 'Start custom run' }).click();
+        await page.getByRole('button', { name: 'Set up your run', exact: true }).click();
+        await page.getByText('Calm: slower resolves', { exact: true }).click();
+        await expect(page.getByLabel('Calm: slower resolves')).toBeChecked();
+        await page.getByTestId('classic-setup-sheet').getByRole('button', { name: 'Start run', exact: true }).click();
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
         const pacing = await page.evaluate(async () =>
             (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.resolveDelayMultiplier);
         expect(pacing).toBeGreaterThan(1);
     });
 
-    test('optional setup returns focus to its menu button on Escape', async ({ page }) => {
+    test('Choose Your Path returns to the menu on Escape', async ({ page }) => {
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
         await page.keyboard.press('Escape');
-        await expect(page.getByRole('dialog', { name: 'Play options' })).toHaveCount(0);
-        await expect(page.getByRole('button', { name: 'Play options', exact: true })).toBeFocused();
+        await expect(page.getByRole('region', { name: /choose your path/i })).toHaveCount(0);
+        await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeVisible();
     });
 
     test('Collection from main menu returns to menu on Back', async ({ page }) => {
@@ -103,7 +106,7 @@ test.describe('Navigation shells', () => {
     test('optional setup starts a shared-device run directly', async ({ page }) => {
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
-        await page.getByText('Play together on this device', { exact: true }).click();
+        await page.getByRole('button', { name: /^Pass and Play\. Open details\.$/i }).click();
         await page.getByRole('button', { name: '3 players' }).click();
         await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 60_000 });
         const seats = await page.evaluate(async () =>
