@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-07T19:47:07.160Z",
+  "capturedAt": "2026-10-07T23:01:49.092Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 157609,
+      "bytes": 155210,
       "status": "captured",
       "stats": {
-        "mean": 25,
+        "mean": 24,
         "std": 15,
-        "dark": 0.154,
+        "dark": 0.164,
         "light": 0,
-        "colours": 20
+        "colours": 19
       }
     },
     {
@@ -56,14 +56,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 147283,
+      "bytes": 144775,
       "status": "captured",
       "stats": {
-        "mean": 25,
+        "mean": 24,
         "std": 15,
-        "dark": 0.121,
+        "dark": 0.127,
         "light": 0,
-        "colours": 22
+        "colours": 19
       }
     },
     {
@@ -71,14 +71,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 39794,
+      "bytes": 39240,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 16,
         "dark": 0.039,
         "light": 0,
-        "colours": 30
+        "colours": 26
       }
     },
     {
@@ -86,29 +86,32 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 121659,
+      "bytes": 120064,
       "status": "captured",
       "stats": {
         "mean": 25,
         "std": 15,
-        "dark": 0.115,
+        "dark": 0.127,
         "light": 0,
-        "colours": 21
-      }
+        "colours": 20
+      },
+      "skipped": [
+        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
+      ]
     },
     {
       "profile": "og",
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 114126,
+      "bytes": 110114,
       "status": "captured",
       "stats": {
         "mean": 25,
         "std": 14,
-        "dark": 0.143,
+        "dark": 0.148,
         "light": 0,
-        "colours": 18
+        "colours": 17
       }
     }
   ]
