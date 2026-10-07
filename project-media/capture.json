@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-06T23:37:06.317Z",
+  "capturedAt": "2026-10-07T13:00:46.906Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -9,8 +9,11 @@
       {
         "type": "click",
         "target": {
-          "text": "Continue to game"
+          "role": "button",
+          "name": "Continue to game",
+          "exact": true
         },
+        "timeoutMs": 45000,
         "label": "leave the studio splash"
       },
       {
@@ -27,14 +30,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 162182,
+      "bytes": 164673,
       "status": "captured",
       "stats": {
         "mean": 25,
-        "std": 18,
-        "dark": 0.193,
+        "std": 19,
+        "dark": 0.194,
         "light": 0,
-        "colours": 28
+        "colours": 30
       }
     },
     {
@@ -42,14 +45,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 153713,
+      "bytes": 154682,
       "status": "captured",
       "stats": {
         "mean": 26,
         "std": 19,
         "dark": 0.154,
         "light": 0,
-        "colours": 28
+        "colours": 31
       }
     },
     {
@@ -72,14 +75,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 126228,
+      "bytes": 128900,
       "status": "captured",
       "stats": {
-        "mean": 25,
-        "std": 17,
-        "dark": 0.159,
+        "mean": 26,
+        "std": 19,
+        "dark": 0.155,
         "light": 0,
-        "colours": 27
+        "colours": 29
       }
     },
     {
@@ -87,14 +90,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 118166,
+      "bytes": 118923,
       "status": "captured",
       "stats": {
         "mean": 26,
         "std": 18,
-        "dark": 0.18,
+        "dark": 0.173,
         "light": 0,
-        "colours": 28
+        "colours": 27
       }
     }
   ]
