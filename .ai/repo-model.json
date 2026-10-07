@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2975,
-    "codeFileCount": 1119,
-    "exportedSymbolCount": 3491,
+    "trackedFileCount": 2974,
+    "codeFileCount": 1118,
+    "exportedSymbolCount": 3490,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9300
+    "relationshipCount": 9298
   },
   "inventory": [
     {
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "ffc81dc4b2a0f8a2eab105c24bfd2e283fc0320587198553a805104c51d6ac95"
+      "sha256": "80a96112b252c920a37735426ca63bdb018fe1378f06f4fb20434211ff525f22"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 118166,
-      "sha256": "9c2b4c661abb3d170f98003a9c5881ea283a2f532917eb824d5a92ef377e3bce"
+      "bytes": 116666,
+      "sha256": "298e069e1a2c453ca4a990fab68a5e4990e4ab54e43876bfd17d990b3886ab3c"
     },
     {
       "path": "public/site.webmanifest",
@@ -5295,8 +5295,8 @@
     {
       "path": "scripts/project-meta.config.mjs",
       "category": "script",
-      "bytes": 4812,
-      "sha256": "a0f2d55e6cd142d4ef000a3f8f5ac10ce2866922b0695a0c0522607768d6864b"
+      "bytes": 5073,
+      "sha256": "bf39efda8d296730593eae7b0558cdccd483bb9f0381314f3474b457c780a6c4"
     },
     {
       "path": "scripts/project.meta.schema.json",
@@ -11707,12 +11707,6 @@
       "sha256": "8d7b96ef049dbd8ab5754d5f4c85229e6380c486d9f13a777c02b5159c09142e"
     },
     {
-      "path": "src/renderer/copy/elementCopy.ts",
-      "category": "source",
-      "bytes": 300,
-      "sha256": "472644119ed649dbf39ad0d0346fa6471e9f9a49b15644a3c1f59dd1585f8efc"
-    },
-    {
       "path": "src/renderer/copy/floorClearChain.ts",
       "category": "source",
       "bytes": 2419,
@@ -17823,8 +17817,8 @@
     {
       "path": "tsconfig.json",
       "category": "configuration",
-      "bytes": 965,
-      "sha256": "603e860dbd020d5c042e618c187b9bcc3fd6638cdb4052ce7412f9942f9a93f5"
+      "bytes": 1000,
+      "sha256": "5974fcf5ee29c5193fef041427e99f8fdc3dfadea3dd6e50e4dce996aa69cb48"
     },
     {
       "path": "tsconfig.shared.json",
@@ -26586,20 +26580,6 @@
         "symbol:src/renderer/copy/elementClarity.ts#ARENA_ACTION",
         "symbol:src/renderer/copy/elementClarity.ts#ELEMENT_ACTION",
         "symbol:src/renderer/copy/elementClarity.ts#focusSummary"
-      ],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/copy/elementCopy.ts",
-      "path": "src/renderer/copy/elementCopy.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 10,
-      "imports": [
-        "file:src/shared/contracts.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/copy/elementCopy.ts#ELEMENT_NAME"
       ],
       "testedBy": []
     },
@@ -49014,14 +48994,6 @@
       "file": "src/renderer/copy/elementClarity.ts",
       "line": 14,
       "endLine": 17
-    },
-    {
-      "id": "symbol:src/renderer/copy/elementCopy.ts#ELEMENT_NAME",
-      "name": "ELEMENT_NAME",
-      "kind": "value",
-      "file": "src/renderer/copy/elementCopy.ts",
-      "line": 4,
-      "endLine": 9
     },
     {
       "id": "symbol:src/renderer/copy/floorClearChain.ts#FLOOR_CLEAR_COPY",
@@ -79531,12 +79503,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/elementCopy.ts->symbol:src/renderer/copy/elementCopy.ts#ELEMENT_NAME",
-      "source": "file:src/renderer/copy/elementCopy.ts",
-      "target": "symbol:src/renderer/copy/elementCopy.ts#ELEMENT_NAME",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/floorClearChain.ts->symbol:src/renderer/copy/floorClearChain.ts#FLOOR_CLEAR_COPY",
       "source": "file:src/renderer/copy/floorClearChain.ts",
       "target": "symbol:src/renderer/copy/floorClearChain.ts#FLOOR_CLEAR_COPY",
@@ -103849,12 +103815,6 @@
     {
       "id": "imports:src/renderer/copy/elementClarity.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/copy/elementClarity.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/elementCopy.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/copy/elementCopy.ts",
       "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
