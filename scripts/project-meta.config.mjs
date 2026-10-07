@@ -46,7 +46,8 @@ export default {
     "actions": [
       {
         "type": "click",
-        "target": { "text": "Continue to game" },
+        "target": { "role": "button", "name": "Continue to game", "exact": true },
+        "timeoutMs": 45000,
         "label": "leave the studio splash"
       },
       { "type": "wait", "ms": 1500, "label": "let the title screen settle" }
