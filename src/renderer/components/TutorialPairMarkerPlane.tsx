@@ -1,5 +1,5 @@
 import { useLayoutEffect, useMemo, type ReactElement } from 'react';
-import { CanvasTexture, DoubleSide, NearestFilter, SRGBColorSpace } from 'three';
+import { CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace } from 'three';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 
@@ -46,8 +46,9 @@ export const TutorialPairMarkerPlane = ({
         canvas.height = 128;
         const tex = new CanvasTexture(canvas);
         tex.colorSpace = SRGBColorSpace;
-        tex.minFilter = NearestFilter;
-        tex.magFilter = NearestFilter;
+        // Smooth on a tilted card: nearest sampling made the marker jagged.
+        tex.minFilter = LinearMipmapLinearFilter;
+        tex.magFilter = LinearFilter;
         return tex;
     }, []);
 

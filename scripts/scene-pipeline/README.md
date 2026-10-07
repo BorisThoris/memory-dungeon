@@ -12,6 +12,7 @@ bash scripts/scene-pipeline/scene.sh        # dungeon: cut sprites → segment �
 bash scripts/scene-pipeline/cathedral.sh    # cathedral: cut sprites → segment → assets
 bash scripts/scene-pipeline/portal.sh       # portal clearing (Classic poster): cut the vortex disc → segment → assets
 python3 scripts/scene-pipeline/bake_ambient.py   # the ambient atlas and fog tile every scene shares
+E:/avatar-scan/venv/Scripts/python.exe -I scripts/scene-pipeline/upscale_plates.py   # after any of the three: the 2064 px runtime WebPs
 ```
 
 ## Stages
@@ -48,6 +49,18 @@ python3 scripts/scene-pipeline/bake_ambient.py   # the ambient atlas and fog til
    `bg-mode-classic-v2-{base,glow-runes,glow-moon,stars}`), and the sprite
    strips + manifest into `src/renderer/assets/ui/sprites/` (`assets/ui/sprites/index.ts` resolves
    them; `SCENE_SPRITES`).
+4. **`upscale_plates.py`** — rewrites those layers' WebPs at 2064x1152 from the 1376x768 PNG
+   masters, which stay as the pipeline wrote them. A desktop's scene canvas has up to 1.5 pixels
+   per painting pixel (`SCENE_CANVAS_MAX_SCALE`); stretched from 1376, a room on a 1440p or 4K
+   screen was soft. Plates go through Real-ESRGAN x4 and Lanczos down. Glow layers are upscaled as
+   the light they add (rgb x alpha on black) beside their alpha, not as straight colour, so no
+   black creeps into their edges. The light passes are rebuilt rather than enlarged: Blender's
+   room is a box, and where its planes meet the light jumps along a straight line the painting
+   does not have (the pale wedges that sat over the vault and the floor), with the render's grain
+   on top. The script keeps only the light, `blur(pass) / blur(base)`, scaled to the pass's total,
+   and lays the upscaled base under it, so the stone's detail is the base's and the light is
+   smooth. Needs the avatar-scan venv (torch, basicsr, realesrgan, scipy) and
+   `RealESRGAN_x4plus.pth`.
 
 ## In the game
 
@@ -71,8 +84,9 @@ offscreen surface the size of the screen in device pixels, re-composited wheneve
 it moves: 33 MB apiece at 4K, 12 MB apiece on a phone at three pixels to the point. The stack
 that fit a laptop did not fit either, and when the compositor ran out of room it dropped tiles,
 which is the flashing that was reported at high resolutions and on phones. One canvas at the
-art's size is 4 MB on every device. The rule that follows: **nothing in a scene is its own
-element unless it has to be** (the storm's bolts, the gold rain and the black hole still are).
+art's size is 4 MB on a phone, and a desktop's, at most half again as many pixels a side
+(`SCENE_CANVAS_MAX_SCALE`), is 9 MB at 4K. The rule that follows: **nothing in a scene is its own
+element unless it has to be** (only the black hole still is).
 
 Images are decoded once and held (`sceneBitmaps.ts`), taken from the run preloader's own
 elements where it has them, so a scene never draws a frame it has to wait for; a colour grade
@@ -115,9 +129,10 @@ the trees.
 ### What lives in the rooms
 
 Beyond what the painter painted, each scene has things in it that move and things that happen
-now and then, all drawn from one baked atlas (`bake_ambient.py` → `ambient-v1.webp`, 512 px: glow
+now and then, all drawn from one baked atlas (`bake_ambient.py` → `ambient-v1.webp`, 1024 px: glow
 dots in each light's colour, a glint, dust, a drop and its ripple, smoke, leaves, a bat and a
-moth as flipbooks, a spider, a falling star, a sheet of light shafts) and one fog tile that
+moth as flipbooks, a spider, a falling star, a sheet of light shafts, and a gold coin ray-traced
+through eight frames of a half turn, lit warm from the torches and cold off the runes) and one fog tile that
 repeats (`ambient-fog-v1.webp`). `sceneAmbient.ts` places them:
 
 - **Cathedral**: moonlight in shafts from the clerestory with dust turning in it, mist on the

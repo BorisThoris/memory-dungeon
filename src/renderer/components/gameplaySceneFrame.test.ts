@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
-import { composeGameplayScene, GAMEPLAY_EYES_EVERY_MS, GAMEPLAY_EYES_LAST_MS, GAMEPLAY_SPIDER_EVERY_MS, GAMEPLAY_SPIDER_LASTS_MS, SCENE_RING, type GameplayFrameInput } from './gameplaySceneFrame';
+import { composeGameplayScene, GAMEPLAY_EYES_EVERY_MS, GAMEPLAY_EYES_LAST_MS, GAMEPLAY_SPIDER_EVERY_MS, GAMEPLAY_SPIDER_LASTS_MS, goldCoinDraws, SCENE_RING, type GameplayFrameInput } from './gameplaySceneFrame';
+import { goldCoinFloor, goldCoinSize, GOLD_RAIN_FLOOR, GOLD_RAIN_HOP_S, type GoldCoin } from './goldRain';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { createSceneClock, fixedSceneClock, sceneOccurrence } from './sceneClock';
 import { deriveSceneMood, type SceneMood } from './sceneMood';
@@ -378,14 +379,18 @@ describe('composeGameplayScene', () => {
         // Found already raining (a restore): nothing replays.
         expect(count(frame({ mood: paid }), 'coin-')).toBe(0);
         const during = frame({ mood: paid }, 1000, { 'gold-rain': 1100 });
-        const coins = during.filter((draw): draw is SceneImageDraw => draw.kind === 'image' && draw.id.startsWith('coin-'));
+        const coins = during.filter((draw): draw is SceneImageDraw => draw.kind === 'image' && /^coin-\d+$/.test(draw.id));
         expect(coins.length).toBeGreaterThan(8);
         expect(coins.length).toBeLessThanOrEqual(24);
         for (const coin of coins) {
+            // Metal in the room's light, not a glow: drawn over the stone, a frame of its baked turn.
             expect(coin.blend).toBe('source-over');
-            expect(Math.abs(coin.scaleX!)).toBeLessThanOrEqual(1);
+            expect(coin.frame!.count).toBe(8);
+            expect(coin.scaleX).toBeUndefined();
             expect(coin.rect!.x).toBeGreaterThan(0);
             expect(coin.rect!.x).toBeLessThan(1);
+            // Nothing falls through the floor of the room.
+            expect(coin.rect!.y + coin.rect!.h).toBeLessThanOrEqual(GOLD_RAIN_FLOOR.near + 1e-9);
         }
         // They are at different heights: a shower, not a curtain.
         expect(new Set(coins.map((coin) => Math.round(coin.rect!.y * 20))).size).toBeGreaterThan(4);
@@ -393,6 +398,47 @@ describe('composeGameplayScene', () => {
         expect(count(frame({ mood: paid, tier: 'still' }, 1000, { 'gold-rain': 1100 }), 'coin-')).toBe(0);
         // A phone rains half as many.
         expect(count(frame({ mood: paid, tier: 'lean' }, 1000, { 'gold-rain': 1100 }), 'coin-')).toBeLessThan(coins.length);
+    });
+
+    it('rains on the first payout a room sees, not only on the ones after it', () => {
+        const driver = createSceneClock();
+        const input = (over: Partial<GameplayFrameInput>): GameplayFrameInput => ({
+            fill: 0, memorize: false, pulse: 'none', pulseKey: null, feverKey: null, cleared: false, imminent: false,
+            comboHeat: 0, comboHueDeg: 0, mood: mood('ember'), runSeed: 1, tier: 'full', base: 1, ...over
+        });
+        composeGameplayScene(input({}), driver.frame(0));
+        const paid = { ...mood('ember'), goldRain: { key: 'bought:miss:1', coins: 18 } };
+        composeGameplayScene(input({ mood: paid }), driver.frame(100));
+        const falling = composeGameplayScene(input({ mood: paid }), driver.frame(1300));
+        expect(count(falling, 'coin-')).toBeGreaterThan(4);
+    });
+
+    it('drops a coin under gravity onto its spot on the floor, hops once, and lets it go out', () => {
+        const coin: GoldCoin = { x: 50, delay: 0, duration: 1, depth: 0.5, spin: 3, phase: 0 };
+        const bottomAt = (seconds: number) => {
+            const draw = goldCoinDraws(coin, 0, seconds, false).find((d) => d.id === 'coin-0') as SceneImageDraw | undefined;
+            return draw ? draw.rect!.y + draw.rect!.h : null;
+        };
+        // From rest, faster and faster: the second half of the fall covers three times the first.
+        const top = bottomAt(0.001)!;
+        const half = bottomAt(0.5)!;
+        const floor = goldCoinFloor(coin);
+        expect(bottomAt(1)! - half).toBeGreaterThan(2.5 * (half - top));
+        expect(bottomAt(0.999)).toBeCloseTo(floor, 2);
+        // A hop off the floor, then it lies there.
+        expect(bottomAt(1 + GOLD_RAIN_HOP_S / 2)!).toBeLessThan(floor - 0.005);
+        expect(bottomAt(1 + GOLD_RAIN_HOP_S + 0.05)).toBeCloseTo(floor, 6);
+        // Falling fast it smears; at rest it does not.
+        expect(goldCoinDraws(coin, 0, 0.9, false).some((d) => d.id.includes('trail'))).toBe(true);
+        expect(goldCoinDraws(coin, 0, 0.9, true).some((d) => d.id.includes('trail'))).toBe(false);
+        expect(goldCoinDraws(coin, 0, 1 + GOLD_RAIN_HOP_S + 0.05, false).some((d) => d.id.includes('trail'))).toBe(false);
+        // And it goes out.
+        expect(goldCoinDraws(coin, 0, 1 + GOLD_RAIN_HOP_S + 0.3 + 0.4 + 0.01, false)).toHaveLength(0);
+        // A far coin lands higher on the plate and is smaller than a near one.
+        const far = { ...coin, depth: 1 };
+        const near = { ...coin, depth: 0 };
+        expect(goldCoinFloor(far)).toBeLessThan(goldCoinFloor(near));
+        expect(goldCoinSize(far)).toBeLessThan(goldCoinSize(near));
     });
 
     it('darkens for a breath on a miss and guts the torches without putting them out', () => {

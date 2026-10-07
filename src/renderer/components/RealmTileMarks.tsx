@@ -1,5 +1,5 @@
 import { useMemo, type ReactElement } from 'react';
-import { CanvasTexture, DoubleSide, LinearFilter, SRGBColorSpace } from 'three';
+import { CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace } from 'three';
 import type { Tile } from '../../shared/contracts';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
@@ -22,7 +22,8 @@ const textureFor = (mark: RealmTileMark, faceUp: boolean): CanvasTexture => {
     if (context) paintCardStatus(context, canvas.width, canvas.height, mark, faceUp);
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
-    texture.minFilter = LinearFilter;
+    // Mipmapped: a tilted or distant card shrinks this, and without mips it shimmers.
+    texture.minFilter = LinearMipmapLinearFilter;
     texture.magFilter = LinearFilter;
     textures.set(key, texture);
     return texture;

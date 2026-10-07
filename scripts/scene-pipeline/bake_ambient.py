@@ -5,9 +5,10 @@ Bake the ambient sprites the painted scenes share (`src/renderer/components/scen
 Everything a scene moves that the painter did not paint is baked here once and shipped as two
 images, so the game draws pre-rendered pixels and computes none of it at runtime:
 
-  ambient-v1.webp      a 512x576 atlas of small cells: glow dots in each light's colour, a glint,
+  ambient-v1.webp      a 1024x704 atlas of small cells: glow dots in each light's colour, a glint,
                        dust, a water drop and its ripple, a smoke puff, leaves, a bat and a moth as
-                       flipbooks, a spider, a shooting star, a gold coin, and a 512x256 sheet of light shafts
+                       flipbooks, a spider, a shooting star, a 512x256 sheet of light shafts, and a gold
+                       coin turning in eight 128px frames
   ambient-fog-v1.webp  a 512x256 tile of fog that repeats in both directions
   ambient-v1.json      where each cell is, in pixels
 
@@ -25,8 +26,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 OUT = Path(__file__).resolve().parents[2] / 'src' / 'renderer' / 'assets' / 'ui' / 'sprites'
-ATLAS = 512
-ATLAS_H = 576  # eight rows of cells and the shafts, then one more row
+ATLAS = 1024
+ATLAS_H = 704  # eight rows of cells and the shafts, then the coin's turn
 CELL = 64
 SS = 4  # supersampling for drawn shapes
 
@@ -258,24 +259,122 @@ atlas[256:512, 0:512] = shaft_rgba
 cells['shafts'] = {'x': 0, 'y': 256, 'w': SHAFT_W, 'h': SHAFT_H, 'frames': 1}
 
 
-# ---------------------------------------------------------------- row 8: the coin
-def coin(d: ImageDraw.ImageDraw, w: int, h: int) -> None:
-    cx, cy = w / 2, h / 2
-    radius = w * 0.3
-    # Rim, face, the ring struck into it, and a highlight high on the left.
-    d.ellipse([cx - radius, cy - radius, cx + radius, cy + radius], fill=(138, 90, 18, 255))
-    d.ellipse([cx - radius * 0.9, cy - radius * 0.9, cx + radius * 0.9, cy + radius * 0.9], fill=(241, 194, 77, 255))
-    d.ellipse([cx - radius * 0.62, cy - radius * 0.62, cx + radius * 0.62, cy + radius * 0.62], outline=(255, 241, 194, 190), width=max(1, SS))
-    d.ellipse([cx - radius * 0.55, cy - radius * 0.62, cx - radius * 0.05, cy - radius * 0.18], fill=(255, 243, 196, 150))
+# ---------------------------------------------------------------- rows 9-10: the coin
+# A struck gold coin, ray-traced as a thin disc and turned about its upright axis: eight frames of a
+# half turn (the two faces are struck alike, so half a turn is the whole cycle). It is lit the way
+# the room is, warm from the torches above and to the left, a cold rim off the blue runes, and it
+# reflects a dark room, so it reads as metal in that light and not as a flat yellow token. No glow
+# is baked around it: a coin in a dark room is dark gold with hot glints, and the glints are the
+# room's own glint cell drawn over it when the turn catches the light.
+COIN = 128
+COIN_FRAMES = 8
+COIN_ROW_Y = 576
 
 
-coin_face = shape(coin)
-# Its own light, baked in: the glow a drop-shadow filter used to draw on every coin, every frame.
-coin_glow = np.exp(-(radial(CELL) / 0.46) ** 2 * 2.4) * 0.55
-coin_alpha = np.maximum(coin_face[..., 3], coin_glow * 255)
-blend = (coin_face[..., 3:4] / 255)
-coin_rgb = coin_face[..., :3] * blend + np.array((255, 210, 90), dtype=np.float32) * (1 - blend)
-put('coin', 0, 8, np.dstack([coin_rgb, coin_alpha]))
+def coin_frame(theta: float, ss: int = 4) -> np.ndarray:
+    n = COIN * ss
+    ax = (np.arange(n) + 0.5) / n * 2 - 1
+    u, v = np.meshgrid(ax, -ax)  # v up
+    radius, half = 0.86, 0.075
+    c, s_ = math.cos(theta), math.sin(theta)
+    # The view ray is (0, 0, -1) from z = +4; in the coin's frame (turned by theta about y).
+    ox, oy, oz = u * c - 4 * s_, v, u * s_ + 4 * c
+    dx, dz = s_, -c
+    big = np.full(u.shape, np.inf)
+    hit_t, nx, ny, nz = big.copy(), np.zeros_like(u), np.zeros_like(u), np.zeros_like(u)
+    face_mask = np.zeros(u.shape, bool)
+    lx_face, ly_face = np.zeros_like(u), np.zeros_like(u)
+    # The two faces.
+    if abs(dz) > 1e-6:
+        for side in (1.0, -1.0):
+            t = (side * half - oz) / dz
+            x = ox + t * dx
+            inside = (x * x + oy * oy <= radius * radius) & (t > 0) & (t < hit_t)
+            hit_t = np.where(inside, t, hit_t)
+            nz = np.where(inside, side, nz)
+            nx = np.where(inside, 0.0, nx)
+            ny = np.where(inside, 0.0, ny)
+            face_mask |= inside
+            lx_face = np.where(inside, x * side, lx_face)
+            ly_face = np.where(inside, oy, ly_face)
+    # The milled edge.
+    if abs(dx) > 1e-6:
+        disc = radius * radius - oy * oy
+        ok = disc >= 0
+        root = np.sqrt(np.where(ok, disc, 0))
+        for sign in (-1.0, 1.0):
+            t = (sign * root - ox) / dx
+            z = oz + t * dz
+            inside = ok & (np.abs(z) <= half) & (t > 0) & (t < hit_t)
+            x = ox + t * dx
+            angle = np.arctan2(oy, x)
+            reed = 0.18 * np.sin(angle * 90)
+            hit_t = np.where(inside, t, hit_t)
+            nx = np.where(inside, x / radius - reed * np.sin(angle), nx)
+            ny = np.where(inside, oy / radius + reed * np.cos(angle), ny)
+            nz = np.where(inside, 0.0, nz)
+            face_mask &= ~inside
+    hit = np.isfinite(hit_t)
+    # The face's relief: a raised rim, a ring of beads, a struck eight-point star; normals from its slope.
+    r = np.sqrt(lx_face ** 2 + ly_face ** 2) / radius
+    a = np.arctan2(ly_face, lx_face)
+    height = 0.55 * np.clip((r - 0.86) / 0.06, 0, 1)
+    height += 0.35 * np.exp(-((r - 0.74) / 0.018) ** 2) * (0.5 + 0.5 * np.cos(a * 36)) ** 3
+    star = 0.42 * (0.55 + 0.45 * np.abs(np.cos(a * 4)) ** 6)
+    height += 0.45 * np.clip((star - r) / 0.06, 0, 1)
+    height += 0.25 * np.exp(-(r / 0.09) ** 2)
+    gy, gx = np.gradient(height, 2 / n, 2 / n)
+    bump = 0.035
+    # Face normals in the coin frame, then back to the view.
+    fx_ = -gx * bump * np.where(nz >= 0, 1, -1)
+    fy_ = gy * bump
+    nx = np.where(face_mask, fx_, nx)
+    ny = np.where(face_mask, fy_, ny)
+    # World normal: turn the coin-frame normal back by theta.
+    wx = nx * c + nz * s_
+    wz = -nx * s_ + nz * c
+    wy = ny
+    length = np.sqrt(wx * wx + wy * wy + wz * wz) + 1e-9
+    wx, wy, wz = wx / length, wy / length, wz / length
+    # Light: a warm torch key up-left and in front, a cold rim behind on the right, a dark room.
+    def lit(lx, ly, lz):
+        l = np.array([lx, ly, lz]) / math.sqrt(lx * lx + ly * ly + lz * lz)
+        return l
+    key, rim = lit(-0.55, 0.6, 0.58), lit(0.7, 0.15, -0.35)
+    view = np.array([0.0, 0.0, 1.0])
+    gold = np.array([1.0, 0.80, 0.40])
+    def spec(l, power):
+        h = (l + view) / np.linalg.norm(l + view)
+        return np.clip(wx * h[0] + wy * h[1] + wz * h[2], 0, 1) ** power
+    def diff(l):
+        return np.clip(wx * l[0] + wy * l[1] + wz * l[2], 0, 1)
+    # Reflection of the room: brighter toward the torch-lit horizon on the left, dark above and below.
+    ry = 2 * wz * wy
+    rx = 2 * wz * wx
+    env = 0.2 + 0.3 * np.exp(-((ry - 0.1) / 0.45) ** 2) * (0.6 + 0.4 * np.clip(-rx, -1, 1))
+    warm = np.array([1.0, 0.86, 0.62])
+    cold = np.array([0.55, 0.65, 1.0])
+    rgb = (gold[None, None, :] * (env[..., None] * warm + 0.42 * diff(key)[..., None] * warm)
+           + gold[None, None, :] * 0.9 * spec(key, 28)[..., None] * warm
+           + 0.55 * spec(key, 160)[..., None]
+           + (0.5 * cold + 0.5 * gold) * 0.22 * spec(rim, 12)[..., None])
+    # The edge is darker and rougher than the polished faces.
+    rgb = np.where((~face_mask)[..., None], rgb * 0.72, rgb)
+    rgb = np.clip(rgb, 0, 1) ** (1 / 1.1)
+    rgba = np.dstack([rgb * 255, hit.astype(np.float32) * 255])
+    small = Image.fromarray(np.clip(rgba, 0, 255).astype(np.uint8), 'RGBA')
+    # Average premultiplied, so the edge does not pick up the black of the empty pixels.
+    pm = np.asarray(small, dtype=np.float32)
+    pm[..., :3] *= pm[..., 3:4] / 255
+    down = pm.reshape(COIN, ss, COIN, ss, 4).mean(axis=(1, 3))
+    alpha = down[..., 3:4]
+    down[..., :3] = np.where(alpha > 0, down[..., :3] * 255 / np.maximum(alpha, 1e-6), 0)
+    return down
+
+
+coin_strip = np.concatenate([coin_frame(math.pi * index / COIN_FRAMES) for index in range(COIN_FRAMES)], axis=1)
+atlas[COIN_ROW_Y:COIN_ROW_Y + COIN, 0:COIN * COIN_FRAMES] = coin_strip
+cells['coin'] = {'x': 0, 'y': COIN_ROW_Y, 'w': COIN, 'h': COIN, 'frames': COIN_FRAMES}
 
 
 # ---------------------------------------------------------------- the fog tile
@@ -297,6 +396,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 Image.fromarray(np.clip(atlas, 0, 255).astype(np.uint8), 'RGBA').save(OUT / 'ambient-v1.webp', lossless=True, method=6)
 Image.fromarray(fog_rgb, 'RGB').save(OUT / 'ambient-fog-v1.webp', quality=88, method=6)
 (OUT / 'ambient-v1.json').write_text(
-    json.dumps({'atlas': 'ambient-v1.webp', 'size': [ATLAS, ATLAS_H], 'fog': 'ambient-fog-v1.webp', 'fogSize': [FOG_W, FOG_H], 'cells': cells}, indent=2) + '\n'
+    json.dumps({'atlas': 'ambient-v1.webp', 'size': [ATLAS, ATLAS_H], 'fog': 'ambient-fog-v1.webp', 'fogSize': [FOG_W, FOG_H], 'cells': cells}, indent=2) + '\n',
+    newline='\n',
 )
 print(f'wrote {len(cells)} cells to {OUT}')

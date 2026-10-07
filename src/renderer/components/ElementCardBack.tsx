@@ -1,6 +1,6 @@
 import { useRef, type ReactElement } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending, CanvasTexture, DoubleSide, LinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
+import { AdditiveBlending, CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
 import type { TileSuit } from '../../shared/contracts';
 import { getTileSuit, TILE_SUITS } from '../../shared/tile-suit-rules';
 import { noopMeshRaycast } from './tileBoardPick';
@@ -101,7 +101,8 @@ export const elementTexture = (suit: TileSuit, empowered: boolean): CanvasTextur
     else paintElement(canvas, suit);
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
-    texture.minFilter = LinearFilter;
+    // Mipmapped: a tilted or distant card shrinks this, and without mips it shimmers.
+    texture.minFilter = LinearMipmapLinearFilter;
     texture.magFilter = LinearFilter;
     textureCache.set(key, texture);
     return texture;

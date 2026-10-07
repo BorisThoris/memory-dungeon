@@ -48,7 +48,6 @@ import {
 } from '../copy/boardPowerCopy';
 import { RUN_SHELL_TOOL_CATALOG, type RunShellToolId } from './runShellToolCatalog';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
-import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
 import {
@@ -1980,7 +1979,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     ? boardFloaterPayload.crescendo?.tier ?? 'none'
                                     : 'none'
                             }
-                            style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
                             {floorClearBeatShown && run.lastLevelResult ? (

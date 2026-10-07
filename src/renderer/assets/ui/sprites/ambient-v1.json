@@ -1,8 +1,8 @@
 {
   "atlas": "ambient-v1.webp",
   "size": [
-    512,
-    576
+    1024,
+    704
   ],
   "fog": "ambient-fog-v1.webp",
   "fogSize": [
@@ -180,10 +180,10 @@
     },
     "coin": {
       "x": 0,
-      "y": 512,
-      "w": 64,
-      "h": 64,
-      "frames": 1
+      "y": 576,
+      "w": 128,
+      "h": 128,
+      "frames": 8
     }
   }
 }

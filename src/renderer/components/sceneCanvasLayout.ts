@@ -28,3 +28,23 @@ export const visiblePlateRect = (
     }
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
 };
+
+/**
+ * How many of the canvas's pixels to give each of the painting's: as many as the screen shows of
+ * it, never fewer than one, never more than `max`. Rounded to a tenth, so the plate's slow drift
+ * (a few percent of scale) does not resize the surface every second.
+ */
+export const sceneCanvasScale = (shownWidthCss: number, devicePixelRatio: number, plateWidth: number, max: number): number => {
+    if (!(shownWidthCss > 0) || !(plateWidth > 0) || !(max > 1)) {
+        return 1;
+    }
+    const wanted = (shownWidthCss * (devicePixelRatio > 0 ? devicePixelRatio : 1)) / plateWidth;
+    return Math.min(max, Math.max(1, Math.ceil(wanted * 10 - 0.5) / 10));
+};
+
+/**
+ * The most a scene's canvas is scaled past its painting on a desktop: the painting's masters are
+ * half again its size (`scripts/scene-pipeline/upscale_plates.py`), so past that there is nothing
+ * more to show. A phone, or the lean tier, keeps the painting's own size.
+ */
+export const SCENE_CANVAS_MAX_SCALE = 1.5;

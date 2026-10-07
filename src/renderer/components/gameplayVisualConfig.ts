@@ -61,13 +61,7 @@ export const GAMEPLAY_VISUAL_CSS_VARS = {
         'radial-gradient(ellipse 120% 48% at 50% 0%, rgba(242, 211, 157, 0.1), transparent 58%), radial-gradient(ellipse 80% 55% at 18% 88%, rgba(140, 98, 223, 0.06), transparent 52%), linear-gradient(168deg, rgba(26, 20, 16, 0.98), rgba(7, 6, 10, 0.99))',
     ['--gameplay-floor-badge-plate-shadow' as string]:
         'inset 0 1px 0 var(--theme-hud-chrome-inset), inset 0 10px 18px color-mix(in srgb, var(--theme-gold-bright) 9%, transparent), inset 0 -22px 28px color-mix(in srgb, var(--theme-void) 72%, transparent), 0 0 0 1px color-mix(in srgb, var(--theme-glow-gold-soft) 34%, transparent), 0 0 16px color-mix(in srgb, var(--theme-glow-gold) 14%, transparent)',
-    ['--gameplay-stage-board-glow-inset' as string]: '3% 5% 6%',
-    ['--gameplay-stage-dais-bottom' as string]: '-9%',
-    ['--gameplay-stage-dais-height' as string]: '56%',
-    ['--gameplay-stage-dais-width' as string]: 'min(116%, 66rem)',
-    ['--gameplay-stage-ring-bottom' as string]: '-7%',
-    ['--gameplay-stage-ring-opacity' as string]: '0.52',
-    ['--gameplay-stage-ring-size' as string]: 'min(118%, 68rem)'
+    ['--gameplay-stage-board-glow-inset' as string]: '3% 5% 6%'
 } as CSSProperties;
 
 /** REG-108 / REG-012: material lanes align with `REG108_CARD_MATERIAL_LANES` in `regPhase4PlayContract`. */

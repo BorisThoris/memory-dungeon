@@ -620,8 +620,16 @@ const cancelPrewarmStep = (handle: PrewarmScheduleHandle | null): void => {
     window.clearTimeout(handle.id);
 };
 
+/** The plain rasters (`getRasterTexture`): the card back's glow and spin, the face's glow. */
+const rasterTextureCache = new Map<TextureImageId, Texture>();
+let rasterAnisotropy = 1;
+
 /** Sharper sampling on tilted quads; call once per WebGL context with device cap. */
 export const applyAnisotropyToCachedTileTextures = (anisotropy: number): void => {
+    rasterAnisotropy = anisotropy;
+    for (const texture of rasterTextureCache.values()) {
+        texture.anisotropy = anisotropy;
+    }
     for (const texture of textureCache.values()) {
         texture.anisotropy = anisotropy;
     }
@@ -672,7 +680,6 @@ export const getCardBackRasterNormalMapTexture = (): Texture | null => {
     return cachedRasterBackNormalTexture;
 };
 
-const rasterTextureCache = new Map<TextureImageId, Texture>();
 
 /**
  * A plain sRGB texture straight from one of the loaded card rasters, cached per image so every card
@@ -691,6 +698,8 @@ const getRasterTexture = (imageId: TextureImageId): Texture | null => {
     cached?.dispose();
     const texture = new CanvasTexture(image as unknown as HTMLCanvasElement);
     texture.colorSpace = SRGBColorSpace;
+    // Tilted with the card like every other layer on it, so sampled the same way.
+    texture.anisotropy = rasterAnisotropy;
     texture.needsUpdate = true;
     rasterTextureCache.set(imageId, texture);
     return texture;

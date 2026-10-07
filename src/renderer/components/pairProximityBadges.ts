@@ -1,4 +1,4 @@
-import { CanvasTexture, LinearFilter, SRGBColorSpace } from 'three';
+import { CanvasTexture, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace } from 'three';
 
 /**
  * The badge is the number in a lit gem: a gold disc with a dark rim and a halo, so it reads on every
@@ -59,7 +59,8 @@ export const badgeTexture = (distance: number): CanvasTexture => {
     paintHint(canvas, distance);
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
-    texture.minFilter = LinearFilter;
+    // Mipmapped: a tilted or distant card shrinks this, and without mips it shimmers.
+    texture.minFilter = LinearMipmapLinearFilter;
     texture.magFilter = LinearFilter;
     badgeByDistance.set(distance, texture);
     return texture;

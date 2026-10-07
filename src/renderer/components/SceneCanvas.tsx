@@ -1,15 +1,18 @@
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import { getSceneImage, sceneFilterIsLive, sceneLiveFilterCss, subscribeSceneImages } from './sceneBitmaps';
 import { createSceneClock, type SceneClock } from './sceneClock';
-import { SCENE_FPS_FULL, visiblePlateRect } from './sceneCanvasLayout';
+import { SCENE_FPS_FULL, sceneCanvasScale, visiblePlateRect } from './sceneCanvasLayout';
 import { paintScene, SCENE_ALPHA_FLOOR, type SceneDraw, type SceneFilter, type ScenePaintContext, type SceneRect } from './scenePaint';
 import styles from './scenePlate.module.css';
 
 /**
  * The one canvas a painted scene is drawn in (`scenePaint.ts` says why it is one).
  *
- * It is the size the art was painted at and is stretched over the plate by CSS, so what it costs
- * is fixed: the same surface on a phone, a laptop and a 4K monitor. All the canvases on a page
+ * It is the size the art was painted at, or up to `maxScale` times that where the screen shows the
+ * plate bigger than the painting (a desktop at 1080p and up), and CSS fits it over the plate. What
+ * it costs is bounded: a phone or the lean tier keeps the painting's own size, a 4K monitor gets
+ * half as many pixels again and no more, since past that the masters have nothing more to show (a
+ * canvas stretched 2.8 times over a 4K screen was the room going soft). All the canvases on a page
  * share one animation-frame loop, which paints each of them at its own pace (thirty frames a
  * second on a desktop, twenty-four on a phone: a painting with fourteen-frame-a-second flames in
  * it does not need sixty), stops while the page is hidden, and paints a scene that holds still
@@ -34,6 +37,8 @@ interface SceneCanvasProps {
     /** Where the player is looking, -1..1, kept current by `useSceneLook`. */
     lookRef?: MutableRefObject<{ x: number; y: number }>;
     testId?: string;
+    /** The most canvas pixels per painting pixel (`sceneCanvasScale`); 1 keeps the painting's size. */
+    maxScale?: number;
 }
 
 /** The fog is built at a fraction of the plate's size: it is soft, and a quarter of the pixels is a quarter of the work. */
@@ -47,6 +52,8 @@ interface Painter {
     last: number;
     still: boolean;
     dirty: boolean;
+    /** Look at the plate again before the next frame: its size, the levels, the clip. */
+    remeasure: () => void;
 }
 
 const painters = new Set<Painter>();
@@ -109,11 +116,13 @@ const readLevel = (style: CSSStyleDeclaration, name: string): number => {
     return Number.isFinite(value) ? value : 1;
 };
 
-export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookRef, testId = 'scene-canvas' }: SceneCanvasProps) {
+export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookRef, testId = 'scene-canvas', maxScale = 1 }: SceneCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const composeRef = useRef(compose);
     const painterRef = useRef<Painter | null>(null);
+    const maxScaleRef = useRef(maxScale);
     composeRef.current = compose;
+    maxScaleRef.current = maxScale;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -134,6 +143,8 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
         // remount of the same element (React's strict mode in development) has to take it again.
         canvas.width = plate[0];
         canvas.height = plate[1];
+        drawing.imageSmoothingQuality = 'medium';
+        let scale = 1;
         const clock = createSceneClock();
         // Where the canvas can filter as it draws, a colour grade costs nothing to change; elsewhere it is baked.
         const liveFilter =
@@ -155,7 +166,21 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
             }
             const style = window.getComputedStyle(scene);
             levels = { base: readLevel(style, '--scene-base-opacity'), light: readLevel(style, '--scene-light-opacity') };
-            visible = visiblePlateRect(scene.getBoundingClientRect(), canvas.getBoundingClientRect());
+            const shown = canvas.getBoundingClientRect();
+            visible = visiblePlateRect(scene.getBoundingClientRect(), shown);
+            const next = sceneCanvasScale(shown.width, window.devicePixelRatio, plate[0], maxScaleRef.current);
+            if (next !== scale) {
+                // A new surface: the draws are in fractions of the plate, so only the pixel count changes.
+                scale = next;
+                canvas.width = Math.round(plate[0] * scale);
+                canvas.height = Math.round(plate[1] * scale);
+                drawing.imageSmoothingQuality = 'medium';
+                if (scratch) {
+                    scratch.canvas.width = 1;
+                    scratch.canvas.height = 1;
+                    scratch = null;
+                }
+            }
         };
 
         const painter: Painter = {
@@ -163,6 +188,9 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
             last: Number.NEGATIVE_INFINITY,
             still,
             dirty: true,
+            remeasure: () => {
+                measuredAt = Number.NEGATIVE_INFINITY;
+            },
             paint: (now) => {
                 // The plate drifts and the page resizes; a look once a second keeps the clip and the levels honest.
                 if (now - measuredAt > 1000) {
@@ -250,6 +278,11 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
         painter.dirty = true;
         schedule();
     });
+
+    // A tier change (a phone turned to low quality, a desktop back to full) resizes the surface on the next frame.
+    useEffect(() => {
+        painterRef.current?.remeasure();
+    }, [maxScale]);
 
     return <canvas className={styles.canvas} data-testid={testId} height={plate[1]} ref={canvasRef} width={plate[0]} />;
 }

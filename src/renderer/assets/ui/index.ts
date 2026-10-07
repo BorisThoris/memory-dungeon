@@ -2,7 +2,6 @@ import brandCrestUrl from './brand-crest.svg';
 import dividerOrnamentUrl from './divider-ornament.svg';
 import menuEmblemUrl from './menu-emblem.svg';
 import menuSealUrl from './menu-seal.svg';
-import stageRingUrl from './stage-ring.svg';
 import { resolveUiBackgroundUrl } from './modeArt';
 
 export const UI_ART = {
@@ -35,7 +34,6 @@ export const UI_ART = {
     /** Wet stone for a storm run: a thin blue sheen on the room's upward faces (`snow_mask.py --wet`). */
     gameplaySceneWet: resolveUiBackgroundUrl('overlay-wet-dungeon-v1.webp'),
     gameplayWorkshopScene: resolveUiBackgroundUrl('bg-gameplay-arcane-workshop-v1.webp'),
-    gameplayWorkshopTable: resolveUiBackgroundUrl('bg-board-arcane-table-v1.webp'),
     menuEmblem: menuEmblemUrl,
     menuScene: resolveUiBackgroundUrl('bg-main-menu-cathedral-v1.webp'),
     /** The cathedral as a relightable nave (`CathedralScene`): base plus additive light layers, from `scripts/scene-pipeline/cathedral.sh`. */
@@ -47,8 +45,7 @@ export const UI_ART = {
     portalSceneBase: resolveUiBackgroundUrl('bg-mode-classic-v2-base.webp'),
     portalSceneGlowMoon: resolveUiBackgroundUrl('bg-mode-classic-v2-glow-moon.webp', ''),
     portalSceneGlowRunes: resolveUiBackgroundUrl('bg-mode-classic-v2-glow-runes.webp', ''),
-    portalSceneStars: resolveUiBackgroundUrl('bg-mode-classic-v2-stars.webp', ''),
-    stageRing: stageRingUrl
+    portalSceneStars: resolveUiBackgroundUrl('bg-mode-classic-v2-stars.webp', '')
 } as const;
 
 export type UiArtKey = keyof typeof UI_ART;
@@ -74,7 +71,6 @@ export const UI_ART_KEYS = [
     'gameplaySceneSnowVoid',
     'gameplaySceneWet',
     'gameplayWorkshopScene',
-    'gameplayWorkshopTable',
     'menuEmblem',
     'menuScene',
     'menuSceneBase',
@@ -84,8 +80,7 @@ export const UI_ART_KEYS = [
     'portalSceneBase',
     'portalSceneGlowMoon',
     'portalSceneGlowRunes',
-    'portalSceneStars',
-    'stageRing'
+    'portalSceneStars'
 ] as const satisfies readonly UiArtKey[];
 
 export interface UiArtRow {

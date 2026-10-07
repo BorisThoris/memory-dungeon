@@ -52,8 +52,9 @@
 }
 
 /*
- * The painting. Its own pixels are the art's (1376 by 768); CSS stretches it over the plate. The
- * browser scales a canvas smoothly, which is what a painting wants.
+ * The painting. Its pixels are the art's (1376 by 768), or up to half again as many where the
+ * screen shows it bigger (`SceneCanvas`'s `maxScale`); CSS fits it over the plate. The browser
+ * scales a canvas smoothly, which is what a painting wants.
  */
 .canvas {
     position: absolute;

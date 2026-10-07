@@ -15,3 +15,21 @@ export const useBeat = (key: string | null, ms: number): boolean => {
     }, [key, ms, beat.on]);
     return beat.key === key && beat.on;
 };
+
+/**
+ * The last thing `value` was, held for `ms` after it arrived even when `value` goes back to null:
+ * a shower of coins started on a beat keeps falling after the beat that paid it has gone. A new
+ * value (by `keyOf`) replaces the held one and starts its own hold.
+ */
+export const useHeld = <T,>(value: T | null, keyOf: (held: T) => string, ms: number): T | null => {
+    const key = value === null ? null : keyOf(value);
+    const [held, setHeld] = useState<{ key: string | null; value: T | null }>({ key, value });
+    if (key !== null && key !== held.key) setHeld({ key, value });
+    useEffect(() => {
+        if (held.value === null || held.key === null) return undefined;
+        const heldKey = held.key;
+        const timer = window.setTimeout(() => setHeld(current => current.key === heldKey ? { key: heldKey, value: null } : current), ms);
+        return () => window.clearTimeout(timer);
+    }, [held.key, held.value, ms]);
+    return value ?? held.value;
+};

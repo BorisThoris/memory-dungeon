@@ -5,7 +5,7 @@ import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
 import { composePortalScene } from './portalSceneFrame';
 import { SceneCanvas, type SceneLevels } from './SceneCanvas';
-import { SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
+import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
 import type { SceneClock } from './sceneClock';
 import plate from './scenePlate.module.css';
 
@@ -57,6 +57,7 @@ export function PortalScene({ quality, reduceMotion }: PortalSceneProps) {
                 <SceneCanvas
                     compose={compose}
                     fps={alive ? SCENE_FPS_FULL : SCENE_FPS_LEAN}
+                    maxScale={tier === 'lean' ? 1 : SCENE_CANVAS_MAX_SCALE}
                     lookRef={lookRef}
                     plate={set.plate}
                     still={still}

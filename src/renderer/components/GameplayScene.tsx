@@ -1,4 +1,4 @@
-import { useCallback, useRef, type CSSProperties } from 'react';
+import { useCallback, useMemo, useRef, type CSSProperties } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import type { ComboHeatStage } from '../../shared/combo-heat-rules';
@@ -10,10 +10,11 @@ import { prefersCompactSceneArt } from './elementSceneArt';
 import { composeGameplayScene, stormBoltCount } from './gameplaySceneFrame';
 import { sceneFlameLevels, sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { SceneCanvas, type SceneLevels } from './SceneCanvas';
-import { SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
+import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
 import type { SceneClock } from './sceneClock';
 import type { SceneMood } from './sceneMood';
-import { useBeat } from './useSceneBeat';
+import { GOLD_RAIN_LASTS_MS } from './goldRain';
+import { useBeat, useHeld } from './useSceneBeat';
 import plate from './scenePlate.module.css';
 import styles from './GameplayScene.module.css';
 
@@ -117,9 +118,12 @@ export function GameplayScene({
     comboHeat = 0,
     comboStage = 'cold',
     comboHueDeg = 0,
-    mood,
+    mood: liveMood,
     runSeed = 0
 }: GameplaySceneProps) {
+    // A shower of gold outlives the beat that paid it: the coins land and go out on their own time.
+    const goldRain = useHeld(liveMood?.goldRain ?? null, (rain) => rain.key, GOLD_RAIN_LASTS_MS);
+    const mood = useMemo(() => (liveMood && liveMood.goldRain !== goldRain ? { ...liveMood, goldRain } : liveMood), [liveMood, goldRain]);
     const sceneRef = useRef<HTMLDivElement>(null);
     const lookRef = useRef({ x: 0, y: 0 });
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
@@ -204,6 +208,7 @@ export function GameplayScene({
                 <SceneCanvas
                     compose={compose}
                     fps={alive ? SCENE_FPS_FULL : SCENE_FPS_LEAN}
+                    maxScale={effectTier === 'lean' ? 1 : SCENE_CANVAS_MAX_SCALE}
                     lookRef={lookRef}
                     plate={flames.plate}
                     still={still}
