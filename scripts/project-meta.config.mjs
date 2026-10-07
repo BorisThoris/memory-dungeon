@@ -39,15 +39,23 @@ export default {
   },
 
   // How the portfolio screenshot pipeline photographs this project.
-  // The deployment opens on the studio splash; the card should show the game
-  // behind it, so the recipe clicks through before it photographs.
+  // The deployment may open on the studio splash or directly on the game.
+  // Photograph only after the actual main menu is visible.
   capture: {
     "route": "/",
     "actions": [
       {
         "type": "click",
-        "target": { "text": "Continue to game" },
+        "target": { "role": "button", "name": "Continue to game", "exact": true },
+        "timeoutMs": 10000,
+        "optional": true,
         "label": "leave the studio splash"
+      },
+      {
+        "type": "waitFor",
+        "target": { "role": "button", "name": "Play", "exact": true },
+        "timeoutMs": 45000,
+        "label": "wait for the game menu"
       },
       { "type": "wait", "ms": 1500, "label": "let the title screen settle" }
     ],

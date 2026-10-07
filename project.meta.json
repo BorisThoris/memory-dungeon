@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T23:37:06.518Z",
+  "generatedAt": "2026-10-07T13:19:10.594Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -278,9 +278,23 @@
       {
         "type": "click",
         "target": {
-          "text": "Continue to game"
+          "role": "button",
+          "name": "Continue to game",
+          "exact": true
         },
+        "timeoutMs": 10000,
+        "optional": true,
         "label": "leave the studio splash"
+      },
+      {
+        "type": "waitFor",
+        "target": {
+          "role": "button",
+          "name": "Play",
+          "exact": true
+        },
+        "timeoutMs": 45000,
+        "label": "wait for the game menu"
       },
       {
         "type": "wait",
@@ -299,28 +313,28 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 162182,
+        "bytes": 162743,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-06T23:36:41.600Z"
+        "capturedAt": "2026-10-07T13:18:26.718Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 153713,
+        "bytes": 151775,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-06T23:36:47.475Z"
+        "capturedAt": "2026-10-07T13:18:35.517Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 126228,
+        "bytes": 128147,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-06T23:37:00.780Z"
+        "capturedAt": "2026-10-07T13:18:54.641Z"
       },
       {
         "profile": "mobile",
@@ -329,16 +343,16 @@
         "bytes": 39518,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-06T23:36:52.377Z"
+        "capturedAt": "2026-10-07T13:18:44.108Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 118166,
+        "bytes": 116666,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-06T23:37:06.225Z"
+        "capturedAt": "2026-10-07T13:19:10.328Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -347,7 +361,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-06T23:35:02.020Z"
+        "capturedAt": "2026-10-07T13:15:13.924Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -356,7 +370,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-06T23:35:02.020Z"
+        "capturedAt": "2026-10-07T13:15:13.924Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -365,7 +379,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-06T23:35:02.021Z"
+        "capturedAt": "2026-10-07T13:15:13.925Z"
       },
       {
         "profile": "reel-end-card",
@@ -374,7 +388,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-06T23:35:02.022Z"
+        "capturedAt": "2026-10-07T13:15:13.927Z"
       }
     ],
     "trailers": [
@@ -501,13 +515,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1351,
+    "sourceFiles": 1350,
     "testFiles": 579,
-    "sourceLines": 205636,
+    "sourceLines": 205634,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1159
+        "files": 1158
       },
       {
         "directory": "scripts",
@@ -542,10 +556,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "acf18010",
-    "lastCommitDate": "2026-10-07T02:34:23+03:00",
-    "lastCommitSubject": "Paint live elemental combinations and give reactions distinct particle materials",
-    "commitCount": 1960,
+    "head": "8d74192c",
+    "lastCommitDate": "2026-10-07T16:14:45+03:00",
+    "lastCommitSubject": "Capture Memory Dungeon only after main menu appears",
+    "commitCount": 1966,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
