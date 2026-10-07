@@ -17,7 +17,8 @@
         "jsx": "react-jsx",
         "types": ["node", "vite/client"],
         "paths": {
-            "@cross-repo-libs/notifications": ["./packages/notifications/src/index.ts"]
+            "@cross-repo-libs/notifications": ["./packages/notifications/src/index.ts"],
+            "/src/*": ["./src/*"]
         }
     },
     "include": [
