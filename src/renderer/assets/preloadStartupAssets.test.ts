@@ -181,16 +181,17 @@ describe('preloadStartupCriticalAssets', () => {
             warmModePosterRasterImagesInBackground
         } = await import('./preloadStartupAssets');
         const { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART, UI_ART_KEYS } = await import('./ui');
-        const { getSceneSpriteSheetUrls, SCENE_SPRITES } = await import('./ui/sprites');
+        const { getAmbientSpriteUrls, getSceneSpriteSheetUrls, SCENE_SPRITES } = await import('./ui/sprites');
         resetStartupAssetPreloadStateForTests();
 
         await preloadUiRasterImages();
         expect(Object.keys(UI_ART)).toEqual([...UI_ART_KEYS]);
         expect(getUiArtRows().map((row) => row.key)).toEqual([...UI_ART_KEYS]);
-        // The backdrops, their light layers and every sprite strip that plays over them (the menu's
-        // candles are on the first screen), deduped.
+        // The backdrops, their light layers, every sprite strip that plays over them (the menu's
+        // candles are on the first screen) and the ambient atlas and fog tile the scenes share, deduped.
         const sheetUrls = getSceneSpriteSheetUrls();
-        expect(sheetUrls.length).toBe(Object.values(SCENE_SPRITES).reduce((sum, set) => sum + set.sprites.length, 0));
+        expect(sheetUrls.length).toBe(Object.values(SCENE_SPRITES).reduce((sum, set) => sum + set.sprites.length, 0) + getAmbientSpriteUrls().length);
+        expect(getAmbientSpriteUrls()).toHaveLength(2);
         expect(requestedRasterUrls).toEqual([...new Set([...getUiArtRows().map((row) => row.assetUrl), ...sheetUrls])]);
 
         requestedRasterUrls = [];

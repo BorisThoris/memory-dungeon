@@ -59,8 +59,8 @@ describe('RunLoadingScreen scene', () => {
         expect(scene).toHaveAttribute('data-scene-fill', '0.00');
         expect(scene).toHaveAttribute('data-scene-pulse', 'none');
         expect(scene).toHaveAttribute('data-memorize', 'false');
-        // The torches are already burning when the board arrives over them.
-        expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
+        // The room is already painted when the board arrives over it: the same canvas the run will use.
+        expect(screen.getByTestId('gameplay-scene-canvas')).toBeInTheDocument();
     });
 
     it('passes reduce motion through to the room', () => {

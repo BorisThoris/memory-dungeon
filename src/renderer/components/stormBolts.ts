@@ -9,6 +9,8 @@ import { createMulberry32 } from '../../shared/rng';
 export interface StormBolt {
     d: string;
     length: number;
+    /** The same path as points in the viewbox, for the room's canvas to stroke. */
+    points: ReadonlyArray<readonly [number, number]>;
 }
 
 /** The plate's aspect, so a bolt at 30% is on the same stone at every viewport. */
@@ -38,7 +40,7 @@ export const buildStormBolts = (seed: number, count = 3): StormBolt[] => {
             y = ny;
             points.push([x, y]);
         }
-        bolts.push({ d: points.map(([px, py], pointIndex) => `${pointIndex === 0 ? 'M' : 'L'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' '), length });
+        bolts.push({ d: points.map(([px, py], pointIndex) => `${pointIndex === 0 ? 'M' : 'L'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' '), length, points });
     }
     return bolts;
 };

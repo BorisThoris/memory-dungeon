@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { GameplayScene, type GameplaySceneProps } from './GameplayScene';
-import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
+import { sceneFlameLevels, sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import sharedPlate from './scenePlate.module.css';
 import sceneStyles from './GameplayScene.module.css';
 
@@ -15,16 +16,24 @@ const base: GameplaySceneProps = {
     tier: 'none'
 };
 
-const plateLayers = () =>
-    [...screen.getByTestId('gameplay-scene-plate').children].filter((el) => /base|layer/i.test(el.className));
-const layerCount = () => plateLayers().length;
-
+/**
+ * The component: the plate, the one canvas, and the room's state on the root. What is painted in
+ * the canvas for a given state is `composeGameplayScene`'s, tested in `gameplaySceneFrame.test.ts`.
+ */
 describe('GameplayScene', () => {
-    it('connects mood lighting and room transitions to the shared plate and flames', () => {
+    it('is one canvas in the shared plate, the size the room was painted at', () => {
         render(<GameplayScene {...base} />);
-        expect(screen.getByTestId('gameplay-scene-plate')).toHaveClass(sharedPlate.plate, sceneStyles.plate);
-        expect(screen.getByTestId('scene-sprites').parentElement).toHaveClass(sharedPlate.things, sceneStyles.things);
+        const plate = screen.getByTestId('gameplay-scene-plate');
+        expect(plate).toHaveClass(sharedPlate.plate, sceneStyles.plate);
+        const canvas = screen.getByTestId('gameplay-scene-canvas') as HTMLCanvasElement;
+        expect(canvas.parentElement).toBe(plate);
+        expect(canvas).toHaveClass(sharedPlate.canvas);
+        expect([canvas.width, canvas.height]).toEqual([...SCENE_SPRITES.gameplayFlames.plate]);
+        // At rest nothing else is in the plate: no element per light for a compositor to blend.
+        expect(plate.children).toHaveLength(1);
+        expect(plate.querySelectorAll('img')).toHaveLength(0);
     });
+
     it('is decoration: hidden from assistive tech, the room as data attributes', () => {
         render(<GameplayScene {...base} tier="sharp" memorize />);
         const scene = screen.getByTestId('gameplay-scene');
@@ -34,7 +43,7 @@ describe('GameplayScene', () => {
         expect(scene).toHaveAttribute('data-still', 'false');
     });
 
-    it('warms the ring with the chain, continuously: every step of fill lifts light, glow, hue and flash', () => {
+    it('puts the ring\'s answer to the chain on the root, every step of the way', () => {
         let last = sceneRingLevels(0);
         expect(last).toEqual({ light: 0.5, glow: 0.68, hueDeg: 0, saturate: 1, pulsePeak: 0.35, motes: 0 });
         for (let step = 1; step <= 20; step += 1) {
@@ -58,208 +67,97 @@ describe('GameplayScene', () => {
         expect(style).toContain(`--scene-ring-hue: ${sceneRingLevels(0.5).hueDeg}deg`);
         expect(style).toContain(`--scene-pulse-peak: ${sceneRingLevels(0.5).pulsePeak}`);
         expect(style).toContain(`--scene-motes-opacity: ${sceneRingLevels(0.5).motes}`);
-        // The ring's motes are on the floor round the ring, never on the walls.
-        const motes = [...screen.getByTestId('gameplay-scene-ring-motes').children] as HTMLElement[];
-        expect(motes).toHaveLength(10);
-        for (const mote of motes) {
-            expect(parseFloat(mote.style.top)).toBeGreaterThan(60);
-            expect(parseFloat(mote.style.top)).toBeLessThan(85);
-            expect(Math.abs(parseFloat(mote.style.left) - 50)).toBeLessThanOrEqual(22);
-        }
     });
 
-    it('holds the painted torchlight still while the chain moves the flames themselves', () => {
-        // Light thrown across a wall by a flame the painter painted cannot honestly grow with a
-        // chain, and holding it still is what lets the flames read as the thing that changed.
-        const roomAt = (fill: number) => {
-            const { unmount } = render(<GameplayScene {...base} fill={fill} />);
-            const torches = plateLayers()
-                .filter((el) => /torch/i.test(el.className))
-                .map((el) => el.getAttribute('style'));
-            const fire = screen.getByTestId('scene-sprites').style.getPropertyValue('--flame-rate');
-            unmount();
-            return { torches, fire };
-        };
-        const cold = roomAt(0);
-        const hot = roomAt(1);
-        expect(cold.torches).toHaveLength(3);
-        expect(cold.torches).toEqual(hot.torches);
-        expect(Number(hot.fire)).toBeGreaterThan(Number(cold.fire));
-    });
-
-    it('burns the fire harder the better the run is going, and only ever on the sprites', () => {
-        const fireAt = (fill: number) => {
-            const { unmount } = render(<GameplayScene {...base} fill={fill} />);
-            const style = screen.getByTestId('scene-sprites').style;
-            const levels = (['--flame-rate', '--flame-lift', '--flame-embers', '--flame-ember-rate'] as const).map(
-                (name) => Number(style.getPropertyValue(name))
-            );
-            unmount();
-            return levels;
-        };
-        const steps = [0, 0.25, 0.5, 0.75, 1].map(fireAt);
-        for (let i = 1; i < steps.length; i += 1) {
-            for (let k = 0; k < steps[i]!.length; k += 1) {
-                expect(steps[i]![k]!).toBeGreaterThan(steps[i - 1]![k]!);
-            }
-        }
-        // No new layer paid for any of it: the plate has the same children hot as cold.
-        const cold = render(<GameplayScene {...base} fill={0} />);
-        const coldLayers = layerCount();
-        cold.unmount();
-        render(<GameplayScene {...base} fill={1} />);
-        expect(layerCount()).toBe(coldLayers);
-    });
-
-    it('leans the room toward the pair that would land a rung, and only that pair', () => {
-        // The ladder lights the rung ahead; this is the room leaning at the same moment, so the
-        // anticipation is not one lit label in a corner of the HUD.
-        const fireAt = (imminent: boolean) => {
-            const { unmount } = render(<GameplayScene {...base} fill={0.6} imminent={imminent} />);
-            const style = screen.getByTestId('scene-sprites').style;
-            const read = {
-                drawing: screen.getByTestId('gameplay-scene').getAttribute('data-scene-drawing'),
-                lift: Number(style.getPropertyValue('--flame-lift')),
-                rate: Number(style.getPropertyValue('--flame-rate'))
+    it('puts the fire\'s answer on the root too, and says when it is drawing breath', () => {
+        const read = (fill: number, imminent = false) => {
+            const { unmount } = render(<GameplayScene {...base} fill={fill} imminent={imminent} />);
+            const scene = screen.getByTestId('gameplay-scene');
+            const out = {
+                rate: Number(scene.style.getPropertyValue('--flame-rate')),
+                lift: Number(scene.style.getPropertyValue('--flame-lift')),
+                embers: Number(scene.style.getPropertyValue('--flame-embers')),
+                drawing: scene.getAttribute('data-scene-drawing')
             };
             unmount();
-            return read;
+            return out;
         };
-        const steady = fireAt(false);
-        const drawing = fireAt(true);
-        expect(steady.drawing).toBe('false');
-        expect(drawing.drawing).toBe('true');
-        expect(drawing.lift).toBeLessThan(steady.lift);
-        expect(drawing.rate).toBeGreaterThan(steady.rate);
+        expect(read(0)).toMatchObject({ ...pick(sceneFlameLevels(0)), drawing: 'false' });
+        expect(read(1).rate).toBeGreaterThan(read(0).rate);
+        expect(read(1).lift).toBeGreaterThan(read(0).lift);
+        expect(read(0.6, true).drawing).toBe('true');
+        expect(read(0.6, true).lift).toBeLessThan(read(0.6).lift);
     });
 
-    it('flashes the floor on a break and restarts for a second break of the same tier', () => {
+    it('carries a break on the root: the tier that broke and how hard the torches flare for it', () => {
         const { rerender } = render(<GameplayScene {...base} pulse="none" />);
-        expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
-        expect(screen.queryByTestId('gameplay-scene-flare')).toBeNull();
-        rerender(<GameplayScene {...base} pulse="clean" pulseKey="turn-1" />);
-        const first = screen.getByTestId('gameplay-scene-pulse');
-        const firstFlare = screen.getByTestId('gameplay-scene-flare');
-        rerender(<GameplayScene {...base} pulse="clean" pulseKey="turn-2" />);
-        const second = screen.getByTestId('gameplay-scene-pulse');
-        expect(second).not.toBe(first);
-        expect(screen.getByTestId('gameplay-scene-flare')).not.toBe(firstFlare);
-        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-pulse', 'clean');
+        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-scene-pulse', 'none');
+        expect(scene.style.getPropertyValue('--scene-flare-peak')).toBe('0');
+        let last = 0;
+        for (const pulse of ['pop', 'clean', 'sharp', 'fever'] as const) {
+            rerender(<GameplayScene {...base} pulse={pulse} pulseKey={`turn-${pulse}`} />);
+            expect(scene).toHaveAttribute('data-scene-pulse', pulse);
+            const peak = Number(scene.style.getPropertyValue('--scene-flare-peak'));
+            expect(peak).toBe(sceneTorchFlarePeak(pulse));
+            expect(peak).toBeGreaterThan(last);
+            last = peak;
+        }
     });
 
-    it('flares the torches on a break, harder up the tiers, and never under reduce motion', () => {
-        expect(sceneTorchFlarePeak('none')).toBe(0);
-        expect(sceneTorchFlarePeak('pop')).toBeLessThan(sceneTorchFlarePeak('clean'));
-        expect(sceneTorchFlarePeak('clean')).toBeLessThan(sceneTorchFlarePeak('sharp'));
-        expect(sceneTorchFlarePeak('sharp')).toBeLessThan(sceneTorchFlarePeak('fever'));
-        const { unmount } = render(<GameplayScene {...base} pulse="fever" pulseKey="t" tier="fever" />);
-        const style = screen.getByTestId('gameplay-scene').getAttribute('style') ?? '';
-        expect(style).toContain(`--scene-flare-peak: ${sceneTorchFlarePeak('fever')}`);
-        expect(screen.getByTestId('gameplay-scene-flare')).toBeInTheDocument();
-        unmount();
-        render(<GameplayScene {...base} pulse="fever" pulseKey="t" tier="fever" reduceMotion />);
-        expect(screen.queryByTestId('gameplay-scene-flare')).toBeNull();
+    it('keeps the storm and the payout in the canvas too: on the root as data, not as elements over the room', () => {
+        render(<GameplayScene {...base} />);
+        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-scene-storm-bolts', '0');
+        expect(scene).toHaveAttribute('data-scene-gold-rain', 'none');
+        expect(scene.querySelectorAll('svg')).toHaveLength(0);
     });
 
-    it('exhales when the floor is cleared', () => {
+    it('says when the floor is cleared', () => {
         const { rerender } = render(<GameplayScene {...base} />);
         expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-cleared', 'false');
         rerender(<GameplayScene {...base} cleared />);
         expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-cleared', 'true');
     });
 
-    it('drops the rendered light passes on low quality and keeps the glows', () => {
-        const { unmount } = render(<GameplayScene {...base} quality="high" pulse="pop" pulseKey="t" />);
-        const full = layerCount();
-        unmount();
-        render(<GameplayScene {...base} quality="low" pulse="pop" pulseKey="t" />);
-        // base + the two other rooms + the frost + three glows + the flare; the three light passes
-        // and the pulse are gone. The rooms and the frost are plates the mood shows, not passes.
-        expect(layerCount()).toBe(13);
-        expect(full).toBe(17);
-        expect(screen.queryByTestId('gameplay-scene-pulse')).toBeNull();
-    });
-
-    it('flashes the room once when the run reaches Fever, and never while it stays there', () => {
-        const { rerender } = render(<GameplayScene {...base} tier="sharp" />);
-        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
-
-        // The key is the turn that crossed into Fever, so arriving mounts the flash...
-        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-9" />);
-        const first = screen.getByTestId('gameplay-scene-fever');
-        // ...staying there does not throw another, because later turns carry no arrival key.
-        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey={null} />);
-        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
-        // ...and taking Fever again after losing it is worth a fresh one.
-        rerender(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-21" />);
-        expect(screen.getByTestId('gameplay-scene-fever')).not.toBe(first);
-    });
-
-    it('never flashes Fever under reduce motion: it is a sudden change in brightness', () => {
-        render(<GameplayScene {...base} fill={1} tier="fever" feverKey="fever:turn-9" reduceMotion />);
-        expect(screen.queryByTestId('gameplay-scene-fever')).toBeNull();
-    });
-
-    it('holds still under reduce motion: no drift, no mist, no embers, every flame on its first frame', () => {
-        render(<GameplayScene {...base} reduceMotion />);
+    it('holds still under reduce motion and holds the plate still on a phone or at low quality', () => {
+        const { rerender } = render(<GameplayScene {...base} reduceMotion />);
         const scene = screen.getByTestId('gameplay-scene');
         expect(scene).toHaveAttribute('data-still', 'true');
-        expect(scene).toHaveAttribute('data-scene-effect-tier', 'still');
         expect(scene).toHaveAttribute('data-alive', 'false');
-        expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
-        expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
-        expect(screen.queryByTestId('gameplay-scene-ring-motes')).toBeNull();
-        expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'true');
-    });
-
-    it('cuts the six torch flames out as sprites that play on their own clocks, with sparks', () => {
-        render(<GameplayScene {...base} />);
-        const scene = screen.getByTestId('gameplay-scene');
+        expect(scene).toHaveAttribute('data-scene-effect-tier', 'still');
+        rerender(<GameplayScene {...base} quality="low" />);
+        expect(scene).toHaveAttribute('data-still', 'false');
+        expect(scene).toHaveAttribute('data-alive', 'false');
+        expect(scene).toHaveAttribute('data-scene-effect-tier', 'lean');
+        rerender(<GameplayScene {...base} quality="high" />);
         expect(scene).toHaveAttribute('data-alive', 'true');
-        const sprites = screen.getByTestId('scene-sprites');
-        expect(sprites).toHaveAttribute('data-sprite-kind', 'flame');
-        const flames = [...sprites.querySelectorAll('[data-sprite-id]')];
-        expect(flames).toHaveLength(6);
-        const durations = new Set(flames.map((el) => (el as HTMLElement).style.getPropertyValue('--sprite-duration')));
-        expect(durations.size).toBe(6);
-        for (const flame of flames) {
-            const style = (flame as HTMLElement).style;
-            expect(style.getPropertyValue('--sprite-frames')).toBe('16');
-            expect(flame.querySelector('img')).toHaveAttribute('src', expect.stringContaining('sprite-flame'));
-            // Every flame is somewhere on the walls: above the horizon, inside the plate.
-            expect(parseFloat(style.top)).toBeLessThan(40);
-            expect(parseFloat(style.left) + parseFloat(style.width)).toBeLessThanOrEqual(100);
-        }
-        expect(screen.getAllByTestId('scene-embers')).toHaveLength(6);
-        expect(screen.getByTestId('gameplay-scene-mist')).toBeInTheDocument();
+        expect(scene).toHaveAttribute('data-scene-effect-tier', 'full');
     });
 
-    it('goes lean on a phone whatever the preset: flames and glows, no light passes, mist, sparks or drift', () => {
-        const width = window.innerWidth;
-        Object.defineProperty(window, 'innerWidth', { configurable: true, value: 390 });
+    it('goes lean on a phone whatever the preset', () => {
+        const original = window.matchMedia;
+        window.matchMedia = ((query: string) => ({
+            matches: query.includes('coarse'),
+            media: query,
+            onchange: null,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
+            addListener: () => undefined,
+            removeListener: () => undefined,
+            dispatchEvent: () => false
+        })) as typeof window.matchMedia;
         try {
             render(<GameplayScene {...base} quality="high" />);
             const scene = screen.getByTestId('gameplay-scene');
             expect(scene).toHaveAttribute('data-scene-effect-tier', 'lean');
             expect(scene).toHaveAttribute('data-alive', 'false');
-            expect(layerCount()).toBe(12);
-            expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
-            expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
-            expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
-            expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
-            expect(screen.queryByTestId('gameplay-scene-ring-motes')).toBeNull();
+            // The same single canvas: a phone gets the room, not a cut-down stack of it.
+            expect(screen.getByTestId('gameplay-scene-plate').children).toHaveLength(1);
         } finally {
-            Object.defineProperty(window, 'innerWidth', { configurable: true, value: width });
+            window.matchMedia = original;
         }
     });
-
-    it('keeps the flames and drops the sparks, mist and drift on low quality', () => {
-        render(<GameplayScene {...base} quality="low" />);
-        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-alive', 'false');
-        expect(screen.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
-        expect(screen.getByTestId('scene-sprites').querySelectorAll('[data-sprite-id]')).toHaveLength(6);
-        expect(screen.getByTestId('scene-sprites')).toHaveAttribute('data-still', 'false');
-        expect(screen.queryAllByTestId('scene-embers')).toHaveLength(0);
-        expect(screen.queryByTestId('gameplay-scene-mist')).toBeNull();
-    });
 });
+
+const pick = (levels: ReturnType<typeof sceneFlameLevels>) => ({ rate: levels.rate, lift: levels.lift, embers: levels.embers });

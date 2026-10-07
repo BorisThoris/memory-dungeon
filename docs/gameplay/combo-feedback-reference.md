@@ -121,7 +121,7 @@ from `scripts/card-pipeline/scene-moods.zimage.manifest.json` at the dungeon's c
 
 - **The storm's room.** Wet stone: the same mask script in `--wet` mode (thinner, bluer,
   fainter) laid on the room's upward faces, shimmering slowly (`--scene-wet`). Lightning through
-  the arches: `StormBoltsOverlay`, three seeded bolts in the plate's space (`stormBolts.ts`),
+  the arches: `buildStormBolts` stroked by the room's canvas, three seeded bolts in the plate's space (`stormBolts.ts`),
   each striking on its own phase of the storm beat the room's flash already runs on.
 - **Frozen through every room.** The snow mask is per plate now (`overlay-snow-shop-v1`,
   `overlay-snow-void-v1`), each shown with its room, and the ice pane is the screen's, so a frost
@@ -179,7 +179,7 @@ or the purchase that made it, so a restore replays none):
 
 | The cabinet does | The room does here |
 | --- | --- |
-| Gold rains on a jackpot | **Gold rain** (`GoldRain`): seeded SVG coins fall through the room on a floor's gold, on every purchase, and on every ascension - more the bigger the payout, more the higher the surge, half again with Deep Pockets |
+| Gold rains on a jackpot | **Gold rain** (`buildGoldRain`, drawn by the room's canvas from one baked coin): seeded coins fall through the room on a floor's gold, on every purchase, and on every ascension - more the bigger the payout, more the higher the surge, half again with Deep Pockets |
 | The frame shakes and zooms on a big hit | **The hit**: the whole plate punches in on a Fever break or an ascension (`data-scene-hit`) |
 | The water darkens when you are losing | **The miss**: the room dims and the torches drop for a breath on every miss |
 | A boss arrives; the sea goes red | **Peril**: with the bank empty a red edge breathes and the torches burn low until a miss is banked |
@@ -314,7 +314,7 @@ turns, and every turn after a miss or an ignition - showed nothing even on a fro
 Now every run has weather from its first turn (`WEATHER_FLOOR` in `sceneMood.ts`, 0.45), and
 the heat builds it from there: a frost run opens on snow on the ledges and rime at the edges, a
 storm run on wet stone and the odd far bolt, and an ember or prismatic run on embers drifting up
-off the floor (`EmberDriftOverlay`, seeded per run, thicker and faster with the heat, `--scene-ash`).
+off the floor (`buildEmberDrift`, painted by the room's canvas in `gameplaySceneFrame.ts`; seeded per run, thicker and faster with the heat, `--scene-ash`).
 The ice pane over the board still waits for the heat. The temper stamp names ember runs too, so
 every run says what its weather is the first time the combo warms.
 

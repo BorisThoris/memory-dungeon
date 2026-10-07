@@ -11,6 +11,7 @@ lights, the torches and the candles move and react.
 bash scripts/scene-pipeline/scene.sh        # dungeon: cut sprites → segment → Blender passes → assets
 bash scripts/scene-pipeline/cathedral.sh    # cathedral: cut sprites → segment → assets
 bash scripts/scene-pipeline/portal.sh       # portal clearing (Classic poster): cut the vortex disc → segment → assets
+python3 scripts/scene-pipeline/bake_ambient.py   # the ambient atlas and fog tile every scene shares
 ```
 
 ## Stages
@@ -50,21 +51,41 @@ bash scripts/scene-pipeline/portal.sh       # portal clearing (Classic poster): 
 
 ## In the game
 
-Both scenes sit in a *plate* (`scenePlate.module.css`): a box with the painting's aspect ratio,
+Every scene sits in a *plate* (`scenePlate.module.css`): a box with the painting's aspect ratio,
 cover-fitted to the scene, so a sprite at 30 % of the plate is on its torch at any viewport. The
 plate drifts slowly (a 48 s push in and back) and turns toward the pointer (`useSceneLook`), the
-sprites a little more than the walls. `SceneSprites` plays each strip with a stepped CSS
-animation on its own clock (`sceneSpriteClocks`: periods spread ±10 %, starts staggered), drawn
-source-over (a flame is opaque paint; adding it to the yellow-white wall clips to a pale ghost),
-with sparks rising off the torches.
+things in the room a little more than the walls.
 
-`GameplayScene.tsx` stacks the layers with `mix-blend-mode: plus-lighter` inside an isolated
-group. The base sinks to the shell's 42 %; the light does not. Intensities: the ring follows the
+**A scene is one canvas.** In the plate is a single `<canvas>` the size the art was painted at
+(1376 x 768), stretched over the plate by CSS (`SceneCanvas.tsx`). Each scene has a pure function
+from its props and a clock to a list of draws (`composeGameplayScene`, `composeCathedralScene`,
+`composePortalScene`; the types are in `scenePaint.ts`), and `paintScene` puts that list on the
+canvas: the base, each light added to it (`lighter`) at the strength the run sets, the flames as
+flipbook frames on their own clocks (`sceneSpriteClocks`: periods spread ±10 %, starts
+staggered; drawn source-over, because a flame is opaque paint and adding it to the yellow-white
+wall clips to a pale ghost), then everything that drifts.
+
+It used to be an element per layer, blended by the browser (`mix-blend-mode: plus-lighter`), up
+to twenty of them in the dungeon with a filter and a mask above. Each blended element is an
+offscreen surface the size of the screen in device pixels, re-composited whenever anything under
+it moves: 33 MB apiece at 4K, 12 MB apiece on a phone at three pixels to the point. The stack
+that fit a laptop did not fit either, and when the compositor ran out of room it dropped tiles,
+which is the flashing that was reported at high resolutions and on phones. One canvas at the
+art's size is 4 MB on every device. The rule that follows: **nothing in a scene is its own
+element unless it has to be** (the storm's bolts, the gold rain and the black hole still are).
+
+Images are decoded once and held (`sceneBitmaps.ts`), taken from the run preloader's own
+elements where it has them, so a scene never draws a frame it has to wait for; a colour grade
+that follows the run (the ring turning rose) is applied by the canvas as it draws, and a blur
+(the snow's glow) is baked into a copy once. Time is `sceneClock.ts`: what a CSS transition did
+is `smooth`, what remounting an element to restart its animation did is `since`, and a loop
+whose rate changes is `phase`.
+
+The base sinks to the shell's 42 %; the light does not. Intensities: the ring follows the
 chain meter's *fill* continuously (`gameplaySceneLevels.ts`: light, glow, hue toward rose,
 saturation and the break-flash peak all ease up from chain 0 to Fever), breathes during memorize,
 and its floor light flashes on a break (remounted per event so two breaks in a row both flash);
-the torches always burn, their flames as sprites and their painted light flickering on two stepped
-clocks, and burn harder the better the run is going — the chain drives each flipbook's rate, how
+the torches always burn, their flames as sprites over painted light that holds still, and burn harder the better the run is going — the chain drives each flipbook's rate, how
 far each flame climbs its own torch and how thickly its sparks come off (`sceneFlameLevels`), on a
 curve steep off zero so the first pair of a chain already shows in the fire, against the ring's
 ease-in; the painted torchlight on the stone does *not* move with the chain, because light a
@@ -77,7 +98,8 @@ anticipation is not one lit label in a corner. They flare with a break as well (
 wall: `sceneTorchFlarePeak`); a cleared floor is the room exhaling (the ring swells and settles,
 the torches gutter and recover); the ring throws up motes as the chain climbs; mist drifts in the
 corridor. `CathedralScene.tsx` (main menu,
-game over) flickers the candlelight, breathes and drifts the wisps, climbs the arch with motes
+game over) wavers the candlelight (continuously: it used to step, and a stepped change of a whole
+bright layer is a flash), breathes and drifts the wisps, climbs the arch with motes
 and plays the 29 candle flames; at the run's end (`mood="ended"`) the candlelight sinks and the
 spirit-light takes the nave; its parent sinks the base further than the lights (`--scene-base-opacity`,
 `--scene-light-opacity`). The game-over nave also takes `heat` — the best chain the finished run
@@ -85,38 +107,58 @@ actually reached, put through `chainMeter` so it lands on the same scale the boa
 play — so the candles go on burning at the rate the run earned while the room goes dark around
 them. A run that never chained ends on guttering candles. The menu passes nothing, because a
 player who has not pressed Play has no run for the room to report on. `PortalScene.tsx` (Choose Your Path, when the recommended run's poster
-is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two stepped
-clocks, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer
+is the Classic clearing) breathes the runes, pulses the moon, twinkles the stars on two curves
+that never agree, spins the vortex disc in the arch (its feathered rim dissolving into the painted outer
 arms, a fainter copy turning the other way), drifts mist over the ground and floats motes through
 the trees.
 
+### What lives in the rooms
+
+Beyond what the painter painted, each scene has things in it that move and things that happen
+now and then, all drawn from one baked atlas (`bake_ambient.py` → `ambient-v1.webp`, 512 px: glow
+dots in each light's colour, a glint, dust, a drop and its ripple, smoke, leaves, a bat and a
+moth as flipbooks, a spider, a falling star, a sheet of light shafts) and one fog tile that
+repeats (`ambient-fog-v1.webp`). `sceneAmbient.ts` places them:
+
+- **Cathedral**: moonlight in shafts from the clerestory with dust turning in it, mist on the
+  floor of the far nave, a pool of light at each stand, glints along the spirit-light, a moth
+  round each near stand; a draught crosses every half minute and the flames lean and duck as it
+  passes; a candle gutters, smokes and catches again; a bat crosses the vault. On the menu the
+  candles burn up while Play has the pointer or the focus (`stirred`).
+- **Dungeon**: mist in the corridor and low over the floor, dust in the torchlight, smoke and a
+  wavering pool of light at the two big torches, glints round the ring that quicken with the
+  chain, water dripping off the vault and ringing on the floor; a bat in the far passage, eyes
+  in the dark that blink and go, a spider down its thread and back.
+- **Portal clearing**: sparks spiralling into the vortex, single stars catching, fireflies
+  among the glowing plants, leaves coming down off the canopy, spores adrift; a falling star.
+
+Things that happen now and then are `sceneOccurrence`: a function of the time alone, so nothing
+has to remember that an event is under way. To add one, bake its cell, give it a helper or use
+`crossingDraws` / `glintDraws` / `driftDraws`, and call it from the scene's compose function.
+Keep events rare, small, dim and at the edges: a thing that starts moving takes the eye in a way
+a thing that is always moving does not, and the board or the menu is in front of it.
+
 What a device gets is `getSceneEffectTier` (`src/shared/graphicsQuality.ts`), fed the pointer
-kind and the viewport by `useSceneEffectTier`: **full** on a desktop at medium or high; **lean**
-on any coarse-pointer device, any viewport under 900 px, or at `low`: the glow layers held still
-and unpromoted (so they rasterize with the page and blend once, instead of one full-screen GPU
-composite per layer per frame), the flame sprites and the vortex playing, no light passes, mist,
-sparks, motes, echo, drift or parallax; **still** under reduce motion. The chain still reaches the
-fire on lean: `sceneFlameLevels` is four custom properties on the one sprite root, inherited by
-every flame, spent on the rate of an animation that was already running and a scale the compositor
-was already paying for — a phone gets the same climb a desktop does, which is the only reason the
-fire was allowed to answer the run at all. A scene with no run behind it (the menu's candles, the
-portal) sets none of them and burns as the painter painted it. On a throttled Pixel 5
-emulation the full menu scene halved the frame rate (134 → 65 fps); lean costs nothing
-measurable (143 → 139). Mist uses soft gradient stops, never `filter: blur()`, which re-filters
-a moving layer every frame.
+kind and the viewport by `useSceneEffectTier`. Every tier draws the same room, because one
+canvas costs the same everywhere: **full** on a desktop of any resolution, at thirty frames a
+second with the plate drifting and turning; **lean** on any coarse-pointer device, any viewport
+under 900 px, or at `low`: twenty-four frames a second, about half the specks, the plate held
+still; **still** under reduce motion: the lit painting, every flame on its first frame, no
+flash. (Lean used to drop the light passes, the mist and the motes, and 4K was held to lean,
+both to keep the layer count down; neither is needed now.) A scene with no run behind it (the
+menu's candles, the portal) burns as the painter painted it.
 
 ## Extending
 
 - Another flame (a brazier): add its box to `sprites/<plate>.json` and rerun; the manifest and
   `SCENE_SPRITES` pick it up, nothing in the components changes.
 - Another element that should react (a window): add its hue key or a hand window in the
-  segmenter, a light in `blender_scene_lights.py` with its own light group, a layer and a CSS
-  variable in the scene component. Before reaching for a new layer, check whether the thing can be
-  said with a property on a box that already exists, the way the fire's answer to the chain is —
-  a layer is a full-screen composite per frame and is what the lean tier drops first.
-- Another scene that should feel the run: pass `heat` to its `SceneSprites` and its fire answers
-  the chain. Leave it off and the scene keeps the flame it was painted with; there is no "resting"
-  value to set, because every `--flame-*` property falls back in CSS to the painting itself.
+  segmenter, a light in `blender_scene_lights.py` with its own light group, and a draw for it in
+  the scene's compose function. A new layer is one more `drawImage` a frame, not a new element.
+- Another scene that should feel the run: give its compose function the heat and pass
+  `sceneFlameLevels`' rate and lift to `flameDraws`, as the cathedral does. Leave it off and the
+  scene keeps the flame it was painted with.
+- Something new adrift or passing through: see "What lives in the rooms" above.
 - Another backdrop (the arcane workshop): measure its flames, run `scene.sh <plate> <prefix>
   <boxes.json>` (or `cathedral.sh` when no light pass is wanted); the positions in `SCENE` are per
   plate and need re-measuring.

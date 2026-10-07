@@ -118,11 +118,30 @@
     justify-self: center;
 }
 
+.crestMount {
+    position: relative;
+    display: block;
+    margin-bottom: clamp(0.4rem, 1.4vh, 0.9rem);
+    line-height: 0;
+}
+
+/* The crest's light: a soft round of gold behind it. Its own element, so breathing is an opacity
+   on a small layer and the crest's pixels are never re-filtered. */
+.crestMount::before {
+    content: '';
+    position: absolute;
+    inset: -70%;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--margin-gold) 34%, transparent) 0%, transparent 62%);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
 .crest {
+    position: relative;
+    display: block;
     width: clamp(2rem, 6vh, 3.5rem);
     height: auto;
-    margin-bottom: clamp(0.4rem, 1.4vh, 0.9rem);
-    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--margin-gold) 35%, transparent));
 }
 
 .eyebrow {
@@ -411,7 +430,8 @@
 @media (max-width: 600px) {
     .spread { gap: 0.8rem; }
     .titleBlock { gap: 0; }
-    .crest { width: 1.8rem; margin-bottom: 0.2rem; }
+    .crest { width: 1.8rem; }
+    .crestMount { margin-bottom: 0.2rem; }
     .contentsHead { display: none; }
     .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; margin-top: 0.65rem; }
     .entries .entry { grid-template-columns: 1.1rem minmax(0, 1fr); align-items: center; gap: 0.5rem; padding: 0.65rem 0.5rem; border: 1px solid var(--margin-hairline); border-radius: 6px; background: linear-gradient(130deg, #e1ad660e, #131111a8); }
@@ -428,4 +448,203 @@
     .entry { grid-template-columns: 1.5rem 1fr; }
     .leader { display: none; }
     .help { margin-top: 0.5rem; }
+}
+
+/* ------------------------------------------------------------------ the page, alive */
+/*
+ * What moves on the title page. Every rule here animates opacity or a transform on a small
+ * element, which the compositor does without repainting anything, with one exception that is
+ * called out where it is. All of it is off under reduce motion, in both of its spellings.
+ *
+ *   - The page arrives: the crest, the title, the rule and each line of the contents rise into
+ *     place one after another, in well under a second. `backwards` holds each at its start until
+ *     its turn, and nothing is held afterwards, so a finished entrance costs nothing.
+ *   - The crest hangs in a light that breathes, and rides a slow swell.
+ *   - A sheen crosses the title now and then, the way candlelight catches gilt.
+ *   - Play is the way in, and it glows a little, in time with nothing else on the page.
+ */
+@media (prefers-reduced-motion: no-preference) {
+    .crestMount,
+    .eyebrow,
+    .title,
+    .tagline,
+    .contentsHead,
+    .playRow,
+    .entries .entry,
+    .colophon {
+        animation: menuArrive 520ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    }
+
+    .eyebrow { animation-delay: 60ms; }
+    .title { animation-delay: 110ms; }
+    .tagline { animation-delay: 260ms; }
+    .contentsHead { animation-delay: 160ms; }
+    .playRow { animation-delay: 210ms; }
+    .entries .entry { animation-delay: calc(230ms + var(--menu-entry-order, 1) * 45ms); }
+    .colophon { animation-delay: 620ms; }
+
+    .rule {
+        transform-origin: 50% 50%;
+        animation: menuRuleDraw 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 220ms backwards;
+    }
+
+    .crestMount::before {
+        animation: menuCrestLight 5.3s ease-in-out infinite;
+    }
+
+    .crest {
+        animation: menuCrestSwell 7.9s ease-in-out infinite;
+    }
+
+    /*
+     * The sheen. Each word of the title is filled with a gradient that is paper everywhere but one narrow band
+     * of gilt, parked off to the left; every sixteen seconds the band crosses. Moving a background
+     * repaints the two words while it moves, which is the one animation here that is not the
+     * compositor's: it runs for a second and a half in sixteen, on two words.
+     */
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+        .title {
+            /* A shadow is painted over a clipped background and would show through the letters,
+               so the dark behind the title moves to an element of its own (below). */
+            position: relative;
+            isolation: isolate;
+            text-shadow: none;
+        }
+
+        .title span {
+            background-image: linear-gradient(
+                100deg,
+                var(--margin-paper) 0%,
+                var(--margin-paper) 44%,
+                color-mix(in srgb, var(--margin-fever) 80%, var(--margin-paper)) 50%,
+                var(--margin-paper) 56%,
+                var(--margin-paper) 100%
+            );
+            background-size: 320% 100%;
+            background-position: 100% 0;
+            background-repeat: no-repeat;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: menuTitleSheen 16s linear 3s infinite;
+        }
+
+        /* The second word catches it a moment after the first. */
+        .title span + span {
+            animation-delay: 3.25s;
+        }
+
+        .title::before {
+            content: '';
+            position: absolute;
+            inset: -18% -12%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--margin-ink) 62%, transparent) 0%, transparent 70%);
+            pointer-events: none;
+        }
+    }
+
+    .entryPlay .entryTitle {
+        animation: menuPlayGlow 4.1s ease-in-out infinite;
+    }
+}
+
+@keyframes menuArrive {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes menuRuleDraw {
+    from {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes menuCrestLight {
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(0.94);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.06);
+    }
+}
+
+@keyframes menuCrestSwell {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes menuTitleSheen {
+    0% {
+        background-position: 100% 0;
+    }
+
+    9%,
+    100% {
+        background-position: 0% 0;
+    }
+}
+
+@keyframes menuPlayGlow {
+    0%,
+    100% {
+        opacity: 0.86;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* The game's own switch says the same thing the system's does. */
+:global([data-reduce-motion='true']) .crestMount,
+:global([data-reduce-motion='true']) .crestMount::before,
+:global([data-reduce-motion='true']) .crest,
+:global([data-reduce-motion='true']) .eyebrow,
+:global([data-reduce-motion='true']) .title,
+:global([data-reduce-motion='true']) .rule,
+:global([data-reduce-motion='true']) .tagline,
+:global([data-reduce-motion='true']) .contentsHead,
+:global([data-reduce-motion='true']) .playRow,
+:global([data-reduce-motion='true']) .entries .entry,
+:global([data-reduce-motion='true']) .entryPlay .entryTitle,
+:global([data-reduce-motion='true']) .colophon {
+    animation: none;
+}
+
+:global([data-reduce-motion='true']) .title span {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+}
+
+:global([data-reduce-motion='true']) .title {
+    text-shadow: 0 6px 40px color-mix(in srgb, var(--margin-ink) 90%, transparent);
+}
+
+:global([data-reduce-motion='true']) .title::before {
+    content: none;
 }

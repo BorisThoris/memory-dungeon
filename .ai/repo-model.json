@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2968,
-    "codeFileCount": 1107,
-    "exportedSymbolCount": 3419,
+    "trackedFileCount": 2975,
+    "codeFileCount": 1119,
+    "exportedSymbolCount": 3491,
     "contentItemCount": 12,
     "mechanicCount": 60,
     "stateFieldCount": 122,
-    "relationshipCount": 9149
+    "relationshipCount": 9300
   },
   "inventory": [
     {
@@ -705,8 +705,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 26069,
-      "sha256": "2ba1b635859f18d5085a2485041526338d82c6bfc23c419be35fdf4d0f295fd7"
+      "bytes": 26124,
+      "sha256": "7a600477ac178bfd1bffe3cf0fd282f479bdc684b97d2e1bee698807d2eb76aa"
     },
     {
       "path": "docs/gameplay/element-agency-review.md",
@@ -2410,13 +2410,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "07ae1f58c8d1f2270772f72ee4dc92d29c2f60314a579721c0f921d49a4ba5b0"
+      "sha256": "751846b017952c16c519dbca3d14f5883b507b078cea64434f05f97fa4f3f733"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "7dd5bb42f60166ed29d771bda10fe1af20155efb62c2045de197e3d6aa19ac4f"
+      "sha256": "ffc81dc4b2a0f8a2eab105c24bfd2e283fc0320587198553a805104c51d6ac95"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4305,8 +4305,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33093,
-      "sha256": "545319e8f8ea94425a9830fe734d72089b385baa821fb633c73372ccae67a80d"
+      "bytes": 33368,
+      "sha256": "37b96f725b0c2e44d0dfb4676ab2e39235f5d7ec14bdb068e9103a63a658e759"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 118869,
-      "sha256": "f8ea3da69b8d624e8bfa8d4b55f29d1cf4c6c134a9baff268360275b5d3630ab"
+      "bytes": 118166,
+      "sha256": "9c2b4c661abb3d170f98003a9c5881ea283a2f532917eb824d5a92ef377e3bce"
     },
     {
       "path": "public/site.webmanifest",
@@ -5151,8 +5151,8 @@
     {
       "path": "scripts/gate-changed.mjs",
       "category": "script",
-      "bytes": 21699,
-      "sha256": "fac254ff10ae88c1a0f48c3a3d7d6eac6b13526f576399289ba2ba5396738876"
+      "bytes": 22166,
+      "sha256": "c93d9aaa16ae47e0e6b551c637b5e2f7ffbe965787e291238ccdecc0fc9c817b"
     },
     {
       "path": "scripts/gate-long-run.ts",
@@ -5473,6 +5473,12 @@
       "sha256": "177712c6dc73b7d5ad3a75a9b5d59367e4502ed75fb4bbd35c527aa18f546894"
     },
     {
+      "path": "scripts/scene-pipeline/bake_ambient.py",
+      "category": "script",
+      "bytes": 14945,
+      "sha256": "1a7e2fad27c4b7c846e640c1a72661e8eb820ff66203552697c066c5de98dfd3"
+    },
+    {
       "path": "scripts/scene-pipeline/blender_scene_lights.py",
       "category": "script",
       "bytes": 9513,
@@ -5499,8 +5505,8 @@
     {
       "path": "scripts/scene-pipeline/element-art-manifest.json",
       "category": "script",
-      "bytes": 3844,
-      "sha256": "4c4db4e2969e41840f66bc9771904666c81fd92026eb9a29655fc67f8d5ed142"
+      "bytes": 4509,
+      "sha256": "be084b1e7f4dd154dddb2d54874499c1844e2c2ea63f710f4d1fad72f8f3097c"
     },
     {
       "path": "scripts/scene-pipeline/find_candles.py",
@@ -5517,8 +5523,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 9832,
-      "sha256": "fe9ce189a26b67e95b34c16abd16a2026438add78ee8f8d3f6c763ac91428471"
+      "bytes": 12915,
+      "sha256": "6d04fdbebddf12636c917b3d19f718965c09aa4819f19753fa2185c72908775c"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -7653,14 +7659,14 @@
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "category": "test",
-      "bytes": 12984,
-      "sha256": "f167533aee46f4cffb89368fa2bcf5f1983cc0e23c394ea73c0f737e7a765ffd"
+      "bytes": 13143,
+      "sha256": "7a4cfd2676a6ac4e3c1b1c2e370144c3d2de51c892e752c646d72ce0e817301a"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "category": "source",
-      "bytes": 9667,
-      "sha256": "e7bcb2bc339129e9c21b5f5d1480595469990b062edca4429d63e2118417abee"
+      "bytes": 10185,
+      "sha256": "c0b13cbd8ead06904fd8d2b229604edb351cfaf66ca7ff5f63536901fea4a164"
     },
     {
       "path": "src/renderer/assets/README.md",
@@ -8509,6 +8515,24 @@
       "sha256": "3ce9bdb7891147baedfe0ade8423f059e8f63d4f19f20a3362bb24f011aad0e7"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/ambient-fog-v1.webp",
+      "category": "source",
+      "bytes": 13446,
+      "sha256": "a4e4a6e9aa16cb35ce1fe724d92a948ccacd6f3f16bfbea68f5d6bdc9768a286"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/ambient-v1.json",
+      "category": "source",
+      "bytes": 2705,
+      "sha256": "e39ed102cd4153d7975c6859199b2f2a24e9d469046c03f57bf09f7e45375e35"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/ambient-v1.webp",
+      "category": "source",
+      "bytes": 38058,
+      "sha256": "6182a8afc16f4847f90dff06a6d7c3d4f3ababdbad1e73cb5693b37959ebef22"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprite-flame-00.png",
       "category": "source",
       "bytes": 85438,
@@ -8961,8 +8985,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "category": "source",
-      "bytes": 2449,
-      "sha256": "34c667132b5be88f935bc6f2d3fc286a2654a4bceb5c73c4fe44a33beb853a67"
+      "bytes": 3611,
+      "sha256": "d7ab3d73541745fd4c724390fb44506b0ad26bc9c479f43f396c2c3871130ad2"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -9595,22 +9619,22 @@
       "sha256": "c68b8b6006392e284be62322cd1bdd51605931421e978f8a0dc6ab04b6474cc7"
     },
     {
-      "path": "src/renderer/components/CathedralScene.module.css",
-      "category": "source",
-      "bytes": 3173,
-      "sha256": "3c7d0089cd5b3a79b2ffb640dad1e48f95d81953307461f178b31201fb52bfd3"
-    },
-    {
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "category": "test",
-      "bytes": 6576,
-      "sha256": "8c26cb3dfa36ee5109d9da8c943c01ff995e79fb4acb5f91308835af844ec7d6"
+      "bytes": 13515,
+      "sha256": "6d4df440a97bcd8b01f4af5d6c0c531df8f3acd7f6046655d7a2cab6088146b6"
     },
     {
       "path": "src/renderer/components/CathedralScene.tsx",
       "category": "source",
-      "bytes": 5009,
-      "sha256": "64fb731370c66771032cc47e9114639c6f1c841039d796e82d0ef54412e33eb2"
+      "bytes": 4830,
+      "sha256": "47f6b3842ea2548e8c648a3030aba9f8028060367df620a71f02d6154af43dce"
+    },
+    {
+      "path": "src/renderer/components/cathedralSceneFrame.ts",
+      "category": "source",
+      "bytes": 11338,
+      "sha256": "362ab8e3038bf9f846a8c23d9fb9b765ad3114f52fe3331ee416a63dcaaea96f"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
@@ -9789,26 +9813,20 @@
     {
       "path": "src/renderer/components/elementSceneArt.ts",
       "category": "source",
-      "bytes": 470,
-      "sha256": "d0e402819c40c2c9d42a31559657e547b62982b8b5c5fbd2c1b513b8e987344e"
-    },
-    {
-      "path": "src/renderer/components/ElementSceneLayers.module.css",
-      "category": "source",
-      "bytes": 2185,
-      "sha256": "2ad7d50812507495e875e84e2fca6771d8d1d91aff7dc4d5b61e1624fa561326"
+      "bytes": 1484,
+      "sha256": "e957620dbcb583e08361fda6b52f1f93c5c15e6a7ec79891ffdfd0142a144ec6"
     },
     {
       "path": "src/renderer/components/ElementSceneLayers.test.tsx",
       "category": "test",
-      "bytes": 1969,
-      "sha256": "535cb0e6972c9c134f23727b52fcdcb1422fd4ab6899a8e79ca8dd93edbcc636"
+      "bytes": 2124,
+      "sha256": "4ee7de2902befcc28e90b4124ee623962b6eb6dd0fd9ab2468dc3b5bcc68d377"
     },
     {
       "path": "src/renderer/components/ElementSceneLayers.tsx",
       "category": "source",
-      "bytes": 2216,
-      "sha256": "68fcc39fa498fb53942f6cd5eba230e02ed66722acd520750d8cd03ae8d8906d"
+      "bytes": 1451,
+      "sha256": "e355557796885d2480fb6e53043c0f54dab1ca344404f194458850c6a08abe1e"
     },
     {
       "path": "src/renderer/components/emberDrift.test.ts",
@@ -9821,18 +9839,6 @@
       "category": "source",
       "bytes": 2239,
       "sha256": "5d44c543bc5ce503774fd93a1e041754b91dac76a2ea6b66211219da2de6e5d1"
-    },
-    {
-      "path": "src/renderer/components/EmberDriftOverlay.module.css",
-      "category": "source",
-      "bytes": 1662,
-      "sha256": "49019a2002570931acb526205b57747c8697f03f64e0aa0dc495a2a955796f0b"
-    },
-    {
-      "path": "src/renderer/components/EmberDriftOverlay.tsx",
-      "category": "source",
-      "bytes": 2154,
-      "sha256": "43e26f59d747408e0d3b39c6d16a6ac0311cf76a9ba5a1e07c8528c1c9394a0b"
     },
     {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
@@ -9903,20 +9909,32 @@
     {
       "path": "src/renderer/components/GameplayScene.module.css",
       "category": "source",
-      "bytes": 19538,
-      "sha256": "7ed21159848333001a2ce58e5b32a70ad43077130a2499c862a1d63ad7f28e65"
+      "bytes": 7891,
+      "sha256": "39a379d6f45144eb0fe61a4e798375f3b0260f8d4ab9940c459144a1041ebcf3"
     },
     {
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "category": "test",
-      "bytes": 15175,
-      "sha256": "8415d242584a08d9215fb9009ca28996eaa9cd106e8a9e6a4b9a91fafe4d0607"
+      "bytes": 8578,
+      "sha256": "4aac612a2f8708426ef831cbe12ae1812155e62fe568f53e76870a05266ec191"
     },
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 17078,
-      "sha256": "70954cb9af46c2757eeb78c9eb1832891b5ad1f011cbf0467dc4edc076272b27"
+      "bytes": 12519,
+      "sha256": "37c31e808706d99892716f9da65ed628ddefa706aa5c49a1b562c2f221e0e621"
+    },
+    {
+      "path": "src/renderer/components/gameplaySceneFrame.test.ts",
+      "category": "test",
+      "bytes": 26846,
+      "sha256": "255d9a550ee4b316bf211ef21d06e73ba69d4f6283649b39a24bde63f4531bf8"
+    },
+    {
+      "path": "src/renderer/components/gameplaySceneFrame.ts",
+      "category": "source",
+      "bytes": 26940,
+      "sha256": "51acba7a0310716c4dbcab04396854c049c00933919785b2f1e4861afcc62ba3"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -9979,22 +9997,16 @@
       "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
     },
     {
-      "path": "src/renderer/components/GoldRain.module.css",
-      "category": "source",
-      "bytes": 1051,
-      "sha256": "7614e6cde6caa87e29833c7ffb45a0f30201e7ae51f70d90505be22089e3b74e"
-    },
-    {
-      "path": "src/renderer/components/GoldRain.test.tsx",
+      "path": "src/renderer/components/goldRain.test.ts",
       "category": "test",
-      "bytes": 1421,
-      "sha256": "1751cf2533e22881089d5c2ee014c1fd71a63e28f3592994a6aef6a3f29cf148"
+      "bytes": 839,
+      "sha256": "0d3e0ed0bed1cf749ce9e47d3b9fbff3d1c518923c27338aff2787a8baf3bec2"
     },
     {
-      "path": "src/renderer/components/GoldRain.tsx",
+      "path": "src/renderer/components/goldRain.ts",
       "category": "source",
-      "bytes": 3217,
-      "sha256": "5ab83b6af743f0454b818ba7f0dcf9c0d8ba6995ffb7c6e677fd5b80efe300ed"
+      "bytes": 1219,
+      "sha256": "988f87fed1cfe99ffb3b2443f3aedf0ad8231659f5cb0b810ffe36d468fb4fea"
     },
     {
       "path": "src/renderer/components/iceSheet.test.ts",
@@ -10053,8 +10065,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 12958,
-      "sha256": "400515d31f35410869dba807fdb2b050d87647d957697f26f1a21b15ba85885b"
+      "bytes": 19244,
+      "sha256": "7f52ce3242b1553d4bdcd37d2aed97ea34af3225245fc42099fcb2a9582ccb52"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -10065,14 +10077,14 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 12766,
-      "sha256": "6cfe63cb6c1921437dded2b884d4a0d9baf209353e09618c4800edeb87deeca6"
+      "bytes": 13608,
+      "sha256": "a9914d3ea0970831ef9579f6cb46decb0bd67846891717c9246d505cb593f184"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
       "category": "source",
-      "bytes": 2164,
-      "sha256": "2af66651b31cf335381c85660115dbc42352abdef91a552d9c72c12fa1345b45"
+      "bytes": 2303,
+      "sha256": "c09a2dbc903d4eb56548534f539104df86e98066a6c04b3a1a4d722036bdf46f"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.test.tsx",
@@ -10207,28 +10219,28 @@
       "sha256": "5521241c3b0dfaede191c5be54242f8f1fe41bec1eda7bd99ffce8586b5be6af"
     },
     {
-      "path": "src/renderer/components/PortalScene.module.css",
-      "category": "source",
-      "bytes": 5533,
-      "sha256": "e5d687dd3f04568a48b978795a04a3a06eda9465c9d2cd1e8af55eeb052d086b"
-    },
-    {
       "path": "src/renderer/components/PortalScene.test.tsx",
       "category": "test",
-      "bytes": 2676,
-      "sha256": "25d07b18aeeb8ece7193e187a9f55bfb2b605c8395706f91dcc9b4ef494f08f9"
+      "bytes": 8265,
+      "sha256": "667be103f781637037f175bf5656da633e9f65a498486f7b626616c5356fdf79"
     },
     {
       "path": "src/renderer/components/PortalScene.tsx",
       "category": "source",
-      "bytes": 4988,
-      "sha256": "b6cba5075854ed452645663fcb5e593e54010fa560295506f7a43dbcccb477fc"
+      "bytes": 3139,
+      "sha256": "ac3dadddfb98352a76866257c6eedaf2cca9d9074da8e1715ec7e3e18011dbb3"
+    },
+    {
+      "path": "src/renderer/components/portalSceneFrame.ts",
+      "category": "source",
+      "bytes": 10214,
+      "sha256": "09ea22ef64c3f5fcbc80271633a5c95cde0b09daeee8462102115f004bcf83ce"
     },
     {
       "path": "src/renderer/components/portalSceneMotes.ts",
       "category": "source",
-      "bytes": 1229,
-      "sha256": "722cb2531b6b06415e7384e96210ba248aa4c69de66c5c893c95c1279bf628e2"
+      "bytes": 1236,
+      "sha256": "d1b78d36257d44715dd003f0b247a4439a34c82d165fcfd4664af5127307449c"
     },
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
@@ -10371,8 +10383,8 @@
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
       "category": "test",
-      "bytes": 3454,
-      "sha256": "0363b0e5446671158f947a075b396d280b5ce62d317add282e93f20b3381c413"
+      "bytes": 3457,
+      "sha256": "b71473def55e0e5c4e753a83fc221186e6bddd980dda549fd248a0fabbe6e860"
     },
     {
       "path": "src/renderer/components/RunLoadingScreen.tsx",
@@ -10423,6 +10435,66 @@
       "sha256": "180f46b7322897a475e574fc5a4a65b511b6b0a892fa78871ae46e80f6a9f3fd"
     },
     {
+      "path": "src/renderer/components/sceneAmbient.test.ts",
+      "category": "test",
+      "bytes": 12574,
+      "sha256": "300f0504a8f2a8eb2d634f8e32ab4ee8fa43e54437d381ee363e65d3ce17bb84"
+    },
+    {
+      "path": "src/renderer/components/sceneAmbient.ts",
+      "category": "source",
+      "bytes": 15536,
+      "sha256": "6bfcec10f860420181c4ccd40c5aff206a9f3f992725504c859e3db043018693"
+    },
+    {
+      "path": "src/renderer/components/sceneBitmaps.test.ts",
+      "category": "test",
+      "bytes": 5645,
+      "sha256": "ae6bd6a6757394cd40b383f55af8db69b12de49bbf2417b027ab522b9363363b"
+    },
+    {
+      "path": "src/renderer/components/sceneBitmaps.ts",
+      "category": "source",
+      "bytes": 10462,
+      "sha256": "7c050c5572e3ca83a9a614cadb1c79b8037d3a40c4c005078dc8cdc770fdc5bb"
+    },
+    {
+      "path": "src/renderer/components/SceneCanvas.test.tsx",
+      "category": "test",
+      "bytes": 3065,
+      "sha256": "7041bc904aabcf1d6a67d4264b5033284282df9e5c6753a5db6e10a47989710d"
+    },
+    {
+      "path": "src/renderer/components/SceneCanvas.tsx",
+      "category": "source",
+      "bytes": 10152,
+      "sha256": "c1f48efcae16781bb534318d5c43b669895c882ea50281c339dc004b43102041"
+    },
+    {
+      "path": "src/renderer/components/sceneCanvasLayout.ts",
+      "category": "source",
+      "bytes": 1419,
+      "sha256": "a93abdc5fdf8316866db7fbbd2f12acda755e3f0f21aaec6806b9a42c9d1c136"
+    },
+    {
+      "path": "src/renderer/components/sceneClock.test.ts",
+      "category": "test",
+      "bytes": 7424,
+      "sha256": "f6602fcdda201cf1f3de4c2fdf3ca1b23dc0237cc612f09fcfee1043ab3f7300"
+    },
+    {
+      "path": "src/renderer/components/sceneClock.ts",
+      "category": "source",
+      "bytes": 8027,
+      "sha256": "0d19b5252907e4dfe24f4b73fa340cdcef371c026e467ba8be956885546bd1c3"
+    },
+    {
+      "path": "src/renderer/components/sceneFlameLevels.test.ts",
+      "category": "test",
+      "bytes": 4891,
+      "sha256": "0b25f25521b462e711cd7826cf389b116a3d5b068711b05a1411cd130c8b143f"
+    },
+    {
       "path": "src/renderer/components/sceneMood.test.ts",
       "category": "test",
       "bytes": 7586,
@@ -10435,46 +10507,28 @@
       "sha256": "b914a311c2d7c5a3380e9f9de72548a3b3d2e891aed035aed23d48f4a29ae360"
     },
     {
-      "path": "src/renderer/components/SceneMotes.module.css",
-      "category": "source",
-      "bytes": 1663,
-      "sha256": "07b8ecf5a1bc1cd62639a3a130e7fe1811836c894b430df3cc7e9a009875ce36"
+      "path": "src/renderer/components/scenePaint.test.ts",
+      "category": "test",
+      "bytes": 10215,
+      "sha256": "1b39e010ed2b01f0707570054ddd4f59fbbc6b609721b4ea42eaae52ef74b687"
     },
     {
-      "path": "src/renderer/components/SceneMotes.tsx",
+      "path": "src/renderer/components/scenePaint.ts",
       "category": "source",
-      "bytes": 2105,
-      "sha256": "baaa7e15fb9e47b7dfbc15312e1ebcbf59d85c707943abdee040128a7bf63387"
+      "bytes": 15513,
+      "sha256": "607099830478ac9e7c3403b9c76c46a4f8f6e86f45125ac3e882f1bc7b9dc679"
     },
     {
       "path": "src/renderer/components/scenePlate.module.css",
       "category": "source",
-      "bytes": 3522,
-      "sha256": "09444f5c876751369a24e5535763f2a6a759403d77c767a187155fcdc9d25006"
+      "bytes": 2958,
+      "sha256": "b5b5ffac13b7ae40d72523f071814fad4da3b09100f9ebb6a07cf87f489e21ca"
     },
     {
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "category": "source",
-      "bytes": 4232,
-      "sha256": "a1db85df487e75fb32756e1b253968c4025b9fbb5660dc13bf01a28cb48b180a"
-    },
-    {
-      "path": "src/renderer/components/SceneSprites.module.css",
-      "category": "source",
-      "bytes": 3224,
-      "sha256": "8a88598f0d1c9bb5d22504f51e8de5687884aeddcbdb1ffc1830b1e163758e70"
-    },
-    {
-      "path": "src/renderer/components/SceneSprites.test.tsx",
-      "category": "test",
-      "bytes": 8066,
-      "sha256": "2c88ef4c79bf52bacb83eaab7aaca2c91d342f77a08e56c9e2a84a7a3905ded3"
-    },
-    {
-      "path": "src/renderer/components/SceneSprites.tsx",
-      "category": "source",
-      "bytes": 6069,
-      "sha256": "78face0f3d1815e3365905c8ec54297fbc33f0d4dece3f8a9cbb22cc811ca1c7"
+      "bytes": 4747,
+      "sha256": "5585ff747ea4844335c1c9761f30471e9448001febb095e4e9e23a0c2b847b7a"
     },
     {
       "path": "src/renderer/components/SceneWipe.module.css",
@@ -10623,26 +10677,14 @@
     {
       "path": "src/renderer/components/stormBolts.test.ts",
       "category": "test",
-      "bytes": 1283,
-      "sha256": "7e154b0f0555891bbd6677f3b2e5ef5cae97991030ab44ba80f7a11fe08832f0"
+      "bytes": 1487,
+      "sha256": "1031ccd123e5cb45c51217c67dea8f8e6b70c44430cfc9d4d23becf96b1783dc"
     },
     {
       "path": "src/renderer/components/stormBolts.ts",
       "category": "source",
-      "bytes": 2094,
-      "sha256": "a13b2f2e436c21b4dd50573ec00db927e524da75b389ff8fafea8238f970768b"
-    },
-    {
-      "path": "src/renderer/components/StormBoltsOverlay.module.css",
-      "category": "source",
-      "bytes": 1196,
-      "sha256": "2f9f3445e042f7b8c5b0c60f8054149fd2fe69031d445258df24e3230d3005db"
-    },
-    {
-      "path": "src/renderer/components/StormBoltsOverlay.tsx",
-      "category": "source",
-      "bytes": 1417,
-      "sha256": "dc8a2972ad8763054a23f4e8180b44738d1869bface84ded18ece51575647d54"
+      "bytes": 2240,
+      "sha256": "7bc185a504ee9e244791bc6bb52c255209cd01b2d19709acd38a63bb5eb836ea"
     },
     {
       "path": "src/renderer/components/TileBezel.tsx",
@@ -12231,8 +12273,8 @@
     {
       "path": "src/renderer/hooks/useSceneLook.ts",
       "category": "source",
-      "bytes": 2926,
-      "sha256": "23040adb277bedc2209fbcc66bd86d4479cd558015330b10bafd4554bc145cda"
+      "bytes": 3328,
+      "sha256": "d8b19e23477f26622ab59c17b6e9c055823542d22fb7f8edc063d9ecbd5393bd"
     },
     {
       "path": "src/renderer/hooks/useViewportSize.test.tsx",
@@ -14073,8 +14115,8 @@
     {
       "path": "src/shared/gate-changed.test.ts",
       "category": "test",
-      "bytes": 35103,
-      "sha256": "cb2a4156dcccbbe5361247787c4af3f1b2a525c832f8dcef275cfd6a198dad85"
+      "bytes": 35099,
+      "sha256": "01a650237979079277622486b97064435ca414b36c6706aae06446d6316e895c"
     },
     {
       "path": "src/shared/gate-long-run-script.test.ts",
@@ -14103,14 +14145,14 @@
     {
       "path": "src/shared/graphicsQuality.test.ts",
       "category": "test",
-      "bytes": 5967,
-      "sha256": "928305da55d7ae91b471aff9c260284730549a18392195ab4406021b119b6a6f"
+      "bytes": 5985,
+      "sha256": "f139130e4ff4f22a3b64d64e6f8c027dfbe540035d86c43051b205a5b3cb1c89"
     },
     {
       "path": "src/shared/graphicsQuality.ts",
       "category": "source",
-      "bytes": 6362,
-      "sha256": "2355e61dcb6702529e08d12909bc806bd33fe951d18991248b9c35d64512d64b"
+      "bytes": 6689,
+      "sha256": "85003e50819c0786ad3a32e788f3cb5fff89a3c2ed68c600cad740bfadf90ce2"
     },
     {
       "path": "src/shared/hashPairKey.test.ts",
@@ -18646,7 +18688,7 @@
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 312,
+      "lineCount": 313,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -18656,12 +18698,14 @@
       "path": "src/renderer/assets/preloadStartupAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 264,
+      "lineCount": 273,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
+        "file:src/renderer/components/elementSceneArt.ts",
+        "file:src/renderer/components/sceneBitmaps.ts",
         "file:src/renderer/components/startupIntroTextures.ts",
         "file:src/renderer/components/tileTextures.ts"
       ],
@@ -18742,6 +18786,16 @@
       ]
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/ambient-v1.json",
+      "path": "src/renderer/assets/ui/sprites/ambient-v1.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 190,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
       "layer": "renderer",
@@ -18776,13 +18830,18 @@
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 66,
+      "lineCount": 96,
       "imports": [
+        "file:src/renderer/assets/ui/sprites/ambient-v1.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json"
       ],
       "exports": [
+        "symbol:src/renderer/assets/ui/sprites/index.ts#AMBIENT_SPRITES",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
+        "symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
         "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
         "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
         "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
@@ -18792,7 +18851,10 @@
       ],
       "testedBy": [
         "file:src/renderer/components/CathedralScene.test.tsx",
-        "file:src/renderer/components/SceneSprites.test.tsx"
+        "file:src/renderer/components/GameplayScene.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/PortalScene.test.tsx",
+        "file:src/renderer/components/sceneAmbient.test.ts"
       ]
     },
     {
@@ -20585,10 +20647,13 @@
       "path": "src/renderer/components/CathedralScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 115,
+      "lineCount": 235,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/cathedralSceneFrame.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts",
         "file:src/renderer/components/sceneSpriteClocks.ts"
       ],
       "exports": [],
@@ -20601,11 +20666,11 @@
       "role": "production",
       "lineCount": 96,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/renderer/components/SceneMotes.tsx",
-        "file:src/renderer/components/sceneSpriteClocks.ts",
-        "file:src/renderer/components/SceneSprites.tsx",
+        "file:src/renderer/components/cathedralSceneFrame.ts",
+        "file:src/renderer/components/SceneCanvas.tsx",
+        "file:src/renderer/components/sceneCanvasLayout.ts",
+        "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/contracts.ts"
@@ -20613,6 +20678,34 @@
       "exports": [
         "symbol:src/renderer/components/CathedralScene.tsx#CathedralScene",
         "symbol:src/renderer/components/CathedralScene.tsx#CathedralSceneProps"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "path": "src/renderer/components/cathedralSceneFrame.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 224,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/sceneAmbient.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts",
+        "file:src/shared/graphicsQuality.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_EVERY_MS",
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_LASTS_MS",
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_EVERY_MS",
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_LASTS_MS",
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#CathedralFrameInput",
+        "symbol:src/renderer/components/cathedralSceneFrame.ts#composeCathedralScene"
       ],
       "testedBy": [
         "file:src/renderer/components/CathedralScene.test.tsx"
@@ -21086,13 +21179,15 @@
       "path": "src/renderer/components/elementSceneArt.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 8,
+      "lineCount": 31,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/components/elementScene.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART"
+        "symbol:src/renderer/components/elementSceneArt.ts#ELEMENT_SCENE_ART",
+        "symbol:src/renderer/components/elementSceneArt.ts#getElementSceneArtUrls",
+        "symbol:src/renderer/components/elementSceneArt.ts#prefersCompactSceneArt"
       ],
       "testedBy": [
         "file:src/renderer/components/ElementSceneLayers.test.tsx"
@@ -21103,7 +21198,7 @@
       "path": "src/renderer/components/ElementSceneLayers.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 30,
+      "lineCount": 33,
       "imports": [
         "file:src/renderer/components/elementScene.ts",
         "file:src/renderer/components/elementSceneArt.ts",
@@ -21118,12 +21213,9 @@
       "path": "src/renderer/components/ElementSceneLayers.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 33,
+      "lineCount": 36,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
-        "file:src/renderer/components/elementScene.ts",
-        "file:src/renderer/components/elementSceneArt.ts",
-        "file:src/renderer/components/useSceneBeat.ts"
+        "file:src/renderer/components/elementScene.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers"
@@ -21164,21 +21256,6 @@
       "testedBy": [
         "file:src/renderer/components/emberDrift.test.ts"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/EmberDriftOverlay.tsx",
-      "path": "src/renderer/components/EmberDriftOverlay.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 47,
-      "imports": [
-        "file:src/renderer/components/emberDrift.ts",
-        "file:src/renderer/components/sceneMood.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
@@ -21338,8 +21415,9 @@
       "path": "src/renderer/components/GameplayScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 266,
+      "lineCount": 164,
       "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/GameplayScene.tsx",
         "file:src/renderer/components/gameplaySceneLevels.ts"
       ],
@@ -21351,20 +21429,17 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 274,
+      "lineCount": 222,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/elementSceneArt.ts",
         "file:src/renderer/components/ElementSceneLayers.tsx",
-        "file:src/renderer/components/emberDrift.ts",
-        "file:src/renderer/components/EmberDriftOverlay.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
-        "file:src/renderer/components/GoldRain.tsx",
+        "file:src/renderer/components/SceneCanvas.tsx",
+        "file:src/renderer/components/sceneCanvasLayout.ts",
+        "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/components/sceneMood.ts",
-        "file:src/renderer/components/SceneMotes.tsx",
-        "file:src/renderer/components/sceneSpriteClocks.ts",
-        "file:src/renderer/components/SceneSprites.tsx",
-        "file:src/renderer/components/StormBoltsOverlay.tsx",
         "file:src/renderer/components/useSceneBeat.ts",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
@@ -21378,6 +21453,63 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameplayScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "path": "src/renderer/components/gameplaySceneFrame.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 464,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/gameplaySceneFrame.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/sceneMood.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "path": "src/renderer/components/gameplaySceneFrame.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 452,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/elementScene.ts",
+        "file:src/renderer/components/elementSceneArt.ts",
+        "file:src/renderer/components/emberDrift.ts",
+        "file:src/renderer/components/gameplaySceneLevels.ts",
+        "file:src/renderer/components/goldRain.ts",
+        "file:src/renderer/components/sceneAmbient.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/sceneMood.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts",
+        "file:src/renderer/components/stormBolts.ts",
+        "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/graphicsQuality.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#composeGameplayScene",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_LAST_MS",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_EVERY_MS",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_LASTS_MS",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#GameplayFrameInput",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#SCENE_RING",
+        "symbol:src/renderer/components/gameplaySceneFrame.ts#stormBoltCount"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/gameplaySceneFrame.test.ts"
       ]
     },
     {
@@ -21398,7 +21530,8 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameplayScene.test.tsx",
-        "file:src/renderer/components/SceneSprites.test.tsx"
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/sceneFlameLevels.test.ts"
       ]
     },
     {
@@ -21620,35 +21753,33 @@
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/components/GoldRain.test.tsx",
-      "path": "src/renderer/components/GoldRain.test.tsx",
+      "id": "file:src/renderer/components/goldRain.test.ts",
+      "path": "src/renderer/components/goldRain.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 27,
+      "lineCount": 18,
       "imports": [
-        "file:src/renderer/components/GoldRain.tsx"
+        "file:src/renderer/components/goldRain.ts"
       ],
       "exports": [],
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/components/GoldRain.tsx",
-      "path": "src/renderer/components/GoldRain.tsx",
+      "id": "file:src/renderer/components/goldRain.ts",
+      "path": "src/renderer/components/goldRain.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 79,
+      "lineCount": 35,
       "imports": [
         "file:src/shared/rng.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
-        "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
-        "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
-        "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
-        "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps"
+        "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
+        "symbol:src/renderer/components/goldRain.ts#GOLD_RAIN_MAX_COINS",
+        "symbol:src/renderer/components/goldRain.ts#GoldCoin"
       ],
       "testedBy": [
-        "file:src/renderer/components/GoldRain.test.tsx"
+        "file:src/renderer/components/goldRain.test.ts"
       ]
     },
     {
@@ -21785,7 +21916,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 261,
+      "lineCount": 271,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -22125,10 +22256,14 @@
       "path": "src/renderer/components/PortalScene.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 48,
+      "lineCount": 146,
       "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/PortalScene.tsx",
-        "file:src/renderer/components/portalSceneMotes.ts"
+        "file:src/renderer/components/portalSceneFrame.ts",
+        "file:src/renderer/components/portalSceneMotes.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -22138,12 +22273,13 @@
       "path": "src/renderer/components/PortalScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 93,
+      "lineCount": 69,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/renderer/components/portalSceneMotes.ts",
-        "file:src/renderer/components/SceneMotes.tsx",
+        "file:src/renderer/components/portalSceneFrame.ts",
+        "file:src/renderer/components/SceneCanvas.tsx",
+        "file:src/renderer/components/sceneCanvasLayout.ts",
+        "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
         "file:src/renderer/hooks/useSceneLook.ts",
         "file:src/shared/contracts.ts"
@@ -22157,13 +22293,41 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/portalSceneFrame.ts",
+      "path": "src/renderer/components/portalSceneFrame.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 211,
+      "imports": [
+        "file:src/renderer/assets/ui/index.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/portalSceneMotes.ts",
+        "file:src/renderer/components/sceneAmbient.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/shared/graphicsQuality.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/portalSceneFrame.ts#composePortalScene",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_FIREFLIES",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_LEAVES",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_EVERY_MS",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_LASTS_MS",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_VORTEX_SPARKS",
+        "symbol:src/renderer/components/portalSceneFrame.ts#PortalFrameInput"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/PortalScene.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/portalSceneMotes.ts",
       "path": "src/renderer/components/portalSceneMotes.ts",
       "layer": "renderer",
       "role": "production",
       "lineCount": 29,
       "imports": [
-        "file:src/renderer/components/SceneMotes.tsx"
+        "file:src/renderer/components/sceneSpriteClocks.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
@@ -22659,6 +22823,188 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/sceneAmbient.test.ts",
+      "path": "src/renderer/components/sceneAmbient.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 240,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/sceneAmbient.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/sceneAmbient.ts",
+      "path": "src/renderer/components/sceneAmbient.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 416,
+      "imports": [
+        "file:src/renderer/assets/ui/sprites/index.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/renderer/components/sceneSpriteClocks.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
+        "symbol:src/renderer/components/sceneAmbient.ts#crossingDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#driftDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#dripDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#flameDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#flameEmberDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#fogDraw",
+        "symbol:src/renderer/components/sceneAmbient.ts#glintDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#moteDraws",
+        "symbol:src/renderer/components/sceneAmbient.ts#SCENE_PLATE_ASPECT",
+        "symbol:src/renderer/components/sceneAmbient.ts#sceneKeyframes"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneAmbient.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneBitmaps.test.ts",
+      "path": "src/renderer/components/sceneBitmaps.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 112,
+      "imports": [
+        "file:src/renderer/components/sceneBitmaps.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/sceneBitmaps.ts",
+      "path": "src/renderer/components/sceneBitmaps.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 279,
+      "imports": [
+        "file:src/renderer/components/scenePaint.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneBitmaps.ts#getSceneImage",
+        "symbol:src/renderer/components/sceneBitmaps.ts#offerSceneImage",
+        "symbol:src/renderer/components/sceneBitmaps.ts#quantizeSceneFilter",
+        "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterCss",
+        "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsIdentity",
+        "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsLive",
+        "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterMatrix",
+        "symbol:src/renderer/components/sceneBitmaps.ts#sceneLiveFilterCss",
+        "symbol:src/renderer/components/sceneBitmaps.ts#subscribeSceneImages"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/sceneBitmaps.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/SceneCanvas.test.tsx",
+      "path": "src/renderer/components/SceneCanvas.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 57,
+      "imports": [
+        "file:src/renderer/components/SceneCanvas.tsx",
+        "file:src/renderer/components/sceneCanvasLayout.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/SceneCanvas.tsx",
+      "path": "src/renderer/components/SceneCanvas.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 252,
+      "imports": [
+        "file:src/renderer/components/sceneBitmaps.ts",
+        "file:src/renderer/components/sceneCanvasLayout.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/SceneCanvas.tsx#SceneCanvas",
+        "symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/SceneCanvas.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "path": "src/renderer/components/sceneCanvasLayout.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 31,
+      "imports": [
+        "file:src/renderer/components/scenePaint.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_FULL",
+        "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_LEAN",
+        "symbol:src/renderer/components/sceneCanvasLayout.ts#visiblePlateRect"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/SceneCanvas.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneClock.test.ts",
+      "path": "src/renderer/components/sceneClock.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 160,
+      "imports": [
+        "file:src/renderer/components/sceneClock.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/sceneClock.ts",
+      "path": "src/renderer/components/sceneClock.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 182,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/sceneClock.ts#createSceneClock",
+        "symbol:src/renderer/components/sceneClock.ts#fixedSceneClock",
+        "symbol:src/renderer/components/sceneClock.ts#SCENE_CLOCK_MAX_STEP_MS",
+        "symbol:src/renderer/components/sceneClock.ts#sceneBeatEnvelope",
+        "symbol:src/renderer/components/sceneClock.ts#sceneBreath",
+        "symbol:src/renderer/components/sceneClock.ts#SceneClock",
+        "symbol:src/renderer/components/sceneClock.ts#sceneFlicker",
+        "symbol:src/renderer/components/sceneClock.ts#sceneHash",
+        "symbol:src/renderer/components/sceneClock.ts#sceneOccurrence",
+        "symbol:src/renderer/components/sceneClock.ts#sceneSmoothstep"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/PortalScene.test.tsx",
+        "file:src/renderer/components/sceneAmbient.test.ts",
+        "file:src/renderer/components/sceneClock.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/sceneFlameLevels.test.ts",
+      "path": "src/renderer/components/sceneFlameLevels.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 90,
+      "imports": [
+        "file:src/renderer/components/gameplaySceneLevels.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/sceneMood.test.ts",
       "path": "src/renderer/components/sceneMood.test.ts",
       "layer": "renderer",
@@ -22697,32 +23043,64 @@
         "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR"
       ],
       "testedBy": [
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/sceneMood.test.ts"
       ]
     },
     {
-      "id": "file:src/renderer/components/SceneMotes.tsx",
-      "path": "src/renderer/components/SceneMotes.tsx",
+      "id": "file:src/renderer/components/scenePaint.test.ts",
+      "path": "src/renderer/components/scenePaint.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 202,
+      "imports": [
+        "file:src/renderer/components/scenePaint.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/scenePaint.ts",
+      "path": "src/renderer/components/scenePaint.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 62,
+      "lineCount": 394,
       "imports": [],
       "exports": [
-        "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
-        "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
-        "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps"
+        "symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
+        "symbol:src/renderer/components/scenePaint.ts#paintScene",
+        "symbol:src/renderer/components/scenePaint.ts#SCENE_ALPHA_FLOOR",
+        "symbol:src/renderer/components/scenePaint.ts#SCENE_DEPTH_SHIFT_X",
+        "symbol:src/renderer/components/scenePaint.ts#SceneBlend",
+        "symbol:src/renderer/components/scenePaint.ts#SceneCrop",
+        "symbol:src/renderer/components/scenePaint.ts#SceneDraw",
+        "symbol:src/renderer/components/scenePaint.ts#sceneDrawIds",
+        "symbol:src/renderer/components/scenePaint.ts#SceneFilter",
+        "symbol:src/renderer/components/scenePaint.ts#SceneFogDraw",
+        "symbol:src/renderer/components/scenePaint.ts#SceneFogMask",
+        "symbol:src/renderer/components/scenePaint.ts#SceneGlowDraw",
+        "symbol:src/renderer/components/scenePaint.ts#SceneImageDraw",
+        "symbol:src/renderer/components/scenePaint.ts#SceneLineDraw",
+        "symbol:src/renderer/components/scenePaint.ts#ScenePaintContext",
+        "symbol:src/renderer/components/scenePaint.ts#ScenePaintEnv",
+        "symbol:src/renderer/components/scenePaint.ts#ScenePaintImage",
+        "symbol:src/renderer/components/scenePaint.ts#SceneRect"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/CathedralScene.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/PortalScene.test.tsx",
+        "file:src/renderer/components/scenePaint.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/sceneSpriteClocks.ts",
       "path": "src/renderer/components/sceneSpriteClocks.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 100,
+      "lineCount": 117,
       "imports": [
-        "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/renderer/components/SceneMotes.tsx"
+        "file:src/renderer/assets/ui/sprites/index.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
@@ -22731,45 +23109,15 @@
         "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
+        "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneMote",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
         "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers"
       ],
       "testedBy": [
-        "file:src/renderer/components/CathedralScene.test.tsx"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/SceneSprites.test.tsx",
-      "path": "src/renderer/components/SceneSprites.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 151,
-      "imports": [
-        "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/renderer/components/gameplaySceneLevels.ts",
-        "file:src/renderer/components/SceneSprites.tsx"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/SceneSprites.tsx",
-      "path": "src/renderer/components/SceneSprites.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 127,
-      "imports": [
-        "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/renderer/components/gameplaySceneLevels.ts",
-        "file:src/renderer/components/sceneSpriteClocks.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
-        "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/SceneSprites.test.tsx"
+        "file:src/renderer/components/CathedralScene.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/sceneAmbient.test.ts"
       ]
     },
     {
@@ -23154,7 +23502,7 @@
       "path": "src/renderer/components/stormBolts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 25,
+      "lineCount": 28,
       "imports": [
         "file:src/renderer/components/stormBolts.ts"
       ],
@@ -23166,7 +23514,7 @@
       "path": "src/renderer/components/stormBolts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 45,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/rng.ts"
       ],
@@ -23178,20 +23526,6 @@
       "testedBy": [
         "file:src/renderer/components/stormBolts.test.ts"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/StormBoltsOverlay.tsx",
-      "path": "src/renderer/components/StormBoltsOverlay.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 29,
-      "imports": [
-        "file:src/renderer/components/stormBolts.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/TileBezel.tsx",
@@ -27643,7 +27977,7 @@
       "path": "src/renderer/hooks/useSceneLook.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 82,
       "imports": [],
       "exports": [
         "symbol:src/renderer/hooks/useSceneLook.ts#useSceneLook"
@@ -31267,6 +31601,7 @@
         "symbol:src/shared/combo-heat-rules.ts#romanNumeral"
       ],
       "testedBy": [
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
         "file:src/shared/combo-heat-perks.test.ts",
@@ -33806,7 +34141,7 @@
       "path": "src/shared/graphicsQuality.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 167,
+      "lineCount": 172,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -37962,6 +38297,7 @@
         "file:src/renderer/components/distantCardPage.test.ts",
         "file:src/renderer/components/elementScene.test.ts",
         "file:src/renderer/components/ElementSceneLayers.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
@@ -39724,88 +40060,88 @@
       "name": "preloadModePosterRasterImages",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 142,
-      "endLine": 145
+      "line": 151,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadStartupCriticalAssets",
       "name": "preloadStartupCriticalAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 230,
-      "endLine": 263
+      "line": 239,
+      "endLine": 272
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImages",
       "name": "preloadUiRasterImages",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 97,
-      "endLine": 100
+      "line": 99,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadUiRasterImagesFully",
       "name": "preloadUiRasterImagesFully",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 129,
-      "endLine": 140
+      "line": 137,
+      "endLine": 149
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#resetStartupAssetPreloadStateForTests",
       "name": "resetStartupAssetPreloadStateForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 176,
-      "endLine": 183
+      "line": 185,
+      "endLine": 192
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_INITIAL_LABEL",
       "name": "STARTUP_PRELOAD_INITIAL_LABEL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 207,
-      "endLine": 207
+      "line": 216,
+      "endLine": 216
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#STARTUP_PRELOAD_STEP_TOTAL",
       "name": "STARTUP_PRELOAD_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 209,
-      "endLine": 209
+      "line": 218,
+      "endLine": 218
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadProgress",
       "name": "StartupPreloadProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 188,
-      "endLine": 195
+      "line": 197,
+      "endLine": 204
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#StartupPreloadStepId",
       "name": "StartupPreloadStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 186,
-      "endLine": 186
+      "line": 195,
+      "endLine": 195
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmCardIllustrationsInBackground",
       "name": "warmCardIllustrationsInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 161,
-      "endLine": 174
+      "line": 170,
+      "endLine": 183
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#warmModePosterRasterImagesInBackground",
       "name": "warmModePosterRasterImagesInBackground",
       "kind": "value",
       "file": "src/renderer/assets/preloadStartupAssets.ts",
-      "line": 147,
-      "endLine": 159
+      "line": 156,
+      "endLine": 168
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
@@ -39960,52 +40296,84 @@
       "endLine": 11
     },
     {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AMBIENT_SPRITES",
+      "name": "AMBIENT_SPRITES",
+      "kind": "value",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 81,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
+      "name": "AmbientCell",
+      "kind": "interface",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 70,
+      "endLine": 77
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
+      "name": "AmbientCellName",
+      "kind": "type",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 79,
+      "endLine": 79
+    },
+    {
+      "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
+      "name": "getAmbientSpriteUrls",
+      "kind": "value",
+      "file": "src/renderer/assets/ui/sprites/index.ts",
+      "line": 89,
+      "endLine": 89
+    },
+    {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
       "name": "getSceneSpriteSheetUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 64,
-      "endLine": 65
+      "line": 92,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
       "name": "resolveSceneSpriteSet",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 44,
-      "endLine": 51
+      "line": 45,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
       "name": "SCENE_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 53,
-      "endLine": 60
+      "line": 54,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
       "name": "SceneSpriteDef",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 11,
-      "endLine": 22
+      "line": 12,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
       "name": "SceneSpriteSet",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 24,
-      "endLine": 29
+      "line": 25,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
       "name": "SceneSpriteSetKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 62,
-      "endLine": 62
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -42300,7 +42668,7 @@
       "name": "CathedralScene",
       "kind": "function",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 55,
+      "line": 57,
       "endLine": 95
     },
     {
@@ -42308,8 +42676,56 @@
       "name": "CathedralSceneProps",
       "kind": "interface",
       "file": "src/renderer/components/CathedralScene.tsx",
-      "line": 32,
-      "endLine": 51
+      "line": 31,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_EVERY_MS",
+      "name": "CATHEDRAL_DRAUGHT_EVERY_MS",
+      "kind": "value",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 65,
+      "endLine": 65
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_LASTS_MS",
+      "name": "CATHEDRAL_DRAUGHT_LASTS_MS",
+      "kind": "value",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 66,
+      "endLine": 66
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_EVERY_MS",
+      "name": "CATHEDRAL_GUTTER_EVERY_MS",
+      "kind": "value",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 67,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_LASTS_MS",
+      "name": "CATHEDRAL_GUTTER_LASTS_MS",
+      "kind": "value",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 68,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#CathedralFrameInput",
+      "name": "CathedralFrameInput",
+      "kind": "interface",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 31,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/renderer/components/cathedralSceneFrame.ts#composeCathedralScene",
+      "name": "composeCathedralScene",
+      "kind": "value",
+      "file": "src/renderer/components/cathedralSceneFrame.ts",
+      "line": 73,
+      "endLine": 223
     },
     {
       "id": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -42584,12 +43000,28 @@
       "endLine": 7
     },
     {
+      "id": "symbol:src/renderer/components/elementSceneArt.ts#getElementSceneArtUrls",
+      "name": "getElementSceneArtUrls",
+      "kind": "value",
+      "file": "src/renderer/components/elementSceneArt.ts",
+      "line": 29,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/elementSceneArt.ts#prefersCompactSceneArt",
+      "name": "prefersCompactSceneArt",
+      "kind": "value",
+      "file": "src/renderer/components/elementSceneArt.ts",
+      "line": 14,
+      "endLine": 26
+    },
+    {
       "id": "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
       "name": "ElementSceneLayers",
       "kind": "function",
       "file": "src/renderer/components/ElementSceneLayers.tsx",
-      "line": 10,
-      "endLine": 32
+      "line": 12,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/emberDrift.ts#buildEmberDrift",
@@ -42638,14 +43070,6 @@
       "file": "src/renderer/components/emberDrift.ts",
       "line": 32,
       "endLine": 33
-    },
-    {
-      "id": "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
-      "name": "EmberDriftOverlay",
-      "kind": "function",
-      "file": "src/renderer/components/EmberDriftOverlay.tsx",
-      "line": 11,
-      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
@@ -42708,16 +43132,80 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 102,
-      "endLine": 273
+      "line": 106,
+      "endLine": 221
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 65,
-      "endLine": 98
+      "line": 71,
+      "endLine": 104
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#composeGameplayScene",
+      "name": "composeGameplayScene",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 156,
+      "endLine": 451
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
+      "name": "GAMEPLAY_EYES_EVERY_MS",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 86,
+      "endLine": 86
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_LAST_MS",
+      "name": "GAMEPLAY_EYES_LAST_MS",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 87,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_EVERY_MS",
+      "name": "GAMEPLAY_SPIDER_EVERY_MS",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 88,
+      "endLine": 88
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_LASTS_MS",
+      "name": "GAMEPLAY_SPIDER_LASTS_MS",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 89,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GameplayFrameInput",
+      "name": "GameplayFrameInput",
+      "kind": "interface",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 41,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#SCENE_RING",
+      "name": "SCENE_RING",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 63,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#stormBoltCount",
+      "name": "stormBoltCount",
+      "kind": "value",
+      "file": "src/renderer/components/gameplaySceneFrame.ts",
+      "line": 92,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -42888,44 +43376,28 @@
       "endLine": 20
     },
     {
-      "id": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+      "id": "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
       "name": "buildGoldRain",
       "kind": "value",
-      "file": "src/renderer/components/GoldRain.tsx",
-      "line": 29,
-      "endLine": 43
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 20,
+      "endLine": 34
     },
     {
-      "id": "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+      "id": "symbol:src/renderer/components/goldRain.ts#GOLD_RAIN_MAX_COINS",
       "name": "GOLD_RAIN_MAX_COINS",
       "kind": "value",
-      "file": "src/renderer/components/GoldRain.tsx",
-      "line": 19,
-      "endLine": 19
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 10,
+      "endLine": 10
     },
     {
-      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
+      "id": "symbol:src/renderer/components/goldRain.ts#GoldCoin",
       "name": "GoldCoin",
       "kind": "interface",
-      "file": "src/renderer/components/GoldRain.tsx",
-      "line": 21,
-      "endLine": 27
-    },
-    {
-      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
-      "name": "GoldRain",
-      "kind": "function",
-      "file": "src/renderer/components/GoldRain.tsx",
-      "line": 45,
-      "endLine": 78
-    },
-    {
-      "id": "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
-      "name": "GoldRainProps",
-      "kind": "interface",
-      "file": "src/renderer/components/GoldRain.tsx",
+      "file": "src/renderer/components/goldRain.ts",
       "line": 12,
-      "endLine": 17
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
@@ -42996,8 +43468,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -43236,16 +43708,72 @@
       "name": "PortalScene",
       "kind": "function",
       "file": "src/renderer/components/PortalScene.tsx",
-      "line": 37,
-      "endLine": 92
+      "line": 33,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
       "name": "PortalSceneProps",
       "kind": "interface",
       "file": "src/renderer/components/PortalScene.tsx",
-      "line": 29,
-      "endLine": 32
+      "line": 28,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#composePortalScene",
+      "name": "composePortalScene",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 81,
+      "endLine": 210
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_FIREFLIES",
+      "name": "PORTAL_FIREFLIES",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 70,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_LEAVES",
+      "name": "PORTAL_LEAVES",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 69,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_EVERY_MS",
+      "name": "PORTAL_STAR_EVERY_MS",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 67,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_LASTS_MS",
+      "name": "PORTAL_STAR_LASTS_MS",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 68,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_VORTEX_SPARKS",
+      "name": "PORTAL_VORTEX_SPARKS",
+      "kind": "value",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 71,
+      "endLine": 71
+    },
+    {
+      "id": "symbol:src/renderer/components/portalSceneFrame.ts#PortalFrameInput",
+      "name": "PortalFrameInput",
+      "kind": "interface",
+      "file": "src/renderer/components/portalSceneFrame.ts",
+      "line": 27,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/portalSceneMotes.ts#PORTAL_MOTE_COUNT",
@@ -43808,6 +44336,286 @@
       "endLine": 47
     },
     {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
+      "name": "ambientSprite",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 38,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#crossingDraws",
+      "name": "crossingDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 305,
+      "endLine": 332
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#driftDraws",
+      "name": "driftDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 252,
+      "endLine": 277
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#dripDraws",
+      "name": "dripDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 380,
+      "endLine": 415
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#flameDraws",
+      "name": "flameDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 140,
+      "endLine": 161
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#flameEmberDraws",
+      "name": "flameEmberDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 164,
+      "endLine": 192
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#fogDraw",
+      "name": "fogDraw",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 207,
+      "endLine": 228
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#glintDraws",
+      "name": "glintDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 349,
+      "endLine": 367
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#moteDraws",
+      "name": "moteDraws",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 88,
+      "endLine": 122
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#SCENE_PLATE_ASPECT",
+      "name": "SCENE_PLATE_ASPECT",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneAmbient.ts#sceneKeyframes",
+      "name": "sceneKeyframes",
+      "kind": "value",
+      "file": "src/renderer/components/sceneAmbient.ts",
+      "line": 61,
+      "endLine": 76
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#getSceneImage",
+      "name": "getSceneImage",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 242,
+      "endLine": 278
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#offerSceneImage",
+      "name": "offerSceneImage",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 114,
+      "endLine": 118
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#quantizeSceneFilter",
+      "name": "quantizeSceneFilter",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 124,
+      "endLine": 129
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterCss",
+      "name": "sceneFilterCss",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 134,
+      "endLine": 142
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsIdentity",
+      "name": "sceneFilterIsIdentity",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 131,
+      "endLine": 132
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsLive",
+      "name": "sceneFilterIsLive",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 189,
+      "endLine": 189
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterMatrix",
+      "name": "sceneFilterMatrix",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 148,
+      "endLine": 186
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#sceneLiveFilterCss",
+      "name": "sceneLiveFilterCss",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 192,
+      "endLine": 193
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneBitmaps.ts#subscribeSceneImages",
+      "name": "subscribeSceneImages",
+      "kind": "value",
+      "file": "src/renderer/components/sceneBitmaps.ts",
+      "line": 36,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneCanvas.tsx#SceneCanvas",
+      "name": "SceneCanvas",
+      "kind": "function",
+      "file": "src/renderer/components/SceneCanvas.tsx",
+      "line": 112,
+      "endLine": 251
+    },
+    {
+      "id": "symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
+      "name": "SceneLevels",
+      "kind": "interface",
+      "file": "src/renderer/components/SceneCanvas.tsx",
+      "line": 18,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_FULL",
+      "name": "SCENE_FPS_FULL",
+      "kind": "value",
+      "file": "src/renderer/components/sceneCanvasLayout.ts",
+      "line": 8,
+      "endLine": 8
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_LEAN",
+      "name": "SCENE_FPS_LEAN",
+      "kind": "value",
+      "file": "src/renderer/components/sceneCanvasLayout.ts",
+      "line": 9,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#visiblePlateRect",
+      "name": "visiblePlateRect",
+      "kind": "value",
+      "file": "src/renderer/components/sceneCanvasLayout.ts",
+      "line": 15,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#createSceneClock",
+      "name": "createSceneClock",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 38,
+      "endLine": 106
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#fixedSceneClock",
+      "name": "fixedSceneClock",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 109,
+      "endLine": 117
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#SCENE_CLOCK_MAX_STEP_MS",
+      "name": "SCENE_CLOCK_MAX_STEP_MS",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 36,
+      "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneBeatEnvelope",
+      "name": "sceneBeatEnvelope",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 147,
+      "endLine": 155
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneBreath",
+      "name": "sceneBreath",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 125,
+      "endLine": 126
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#SceneClock",
+      "name": "SceneClock",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 12,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneFlicker",
+      "name": "sceneFlicker",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 139,
+      "endLine": 144
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneHash",
+      "name": "sceneHash",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 122,
+      "endLine": 122
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneOccurrence",
+      "name": "sceneOccurrence",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 170,
+      "endLine": 181
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneClock.ts#sceneSmoothstep",
+      "name": "sceneSmoothstep",
+      "kind": "value",
+      "file": "src/renderer/components/sceneClock.ts",
+      "line": 129,
+      "endLine": 132
+    },
+    {
       "id": "symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
       "name": "blackHoleKeyFor",
       "kind": "value",
@@ -43872,116 +44680,228 @@
       "endLine": 112
     },
     {
-      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
-      "name": "SceneMote",
-      "kind": "interface",
-      "file": "src/renderer/components/SceneMotes.tsx",
-      "line": 12,
-      "endLine": 23
+      "id": "symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
+      "name": "findSceneDraw",
+      "kind": "value",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 388,
+      "endLine": 393
     },
     {
-      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
-      "name": "SceneMotes",
-      "kind": "function",
-      "file": "src/renderer/components/SceneMotes.tsx",
-      "line": 34,
-      "endLine": 61
+      "id": "symbol:src/renderer/components/scenePaint.ts#paintScene",
+      "name": "paintScene",
+      "kind": "value",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 348,
+      "endLine": 382
     },
     {
-      "id": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
-      "name": "SceneMotesProps",
+      "id": "symbol:src/renderer/components/scenePaint.ts#SCENE_ALPHA_FLOOR",
+      "name": "SCENE_ALPHA_FLOOR",
+      "kind": "value",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 174,
+      "endLine": 174
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SCENE_DEPTH_SHIFT_X",
+      "name": "SCENE_DEPTH_SHIFT_X",
+      "kind": "value",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 177,
+      "endLine": 177
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneBlend",
+      "name": "SceneBlend",
+      "kind": "type",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneCrop",
+      "name": "SceneCrop",
       "kind": "interface",
-      "file": "src/renderer/components/SceneMotes.tsx",
-      "line": 25,
-      "endLine": 32
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 37,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneDraw",
+      "name": "SceneDraw",
+      "kind": "type",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 115,
+      "endLine": 115
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#sceneDrawIds",
+      "name": "sceneDrawIds",
+      "kind": "value",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 385,
+      "endLine": 386
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneFilter",
+      "name": "SceneFilter",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 21,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneFogDraw",
+      "name": "SceneFogDraw",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 90,
+      "endLine": 99
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneFogMask",
+      "name": "SceneFogMask",
+      "kind": "type",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 85,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneGlowDraw",
+      "name": "SceneGlowDraw",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 70,
+      "endLine": 82
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneImageDraw",
+      "name": "SceneImageDraw",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 44,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneLineDraw",
+      "name": "SceneLineDraw",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 102,
+      "endLine": 113
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintContext",
+      "name": "ScenePaintContext",
+      "kind": "type",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 118,
+      "endLine": 144
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintEnv",
+      "name": "ScenePaintEnv",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 152,
+      "endLine": 171
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintImage",
+      "name": "ScenePaintImage",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 146,
+      "endLine": 150
+    },
+    {
+      "id": "symbol:src/renderer/components/scenePaint.ts#SceneRect",
+      "name": "SceneRect",
+      "kind": "interface",
+      "file": "src/renderer/components/scenePaint.ts",
+      "line": 29,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#CATHEDRAL_MOTE_COUNT",
       "name": "CATHEDRAL_MOTE_COUNT",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 78,
-      "endLine": 78
+      "line": 95,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#cathedralMotes",
       "name": "cathedralMotes",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 85,
-      "endLine": 99
+      "line": 102,
+      "endLine": 116
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RING_MOTE_COUNT",
       "name": "RING_MOTE_COUNT",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#RingMote",
       "name": "RingMote",
       "kind": "type",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 68,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#ringMotes",
       "name": "ringMotes",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 61,
-      "endLine": 76
+      "line": 78,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneEmber",
       "name": "SceneEmber",
       "kind": "interface",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 23,
-      "endLine": 32
+      "line": 40,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneMote",
+      "name": "SceneMote",
+      "kind": "interface",
+      "file": "src/renderer/components/sceneSpriteClocks.ts",
+      "line": 27,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
       "name": "SceneSpriteClock",
       "kind": "interface",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 9,
-      "endLine": 12
+      "line": 8,
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteClocks",
       "name": "sceneSpriteClocks",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 16,
-      "endLine": 21
+      "line": 15,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
       "name": "sceneSpriteEmbers",
       "kind": "value",
       "file": "src/renderer/components/sceneSpriteClocks.ts",
-      "line": 35,
-      "endLine": 49
-    },
-    {
-      "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
-      "name": "SceneSprites",
-      "kind": "function",
-      "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 59,
-      "endLine": 126
-    },
-    {
-      "id": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
-      "name": "SceneSpritesProps",
-      "kind": "interface",
-      "file": "src/renderer/components/SceneSprites.tsx",
-      "line": 27,
-      "endLine": 40
+      "line": 52,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/SceneWipe.tsx#SCENE_WIPE_MS",
@@ -44444,16 +45364,16 @@
       "name": "buildStormBolts",
       "kind": "value",
       "file": "src/renderer/components/stormBolts.ts",
-      "line": 17,
-      "endLine": 44
+      "line": 19,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/stormBolts.ts#STORM_VIEWBOX",
       "name": "STORM_VIEWBOX",
       "kind": "value",
       "file": "src/renderer/components/stormBolts.ts",
-      "line": 15,
-      "endLine": 15
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/components/stormBolts.ts#StormBolt",
@@ -44461,15 +45381,7 @@
       "kind": "interface",
       "file": "src/renderer/components/stormBolts.ts",
       "line": 9,
-      "endLine": 12
-    },
-    {
-      "id": "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
-      "name": "StormBoltsOverlay",
-      "kind": "function",
-      "file": "src/renderer/components/StormBoltsOverlay.tsx",
-      "line": 10,
-      "endLine": 28
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileBezel",
@@ -49396,8 +50308,8 @@
       "name": "useSceneLook",
       "kind": "value",
       "file": "src/renderer/hooks/useSceneLook.ts",
-      "line": 13,
-      "endLine": 70
+      "line": 16,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
@@ -58484,8 +59396,8 @@
       "name": "getSceneEffectTier",
       "kind": "value",
       "file": "src/shared/graphicsQuality.ts",
-      "line": 149,
-      "endLine": 166
+      "line": 155,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/graphicsQuality.ts#GraphicsQualityTierSnapshot",
@@ -58508,16 +59420,16 @@
       "name": "SCENE_LEAN_MAX_WIDTH",
       "kind": "value",
       "file": "src/shared/graphicsQuality.ts",
-      "line": 147,
-      "endLine": 147
+      "line": 153,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/graphicsQuality.ts#SceneEffectTier",
       "name": "SceneEffectTier",
       "kind": "type",
       "file": "src/shared/graphicsQuality.ts",
-      "line": 145,
-      "endLine": 145
+      "line": 151,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/hashPairKey.ts#hashPairKey",
@@ -72079,6 +72991,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#AMBIENT_SPRITES",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#AMBIENT_SPRITES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/assets/ui/sprites/index.ts->symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
@@ -73843,6 +74779,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_EVERY_MS",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_EVERY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_LASTS_MS",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_DRAUGHT_LASTS_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_EVERY_MS",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_EVERY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_LASTS_MS",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#CATHEDRAL_GUTTER_LASTS_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#CathedralFrameInput",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#CathedralFrameInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cathedralSceneFrame.ts->symbol:src/renderer/components/cathedralSceneFrame.ts#composeCathedralScene",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "symbol:src/renderer/components/cathedralSceneFrame.ts#composeCathedralScene",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ChooseYourPathScreen.tsx->symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -74047,6 +75019,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/elementSceneArt.ts->symbol:src/renderer/components/elementSceneArt.ts#getElementSceneArtUrls",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "symbol:src/renderer/components/elementSceneArt.ts#getElementSceneArtUrls",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/elementSceneArt.ts->symbol:src/renderer/components/elementSceneArt.ts#prefersCompactSceneArt",
+      "source": "file:src/renderer/components/elementSceneArt.ts",
+      "target": "symbol:src/renderer/components/elementSceneArt.ts#prefersCompactSceneArt",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ElementSceneLayers.tsx->symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
       "source": "file:src/renderer/components/ElementSceneLayers.tsx",
       "target": "symbol:src/renderer/components/ElementSceneLayers.tsx#ElementSceneLayers",
@@ -74086,12 +75070,6 @@
       "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
       "source": "file:src/renderer/components/emberDrift.ts",
       "target": "symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/EmberDriftOverlay.tsx->symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
-      "source": "file:src/renderer/components/EmberDriftOverlay.tsx",
-      "target": "symbol:src/renderer/components/EmberDriftOverlay.tsx#EmberDriftOverlay",
       "kind": "exports"
     },
     {
@@ -74146,6 +75124,54 @@
       "id": "exports:src/renderer/components/GameplayScene.tsx->symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#composeGameplayScene",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#composeGameplayScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_LAST_MS",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_LAST_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_EVERY_MS",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_EVERY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_LASTS_MS",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_LASTS_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#GameplayFrameInput",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#GameplayFrameInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#SCENE_RING",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#SCENE_RING",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/gameplaySceneFrame.ts->symbol:src/renderer/components/gameplaySceneFrame.ts#stormBoltCount",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "symbol:src/renderer/components/gameplaySceneFrame.ts#stormBoltCount",
       "kind": "exports"
     },
     {
@@ -74275,33 +75301,21 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "symbol:src/renderer/components/GoldRain.tsx#buildGoldRain",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#buildGoldRain",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "symbol:src/renderer/components/GoldRain.tsx#GOLD_RAIN_MAX_COINS",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GOLD_RAIN_MAX_COINS",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#GOLD_RAIN_MAX_COINS",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldCoin",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldRain",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldRain",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GoldRain.tsx->symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "symbol:src/renderer/components/GoldRain.tsx#GoldRainProps",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GoldCoin",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#GoldCoin",
       "kind": "exports"
     },
     {
@@ -74542,6 +75556,48 @@
       "id": "exports:src/renderer/components/PortalScene.tsx->symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
       "source": "file:src/renderer/components/PortalScene.tsx",
       "target": "symbol:src/renderer/components/PortalScene.tsx#PortalSceneProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#composePortalScene",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#composePortalScene",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_FIREFLIES",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_FIREFLIES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_LEAVES",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_LEAVES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_EVERY_MS",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_EVERY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_LASTS_MS",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_STAR_LASTS_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_VORTEX_SPARKS",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_VORTEX_SPARKS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/portalSceneFrame.ts->symbol:src/renderer/components/portalSceneFrame.ts#PortalFrameInput",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "symbol:src/renderer/components/portalSceneFrame.ts#PortalFrameInput",
       "kind": "exports"
     },
     {
@@ -74965,6 +76021,216 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#crossingDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#crossingDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#driftDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#driftDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#dripDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#dripDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#flameDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#flameDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#flameEmberDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#flameEmberDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#fogDraw",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#fogDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#glintDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#glintDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#moteDraws",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#moteDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#SCENE_PLATE_ASPECT",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#SCENE_PLATE_ASPECT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneAmbient.ts->symbol:src/renderer/components/sceneAmbient.ts#sceneKeyframes",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "symbol:src/renderer/components/sceneAmbient.ts#sceneKeyframes",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#getSceneImage",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#getSceneImage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#offerSceneImage",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#offerSceneImage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#quantizeSceneFilter",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#quantizeSceneFilter",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterCss",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterCss",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsIdentity",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsIdentity",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsLive",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterIsLive",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterMatrix",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#sceneFilterMatrix",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#sceneLiveFilterCss",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#sceneLiveFilterCss",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneBitmaps.ts->symbol:src/renderer/components/sceneBitmaps.ts#subscribeSceneImages",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "symbol:src/renderer/components/sceneBitmaps.ts#subscribeSceneImages",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneCanvas.tsx->symbol:src/renderer/components/SceneCanvas.tsx#SceneCanvas",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "symbol:src/renderer/components/SceneCanvas.tsx#SceneCanvas",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SceneCanvas.tsx->symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneCanvasLayout.ts->symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_FULL",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_FULL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneCanvasLayout.ts->symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_LEAN",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_LEAN",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneCanvasLayout.ts->symbol:src/renderer/components/sceneCanvasLayout.ts#visiblePlateRect",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "symbol:src/renderer/components/sceneCanvasLayout.ts#visiblePlateRect",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#createSceneClock",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#createSceneClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#fixedSceneClock",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#fixedSceneClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#SCENE_CLOCK_MAX_STEP_MS",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#SCENE_CLOCK_MAX_STEP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneBeatEnvelope",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneBeatEnvelope",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneBreath",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneBreath",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#SceneClock",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#SceneClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneFlicker",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneFlicker",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneHash",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneHash",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneOccurrence",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneOccurrence",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneClock.ts->symbol:src/renderer/components/sceneClock.ts#sceneSmoothstep",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "symbol:src/renderer/components/sceneClock.ts#sceneSmoothstep",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/sceneMood.ts->symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
       "source": "file:src/renderer/components/sceneMood.ts",
       "target": "symbol:src/renderer/components/sceneMood.ts#blackHoleKeyFor",
@@ -75013,21 +76279,111 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
-      "source": "file:src/renderer/components/SceneMotes.tsx",
-      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMote",
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
-      "source": "file:src/renderer/components/SceneMotes.tsx",
-      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotes",
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#paintScene",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#paintScene",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/SceneMotes.tsx->symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
-      "source": "file:src/renderer/components/SceneMotes.tsx",
-      "target": "symbol:src/renderer/components/SceneMotes.tsx#SceneMotesProps",
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SCENE_ALPHA_FLOOR",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SCENE_ALPHA_FLOOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SCENE_DEPTH_SHIFT_X",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SCENE_DEPTH_SHIFT_X",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneBlend",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneBlend",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneCrop",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneCrop",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#sceneDrawIds",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#sceneDrawIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneFilter",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneFilter",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneFogDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneFogDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneFogMask",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneFogMask",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneGlowDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneGlowDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneImageDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneImageDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneLineDraw",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneLineDraw",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#ScenePaintContext",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#ScenePaintContext",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#ScenePaintEnv",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#ScenePaintEnv",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#ScenePaintImage",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#ScenePaintImage",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/scenePaint.ts->symbol:src/renderer/components/scenePaint.ts#SceneRect",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "symbol:src/renderer/components/scenePaint.ts#SceneRect",
       "kind": "exports"
     },
     {
@@ -75067,6 +76423,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#SceneMote",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneMote",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#SceneSpriteClock",
@@ -75082,18 +76444,6 @@
       "id": "exports:src/renderer/components/sceneSpriteClocks.ts->symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "symbol:src/renderer/components/sceneSpriteClocks.ts#sceneSpriteEmbers",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/SceneSprites.tsx->symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "symbol:src/renderer/components/SceneSprites.tsx#SceneSprites",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/SceneSprites.tsx->symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "symbol:src/renderer/components/SceneSprites.tsx#SceneSpritesProps",
       "kind": "exports"
     },
     {
@@ -75454,12 +76804,6 @@
       "id": "exports:src/renderer/components/stormBolts.ts->symbol:src/renderer/components/stormBolts.ts#StormBolt",
       "source": "file:src/renderer/components/stormBolts.ts",
       "target": "symbol:src/renderer/components/stormBolts.ts#StormBolt",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/StormBoltsOverlay.tsx->symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
-      "source": "file:src/renderer/components/StormBoltsOverlay.tsx",
-      "target": "symbol:src/renderer/components/StormBoltsOverlay.tsx#StormBoltsOverlay",
       "kind": "exports"
     },
     {
@@ -94091,6 +95435,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/preloadStartupAssets.ts->src/renderer/components/elementSceneArt.ts",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "file:src/renderer/components/elementSceneArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/preloadStartupAssets.ts->src/renderer/components/sceneBitmaps.ts",
+      "source": "file:src/renderer/assets/preloadStartupAssets.ts",
+      "target": "file:src/renderer/components/sceneBitmaps.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/preloadStartupAssets.ts->src/renderer/components/startupIntroTextures.ts",
       "source": "file:src/renderer/assets/preloadStartupAssets.ts",
       "target": "file:src/renderer/components/startupIntroTextures.ts",
@@ -94118,6 +95474,12 @@
       "id": "imports:src/renderer/assets/ui/modeArt.test.ts->src/shared/run-mode-catalog.ts",
       "source": "file:src/renderer/assets/ui/modeArt.test.ts",
       "target": "file:src/shared/run-mode-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/ambient-v1.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/ambient-v1.json",
       "kind": "imports"
     },
     {
@@ -95417,15 +96779,27 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/cathedralSceneFrame.ts",
       "source": "file:src/renderer/components/CathedralScene.test.tsx",
-      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/cathedralSceneFrame.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/CathedralScene.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.test.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/CathedralScene.test.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
       "kind": "imports"
     },
     {
@@ -95435,21 +96809,27 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneMotes.tsx",
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/cathedralSceneFrame.ts",
       "source": "file:src/renderer/components/CathedralScene.tsx",
-      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "file:src/renderer/components/cathedralSceneFrame.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/sceneSpriteClocks.ts",
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneCanvas.tsx",
       "source": "file:src/renderer/components/CathedralScene.tsx",
-      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/SceneCanvas.tsx",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/SceneSprites.tsx",
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/sceneCanvasLayout.ts",
       "source": "file:src/renderer/components/CathedralScene.tsx",
-      "target": "file:src/renderer/components/SceneSprites.tsx",
+      "target": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CathedralScene.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/CathedralScene.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
       "kind": "imports"
     },
     {
@@ -95468,6 +96848,54 @@
       "id": "imports:src/renderer/components/CathedralScene.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/CathedralScene.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/components/sceneAmbient.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/sceneAmbient.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cathedralSceneFrame.ts->src/shared/graphicsQuality.ts",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/shared/graphicsQuality.ts",
       "kind": "imports"
     },
     {
@@ -96263,27 +97691,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/elementScene.ts",
       "source": "file:src/renderer/components/ElementSceneLayers.tsx",
       "target": "file:src/renderer/components/elementScene.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/elementSceneArt.ts",
-      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
-      "target": "file:src/renderer/components/elementSceneArt.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementSceneLayers.tsx->src/renderer/components/useSceneBeat.ts",
-      "source": "file:src/renderer/components/ElementSceneLayers.tsx",
-      "target": "file:src/renderer/components/useSceneBeat.ts",
       "kind": "imports"
     },
     {
@@ -96296,18 +97706,6 @@
       "id": "imports:src/renderer/components/emberDrift.ts->src/shared/rng.ts",
       "source": "file:src/renderer/components/emberDrift.ts",
       "target": "file:src/shared/rng.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/EmberDriftOverlay.tsx->src/renderer/components/emberDrift.ts",
-      "source": "file:src/renderer/components/EmberDriftOverlay.tsx",
-      "target": "file:src/renderer/components/emberDrift.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/EmberDriftOverlay.tsx->src/renderer/components/sceneMood.ts",
-      "source": "file:src/renderer/components/EmberDriftOverlay.tsx",
-      "target": "file:src/renderer/components/sceneMood.ts",
       "kind": "imports"
     },
     {
@@ -96581,6 +97979,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.test.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/GameplayScene.test.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.test.tsx->src/renderer/components/GameplayScene.tsx",
       "source": "file:src/renderer/components/GameplayScene.test.tsx",
       "target": "file:src/renderer/components/GameplayScene.tsx",
@@ -96593,15 +97997,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/elementSceneArt.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/elementSceneArt.ts",
       "kind": "imports"
     },
     {
@@ -96611,15 +98015,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/emberDrift.ts",
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/gameplaySceneFrame.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/emberDrift.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/EmberDriftOverlay.tsx",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/EmberDriftOverlay.tsx",
+      "target": "file:src/renderer/components/gameplaySceneFrame.ts",
       "kind": "imports"
     },
     {
@@ -96629,39 +98027,27 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/GoldRain.tsx",
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneCanvas.tsx",
       "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/GoldRain.tsx",
+      "target": "file:src/renderer/components/SceneCanvas.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneCanvasLayout.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
       "kind": "imports"
     },
     {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneMood.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/sceneMood.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneMotes.tsx",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/SceneMotes.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/sceneSpriteClocks.ts",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneSprites.tsx",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/SceneSprites.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/StormBoltsOverlay.tsx",
-      "source": "file:src/renderer/components/GameplayScene.tsx",
-      "target": "file:src/renderer/components/StormBoltsOverlay.tsx",
       "kind": "imports"
     },
     {
@@ -96698,6 +98084,150 @@
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/gameplaySceneFrame.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/sceneMood.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/sceneMood.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/elementScene.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/elementScene.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/elementSceneArt.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/elementSceneArt.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/emberDrift.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/emberDrift.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/goldRain.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/goldRain.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/sceneAmbient.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/sceneAmbient.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/sceneMood.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/sceneMood.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/stormBolts.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/stormBolts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/shared/graphicsQuality.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/shared/graphicsQuality.ts",
       "kind": "imports"
     },
     {
@@ -97295,14 +98825,14 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GoldRain.test.tsx->src/renderer/components/GoldRain.tsx",
-      "source": "file:src/renderer/components/GoldRain.test.tsx",
-      "target": "file:src/renderer/components/GoldRain.tsx",
+      "id": "imports:src/renderer/components/goldRain.test.ts->src/renderer/components/goldRain.ts",
+      "source": "file:src/renderer/components/goldRain.test.ts",
+      "target": "file:src/renderer/components/goldRain.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GoldRain.tsx->src/shared/rng.ts",
-      "source": "file:src/renderer/components/GoldRain.tsx",
+      "id": "imports:src/renderer/components/goldRain.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/goldRain.ts",
       "target": "file:src/shared/rng.ts",
       "kind": "imports"
     },
@@ -97769,9 +99299,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/PortalScene.tsx",
       "source": "file:src/renderer/components/PortalScene.test.tsx",
       "target": "file:src/renderer/components/PortalScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/portalSceneFrame.ts",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/components/portalSceneFrame.ts",
       "kind": "imports"
     },
     {
@@ -97781,9 +99323,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/PortalScene.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.test.tsx->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/PortalScene.test.tsx",
+      "target": "file:src/renderer/components/scenePaint.ts",
       "kind": "imports"
     },
     {
@@ -97793,15 +99341,27 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/portalSceneMotes.ts",
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/portalSceneFrame.ts",
       "source": "file:src/renderer/components/PortalScene.tsx",
-      "target": "file:src/renderer/components/portalSceneMotes.ts",
+      "target": "file:src/renderer/components/portalSceneFrame.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/SceneMotes.tsx",
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/SceneCanvas.tsx",
       "source": "file:src/renderer/components/PortalScene.tsx",
-      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "file:src/renderer/components/SceneCanvas.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/sceneCanvasLayout.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/PortalScene.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
       "kind": "imports"
     },
     {
@@ -97823,9 +99383,51 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/portalSceneMotes.ts->src/renderer/components/SceneMotes.tsx",
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/assets/ui/index.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/components/portalSceneMotes.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/components/portalSceneMotes.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/components/sceneAmbient.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/components/sceneAmbient.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneFrame.ts->src/shared/graphicsQuality.ts",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
+      "target": "file:src/shared/graphicsQuality.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/portalSceneMotes.ts->src/renderer/components/sceneSpriteClocks.ts",
       "source": "file:src/renderer/components/portalSceneMotes.ts",
-      "target": "file:src/renderer/components/SceneMotes.tsx",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
       "kind": "imports"
     },
     {
@@ -98453,6 +100055,120 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/sceneAmbient.test.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/sceneAmbient.test.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.test.ts->src/renderer/components/sceneAmbient.ts",
+      "source": "file:src/renderer/components/sceneAmbient.test.ts",
+      "target": "file:src/renderer/components/sceneAmbient.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.test.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/sceneAmbient.test.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.test.ts->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/sceneAmbient.test.ts",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneAmbient.ts->src/renderer/components/sceneSpriteClocks.ts",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneBitmaps.test.ts->src/renderer/components/sceneBitmaps.ts",
+      "source": "file:src/renderer/components/sceneBitmaps.test.ts",
+      "target": "file:src/renderer/components/sceneBitmaps.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneBitmaps.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.test.tsx->src/renderer/components/SceneCanvas.tsx",
+      "source": "file:src/renderer/components/SceneCanvas.test.tsx",
+      "target": "file:src/renderer/components/SceneCanvas.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.test.tsx->src/renderer/components/sceneCanvasLayout.ts",
+      "source": "file:src/renderer/components/SceneCanvas.test.tsx",
+      "target": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.tsx->src/renderer/components/sceneBitmaps.ts",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "file:src/renderer/components/sceneBitmaps.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.tsx->src/renderer/components/sceneCanvasLayout.ts",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.tsx->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SceneCanvas.tsx->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneCanvasLayout.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneClock.test.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/sceneClock.test.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/sceneFlameLevels.test.ts->src/renderer/components/gameplaySceneLevels.ts",
+      "source": "file:src/renderer/components/sceneFlameLevels.test.ts",
+      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/sceneMood.test.ts->src/renderer/components/sceneMood.ts",
       "source": "file:src/renderer/components/sceneMood.test.ts",
       "target": "file:src/renderer/components/sceneMood.ts",
@@ -98507,51 +100223,15 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/scenePaint.test.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/scenePaint.test.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/assets/ui/sprites/index.ts",
       "source": "file:src/renderer/components/sceneSpriteClocks.ts",
       "target": "file:src/renderer/assets/ui/sprites/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/sceneSpriteClocks.ts->src/renderer/components/SceneMotes.tsx",
-      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
-      "target": "file:src/renderer/components/SceneMotes.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/assets/ui/sprites/index.ts",
-      "source": "file:src/renderer/components/SceneSprites.test.tsx",
-      "target": "file:src/renderer/assets/ui/sprites/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/components/gameplaySceneLevels.ts",
-      "source": "file:src/renderer/components/SceneSprites.test.tsx",
-      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.test.tsx->src/renderer/components/SceneSprites.tsx",
-      "source": "file:src/renderer/components/SceneSprites.test.tsx",
-      "target": "file:src/renderer/components/SceneSprites.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/assets/ui/sprites/index.ts",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "file:src/renderer/assets/ui/sprites/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/components/gameplaySceneLevels.ts",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "file:src/renderer/components/gameplaySceneLevels.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SceneSprites.tsx->src/renderer/components/sceneSpriteClocks.ts",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "file:src/renderer/components/sceneSpriteClocks.ts",
       "kind": "imports"
     },
     {
@@ -98990,12 +100670,6 @@
       "id": "imports:src/renderer/components/stormBolts.ts->src/shared/rng.ts",
       "source": "file:src/renderer/components/stormBolts.ts",
       "target": "file:src/shared/rng.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/StormBoltsOverlay.tsx->src/renderer/components/stormBolts.ts",
-      "source": "file:src/renderer/components/StormBoltsOverlay.tsx",
-      "target": "file:src/renderer/components/stormBolts.ts",
       "kind": "imports"
     },
     {
@@ -116935,9 +118609,27 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/SceneSprites.test.tsx",
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/GameplayScene.test.tsx",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
-      "target": "file:src/renderer/components/SceneSprites.test.tsx",
+      "target": "file:src/renderer/components/GameplayScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/assets/ui/sprites/index.ts->file:src/renderer/components/sceneAmbient.test.ts",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/components/sceneAmbient.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117349,6 +119041,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/cathedralSceneFrame.ts->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/components/cathedralSceneFrame.ts",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/ChooseYourPathScreen.tsx->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -117493,15 +119191,27 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/gameplaySceneFrame.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/GameplayScene.test.tsx",
       "source": "file:src/renderer/components/gameplaySceneLevels.ts",
       "target": "file:src/renderer/components/GameplayScene.test.tsx",
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/SceneSprites.test.tsx",
+      "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
       "source": "file:src/renderer/components/gameplaySceneLevels.ts",
-      "target": "file:src/renderer/components/SceneSprites.test.tsx",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/gameplaySceneLevels.ts->file:src/renderer/components/sceneFlameLevels.test.ts",
+      "source": "file:src/renderer/components/gameplaySceneLevels.ts",
+      "target": "file:src/renderer/components/sceneFlameLevels.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117571,9 +119281,9 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/GoldRain.tsx->file:src/renderer/components/GoldRain.test.tsx",
-      "source": "file:src/renderer/components/GoldRain.tsx",
-      "target": "file:src/renderer/components/GoldRain.test.tsx",
+      "id": "tested_by:src/renderer/components/goldRain.ts->file:src/renderer/components/goldRain.test.ts",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "file:src/renderer/components/goldRain.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117651,6 +119361,12 @@
     {
       "id": "tested_by:src/renderer/components/PortalScene.tsx->file:src/renderer/components/PortalScene.test.tsx",
       "source": "file:src/renderer/components/PortalScene.tsx",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/portalSceneFrame.ts->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/components/portalSceneFrame.ts",
       "target": "file:src/renderer/components/PortalScene.test.tsx",
       "kind": "tested_by"
     },
@@ -117745,9 +119461,93 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/sceneAmbient.ts->file:src/renderer/components/sceneAmbient.test.ts",
+      "source": "file:src/renderer/components/sceneAmbient.ts",
+      "target": "file:src/renderer/components/sceneAmbient.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneBitmaps.ts->file:src/renderer/components/sceneBitmaps.test.ts",
+      "source": "file:src/renderer/components/sceneBitmaps.ts",
+      "target": "file:src/renderer/components/sceneBitmaps.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/SceneCanvas.tsx->file:src/renderer/components/SceneCanvas.test.tsx",
+      "source": "file:src/renderer/components/SceneCanvas.tsx",
+      "target": "file:src/renderer/components/SceneCanvas.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneCanvasLayout.ts->file:src/renderer/components/SceneCanvas.test.tsx",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "file:src/renderer/components/SceneCanvas.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneClock.ts->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneClock.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneClock.ts->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneClock.ts->file:src/renderer/components/sceneAmbient.test.ts",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "file:src/renderer/components/sceneAmbient.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneClock.ts->file:src/renderer/components/sceneClock.test.ts",
+      "source": "file:src/renderer/components/sceneClock.ts",
+      "target": "file:src/renderer/components/sceneClock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneMood.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/sceneMood.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/sceneMood.ts->file:src/renderer/components/sceneMood.test.ts",
       "source": "file:src/renderer/components/sceneMood.ts",
       "target": "file:src/renderer/components/sceneMood.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/CathedralScene.test.tsx",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "file:src/renderer/components/CathedralScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/PortalScene.test.tsx",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/scenePaint.test.ts",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "file:src/renderer/components/scenePaint.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117757,9 +119557,15 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/SceneSprites.tsx->file:src/renderer/components/SceneSprites.test.tsx",
-      "source": "file:src/renderer/components/SceneSprites.tsx",
-      "target": "file:src/renderer/components/SceneSprites.test.tsx",
+      "id": "tested_by:src/renderer/components/sceneSpriteClocks.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/sceneSpriteClocks.ts->file:src/renderer/components/sceneAmbient.test.ts",
+      "source": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "target": "file:src/renderer/components/sceneAmbient.test.ts",
       "kind": "tested_by"
     },
     {
@@ -119680,6 +121486,12 @@
       "id": "tested_by:src/shared/combo-heat-perks.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/shared/combo-heat-perks.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123712,6 +125524,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/ElementSceneLayers.test.tsx",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/ElementSceneLayers.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
       "kind": "tested_by"
     },
     {

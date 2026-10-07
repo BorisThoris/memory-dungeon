@@ -4,6 +4,8 @@ import { preloadTileTextureImages } from '../components/tileTextures';
 import { loadRelicTextures, type RelicTextureSet } from '../components/startupIntroTextures';
 import { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS } from './ui';
 import { getSceneSpriteSheetUrls } from './ui/sprites';
+import { getElementSceneArtUrls } from '../components/elementSceneArt';
+import { offerSceneImage } from '../components/sceneBitmaps';
 
 type IdleWindow = Window &
     typeof globalThis & {
@@ -118,7 +120,13 @@ const loadAndDecodeRaster = (url: string, timeoutMs: number): Promise<void> => {
         };
         image.onload = () => {
             retainedImages.set(url, image);
-            void (image.decode?.() ?? Promise.resolve()).catch(() => undefined).then(done);
+            void (image.decode?.() ?? Promise.resolve())
+                .catch(() => undefined)
+                .then(() => {
+                    // The painted scenes draw from this very element: no second fetch, and their first frame is whole.
+                    offerSceneImage(url, image);
+                    done();
+                });
         };
         image.onerror = done;
         image.src = url;
@@ -127,7 +135,8 @@ const loadAndDecodeRaster = (url: string, timeoutMs: number): Promise<void> => {
 
 /** The gameplay scene's backdrops, light layers and sprite strips, loaded, decoded and held (not the boot's 250ms glance). */
 export const preloadUiRasterImagesFully = async (timeoutMs = 6000): Promise<void> => {
-    const urls = [...new Set([...getUiArtRows().map((row) => row.assetUrl), ...getSceneSpriteSheetUrls()])];
+    // With the chemistry paintings this device will draw: the room paints them on its canvas mid-run.
+    const urls = [...new Set([...getUiArtRows().map((row) => row.assetUrl), ...getSceneSpriteSheetUrls(), ...getElementSceneArtUrls()])];
     let cursor = 0;
     const worker = async (): Promise<void> => {
         while (cursor < urls.length) {

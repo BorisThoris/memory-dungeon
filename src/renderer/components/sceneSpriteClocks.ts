@@ -1,5 +1,4 @@
 import type { SceneSpriteDef } from '../assets/ui/sprites';
-import type { SceneMote } from './SceneMotes';
 
 /**
  * Per-sprite timing, deterministic from the sprite's index so a render is the same every time and
@@ -19,6 +18,24 @@ export const sceneSpriteClocks = (sprite: Pick<SceneSpriteDef, 'frames' | 'fps'>
     const delayMs = -Math.round(durationMs * fract(index * 0.381966 + 0.25));
     return { durationMs, delayMs };
 };
+
+/**
+ * A point of light drifting up through a scene: the portal clearing's motes, the rune ring's
+ * sparks, the cathedral's spirit-light. Each is one baked dot on its own loop, rising and
+ * wandering from where it starts (`moteDraws`).
+ */
+export interface SceneMote {
+    id: string;
+    /** Start point, percent of the plate. */
+    x: number;
+    y: number;
+    durationMs: number;
+    delayMs: number;
+    /** Sideways wander and rise over one loop, in the plate's own pixels (1376 by 768). */
+    driftPx: number;
+    risePx: number;
+    size: number;
+}
 
 export interface SceneEmber {
     id: string;

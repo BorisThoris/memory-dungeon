@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { deriveElementScene, ELEMENT_SCENE_KINDS } from './elementScene';
@@ -12,18 +12,21 @@ it('has real desktop and mobile paintings for every chemistry and storm combinat
         expect(art.mobile).toContain(`bg-gameplay-element-${kind}-v1-mobile.webp`);
     }
 });
-it('crossfades loaded art as the current world changes and keeps still art under reduced motion', () => {
+it('records which chemistry is in the room and how much of the wall each has; the canvas paints it', () => {
     const r = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: 'ember', realmSecondaryId: 'tide' });
     const { rerender } = render(<ElementSceneLayers scene={deriveElementScene(r)} alive still={false} plate="dungeon" />);
+    const world = screen.getByTestId('element-scene');
     const steam = screen.getByTestId('element-scene-steam');
-    expect(steam.style.getPropertyValue('--element-opacity')).toBe('0');
-    const img = steam.querySelector('img')!;
-    expect(img.srcset).toContain('768w');
-    fireEvent.load(img);
-    expect(Number(steam.style.getPropertyValue('--element-opacity'))).toBeGreaterThan(0);
+    expect(world).toHaveAttribute('data-reactions', 'steam');
+    expect(steam).toHaveAttribute('data-active', 'true');
+    expect(Number(steam.getAttribute('data-opacity'))).toBeGreaterThan(0);
+    // It is a record, not a picture: no image is fetched or layered here, and it takes no space.
+    expect(world.querySelectorAll('img')).toHaveLength(0);
+    expect(world).toHaveAttribute('hidden');
     rerender(<ElementSceneLayers scene={deriveElementScene({ ...r, realmId: 'frost', realmSecondaryId: 'grove' })} alive={false} still plate="dungeon" />);
-    expect(screen.getByTestId('element-scene')).toHaveAttribute('data-reactions', 'frostbloom');
-    expect(screen.getByTestId('element-scene')).toHaveAttribute('data-still', 'true');
-    expect(steam.style.getPropertyValue('--element-opacity')).toBe('0');
+    expect(world).toHaveAttribute('data-reactions', 'frostbloom');
+    expect(world).toHaveAttribute('data-still', 'true');
+    expect(steam).toHaveAttribute('data-active', 'false');
+    expect(steam).toHaveAttribute('data-opacity', '0.000');
     expect(screen.getByTestId('element-scene-frostbloom')).toHaveAttribute('data-active', 'true');
 });

@@ -119,9 +119,9 @@ describe('getSceneEffectTier', () => {
         expect(getSceneEffectTier({ ...desktop, reduceMotion: true, coarsePointer: true, quality: 'low' })).toBe('still');
     });
 
-    it('keeps 4K and scaled 4K backgrounds lean while preserving flame sprites', () => {
-        expect(getSceneEffectTier({ ...desktop, viewportWidth: 3840, viewportHeight: 2160 })).toBe('lean');
-        expect(getSceneEffectTier({ ...desktop, viewportWidth: 1920, viewportHeight: 1080, devicePixelRatio: 2 })).toBe('lean');
+    it('gives a 4K or scaled-4K desktop the full scene: one canvas costs the same on any display', () => {
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: 3840, viewportHeight: 2160 })).toBe('full');
+        expect(getSceneEffectTier({ ...desktop, viewportWidth: 1920, viewportHeight: 1080, devicePixelRatio: 2 })).toBe('full');
         expect(getSceneEffectTier({ ...desktop, viewportWidth: 1920, viewportHeight: 1080, devicePixelRatio: 1 })).toBe('full');
     });
 });

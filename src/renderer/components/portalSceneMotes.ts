@@ -1,4 +1,4 @@
-import type { SceneMote } from './SceneMotes';
+import type { SceneMote } from './sceneSpriteClocks';
 
 /**
  * The motes that rise through the portal clearing: a dozen points of light, each on its own loop,

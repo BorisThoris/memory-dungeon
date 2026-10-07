@@ -199,7 +199,7 @@ describe('gate:changed selector', () => {
      */
     it('typechecks changed TypeScript that a narrower gate already claimed', () => {
         for (const file of [
-            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/components/SceneCanvas.tsx',
             'src/renderer/audio/gameSfx.ts',
             'src/renderer/components/GameplayScene.tsx'
         ]) {
@@ -228,7 +228,7 @@ describe('gate:changed selector', () => {
 
         // One run of `tsc` reads the whole program, so many changed files are still one gate.
         const many = runGateChanged(
-            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/components/SceneCanvas.tsx',
             'src/renderer/audio/gameSfx.ts',
             'src/renderer/components/GameplayScene.tsx'
         );
@@ -247,7 +247,7 @@ describe('gate:changed selector', () => {
      */
     it('lints changed code, whatever else the file was routed to', () => {
         for (const file of [
-            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/components/SceneCanvas.tsx',
             'src/shared/gameplay-rules-edit-map.test.ts',
             // Not `src/`-only: `eslint .` covers the scripts and configs, including this selector.
             'scripts/gate-changed.mjs'
@@ -268,7 +268,7 @@ describe('gate:changed selector', () => {
 
     it('asks for eslint once, and not for a change with no code in it', () => {
         const many = runGateChanged(
-            'src/renderer/components/SceneSprites.tsx',
+            'src/renderer/components/SceneCanvas.tsx',
             'scripts/gate-changed.mjs',
             'src/renderer/audio/gameSfx.ts'
         );

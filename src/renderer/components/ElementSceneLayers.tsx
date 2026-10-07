@@ -1,32 +1,35 @@
-import { useState, type CSSProperties } from 'react';
-import { UI_ART } from '../assets/ui';
-import { ELEMENT_SCENE_SUITS, ELEMENT_SCENE_VISUALS, type ElementSceneKind, type ElementSceneState } from './elementScene';
-import { ELEMENT_SCENE_ART } from './elementSceneArt';
-import { useBeat } from './useSceneBeat';
-import styles from './ElementSceneLayers.module.css';
+import type { ElementSceneState } from './elementScene';
 
-const lightHue = { ember: 100, tide: -45, bone: -25, moss: -125 };
-
+/**
+ * What chemistry is in the room, as data.
+ *
+ * The paintings, their crossfade and the light each element throws are drawn by the scene's canvas
+ * (`elementDraws` in `gameplaySceneFrame.ts`), under the room's light passes where they belong.
+ * They used to be elements here, each a full-plate image screened over the stone. What is left is
+ * the record of the room's state: one node per reaction with whether it is active and how much of
+ * the wall it has, which is what the tests and anything driving the app read.
+ */
 export function ElementSceneLayers({ scene, still, alive, plate }: {
     scene: ElementSceneState; still: boolean; alive: boolean; plate: 'dungeon' | 'void' | 'shop';
 }) {
-    const [loaded, setLoaded] = useState<Partial<Record<ElementSceneKind, boolean>>>({});
-    const beat = useBeat(scene.pulseKey, 1000);
-    return <div className={styles.world} data-testid="element-scene" data-still={still} data-alive={alive}
-        data-reactions={scene.reactions.filter(r => r.weight > 0.01).map(r => r.kind).join(' ')} data-plate={plate}>
-        {scene.reactions.map(({ kind, opacity, weight }) => <div key={kind} className={styles.reaction}
-            data-testid={`element-scene-${kind}`} data-kind={kind} data-active={weight > 0.01}
-            data-pulse={beat && !still && scene.pulseKinds.includes(kind)}
-            style={{ '--element-opacity': loaded[kind] ? opacity : 0, '--element-energy': weight,
-                '--element-light': ELEMENT_SCENE_VISUALS[kind].light } as CSSProperties}>
-            <img alt="" aria-hidden="true" className={styles.painting} src={ELEMENT_SCENE_ART[kind].desktop}
-                srcSet={`${ELEMENT_SCENE_ART[kind].mobile} 768w, ${ELEMENT_SCENE_ART[kind].desktop} 1376w`}
-                sizes="100vw" decoding="async" draggable={false}
-                onLoad={() => setLoaded(previous => previous[kind] ? previous : { ...previous, [kind]: true })} />
-            <div className={styles.energy} />
-        </div>)}
-        {ELEMENT_SCENE_SUITS.map(suit => <div key={suit} className={styles.materialLight} data-element={suit}
-            style={{ backgroundImage: `url(${UI_ART.gameplaySceneLightRing})`, opacity: scene.elements[suit] * 0.32,
-                filter: `hue-rotate(${lightHue[suit]}deg) saturate(1.35)` }} />)}
-    </div>;
+    return (
+        <div
+            data-alive={alive}
+            data-plate={plate}
+            data-reactions={scene.reactions.filter((reaction) => reaction.weight > 0.01).map((reaction) => reaction.kind).join(' ')}
+            data-still={still}
+            data-testid="element-scene"
+            hidden
+        >
+            {scene.reactions.map(({ kind, opacity, weight }) => (
+                <i
+                    data-active={weight > 0.01}
+                    data-kind={kind}
+                    data-opacity={opacity.toFixed(3)}
+                    data-testid={`element-scene-${kind}`}
+                    key={kind}
+                />
+            ))}
+        </div>
+    );
 }

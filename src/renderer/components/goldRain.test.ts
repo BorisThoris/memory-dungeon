@@ -1,6 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { buildGoldRain, GOLD_RAIN_MAX_COINS, GoldRain } from './GoldRain';
+import { buildGoldRain, GOLD_RAIN_MAX_COINS } from './goldRain';
 
 describe('gold rain', () => {
     it('rains the same coins for the same payout, more for a bigger one, never past the cap', () => {
@@ -14,13 +13,5 @@ describe('gold rain', () => {
             expect(coin.x).toBeLessThanOrEqual(96);
             expect(coin.duration).toBeGreaterThan(1);
         }
-    });
-
-    it('renders one coin per drop, and nothing for an empty payout', () => {
-        const { rerender } = render(<GoldRain coins={7} rainKey="buy:miss:1" />);
-        expect(screen.getByTestId('gameplay-scene-gold-rain')).toHaveAttribute('data-coins', '7');
-        expect(screen.getByTestId('gameplay-scene-gold-rain').querySelectorAll('circle')).toHaveLength(14);
-        rerender(<GoldRain coins={0} rainKey="buy:miss:2" />);
-        expect(screen.queryByTestId('gameplay-scene-gold-rain')).toBeNull();
     });
 });

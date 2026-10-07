@@ -1,18 +1,12 @@
 /*
- * A painted backdrop as a place: the plate, its drift, the pointer parallax, and the boxes every
- * layer and sprite sits in. Shared by the dungeon (`GameplayScene`) and the cathedral
- * (`CathedralScene`); each scene's own stylesheet adds what its lights do.
+ * A painted backdrop as a place: the plate, its drift, the pointer parallax, and the one canvas
+ * the painting is drawn in. Shared by the dungeon (`GameplayScene`), the cathedral
+ * (`CathedralScene`) and the portal clearing (`PortalScene`).
  *
- * `isolation: isolate` keeps the additive layers blending with the base only, never with the page
- * behind the scene.
+ * The plate used to hold a stack of full-plate elements, one per light, blended by the browser.
+ * It holds a single canvas now (`SceneCanvas`, `scenePaint.ts`): the scene is one surface whatever
+ * the screen, which is what stopped it flashing at 4K and on phones.
  */
-
-/* Registered so the drift keyframes interpolate it; an unregistered custom property would snap. */
-@property --scene-drift-scale {
-    syntax: '<number>';
-    inherits: false;
-    initial-value: 1;
-}
 
 .scene {
     position: absolute;
@@ -27,9 +21,10 @@
 
 /*
  * The plate: a box with the painting's aspect ratio, cover-fitted to the scene (the larger of
- * "as wide as the scene" and "as tall as the scene"), centred. Every layer fills it exactly, so a
- * sprite at 30 % of the plate is on its torch at any viewport. Alive, it drifts a little (a slow
- * push in and back, 48 s) and turns toward the pointer; the sprites in `.things` turn further.
+ * "as wide as the scene" and "as tall as the scene"), centred. The canvas fills it exactly, so a
+ * flame at 30 % of the plate is on its torch at any viewport. Alive, it drifts a little (a slow
+ * push in and back, 48 s) and turns toward the pointer; the things in the room turn further, which
+ * the painter does (`SceneImageDraw.depth`).
  */
 .plate {
     position: absolute;
@@ -42,61 +37,41 @@
     transform: translate(
             calc(-50% + var(--scene-look-x, 0) * -0.6%),
             calc(-1 * var(--scene-plate-anchor-y, 50%) + var(--scene-look-y, 0) * -0.4%)
-        )
-        scale(var(--scene-drift-scale, 1));
+        );
     transform-origin: 50% 50%;
 }
 
-/* Only a plate that moves is promoted: a lean scene's plate is static and stays in the page's raster. */
+/*
+ * Only a plate that moves is promoted: a lean scene's plate is static. The drift animates `scale`
+ * itself, not a custom property inside `transform`: an individual transform property is animated
+ * by the compositor, where the custom property was re-styled on the main thread every frame.
+ */
 .scene[data-alive='true'] .plate {
     animation: sceneDrift 48s ease-in-out infinite alternate;
     will-change: transform;
 }
 
-.base,
-.layer {
-    position: absolute;
-    inset: 0;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-
-/* The things in the room (flames, sparks) turn with the pointer a little more than the walls do. */
-.things {
-    position: absolute;
-    inset: 0;
-    transform: translate(calc(var(--scene-look-x, 0) * -0.45%), calc(var(--scene-look-y, 0) * -0.3%));
-}
-
-.scene[data-alive='true'] .things {
-    will-change: transform;
-}
-
-/* The stone is sunk into the page; the light is not. */
-.base {
-    opacity: var(--scene-base-opacity, 1);
-}
-
-.layer {
-    mix-blend-mode: plus-lighter;
-}
-
 /*
- * Only a full scene promotes its light layers: there they flicker and breathe every frame, and a
- * promoted layer blends on the GPU. A lean scene's layers hold still (each scene's own stylesheet
- * turns their ambient animations off under `data-alive='false'`), so they stay in the page's
- * raster and blend once; on a phone that is the difference between one full-screen composite
- * per frame and four.
+ * The painting. Its own pixels are the art's (1376 by 768); CSS stretches it over the plate. The
+ * browser scales a canvas smoothly, which is what a painting wants.
  */
-.scene[data-alive='true'] .layer {
-    will-change: opacity;
+.canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* Held back until its first whole frame (`SceneCanvas`), then faded in: a room, not its layers arriving. */
+    opacity: 0;
+    transition: opacity 420ms ease;
 }
 
-@supports not (mix-blend-mode: plus-lighter) {
-    .layer {
-        mix-blend-mode: screen;
-    }
+.canvas[data-ready='true'] {
+    opacity: 1;
+}
+
+.scene[data-still='true'] .canvas {
+    transition: none;
 }
 
 .scene[data-still='true'] .plate {
@@ -105,10 +80,10 @@
 
 @keyframes sceneDrift {
     0% {
-        --scene-drift-scale: 1;
+        scale: 1;
     }
 
     100% {
-        --scene-drift-scale: 1.035;
+        scale: 1.035;
     }
 }

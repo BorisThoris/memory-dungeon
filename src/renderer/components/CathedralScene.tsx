@@ -1,33 +1,32 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
-import { UI_ART } from '../assets/ui';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { useSceneEffectTier } from '../hooks/useSceneEffectTier';
 import { useSceneLook } from '../hooks/useSceneLook';
-import { SceneMotes } from './SceneMotes';
-import { cathedralMotes } from './sceneSpriteClocks';
-import { SceneSprites } from './SceneSprites';
+import { composeCathedralScene } from './cathedralSceneFrame';
+import { SceneCanvas, type SceneLevels } from './SceneCanvas';
+import { SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
+import type { SceneClock } from './sceneClock';
 import plate from './scenePlate.module.css';
-import styles from './CathedralScene.module.css';
 
 /**
  * The cathedral behind the main menu and the run's end, as a place rather than a picture.
  *
  * `scripts/scene-pipeline/cathedral.sh` splits the painting into a dark *base* and two additive
  * light layers: the candlelight pooled on the pillars, rails and floor, and the teal spirit-light
- * climbing the far arch. Over them the candle flames, cut out of the painting, play as flipbook
- * sprites (`SceneSprites`), each on its own clock, so twenty-nine candles never flicker together;
- * the candlelight on the stone flickers under them on a slower clock of its own, and the wisps
- * breathe and drift, and motes of the same light climb the arch. The plate drifts slowly and
- * turns with the pointer (`useSceneLook`).
+ * climbing the far arch, and cuts every candle flame out as a flipbook. `composeCathedralScene`
+ * turns those and the baked ambient sprites into one frame — the candlelight wavering, each
+ * candle on its own clock, a draught now and then, moonlight and dust, mist, moths, a bat — and
+ * `SceneCanvas` paints it into a single canvas. The plate drifts slowly and turns with the
+ * pointer (`useSceneLook`).
  *
  * The parent owns the mask, the filter and how far the whole scene sinks into the page; the base
  * alone reads `--scene-base-opacity` and the lights `--scene-light-opacity`, so the candles can
  * burn brighter than the nave they light. At the run's end (`mood="ended"`) the candlelight
  * sinks and the spirit-light takes the nave, and `heat` lets the candles go on burning at the rate
- * the run earned while it does. `getSceneEffectTier` decides the rest: `full` on a
- * desktop, `lean` on a phone or at `low` (the flames and the lights only, no drift, no echo, no
- * motes), `still` under reduce motion.
+ * the run earned while it does. `getSceneEffectTier` decides the rest: `full` on a desktop (the
+ * plate drifts and turns), `lean` on a phone or at `low` (the same room, fewer specks, no drift),
+ * `still` under reduce motion.
  */
 export interface CathedralSceneProps {
     quality: GraphicsQualityPreset;
@@ -48,47 +47,48 @@ export interface CathedralSceneProps {
      * on guttering candles; one who hit Fever ends on a nave still alight.
      */
     heat?: number | null;
+    /**
+     * The player is about to go in (the menu's Play has the pointer or the focus): the candles
+     * burn up and the candlelight on the stone rises with them, and settle when the hand moves on.
+     */
+    stirred?: boolean;
 }
 
-const bg = (url: string) => ({ backgroundImage: `url(${url})` });
-
-export function CathedralScene({ heat = null, mood = 'menu', quality, reduceMotion }: CathedralSceneProps) {
+export function CathedralScene({ heat = null, mood = 'menu', quality, reduceMotion, stirred = false }: CathedralSceneProps) {
     const sceneRef = useRef<HTMLDivElement>(null);
+    const lookRef = useRef({ x: 0, y: 0 });
     const tier = useSceneEffectTier(quality, reduceMotion);
     const still = tier === 'still';
     const alive = tier === 'full';
     const candles = SCENE_SPRITES.cathedralCandles;
-    useSceneLook(sceneRef, alive);
+    useSceneLook(sceneRef, alive, lookRef);
+    const compose = useCallback(
+        (clock: SceneClock, levels: SceneLevels) => composeCathedralScene({ mood, heat, stirred, tier, base: levels.base, light: levels.light }, clock),
+        [mood, heat, stirred, tier]
+    );
     return (
         <div
             aria-hidden="true"
-            className={`${plate.scene} ${styles.scene}`}
+            className={plate.scene}
             data-alive={alive ? 'true' : 'false'}
             data-mood={mood}
             data-scene-heat={heat === null ? 'none' : heat.toFixed(2)}
             data-scene-effect-tier={tier}
+            data-stirred={stirred ? 'true' : 'false'}
             data-still={still ? 'true' : 'false'}
             data-testid="cathedral-scene"
             ref={sceneRef}
             style={{ '--scene-plate-aspect': `${candles.plate[0]} / ${candles.plate[1]}` } as React.CSSProperties}
         >
             <div className={plate.plate} data-testid="cathedral-scene-plate">
-                <div className={plate.base} style={bg(UI_ART.menuSceneBase)} />
-                <div className={`${plate.layer} ${styles.layer} ${styles.candleGlow}`} style={bg(UI_ART.menuSceneGlowCandles)} />
-                <div className={`${plate.layer} ${styles.layer} ${styles.wisps}`} style={bg(UI_ART.menuSceneGlowWisps)} />
-                <div className={`${plate.layer} ${styles.layer} ${styles.wispsEcho}`} style={bg(UI_ART.menuSceneGlowWisps)} />
-                <div className={`${plate.things} ${styles.things}`}>
-                    <SceneSprites heat={heat} set={candles} still={still} />
-                    {alive ? (
-                        <SceneMotes
-                            color="#bff5ea"
-                            glow="rgba(90, 220, 200, 0.7)"
-                            motes={cathedralMotes()}
-                            still={false}
-                            testId="cathedral-scene-motes"
-                        />
-                    ) : null}
-                </div>
+                <SceneCanvas
+                    compose={compose}
+                    fps={alive ? SCENE_FPS_FULL : SCENE_FPS_LEAN}
+                    lookRef={lookRef}
+                    plate={candles.plate}
+                    still={still}
+                    testId="cathedral-scene-canvas"
+                />
             </div>
         </div>
     );

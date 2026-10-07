@@ -1,3 +1,4 @@
+import ambientManifest from './ambient-v1.json';
 import cathedralCandles from './bg-main-menu-cathedral-v2-sprites.json';
 import dungeonFlames from './bg-gameplay-dungeon-ring-v2-sprites.json';
 import portalVortex from './bg-mode-classic-v2-sprites.json';
@@ -61,5 +62,34 @@ export const SCENE_SPRITES = {
 
 export type SceneSpriteSetKey = keyof typeof SCENE_SPRITES;
 
-export const getSceneSpriteSheetUrls = (): string[] =>
-    Object.values(SCENE_SPRITES).flatMap((set) => set.sprites.map((sprite) => sprite.sheet));
+/**
+ * The ambient sprites every scene shares, baked by `scripts/scene-pipeline/bake_ambient.py`: an
+ * atlas of small cells (glow dots, a bat, a moth, a falling star, light shafts) and a fog tile
+ * that repeats. `sceneAmbient.ts` draws from them.
+ */
+export interface AmbientCell {
+    /** The cell's first frame in the atlas, in pixels; frames run left to right. */
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    frames: number;
+}
+
+export type AmbientCellName = keyof typeof ambientManifest.cells;
+
+export const AMBIENT_SPRITES = {
+    atlas: sheetUrls[`./${ambientManifest.atlas}`] ?? '',
+    fog: sheetUrls[`./${ambientManifest.fog}`] ?? '',
+    /** The atlas's size in pixels. */
+    size: ambientManifest.size as readonly number[],
+    cells: ambientManifest.cells as Record<AmbientCellName, AmbientCell>
+} as const;
+
+export const getAmbientSpriteUrls = (): string[] => [AMBIENT_SPRITES.atlas, AMBIENT_SPRITES.fog].filter(Boolean);
+
+/** Every sheet a scene draws from: the cut-outs of each painting, then the ambient atlas and fog tile they share. */
+export const getSceneSpriteSheetUrls = (): string[] => [
+    ...Object.values(SCENE_SPRITES).flatMap((set) => set.sprites.map((sprite) => sprite.sheet)),
+    ...getAmbientSpriteUrls()
+];

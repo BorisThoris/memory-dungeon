@@ -1,6 +1,6 @@
 import type { SaveData } from '../../shared/contracts';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
-import { useRef } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { desktopClient, hasDesktopBridge } from '../desktop-client';
@@ -97,6 +97,8 @@ const MainMenu = ({
         { label: 'Settings', note: 'Sound, motion, display', onClick: onOpenSettings }
     ];
     const uiGain = uiSfxGainFromSettings(saveData.settings.masterVolume, saveData.settings.sfxVolume);
+    // The nave leans in with the player: while Play has the pointer or the focus its candles burn up.
+    const [playWarm, setPlayWarm] = useState(false);
     const playMenuOpen = (): void => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
@@ -117,7 +119,7 @@ const MainMenu = ({
                 width={width}
             />
             <div aria-hidden="true" className={styles.sceneLayer}>
-                <CathedralScene quality={saveData.settings.graphicsQuality} reduceMotion={reduceMotion} />
+                <CathedralScene quality={saveData.settings.graphicsQuality} reduceMotion={reduceMotion} stirred={playWarm} />
             </div>
             <div aria-hidden="true" className={styles.scrim} />
 
@@ -163,7 +165,10 @@ const MainMenu = ({
 
                 <div className={styles.spread}>
                     <header className={styles.titleBlock}>
-                        <img alt="" className={styles.crest} src={UI_ART.brandCrest} />
+                        {/* The crest hangs in its own light: the halo breathes behind it, the crest rides a slow swell. */}
+                        <span aria-hidden="true" className={styles.crestMount}>
+                            <img alt="" className={styles.crest} src={UI_ART.brandCrest} />
+                        </span>
                         <p className={styles.eyebrow}>Seeker of Shards</p>
                         {/*
                           * The space between the words is real text, not a gap the layout draws.
@@ -189,6 +194,10 @@ const MainMenu = ({
                                     aria-label="Play"
                                     className={`${styles.entry} ${styles.entryPlay}`}
                                     type="button"
+                                    onBlur={() => setPlayWarm(false)}
+                                    onFocus={() => setPlayWarm(true)}
+                                    onPointerEnter={() => setPlayWarm(true)}
+                                    onPointerLeave={() => setPlayWarm(false)}
                                     onClick={() => {
                                         playMenuOpen();
                                         onPlay();
@@ -208,6 +217,7 @@ const MainMenu = ({
                                         aria-label={entry.label}
                                         className={styles.entry}
                                         key={entry.label}
+                                        style={{ '--menu-entry-order': index + 1 } as CSSProperties}
                                         type="button"
                                         onClick={() => {
                                             playMenuOpen();

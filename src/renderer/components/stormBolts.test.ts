@@ -10,6 +10,9 @@ describe('the storm\'s bolts', () => {
         for (const bolt of bolts) {
             const points = [...bolt.d.matchAll(/([ML])(-?[\d.]+) (-?[\d.]+)/g)].map((match) => [Number(match[2]), Number(match[3])]);
             expect(points.length).toBeGreaterThan(6);
+            // The same path as points, for the canvas that strokes it.
+            expect(bolt.points).toHaveLength(points.length);
+            expect(bolt.points[0]![0]).toBeCloseTo(points[0]![0]!, 1);
             expect(bolt.length).toBeGreaterThan(0);
             // Starts near the top, ends in the room's middle band, never leaves the plate.
             expect(points[0]![1]).toBeLessThan(STORM_VIEWBOX.height * 0.12);

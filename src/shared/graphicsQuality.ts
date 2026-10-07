@@ -130,17 +130,23 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
  * How much of a painted scene's life a device gets (`GameplayScene`, `CathedralScene`,
  * `PortalScene`).
  *
- *   - `full`: light passes, flame sprites, mist, sparks, motes, the plate's drift and its turn
- *     toward the pointer.
- *   - `lean`: the glow layers and the flame sprites only. Everything else in `full` is either a
- *     blended composited layer per particle, a blurred full-plate layer, or a per-frame transform
- *     of the whole plate, and on a phone those cost the frame rate the board needs; the flames are
- *     a handful of small stepped strips and are what the scene is for.
+ * A scene is painted into one canvas the size of its art (`scenePaint.ts`), so what it costs does
+ * not grow with the screen, and every tier draws the same room: its lights, its flames, its mist.
+ *
+ *   - `full`: all of it at thirty frames a second, the plate drifting slowly and turning toward
+ *     the pointer.
+ *   - `lean`: the same room at twenty-four frames a second with about half the motes and specks,
+ *     and the plate held still. A phone has no pointer to turn toward, and a plate that does not
+ *     move is one less layer for it to composite under the board.
  *   - `still`: nothing moves (reduce motion).
  *
  * A phone is any coarse-pointer device or a viewport narrower than `SCENE_LEAN_MAX_WIDTH`, whatever
  * the quality preset says: the preset is the player's choice of fidelity, the device's budget is
  * not theirs to raise.
+ *
+ * A large display is not lean. It was for a while (4K and scaled-4K were held to `lean`), because
+ * the scenes were then stacks of blended full-screen layers whose cost grew with every device
+ * pixel and which flashed when the compositor ran out of room. One canvas does not.
  */
 export type SceneEffectTier = 'full' | 'lean' | 'still';
 
@@ -151,15 +157,14 @@ export const getSceneEffectTier = (input: {
     reduceMotion: boolean;
     coarsePointer: boolean;
     viewportWidth: number;
+    /** Accepted for callers that have them; the tier no longer depends on how many pixels the display has. */
     viewportHeight?: number;
     devicePixelRatio?: number;
 }): SceneEffectTier => {
     if (input.reduceMotion) {
         return 'still';
     }
-    const physicalPixels = input.viewportWidth * (input.viewportHeight ?? 0) * (input.devicePixelRatio ?? 1) ** 2;
-    if (input.quality === 'low' || input.coarsePointer || input.viewportWidth < SCENE_LEAN_MAX_WIDTH
-        || physicalPixels >= 3840 * 2160) {
+    if (input.quality === 'low' || input.coarsePointer || input.viewportWidth < SCENE_LEAN_MAX_WIDTH) {
         return 'lean';
     }
     return 'full';
