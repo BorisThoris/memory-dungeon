@@ -120,9 +120,20 @@ for (const display of [
                 await expect(bomb).toHaveAttribute('aria-pressed', 'true');
                 await expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
             }
+            // The room is one canvas the size of its art on every display: 4K gets the full scene
+            // (it was once held to lean, when each light was a blended layer the size of the screen)
+            // and nothing in the room is blended by the page at any size.
+            const scene = page.getByTestId('gameplay-scene');
             if (display.name.includes('4K')) {
-                await expect(page.getByTestId('gameplay-scene')).toHaveAttribute('data-scene-effect-tier', 'lean');
+                await expect(scene).toHaveAttribute('data-scene-effect-tier', 'full');
             }
+            expect(
+                await scene.evaluate((node) => {
+                    const canvas = node.querySelector<HTMLCanvasElement>('[data-testid="gameplay-scene-canvas"]');
+                    const blended = [...node.querySelectorAll('*')].filter((el) => getComputedStyle(el).mixBlendMode !== 'normal').length;
+                    return { width: canvas?.width, height: canvas?.height, blended, images: node.querySelectorAll('img').length };
+                })
+            ).toEqual({ width: 1376, height: 768, blended: 0, images: 0 });
             const target = await page.evaluate(() => {
                 const w = window as unknown as {
                     __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } | null;

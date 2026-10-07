@@ -705,8 +705,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 26124,
-      "sha256": "7a600477ac178bfd1bffe3cf0fd282f479bdc684b97d2e1bee698807d2eb76aa"
+      "bytes": 26200,
+      "sha256": "7cc517e7e346acdb8713d8e4462f62d1b6c3725e588a142b05fdcd71765afb13"
     },
     {
       "path": "docs/gameplay/element-agency-review.md",
@@ -4113,8 +4113,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 15884,
-      "sha256": "424d4097fd6386f1fe8372ee774002873372437f2dfa112fd6ebcd8d9def8638"
+      "bytes": 16742,
+      "sha256": "f9d48401965e22b442d880fa45a33d792220b173a9a60023b0f5f5ab483cb403"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -9633,8 +9633,8 @@
     {
       "path": "src/renderer/components/cathedralSceneFrame.ts",
       "category": "source",
-      "bytes": 11338,
-      "sha256": "362ab8e3038bf9f846a8c23d9fb9b765ad3114f52fe3331ee416a63dcaaea96f"
+      "bytes": 11379,
+      "sha256": "996a89f490ccd3b67daa67a66c442941f86adaeaf17673711faca13694004c50"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
@@ -9921,8 +9921,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 12519,
-      "sha256": "37c31e808706d99892716f9da65ed628ddefa706aa5c49a1b562c2f221e0e621"
+      "bytes": 12517,
+      "sha256": "9b32ae9a1699ae4be8c101da0a494dce001cc27469b0b11d156b690a4504ebeb"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
@@ -9933,8 +9933,8 @@
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "category": "source",
-      "bytes": 26940,
-      "sha256": "51acba7a0310716c4dbcab04396854c049c00933919785b2f1e4861afcc62ba3"
+      "bytes": 27834,
+      "sha256": "d76fceae10a702e60b0a5b45875a56fe6403ca1d0561e7664c49beda719f955b"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -10233,8 +10233,8 @@
     {
       "path": "src/renderer/components/portalSceneFrame.ts",
       "category": "source",
-      "bytes": 10214,
-      "sha256": "09ea22ef64c3f5fcbc80271633a5c95cde0b09daeee8462102115f004bcf83ce"
+      "bytes": 10249,
+      "sha256": "7504bf891b9d431f374219c65ab09dc9e8e71e016446ec1eb1cb2be1aaffd434"
     },
     {
       "path": "src/renderer/components/portalSceneMotes.ts",
@@ -10467,8 +10467,8 @@
     {
       "path": "src/renderer/components/SceneCanvas.tsx",
       "category": "source",
-      "bytes": 10152,
-      "sha256": "c1f48efcae16781bb534318d5c43b669895c882ea50281c339dc004b43102041"
+      "bytes": 10484,
+      "sha256": "89af260c5dc8446a198c8e202e55229f2ee8ab224e37f86dfc02b85f44037154"
     },
     {
       "path": "src/renderer/components/sceneCanvasLayout.ts",
@@ -20688,7 +20688,7 @@
       "path": "src/renderer/components/cathedralSceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 224,
+      "lineCount": 225,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -21480,7 +21480,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 452,
+      "lineCount": 475,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -22297,7 +22297,7 @@
       "path": "src/renderer/components/portalSceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 211,
+      "lineCount": 212,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -22920,7 +22920,7 @@
       "path": "src/renderer/components/SceneCanvas.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 252,
+      "lineCount": 256,
       "imports": [
         "file:src/renderer/components/sceneBitmaps.ts",
         "file:src/renderer/components/sceneCanvasLayout.ts",
@@ -42724,8 +42724,8 @@
       "name": "composeCathedralScene",
       "kind": "value",
       "file": "src/renderer/components/cathedralSceneFrame.ts",
-      "line": 73,
-      "endLine": 223
+      "line": 74,
+      "endLine": 224
     },
     {
       "id": "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default",
@@ -43148,8 +43148,8 @@
       "name": "composeGameplayScene",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 156,
-      "endLine": 451
+      "line": 180,
+      "endLine": 474
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
@@ -43724,8 +43724,8 @@
       "name": "composePortalScene",
       "kind": "value",
       "file": "src/renderer/components/portalSceneFrame.ts",
-      "line": 81,
-      "endLine": 210
+      "line": 82,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/components/portalSceneFrame.ts#PORTAL_FIREFLIES",
@@ -44501,7 +44501,7 @@
       "kind": "function",
       "file": "src/renderer/components/SceneCanvas.tsx",
       "line": 112,
-      "endLine": 251
+      "endLine": 255
     },
     {
       "id": "symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
