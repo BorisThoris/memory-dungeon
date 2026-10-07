@@ -1,5 +1,5 @@
 {
-    "version": 38,
+    "version": 39,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -339,7 +339,15 @@
                 "realmDoors",
                 "nextRealm",
                 "realmFloorsThisRun",
-                "voidSpewsThisFloor"
+                "voidSpewsThisFloor",
+                "colossusHitsThisFloor",
+                "colossusSplitsThisFloor",
+                "colossiFelledThisRun",
+                "lastColossusEvent",
+                "turncoatTurnsThisFloor",
+                "hourglassesCaughtThisRun",
+                "hourglassesSpentThisFloor",
+                "lastHourglassEvent"
             ],
             "writes": [
                 "feedbackLines"
@@ -2240,6 +2248,127 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "hazard.colossus",
+            "label": "The Colossus",
+            "kind": "hazard",
+            "role": "a_boss_card_over_a_boss_floor_that_changes_element_every_turn_takes_hits_from_matches_of_it_and_splits_into_new_pairs_when_its_turns_run_out",
+            "evidence": [
+                "src/shared/colossus-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/renderer/components/ColossusCard.tsx",
+                "src/renderer/copy/colossusBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "floorTag",
+                "pairCount",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "matchedPairs",
+                "colossusHitsThisFloor",
+                "colossusSplitsThisFloor",
+                "colossiFelledThisRun",
+                "lastColossusEvent",
+                "score"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "never-holds-the-floor-open",
+                "off-element-matches-chip-so-safe-play-still-wins",
+                "splits-once-two-pairs-at-most-shown-face-up",
+                "matched-pairs-count-what-is-gone"
+            ],
+            "tests": [
+                "src/shared/colossus-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "board.turncoat_pair",
+            "label": "Turncoat pair",
+            "kind": "board",
+            "role": "a_pair_whose_element_turns_every_turn_both_halves_together_showing_what_it_is_and_what_it_will_be_next_and_counting_as_what_it_is_when_matched",
+            "evidence": [
+                "src/shared/odd-card-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/renderer/components/cardStatusPaint.ts",
+                "src/renderer/components/OddCardLegend.tsx",
+                "src/renderer/copy/oddCardBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pairCount",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "turncoatTurnsThisFloor"
+            ],
+            "enables": [
+                "hazard.colossus"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "always-an-ordinary-pair-to-turn-and-clear",
+                "holds-still-while-the-realm-holds-it",
+                "turns-only-to-elements-still-in-play"
+            ],
+            "tests": [
+                "src/shared/odd-card-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
+            "id": "findable.hourglass_pair",
+            "label": "Hourglass pair",
+            "kind": "findable",
+            "role": "a_pair_with_a_prize_and_turns_of_sand_on_its_back_that_pays_gold_and_score_if_matched_before_the_sand_runs_out_and_is_a_plain_pair_after",
+            "evidence": [
+                "src/shared/odd-card-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/turn-mismatch-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/board-power-actions.ts",
+                "src/renderer/components/cardStatusPaint.ts",
+                "src/renderer/components/OddCardLegend.tsx",
+                "src/renderer/copy/oddCardBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pairCount",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "hourglassesCaughtThisRun",
+                "hourglassesSpentThisFloor",
+                "lastHourglassEvent",
+                "score"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "running-out-takes-only-the-prize",
+                "a-bombed-pair-pays-nothing"
+            ],
+            "tests": [
+                "src/shared/odd-card-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3298,6 +3427,54 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the room lurches violet, the cards glide to new cells, a stamp says what came back"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.colossus",
+            "kind": "triggers",
+            "label": "every resolved turn, match or miss, is a turn of the fight"
+        },
+        {
+            "source": "hazard.colossus",
+            "target": "board.cleanup",
+            "kind": "modifies",
+            "label": "out of turns it splits: new pairs fill cleared cells, face up until the next flip"
+        },
+        {
+            "source": "hazard.colossus",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the great card shows its element, the next, its hits and its turns, and every hit, chip, fall and split is announced"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.turncoat_pair",
+            "kind": "triggers",
+            "label": "every resolved turn, match or miss, turns the Turncoat to the element its corner showed"
+        },
+        {
+            "source": "board.turncoat_pair",
+            "target": "hazard.colossus",
+            "kind": "synergy",
+            "label": "a Turncoat matched while it is the Colossus's element is a hit: the one pair that can be held for the element the fight needs"
+        },
+        {
+            "source": "board.turncoat_pair",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the card's corner shows its next element and the key beside the board says what it is now and next"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "findable.hourglass_pair",
+            "kind": "triggers",
+            "label": "every resolved turn spends a turn of sand; the pair going with sand left pays the prize"
+        },
+        {
+            "source": "findable.hourglass_pair",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the card shows its sand, the key says the prize, and a catch is stamped and announced"
         }
     ],
     "coverage": {

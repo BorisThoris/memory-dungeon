@@ -1,3 +1,4 @@
+import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
 import { cardStatusBlocksTurning, type RealmTileMark } from './realmTileMarkKey';
 
 const W = 256;
@@ -135,6 +136,31 @@ export const paintCardStatus = (
         // Rewards are compact and round; never the full-card crossing used for a hold.
         badge(ctx, `+${mark.seeded}`, '#d1e5a5', mark.rime ? 58 : W / 2, mark.rime ? H - 127 : H - 49);
     }
-    if (mark.bloom) badge(ctx, '+3', '#ffe2a0', 58, mark.frost && mark.fuse ? 119 : 46);
+    if (mark.bloom) badge(ctx, '+3', '#ffe2a0', mark.turncoat ? W / 2 : 58, mark.frost && mark.fuse ? 119 : 46);
+    if (mark.turncoat) {
+        // The Turncoat's dog-ear: the corner already turned to what the card will be next, in that
+        // element's colour and rune, with the arrow of a turn. A shape no realm mark uses.
+        const next = TILE_SUIT_CATALOG[mark.turncoat];
+        ctx.beginPath(); ctx.moveTo(6, 6); ctx.lineTo(132, 6); ctx.lineTo(6, 132); ctx.closePath();
+        outlined(ctx, next.hue, 9);
+        ctx.strokeStyle = PAPER; ctx.lineWidth = 4; ctx.stroke();
+        ctx.fillStyle = INK; ctx.font = 'bold 50px system-ui, "Segoe UI Symbol", sans-serif';
+        ctx.fillText(next.rune, 44, 46);
+        ctx.strokeStyle = INK; ctx.lineWidth = 15;
+        ctx.beginPath(); ctx.arc(74, 74, 76, -0.2, Math.PI / 2 + 0.2); ctx.stroke();
+        ctx.strokeStyle = PAPER; ctx.lineWidth = 7; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(148, 40); ctx.lineTo(168, 72); ctx.lineTo(130, 72); ctx.closePath();
+        outlined(ctx, PAPER, 6);
+    }
+    if (mark.hourglass) {
+        // The Hourglass: two gold triangles tip to tip and the turns of sand left, low on the left.
+        const x = 54; const y = H - 62;
+        rect(ctx, x - 46, y - 50, 124, 100, 12); outlined(ctx, INK, 7);
+        ctx.strokeStyle = '#ffd766'; ctx.lineWidth = 4; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x - 30, y - 34); ctx.lineTo(x + 14, y - 34); ctx.lineTo(x - 8, y); ctx.lineTo(x + 14, y + 34); ctx.lineTo(x - 30, y + 34); ctx.lineTo(x - 8, y); ctx.closePath();
+        ctx.fillStyle = '#ffd766'; ctx.fill();
+        ctx.font = 'bold 56px system-ui, sans-serif';
+        ctx.fillText(String(mark.hourglass), x + 48, y + 3);
+    }
     ctx.restore();
 };

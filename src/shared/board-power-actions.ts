@@ -343,7 +343,7 @@ export const applyBomb = (run: RunState, tileId: string): RunState => {
     const pairTileIds = run.board.tiles.filter((candidate) => candidate.pairKey === tile.pairKey).map((candidate) => candidate.id);
     const tiles = run.board.tiles.map((candidate) =>
         pairTileIds.includes(candidate.id)
-            ? { ...candidate, state: 'removed' as const, findableKind: undefined }
+            ? { ...candidate, state: 'removed' as const, findableKind: undefined, turncoat: undefined, hourglass: undefined }
             : candidate
     );
     // What the bomb leaves must still hold a pair the player can turn (`realm-weather-rules.ts`).

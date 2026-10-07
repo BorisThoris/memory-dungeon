@@ -2,6 +2,8 @@ import { type BoardState, type RunState, type RunStatus, type Tile } from './con
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { applySkittishFlinch, resolveSkittishFlinch } from './skittish-cards-rules';
+import { applyColossusTurnToRun, resolveColossusTurn } from './colossus-rules';
+import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
 import { hasMutator } from './mutators';
 import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { resolveVoidSpew } from './void-spew-rules';
@@ -137,7 +139,7 @@ export const resolveMismatchTurnTransition = ({
         pinnedTileIds: Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds : []
     });
 
-    return {
+    const missed: RunState = {
         ...run,
         ...applyRealmTurnToRun(run, realmTurn),
         status: penalty.status,
@@ -181,4 +183,11 @@ export const resolveMismatchTurnTransition = ({
         },
         timerState: clearResolveState(run)
     };
+    // The Colossus's clock runs on a miss as on a match, and it turns to its next element (`colossus-rules.ts`).
+    if (!missed.board) {
+        return missed;
+    }
+    const fought: RunState = { ...missed, ...applyColossusTurnToRun(missed, resolveColossusTurn({ board: missed.board, outcome: 'miss', turnsThisFloor: turnsAfterMiss })) };
+    // A miss is a turn for the odd cards too: the Turncoat turns and the Hourglass loses sand (`odd-card-rules.ts`).
+    return { ...fought, ...applyOddCardTurnToRun(fought, resolveOddCardTurn({ board: fought.board!, turnsThisFloor: turnsAfterMiss })) };
 };

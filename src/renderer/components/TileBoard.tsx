@@ -724,18 +724,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [selectionSuppressed, setSelectionSuppressed] = useState(false);
     const [stageWorldViewport, setStageWorldViewport] = useState<StageWorldViewport>({ height: 0, width: 0 });
     const [fitFrame, setFitFrame] = useState({ heightFraction: 1, centerYFraction: 0, widthFraction: 1, centerXFraction: 0 });
+    // Whether anything hangs over the board, so the fit is measured again when it comes and goes.
+    const boardCrowned = board.colossus != null || board.tiles.some((tile) => (tile.turncoat != null || tile.hourglass != null) && tile.state !== 'matched' && tile.state !== 'removed');
     useEffect(() => {
         const stage = stageRef.current;
         const shell = stage?.closest('[data-testid="game-shell"]');
         const hud = shell?.querySelector('[data-testid="game-hud"]');
         const dock = shell?.querySelector('[data-testid="game-action-dock"]');
         const rail = shell?.querySelector('[data-testid="hud-chain"]');
+        // The Colossus and the odd cards' key hang under the HUD: the cards fit below them too.
+        const crown = shell?.querySelector('[data-board-crown]');
         if (!stage || !hud || !dock || typeof ResizeObserver === 'undefined') return;
         // Fit keeps cards clear of the chrome. The canvas and zoom/pan bounds still fill the screen.
         const measure = (): void => {
             const rect = stage.getBoundingClientRect();
             if (rect.height <= 0) return;
-            const next = boardFitFrame(rect, hud.getBoundingClientRect().bottom, dock.getBoundingClientRect().top, rail?.getBoundingClientRect());
+            const next = boardFitFrame(rect, Math.max(hud.getBoundingClientRect().bottom, crown?.getBoundingClientRect().bottom ?? 0), dock.getBoundingClientRect().top, rail?.getBoundingClientRect());
             setFitFrame(current => Object.keys(next).every(key => Math.abs(current[key as keyof typeof current] - next[key as keyof typeof next]) < 0.001) ? current : next);
         };
         measure();
@@ -744,8 +748,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         observer.observe(hud);
         observer.observe(dock);
         if (rail) observer.observe(rail);
+        if (crown) observer.observe(crown);
         return () => observer.disconnect();
-    }, [boardGraphicsOk]);
+    }, [boardGraphicsOk, boardCrowned]);
     const [viewportState, setViewportState] = useState<TileBoardViewportState>(() => createFittedBoardViewport(1));
     const viewportStateRef = useRef<TileBoardViewportState>(viewportState);
     const viewportMetricsRef = useRef<TileBoardViewportMetrics | null>(null);

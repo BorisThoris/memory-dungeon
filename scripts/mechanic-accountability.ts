@@ -205,6 +205,18 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 264,
         reason: 'The void needs a combo of Inferno or better to die on a miss, and the floor census starts every floor cold. The whole-run soak requires the void to spit, and the void-spew room walks the new pairs, the reshuffle and the matched count.'
     },
+    'board.turncoat_pair': {
+        generation: 265,
+        reason: 'A Turncoat is dealt at the floor transition from floor five, and the floor census builds each floor on its own without one. The whole-run soak requires one to be dealt and to turn and holds three invariants over it, and the turncoat room walks every kind of turn.'
+    },
+    'findable.hourglass_pair': {
+        generation: 265,
+        reason: 'An Hourglass is dealt at the floor transition, which the floor census does not run, and its prize is gold the census players never count. The whole-run soak requires one caught and one run out, and two hall rooms walk the catch and the run-out.'
+    },
+    'hazard.colossus': {
+        generation: 265,
+        reason: 'The Colossus stands only on boss floors and its cycle is the deck the realm dealt; the floor census builds realm-free floors with no boss tag. The whole-run soak requires one to be felled and one to split, and the colossus room walks the hit, the chip, the turn of element and the split.'
+    },
     'power.ignition_zone': {
         generation: 264,
         reason: 'The Zone is ignited by the player at Inferno or better, and the census players never spend a combo on anything. The whole-run soak ignites it on half the turns it may, walks its flips and requires a Zone to open and to match a pair; the zone room walks the burn, the free flips, the resolve, the miss and the bonus.'

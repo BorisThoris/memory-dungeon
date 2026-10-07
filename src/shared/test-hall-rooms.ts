@@ -9,7 +9,8 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import { inspectRunFairness } from './board-inspection';
-import type { BoardState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } from './contracts';
+import type { BoardState, ColossusState, MutatorId, RunState, Tile, TileSuit, TileTraitKind } from './contracts';
+import { colossusElement, raiseColossus } from './colossus-rules';
 import { togglePinnedTile } from './board-power-state';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
@@ -136,7 +137,12 @@ export type TestHallRoomId =
     | 'element-freezeover'
     | 'element-flood'
     | 'element-frostbloom'
-    | 'realm-depth';
+    | 'realm-depth'
+    | 'colossus'
+    | 'colossus-split'
+    | 'turncoat'
+    | 'hourglass'
+    | 'hourglass-runs-out';
 
 export type TestHallStep =
     | { readonly do: 'match'; readonly pairKey: string }
@@ -265,6 +271,40 @@ const room = (
         stats: { ...base.stats, currentStreak: streak, highestLevel: level },
         ...extra
     };
+};
+
+/** A boss floor of two elements in a checkerboard (nothing pops), four pairs each, with its Colossus raised: fire first, then water. */
+const COLOSSUS_FLOOR = ['a:e b:t c:e d:t', 'b:t a:e d:t c:e', 'e:e f:t g:e h:t', 'f:t e:e h:t g:e'] as const;
+const colossusRoom = (edit: (colossus: ColossusState) => ColossusState = (c) => c): RunState => {
+    const base = room(COLOSSUS_FLOOR, { level: 7, board: { floorTag: 'boss' } });
+    const raised = raiseColossus(base.board!, { runSeed: base.runSeed, rulesVersion: base.runRulesVersion });
+    return { ...base, board: { ...raised, colossus: raised.colossus ? edit(raised.colossus) : undefined } };
+};
+const colossusIs =
+    (want: Partial<Pick<ColossusState, 'hits' | 'chips' | 'turnsLeft' | 'status'>> & { showing?: TileSuit }) =>
+    (run: RunState): string | null => {
+        const colossus = run.board?.colossus;
+        if (!colossus) return 'no Colossus stands over the floor';
+        if (want.showing && colossusElement(colossus) !== want.showing) return `it shows ${colossusElement(colossus)}, expected ${want.showing}`;
+        for (const key of ['hits', 'chips', 'turnsLeft', 'status'] as const) {
+            if (want[key] !== undefined && colossus[key] !== want[key]) return `its ${key} is ${colossus[key]}, expected ${want[key]}`;
+        }
+        return null;
+    };
+const colossusEventIs = (kind: NonNullable<RunState['lastColossusEvent']>['kind']) => (run: RunState) =>
+    run.lastColossusEvent?.kind === kind ? null : `the Colossus beat was ${run.lastColossusEvent?.kind ?? 'nothing'}, expected ${kind}`;
+
+/** The Colossus's checkerboard without the boss, and one pair marked odd (`odd-card-rules.ts`). */
+const oddRoom = (mark: (tile: Tile) => Tile, pairKey = 'a'): RunState =>
+    room(COLOSSUS_FLOOR, { level: 6, tiles: (tiles) => tiles.map((t) => (t.pairKey === pairKey ? mark(t) : t)) });
+const suitIs = (pairKey: string, suit: TileSuit, next?: TileSuit) => (run: RunState) => {
+    const halves = (run.board?.tiles ?? []).filter((t) => t.pairKey === pairKey);
+    if (halves.some((t) => t.suit !== suit)) return `pair ${pairKey} is ${halves.map((t) => t.suit).join('/')}, expected ${suit}`;
+    return next === undefined || halves.every((t) => t.turncoat === next) ? null : `pair ${pairKey} promises ${halves.map((t) => t.turncoat).join('/')}, expected ${next}`;
+};
+const sandIs = (pairKey: string, sand: number | undefined) => (run: RunState) => {
+    const halves = (run.board?.tiles ?? []).filter((t) => t.pairKey === pairKey);
+    return halves.every((t) => t.hourglass === sand) ? null : `pair ${pairKey} holds ${halves.map((t) => t.hourglass).join('/')} turns of sand, expected ${sand}`;
 };
 
 // ---- Expectations ----------------------------------------------------------------------------
@@ -1966,6 +2006,103 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'the calm floor strikes back: both missed cards are held in vines',
                 expect: expectAll(realmEventIs('snare'), (r) => (tileById(r, 'b-1')?.vined === true && tileById(r, 'd-1')?.vined === true ? null : 'the missed cards are not vined'), (r) => (r.realmBacklashesThisFloor === 1 ? null : `backlashes ${r.realmBacklashesThisFloor}`), finishable)
             },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'colossus',
+        title: 'Colossus: the boss card',
+        mechanic: 'On a boss floor a great card stands over the board. It shows one element and turns to the next every turn. Match its element for a hit; any other match is a chip, and two chips are a hit. Fell it in time and it pays.',
+        graphMechanicIds: ['hazard.colossus'],
+        tryThis: 'It shows fire, then water, then fire. Match a fire pair (a) now for a hit. Then match off its element and watch a chip land instead.',
+        build: () => colossusRoom(),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'fire on fire is a hit, and it turns to water', expect: expectAll(colossusEventIs('hit'), colossusIs({ hits: 1, chips: 0, turnsLeft: 5, showing: 'tide', status: 'standing' }), (r) => (r.colossusHitsThisFloor === 1 ? null : `hits counted ${r.colossusHitsThisFloor}`)) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss lands nothing, but it still turns, back to fire, and its clock runs', expect: expectAll(colossusEventIs('turn'), colossusIs({ hits: 1, turnsLeft: 4, showing: 'ember' })) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'water while it shows fire is a chip, not a hit', expect: expectAll(colossusEventIs('chip'), colossusIs({ hits: 1, chips: 1, turnsLeft: 3, showing: 'tide' })) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'a second chip makes the last hit: it falls and pays score and gold for both', expect: expectAll(colossusEventIs('felled'), colossusIs({ hits: 0, status: 'felled' }), (r, before) => (runGold(r) - runGold(before) >= 4 ? null : `gold rose by ${runGold(r) - runGold(before)}, expected its 4`), (r) => (r.colossiFelledThisRun === 1 ? null : `felled counted ${r.colossiFelledThisRun}`)) },
+            { step: { do: 'match', pairKey: 'd' }, says: 'felled, it is out of the fight: a match is only a match', expect: expectAll(colossusIs({ status: 'felled' }), colossusEventIs('felled')) },
+            { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'colossus-split',
+        title: 'Colossus: out of time, it splits',
+        mechanic: 'A Colossus still standing when its turns run out splits: one new pair for each hit it had left, two at most, dealt into cleared cells and shown face up until the next flip. It never leaves a floor that cannot be finished.',
+        graphMechanicIds: ['hazard.colossus'],
+        tryThis: 'It has two turns left and two hits in it. Land one hit (a), then miss: it splits into one pair, in the cells the fire pair left, face up.',
+        build: () => colossusRoom((colossus) => ({ ...colossus, turnsLeft: 2 })),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'a hit, with one turn left', expect: colossusIs({ hits: 1, turnsLeft: 1, status: 'standing' }) },
+            {
+                step: { do: 'miss', a: 'c-1', b: 'd-1' },
+                says: 'time is up: it splits into one pair, where the matched pair was, shown face up',
+                expect: expectAll(
+                    colossusEventIs('split'),
+                    colossusIs({ status: 'split', turnsLeft: 0 }),
+                    (r) => (r.colossusSplitsThisFloor === 1 ? null : `splits counted ${r.colossusSplitsThisFloor}`),
+                    (r, before) => (r.board!.tiles.length === before.board!.tiles.length ? null : 'the board grew instead of reusing the cleared cells'),
+                    (r) => {
+                        const shards = r.board!.tiles.filter((t) => t.pairKey === '7-colossus-0');
+                        return shards.length === 2 && shards.every((t) => t.state === 'hidden' && (r.realmLitTileIds ?? []).includes(t.id)) ? null : 'the split pair is not two face-down cards shown lit';
+                    },
+                    (r) => (r.board!.matchedPairs === 0 ? null : `matched pairs ${r.board!.matchedPairs}, expected the reused pair uncounted`),
+                    finishable
+                )
+            },
+            { step: { do: 'match', pairKey: '7-colossus-0' }, says: 'the split pair is a pair like any other, and it does not split twice', expect: expectAll(isGone('7-colossus-0'), colossusIs({ status: 'split' })) },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'turncoat',
+        title: 'Turncoat: the pair that changes element',
+        mechanic: 'A Turncoat pair turns to its next element every turn, match or miss, both halves together. Its back shows what it is; its badge shows what it will be. It counts as what it is when it is matched.',
+        graphMechanicIds: ['board.turncoat_pair'],
+        tryThis: 'Pair a is a Turncoat: fire now, water next. Miss anything and watch both of its backs turn to water; match anything and they turn back.',
+        build: () => oddRoom((t) => ({ ...t, turncoat: 'tide' as const })),
+        script: [
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss is a turn: both halves are water now, and promise fire', expect: expectAll(suitIs('a', 'tide', 'ember'), (r) => (r.turncoatTurnsThisFloor === 1 ? null : `turns counted ${r.turncoatTurnsThisFloor}`), finishable) },
+            { step: { do: 'match', pairKey: 'h' }, says: 'a match is a turn too: it is fire again', expect: expectAll(suitIs('a', 'ember', 'tide'), finishable) },
+            { step: { do: 'peek', tileId: 'b-1' }, says: 'a peek is not a turn, and it does not turn', expect: expectAll(suitIs('a', 'ember', 'tide'), costsNothing) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'matched, it is a pair like any other and leaves its mark behind', expect: expectAll(isGone('a'), (r) => (r.board!.tiles.some((t) => t.turncoat != null) ? 'a gone card is still a Turncoat' : null)) },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'hourglass',
+        title: 'Hourglass: a prize on a clock',
+        mechanic: 'An Hourglass pair shows turns of sand on its back. Every turn spends one. Match the pair while sand is left and it pays three gold and sixty score.',
+        graphMechanicIds: ['findable.hourglass_pair'],
+        tryThis: 'Pair a holds three turns of sand. Take a turn elsewhere and watch it drop to two, then match it: the prize is yours.',
+        build: () => oddRoom((t) => ({ ...t, hourglass: 3 })),
+        script: [
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a turn spends a turn of sand', expect: sandIs('a', 2) },
+            { step: { do: 'peek', tileId: 'b-1' }, says: 'a peek is not a turn: the sand holds', expect: expectAll(sandIs('a', 2), costsNothing) },
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'matched with sand left, it pays three gold and sixty score over a plain match',
+                expect: expectAll(
+                    isGone('a'),
+                    (r) => (r.lastHourglassEvent?.kind === 'caught' ? null : `the hourglass beat was ${r.lastHourglassEvent?.kind ?? 'nothing'}`),
+                    (r, before) => (runGold(r) - runGold(before) >= 3 ? null : `gold rose by ${runGold(r) - runGold(before)}`),
+                    (r) => (r.hourglassesCaughtThisRun === 1 ? null : `caught counted ${r.hourglassesCaughtThisRun}`),
+                    matchPaysBeside('a', 60, (before) => ({ ...before, board: { ...before.board!, tiles: before.board!.tiles.map(({ hourglass: _sand, ...t }) => t) } }))
+                )
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'hourglass-runs-out',
+        title: 'Hourglass: the sand runs out',
+        mechanic: 'An Hourglass whose sand runs out loses its prize and nothing else: it is a pair like any other from then on.',
+        graphMechanicIds: ['findable.hourglass_pair'],
+        tryThis: 'Pair a has one turn of sand. Take a turn elsewhere: the mark is gone, and matching it pays what any pair pays.',
+        build: () => oddRoom((t) => ({ ...t, hourglass: 1 })),
+        script: [
+            { step: { do: 'match', pairKey: 'h' }, says: 'the last of the sand goes with the turn, and the mark with it', expect: expectAll(sandIs('a', undefined), isStanding('a'), (r) => (r.lastHourglassEvent?.kind === 'spent' && r.hourglassesSpentThisFloor === 1 ? null : 'the hourglass did not report running out')) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'it matches as a plain pair: no prize, no penalty', expect: expectAll(isGone('a'), (r) => ((r.hourglassesCaughtThisRun ?? 0) === 0 ? null : 'a spent hourglass paid'), (r) => (r.lastHourglassEvent?.kind === 'spent' ? null : 'a second hourglass beat fired')) },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     }

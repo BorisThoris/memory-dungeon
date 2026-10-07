@@ -1,4 +1,4 @@
-import type { Tile } from '../../shared/contracts';
+import type { Tile, TileSuit } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 /** Gameplay state shared by detailed cards and the distant-card atlas. */
@@ -11,6 +11,10 @@ export interface RealmTileMark {
     rime?: boolean;
     seeded?: number;
     openingLocked?: boolean;
+    /** A Turncoat (`odd-card-rules.ts`): the element this card turns to next. */
+    turncoat?: TileSuit;
+    /** An Hourglass: turns of sand left on its prize. */
+    hourglass?: number;
 }
 
 export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark | null => {
@@ -23,9 +27,11 @@ export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark
         bloom: tile.vined === true && tile.bloom === true,
         rime: tile.rime === true,
         seeded: Math.min(2, runNonNegativeInteger(tile.seeded)),
-        openingLocked
+        openingLocked,
+        ...(tile.turncoat != null ? { turncoat: tile.turncoat } : {}),
+        ...(tile.hourglass != null ? { hourglass: runNonNegativeInteger(tile.hourglass) } : {})
     };
-    return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded || openingLocked ? mark : null;
+    return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded || openingLocked || mark.turncoat || mark.hourglass ? mark : null;
 };
 
 export const cardStatusBlocksTurning = (mark: RealmTileMark | null): boolean =>
@@ -33,4 +39,4 @@ export const cardStatusBlocksTurning = (mark: RealmTileMark | null): boolean =>
 
 /** The cache key for a mark's painted texture: two cards with the same marks share one canvas. */
 export const realmTileMarkKey = (mark: RealmTileMark): string =>
-    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.openingLocked ? ':locked' : ''}`;
+    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.turncoat ? ':turn-' + mark.turncoat : ''}${mark.hourglass ? ':sand' + mark.hourglass : ''}${mark.openingLocked ? ':locked' : ''}`;

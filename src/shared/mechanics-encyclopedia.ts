@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 80 as const;
+export const ENCYCLOPEDIA_VERSION = 81 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -600,6 +600,26 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Your **combo carries from floor to floor until you miss** - the chain, its tier, its cascade and early-start momentum, all of it. A floor cleared at Fever opens the next one at Fever, and the only thing that ends it is a miss. ' +
             'Past Fever the combo keeps heating: **Warm** from 3, **Hot** from 6, **Blazing** from 10, **Inferno** from 16, **Legendary** from 25. The heat changes nothing a rule reads - the rungs still decide what a break takes - but the whole game answers it: flames climb the chain rail, the combo number burns, embers rise off the cards, the torches and the ring go wild, lightning through every pop forks and thickens, and the edges of the screen glow in the stage\'s colour. ' +
             'Every run has a **temper**, rolled from its seed: most burn **Ember**; some run **Frost**, and the combo goes cold instead - Chill, Cold, Frozen, Glacial, Absolute Zero - with snow drifting down off the cards; some run **Storm**. One run in fifty is **Prismatic**, the rare one: every colour at once, and its stamps say so. The temper changes nothing a rule reads, and on a floor in a realm the heat burns in the realm\u2019s own element instead - frost, ember, storm, tide or grove. A combo of fifty, and of every hundred, gets a stamp of its own.'
+    },
+    {
+        id: 'odd_cards',
+        title: 'Odd cards: the Turncoat and the Hourglass',
+        description:
+            'Some floors deal a pair that is not like the others. Each wears its mark on its back and is named beside the board, so there is nothing to remember about it. ' +
+            'A **Turncoat** changes element **every turn**, match or miss, both halves together. Its back is the element it is now; its **turned corner** shows the one it becomes next. It counts as what it is at the moment you match it - for a burst, for a cast, and for a **Colossus**, which makes it the one pair you can hold back for the element you need. It turns only to elements another pair on the floor still holds, and while the realm has hold of it - burning, frozen, snowed over or bound - it does not turn. Floors from five on can have one, and a floor a Colossus stands over always does. ' +
+            'An **Hourglass** shows **turns of sand**. Every turn spends one. Match its pair, or burst it, while sand is left and it pays **3 gold and 60 score**. When the sand runs out the mark is gone and the pair is a plain pair: you lose the prize and nothing else. A bomb takes the pair without the prize. Floors from three on can have one.'
+    },
+    {
+        id: 'colossus',
+        title: 'The Colossus',
+        description:
+            'On a **boss floor** a great card stands over the board: the **Colossus**. It shows one element and **turns to the next every turn**, match or miss. ' +
+            'The order is fixed when the floor is dealt and is all on the card: only the elements this floor\'s deck holds, the one it shows now, the one it shows next. Nothing about it is rolled while you play. ' +
+            '**Match a pair of the element it is showing and it takes a hit.** A pair a reaction bursts counts too, but **a turn lands one blow** however many pairs it took. A match with none of its element is a **chip**, and two chips are a hit, so taking a pair you know is never wasted - but waiting a turn for the right element lands twice as hard. ' +
+            'It takes two hits on a small floor, three on most, four on a large one, and gives you twice that many turns and two more. The card counts both down. ' +
+            '**Out of turns, it splits**: one new pair for every hit it still had in it, two at most, dealt into cells you have already cleared and **shown face up until your next flip** - more floor to clear, but nothing you have to hunt for. It splits once and is gone. ' +
+            '**Felled**, it pays 90 score and 2 gold for every hit it took. It never holds the floor: clear every pair and the floor ends whether it stands or not. ' +
+            'A tool that takes no turn - a bomb, a peek, a shuffle - does not turn it.'
     },
     {
         id: 'realms',

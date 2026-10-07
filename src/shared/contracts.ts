@@ -16,7 +16,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 61: automatic camp rewards without a shop stop. */
-export const GAME_RULES_VERSION = 61;
+export const GAME_RULES_VERSION = 62;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -382,6 +382,10 @@ export interface Tile {
     findableKind?: FindableKind;
     /** Optional lightweight pair modifier: adds match rewards or mismatch drawbacks without changing pair identity. */
     tileTraitKind?: TileTraitKind;
+    /** A Turncoat (`odd-card-rules.ts`): this pair's element turns every turn, and this is what it turns to next. */
+    turncoat?: TileSuit;
+    /** An Hourglass (`odd-card-rules.ts`): turns of sand left; matched before it runs out, the pair pays a prize. */
+    hourglass?: number;
     /** Frost realm: turns this card stays frozen. A frozen card cannot be turned. */
     frost?: number;
     /** Frost realm: a blizzard snowed over this card's back, so its suit cannot be read until it is turned. */
@@ -490,6 +494,54 @@ export interface BoardState {
     actFloorCount?: number | null;
     biomeTitle?: string | null;
     biomeTone?: string | null;
+    /** The boss over a boss floor (`colossus-rules.ts`); absent on every other floor. Not on the grid. */
+    colossus?: ColossusState;
+}
+
+/**
+ * The Colossus (`colossus-rules.ts`): a great card that stands over a boss floor, changes element
+ * every turn in a fixed order, takes a hit from a match of the element it shows, and splits into
+ * new pairs if it is not felled in time.
+ */
+export interface ColossusState {
+    /** The elements it turns through, in order: the ones this floor's deck holds. Fixed when the floor is dealt. */
+    cycle: TileSuit[];
+    /** Turns it has stood; it shows `cycle[step % cycle.length]`. */
+    step: number;
+    /** Hits it still takes to fell. */
+    hits: number;
+    hitsMax: number;
+    /** Off-element matches banked toward a hit (`COLOSSUS_CHIPS_PER_HIT` make one). */
+    chips: number;
+    /** Turns before it splits. */
+    turnsLeft: number;
+    turnsMax: number;
+    status: 'standing' | 'felled' | 'split';
+    /** The pairs it split into, once it has. */
+    splitPairKeys?: string[];
+}
+
+/** What the Colossus did on a turn, for the HUD to say once. */
+/** An Hourglass pair caught with sand left, or run out (`odd-card-rules.ts`). */
+export interface HourglassEvent {
+    key: string;
+    kind: 'caught' | 'spent';
+    pairs: number;
+    gold: number;
+    score: number;
+}
+
+export interface ColossusEvent {
+    key: string;
+    kind: 'turn' | 'chip' | 'hit' | 'felled' | 'split';
+    /** The element it was showing when the turn resolved. */
+    element: TileSuit;
+    /** Hits this turn landed. */
+    hits: number;
+    hitsLeft: number;
+    turnsLeft: number;
+    /** New pairs a split dealt. */
+    pairs: number;
 }
 
 export interface SessionStats {
@@ -948,6 +1000,18 @@ export interface RunState {
     lastElementCastEvent?: RealmEvent | null;
     /** Storm: the cards lightning left lit; they show their faces until the next flip, like the lantern's. */
     realmLitTileIds?: string[];
+    /** The Colossus (`colossus-rules.ts`): hits landed on it this floor, splits this floor, and those felled this run. */
+    colossusHitsThisFloor?: number;
+    colossusSplitsThisFloor?: number;
+    colossiFelledThisRun?: number;
+    /** The odd cards (`odd-card-rules.ts`): times a Turncoat turned this floor, Hourglass prizes caught this run, and Hourglasses that ran out this floor. */
+    turncoatTurnsThisFloor?: number;
+    hourglassesCaughtThisRun?: number;
+    hourglassesSpentThisFloor?: number;
+    /** What an Hourglass last did, for the HUD to say once. */
+    lastHourglassEvent?: HourglassEvent | null;
+    /** What the Colossus last did, for the HUD to say once. */
+    lastColossusEvent?: ColossusEvent | null;
 }
 
 export type AchievementState = Record<AchievementId, boolean>;

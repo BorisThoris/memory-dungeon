@@ -17,6 +17,8 @@ import { runArray } from './run-array-guards';
 import { enterRealmFloor, nextFloorRealmDoor } from './realm-rules';
 import { applyRealmChill } from './realm-carryover-rules';
 import { automaticCampReward } from './automatic-camp-rules';
+import { raiseColossus } from './colossus-rules';
+import { dealOddCards } from './odd-card-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -54,7 +56,11 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // The next floor is in the realm the player walked into at the clear (`realm-rules.ts`).
     const realmEntry = enterRealmFloor(run, builtBoard, nextFloorRealmDoor(run));
     // The cold a frozen floor sent on: cards that start this one frozen (`realm-carryover-rules.ts`).
-    const nextBoard = applyRealmChill(realmEntry.board, run.realmChill, run.runSeed, run.runRulesVersion);
+    const chilledBoard = applyRealmChill(realmEntry.board, run.realmChill, run.runSeed, run.runRulesVersion);
+    // A boss floor's Colossus stands once the deck's elements are final: its cycle is those elements (`colossus-rules.ts`).
+    const bossBoard = raiseColossus(chilledBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
+    // The floor's odd cards, a Turncoat and an Hourglass, on pairs nothing else has marked (`odd-card-rules.ts`).
+    const nextBoard = dealOddCards(bossBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 

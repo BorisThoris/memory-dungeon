@@ -29,6 +29,8 @@ describe('the run soak', () => {
         // Rules 53 reseeded the deal and strengthened holds. Keep a real Inferno/void witness
         // alongside the broad sample instead of relying on the first twelve seeds to hit it.
         reports.push(soakRun({ seed: 278_247, player: SOAK_PLAYERS.careful, playerName: 'careful' }));
+        // The careful player outruns a Colossus's clock; one that plays like most people does not always.
+        for (const seed of [34, 44]) reports.push(soakRun({ seed, player: SOAK_PLAYERS.average, playerName: 'average' }));
         expect(reports.some((report) => report.purchases > 0), 'no run ever shopped at a stop').toBe(true);
         expect(reports.some((report) => report.bombsUsed > 0), 'no run ever threw a bomb').toBe(true);
         /* The five run-economy mechanics have no row in the floor census (the reference player never
@@ -39,6 +41,16 @@ describe('the run soak', () => {
         expect(reports.every((report) => report.focusesForged === 0 && report.essenceFound === 0), 'removed elemental economy is still active').toBe(true);
         // The void: a careful player reaches Inferno, misses, and the black hole spits new pairs.
         expect(reports.some((report) => report.voidSpews > 0), 'the void never spat').toBe(true);
+        // The Colossus: boss floors raise one, hits land on it, the careful fell it and the sloppy run out its clock.
+        expect(reports.some((report) => report.colossiRaised > 0), 'no boss floor ever raised a Colossus').toBe(true);
+        expect(reports.some((report) => report.colossusHits > 0), 'no hit ever landed on a Colossus').toBe(true);
+        expect(reports.some((report) => report.colossiFelled > 0), 'no Colossus was ever felled').toBe(true);
+        expect(reports.some((report) => report.colossusSplits > 0), 'no Colossus ever split').toBe(true);
+        // The odd cards: a Turncoat is dealt and turns, an Hourglass is dealt, caught by some and run out on others.
+        expect(reports.some((report) => report.turncoatFloors > 0 && report.turncoatTurns > 0), 'no Turncoat was ever dealt and turned').toBe(true);
+        expect(reports.some((report) => report.hourglassFloors > 0), 'no Hourglass was ever dealt').toBe(true);
+        expect(reports.some((report) => report.hourglassesCaught > 0), 'no Hourglass prize was ever caught').toBe(true);
+        expect(reports.some((report) => report.hourglassesSpent > 0), 'no Hourglass ever ran out').toBe(true);
         // The careful player runs hot: the combo's perks change the board on some of its matches.
         expect(reports.some((report) => report.heatPerkTurns > 0), 'no run ever played a match with a heat perk on').toBe(true);
         // The Zone: the careful player reaches Inferno and ignites it; some of its pairs match.

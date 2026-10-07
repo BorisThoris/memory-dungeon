@@ -34,6 +34,8 @@ import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
+import { applyColossusTurnToRun, resolveColossusTurn } from './colossus-rules';
+import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 
@@ -344,6 +346,19 @@ export const createResolveBoardTurnTransition = ({
         };
 
         Object.assign(nextRun, applyRealmTurnToRun(nextRun, realmTurn));
+        /*
+         * The Colossus takes the turn last (`colossus-rules.ts`), on the board everything else has
+         * finished with: a hit for a pair of the element it was showing, a chip for any other, and
+         * its clock.
+         */
+        if (nextRun.board) {
+            Object.assign(
+                nextRun,
+                applyColossusTurnToRun(nextRun, resolveColossusTurn({ board: nextRun.board, outcome: 'match', pairsBySuit, turnsThisFloor: progress.turnsThisFloor }))
+            );
+            // The odd cards after it: a Turncoat matched this turn counted as what it was (`odd-card-rules.ts`).
+            Object.assign(nextRun, applyOddCardTurnToRun(nextRun, resolveOddCardTurn({ board: nextRun.board!, turnsThisFloor: progress.turnsThisFloor })));
+        }
         // The rung the HUD now shows, read the way it reads it, kept as the floor's and the run's peak.
         const shownTier = runChainTier(nextRun);
         const cleanedNextRun = releaseStrandedStasisBlock({

@@ -57,7 +57,7 @@ describe('gameplay interaction graph', () => {
     });
 
     it('keeps the executable graph connected and guarded', () => {
-        expect(gameplayInteractionGraph.version).toBe(38);
+        expect(gameplayInteractionGraph.version).toBe(39);
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
 

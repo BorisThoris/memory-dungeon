@@ -1,0 +1,66 @@
+/* The odd cards' key: one quiet line each, above the board. */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+    flex: 0 0 auto;
+    align-self: center;
+    width: min(100%, 44rem);
+    margin: 0 0 0.25rem;
+    padding: 0;
+    list-style: none;
+    position: relative;
+    z-index: 6;
+}
+
+.entry {
+    --odd-hue: var(--theme-gold-bright, #f0c869);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+    padding: 0.16rem 0.5rem 0.16rem 0.2rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--odd-hue) 50%, #0b0d12);
+    background: color-mix(in srgb, var(--theme-panel-alt, #161a22) 90%, var(--odd-hue) 10%);
+    font-size: 0.75rem;
+    line-height: 1.25;
+    color: var(--theme-text-muted, #a9a392);
+}
+
+.mark {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--odd-hue) 78%, #000);
+    color: #10191f;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.name {
+    flex: 0 0 auto;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--odd-hue) 60%, #fff 40%);
+}
+
+.line {
+    min-width: 0;
+}
+
+/* A phone has no room for the sentence: the mark and the name stay, and the sentence is still read out. */
+@media (max-width: 560px), (max-height: 640px) {
+    .line {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+}

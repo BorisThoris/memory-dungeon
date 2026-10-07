@@ -128,6 +128,11 @@ import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sw
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
 import { RealmScreenOverlay } from './RealmScreenOverlay';
 import { VOID_SPEW_COPY } from '../copy/voidSpewCopy';
+import { COLOSSUS_COPY, colossusBeatLine, colossusCalloutSub } from '../copy/colossusBeat';
+import { colossusElement } from '../../shared/colossus-rules';
+import { ColossusCard } from './ColossusCard';
+import { OddCardLegend } from './OddCardLegend';
+import { hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
@@ -309,6 +314,39 @@ const useVoidCallouts = (run: RunState): ScreenCallout[] => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- retain the keyed visual event after the run advances
         setCallouts((current) => [...current, { key: `void:${level}:${spews}`, kind: 'broken' as const, size: 'major' as const, tone: 'miss' as const, title: VOID_SPEW_COPY.title, sub: VOID_SPEW_COPY.sub }].slice(-4));
     }, [level, spews]);
+    return callouts;
+};
+
+/** The Hourglass's stamp (`odd-card-rules.ts`): a prize caught. Keyed on the event, so a restore replays nothing. */
+const useHourglassCallouts = (run: RunState): ScreenCallout[] => {
+    const event = run.lastHourglassEvent ?? null;
+    const previous = useRef<string | null | undefined>(undefined);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        const first = previous.current === undefined;
+        const fresh = !first && event !== null && event.key !== previous.current;
+        previous.current = event?.key ?? null;
+        if (!fresh || !event || event.kind !== 'caught') return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- retain the keyed visual event after the run advances
+        setCallouts((current) => [...current, { key: event.key, kind: 'pickup' as const, size: 'minor' as const, tone: 'gold' as const, title: ODD_CARD_COPY.caughtTitle, sub: hourglassCalloutSub(event) }].slice(-4));
+    }, [event]);
+    return callouts;
+};
+
+/** The Colossus's two stamps (`colossus-rules.ts`): felled, and split. Keyed on the event, so a restore replays neither. */
+const useColossusCallouts = (run: RunState): ScreenCallout[] => {
+    const event = run.lastColossusEvent ?? null;
+    const previous = useRef<string | null | undefined>(undefined);
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        const first = previous.current === undefined;
+        const fresh = !first && event !== null && event.key !== previous.current;
+        previous.current = event?.key ?? null;
+        if (!fresh || !event || (event.kind !== 'felled' && event.kind !== 'split')) return;
+        const felled = event.kind === 'felled';
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- retain the keyed visual event after the run advances
+        setCallouts((current) => [...current, { key: event.key, kind: felled ? ('milestone' as const) : ('broken' as const), size: 'major' as const, tone: felled ? ('gold' as const) : ('miss' as const), title: felled ? COLOSSUS_COPY.felledTitle : COLOSSUS_COPY.splitTitle, sub: colossusCalloutSub(event) }].slice(-4));
+    }, [event]);
     return callouts;
 };
 
@@ -1110,6 +1148,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const zoneCallouts = useZoneCallouts(run);
     const realmCallouts = useRealmCallouts(run);
     const voidCallouts = useVoidCallouts(run);
+    const colossusCallouts = useColossusCallouts(run);
+    const hourglassCallouts = useHourglassCallouts(run);
     // The realm on every face-down card (`RealmAmbientBackPlane`), and its strength by the realm's severity.
     const ambienceRealm = run.status === 'playing' || run.status === 'resolving' || run.status === 'memorize' ? runRealmId(run) : null;
     const ambienceSecondary = runRealmSecondaryId(run);
@@ -1166,11 +1206,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ...purchaseCallouts,
             ...zoneCallouts,
             ...realmCallouts,
-            ...voidCallouts
+            ...voidCallouts,
+            ...colossusCallouts,
+            ...hourglassCallouts
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
     );
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1408,6 +1450,55 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             );
         }
     }, [activeSeatLabel, chainLostLabel, chainLostLength, queuePoliteAnnouncement]);
+
+    // The Colossus's turn, said once per turn of the fight (`colossusBeat.ts`); the one a run opened on is not replayed.
+    const colossus = run.board?.colossus ?? null;
+    const colossusEvent = colossus && run.lastColossusEvent?.key.startsWith(`colossus:${run.board?.level}:`) ? run.lastColossusEvent : null;
+    const colossusEventKey = colossusEvent?.key ?? null;
+    const saidColossusKey = useRef<string | null | undefined>(undefined);
+    useEffect(() => {
+        if (saidColossusKey.current === undefined) {
+            saidColossusKey.current = colossusEventKey;
+            return;
+        }
+        if (!colossusEventKey || colossusEventKey === saidColossusKey.current || !colossusEvent || !colossus) return;
+        saidColossusKey.current = colossusEventKey;
+        queuePoliteAnnouncement(colossusBeatLine(colossusEvent, colossus.status === 'standing' ? colossusElement(colossus) : null), { dedupeKey: colossusEventKey });
+    }, [colossusEventKey, colossusEvent, colossus, queuePoliteAnnouncement]);
+
+    // The odd cards' key, and the Hourglass said once when it is caught or runs out (`oddCardBeat.ts`).
+    const boardTilesForLegend = run.board?.tiles;
+    const oddCardEntries = useMemo(() => oddCardLegend(boardTilesForLegend ?? []), [boardTilesForLegend]);
+    const hourglassEvent = run.lastHourglassEvent?.key.startsWith(`hourglass:${run.board?.level}:`) ? run.lastHourglassEvent : null;
+    const hourglassEventKey = hourglassEvent?.key ?? null;
+    const saidHourglassKey = useRef<string | null | undefined>(undefined);
+    useEffect(() => {
+        if (saidHourglassKey.current === undefined) {
+            saidHourglassKey.current = hourglassEventKey;
+            return;
+        }
+        if (!hourglassEventKey || hourglassEventKey === saidHourglassKey.current || !hourglassEvent) return;
+        saidHourglassKey.current = hourglassEventKey;
+        queuePoliteAnnouncement(hourglassAnnouncement(hourglassEvent), { dedupeKey: hourglassEventKey });
+    }, [hourglassEventKey, hourglassEvent, queuePoliteAnnouncement]);
+
+    const boardCrownShown = !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0);
+    const boardCrownRef = useRef<HTMLDivElement | null>(null);
+    // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
+    useLayoutEffect(() => {
+        const crown = boardCrownRef.current;
+        const hud = shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]');
+        if (!boardCrownShown || !crown || !hud) return undefined;
+        const place = (): void => {
+            const parent = (crown.offsetParent as HTMLElement | null)?.getBoundingClientRect();
+            crown.style.top = `${Math.max(0, Math.round(hud.getBoundingClientRect().bottom - (parent?.top ?? 0) + 4))}px`;
+        };
+        place();
+        if (typeof ResizeObserver === 'undefined') return undefined;
+        const observer = new ResizeObserver(place);
+        observer.observe(hud);
+        return () => observer.disconnect();
+    }, [boardCrownShown]);
 
     const showForgivenessHint = Boolean(
         run.board &&
@@ -1850,6 +1941,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 data-testid="gambit-opportunity-hint"
                             >
                                 {GAMBIT_OPPORTUNITY_HINT_LINE}
+                            </div>
+                        ) : null}
+
+                        {/* The board's crown: the Colossus and the odd cards' key, hung under the HUD. The board
+                            fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
+                        {boardCrownShown ? (
+                            <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-testid="board-crown">
+                                {colossus ? <ColossusCard colossus={colossus} event={colossusEvent} reduceMotion={reduceMotion} /> : null}
+                                <OddCardLegend entries={oddCardEntries} />
                             </div>
                         ) : null}
 

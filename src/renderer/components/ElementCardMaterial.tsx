@@ -27,7 +27,8 @@ export function ElementCardMaterial({ suit, faceZ, front, charge }: {
     return <group position={[0, 0, front ? faceZ : -faceZ]} rotation={[0, front ? 0 : Math.PI, 0]}>
         <mesh position={[0, 0, 0.052]} raycast={noopMeshRaycast} renderOrder={11}>
             <planeGeometry args={[CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT]} />
-            <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader}
+            {/* Keyed on the element: a material takes its uniforms once, and a Turncoat's card changes element in place. */}
+            <shaderMaterial key={suit} uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader}
                 transparent depthWrite={false} toneMapped={false} />
         </mesh>
     </group>;

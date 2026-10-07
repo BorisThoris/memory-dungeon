@@ -1,4 +1,5 @@
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
+import { COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
@@ -85,6 +86,17 @@ export interface SoakRunReport {
     essenceFound: number;
     /** Misses that opened the void and spat new pairs onto a reshuffled board. */
     voidSpews: number;
+    /** The Colossus (`colossus-rules.ts`): boss floors it stood over, hits landed on it, times it fell, times it split. */
+    colossiRaised: number;
+    colossusHits: number;
+    colossiFelled: number;
+    colossusSplits: number;
+    /** The odd cards (`odd-card-rules.ts`): floors dealt a Turncoat, times one turned, floors dealt an Hourglass, prizes caught, and Hourglasses that ran out. */
+    turncoatFloors: number;
+    turncoatTurns: number;
+    hourglassFloors: number;
+    hourglassesCaught: number;
+    hourglassesSpent: number;
     /** Jokers spent: every fall in wildMatchesRemaining. */
     wildMatches: number;
     /** Matches resolved with a heat perk on: every rise in heatPerkTurnsThisFloor. */
@@ -142,6 +154,56 @@ const nonNegativeInteger = (value: unknown): boolean => typeof value === 'number
 
 /** Every invariant, in the order a failure is most useful to read. */
 export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
+    'a standing Colossus has hits and turns left, and an order of two elements or more': (_b, run) => {
+        const colossus = run.board?.colossus;
+        if (!colossus || colossus.status !== 'standing') return null;
+        if (colossus.hits < 1 || colossus.hits > colossus.hitsMax) return `standing with ${colossus.hits} of ${colossus.hitsMax} hits`;
+        if (colossus.turnsLeft < 1 || colossus.turnsLeft > colossus.turnsMax) return `standing with ${colossus.turnsLeft} of ${colossus.turnsMax} turns`;
+        if (colossus.chips < 0 || colossus.chips >= COLOSSUS_CHIPS_PER_HIT) return `holding ${colossus.chips} chips`;
+        return new Set(colossus.cycle).size >= 2 ? null : `its order is ${colossus.cycle.join(',')}`;
+    },
+    'a Colossus splits once, into two pairs at most, and only out of turns': (_b, run) => {
+        const colossus = run.board?.colossus;
+        if ((run.colossusSplitsThisFloor ?? 0) > 1) return `split ${run.colossusSplitsThisFloor} times on one floor`;
+        if (!colossus || colossus.status !== 'split') return null;
+        const pairs = colossus.splitPairKeys?.length ?? 0;
+        if (pairs < 1 || pairs > COLOSSUS_MAX_SPLIT_PAIRS || pairs > colossus.hits) return `split into ${pairs} pairs with ${colossus.hits} hits left`;
+        return colossus.turnsLeft === 0 ? null : `split with ${colossus.turnsLeft} turns left`;
+    },
+    'the Colossus moves only when a turn is counted': (before, run) => {
+        if (!before) return null;
+        const was = before.board?.colossus;
+        const now = run.board?.colossus;
+        if (!was || !now || before.board?.level !== run.board?.level || before.turnsThisFloor !== run.turnsThisFloor) return null;
+        return was.step === now.step && was.turnsLeft === now.turnsLeft && was.hits === now.hits && was.status === now.status ? null : 'it changed without a turn';
+    },
+    'a Turncoat pair is whole: two halves, one element, one promise, and only on standing cards': (_b, run) => {
+        if (!run.board) return null;
+        for (const [key, halves] of pairsOf(run.board)) {
+            if (!halves.some((tile) => tile.turncoat != null)) continue;
+            if (halves.some(isGone)) return `pair ${key} is gone and still a Turncoat`;
+            if (halves.some((tile) => tile.turncoat !== halves[0]!.turncoat || tile.suit !== halves[0]!.suit)) return `pair ${key} is split: ${halves.map((t) => `${t.suit}>${t.turncoat}`).join(' / ')}`;
+        }
+        return null;
+    },
+    'an Hourglass pair is whole, standing, and has sand': (_b, run) => {
+        if (!run.board) return null;
+        for (const [key, halves] of pairsOf(run.board)) {
+            if (!halves.some((tile) => tile.hourglass != null)) continue;
+            if (halves.some(isGone)) return `pair ${key} is gone and still an Hourglass`;
+            if (halves.some((tile) => tile.hourglass !== halves[0]!.hourglass || !(tile.hourglass! >= 1))) return `pair ${key} holds ${halves.map((t) => t.hourglass).join(' / ')} turns of sand`;
+        }
+        return null;
+    },
+    'the odd cards move only when a turn is counted': (before, run) => {
+        if (!before?.board || !run.board || before.board.level !== run.board.level || before.turnsThisFloor !== run.turnsThisFloor) return null;
+        const was = new Map(before.board.tiles.map((tile) => [tile.id, tile]));
+        const moved = run.board.tiles.find((tile) => {
+            const prior = was.get(tile.id);
+            return prior != null && !isGone(tile) && (prior.turncoat !== tile.turncoat || prior.hourglass !== tile.hourglass || (tile.turncoat != null && prior.suit !== tile.suit));
+        });
+        return moved ? `${moved.id} changed without a turn` : null;
+    },
     'tile ids are unique': (_b, run) =>
         run.board && new Set(run.board.tiles.map((tile) => tile.id)).size !== run.board.tiles.length ? 'duplicate tile id' : null,
     'every real pair has exactly two halves': (_b, run) => {
@@ -430,6 +492,15 @@ export const soakRun = ({
     let focusesForged = 0;
     let essenceFound = 0;
     let voidSpews = 0;
+    let colossiRaised = 0;
+    let colossusHits = 0;
+    let colossiFelled = 0;
+    let colossusSplits = 0;
+    let turncoatFloors = 0;
+    let turncoatTurns = 0;
+    let hourglassFloors = 0;
+    let hourglassesCaught = 0;
+    let hourglassesSpent = 0;
     let wildMatches = 0;
     let heatPerkTurns = 0;
     let zones = 0;
@@ -470,6 +541,17 @@ export const soakRun = ({
         focusesForged += TILE_SUITS.reduce((sum, suit) => sum + Math.max(0, focusOf(next, suit) - focusOf(run, suit)), 0);
         essenceFound += TILE_SUITS.reduce((sum, suit) => sum + Math.max(0, essenceOf(next.elementalEssence, suit) - essenceOf(run.elementalEssence, suit)), 0);
         voidSpews += Math.max(0, (next.voidSpewsThisFloor ?? 0) - (run.voidSpewsThisFloor ?? 0));
+        if (next.board?.colossus && next.board.level !== run.board?.level) colossiRaised += 1;
+        colossusHits += Math.max(0, (next.colossusHitsThisFloor ?? 0) - (run.colossusHitsThisFloor ?? 0));
+        colossiFelled += Math.max(0, (next.colossiFelledThisRun ?? 0) - (run.colossiFelledThisRun ?? 0));
+        colossusSplits += Math.max(0, (next.colossusSplitsThisFloor ?? 0) - (run.colossusSplitsThisFloor ?? 0));
+        if (next.board && next.board.level !== run.board?.level) {
+            if (next.board.tiles.some((tile) => tile.turncoat != null)) turncoatFloors += 1;
+            if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
+        }
+        turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        hourglassesCaught += Math.max(0, (next.hourglassesCaughtThisRun ?? 0) - (run.hourglassesCaughtThisRun ?? 0));
+        hourglassesSpent += Math.max(0, (next.hourglassesSpentThisFloor ?? 0) - (run.hourglassesSpentThisFloor ?? 0));
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
@@ -619,6 +701,15 @@ export const soakRun = ({
         focusesForged,
         essenceFound,
         voidSpews,
+        colossiRaised,
+        colossusHits,
+        colossiFelled,
+        colossusSplits,
+        turncoatFloors,
+        turncoatTurns,
+        hourglassFloors,
+        hourglassesCaught,
+        hourglassesSpent,
         wildMatches,
         heatPerkTurns,
         zones,
