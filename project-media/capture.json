@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-07T13:00:46.906Z",
+  "capturedAt": "2026-10-07T13:19:10.400Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -13,8 +13,19 @@
           "name": "Continue to game",
           "exact": true
         },
-        "timeoutMs": 45000,
+        "timeoutMs": 10000,
+        "optional": true,
         "label": "leave the studio splash"
+      },
+      {
+        "type": "waitFor",
+        "target": {
+          "role": "button",
+          "name": "Play",
+          "exact": true
+        },
+        "timeoutMs": 45000,
+        "label": "wait for the game menu"
       },
       {
         "type": "wait",
@@ -30,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 164673,
+      "bytes": 162743,
       "status": "captured",
       "stats": {
         "mean": 25,
-        "std": 19,
-        "dark": 0.194,
+        "std": 18,
+        "dark": 0.188,
         "light": 0,
-        "colours": 30
+        "colours": 28
       }
     },
     {
@@ -45,14 +56,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 154682,
+      "bytes": 151775,
       "status": "captured",
       "stats": {
-        "mean": 26,
-        "std": 19,
-        "dark": 0.154,
+        "mean": 25,
+        "std": 17,
+        "dark": 0.161,
         "light": 0,
-        "colours": 31
+        "colours": 26
       }
     },
     {
@@ -75,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 128900,
+      "bytes": 128147,
       "status": "captured",
       "stats": {
         "mean": 26,
-        "std": 19,
-        "dark": 0.155,
+        "std": 18,
+        "dark": 0.159,
         "light": 0,
-        "colours": 29
+        "colours": 26
       }
     },
     {
@@ -90,15 +101,18 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 118923,
+      "bytes": 116666,
       "status": "captured",
       "stats": {
         "mean": 26,
-        "std": 18,
-        "dark": 0.173,
+        "std": 17,
+        "dark": 0.178,
         "light": 0,
-        "colours": 27
-      }
+        "colours": 23
+      },
+      "skipped": [
+        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
+      ]
     }
   ]
 }
