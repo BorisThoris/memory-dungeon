@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-07T13:19:10.400Z",
+  "capturedAt": "2026-10-07T15:33:13.639Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 162743,
+      "bytes": 155313,
       "status": "captured",
       "stats": {
-        "mean": 25,
-        "std": 18,
-        "dark": 0.188,
+        "mean": 23,
+        "std": 15,
+        "dark": 0.184,
         "light": 0,
-        "colours": 28
+        "colours": 19
       }
     },
     {
@@ -56,14 +56,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 151775,
+      "bytes": 146387,
       "status": "captured",
       "stats": {
         "mean": 25,
-        "std": 17,
-        "dark": 0.161,
+        "std": 15,
+        "dark": 0.112,
         "light": 0,
-        "colours": 26
+        "colours": 21
       }
     },
     {
@@ -71,12 +71,12 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 39518,
+      "bytes": 39775,
       "status": "captured",
       "stats": {
-        "mean": 22,
+        "mean": 23,
         "std": 16,
-        "dark": 0.06,
+        "dark": 0.039,
         "light": 0,
         "colours": 29
       }
@@ -86,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 128147,
+      "bytes": 122216,
       "status": "captured",
       "stats": {
-        "mean": 26,
-        "std": 18,
-        "dark": 0.159,
+        "mean": 25,
+        "std": 15,
+        "dark": 0.121,
         "light": 0,
-        "colours": 26
+        "colours": 21
       }
     },
     {
@@ -101,18 +101,15 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 116666,
+      "bytes": 113372,
       "status": "captured",
       "stats": {
-        "mean": 26,
-        "std": 17,
-        "dark": 0.178,
+        "mean": 25,
+        "std": 14,
+        "dark": 0.142,
         "light": 0,
-        "colours": 23
-      },
-      "skipped": [
-        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
-      ]
+        "colours": 18
+      }
     }
   ]
 }
