@@ -74,11 +74,13 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
  * floor after that, played through the command path. Late boards grow to thousands of pairs
  * (`LATE_PAIRS_MAX`, 2026-10-05) and playing one through the solver took minutes, so the
  * thousand-floor gate never finished; a board past `PLAYED_PAIRS_MAX` is inspected (every floor
- * still is) and played only on a boss floor.
+ * still is) and played only on a boss floor. Past floor 250 a board is already at the cap and
+ * building one is itself minutes of work, so the gates run this to floor 200 (package.json
+ * `gate:sim-health`, 2026-10-08): every board shape the curve deals, at a depth that finishes.
  */
 export const PLAYED_PAIRS_MAX = 512;
 const shouldCheckPlayableBoard = (board: BoardState): boolean =>
-    board.floorTag === 'boss' || (board.pairCount <= PLAYED_PAIRS_MAX && (board.level <= 24 || board.level % 3 === 0));
+    board.pairCount <= PLAYED_PAIRS_MAX && (board.level <= 24 || board.level % 3 === 0 || board.floorTag === 'boss');
 
 export const buildEndlessSimulationCsv = ({
     floors,
@@ -143,8 +145,11 @@ export const buildEndlessSimulationCsv = ({
             // Solved through the command path rather than direct transitions, so the
             // endless gate exercises the same reducer the game runs and can report
             // whether the command journal replays deterministically.
+            // The solver's default of 160 turns was a ceiling for the old pair curve; late boards now
+            // hold hundreds of pairs, and a clean clear of n pairs takes about n turns.
             const trace = solveRunThroughGameplayCoreWithTrace(
-                createGeneratedBoardSolverRun(board, safeRunSeed, rulesVersion)
+                createGeneratedBoardSolverRun(board, safeRunSeed, rulesVersion),
+                Math.max(160, board.pairCount * 3)
             );
             coreReplayCheckedFloors += 1;
             if (!trace.replayVerified || !trace.replayDeterministic) {
