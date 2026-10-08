@@ -75,8 +75,11 @@ interface TileBoardFramePulseTransitionState {
     trauma: number;
 }
 
-/** How long a removed tile takes to scale away after its burst. */
-export const BREAK_DEPARTURE_SECONDS = 0.26;
+/**
+ * How long a removed tile takes to leave after its burst: long enough to see it break up its
+ * element's way (`cardDissolveMaterial.ts`) before it is gone.
+ */
+export const BREAK_DEPARTURE_SECONDS = 0.42;
 
 const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
 

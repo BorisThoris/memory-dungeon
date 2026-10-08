@@ -12,6 +12,7 @@ import { getRimParticleMood } from './boardParticleRim';
 import { beginMatchImpact, MATCH_CONTACT_SECONDS } from './boardMatchImpact';
 import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
 import { collectElementCastParticles } from './elementCastParticles';
+import { cardDepartureBursts, cardDepartureSparkTint } from './cardDepartureParticles';
 import { collectElementReactionParticles } from './elementReactionParticles';
 import { useDevOptions } from '../dev/useDevOptions';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
@@ -64,6 +65,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const elementBursts = useRef(0);
     const castBursts = useRef(0);
     const reactionBursts = useRef(0);
+    const departureBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useLayoutEffect(() => {
         system.configure(graphicsQuality);
@@ -108,9 +110,18 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 y: anchor?.y ?? transform.baseY + transform.layoutJitterY,
                 z: anchor?.z ?? 0.04,
                 time: time.current, seed: hashStringToSeed(`${tile.id}:${cue.kind}`), reduceMotion, quality: graphicsQuality,
-                cardMatrix: group?.matrix, energy: cue.kind === 'flip' ? cardHeat : energy
+                cardMatrix: group?.matrix, energy: cue.kind === 'flip' ? cardHeat : energy,
+                tint: cue.kind === 'match' ? cardDepartureSparkTint(tile.suit) : undefined
             });
             if (emitted > 0) totals.current[cue.kind] += 1;
+            // ...and as it leaves, it throws off its element (`cardDepartureParticles.ts`).
+            if (cue.kind !== 'flip') {
+                let thrown = 0;
+                for (const burst of cardDepartureBursts({ suit: tile.suit,
+                    x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: anchor?.z ?? 0.04,
+                    seed: hashStringToSeed(`${tile.id}:departure`), time: time.current, delay: cue.delay, quality: graphicsQuality, reduceMotion })) thrown += system.emit(burst);
+                if (thrown > 0) departureBursts.current += 1;
+            }
             if (cue.kind === 'match' && system.emit({ kind: 'ripple',
                 x: anchor?.x ?? transform.baseX, y: anchor?.y ?? transform.baseY, z: 0,
                 time: time.current, delay: MATCH_CONTACT_SECONDS, seed: transform.seed,
@@ -129,6 +140,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         canvas.setAttribute('data-combo-pop-effects', String(comboPopEffects));
         canvas.setAttribute('data-particle-cast-bursts', String(castBursts.current));
         canvas.setAttribute('data-particle-reaction-bursts', String(reactionBursts.current));
+        canvas.setAttribute('data-particle-departure-bursts', String(departureBursts.current));
         canvas.setAttribute('data-particle-ground-bursts', String(groundBursts.current));
         canvas.setAttribute('data-particle-status-bursts', String(statusBursts.current));
         for (const kind of PARTICLE_KINDS) {

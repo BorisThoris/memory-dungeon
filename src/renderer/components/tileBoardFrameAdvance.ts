@@ -91,10 +91,12 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     const matchPulse = bag.matchPulseRef.current;
     const matchedVictoryBurst = pulseTransition.matchedVictoryBurst;
     // A departing tile shares the flip-pop scale channel: once its burst is done it shrinks to
-    // nothing, and a group at scale zero is a tile that has left the board.
-    const flipPopMul = pulseTransition.flipPopScaleMultiplier * (1 - pulseTransition.departure);
+    // nothing, and a group at scale zero is a tile that has left the board. It keeps most of its
+    // size while it burns, so the break-up reads, and shrinks hardest at the end.
+    const departure = pulseTransition.departure;
+    const flipPopMul = pulseTransition.flipPopScaleMultiplier * (p.reduceMotion ? 1 - departure : 1 - departure * departure * departure);
     // ...and burns away as it shrinks (`cardDissolveMaterial.ts`), unless motion is reduced.
-    const dissolve = p.reduceMotion ? 0 : Math.min(1, pulseTransition.departure * 1.15);
+    const dissolve = p.reduceMotion ? 0 : Math.min(1, departure * 1.1);
     setCardDissolve(bag.frontCardMatRef.current, dissolve);
     setCardDissolve(bag.backCardMatRef.current, dissolve);
     const flipPopZ = pulseTransition.flipPopZ;

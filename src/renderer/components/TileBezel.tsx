@@ -1,6 +1,7 @@
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import {
     memo,
+    useCallback,
     useContext,
     useEffect,
     useLayoutEffect,
@@ -94,7 +95,7 @@ import {
     getTileFaceTexture
 } from './tileTextures';
 import { disposeTileBoardResources } from './tileBoardDisposables';
-import { installCardDissolve } from './cardDissolveMaterial';
+import { createCardDissolveUniforms, installCardDissolve } from './cardDissolveMaterial';
 import {
     CARD_PLANE_HEIGHT,
     CARD_PLANE_WIDTH,
@@ -394,12 +395,18 @@ const TileBezelInner = ({
     const liftSmoothRef = useRef(0);
     const frontCardMatRef = useRef<MeshStandardMaterial | null>(null);
     const backCardMatRef = useRef<MeshStandardMaterial | null>(null);
-    // The burn-away as the card leaves the board (`cardDissolveMaterial.ts`), edged in its element.
+    // The burn-away as the card leaves the board (`cardDissolveMaterial.ts`), broken up its element's
+    // way and offset by the card's own seed. One set of uniforms: both surfaces and the element rim.
+    const dissolveUniforms = useMemo(() => createCardDissolveUniforms(), []);
     useLayoutEffect(() => {
         for (const material of [frontCardMatRef.current, backCardMatRef.current]) {
-            if (material) installCardDissolve(material, tile.suit);
+            if (material) installCardDissolve(material, tile.suit, { uniforms: dissolveUniforms, seed: transform.seed });
         }
-    }, [tile.suit]);
+    }, [dissolveUniforms, tile.suit, transform.seed]);
+    const overlayDissolveRef = useCallback((material: MeshBasicMaterial | null) => {
+        if (material) installCardDissolve(material, tile.suit, { uniforms: dissolveUniforms, seed: transform.seed,
+            uvScale: { x: CARD_FACE_WIDTH / CARD_WIDTH, y: CARD_FACE_HEIGHT / CARD_HEIGHT } });
+    }, [dissolveUniforms, tile.suit, transform.seed]);
     const focusDimBlendRef = useRef(0);
 
     const bendURef = useRef(0.5);
@@ -819,10 +826,10 @@ const TileBezelInner = ({
                             {/* Each side is drawn only while it faces out: the hidden side's layers are draw calls for nothing. */}
                             <group visible={!faceUp}>
                                 <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
-                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} />
+                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} dissolve={dissolveUniforms} />
                             </group>
                             <group visible={faceUp}>
-                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} />
+                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} dissolve={dissolveUniforms} />
                             </group>
                         </>
                     ) : null}
@@ -887,6 +894,7 @@ const TileBezelInner = ({
                         matchedVictoryFlameMeshRef={matchedVictoryFlameMeshRef}
                         memorizeCurseHighlight={memorizeCurseHighlight}
                         overlayGeometry={overlayGeometry}
+                        overlayMaterialRef={overlayDissolveRef}
                         overlayTexture={overlayTexture}
                         overlayZ={overlayZ}
                         pairProximityDistance={pairProximityDistance}

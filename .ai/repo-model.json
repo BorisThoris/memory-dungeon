@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3016,
-    "codeFileCount": 1143,
-    "exportedSymbolCount": 3606,
+    "trackedFileCount": 3018,
+    "codeFileCount": 1145,
+    "exportedSymbolCount": 3616,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9641
+    "relationshipCount": 9663
   },
   "inventory": [
     {
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "8ddb6b354d2c44dd061ae2738b632e6bdc163f1cbd86f23f9c5ddb4e5a665e9f"
+      "sha256": "7c9ce41a25d36bee86366d8add6911a1c14f12b6a3a835942cbe8ae83a14232e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9685,16 +9685,28 @@
       "sha256": "d5e5fbf5bfb579b4f2d45e66b92cfbe035c1e1b03599fb43a91acecd46a91780"
     },
     {
+      "path": "src/renderer/components/cardDepartureParticles.test.ts",
+      "category": "test",
+      "bytes": 1441,
+      "sha256": "1ecb70308c522ccd4d2903de13bf3258a3f1b9fb5159484323e7e14d50aceace"
+    },
+    {
+      "path": "src/renderer/components/cardDepartureParticles.ts",
+      "category": "source",
+      "bytes": 2536,
+      "sha256": "199cc3cb8408c59d3cfec2c8968c888aa89a6464d5fcf61feffdc35b04f700d6"
+    },
+    {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
       "category": "test",
-      "bytes": 2336,
-      "sha256": "fb2d581f62427f1ce30bfb2954051de23aae1eb6602da85d3b038e3795d25707"
+      "bytes": 3850,
+      "sha256": "32410372716c2abf7d0a81c479863e86206aa86f9e6fd7d1b38a555634f49771"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.ts",
       "category": "source",
-      "bytes": 3887,
-      "sha256": "b5073f62ec7bf0e5b054a8baa7a03c36cbc0232e0e75a2b1eb2f438047c9853e"
+      "bytes": 10594,
+      "sha256": "de5a48d59b8e437edc6e78da9e84fec18cbcea26aeff6f7f74dd93580fedce29"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -9843,8 +9855,8 @@
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
       "category": "source",
-      "bytes": 1931,
-      "sha256": "46eedfe1374ba4072e9356594c1122afffe76df0b6c9b882ca0bdeecc780a909"
+      "bytes": 2777,
+      "sha256": "3a7593e7752325f7ae9627dac210d4a53c3e1eea3ef72136cc0f7d0ad9e015eb"
     },
     {
       "path": "src/renderer/components/ElementCastGuide.module.css",
@@ -10845,8 +10857,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 36703,
-      "sha256": "66dde2d18a8d2187cbf971ad8a8b73da23aa8ee310efc0a0a46fcd15a55097ab"
+      "bytes": 37489,
+      "sha256": "1971973585ea3e85ec8baf9a875095b73781240e24aa26ae48947647ddf1c85c"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -10995,8 +11007,8 @@
     {
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "category": "source",
-      "bytes": 8590,
-      "sha256": "ce0918a90015bfed741a2bf360cc4ad7b144dcbd2b2cfee98185921675129b63"
+      "bytes": 8844,
+      "sha256": "f5a13823240e0e89e6de120ef6777941fa94e93ef13f54d3a1c91e998cf1ee6c"
     },
     {
       "path": "src/renderer/components/tileBoardFaceUp.test.ts",
@@ -11025,8 +11037,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 14141,
-      "sha256": "59a471237cc172d7b0dd32414bd35cf985f9dd8c8316c8e929a70798f4d1f9fe"
+      "bytes": 14318,
+      "sha256": "12a2aa1ba5bf2fa1dec718e354b8c76923ea05fbff5523487aa1133065801b63"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -11079,8 +11091,8 @@
     {
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "category": "source",
-      "bytes": 11940,
-      "sha256": "dc36d9725bc06f882a006ab0979be20fd6c9dd53228dab387895f864a18ee56e"
+      "bytes": 12038,
+      "sha256": "df78afbefa657d5b0599715337c35dc0c3e91a7d1750b2e42e8ae4fbcb9feba8"
     },
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
@@ -11223,8 +11235,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 22298,
-      "sha256": "85a2ed029c590bcaa2ecb8aabf8f22c6c9de473af8d2a4b494fa902a0a05b8b0"
+      "bytes": 23267,
+      "sha256": "46387ba729573400787b5d035a5ae2f5b622bdf6335ca3eedf2131eb39f89505"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -20849,11 +20861,48 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/cardDepartureParticles.test.ts",
+      "path": "src/renderer/components/cardDepartureParticles.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 25,
+      "imports": [
+        "file:src/renderer/components/cardDepartureParticles.ts",
+        "file:src/shared/tile-suit-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardDepartureParticles.ts",
+      "path": "src/renderer/components/cardDepartureParticles.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 59,
+      "imports": [
+        "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/cardDissolveMaterial.ts",
+        "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/components/realmParticles.ts",
+        "file:src/renderer/components/tileBoardFramePulseState.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
+        "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_SHAPES",
+        "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureBursts",
+        "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardDepartureParticles.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardDissolveMaterial.test.ts",
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 48,
+      "lineCount": 73,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts"
       ],
@@ -20865,15 +20914,21 @@
       "path": "src/renderer/components/cardDissolveMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 87,
+      "lineCount": 214,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_GLSL",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_STYLE",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_THRESHOLD_GLSL",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#cardDissolveUniforms",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
-        "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve"
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook"
       ],
       "testedBy": [
         "file:src/renderer/components/cardDissolveMaterial.test.ts"
@@ -21269,8 +21324,9 @@
       "path": "src/renderer/components/ElementCardMaterial.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 48,
       "imports": [
+        "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/realmParticles.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -23983,7 +24039,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 913,
+      "lineCount": 921,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -24516,7 +24572,7 @@
       "path": "src/renderer/components/TileBoardEffectOverlays.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 247,
+      "lineCount": 251,
       "imports": [
         "file:src/renderer/components/PairProximityHintPlane.tsx",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -24590,7 +24646,7 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 349,
+      "lineCount": 351,
       "imports": [
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -24740,7 +24796,7 @@
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 381,
+      "lineCount": 384,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -25153,13 +25209,14 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 327,
+      "lineCount": 339,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/cardDepartureParticles.ts",
         "file:src/renderer/components/elementCastParticles.ts",
         "file:src/renderer/components/elementReactionParticles.ts",
         "file:src/renderer/components/itemEffects.ts",
@@ -39296,6 +39353,7 @@
         "symbol:src/shared/tile-suit-rules.ts#TileSuitDefinition"
       ],
       "testedBy": [
+        "file:src/renderer/components/cardDepartureParticles.test.ts",
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/shared/archetype-pressure-simulation.test.ts",
         "file:src/shared/boss-encounters.test.ts",
@@ -43424,36 +43482,116 @@
       "endLine": 112
     },
     {
+      "id": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
+      "name": "CARD_DEPARTURE_PARTICLE_DELAY",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureParticles.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_SHAPES",
+      "name": "CARD_DEPARTURE_SHAPES",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureParticles.ts",
+      "line": 14,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureBursts",
+      "name": "cardDepartureBursts",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureParticles.ts",
+      "line": 29,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
+      "name": "cardDepartureSparkTint",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureParticles.ts",
+      "line": 27,
+      "endLine": 27
+    },
+    {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
       "name": "CARD_DISSOLVE_EDGE",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 14,
-      "endLine": 20
+      "line": 23,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_GLSL",
+      "name": "CARD_DISSOLVE_GLSL",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 73,
+      "endLine": 118
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_STYLE",
+      "name": "CARD_DISSOLVE_STYLE",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 32,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_THRESHOLD_GLSL",
+      "name": "CARD_DISSOLVE_THRESHOLD_GLSL",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#cardDissolveUniforms",
       "name": "cardDissolveUniforms",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 30,
-      "endLine": 31
+      "line": 168,
+      "endLine": 169
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
+      "name": "CardDissolveUniforms",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 40,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
+      "name": "createCardDissolveUniforms",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 50,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
       "name": "installCardDissolve",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 34,
-      "endLine": 78
+      "line": 176,
+      "endLine": 205
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
       "name": "setCardDissolve",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 81,
-      "endLine": 86
+      "line": 208,
+      "endLine": 213
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
+      "name": "setCardDissolveLook",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 62,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -43756,8 +43894,8 @@
       "name": "ElementCardMaterial",
       "kind": "function",
       "file": "src/renderer/components/ElementCardMaterial.tsx",
-      "line": 22,
-      "endLine": 35
+      "line": 30,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/ElementCastGuide.tsx#ElementCastGuide",
@@ -46532,16 +46670,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 912,
-      "endLine": 912
+      "line": 920,
+      "endLine": 920
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 162,
-      "endLine": 166
+      "line": 163,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -47364,8 +47502,8 @@
       "name": "TileBoardEffectOverlays",
       "kind": "value",
       "file": "src/renderer/components/TileBoardEffectOverlays.tsx",
-      "line": 53,
-      "endLine": 246
+      "line": 55,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFaceUp.ts#isTileBoardFaceUp",
@@ -47389,7 +47527,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
       "line": 45,
-      "endLine": 348
+      "endLine": 350
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -47460,8 +47598,8 @@
       "name": "BREAK_DEPARTURE_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 82,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FACE_UP_SURFACE_SECONDS",
@@ -47484,64 +47622,64 @@
       "name": "computeTileBoardFaceUpStructState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 127,
-      "endLine": 160
+      "line": 130,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopStart",
       "name": "computeTileBoardFlipPopStart",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 107,
-      "endLine": 125
+      "line": 110,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopVisualState",
       "name": "computeTileBoardFlipPopVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 267,
-      "endLine": 291
+      "line": 270,
+      "endLine": 294
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFramePulseTransitionState",
       "name": "computeTileBoardFramePulseTransitionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 293,
-      "endLine": 380
+      "line": 296,
+      "endLine": 383
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchedBurstState",
       "name": "computeTileBoardMatchedBurstState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 217,
-      "endLine": 265
+      "line": 220,
+      "endLine": 268
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchPulseState",
       "name": "computeTileBoardMatchPulseState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 162,
-      "endLine": 182
+      "line": 165,
+      "endLine": 185
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardResolvingWaveFrameState",
       "name": "computeTileBoardResolvingWaveFrameState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 88,
-      "endLine": 105
+      "line": 91,
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardTraumaState",
       "name": "computeTileBoardTraumaState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 195,
-      "endLine": 215
+      "line": 198,
+      "endLine": 218
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND",
@@ -47860,8 +47998,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 24,
-      "endLine": 326
+      "line": 25,
+      "endLine": 338
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -69504,7 +69642,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 18
+          "line": 19
         }
       ],
       "tests": [
@@ -76875,15 +77013,69 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_SHAPES",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_SHAPES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureBursts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureBursts",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_GLSL",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_GLSL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_STYLE",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_STYLE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_THRESHOLD_GLSL",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_THRESHOLD_GLSL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#cardDissolveUniforms",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#cardDissolveUniforms",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
       "kind": "exports"
     },
     {
@@ -76896,6 +77088,12 @@
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
       "kind": "exports"
     },
     {
@@ -99745,6 +99943,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardDepartureParticles.test.ts->src/renderer/components/cardDepartureParticles.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.test.ts",
+      "target": "file:src/renderer/components/cardDepartureParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.test.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.test.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/renderer/components/boardParticleSystem.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/renderer/components/gameplayVisualConfig.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/renderer/components/realmParticles.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/realmParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/renderer/components/tileBoardFramePulseState.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureParticles.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardDissolveMaterial.test.ts->src/renderer/components/cardDissolveMaterial.ts",
       "source": "file:src/renderer/components/cardDissolveMaterial.test.ts",
       "target": "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -100330,6 +100576,12 @@
       "id": "imports:src/renderer/components/ElementCardBack.tsx->src/shared/tile-suit-rules.ts",
       "source": "file:src/renderer/components/ElementCardBack.tsx",
       "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardMaterial.tsx->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/ElementCardMaterial.tsx",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
       "kind": "imports"
     },
     {
@@ -105364,6 +105616,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/boardParticleSystem.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardDepartureParticles.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/cardDepartureParticles.ts",
       "kind": "imports"
     },
     {
@@ -122873,6 +123131,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/cardDepartureParticles.ts->file:src/renderer/components/cardDepartureParticles.test.ts",
+      "source": "file:src/renderer/components/cardDepartureParticles.ts",
+      "target": "file:src/renderer/components/cardDepartureParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/cardDissolveMaterial.ts->file:src/renderer/components/cardDissolveMaterial.test.ts",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "file:src/renderer/components/cardDissolveMaterial.test.ts",
@@ -129854,6 +130118,12 @@
       "id": "tested_by:src/shared/tile-state-rules.ts->file:src/shared/tile-state-rules.test.ts",
       "source": "file:src/shared/tile-state-rules.ts",
       "target": "file:src/shared/tile-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/renderer/components/cardDepartureParticles.test.ts",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "file:src/renderer/components/cardDepartureParticles.test.ts",
       "kind": "tested_by"
     },
     {

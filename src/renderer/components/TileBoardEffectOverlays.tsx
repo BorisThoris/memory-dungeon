@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import type { RefCallback, RefObject } from 'react';
 import { getCardAuraGeometry } from './tileBoardRimGeometry';
 import {
     DoubleSide,
@@ -35,6 +35,8 @@ interface TileBoardEffectOverlaysProps {
     matchedVictoryFlameMeshRef: RefObject<Mesh | null>;
     memorizeCurseHighlight: boolean;
     overlayGeometry: PlaneGeometry;
+    /** The illustration's material, so the card's dissolve can be installed on it (`cardDissolveMaterial.ts`). */
+    overlayMaterialRef?: RefCallback<MeshBasicMaterial>;
     overlayTexture: Texture | null;
     overlayZ: number;
     pairProximityDistance: number | null;
@@ -66,6 +68,7 @@ export const TileBoardEffectOverlays = ({
     matchedVictoryFlameMeshRef,
     memorizeCurseHighlight,
     overlayGeometry,
+    overlayMaterialRef,
     overlayTexture,
     overlayZ,
     pairProximityDistance,
@@ -155,6 +158,7 @@ export const TileBoardEffectOverlays = ({
         {overlayTexture ? (
             <mesh geometry={overlayGeometry} position={[0, 0, overlayZ]} raycast={noopMeshRaycast} renderOrder={10}>
                 <meshBasicMaterial
+                    ref={overlayMaterialRef}
                     alphaTest={0.08}
                     color={
                         surfaceVariant === 'matched' && graphicsQuality === 'high'
