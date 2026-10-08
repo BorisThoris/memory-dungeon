@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3016,
     "codeFileCount": 1143,
-    "exportedSymbolCount": 3605,
+    "exportedSymbolCount": 3606,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9640
+    "relationshipCount": 9641
   },
   "inventory": [
     {
@@ -4065,8 +4065,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 10405,
-      "sha256": "7829f58c0ff054f08ce78c5b0d2474f4fa66d9b066737b2a2be21ee3224adfb8"
+      "bytes": 10563,
+      "sha256": "d3c8eaa14d2333de88ee7e57906feb0f945143ccceb771cd5a60a09818c610f4"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
@@ -10173,26 +10173,26 @@
     {
       "path": "src/renderer/components/ItemDropPopup.module.css",
       "category": "source",
-      "bytes": 4411,
-      "sha256": "cbe38ec979a5ea9c5b74b8b9ed92590c2114d0834ff120fbd43a22eb433c6ecc"
+      "bytes": 4232,
+      "sha256": "aaf093f6c2d6d1a180ffd43486475d0cebf0012e5f2e79fe1da0254cb7b7b51a"
     },
     {
       "path": "src/renderer/components/ItemDropPopup.test.tsx",
       "category": "test",
-      "bytes": 4361,
-      "sha256": "ad87920c68d88a48bd0d1f3b602c72736c98bec219ff71664ee7c17f90905068"
+      "bytes": 5144,
+      "sha256": "d8e5ce7cc623ab96f327df9e1495d184a1ab1964ac8f43ad71ef473018fd9d41"
     },
     {
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "category": "source",
-      "bytes": 6692,
-      "sha256": "8764f67ebbc5d19e277b8cb9763fcc0c948cc938907f5092d4e92d6b40436665"
+      "bytes": 6512,
+      "sha256": "4a3bbe170b2b3510f3cf9b74079bcf9ca699368a5b9895eb848fef95a1d150d6"
     },
     {
       "path": "src/renderer/components/itemDrops.ts",
       "category": "source",
-      "bytes": 3585,
-      "sha256": "b29879d362e5d96207d3147d5f9631d1f64bcad1ec4a0ed4e8d48e9c1bb4bed3"
+      "bytes": 3783,
+      "sha256": "2a05b99df9e45136c09e2d33c78f12c1dc002e261d465b868264a6ef6f14ff9f"
     },
     {
       "path": "src/renderer/components/itemEffects.test.ts",
@@ -11931,8 +11931,8 @@
     {
       "path": "src/renderer/copy/itemDropCopy.ts",
       "category": "source",
-      "bytes": 337,
-      "sha256": "b8d5bb3585db2a401cf41dd35d59b21db39b6383978d48edecc78c034c2e3924"
+      "bytes": 340,
+      "sha256": "0b05347c3b5e38c58c8be681fe2199f3dfa2fcae3af7688da59773aae12a8aad"
     },
     {
       "path": "src/renderer/copy/lanternLightBeat.test.ts",
@@ -22227,7 +22227,7 @@
       "path": "src/renderer/components/ItemDropPopup.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 78,
+      "lineCount": 94,
       "imports": [
         "file:src/renderer/components/ItemDropPopup.tsx",
         "file:src/renderer/components/itemDrops.ts",
@@ -22244,13 +22244,14 @@
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 142,
+      "lineCount": 129,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/copy/itemDropCopy.ts",
         "file:src/renderer/store/itemDropFeed.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_LEAVE_MS",
         "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_TICK_MS",
         "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopup",
         "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopupProps"
@@ -22264,7 +22265,7 @@
       "path": "src/renderer/components/itemDrops.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 101,
+      "lineCount": 104,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/shared/contracts.ts",
@@ -27233,7 +27234,7 @@
       "path": "src/renderer/copy/itemDropCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 8,
+      "lineCount": 6,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/itemDropCopy.ts#ITEM_DROP_COPY"
@@ -44391,108 +44392,116 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_LEAVE_MS",
+      "name": "ITEM_DROP_LEAVE_MS",
+      "kind": "value",
+      "file": "src/renderer/components/ItemDropPopup.tsx",
+      "line": 60,
+      "endLine": 60
+    },
+    {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_TICK_MS",
       "name": "ITEM_DROP_TICK_MS",
       "kind": "value",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 56,
-      "endLine": 56
+      "line": 58,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopup",
       "name": "ItemDropPopup",
       "kind": "function",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 69,
-      "endLine": 141
+      "line": 74,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopupProps",
       "name": "ItemDropPopupProps",
       "kind": "interface",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 58,
-      "endLine": 62
+      "line": 62,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_HOLD_MS",
       "name": "ITEM_DROP_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 37,
-      "endLine": 43
+      "line": 40,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_COLOR",
       "name": "ITEM_DROP_RARITY_COLOR",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 20,
-      "endLine": 26
+      "line": 23,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_LABEL",
       "name": "ITEM_DROP_RARITY_LABEL",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 28,
-      "endLine": 34
+      "line": 31,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDrop",
       "name": "ItemDrop",
       "kind": "interface",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 76,
-      "endLine": 85
+      "line": 79,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropFromCallout",
       "name": "itemDropFromCallout",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 88,
-      "endLine": 100
+      "line": 91,
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropGlyph",
       "name": "itemDropGlyph",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 54,
-      "endLine": 74
+      "line": 57,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropGlyph",
       "name": "ItemDropGlyph",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropId",
       "name": "ItemDropId",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropRarity",
       "name": "itemDropRarity",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 47,
-      "endLine": 52
+      "line": 50,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropRarity",
       "name": "ItemDropRarity",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_MAX_CARDS",
@@ -50388,7 +50397,7 @@
       "kind": "value",
       "file": "src/renderer/copy/itemDropCopy.ts",
       "line": 2,
-      "endLine": 7
+      "endLine": 5
     },
     {
       "id": "symbol:src/renderer/copy/lanternLightBeat.ts#lanternLitAnnouncement",
@@ -77589,6 +77598,12 @@
       "id": "exports:src/renderer/components/inventoryScreenModel.ts->symbol:src/renderer/components/inventoryScreenModel.ts#modeTitle",
       "source": "file:src/renderer/components/inventoryScreenModel.ts",
       "target": "symbol:src/renderer/components/inventoryScreenModel.ts#modeTitle",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ItemDropPopup.tsx->symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_LEAVE_MS",
+      "source": "file:src/renderer/components/ItemDropPopup.tsx",
+      "target": "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_LEAVE_MS",
       "kind": "exports"
     },
     {

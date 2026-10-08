@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ItemDropPopup } from './ItemDropPopup';
+import { ITEM_DROP_LEAVE_MS, ITEM_DROP_TICK_MS, ItemDropPopup } from './ItemDropPopup';
 import { ITEM_DROP_HOLD_MS, itemDropFromCallout, itemDropRarity, type ItemDrop } from './itemDrops';
 import { derivePurchaseCallouts } from './screenCallouts';
 import { clearItemDrops, enqueueItemDrops, itemDropsBetween } from '../store/itemDropFeed';
@@ -65,13 +65,29 @@ describe('item drops', () => {
         expect(screen.queryByTestId('item-drop')).toBeNull();
     });
 
-    it('a tap or a key skips it, and a screen reader hears what it was', () => {
+    it('sinks away at the end of its hold', () => {
+        render(<ItemDropPopup reduceMotion={false} />);
+        act(() => enqueueItemDrops([drop('a')]));
+        expect(screen.getByTestId('item-drop')).toHaveAttribute('data-leaving', 'false');
+        act(() => {
+            vi.advanceTimersByTime(ITEM_DROP_HOLD_MS.rare - ITEM_DROP_LEAVE_MS + ITEM_DROP_TICK_MS);
+        });
+        expect(screen.getByTestId('item-drop')).toHaveAttribute('data-leaving', 'true');
+        act(() => {
+            vi.advanceTimersByTime(ITEM_DROP_LEAVE_MS + ITEM_DROP_TICK_MS);
+        });
+        expect(screen.queryByTestId('item-drop')).toBeNull();
+    });
+
+    it('is never in the way: a tap or a key passes it by, and a screen reader hears what it was', () => {
         render(<ItemDropPopup reduceMotion />);
         act(() => enqueueItemDrops([drop('a'), drop('b')]));
         expect(screen.getByRole('status')).toHaveTextContent('Rare item: Meteor shard. +1 meteor');
-        fireEvent.click(screen.getByTestId('item-drop'));
-        expect(screen.getByTestId('item-drop')).toBeInTheDocument();
+        const balloon = screen.getByTestId('item-drop');
+        expect(balloon.tagName).not.toBe('BUTTON');
+        fireEvent.click(balloon);
         fireEvent.keyDown(window, { key: 'Escape' });
-        expect(screen.queryByTestId('item-drop')).toBeNull();
+        fireEvent.keyDown(window, { key: 'Enter' });
+        expect(screen.getByTestId('item-drop')).toBe(balloon);
     });
 });

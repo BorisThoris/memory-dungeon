@@ -10,8 +10,11 @@ import type { ScreenCallout } from './screenCallouts';
  * gone in under a second. Now each is a drop: the item's glyph in a gem, its name, what it does,
  * and its rarity in the colour grammar players already read from loot and gacha games (the
  * research: low rarity cool and quiet, mid rarity warming through purple, the top one gold), with
- * a beam of that colour behind it. It holds long enough to read, and a tap, a click or a key skips
- * it (`ItemDropPopup.tsx`).
+ * a beam of that colour behind it.
+ *
+ * Later the same day the owner found that card too intrusive: it is now a small pickup balloon
+ * that launches from the bottom of the play area, lands above the dock and goes by itself, taking
+ * no tap or key (`ItemDropPopup.tsx`). The rarity colour stays; the beam and the skip went.
  */
 export type ItemDropId = FindableKind | StoreItemId | 'hourglass_prize';
 export type ItemDropRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
@@ -35,11 +38,11 @@ export const ITEM_DROP_RARITY_LABEL: Readonly<Record<ItemDropRarity, string>> = 
 
 /** How long a drop holds before it goes by itself; rarer ones longer. */
 export const ITEM_DROP_HOLD_MS: Readonly<Record<ItemDropRarity, number>> = {
-    common: 1900,
-    uncommon: 2200,
-    rare: 2600,
-    epic: 3000,
-    legendary: 3400
+    common: 1700,
+    uncommon: 1900,
+    rare: 2200,
+    epic: 2600,
+    legendary: 3000
 };
 
 const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']);

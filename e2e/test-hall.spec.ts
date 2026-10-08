@@ -131,7 +131,7 @@ test.describe('Sticky fingers, in its room', () => {
 for (const viewport of [{ name: 'desktop', width: 1280, height: 800 }, { name: 'phone', width: 390, height: 844 }]) {
     test.describe(`The camp upgrade, on ${viewport.name}`, () => {
         test.use({ viewport: { width: viewport.width, height: viewport.height } });
-        test('arrives as an item drop on the next floor, fully on screen, and a tap dismisses it', async ({ page }) => {
+        test('arrives as an item drop on the next floor, fully on screen, and goes by itself', async ({ page }) => {
             test.setTimeout(240_000);
             await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
             await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
@@ -152,8 +152,9 @@ for (const viewport of [{ name: 'desktop', width: 1280, height: 800 }, { name: '
             await expect
                 .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level), { timeout: 60_000 })
                 .toBe(4);
-            await drop.click();
-            await expect(drop).toBeHidden();
+            // The balloon takes no tap: it goes by itself, on a hold that counts timer ticks, which
+            // software WebGL at desktop size starves to a few a second.
+            await expect(drop).toBeHidden({ timeout: 150_000 });
         });
     });
 }

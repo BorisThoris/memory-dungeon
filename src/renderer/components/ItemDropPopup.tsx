@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
 import { claimItemDropSting, dismissItemDrop, useItemDropFeed } from '../store/itemDropFeed';
 import { ITEM_DROP_COPY } from '../copy/itemDropCopy';
 import {
@@ -40,8 +40,9 @@ const GLYPH_PATHS: Readonly<Record<ItemDropGlyph, ReactElement>> = {
 };
 
 /**
- * True when the drop is what the player sees at its centre: laid out, and nothing (the loading
- * screen between floors, a menu) drawn over it.
+ * True when the drop is what the player sees: laid out, and nothing (the loading screen between
+ * floors, a menu) drawn over it. The balloon takes no pointer, so the hit test looks through it to
+ * whatever is under it; that has to be the game screen itself, not a panel over it.
  */
 const isFrontmost = (element: HTMLElement): boolean => {
     // A test DOM has no layout to ask; there the drop counts as seen.
@@ -49,11 +50,14 @@ const isFrontmost = (element: HTMLElement): boolean => {
     const box = element.getBoundingClientRect();
     if (box.width === 0 || box.height === 0) return false;
     const top = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
-    return top !== null && element.contains(top);
+    const screen = element.closest<HTMLElement>('[data-testid="game-shell"]') ?? element.parentElement?.parentElement ?? null;
+    return top !== null && screen !== null && screen.contains(top);
 };
 
 /** How often the hold checks that the drop is on screen. */
 export const ITEM_DROP_TICK_MS = 100;
+/** The last stretch of the hold, in which the balloon sinks away (the CSS `leave` runs this long). */
+export const ITEM_DROP_LEAVE_MS = 300;
 
 export interface ItemDropPopupProps {
     reduceMotion: boolean;
@@ -62,12 +66,14 @@ export interface ItemDropPopupProps {
 }
 
 /**
- * The item drop (`itemDrops.ts`): one at a time, in arrival order (`itemDropFeed.ts`), each held
- * for its rarity's time or until the player taps, clicks or presses a key. Reduced motion keeps the
- * card and drops the beam's spin and the gem's pop.
+ * The item drop (`itemDrops.ts`) as a pickup balloon: one at a time, in arrival order
+ * (`itemDropFeed.ts`), launched up from the bottom of the play area, landed above the dock and held
+ * for its rarity's time. It is never in the way: it takes no tap, no click and no key, so play goes
+ * on under it. Reduced motion keeps the balloon and drops the flight.
  */
 export function ItemDropPopup({ reduceMotion, onShow }: ItemDropPopupProps) {
     const showing = useItemDropFeed((state) => state.queue[0] ?? null);
+    const [leavingKey, setLeavingKey] = useState<string | null>(null);
     useEffect(() => {
         // The sting plays once per drop, even if the screen remounts while it shows.
         if (!showing || !claimItemDropSting(showing.key)) return;
@@ -76,7 +82,7 @@ export function ItemDropPopup({ reduceMotion, onShow }: ItemDropPopupProps) {
     // The hold counts only while the drop is in front: a drop that lands as the next floor builds
     // waits under the loading screen, which covers the game screen rather than unmounting it, and
     // then holds its full time where the player can see it.
-    const dropRef = useRef<HTMLButtonElement | null>(null);
+    const dropRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         if (!showing) return undefined;
         const hold = ITEM_DROP_HOLD_MS[showing.rarity];
@@ -84,55 +90,36 @@ export function ItemDropPopup({ reduceMotion, onShow }: ItemDropPopupProps) {
         const tick = window.setInterval(() => {
             const element = dropRef.current;
             if (element !== null && document.visibilityState !== 'hidden' && isFrontmost(element)) shown += ITEM_DROP_TICK_MS;
+            if (shown >= hold - ITEM_DROP_LEAVE_MS) setLeavingKey(showing.key);
             if (shown >= hold) dismissItemDrop();
         }, ITEM_DROP_TICK_MS);
-        const onKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') dismissItemDrop();
-        };
-        window.addEventListener('keydown', onKey);
-        return () => {
-            window.clearInterval(tick);
-            window.removeEventListener('keydown', onKey);
-        };
+        return () => window.clearInterval(tick);
     }, [showing]);
     if (!showing) return null;
     const color = ITEM_DROP_RARITY_COLOR[showing.rarity];
     const rarity = ITEM_DROP_RARITY_LABEL[showing.rarity];
     return (
         <div className={styles.layer} data-reduce-motion={reduceMotion ? 'true' : 'false'}>
-            <button
-                aria-label={ITEM_DROP_COPY.announce(rarity, showing.name, showing.line)}
+            <div
+                aria-hidden="true"
                 className={styles.drop}
+                data-leaving={leavingKey === showing.key ? 'true' : 'false'}
                 data-rarity={showing.rarity}
                 data-testid="item-drop"
                 key={showing.key}
-                onClick={dismissItemDrop}
                 ref={dropRef}
                 style={{ '--rarity': color } as CSSProperties}
-                type="button"
             >
-                <span aria-hidden="true" className={styles.beam} />
-                <span aria-hidden="true" className={styles.kicker}>
-                    {ITEM_DROP_COPY.kicker}
-                </span>
-                <span aria-hidden="true" className={styles.gem}>
+                <span className={styles.gem}>
                     <svg className={styles.glyph} fill="currentColor" viewBox="0 0 64 64">
                         {GLYPH_PATHS[showing.glyph]}
                     </svg>
                 </span>
-                <span aria-hidden="true" className={styles.rarity}>
-                    {rarity}
+                <span className={styles.text}>
+                    <span className={styles.name}>{showing.name}</span>
+                    <span className={styles.line}>{showing.line}</span>
                 </span>
-                <span aria-hidden="true" className={styles.name}>
-                    {showing.name}
-                </span>
-                <span aria-hidden="true" className={styles.line}>
-                    {showing.line}
-                </span>
-                <span aria-hidden="true" className={styles.skip}>
-                    {ITEM_DROP_COPY.skipHint}
-                </span>
-            </button>
+            </div>
             <span aria-live="polite" className={styles.srOnly} role="status">
                 {ITEM_DROP_COPY.announce(rarity, showing.name, showing.line)}
             </span>
