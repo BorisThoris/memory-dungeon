@@ -96,11 +96,26 @@ test.describe('Sticky fingers, in its room', () => {
                 return { id: tile?.id ?? null, state: tile?.state ?? null, flipped: run?.board?.flippedTileIds ?? [] };
             });
 
+        // The HUD says it in its polite region (the run-shell caption stopped echoing the announcer in
+        // c27d3d05). It is a beat: the announcer clears it again, and under software WebGL the lock
+        // can land after it has gone, so every line the region says is recorded instead of read once.
+        await page.evaluate(() => {
+            const seen: string[] = [];
+            (window as unknown as { __hallCaptions: string[] }).__hallCaptions = seen;
+            const record = () => {
+                const text = document.querySelector('[data-testid="hud-polite-live-region"]')?.textContent?.trim();
+                if (text && seen[seen.length - 1] !== text) seen.push(text);
+            };
+            new MutationObserver(record).observe(document.body, { childList: true, subtree: true, characterData: true });
+            record();
+        });
+        const captions = () => page.evaluate(() => (window as unknown as { __hallCaptions: string[] }).__hallCaptions.join(' | '));
+
         await press(['a-1', 'a-2']);
         await expect.poll(async () => (await lock()).id, { timeout: 45_000 }).toBe('b-1');
         expect((await lock()).state).toBe('hidden');
-        await expect(page.getByTestId('run-shell-line')).toContainText('Sticky fingers', { timeout: 15_000 });
-        await expect(page.getByTestId('run-shell-line')).not.toContainText('Stasis');
+        await expect.poll(captions, { timeout: 15_000 }).toContain('Sticky fingers');
+        expect(await captions()).not.toContain('Stasis');
 
         // Pressed as an opener, the locked card stays down (the room's unit script covers it opening second).
         await press(['b-1']);
@@ -135,7 +150,7 @@ for (const viewport of [{ name: 'desktop', width: 1280, height: 800 }, { name: '
             await expect(drop).toContainText('Long look');
             await expect(drop).toBeInViewport({ ratio: 1 });
             await expect
-                .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level))
+                .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level), { timeout: 60_000 })
                 .toBe(4);
             await drop.click();
             await expect(drop).toBeHidden();
@@ -159,7 +174,7 @@ test.describe('The board without a preview popup', () => {
         await expect.poll(() => page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             return useAppStore.getState().run?.board?.flippedTileIds.length;
-        })).toBe(1);
+        }), { timeout: 30_000 }).toBe(1);
         await expect(page.getByTestId('trait-preview-chip')).toHaveCount(0);
         await page.mouse.move(first.left + first.width / 2, first.top + first.height / 2);
         await expect(page.getByTestId('trait-preview-chip')).toHaveCount(0);
