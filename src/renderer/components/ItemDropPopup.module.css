@@ -1,0 +1,181 @@
+/*
+ * The item drop (`ItemDropPopup.tsx`): a card rising into the upper third, a beam of the rarity's
+ * colour turning behind it, the item's glyph in a gem that pops, then its rarity, name and line.
+ * Reduced motion: the card fades in and out; the beam stands still; nothing pops.
+ */
+.layer {
+    position: absolute;
+    inset: calc(var(--gameplay-hud-top-clearance, 0px) + 0.4rem) 0 auto 0;
+    display: flex;
+    justify-content: center;
+    padding-top: 6vh;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.drop {
+    --rarity: #c3cfdb;
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    min-width: min(19rem, 82vw);
+    max-width: min(24rem, 92vw);
+    padding: 1.1rem 1.4rem 0.9rem;
+    border: 2px solid var(--rarity);
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--rarity) 32%, transparent), transparent 62%),
+        linear-gradient(180deg, rgba(20, 16, 26, 0.96), rgba(8, 7, 12, 0.96));
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.6),
+        0 0 28px color-mix(in srgb, var(--rarity) 55%, transparent),
+        0 18px 40px rgba(0, 0, 0, 0.55);
+    color: #f4efe6;
+    font: inherit;
+    text-align: center;
+    pointer-events: auto;
+    cursor: pointer;
+    overflow: visible;
+    animation: rise 420ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.drop:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+}
+
+.beam {
+    position: absolute;
+    left: 50%;
+    top: 2.9rem;
+    width: 22rem;
+    height: 22rem;
+    margin: -11rem 0 0 -11rem;
+    border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--rarity) 55%, transparent) 0deg 9deg, transparent 9deg 30deg);
+    mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+    -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+    opacity: 0.85;
+    z-index: -1;
+    animation: spin 6s linear infinite;
+}
+
+.kicker {
+    font-family: var(--theme-display-font, 'Cinzel', serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--rarity) 70%, #fff);
+}
+
+.gem {
+    display: grid;
+    place-items: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff33, transparent 55%), radial-gradient(circle, color-mix(in srgb, var(--rarity) 35%, #120e18) 0%, #0b0910 75%);
+    box-shadow: 0 0 0 2px var(--rarity), 0 0 22px var(--rarity), inset 0 0 14px #000;
+    color: var(--rarity);
+    animation: pop 520ms 120ms cubic-bezier(0.2, 1.8, 0.4, 1) both;
+}
+
+.glyph {
+    width: 2.7rem;
+    height: 2.7rem;
+    filter: drop-shadow(0 0 6px var(--rarity));
+}
+
+.rarity {
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rarity);
+}
+
+.name {
+    font-family: var(--theme-display-font, 'Cinzel', serif);
+    font-size: clamp(1.15rem, 3.6vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.line {
+    font-size: 0.92rem;
+    color: #d8d0c4;
+}
+
+.skip {
+    margin-top: 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9a9187;
+}
+
+.drop[data-rarity='epic'],
+.drop[data-rarity='legendary'] {
+    animation-duration: 620ms;
+}
+
+.drop[data-rarity='legendary'] .beam {
+    background: repeating-conic-gradient(from 0deg, #ffe08a 0deg 6deg, transparent 6deg 18deg, color-mix(in srgb, var(--rarity) 70%, transparent) 18deg 24deg, transparent 24deg 36deg);
+}
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.layer[data-reduce-motion='true'] .drop {
+    animation: fade 220ms ease-out both;
+}
+
+.layer[data-reduce-motion='true'] .beam,
+.layer[data-reduce-motion='true'] .gem {
+    animation: none;
+}
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.86);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.2) rotate(-25deg);
+        opacity: 0;
+    }
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

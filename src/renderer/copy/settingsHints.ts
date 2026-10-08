@@ -21,6 +21,7 @@ export const SETTINGS_HINTS = {
     masterVolume: 'Overall volume for everything.',
     musicVolume: 'Menu and ambient music.',
     reduceMotion: 'Reduces shake, camera motion and animated effects.',
+    screenShakeIntensity: 'How hard bombs, meteors and big breaks shake the board.',
     resolveDelayMultiplier: 'Match, miss and study timing. Applies to new runs.',
     sfxVolume: 'Tile flips, rewards, and hit feedback.',
     shuffleScorePenalty: 'Each full shuffle costs some score. Applies to new runs.',

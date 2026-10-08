@@ -48,9 +48,11 @@ interface SliderRowProps {
     step: number;
     value: number;
     onChange: (next: number) => void;
+    /** Greyed out and inert, when another setting overrides it (Reduce Motion over Screen shake). */
+    disabled?: boolean;
 }
 
-export const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onChange }: SliderRowProps) => (
+export const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onChange, disabled = false }: SliderRowProps) => (
     <div className={styles.fieldCard}>
         <div className={styles.fieldText}>
             <strong>{label}</strong>
@@ -60,6 +62,7 @@ export const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onCh
             <input
                 aria-label={label}
                 className={styles.rangeInput}
+                disabled={disabled}
                 max={String(max)}
                 min={String(min)}
                 onChange={(event) => onChange(Number(event.currentTarget.value))}

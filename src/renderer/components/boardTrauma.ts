@@ -190,6 +190,17 @@ export const BOARD_SHAKE_AT_REST: BoardShakeSample = { angleZ: 0, offsetX: 0, of
  * the shake slows or holds with it, hand it the same run's clock twice and it draws the same thing
  * twice.
  */
+/**
+ * The player's Screen shake setting (`Settings.screenShakeIntensity`, 0..1), applied to every shake
+ * sample: the board's, each card's, and the frame activity's. Set by the game screen; module state
+ * rather than a parameter so no caller can forget it.
+ */
+let shakeIntensity = 1;
+export const setScreenShakeIntensity = (value: number): void => {
+    shakeIntensity = Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 1;
+};
+export const screenShakeIntensity = (): number => shakeIntensity;
+
 export const sampleTraumaShake = ({
     maxima = BOARD_SHAKE_MAXIMA,
     seconds,
@@ -199,7 +210,7 @@ export const sampleTraumaShake = ({
     seconds: number;
     trauma: number;
 }): BoardShakeSample => {
-    const amount = traumaShakeAmount(trauma);
+    const amount = traumaShakeAmount(trauma) * shakeIntensity;
     if (amount <= 0) {
         return BOARD_SHAKE_AT_REST;
     }

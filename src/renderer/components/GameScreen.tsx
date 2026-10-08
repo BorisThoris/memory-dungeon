@@ -1,5 +1,9 @@
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
 import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
+import { useItemEffectPublisher } from '../hooks/useItemEffectPublisher';
+import { ItemDropPopup } from './ItemDropPopup';
+import { itemDropFromCallout, type ItemDrop } from './itemDrops';
+import { setScreenShakeIntensity } from './boardTrauma';
 import { playerVisibleBoard } from '../../shared/player-visible-board';
 import { describeHeldPair } from '../../shared/held-pair-rules';
 import {
@@ -105,6 +109,7 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 const MemoTileBoard = memo(TileBoard);
 import {
     playComboStageSfx,
+    playItemDropSfx,
     playMismatchRecoveryCrescendoSfx,
     resumeAudioContext,
     sfxGainFromSettings
@@ -328,7 +333,7 @@ const useHourglassCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = event?.key ?? null;
         if (!fresh || !event || event.kind !== 'caught') return;
         // eslint-disable-next-line react-hooks/set-state-in-effect -- retain the keyed visual event after the run advances
-        setCallouts((current) => [...current, { key: event.key, kind: 'pickup' as const, size: 'minor' as const, tone: 'gold' as const, title: ODD_CARD_COPY.caughtTitle, sub: hourglassCalloutSub(event) }].slice(-4));
+        setCallouts((current) => [...current, { key: event.key, kind: 'pickup' as const, size: 'minor' as const, tone: 'gold' as const, title: ODD_CARD_COPY.caughtTitle, sub: hourglassCalloutSub(event), drop: 'hourglass_prize' as const }].slice(-4));
     }, [event]);
     return callouts;
 };
@@ -738,6 +743,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         () => sfxGainFromSettings(settingsMasterVolume, settingsSfxVolume),
         [settingsMasterVolume, settingsSfxVolume]
     );
+    // Items used on the board: their effect, their shake and their sound (`itemEffects.ts`).
+    useItemEffectPublisher({ journal: run.gameplayEventJournal, board: run.board, sfxGain: shuffleSfxGain });
+    const screenShake = useAppStore((state) => state.settings.screenShakeIntensity);
+    useEffect(() => setScreenShakeIntensity(screenShake), [screenShake]);
     const uiGain = useMemo(
         () => uiSfxGainFromSettings(settingsMasterVolume, settingsSfxVolume),
         [settingsMasterVolume, settingsSfxVolume]
@@ -1214,6 +1223,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
     );
+    // What the player got (a pickup, a prize, a purchase) is an item drop, not a stamp (`itemDrops.ts`).
+    const stampCallouts = useMemo(() => screenCallouts.filter((callout) => !callout.drop), [screenCallouts]);
+    const itemDrops = useMemo(
+        () => screenCallouts.map(itemDropFromCallout).filter((drop): drop is ItemDrop => drop !== null),
+        [screenCallouts]
+    );
+    const playDropSting = useCallback((drop: ItemDrop) => playItemDropSfx(shuffleSfxGain, drop.rarity), [shuffleSfxGain]);
     const feverArrivalKey =
         latestTurnForPulse &&
         latestTurnForPulse.announcement.chainTierAfter === 'fever' &&
@@ -1867,7 +1883,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             {/* The Zone's veil: time stopped, the room held in a cold light until the resolve. */}
             <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
-            <ScreenCalloutQueue callouts={screenCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} />
+            <ScreenCalloutQueue callouts={stampCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} />
+            <ItemDropPopup drops={itemDrops} onShow={playDropSting} reduceMotion={reduceMotion} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
             {comboTemper.id === 'frost' ? (

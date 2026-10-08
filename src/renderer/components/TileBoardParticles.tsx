@@ -5,6 +5,7 @@ import { readElementalGround } from '../../shared/element-ground-rules';
 import { hashStringToSeed } from '../../shared/rng';
 import { boardParticleBudget, createBoardParticleSystem } from './boardParticleSystem';
 import { collectBoardParticleCues, particleBoardChanged } from './boardParticleCues';
+import { itemEffectRecipe, useItemEffectChannel } from './itemEffects';
 import { getTileTransform } from './tileBoardTransform';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import { getRimParticleMood } from './boardParticleRim';
@@ -134,6 +135,37 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
     }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, system, time]);
+    // Items used on the board (`itemEffects.ts`): each effect's recipe, at its cards or its cell.
+    const itemEffectInputs = useRef({ board, compact, graphicsQuality, reduceMotion });
+    useLayoutEffect(() => {
+        itemEffectInputs.current = { board, compact, graphicsQuality, reduceMotion };
+    }, [board, compact, graphicsQuality, reduceMotion]);
+    const itemEffectBursts = useRef(0);
+    useEffect(
+        () =>
+            useItemEffectChannel.subscribe((state, before) => {
+                if (state.serial === before.serial) return;
+                const { board: now, compact: small, graphicsQuality: quality, reduceMotion: still } = itemEffectInputs.current;
+                const atCell = (cell: number) => {
+                    const tile = now.tiles[cell];
+                    if (!tile) return null;
+                    const position = frames.current?.get(tile.id)?.groupRef.current?.position;
+                    const transform = getTileTransform(tile, cell, now.columns, now.rows, small, true, still);
+                    return { x: position?.x ?? transform.baseX + transform.layoutJitterX, y: position?.y ?? transform.baseY + transform.layoutJitterY, z: position?.z ?? 0.04 };
+                };
+                for (const effect of state.latest) {
+                    const anchors = (effect.cell != null ? [atCell(effect.cell)] : effect.tileIds.map((id) => atCell(now.tiles.findIndex((tile) => tile.id === id))))
+                        .filter((anchor): anchor is NonNullable<typeof anchor> => anchor != null);
+                    const recipe = itemEffectRecipe({ effect, anchors, time: time.current, quality, reduceMotion: still });
+                    let emitted = 0;
+                    for (const burst of recipe.bursts) emitted += system.emit(burst);
+                    for (const arc of recipe.arcs) emitted += system.emitArc(arc);
+                    if (emitted > 0) itemEffectBursts.current += 1;
+                }
+                gl.domElement.setAttribute('data-particle-item-bursts', String(itemEffectBursts.current));
+            }),
+        [frames, gl, system, time]
+    );
     useFrame(() => {
         if (!reduceMotion && (runStatus === 'playing' || runStatus === 'resolving') && time.current >= nextRimTick.current) {
             nextRimTick.current = time.current + (graphicsQuality === 'low' ? 0.24 : graphicsQuality === 'medium' ? 0.16 : 0.1);

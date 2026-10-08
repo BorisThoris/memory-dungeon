@@ -315,7 +315,7 @@ describe('tile board DOM telemetry helpers', () => {
         );
     });
 
-    it('tracks selected trait followup mates separately from generic chain-ready cards', () => {
+    it('never reports a face-down mate of a flipped trait card as a follow-up', () => {
         const selectedBoard: BoardState = {
             ...board,
             flippedTileIds: ['a1'],
@@ -338,15 +338,12 @@ describe('tile board DOM telemetry helpers', () => {
             runStatus: 'playing'
         });
 
-        expect(states).toContain('selected-followup:1');
-        expect(getCardFeedbackMarkerShapesAttr({ board: selectedBoard })).toContain('followup-target:1');
-        expect(getCardFeedbackActionCuesAttr({ board: selectedBoard })).toContain('follow-up:1');
-        expect(getCardFeedbackActionPriorityAttr({ board: selectedBoard })).toContain('follow-up:1');
-        expect(getCardFeedbackPrimaryActionAttr({ board: selectedBoard })).toBe('follow-up');
-        expect(getCardFeedbackBeatTiersAttr({ board: selectedBoard })).toContain('follow-up:1');
-        expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: selectedBoard })).toBe('ready:2');
-        expect(getCardFeedbackTraitRouteTiersAttr({ board: selectedBoard })).toContain('selected-followup:1');
-        expect(getCardFeedbackRouteGlyphsAttr({ board: selectedBoard })).toContain('next-tap:1');
+        // The mate is the card the player is trying to remember: nothing may point at it.
+        expect(states).not.toContain('selected-followup');
+        expect(getCardFeedbackMarkerShapesAttr({ board: selectedBoard })).not.toContain('followup-target');
+        expect(getCardFeedbackActionCuesAttr({ board: selectedBoard })).not.toContain('follow-up');
+        expect(getCardFeedbackPrimaryActionAttr({ board: selectedBoard })).not.toBe('follow-up');
+        expect(getCardFeedbackTraitRouteTiersAttr({ board: selectedBoard })).not.toContain('selected-followup');
     });
 
     it('serializes dev pair positions only when enough pairs are available', () => {

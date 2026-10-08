@@ -630,8 +630,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         const command = createGameplayMeteorCommand(`meteor:${run.runSeed}:${run.board?.level}:${run.meteorCharges}:${tileId}`, tileId);
         const result = reduceGameplayCommand(run, command);
         if (!result.accepted) return;
+        // The strike's own sound plays off the journal (`useItemEffectPublisher`), with its effect.
         void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
         applyResolvedRun(appendGameplayJournal(result.run, [command], result.events));
     },
     useBomb: () => {
@@ -651,8 +651,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (!result.accepted) {
             return;
         }
+        // The blast's own sound plays off the journal (`useItemEffectPublisher`), with its effect.
         void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 

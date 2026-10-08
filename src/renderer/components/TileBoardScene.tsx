@@ -72,6 +72,7 @@ import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImage
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
 import { TileBoardSceneBoardGroup } from './TileBoardSceneBoardGroup';
+import { ITEM_EFFECT_TRAUMA, useItemEffectChannel } from './itemEffects';
 import { getTileBoardCardWindow } from './tileBoardCardWindow';
 import { DistantCards } from './DistantCards';
 import { retainTileTextureWorkingSet } from './tileTextures';
@@ -271,6 +272,15 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const comboHeatNow = comboHeatLevels(combo);
     const comboStageSeenRef = useRef<number | null>(null);
     const traumaPulseRef = useRef(0);
+    // Items land on the board (`itemEffects.ts`): a bomb, a meteor, a shuffle each add their trauma.
+    useEffect(
+        () =>
+            useItemEffectChannel.subscribe((state, before) => {
+                if (state.serial === before.serial) return;
+                for (const effect of state.latest) traumaPulseRef.current += ITEM_EFFECT_TRAUMA[effect.kind];
+            }),
+        []
+    );
     useEffect(() => {
         const seen = comboStageSeenRef.current;
         comboStageSeenRef.current = comboHeatNow.stageIndex;

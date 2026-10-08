@@ -16,7 +16,7 @@ const backOf = (tile: Tile): string => {
 
 describe('the board the player can see', () => {
     it('strips pickups, traits and odd cards off face-down cards, and keeps them on faces', () => {
-        const hidden = card('a-A', 'a', { findableKind: 'shard_spark', tileTraitKind: 'heavy', hourglass: 4 });
+        const hidden = card('a-A', 'a', { findableKind: 'meteor_shard', tileTraitKind: 'heavy', hourglass: 4 });
         expect(playerVisibleTile(hidden)).toEqual(card('a-A', 'a'));
         const flipped = { ...hidden, state: 'flipped' as const };
         expect(playerVisibleTile(flipped)).toBe(flipped);

@@ -23,6 +23,8 @@ import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playFlipSfx: vi.fn(),
+    playItemEffectSfx: vi.fn(),
+    playItemDropSfx: vi.fn(),
     playPeekPowerSfx: vi.fn(),
     playMismatchRecoveryCrescendoSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),

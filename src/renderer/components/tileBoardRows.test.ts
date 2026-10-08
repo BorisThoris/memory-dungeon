@@ -267,7 +267,7 @@ describe('tileBoardRows', () => {
         expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([null, 'Next tap', 'Prime payoff']);
     });
 
-    it('marks the hidden matching mate as a selected trait followup after one combo trait card is flipped', () => {
+    it('never marks the face-down mate of a flipped trait card', () => {
         const b = board([
             tile('conduit-a', 'conduit', 'flipped', { tileTraitKind: 'conduit' }),
             tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
@@ -277,7 +277,7 @@ describe('tileBoardRows', () => {
 
         const result = rows({ board: { ...b, flippedTileIds: ['conduit-a'] } });
 
-        expect(result.map((row) => row.selectedTraitFollowupBack)).toEqual([false, false, true, false]);
+        expect(result.map((row) => row.selectedTraitFollowupBack)).toEqual([false, false, false, false]);
     });
 
     it('carries semantic trait lane labels and actions for hidden payoff routes', () => {

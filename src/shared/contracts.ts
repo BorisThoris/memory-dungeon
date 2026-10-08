@@ -330,6 +330,11 @@ export interface Settings {
     displayMode: DisplayMode;
     uiScale: number;
     reduceMotion: boolean;
+    /**
+     * How hard the board shakes on impacts (bombs, meteors, breaks, misses), 0..1. Xbox accessibility
+     * guideline 117: shake must be avoidable or adjustable. Reduce Motion still stops it outright.
+     */
+    screenShakeIntensity: number;
     /** PERF-001: drives board DPR cap and menu Pixi resolution cap. */
     graphicsQuality: GraphicsQualityPreset;
     boardScreenSpaceAA: BoardScreenSpaceAA;

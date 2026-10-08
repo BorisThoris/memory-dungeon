@@ -195,7 +195,7 @@ describe('trait opportunities', () => {
         });
     });
 
-    it('marks hidden mate cards as selected trait followups after one comboable trait card is flipped', () => {
+    it('never marks the face-down mate of a flipped trait card: that would give the pair away', () => {
         const b = board([
             tile('conduit-a', 'conduit', { state: 'flipped', tileTraitKind: 'conduit' }),
             tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
@@ -203,7 +203,7 @@ describe('trait opportunities', () => {
             tile('plain-a', 'plain')
         ]);
 
-        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: ['conduit-a'] })]).toEqual(['conduit-b']);
+        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: ['conduit-a'] })]).toEqual([]);
         expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: [] })]).toEqual([]);
         expect([
             ...getSelectedTraitFollowupTileIds({

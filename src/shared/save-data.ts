@@ -31,6 +31,7 @@ export const DEFAULT_SETTINGS: Settings = {
     displayMode: 'windowed',
     uiScale: 1,
     reduceMotion: false,
+    screenShakeIntensity: 1,
     graphicsQuality: 'medium',
     boardScreenSpaceAA: 'auto',
     boardBloomEnabled: false,
@@ -70,6 +71,7 @@ type NumericSettingsKey =
     | 'musicVolume'
     | 'sfxVolume'
     | 'uiScale'
+    | 'screenShakeIntensity'
     | 'resolveDelayMultiplier';
 
 /**
@@ -84,6 +86,7 @@ export const SETTINGS_NUMERIC_RANGES = {
     musicVolume: { min: 0, max: 1 },
     sfxVolume: { min: 0, max: 1 },
     uiScale: { min: 0.8, max: 1.05 },
+    screenShakeIntensity: { min: 0, max: 1 },
     resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
 } as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
 
@@ -390,6 +393,7 @@ export const settingsBoundarySchema = z.object({
     shuffleScoreTaxEnabled: z.unknown().optional(),
     tileFocusAssist: z.unknown().optional(),
     uiScale: z.unknown().optional(),
+    screenShakeIntensity: z.unknown().optional(),
     weakerShuffleMode: z.unknown().optional()
 });
 
@@ -456,6 +460,7 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
         ),
         displayMode: oneOf(source.displayMode, DISPLAY_MODE_VALUES, DEFAULT_SETTINGS.displayMode),
         uiScale: finiteClampedNumber(source.uiScale, DEFAULT_SETTINGS.uiScale, SETTINGS_NUMERIC_RANGES.uiScale),
+        screenShakeIntensity: finiteClampedNumber(source.screenShakeIntensity, DEFAULT_SETTINGS.screenShakeIntensity, SETTINGS_NUMERIC_RANGES.screenShakeIntensity),
         reduceMotion: typeof source.reduceMotion === 'boolean' ? source.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
         graphicsQuality: oneOf(source.graphicsQuality, GRAPHICS_QUALITY_VALUES, DEFAULT_SETTINGS.graphicsQuality),
         boardScreenSpaceAA: oneOf(

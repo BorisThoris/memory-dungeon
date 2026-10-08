@@ -541,6 +541,17 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         label="Reduce Motion"
                                                         onChange={(next) => patchSettings('reduceMotion', next)}
                                                     />
+                                                    <SliderRow
+                                                        disabled={draft.reduceMotion}
+                                                        hint={SETTINGS_HINTS.screenShakeIntensity}
+                                                        label="Screen shake"
+                                                        max={SETTINGS_NUMERIC_RANGES.screenShakeIntensity.max}
+                                                        min={SETTINGS_NUMERIC_RANGES.screenShakeIntensity.min}
+                                                        onChange={(next) => patchSettings('screenShakeIntensity', next)}
+                                                        step={0.05}
+                                                        value={draft.screenShakeIntensity}
+                                                        valueLabel={draft.reduceMotion ? 'Off' : `${Math.round(draft.screenShakeIntensity * 100)}%`}
+                                                    />
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}
                                                         hint={SETTINGS_HINTS.tileFocusAssistRepeat}

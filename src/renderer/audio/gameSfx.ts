@@ -24,6 +24,8 @@ import {
     type SampledVoicing,
     type SfxSampleKey
 } from './sampledSfx';
+import { METEOR_IMPACT_DELAY_SECONDS, type ItemEffectKind } from '../components/itemEffects';
+import type { ItemDropRarity } from '../components/itemDrops';
 import {
     getSharedAudioContext,
     resetSharedAudioContextForTests,
@@ -1161,4 +1163,70 @@ export const playFloorClearSfx = (gain: number): void => {
             category: 'power'
         });
     }, 0);
+};
+
+/**
+ * What using an item sounds like (`itemEffects.ts`), so a bomb is not the same click as a peek.
+ * Layered from the realm's voices: a bomb is a crack, a thump and a roll of debris; the meteor a
+ * falling whistle, then a bigger one; a swap a zip; a pin a tick; a flash a bright shimmer.
+ */
+export const playItemEffectSfx = (gain: number, kind: ItemEffectKind): void => {
+    if (gain <= 0.001) return;
+    switch (kind) {
+        case 'bomb':
+            playNoise({ durationSec: 0.07, gain: gain * 0.9, filter: 'highpass', from: 3000, to: 1800, attackSec: 0.002 });
+            playTone({ frequency: 110, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.7, type: 'sine', category: 'realm' });
+            playNoise({ durationSec: 0.9, gain: gain * 0.75, filter: 'lowpass', from: 2200, to: 90, attackSec: 0.004, delaySec: 0.02 });
+            return;
+        case 'meteor':
+            playTone({ frequency: 1800, frequencyEnd: 260, durationSec: METEOR_IMPACT_DELAY_SECONDS, gain: gain * 0.18, type: 'sine', category: 'realm' });
+            playNoise({ durationSec: 0.3, gain: gain * 0.35, filter: 'bandpass', from: 4000, to: 600, q: 1.2, attackSec: 0.08 });
+            scheduleCue(() => {
+                playNoise({ durationSec: 0.08, gain: gain * 1, filter: 'highpass', from: 2600, to: 1500, attackSec: 0.002 });
+                playTone({ frequency: 82, frequencyEnd: 26, durationSec: 0.9, gain: gain * 0.85, type: 'sine', category: 'realm' });
+                playNoise({ durationSec: 1.4, gain: gain * 0.9, filter: 'lowpass', from: 1800, to: 60, attackSec: 0.004 });
+            }, METEOR_IMPACT_DELAY_SECONDS * 1000);
+            return;
+        // A peek, a shuffle and a gambit already have their own sounds (`playPeekPowerSfx`, `playShuffleSfx`, `gambitCommit`).
+        case 'peek':
+        case 'shuffle':
+        case 'row_shuffle':
+            return;
+        case 'swap':
+            playNoise({ durationSec: 0.22, gain: gain * 0.3, filter: 'bandpass', from: 600, peak: 3200, to: 900, q: 3, attackSec: 0.02 });
+            playTone({ frequency: 520, frequencyEnd: 1040, durationSec: 0.18, gain: gain * 0.12, type: 'triangle', category: 'power' });
+            return;
+        case 'pin':
+            playTone({ frequency: 1240, frequencyEnd: 980, durationSec: 0.09, gain: gain * 0.2, type: 'triangle', category: 'power' });
+            return;
+        case 'flash':
+            playTone({ frequency: 880, frequencyEnd: 1760, durationSec: 0.22, gain: gain * 0.18, type: 'sine', category: 'power' });
+            playNoise({ durationSec: 0.25, gain: gain * 0.2, filter: 'highpass', from: 5000, to: 2500, attackSec: 0.01 });
+            return;
+        case 'undo':
+            playTone({ frequency: 980, frequencyEnd: 420, durationSec: 0.3, gain: gain * 0.16, type: 'triangle', category: 'power' });
+            return;
+        case 'wild':
+            [660, 830, 990, 1320].forEach((frequency, n) =>
+                scheduleCue(() => playTone({ frequency, durationSec: 0.18, gain: gain * 0.14, type: 'triangle', category: 'power' }), n * 55)
+            );
+            return;
+        case 'gambit':
+            return;
+    }
+};
+
+/**
+ * An item drop's sting (`ItemDropPopup.tsx`): a rising arpeggio, longer and brighter the rarer the
+ * item, ending on a shimmer for the epic and the legendary.
+ */
+export const playItemDropSfx = (gain: number, rarity: ItemDropRarity): void => {
+    if (gain <= 0.001) return;
+    const steps = { common: [784, 988], uncommon: [659, 880, 1109], rare: [587, 784, 988, 1319], epic: [523, 659, 880, 1047, 1397], legendary: [523, 659, 784, 1047, 1319, 1568] }[rarity];
+    steps.forEach((frequency, n) =>
+        scheduleCue(() => playTone({ frequency, durationSec: 0.16 + n * 0.02, gain: gain * 0.16, type: 'triangle', category: 'power' }), n * 70)
+    );
+    if (rarity === 'epic' || rarity === 'legendary') {
+        scheduleCue(() => playNoise({ durationSec: 0.7, gain: gain * 0.18, filter: 'highpass', from: 6000, to: 3500, attackSec: 0.05 }), steps.length * 70);
+    }
 };

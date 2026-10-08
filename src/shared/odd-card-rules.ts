@@ -10,12 +10,14 @@ import { TILE_SUITS } from './tile-suit-rules';
  * each of them a thing the board shows and the player times, never a thing to hold in the head.
  *
  *   - **The Turncoat** is a pair whose element turns every turn, match or miss. Both halves turn
- *     together and its back always shows what it is now, with a badge for what it will be next,
- *     so it is read, not remembered. While the realm has hold of it (burning, frozen, snowed
+ *     together. Face down it wears the element it was dealt (`player-visible-board.ts`): two backs
+ *     changing at once would name the pair from across the board (the owner, 2026-10-08: "type
+ *     switch cards are easily tellable pairs"). Its face shows what it is now, with a badge for
+ *     what it will be next. While the realm has hold of it (burning, frozen, snowed
  *     over, bound) it does not turn. It turns only through elements another standing pair still
  *     holds. What it is when it is matched is what it counts as: for the pop, for a cast, and for
  *     a Colossus, which makes it the one pair a player can hold back for the element they need.
- *   - **The Hourglass** is a pair with a prize and a clock on its back. Matched (or burst) before
+ *   - **The Hourglass** is a pair with a prize and a clock on its face. Matched (or burst) before
  *     the sand runs out, it pays gold and score. After that it is a pair like any other: nothing
  *     is taken, the prize is only gone.
  *

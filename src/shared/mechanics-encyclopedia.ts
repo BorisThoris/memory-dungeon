@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 81 as const;
+export const ENCYCLOPEDIA_VERSION = 82 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -605,9 +605,9 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'odd_cards',
         title: 'Odd cards: the Turncoat and the Hourglass',
         description:
-            'Some floors deal a pair that is not like the others. Each wears its mark on its back and is named beside the board, so there is nothing to remember about it. ' +
-            'A **Turncoat** changes element **every turn**, match or miss, both halves together. Its back is the element it is now; its **turned corner** shows the one it becomes next. It counts as what it is at the moment you match it - for a burst, for a cast, and for a **Colossus**, which makes it the one pair you can hold back for the element you need. It turns only to elements another pair on the floor still holds, and while the realm has hold of it - burning, frozen, snowed over or bound - it does not turn. Floors from five on can have one, and a floor a Colossus stands over always does. ' +
-            'An **Hourglass** shows **turns of sand**. Every turn spends one. Match its pair, or burst it, while sand is left and it pays **3 gold and 60 score**. When the sand runs out the mark is gone and the pair is a plain pair: you lose the prize and nothing else. A bomb takes the pair without the prize. Floors from three on can have one.'
+            'Some floors deal a pair that is not like the others, and the board names which ones are on it. Face down an odd card looks like any card of its element - no mark gives its pair away - and its mark is on its **face**: turn one to find it. ' +
+            'A **Turncoat** changes element **every turn**, match or miss, both halves together. Face down it wears the element it was **dealt**; turned over, its face shows the element it is now and its **turned corner** the one it becomes next. It counts as what it is at the moment you match it - for a burst, for a cast, and for a **Colossus**, which makes it the one pair you can hold back for the element you need. It turns only to elements another pair on the floor still holds, and while the realm has hold of it - burning, frozen, snowed over or bound - it does not turn. Floors from five on can have one, and a floor a Colossus stands over always does. ' +
+            'An **Hourglass** shows its **turns of sand** on its face. Every turn spends one. Match its pair, or burst it, while sand is left and it pays **3 gold and 60 score**. When the sand runs out the mark is gone and the pair is a plain pair: you lose the prize and nothing else. A bomb takes the pair without the prize. Floors from three on can have one.'
     },
     {
         id: 'colossus',

@@ -213,7 +213,7 @@ describe('tile board DOM accessibility helpers', () => {
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
             })
-        ).toContain('Selected chain follow-up. Match this mate to keep the trait route moving.');
+        ).not.toContain('Selected chain follow-up');
         expect(
             getFocusedTileLiveLabel({
                 board: selectedTraitBoard,
@@ -229,7 +229,7 @@ describe('tile board DOM accessibility helpers', () => {
                 tileSwapFirstTileId: null,
                 tileSwapPowerVisualActive: false
             })
-        ).toContain('Beat: follow-up. Action: Next tap. 3-beat pulse. Tap next to keep the route moving.');
+        ).not.toContain('Beat: follow-up');
 
         const armedSwapLabel = getFocusedTileLiveLabel({
             board: swapBoard,
@@ -302,18 +302,10 @@ describe('tile board DOM accessibility helpers', () => {
             ]
         };
 
-        expect(getBoardChainAccessibilitySummary(selectedFollowupBoard)).toMatchObject({
-            label: expect.stringContaining(
-                'Chain board: 2 chain-ready cards, 1 selected follow-up. Next: follow up the marked mate: Conduit: adjacent trait charge.'
-            ),
-            primaryLine: '1 selected follow-up',
-            followupCount: 1,
-            readyCount: 2,
-            rewardHotCount: 0,
-            setupCount: 0,
-            surgeCount: 0,
-            tone: 'ready'
-        });
+        // A flipped trait card no longer points at its face-down mate (2026-10-08 audit).
+        const followupSummary = getBoardChainAccessibilitySummary(selectedFollowupBoard);
+        expect(followupSummary.followupCount).toBe(0);
+        expect(followupSummary.label).not.toContain('follow-up');
 
         expect(
             getBoardChainAccessibilitySummary(board, {

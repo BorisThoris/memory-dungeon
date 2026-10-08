@@ -16,6 +16,7 @@ import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findab
 import { ELEMENTAL_STORE_ITEMS, STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
+import type { ItemDropId } from './itemDrops';
 import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
 
 /**
@@ -51,6 +52,11 @@ export interface ScreenCallout {
     color?: string;
     /** The shiny's stamps: tagged rare, palette cycling. */
     rare?: boolean;
+    /**
+     * The item this moment gave the player: shown as an item drop (`ItemDropPopup`) instead of a
+     * stamp. Pickups, an Hourglass's prize and store purchases carry one.
+     */
+    drop?: ItemDropId;
 }
 
 type TurnEvent = BoardTurnResolvedEvent;
@@ -104,7 +110,7 @@ export const deriveTurnCallouts = (
     }
     if (event.matchedFindableKind) {
         const kind = event.matchedFindableKind;
-        callouts.push({ key: `pickup:${id}`, kind: 'pickup', size: 'minor', tone: 'cyan', title: `${getFindableKindLabel(kind).toUpperCase()}!`, sub: getFindableRewardCopy(kind) });
+        callouts.push({ key: `pickup:${id}`, kind: 'pickup', size: 'minor', tone: 'cyan', title: `${getFindableKindLabel(kind).toUpperCase()}!`, sub: getFindableRewardCopy(kind), drop: kind });
     }
     return callouts.sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind));
 };
@@ -275,7 +281,8 @@ export const derivePurchaseCallouts = (
                 size: 'minor',
                 tone: 'gold',
                 title: item.title.toUpperCase(),
-                sub: item.kind === 'focus' ? 'Forged · kept for this run' : item.kind === 'prime' ? 'Primed · match another element' : item.kind === 'relic' ? 'Relic · kept to the end of the run' : 'Bought'
+                sub: item.kind === 'focus' ? 'Forged · kept for this run' : item.kind === 'prime' ? 'Primed · match another element' : item.kind === 'relic' ? 'Relic · kept to the end of the run' : 'Bought',
+                drop: item.id as StoreItemId
             });
         }
     }
