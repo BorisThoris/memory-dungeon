@@ -141,3 +141,6 @@ export const PERFECT_MEMORY_COPY = {
     label: 'Perfect memory',
     locked: 'Locked'
 } as const;
+
+/** The miss bank's tooltip in the run rail. */
+export const MISS_BANK_TITLE = 'A mismatch spends one life. Earn more through combos and floor clears.';

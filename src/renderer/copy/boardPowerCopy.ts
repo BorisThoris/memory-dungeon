@@ -51,3 +51,9 @@ export const BOARD_SHUFFLE_COPY = {
     pendingFlip: 'Finish the current flip first',
     scholarContract: 'Scholar contract: shuffle disabled'
 } as const;
+
+export const METEOR_TOOL_COPY = {
+    armedTitle: 'Select a card for the meteor strike. Click Meteor again or press Escape to cancel without spending.',
+    idleTitle: 'Spend one stored meteor: choose a card and strike the surrounding area.',
+    armed: 'Select a card for your meteor. Tap Meteor again to cancel.'
+} as const;

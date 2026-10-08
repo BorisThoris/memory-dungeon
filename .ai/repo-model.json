@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3015,
-    "codeFileCount": 1142,
-    "exportedSymbolCount": 3601,
+    "trackedFileCount": 3016,
+    "codeFileCount": 1143,
+    "exportedSymbolCount": 3605,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9638
+    "relationshipCount": 9640
   },
   "inventory": [
     {
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "8ed4be4271f6d666b4b68d50491567d9c8cc161262f3bd41a1baa0673bd70e2f"
+      "sha256": "8ddb6b354d2c44dd061ae2738b632e6bdc163f1cbd86f23f9c5ddb4e5a665e9f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5697,8 +5697,8 @@
     {
       "path": "scripts/test-only-exports.ts",
       "category": "script",
-      "bytes": 18601,
-      "sha256": "177869f6d7ab033ea54f276a38c6c8c0a695b71dc7a52c2d9a7400ad84f15150"
+      "bytes": 18915,
+      "sha256": "0122e65a93a123d5b1a70c5738a98817703c5fd45747f1ff7b46608fe3ba538a"
     },
     {
       "path": "scripts/test-only-modules.ts",
@@ -9987,8 +9987,8 @@
     {
       "path": "src/renderer/components/FloorJourney.tsx",
       "category": "source",
-      "bytes": 3147,
-      "sha256": "3239951aa56b25a8e93c7ccec3f5580970e305dd557338a75a53c256b51ca854"
+      "bytes": 3175,
+      "sha256": "8b3e8786b2038198d0e62ec9813dce5e39087c0ce74642db990c9e23170a5336"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -10077,8 +10077,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 119151,
-      "sha256": "b288cfd8861509cb1e1d27f5a63a9d196d814530fa98f7d66d897be6c53f06b0"
+      "bytes": 119013,
+      "sha256": "f14cb3a79f393405799520b23f8b7da93474640a7fbc832a963c64a038e005b7"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10563,8 +10563,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 46995,
-      "sha256": "804e20231e360653637751a7266fd3a13926f197148033a78c9df0dbdf7348c3"
+      "bytes": 46957,
+      "sha256": "f80c88e342e5c3a234aae20b9353c141a77b7bcdae2a2c15bbb5c47edd9a2355"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -11037,8 +11037,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "category": "source",
-      "bytes": 4111,
-      "sha256": "1e1ef3cb5282d242fabbd977b0512c38cba667384ecd095d6d8135f8e04f9e02"
+      "bytes": 4042,
+      "sha256": "18592485b698d6a37e3f7cec0f336a45862748d2df0c9390b2cc05a1fe12edeb"
     },
     {
       "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
@@ -11667,8 +11667,8 @@
     {
       "path": "src/renderer/components/TutorialHall.tsx",
       "category": "source",
-      "bytes": 9643,
-      "sha256": "be454f375173577a90b9cc13772b46c03a3ec6467eff22894dd1ffa67a58e161"
+      "bytes": 9715,
+      "sha256": "260610062142e3f15b7f91841e919c54a90e9a0437338eab870d7c4ccce63744"
     },
     {
       "path": "src/renderer/components/tutorialHallContext.ts",
@@ -11715,8 +11715,8 @@
     {
       "path": "src/renderer/components/useSceneWipe.ts",
       "category": "source",
-      "bytes": 1201,
-      "sha256": "9fe3b2d0cad8b19faa8e6bb527761648c32edcf67a321f74e0a092b66afb8381"
+      "bytes": 1262,
+      "sha256": "4d589ad08fbf973a6f657d8e573a68471fdc875c45de5658cd5706f7e4a17107"
     },
     {
       "path": "src/renderer/components/useTileBoardSceneImperativeHandle.ts",
@@ -11769,8 +11769,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 2284,
-      "sha256": "3f417e8a30a126549247b8cae412778beea877f37a237fa9e78d3040205b536f"
+      "bytes": 2612,
+      "sha256": "bd36f5c7e35a1347d17092b1114e2c2ef169174d46333e4d751592f388947117"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -12009,8 +12009,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 6172,
-      "sha256": "cfa2e207790ca5d40d843ee04cfc822be8d6d7871f6c231f4c4eb97f59eb6cf3"
+      "bytes": 6317,
+      "sha256": "ed49d8934224f2220d456b2d8a18b65b3533e1c1f17c543ea178d4d9caa41c23"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -12027,8 +12027,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 6819,
-      "sha256": "844e91ed0c9471f67555ec866dbc09951051e4e9ca785a3fa13c695bca7d1ffe"
+      "bytes": 6973,
+      "sha256": "eee399e153c5df93875a5df394966e912809d267633af5cccc853d2680f19bc6"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -12089,6 +12089,12 @@
       "category": "source",
       "bytes": 4353,
       "sha256": "76fa325685665a4b4553bf9c9963c3bee4b946e7978e26a387675a4c250b09c5"
+    },
+    {
+      "path": "src/renderer/copy/tutorialHallCopy.ts",
+      "category": "source",
+      "bytes": 247,
+      "sha256": "d9d55b9159323afed4969c4907c094636e58aa7c17297d94bc82e14310aeef39"
     },
     {
       "path": "src/renderer/copy/voidSpewCopy.ts",
@@ -13713,8 +13719,8 @@
     {
       "path": "src/shared/combo-heat-perks.test.ts",
       "category": "test",
-      "bytes": 3280,
-      "sha256": "3531e009482b168a670a325f4410b47801f53dd62815a1e18ba007cd91659d91"
+      "bytes": 3278,
+      "sha256": "301a64e85cb93ae6fe073ac43cb97a9dfc718d53785aeac29802fb79dfaaddef"
     },
     {
       "path": "src/shared/combo-heat-perks.ts",
@@ -14169,8 +14175,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 68299,
-      "sha256": "ed856357d6120998c8f753800d25f26c5b95bfb550e3ab506dee7035f6bba31b"
+      "bytes": 68236,
+      "sha256": "53338623893f50d2c522712e5cd713ff1735f6240f73aa0391da981b2b7102f5"
     },
     {
       "path": "src/shared/game.ts",
@@ -14691,8 +14697,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "category": "test",
-      "bytes": 5383,
-      "sha256": "027928bcd716681efb225ab5a7f0efddacdb32bdd1807c3dffcee93fae6c3fa7"
+      "bytes": 5362,
+      "sha256": "7bf69840c74011b2fa00e60ebc532458cec4cb392562c409c27b95ee4e1833fa"
     },
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
@@ -15051,8 +15057,8 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 40976,
-      "sha256": "d0aa56be13bc9915869e84d8529b800ca426c39f313c53462dcc3c60318f6985"
+      "bytes": 41331,
+      "sha256": "5cf74d1366e5975703dda92cf966d46d74747e3831c7b193453ce8b052ef2ffb"
     },
     {
       "path": "src/shared/release-checklist.ts",
@@ -15573,8 +15579,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 59600,
-      "sha256": "98a8d9ab40e84af452c2d28364e60e26d5bc124ecdd99a4fa8dce569e9172e0a"
+      "bytes": 59793,
+      "sha256": "f23a48463af16d424ecdd0380049c6f999d45dfcd4abb36e79a4579dd6be9828"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -21901,7 +21907,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2354,
+      "lineCount": 2355,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -24621,12 +24627,11 @@
       "path": "src/renderer/components/tileBoardFrameBag.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 89,
       "imports": [
         "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
         "file:src/renderer/components/tileFrameActivity.ts",
-        "file:src/renderer/components/tileResolvingSelection.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/renderer/components/tileResolvingSelection.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -26531,10 +26536,11 @@
       "path": "src/renderer/components/TutorialHall.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 121,
+      "lineCount": 122,
       "imports": [
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/TileBoard.tsx",
+        "file:src/renderer/copy/tutorialHallCopy.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -26776,11 +26782,12 @@
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 54,
+      "lineCount": 60,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY"
@@ -27428,7 +27435,7 @@
       "path": "src/renderer/copy/realmCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 98,
+      "lineCount": 101,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-carryover-rules.ts",
@@ -27436,6 +27443,7 @@
       ],
       "exports": [
         "symbol:src/renderer/copy/realmCopy.ts#attunementNumeral",
+        "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_TRAVEL_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#realmCarryoverLines"
@@ -27472,12 +27480,13 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 147,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#MEMORIZE_SKIP_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
         "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -27655,6 +27664,18 @@
       "testedBy": [
         "file:src/renderer/copy/traitInteractionLaneMap.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/copy/tutorialHallCopy.ts",
+      "path": "src/renderer/copy/tutorialHallCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 7,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/tutorialHallCopy.ts#TUTORIAL_HALL_COPY"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/voidSpewCopy.ts",
@@ -31727,7 +31748,6 @@
       ],
       "testedBy": [
         "file:src/shared/chain-carryover-rules.test.ts",
-        "file:src/shared/game.test.ts",
         "file:src/shared/next-floor-run-state-rules.test.ts"
       ]
     },
@@ -34010,11 +34030,10 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1713,
+      "lineCount": 1712,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
-        "file:src/shared/chain-carryover-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
@@ -37058,7 +37077,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 713,
+      "lineCount": 717,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -38832,7 +38851,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1107,
+      "lineCount": 1109,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -44136,40 +44155,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2353,
-      "endLine": 2353
+      "line": 2354,
+      "endLine": 2354
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 257,
-      "endLine": 257
+      "line": 258,
+      "endLine": 258
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 255,
-      "endLine": 255
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 259,
-      "endLine": 259
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 249,
-      "endLine": 249
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -47368,32 +47387,32 @@
       "name": "createOrUpdateTileBezelFrameBag",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 79,
-      "endLine": 89
+      "line": 78,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#CreateTileBezelFrameBagInput",
       "name": "CreateTileBezelFrameBagInput",
       "kind": "type",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 75,
-      "endLine": 77
+      "line": 74,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelFrameBag",
       "name": "TileBezelFrameBag",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 21,
-      "endLine": 73
+      "line": 20,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#TileBezelPlaneGeometries",
       "name": "TileBezelPlaneGeometries",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFrameBag.ts",
-      "line": 15,
-      "endLine": 19
+      "line": 14,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameMaterialState.ts#applyTileBoardFrameMaterialState",
@@ -49696,8 +49715,8 @@
       "name": "default",
       "kind": "function",
       "file": "src/renderer/components/TutorialHall.tsx",
-      "line": 15,
-      "endLine": 120
+      "line": 16,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/components/tutorialHallContext.ts#TutorialHallContext",
@@ -49842,6 +49861,14 @@
       "file": "src/renderer/copy/boardPowerCopy.ts",
       "line": 40,
       "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
+      "name": "METEOR_TOOL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 55,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
@@ -50540,6 +50567,14 @@
       "endLine": 34
     },
     {
+      "id": "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
+      "name": "FLOOR_JOURNEY_REWARDS_LABEL",
+      "kind": "value",
+      "file": "src/renderer/copy/realmCopy.ts",
+      "line": 100,
+      "endLine": 100
+    },
+    {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
       "name": "REALM_HUD_COPY",
       "kind": "value",
@@ -50594,6 +50629,14 @@
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 130,
       "endLine": 133
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
+      "name": "MISS_BANK_TITLE",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -50906,6 +50949,14 @@
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
       "line": 99,
       "endLine": 100
+    },
+    {
+      "id": "symbol:src/renderer/copy/tutorialHallCopy.ts#TUTORIAL_HALL_COPY",
+      "name": "TUTORIAL_HALL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/tutorialHallCopy.ts",
+      "line": 2,
+      "endLine": 6
     },
     {
       "id": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
@@ -66880,120 +66931,120 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1085,
-      "endLine": 1088
+      "line": 1087,
+      "endLine": 1090
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1002,
-      "endLine": 1007
+      "line": 1004,
+      "endLine": 1009
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1043,
-      "endLine": 1083
+      "line": 1045,
+      "endLine": 1085
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1009,
-      "endLine": 1031
+      "line": 1011,
+      "endLine": 1033
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 969,
-      "endLine": 992
+      "line": 971,
+      "endLine": 994
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 799,
-      "endLine": 799
+      "line": 801,
+      "endLine": 801
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 425,
-      "endLine": 429
+      "line": 427,
+      "endLine": 431
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 653,
-      "endLine": 671
+      "line": 655,
+      "endLine": 673
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 673,
-      "endLine": 787
+      "line": 675,
+      "endLine": 789
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 801,
-      "endLine": 846
+      "line": 803,
+      "endLine": 848
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 789,
-      "endLine": 797
+      "line": 791,
+      "endLine": 799
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1090,
-      "endLine": 1106
+      "line": 1092,
+      "endLine": 1108
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 853,
-      "endLine": 873
+      "line": 855,
+      "endLine": 875
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 923,
-      "endLine": 943
+      "line": 925,
+      "endLine": 945
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 960,
-      "endLine": 960
+      "line": 962,
+      "endLine": 962
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -67001,7 +67052,7 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 123,
-      "endLine": 259
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
@@ -67016,8 +67067,8 @@
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 290,
-      "endLine": 302
+      "line": 292,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
@@ -70464,7 +70515,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 133
+          "line": 132
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -81645,6 +81696,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
       "source": "file:src/renderer/copy/boardPowerCopy.ts",
       "target": "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
@@ -82167,6 +82224,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
+      "source": "file:src/renderer/copy/realmCopy.ts",
+      "target": "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
       "source": "file:src/renderer/copy/realmCopy.ts",
       "target": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
@@ -82206,6 +82269,12 @@
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#MEMORIZE_SKIP_COPY",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#MEMORIZE_SKIP_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "kind": "exports"
     },
     {
@@ -82440,6 +82509,12 @@
       "id": "exports:src/renderer/copy/traitInteractionLaneMap.ts->symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/tutorialHallCopy.ts->symbol:src/renderer/copy/tutorialHallCopy.ts#TUTORIAL_HALL_COPY",
+      "source": "file:src/renderer/copy/tutorialHallCopy.ts",
+      "target": "symbol:src/renderer/copy/tutorialHallCopy.ts#TUTORIAL_HALL_COPY",
       "kind": "exports"
     },
     {
@@ -104791,12 +104866,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/tileBoardFrameBag.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/tileBoardFrameBag.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/tileBoardFrameDeparture.test.ts->src/renderer/components/tileBoardFramePulseState.ts",
       "source": "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
       "target": "file:src/renderer/components/tileBoardFramePulseState.ts",
@@ -106696,6 +106765,12 @@
       "id": "imports:src/renderer/components/TutorialHall.tsx->src/renderer/components/TileBoard.tsx",
       "source": "file:src/renderer/components/TutorialHall.tsx",
       "target": "file:src/renderer/components/TileBoard.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TutorialHall.tsx->src/renderer/copy/tutorialHallCopy.ts",
+      "source": "file:src/renderer/components/TutorialHall.tsx",
+      "target": "file:src/renderer/copy/tutorialHallCopy.ts",
       "kind": "imports"
     },
     {
@@ -112996,12 +113071,6 @@
       "id": "imports:src/shared/game.test.ts->src/shared/board-powers.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/board-powers.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/game.test.ts->src/shared/chain-carryover-rules.ts",
-      "source": "file:src/shared/game.test.ts",
-      "target": "file:src/shared/chain-carryover-rules.ts",
       "kind": "imports"
     },
     {
@@ -125108,12 +125177,6 @@
       "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/chain-carryover-rules.test.ts",
       "source": "file:src/shared/chain-carryover-rules.ts",
       "target": "file:src/shared/chain-carryover-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/chain-carryover-rules.ts->file:src/shared/game.test.ts",
-      "source": "file:src/shared/chain-carryover-rules.ts",
-      "target": "file:src/shared/game.test.ts",
       "kind": "tested_by"
     },
     {

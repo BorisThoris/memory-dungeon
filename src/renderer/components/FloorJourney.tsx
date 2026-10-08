@@ -5,7 +5,7 @@ import { TILE_SUITS, getTileSuit } from '../../shared/tile-suit-rules';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 import { REALMS, REALM_SEVERITIES, realmIntervalFor } from '../../shared/realm-rules';
 import { ARENA_ACTION } from '../copy/elementClarity';
-import { realmCarryoverLines } from '../copy/realmCopy';
+import { FLOOR_JOURNEY_REWARDS_LABEL, realmCarryoverLines } from '../copy/realmCopy';
 import styles from './FloorJourney.module.css';
 
 /** Keep the earned rewards and next destination readable for the whole intermission. */
@@ -19,7 +19,7 @@ export function FloorJourney({ run, phase }: { run: RunState; phase: 'camp' | 'f
             <strong>{phase === 'camp' ? 'Rest & upgrade' : phase === 'forge' ? 'Prepare your next cast' : 'Next arena'}</strong>
             <span className={styles.next}>Floor {result.level + 1} ahead <span aria-hidden="true">↘</span></span>
         </div>
-        <div className={styles.rewards} aria-label="Rewards earned on this floor">
+        <div className={styles.rewards} aria-label={FLOOR_JOURNEY_REWARDS_LABEL}>
             <strong>+{result.goldEarned ?? 0} gold earned</strong>
             {phase === 'camp' ? <span className={styles.next}>Floor {result.level + 1} ahead</span> : null}
             {TILE_SUITS.filter(suit => essenceOf(result.elementalDrops, suit) > 0).map(suit =>

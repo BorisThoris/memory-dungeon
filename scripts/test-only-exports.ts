@@ -39,6 +39,10 @@ import { readRelativeImports, TEST_ONLY_EXEMPTIONS } from './test-only-modules';
  * unreachable" is the whole question - the same contract the module audit's exemptions keep.
  */
 export const TEST_ONLY_EXPORT_EXEMPTIONS: Record<string, string> = {
+    CHAIN_CARRYOVER_CAP:
+        'Record by design since the ladder began carrying whole (2026-09-29): the old one-link cap ' +
+        'is kept as a documented constant so the reasoning it carried stays findable, and its test ' +
+        'pins it two short of Clean. Nothing at runtime caps the carry any more.',
     clearTileTextureCachesForDebug:
         'Reached by scripts/bake-procedural-illustration-set.ts and two illustration e2e specs ' +
         "through `import('/src/renderer/components/tileTextures.ts')` - a dynamic module URL this " +

@@ -95,3 +95,6 @@ export const REALM_TRAVEL_COPY = {
             ? `Go to the confluence of ${REALMS[door.realmId].place} and ${REALMS[door.confluence].place}`
             : `Go to ${REALMS[door.realmId].place}, ${REALM_SEVERITIES[door.severity].title.toLowerCase()}`
 } as const;
+
+/** The floor journey's rewards row, as a screen reader names it. */
+export const FLOOR_JOURNEY_REWARDS_LABEL = 'Rewards earned on this floor';

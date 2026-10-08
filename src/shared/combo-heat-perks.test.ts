@@ -40,8 +40,8 @@ describe('what the heat buys on the board', () => {
         expect(nextComboHeatPerkAt(6)).toBe(COMBO_HEAT_STAGE_FROM.blazing);
         expect(nextComboHeatPerkAt(16)).toBeNull();
         expect(nextComboHeatPerkAt(25)).toBeNull();
-        expect(comboHeatPerksLine(comboHeatPerks(0), 6)).toBe('Fire at 6');
-        expect(comboHeatPerksLine(comboHeatPerks(16), 25)).toBe('Afterglow 3 · Pop +1 · Reach +1');
-        expect(comboHeatPerksLine(comboHeatPerks(25), null)).toBe('Afterglow 3 · Pop +1 · Reach +1');
+        expect(comboHeatPerksLine(comboHeatPerks(0), 6)).toBe('Reveal at 6');
+        expect(comboHeatPerksLine(comboHeatPerks(16), 25)).toBe('Reveal +3 · Pop +1 · Reach +1');
+        expect(comboHeatPerksLine(comboHeatPerks(25), null)).toBe('Reveal +3 · Pop +1 · Reach +1');
     });
 });

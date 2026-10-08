@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
-import { CHAIN_CARRYOVER_CAP, carriedChainForNextFloor } from './chain-carryover-rules';
+import { carriedChainForNextFloor } from './chain-carryover-rules';
 import { getChainTier, runChainTier, runLadderChain } from './chain-tier-rules';
 import { pickFloorCurio } from './floor-curio-rules';
 

@@ -8,6 +8,7 @@ import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import styles from './TutorialHall.module.css';
+import { TUTORIAL_HALL_COPY } from '../copy/tutorialHallCopy';
 
 interface Props { initialLessonId?: string; onClose: () => void; reduceMotion: boolean; graphicsQuality: GraphicsQualityPreset }
 const categories = ['Essentials', 'Elements', 'Combinations', 'Interactions'] as const;
@@ -111,7 +112,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
                 <ScreenCalloutQueue callouts={callouts} reduceMotion={reduceMotion} lowQuality={graphicsQuality === 'low'} />
             </div>
             <div className={styles.coach}>
-                <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? 'You’ve got it.' : session.phase === 'result' ? reactionResult ? `${session.lesson.title}: ${elementReactionResult(reactionResult)}.` : step?.result : session.hint || (session.phase === 'resolve' ? 'Watch what happens…' : session.half === 1 ? 'Tap the next highlighted card.' : step?.instruction)}</p>
+                <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? TUTORIAL_HALL_COPY.complete : session.phase === 'result' ? reactionResult ? `${session.lesson.title}: ${elementReactionResult(reactionResult)}.` : step?.result : session.hint || (session.phase === 'resolve' ? TUTORIAL_HALL_COPY.resolving : session.half === 1 ? TUTORIAL_HALL_COPY.nextCard : step?.instruction)}</p>
                 {session.phase === 'result' ? <button type="button" className={styles.primary} onClick={next} autoFocus>{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</button> : null}
                 {session.phase === 'complete' ? <button type="button" className={styles.primary} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }}>Choose a lesson</button> : null}
             </div>

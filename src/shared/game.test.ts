@@ -57,7 +57,6 @@ import {
 } from './turn-resolution';
 import { WILD_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
-import { CHAIN_CARRYOVER_CAP } from './chain-carryover-rules';
 import { runLadderChain } from './chain-tier-rules';
 import { pairsForFloor } from './pair-curve';
 import { parTurnsForFloor } from './floor-par';

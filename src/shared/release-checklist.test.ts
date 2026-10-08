@@ -395,7 +395,11 @@ const VERIFIERS: Record<string, () => void> = {
 
         const board = readFileSync('src/renderer/components/TileBoard.module.css', 'utf8');
         expect(board).toContain('var(--gameplay-hud-top-clearance');
-        expect(board).toContain('var(--gameplay-dock-bottom-clearance');
+        // The board's own bottom overlay (the trait preview chip) went in 5338d3d7; what is drawn over
+        // the dock now is the callout queue and the floor-clear beat, and both clear it.
+        for (const overlay of ['ScreenCalloutQueue', 'FloorClearBeat']) {
+            expect(readFileSync(`src/renderer/components/${overlay}.module.css`, 'utf8'), overlay).toContain('var(--gameplay-dock-bottom-clearance');
+        }
     },
     'board-controls-answer': () => {
         /*

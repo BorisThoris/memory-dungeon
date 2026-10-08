@@ -44,6 +44,7 @@ import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
+import { METEOR_TOOL_COPY } from '../copy/boardPowerCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1722,7 +1723,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 charges: meteorCharges(run),
                 armed: run.meteorArmed === true,
                 disabled: !canAimMeteor(run),
-                title: run.meteorArmed ? 'Select a card for the meteor strike. Click Meteor again or press Escape to cancel without spending.' : 'Spend one stored meteor: choose a card and strike the surrounding area.',
+                title: run.meteorArmed ? METEOR_TOOL_COPY.armedTitle : METEOR_TOOL_COPY.idleTitle,
                 onClick: () => useAppStore.getState().armMeteor()
             },
             {
@@ -1930,11 +1931,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
-                            feedback={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : ''}
+                            feedback={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : ''}
                             onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
-                            politeAnnouncement={run.meteorArmed ? 'Select a card for your meteor. Tap Meteor again to cancel.' : bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
+                            politeAnnouncement={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
                             sfxGain={shuffleSfxGain}

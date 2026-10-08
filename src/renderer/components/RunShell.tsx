@@ -18,7 +18,7 @@ import { REALM_HUD_COPY } from '../copy/realmCopy';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import styles from './RunShell.module.css';
-import { MEMORIZE_SKIP_COPY, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
+import { MEMORIZE_SKIP_COPY, MISS_BANK_TITLE, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
@@ -491,7 +491,7 @@ const RunShell = ({
                                 data-low={missesRemaining <= 1 ? 'true' : undefined}
                                 data-miss-earned={missesEarned > 0 ? 'true' : undefined}
                                 role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left`}
-                                title="A mismatch spends one life. Earn more through combos and floor clears.">
+                                title={MISS_BANK_TITLE}>
                                 <svg aria-hidden="true" viewBox="0 0 32 36" data-life-icon="relic-heart">
                                     <path d="m16 33-12-13-2-10 5-6 5-1 4 5 4-5 5 1 5 6-2 10Z" fill="#2b1c20" stroke="#ae8247" strokeWidth="1.5" strokeLinejoin="round" />
                                     <path d="m16 29-10-11-1-7 4-5 3-.5 4 6 4-6 3 .5 4 5-1 7Z" fill="var(--life-stone)" />

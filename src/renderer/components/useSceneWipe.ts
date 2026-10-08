@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SCENE_WIPE_MS } from './SceneWipe';
 
 /**
@@ -7,19 +7,19 @@ import { SCENE_WIPE_MS } from './SceneWipe';
  * plays once and leaves after its length.
  */
 export const useSceneWipe = (room: 'dungeon' | 'shop'): { key: string; direction: 'in' | 'out' } | null => {
-    const previous = useRef<'dungeon' | 'shop' | null>(null);
+    // The room change is read while rendering (React's "adjust state on a prop change"), so the wipe
+    // starts in the same render as the move, not in an effect's second pass.
+    const [seen, setSeen] = useState({ room, changes: 0 });
     const [wipe, setWipe] = useState<{ key: string; direction: 'in' | 'out' } | null>(null);
+    if (seen.room !== room) {
+        const changes = seen.changes + 1;
+        setSeen({ room, changes });
+        setWipe({ key: `wipe:${room}:${changes}`, direction: room === 'shop' ? 'in' : 'out' });
+    }
     useEffect(() => {
-        if (previous.current === null) {
-            previous.current = room;
-            return undefined;
-        }
-        if (previous.current === room) return undefined;
-        previous.current = room;
-        const next = { key: `wipe:${room}:${Date.now()}`, direction: room === 'shop' ? ('in' as const) : ('out' as const) };
-        setWipe(next);
-        const timer = window.setTimeout(() => setWipe((current) => (current?.key === next.key ? null : current)), SCENE_WIPE_MS + 40);
+        if (!wipe) return undefined;
+        const timer = window.setTimeout(() => setWipe((current) => (current?.key === wipe.key ? null : current)), SCENE_WIPE_MS + 40);
         return () => window.clearTimeout(timer);
-    }, [room]);
+    }, [wipe]);
     return wipe;
 };

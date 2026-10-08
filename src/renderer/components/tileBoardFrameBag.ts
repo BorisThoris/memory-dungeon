@@ -7,7 +7,6 @@ import type {
     PlaneGeometry,
     ShaderMaterial
 } from 'three';
-import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 import type { TileBezelFramePropsSnapshot } from './tileBoardFramePropsSnapshot';
 import type { TileBezelActivityGate } from './tileFrameActivity';
