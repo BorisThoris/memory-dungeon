@@ -1170,8 +1170,34 @@ export const playFloorClearSfx = (gain: number): void => {
  * Layered from the realm's voices: a bomb is a crack, a thump and a roll of debris; the meteor a
  * falling whistle, then a bigger one; a swap a zip; a pin a tick; a flash a bright shimmer.
  */
-export const playItemEffectSfx = (gain: number, kind: ItemEffectKind): void => {
-    if (gain <= 0.001) return;
+/** The CC0 recordings for each item (`assets/ASSET_SOURCES.md`), by take. */
+const ITEM_EFFECT_SAMPLES: Partial<Record<ItemEffectKind, readonly SfxSampleKey[]>> = {
+    bomb: ['item-bomb-1', 'item-bomb-2'],
+    meteor: ['item-meteor'],
+    swap: ['item-swap'],
+    pin: ['item-pin'],
+    flash: ['item-flash'],
+    undo: ['item-undo'],
+    wild: ['item-wild']
+};
+let itemSampleTurn = 0;
+
+export const playItemEffectSfx = (rawGain: number, kind: ItemEffectKind): void =>
+    audioNeverThrows(() => playItemEffectSfxUnguarded(rawGain, kind));
+
+const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void => {
+    if (rawGain <= 0.001) return;
+    // The recording carries the hit; the procedural layer under it adds the weight and the tail.
+    const takes = ITEM_EFFECT_SAMPLES[kind] ?? [];
+    let gain = rawGain;
+    if (takes.length > 0) {
+        itemSampleTurn += 1;
+        const take = takes[itemSampleTurn % takes.length]!;
+        const delayMs = kind === 'meteor' ? METEOR_IMPACT_DELAY_SECONDS * 1000 : 0;
+        if (delayMs > 0) scheduleCue(() => tryPlaySampled(take, rawGain), delayMs);
+        else if (tryPlaySampled(take, rawGain)) gain = rawGain * 0.45;
+        if (delayMs > 0) gain = rawGain * 0.6;
+    }
     switch (kind) {
         case 'bomb':
             playNoise({ durationSec: 0.07, gain: gain * 0.9, filter: 'highpass', from: 3000, to: 1800, attackSec: 0.002 });
@@ -1220,8 +1246,21 @@ export const playItemEffectSfx = (gain: number, kind: ItemEffectKind): void => {
  * An item drop's sting (`ItemDropPopup.tsx`): a rising arpeggio, longer and brighter the rarer the
  * item, ending on a shimmer for the epic and the legendary.
  */
-export const playItemDropSfx = (gain: number, rarity: ItemDropRarity): void => {
-    if (gain <= 0.001) return;
+const ITEM_DROP_SAMPLES: Readonly<Record<ItemDropRarity, SfxSampleKey>> = {
+    common: 'drop-common',
+    uncommon: 'drop-uncommon',
+    rare: 'drop-rare',
+    epic: 'drop-epic',
+    legendary: 'drop-legendary'
+};
+
+export const playItemDropSfx = (rawGain: number, rarity: ItemDropRarity): void =>
+    audioNeverThrows(() => playItemDropSfxUnguarded(rawGain, rarity));
+
+const playItemDropSfxUnguarded = (rawGain: number, rarity: ItemDropRarity): void => {
+    if (rawGain <= 0.001 || !(rarity in ITEM_DROP_SAMPLES)) return;
+    // The recorded chime or bell for the rarity, the arpeggio under it a little quieter.
+    const gain = tryPlaySampled(ITEM_DROP_SAMPLES[rarity], rawGain * 0.9) ? rawGain * 0.6 : rawGain;
     const steps = { common: [784, 988], uncommon: [659, 880, 1109], rare: [587, 784, 988, 1319], epic: [523, 659, 880, 1047, 1397], legendary: [523, 659, 784, 1047, 1319, 1568] }[rarity];
     steps.forEach((frequency, n) =>
         scheduleCue(() => playTone({ frequency, durationSec: 0.16 + n * 0.02, gain: gain * 0.16, type: 'triangle', category: 'power' }), n * 70)

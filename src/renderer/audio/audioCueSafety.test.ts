@@ -39,6 +39,8 @@ const installHostileAudioContext = (): void => {
  */
 const EXTRA_ARGS: Record<string, readonly unknown[]> = {
     playChainOpportunityBeatSfx: ['surge', 3],
+    playItemDropSfx: ['legendary'],
+    playItemEffectSfx: ['meteor'],
     playMatchSfx: [3],
     playMismatchRecoveryCrescendoSfx: ['recover', 3],
     playShuffleSfx: [true],

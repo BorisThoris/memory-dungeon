@@ -26,7 +26,20 @@
         "realm-lightning-1": { "file": "realm-lightning-1.ogg", "category": "realm", "envelope": "natural" },
         "realm-lightning-2": { "file": "realm-lightning-2.ogg", "category": "realm", "envelope": "natural" },
         "realm-static": { "file": "realm-static.ogg", "category": "realm", "envelope": "natural" },
-        "realm-earth": { "file": "realm-earth.ogg", "category": "realm", "envelope": "natural" }
+        "realm-earth": { "file": "realm-earth.ogg", "category": "realm", "envelope": "natural" },
+        "item-bomb-1": { "file": "item-bomb-1.ogg", "category": "realm", "envelope": "natural" },
+        "item-bomb-2": { "file": "item-bomb-2.ogg", "category": "realm", "envelope": "natural" },
+        "item-meteor": { "file": "item-meteor.ogg", "category": "realm", "envelope": "natural" },
+        "item-swap": { "file": "item-swap.ogg", "category": "power", "envelope": "natural" },
+        "item-pin": { "file": "item-pin.ogg", "category": "power", "envelope": "natural" },
+        "item-flash": { "file": "item-flash.ogg", "category": "power", "envelope": "natural" },
+        "item-undo": { "file": "item-undo.ogg", "category": "power", "envelope": "natural" },
+        "item-wild": { "file": "item-wild.ogg", "category": "power", "envelope": "natural" },
+        "drop-common": { "file": "drop-common.ogg", "category": "power", "envelope": "natural" },
+        "drop-uncommon": { "file": "drop-uncommon.ogg", "category": "power", "envelope": "natural" },
+        "drop-rare": { "file": "drop-rare.ogg", "category": "power", "envelope": "natural" },
+        "drop-epic": { "file": "drop-epic.ogg", "category": "power", "envelope": "natural" },
+        "drop-legendary": { "file": "drop-legendary.ogg", "category": "power", "envelope": "natural" }
     },
     "matchTierDepthRanges": {
         "match-tier-low": [1, 5],

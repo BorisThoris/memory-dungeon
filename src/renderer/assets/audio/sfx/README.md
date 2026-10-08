@@ -32,6 +32,19 @@
 | realm-lightning-2 | `realm-lightning-2.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
 | realm-static | `realm-static.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
 | realm-earth | `realm-earth.ogg` (CC0 recording, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-bomb-1 | `item-bomb-1.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-bomb-2 | `item-bomb-2.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-meteor | `item-meteor.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-swap | `item-swap.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-pin | `item-pin.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-flash | `item-flash.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-undo | `item-undo.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| item-wild | `item-wild.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| drop-common | `drop-common.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| drop-uncommon | `drop-uncommon.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| drop-rare | `drop-rare.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| drop-epic | `drop-epic.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
+| drop-legendary | `drop-legendary.ogg` (CC0, Kenney, see [ASSET_SOURCES](../../ASSET_SOURCES.md)) |
 
 Match streak depth maps to low / mid / high in `manifest.json`.
 

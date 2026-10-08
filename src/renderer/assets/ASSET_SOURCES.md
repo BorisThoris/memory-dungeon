@@ -145,3 +145,23 @@ The owner asked for free, royalty-free recordings in place of the procedural rea
 | `audio/sfx/realm-earth.ogg` | Grove: overgrowth, bloom, snare, a grove group's entangle | "Earth Element Magic Spell" - https://opengameart.org/content/earth-element-magic-spell | qubodup | CC0 |
 | `audio/sfx/realm-burnout.ogg` | A fire burning out | "Fire Crackling" (fire-1.wav, first 1.6 s, compressed) - https://opengameart.org/content/fire-crackling | AntumDeluge | CC0 |
 | `audio/sfx/realm-wind.ogg` | Blizzard, whiteout | "wind whoosh loop" (0.3-2.1 s) - https://opengameart.org/content/wind-whoosh-loop | SketchMan3 | CC0 |
+
+## Item and item-drop sounds (CC0, Kenney, 2026-10-08)
+
+The owner asked for royalty-free sounds for the item effects and the item drops. Every Kenney pack is **CC0** (public domain: commercial use in a paid Steam or mobile game, no attribution required; each pack's `License.txt` says so); credited here anyway. Peak-normalised to -5 dBFS to sit with the realm sounds, 44.1 kHz Ogg Vorbis q5. Played by `playItemEffectSfx` and `playItemDropSfx` (`audio/gameSfx.ts`) over a quieter procedural layer.
+
+| Runtime file(s) | Role | Source | Author | License |
+|---|---|---|---|---|
+| `audio/sfx/item-bomb-1.ogg` | A bomb going off (two takes) | "Sci-Fi Sounds - https://kenney.nl/assets/sci-fi-sounds", `explosionCrunch_000.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-bomb-2.ogg` | A bomb going off (two takes) | "Sci-Fi Sounds - https://kenney.nl/assets/sci-fi-sounds", `explosionCrunch_003.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-meteor.ogg` | A meteor landing | "Sci-Fi Sounds - https://kenney.nl/assets/sci-fi-sounds", `lowFrequency_explosion_000.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-swap.ogg` | Two cards swapped | "RPG Audio - https://kenney.nl/assets/rpg-audio", `cloth2.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-pin.ogg` | A card pinned | "RPG Audio - https://kenney.nl/assets/rpg-audio", `metalClick.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-flash.ogg` | A pair flashed | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `glass_002.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-undo.ogg` | A turn undone | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `minimize_004.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/item-wild.ogg` | The joker matched | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `maximize_006.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/drop-common.ogg` | A common item drop | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `confirmation_001.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/drop-uncommon.ogg` | An uncommon item drop | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `confirmation_003.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/drop-rare.ogg` | A rare item drop | "Interface Sounds - https://kenney.nl/assets/interface-sounds", `glass_005.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/drop-epic.ogg` | An epic item drop | "Impact Sounds - https://kenney.nl/assets/impact-sounds", `impactBell_heavy_001.ogg` | Kenney (kenney.nl) | CC0 1.0 |
+| `audio/sfx/drop-legendary.ogg` | A legendary item drop | "Impact Sounds - https://kenney.nl/assets/impact-sounds", `impactBell_heavy_003.ogg` | Kenney (kenney.nl) | CC0 1.0 |

@@ -41,7 +41,20 @@ export const SFX_SAMPLE_KEYS = [
     'realm-lightning-1',
     'realm-lightning-2',
     'realm-static',
-    'realm-earth'
+    'realm-earth',
+    'item-bomb-1',
+    'item-bomb-2',
+    'item-meteor',
+    'item-swap',
+    'item-pin',
+    'item-flash',
+    'item-undo',
+    'item-wild',
+    'drop-common',
+    'drop-uncommon',
+    'drop-rare',
+    'drop-epic',
+    'drop-legendary'
 ] as const satisfies readonly SfxSampleKey[];
 
 export const MATCH_TIER_SAMPLE_KEYS = [
