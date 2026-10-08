@@ -102,7 +102,8 @@ export const AnimatedCardGlow = memo(
         return (
             <>
                 {glowTexture ? (
-                    <mesh geometry={geometry} position={[0, 0, z]} raycast={noopMeshRaycast} renderOrder={4}>
+                    // Drawn only on the side that faces out: a glow behind the card is a draw call for nothing.
+                    <mesh geometry={geometry} position={[0, 0, z]} raycast={noopMeshRaycast} renderOrder={4} visible={visible}>
                         <meshBasicMaterial
                             ref={glowMatRef}
                             blending={AdditiveBlending}
@@ -123,6 +124,7 @@ export const AnimatedCardGlow = memo(
                         raycast={noopMeshRaycast}
                         ref={spinMeshRef}
                         renderOrder={5}
+                        visible={visible}
                     >
                         <meshBasicMaterial
                             ref={spinMatRef}

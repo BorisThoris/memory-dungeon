@@ -2,7 +2,7 @@ import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
 import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
 import { useItemEffectPublisher } from '../hooks/useItemEffectPublisher';
 import { ItemDropPopup } from './ItemDropPopup';
-import { itemDropFromCallout, type ItemDrop } from './itemDrops';
+import type { ItemDrop } from './itemDrops';
 import { setScreenShakeIntensity } from './boardTrauma';
 import { playerVisibleBoard } from '../../shared/player-visible-board';
 import { describeHeldPair } from '../../shared/held-pair-rules';
@@ -1223,12 +1223,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
     );
-    // What the player got (a pickup, a prize, a purchase) is an item drop, not a stamp (`itemDrops.ts`).
+    // What the player got (a pickup, a prize, a purchase) is an item drop (`itemDropFeed.ts`), not a stamp.
     const stampCallouts = useMemo(() => screenCallouts.filter((callout) => !callout.drop), [screenCallouts]);
-    const itemDrops = useMemo(
-        () => screenCallouts.map(itemDropFromCallout).filter((drop): drop is ItemDrop => drop !== null),
-        [screenCallouts]
-    );
     const playDropSting = useCallback((drop: ItemDrop) => playItemDropSfx(shuffleSfxGain, drop.rarity), [shuffleSfxGain]);
     const feverArrivalKey =
         latestTurnForPulse &&
@@ -1884,7 +1880,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             {/* The Zone's veil: time stopped, the room held in a cold light until the resolve. */}
             <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
             <ScreenCalloutQueue callouts={stampCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} />
-            <ItemDropPopup drops={itemDrops} onShow={playDropSting} reduceMotion={reduceMotion} />
+            <ItemDropPopup onShow={playDropSting} reduceMotion={reduceMotion} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
             {comboTemper.id === 'frost' ? (

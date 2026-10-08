@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactElement } from 'react';
+import { claimItemDropSting, dismissItemDrop, useItemDropFeed } from '../store/itemDropFeed';
 import { ITEM_DROP_COPY } from '../copy/itemDropCopy';
 import {
     ITEM_DROP_HOLD_MS,
@@ -38,50 +39,62 @@ const GLYPH_PATHS: Readonly<Record<ItemDropGlyph, ReactElement>> = {
     hourglass: <path d="M14 6h36M14 58h36M18 6c0 16 28 16 28 26S18 42 18 58h28c0-16-28-16-28-26S46 22 46 6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="5" />
 };
 
+/**
+ * True when the drop is what the player sees at its centre: laid out, and nothing (the loading
+ * screen between floors, a menu) drawn over it.
+ */
+const isFrontmost = (element: HTMLElement): boolean => {
+    // A test DOM has no layout to ask; there the drop counts as seen.
+    if (typeof document.elementFromPoint !== 'function' || /jsdom|happydom/i.test(navigator.userAgent)) return true;
+    const box = element.getBoundingClientRect();
+    if (box.width === 0 || box.height === 0) return false;
+    const top = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    return top !== null && element.contains(top);
+};
+
+/** How often the hold checks that the drop is on screen. */
+export const ITEM_DROP_TICK_MS = 100;
+
 export interface ItemDropPopupProps {
-    drops: readonly ItemDrop[];
     reduceMotion: boolean;
     /** Plays the drop's sting, by rarity, as it shows. */
     onShow?: (drop: ItemDrop) => void;
 }
 
 /**
- * The item drop (`itemDrops.ts`): one at a time, in arrival order, each held for its rarity's time
- * or until the player taps, clicks or presses a key. Like the stamps it plays each key once, and the
- * drops present when the screen opens are what it opened on, not news. Reduced motion keeps the
+ * The item drop (`itemDrops.ts`): one at a time, in arrival order (`itemDropFeed.ts`), each held
+ * for its rarity's time or until the player taps, clicks or presses a key. Reduced motion keeps the
  * card and drops the beam's spin and the gem's pop.
  */
-export function ItemDropPopup({ drops, reduceMotion, onShow }: ItemDropPopupProps) {
-    const seen = useRef<Set<string> | null>(null);
-    const [queue, setQueue] = useState<ItemDrop[]>([]);
-    if (seen.current === null) seen.current = new Set(drops.map((drop) => drop.key));
+export function ItemDropPopup({ reduceMotion, onShow }: ItemDropPopupProps) {
+    const showing = useItemDropFeed((state) => state.queue[0] ?? null);
     useEffect(() => {
-        const fresh = drops.filter((drop) => !seen.current!.has(drop.key));
-        if (fresh.length === 0) return;
-        for (const drop of fresh) seen.current!.add(drop.key);
-        setQueue((current) => [...current, ...fresh].slice(-6));
-    }, [drops]);
-    const showing = queue[0] ?? null;
-    const dismiss = useCallback(() => setQueue((current) => current.slice(1)), []);
-    const shownKey = useRef<string | null>(null);
-    useEffect(() => {
-        if (!showing || shownKey.current === showing.key) return undefined;
-        shownKey.current = showing.key;
+        // The sting plays once per drop, even if the screen remounts while it shows.
+        if (!showing || !claimItemDropSting(showing.key)) return;
         onShow?.(showing);
-        return undefined;
     }, [showing, onShow]);
+    // The hold counts only while the drop is in front: a drop that lands as the next floor builds
+    // waits under the loading screen, which covers the game screen rather than unmounting it, and
+    // then holds its full time where the player can see it.
+    const dropRef = useRef<HTMLButtonElement | null>(null);
     useEffect(() => {
         if (!showing) return undefined;
-        const timer = window.setTimeout(dismiss, ITEM_DROP_HOLD_MS[showing.rarity]);
+        const hold = ITEM_DROP_HOLD_MS[showing.rarity];
+        let shown = 0;
+        const tick = window.setInterval(() => {
+            const element = dropRef.current;
+            if (element !== null && document.visibilityState !== 'hidden' && isFrontmost(element)) shown += ITEM_DROP_TICK_MS;
+            if (shown >= hold) dismissItemDrop();
+        }, ITEM_DROP_TICK_MS);
         const onKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') dismiss();
+            if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') dismissItemDrop();
         };
         window.addEventListener('keydown', onKey);
         return () => {
-            window.clearTimeout(timer);
+            window.clearInterval(tick);
             window.removeEventListener('keydown', onKey);
         };
-    }, [showing, dismiss]);
+    }, [showing]);
     if (!showing) return null;
     const color = ITEM_DROP_RARITY_COLOR[showing.rarity];
     const rarity = ITEM_DROP_RARITY_LABEL[showing.rarity];
@@ -93,7 +106,8 @@ export function ItemDropPopup({ drops, reduceMotion, onShow }: ItemDropPopupProp
                 data-rarity={showing.rarity}
                 data-testid="item-drop"
                 key={showing.key}
-                onClick={dismiss}
+                onClick={dismissItemDrop}
+                ref={dropRef}
                 style={{ '--rarity': color } as CSSProperties}
                 type="button"
             >

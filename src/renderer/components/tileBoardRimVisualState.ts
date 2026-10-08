@@ -36,7 +36,16 @@ export interface RimMaterialTarget {
         set: (color: string) => void;
     };
     opacity: number;
+    /** three skips a material that is not visible: a rim at nothing costs no draw call. */
+    visible?: boolean;
 }
+
+/** Set a rim's opacity, and stop drawing it while it shows nothing. */
+const setRimOpacity = (material: RimMaterialTarget, opacity: number): void => {
+    material.opacity = opacity;
+    const visible = opacity > 0.001;
+    if (material.visible !== undefined && material.visible !== visible) material.visible = visible;
+};
 
 interface FocusRimOpacityInput {
     keyboardFocused: boolean;
@@ -185,12 +194,12 @@ export const applyResolvingRimVisualState = ({
         material.color?.set(RENDERER_THEME.colors[state.colorRole]);
     }
 
-    material.opacity = state.opacity;
+    setRimOpacity(material, state.opacity);
 };
 
 export const applyFocusRimOpacity = ({ material, opacity }: ApplyFocusRimOpacityInput): void => {
     if (material) {
-        material.opacity = opacity;
+        setRimOpacity(material, opacity);
     }
 };
 

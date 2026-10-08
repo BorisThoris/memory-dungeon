@@ -6,6 +6,8 @@ import {
 
 export interface HoverGoldRimMaterialTarget {
     opacity: number;
+    /** three skips a material that is not visible: a rim at nothing costs no draw call. */
+    visible?: boolean;
 }
 
 export interface HoverGoldVisualState {
@@ -43,9 +45,13 @@ export const applyHoverGoldRimOpacity = (
     materials: readonly (HoverGoldRimMaterialTarget | null | undefined)[],
     opacity: number
 ): void => {
+    // Eight rims a card, drawn at zero opacity on every card nobody hovers, were a third of the
+    // board's draw calls (2026-10-08 census): a rim with nothing to show is not drawn at all.
+    const visible = opacity > 0.001;
     for (const material of materials) {
         if (material) {
             material.opacity = opacity;
+            if (material.visible !== undefined && material.visible !== visible) material.visible = visible;
         }
     }
 };

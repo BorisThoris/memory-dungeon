@@ -94,6 +94,7 @@ import {
     getTileFaceTexture
 } from './tileTextures';
 import { disposeTileBoardResources } from './tileBoardDisposables';
+import { installCardDissolve } from './cardDissolveMaterial';
 import {
     CARD_PLANE_HEIGHT,
     CARD_PLANE_WIDTH,
@@ -393,6 +394,12 @@ const TileBezelInner = ({
     const liftSmoothRef = useRef(0);
     const frontCardMatRef = useRef<MeshStandardMaterial | null>(null);
     const backCardMatRef = useRef<MeshStandardMaterial | null>(null);
+    // The burn-away as the card leaves the board (`cardDissolveMaterial.ts`), edged in its element.
+    useLayoutEffect(() => {
+        for (const material of [frontCardMatRef.current, backCardMatRef.current]) {
+            if (material) installCardDissolve(material, tile.suit);
+        }
+    }, [tile.suit]);
     const focusDimBlendRef = useRef(0);
 
     const bendURef = useRef(0.5);
@@ -809,9 +816,14 @@ const TileBezelInner = ({
                     {/* The card is made of its element (`ElementCardBack`); a blizzard's snow buries it until the card is turned. */}
                     {tile.suit && !(tile.snowed && tile.state === 'hidden') ? (
                         <>
-                            <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
-                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} />
-                            <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} />
+                            {/* Each side is drawn only while it faces out: the hidden side's layers are draw calls for nothing. */}
+                            <group visible={!faceUp}>
+                                <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
+                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} />
+                            </group>
+                            <group visible={faceUp}>
+                                <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front charge={tileCharge(tile)} />
+                            </group>
                         </>
                     ) : null}
                     <RealmTileMarks faceUp={faceUp} faceZ={faceZ} tile={tile} openingLocked={stickyFingerSlotMark} />

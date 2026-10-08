@@ -169,3 +169,15 @@ export const getSceneEffectTier = (input: {
     }
     return 'full';
 };
+
+/**
+ * The board's draw-call budget (2026-10-08): react-three-fiber's guidance is at most a thousand
+ * calls a frame and ideally a few hundred, the low end on a phone. A card's layers once cost about
+ * 22 calls even with nothing to show (zero-opacity hover rims, glows behind the card); hidden
+ * layers now cost nothing, and a card at rest is about nine. The budget allows ten a card and a
+ * fixed sixty for the scene around them, and the playtest e2e holds every floor it plays to it
+ * (canvas `data-webgl-draw-calls`).
+ */
+export const BOARD_DRAW_CALLS_PER_CARD = 10;
+export const BOARD_DRAW_CALLS_FIXED = 60;
+export const boardDrawCallBudget = (cards: number): number => BOARD_DRAW_CALLS_FIXED + BOARD_DRAW_CALLS_PER_CARD * Math.max(0, cards);

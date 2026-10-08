@@ -34,6 +34,7 @@ import {
     ZERO_REALM_OFFSET
 } from './realmCardMotion';
 import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
+import { setCardDissolve } from './cardDissolveMaterial';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -92,6 +93,10 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     // A departing tile shares the flip-pop scale channel: once its burst is done it shrinks to
     // nothing, and a group at scale zero is a tile that has left the board.
     const flipPopMul = pulseTransition.flipPopScaleMultiplier * (1 - pulseTransition.departure);
+    // ...and burns away as it shrinks (`cardDissolveMaterial.ts`), unless motion is reduced.
+    const dissolve = p.reduceMotion ? 0 : Math.min(1, pulseTransition.departure * 1.15);
+    setCardDissolve(bag.frontCardMatRef.current, dissolve);
+    setCardDissolve(bag.backCardMatRef.current, dissolve);
     const flipPopZ = pulseTransition.flipPopZ;
 
     const frontBase = bag.frontBaseRef.current;

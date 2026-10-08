@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
+import { boardDrawCallBudget } from '../src/shared/graphicsQuality';
 import { startClassicFromMenu } from './playablePathHelpers';
 
 /**
@@ -46,6 +47,17 @@ const snapshot = (page: Page): Promise<Snapshot> =>
         };
     });
 
+/** Every floor the playtest reaches is held to the board's draw-call budget (`boardDrawCallBudget`). */
+const expectDrawCallsWithinBudget = async (page: Page, level: number): Promise<void> => {
+    await page.waitForTimeout(1200);
+    const { calls, cards } = await page.evaluate(async () => {
+        const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        const canvas = document.querySelector('canvas[data-webgl-draw-calls]');
+        return { calls: Number(canvas?.getAttribute('data-webgl-draw-calls') ?? 0), cards: useAppStore.getState().run?.board?.tiles.length ?? 0 };
+    });
+    expect(calls, `floor ${level}: ${calls} draw calls for ${cards} cards`).toBeLessThanOrEqual(boardDrawCallBudget(cards));
+};
+
 const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: number; maxFloor: number; label: string }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
@@ -74,6 +86,7 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
             level = s.level;
             stepsOnFloor = 0;
             await shot(`floor-${level}`);
+            await expectDrawCallsWithinBudget(page, level);
             if (level > maxFloor) return { ended: 'depth' as const, level, errors };
         }
         stepsOnFloor += 1;

@@ -472,6 +472,30 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         if (runStatus !== 'paused') visualTime.current += Math.max(0, Math.min(delta, 0.1));
     }, -2);
 
+    /*
+     * The draw-call budget (2026-10-08): react-three-fiber's guidance is a few hundred calls a frame
+     * at most, the low end on a phone (`BOARD_DRAW_CALL_BUDGET`). The last frame's count is on the
+     * canvas, read twice a second (before a frame draws, so it is the last frame's whole count), so the e2e can hold boards to it.
+     */
+    const drawCallSampleAt = useRef(0);
+    useFrame(({ clock }) => {
+        if (clock.elapsedTime < drawCallSampleAt.current) return;
+        drawCallSampleAt.current = clock.elapsedTime + 0.5;
+        gl.domElement.setAttribute('data-webgl-draw-calls', String(gl.info.render.calls));
+        gl.domElement.setAttribute('data-webgl-triangles', String(gl.info.render.triangles));
+        if (import.meta.env.DEV) {
+            // Dev only: which kinds of mesh are drawn, for chasing the budget.
+            const census: Record<string, number> = {};
+            scene.traverseVisible((object) => {
+                const mesh = object as { isMesh?: boolean; material?: { type?: string; name?: string }; renderOrder?: number; geometry?: { type?: string } };
+                if (!mesh.isMesh || (mesh.material as { visible?: boolean } | undefined)?.visible === false) return;
+                const key = `${mesh.material?.type}|${mesh.geometry?.type}|ro${mesh.renderOrder ?? 0}`;
+                census[key] = (census[key] ?? 0) + 1;
+            });
+            (window as unknown as { __boardDrawCensus?: Record<string, number> }).__boardDrawCensus = census;
+        }
+    });
+
     useFrame((state, rawDelta) => {
         if (runStatus === 'paused') return;
         const delta = Math.max(0, Math.min(rawDelta, 0.1));

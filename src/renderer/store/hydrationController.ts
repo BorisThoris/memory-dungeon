@@ -3,6 +3,7 @@ import { normalizeUnknownSteamConnected } from '../../shared/desktop-api-boundar
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { createDefaultSaveData, normalizeUnknownSaveData } from '../../shared/save-data';
 import { describeCrashReports, normalizeCrashReportSummary } from '../../shared/crash-report-summary';
+import { detectGraphicsTier } from '../graphicsTier';
 import { runPersistenceInBackground } from './backgroundPersistence';
 
 export const SAVE_READ_FAILURE_NOTICE =
@@ -34,10 +35,15 @@ export const createHydratedAppStatePatch = async ({
     persistSaveData
 }: CreateHydratedAppStatePatchInput): Promise<HydratedAppStatePatch> => {
     let saveReadFailed = false;
+    let firstLaunch = false;
     const [rawSave, steamConnected, priorCrashNotice] = await Promise.all([
         Promise.resolve()
             .then(() => desktop.getSaveData())
-            .then(normalizeUnknownSaveData)
+            .then((raw) => {
+                // No graphics choice saved yet: a first launch, whose tier is chosen for the device.
+                firstLaunch = (raw as { settings?: { graphicsQuality?: unknown } } | null)?.settings?.graphicsQuality == null;
+                return normalizeUnknownSaveData(raw);
+            })
             .catch(() => {
                 saveReadFailed = true;
                 return createDefaultSaveData();
@@ -53,7 +59,12 @@ export const createHydratedAppStatePatch = async ({
             .catch(() => null)
     ]);
 
-    const saveData = mergeHonorUnlockTags(rawSave);
+    const merged = mergeHonorUnlockTags(rawSave);
+    // A first launch starts on the tier the device can carry (`graphicsTier.ts`), not always Medium.
+    const saveData =
+        firstLaunch && !saveReadFailed
+            ? { ...merged, settings: { ...merged.settings, graphicsQuality: detectGraphicsTier() } }
+            : merged;
     if (saveData !== rawSave && !saveReadFailed) {
         runPersistenceInBackground(() => persistSaveData(saveData));
     }

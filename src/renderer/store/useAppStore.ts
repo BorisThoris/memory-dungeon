@@ -99,6 +99,7 @@ import { runPersistenceInBackground } from './backgroundPersistence';
 import { createHydratedAppStatePatch, SAVE_RECOVERY_FAILED_NOTICE } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
+import { enqueueItemDrops, itemDropsBetween } from './itemDropFeed';
 import type { AppState } from './appStoreTypes';
 
 const RUN_SURFACE_RESET = createRunSurfaceReset();
@@ -792,4 +793,10 @@ registerPersistenceWriteFailureHandler(({ consecutive }) => {
     useAppStore.setState({
         persistenceWriteNotice: persistenceNoticeForConsecutiveFailures(consecutive)
     });
+});
+
+// Item drops are read off the run as it changes (`itemDropFeed.ts`), so a drop landing while the
+// game screen remounts between floors is still shown.
+useAppStore.subscribe((state, previous) => {
+    if (state.run !== previous.run) enqueueItemDrops(itemDropsBetween(previous.run, state.run));
 });

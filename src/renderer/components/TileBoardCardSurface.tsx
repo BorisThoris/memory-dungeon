@@ -126,6 +126,7 @@ export const TileBoardCardSurface = memo(
                     position={[0, 0, faceZ + CARD_WEAR_Z_SLIVER]}
                     raycast={noopMeshRaycast}
                     renderOrder={6}
+                    visible={!cardBackVisible}
                 >
                     <meshBasicMaterial
                         blending={MultiplyBlending}
@@ -184,6 +185,7 @@ export const TileBoardCardSurface = memo(
                     raycast={noopMeshRaycast}
                     renderOrder={6}
                     rotation={[0, Math.PI, 0]}
+                    visible={cardBackVisible}
                 >
                     <meshBasicMaterial
                         blending={MultiplyBlending}

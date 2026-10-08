@@ -3,11 +3,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ItemDropPopup } from './ItemDropPopup';
 import { ITEM_DROP_HOLD_MS, itemDropFromCallout, itemDropRarity, type ItemDrop } from './itemDrops';
 import { derivePurchaseCallouts } from './screenCallouts';
+import { clearItemDrops, enqueueItemDrops, itemDropsBetween } from '../store/itemDropFeed';
+import { createNewRun } from '../../shared/game';
+import type { GameplayEventJournalEntry } from '../../shared/contracts';
 
 const drop = (key: string, extra: Partial<ItemDrop> = {}): ItemDrop => ({ key, id: 'meteor_shard', rarity: 'rare', glyph: 'comet', name: 'Meteor shard', line: '+1 meteor', ...extra });
 
 describe('item drops', () => {
-    beforeEach(() => vi.useFakeTimers());
+    beforeEach(() => {
+        vi.useFakeTimers();
+        clearItemDrops();
+    });
     afterEach(() => vi.useRealTimers());
 
     it('grades rarity the way loot reads: consumables common, shards rare, relics epic', () => {
@@ -24,13 +30,31 @@ describe('item drops', () => {
         expect(fromStamp).toMatchObject({ id: 'deep_pockets', rarity: 'epic', glyph: 'gem', name: 'Deep pockets' });
     });
 
-    it('shows nothing it opened on, then each new drop in turn, for its rarity’s time', () => {
+    it('a camp upgrade bought as the next floor builds is a drop; a new run or a restore is not', () => {
+        const run = createNewRun(0, { runSeed: 5 });
+        const next = { ...run, storePurchases: { long_look: 1 } };
+        expect(itemDropsBetween(run, next).map((drop) => drop.id)).toEqual(['long_look']);
+        expect(itemDropsBetween(null, next)).toEqual([]);
+        expect(itemDropsBetween({ ...run, runSeed: 6 }, next)).toEqual([]);
+    });
+
+    it('a pickup claimed with a match is a drop, read off the journal entry once', () => {
+        const run = createNewRun(0, { runSeed: 5 });
+        const claim = { eventId: 'turn-1', type: 'board.turn_resolved', matchedFindableKind: 'meteor_shard' } as unknown as GameplayEventJournalEntry;
+        const after = { ...run, gameplayEventJournal: [...(run.gameplayEventJournal ?? []), claim] };
+        expect(itemDropsBetween(run, after)).toMatchObject([{ key: 'pickup:turn-1', id: 'meteor_shard', rarity: 'rare' }]);
+        expect(itemDropsBetween(after, { ...after, gameplayEventJournal: [...after.gameplayEventJournal!] })).toEqual([]);
+    });
+
+    it('shows each drop in turn, for its rarity\u2019s time, and outlives the screen remounting', () => {
         const onShow = vi.fn();
-        const { rerender } = render(<ItemDropPopup drops={[drop('old')]} onShow={onShow} reduceMotion={false} />);
-        expect(screen.queryByTestId('item-drop')).toBeNull();
-        rerender(<ItemDropPopup drops={[drop('old'), drop('a'), drop('b', { rarity: 'common', name: 'Score glint' })]} onShow={onShow} reduceMotion={false} />);
+        const { unmount } = render(<ItemDropPopup onShow={onShow} reduceMotion={false} />);
+        act(() => enqueueItemDrops([drop('a'), drop('b', { rarity: 'common', name: 'Score glint' })]));
         expect(screen.getByTestId('item-drop')).toHaveAttribute('data-rarity', 'rare');
-        expect(onShow).toHaveBeenCalledTimes(1);
+        // The game screen remounts as the next floor builds: the drop is still there.
+        unmount();
+        render(<ItemDropPopup onShow={onShow} reduceMotion={false} />);
+        expect(screen.getByTestId('item-drop')).toHaveAttribute('data-rarity', 'rare');
         act(() => {
             vi.advanceTimersByTime(ITEM_DROP_HOLD_MS.rare + 10);
         });
@@ -42,12 +66,11 @@ describe('item drops', () => {
     });
 
     it('a tap or a key skips it, and a screen reader hears what it was', () => {
-        const { rerender } = render(<ItemDropPopup drops={[]} reduceMotion />);
-        rerender(<ItemDropPopup drops={[drop('a')]} reduceMotion />);
+        render(<ItemDropPopup reduceMotion />);
+        act(() => enqueueItemDrops([drop('a'), drop('b')]));
         expect(screen.getByRole('status')).toHaveTextContent('Rare item: Meteor shard. +1 meteor');
         fireEvent.click(screen.getByTestId('item-drop'));
-        expect(screen.queryByTestId('item-drop')).toBeNull();
-        rerender(<ItemDropPopup drops={[drop('a'), drop('b')]} reduceMotion />);
+        expect(screen.getByTestId('item-drop')).toBeInTheDocument();
         fireEvent.keyDown(window, { key: 'Escape' });
         expect(screen.queryByTestId('item-drop')).toBeNull();
     });
