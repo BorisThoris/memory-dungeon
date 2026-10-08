@@ -17,7 +17,11 @@ import { join } from 'node:path';
 export const REACHABILITY_EXEMPTIONS: Record<string, string> = {
     clearSaveReadFailureNotice:
         'The save-read notice is deliberately not dismissable: it stays up until the player starts a fresh profile.',
+    buyStoreItem:
+        'Camp upgrades are bought automatically at the clear (automatic-camp-rules.ts); the action stays for a shop screen to return to.',
     endRun: 'Lifecycle pass-through kept for the run controller; no screen ends a run directly.',
+    travelThroughRealmDoor:
+        'The next floor starts on its own since camp upgrades went automatic; the door action stays for a travel screen to return to.',
     triggerDebugReveal: 'Debug-only reveal, not wired to any shipping affordance.'
 };
 

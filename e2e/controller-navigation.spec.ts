@@ -386,36 +386,6 @@ test.describe('controller navigation', () => {
     const focusedTestId = (page: Page): Promise<string> =>
         page.evaluate(() => document.activeElement?.getAttribute('data-testid') ?? '');
 
-    test('a pad buys at the store stop, and B descends', async ({ page }) => {
-        test.setTimeout(300_000);
-        await installFakePad(page);
-        await bootHallRoom(page, 'store-stop');
-        await pressTiles(page, ['a-1', 'a-2']);
-        await page.waitForTimeout(1200);
-        await pressTiles(page, ['b-1', 'b-2']);
-        const sheet = page.getByTestId('store-sheet');
-        await expect(sheet).toBeVisible({ timeout: 30_000 });
-        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Descend');
-
-        // The sheet opens on Descend; the rows are above it, so the d-pad walks up into them.
-        let onBuy = false;
-        for (let step = 0; step < 10 && !onBuy; step += 1) {
-            await pressPad(page, DPAD_UP);
-            onBuy = (await focusedTestId(page)).startsWith('store-buy-');
-        }
-        expect(onBuy, 'the d-pad never reached a buy button').toBe(true);
-        const bought = await focusedTestId(page);
-        await pressPad(page, BUTTON_A);
-        await expect(page.getByTestId('store-receipt')).toHaveText(/^Bought /);
-        expect(bought).toMatch(/^store-buy-/);
-
-        await pressPad(page, BUTTON_B);
-        await expect(sheet).toBeHidden({ timeout: 20_000 });
-        await expect
-            .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level))
-            .toBe(4);
-    });
-
     test('a pad walks the dock to Bomb and fires it, and focus stays in the dock', async ({ page }) => {
         test.setTimeout(300_000);
         await installFakePad(page);

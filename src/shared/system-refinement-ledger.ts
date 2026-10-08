@@ -425,6 +425,20 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Its reward row carried a field saying Destroy forfeits the score. Replaced with the rule that is true: a break which takes the carrier spills the glint and pays it. Gen 213 found the same dead promise a second time in the economy row for findable pickups and repointed it; Gen 214 found that row had no reader at all and removed it, so the rule now lives in one place rather than two.'
     },
     {
+        id: 'findable.meteor_shard',
+        verdict: 'changed',
+        generation: 268,
+        present: ['meteor_shard', 'meteorCharges', 'itemDropsBetween'],
+        note: 'The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second.'
+    },
+    {
+        id: 'inventory.meteor_charge',
+        verdict: 'changed',
+        generation: 268,
+        present: ['callMeteor', 'canAimMeteor', 'meteor_charge', 'METEOR_IMPACT_DELAY_SECONDS'],
+        note: 'The meteor (2026-10-08): the owner asked for actual effects on meteors and bombs. A strike now lands with two shockwaves, a crater of fire, thrown molten shards and dust, the largest trauma pulse an item adds (0.85, shake scaled by the Screen shake setting), and a CC0 impact under its own falling whistle, timed to the strike shader.'
+    },
+    {
         id: 'objective.featured_streak',
         counter: 'featuredStreak',
         verdict: 'changed',

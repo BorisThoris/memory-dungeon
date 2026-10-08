@@ -660,6 +660,70 @@
             ]
         },
         {
+            "id": "findable.meteor_shard",
+            "label": "Meteor Shard Findable",
+            "kind": "findable",
+            "role": "remembered_pair_grants_a_meteor",
+            "evidence": [
+                "src/shared/findables.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/store/itemDropFeed.ts"
+            ],
+            "reads": [
+                "matchedFindables",
+                "tileStates"
+            ],
+            "writes": [
+                "meteorCharges",
+                "feedbackLines"
+            ],
+            "enables": [
+                "inventory.meteor_charge"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "matched-pair-only",
+                "face-down-carrier-unmarked"
+            ],
+            "tests": [
+                "src/shared/findables.test.ts",
+                "src/renderer/components/ItemDropPopup.test.tsx"
+            ]
+        },
+        {
+            "id": "inventory.meteor_charge",
+            "label": "Meteor Charge Inventory",
+            "kind": "inventory",
+            "role": "area_strike_resource",
+            "evidence": [
+                "src/shared/run-inventory.ts",
+                "src/shared/meteor-rules.ts",
+                "src/renderer/components/MeteorStrike.tsx",
+                "src/renderer/components/itemEffects.ts"
+            ],
+            "reads": [
+                "meteorCharges",
+                "tileStates"
+            ],
+            "writes": [
+                "meteorCharges",
+                "tileStates"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "non-negative-counter",
+                "takes-whole-pairs-only",
+                "realm-guard-frees-holds-that-leave-no-pair"
+            ],
+            "tests": [
+                "src/shared/run-inventory.test.ts",
+                "src/renderer/components/itemEffects.test.ts"
+            ]
+        },
+        {
             "id": "objective.featured_streak",
             "label": "Featured Objective Streak",
             "kind": "objective",
@@ -3301,6 +3365,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the realm chip and its clock, the marks on the cards and the weather stamps"
+        },
+        {
+            "source": "findable.meteor_shard",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the claimed shard shows as a rare item drop"
+        },
+        {
+            "source": "inventory.meteor_charge",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the meteor tool's count, the strike, its shockwaves, shake and sound"
         },
         {
             "source": "board.element_alchemy",

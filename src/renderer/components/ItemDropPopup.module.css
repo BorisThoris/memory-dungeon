@@ -63,7 +63,7 @@
 
 .kicker {
     font-family: var(--theme-display-font, 'Cinzel', serif);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--rarity) 70%, #fff);
@@ -110,7 +110,7 @@
 
 .skip {
     margin-top: 0.35rem;
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #9a9187;

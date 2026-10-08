@@ -237,6 +237,14 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 265,
         reason: 'The census builds each floor fresh with no realm, because it measures the pair curve and the par it is judged against. The whole-run soak plays every realm through its doors, requires weather, frostbite, a raging backlash, a doused fire and a cut vine to happen, and checks after every action that a turnable pair remains; a test hall room walks each realm.'
     },
+    'findable.meteor_shard': {
+        generation: 268,
+        reason: 'The census counts findables claimed as one channel and the shard is one of two kinds in it; the whole-run soak claims shards across its runs, and the item-drop tests read a claimed shard off the journal.'
+    },
+    'inventory.meteor_charge': {
+        generation: 268,
+        reason: 'The census players never spend a meteor, which is aimed by the player. Its strike is covered by the meteor rules and the item-effects tests, which check the impact recipe, its timing and its trauma.'
+    },
     'board.element_alchemy': {
         generation: 268,
         reason: 'Alchemy answers elements on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak counts empowered and neutralized cards across its runs and requires both, and the kin and counter rooms in the test hall walk a card drinking frost and paying for it and a fire card melting a frostbite.'

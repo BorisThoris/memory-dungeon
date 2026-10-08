@@ -104,9 +104,9 @@ export const ACCESSIBILITY_TARGETS: readonly AccessibilityTarget[] = [
         evidence: () => [
             `resolveDelayMultiplier range: ${SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min} to ` +
                 `${SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max}`,
-            `reaches the run: ${/resolveDelayMultiplier: settings.resolveDelayMultiplier/u.test(read('src/shared/run-settings-rules.ts')) ? 'yes' : 'NO'} (run-settings-rules.ts)`,
+            `reaches the run: ${/resolveDelayMultiplier:[^\n]*settings\.resolveDelayMultiplier/u.test(read('src/shared/run-settings-rules.ts')) ? 'yes' : 'NO'} (run-settings-rules.ts)`,
             `moves the memorize window: ${/run.resolveDelayMultiplier > 1/u.test(read('src/shared/scoring-rules.ts')) ? 'yes' : 'NO'} (scoring-rules.ts)`,
-            `hint names the memorize window: ${/memorize/iu.test(SETTINGS_HINTS.resolveDelayMultiplier) ? 'yes' : 'NO'}`,
+            `hint names the memorize window: ${/memoriz|study/iu.test(SETTINGS_HINTS.resolveDelayMultiplier) ? 'yes' : 'NO'}`,
             `hint: "${SETTINGS_HINTS.resolveDelayMultiplier}"`
         ]
     },

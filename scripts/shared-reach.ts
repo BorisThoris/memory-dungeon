@@ -77,7 +77,10 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
  * Known and unreachable, and that is a problem rather than a design. The gate passes on these and
  * fails the moment a new module joins them or one of these is fixed and the line goes stale.
  */
-export const SHARED_REACH_BASELINE: Record<string, string> = {};
+export const SHARED_REACH_BASELINE: Record<string, string> = {
+    'first-run-help-center.ts': 'Lost its menu entry in the main-menu rebuild (main, 2026-10-07); reconnect it or delete it.',
+    'settings-control-model.ts': 'Lost its renderer reader when the settings screen was rebuilt (main, 2026-10-07); reconnect it or delete it.'
+};
 
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {

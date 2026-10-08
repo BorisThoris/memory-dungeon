@@ -108,107 +108,40 @@ test.describe('Sticky fingers, in its room', () => {
     });
 });
 
-test.describe('The store stop, in the store-stop room', () => {
-    test('describes everything it sells, inside the dialog, and opens on Descend', async ({ page }) => {
-        test.setTimeout(240_000);
-        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
-        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
-        for (const pair of ['a', 'b']) {
-            await page.evaluate(async (key) => {
-                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-                const store = useAppStore.getState();
-                store.pressTile(`${key}-1`);
-                store.pressTile(`${key}-2`);
-            }, pair);
-            await page.waitForTimeout(1200);
-        }
-        await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
-        // The store is the room now: every ware is a button on its object, on screen, and says what
-        // it does when the pointer or focus is on it (Gen 263's clipped descriptions cannot recur -
-        // there is no body to clip - but a hotspot can still fall off a viewport, so each is checked).
-        const viewport = page.viewportSize()!;
-        // The stop stocks its shelves from the seed (rollStoreStock): a miss and, at the first stop, a bomb
-        // are always there; the rest of the shelves are what the roll put on them, and nothing else.
-        const ids = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.storeStock ?? []);
-        expect(ids).toContain('miss');
-        expect(ids).toContain('bomb');
-        expect(ids.length).toBeLessThan(8);
-        for (const id of ids) {
-            const buy = page.getByTestId(`store-buy-${id}`);
-            await expect(buy).toBeVisible();
-            await buy.scrollIntoViewIfNeeded();
-            const box = (await buy.boundingBox())!;
-            expect(box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width && box.y + box.height <= viewport.height, `${id} on screen`).toBe(true);
-            await buy.hover();
-            await expect(page.getByTestId(`store-row-${id}`)).toBeVisible();
-        }
-        await expect.poll(() => page.evaluate(() => document.activeElement?.textContent?.trim())).toBe('Continue to floor 4 →');
-    });
-});
-
-test.describe('The store stop on a phone', () => {
-    test.use({ viewport: { width: 390, height: 844 } });
-
-    test('every item can be scrolled to and bought, none cut off by the dialog', async ({ page }) => {
-        test.setTimeout(240_000);
-        await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
-        await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
-        for (const pair of ['a', 'b']) {
-            await page.evaluate(async (key) => {
-                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-                const store = useAppStore.getState();
-                store.pressTile(`${key}-1`);
-                store.pressTile(`${key}-2`);
-            }, pair);
-            await page.waitForTimeout(1200);
-        }
-        await expect(page.getByTestId('store-sheet')).toBeVisible({ timeout: 30_000 });
-        // The store is the room: on a phone the plate is cover-fitted, so the wares at the room's
-        // edges can slide off the sides. Every hotspot has to be on screen and buyable, unscrolled.
-        // Give this fixture enough gold and room in the bank.
-        await page.evaluate(async () => {
-            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            const run = useAppStore.getState().run!;
-            useAppStore.setState({ run: { ...run, gold: 100, missBank: [{ floor: 3, misses: 1 }] } });
+/*
+ * The store stop became camp upgrades: every third clear funds one with the run's gold, and the
+ * next floor starts on its own. What the player sees of it is the item drop (`ItemDropPopup`),
+ * which has to survive the game screen remounting behind the loading screen as that floor builds.
+ */
+for (const viewport of [{ name: 'desktop', width: 1280, height: 800 }, { name: 'phone', width: 390, height: 844 }]) {
+    test.describe(`The camp upgrade, on ${viewport.name}`, () => {
+        test.use({ viewport: { width: viewport.width, height: viewport.height } });
+        test('arrives as an item drop on the next floor, fully on screen, and a tap dismisses it', async ({ page }) => {
+            test.setTimeout(240_000);
+            await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), 'hallRoom=store-stop');
+            await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
+            for (const pair of ['a', 'b']) {
+                await page.evaluate(async (key) => {
+                    const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                    const store = useAppStore.getState();
+                    store.pressTile(`${key}-1`);
+                    store.pressTile(`${key}-2`);
+                }, pair);
+                await page.waitForTimeout(1200);
+            }
+            const drop = page.getByTestId('item-drop');
+            await expect(drop).toBeVisible({ timeout: 60_000 });
+            await expect(drop).toHaveAttribute('data-rarity', 'epic');
+            await expect(drop).toContainText('Long look');
+            await expect(drop).toBeInViewport({ ratio: 1 });
+            await expect
+                .poll(() => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.board?.level))
+                .toBe(4);
+            await drop.click();
+            await expect(drop).toBeHidden();
         });
-        const stocked = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.storeStock ?? []);
-        expect(stocked.length).toBeGreaterThan(2);
-        for (const id of stocked) {
-            const buy = page.getByTestId(`store-buy-${id}`);
-            const viewport = page.viewportSize()!;
-            await buy.scrollIntoViewIfNeeded();
-            const button = (await buy.boundingBox())!;
-            expect(button.x >= 0 && button.y >= 0 && button.x + button.width <= viewport.width && button.y + button.height <= viewport.height, `${id} on screen`).toBe(true);
-            await expect(buy).toBeEnabled();
-            await buy.click();
-            await expect.poll(() => page.evaluate(async (item) => {
-                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-                return useAppStore.getState().run?.storePurchases?.[item];
-            }, id), { timeout: 30_000 }).toBe(1);
-        }
-        await expect(page.getByTestId('store-descend')).toBeInViewport();
-        const inventory = () => page.evaluate(async () => {
-            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            const run = useAppStore.getState().run!;
-            return { level: run.board!.level, bombs: run.bombCharges, peeks: run.peekCharges,
-                shuffles: run.shuffleCharges, relics: run.relics, gold: run.gold };
-        });
-        const bought = await inventory();
-        // Everything the stop stocked was bought, and only that: the bare shelves stay bare.
-        expect(bought.bombs).toBe(2);
-        if (stocked.includes('peek')) expect(bought.peeks).toBeGreaterThan(0);
-        if (stocked.includes('shuffle')) expect(bought.shuffles).toBeGreaterThan(0);
-        expect([...(bought.relics ?? [])].sort()).toEqual(stocked.filter((id) => !['miss', 'peek', 'shuffle', 'bomb'].includes(id)).sort());
-        expect(bought.gold).toBeLessThan(100);
-        await page.getByTestId('store-descend').click();
-        await expect.poll(async () => (await inventory()).level, { timeout: 30_000 }).toBe(4);
-        const carried = await inventory();
-        expect(carried.bombs).toBe(bought.bombs);
-        expect(carried.peeks).toBeGreaterThanOrEqual(bought.peeks);
-        expect(carried.shuffles).toBeGreaterThanOrEqual(bought.shuffles);
-        expect(carried.relics).toEqual(bought.relics);
     });
-});
+}
 
 test.describe('The board without a preview popup', () => {
     test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });

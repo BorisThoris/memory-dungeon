@@ -38,7 +38,12 @@ export const TEST_ONLY_EXEMPTIONS: Record<string, string> = {
  * rebuild. Listed by name so the audit passes on today's repo and fails the moment a *new* module
  * joins them. Reconnect or delete them, then delete the line.
  */
-export const TEST_ONLY_BASELINE: Record<string, string> = {};
+export const TEST_ONLY_BASELINE: Record<string, string> = {
+    'FloorJourney.tsx': 'The floor journey strip lost its screen when the floor clear went straight on (main, 2026-10-07).',
+    'RealmTravel.tsx': 'The travel doors lost their screen when the next floor began starting on its own (main, 2026-10-07).',
+    'first-run-help-center.ts': 'The first-run help centre lost its menu entry in the main-menu rebuild (main, 2026-10-07).',
+    'settings-control-model.ts': 'The settings reference matrix lost its renderer reader when the settings screen was rebuilt (main, 2026-10-07).'
+};
 
 /** Where a module may be reported from. */
 const SOURCE_ROOTS = ['src'] as const;
