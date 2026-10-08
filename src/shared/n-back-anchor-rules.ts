@@ -34,10 +34,16 @@ const fullyHiddenPairKeys = (board: BoardState): string[] => {
         .sort();
 };
 
-/** The card the anchor marks: the first of its pair in board order that is still face down. */
+/**
+ * The card the anchor marks: always the same one of its two (the lower id, so a shuffle cannot move
+ * the mark either), shown only while it is face down. It used to be the first of the pair still
+ * face down, so turning the marked card moved the mark onto its partner: the one card the anchor
+ * asks the player to find (2026-10-08 audit).
+ */
 export const anchorMarkedTileId = (board: BoardState | null | undefined, pairKey: string | null | undefined): string | null => {
     if (!board || !pairKey) return null;
-    return board.tiles.find((tile) => tile.pairKey === pairKey && tile.state === 'hidden')?.id ?? null;
+    const marked = board.tiles.filter((tile) => tile.pairKey === pairKey).sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0];
+    return marked && marked.state === 'hidden' ? marked.id : null;
 };
 
 export interface AnchorAfterMatch {

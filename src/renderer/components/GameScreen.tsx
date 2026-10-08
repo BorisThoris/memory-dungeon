@@ -1,5 +1,6 @@
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
 import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
+import { playerVisibleBoard } from '../../shared/player-visible-board';
 import { describeHeldPair } from '../../shared/held-pair-rules';
 import {
     MAX_PINNED_TILES,
@@ -1465,6 +1466,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         queuePoliteAnnouncement(colossusBeatLine(colossusEvent, colossus.status === 'standing' ? colossusElement(colossus) : null), { dedupeKey: colossusEventKey });
     }, [colossusEventKey, colossusEvent, colossus, queuePoliteAnnouncement]);
 
+    // The board as the player can see it (`player-visible-board.ts`): no face-down card shows what
+    // marks its pair (a pickup, a trait, an odd card). Everything that draws or describes a card reads it.
+    const visibleBoard = useMemo(() => (run.board ? playerVisibleBoard(run.board) : null), [run.board]);
     // The odd cards' key, and the Hourglass said once when it is caught or runs out (`oddCardBeat.ts`).
     const boardTilesForLegend = run.board?.tiles;
     const oddCardEntries = useMemo(() => oddCardLegend(boardTilesForLegend ?? []), [boardTilesForLegend]);
@@ -1991,7 +1995,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}
                                 zoneFlipCapacity={zoneFlipCapacity}
-                                board={run.board}
+                                board={visibleBoard ?? run.board}
                                 handoffSeatLabel={run.passAndPlay?.handoffPending === true ? activeSeatLabel : null}
                                 cursedPairKey={run.board.cursedPairKey ?? null}
                                 wardPairKey={run.board.wardPairKey ?? null}

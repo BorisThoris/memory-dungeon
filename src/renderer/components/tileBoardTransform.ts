@@ -28,6 +28,16 @@ export interface TileTransform {
     seed: number;
 }
 
+/**
+ * A card's private seed: its layout jitter, tilt, idle sway, glow and sparks all read it.
+ *
+ * The ids of a pair's two halves differ only in their last character (`${pairKey}-A`, `-B`), and a
+ * plain `*31` string hash left their seeds exactly one apart. Everything shifted or taken modulo
+ * from that seed came out nearly the same for both halves, so a pair bobbed in step, sat at the
+ * same tilt and glinted alike while every other card was out of step: a tell that gave the pair
+ * away before either card was turned (2026-10-08 audit). The string hash is now finished with an
+ * avalanche mix (murmur3's fmix32), so ids one character apart get unrelated seeds.
+ */
 export const hashTileLayoutSeed = (value: string): number => {
     let hash = 0;
 
@@ -35,7 +45,13 @@ export const hashTileLayoutSeed = (value: string): number => {
         hash = (hash * 31 + value.charCodeAt(index)) | 0;
     }
 
-    return Math.abs(hash);
+    hash ^= hash >>> 16;
+    hash = Math.imul(hash, 0x85ebca6b);
+    hash ^= hash >>> 13;
+    hash = Math.imul(hash, 0xc2b2ae35);
+    hash ^= hash >>> 16;
+    // Non-negative and under 2^31, as every consumer of the seed expects.
+    return hash >>> 1;
 };
 
 export const layoutNormFromSeed = (seed: number, shift: number): number =>

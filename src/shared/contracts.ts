@@ -384,6 +384,11 @@ export interface Tile {
     tileTraitKind?: TileTraitKind;
     /** A Turncoat (`odd-card-rules.ts`): this pair's element turns every turn, and this is what it turns to next. */
     turncoat?: TileSuit;
+    /**
+     * A Turncoat's element when it was dealt: what it wears face down (`player-visible-board.ts`), so
+     * its turning is read off its face, never watched on two backs at once.
+     */
+    turncoatDealt?: TileSuit;
     /** An Hourglass (`odd-card-rules.ts`): turns of sand left; matched before it runs out, the pair pays a prize. */
     hourglass?: number;
     /** Frost realm: turns this card stays frozen. A frozen card cannot be turned. */

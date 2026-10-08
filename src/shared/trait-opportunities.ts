@@ -144,29 +144,12 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
 export const getTraitOpportunityTileIds = (board: BoardState | null | undefined): Set<string> =>
     new Set(getTraitOpportunitySummary(board).tiles.map((tile) => tile.tileId));
 
-export const getSelectedTraitFollowupTileIds = (board: BoardState | null | undefined): Set<string> => {
-    if (!board || !Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 1) {
-        return new Set();
-    }
-
-    const selectedTile = board.tiles.find((tile) => tile.id === board.flippedTileIds[0]);
-    if (!selectedTile || selectedTile.tileTraitKind == null || selectedTile.state !== 'flipped') {
-        return new Set();
-    }
-
-    const selectedPreviewLines = [
-        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id])
-    ];
-    if (selectedPreviewLines.length === 0) {
-        return new Set();
-    }
-
-    return new Set(
-        board.tiles
-            .filter((tile) => tile.state === 'hidden' && tile.pairKey === selectedTile.pairKey)
-            .map((tile) => tile.id)
-    );
-};
+/**
+ * The face-down mate of a flipped trait card. Always empty now: marking it (a glyph, a ring and an
+ * aria line on the card the player was trying to remember) told the player where the other half
+ * was, before the second flip (2026-10-08 audit). The trait's preview stays on the flipped card.
+ */
+export const getSelectedTraitFollowupTileIds = (_board: BoardState | null | undefined): Set<string> => new Set();
 
 export const getTraitComboSurgeTileIds = (board: BoardState | null | undefined): Set<string> => {
     const summary = getTraitOpportunitySummary(board);

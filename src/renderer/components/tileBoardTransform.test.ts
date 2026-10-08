@@ -24,6 +24,24 @@ describe('tile board transform', () => {
         expect(hashTileLayoutSeed('a1')).not.toBe(hashTileLayoutSeed('b1'));
     });
 
+    it('gives the two halves of a pair unrelated seeds, so neither motion nor tilt pairs them', () => {
+        // The halves of a pair are `${pairKey}-A` and `-B`: ids one character apart.
+        let sameJitter = 0;
+        let samePhase = 0;
+        const pairs = 200;
+        for (let n = 0; n < pairs; n += 1) {
+            const a = getTileTransform(tile(`5-${n}-A`), 0, 4, 4, false, false, false);
+            const b = getTileTransform(tile(`5-${n}-B`), 0, 4, 4, false, false, false);
+            if (Math.abs(a.layoutJitterX - b.layoutJitterX) < 0.002 && Math.abs(a.layoutJitterY - b.layoutJitterY) < 0.002) sameJitter += 1;
+            // The idle sway's phase (`tileBoardFrameAdvance.ts`).
+            const phase = (seed: number) => (seed % 997) * 0.0063;
+            if (Math.abs(phase(a.seed) - phase(b.seed)) < 0.2) samePhase += 1;
+        }
+        // Chance alone would put a few pairs close; the old hash put every pair there.
+        expect(sameJitter).toBeLessThan(pairs * 0.05);
+        expect(samePhase).toBeLessThan(pairs * 0.1);
+    });
+
     it('maps seed bits into the expected jitter range', () => {
         expect(layoutNormFromSeed(0, 0)).toBeCloseTo(-1);
         expect(layoutNormFromSeed(1000, 0)).toBeCloseTo(1);

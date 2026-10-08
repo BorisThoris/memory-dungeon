@@ -108,7 +108,7 @@ export const dealOddCards = (board: BoardState, { runSeed, rulesVersion }: { run
             // The next element is read off the board without this pair, so mark it first.
             mark(pairKey, (tile) => ({ ...tile, turncoat: own }));
             const next = turncoatNextSuit(tiles, own);
-            mark(pairKey, (tile) => ({ ...tile, turncoat: next }));
+            mark(pairKey, (tile) => ({ ...tile, turncoat: next, turncoatDealt: own }));
         }
     }
     if (board.level >= HOURGLASS_FROM_FLOOR && hourglassRoll < 0.5) {
@@ -167,7 +167,7 @@ export const resolveOddCardTurn = ({ board, turnsThisFloor }: { board: BoardStat
     tiles = tiles.map((tile) => {
         if (tile.turncoat == null) return tile;
         if (isGone(tile)) {
-            const { turncoat: _turncoat, ...plain } = tile;
+            const { turncoat: _turncoat, turncoatDealt: _dealt, ...plain } = tile;
             return plain;
         }
         if (heldPairs.has(tile.pairKey)) return tile;
