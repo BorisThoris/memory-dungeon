@@ -71,10 +71,14 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
 
 /*
  * Which floors get played, not just inspected: every early floor, every boss floor and every third
- * floor after that - about 430 of a thousand, played through the command path.
+ * floor after that, played through the command path. Late boards grow to thousands of pairs
+ * (`LATE_PAIRS_MAX`, 2026-10-05) and playing one through the solver took minutes, so the
+ * thousand-floor gate never finished; a board past `PLAYED_PAIRS_MAX` is inspected (every floor
+ * still is) and played only on a boss floor.
  */
+export const PLAYED_PAIRS_MAX = 512;
 const shouldCheckPlayableBoard = (board: BoardState): boolean =>
-    board.level <= 24 || board.level % 3 === 0 || board.floorTag === 'boss';
+    board.floorTag === 'boss' || (board.pairCount <= PLAYED_PAIRS_MAX && (board.level <= 24 || board.level % 3 === 0));
 
 export const buildEndlessSimulationCsv = ({
     floors,
