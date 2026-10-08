@@ -4479,8 +4479,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 109889,
-      "sha256": "c8a2f85eaf439abdcfff4e1bf4d01fdf7a97edff6e251adf8c2a721dc13b36bb"
+      "bytes": 110098,
+      "sha256": "091ef6ab28045680c9a61b9eb959683b214a7ed263aaea609e6eeecf45138852"
     },
     {
       "path": "public/site.webmanifest",
@@ -10551,8 +10551,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 61121,
-      "sha256": "d3a76b52cb50e5178b54270ceacfbcabae649903e6113da2d4dcfccc25b4c285"
+      "bytes": 61468,
+      "sha256": "cdeb312e8d5255e76d1f4de2b7c37b52bd5cfed329ef14043db70a65103e39a0"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
