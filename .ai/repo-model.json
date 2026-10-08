@@ -5169,8 +5169,8 @@
     {
       "path": "scripts/gate-softlock-seeds.ts",
       "category": "script",
-      "bytes": 2503,
-      "sha256": "b2dabe8d76d705899255346cbb06285f071e430adb8c4c777448c22cc90321ab"
+      "bytes": 2852,
+      "sha256": "7ceb3faa20c3453a0b861967a24182d3d72cd86bd74a9db29ad181f5856a3f98"
     },
     {
       "path": "scripts/gen-face-panel-raster-urls.mjs",
