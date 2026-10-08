@@ -16,6 +16,7 @@ import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { canAimMeteor, callMeteor } from './meteor-rules';
 import { missBankCap, missesLeft } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
@@ -56,6 +57,8 @@ export type TestHallRoomId =
     | 'severance-drop'
     | 'fever-bridge'
     | 'bomb'
+    | 'meteor-strike'
+    | 'meteor-shard'
     | 'bomb-last-pair'
     | 'store-stop'
     | 'deep-pockets'
@@ -149,6 +152,7 @@ export type TestHallStep =
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
+    | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
     | { readonly do: 'swap'; readonly a: string; readonly b: string }
@@ -195,6 +199,12 @@ export interface TestHallRoom {
     readonly tryThis: string;
     readonly build: () => RunState;
     readonly script: readonly TestHallScriptLine[];
+    /**
+     * Why this room is walked only at its own seed, when its script reads a random draw (where
+     * the weather lands, where the marks move). Every other room is walked again at
+     * `TEST_HALL_RESEEDS`, so the rules it shows cannot lean on one seed's luck.
+     */
+    readonly seedPinned?: string;
 }
 
 // ---- Building rooms ------------------------------------------------------------------------
@@ -583,6 +593,38 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'one card face up lights the bomb', expect: (r) => (bombTargetTileId(r) === 'b-1' ? null : 'the bomb is not aimed at the flipped card') },
             { step: { do: 'bomb' }, says: 'pair b is gone, nothing else moved', expect: expectAll(isGone('b'), missesAre(3), turnsAre(0), (r) => (r.bombCharges === 0 ? null : `bombs ${r.bombCharges}`)) }
+        ]
+    },
+    {
+        id: 'meteor-strike',
+        title: 'The meteor',
+        mechanic: 'A meteor called on a card takes every pair it lands within reach of, partners and all, with no turn, no miss and no score.',
+        graphMechanicIds: ['inventory.meteor_charge'],
+        tryThis: 'Press Meteor, then choose the top-left card: it and its three neighbours go, and their partners with them.',
+        build: () => room(['a:e b:t c:m d:b e:e', 'f:t g:e h:b i:m j:t', 'a:e b:t c:m d:b e:e', 'f:t g:e h:b i:m j:t'], { run: { meteorCharges: 1, meteorArmed: true } }),
+        script: [
+            {
+                step: { do: 'meteor', tileId: 'a-1' },
+                says: 'the corner and the three cards touching it go, with their partners across the board',
+                expect: expectAll(isGone('a'), isGone('b'), isGone('f'), isGone('g'), isStanding('c'), isStanding('h'), missesAre(3), turnsAre(0), (r) =>
+                    r.meteorCharges === 0 && r.board?.matchedPairs === 4 ? null : `meteors ${r.meteorCharges}, matched ${r.board?.matchedPairs}`)
+            }
+        ]
+    },
+    {
+        id: 'meteor-shard',
+        title: 'The meteor shard',
+        mechanic: 'Matching the pair that carries a meteor shard earns a meteor; a meteor that takes the last pairs clears the floor.',
+        graphMechanicIds: ['findable.meteor_shard', 'inventory.meteor_charge', 'objective.floor_clear'],
+        tryThis: 'Match a, the pair with the amber comet: a meteor is yours. Call it on b to take b and c and clear the floor.',
+        build: () =>
+            room(['a:e b:t c:m', 'c:m a:e b:t'], {
+                run: { meteorCharges: 0 },
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, findableKind: 'meteor_shard' as const } : t))
+            }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the shard pays a meteor', expect: (r) => (r.meteorCharges === 1 ? null : `meteors ${r.meteorCharges}`) },
+            { step: { do: 'meteor', tileId: 'b-1' }, says: 'the meteor takes the last two pairs and the floor is clear', expect: expectAll(isGone('b'), isGone('c'), statusIs('levelComplete')) }
         ]
     },
     {
@@ -1127,6 +1169,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'The Bounty pair pays 30 more and the Ward pair 22 less; every turn moves both.',
         graphMechanicIds: ['economy.score_and_rewards'],
         tryThis: 'Match the Bounty (b), then the new Ward, then miss: the two marks move every turn.',
+        seedPinned: 'The marks move to pairs drawn from the run seed; the script names the pair they land on.',
         // Keep this authored sequence's random marks stable when the production deal is reseeded.
         build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { mutators: ['shifting_spotlight'], run: { runSeed: 90_211, runRulesVersion: 51 }, board: { wardPairKey: 'a', bountyPairKey: 'b' } }),
         script: [
@@ -1420,6 +1463,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every second turn on a raging Cinder Deep, wildfire sets two face-down cards on a three-turn fuse; matched in time a fire is doused for two gold.',
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
+        seedPinned: 'Wildfire lights cards drawn from the run seed, and at some seeds both land on vine-held cards no turn can douse.',
         build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
@@ -1434,7 +1478,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Card c is on its last turn of fuse. Take any turn and watch it burn out and catch beside it.',
         build: () =>
-            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
+            // No water card touches c-1: water puts fire out, and a spread drawn onto one would not land.
+            room(['a:e b:b c:m d:b', 'e:e f:t a:e b:b', 'c:m d:b e:e f:t'], {
                 run: realmRun('ember', 'calm', { gold: 5, runRulesVersion: 51 }),
                 tiles: (tiles) => tiles.map((t) => (t.id === 'c-1' ? { ...t, fuse: 1 } : t))
             }),
@@ -2134,6 +2179,11 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             const target = bombTargetTileId(run);
             return target ? applyBomb(run, target) : null;
         }
+        case 'meteor': {
+            if (!canAimMeteor(run)) return null;
+            const struck = callMeteor(run, step.tileId);
+            return struck === run ? null : struck;
+        }
         case 'peek':
             return applyPeek(run, step.tileId);
         case 'shuffle':
@@ -2225,9 +2275,48 @@ export interface TestHallRoomReport {
     readonly failures: readonly string[];
 }
 
-export const walkTestHallRoom = (hallRoom: TestHallRoom): TestHallRoomReport => {
+/**
+ * Seeds every room is walked at again (2026-10-08, the owner: "make sure we check every mechanic at
+ * least 2 times ... maybe introduce seeding"). A room's layout is authored, but the run seed drives
+ * every draw the rules make on it: where weather lands, which cards a shuffle moves, what a thief
+ * takes. A room that passes only at its own seed is showing luck, not a rule.
+ */
+export const TEST_HALL_RESEEDS: readonly number[] = [7_331, 424_242];
+
+/** Every walk the hall makes: each room at its own seed, and again at each reseed unless pinned. */
+export const testHallWalks = (): ReadonlyArray<{ readonly room: TestHallRoom; readonly runSeed: number | null }> =>
+    TEST_HALL_ROOMS.flatMap((hallRoom) => [
+        { room: hallRoom, runSeed: null },
+        ...(hallRoom.seedPinned ? [] : TEST_HALL_RESEEDS.map((runSeed) => ({ room: hallRoom, runSeed })))
+    ]);
+
+/** A mechanic must be checked by at least this many walks of the hall. */
+export const MIN_TEST_HALL_CHECKS = 2;
+
+/**
+ * Graph mechanics no room can stand in, with where they are checked instead: they act before a
+ * board exists or after a run ends, and the hall's rooms start on a board.
+ */
+export const TEST_HALL_CHECKED_ELSEWHERE: Readonly<Record<string, string>> = {
+    'progression.run_setup': 'Run setup happens before any board: the soak plays whole runs from it at every setup, and the playtest starts runs from the main menu.',
+    'persistence.run_summary': 'The run summary is written when a run ends: the soak finishes runs to it, and the playtest reads it on the results screen.',
+    'simulation.gameplay_replay': 'Replay re-runs a recorded journal: the endless sim verifies a replay on every floor it plays, at every seed it tops up.',
+    'simulation.build_evaluation': 'Build evaluation scores whole runs, not a board: the balance simulation and the seed sweep gate drive it over many seeds.'
+};
+
+/** How many walks check each interaction-graph mechanic. */
+export const testHallChecksByMechanic = (): ReadonlyMap<string, number> => {
+    const checks = new Map<string, number>();
+    for (const { room: hallRoom } of testHallWalks()) {
+        for (const id of hallRoom.graphMechanicIds) checks.set(id, (checks.get(id) ?? 0) + 1);
+    }
+    return checks;
+};
+
+export const walkTestHallRoom = (hallRoom: TestHallRoom, runSeed: number | null = null): TestHallRoomReport => {
     const failures: string[] = [];
-    let run = hallRoom.build();
+    const built = hallRoom.build();
+    let run = runSeed == null ? built : { ...built, runSeed };
     hallRoom.script.forEach((line, index) => {
         const before = run;
         const next = playTestHallStep(run, line.step);

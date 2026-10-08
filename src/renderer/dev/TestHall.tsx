@@ -1,6 +1,14 @@
 import { useMemo, useState, type ReactElement } from 'react';
 import { gameplayInteractionGraph } from '../../shared/gameplay-interaction-graph';
-import { TEST_HALL_ROOMS, walkTestHallRoom, type TestHallRoomReport } from '../../shared/test-hall-rooms';
+import {
+    MIN_TEST_HALL_CHECKS,
+    TEST_HALL_CHECKED_ELSEWHERE,
+    TEST_HALL_RESEEDS,
+    TEST_HALL_ROOMS,
+    testHallChecksByMechanic,
+    walkTestHallRoom,
+    type TestHallRoomReport
+} from '../../shared/test-hall-rooms';
 import { TEST_HALL_ROOM_PARAM } from './testHallLoader';
 import styles from './TestHall.module.css';
 
@@ -10,17 +18,31 @@ import styles from './TestHall.module.css';
  *
  * "Run all" plays every room's script in this tab through the game's own rules - the same sweep the
  * unit suite runs - so a room that breaks shows up here before anyone walks into it. The coverage
- * panel lists the interaction graph's mechanics that no room exercises yet: the parts of the game
- * nobody can stand in front of.
+ * panel lists the interaction graph's mechanics that fewer than two walks check: every room is
+ * walked at its own seed and again at each reseed, unless pinned (`TEST_HALL_RESEEDS`).
  */
 const TestHall = (): ReactElement => {
     const [reports, setReports] = useState<Record<string, TestHallRoomReport> | null>(null);
-    const covered = useMemo(() => new Set(TEST_HALL_ROOMS.flatMap((hallRoom) => hallRoom.graphMechanicIds)), []);
-    const uncovered = gameplayInteractionGraph.mechanics.filter((mechanic) => !covered.has(mechanic.id));
+    const checks = useMemo(() => testHallChecksByMechanic(), []);
+    const uncovered = gameplayInteractionGraph.mechanics.filter(
+        (mechanic) => !(mechanic.id in TEST_HALL_CHECKED_ELSEWHERE) && (checks.get(mechanic.id) ?? 0) < MIN_TEST_HALL_CHECKS
+    );
     const failing = reports ? Object.values(reports).filter((report) => report.failures.length > 0).length : 0;
 
     const runAll = (): void => {
-        setReports(Object.fromEntries(TEST_HALL_ROOMS.map((hallRoom) => [hallRoom.id, walkTestHallRoom(hallRoom)])));
+        setReports(
+            Object.fromEntries(
+                TEST_HALL_ROOMS.map((hallRoom) => {
+                    const failures = [
+                        ...walkTestHallRoom(hallRoom).failures,
+                        ...(hallRoom.seedPinned ? [] : TEST_HALL_RESEEDS).flatMap((runSeed) =>
+                            walkTestHallRoom(hallRoom, runSeed).failures.map((failure) => `seed ${runSeed}: ${failure}`)
+                        )
+                    ];
+                    return [hallRoom.id, { id: hallRoom.id, failures }];
+                })
+            )
+        );
     };
 
     return (
@@ -83,9 +105,9 @@ const TestHall = (): ReactElement => {
             <section aria-label="Graph coverage" className={styles.coverage} data-testid="test-hall-coverage">
                 <h2 className={styles.roomTitle}>
                     Graph coverage: {gameplayInteractionGraph.mechanics.length - uncovered.length} of {gameplayInteractionGraph.mechanics.length} mechanics
-                    have a room
+                    checked at least {MIN_TEST_HALL_CHECKS} times
                 </h2>
-                <p className={styles.mechanic}>No room walks through these yet:</p>
+                <p className={styles.mechanic}>Checked fewer than {MIN_TEST_HALL_CHECKS} times:</p>
                 <ul className={styles.uncovered}>
                     {uncovered.map((mechanic) => (
                         <li key={mechanic.id}>

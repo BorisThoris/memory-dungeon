@@ -62,6 +62,12 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
   in `mechanic-accountability.test.ts`; every `writes` read by some node; player-visible writes
   joined to `feedback.gameplay_hud` by a `displays` edge. Every hall room names at least one
   node (tested); the hall's coverage panel lists the mechanics still without a room - shrink it.
+- **Every mechanic checked at least twice.** Each hall room is walked at its own seed and again at
+  `TEST_HALL_RESEEDS`; a room whose script reads a random draw says why in `seedPinned`. The hall
+  test fails a graph mechanic with fewer than two walks unless `TEST_HALL_CHECKED_ELSEWHERE` names
+  where it is checked. `yarn sim:endless` plays every mutator, archetype, floor tag, trait and
+  pickup on at least two floors, topping up from later seeds, and `--deep-floors` cherry-picks one
+  floor per late board size (768 to 4096 pairs) instead of simulating a thousand floors.
 - Shared rule code picks random indexes with `pickRngIndex` (`rng.ts`), never `Math.floor(rng() * n)`.
 - A new `src/shared` module that ships nowhere needs a runtime importer or a named exemption in
   `scripts/shared-reach.ts`; one reached only by tests needs a script (`audit:test-only-modules`).

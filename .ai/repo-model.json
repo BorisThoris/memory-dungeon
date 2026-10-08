@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3015,
     "codeFileCount": 1142,
-    "exportedSymbolCount": 3596,
+    "exportedSymbolCount": 3601,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9632
+    "relationshipCount": 9638
   },
   "inventory": [
     {
@@ -201,8 +201,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 8802,
-      "sha256": "4cf73976403ae37a0b6577974265f42a0e23500ad2930bd317bd19eaebde4051"
+      "bytes": 9381,
+      "sha256": "6fb9e422008d83503668f3757c8b130a298874e9d2bc2c215a86df0d0a168c9f"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "a5fdda92c073ef3390440199b94b9345bd7f63e12aafbba68079cffb0d49374b"
+      "sha256": "8ed4be4271f6d666b4b68d50491567d9c8cc161262f3bd41a1baa0673bd70e2f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4305,8 +4305,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33368,
-      "sha256": "37b96f725b0c2e44d0dfb4676ab2e39235f5d7ec14bdb068e9103a63a658e759"
+      "bytes": 33395,
+      "sha256": "4cb395620dc81ae3c20a66e70ff2318fabd7dc33fe58b1edc3edfc28e484d3f2"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5613,8 +5613,8 @@
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 19746,
-      "sha256": "73c669254d314555b52c07ddb74e3a06b21c8119cfb02b8317e7fdb2aeb0ce69"
+      "bytes": 30316,
+      "sha256": "234721a8c1b65e1bc0548ed4839541a5f34676d2f17d7b0e161a097c5b568e60"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -12207,8 +12207,8 @@
     {
       "path": "src/renderer/dev/TestHall.tsx",
       "category": "source",
-      "bytes": 5481,
-      "sha256": "61703b185001e438501a4c5f358fce0d5ca24502098abb034115faf8d7d0c2ea"
+      "bytes": 6222,
+      "sha256": "03b11d9caa93c694886c50e9b437935ca9713bab2ab02196733a67760b882745"
     },
     {
       "path": "src/renderer/dev/TestHallBadge.tsx",
@@ -15489,8 +15489,8 @@
     {
       "path": "src/shared/sim-endless-output.test.ts",
       "category": "test",
-      "bytes": 9318,
-      "sha256": "ea5fc32b0f8a7343ebf9eddb2e3b044eaced07b59d429e28c0866b07bd2501a4"
+      "bytes": 11639,
+      "sha256": "344baba4684a720a41922ee6705a5c7a208e520e54aa8ee612a66bac6669c053"
     },
     {
       "path": "src/shared/skittish-cards-rules.test.ts",
@@ -15603,14 +15603,14 @@
     {
       "path": "src/shared/test-hall-rooms.test.ts",
       "category": "test",
-      "bytes": 1729,
-      "sha256": "e05bb3aa7e54bf7bd585bc874b770116b21609db2978bde67eb536a41c58cdf5"
+      "bytes": 3472,
+      "sha256": "9fadebf1cb15d4d4cf6ed60816de5b63d17c278f7b7251137f54931b4aba7cd3"
     },
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 145701,
-      "sha256": "25e64841378978f52c7977fd4818a9ad72d3ea48b605606f0ef6cc86d8c32363"
+      "bytes": 151255,
+      "sha256": "d5b369ee08bafa450ae19ba1b0221db840a92169ed368043b300fae8c4ad627f"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -27871,7 +27871,7 @@
       "path": "src/renderer/dev/TestHall.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 124,
       "imports": [
         "file:src/renderer/dev/testHallLoader.ts",
         "file:src/shared/gameplay-interaction-graph.ts",
@@ -38584,7 +38584,7 @@
       "path": "src/shared/sim-endless-output.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 191,
+      "lineCount": 222,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts"
@@ -38958,7 +38958,7 @@
       "path": "src/shared/test-hall-rooms.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 38,
+      "lineCount": 76,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/test-hall-rooms.ts"
@@ -38971,7 +38971,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2246,
+      "lineCount": 2335,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -38984,6 +38984,7 @@
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
+        "file:src/shared/meteor-rules.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/n-back-anchor-rules.ts",
         "file:src/shared/realm-rules.ts",
@@ -38995,14 +38996,19 @@
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
+        "symbol:src/shared/test-hall-rooms.ts#MIN_TEST_HALL_CHECKS",
         "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
+        "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
+        "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
         "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+        "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
         "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
         "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
         "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
         "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
         "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
         "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+        "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
         "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom"
       ],
       "testedBy": [
@@ -51058,8 +51064,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/dev/TestHall.tsx",
-      "line": 101,
-      "endLine": 101
+      "line": 123,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/dev/TestHallBadge.tsx#default",
@@ -67166,76 +67172,116 @@
       "endLine": 132
     },
     {
+      "id": "symbol:src/shared/test-hall-rooms.ts#MIN_TEST_HALL_CHECKS",
+      "name": "MIN_TEST_HALL_CHECKS",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 2294,
+      "endLine": 2294
+    },
+    {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2122,
-      "endLine": 2221
+      "line": 2167,
+      "endLine": 2271
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
+      "name": "TEST_HALL_CHECKED_ELSEWHERE",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 2300,
+      "endLine": 2305
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
+      "name": "TEST_HALL_RESEEDS",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 2284,
+      "endLine": 2284
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 420,
-      "endLine": 2109
+      "line": 430,
+      "endLine": 2154
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
+      "name": "testHallChecksByMechanic",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 2308,
+      "endLine": 2314
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2245,
-      "endLine": 2245
+      "line": 2334,
+      "endLine": 2334
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 187,
-      "endLine": 198
+      "line": 191,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 49,
-      "endLine": 145
+      "line": 50,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2223,
-      "endLine": 2226
+      "line": 2273,
+      "endLine": 2276
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 180,
-      "endLine": 185
+      "line": 184,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 147,
-      "endLine": 178
+      "line": 150,
+      "endLine": 182
+    },
+    {
+      "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
+      "name": "testHallWalks",
+      "kind": "value",
+      "file": "src/shared/test-hall-rooms.ts",
+      "line": 2287,
+      "endLine": 2291
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2228,
-      "endLine": 2243
+      "line": 2316,
+      "endLine": 2332
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -70641,7 +70687,7 @@
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
-          "line": 27
+          "line": 65
         }
       ],
       "enables": [],
@@ -71033,7 +71079,7 @@
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
-          "line": 27
+          "line": 65
         },
         {
           "path": "src/shared/run-soak.test.ts",
@@ -71688,7 +71734,7 @@
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
-          "line": 27
+          "line": 65
         }
       ],
       "enables": [
@@ -94595,15 +94641,39 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#MIN_TEST_HALL_CHECKS",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#MIN_TEST_HALL_CHECKS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "kind": "exports"
     },
     {
@@ -94640,6 +94710,12 @@
       "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/test-hall-rooms.ts->symbol:src/shared/test-hall-rooms.ts#testHallWalks",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "kind": "exports"
     },
     {
@@ -117762,6 +117838,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/game.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/meteor-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/meteor-rules.ts",
       "kind": "imports"
     },
     {

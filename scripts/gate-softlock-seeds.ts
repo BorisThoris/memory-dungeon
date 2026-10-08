@@ -13,8 +13,13 @@ const formatFailure = (seed: number, report: EndlessSimulationHealthReport): str
         ...report.issues.map((issue) => `  - ${issue}`)
     ].join('\n');
 
+export const SOFTLOCK_GATE_FLOORS = 150;
+
 export const runSoftlockSeedGate = (argv: readonly string[]): number => {
-    const floors = Math.max(1, readFlooredNumericCliArg(argv, 'floors', 1000));
+    // Sixteen seeds to floor 150 (2026-10-08): breadth across seeds, each with every mechanic played
+    // twice (`MIN_PLAYS_PER_MECHANIC`). A thousand floors per seed reached boards of 4096 pairs and
+    // never finished; the late sizes are the endless gate's cherry-picked deep floors.
+    const floors = Math.max(1, readFlooredNumericCliArg(argv, 'floors', SOFTLOCK_GATE_FLOORS));
     const rulesVersion = Math.max(1, readFlooredNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION));
     const defaultSeeds = [
         42_001,

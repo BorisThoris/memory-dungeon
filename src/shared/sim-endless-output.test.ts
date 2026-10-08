@@ -3,7 +3,9 @@ import {
     analyzeEndlessSimulationHealth,
     buildEndlessSimulationCsv,
     buildEndlessSimulationSummary,
+    endlessMechanicKeys,
     evaluateEndlessSimulationHealth,
+    MIN_PLAYS_PER_MECHANIC,
     parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
 import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
@@ -21,15 +23,18 @@ describe('sim-endless CSV output', () => {
             runSeed: 42_001,
             summaryMode: true,
             checkMode: false,
+            deepFloors: [210, 225, 240, 260, 300],
             out: 'reports/a=b.csv'
         });
 
-        expect(parseEndlessSimulationCliOptions(['--floors=0', '--seed=', '--check'])).toEqual({
+        expect(parseEndlessSimulationCliOptions(['--floors=0', '--seed=', '--check', '--deep-floors='])).toEqual({
             floors: 1,
             runSeed: 42_001,
             summaryMode: false,
-            checkMode: true
+            checkMode: true,
+            deepFloors: []
         });
+        expect(parseEndlessSimulationCliOptions(['--deep-floors=210,x,300']).deepFloors).toEqual([210, 300]);
     });
 
     it('reports findable kind diagnostics and target weights', () => {
@@ -81,8 +86,10 @@ describe('sim-endless CSV output', () => {
     });
 
     it('turns endless route, reward, and trait health into a gateable report', () => {
+        // Two hundred floors, as the gate runs it: past that a board is thousands of pairs (the deep
+        // sample below covers those sizes).
         const health = analyzeEndlessSimulationHealth({
-            floors: 1000,
+            floors: 200,
             runSeed: 42_001,
             rulesVersion: GAME_RULES_VERSION
         });
@@ -99,7 +106,8 @@ describe('sim-endless CSV output', () => {
             playableIssueReasons: [],
             rewardKinds: getFindableSpawnWeightRows().length
         });
-        expect(health.metrics.playableCheckedFloors).toBeGreaterThan(400);
+        expect(health.metrics.playableCheckedFloors).toBeGreaterThan(80);
+        expect(health.metrics.mechanicsUnderPlayed).toEqual([]);
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
         expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitMatchRouteFloorShare).toBeGreaterThanOrEqual(0.95);
@@ -108,6 +116,23 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
     }, 300_000);
 
+
+    it('plays every mechanic at least twice, topping up from later seeds when one run deals it once', () => {
+        const lines = buildEndlessSimulationCsv({ floors: 24, runSeed: 42_001, rulesVersion: GAME_RULES_VERSION }).trim().split('\n');
+        const plays = lines.filter((line) => line.startsWith('mechanicPlayed,'));
+        expect(plays).toHaveLength(endlessMechanicKeys().length);
+        for (const line of plays) expect(Number(line.split(',')[2]), line).toBeGreaterThanOrEqual(MIN_PLAYS_PER_MECHANIC);
+        // Twenty-four floors of seed 42001 deal the distraction channel once: the second comes from seed 42002.
+        expect(lines.some((line) => line.startsWith('mechanicTopUp,mutator:distraction_channel@4200'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
+    }, 120_000);
+
+    it('cherry-picks a deep floor, builds it, inspects it and plays it to the clear', () => {
+        const lines = buildEndlessSimulationCsv({ floors: 1, runSeed: 42_001, rulesVersion: GAME_RULES_VERSION, deepFloors: [210] }).trim().split('\n');
+        const deep = lines.filter((line) => line.startsWith('deepFloor,'));
+        expect(deep).toHaveLength(1);
+        expect(deep[0]).toMatch(/^deepFloor,floor=210\|pairs=768\|mode=clear\|status=levelComplete\|.*\|replay=ok\|fairness=ok\|ok,1$/u);
+    }, 180_000);
 
     it('reports actionable failures when endless health metrics regress', () => {
         const health = evaluateEndlessSimulationHealth(
@@ -124,6 +149,10 @@ describe('sim-endless CSV output', () => {
                 ],
                 playableIssueFloors: 4,
                 playableIssueReasons: ['no_progress'],
+                mechanicsUnderPlayed: ['mutator:magpie_thief (1)'],
+                mechanicTopUps: 0,
+                deepFloorsChecked: 1,
+                deepFloorFailures: ['floor=300|pairs=4096|mode=capped80|status=gameOver|FAIL'],
                 rewardKinds: 1,
                 traitBoardPowerInteractionFloorShare: 0.2,
                 traitMatchRouteFloorShare: 0.4,
@@ -148,7 +177,9 @@ describe('sim-endless CSV output', () => {
                 'Expected reward-producing trait interactions on at least 80.0% of trait floors, saw 30.0%.',
                 'Expected board-power trait interactions on at least 70.0% of trait floors, saw 20.0%.',
                 'Expected one-swap trait setup opportunities on at least 10.0% of trait floors, saw 0.0%.',
-                'Expected 0 dead trait floors, saw 2.'
+                'Expected 0 dead trait floors, saw 2.',
+                'Expected every mechanic played at least 2 times across seeds, short: mutator:magpie_thief (1).',
+                'Expected every cherry-picked deep floor to pass, failed: floor=300|pairs=4096|mode=capped80|status=gameOver|FAIL.'
             ])
         );
     });

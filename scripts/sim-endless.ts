@@ -5,10 +5,14 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
+    FLOOR_ARCHETYPE_IDS,
     GAME_RULES_VERSION,
+    MUTATOR_IDS,
     type BoardState,
-    type FindableKind
+    type FindableKind,
+    type FloorTag
 } from '../src/shared/contracts';
+import { BALANCE_SIMULATION_TILE_TRAIT_KINDS } from '../src/shared/balance-simulation';
 import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
@@ -28,6 +32,8 @@ export interface EndlessSimulationCsvInput {
     floors: number;
     runSeed: number;
     rulesVersion?: number;
+    /** Deep floors built, inspected and played past `floors` (`DEEP_SAMPLE_FLOORS` from the CLI). */
+    deepFloors?: readonly number[];
 }
 
 export interface EndlessSimulationCliOptions {
@@ -35,6 +41,7 @@ export interface EndlessSimulationCliOptions {
     runSeed: number;
     summaryMode: boolean;
     checkMode: boolean;
+    deepFloors: number[];
     out?: string;
 }
 
@@ -52,6 +59,10 @@ export interface EndlessSimulationHealthReport {
         playableFailureDetails: string[];
         playableIssueFloors: number;
         playableIssueReasons: string[];
+        mechanicsUnderPlayed: string[];
+        mechanicTopUps: number;
+        deepFloorsChecked: number;
+        deepFloorFailures: string[];
         rewardKinds: number;
         traitBoardPowerInteractionFloorShare: number;
         traitMatchRouteFloorShare: number;
@@ -82,10 +93,99 @@ export const PLAYED_PAIRS_MAX = 512;
 const shouldCheckPlayableBoard = (board: BoardState): boolean =>
     board.pairCount <= PLAYED_PAIRS_MAX && (board.level <= 24 || board.level % 3 === 0 || board.floorTag === 'boss');
 
+/*
+ * Every mechanic played at least twice (2026-10-08, the owner: "make sure we check every mechanic
+ * at least 2 times ... maybe introduce seeding"). The run's own floors played half the mutators and
+ * archetypes exactly twice, by luck of one seed's schedule. Now each mutator, archetype, floor tag,
+ * card trait and pickup kind counts the floors it was played on, and one that falls short is topped
+ * up from the next seeds: the first small floor of seed+1, seed+2, ... that deals it is built and
+ * played. The top-ups are named in the report, and a mechanic no seed deals fails the check.
+ */
+export const MIN_PLAYS_PER_MECHANIC = 2;
+export const COVERAGE_TOP_UP_SEEDS = 64;
+export const COVERAGE_TOP_UP_FLOORS = 36;
+const FLOOR_TAGS: readonly FloorTag[] = ['normal', 'breather', 'boss'];
+
+export const endlessMechanicKeys = (): string[] => [
+    ...MUTATOR_IDS.map((id) => `mutator:${id}`),
+    ...FLOOR_ARCHETYPE_IDS.map((id) => `archetype:${id}`),
+    ...FLOOR_TAGS.map((tag) => `floorTag:${tag}`),
+    ...BALANCE_SIMULATION_TILE_TRAIT_KINDS.map((kind) => `trait:${kind}`),
+    ...getFindableSpawnWeightRows().map((row) => `findable:${row.id}`)
+];
+
+const boardMechanicKeys = (board: BoardState, mutators: readonly string[], floorArchetypeId: string | null | undefined): string[] => {
+    const keys = new Set<string>([...mutators.map((id) => `mutator:${id}`), `floorTag:${board.floorTag ?? 'normal'}`]);
+    if (floorArchetypeId) keys.add(`archetype:${floorArchetypeId}`);
+    for (const tile of board.tiles) {
+        if (tile.tileTraitKind) keys.add(`trait:${tile.tileTraitKind}`);
+        if (tile.findableKind) keys.add(`findable:${tile.findableKind}`);
+    }
+    return [...keys];
+};
+
+/*
+ * Cherry-picked deep floors (2026-10-08). Past floor 200 the pair curve reaches the 4096 cap, and a
+ * thousand floors of it never finish. The deep sample instead builds one floor at each size the late
+ * curve deals (768, 1086, 1536, 2438 and 4096 pairs at seed 42001) and inspects it for fairness.
+ * A board up to `DEEP_FULL_CLEAR_PAIRS` is played to the clear; a larger one is played for
+ * `DEEP_CAPPED_TURNS` turns through the same command path, which must reject nothing, break no
+ * invariant, replay identically and lose no run: the rules that differ on a big board (streaming,
+ * the cap, a meteor's reach) all act in the first turns, and a full clear of 4096 pairs is minutes.
+ */
+export const DEEP_SAMPLE_FLOORS: readonly number[] = [210, 225, 240, 260, 300];
+export const DEEP_FULL_CLEAR_PAIRS = 1100;
+export const DEEP_CAPPED_TURNS = 80;
+
+interface PlayedFloorReport {
+    ok: boolean;
+    detail: string;
+}
+
+const playFloor = (board: BoardState, runSeed: number, rulesVersion: number, maxTurns: number, capped: boolean): PlayedFloorReport => {
+    const trace = solveRunThroughGameplayCoreWithTrace(createGeneratedBoardSolverRun(board, runSeed, rulesVersion), maxTurns);
+    const cleared = trace.run.status === 'levelComplete';
+    const cappedClean = capped && trace.run.status === 'playing' && trace.stopReason === 'turn_guard';
+    const ok =
+        (cleared || cappedClean) &&
+        trace.replayVerified &&
+        trace.replayDeterministic &&
+        trace.rejectedCommandIds.length === 0 &&
+        trace.invariantViolations.length === 0;
+    return {
+        ok,
+        detail: [
+            `status=${trace.run.status}`,
+            `reason=${trace.stopReason}`,
+            `turns=${trace.turns}`,
+            `matched=${trace.run.board?.matchedPairs ?? 0}`,
+            `rejected=${trace.rejectedCommandIds.length}`,
+            `invariants=${trace.invariantViolations.length}`,
+            `replay=${trace.replayVerified && trace.replayDeterministic ? 'ok' : 'diverged'}`
+        ].join('|')
+    };
+};
+
+const buildScheduledBoard = (runSeed: number, rulesVersion: number, level: number) => {
+    const entry = pickFloorScheduleEntry(runSeed, rulesVersion, level, 'endless');
+    const board = buildBoard(level, {
+        runSeed,
+        runRulesVersion: rulesVersion,
+        activeMutators: entry.mutators,
+        floorTag: entry.floorTag,
+        floorArchetypeId: entry.floorArchetypeId,
+        featuredObjectiveId: entry.featuredObjectiveId,
+        cycleFloor: entry.cycleFloor,
+        gameMode: 'endless'
+    });
+    return { entry, board };
+};
+
 export const buildEndlessSimulationCsv = ({
     floors,
     runSeed,
-    rulesVersion = GAME_RULES_VERSION
+    rulesVersion = GAME_RULES_VERSION,
+    deepFloors = []
 }: EndlessSimulationCsvInput): string => {
     const safeFloors = Math.max(1, Math.floor(floors));
     const safeRunSeed = Math.floor(runSeed);
@@ -110,6 +210,12 @@ export const buildEndlessSimulationCsv = ({
         deadTraitFloors: 0
     };
     const findableKindCounts = emptyFindableKindCounts();
+    const mechanicPlays: Record<string, number> = Object.fromEntries(endlessMechanicKeys().map((key) => [key, 0]));
+    const countPlayed = (keys: readonly string[]) => {
+        for (const key of keys) mechanicPlays[key] = (mechanicPlays[key] ?? 0) + 1;
+    };
+    const topUps: string[] = [];
+    const deepRows: string[] = [];
 
     for (let level = 1; level <= safeFloors; level++) {
         const { mutators, floorTag, floorArchetypeId, featuredObjectiveId, cycleFloor } = pickFloorScheduleEntry(
@@ -161,6 +267,7 @@ export const buildEndlessSimulationCsv = ({
             if (trace.invariantViolations.length > 0) {
                 coreReplayInvariantViolationFloors += 1;
             }
+            countPlayed(boardMechanicKeys(board, mutators, floorArchetypeId));
             if (trace.run.status !== 'levelComplete') {
                 const reason = trace.stopReason;
                 playableIssueCounts.floorWithIssue = (playableIssueCounts.floorWithIssue ?? 0) + 1;
@@ -207,6 +314,45 @@ export const buildEndlessSimulationCsv = ({
         }
     }
 
+    // Seeded top-up: a mechanic played fewer than twice is dealt again from the next seeds.
+    for (const key of Object.keys(mechanicPlays)) {
+        for (let offset = 1; offset <= COVERAGE_TOP_UP_SEEDS && (mechanicPlays[key] ?? 0) < MIN_PLAYS_PER_MECHANIC; offset++) {
+            const seed = safeRunSeed + offset;
+            for (let level = 1; level <= COVERAGE_TOP_UP_FLOORS; level++) {
+                const entry = pickFloorScheduleEntry(seed, rulesVersion, level, 'endless');
+                const scheduleKeys = [...entry.mutators.map((id) => `mutator:${id}`), `archetype:${entry.floorArchetypeId}`, `floorTag:${entry.floorTag}`];
+                if (!key.startsWith('trait:') && !key.startsWith('findable:') && !scheduleKeys.includes(key)) continue;
+                const { board } = buildScheduledBoard(seed, rulesVersion, level);
+                if (board.pairCount > PLAYED_PAIRS_MAX) break;
+                const keys = boardMechanicKeys(board, entry.mutators, entry.floorArchetypeId);
+                if (!keys.includes(key)) continue;
+                const played = playFloor(board, seed, rulesVersion, Math.max(160, board.pairCount * 3), false);
+                playableCheckedFloors += 1;
+                coreReplayCheckedFloors += 1;
+                if (!played.ok) {
+                    playableIssueCounts.floorWithIssue = (playableIssueCounts.floorWithIssue ?? 0) + 1;
+                    playableIssueCounts.topUp = (playableIssueCounts.topUp ?? 0) + 1;
+                    playableFailureDetails.push(`seed=${seed}|floor=${level}|${played.detail}|for=${key}`);
+                }
+                countPlayed(keys);
+                topUps.push(`${key}@${seed}:${level}`);
+                break;
+            }
+        }
+    }
+
+    // Cherry-picked deep floors, one per late board size.
+    for (const level of deepFloors) {
+        const { board } = buildScheduledBoard(safeRunSeed, rulesVersion, level);
+        const fairness = inspectBoardFairness(board).issues.map((issue) => issue.code);
+        const capped = board.pairCount > DEEP_FULL_CLEAR_PAIRS;
+        const played = playFloor(board, safeRunSeed, rulesVersion, capped ? DEEP_CAPPED_TURNS : board.pairCount * 3, capped);
+        const ok = played.ok && fairness.length === 0;
+        deepRows.push(
+            `deepFloor,floor=${level}|pairs=${board.pairCount}|mode=${capped ? `capped${DEEP_CAPPED_TURNS}` : 'clear'}|${played.detail}|fairness=${fairness.join('+') || 'ok'}|${ok ? 'ok' : 'FAIL'},1`
+        );
+    }
+
     const lines = [
         'kind,key,count',
         ...Object.entries(floorTagCounts).map(([k, v]) => `floorTag,${k},${v}`),
@@ -238,7 +384,12 @@ export const buildEndlessSimulationCsv = ({
             .map(([k, v]) => `playableIssue,${k},${v}`),
         ...playableFailureDetails
             .sort((a, b) => a.localeCompare(b))
-            .map((detail) => `playableFailure,${detail},1`)
+            .map((detail) => `playableFailure,${detail},1`),
+        ...Object.entries(mechanicPlays)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([k, v]) => `mechanicPlayed,${k},${v}`),
+        ...topUps.map((topUp) => `mechanicTopUp,${topUp},1`),
+        ...deepRows
     ];
 
     return lines.join('\n') + '\n';
@@ -271,6 +422,11 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         .filter((key) => key !== 'floorWithIssue')
         .sort((a, b) => a.localeCompare(b));
     const playableFailureDetails = Object.keys(counts.playableFailure ?? {}).sort((a, b) => a.localeCompare(b));
+    const mechanicsUnderPlayed = Object.entries(counts.mechanicPlayed ?? {})
+        .filter(([, plays]) => plays < MIN_PLAYS_PER_MECHANIC)
+        .map(([key, plays]) => `${key} (${plays})`)
+        .sort((a, b) => a.localeCompare(b));
+    const deepKeys = Object.keys(counts.deepFloor ?? {});
     const rewardKinds = Object.keys(counts.findableKind ?? {}).filter((key) => (counts.findableKind?.[key] ?? 0) > 0).length;
     const traitFloors = counts.traitMetric?.traitFloors ?? 0;
     const deadTraitFloors = counts.traitMetric?.deadTraitFloors ?? 0;
@@ -287,6 +443,10 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         playableFailureDetails,
         playableIssueFloors: counts.playableIssue?.floorWithIssue ?? 0,
         playableIssueReasons,
+        mechanicsUnderPlayed,
+        mechanicTopUps: Object.keys(counts.mechanicTopUp ?? {}).length,
+        deepFloorsChecked: deepKeys.length,
+        deepFloorFailures: deepKeys.filter((key) => key.endsWith('|FAIL')).sort((a, b) => a.localeCompare(b)),
         rewardKinds,
         traitBoardPowerInteractionFloorShare:
             (counts.traitMetric?.traitBoardPowerInteractionFloors ?? 0) / traitDenominator,
@@ -315,6 +475,12 @@ export const evaluateEndlessSimulationHealth = (
             : null,
         metrics.playableIssueFloors > 0
             ? `Expected playable solver sample to clear every checked floor, saw ${metrics.playableIssueFloors} issue floor(s): ${metrics.playableIssueReasons.join(', ') || 'unknown'}. Details: ${metrics.playableFailureDetails.slice(0, 5).join('; ') || 'none'}.`
+            : null,
+        metrics.mechanicsUnderPlayed.length > 0
+            ? `Expected every mechanic played at least ${MIN_PLAYS_PER_MECHANIC} times across seeds, short: ${metrics.mechanicsUnderPlayed.join(', ')}.`
+            : null,
+        metrics.deepFloorFailures.length > 0
+            ? `Expected every cherry-picked deep floor to pass, failed: ${metrics.deepFloorFailures.join('; ')}.`
             : null,
         metrics.rewardKinds < expectedRewardKinds
             ? `Expected all ${expectedRewardKinds} findable reward kinds, saw ${metrics.rewardKinds}.`
@@ -368,6 +534,8 @@ const formatEndlessSimulationSummary = (
         `- Route gates: ${metrics.routeKinds} floor archetypes.`,
         `- Fairness gates: ${metrics.fairnessIssueFloors} issue floors across ${metrics.fairnessIssueTypes} issue types (${metrics.fairnessIssueCodes.join(', ') || 'none'}).`,
         `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
+        `- Mechanic coverage: every mechanic played at least ${MIN_PLAYS_PER_MECHANIC} times, ${metrics.mechanicTopUps} topped up from later seeds${metrics.mechanicsUnderPlayed.length ? `; short: ${metrics.mechanicsUnderPlayed.join(', ')}` : ''}.`,
+        `- Deep floors: ${metrics.deepFloorsChecked} cherry-picked, ${metrics.deepFloorFailures.length} failed${metrics.deepFloorFailures.length ? ` (${metrics.deepFloorFailures.join('; ')})` : ''}.`,
         `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
         `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,
         `- Trait mechanic gates: ${(metrics.traitMatchRouteFloorShare * 100).toFixed(1)}% match-route floors, ${(metrics.traitRewardFloorShare * 100).toFixed(1)}% reward floors, ${(metrics.traitBoardPowerInteractionFloorShare * 100).toFixed(1)}% board-power floors, ${(metrics.traitSwapSetupFloorShare * 100).toFixed(1)}% one-swap setup floors.`,
@@ -378,6 +546,15 @@ const formatEndlessSimulationSummary = (
 export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string =>
     formatEndlessSimulationSummary(input, readEndlessSimulationMetrics(input));
 
+const readDeepFloors = (argv: readonly string[]): number[] => {
+    const raw = argv.find((arg) => arg.startsWith('--deep-floors='))?.slice('--deep-floors='.length);
+    if (raw === undefined) return [...DEEP_SAMPLE_FLOORS];
+    return raw
+        .split(',')
+        .map((value) => Math.floor(Number(value)))
+        .filter((value) => Number.isFinite(value) && value > 0);
+};
+
 export const parseEndlessSimulationCliOptions = (argv: readonly string[]): EndlessSimulationCliOptions => {
     const outPrefix = '--out=';
     const out = argv.find((arg) => arg.startsWith(outPrefix))?.slice(outPrefix.length);
@@ -387,13 +564,14 @@ export const parseEndlessSimulationCliOptions = (argv: readonly string[]): Endle
         runSeed: readPositiveFlooredNumericCliArg(argv, 'seed', 42_001),
         summaryMode: argv.includes('--summary'),
         checkMode: argv.includes('--check'),
+        deepFloors: readDeepFloors(argv),
         ...(out ? { out } : {})
     };
 };
 
 const runCli = (argv: readonly string[]): void => {
-    const { floors, runSeed, summaryMode, checkMode, out } = parseEndlessSimulationCliOptions(argv);
-    const input = { floors, runSeed };
+    const { floors, runSeed, summaryMode, checkMode, deepFloors, out } = parseEndlessSimulationCliOptions(argv);
+    const input = { floors, runSeed, deepFloors };
     const health = checkMode ? analyzeEndlessSimulationHealth(input) : null;
     const output = health
         ? formatEndlessSimulationSummary(input, health.metrics)
