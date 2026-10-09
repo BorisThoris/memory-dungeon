@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3144,
-    "codeFileCount": 1171,
-    "exportedSymbolCount": 3718,
+    "trackedFileCount": 3146,
+    "codeFileCount": 1173,
+    "exportedSymbolCount": 3723,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9877
+    "relationshipCount": 9889
   },
   "inventory": [
     {
@@ -117,8 +117,8 @@
     {
       "path": "AGENTS.md",
       "category": "other",
-      "bytes": 6925,
-      "sha256": "875639afbea609dd6bd5ba9820c8e690e4ffbec048189ccab3693ac1af398140"
+      "bytes": 7182,
+      "sha256": "07bce88d23e930dc19ecf553e079f8050c6a9e94262638797507508e6d8ba001"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack.jobs.json",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "76a545ef72170c025ac210b4ae0748993cba13bf1c9631384076acd0b310e90e"
+      "sha256": "bb006fb01eca2b8293882f1bf7b692f14ac275b890da3333defdfa143c21869b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4491,8 +4491,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 109873,
-      "sha256": "f1ec6de034668ed1cd8ce9f81937422f8f32d2b208a0436afcda98eb35532adf"
+      "bytes": 110294,
+      "sha256": "03b5f560477575557cadcb1a8dae9c17a782b65e7b72f5cf02f93348d6303e1f"
     },
     {
       "path": "public/site.webmanifest",
@@ -10353,8 +10353,8 @@
     {
       "path": "src/renderer/components/cardDepartureParticles.ts",
       "category": "source",
-      "bytes": 2536,
-      "sha256": "199cc3cb8408c59d3cfec2c8968c888aa89a6464d5fcf61feffdc35b04f700d6"
+      "bytes": 2676,
+      "sha256": "fb606b70f4cf2a854b39e5496b1ee737f35992b49d7be11fe57ea5249b9f982d"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
@@ -10367,6 +10367,18 @@
       "category": "source",
       "bytes": 10594,
       "sha256": "de5a48d59b8e437edc6e78da9e84fec18cbcea26aeff6f7f74dd93580fedce29"
+    },
+    {
+      "path": "src/renderer/components/cardElementFx.test.ts",
+      "category": "test",
+      "bytes": 771,
+      "sha256": "f5237597324f04ce91b98b2aac70b88483a38b6693d81f58ecd5a14e5a2cb107"
+    },
+    {
+      "path": "src/renderer/components/cardElementFx.ts",
+      "category": "source",
+      "bytes": 18383,
+      "sha256": "44e5018ef6e1bd0521306a12f3512ec0951ecf8dbd2020ded8ce550805d523eb"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -11991,8 +12003,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 25509,
-      "sha256": "01e54c84ff01458645b68573980ba59b4b48b5da7b3fc64a9c9d353fd642b348"
+      "bytes": 26410,
+      "sha256": "79e3f30d27eb210d1ee2d5b3178debe6e5180db476cd0a40a38bb4e2077bbd5c"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -21786,7 +21798,7 @@
       "path": "src/renderer/components/cardDepartureParticles.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 63,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -21840,6 +21852,41 @@
       ],
       "testedBy": [
         "file:src/renderer/components/cardDissolveMaterial.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/cardElementFx.test.ts",
+      "path": "src/renderer/components/cardElementFx.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 17,
+      "imports": [
+        "file:src/renderer/components/cardElementFx.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardElementFx.ts",
+      "path": "src/renderer/components/cardElementFx.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 389,
+      "imports": [
+        "file:src/renderer/components/cardDissolveMaterial.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/renderer/components/tileTextures.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardElementFx.ts#CARD_ELEMENT_FX_SECONDS",
+        "symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
+        "symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
+        "symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
+        "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardElementFx.test.ts"
       ]
     },
     {
@@ -26462,7 +26509,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 366,
+      "lineCount": 375,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -26470,6 +26517,7 @@
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
+        "file:src/renderer/components/cardElementFx.ts",
         "file:src/renderer/components/cardShardSystem.ts",
         "file:src/renderer/components/elementCastParticles.ts",
         "file:src/renderer/components/elementReactionParticles.ts",
@@ -44932,32 +44980,32 @@
       "name": "CARD_DEPARTURE_PARTICLE_DELAY",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureParticles.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_SHAPES",
       "name": "CARD_DEPARTURE_SHAPES",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureParticles.ts",
-      "line": 14,
-      "endLine": 19
+      "line": 18,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureBursts",
       "name": "cardDepartureBursts",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureParticles.ts",
-      "line": 29,
-      "endLine": 58
+      "line": 33,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
       "name": "cardDepartureSparkTint",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureParticles.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
@@ -45038,6 +45086,46 @@
       "file": "src/renderer/components/cardDissolveMaterial.ts",
       "line": 62,
       "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#CARD_ELEMENT_FX_SECONDS",
+      "name": "CARD_ELEMENT_FX_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
+      "name": "CardElementFx",
+      "kind": "type",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
+      "name": "cardElementFxOf",
+      "kind": "value",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 26,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
+      "name": "CardElementFxSystem",
+      "kind": "type",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 388,
+      "endLine": 388
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
+      "name": "createCardElementFxSystem",
+      "kind": "value",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 289,
+      "endLine": 386
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -50052,8 +50140,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 29,
-      "endLine": 365
+      "line": 30,
+      "endLine": 374
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -71728,7 +71816,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 23
+          "line": 24
         }
       ],
       "tests": [
@@ -79312,6 +79400,36 @@
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#CARD_ELEMENT_FX_SECONDS",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#CARD_ELEMENT_FX_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "kind": "exports"
     },
     {
@@ -102815,6 +102933,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardElementFx.test.ts->src/renderer/components/cardElementFx.ts",
+      "source": "file:src/renderer/components/cardElementFx.test.ts",
+      "target": "file:src/renderer/components/cardElementFx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardGlowFrame.test.ts->src/renderer/components/cardGlowFrame.ts",
       "source": "file:src/renderer/components/cardGlowFrame.test.ts",
       "target": "file:src/renderer/components/cardGlowFrame.ts",
@@ -108818,6 +108966,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardDepartureParticles.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/cardDepartureParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardElementFx.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/cardElementFx.ts",
       "kind": "imports"
     },
     {
@@ -126378,6 +126532,12 @@
       "id": "tested_by:src/renderer/components/cardDissolveMaterial.ts->file:src/renderer/components/cardDissolveMaterial.test.ts",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "file:src/renderer/components/cardDissolveMaterial.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardElementFx.ts->file:src/renderer/components/cardElementFx.test.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/cardElementFx.test.ts",
       "kind": "tested_by"
     },
     {
