@@ -1,7 +1,7 @@
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import type { SceneEffectTier } from '../../shared/graphicsQuality';
 import { UI_ART } from '../assets/ui';
-import { AMBIENT_SPRITES, SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
+import { SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
@@ -9,12 +9,12 @@ import { REALM_FLOORS, realmRoomLifeDraws } from './realmRoomLife';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
-import { buildGoldRain, goldCoinFloorOn, goldCoinMotion, goldCoinSize, GOLD_PILE_MAX_COINS, GOLD_PILE_SLOTS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin, type GoldFloorBand } from './goldRain';
+import { buildGoldRain, floorScale, goldCoinPath, goldCoinPose, goldCoinView, GOLD_COIN_RADIUS, GOLD_PILE_MAX_COINS, GOLD_PILE_SLOTS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin, type GoldCoinPath, type GoldFloorBand } from './goldRain';
 import { sceneFlameLevels, sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { ambientSprite, crossingDraws, dripDraws, driftDraws, flameDraws, flameEmberDraws, fogDraw, glintDraws, moteDraws, SCENE_PLATE_ASPECT, sceneKeyframes } from './sceneAmbient';
 import { sceneBeatEnvelope, sceneBreath, sceneFlicker, sceneHash, sceneOccurrence, sceneSmoothstep, type SceneClock } from './sceneClock';
 import type { SceneMood, SceneDriftTone } from './sceneMood';
-import type { SceneBlend, SceneDraw, SceneFilter } from './scenePaint';
+import type { SceneBlend, SceneDraw, SceneFilter, SceneImageDraw } from './scenePaint';
 import { ringMotes } from './sceneSpriteClocks';
 import { buildStormBolts, STORM_VIEWBOX } from './stormBolts';
 
@@ -199,8 +199,6 @@ const elementDraws = (scene: ElementSceneState, plate: SceneMood['plate'], clock
 
 
 /** Where a coin starts, just above the plate, as a fraction of its height. */
-const COIN_START_Y = -0.05;
-const COIN_FRAMES = AMBIENT_SPRITES.cells.coin.frames;
 
 /**
  * One coin of a shower, `seconds` after it started to fall: falling from rest under gravity onto
@@ -217,77 +215,109 @@ export interface GoldCoinPlace {
     t?: number;
 }
 
+const COIN_TURN = SCENE_SPRITES.goldCoin.sprites[0];
+/** The baked coin fills this much of its frame (`bake_coin.py`: R). */
+const COIN_FILL = 0.86;
+
+/** Each coin's flight, worked out once per floor it falls on. */
+const coinPaths = new WeakMap<GoldCoin, Map<string, GoldCoinPath>>();
+const coinPathFor = (coin: GoldCoin, band: GoldFloorBand): GoldCoinPath => {
+    const key = `${band.far}:${band.near}:${band.horizon ?? ''}`;
+    let byBand = coinPaths.get(coin);
+    if (!byBand) {
+        byBand = new Map();
+        coinPaths.set(coin, byBand);
+    }
+    let path = byBand.get(key);
+    if (!path) {
+        path = goldCoinPath(coin, band);
+        byBand.set(key, path);
+    }
+    return path;
+};
+
 /**
- * One coin `seconds` after it began to fall (`Infinity`: found lying there): falling and turning,
- * bouncing lower each time and rolling to a stop, then flat on the floor for good, with its shadow
- * on the stone under it. On water it splashes and sinks, and stays a dim glint under the surface.
+ * One coin `seconds` after it began to fall (`Infinity`: found lying there), as gold does
+ * (`goldCoinPath`): tumbling down through the room, striking the stone and bouncing, spinning down
+ * to lie flat in the floor's perspective, its shadow under it sharpening as it comes down. Drawn
+ * from the baked 3D coin (`bake_coin.py`), the frame of its turn and its rotation taken from its
+ * face against the camera, so its edge shows as it tumbles and its rim as it lies. On water it goes
+ * in with a ring and sinks to a glint under the surface.
  */
 export const goldCoinDraws = (coin: GoldCoin, index: number, seconds: number, lean: boolean, place: GoldCoinPlace = {}): SceneDraw[] => {
-    if (seconds <= 0) {
+    if (seconds <= 0 || !COIN_TURN) {
         return [];
     }
     const band = place.band ?? GOLD_RAIN_FLOOR;
-    const floor = goldCoinFloorOn(coin, band);
-    const size = goldCoinSize(coin);
-    const motion = goldCoinMotion(coin, place.water ? Math.min(seconds, coin.duration - 1e-6) : seconds, COIN_START_Y, floor);
-    const x = coin.x / 100 + motion.roll;
-    const w = size / SCENE_PLATE_ASPECT;
+    const path = coinPathFor(coin, band);
+    const water = place.water ?? false;
+    const pose = goldCoinPose(path, water ? Math.min(seconds, path.landS) : seconds);
+    const yFloor = band.near + (band.far - band.near) * pose.depth;
+    const scale = floorScale(yFloor, band);
+    const radius = GOLD_COIN_RADIUS * scale;
+    const view = goldCoinView(pose, band);
+    const frames = COIN_TURN.frames;
+    const frame = Math.max(0, Math.min(frames - 1, Math.round(view.turn * (frames - 1))));
+    const y = yFloor - pose.height * scale;
+    const x = pose.x;
+    const side = (2 * radius) / COIN_FILL;
     const draws: SceneDraw[] = [];
-    if (place.water && seconds >= coin.duration) {
+    const coinDraw = (alpha: number, dy = 0): SceneImageDraw => ({
+        kind: 'image',
+        id: `coin-${index}`,
+        src: COIN_TURN.sheet,
+        alpha,
+        blend: 'source-over',
+        // Centred on the coin: on the floor its centre is as high as its tilt stands it up.
+        rect: { x: x - side / 2 / SCENE_PLATE_ASPECT, y: y + dy - side / 2, w: side / SCENE_PLATE_ASPECT, h: side },
+        frame: { index: frame, count: frames },
+        rotate: view.rotate,
+        depth: 1
+    });
+    if (water && Number.isFinite(seconds) && seconds >= path.landS) {
         // Into the water: a ring spreads where it went in, two drops jump, and it sinks to a glint.
-        const under = seconds - coin.duration;
+        const under = seconds - path.landS;
         if (under < 0.9) {
-            draws.push(ambientSprite({ id: `coin-${index}-splash`, cell: 'ripple', x, y: floor, size: 0.01 + 0.04 * (under / 0.9), alpha: 0.8 * (1 - under / 0.9) ** 1.5, scaleX: 2.6 }));
+            draws.push(ambientSprite({ id: `coin-${index}-splash`, cell: 'ripple', x, y: yFloor, size: (0.012 + 0.05 * (under / 0.9)) * scale, alpha: 0.8 * (1 - under / 0.9) ** 1.5, scaleX: 2.6 }));
         }
         if (under < 0.4 && !lean) {
             const q = under / 0.4;
-            for (const side of [-1, 1] as const) {
-                draws.push(ambientSprite({ id: `coin-${index}-spray-${side < 0 ? 'l' : 'r'}`, cell: 'drop', x: x + side * w * 0.6 * q, y: floor - 0.03 * 4 * q * (1 - q), size: 0.018, alpha: 0.7 * (1 - q) }));
+            for (const dir of [-1, 1] as const) {
+                draws.push(ambientSprite({ id: `coin-${index}-spray-${dir < 0 ? 'l' : 'r'}`, cell: 'drop', x: x + (dir * radius * 1.2 * q) / SCENE_PLATE_ASPECT, y: yFloor - 0.035 * scale * 4 * q * (1 - q), size: 0.02 * scale, alpha: 0.7 * (1 - q) }));
             }
         }
         const sunk = Math.min(1, under / 1.4);
-        draws.push(ambientSprite({ id: `coin-${index}`, cell: 'coin', x, y: floor + 0.012 * sunk - size / 2, size, alpha: 1 - 0.72 * sunk, blend: 'source-over', frame: 0, scaleY: 1 - 0.45 * sunk }));
+        draws.push(coinDraw(1 - 0.72 * sunk, 0.01 * sunk * scale));
         return draws;
     }
-    const turn = coin.phase + coin.spin * motion.turnTime;
-    const turning = ((Math.floor(turn * COIN_FRAMES) % COIN_FRAMES) + COIN_FRAMES) % COIN_FRAMES;
-    // Settling, it rocks onto its face: the turn gives way to the face, lying flat in perspective.
-    const frame = motion.flat > 0.5 ? 0 : turning;
-    const scaleY = 1 - 0.58 * motion.flat;
-    const bottom = motion.bottom;
-    const y = bottom - (size * scaleY) / 2;
     if (!lean) {
-        // Its shadow on the floor: tight and dark as it comes down onto it, gone while it is high.
-        const close = Math.max(0, 1 - motion.height / 0.25);
-        if (close > 0.02) {
-            draws.push({
-                kind: 'glow',
-                id: `coinshadow-${index}`,
-                alpha: 0.55 * close,
-                blend: 'source-over',
-                cx: x,
-                cy: floor,
-                rx: w * (0.75 - 0.2 * close),
-                ry: size * 0.16,
-                stops: [
-                    [0, 'rgba(8, 5, 2, 0.7)'],
-                    [1, 'rgba(8, 5, 2, 0)']
-                ]
-            });
-        }
-        // Where it was a frame or two ago, as one faint copy drawn out along the fall: a smear, not a stack of coins.
-        const back = motion.speed * 0.035;
-        if (back > size * 0.3) {
-            draws.push(ambientSprite({ id: `coin-${index}-trail`, cell: 'coin', x, y: y - back / 2, size, alpha: 0.26, blend: 'source-over', frame, scaleY: 1 + back / size }));
-        }
+        // Its shadow on the floor: wide and faint while it is high, tight and dark as it comes down onto it.
+        const lift = pose.height * scale;
+        const close = 1 / (1 + 14 * lift);
+        draws.push({
+            kind: 'glow',
+            id: `coinshadow-${index}`,
+            alpha: 0.7 * close,
+            blend: 'source-over',
+            cx: x,
+            cy: yFloor + radius * view.foreshortening * 0.15,
+            rx: (radius * (1.05 + 2.5 * lift)) / SCENE_PLATE_ASPECT,
+            ry: radius * view.foreshortening * (1.1 + 2.5 * lift),
+            stops: [
+                [0, 'rgba(10, 6, 2, 0.75)'],
+                [0.6, 'rgba(10, 6, 2, 0.35)'],
+                [1, 'rgba(10, 6, 2, 0)']
+            ]
+        });
     }
-    draws.push(ambientSprite({ id: `coin-${index}`, cell: 'coin', x, y, size, alpha: 1, blend: 'source-over', frame, scaleY: scaleY === 1 ? undefined : scaleY }));
-    // The face toward the light flashes as it turns through it; lying there, it catches the light now and then.
-    const airborne = motion.flat === 0;
-    const resting = motion.flat >= 1 && place.t !== undefined ? sceneOccurrence(place.t + index * 977, 6000 + 3000 * sceneHash(index, 5), 700, 211 + index) : null;
-    if ((airborne && (frame === 0 || frame === COIN_FRAMES - 1)) || resting) {
-        const swell = resting ? Math.sin(resting.progress * Math.PI) : 1;
-        draws.push(ambientSprite({ id: `coin-${index}-glint`, cell: 'glint', x: x - 0.18 * w, y: y - 0.2 * size, size: size * 0.9 * (0.6 + 0.4 * swell), alpha: 0.8 * swell, blend: 'lighter' }));
+    draws.push(coinDraw(1));
+    // Lying there, it catches the light now and then.
+    if (pose.still && place.t !== undefined) {
+        const glint = sceneOccurrence(place.t + index * 977, 6000 + 3000 * sceneHash(index, 5), 700, 211 + index);
+        if (glint) {
+            const swell = Math.sin(glint.progress * Math.PI);
+            draws.push(ambientSprite({ id: `coin-${index}-glint`, cell: 'glint', x: x - (radius * 0.4) / SCENE_PLATE_ASPECT, y: y - radius * view.foreshortening * 0.3, size: radius * 2.4 * (0.6 + 0.4 * swell), alpha: 0.85 * swell, blend: 'lighter' }));
+        }
     }
     return draws;
 };

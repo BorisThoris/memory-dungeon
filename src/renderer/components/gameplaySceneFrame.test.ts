@@ -4,7 +4,7 @@ import { REALM_IDS, type RealmId } from '../../shared/contracts';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { composeGameplayScene, GAMEPLAY_EYES_EVERY_MS, GAMEPLAY_EYES_LAST_MS, GAMEPLAY_SPIDER_EVERY_MS, GAMEPLAY_SPIDER_LASTS_MS, goldCoinDraws, SCENE_RING, type GameplayFrameInput } from './gameplaySceneFrame';
-import { goldCoinFloor, goldCoinMotion, goldCoinSize, GOLD_PILE_MAX_COINS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin } from './goldRain';
+import { floorForeshortening, goldCoinPath, goldCoinPose, goldCoinView, GOLD_PILE_MAX_COINS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin } from './goldRain';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { createSceneClock, fixedSceneClock, sceneOccurrence } from './sceneClock';
 import { deriveSceneMood, type SceneMood } from './sceneMood';
@@ -386,7 +386,8 @@ describe('composeGameplayScene', () => {
         for (const coin of coins) {
             // Metal in the room's light, not a glow: drawn over the stone, a frame of its baked turn.
             expect(coin.blend).toBe('source-over');
-            expect(coin.frame!.count).toBe(8);
+            // A frame of the baked coin's turn (`bake_coin.py`).
+            expect(coin.frame!.count).toBe(SCENE_SPRITES.goldCoin.sprites[0]!.frames);
             expect(coin.scaleX).toBeUndefined();
             expect(coin.rect!.x).toBeGreaterThan(0);
             expect(coin.rect!.x).toBeLessThan(1);
@@ -400,7 +401,10 @@ describe('composeGameplayScene', () => {
         expect(after.length).toBe(24);
         for (const coin of after) {
             expect(coin.alpha).toBe(1);
-            expect(coin.scaleY!).toBeLessThan(0.5);
+            // Lying flat on the floor: its centre on the floor band.
+            const centre = coin.rect!.y + coin.rect!.h / 2;
+            expect(centre).toBeGreaterThan(GOLD_RAIN_FLOOR.far - 0.01);
+            expect(centre).toBeLessThan(GOLD_RAIN_FLOOR.near + 0.01);
         }
         // Found already lying there (a restore), and under reduced motion: at rest, not falling again.
         const bodies = (draws: readonly SceneDraw[]) => draws.filter((draw) => /^coin-\d+$/.test(draw.id) && draw.alpha > 0.004).length;
@@ -434,53 +438,51 @@ describe('composeGameplayScene', () => {
         expect(count(falling, 'coin-')).toBeGreaterThan(4);
     });
 
-    it('drops a coin under gravity, bounces it lower each time, rolls it to a stop and lays it flat for good', () => {
-        const coin: GoldCoin = { x: 50, delay: 0, duration: 1, depth: 0.5, spin: 3, phase: 0.3 };
-        const at = (seconds: number) => goldCoinDraws(coin, 0, seconds, false).find((d) => d.id === 'coin-0') as SceneImageDraw | undefined;
-        const bottomAt = (seconds: number) => {
-            const draw = at(seconds)!;
-            return draw.rect!.y + draw.rect!.h / 2 + (draw.rect!.h * (draw.scaleY ?? 1)) / 2;
+    it('flies a coin like gold: falls tumbling, bounces lower each time, spins down and lies flat in the floor\'s perspective', () => {
+        const coin: GoldCoin = { x: 50, delay: 0, duration: 1, depth: 0.4, spin: 3, phase: 0.3 };
+        const path = goldCoinPath(coin, GOLD_RAIN_FLOOR);
+        expect(path.landS).toBeGreaterThan(0.4);
+        expect(path.landS).toBeLessThan(1.2);
+        expect(path.restS).toBeGreaterThan(path.landS);
+        // Tumbling on the way down: its face turns through the view.
+        const turns = new Set<number>();
+        for (let s = 0; s < path.landS; s += 0.05) turns.add(Math.round(goldCoinView(goldCoinPose(path, s), GOLD_RAIN_FLOOR).turn * 10));
+        expect(turns.size).toBeGreaterThan(4);
+        // Off the floor and back: it leaves the floor again after the strike, never as high as it fell
+        // from, and the bounces die away (the second half of its settling lower than the first).
+        const start = goldCoinPose(path, 0).height;
+        const heightsAfter = (from: number, to: number): number[] => {
+            const out: number[] = [];
+            for (let s = from; s < to; s += 1 / 120) out.push(goldCoinPose(path, s).height);
+            return out;
         };
-        // From rest, faster and faster: the second half of the fall covers three times the first.
-        const top = bottomAt(0.001);
-        const half = bottomAt(0.5);
-        const floor = goldCoinFloor(coin);
-        expect(bottomAt(1) - half).toBeGreaterThan(2.5 * (half - top));
-        expect(bottomAt(0.999)).toBeCloseTo(floor, 2);
-        // Off the floor and back, each bounce lower than the one before.
-        const peaks: number[] = [];
-        let rising = false;
-        let last = 0;
-        for (let s = 1; s < 2.2; s += 0.002) {
-            const height = floor - goldCoinMotion(coin, s, -0.05, floor).bottom;
-            if (height > last) rising = true;
-            else if (rising && height < last) {
-                peaks.push(last);
-                rising = false;
-            }
-            last = height;
-        }
-        expect(peaks.length).toBe(3);
-        expect(peaks[1]!).toBeLessThan(peaks[0]!);
-        expect(peaks[2]!).toBeLessThan(peaks[1]!);
-        // Then it lies there flat, with its shadow under it, and never goes out.
-        const lying = at(30)!;
+        const mid = (path.landS + path.restS) / 2;
+        const early = Math.max(...heightsAfter(path.landS + 0.02, mid));
+        const late = Math.max(...heightsAfter(mid, path.restS));
+        expect(early).toBeGreaterThan(0.005);
+        expect(early).toBeLessThan(start * 0.3);
+        expect(late).toBeLessThan(early);
+        // At rest: flat on the floor, seen at the floor's own foreshortening, and it stays.
+        const rest = goldCoinPose(path, Number.POSITIVE_INFINITY);
+        expect(rest.tilt).toBe(0);
+        expect(rest.height).toBe(0);
+        expect(rest.still).toBe(true);
+        const view = goldCoinView(rest, GOLD_RAIN_FLOOR);
+        const yFloor = GOLD_RAIN_FLOOR.near + (GOLD_RAIN_FLOOR.far - GOLD_RAIN_FLOOR.near) * rest.depth;
+        expect(view.foreshortening).toBeCloseTo(floorForeshortening(yFloor, GOLD_RAIN_FLOOR), 6);
+        expect(Math.cos(view.turn * Math.PI)).toBeCloseTo(view.foreshortening, 3);
+        const lying = goldCoinDraws(coin, 0, 60, false).find((d) => d.id === 'coin-0') as SceneImageDraw;
         expect(lying.alpha).toBe(1);
-        expect(lying.scaleY!).toBeLessThan(0.5);
-        expect(goldCoinDraws(coin, 0, 30, false).some((d) => d.id === 'coinshadow-0')).toBe(true);
-        expect(at(Number.POSITIVE_INFINITY)).toBeDefined();
-        // Falling fast it smears; at rest it does not.
-        expect(goldCoinDraws(coin, 0, 0.9, false).some((d) => d.id.includes('trail'))).toBe(true);
-        expect(goldCoinDraws(coin, 0, 0.9, true).some((d) => d.id.includes('trail'))).toBe(false);
-        expect(goldCoinDraws(coin, 0, 30, false).some((d) => d.id.includes('trail'))).toBe(false);
+        expect(goldCoinDraws(coin, 0, 60, false).some((d) => d.id === 'coinshadow-0')).toBe(true);
+        expect(goldCoinDraws(coin, 0, Number.POSITIVE_INFINITY, false).some((d) => d.id === 'coin-0')).toBe(true);
+        // A far coin is smaller, and lies flatter (nearer the horizon), than a near one.
+        const far = goldCoinDraws({ ...coin, depth: 1 }, 0, 60, false).find((d) => d.id === 'coin-0') as SceneImageDraw;
+        const near = goldCoinDraws({ ...coin, depth: 0 }, 0, 60, false).find((d) => d.id === 'coin-0') as SceneImageDraw;
+        expect(far.rect!.h).toBeLessThan(near.rect!.h);
+        expect(floorForeshortening(GOLD_RAIN_FLOOR.far, GOLD_RAIN_FLOOR)).toBeLessThan(floorForeshortening(GOLD_RAIN_FLOOR.near, GOLD_RAIN_FLOOR));
         // On water it goes in with a ring and sinks to a dim glint, and stays.
-        expect(goldCoinDraws(coin, 0, 1.2, false, { water: true }).some((d) => d.id === 'coin-0-splash')).toBe(true);
+        expect(goldCoinDraws(coin, 0, path.landS + 0.2, false, { water: true }).some((d) => d.id === 'coin-0-splash')).toBe(true);
         expect((goldCoinDraws(coin, 0, 30, false, { water: true }).find((d) => d.id === 'coin-0') as SceneImageDraw).alpha).toBeLessThan(0.4);
-        // A far coin lands higher on the plate and is smaller than a near one.
-        const far = { ...coin, depth: 1 };
-        const near = { ...coin, depth: 0 };
-        expect(goldCoinFloor(far)).toBeLessThan(goldCoinFloor(near));
-        expect(goldCoinSize(far)).toBeLessThan(goldCoinSize(near));
     });
 
     it('darkens for a breath on a miss and guts the torches without putting them out', () => {

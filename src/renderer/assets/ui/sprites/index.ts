@@ -2,6 +2,7 @@ import ambientManifest from './ambient-v1.json';
 import cathedralCandles from './bg-main-menu-cathedral-v2-sprites.json';
 import dungeonFlames from './bg-gameplay-dungeon-ring-v2-sprites.json';
 import portalVortex from './bg-mode-classic-v2-sprites.json';
+import goldCoinTurn from './gold-coin-v1-sprites.json';
 
 /**
  * Animated cut-outs of a painted backdrop, from `scripts/scene-pipeline/cut_sprites.py`: each one
@@ -57,7 +58,9 @@ export const SCENE_SPRITES = {
     /** The six torches of the relightable room (`GameplayScene`). */
     gameplayFlames: resolveSceneSpriteSet(dungeonFlames),
     /** The vortex in the portal's arch (`PortalScene`): one feathered disc the scene spins, not a flipbook. */
-    portalVortex: resolveSceneSpriteSet(portalVortex)
+    portalVortex: resolveSceneSpriteSet(portalVortex),
+    /** The gold coin turning from face-on through its edge to its back (`bake_coin.py`): the gold that falls in a room. */
+    goldCoin: resolveSceneSpriteSet(goldCoinTurn)
 } as const;
 
 export type SceneSpriteSetKey = keyof typeof SCENE_SPRITES;

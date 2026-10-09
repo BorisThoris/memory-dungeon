@@ -8,14 +8,18 @@ import type { GoldFloorBand } from './goldRain';
 
 /**
  * Each room's floor, as it is painted: where gold, rain, snow and leaves come down (its far edge
- * and near edge on the plate), and whether it is water.
+ * and near edge on the plate), whether it is water, and its camera - the horizon (where the floor's
+ * lines meet) and the focal length that its rune ring gives (pixel height over pixel width of the
+ * ring at its height; see `GoldFloorBand`). Measured on the paintings on a 10% grid.
+ *   frost: ring at 0.78, 0.12 tall for wide, horizon 0.45;  ember: 0.60, 0.084, 0.43;
+ *   tide: the dais at 0.63, 0.093, 0.47;  storm: 0.66, 0.12, 0.45;  grove: 0.79, 0.093, 0.58.
  */
 export const REALM_FLOORS: Readonly<Record<RealmId, { band: GoldFloorBand; water: boolean }>> = {
-    frost: { band: { far: 0.66, near: 0.97 }, water: false },
-    ember: { band: { far: 0.6, near: 0.97 }, water: false },
-    tide: { band: { far: 0.7, near: 0.97 }, water: true },
-    storm: { band: { far: 0.58, near: 0.97 }, water: false },
-    grove: { band: { far: 0.74, near: 0.97 }, water: false }
+    frost: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.75 }, water: false },
+    ember: { band: { far: 0.6, near: 0.97, horizon: 0.43, focal: 2.0 }, water: false },
+    tide: { band: { far: 0.7, near: 0.97, horizon: 0.47, focal: 1.7 }, water: true },
+    storm: { band: { far: 0.58, near: 0.97, horizon: 0.45, focal: 1.75 }, water: false },
+    grove: { band: { far: 0.74, near: 0.97, horizon: 0.58, focal: 2.26 }, water: false }
 };
 
 /**

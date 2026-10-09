@@ -1,0 +1,19 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "coin",
+  "sprites": [
+    {
+      "id": "turn",
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0,
+      "frames": 24,
+      "fps": 0,
+      "sheet": "gold-coin-v1-sprite-turn.webp"
+    }
+  ]
+}

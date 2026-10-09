@@ -25,7 +25,7 @@ export const GOLD_RAIN_FADE_S = 0.4;
 export const GOLD_RAIN_LASTS_MS = Math.ceil((GOLD_RAIN_SPREAD_S + GOLD_RAIN_FALL_MAX_S + GOLD_RAIN_HOP_S + GOLD_RAIN_REST_S + GOLD_RAIN_FADE_S) * 1000);
 
 /** Where the floor of the room is on the plate: the far edge by the ring, the near edge at the bottom. */
-export const GOLD_RAIN_FLOOR = { far: 0.79, near: 0.97 } as const;
+export const GOLD_RAIN_FLOOR = { far: 0.79, near: 0.97, horizon: 0.5, focal: 0.86 } as const;
 
 export interface GoldCoin {
     /** Across the plate, percent. */
@@ -85,72 +85,194 @@ export interface GoldPileShower {
     slot: number;
 }
 export const GOLD_PILE_MAX_COINS = 240;
-/** How much of its speed a coin keeps off the stone, bounce to bounce. */
-export const GOLD_COIN_RESTITUTION = 0.4;
-export const GOLD_COIN_BOUNCES = 3;
-/** Bounces are seen from above and far off: a fraction of their true height on the plate. */
-const BOUNCE_VIEW = 0.4;
-/** How long a coin rolls after it lands, its speed falling away. */
-const ROLL_TAU_S = 0.35;
 
-/** A floor on the plate: its far edge and its near edge, as fractions of the plate's height. */
+/**
+ * A floor on the plate: its far edge and near edge (fractions of the plate's height), and the
+ * horizon (the camera's eye level on the painting). Perspective follows from the horizon: a thing on
+ * the floor is smaller the closer its foot is to it, and a coin lying flat is foreshortened by how
+ * far below the horizon it lies.
+ */
 export interface GoldFloorBand {
     far: number;
     near: number;
+    horizon?: number;
+    /**
+     * The camera's focal length in plate heights: a flat disc lying at plate height y looks
+     * (y - horizon) / focal as tall as it is wide, on screen. Measured from the painting's rune ring
+     * (its pixel height over its pixel width at its height): the dungeon ring is 0.266 at y 0.729
+     * under a horizon at 0.5, so 0.86.
+     */
+    focal?: number;
 }
+
+const DUNGEON_HORIZON = 0.5;
+const DUNGEON_FOCAL = 0.86;
 
 export const goldCoinFloorOn = (coin: GoldCoin, band: GoldFloorBand): number => band.near + (band.far - band.near) * coin.depth;
 
-export interface GoldCoinMotion {
-    /** The coin's lowest point, fraction of the plate's height. */
-    bottom: number;
-    /** How far it has rolled, plate widths. */
-    roll: number;
-    /** Downward speed, plate heights a second (for the smear). */
-    speed: number;
-    /** 0 in the air, rising to 1 as it settles flat. */
-    flat: number;
-    /** Seconds since it first struck the floor, or a negative number while still falling. */
-    landed: number;
-    /** How far above the floor it is, plate heights. */
-    height: number;
-    /** Seconds of turning it has done (it stops turning when it settles). */
-    turnTime: number;
+/** How a disc lying on the floor at plate height `y` is foreshortened (its height over its width). */
+export const floorForeshortening = (y: number, band: GoldFloorBand): number =>
+    Math.max(0.05, Math.min(0.9, (y - (band.horizon ?? DUNGEON_HORIZON)) / (band.focal ?? DUNGEON_FOCAL)));
+
+/** How big a thing standing at plate height `y` on the floor is, against one at the near edge. */
+export const floorScale = (y: number, band: GoldFloorBand): number => {
+    const horizon = band.horizon ?? DUNGEON_HORIZON;
+    return Math.max(0.12, (y - horizon) / Math.max(0.05, band.near - horizon));
+};
+
+/** A coin's radius at the near edge of the floor, in plate heights. */
+export const GOLD_COIN_RADIUS = 0.03;
+/** Gravity, in near-floor plate heights a second squared: a coin from the top of the room lands in about 0.7 s. */
+const GRAVITY = 4.2;
+/** How much of its fall a coin keeps off the stone. */
+export const GOLD_COIN_RESTITUTION = 0.3;
+const SIM_HZ = 240;
+const SAMPLE_HZ = 60;
+
+/**
+ * One coin's flight, worked out once (a small physics step at 240 Hz, kept at 60 Hz): it falls from
+ * above the room under gravity, tumbling end over end about an axis of its own; each strike on the
+ * stone throws it back up with less of its speed, kicks its tumble one way or the other and takes
+ * some of its slide; once a bounce is too small to leave the floor it is down on its edge or its face
+ * and spins down like a coin on a table, the wobble fast and shallow until it lies flat. Pure and
+ * seeded by the coin, so the same payout falls the same way.
+ *
+ * Per sample: across (plate widths), depth (0 near .. 1 far), height above the floor (near-floor
+ * plate heights), the tilt of its face from flat (radians), the bearing of that tilt, and whether
+ * it has struck the floor yet.
+ */
+export interface GoldCoinPath {
+    /** Seconds from the start of the fall to the first strike and to lying still. */
+    landS: number;
+    restS: number;
+    /** Samples: x, depth, height, tilt, bearing per frame. */
+    samples: Float32Array;
 }
 
-/** Where a coin is `seconds` after it began to fall, from `startY` onto `floor`. Pure; Infinity is at rest. */
-export const goldCoinMotion = (coin: GoldCoin, seconds: number, startY: number, floor: number): GoldCoinMotion => {
-    const fallS = coin.duration;
-    const drop = floor - startY;
-    const g = (2 * drop) / (fallS * fallS);
-    const v0 = g * fallS;
-    // Each bounce's air time, and when the coin is finally down.
-    const airs: number[] = [];
-    for (let bounce = 1; bounce <= GOLD_COIN_BOUNCES; bounce += 1) airs.push((2 * v0 * GOLD_COIN_RESTITUTION ** bounce) / g);
-    const bouncingS = airs.reduce((sum, s) => sum + s, 0);
-    const rollSpeed = (((coin.phase * 7.13) % 1) - 0.5) * 0.06 * (1 - 0.5 * coin.depth);
-    const restRoll = rollSpeed * ROLL_TAU_S;
-    if (!Number.isFinite(seconds)) {
-        return { bottom: floor, roll: restRoll, speed: 0, flat: 1, landed: Number.POSITIVE_INFINITY, height: 0, turnTime: fallS + bouncingS * 0.5 };
-    }
-    if (seconds < fallS) {
-        const p = Math.max(0, seconds) / fallS;
-        return { bottom: startY + drop * p * p, roll: 0, speed: (2 * drop * p) / fallS, flat: 0, landed: seconds - fallS, height: drop * (1 - p * p), turnTime: seconds };
-    }
-    const landed = seconds - fallS;
-    const roll = rollSpeed * ROLL_TAU_S * (1 - Math.exp(-landed / ROLL_TAU_S));
-    const view = BOUNCE_VIEW * (1 - 0.5 * coin.depth);
-    let into = landed;
-    for (let bounce = 0; bounce < airs.length; bounce += 1) {
-        const air = airs[bounce]!;
-        if (into < air) {
-            const v = v0 * GOLD_COIN_RESTITUTION ** (bounce + 1);
-            const height = (v * into - 0.5 * g * into * into) * view;
-            return { bottom: floor - height, roll, speed: 0, flat: 0, landed, height, turnTime: fallS + into * 0.5 + bounce * 0.1 };
+const rand = (coin: GoldCoin, salt: number): number => {
+    const v = Math.sin((coin.x * 12.9898 + coin.depth * 78.233 + coin.phase * 37.719 + salt * 4.1414) * 43758.5453);
+    return v - Math.floor(v);
+};
+
+export const goldCoinPath = (coin: GoldCoin, band: GoldFloorBand): GoldCoinPath => {
+    const yFloor = goldCoinFloorOn(coin, band);
+    const scale = floorScale(yFloor, band);
+    const r = GOLD_COIN_RADIUS;
+    // From just above the top of the plate: its height in near-floor units at its own depth.
+    let h = (yFloor + 0.08) / scale;
+    let x = coin.x / 100;
+    let depth = coin.depth;
+    let vh = 0;
+    let vx = (rand(coin, 1) - 0.5) * 0.05;
+    let vd = (rand(coin, 2) - 0.5) * 0.06;
+    let tilt = rand(coin, 3) * Math.PI * 2;
+    let spin = (rand(coin, 4) > 0.5 ? 1 : -1) * (7 + 8 * rand(coin, 5));
+    let bearing = rand(coin, 6) * Math.PI * 2;
+    let bearingRate = (rand(coin, 7) - 0.5) * 1.5;
+    let landS = -1;
+    let settling = -1;
+    let settleTilt = 0;
+    let restS = -1;
+    const samples: number[] = [];
+    const every = SIM_HZ / SAMPLE_HZ;
+    const dt = 1 / SIM_HZ;
+    for (let step = 0; step < SIM_HZ * 6; step += 1) {
+        const time = step * dt;
+        if (step % every === 0) samples.push(x, depth, h, tilt, bearing);
+        if (restS >= 0) break;
+        if (settling < 0) {
+            vh -= GRAVITY * dt;
+            h += vh * dt;
+            x += vx * dt;
+            depth = Math.max(0, Math.min(1, depth + vd * dt));
+            tilt += spin * dt;
+            bearing += bearingRate * dt;
+            // Its lowest point is its rim, as far below its centre as the tilt stands it up.
+            const reach = r * Math.abs(Math.sin(tilt));
+            if (h - reach <= 0 && vh < 0) {
+                if (landS < 0) landS = time;
+                h = reach;
+                const impact = -vh;
+                vh = impact * GOLD_COIN_RESTITUTION;
+                spin = spin * 0.45 + (rand(coin, 10 + step) - 0.5) * 18 * impact;
+                vx *= 0.6;
+                vd *= 0.6;
+                bearingRate += (rand(coin, 20 + step) - 0.5) * 3;
+                // Too little to leave the floor: it is down, on whatever side it fell.
+                if (vh < 0.22) {
+                    settling = time;
+                    settleTilt = Math.acos(Math.abs(Math.cos(tilt)));
+                    tilt = settleTilt;
+                }
+            }
+        } else {
+            // Spinning down: the tilt sinks, and the wobble round it quickens as it does (Euler's disk).
+            const since = time - settling;
+            tilt = settleTilt * Math.exp(-since / 0.22);
+            bearing += Math.min(45, 5 + 3 / Math.sqrt(Math.max(tilt, 0.002))) * dt;
+            h = r * Math.sin(tilt);
+            x += vx * Math.exp(-since / 0.2) * dt;
+            if (tilt < 0.004) {
+                tilt = 0;
+                h = 0;
+                restS = time;
+                samples.push(x, depth, h, tilt, bearing);
+            }
         }
-        into -= air;
     }
-    // Down: it rocks onto its face and lies there.
-    const flat = Math.min(1, into / 0.22);
-    return { bottom: floor, roll, speed: 0, flat, landed, height: 0, turnTime: fallS + bouncingS * 0.5 };
+    if (landS < 0) landS = samples.length / 5 / SAMPLE_HZ;
+    if (restS < 0) restS = samples.length / 5 / SAMPLE_HZ;
+    return { landS, restS, samples: Float32Array.from(samples) };
+};
+
+export interface GoldCoinPose {
+    x: number;
+    depth: number;
+    height: number;
+    tilt: number;
+    bearing: number;
+    /** Seconds since it first struck the floor (negative while still falling). */
+    landed: number;
+    /** It has come to rest. */
+    still: boolean;
+}
+
+/** Where a coin is `seconds` into its flight (`Infinity`: lying where it came to rest). */
+export const goldCoinPose = (path: GoldCoinPath, seconds: number): GoldCoinPose => {
+    const count = path.samples.length / 5;
+    const at = Number.isFinite(seconds) ? Math.max(0, seconds) * SAMPLE_HZ : count - 1;
+    const i = Math.min(count - 1, Math.floor(at));
+    const j = Math.min(count - 1, i + 1);
+    const f = Math.min(1, at - i);
+    const s = path.samples;
+    const lerp = (k: number): number => s[i * 5 + k]! + (s[j * 5 + k]! - s[i * 5 + k]!) * f;
+    return {
+        x: lerp(0),
+        depth: lerp(1),
+        height: Math.max(0, lerp(2)),
+        tilt: lerp(3),
+        bearing: lerp(4),
+        landed: (Number.isFinite(seconds) ? seconds : path.restS + 1) - path.landS,
+        still: !Number.isFinite(seconds) || seconds >= path.restS
+    };
+};
+
+/**
+ * How the coin looks from the camera at a pose: which frame of its turn (`bake_coin.py`: 0 face-on
+ * to the last, its back face-on) and how far to rotate it, from its face's normal against the view.
+ */
+export const goldCoinView = (pose: GoldCoinPose, band: GoldFloorBand): { turn: number; rotate: number; foreshortening: number } => {
+    const yFloor = band.near + (band.far - band.near) * pose.depth;
+    const sinA = floorForeshortening(yFloor, band);
+    const cosA = Math.sqrt(1 - sinA * sinA);
+    const nx = Math.sin(pose.tilt) * Math.sin(pose.bearing);
+    const ny = Math.cos(pose.tilt);
+    const nz = Math.sin(pose.tilt) * Math.cos(pose.bearing);
+    const facing = ny * sinA + nz * cosA;
+    // 0 face-on, 0.5 edge-on, 1 its back face-on.
+    const turn = Math.acos(Math.max(-1, Math.min(1, facing))) / Math.PI;
+    const sx = nx;
+    const sy = ny * cosA - nz * sinA;
+    const rotate = Math.hypot(sx, sy) < 1e-4 ? 0 : -Math.atan2(sx, sy);
+    return { turn, rotate, foreshortening: sinA };
 };
