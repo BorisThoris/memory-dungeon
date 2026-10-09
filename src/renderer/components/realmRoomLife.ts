@@ -244,14 +244,14 @@ export const rainDraws = (spec: RainSpec): SceneDraw[] => {
         // Where this round's drop comes down: anywhere across, so long as it lands on the plate.
         const xLand = 0.02 + 0.96 * sceneHash(index * 31 + round, spec.seed + 2);
         const near = 1 - depth;
-        const length = 0.03 + 0.07 * near;
-        const width = 0.0008 + 0.0018 * near;
-        const alpha = spec.alpha * (0.45 + 0.4 * near);
+        const length = 0.045 + 0.1 * near;
+        const width = 0.0012 + 0.0028 * near;
+        const alpha = spec.alpha * (0.55 + 0.45 * near);
         if (local < fallS) {
             const y = fromY + vy * local;
             const x = xLand - vx * (fallS - local);
             const tailDt = length / vy;
-            out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha, blend: 'screen', color: 'rgb(214, 226, 242)', width, points: [[x - vx * tailDt, y - length], [x, y]] });
+            out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha, blend: 'lighter', color: 'rgb(150, 165, 190)', width, points: [[x - vx * tailDt, y - length], [x, y]] });
             continue;
         }
         // The drop is spent: one draw still, transparent, so a count is a count.
@@ -265,8 +265,8 @@ export const rainDraws = (spec: RainSpec): SceneDraw[] => {
                 cell: 'ripple',
                 x: xLand,
                 y: land,
-                size: (0.006 + 0.026 * q) * (0.45 + 0.55 * near),
-                alpha: spec.alpha * 1.4 * (1 - q) ** 1.6,
+                size: (0.01 + 0.038 * q) * (0.45 + 0.55 * near),
+                alpha: Math.min(1, spec.alpha * 1.6) * (1 - q) ** 1.4,
                 scaleX: 2.8
             })
         );
@@ -558,7 +558,9 @@ const stormLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number):
     // Lightning out of the clouds onto the rods and the horizon, behind everything else.
     ...stormStrikeDraws(t, depth, alpha),
     // Rain driven across the platform: it strikes the stone and splashes, faster and thicker with the chain.
-    ...rainDraws({ idPrefix: 'storm-rain', count: realmLifeCount(110, depth, lean), t, floor: REALM_FLOORS.storm.band, alpha: 0.8 * alpha, seed: 101, pace: Math.sqrt(pace), crowns: !lean }),
+    ...rainDraws({ idPrefix: 'storm-rain', count: realmLifeCount(190, depth, lean), t, floor: REALM_FLOORS.storm.band, alpha: 0.9 * alpha, seed: 101, pace: Math.sqrt(pace), crowns: !lean }),
+    // The spray the rain throws up off the stone: a low haze over the whole floor, driven with the wind.
+    fogDraw({ id: 'storm-spray', t, alpha: 0.3 * alpha, mask: { kind: 'band', top: 0.6, solidFrom: 0.78, solidTo: 0.97, bottom: 1 }, speed: 0.025 * pace, tileW: 0.7, seed: 17 }),
     // Water standing on the stone catches the light.
     ...glintDraws({ idPrefix: 'storm-puddle', points: STORM_PUDDLES, t, everyMs: 4000 / pace, lastsMs: 700, size: 0.045, alpha: 0.55 * alpha, seed: 104, cell: 'glint' }),
     ...glintDraws({ idPrefix: 'storm-rod', points: STORM_RODS, t, everyMs: 5200 / pace, lastsMs: 500, size: 0.06, alpha: 0.9 * alpha, seed: 103, cell: 'dotViolet' })
