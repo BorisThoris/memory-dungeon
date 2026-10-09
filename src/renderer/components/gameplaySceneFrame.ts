@@ -4,6 +4,7 @@ import { UI_ART } from '../assets/ui';
 import { AMBIENT_SPRITES, SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
+import { REALM_ROOM_ART } from './realmRoomArt';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
 import { buildGoldRain, goldCoinFloor, goldCoinSize, GOLD_RAIN_FADE_S, GOLD_RAIN_HOP_S, GOLD_RAIN_REST_S, type GoldCoin } from './goldRain';
@@ -142,8 +143,9 @@ const hexToRgba = (hex: string, alpha: number): string => {
 const elementDraws = (scene: ElementSceneState, plate: SceneMood['plate'], clock: SceneClock, compact: boolean): SceneDraw[] => {
     const { t, still } = clock;
     // In another room the chemistry is a tint on it, not the walls themselves.
-    const world = plate === 'void' ? 0.32 : plate === 'shop' ? 0.2 : 1;
-    const blend: SceneBlend = plate === 'void' ? 'screen' : plate === 'shop' ? 'soft-light' : 'source-over';
+    // A realm's own room is not the dungeon's layout either: its chemistry is laid over it like the shop's.
+    const world = plate === 'void' ? 0.32 : plate === 'shop' || plate === 'realm' ? 0.2 : 1;
+    const blend: SceneBlend = plate === 'void' ? 'screen' : plate === 'shop' || plate === 'realm' ? 'soft-light' : 'source-over';
     const draws: SceneDraw[] = [];
     const pulse = clock.since('element-pulse', scene.pulseKey);
     for (const reaction of scene.reactions) {
@@ -249,6 +251,8 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     const dungeon = clock.smooth('plate:dungeon', plateId === 'dungeon' ? 1 : 0, 900);
     const shop = clock.smooth('plate:shop', plateId === 'shop' ? 1 : 0, 900);
     const voidRoom = clock.smooth('plate:void', plateId === 'void' ? 1 : 0, 900);
+    const realmRoom = clock.smooth('plate:realm', plateId === 'realm' ? 1 : 0, 900);
+    const realmArt = mood?.realmRoom ? REALM_ROOM_ART[mood.realmRoom] : null;
 
     // The beats: each keyed to the turn that made it, so one turn is one beat and a restore replays none.
     // Asked every frame, break or no break: the clock has to have seen "no break" for the first one to be a change.
@@ -267,6 +271,11 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     draws.push({ kind: 'image', id: 'base', src: UI_ART.gameplaySceneBase, alpha: input.base * dungeon * missDim });
     draws.push({ kind: 'image', id: 'shop', src: UI_ART.gameplaySceneShop, alpha: input.base * shop * missDim });
     draws.push({ kind: 'image', id: 'void', src: UI_ART.gameplaySceneVoid, alpha: input.base * voidRoom * missDim });
+    // The realm's own room (`realmRoomArt.ts`): its dark base, and its glow rising with the combo.
+    if (realmArt) {
+        draws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * realmRoom * missDim });
+        draws.push({ kind: 'image', id: 'realmGlow', src: realmArt.glow, alpha: realmRoom * (0.35 + 0.65 * input.comboHeat) * (still ? 1 : 0.9 + 0.1 * sceneBreath(roomT, 6_000)), blend: 'lighter' });
+    }
 
     if (mood?.elements) {
         draws.push(...elementDraws(mood.elements, plateId, clock, input.compactArt ?? false));
@@ -336,7 +345,7 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
         kind: 'image',
         id: 'frost',
         src: UI_ART.gameplaySceneFrost,
-        alpha: frost * 0.35 * dungeon,
+        alpha: frost * 0.35 * (dungeon + realmRoom),
         blend: 'screen',
         rect: { x: (1 - frostScale) / 2, y: (1 - frostScale) / 2, w: frostScale, h: frostScale }
     });

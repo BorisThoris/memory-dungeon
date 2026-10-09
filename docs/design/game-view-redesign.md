@@ -112,3 +112,48 @@ thing is earned, current or unlocked — in place of the plated cards.
 | Dialogs on the Margin surface | `OverlayModal.tsx` / `.module.css` (`surface`, `wide`) |
 | Outlined words, ruled regions, rails, tiles | `src/renderer/ui/*.module.css` |
 | Meta screens' ruled notes | `CollectionScreen`, `CodexScreen`, `ProfileScreen`, `InventoryScreen`, `GameOverScreen`, `MetaScreen` `.module.css` |
+
+## Effects (2026-10-09)
+
+The Margin covered the menus and the HUD and said nothing about effects, so the board's effects
+grew by their own lights. These are the rules they now keep, and the systems that keep them.
+
+**Colour.** The palette's ink, paper and gold, plus **the four element hues and nothing else**:
+fire `#ff8a2a`, water `#5fd8ff`, ice `#e8f6ff`, growth `#8ef05a` (`CARD_DISSOLVE_EDGE` in
+`cardDissolveMaterial.ts`, `ELEMENT_CARD_MOTE` in `realmParticles.ts`). The combo's tempers
+(`combo-heat-rules.ts`) are the one other source of hue, and only on the combo's own surfaces: the
+plasma rail, the embers, the aura. An effect that needs a colour takes its element's.
+
+**Line, not fill.** Effects are drawn the way the chrome is: hairlines, rims, rules and simple
+shapes. A card back is inked, never painted over (`cardBackInk.ts`: a rosette, a border rule, hatched
+corners). The Colossus cracks in lines of light (`ColossusStone.tsx`). The meteor's target is a
+hairline ring and its scorch a char with an ash rim (`MeteorStrike.tsx`). A burst is motes of the
+element's own material, not a flash of colour.
+
+**Nothing covers a card being read.** An effect plays on a card that is leaving (the dissolve,
+`cardDissolveMaterial.ts`), on the table under the cards (scorch, ground motes), at the board's edge
+(the aura) or in the margin (the plasma rail). Nothing is drawn over a face-up card while it is face
+up, and a card's element rim burns away with it rather than hanging over the hole it leaves.
+
+**Each element leaves its own way.** Fire burns up from the foot with a char ahead of the flame;
+water runs off from the top in streaks; ice cracks, then drops whole shards; growth opens from the
+heart with a bloom ahead of the edge (`cardDissolveMaterial.ts`, seeded per card). What a card throws
+off as it goes is its own material (`cardDepartureParticles.ts`).
+
+**Weight has tiers.** A bomb is a strong hit and the meteor a critical one: trauma (cubed, on smooth
+noise, `boardTrauma.ts`) and a visual-only hit-stop of 0.06 s against 0.12 s
+(`meteorImpactMotion.ts`). Input and the rules never wait on an effect.
+
+**The combo climbs, and never saturates.** Every escalating channel - the plasma beam
+(`plasmaRailLook.ts`), the music layers (`comboMusicLayers.ts`), the flame haze - reads heat, which
+levels off by forty links, and the surge past Legendary on a soft cap. A chain of a thousand is
+hotter than a chain of a hundred, and still a board you can read.
+
+**Budgets live in materials and particles, not passes.** On a phone, multi-pass post-processing
+costs several times what a glow in a material does, so glow is a material term, an additive mote or a
+sprite. Particles share one pool (`boardParticleSystem.ts`) with a per-quality budget; a departure's
+motes and an item's effects go in at event priority so ambient weather cannot crowd them out.
+
+**Reduced motion keeps the meaning and drops the motion.** Cards shrink rather than dissolve, nothing
+is thrown, the plasma beam is drawn still, the meteor's ground is a static scorch, and the shake and
+hit-stop are off.

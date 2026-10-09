@@ -1,4 +1,5 @@
-import type { RelicId, RunState } from '../../shared/contracts';
+import type { RealmId, RelicId, RunState } from '../../shared/contracts';
+import { REALM_ROOM_ART, realmRoomFor, type RealmRoomArt } from './realmRoomArt';
 import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { REALM_JOLT_FAMILY, type RealmJoltFamily } from './realmCardMotion';
@@ -22,12 +23,14 @@ import { deriveElementScene, type ElementSceneState } from './elementScene';
  *
  * Everything here is presentation; nothing a rule reads.
  */
-export type ScenePlateId = 'dungeon' | 'shop' | 'void';
+export type ScenePlateId = 'dungeon' | 'shop' | 'void' | 'realm';
 export type SceneDriftTone = 'ember' | 'spore' | 'bubble';
 
 export interface SceneMood {
     elements: ElementSceneState;
     plate: ScenePlateId;
+    /** The realm whose own room this is, while its painting exists (`realmRoomArt.ts`); null on the dungeon ring. */
+    realmRoom: RealmId | null;
     /** Identity of the miss that opened the black hole, for the collapse animation; null when none. */
     blackHoleKey: string | null;
     /** How far the frost has grown in from the edges, 0..1; only a frost run's. */
@@ -119,8 +122,11 @@ export const deriveSceneMood = ({
     payout = null,
     run,
     storeOpen,
-    temper
+    temper,
+    realmRoomArt = REALM_ROOM_ART
 }: {
+    /** The realm rooms there is art for; the tests pass their own. */
+    realmRoomArt?: Readonly<Record<RealmId, RealmRoomArt>>;
     combo: number;
     /** The latest miss on the journal, or null: the black hole reads it. */
     latestLoss: BoardTurnResolvedEvent | null;
@@ -154,7 +160,9 @@ export const deriveSceneMood = ({
           ? { key: `ascend:${turn.eventId}`, coins: Math.round((18 + surge * 12) * pocketed) }
           : null;
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
-    const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : 'dungeon';
+    // A realm with a room of its own opens in it; the store and a black hole still take the room over.
+    const realmRoom = realmRoomFor(run.realmId, realmRoomArt);
+    const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : realmRoom ? 'realm' : 'dungeon';
     /*
      * Every run has weather from its first turn (`SCENE_WEATHER_FLOOR`): a frost run opens on a
      * dusting of snow and rime at the edges, a storm run on wet stone and the odd far bolt, an
@@ -183,6 +191,7 @@ export const deriveSceneMood = ({
     return {
         elements,
         plate,
+        realmRoom,
         blackHoleKey,
         frost,
         snow,

@@ -1,0 +1,54 @@
+{
+  "jobs": [
+    {
+      "id": "realm-frost-ambience",
+      "task_type": "text2music",
+      "caption": "A seamless dark fantasy ambience loop for The Frozen Reach, a vaulted chamber of glacial ice: low wind moving through ice, soft glassy chimes, a deep sustained drone on A, slow and spacious, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 32,
+      "inference_steps": 8,
+      "target": "src/renderer/assets/audio/music/realm/frost-ambience.ogg"
+    },
+    {
+      "id": "realm-ember-ambience",
+      "task_type": "text2music",
+      "caption": "A seamless dark fantasy ambience loop for The Cinder Deep, a basalt hall under a volcano: a slow low rumble, crackling embers, a warm sustained drone on A, distant metallic resonance, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 32,
+      "inference_steps": 8,
+      "target": "src/renderer/assets/audio/music/realm/ember-ambience.ogg"
+    },
+    {
+      "id": "realm-tide-ambience",
+      "task_type": "text2music",
+      "caption": "A seamless dark fantasy ambience loop for The Drowned Vault, a sunken temple: gentle water lapping, slow bubbles, a soft underwater drone on A with a hint of D, calm and deep, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 32,
+      "inference_steps": 8,
+      "target": "src/renderer/assets/audio/music/realm/tide-ambience.ogg"
+    },
+    {
+      "id": "realm-storm-ambience",
+      "task_type": "text2music",
+      "caption": "A seamless dark fantasy ambience loop for The Thunder Spire, an open stone platform in a storm: steady rain, distant rolling thunder, a tense low drone on A, airy wind, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 32,
+      "inference_steps": 8,
+      "target": "src/renderer/assets/audio/music/realm/storm-ambience.ogg"
+    },
+    {
+      "id": "realm-grove-ambience",
+      "task_type": "text2music",
+      "caption": "A seamless dark fantasy ambience loop for The Overgrown Crypt, a crypt taken over by a living forest: rustling leaves, soft night insects, a warm wooden drone on A with a hint of E, gentle and organic, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 32,
+      "inference_steps": 8,
+      "target": "src/renderer/assets/audio/music/realm/grove-ambience.ogg"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { loadRelicTextures, type RelicTextureSet } from '../components/startupIn
 import { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS } from './ui';
 import { getSceneSpriteSheetUrls } from './ui/sprites';
 import { getElementSceneArtUrls } from '../components/elementSceneArt';
+import { getRealmRoomArtUrls } from '../components/realmRoomArt';
 import { offerSceneImage } from '../components/sceneBitmaps';
 
 type IdleWindow = Window &
@@ -136,7 +137,7 @@ const loadAndDecodeRaster = (url: string, timeoutMs: number): Promise<void> => {
 /** The gameplay scene's backdrops, light layers and sprite strips, loaded, decoded and held (not the boot's 250ms glance). */
 export const preloadUiRasterImagesFully = async (timeoutMs = 6000): Promise<void> => {
     // With the chemistry paintings this device will draw: the room paints them on its canvas mid-run.
-    const urls = [...new Set([...getUiArtRows().map((row) => row.assetUrl), ...getSceneSpriteSheetUrls(), ...getElementSceneArtUrls()])];
+    const urls = [...new Set([...getUiArtRows().map((row) => row.assetUrl), ...getSceneSpriteSheetUrls(), ...getElementSceneArtUrls(), ...getRealmRoomArtUrls()])];
     let cursor = 0;
     const worker = async (): Promise<void> => {
         while (cursor < urls.length) {

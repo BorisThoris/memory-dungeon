@@ -1,4 +1,5 @@
 import type { ElementSceneState } from './elementScene';
+import type { ScenePlateId } from './sceneMood';
 
 /**
  * What chemistry is in the room, as data.
@@ -10,7 +11,7 @@ import type { ElementSceneState } from './elementScene';
  * the wall it has, which is what the tests and anything driving the app read.
  */
 export function ElementSceneLayers({ scene, still, alive, plate }: {
-    scene: ElementSceneState; still: boolean; alive: boolean; plate: 'dungeon' | 'void' | 'shop';
+    scene: ElementSceneState; still: boolean; alive: boolean; plate: ScenePlateId;
 }) {
     return (
         <div
