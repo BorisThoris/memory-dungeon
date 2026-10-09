@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
+import { REALM_IDS, type RealmId } from '../../shared/contracts';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { composeGameplayScene, GAMEPLAY_EYES_EVERY_MS, GAMEPLAY_EYES_LAST_MS, GAMEPLAY_SPIDER_EVERY_MS, GAMEPLAY_SPIDER_LASTS_MS, goldCoinDraws, SCENE_RING, type GameplayFrameInput } from './gameplaySceneFrame';
@@ -9,6 +10,7 @@ import { createSceneClock, fixedSceneClock, sceneOccurrence } from './sceneClock
 import { deriveSceneMood, type SceneMood } from './sceneMood';
 import { findSceneDraw, sceneDrawIds, type SceneDraw, type SceneImageDraw } from './scenePaint';
 import { RING_MOTE_COUNT } from './sceneSpriteClocks';
+import type { RealmRoomArt } from './realmRoomArt';
 
 const flames = SCENE_SPRITES.gameplayFlames;
 const rest: GameplayFrameInput = {
@@ -34,6 +36,7 @@ const flamesOf = (draws: readonly SceneDraw[]) => draws.filter((draw): draw is S
 const count = (draws: readonly SceneDraw[], prefix: string) => draws.filter((draw) => draw.id.startsWith(prefix) && draw.alpha > 0.004).length;
 
 const theme = (id: string) => COMBO_HEAT_THEMES.find((candidate) => candidate.id === id)!;
+const NO_REALM_ROOMS = Object.fromEntries(REALM_IDS.map((realm) => [realm, { base: '', glow: '' }])) as Record<RealmId, RealmRoomArt>;
 const mood = (temper: string, over: Partial<Parameters<typeof deriveSceneMood>[0]> = {}): SceneMood =>
     deriveSceneMood({
         combo: 0,
@@ -472,7 +475,8 @@ describe('composeGameplayScene', () => {
 
     it('paints the chemistry in the room under its lights, and tints the ring\'s light with each element there', () => {
         const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: 'ember', realmSecondaryId: 'tide' });
-        const steam = frame({ mood: mood('ember', { run }) });
+        // In the dungeon ring: the Cinder Deep's own room is painted, so a realm without its art stands in.
+        const steam = frame({ mood: mood('ember', { run, realmRoomArt: NO_REALM_ROOMS }) });
         const ids = sceneDrawIds(steam);
         expect(ids).toContain('element-steam');
         expect(ids.indexOf('element-steam')).toBeGreaterThan(ids.indexOf('base'));
@@ -481,9 +485,21 @@ describe('composeGameplayScene', () => {
         expect(ids).toContain('material-ember');
         expect(findSceneDraw(steam, 'material-ember')).toMatchObject({ blend: 'screen', filter: { hueDeg: 100, saturate: 1.35 } });
         // A phone draws the smaller painting.
-        expect(findSceneDraw(frame({ mood: mood('ember', { run }), compactArt: true }), 'element-steam')!.src).toContain('-mobile.webp');
+        expect(findSceneDraw(frame({ mood: mood('ember', { run, realmRoomArt: NO_REALM_ROOMS }), compactArt: true }), 'element-steam')!.src).toContain('-mobile.webp');
         // No chemistry, nothing painted.
         expect(sceneDrawIds(frame({ mood: mood('ember') })).some((id) => id.startsWith('element-'))).toBe(false);
+    });
+
+    it('opens a realm floor in its own painted room, its glow on the combo and its chemistry a tint over it', () => {
+        const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: 'ember', realmSecondaryId: 'tide' });
+        const cold = frame({ mood: mood('ember', { run }) });
+        const ids = sceneDrawIds(cold);
+        expect(findSceneDraw(cold, 'realm')!.src).toContain('bg-gameplay-realm-ember-v1-base');
+        expect(findSceneDraw(cold, 'realmGlow')).toMatchObject({ blend: 'lighter' });
+        expect(ids).not.toContain('torchLightL');
+        expect(ids.indexOf('element-steam')).toBeGreaterThan(ids.indexOf('realmGlow'));
+        expect(findSceneDraw(cold, 'element-steam')).toMatchObject({ blend: 'soft-light' });
+        expect(alphaOf(frame({ mood: mood('ember', { run }), comboHeat: 1 }), 'realmGlow')).toBeGreaterThan(alphaOf(cold, 'realmGlow'));
     });
 
     it('stops the room for a beat when a frost stage is reached, and lets it go', () => {

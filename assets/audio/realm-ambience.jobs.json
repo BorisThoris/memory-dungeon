@@ -1,54 +1,60 @@
 {
+  "notes": "The realms' ambience loops (realmAmbientBed.ts). Render with yarn audio:ace-step:realm (from a worktree, set CROSS_REPO_LIBS_ROOT to the cross-repo-libs checkout and ACESTEP_PYTHON to the main checkout's .venv-audio python), rank the takes with pick-ace-takes.py, cut each winner with make-seamless-loop.py and encode it to src/renderer/assets/audio/music/realm/<realm>-ambience.ogg. A job takes only ACE-Step GenerationParams keys, so the target is named here, not on the job. Beatless on purpose: the bed is not locked to the run loop's beat, so a pulse at the same tempo would drift against it; the key (A minor, the run music's A, B, D, E frame) is what keeps the two together. The first takes, asked for a 75 BPM feel, came out as beat loops; the beatless wording reduced the pulse on the XL-turbo model but did not remove it, so audition every take before installing one (the game plays any file in that folder).",
   "jobs": [
     {
       "id": "realm-frost-ambience",
       "task_type": "text2music",
-      "caption": "A seamless dark fantasy ambience loop for The Frozen Reach, a vaulted chamber of glacial ice: low wind moving through ice, soft glassy chimes, a deep sustained drone on A, slow and spacious, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "caption": "A seamless dark fantasy ambience loop for The Frozen Reach, a vaulted chamber of glacial ice: low wind moving through ice, soft glassy chimes, a deep sustained drone on A, slow and spacious, quiet enough to sit under a game, beatless and in free time, no drums, no percussion, no pulse, slow sustained swells, loop-safe start and end.",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 32,
       "inference_steps": 8,
-      "target": "src/renderer/assets/audio/music/realm/frost-ambience.ogg"
+      "keyscale": "A minor",
+      "seed": 53110
     },
     {
       "id": "realm-ember-ambience",
       "task_type": "text2music",
-      "caption": "A seamless dark fantasy ambience loop for The Cinder Deep, a basalt hall under a volcano: a slow low rumble, crackling embers, a warm sustained drone on A, distant metallic resonance, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "caption": "A seamless dark fantasy ambience loop for The Cinder Deep, a basalt hall under a volcano: a slow low rumble, crackling embers, a warm sustained drone on A, distant metallic resonance, quiet enough to sit under a game, beatless and in free time, no drums, no percussion, no pulse, slow sustained swells, loop-safe start and end.",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 32,
       "inference_steps": 8,
-      "target": "src/renderer/assets/audio/music/realm/ember-ambience.ogg"
+      "keyscale": "A minor",
+      "seed": 53111
     },
     {
       "id": "realm-tide-ambience",
       "task_type": "text2music",
-      "caption": "A seamless dark fantasy ambience loop for The Drowned Vault, a sunken temple: gentle water lapping, slow bubbles, a soft underwater drone on A with a hint of D, calm and deep, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "caption": "A seamless dark fantasy ambience loop for The Drowned Vault, a sunken temple: gentle water lapping, slow bubbles, a soft underwater drone on A with a hint of D, calm and deep, quiet enough to sit under a game, beatless and in free time, no drums, no percussion, no pulse, slow sustained swells, loop-safe start and end.",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 32,
       "inference_steps": 8,
-      "target": "src/renderer/assets/audio/music/realm/tide-ambience.ogg"
+      "keyscale": "A minor",
+      "seed": 53112
     },
     {
       "id": "realm-storm-ambience",
       "task_type": "text2music",
-      "caption": "A seamless dark fantasy ambience loop for The Thunder Spire, an open stone platform in a storm: steady rain, distant rolling thunder, a tense low drone on A, airy wind, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "caption": "A seamless dark fantasy ambience loop for The Thunder Spire, an open stone platform in a storm: steady rain, distant rolling thunder, a tense low drone on A, airy wind, quiet enough to sit under a game, beatless and in free time, no drums, no percussion, no pulse, slow sustained swells, loop-safe start and end.",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 32,
       "inference_steps": 8,
-      "target": "src/renderer/assets/audio/music/realm/storm-ambience.ogg"
+      "keyscale": "A minor",
+      "seed": 53113
     },
     {
       "id": "realm-grove-ambience",
       "task_type": "text2music",
-      "caption": "A seamless dark fantasy ambience loop for The Overgrown Crypt, a crypt taken over by a living forest: rustling leaves, soft night insects, a warm wooden drone on A with a hint of E, gentle and organic, quiet enough to sit under a game, 75 BPM feel, loop-safe start and end.",
+      "caption": "A seamless dark fantasy ambience loop for The Overgrown Crypt, a crypt taken over by a living forest: rustling leaves, soft night insects, a warm wooden drone on A with a hint of E, gentle and organic, quiet enough to sit under a game, beatless and in free time, no drums, no percussion, no pulse, slow sustained swells, loop-safe start and end.",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 32,
       "inference_steps": 8,
-      "target": "src/renderer/assets/audio/music/realm/grove-ambience.ogg"
+      "keyscale": "A minor",
+      "seed": 53114
     }
   ]
 }

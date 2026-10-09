@@ -177,3 +177,7 @@ menu's candles, the portal) burns as the painter painted it.
 - Another backdrop (the arcane workshop): measure its flames, run `scene.sh <plate> <prefix>
   <boxes.json>` (or `cathedral.sh` when no light pass is wanted); the positions in `SCENE` are per
   plate and need re-measuring.
+- A realm's own room (`realmRoomArt.ts`): two layers, not seven. `segment_realm.py <plate> <realm>
+  <out>` keys the realm's hue (and anything near white) into one additive glow and leaves the rest
+  as the base, with a check sheet of base | cold combo | full heat | glow alone. No sprites, no
+  Blender: the game lights a realm room with one glow on the combo's heat.

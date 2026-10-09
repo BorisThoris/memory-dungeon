@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3034,
+    "trackedFileCount": 3056,
     "codeFileCount": 1159,
     "exportedSymbolCount": 3659,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9774
+    "relationshipCount": 9778
   },
   "inventory": [
     {
@@ -183,8 +183,8 @@
     {
       "path": "assets/audio/realm-ambience.jobs.json",
       "category": "configuration",
-      "bytes": 2744,
-      "sha256": "1612cb731b0f6fea9abe7355a10ad78263ccb42cc6ac86a4896f2cbae455d234"
+      "bytes": 3908,
+      "sha256": "330a49e065f9fcdd6760dc3847866bd8427938e0998ade7bc1dbc9cfa54fbd77"
     },
     {
       "path": "assets/generated/card-backs/memory-dungeon-card-backs.png",
@@ -2422,7 +2422,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "13bc4b2df1672cb17c243978d505a4a110d606e1cc720341384b9c6ae37d726a"
+      "sha256": "a0ecfe7d920cc79a2d2e85cd4080e3731b86fafbc9a9220ade470df4fb47c658"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4311,8 +4311,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33395,
-      "sha256": "4cb395620dc81ae3c20a66e70ff2318fabd7dc33fe58b1edc3edfc28e484d3f2"
+      "bytes": 33639,
+      "sha256": "a8b34fccc1bdf776d68fc2830897b879d507061d075a2ad8435219fcb2ba767d"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4485,8 +4485,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110336,
-      "sha256": "d7e94221727c47c0f71b9e6955d0e1d6462095545aff793f69580ff5f4292e8c"
+      "bytes": 109821,
+      "sha256": "2a61fe9731d98576ef01426dab4905f1ccca3d9369324e8278c84974fe1a807d"
     },
     {
       "path": "public/site.webmanifest",
@@ -5049,8 +5049,14 @@
     {
       "path": "scripts/card-pipeline/realm-rooms.zimage.manifest.json",
       "category": "script",
-      "bytes": 4988,
-      "sha256": "07ae8d2df12721232fa7aa95133c6c998a9f94c49a6774467c7127a552b126b2"
+      "bytes": 5436,
+      "sha256": "024c34ffc9561bfa103cee7375775f5a1f376d7a2382ac3b6f02c699ce8ad930"
+    },
+    {
+      "path": "scripts/card-pipeline/realm-rooms.zimage.picks.json",
+      "category": "script",
+      "bytes": 177,
+      "sha256": "19e5f90b273198c1077d9dc493dcc81e0996a3aa5c54344b89d79c2354e42de1"
     },
     {
       "path": "scripts/card-pipeline/requirements-local-card-backs.txt",
@@ -5535,8 +5541,8 @@
     {
       "path": "scripts/scene-pipeline/README.md",
       "category": "script",
-      "bytes": 14297,
-      "sha256": "905482b70497174cb06a504d1dbc6fc2f59cfd3db6ae2af80f8ea1af4e62d479"
+      "bytes": 14666,
+      "sha256": "70e8abfc416b8da118e36becbbaf0b85564460e5fb56ede02e90b0965ff56710"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -5555,6 +5561,12 @@
       "category": "script",
       "bytes": 4264,
       "sha256": "7458c21f9d9e5efcbdd0e2955858b2828b08d48081a76cbe189eda1434aa2d23"
+    },
+    {
+      "path": "scripts/scene-pipeline/segment_realm.py",
+      "category": "script",
+      "bytes": 4795,
+      "sha256": "3a5e2b8560a3ad130b7be441d9316d57d2e58aea732baa6986124316872d57e9"
     },
     {
       "path": "scripts/scene-pipeline/segment_scene.py",
@@ -8137,6 +8149,126 @@
       "sha256": "93cd1490e32c4daeac1dc6b9614bae0dfddc8801045614db106ba0225a610df8"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-base.png",
+      "category": "source",
+      "bytes": 1273405,
+      "sha256": "5516aae9e841de58f144aaec8b8b1d108cf5595ca713fa75f51634206a780dbc"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-base.webp",
+      "category": "source",
+      "bytes": 73568,
+      "sha256": "ea5a322aa760210a1d44cba642457b7c8d53ea3b654392813a61f6e75aca97cb"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow.png",
+      "category": "source",
+      "bytes": 1644713,
+      "sha256": "fc38c6a32c9dd11d4406c394b054a6be7c33fb047d2d1356b8062a5a163d16d0"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow.webp",
+      "category": "source",
+      "bytes": 110098,
+      "sha256": "44a49f8a1c71eaafb313a6dd2d7a6fe4cff2b2316072c1fb319c9aa69b895145"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-base.png",
+      "category": "source",
+      "bytes": 1073388,
+      "sha256": "bfd0fdd54204114aedfabfb7648323260afc3dec043030f41435cb1b2a077ade"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-base.webp",
+      "category": "source",
+      "bytes": 43694,
+      "sha256": "ac2f6b2e7a3e54df89ea5882f939af914499038468dd1c2088c33e0ea5d39c57"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow.png",
+      "category": "source",
+      "bytes": 1860878,
+      "sha256": "be385cd8bc7bbbf15b599de8203f8c3a9676b144bda8636eca8a29b4938cbff4"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow.webp",
+      "category": "source",
+      "bytes": 259062,
+      "sha256": "6aa27eba264c369dde80042e5ba7b28c7dd958f14971e4bb9072a73e5a95c9fe"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-base.png",
+      "category": "source",
+      "bytes": 1430293,
+      "sha256": "c415386270678b93a1b8183eab9d86a78028a93444f165b7684f445da719bee3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-base.webp",
+      "category": "source",
+      "bytes": 103284,
+      "sha256": "331cb0cf24d212ad1a11c4182474bc5d2eede98463b98b4dff3951c8aa0614e8"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow.png",
+      "category": "source",
+      "bytes": 1823689,
+      "sha256": "436b4cc021c034d243ad8c2a95573a91dc28a7e0ec0b07ed271246cc7703bc50"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow.webp",
+      "category": "source",
+      "bytes": 150504,
+      "sha256": "c90363c9dfa2ea0176be6e2f1b2beb788eb21554a3be9a6710b1a6495d77901c"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-base.png",
+      "category": "source",
+      "bytes": 1283979,
+      "sha256": "e75cba9d1bad441af278cf017d1ac3e0bf5197a60b9be99d3928d11309eb9d6b"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-base.webp",
+      "category": "source",
+      "bytes": 72474,
+      "sha256": "e6889b7b56fd144fb52cfb09fce619aa69b12e3c04be5fe2319be1c554faac4d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow.png",
+      "category": "source",
+      "bytes": 1690629,
+      "sha256": "c7d18ed57b71307864b081af1ad9bb768ea53db4f64a03e59afd729e48388c8b"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow.webp",
+      "category": "source",
+      "bytes": 135746,
+      "sha256": "f90c340226a535e882ef9ebd60313000376e8e61acd28bc75913fe497364e856"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-base.png",
+      "category": "source",
+      "bytes": 1152053,
+      "sha256": "fa9d0052c55961a3c571edce1d7c69f5473d053827722263eea277c2544dfc05"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-base.webp",
+      "category": "source",
+      "bytes": 57582,
+      "sha256": "84d3949761e11e2ee4d02d48ea9a50081ba70ae4ba27665d9a3bcdd51e40dfdf"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow.png",
+      "category": "source",
+      "bytes": 1554262,
+      "sha256": "a4edb5d032a816599d4a969079844162841608516afd1442de86e01760a1d33a"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow.webp",
+      "category": "source",
+      "bytes": 112782,
+      "sha256": "0b46f883cb4c6a74ebd208372bb5366ed92421be0c1550c6a1c597950044081b"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
       "category": "source",
       "bytes": 1333430,
@@ -10101,8 +10233,8 @@
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "category": "test",
-      "bytes": 29906,
-      "sha256": "92eb6121fa5043a8f7bdd34ad439fca69aa928406ef4c81c1de8d13743fb33a1"
+      "bytes": 31232,
+      "sha256": "738797a3157e0235251f35a90cc3b45e00143f0428c6d2f25084c53f651e14d1"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
@@ -22056,17 +22188,19 @@
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 510,
+      "lineCount": 526,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneFrame.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
         "file:src/renderer/components/goldRain.ts",
+        "file:src/renderer/components/realmRoomArt.ts",
         "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/components/sceneMood.ts",
         "file:src/renderer/components/scenePaint.ts",
         "file:src/renderer/components/sceneSpriteClocks.ts",
         "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts",
         "file:src/shared/test/game-fixtures.ts"
       ],
       "exports": [],
@@ -23352,6 +23486,7 @@
         "symbol:src/renderer/components/realmRoomArt.ts#realmRoomFor"
       ],
       "testedBy": [
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/realmRoomArt.test.ts"
       ]
     },
@@ -32957,6 +33092,7 @@
         "file:src/renderer/components/elementScene.test.ts",
         "file:src/renderer/components/FloorClearBeat.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
+        "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/ItemDropPopup.test.tsx",
         "file:src/renderer/components/itemEffects.test.ts",
@@ -102552,6 +102688,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/realmRoomArt.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/renderer/components/realmRoomArt.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/renderer/components/sceneClock.ts",
       "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
       "target": "file:src/renderer/components/sceneClock.ts",
@@ -102579,6 +102721,12 @@
       "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/shared/combo-heat-rules.ts",
       "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
       "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -124870,6 +125018,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/realmRoomArt.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/realmRoomArt.ts->file:src/renderer/components/realmRoomArt.test.ts",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "file:src/renderer/components/realmRoomArt.test.ts",
@@ -127237,6 +127391,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
       "kind": "tested_by"
     },
     {
