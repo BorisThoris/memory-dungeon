@@ -75,6 +75,8 @@ export interface SceneMood {
     realmEventKey: string | null;
     realmEventFamily: RealmJoltFamily | null;
     goldRain: { key: string; coins: number } | null;
+    /** Every shower this floor has paid, oldest first: the gold lying on the floor (`GameplayScene` keeps it). */
+    goldPile?: readonly { key: string; coins: number; slot: number }[];
     /** The bank is empty: the boss-warning state, held until a miss is banked again. */
     peril: boolean;
     /** How fast the room moves, 1 at rest, climbing with the surge: the frenzy tempo. */

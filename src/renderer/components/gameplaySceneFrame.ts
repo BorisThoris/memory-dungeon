@@ -5,11 +5,11 @@ import { AMBIENT_SPRITES, SCENE_SPRITES, type AmbientCellName } from '../assets/
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
-import { realmRoomLifeDraws } from './realmRoomLife';
+import { REALM_FLOORS, realmRoomLifeDraws } from './realmRoomLife';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
-import { buildGoldRain, goldCoinFloor, goldCoinSize, GOLD_RAIN_FADE_S, GOLD_RAIN_HOP_S, GOLD_RAIN_REST_S, type GoldCoin } from './goldRain';
+import { buildGoldRain, goldCoinFloorOn, goldCoinMotion, goldCoinSize, GOLD_PILE_MAX_COINS, GOLD_PILE_SLOTS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin, type GoldFloorBand } from './goldRain';
 import { sceneFlameLevels, sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { ambientSprite, crossingDraws, dripDraws, driftDraws, flameDraws, flameEmberDraws, fogDraw, glintDraws, moteDraws, SCENE_PLATE_ASPECT, sceneKeyframes } from './sceneAmbient';
 import { sceneBeatEnvelope, sceneBreath, sceneFlicker, sceneHash, sceneOccurrence, sceneSmoothstep, type SceneClock } from './sceneClock';
@@ -120,7 +120,18 @@ const emberDriftFor = keepLast((seed: number, count: number) => buildEmberDrift(
 const stormBoltsFor = keepLast((seed: number, count: number) =>
     buildStormBolts(seed, count).map((bolt) => bolt.points.map(([x, y]) => [x / STORM_VIEWBOX.width, y / STORM_VIEWBOX.height] as const))
 );
-const goldRainFor = keepLast((key: string, coins: number) => buildGoldRain(key, coins));
+/** Each shower's coins, laid out once: a floor's pile is many showers, drawn every frame. */
+const goldShowers = new Map<string, GoldCoin[]>();
+const goldRainFor = (key: string, coins: number): GoldCoin[] => {
+    const id = `${key}:${coins}`;
+    let laid = goldShowers.get(id);
+    if (!laid) {
+        if (goldShowers.size > 64) goldShowers.clear();
+        laid = buildGoldRain(key, coins);
+        goldShowers.set(id, laid);
+    }
+    return laid;
+};
 const RING_MOTES = ringMotes();
 
 const MATERIAL_LIGHT_HUE = { ember: 100, tide: -45, bone: -25, moss: -125 } as const;
@@ -197,48 +208,86 @@ const COIN_FRAMES = AMBIENT_SPRITES.cells.coin.frames;
  * frames), slows on the hop and lies still; while it falls fast it is drawn out faintly behind
  * itself, the smear the eye sees, and when a face turns to the torches it catches the light in a glint.
  */
-export const goldCoinDraws = (coin: GoldCoin, index: number, seconds: number, lean: boolean): SceneDraw[] => {
-    const fallS = coin.duration;
-    const lifeS = fallS + GOLD_RAIN_HOP_S + GOLD_RAIN_REST_S + GOLD_RAIN_FADE_S;
-    if (seconds <= 0 || seconds >= lifeS) {
+export interface GoldCoinPlace {
+    /** The floor it lands on (the dungeon's by default). */
+    band?: GoldFloorBand;
+    /** Water: it splashes and sinks instead of bouncing. */
+    water?: boolean;
+    /** The room's clock, for the glints off the pile. */
+    t?: number;
+}
+
+/**
+ * One coin `seconds` after it began to fall (`Infinity`: found lying there): falling and turning,
+ * bouncing lower each time and rolling to a stop, then flat on the floor for good, with its shadow
+ * on the stone under it. On water it splashes and sinks, and stays a dim glint under the surface.
+ */
+export const goldCoinDraws = (coin: GoldCoin, index: number, seconds: number, lean: boolean, place: GoldCoinPlace = {}): SceneDraw[] => {
+    if (seconds <= 0) {
         return [];
     }
-    const floor = goldCoinFloor(coin);
+    const band = place.band ?? GOLD_RAIN_FLOOR;
+    const floor = goldCoinFloorOn(coin, band);
     const size = goldCoinSize(coin);
-    const x = coin.x / 100;
-    const landed = seconds - fallS;
-    const turnTime = landed < 0 ? seconds : fallS + 0.4 * Math.min(landed, GOLD_RAIN_HOP_S);
-    const turn = coin.phase + coin.spin * turnTime;
-    const frame = ((Math.floor(turn * COIN_FRAMES) % COIN_FRAMES) + COIN_FRAMES) % COIN_FRAMES;
-    let bottom: number;
-    let alpha = 1;
-    let speed = 0;
-    if (landed < 0) {
-        const p = seconds / fallS;
-        bottom = COIN_START_Y + (floor - COIN_START_Y) * p * p;
-        speed = (2 * (floor - COIN_START_Y) * p) / fallS;
-    } else if (landed < GOLD_RAIN_HOP_S) {
-        const q = landed / GOLD_RAIN_HOP_S;
-        bottom = floor - 0.022 * (1 - 0.5 * coin.depth) * 4 * q * (1 - q);
-    } else {
-        bottom = floor;
-        const fading = landed - GOLD_RAIN_HOP_S - GOLD_RAIN_REST_S;
-        alpha = fading > 0 ? 1 - fading / GOLD_RAIN_FADE_S : 1;
-    }
-    const y = bottom - size / 2;
+    const motion = goldCoinMotion(coin, place.water ? Math.min(seconds, coin.duration - 1e-6) : seconds, COIN_START_Y, floor);
+    const x = coin.x / 100 + motion.roll;
+    const w = size / SCENE_PLATE_ASPECT;
     const draws: SceneDraw[] = [];
+    if (place.water && seconds >= coin.duration) {
+        // Into the water: a ring spreads where it went in, two drops jump, and it sinks to a glint.
+        const under = seconds - coin.duration;
+        if (under < 0.9) {
+            draws.push(ambientSprite({ id: `coin-${index}-splash`, cell: 'ripple', x, y: floor, size: 0.01 + 0.04 * (under / 0.9), alpha: 0.8 * (1 - under / 0.9) ** 1.5, scaleX: 2.6 }));
+        }
+        if (under < 0.4 && !lean) {
+            const q = under / 0.4;
+            for (const side of [-1, 1] as const) {
+                draws.push(ambientSprite({ id: `coin-${index}-spray-${side < 0 ? 'l' : 'r'}`, cell: 'drop', x: x + side * w * 0.6 * q, y: floor - 0.03 * 4 * q * (1 - q), size: 0.018, alpha: 0.7 * (1 - q) }));
+            }
+        }
+        const sunk = Math.min(1, under / 1.4);
+        draws.push(ambientSprite({ id: `coin-${index}`, cell: 'coin', x, y: floor + 0.012 * sunk - size / 2, size, alpha: 1 - 0.72 * sunk, blend: 'source-over', frame: 0, scaleY: 1 - 0.45 * sunk }));
+        return draws;
+    }
+    const turn = coin.phase + coin.spin * motion.turnTime;
+    const turning = ((Math.floor(turn * COIN_FRAMES) % COIN_FRAMES) + COIN_FRAMES) % COIN_FRAMES;
+    // Settling, it rocks onto its face: the turn gives way to the face, lying flat in perspective.
+    const frame = motion.flat > 0.5 ? 0 : turning;
+    const scaleY = 1 - 0.58 * motion.flat;
+    const bottom = motion.bottom;
+    const y = bottom - (size * scaleY) / 2;
     if (!lean) {
+        // Its shadow on the floor: tight and dark as it comes down onto it, gone while it is high.
+        const close = Math.max(0, 1 - motion.height / 0.25);
+        if (close > 0.02) {
+            draws.push({
+                kind: 'glow',
+                id: `coinshadow-${index}`,
+                alpha: 0.55 * close,
+                blend: 'source-over',
+                cx: x,
+                cy: floor,
+                rx: w * (0.75 - 0.2 * close),
+                ry: size * 0.16,
+                stops: [
+                    [0, 'rgba(8, 5, 2, 0.7)'],
+                    [1, 'rgba(8, 5, 2, 0)']
+                ]
+            });
+        }
         // Where it was a frame or two ago, as one faint copy drawn out along the fall: a smear, not a stack of coins.
-        const back = speed * 0.035;
+        const back = motion.speed * 0.035;
         if (back > size * 0.3) {
             draws.push(ambientSprite({ id: `coin-${index}-trail`, cell: 'coin', x, y: y - back / 2, size, alpha: 0.26, blend: 'source-over', frame, scaleY: 1 + back / size }));
         }
     }
-    draws.push(ambientSprite({ id: `coin-${index}`, cell: 'coin', x, y, size, alpha, blend: 'source-over', frame }));
-    // The face toward the torches, up and to the left: it flashes as it turns through them.
-    if (landed < GOLD_RAIN_HOP_S && (frame === 0 || frame === COIN_FRAMES - 1)) {
-        const w = size / SCENE_PLATE_ASPECT;
-        draws.push(ambientSprite({ id: `coin-${index}-glint`, cell: 'glint', x: x - 0.18 * w, y: y - 0.2 * size, size: size * 0.9, alpha: 0.8, blend: 'lighter' }));
+    draws.push(ambientSprite({ id: `coin-${index}`, cell: 'coin', x, y, size, alpha: 1, blend: 'source-over', frame, scaleY: scaleY === 1 ? undefined : scaleY }));
+    // The face toward the light flashes as it turns through it; lying there, it catches the light now and then.
+    const airborne = motion.flat === 0;
+    const resting = motion.flat >= 1 && place.t !== undefined ? sceneOccurrence(place.t + index * 977, 6000 + 3000 * sceneHash(index, 5), 700, 211 + index) : null;
+    if ((airborne && (frame === 0 || frame === COIN_FRAMES - 1)) || resting) {
+        const swell = resting ? Math.sin(resting.progress * Math.PI) : 1;
+        draws.push(ambientSprite({ id: `coin-${index}-glint`, cell: 'glint', x: x - 0.18 * w, y: y - 0.2 * size, size: size * 0.9 * (0.6 + 0.4 * swell), alpha: 0.8 * swell, blend: 'lighter' }));
     }
     return draws;
 };
@@ -519,13 +568,32 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     // A payout: coins fall through the room, in front of the stone and behind the cards. Asked every
     // frame, paid or not: a clock that first hears of a shower when it is already falling takes it
     // for a restore and drops it, which is what the first payout of every room used to be.
-    const sinceRain = clock.since('gold-rain', mood?.goldRain?.key ?? null) / 1000;
-    if (mood?.goldRain && !still) {
-        if (Number.isFinite(sinceRain)) {
-            goldRainFor(mood.goldRain.key, lean ? Math.ceil(mood.goldRain.coins / 2) : mood.goldRain.coins).forEach((coin, index) => {
-                draws.push(...goldCoinDraws(coin, index, sinceRain - coin.delay, lean));
-            });
-        }
+    // Every shower this floor has paid lies where it fell (`goldRain.ts`): each in its own slot,
+    // timed from when it arrived, and one found already there (a restore) lies at rest. On a realm's
+    // own room it lands on that room's floor, and in the Drowned Vault it sinks.
+    const pile = mood?.goldPile ?? (mood?.goldRain ? [{ ...mood.goldRain, slot: 0 }] : []);
+    const realmFloor = plateId === 'realm' && mood?.realmRoom ? REALM_FLOORS[mood.realmRoom] : null;
+    const coinPlace = { band: realmFloor?.band ?? GOLD_RAIN_FLOOR, water: realmFloor?.water ?? false, t: still ? undefined : roomT };
+    let coinBudget = lean ? Math.ceil(GOLD_PILE_MAX_COINS / 2) : GOLD_PILE_MAX_COINS;
+    const bySlot = new Map(pile.map((shower) => [shower.slot, shower]));
+    const sinceBySlot = new Map<number, number>();
+    for (let slot = 0; slot < GOLD_PILE_SLOTS; slot += 1) {
+        sinceBySlot.set(slot, clock.since(`gold-pile:${slot}`, bySlot.get(slot)?.key ?? null) / 1000);
+    }
+    // Oldest first, as the pile keeps them.
+    const showers = pile.map((shower) => ({ coins: goldRainFor(shower.key, lean ? Math.ceil(shower.coins / 2) : shower.coins), since: sinceBySlot.get(shower.slot) ?? Number.POSITIVE_INFINITY, slot: shower.slot }));
+    // The newest gold first against the budget: the oldest coins are the ones that go.
+    const shown: { coin: GoldCoin; seconds: number; id: number }[] = [];
+    for (let s = showers.length - 1; s >= 0 && coinBudget > 0; s -= 1) {
+        const { coins, since, slot } = showers[s]!;
+        const kept = coins.slice(0, coinBudget);
+        coinBudget -= kept.length;
+        kept.forEach((coin, index) => shown.push({ coin, seconds: still ? Number.POSITIVE_INFINITY : since - coin.delay, id: slot * GOLD_RAIN_MAX_COINS + index }));
+    }
+    // Far coins first, so a near one lies over a far one.
+    shown.sort((a, b) => b.coin.depth - a.coin.depth);
+    for (const { coin, seconds, id } of shown) {
+        draws.push(...goldCoinDraws(coin, id, seconds, lean, coinPlace));
     }
 
     // Peril: the bank is empty. A red edge breathes until a miss is banked again.

@@ -4,7 +4,7 @@ import { REALM_IDS, type RealmId } from '../../shared/contracts';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { SCENE_SPRITES } from '../assets/ui/sprites';
 import { composeGameplayScene, GAMEPLAY_EYES_EVERY_MS, GAMEPLAY_EYES_LAST_MS, GAMEPLAY_SPIDER_EVERY_MS, GAMEPLAY_SPIDER_LASTS_MS, goldCoinDraws, SCENE_RING, type GameplayFrameInput } from './gameplaySceneFrame';
-import { goldCoinFloor, goldCoinSize, GOLD_RAIN_FLOOR, GOLD_RAIN_HOP_S, type GoldCoin } from './goldRain';
+import { goldCoinFloor, goldCoinMotion, goldCoinSize, GOLD_PILE_MAX_COINS, GOLD_RAIN_FLOOR, GOLD_RAIN_MAX_COINS, type GoldCoin } from './goldRain';
 import { sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { createSceneClock, fixedSceneClock, sceneOccurrence } from './sceneClock';
 import { deriveSceneMood, type SceneMood } from './sceneMood';
@@ -377,11 +377,9 @@ describe('composeGameplayScene', () => {
         expect(count(frame({ mood: mood('frost') }, 3000), 'drift-')).toBe(0);
     });
 
-    it('rains gold on a payout: coins from the top to the floor, turning, and none before or after', () => {
+    it('rains gold on a payout that lands and stays on the floor, and lies there on a restore and under reduced motion', () => {
         const paid = { ...mood('ember'), goldRain: { key: 'floor:3', coins: 24 } };
-        // Found already raining (a restore): nothing replays.
-        expect(count(frame({ mood: paid }), 'coin-')).toBe(0);
-        const during = frame({ mood: paid }, 1000, { 'gold-rain': 1100 });
+        const during = frame({ mood: paid }, 1000, { 'gold-pile:0': 1100 });
         const coins = during.filter((draw): draw is SceneImageDraw => draw.kind === 'image' && /^coin-\d+$/.test(draw.id));
         expect(coins.length).toBeGreaterThan(8);
         expect(coins.length).toBeLessThanOrEqual(24);
@@ -397,10 +395,30 @@ describe('composeGameplayScene', () => {
         }
         // They are at different heights: a shower, not a curtain.
         expect(new Set(coins.map((coin) => Math.round(coin.rect!.y * 20))).size).toBeGreaterThan(4);
-        expect(count(frame({ mood: paid }, 1000, { 'gold-rain': 6000 }), 'coin-')).toBe(0);
-        expect(count(frame({ mood: paid, tier: 'still' }, 1000, { 'gold-rain': 1100 }), 'coin-')).toBe(0);
-        // A phone rains half as many.
-        expect(count(frame({ mood: paid, tier: 'lean' }, 1000, { 'gold-rain': 1100 }), 'coin-')).toBeLessThan(coins.length);
+        // Long after, every coin is still there, lying flat on the floor.
+        const after = frame({ mood: paid }, 1000, { 'gold-pile:0': 60_000 }).filter((draw): draw is SceneImageDraw => draw.kind === 'image' && /^coin-\d+$/.test(draw.id));
+        expect(after.length).toBe(24);
+        for (const coin of after) {
+            expect(coin.alpha).toBe(1);
+            expect(coin.scaleY!).toBeLessThan(0.5);
+        }
+        // Found already lying there (a restore), and under reduced motion: at rest, not falling again.
+        const bodies = (draws: readonly SceneDraw[]) => draws.filter((draw) => /^coin-\d+$/.test(draw.id) && draw.alpha > 0.004).length;
+        expect(bodies(frame({ mood: paid }))).toBe(24);
+        expect(bodies(frame({ mood: paid, tier: 'still' }, 1000, { 'gold-pile:0': 1100 }))).toBe(24);
+        // A phone carries half as many.
+        expect(count(frame({ mood: paid, tier: 'lean' }, 1000, { 'gold-pile:0': 1100 }), 'coin-')).toBeLessThan(coins.length);
+    });
+
+    it('piles every payout of the floor on the floor, the newest kept when the pile is full', () => {
+        const pile = [{ key: 'a', coins: 30, slot: 0 }, { key: 'b', coins: 40, slot: 1 }];
+        const lying = frame({ mood: { ...mood('ember'), goldRain: pile[1]!, goldPile: pile } }, 1000);
+        expect(lying.filter((draw) => /^coin-\d+$/.test(draw.id)).length).toBe(70);
+        const huge = Array.from({ length: 6 }, (_, index) => ({ key: `s${index}`, coins: 90, slot: index }));
+        const full = frame({ mood: { ...mood('ember'), goldRain: huge[5]!, goldPile: huge } }, 1000);
+        expect(full.filter((draw) => /^coin-\d+$/.test(draw.id)).length).toBe(GOLD_PILE_MAX_COINS);
+        // The newest shower is all there.
+        expect(full.some((draw) => draw.id === `coin-${5 * GOLD_RAIN_MAX_COINS + 89}`)).toBe(true);
     });
 
     it('rains on the first payout a room sees, not only on the ones after it', () => {
@@ -416,27 +434,48 @@ describe('composeGameplayScene', () => {
         expect(count(falling, 'coin-')).toBeGreaterThan(4);
     });
 
-    it('drops a coin under gravity onto its spot on the floor, hops once, and lets it go out', () => {
-        const coin: GoldCoin = { x: 50, delay: 0, duration: 1, depth: 0.5, spin: 3, phase: 0 };
+    it('drops a coin under gravity, bounces it lower each time, rolls it to a stop and lays it flat for good', () => {
+        const coin: GoldCoin = { x: 50, delay: 0, duration: 1, depth: 0.5, spin: 3, phase: 0.3 };
+        const at = (seconds: number) => goldCoinDraws(coin, 0, seconds, false).find((d) => d.id === 'coin-0') as SceneImageDraw | undefined;
         const bottomAt = (seconds: number) => {
-            const draw = goldCoinDraws(coin, 0, seconds, false).find((d) => d.id === 'coin-0') as SceneImageDraw | undefined;
-            return draw ? draw.rect!.y + draw.rect!.h : null;
+            const draw = at(seconds)!;
+            return draw.rect!.y + draw.rect!.h / 2 + (draw.rect!.h * (draw.scaleY ?? 1)) / 2;
         };
         // From rest, faster and faster: the second half of the fall covers three times the first.
-        const top = bottomAt(0.001)!;
-        const half = bottomAt(0.5)!;
+        const top = bottomAt(0.001);
+        const half = bottomAt(0.5);
         const floor = goldCoinFloor(coin);
-        expect(bottomAt(1)! - half).toBeGreaterThan(2.5 * (half - top));
+        expect(bottomAt(1) - half).toBeGreaterThan(2.5 * (half - top));
         expect(bottomAt(0.999)).toBeCloseTo(floor, 2);
-        // A hop off the floor, then it lies there.
-        expect(bottomAt(1 + GOLD_RAIN_HOP_S / 2)!).toBeLessThan(floor - 0.005);
-        expect(bottomAt(1 + GOLD_RAIN_HOP_S + 0.05)).toBeCloseTo(floor, 6);
+        // Off the floor and back, each bounce lower than the one before.
+        const peaks: number[] = [];
+        let rising = false;
+        let last = 0;
+        for (let s = 1; s < 2.2; s += 0.002) {
+            const height = floor - goldCoinMotion(coin, s, -0.05, floor).bottom;
+            if (height > last) rising = true;
+            else if (rising && height < last) {
+                peaks.push(last);
+                rising = false;
+            }
+            last = height;
+        }
+        expect(peaks.length).toBe(3);
+        expect(peaks[1]!).toBeLessThan(peaks[0]!);
+        expect(peaks[2]!).toBeLessThan(peaks[1]!);
+        // Then it lies there flat, with its shadow under it, and never goes out.
+        const lying = at(30)!;
+        expect(lying.alpha).toBe(1);
+        expect(lying.scaleY!).toBeLessThan(0.5);
+        expect(goldCoinDraws(coin, 0, 30, false).some((d) => d.id === 'coinshadow-0')).toBe(true);
+        expect(at(Number.POSITIVE_INFINITY)).toBeDefined();
         // Falling fast it smears; at rest it does not.
         expect(goldCoinDraws(coin, 0, 0.9, false).some((d) => d.id.includes('trail'))).toBe(true);
         expect(goldCoinDraws(coin, 0, 0.9, true).some((d) => d.id.includes('trail'))).toBe(false);
-        expect(goldCoinDraws(coin, 0, 1 + GOLD_RAIN_HOP_S + 0.05, false).some((d) => d.id.includes('trail'))).toBe(false);
-        // And it goes out.
-        expect(goldCoinDraws(coin, 0, 1 + GOLD_RAIN_HOP_S + 0.3 + 0.4 + 0.01, false)).toHaveLength(0);
+        expect(goldCoinDraws(coin, 0, 30, false).some((d) => d.id.includes('trail'))).toBe(false);
+        // On water it goes in with a ring and sinks to a dim glint, and stays.
+        expect(goldCoinDraws(coin, 0, 1.2, false, { water: true }).some((d) => d.id === 'coin-0-splash')).toBe(true);
+        expect((goldCoinDraws(coin, 0, 30, false, { water: true }).find((d) => d.id === 'coin-0') as SceneImageDraw).alpha).toBeLessThan(0.4);
         // A far coin lands higher on the plate and is smaller than a near one.
         const far = { ...coin, depth: 1 };
         const near = { ...coin, depth: 0 };

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, type CSSProperties } from 'react';
+import { useCallback, useMemo, useRef, type CSSProperties, useState } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import type { ComboHeatStage } from '../../shared/combo-heat-rules';
@@ -13,7 +13,7 @@ import { SceneCanvas, type SceneLevels } from './SceneCanvas';
 import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
 import type { SceneClock } from './sceneClock';
 import type { SceneMood } from './sceneMood';
-import { GOLD_RAIN_LASTS_MS } from './goldRain';
+import { GOLD_PILE_SLOTS, GOLD_RAIN_LASTS_MS, type GoldPileShower } from './goldRain';
 import { useBeat, useHeld } from './useSceneBeat';
 import plate from './scenePlate.module.css';
 import styles from './GameplayScene.module.css';
@@ -104,6 +104,11 @@ export interface GameplaySceneProps {
     mood?: SceneMood;
     /** The run seed: the storm's bolts are laid out from it. */
     runSeed?: number;
+    /**
+     * Which room the run is in (its seed and realm): the gold lying on the floor stays while the run
+     * stays in this room, floor after floor, and is swept when it moves to another.
+     */
+    roomKey?: string;
 }
 
 export function GameplayScene({
@@ -122,11 +127,27 @@ export function GameplayScene({
     comboStage = 'cold',
     comboHueDeg = 0,
     mood: liveMood,
-    runSeed = 0
+    runSeed = 0,
+    roomKey = ''
 }: GameplaySceneProps) {
     // A shower of gold outlives the beat that paid it: the coins land and go out on their own time.
     const goldRain = useHeld(liveMood?.goldRain ?? null, (rain) => rain.key, GOLD_RAIN_LASTS_MS);
-    const mood = useMemo(() => (liveMood && liveMood.goldRain !== goldRain ? { ...liveMood, goldRain } : liveMood), [liveMood, goldRain]);
+    // And the gold stays where it fell: every shower paid in this room, swept when the run leaves it.
+    const [pile, setPile] = useState<{ room: string; showers: readonly GoldPileShower[] }>({ room: roomKey, showers: [] });
+    let nextPile = pile.room === roomKey ? pile : { room: roomKey, showers: [] };
+    const paid = liveMood?.goldRain ?? null;
+    if (paid && !nextPile.showers.some((shower) => shower.key === paid.key)) {
+        // A full pile gives the oldest shower's slot to the new one: it falls, the oldest goes, the rest lie still.
+        const full = nextPile.showers.length >= GOLD_PILE_SLOTS;
+        const slot = full ? nextPile.showers[0]!.slot : nextPile.showers.length;
+        nextPile = { room: roomKey, showers: [...(full ? nextPile.showers.slice(1) : nextPile.showers), { ...paid, slot }] };
+    }
+    if (nextPile !== pile) setPile(nextPile);
+    const goldPile = nextPile.showers;
+    const mood = useMemo(
+        () => (liveMood ? { ...liveMood, goldRain, goldPile } : liveMood),
+        [liveMood, goldRain, goldPile]
+    );
     const sceneRef = useRef<HTMLDivElement>(null);
     const lookRef = useRef({ x: 0, y: 0 });
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);

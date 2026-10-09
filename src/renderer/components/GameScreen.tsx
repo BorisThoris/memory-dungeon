@@ -1872,6 +1872,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     tier={runChainTier(run)}
                     comboHeat={comboHeatLevelsNow.heat}
                     comboDepth={comboDepth(run.stats.currentStreak)}
+                    roomKey={`${run.runSeed}:${run.realmId ?? 'dungeon'}`}
                     comboStage={comboHeatLevelsNow.stage}
                     comboHueDeg={comboTemper.ringHueDeg}
                     mood={sceneMood}

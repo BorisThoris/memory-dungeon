@@ -5,7 +5,8 @@ Rules here are the owner's decisions and the lessons that cost real time. They o
 
 **Read [`AGENTS.md`](AGENTS.md) first: the core rules for every agent.** The realm's music is the
 run's music on the settings' music volume; everything the combo drives climbs with it without end
-(`comboDepth`, `comboSoftCap`); a painted room is never still.
+(`comboDepth`, `comboSoftCap`); a painted room is never still, what falls in it lands, its
+weather strikes in the background, and gold lies where it fell.
 
 ## Delivery
 

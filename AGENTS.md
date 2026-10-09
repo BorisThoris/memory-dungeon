@@ -45,6 +45,17 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
   or fog where its floor or sky is, light that catches now and then (glints, a breathing shaft, a
   flash), and one thing that happens (a creature crossing, a drop, the sky breaking). Placed on the
   painting itself, from the helpers in `sceneAmbient.ts` and the cells of the ambient atlas.
+- **What falls lands.** Rain strikes the stone and splashes, snow settles, leaves and cinders come to
+  rest, each on its own spot of the room's floor as it is painted (`REALM_FLOORS`, far edge higher and
+  smaller), via `landingDraws`. Nothing falls through a floor or wraps back to the top in mid-air.
+- **The weather happens in the room.** A storm's lightning comes down out of the clouds onto
+  something (the rods, the horizon), branching, lighting the sky and the ground, on more channels
+  the deeper the chain (`stormStrikeDraws`). Every room has its equivalent: the ember's eruptions,
+  the frost's gusts, the tide's drops and breaking bubbles.
+- **Gold is physical.** A payout's coins fall under gravity, bounce lower each time, roll to a stop
+  and lie flat with a shadow on that room's floor for as long as the run stays in the room, every
+  payout piling on the last (`goldRain.ts`: `goldCoinMotion`, the pile in `GameplayScene`); on water
+  they splash and sink. A restore or reduced motion shows the pile lying there.
 - It climbs with the combo (rule 2), halves on the phone tier (`lean`), and stops entirely under
   reduced motion (`still`).
 - The realm rooms do this in `realmRoomLife.ts`; a new room or plate gets the same, a test per room

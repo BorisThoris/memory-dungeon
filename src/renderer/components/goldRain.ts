@@ -67,3 +67,90 @@ export const goldCoinFloor = (coin: GoldCoin): number => GOLD_RAIN_FLOOR.near + 
 
 /** A coin's height on the plate, as a fraction of the plate's height: near coins are larger. */
 export const goldCoinSize = (coin: GoldCoin): number => 0.06 - 0.026 * coin.depth;
+
+/**
+ * Gold that lands and stays (2026-10-09, the owner: "the coin drop effect needs to drop physical gold
+ * that falls on the floor"). A coin no longer hops and goes out: it falls under gravity, strikes the
+ * floor and bounces, lower each time, rolls a little and slows, and lies there flat for as long as
+ * the run stays in that room, every payout's gold piling up with the last (`GOLD_PILE_SLOTS` showers, the newest
+ * `GOLD_PILE_MAX_COINS` coins). On water (the Drowned Vault) it splashes and sinks, and its glint
+ * stays under the surface.
+ */
+export const GOLD_PILE_SLOTS = 24;
+
+/** One payout lying in the room: its shower, and the slot its clock runs in. */
+export interface GoldPileShower {
+    key: string;
+    coins: number;
+    slot: number;
+}
+export const GOLD_PILE_MAX_COINS = 240;
+/** How much of its speed a coin keeps off the stone, bounce to bounce. */
+export const GOLD_COIN_RESTITUTION = 0.4;
+export const GOLD_COIN_BOUNCES = 3;
+/** Bounces are seen from above and far off: a fraction of their true height on the plate. */
+const BOUNCE_VIEW = 0.4;
+/** How long a coin rolls after it lands, its speed falling away. */
+const ROLL_TAU_S = 0.35;
+
+/** A floor on the plate: its far edge and its near edge, as fractions of the plate's height. */
+export interface GoldFloorBand {
+    far: number;
+    near: number;
+}
+
+export const goldCoinFloorOn = (coin: GoldCoin, band: GoldFloorBand): number => band.near + (band.far - band.near) * coin.depth;
+
+export interface GoldCoinMotion {
+    /** The coin's lowest point, fraction of the plate's height. */
+    bottom: number;
+    /** How far it has rolled, plate widths. */
+    roll: number;
+    /** Downward speed, plate heights a second (for the smear). */
+    speed: number;
+    /** 0 in the air, rising to 1 as it settles flat. */
+    flat: number;
+    /** Seconds since it first struck the floor, or a negative number while still falling. */
+    landed: number;
+    /** How far above the floor it is, plate heights. */
+    height: number;
+    /** Seconds of turning it has done (it stops turning when it settles). */
+    turnTime: number;
+}
+
+/** Where a coin is `seconds` after it began to fall, from `startY` onto `floor`. Pure; Infinity is at rest. */
+export const goldCoinMotion = (coin: GoldCoin, seconds: number, startY: number, floor: number): GoldCoinMotion => {
+    const fallS = coin.duration;
+    const drop = floor - startY;
+    const g = (2 * drop) / (fallS * fallS);
+    const v0 = g * fallS;
+    // Each bounce's air time, and when the coin is finally down.
+    const airs: number[] = [];
+    for (let bounce = 1; bounce <= GOLD_COIN_BOUNCES; bounce += 1) airs.push((2 * v0 * GOLD_COIN_RESTITUTION ** bounce) / g);
+    const bouncingS = airs.reduce((sum, s) => sum + s, 0);
+    const rollSpeed = (((coin.phase * 7.13) % 1) - 0.5) * 0.06 * (1 - 0.5 * coin.depth);
+    const restRoll = rollSpeed * ROLL_TAU_S;
+    if (!Number.isFinite(seconds)) {
+        return { bottom: floor, roll: restRoll, speed: 0, flat: 1, landed: Number.POSITIVE_INFINITY, height: 0, turnTime: fallS + bouncingS * 0.5 };
+    }
+    if (seconds < fallS) {
+        const p = Math.max(0, seconds) / fallS;
+        return { bottom: startY + drop * p * p, roll: 0, speed: (2 * drop * p) / fallS, flat: 0, landed: seconds - fallS, height: drop * (1 - p * p), turnTime: seconds };
+    }
+    const landed = seconds - fallS;
+    const roll = rollSpeed * ROLL_TAU_S * (1 - Math.exp(-landed / ROLL_TAU_S));
+    const view = BOUNCE_VIEW * (1 - 0.5 * coin.depth);
+    let into = landed;
+    for (let bounce = 0; bounce < airs.length; bounce += 1) {
+        const air = airs[bounce]!;
+        if (into < air) {
+            const v = v0 * GOLD_COIN_RESTITUTION ** (bounce + 1);
+            const height = (v * into - 0.5 * g * into * into) * view;
+            return { bottom: floor - height, roll, speed: 0, flat: 0, landed, height, turnTime: fallS + into * 0.5 + bounce * 0.1 };
+        }
+        into -= air;
+    }
+    // Down: it rocks onto its face and lies there.
+    const flat = Math.min(1, into / 0.22);
+    return { bottom: floor, roll, speed: 0, flat, landed, height: 0, turnTime: fallS + bouncingS * 0.5 };
+};
