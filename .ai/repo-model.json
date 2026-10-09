@@ -10287,8 +10287,8 @@
     {
       "path": "src/renderer/components/boardParticleSystem.ts",
       "category": "source",
-      "bytes": 36909,
-      "sha256": "a72697fed185371fdfba21c0b047e92d472f77b93c22b0580088f4c96cea9a5b"
+      "bytes": 37720,
+      "sha256": "cc85fdb23dc7bd55b0c366b8e7876f63de98e8ff83527f62cec2bb31b1bdeb34"
     },
     {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
@@ -10377,8 +10377,8 @@
     {
       "path": "src/renderer/components/cardElementFx.ts",
       "category": "source",
-      "bytes": 18383,
-      "sha256": "44e5018ef6e1bd0521306a12f3512ec0951ecf8dbd2020ded8ce550805d523eb"
+      "bytes": 19344,
+      "sha256": "38b1fdc423e7464d25558baacd1838ac80b92b53bc80599df6278cde790fd517"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -10402,13 +10402,13 @@
       "path": "src/renderer/components/cardShards.ts",
       "category": "source",
       "bytes": 10450,
-      "sha256": "7aea12667f160102302ee138b716bbd079ef30bf940a00ec45122d18ac3df792"
+      "sha256": "a335ad911712a2f8720d52aebbbc1944a5fd5be15834f180d0085a7211aff163"
     },
     {
       "path": "src/renderer/components/cardShardSystem.ts",
       "category": "source",
-      "bytes": 11166,
-      "sha256": "2249e6a39482e9421e673c9fb6b7052eab66c4f2bd605e5a57b1334efeba86c3"
+      "bytes": 11517,
+      "sha256": "a369f4fe04ad3d76f6f61195e8c53ee550843fa92ba6f15c78c21e5d481c7750"
     },
     {
       "path": "src/renderer/components/cardStatusPaint.ts",
@@ -21585,7 +21585,7 @@
       "path": "src/renderer/components/boardParticleSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 652,
+      "lineCount": 663,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardParticleRim.ts",
@@ -21871,7 +21871,7 @@
       "path": "src/renderer/components/cardElementFx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 389,
+      "lineCount": 396,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -21968,7 +21968,7 @@
       "path": "src/renderer/components/cardShardSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 241,
+      "lineCount": 245,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/cardShards.ts",
@@ -44654,8 +44654,8 @@
       "name": "createBoardParticleSystem",
       "kind": "value",
       "file": "src/renderer/components/boardParticleSystem.ts",
-      "line": 285,
-      "endLine": 651
+      "line": 296,
+      "endLine": 662
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -45118,16 +45118,16 @@
       "name": "CardElementFxSystem",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 388,
-      "endLine": 388
+      "line": 395,
+      "endLine": 395
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "name": "createCardElementFxSystem",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 289,
-      "endLine": 386
+      "line": 296,
+      "endLine": 393
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -45278,16 +45278,16 @@
       "name": "CardShardSystem",
       "kind": "type",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 240,
-      "endLine": 240
+      "line": 244,
+      "endLine": 244
     },
     {
       "id": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
       "name": "createCardShardSystem",
       "kind": "value",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 144,
-      "endLine": 238
+      "line": 148,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
