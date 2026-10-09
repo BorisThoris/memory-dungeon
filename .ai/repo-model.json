@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3064,
-    "codeFileCount": 1161,
-    "exportedSymbolCount": 3683,
+    "trackedFileCount": 3150,
+    "codeFileCount": 1171,
+    "exportedSymbolCount": 3709,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9815
+    "relationshipCount": 9867
   },
   "inventory": [
     {
@@ -117,8 +117,8 @@
     {
       "path": "AGENTS.md",
       "category": "other",
-      "bytes": 5236,
-      "sha256": "a17aeeffadcbc7991c1aa08e290532a54475c79bef658f1993398d98d845128d"
+      "bytes": 5732,
+      "sha256": "49b9e2a0596852ae4fa87a6f3db57d8879daf215a5bb6c027bcc978820320ec4"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack.jobs.json",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "a90f5e093a11cef4a1509e517a9c285e08f6336fc25fead6f99f0930e7611f74"
+      "sha256": "642c884e7ffa8d3734df5b3d11338023a4392b8c189d24a97d05427e8e6c1951"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5503,6 +5503,12 @@
       "sha256": "df53a5b0964e9a3d52a20ab00daa4691d0d7766bb36786c4d7b6f83fa8951399"
     },
     {
+      "path": "scripts/scene-pipeline/bake_coin.py",
+      "category": "script",
+      "bytes": 7205,
+      "sha256": "a56ec9169ea3c5d11d65afce0fbbea7ab3d6d9f8eb0a7adaa5b3bf12182df1a8"
+    },
+    {
       "path": "scripts/scene-pipeline/blender_scene_lights.py",
       "category": "script",
       "bytes": 9513,
@@ -5549,6 +5555,18 @@
       "category": "script",
       "bytes": 14666,
       "sha256": "70e8abfc416b8da118e36becbbaf0b85564460e5fb56ede02e90b0965ff56710"
+    },
+    {
+      "path": "scripts/scene-pipeline/realm_layers.py",
+      "category": "script",
+      "bytes": 15269,
+      "sha256": "3054a2ac00e50b9de9fca7169239e6a20f129456dc656b9e02f3f8ef2a4247a7"
+    },
+    {
+      "path": "scripts/scene-pipeline/realms.json",
+      "category": "script",
+      "bytes": 6949,
+      "sha256": "5f8e6569b7ca3e8362c7ba8175018f2638c96834cb7694c53bbe3f0207416d69"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8187,122 +8205,296 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-base.png",
       "category": "source",
-      "bytes": 1273405,
-      "sha256": "5516aae9e841de58f144aaec8b8b1d108cf5595ca713fa75f51634206a780dbc"
+      "bytes": 1279243,
+      "sha256": "0a98910876e41c18fc666c8fc7319bc3d30819c9e3a64521ed87f80b24391c91"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-base.webp",
       "category": "source",
-      "bytes": 73568,
-      "sha256": "ea5a322aa760210a1d44cba642457b7c8d53ea3b654392813a61f6e75aca97cb"
+      "bytes": 75338,
+      "sha256": "02308e24f15f4fbf39abe52c75d0e412a9db1720bef7457377f8d7db2581bdc7"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow.png",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-braziers.png",
       "category": "source",
-      "bytes": 1644713,
-      "sha256": "fc38c6a32c9dd11d4406c394b054a6be7c33fb047d2d1356b8062a5a163d16d0"
+      "bytes": 1579817,
+      "sha256": "07e7d3c0a40675d2f67a54708984f9bd509ae48d07427234486bbfc4b87fe8b9"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow.webp",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-braziers.webp",
       "category": "source",
-      "bytes": 110098,
-      "sha256": "44a49f8a1c71eaafb313a6dd2d7a6fe4cff2b2316072c1fb319c9aa69b895145"
+      "bytes": 21264,
+      "sha256": "cfd1c7027e681f19117c16b97e1645b88a2c910a6a7c0af5d5589a14e30dc04c"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-lava.png",
+      "category": "source",
+      "bytes": 1588036,
+      "sha256": "f593d67598c683efa738eb97f1cdc43deee5734a193afce02ba63b8a73b85346"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-lava.webp",
+      "category": "source",
+      "bytes": 32862,
+      "sha256": "7e2cc9d10967dd3c7abe7777d4cb9fd133d1f88e4829d425ab7e52acb48c81c2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-ring.png",
+      "category": "source",
+      "bytes": 1572868,
+      "sha256": "989370506777a98659380fe44067dfdbc44768a8c1d161476f778b42048ec64a"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-glow-ring.webp",
+      "category": "source",
+      "bytes": 7418,
+      "sha256": "1e3d58d405c3e7a96536c6211a13efbaa78f5cc1b33b1bc90c45e712a4624a1e"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1.png",
+      "category": "source",
+      "bytes": 1314167,
+      "sha256": "34fbab46c9d101d4f4a68dda1aa08403a4b58a7506663b481450ad5bd5e3ef8a"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-base.png",
       "category": "source",
-      "bytes": 1073388,
-      "sha256": "bfd0fdd54204114aedfabfb7648323260afc3dec043030f41435cb1b2a077ade"
+      "bytes": 1082649,
+      "sha256": "3fad38323ac2ffd4427687cf37764991a81a7e0a12d8a936b8e142bebcdf3bc7"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-base.webp",
       "category": "source",
-      "bytes": 43694,
-      "sha256": "ac2f6b2e7a3e54df89ea5882f939af914499038468dd1c2088c33e0ea5d39c57"
+      "bytes": 44954,
+      "sha256": "a067e4381db4a0e9f1996eaba66238ed9b50421a920107315a97d362ed2434a6"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow.png",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-ice.png",
       "category": "source",
-      "bytes": 1860878,
-      "sha256": "be385cd8bc7bbbf15b599de8203f8c3a9676b144bda8636eca8a29b4938cbff4"
+      "bytes": 1679679,
+      "sha256": "41b70d3b7b83a47514e104b2c07127a5514d73b5d20ec8251fd6007a16739331"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow.webp",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-ice.webp",
       "category": "source",
-      "bytes": 259062,
-      "sha256": "6aa27eba264c369dde80042e5ba7b28c7dd958f14971e4bb9072a73e5a95c9fe"
+      "bytes": 67978,
+      "sha256": "0b192e4b0fa2caff199b4f80370f72c4012a02e3fe45a77935a06b3c618439b5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-ring.png",
+      "category": "source",
+      "bytes": 1626107,
+      "sha256": "37afc5e98425422fdffaf71692b3b4280cda732ee677a9f35b37c9356d2f2359"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-ring.webp",
+      "category": "source",
+      "bytes": 20374,
+      "sha256": "021e3ed99960a9575e01c8bed969df49241d66e58fdf071872fc2bdc178c4576"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-snow.png",
+      "category": "source",
+      "bytes": 1677656,
+      "sha256": "a8c3816d782875a49d7e90f3fc7518873ffa8b3af4e2034ffe7f055483cd3d03"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1-glow-snow.webp",
+      "category": "source",
+      "bytes": 63308,
+      "sha256": "f35d7cd67b1489903451362fa316e06fbac6c3df123d48fc90308fa0150d7b42"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-frost-v1.png",
+      "category": "source",
+      "bytes": 1353128,
+      "sha256": "768841775714c47b21d7f4edf0a30b49bd2960806b50fb9a409d110be3658749"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-base.png",
       "category": "source",
-      "bytes": 1430293,
-      "sha256": "c415386270678b93a1b8183eab9d86a78028a93444f165b7684f445da719bee3"
+      "bytes": 1431953,
+      "sha256": "e02200df3813caea6dfbb347730ce7ff88d6c37fbabad881d2ad0112ecdd0594"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-base.webp",
       "category": "source",
-      "bytes": 103284,
-      "sha256": "331cb0cf24d212ad1a11c4182474bc5d2eede98463b98b4dff3951c8aa0614e8"
+      "bytes": 102670,
+      "sha256": "9d17e49cdcd38389f012983f735c479240695ac21017bf76424f10e4746fe6fa"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow.png",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-canopy.png",
       "category": "source",
-      "bytes": 1823689,
-      "sha256": "436b4cc021c034d243ad8c2a95573a91dc28a7e0ec0b07ed271246cc7703bc50"
+      "bytes": 1724497,
+      "sha256": "7163c8fa8083651eac98bdd2fd7eea662bad42735678c0f9a67d194d96a5e102"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow.webp",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-canopy.webp",
       "category": "source",
-      "bytes": 150504,
-      "sha256": "c90363c9dfa2ea0176be6e2f1b2beb788eb21554a3be9a6710b1a6495d77901c"
+      "bytes": 12262,
+      "sha256": "24ec16b15d4e0ed528513459a9cba1ceeb819a0d024d2763503962141a5d1814"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-fungi.png",
+      "category": "source",
+      "bytes": 1778044,
+      "sha256": "182af4ebd0ada7864666d3c6e2e0b06a97a24a5944b017e7648521a0a9397eb7"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-fungi.webp",
+      "category": "source",
+      "bytes": 89444,
+      "sha256": "c1d299dc3e2433a7c91e7f902c15a55285052daf5686013ffe7b618a01379cab"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-ring.png",
+      "category": "source",
+      "bytes": 1760975,
+      "sha256": "4baf8738cb4f301d5854c040c034b5d3f6e63fd432dc35a2533a94e9a13127c7"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1-glow-ring.webp",
+      "category": "source",
+      "bytes": 54686,
+      "sha256": "584694c0fcab44d4b766b7c98862dd6640435b7008a37f88e1f114878f062733"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-grove-v1.png",
+      "category": "source",
+      "bytes": 1449727,
+      "sha256": "9d6107d542a75329f8ed2c055a0df978325b999e60e0216bc9ce70ec1491a421"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-base.png",
       "category": "source",
-      "bytes": 1283979,
-      "sha256": "e75cba9d1bad441af278cf017d1ac3e0bf5197a60b9be99d3928d11309eb9d6b"
+      "bytes": 1262650,
+      "sha256": "555b2dc577f1c445234c9a264f3166fe0be1472e9332e574ab67d680d95c1656"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-base.webp",
       "category": "source",
-      "bytes": 72474,
-      "sha256": "e6889b7b56fd144fb52cfb09fce619aa69b12e3c04be5fe2319be1c554faac4d"
+      "bytes": 68808,
+      "sha256": "379bfb81ae5db58cbdfebb0721c64f1b5ccab3561fa0fcd80c6ee109e3658dba"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow.png",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-bolts.png",
       "category": "source",
-      "bytes": 1690629,
-      "sha256": "c7d18ed57b71307864b081af1ad9bb768ea53db4f64a03e59afd729e48388c8b"
+      "bytes": 1584505,
+      "sha256": "3cbc4af3077940c45f6ecb48ad482028b3320770d873f43ec982d0ca63af556e"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow.webp",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-bolts.webp",
       "category": "source",
-      "bytes": 135746,
-      "sha256": "f90c340226a535e882ef9ebd60313000376e8e61acd28bc75913fe497364e856"
+      "bytes": 27680,
+      "sha256": "41079a02736cb199454dacc2840d5bbc55cc669e3682e0044c12f11c7c24213c"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-puddles.png",
+      "category": "source",
+      "bytes": 1580087,
+      "sha256": "d780127d4be29a5212614027705de00bd55fffb34dbbb1b87700419ef478b135"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-puddles.webp",
+      "category": "source",
+      "bytes": 23602,
+      "sha256": "971d75911a0a8bfc3f0e0aed72814cca0f1c817544ef5fe4e8bfa4a231ea2322"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-ring.png",
+      "category": "source",
+      "bytes": 1622611,
+      "sha256": "1883f9a575f1634b7a6e303e02850426e80e512ed5d014880cebc211e51819dd"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-ring.webp",
+      "category": "source",
+      "bytes": 58738,
+      "sha256": "d5bde7373d40b240fe386bbc86511cf9e10d59600b67c0197199555a656778c3"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-sky.png",
+      "category": "source",
+      "bytes": 1593780,
+      "sha256": "88d16911a4bce3dcc1eb21478055863872b72e53416e12c51bda9c5d7dfb1132"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-glow-sky.webp",
+      "category": "source",
+      "bytes": 40482,
+      "sha256": "3c2bd8fbe16877363ebbe16457f6cc837851bf7da39e9bb75c71deef0644d950"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1.png",
+      "category": "source",
+      "bytes": 1307200,
+      "sha256": "e69edf5ca5687f883c79197ba1bbb59527a7ed1e9f2ba7807d545df17a7fb5e8"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-base.png",
       "category": "source",
-      "bytes": 1152053,
-      "sha256": "fa9d0052c55961a3c571edce1d7c69f5473d053827722263eea277c2544dfc05"
+      "bytes": 1152480,
+      "sha256": "a4d856629d4149062b6c366804d6b5e7515caac2c727a774676d8aaa6dfb7e3e"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-base.webp",
       "category": "source",
-      "bytes": 57582,
-      "sha256": "84d3949761e11e2ee4d02d48ea9a50081ba70ae4ba27665d9a3bcdd51e40dfdf"
+      "bytes": 57480,
+      "sha256": "ce437a9359ddf86056abc4f4de3e61d1a28aeb61731340cce3ae6c779c2fcb46"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow.png",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-pillars.png",
       "category": "source",
-      "bytes": 1554262,
-      "sha256": "a4edb5d032a816599d4a969079844162841608516afd1442de86e01760a1d33a"
+      "bytes": 1489872,
+      "sha256": "97016b54eafeda652643df2f116dfa2530f8c7eac5c052811d65782a64acc395"
     },
     {
-      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow.webp",
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-pillars.webp",
       "category": "source",
-      "bytes": 112782,
-      "sha256": "0b46f883cb4c6a74ebd208372bb5366ed92421be0c1550c6a1c597950044081b"
+      "bytes": 44676,
+      "sha256": "2233045038e49bb65213af4c51c478db0f62f820d2db15c87a9cdc3365dca90d"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-ring.png",
+      "category": "source",
+      "bytes": 1480495,
+      "sha256": "3468d3ac9c36d047727cf62bb69d7fc3b2cb3c3ee458140de32bc7350d851505"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-ring.webp",
+      "category": "source",
+      "bytes": 29090,
+      "sha256": "90395577987f9dd2d048758a5f16179252c24cca0ccfa52156708200245cd7fb"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-shaft.png",
+      "category": "source",
+      "bytes": 1475672,
+      "sha256": "1b9e35436da29f1de86d94c630b9ee024a615ccbddbc80f75f6729e674b01cd2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-shaft.webp",
+      "category": "source",
+      "bytes": 26746,
+      "sha256": "f0ec534761ad62c2ad17157c65f6f6ea725411c9844d67819d4bd4e4bcb0541c"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-water.png",
+      "category": "source",
+      "bytes": 1474562,
+      "sha256": "7ebe462750cc37dd931da96050b82dca5d78a320771878efc4e41f43a56e3ef5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1-glow-water.webp",
+      "category": "source",
+      "bytes": 29856,
+      "sha256": "54df164ad2c35cdc88f8853bcb229e975e01e62b9629f4b84944d2ae1c439eb5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-tide-v1.png",
+      "category": "source",
+      "bytes": 1209045,
+      "sha256": "0df469f7a631311ac9e76fc423353c2e65612e9633fa69b9d6bb45b719f17ae5"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
@@ -8875,6 +9067,288 @@
       "sha256": "95f507b4b5f772495854ccf724350a07811e9f91abc0141012a17c4d4584373b"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-l.png",
+      "category": "source",
+      "bytes": 370449,
+      "sha256": "6abc159ca17b0021d4ee0ea655c02dd563c679e52b933f1be6de9ac60bf91158"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-l.webp",
+      "category": "source",
+      "bytes": 47972,
+      "sha256": "c6619cb0479ac04a07dae268a7c9b633fd54f6d4bc7a4cdbb5ac281c12c6d5c0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-ll.png",
+      "category": "source",
+      "bytes": 805239,
+      "sha256": "a6a8e78b92843db6495812826cd2cf8963d04e7962f133aafc01c74ce457d4e2"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-ll.webp",
+      "category": "source",
+      "bytes": 120760,
+      "sha256": "69151769a68dd6440d2ebf108b9df30b82027ff3961c90ea745549ba7a75b210"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-r.png",
+      "category": "source",
+      "bytes": 364486,
+      "sha256": "2c9c8d02a747fa9fdbc982e0886612211e5882e12dd662b0292839ee01c8d944"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-r.webp",
+      "category": "source",
+      "bytes": 44324,
+      "sha256": "ec382e53818684f61c66829c60b5e27fd447680657399ff6b01eb750bd9e2891"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-rr.png",
+      "category": "source",
+      "bytes": 883906,
+      "sha256": "97bf8fc58ec2da5ac2c84f91f8960075a6b6a4f148e87f3ae908187ac15ee9b2"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-rr.webp",
+      "category": "source",
+      "bytes": 132836,
+      "sha256": "70f0789706a3948c983e05af42cbdc35f4ee27436ebc59e7aa3853e605aa805a"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-ring.png",
+      "category": "source",
+      "bytes": 610628,
+      "sha256": "f9187dd92e2599cd3b87c4f9e4401e44d7701dd6fe506834021e88d3e13d2168"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-ring.webp",
+      "category": "source",
+      "bytes": 148120,
+      "sha256": "ad1a68ea1ba873f7aaa6a93786bd5f78a7ca00b23c935872042c0bda40031cbf"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-seam-l.png",
+      "category": "source",
+      "bytes": 868029,
+      "sha256": "9f04f91ec8e0e8028d0f6dac57ec9fc14985c38eb75c1889279614dc202f81f8"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-seam-l.webp",
+      "category": "source",
+      "bytes": 274860,
+      "sha256": "d9de1f03912929020c2231e9a86aa097b243fc1facbdffef0cfbe2745e78b186"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-seam-r.png",
+      "category": "source",
+      "bytes": 860770,
+      "sha256": "f3dbcf24bc8cdd88fbfeaabaa4fe5362dca631449886629772290b7ea0288a92"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-seam-r.webp",
+      "category": "source",
+      "bytes": 268606,
+      "sha256": "edfc67969cd27389b7d06c3c7510d10527f8f2398c0374c8c314204e16133acf"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+      "category": "source",
+      "bytes": 2027,
+      "sha256": "2632591d08153beffde72bb4ef17cd7b66fb384418c3ee393d7e9e0889ddbeb4"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
+      "category": "source",
+      "bytes": 391898,
+      "sha256": "be8e7d9326b2c392d7c87a4e1c9924a2515d766e23dfb87a6c759ac8d29e3297"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.webp",
+      "category": "source",
+      "bytes": 227082,
+      "sha256": "47a0e1d4c32de293dd8f105babc93a699a50ae8443f4ad412e785cde1c796a61"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-r.png",
+      "category": "source",
+      "bytes": 399375,
+      "sha256": "8b04f8e4b50b2e0eda39c506ff60f2202bd0587033e433c12001e326702bb55e"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-r.webp",
+      "category": "source",
+      "bytes": 227782,
+      "sha256": "ccdff96a10e1dc3669e980aa3b58f13fc510bafc7f1aecd230cad179309335b0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ring.png",
+      "category": "source",
+      "bytes": 298561,
+      "sha256": "d13bab4a7478c5afd7a76f8f2115d4ecab7a5d860c9c47d93b34f8f8455d0ba8"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ring.webp",
+      "category": "source",
+      "bytes": 152460,
+      "sha256": "ab1dbb40b111df0423633f8d3db0d161962592c8884dd6cacf07a08b07474a3d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+      "category": "source",
+      "bytes": 888,
+      "sha256": "35e2889c02b913a0a2b5cfd05197ecee34aba1177def0d7cef3a1af9b33620d3"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
+      "category": "source",
+      "bytes": 1163204,
+      "sha256": "df137f20eff74f02d5738687a15d1f82c44ac8c65f8eb6b69a5548f1bc56657b"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.webp",
+      "category": "source",
+      "bytes": 114076,
+      "sha256": "76a70fded8c5c8eafef472cbc7c02e66c28555fab57e0b3e1f8e4ac992d76821"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-ferns-l.png",
+      "category": "source",
+      "bytes": 1005833,
+      "sha256": "eb13a8b73cadbb38ff554af23b6d80d99ec73f189e0b5f4e4551e1970a7bf6b1"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-ferns-l.webp",
+      "category": "source",
+      "bytes": 96334,
+      "sha256": "c001ee6ca171cd14a1a6e4d11dabaf39ca82359cb0eb0d746303e922639ffd9d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-ferns-r.png",
+      "category": "source",
+      "bytes": 998355,
+      "sha256": "2acf5b43da45f755a22fc876df588b8d971ed019a410c139a1d66dddf4476c4e"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-ferns-r.webp",
+      "category": "source",
+      "bytes": 96364,
+      "sha256": "11385e205f5922f3db3798bb7d721492464c6329ecbf3899dd69a7d2681fc72f"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-vines-l.png",
+      "category": "source",
+      "bytes": 1831053,
+      "sha256": "a3de5f0f3d0d1756bd69fcef1db4a1f24c14739f90b550bbd8c7020670c3dc36"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-vines-l.webp",
+      "category": "source",
+      "bytes": 154142,
+      "sha256": "af4c85a745a92f1d74b57585f856c38a661a4de05c4d3901cd6bdebbf38dd774"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-vines-r.png",
+      "category": "source",
+      "bytes": 1824754,
+      "sha256": "b4cefc15242788dc810f200ef1704294917ec35fa07d82e4f394b8bce2579ae9"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-vines-r.webp",
+      "category": "source",
+      "bytes": 148636,
+      "sha256": "3c754529eba5cac3f3e8fab07ee68e49cd89d9db4e9e86ed89d3c8c02712b2db"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+      "category": "source",
+      "bytes": 1432,
+      "sha256": "3769180ef0fed05e23a692a1b5dd16a88ddb74ff0b6f528df9ad122cffb5c49a"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-clouds.png",
+      "category": "source",
+      "bytes": 2098414,
+      "sha256": "4ec0ece663dd8fd00f5df0d290275e9bfb4d3e60d7295c64746b205d0b6e1fe7"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-clouds.webp",
+      "category": "source",
+      "bytes": 73298,
+      "sha256": "df93e6c1ecf9fe9987ed0cc8ee6a0fc1c43ed4e4953cd1bc4ef03f2e81c77ef8"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
+      "category": "source",
+      "bytes": 3765379,
+      "sha256": "64b010323e07f4ddb4d37518f273cedc6cb3f59702e4372eaa58dd3847630d94"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.webp",
+      "category": "source",
+      "bytes": 340892,
+      "sha256": "f911d30dfff9eda55be6977a52011eeffc0ae183a9aeeedd1a0e79dfc89942bf"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-sky-light.png",
+      "category": "source",
+      "bytes": 2864420,
+      "sha256": "d29af345af00a6c4e0655894e0ad8b980e450be5bdc528c3397b5af3f6ff6c5d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-sky-light.webp",
+      "category": "source",
+      "bytes": 489722,
+      "sha256": "246211c5d5fffb7268d4f10b77bad38b5c4574f6298b08c09e99a73dd39a22d5"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+      "category": "source",
+      "bytes": 897,
+      "sha256": "f734f26e955b23121c02dc444d3cddd96c70fdc2da94b4437effe1ab1938ea07"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
+      "category": "source",
+      "bytes": 476402,
+      "sha256": "ba28d107446330efdc87f746037c79b189b97722900e93f68d0137eab5787e47"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.webp",
+      "category": "source",
+      "bytes": 209086,
+      "sha256": "e407a938c6e7a85da47b78685b7472746bebccae6e0c98c3d0fb587831b3aa8a"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-water-light.png",
+      "category": "source",
+      "bytes": 2473505,
+      "sha256": "abef4fe59c782d949bc7a5693d1f68ec668f9b1f694cdd7b488868384c684a6e"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-water-light.webp",
+      "category": "source",
+      "bytes": 382854,
+      "sha256": "555558de62b55f80094b0f32a0b9e87940cef10c8000b3988e34196de9b8bf2d"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-water.png",
+      "category": "source",
+      "bytes": 2579552,
+      "sha256": "86195cd9e1ba0b5328ae61e321dfc832d1c0a30626999646e2be9b6031f5794f"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-water.webp",
+      "category": "source",
+      "bytes": 232914,
+      "sha256": "c63f712cdd4df8b32bfb23140390051365a98169fcac1386b0f1b4ff03ea8ae0"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "category": "source",
+      "bytes": 898,
+      "sha256": "e2cb8f89693a8b5b217103652cedf2815b4723dd44b2070580a916ffa2c3fba1"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
       "category": "source",
       "bytes": 8652,
@@ -9247,10 +9721,28 @@
       "sha256": "d1d387e49a4420db944548c986f39efeb304621df3261a0b7ce559136e347bcd"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprite-turn.png",
+      "category": "source",
+      "bytes": 262856,
+      "sha256": "5245aee7588816f4ed7e2ac5f45ce9af3180559d3b041bba1e7bf085f421ad61"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprite-turn.webp",
+      "category": "source",
+      "bytes": 79342,
+      "sha256": "1e41fad5f637b32ffa72f21f0f81dec1e787479872221018b219855ec16cc721"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
+      "category": "source",
+      "bytes": 267,
+      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "category": "source",
-      "bytes": 3611,
-      "sha256": "d7ab3d73541745fd4c724390fb44506b0ad26bc9c479f43f396c2c3871130ad2"
+      "bytes": 4959,
+      "sha256": "c608522828681ea9bafaab421c55adfe71ac1362aa2e565df5ba9bb815f8cac1"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -9925,6 +10417,24 @@
       "sha256": "de54ae578cc86e6ab0f16ba94c18b8b6ad8d6a506e64342a5efe076e173342a2"
     },
     {
+      "path": "src/renderer/components/cardShards.test.ts",
+      "category": "test",
+      "bytes": 3067,
+      "sha256": "24ac875dcdb2c9a62178b34ee287155f668e1001821749d762a5883221fd02c3"
+    },
+    {
+      "path": "src/renderer/components/cardShards.ts",
+      "category": "source",
+      "bytes": 6544,
+      "sha256": "d93d792daed0aefb8bed41ce79b0f000456341ce2188e73d8ed757efeadea5b6"
+    },
+    {
+      "path": "src/renderer/components/cardShardSystem.ts",
+      "category": "source",
+      "bytes": 8562,
+      "sha256": "c6ca79c35fd57af58555dbdd020735136c532a7b157ce447b2df744d30e2be5b"
+    },
+    {
       "path": "src/renderer/components/cardStatusPaint.ts",
       "category": "source",
       "bytes": 8492,
@@ -10111,12 +10621,6 @@
       "sha256": "992b9b87d88a8adee804c455f077c650560d8a7199788dddb14fd4d28cdd458f"
     },
     {
-      "path": "src/renderer/components/ElementGround.tsx",
-      "category": "source",
-      "bytes": 5702,
-      "sha256": "1e4bb294afd49128aea1b6eba209e491626825d7064f3ea01d41c6f9f3459db8"
-    },
-    {
       "path": "src/renderer/components/elementReactionParticles.test.ts",
       "category": "test",
       "bytes": 5206,
@@ -10263,20 +10767,20 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 14428,
-      "sha256": "5434cbc5f4f0917c95a3bb82e42f4b822229ffcd5edad8d8782323a9d6605a0e"
+      "bytes": 15579,
+      "sha256": "9d8f26e0be89f207d59235568b09acaf4b34768f7e58ffcc992064637d774a53"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "category": "test",
-      "bytes": 35765,
-      "sha256": "0270cdbdfec07a4b5186817d0757108eceb26b0e30ed73a767ad9b90543367c4"
+      "bytes": 36695,
+      "sha256": "940f1a8ece74a8165f6248905edf828b5c184aa515ec66112fbb0565dfaec50b"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "category": "source",
-      "bytes": 36513,
-      "sha256": "5a64e73d41be750da32a53d5de33980fc979e8a896fba7d03626ee4a8511c181"
+      "bytes": 38339,
+      "sha256": "b88284ca841ff5bd6d8dcc489cc22b13a1afd6d2df1e1b186ae987f9d9906ab7"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -10347,8 +10851,8 @@
     {
       "path": "src/renderer/components/goldRain.ts",
       "category": "source",
-      "bytes": 7460,
-      "sha256": "67b0e39c763ae7c9962eb792c67980b1c6fd91882cae765572d8e383e72b892a"
+      "bytes": 12499,
+      "sha256": "6d1ad0df92874bfdc4777a0f3f83662d5fc4559a2c7636404ac51287e9b09658"
     },
     {
       "path": "src/renderer/components/iceSheet.test.ts",
@@ -10713,26 +11217,26 @@
     {
       "path": "src/renderer/components/realmRoomArt.test.ts",
       "category": "test",
-      "bytes": 2038,
-      "sha256": "be069bda136312cb3b9bba9d1e3b43c7aa7005a69704e1e19c1b1ba943e1207a"
+      "bytes": 2102,
+      "sha256": "824e57a129c4fd08342e482a1f40f2e95905d76a03b6d60ce46d90b5755cdde3"
     },
     {
       "path": "src/renderer/components/realmRoomArt.ts",
       "category": "source",
-      "bytes": 2003,
-      "sha256": "8798baf933ddae1da5281627388ee6da3565cc2a08d05004c2cf6b0b244b080e"
+      "bytes": 3185,
+      "sha256": "d3ce700703c7ef53806028ee34be57f0d9d15f4933a52e865bd84f8433d8f6f5"
     },
     {
       "path": "src/renderer/components/realmRoomLife.test.ts",
       "category": "test",
-      "bytes": 5126,
-      "sha256": "323ea663e7b7e9db5e57922737d52ac3b323a25f347b1db154f7b025dc437dee"
+      "bytes": 6119,
+      "sha256": "e87a9555e353d094785a55fc6da9a847343cb94b06275fc601c6dd46a7d1b028"
     },
     {
       "path": "src/renderer/components/realmRoomLife.ts",
       "category": "source",
-      "bytes": 29033,
-      "sha256": "845586b5e65965ac0e657d800837017397696df48221290d8371d3e82693fa79"
+      "bytes": 38041,
+      "sha256": "23e4ffaa52598a1dbcec2089af83cb10649ada84eef2b9fc17c0ad65bd178d54"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -10781,6 +11285,18 @@
       "category": "source",
       "bytes": 7336,
       "sha256": "7a4d7472c2ea6f8a574ba11dab5c7745656bdeaa74c45fc9e1cd82a6d59f97d1"
+    },
+    {
+      "path": "src/renderer/components/roomSpill.test.ts",
+      "category": "test",
+      "bytes": 2453,
+      "sha256": "875b918d65d67db9552acb224fe1109385183ea49b5f8a6dafabd7718203f466"
+    },
+    {
+      "path": "src/renderer/components/roomSpill.ts",
+      "category": "source",
+      "bytes": 8090,
+      "sha256": "31876ab8346b1f75bd10be6c1779fbe533f0b92501e982413523ad9a1e5c4421"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
@@ -11511,8 +12027,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 23267,
-      "sha256": "46387ba729573400787b5d035a5ae2f5b622bdf6335ca3eedf2131eb39f89505"
+      "bytes": 25509,
+      "sha256": "01e54c84ff01458645b68573980ba59b4b48b5da7b3fc64a9c9d353fd642b348"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -11667,8 +12183,8 @@
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 8948,
-      "sha256": "75df7a94e878bcdb31e9cc7d2a4e990284d8f25d80d7352c83c23adfdc827053"
+      "bytes": 8813,
+      "sha256": "5649acbf92fa398763528f7d43d7fef654d04399b4849e6c5938498451baa25c"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -19344,6 +19860,56 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 94,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 46,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 70,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 46,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 46,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
       "layer": "renderer",
@@ -19364,16 +19930,32 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 20,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/index.ts",
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 96,
+      "lineCount": 114,
       "imports": [
         "file:src/renderer/assets/ui/sprites/ambient-v1.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
-        "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json"
+        "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+        "file:src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json"
       ],
       "exports": [
         "symbol:src/renderer/assets/ui/sprites/index.ts#AMBIENT_SPRITES",
@@ -21330,6 +21912,61 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/cardShards.test.ts",
+      "path": "src/renderer/components/cardShards.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 64,
+      "imports": [
+        "file:src/renderer/components/cardShards.ts",
+        "file:src/renderer/components/tileShatter.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardShards.ts",
+      "path": "src/renderer/components/cardShards.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 158,
+      "imports": [
+        "file:src/renderer/components/tileShatter.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardShards.ts#cardShardPieces",
+        "symbol:src/renderer/components/cardShards.ts#SHARD_GRAVITY",
+        "symbol:src/renderer/components/cardShards.ts#shardFlight",
+        "symbol:src/renderer/components/cardShards.ts#ShardFlight",
+        "symbol:src/renderer/components/cardShards.ts#ShardPiece",
+        "symbol:src/renderer/components/cardShards.ts#shardPose",
+        "symbol:src/renderer/components/cardShards.ts#ShardPose"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardShards.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/cardShardSystem.ts",
+      "path": "src/renderer/components/cardShardSystem.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 198,
+      "imports": [
+        "file:src/renderer/components/cardDissolveMaterial.ts",
+        "file:src/renderer/components/cardShards.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/renderer/components/tileTextures.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardShardSystem.ts#CardShardSystem",
+        "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
+        "symbol:src/renderer/components/cardShardSystem.ts#SHARD_LIFE_SECONDS"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/cardStatusPaint.ts",
       "path": "src/renderer/components/cardStatusPaint.ts",
       "layer": "renderer",
@@ -21831,25 +22468,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/components/ElementGround.tsx",
-      "path": "src/renderer/components/ElementGround.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 119,
-      "imports": [
-        "file:src/renderer/components/tileBoardPick.ts",
-        "file:src/renderer/components/tileBoardTransform.ts",
-        "file:src/renderer/components/tileShatter.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/element-ground-rules.ts",
-        "file:src/shared/tile-suit-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/ElementGround.tsx#ElementGround"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/renderer/components/elementReactionParticles.test.ts",
       "path": "src/renderer/components/elementReactionParticles.test.ts",
       "layer": "renderer",
@@ -22207,7 +22825,7 @@
       "path": "src/renderer/components/GameplayScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 251,
+      "lineCount": 268,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/elementSceneArt.ts",
@@ -22215,6 +22833,7 @@
         "file:src/renderer/components/gameplaySceneFrame.ts",
         "file:src/renderer/components/gameplaySceneLevels.ts",
         "file:src/renderer/components/goldRain.ts",
+        "file:src/renderer/components/roomSpill.ts",
         "file:src/renderer/components/SceneCanvas.tsx",
         "file:src/renderer/components/sceneCanvasLayout.ts",
         "file:src/renderer/components/sceneClock.ts",
@@ -22239,7 +22858,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 599,
+      "lineCount": 601,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneFrame.ts",
@@ -22262,7 +22881,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 617,
+      "lineCount": 658,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -22273,6 +22892,7 @@
         "file:src/renderer/components/goldRain.ts",
         "file:src/renderer/components/realmRoomArt.ts",
         "file:src/renderer/components/realmRoomLife.ts",
+        "file:src/renderer/components/roomSpill.ts",
         "file:src/renderer/components/sceneAmbient.ts",
         "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/components/sceneMood.ts",
@@ -22565,13 +23185,15 @@
       "path": "src/renderer/components/goldRain.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 157,
+      "lineCount": 279,
       "imports": [
         "file:src/shared/rng.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
-        "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_BOUNCES",
+        "symbol:src/renderer/components/goldRain.ts#floorForeshortening",
+        "symbol:src/renderer/components/goldRain.ts#floorScale",
+        "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RADIUS",
         "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RESTITUTION",
         "symbol:src/renderer/components/goldRain.ts#GOLD_PILE_MAX_COINS",
         "symbol:src/renderer/components/goldRain.ts#GOLD_PILE_SLOTS",
@@ -22584,9 +23206,12 @@
         "symbol:src/renderer/components/goldRain.ts#GoldCoin",
         "symbol:src/renderer/components/goldRain.ts#goldCoinFloor",
         "symbol:src/renderer/components/goldRain.ts#goldCoinFloorOn",
-        "symbol:src/renderer/components/goldRain.ts#goldCoinMotion",
-        "symbol:src/renderer/components/goldRain.ts#GoldCoinMotion",
+        "symbol:src/renderer/components/goldRain.ts#goldCoinPath",
+        "symbol:src/renderer/components/goldRain.ts#GoldCoinPath",
+        "symbol:src/renderer/components/goldRain.ts#goldCoinPose",
+        "symbol:src/renderer/components/goldRain.ts#GoldCoinPose",
         "symbol:src/renderer/components/goldRain.ts#goldCoinSize",
+        "symbol:src/renderer/components/goldRain.ts#goldCoinView",
         "symbol:src/renderer/components/goldRain.ts#GoldFloorBand",
         "symbol:src/renderer/components/goldRain.ts#GoldPileShower"
       ],
@@ -23537,9 +24162,10 @@
       "path": "src/renderer/components/realmRoomArt.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 37,
+      "lineCount": 62,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts",
+        "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
@@ -23558,7 +24184,7 @@
       "path": "src/renderer/components/realmRoomLife.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 78,
+      "lineCount": 94,
       "imports": [
         "file:src/renderer/components/realmRoomLife.ts",
         "file:src/renderer/components/scenePaint.ts"
@@ -23571,7 +24197,7 @@
       "path": "src/renderer/components/realmRoomLife.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 477,
+      "lineCount": 664,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/goldRain.ts",
@@ -23584,13 +24210,19 @@
       "exports": [
         "symbol:src/renderer/components/realmRoomLife.ts#landingDraws",
         "symbol:src/renderer/components/realmRoomLife.ts#lightningPath",
+        "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
+        "symbol:src/renderer/components/realmRoomLife.ts#rainDraws",
         "symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
+        "symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
         "symbol:src/renderer/components/realmRoomLife.ts#realmLifeCount",
         "symbol:src/renderer/components/realmRoomLife.ts#realmLifePace",
         "symbol:src/renderer/components/realmRoomLife.ts#realmRoomLifeDraws",
         "symbol:src/renderer/components/realmRoomLife.ts#RealmRoomLifeInput",
+        "symbol:src/renderer/components/realmRoomLife.ts#realmRoomSpriteDraws",
+        "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
         "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
-        "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws"
+        "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws",
+        "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel"
       ],
       "testedBy": [
         "file:src/renderer/components/realmRoomLife.test.ts"
@@ -23696,6 +24328,45 @@
       ],
       "testedBy": [
         "file:src/renderer/components/RealmTravel.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/roomSpill.test.ts",
+      "path": "src/renderer/components/roomSpill.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 40,
+      "imports": [
+        "file:src/renderer/components/roomSpill.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/roomSpill.ts",
+      "path": "src/renderer/components/roomSpill.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 160,
+      "imports": [
+        "file:src/renderer/components/goldRain.ts",
+        "file:src/renderer/components/sceneAmbient.ts",
+        "file:src/renderer/components/sceneClock.ts",
+        "file:src/renderer/components/scenePaint.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/roomSpill.ts#emitRoomSpill",
+        "symbol:src/renderer/components/roomSpill.ts#ROOM_SPILL_SECONDS",
+        "symbol:src/renderer/components/roomSpill.ts#RoomSpill",
+        "symbol:src/renderer/components/roomSpill.ts#roomSpillDraws",
+        "symbol:src/renderer/components/roomSpill.ts#RoomSpillEvent",
+        "symbol:src/renderer/components/roomSpill.ts#subscribeRoomSpill"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/roomSpill.test.ts"
       ]
     },
     {
@@ -24197,6 +24868,7 @@
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/PortalScene.test.tsx",
         "file:src/renderer/components/realmRoomLife.test.ts",
+        "file:src/renderer/components/roomSpill.test.ts",
         "file:src/renderer/components/scenePaint.test.ts"
       ]
     },
@@ -25816,7 +26488,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 339,
+      "lineCount": 366,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -25824,13 +26496,16 @@
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
+        "file:src/renderer/components/cardShardSystem.ts",
         "file:src/renderer/components/elementCastParticles.ts",
         "file:src/renderer/components/elementReactionParticles.ts",
         "file:src/renderer/components/itemEffects.ts",
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/realmParticles.ts",
+        "file:src/renderer/components/roomSpill.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/dev/useDevOptions.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
@@ -26342,10 +27017,9 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 208,
+      "lineCount": 206,
       "imports": [
         "file:src/renderer/components/ColossusStone.tsx",
-        "file:src/renderer/components/ElementGround.tsx",
         "file:src/renderer/components/MeteorStrike.tsx",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -27091,6 +27765,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/boardParticleRim.test.ts",
+        "file:src/renderer/components/cardShards.test.ts",
         "file:src/renderer/components/colossusStoneLayout.test.ts",
         "file:src/renderer/components/tileBoardTransform.test.ts",
         "file:src/renderer/components/tileShatter.test.ts",
@@ -33211,6 +33886,7 @@
         "file:src/renderer/components/realmParticles.test.ts",
         "file:src/renderer/components/realmRoomArt.test.ts",
         "file:src/renderer/components/realmTileMarkKey.test.ts",
+        "file:src/renderer/components/roomSpill.test.ts",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
@@ -41762,80 +42438,80 @@
       "name": "AMBIENT_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 81,
-      "endLine": 87
+      "line": 99,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
       "name": "AmbientCell",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 70,
-      "endLine": 77
+      "line": 88,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
       "name": "AmbientCellName",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
       "name": "getAmbientSpriteUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 107,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
       "name": "getSceneSpriteSheetUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 92,
-      "endLine": 95
+      "line": 110,
+      "endLine": 113
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
       "name": "resolveSceneSpriteSet",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 45,
-      "endLine": 52
+      "line": 55,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
       "name": "SCENE_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 54,
-      "endLine": 61
+      "line": 64,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
       "name": "SceneSpriteDef",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 12,
-      "endLine": 23
+      "line": 18,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
       "name": "SceneSpriteSet",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 25,
-      "endLine": 30
+      "line": 35,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
       "name": "SceneSpriteSetKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -44438,6 +45114,86 @@
       "endLine": 65
     },
     {
+      "id": "symbol:src/renderer/components/cardShards.ts#cardShardPieces",
+      "name": "cardShardPieces",
+      "kind": "value",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 44,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#SHARD_GRAVITY",
+      "name": "SHARD_GRAVITY",
+      "kind": "value",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 72,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#shardFlight",
+      "name": "shardFlight",
+      "kind": "value",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 87,
+      "endLine": 101
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#ShardFlight",
+      "name": "ShardFlight",
+      "kind": "interface",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 76,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#ShardPiece",
+      "name": "ShardPiece",
+      "kind": "interface",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 13,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#shardPose",
+      "name": "shardPose",
+      "kind": "value",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 121,
+      "endLine": 157
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShards.ts#ShardPose",
+      "name": "ShardPose",
+      "kind": "interface",
+      "file": "src/renderer/components/cardShards.ts",
+      "line": 103,
+      "endLine": 113
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShardSystem.ts#CardShardSystem",
+      "name": "CardShardSystem",
+      "kind": "type",
+      "file": "src/renderer/components/cardShardSystem.ts",
+      "line": 197,
+      "endLine": 197
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
+      "name": "createCardShardSystem",
+      "kind": "value",
+      "file": "src/renderer/components/cardShardSystem.ts",
+      "line": 103,
+      "endLine": 195
+    },
+    {
+      "id": "symbol:src/renderer/components/cardShardSystem.ts#SHARD_LIFE_SECONDS",
+      "name": "SHARD_LIFE_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/cardShardSystem.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
       "name": "paintCardStatus",
       "kind": "value",
@@ -44750,14 +45506,6 @@
       "endLine": 58
     },
     {
-      "id": "symbol:src/renderer/components/ElementGround.tsx#ElementGround",
-      "name": "ElementGround",
-      "kind": "function",
-      "file": "src/renderer/components/ElementGround.tsx",
-      "line": 108,
-      "endLine": 118
-    },
-    {
       "id": "symbol:src/renderer/components/elementReactionParticles.ts#collectElementReactionParticles",
       "name": "collectElementReactionParticles",
       "kind": "function",
@@ -44970,96 +45718,96 @@
       "name": "GameplayScene",
       "kind": "function",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 114,
-      "endLine": 250
+      "line": 115,
+      "endLine": 267
     },
     {
       "id": "symbol:src/renderer/components/GameplayScene.tsx#GameplaySceneProps",
       "name": "GameplaySceneProps",
       "kind": "interface",
       "file": "src/renderer/components/GameplayScene.tsx",
-      "line": 72,
-      "endLine": 112
+      "line": 73,
+      "endLine": 113
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#composeGameplayScene",
       "name": "composeGameplayScene",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 295,
-      "endLine": 616
+      "line": 328,
+      "endLine": 657
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
       "name": "GAMEPLAY_EYES_EVERY_MS",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_LAST_MS",
       "name": "GAMEPLAY_EYES_LAST_MS",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 95,
-      "endLine": 95
+      "line": 98,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_EVERY_MS",
       "name": "GAMEPLAY_SPIDER_EVERY_MS",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 96,
-      "endLine": 96
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_SPIDER_LASTS_MS",
       "name": "GAMEPLAY_SPIDER_LASTS_MS",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 97,
-      "endLine": 97
+      "line": 100,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GameplayFrameInput",
       "name": "GameplayFrameInput",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 44,
-      "endLine": 66
+      "line": 45,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#goldCoinDraws",
       "name": "goldCoinDraws",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 225,
-      "endLine": 293
+      "line": 250,
+      "endLine": 326
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GoldCoinPlace",
       "name": "GoldCoinPlace",
       "kind": "interface",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 211,
-      "endLine": 218
+      "line": 212,
+      "endLine": 219
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#SCENE_RING",
       "name": "SCENE_RING",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 71,
-      "endLine": 71
+      "line": 74,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#stormBoltCount",
       "name": "stormBoltCount",
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
-      "line": 100,
-      "endLine": 100
+      "line": 103,
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneLevels.ts#sceneFlameLevels",
@@ -45238,20 +45986,36 @@
       "endLine": 63
     },
     {
-      "id": "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_BOUNCES",
-      "name": "GOLD_COIN_BOUNCES",
+      "id": "symbol:src/renderer/components/goldRain.ts#floorForeshortening",
+      "name": "floorForeshortening",
       "kind": "value",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 90,
-      "endLine": 90
+      "line": 114,
+      "endLine": 115
+    },
+    {
+      "id": "symbol:src/renderer/components/goldRain.ts#floorScale",
+      "name": "floorScale",
+      "kind": "value",
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 118,
+      "endLine": 121
+    },
+    {
+      "id": "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RADIUS",
+      "name": "GOLD_COIN_RADIUS",
+      "kind": "value",
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 124,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RESTITUTION",
       "name": "GOLD_COIN_RESTITUTION",
       "kind": "value",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 128,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#GOLD_PILE_MAX_COINS",
@@ -45338,24 +46102,40 @@
       "name": "goldCoinFloorOn",
       "kind": "value",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 102,
-      "endLine": 102
+      "line": 111,
+      "endLine": 111
     },
     {
-      "id": "symbol:src/renderer/components/goldRain.ts#goldCoinMotion",
-      "name": "goldCoinMotion",
+      "id": "symbol:src/renderer/components/goldRain.ts#goldCoinPath",
+      "name": "goldCoinPath",
       "kind": "value",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 122,
-      "endLine": 156
+      "line": 157,
+      "endLine": 226
     },
     {
-      "id": "symbol:src/renderer/components/goldRain.ts#GoldCoinMotion",
-      "name": "GoldCoinMotion",
+      "id": "symbol:src/renderer/components/goldRain.ts#GoldCoinPath",
+      "name": "GoldCoinPath",
       "kind": "interface",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 104,
-      "endLine": 119
+      "line": 144,
+      "endLine": 150
+    },
+    {
+      "id": "symbol:src/renderer/components/goldRain.ts#goldCoinPose",
+      "name": "goldCoinPose",
+      "kind": "value",
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 241,
+      "endLine": 258
+    },
+    {
+      "id": "symbol:src/renderer/components/goldRain.ts#GoldCoinPose",
+      "name": "GoldCoinPose",
+      "kind": "interface",
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 228,
+      "endLine": 238
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#goldCoinSize",
@@ -45366,12 +46146,20 @@
       "endLine": 69
     },
     {
+      "id": "symbol:src/renderer/components/goldRain.ts#goldCoinView",
+      "name": "goldCoinView",
+      "kind": "value",
+      "file": "src/renderer/components/goldRain.ts",
+      "line": 264,
+      "endLine": 278
+    },
+    {
       "id": "symbol:src/renderer/components/goldRain.ts#GoldFloorBand",
       "name": "GoldFloorBand",
       "kind": "interface",
       "file": "src/renderer/components/goldRain.ts",
-      "line": 97,
-      "endLine": 100
+      "line": 95,
+      "endLine": 106
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#GoldPileShower",
@@ -46402,104 +47190,152 @@
       "name": "getRealmRoomArtUrls",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 35,
-      "endLine": 36
+      "line": 60,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#REALM_ROOM_ART",
       "name": "REALM_ROOM_ART",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 23,
-      "endLine": 28
+      "line": 47,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#RealmRoomArt",
       "name": "RealmRoomArt",
       "kind": "interface",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 18,
-      "endLine": 21
+      "line": 21,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#realmRoomFor",
       "name": "realmRoomFor",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 31,
-      "endLine": 32
+      "line": 56,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#landingDraws",
       "name": "landingDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 112,
-      "endLine": 194
+      "line": 116,
+      "endLine": 198
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#lightningPath",
       "name": "lightningPath",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 203,
-      "endLine": 223
+      "line": 306,
+      "endLine": 326
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
+      "name": "RAIN_WIND",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 205,
+      "endLine": 205
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#rainDraws",
+      "name": "rainDraws",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 227,
+      "endLine": 297
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
       "name": "REALM_FLOORS",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 13,
-      "endLine": 19
+      "line": 17,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
+      "name": "realmLayerLevel",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 605,
+      "endLine": 637
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifeCount",
       "name": "realmLifeCount",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 57,
-      "endLine": 60
+      "line": 61,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifePace",
       "name": "realmLifePace",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomLifeDraws",
       "name": "realmRoomLifeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 475,
-      "endLine": 476
+      "line": 593,
+      "endLine": 594
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RealmRoomLifeInput",
       "name": "RealmRoomLifeInput",
       "kind": "interface",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 44,
-      "endLine": 54
+      "line": 48,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomSpriteDraws",
+      "name": "realmRoomSpriteDraws",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 644,
+      "endLine": 663
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
+      "name": "stormSheetLevel",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 355,
+      "endLine": 358
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
       "name": "stormStrikeChannels",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws",
       "name": "stormStrikeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 241,
-      "endLine": 320
+      "line": 361,
+      "endLine": 440
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel",
+      "name": "stormStrikeLevel",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 344,
+      "endLine": 352
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
@@ -46564,6 +47400,54 @@
       "file": "src/renderer/components/RealmTravel.tsx",
       "line": 132,
       "endLine": 132
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#emitRoomSpill",
+      "name": "emitRoomSpill",
+      "kind": "value",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 30,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#ROOM_SPILL_SECONDS",
+      "name": "ROOM_SPILL_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 49,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#RoomSpill",
+      "name": "RoomSpill",
+      "kind": "interface",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 40,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#roomSpillDraws",
+      "name": "roomSpillDraws",
+      "kind": "value",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 87,
+      "endLine": 159
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#RoomSpillEvent",
+      "name": "RoomSpillEvent",
+      "kind": "interface",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 17,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/roomSpill.ts#subscribeRoomSpill",
+      "name": "subscribeRoomSpill",
+      "kind": "value",
+      "file": "src/renderer/components/roomSpill.ts",
+      "line": 34,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
@@ -49122,8 +50006,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 25,
-      "endLine": 338
+      "line": 29,
+      "endLine": 365
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -49746,8 +50630,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 58,
-      "endLine": 207
+      "line": 57,
+      "endLine": 205
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -70798,7 +71682,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 19
+          "line": 23
         }
       ],
       "tests": [
@@ -78421,6 +79305,66 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#cardShardPieces",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#cardShardPieces",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#SHARD_GRAVITY",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#SHARD_GRAVITY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#shardFlight",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#shardFlight",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#ShardFlight",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#ShardFlight",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#ShardPiece",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#ShardPiece",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#shardPose",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#shardPose",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShards.ts->symbol:src/renderer/components/cardShards.ts#ShardPose",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "symbol:src/renderer/components/cardShards.ts#ShardPose",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShardSystem.ts->symbol:src/renderer/components/cardShardSystem.ts#CardShardSystem",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "symbol:src/renderer/components/cardShardSystem.ts#CardShardSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShardSystem.ts->symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardShardSystem.ts->symbol:src/renderer/components/cardShardSystem.ts#SHARD_LIFE_SECONDS",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "symbol:src/renderer/components/cardShardSystem.ts#SHARD_LIFE_SECONDS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardStatusPaint.ts->symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
       "source": "file:src/renderer/components/cardStatusPaint.ts",
       "target": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
@@ -78652,12 +79596,6 @@
       "id": "exports:src/renderer/components/elementCastParticles.ts->symbol:src/renderer/components/elementCastParticles.ts#collectElementCastParticles",
       "source": "file:src/renderer/components/elementCastParticles.ts",
       "target": "symbol:src/renderer/components/elementCastParticles.ts#collectElementCastParticles",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/ElementGround.tsx->symbol:src/renderer/components/ElementGround.tsx#ElementGround",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "symbol:src/renderer/components/ElementGround.tsx#ElementGround",
       "kind": "exports"
     },
     {
@@ -79021,9 +79959,21 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GOLD_COIN_BOUNCES",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#floorForeshortening",
       "source": "file:src/renderer/components/goldRain.ts",
-      "target": "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_BOUNCES",
+      "target": "symbol:src/renderer/components/goldRain.ts#floorForeshortening",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#floorScale",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#floorScale",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RADIUS",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#GOLD_COIN_RADIUS",
       "kind": "exports"
     },
     {
@@ -79099,21 +80049,39 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#goldCoinMotion",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#goldCoinPath",
       "source": "file:src/renderer/components/goldRain.ts",
-      "target": "symbol:src/renderer/components/goldRain.ts#goldCoinMotion",
+      "target": "symbol:src/renderer/components/goldRain.ts#goldCoinPath",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GoldCoinMotion",
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GoldCoinPath",
       "source": "file:src/renderer/components/goldRain.ts",
-      "target": "symbol:src/renderer/components/goldRain.ts#GoldCoinMotion",
+      "target": "symbol:src/renderer/components/goldRain.ts#GoldCoinPath",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#goldCoinPose",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#goldCoinPose",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#GoldCoinPose",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#GoldCoinPose",
       "kind": "exports"
     },
     {
       "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#goldCoinSize",
       "source": "file:src/renderer/components/goldRain.ts",
       "target": "symbol:src/renderer/components/goldRain.ts#goldCoinSize",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/goldRain.ts->symbol:src/renderer/components/goldRain.ts#goldCoinView",
+      "source": "file:src/renderer/components/goldRain.ts",
+      "target": "symbol:src/renderer/components/goldRain.ts#goldCoinView",
       "kind": "exports"
     },
     {
@@ -79927,9 +80895,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#rainDraws",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#rainDraws",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
       "source": "file:src/renderer/components/realmRoomLife.ts",
       "target": "symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
       "kind": "exports"
     },
     {
@@ -79957,6 +80943,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#realmRoomSpriteDraws",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomSpriteDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
       "source": "file:src/renderer/components/realmRoomLife.ts",
       "target": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
@@ -79966,6 +80964,12 @@
       "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws",
       "source": "file:src/renderer/components/realmRoomLife.ts",
       "target": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel",
       "kind": "exports"
     },
     {
@@ -80014,6 +81018,42 @@
       "id": "exports:src/renderer/components/RealmTravel.tsx->symbol:src/renderer/components/RealmTravel.tsx#default",
       "source": "file:src/renderer/components/RealmTravel.tsx",
       "target": "symbol:src/renderer/components/RealmTravel.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#emitRoomSpill",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#emitRoomSpill",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#ROOM_SPILL_SECONDS",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#ROOM_SPILL_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#RoomSpill",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#RoomSpill",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#roomSpillDraws",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#roomSpillDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#RoomSpillEvent",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#RoomSpillEvent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/roomSpill.ts->symbol:src/renderer/components/roomSpill.ts#subscribeRoomSpill",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "symbol:src/renderer/components/roomSpill.ts#subscribeRoomSpill",
       "kind": "exports"
     },
     {
@@ -100253,6 +101293,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
@@ -100262,6 +101332,12 @@
       "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "kind": "imports"
     },
     {
@@ -101651,6 +102727,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardShards.test.ts->src/renderer/components/cardShards.ts",
+      "source": "file:src/renderer/components/cardShards.test.ts",
+      "target": "file:src/renderer/components/cardShards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShards.test.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/cardShards.test.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShards.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/cardShards.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/renderer/components/cardShards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/tileTextures.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/renderer/components/tileTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardStatusPaint.ts->src/renderer/components/realmTileMarkKey.ts",
       "source": "file:src/renderer/components/cardStatusPaint.ts",
       "target": "file:src/renderer/components/realmTileMarkKey.ts",
@@ -102467,42 +103591,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/renderer/components/tileBoardPick.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/renderer/components/tileBoardPick.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/renderer/components/tileBoardTransform.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/renderer/components/tileBoardTransform.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/renderer/components/tileShatter.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/renderer/components/tileShatter.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/shared/element-ground-rules.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/shared/element-ground-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ElementGround.tsx->src/shared/tile-suit-rules.ts",
-      "source": "file:src/renderer/components/ElementGround.tsx",
-      "target": "file:src/shared/tile-suit-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/elementReactionParticles.test.ts->src/renderer/components/boardParticleSystem.ts",
       "source": "file:src/renderer/components/elementReactionParticles.test.ts",
       "target": "file:src/renderer/components/boardParticleSystem.ts",
@@ -103049,6 +104137,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/roomSpill.ts",
+      "source": "file:src/renderer/components/GameplayScene.tsx",
+      "target": "file:src/renderer/components/roomSpill.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameplayScene.tsx->src/renderer/components/SceneCanvas.tsx",
       "source": "file:src/renderer/components/GameplayScene.tsx",
       "target": "file:src/renderer/components/SceneCanvas.tsx",
@@ -103232,6 +104326,12 @@
       "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/realmRoomLife.ts",
       "source": "file:src/renderer/components/gameplaySceneFrame.ts",
       "target": "file:src/renderer/components/realmRoomLife.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameplaySceneFrame.ts->src/renderer/components/roomSpill.ts",
+      "source": "file:src/renderer/components/gameplaySceneFrame.ts",
+      "target": "file:src/renderer/components/roomSpill.ts",
       "kind": "imports"
     },
     {
@@ -104945,6 +106045,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/realmRoomArt.ts->src/renderer/assets/ui/sprites/index.ts",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "file:src/renderer/assets/ui/sprites/index.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/realmRoomArt.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "file:src/shared/contracts.ts",
@@ -105122,6 +106228,54 @@
       "id": "imports:src/renderer/components/RealmTravel.tsx->src/shared/realm-rules.ts",
       "source": "file:src/renderer/components/RealmTravel.tsx",
       "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.test.ts->src/renderer/components/roomSpill.ts",
+      "source": "file:src/renderer/components/roomSpill.test.ts",
+      "target": "file:src/renderer/components/roomSpill.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.test.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/roomSpill.test.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/roomSpill.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.ts->src/renderer/components/goldRain.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/renderer/components/goldRain.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.ts->src/renderer/components/sceneAmbient.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/renderer/components/sceneAmbient.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.ts->src/renderer/components/sceneClock.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/renderer/components/sceneClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.ts->src/renderer/components/scenePaint.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/renderer/components/scenePaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/roomSpill.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -107561,6 +108715,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardShardSystem.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/cardShardSystem.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/elementCastParticles.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/elementCastParticles.ts",
@@ -107591,6 +108751,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/roomSpill.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/roomSpill.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardFrameBag.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -107600,6 +108766,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileBoardTransform.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
       "kind": "imports"
     },
     {
@@ -108278,12 +109450,6 @@
       "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/ColossusStone.tsx",
       "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "target": "file:src/renderer/components/ColossusStone.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/ElementGround.tsx",
-      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "target": "file:src/renderer/components/ElementGround.tsx",
       "kind": "imports"
     },
     {
@@ -125115,6 +126281,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/cardShards.ts->file:src/renderer/components/cardShards.test.ts",
+      "source": "file:src/renderer/components/cardShards.ts",
+      "target": "file:src/renderer/components/cardShards.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/CathedralScene.tsx->file:src/renderer/components/CathedralScene.test.tsx",
       "source": "file:src/renderer/components/CathedralScene.tsx",
       "target": "file:src/renderer/components/CathedralScene.test.tsx",
@@ -125559,6 +126731,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/roomSpill.ts->file:src/renderer/components/roomSpill.test.ts",
+      "source": "file:src/renderer/components/roomSpill.ts",
+      "target": "file:src/renderer/components/roomSpill.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RunEndCinematic.tsx->file:src/renderer/components/RunEndCinematic.test.tsx",
       "source": "file:src/renderer/components/RunEndCinematic.tsx",
       "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
@@ -125700,6 +126878,12 @@
       "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/realmRoomLife.test.ts",
       "source": "file:src/renderer/components/scenePaint.ts",
       "target": "file:src/renderer/components/realmRoomLife.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/scenePaint.ts->file:src/renderer/components/roomSpill.test.ts",
+      "source": "file:src/renderer/components/scenePaint.ts",
+      "target": "file:src/renderer/components/roomSpill.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126216,6 +127400,12 @@
       "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/boardParticleRim.test.ts",
       "source": "file:src/renderer/components/tileShatter.ts",
       "target": "file:src/renderer/components/boardParticleRim.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/cardShards.test.ts",
+      "source": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/cardShards.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127974,6 +129164,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/realmTileMarkKey.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/realmTileMarkKey.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/roomSpill.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/roomSpill.test.ts",
       "kind": "tested_by"
     },
     {
