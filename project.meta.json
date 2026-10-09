@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-09T03:35:25.312Z",
+  "generatedAt": "2026-10-09T11:40:51.565Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -226,6 +226,7 @@
       "audio:ace-step:ambience",
       "audio:ace-step:run-bed",
       "audio:ace-step:run-bed:library",
+      "audio:ace-step:realm",
       "audio:ace-step:app:dry",
       "audio:install:ace-app-outputs",
       "audio:placeholders",
@@ -313,46 +314,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 155583,
+        "bytes": 154498,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-09T03:34:55.202Z"
+        "capturedAt": "2026-10-09T11:40:14.018Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 146040,
+        "bytes": 145366,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-09T03:35:02.177Z"
+        "capturedAt": "2026-10-09T11:40:24.357Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 120599,
+        "bytes": 120461,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-09T03:35:16.409Z"
+        "capturedAt": "2026-10-09T11:40:41.835Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 39323,
+        "bytes": 39253,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-09T03:35:08.821Z"
+        "capturedAt": "2026-10-09T11:40:32.493Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 109821,
+        "bytes": 109776,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-09T03:35:25.090Z"
+        "capturedAt": "2026-10-09T11:40:51.244Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -361,7 +362,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-09T03:31:23.801Z"
+        "capturedAt": "2026-10-09T11:37:03.047Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -370,7 +371,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-09T03:31:23.801Z"
+        "capturedAt": "2026-10-09T11:37:03.047Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -379,7 +380,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-09T03:31:23.802Z"
+        "capturedAt": "2026-10-09T11:37:03.048Z"
       },
       {
         "profile": "reel-end-card",
@@ -388,7 +389,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-09T03:31:23.803Z"
+        "capturedAt": "2026-10-09T11:37:03.049Z"
       }
     ],
     "trailers": [
@@ -517,7 +518,7 @@
   "metrics": {
     "sourceFiles": 1397,
     "testFiles": 601,
-    "sourceLines": 214148,
+    "sourceLines": 214164,
     "largestDirectories": [
       {
         "directory": "src",
@@ -556,10 +557,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "49d333a9",
-    "lastCommitDate": "2026-10-09T03:26:56Z",
-    "lastCommitSubject": "Refresh the repo model after merging main",
-    "commitCount": 2019,
+    "head": "643d494d",
+    "lastCommitDate": "2026-10-09T14:34:44+03:00",
+    "lastCommitSubject": "Paint the five realms' own rooms",
+    "commitCount": 2021,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
