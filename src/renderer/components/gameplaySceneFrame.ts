@@ -6,6 +6,7 @@ import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
 import { REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws } from './realmRoomLife';
+import { roomSpillDraws, type RoomSpill } from './roomSpill';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
@@ -63,6 +64,8 @@ export interface GameplayFrameInput {
     compactArt?: boolean;
     /** How far the parent sinks the stone (`--scene-base-opacity`). */
     base: number;
+    /** What breaking cards have spilled into the room (`roomSpill.ts`). */
+    spills?: readonly RoomSpill[];
 }
 
 const flames = SCENE_SPRITES.gameplayFlames;
@@ -628,6 +631,10 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     shown.sort((a, b) => b.coin.depth - a.coin.depth);
     for (const { coin, seconds, id } of shown) {
         draws.push(...goldCoinDraws(coin, id, seconds, lean, coinPlace));
+    }
+    // What the breaking cards spilled: their embers, drops, shards, leaves and chips, landing on this floor.
+    if (!still) {
+        for (const spill of input.spills ?? []) draws.push(...roomSpillDraws(spill, coinPlace.band, coinPlace.water, lean));
     }
 
     // Peril: the bank is empty. A red edge breathes until a miss is banked again.

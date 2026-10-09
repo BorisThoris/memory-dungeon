@@ -14,6 +14,8 @@ import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
 import { collectElementCastParticles } from './elementCastParticles';
 import { cardDepartureBursts, cardDepartureSparkTint, CARD_DEPARTURE_PARTICLE_DELAY } from './cardDepartureParticles';
 import { createCardShardSystem } from './cardShardSystem';
+import { emitRoomSpill } from './roomSpill';
+import { Vector3 } from 'three';
 import { CARD_PLANE_HEIGHT } from './tileShatter';
 import { collectElementReactionParticles } from './elementReactionParticles';
 import { useDevOptions } from '../dev/useDevOptions';
@@ -39,7 +41,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     time: RefObject<number>;
     sharedFrameClock: boolean;
 }) => {
-    const { gl } = useThree();
+    const { gl, camera } = useThree();
     const comboPopEffects = useDevOptions(state => state.comboPopEffects);
     const system = useMemo(() => createBoardParticleSystem(), []);
     // Every card that leaves breaks into pieces that fall and bounce on the board's floor (`cardShards.ts`).
@@ -130,6 +132,12 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                     seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
                     floorY: lowest - CARD_PLANE_HEIGHT * 0.5 - 0.3, quality: graphicsQuality, energy });
                 shardBreaks.current += 1;
+                // And its material spills into the room, from where the card is on the screen (`roomSpill.ts`).
+                const onScreen = new Vector3(anchor?.x ?? transform.baseX, anchor?.y ?? transform.baseY, anchor?.z ?? 0.04).project(camera);
+                const canvasRect = gl.domElement.getBoundingClientRect();
+                emitRoomSpill({ key: `${tile.id}:${time.current.toFixed(2)}`, suit: tile.suit ?? null,
+                    screenX: canvasRect.left + ((onScreen.x + 1) / 2) * canvasRect.width, screenY: canvasRect.top + ((1 - onScreen.y) / 2) * canvasRect.height,
+                    delayMs: (cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6) * 1000 });
                 gl.domElement.setAttribute('data-card-shard-breaks', String(shardBreaks.current));
             }
             // ...and throws off its element (`cardDepartureParticles.ts`).
@@ -164,7 +172,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, shards, system, time]);
+    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, shards, system, time, camera]);
     // Items used on the board (`itemEffects.ts`): each effect's recipe, at its cards or its cell.
     const itemEffectInputs = useRef({ board, compact, graphicsQuality, reduceMotion });
     useLayoutEffect(() => {

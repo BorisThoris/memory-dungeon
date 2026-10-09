@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, type CSSProperties, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 import type { ComboHeatStage } from '../../shared/combo-heat-rules';
@@ -14,6 +14,7 @@ import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneC
 import type { SceneClock } from './sceneClock';
 import type { SceneMood } from './sceneMood';
 import { GOLD_PILE_SLOTS, GOLD_RAIN_LASTS_MS, type GoldPileShower } from './goldRain';
+import { ROOM_SPILL_SECONDS, subscribeRoomSpill, type RoomSpill } from './roomSpill';
 import { useBeat, useHeld } from './useSceneBeat';
 import plate from './scenePlate.module.css';
 import styles from './GameplayScene.module.css';
@@ -149,6 +150,19 @@ export function GameplayScene({
         [liveMood, goldRain, goldPile]
     );
     const sceneRef = useRef<HTMLDivElement>(null);
+    // What breaking cards spill into the room (`roomSpill.ts`): kept as points on the painting, timed from their break.
+    const spillsRef = useRef<Array<Omit<RoomSpill, 'seconds'> & { bornAt: number }>>([]);
+    useEffect(() => subscribeRoomSpill((event) => {
+        const plateNode = sceneRef.current?.querySelector('[data-testid="gameplay-scene-plate"]');
+        if (!plateNode) return;
+        const rect = plateNode.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+        const now = performance.now();
+        spillsRef.current = [
+            ...spillsRef.current.filter((spill) => now - spill.bornAt < ROOM_SPILL_SECONDS * 1000),
+            { key: event.key, suit: event.suit, x: (event.screenX - rect.left) / rect.width, y: (event.screenY - rect.top) / rect.height, bornAt: now + event.delayMs }
+        ].slice(-16);
+    }), []);
     const lookRef = useRef({ x: 0, y: 0 });
     const ring = sceneRingLevels(fill, comboHeat, comboHueDeg);
     const flame = sceneFlameLevels(fill, imminent, comboHeat);
@@ -167,7 +181,10 @@ export function GameplayScene({
     const compose = useCallback(
         (clock: SceneClock, levels: SceneLevels) =>
             composeGameplayScene(
-                { fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboDepth, comboHueDeg, mood, runSeed, tier: effectTier, compactArt: prefersCompactSceneArt(), base: levels.base },
+                {
+                    fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboDepth, comboHueDeg, mood, runSeed, tier: effectTier, compactArt: prefersCompactSceneArt(), base: levels.base,
+                    spills: spillsRef.current.map(({ bornAt, ...spill }) => ({ ...spill, seconds: (performance.now() - bornAt) / 1000 }))
+                },
                 clock
             ),
         [fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboDepth, comboHueDeg, mood, runSeed, effectTier]
