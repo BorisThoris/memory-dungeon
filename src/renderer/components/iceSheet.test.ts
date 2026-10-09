@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildIceCracks, ICE_SHEET_VIEWBOX } from './iceSheet';
+import { buildIceCracks, inIceFrameBand } from './iceSheet';
 
 describe('the ice sheet\'s cracks', () => {
     it('cracks the same way for the same seed, and differently for another', () => {
@@ -10,16 +10,12 @@ describe('the ice sheet\'s cracks', () => {
         expect(a.some((crack) => crack.fork)).toBe(true);
     });
 
-    it('runs in from the frame and stops short of the board', () => {
-        const { width, height } = ICE_SHEET_VIEWBOX;
-        for (const crack of buildIceCracks(4)) {
+    it('runs in from the frame and stays in the band around it, never across the board', () => {
+        for (const crack of [4, 14, 99].flatMap((seed) => buildIceCracks(seed))) {
             expect(crack.length).toBeGreaterThan(0);
             const points = [...crack.d.matchAll(/([ML])(-?[\d.]+) (-?[\d.]+)/g)].map((match) => [Number(match[2]), Number(match[3])]);
             expect(points.length).toBeGreaterThanOrEqual(2);
-            for (const [x, y] of points) {
-                const inBoard = Math.abs(x! - width / 2) < width * 0.22 && Math.abs(y! - height / 2) < height * 0.28;
-                expect(inBoard, crack.d).toBe(false);
-            }
+            for (const [x, y] of points) expect(inIceFrameBand(x!, y!), crack.d).toBe(true);
         }
     });
 });

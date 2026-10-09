@@ -224,13 +224,29 @@ interface RainSpec {
  * far off. It strikes the floor where the painting's floor is at its depth, and the strike throws a
  * crown of droplets on short ballistic arcs and leaves a ring spreading on the wet stone.
  */
+/** How much of the rain each draw carries: near, middle and far, each one stroke of its own width and light. */
+const RAIN_BANDS = [
+    { id: 'near', from: 0, to: 0.34 },
+    { id: 'mid', from: 0.34, to: 0.67 },
+    { id: 'far', from: 0.67, to: 1.01 }
+] as const;
+/** The most splash rings drawn at once (a phone half that). */
+const RAIN_SPLASH_BUDGET = 60;
+
+type Segment = readonly [readonly [number, number], readonly [number, number]];
+
 export const rainDraws = (spec: RainSpec): SceneDraw[] => {
     const s = spec.t / 1000;
-    const out: SceneDraw[] = [];
     const fromY = -0.12;
     const splashS = 0.34;
+    const streaks: Segment[][] = RAIN_BANDS.map(() => []);
+    const crowns: Segment[] = [];
+    const splashes: SceneDraw[] = [];
+    const splashBudget = spec.crowns ? RAIN_SPLASH_BUDGET : Math.ceil(RAIN_SPLASH_BUDGET / 2.5);
+    const g = 3.2;
     for (let index = 0; index < spec.count; index += 1) {
         const depth = sceneHash(index, spec.seed);
+        const band = depth < 0.34 ? 0 : depth < 0.67 ? 1 : 2;
         // A far drop covers less of the plate in the same time: it looks slower and shorter.
         const fallS = (0.42 + 0.38 * depth) / spec.pace;
         const cycle = fallS + splashS + 0.1 + 0.2 * sceneHash(index, spec.seed + 3);
@@ -238,60 +254,65 @@ export const rainDraws = (spec: RainSpec): SceneDraw[] => {
         const round = Math.floor(local0 / cycle);
         const local = local0 - round * cycle;
         const land = spec.floor.near + (spec.floor.far - spec.floor.near) * depth;
-        const drop = land - fromY;
-        const vy = drop / fallS;
+        const vy = (land - fromY) / fallS;
         const vx = (RAIN_WIND * vy) / PLATE_ASPECT;
         // Where this round's drop comes down: anywhere across, so long as it lands on the plate.
         const xLand = 0.02 + 0.96 * sceneHash(index * 31 + round, spec.seed + 2);
         const near = 1 - depth;
         const length = 0.045 + 0.1 * near;
-        const width = 0.0012 + 0.0028 * near;
-        const alpha = spec.alpha * (0.55 + 0.45 * near);
         if (local < fallS) {
             const y = fromY + vy * local;
             const x = xLand - vx * (fallS - local);
             const tailDt = length / vy;
-            out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha, blend: 'lighter', color: 'rgb(150, 165, 190)', width, points: [[x - vx * tailDt, y - length], [x, y]] });
+            streaks[band]!.push([[x - vx * tailDt, y - length], [x, y]]);
             continue;
         }
-        // The drop is spent: one draw still, transparent, so a count is a count.
-        out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha: 0, blend: 'screen', color: 'rgb(214, 226, 242)', width, points: [[xLand, land], [xLand, land]] });
         const since = local - fallS;
         if (since >= splashS) continue;
         const q = since / splashS;
-        out.push(
-            ambientSprite({
-                id: `splash-${spec.idPrefix}-${index}`,
-                cell: 'ripple',
-                x: xLand,
-                y: land,
-                size: (0.01 + 0.038 * q) * (0.45 + 0.55 * near),
-                alpha: Math.min(1, spec.alpha * 1.6) * (1 - q) ** 1.4,
-                scaleX: 2.8
-            })
-        );
-        if (!spec.crowns) continue;
+        if (splashes.length < splashBudget) {
+            splashes.push(
+                ambientSprite({
+                    id: `splash-${spec.idPrefix}-${index}`,
+                    cell: 'ripple',
+                    x: xLand,
+                    y: land,
+                    size: (0.01 + 0.038 * q) * (0.45 + 0.55 * near),
+                    alpha: Math.min(1, spec.alpha * 1.6) * (1 - q) ** 1.4,
+                    scaleX: 2.8
+                })
+            );
+        }
+        if (!spec.crowns || q > 0.6) continue;
         // The crown: droplets thrown up and out, falling back under gravity, each a short streak along its path.
-        const g = 3.2;
         for (let bead = 0; bead < 3; bead += 1) {
             const spread = (bead - 1) * 0.9 + (sceneHash(index * 7 + bead + round, spec.seed + 5) - 0.5) * 0.5;
             const up = (0.18 + 0.12 * sceneHash(index * 11 + bead + round, spec.seed + 6)) * (0.4 + 0.6 * near);
-            const out_ = 0.05 * spread * (0.4 + 0.6 * near);
-            const bx = xLand + (out_ * since) / PLATE_ASPECT;
+            const out = 0.05 * spread * (0.4 + 0.6 * near);
+            const bx = xLand + (out * since) / PLATE_ASPECT;
             const by = land - (up * since - 0.5 * g * since * since);
             if (by > land) continue;
             const dvy = -up + g * since;
             const dt = 0.018;
-            out.push({
-                kind: 'line',
-                id: `crown-${spec.idPrefix}-${index}-${bead}`,
-                alpha: spec.alpha * 1.2 * (1 - q),
-                blend: 'screen',
-                color: 'rgb(226, 236, 250)',
-                width: width * 0.8,
-                points: [[bx - (out_ * dt) / PLATE_ASPECT, by - dvy * dt], [bx, by]]
-            });
+            crowns.push([[bx - (out * dt) / PLATE_ASPECT, by - dvy * dt], [bx, by]]);
         }
+    }
+    const out: SceneDraw[] = RAIN_BANDS.map((band, index) => {
+        const near = 1 - (band.from + Math.min(1, band.to)) / 2;
+        return {
+            kind: 'line',
+            id: `${spec.idPrefix}-${band.id}`,
+            alpha: streaks[index]!.length > 0 ? spec.alpha * (0.55 + 0.45 * near) : 0,
+            blend: 'lighter',
+            color: 'rgb(150, 165, 190)',
+            width: 0.0012 + 0.0028 * near,
+            points: [],
+            segments: streaks[index]!
+        };
+    });
+    out.push(...splashes);
+    if (crowns.length > 0) {
+        out.push({ kind: 'line', id: `crown-${spec.idPrefix}`, alpha: spec.alpha * 0.9, blend: 'screen', color: 'rgb(226, 236, 250)', width: 0.0016, points: [], segments: crowns });
     }
     return out;
 };
@@ -703,7 +724,8 @@ export const realmRoomWarpDraws = (realm: RealmId, src: string, t: number, depth
     const out: SceneDraw[] = [];
     for (const warp of REALM_WARPS[realm]) {
         const [x0, y0, x1, y1] = warp.box;
-        const bands = (lean ? 24 : 44) * (warp.kind === 'sway' ? 1 : 1);
+        // As many bands as the motion needs: water ripples finely, cloud churns broadly, a vine sways as one.
+        const bands = warp.kind === 'ripple' ? (lean ? 24 : 44) : warp.kind === 'billow' ? (lean ? 16 : 28) : lean ? 10 : 18;
         const bh = (y1 - y0) / bands;
         const phase = (warp.phase ?? 0) * Math.PI * 2;
         for (let band = 0; band < bands; band += 1) {

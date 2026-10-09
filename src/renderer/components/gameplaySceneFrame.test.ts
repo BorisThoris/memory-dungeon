@@ -548,12 +548,15 @@ describe('composeGameplayScene', () => {
         for (const realm of REALM_IDS) {
             const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: realm });
             const room = (over: Partial<GameplayFrameInput>) => frame({ mood: mood('ember', { run }), ...over });
-            const life = (draws: readonly SceneDraw[]) => draws.filter((draw) => draw.id.startsWith(signature[realm])).length;
+            // Batched strokes (the storm's rain) count each thing they carry.
+            const life = (draws: readonly SceneDraw[]) =>
+                draws.filter((draw) => draw.id.startsWith(signature[realm])).reduce((sum, draw) => sum + (draw.kind === 'line' && draw.segments ? draw.segments.length : 1), 0);
             const cold = life(room({ comboDepth: 0 }));
             const deep = life(room({ comboDepth: 6 }));
             expect(cold, realm).toBeGreaterThan(0);
             expect(deep, realm).toBeGreaterThan(cold);
-            expect(life(room({ comboDepth: 0, tier: 'lean' })), realm).toBe(Math.ceil(cold / 2));
+            // Half the drops; the rain's strokes carry only those in the air at that instant, so within a few.
+            expect(Math.abs(life(room({ comboDepth: 0, tier: 'lean' })) - Math.ceil(cold / 2)), realm).toBeLessThanOrEqual(realm === 'storm' ? Math.ceil(cold * 0.1) : 0);
             expect(life(room({ comboDepth: 6, tier: 'still' })), realm).toBe(0);
         }
     });

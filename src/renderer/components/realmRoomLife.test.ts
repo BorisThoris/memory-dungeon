@@ -49,10 +49,10 @@ describe('realm room life', () => {
     it('rains straight down with the wind onto the floor, where it splashes, and lays leaves on their room\'s floor', () => {
         const floor = REALM_FLOORS.storm.band;
         const frames = over(0, 8000, 50, (t) => rainDraws({ idPrefix: 'rain', count: 40, t, floor, alpha: 1, seed: 1, pace: 1, crowns: true }));
-        const drops = frames.flat().filter((draw): draw is SceneLineDraw => draw.kind === 'line' && /^rain-\d+$/.test(draw.id) && draw.alpha > 0);
+        const bands = (draws: readonly SceneDraw[]) => draws.filter((draw): draw is SceneLineDraw => draw.kind === 'line' && /^rain-(near|mid|far)$/.test(draw.id));
+        const drops = frames.flatMap((draws) => bands(draws).flatMap((band) => band.segments ?? []));
         expect(drops.length).toBeGreaterThan(500);
-        for (const drop of drops) {
-            const [[x0, y0], [x1, y1]] = drop.points as [[number, number], [number, number]];
+        for (const [[x0, y0], [x1, y1]] of drops) {
             // Falling: the head is below the tail, and it leans no more than the wind, a few degrees off vertical.
             expect(y1).toBeGreaterThan(y0);
             const leanDeg = (Math.atan2((x1 - x0) * (1376 / 768), y1 - y0) * 180) / Math.PI;
@@ -69,11 +69,14 @@ describe('realm room life', () => {
             expect(y).toBeLessThanOrEqual(floor.near + 1e-6);
         }
         // The crown's droplets go up from the strike and never below the floor.
-        const crowns = frames.flat().filter((draw): draw is SceneLineDraw => draw.id.startsWith('crown-rain-'));
+        const crowns = frames.flat().filter((draw): draw is SceneLineDraw => draw.kind === 'line' && draw.id === 'crown-rain').flatMap((draw) => draw.segments ?? []);
         expect(crowns.length).toBeGreaterThan(100);
-        for (const bead of crowns) expect(bead.points[1]![1]).toBeLessThanOrEqual(floor.near + 1e-6);
-        // Every drop is one draw always, falling or spent: a count is a count.
-        for (const draws of frames) expect(draws.filter((draw) => /^rain-\d+$/.test(draw.id))).toHaveLength(40);
+        for (const [, head] of crowns) expect(head[1]).toBeLessThanOrEqual(floor.near + 1e-6);
+        // The whole shower is three strokes, near to far, whatever the count, and never more drops than it was asked for.
+        for (const draws of frames) {
+            expect(bands(draws)).toHaveLength(3);
+            expect(bands(draws).reduce((sum, band) => sum + (band.segments?.length ?? 0), 0)).toBeLessThanOrEqual(40);
+        }
         // Leaves lie on the grove's floor a while after they land.
         const grove = over(0, 20_000, 100, (t) => realmRoomLifeDraws({ realm: 'grove', t, depth: 0, lean: false, alpha: 1 })).flat();
         const lying = grove.filter((draw): draw is SceneImageDraw => draw.kind === 'image' && /^grove-leaf-\d+$/.test(draw.id) && draw.scaleY !== undefined && draw.alpha > 0.05);

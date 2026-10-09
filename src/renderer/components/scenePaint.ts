@@ -108,6 +108,11 @@ export interface SceneLineDraw {
     blend?: SceneBlend;
     /** The points it runs through, fractions of the plate. */
     points: ReadonlyArray<readonly [number, number]>;
+    /**
+     * Or many separate strokes of the same colour and width, drawn as one path: a whole band of rain
+     * is one draw, not two hundred (2026-10-09).
+     */
+    segments?: ReadonlyArray<readonly [readonly [number, number], readonly [number, number]]>;
     color: string;
     /** Width as a fraction of the plate's height. */
     width: number;
@@ -327,7 +332,7 @@ const paintFog = (context: ScenePaintContext, draw: SceneFogDraw, env: ScenePain
 };
 
 const paintLine = (context: ScenePaintContext, draw: SceneLineDraw, env: ScenePaintEnv): boolean => {
-    if (draw.points.length < 2) {
+    if (draw.points.length < 2 && !(draw.segments && draw.segments.length > 0)) {
         return false;
     }
     const depth = draw.depth ?? 0;
@@ -340,6 +345,10 @@ const paintLine = (context: ScenePaintContext, draw: SceneLineDraw, env: ScenePa
     context.lineJoin = 'round';
     context.lineCap = 'round';
     context.beginPath();
+    for (const [[ax, ay], [bx, by]] of draw.segments ?? []) {
+        context.moveTo(ax * env.width + shiftX, ay * env.height + shiftY);
+        context.lineTo(bx * env.width + shiftX, by * env.height + shiftY);
+    }
     draw.points.forEach(([x, y], index) => {
         if (index === 0) {
             context.moveTo(x * env.width + shiftX, y * env.height + shiftY);
