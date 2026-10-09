@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-09T14:27:27.178Z",
+  "capturedAt": "2026-10-09T17:43:20.021Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 155703,
+      "bytes": 154398,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 15,
-        "dark": 0.163,
+        "dark": 0.166,
         "light": 0,
-        "colours": 18
+        "colours": 19
       }
     },
     {
@@ -56,12 +56,12 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 146146,
+      "bytes": 144839,
       "status": "captured",
       "stats": {
-        "mean": 25,
+        "mean": 24,
         "std": 15,
-        "dark": 0.12,
+        "dark": 0.123,
         "light": 0,
         "colours": 21
       }
@@ -71,14 +71,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 39308,
+      "bytes": 39335,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 16,
-        "dark": 0.039,
+        "dark": 0.038,
         "light": 0,
-        "colours": 27
+        "colours": 25
       }
     },
     {
@@ -86,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 119836,
+      "bytes": 119997,
       "status": "captured",
       "stats": {
-        "mean": 25,
+        "mean": 24,
         "std": 15,
-        "dark": 0.122,
+        "dark": 0.121,
         "light": 0,
-        "colours": 22
+        "colours": 21
       }
     },
     {
@@ -101,12 +101,12 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 109873,
+      "bytes": 110294,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 14,
-        "dark": 0.148,
+        "dark": 0.149,
         "light": 0,
         "colours": 18
       }
