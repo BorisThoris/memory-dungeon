@@ -1,0 +1,69 @@
+import { CanvasTexture, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace } from 'three';
+import type { Tile, TileSuit } from '../../shared/contracts';
+import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
+import { cardStatusMark, realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
+import { paintCardStatus } from './cardStatusPaint';
+
+/** The painted textures of the marks a card wears (`RealmTileMarks`): one canvas per distinct mark and face, shared. */
+const CANVAS_W = 256;
+const CANVAS_H = Math.round(CANVAS_W * (CARD_PLANE_HEIGHT / CARD_PLANE_WIDTH));
+
+const textures = new Map<string, CanvasTexture>();
+
+export const realmTileMarkTexture = (mark: RealmTileMark, faceUp: boolean): CanvasTexture => {
+    const key = `${realmTileMarkKey(mark)}:${faceUp ? 'front' : 'back'}`;
+    const cached = textures.get(key);
+    if (cached) return cached;
+    const canvas = document.createElement('canvas');
+    canvas.width = CANVAS_W;
+    canvas.height = CANVAS_H;
+    const context = canvas.getContext('2d');
+    if (context) paintCardStatus(context, canvas.width, canvas.height, mark, faceUp);
+    const texture = new CanvasTexture(canvas);
+    texture.colorSpace = SRGBColorSpace;
+    // Mipmapped: a tilted or distant card shrinks this, and without mips it shimmers.
+    texture.minFilter = LinearMipmapLinearFilter;
+    texture.magFilter = LinearFilter;
+    textures.set(key, texture);
+    return texture;
+};
+
+const TURNCOAT_SUITS: readonly TileSuit[] = ['ember', 'tide', 'moss', 'bone'];
+
+/**
+ * Paints the countdown variants of the floor's initial marks before its first frame: Hourglass
+ * sand and fuses down to zero, Turncoats at every element, frost thawing, locks coming off, both
+ * faces. The asset-streaming e2e test caught an Hourglass drawing a canvas mid-play. Returns the
+ * number of new canvases; uploads cached textures too, since a new renderer has its own GPU cache.
+ */
+export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture: CanvasTexture) => void): number => {
+    let painted = 0;
+    const seen = new Set<string>();
+    for (const tile of tiles) {
+        if (tile.state !== 'hidden') continue;
+        const mark = cardStatusMark(tile, false);
+        const lockable = cardStatusMark(tile, true)!;
+        for (const base of mark ? [mark, lockable] : [lockable]) {
+            const sands = Array.from({ length: (base.hourglass ?? 0) + 1 }, (_, index) => index);
+            const fuses = Array.from({ length: base.fuse + 1 }, (_, index) => index);
+            const suits = base.turncoat ? TURNCOAT_SUITS : [base.turncoat];
+            const frosts = Array.from({ length: base.frost + 1 }, (_, index) => index);
+            for (const hourglass of sands) for (const fuse of fuses) for (const turncoat of suits) for (const frost of frosts) {
+                const variant: RealmTileMark = { ...base, frost, fuse, hourglass, ...(turncoat ? { turncoat } : {}) };
+                if (!variant.frost && !variant.snowed && !variant.fuse && !variant.vined && !variant.rime && !variant.seeded && !variant.openingLocked && !variant.turncoat && !variant.hourglass) continue;
+                for (const faceUp of [true, false]) {
+                    const key = `${realmTileMarkKey(variant)}:${faceUp}`;
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+                    const fresh = !textures.has(`${realmTileMarkKey(variant)}:${faceUp ? 'front' : 'back'}`);
+                    const texture = realmTileMarkTexture(variant, faceUp);
+                    if (fresh) {
+                        painted += 1;
+                    }
+                    upload?.(texture);
+                }
+            }
+        }
+    }
+    return painted;
+};

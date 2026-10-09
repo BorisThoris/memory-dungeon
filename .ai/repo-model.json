@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3146,
-    "codeFileCount": 1173,
-    "exportedSymbolCount": 3725,
+    "trackedFileCount": 3148,
+    "codeFileCount": 1175,
+    "exportedSymbolCount": 3727,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9891
+    "relationshipCount": 9902
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "bb006fb01eca2b8293882f1bf7b692f14ac275b890da3333defdfa143c21869b"
+      "sha256": "d14b0f557c62f38c698204b6de3388bfb347c32ba22beabb7cbc5555f6d2793b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4491,8 +4491,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 109851,
-      "sha256": "39168d2919e1ace03a6b9ef062fd9295352ef7ccb0aaeccb7e330d58c5e30d34"
+      "bytes": 110153,
+      "sha256": "9ae6e1a3355cf847b98e4ab56c134c15128b9e9957edf6e8f0cf6c5304998083"
     },
     {
       "path": "public/site.webmanifest",
@@ -11241,8 +11241,20 @@
     {
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "category": "source",
-      "bytes": 2755,
-      "sha256": "4d8987816cd98e9ed618073aa4e21d11afe1304d42d55ad4e69427f6182538c3"
+      "bytes": 1749,
+      "sha256": "e2cc3982c6843faaeec7d05d2bf547d6229b9f92c0b35fd5cbede7df2018a85f"
+    },
+    {
+      "path": "src/renderer/components/realmTileMarkTextures.test.ts",
+      "category": "test",
+      "bytes": 3550,
+      "sha256": "13ff541a0deafbb5801ffea62bdeb4bdb795d1aecfef11b6892f405730aac38b"
+    },
+    {
+      "path": "src/renderer/components/realmTileMarkTextures.ts",
+      "category": "source",
+      "bytes": 3753,
+      "sha256": "5f7f948ab6f41996ee07db25805fd332cbf2357efb0ec6a34ebc00d63ad3e221"
     },
     {
       "path": "src/renderer/components/RealmTravel.module.css",
@@ -12153,8 +12165,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 27838,
-      "sha256": "c097ff5c1e8909d84f8ca9e1861830ee27e7578ab8c5b0a96a967a71c228bc20"
+      "bytes": 27985,
+      "sha256": "3e9f42e66dc521616668570065b6c4104b36f58830de305421c58025cec61273"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -24296,7 +24308,8 @@
         "symbol:src/renderer/components/realmTileMarkKey.ts#realmTileMarkKey"
       ],
       "testedBy": [
-        "file:src/renderer/components/realmTileMarkKey.test.ts"
+        "file:src/renderer/components/realmTileMarkKey.test.ts",
+        "file:src/renderer/components/realmTileMarkTextures.test.ts"
       ]
     },
     {
@@ -24304,16 +24317,47 @@
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 40,
       "imports": [
-        "file:src/renderer/components/cardStatusPaint.ts",
         "file:src/renderer/components/realmTileMarkKey.ts",
+        "file:src/renderer/components/realmTileMarkTextures.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/RealmTileMarks.tsx#RealmTileMarks"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "path": "src/renderer/components/realmTileMarkTextures.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 57,
+      "imports": [
+        "file:src/renderer/components/realmTileMarkKey.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "path": "src/renderer/components/realmTileMarkTextures.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 70,
+      "imports": [
+        "file:src/renderer/components/cardStatusPaint.ts",
+        "file:src/renderer/components/realmTileMarkKey.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
+        "symbol:src/renderer/components/realmTileMarkTextures.ts#realmTileMarkTexture"
       ],
       "testedBy": []
     },
@@ -26988,7 +27032,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 619,
+      "lineCount": 621,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -27000,6 +27044,7 @@
         "file:src/renderer/components/itemEffects.ts",
         "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/renderer/components/pairProximityBadges.ts",
+        "file:src/renderer/components/realmTileMarkTextures.ts",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardCardWindow.ts",
         "file:src/renderer/components/tileBoardFrameAdvance.ts",
@@ -33910,6 +33955,7 @@
         "file:src/renderer/components/realmParticles.test.ts",
         "file:src/renderer/components/realmRoomArt.test.ts",
         "file:src/renderer/components/realmTileMarkKey.test.ts",
+        "file:src/renderer/components/realmTileMarkTextures.test.ts",
         "file:src/renderer/components/roomSpill.test.ts",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
@@ -47518,8 +47564,24 @@
       "name": "RealmTileMarks",
       "kind": "value",
       "file": "src/renderer/components/RealmTileMarks.tsx",
-      "line": 53,
-      "endLine": 63
+      "line": 30,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
+      "name": "prewarmRealmTileMarks",
+      "kind": "value",
+      "file": "src/renderer/components/realmTileMarkTextures.ts",
+      "line": 39,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/components/realmTileMarkTextures.ts#realmTileMarkTexture",
+      "name": "realmTileMarkTexture",
+      "kind": "value",
+      "file": "src/renderer/components/realmTileMarkTextures.ts",
+      "line": 13,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/RealmTravel.tsx#default",
@@ -50758,24 +50820,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 618,
-      "endLine": 618
+      "line": 620,
+      "endLine": 620
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 169,
-      "endLine": 169
+      "line": 170,
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 86,
-      "endLine": 86
+      "line": 87,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -81245,6 +81307,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmTileMarkTextures.ts->symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmTileMarkTextures.ts->symbol:src/renderer/components/realmTileMarkTextures.ts#realmTileMarkTexture",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "symbol:src/renderer/components/realmTileMarkTextures.ts#realmTileMarkTexture",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/RealmTravel.tsx->symbol:src/renderer/components/RealmTravel.tsx#default",
       "source": "file:src/renderer/components/RealmTravel.tsx",
       "target": "symbol:src/renderer/components/RealmTravel.tsx#default",
@@ -106443,15 +106517,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/renderer/components/cardStatusPaint.ts",
-      "source": "file:src/renderer/components/RealmTileMarks.tsx",
-      "target": "file:src/renderer/components/cardStatusPaint.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/renderer/components/realmTileMarkKey.ts",
       "source": "file:src/renderer/components/RealmTileMarks.tsx",
       "target": "file:src/renderer/components/realmTileMarkKey.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/renderer/components/realmTileMarkTextures.ts",
+      "source": "file:src/renderer/components/RealmTileMarks.tsx",
+      "target": "file:src/renderer/components/realmTileMarkTextures.ts",
       "kind": "imports"
     },
     {
@@ -106469,6 +106543,42 @@
     {
       "id": "imports:src/renderer/components/RealmTileMarks.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/RealmTileMarks.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.test.ts->src/renderer/components/realmTileMarkKey.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "target": "file:src/renderer/components/realmTileMarkKey.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.ts->src/renderer/components/cardStatusPaint.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "file:src/renderer/components/cardStatusPaint.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.ts->src/renderer/components/realmTileMarkKey.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "file:src/renderer/components/realmTileMarkKey.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
       "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
@@ -109566,6 +109676,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/pairProximityBadges.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/pairProximityBadges.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/realmTileMarkTextures.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/realmTileMarkTextures.ts",
       "kind": "imports"
     },
     {
@@ -127021,6 +127137,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/realmTileMarkKey.ts->file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "source": "file:src/renderer/components/realmTileMarkKey.ts",
+      "target": "file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RealmTravel.tsx->file:src/renderer/components/RealmTravel.test.tsx",
       "source": "file:src/renderer/components/RealmTravel.tsx",
       "target": "file:src/renderer/components/RealmTravel.test.tsx",
@@ -129460,6 +129582,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/realmTileMarkKey.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/realmTileMarkKey.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/realmTileMarkTextures.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/realmTileMarkTextures.test.ts",
       "kind": "tested_by"
     },
     {
