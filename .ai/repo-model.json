@@ -4491,8 +4491,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110356,
-      "sha256": "c506cb10c230b3bb40d1fb09eb3d547128b84c567024ebc8b5bbe6ecbe54101f"
+      "bytes": 110276,
+      "sha256": "31184e102725c27dfdf6ddd415d5765f494ec91be99b4125bda424ccb18a781b"
     },
     {
       "path": "public/site.webmanifest",
@@ -10779,8 +10779,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 53297,
-      "sha256": "3b46c673c73af96ce8c196d724c419f9572ac86bc6157969680c6ca72736f0a2"
+      "bytes": 53761,
+      "sha256": "46fee26f23b57efaa5a473d6347fb51c231e9812ef98581a77cca3be02bd9b6e"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -10791,8 +10791,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 119302,
-      "sha256": "fa149d61b172b35366f678d0770d9b3c42b894948a8307131b9bc851018b0635"
+      "bytes": 119365,
+      "sha256": "67c7d8ba830a2f3e878b861646a1454a13098bdb309b4de603f9079a0c4e5ad5"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
