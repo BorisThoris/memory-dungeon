@@ -193,6 +193,105 @@ export const landingDraws = (spec: LandingSpec): SceneDraw[] => {
     return out;
 };
 
+// ------------------------------------------------------------------ rain
+
+/** The plate is this much wider than tall: a slant in plate heights is this much less in plate widths. */
+const PLATE_ASPECT = 1376 / 768;
+/** The wind: plate heights sideways per plate height of fall. Rain leans a little, it does not fly. */
+export const RAIN_WIND = 0.08;
+
+interface RainSpec {
+    idPrefix: string;
+    count: number;
+    t: number;
+    floor: GoldFloorBand;
+    alpha: number;
+    seed: number;
+    /** Multiplies the fall speed (the combo's pace). */
+    pace: number;
+    /** The crown of droplets each splash throws (off on a phone). */
+    crowns: boolean;
+}
+
+/**
+ * Rain that falls the way rain does (2026-10-09; the first cut drew each drop as a sideways bar).
+ * Each drop is a streak along its own velocity: nearly straight down at terminal speed, leaning with
+ * one wind for all of them, long and bright near the camera and short, faint and slow on the plate
+ * far off. It strikes the floor where the painting's floor is at its depth, and the strike throws a
+ * crown of droplets on short ballistic arcs and leaves a ring spreading on the wet stone.
+ */
+export const rainDraws = (spec: RainSpec): SceneDraw[] => {
+    const s = spec.t / 1000;
+    const out: SceneDraw[] = [];
+    const fromY = -0.12;
+    const splashS = 0.34;
+    for (let index = 0; index < spec.count; index += 1) {
+        const depth = sceneHash(index, spec.seed);
+        // A far drop covers less of the plate in the same time: it looks slower and shorter.
+        const fallS = (0.42 + 0.38 * depth) / spec.pace;
+        const cycle = fallS + splashS + 0.1 + 0.2 * sceneHash(index, spec.seed + 3);
+        const local0 = s + sceneHash(index, spec.seed + 1) * cycle;
+        const round = Math.floor(local0 / cycle);
+        const local = local0 - round * cycle;
+        const land = spec.floor.near + (spec.floor.far - spec.floor.near) * depth;
+        const drop = land - fromY;
+        const vy = drop / fallS;
+        const vx = (RAIN_WIND * vy) / PLATE_ASPECT;
+        // Where this round's drop comes down: anywhere across, so long as it lands on the plate.
+        const xLand = 0.02 + 0.96 * sceneHash(index * 31 + round, spec.seed + 2);
+        const near = 1 - depth;
+        const length = 0.03 + 0.07 * near;
+        const width = 0.0008 + 0.0018 * near;
+        const alpha = spec.alpha * (0.45 + 0.4 * near);
+        if (local < fallS) {
+            const y = fromY + vy * local;
+            const x = xLand - vx * (fallS - local);
+            const tailDt = length / vy;
+            out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha, blend: 'screen', color: 'rgb(214, 226, 242)', width, points: [[x - vx * tailDt, y - length], [x, y]] });
+            continue;
+        }
+        // The drop is spent: one draw still, transparent, so a count is a count.
+        out.push({ kind: 'line', id: `${spec.idPrefix}-${index}`, alpha: 0, blend: 'screen', color: 'rgb(214, 226, 242)', width, points: [[xLand, land], [xLand, land]] });
+        const since = local - fallS;
+        if (since >= splashS) continue;
+        const q = since / splashS;
+        out.push(
+            ambientSprite({
+                id: `splash-${spec.idPrefix}-${index}`,
+                cell: 'ripple',
+                x: xLand,
+                y: land,
+                size: (0.006 + 0.026 * q) * (0.45 + 0.55 * near),
+                alpha: spec.alpha * 1.4 * (1 - q) ** 1.6,
+                scaleX: 2.8
+            })
+        );
+        if (!spec.crowns) continue;
+        // The crown: droplets thrown up and out, falling back under gravity, each a short streak along its path.
+        const g = 3.2;
+        for (let bead = 0; bead < 3; bead += 1) {
+            const spread = (bead - 1) * 0.9 + (sceneHash(index * 7 + bead + round, spec.seed + 5) - 0.5) * 0.5;
+            const up = (0.18 + 0.12 * sceneHash(index * 11 + bead + round, spec.seed + 6)) * (0.4 + 0.6 * near);
+            const out_ = 0.05 * spread * (0.4 + 0.6 * near);
+            const bx = xLand + (out_ * since) / PLATE_ASPECT;
+            const by = land - (up * since - 0.5 * g * since * since);
+            if (by > land) continue;
+            const dvy = -up + g * since;
+            const dt = 0.018;
+            out.push({
+                kind: 'line',
+                id: `crown-${spec.idPrefix}-${index}-${bead}`,
+                alpha: spec.alpha * 1.2 * (1 - q),
+                blend: 'screen',
+                color: 'rgb(226, 236, 250)',
+                width: width * 0.8,
+                points: [[bx - (out_ * dt) / PLATE_ASPECT, by - dvy * dt], [bx, by]]
+            });
+        }
+    }
+    return out;
+};
+
 // ------------------------------------------------------------------ lightning
 
 /**
@@ -439,7 +538,7 @@ const stormLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number):
     // Lightning out of the clouds onto the rods and the horizon, behind everything else.
     ...stormStrikeDraws(t, depth, alpha),
     // Rain driven across the platform: it strikes the stone and splashes, faster and thicker with the chain.
-    ...landingDraws({ idPrefix: 'storm-rain', cell: 'streak', count: realmLifeCount(34, depth, lean), t, floor: REALM_FLOORS.storm.band, xMin: -0.05, xMax: 1.1, fromY: -0.08, fallS: 0.75 / pace, gravity: false, lieS: 0, gapS: 0.12, slide: -0.09 * pace, sway: 0, size: 0.06, alpha: 0.4 * alpha, seed: 101, rotate: 0.09, splash: { cell: 'ripple', seconds: 0.4, size: 0.026, alpha: 0.7, drops: !lean } }),
+    ...rainDraws({ idPrefix: 'storm-rain', count: realmLifeCount(60, depth, lean), t, floor: REALM_FLOORS.storm.band, alpha: 0.5 * alpha, seed: 101, pace: Math.sqrt(pace), crowns: !lean }),
     // Water standing on the stone catches the light.
     ...glintDraws({ idPrefix: 'storm-puddle', points: STORM_PUDDLES, t, everyMs: 4000 / pace, lastsMs: 700, size: 0.045, alpha: 0.55 * alpha, seed: 104, cell: 'glint' }),
     ...glintDraws({ idPrefix: 'storm-rod', points: STORM_RODS, t, everyMs: 5200 / pace, lastsMs: 500, size: 0.06, alpha: 0.9 * alpha, seed: 103, cell: 'dotViolet' })

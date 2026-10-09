@@ -61,7 +61,15 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
 - The realm rooms do this in `realmRoomLife.ts`; a new room or plate gets the same, a test per room
   (present, more of it deeper, halved on lean, none when still), and a look at it in the browser.
 
-## 4. How a change to these is checked
+## 4. The board is the cards on the room's floor
+
+- No cell tiles, ground squares or grid behind or between the cards. The element-ground squares
+  (`ElementGround.tsx`: wave lines, crack webs and tints blended over each cell) were removed on the
+  owner's word (2026-10-09, "that can go away entirely"); the ground rules still run, but nothing
+  paints squares on the board. Do not restore them for the ground mechanic's sake: show a mechanic
+  on the cards or in the room, not as a tile grid.
+
+## 5. How a change to these is checked
 
 - Unit tests for the rule (monotonic in the combo, present per room, the music key and crossfade).
 - A browser look, headless and isolated (see the global rule about the desktop): screenshots of the

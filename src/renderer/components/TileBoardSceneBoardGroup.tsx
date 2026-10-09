@@ -2,7 +2,6 @@ import type { MutableRefObject, RefObject, ReactNode } from 'react';
 import type { Group, PlaneGeometry, ShaderMaterial } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { TileBoardParticles } from './TileBoardParticles';
-import { ElementGround } from './ElementGround';
 import { MeteorStrike } from './MeteorStrike';
 import { ColossusStone } from './ColossusStone';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
@@ -97,7 +96,6 @@ export const TileBoardSceneBoardGroup = ({
 }: TileBoardSceneBoardGroupProps) => (
     <group ref={boardGroupRef} rotation={[0, 0, 0]}>
         {distantCards}
-        <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} />
         {board.meteorImpact && <MeteorStrike key={board.meteorImpact.key} board={board} compact={compact} reduceMotion={reduceMotion} time={visualTime} />}
         {/* The rules-63 Colossus, two cells by two at the head of the grid (`ColossusStone.tsx`). */}
         {board.colossus?.form === 'fixed' && <ColossusStone key={board.level} board={board} compact={compact} reduceMotion={reduceMotion} rows={boardRows} time={visualTime} />}
