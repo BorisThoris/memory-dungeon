@@ -3,6 +3,7 @@ import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
+import { PlasmaRail } from './PlasmaRail';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
 import { missesLeft } from '../../shared/miss-bank';
@@ -669,6 +670,8 @@ const RunShell = ({
                             {rung('clean', CHAIN_TIER_LABELS.clean, 'var(--chain-meter-clean)')}
                             {rung('none', 'Lone', '0%')}
                             <span className={styles.ladderFlames} data-testid="hud-chain-flames" />
+                            {/* The beam of plasma up the rail (`PlasmaRail.tsx`). */}
+                            <PlasmaRail colour={temper.colors[heat.stageIndex] ?? '#ffb34b'} combo={chain} fill={meter.fill} reduceMotion={reduceMotion} />
                             <span className={styles.ladderFill} />
                             <span className={styles.ladderMarker} />
                         </span>

@@ -703,9 +703,11 @@
 .shell[data-combo-stage='blazing'] .ladderFlames,
 .shell[data-combo-stage='inferno'] .ladderFlames,
 .shell[data-combo-stage='legendary'] .ladderFlames {
-    width: calc(1.8rem + 0.6rem * var(--combo-surge, 0));
-    left: calc(-0.85rem - 0.3rem * var(--combo-surge, 0));
-    box-shadow: 0 0 calc(18px + 12px * var(--combo-surge, 0)) color-mix(in srgb, var(--combo-flame) 70%, transparent);
+    /* Capped: past Legendary the plasma beam (`PlasmaRail.tsx`) carries the climb, and an
+       uncapped haze grew across the board on a very deep chain. */
+    width: calc(1.8rem + 0.6rem * min(2, var(--combo-surge, 0)));
+    left: calc(-0.85rem - 0.3rem * min(2, var(--combo-surge, 0)));
+    box-shadow: 0 0 calc(18px + 12px * min(2, var(--combo-surge, 0))) color-mix(in srgb, var(--combo-flame) 70%, transparent);
 }
 
 @keyframes ladderFlameLick {

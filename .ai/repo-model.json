@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3023,
-    "codeFileCount": 1149,
-    "exportedSymbolCount": 3630,
+    "trackedFileCount": 3025,
+    "codeFileCount": 1152,
+    "exportedSymbolCount": 3633,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9697
+    "relationshipCount": 9705
   },
   "inventory": [
     {
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2a6bac539e91a60024ec774dc5afeef58802ffd6485473a6011df5ff9512f340"
+      "sha256": "5e7559ffe159828a37f921796e2b29fe08fecd2a25d9e7e7e0754e5214a6a183"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4229,12 +4229,6 @@
       "category": "test",
       "bytes": 1041,
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
-    },
-    {
-      "path": "e2e/zz-scratch-meteor.spec.ts",
-      "category": "test",
-      "bytes": 2599,
-      "sha256": "a1b2e9968744ea5e98804feda0d65c3d32bb36356afe431f3940d069c0d6f8b5"
     },
     {
       "path": "eslint.config.mjs",
@@ -10411,6 +10405,24 @@
       "sha256": "61a12eb44cb8d6681ff947d0458b47dad4c9195e84eae806a20ca633fe44bb71"
     },
     {
+      "path": "src/renderer/components/PlasmaRail.tsx",
+      "category": "source",
+      "bytes": 6965,
+      "sha256": "b75ece046025254b96989d9ff7cf285def2c2ae957511540d5da6155e97b95d5"
+    },
+    {
+      "path": "src/renderer/components/plasmaRailLook.test.ts",
+      "category": "test",
+      "bytes": 1038,
+      "sha256": "7f258271c102f250c0b09d97cafb9bf6bbf7c1bd687305d7e65e920ef4d44cf6"
+    },
+    {
+      "path": "src/renderer/components/plasmaRailLook.ts",
+      "category": "source",
+      "bytes": 1169,
+      "sha256": "bb3d3a9b3bc615e14a1bf014658574a88e526573cbc38beb9979944fd4f1da94"
+    },
+    {
       "path": "src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "category": "test",
       "bytes": 1237,
@@ -10593,8 +10605,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 61468,
-      "sha256": "cdeb312e8d5255e76d1f4de2b7c37b52bd5cfed329ef14043db70a65103e39a0"
+      "bytes": 61651,
+      "sha256": "717d48aa25f35c6b868568f7a2ee2afd5522459c49ca967fb83e31edfbd4b257"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -10605,8 +10617,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 46957,
-      "sha256": "f80c88e342e5c3a234aae20b9353c141a77b7bcdae2a2c15bbb5c47edd9a2355"
+      "bytes": 47243,
+      "sha256": "6f67fc6ab72e488c3cffb4ee327816ec443a307580044fe711286eef5c7d0ff5"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -22847,6 +22859,49 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/PlasmaRail.tsx",
+      "path": "src/renderer/components/PlasmaRail.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 145,
+      "imports": [
+        "file:src/renderer/components/plasmaRailLook.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/PlasmaRail.tsx#PlasmaRail"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/plasmaRailLook.test.ts",
+      "path": "src/renderer/components/plasmaRailLook.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 21,
+      "imports": [
+        "file:src/renderer/components/plasmaRailLook.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/plasmaRailLook.ts",
+      "path": "src/renderer/components/plasmaRailLook.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 31,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/plasmaRailLook.ts#plasmaRailLook",
+        "symbol:src/renderer/components/plasmaRailLook.ts#PlasmaRailLook"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/plasmaRailLook.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "path": "src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "layer": "renderer",
@@ -23329,13 +23384,14 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 837,
+      "lineCount": 840,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/ElementResonanceStrip.tsx",
         "file:src/renderer/components/memorizeUrgency.ts",
+        "file:src/renderer/components/PlasmaRail.tsx",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/realmCopy.ts",
@@ -45194,6 +45250,30 @@
       "endLine": 61
     },
     {
+      "id": "symbol:src/renderer/components/PlasmaRail.tsx#PlasmaRail",
+      "name": "PlasmaRail",
+      "kind": "value",
+      "file": "src/renderer/components/PlasmaRail.tsx",
+      "line": 32,
+      "endLine": 144
+    },
+    {
+      "id": "symbol:src/renderer/components/plasmaRailLook.ts#plasmaRailLook",
+      "name": "plasmaRailLook",
+      "kind": "value",
+      "file": "src/renderer/components/plasmaRailLook.ts",
+      "line": 21,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/plasmaRailLook.ts#PlasmaRailLook",
+      "name": "PlasmaRailLook",
+      "kind": "interface",
+      "file": "src/renderer/components/plasmaRailLook.ts",
+      "line": 8,
+      "endLine": 17
+    },
+    {
       "id": "symbol:src/renderer/components/PortalScene.tsx#PortalScene",
       "name": "PortalScene",
       "kind": "function",
@@ -45750,24 +45830,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 836,
-      "endLine": 836
+      "line": 839,
+      "endLine": 839
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 60,
-      "endLine": 90
+      "line": 61,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 47,
-      "endLine": 58
+      "line": 48,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -69490,7 +69570,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 95
+          "line": 96
         }
       ],
       "tests": [
@@ -70342,7 +70422,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 13
+          "line": 14
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -70972,7 +71052,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 10
+          "line": 11
         }
       ],
       "tests": [
@@ -72340,7 +72420,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 352
+          "line": 353
         }
       ],
       "tests": [
@@ -72379,7 +72459,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 352
+          "line": 353
         }
       ],
       "tests": [
@@ -72413,7 +72493,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 352
+          "line": 353
         }
       ],
       "tests": [
@@ -72447,7 +72527,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 352
+          "line": 353
         }
       ],
       "tests": [
@@ -78434,6 +78514,24 @@
       "id": "exports:src/renderer/components/PairProximityHintPlane.tsx->symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
       "source": "file:src/renderer/components/PairProximityHintPlane.tsx",
       "target": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/PlasmaRail.tsx->symbol:src/renderer/components/PlasmaRail.tsx#PlasmaRail",
+      "source": "file:src/renderer/components/PlasmaRail.tsx",
+      "target": "symbol:src/renderer/components/PlasmaRail.tsx#PlasmaRail",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/plasmaRailLook.ts->symbol:src/renderer/components/plasmaRailLook.ts#plasmaRailLook",
+      "source": "file:src/renderer/components/plasmaRailLook.ts",
+      "target": "symbol:src/renderer/components/plasmaRailLook.ts#plasmaRailLook",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/plasmaRailLook.ts->symbol:src/renderer/components/plasmaRailLook.ts#PlasmaRailLook",
+      "source": "file:src/renderer/components/plasmaRailLook.ts",
+      "target": "symbol:src/renderer/components/plasmaRailLook.ts#PlasmaRailLook",
       "kind": "exports"
     },
     {
@@ -103149,6 +103247,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/PlasmaRail.tsx->src/renderer/components/plasmaRailLook.ts",
+      "source": "file:src/renderer/components/PlasmaRail.tsx",
+      "target": "file:src/renderer/components/plasmaRailLook.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/plasmaRailLook.test.ts->src/renderer/components/plasmaRailLook.ts",
+      "source": "file:src/renderer/components/plasmaRailLook.test.ts",
+      "target": "file:src/renderer/components/plasmaRailLook.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/plasmaRailLook.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/plasmaRailLook.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/PlayableOnboardingHarness.test.tsx->src/shared/game-core.ts",
       "source": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "target": "file:src/shared/game-core.ts",
@@ -103752,6 +103868,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/memorizeUrgency.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/memorizeUrgency.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/PlasmaRail.tsx",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/PlasmaRail.tsx",
       "kind": "imports"
     },
     {
@@ -123910,6 +124032,12 @@
       "id": "tested_by:src/renderer/components/OverlayModal.tsx->file:src/renderer/components/OverlayModal.test.tsx",
       "source": "file:src/renderer/components/OverlayModal.tsx",
       "target": "file:src/renderer/components/OverlayModal.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/plasmaRailLook.ts->file:src/renderer/components/plasmaRailLook.test.ts",
+      "source": "file:src/renderer/components/plasmaRailLook.ts",
+      "target": "file:src/renderer/components/plasmaRailLook.test.ts",
       "kind": "tested_by"
     },
     {
