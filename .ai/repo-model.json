@@ -11235,8 +11235,8 @@
     {
       "path": "src/renderer/components/realmRoomLife.ts",
       "category": "source",
-      "bytes": 38041,
-      "sha256": "23e4ffaa52598a1dbcec2089af83cb10649ada84eef2b9fc17c0ad65bd178d54"
+      "bytes": 38340,
+      "sha256": "41c8b402b9d7ceb844c34c5d4ca6148f22e62c012076c555baa62348afee530b"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -24197,7 +24197,7 @@
       "path": "src/renderer/components/realmRoomLife.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 664,
+      "lineCount": 666,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/goldRain.ts",
@@ -47262,8 +47262,8 @@
       "name": "realmLayerLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 605,
-      "endLine": 637
+      "line": 607,
+      "endLine": 639
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifeCount",
@@ -47286,8 +47286,8 @@
       "name": "realmRoomLifeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 593,
-      "endLine": 594
+      "line": 595,
+      "endLine": 596
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RealmRoomLifeInput",
@@ -47302,8 +47302,8 @@
       "name": "realmRoomSpriteDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 644,
-      "endLine": 663
+      "line": 646,
+      "endLine": 665
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
