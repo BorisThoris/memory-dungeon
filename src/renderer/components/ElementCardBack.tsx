@@ -1,10 +1,11 @@
-import { useRef, type ReactElement } from 'react';
+import { useCallback, useRef, type ReactElement } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { AdditiveBlending, CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
 import type { TileSuit } from '../../shared/contracts';
 import { getTileSuit, TILE_SUITS } from '../../shared/tile-suit-rules';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
+import { installCardBackInk } from './cardBackInk';
 
 /** Clean card bodies and a persistent rune. Fire, water, ice and growth move
  * through the shared particle pool, never as painted-on effects. */
@@ -141,22 +142,29 @@ const EmpoweredGlow = ({ suit, reduceMotion }: { suit: TileSuit; reduceMotion: b
     );
 };
 
-/** The card's back, made of its element; brighter while it is empowered. */
+/** The card's back, made of its element and inked its own way (`cardBackInk.ts`); brighter while it is empowered. */
 export const ElementCardBack = ({
     faceZ,
     suit,
     empowered,
-    reduceMotion
+    reduceMotion,
+    seed = 0
 }: {
     faceZ: number;
     suit: TileSuit;
     empowered: boolean;
     reduceMotion: boolean;
-}): ReactElement => (
-    <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
+    /** The card's layout seed: its rosette, its corners. */
+    seed?: number;
+}): ReactElement => {
+    const ink = useCallback((material: MeshBasicMaterial | null) => {
+        if (material) installCardBackInk(material, suit, seed);
+    }, [seed, suit]);
+    return <group position={[0, 0, -faceZ]} rotation={[0, Math.PI, 0]}>
         <mesh position={[0, 0, 0.05]} raycast={noopMeshRaycast} renderOrder={7}>
             <planeGeometry args={[CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT]} />
             <meshBasicMaterial
+                ref={ink}
                 depthTest
                 depthWrite={false}
                 map={elementTexture(suit, false)}
@@ -169,5 +177,5 @@ export const ElementCardBack = ({
             />
         </mesh>
         {empowered ? <EmpoweredGlow reduceMotion={reduceMotion} suit={suit} /> : null}
-    </group>
-);
+    </group>;
+};

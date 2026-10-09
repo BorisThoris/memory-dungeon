@@ -825,7 +825,7 @@ const TileBezelInner = ({
                         <>
                             {/* Each side is drawn only while it faces out: the hidden side's layers are draw calls for nothing. */}
                             <group visible={!faceUp}>
-                                <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} suit={tile.suit} />
+                                <ElementCardBack empowered={!statusBlocksTurning && tileCharge(tile) > 0 && tile.state === 'hidden'} faceZ={faceZ} reduceMotion={reduceMotion} seed={transform.seed} suit={tile.suit} />
                                 <ElementCardMaterial suit={tile.suit} faceZ={faceZ} front={false} charge={tileCharge(tile)} dissolve={dissolveUniforms} />
                             </group>
                             <group visible={faceUp}>

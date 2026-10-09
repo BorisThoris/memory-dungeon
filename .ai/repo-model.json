@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3018,
-    "codeFileCount": 1145,
-    "exportedSymbolCount": 3616,
+    "trackedFileCount": 3022,
+    "codeFileCount": 1148,
+    "exportedSymbolCount": 3620,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9663
+    "relationshipCount": 9674
   },
   "inventory": [
     {
@@ -185,6 +185,12 @@
       "category": "asset",
       "bytes": 61963,
       "sha256": "6797a7e752e9dd26785e47ce6c0ef8172490846c8cfb9d95bedcd6df2c5c3af1"
+    },
+    {
+      "path": "back-preview.html",
+      "category": "other",
+      "bytes": 145,
+      "sha256": "7025e313a10668d6cb1734294841d4a43672fbc3b66c06905c0bfb18eb0b4505"
     },
     {
       "path": "build/.gitkeep",
@@ -2416,7 +2422,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "7c9ce41a25d36bee86366d8add6911a1c14f12b6a3a835942cbe8ae83a14232e"
+      "sha256": "ffe1635c6755fcd2fcc6b3100bee7cd9569decede0dd160254dc570cd3dce7d5"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5717,6 +5723,12 @@
       "category": "script",
       "bytes": 1108,
       "sha256": "8403d18a273984073c352c9721594d49669c7154f1f540f1f4ee04daa7dea804"
+    },
+    {
+      "path": "src/__scratch/backPreview.ts",
+      "category": "source",
+      "bytes": 1339,
+      "sha256": "53e509f7f2f6a2ec8ccecfac4bfbf0ae50f883da89b23c9bd0e7cdadee8d6f00"
     },
     {
       "path": "src/blueprint/definitions/devTerms.blueprint.json",
@@ -9685,6 +9697,18 @@
       "sha256": "d5e5fbf5bfb579b4f2d45e66b92cfbe035c1e1b03599fb43a91acecd46a91780"
     },
     {
+      "path": "src/renderer/components/cardBackInk.test.ts",
+      "category": "test",
+      "bytes": 1628,
+      "sha256": "046153d354666036ff10aff92569747469b6041c3b43e03d203d5e3cbd84840c"
+    },
+    {
+      "path": "src/renderer/components/cardBackInk.ts",
+      "category": "source",
+      "bytes": 4470,
+      "sha256": "4f9a03815fa20f5b594dc2fecc6b11a3c06edaaadc3797bbd2efab014c2489fe"
+    },
+    {
       "path": "src/renderer/components/cardDepartureParticles.test.ts",
       "category": "test",
       "bytes": 1441,
@@ -9849,8 +9873,8 @@
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
       "category": "source",
-      "bytes": 7105,
-      "sha256": "c23f28d7cbf2d292a1b573d5df1f9b8ade0a77bd859b6fc84ae6a7d7990cbe17"
+      "bytes": 7495,
+      "sha256": "7c49443db516e6dbcff186c79334f3fda025d880676b7a4d6a2ff4f0ee0de380"
     },
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
@@ -10857,8 +10881,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 37489,
-      "sha256": "1971973585ea3e85ec8baf9a875095b73781240e24aa26ae48947647ddf1c85c"
+      "bytes": 37511,
+      "sha256": "ea5aad5332365aa9b8eec6e9724f4ccc3f6b9798bbbe0006484ed5a7e5b36569"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -18123,6 +18147,19 @@
   ],
   "files": [
     {
+      "id": "file:src/__scratch/backPreview.ts",
+      "path": "src/__scratch/backPreview.ts",
+      "layer": "other",
+      "role": "production",
+      "lineCount": 21,
+      "imports": [
+        "file:src/renderer/components/cardBackInk.ts",
+        "file:src/renderer/components/ElementCardBack.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/blueprint/definitions/devTerms.blueprint.json",
       "path": "src/blueprint/definitions/devTerms.blueprint.json",
       "layer": "blueprint",
@@ -20861,6 +20898,38 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/cardBackInk.test.ts",
+      "path": "src/renderer/components/cardBackInk.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 30,
+      "imports": [
+        "file:src/renderer/components/cardBackInk.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardBackInk.ts",
+      "path": "src/renderer/components/cardBackInk.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 91,
+      "imports": [
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardBackInk.ts#CARD_BACK_INK",
+        "symbol:src/renderer/components/cardBackInk.ts#cardBackInkSeed",
+        "symbol:src/renderer/components/cardBackInk.ts#cardBackInkUniforms",
+        "symbol:src/renderer/components/cardBackInk.ts#installCardBackInk"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardBackInk.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardDepartureParticles.test.ts",
       "path": "src/renderer/components/cardDepartureParticles.test.ts",
       "layer": "renderer",
@@ -21305,8 +21374,9 @@
       "path": "src/renderer/components/ElementCardBack.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 174,
+      "lineCount": 182,
       "imports": [
+        "file:src/renderer/components/cardBackInk.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts",
@@ -43482,6 +43552,38 @@
       "endLine": 112
     },
     {
+      "id": "symbol:src/renderer/components/cardBackInk.ts#CARD_BACK_INK",
+      "name": "CARD_BACK_INK",
+      "kind": "value",
+      "file": "src/renderer/components/cardBackInk.ts",
+      "line": 13,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/cardBackInk.ts#cardBackInkSeed",
+      "name": "cardBackInkSeed",
+      "kind": "value",
+      "file": "src/renderer/components/cardBackInk.ts",
+      "line": 28,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/cardBackInk.ts#cardBackInkUniforms",
+      "name": "cardBackInkUniforms",
+      "kind": "value",
+      "file": "src/renderer/components/cardBackInk.ts",
+      "line": 33,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/components/cardBackInk.ts#installCardBackInk",
+      "name": "installCardBackInk",
+      "kind": "value",
+      "file": "src/renderer/components/cardBackInk.ts",
+      "line": 65,
+      "endLine": 90
+    },
+    {
       "id": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
       "name": "CARD_DEPARTURE_PARTICLE_DELAY",
       "kind": "value",
@@ -43870,24 +43972,24 @@
       "name": "ElementCardBack",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 145,
-      "endLine": 173
+      "line": 146,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#elementTexture",
       "name": "elementTexture",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 93,
-      "endLine": 109
+      "line": 94,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures",
       "name": "prewarmElementCardTextures",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 113,
-      "endLine": 118
+      "line": 114,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/components/ElementCardMaterial.tsx#ElementCardMaterial",
@@ -77013,6 +77115,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardBackInk.ts->symbol:src/renderer/components/cardBackInk.ts#CARD_BACK_INK",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "symbol:src/renderer/components/cardBackInk.ts#CARD_BACK_INK",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardBackInk.ts->symbol:src/renderer/components/cardBackInk.ts#cardBackInkSeed",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "symbol:src/renderer/components/cardBackInk.ts#cardBackInkSeed",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardBackInk.ts->symbol:src/renderer/components/cardBackInk.ts#cardBackInkUniforms",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "symbol:src/renderer/components/cardBackInk.ts#cardBackInkUniforms",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardBackInk.ts->symbol:src/renderer/components/cardBackInk.ts#installCardBackInk",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "symbol:src/renderer/components/cardBackInk.ts#installCardBackInk",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
       "source": "file:src/renderer/components/cardDepartureParticles.ts",
       "target": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
@@ -97861,6 +97987,18 @@
       "kind": "implemented_by"
     },
     {
+      "id": "imports:src/__scratch/backPreview.ts->src/renderer/components/cardBackInk.ts",
+      "source": "file:src/__scratch/backPreview.ts",
+      "target": "file:src/renderer/components/cardBackInk.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/__scratch/backPreview.ts->src/renderer/components/ElementCardBack.tsx",
+      "source": "file:src/__scratch/backPreview.ts",
+      "target": "file:src/renderer/components/ElementCardBack.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/crash-log.test.ts->src/main/crash-log.ts",
       "source": "file:src/main/crash-log.test.ts",
       "target": "file:src/main/crash-log.ts",
@@ -99943,6 +100081,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardBackInk.test.ts->src/renderer/components/cardBackInk.ts",
+      "source": "file:src/renderer/components/cardBackInk.test.ts",
+      "target": "file:src/renderer/components/cardBackInk.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardBackInk.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardBackInk.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardDepartureParticles.test.ts->src/renderer/components/cardDepartureParticles.ts",
       "source": "file:src/renderer/components/cardDepartureParticles.test.ts",
       "target": "file:src/renderer/components/cardDepartureParticles.ts",
@@ -100552,6 +100708,12 @@
       "id": "imports:src/renderer/components/DistantCards.tsx->src/renderer/components/tileBoardSceneRegistries.ts",
       "source": "file:src/renderer/components/DistantCards.tsx",
       "target": "file:src/renderer/components/tileBoardSceneRegistries.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ElementCardBack.tsx->src/renderer/components/cardBackInk.ts",
+      "source": "file:src/renderer/components/ElementCardBack.tsx",
+      "target": "file:src/renderer/components/cardBackInk.ts",
       "kind": "imports"
     },
     {
@@ -123128,6 +123290,12 @@
       "id": "tested_by:src/renderer/components/cardArcaneGlowMaterial.ts->file:src/renderer/components/tileBoardGlowVisualState.test.ts",
       "source": "file:src/renderer/components/cardArcaneGlowMaterial.ts",
       "target": "file:src/renderer/components/tileBoardGlowVisualState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardBackInk.ts->file:src/renderer/components/cardBackInk.test.ts",
+      "source": "file:src/renderer/components/cardBackInk.ts",
+      "target": "file:src/renderer/components/cardBackInk.test.ts",
       "kind": "tested_by"
     },
     {
