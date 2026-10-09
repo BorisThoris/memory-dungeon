@@ -56,6 +56,8 @@ void main() {
     float alpha = colour.a * (1.0 - burnt * step(0.001, uBurn)) * uFade;
     if (alpha < 0.02) discard;
     gl_FragColor = vec4(lit, alpha);
+    // The card textures are sRGB: convert to the output the way the cards themselves are drawn.
+    #include <colorspace_fragment>
 }`;
 
 interface ShardMesh {
