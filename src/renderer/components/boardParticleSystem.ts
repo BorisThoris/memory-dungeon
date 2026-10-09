@@ -132,7 +132,10 @@ const vertexShader = /* glsl */ `
             // A short, velocity-aligned streak rather than a spinning round point.
             vec2 velocity = movement.xy * exp(-movement.w * seconds) - vec2(0.0, movement.z * seconds);
             angle = atan(velocity.y, velocity.x) - 1.570796;
-            local.y *= 1.0 + min(3.0, length(velocity) * 2.5);
+            // A combo ember (the only spark emitted at emphasis 0.58) is a glowing mote, barely drawn
+            // out: stretched like a burst spark, a field of them rising read as rain on the cards.
+            bool comboEmber = vKind < 0.5 && appearance.w > 0.5 && appearance.w < 0.65;
+            local.y *= comboEmber ? 1.0 + min(0.5, length(velocity) * 0.6) : 1.0 + min(3.0, length(velocity) * 2.5);
         }
         if (flame) local.y *= 1.9;
         if (drop) local.y *= 1.2 + min(1.2, movement.z * seconds);
@@ -177,6 +180,14 @@ const fragmentShader = /* glsl */ `
         float shape = exp(-dot(p * vec2(2.5, 1.3), p * vec2(2.5, 1.3)) * 2.0);
         float strength = 0.9;
         vec3 color = vTint;
+        if (vKind < 0.5 && vEmphasis > 0.5 && vEmphasis < 0.65) {
+            // The combo ember: a hot core in a round halo, flickering as it cools.
+            float core = exp(-radius * radius * 14.0);
+            float halo = exp(-radius * radius * 3.5);
+            shape = core * 0.85 + halo * 0.35;
+            color = mix(vTint, vec3(1.0, 0.96, 0.86), core * 0.55);
+            strength = 0.9 * (0.75 + 0.25 * sin(vSeconds * 17.0 + vPhase * 6.0));
+        }
         if (vKind > 0.5 && vKind < 1.5) {
             shape = coverage(abs(radius - 0.72) - 0.035);
             strength = 0.58;

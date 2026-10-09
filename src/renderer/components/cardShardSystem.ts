@@ -77,11 +77,15 @@ void main() {
         alpha *= (0.92 - 0.35 * uGo) * smoothstep(uGo * 1.25 - 0.25, uGo * 1.25, vUv.y + (grain - 0.5) * 0.1);
     } else if (look == 3) {
         // Ice: frosted, bright and cold at the break, glinting, melting at the end.
-        rgb = mix(rgb, vec3(0.86, 0.95, 1.0), 0.32);
-        rgb += vec3(0.75, 0.95, 1.0) * crack * 1.4;
+        // Glass: the card seen through cold ice, clear in the middle, bright where it broke, a light
+        // sweeping across each piece as it turns, and melting away at the end.
+        rgb = mix(rgb, vec3(0.62, 0.84, 0.98), 0.45);
+        rgb += vec3(0.75, 0.95, 1.0) * crack * 1.6;
+        float sweep = smoothstep(0.82, 1.0, sin((vUv.x + vUv.y) * 9.0 - uAge * 6.0));
+        rgb += vec3(0.85, 0.97, 1.0) * sweep * 0.5;
         float glint = step(0.993, hash(floor(vUv * 70.0) + floor(uAge * 9.0)));
         rgb += vec3(1.0) * glint * 1.6;
-        alpha *= (1.0 - uGo) * (0.88 + 0.12 * inside);
+        alpha *= (1.0 - uGo) * mix(0.95, 0.42, inside) + sweep * 0.25 * (1.0 - uGo);
     } else if (look == 4) {
         // Growth: a leaf's green creeps in from the break; it crumbles away from the edges at the end.
         float green = smoothstep(1.0 - uGo * 1.3, 1.3 - uGo * 1.3, rough);

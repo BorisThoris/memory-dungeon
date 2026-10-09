@@ -114,7 +114,7 @@ export interface ShardStyleSpec {
 export const SHARD_STYLES: Readonly<Record<ShardStyle, ShardStyleSpec>> = {
     fire: { count: 6, force: 0.9, lift: 1.8, gravity: 5, drag: 1.4, restitution: 0.15, friction: 0.4, spin: 4, flutter: 0.06, flutterRate: 3, life: 2.0, goFrom: 0.5, look: 1 },
     water: { count: 6, force: 0.6, lift: 0, gravity: 10, drag: 0.6, restitution: 0, friction: 0.2, spin: 2, flutter: 0, flutterRate: 0, life: 1.5, goFrom: 0.35, look: 2 },
-    ice: { count: 6, force: 1.2, lift: 0.5, gravity: 10, drag: 0.2, restitution: 0.42, friction: 0.7, spin: 11, flutter: 0, flutterRate: 0, life: 2.6, goFrom: 1.6, look: 3 },
+    ice: { count: 8, force: 1.2, lift: 0.5, gravity: 10, drag: 0.2, restitution: 0.42, friction: 0.7, spin: 11, flutter: 0, flutterRate: 0, life: 2.2, goFrom: 1.1, look: 3 },
     growth: { count: 6, force: 0.7, lift: 0.9, gravity: 3.2, drag: 2.6, restitution: 0.05, friction: 0.3, spin: 3, flutter: 0.22, flutterRate: 4.2, life: 2.8, goFrom: 1.7, look: 4 },
     stone: { count: 6, force: 1.1, lift: 0.5, gravity: 12, drag: 0.25, restitution: 0.25, friction: 0.5, spin: 7, flutter: 0, flutterRate: 0, life: 2.0, goFrom: 1.2, look: 0 }
 };

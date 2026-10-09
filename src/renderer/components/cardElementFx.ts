@@ -112,11 +112,13 @@ void main() {
 // ------------------------------------------------------------------ fire: the card combusts
 
 const combustVertex = `${COMMON}
+// The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
+float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 varying float vBurn;
 void main() {
     vUv = uv;
     vec3 p = position;
-    float front = uT * 0.55 - 0.05;
+    float front = burnFront(uv.x);
     // Burnt, it curls back away from the flame.
     float burnt = clamp((front - uv.y) * 3.0, 0.0, 1.0);
     p.z -= burnt * burnt * 0.22;
@@ -127,18 +129,21 @@ void main() {
 }`;
 
 const combustFragment = `${COMMON}${FACE}
+// The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
+float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 uniform vec3 uTint;
 varying float vBurn;
 void main() {
     vec4 colour = cardFace(vUv);
     float n = fbm(vUv * vec2(7.0, 9.0)) - 0.5;
-    float d = vBurn + n * 0.12;
+    // Per pixel, so the line is as ragged as the fbm and not the mesh's resolution.
+    float d = burnFront(vUv.x) - vUv.y + n * 0.1;
     // Ahead of the fire it scorches brown; behind the glowing edge it is char, then ash and gone.
     vec3 rgb = colour.rgb;
     rgb = mix(rgb, rgb * vec3(0.55, 0.35, 0.2), smoothstep(-0.18, 0.0, d));
     rgb = mix(rgb, vec3(0.06, 0.04, 0.03), smoothstep(0.0, 0.06, d));
-    float edge = exp(-pow(d, 2.0) / 0.0009);
-    rgb += mix(uTint, vec3(1.0, 0.85, 0.45), 0.5) * edge * 2.4;
+    float edge = exp(-pow(d, 2.0) / 0.0012) * (0.7 + 0.6 * noise(vec2(vUv.x * 30.0, uT * 8.0)));
+    rgb += mix(uTint, vec3(1.0, 0.7, 0.3), 0.5) * edge * 1.9;
     float alpha = colour.a * (1.0 - smoothstep(0.12, 0.2, d));
     if (alpha < 0.02) discard;
     gl_FragColor = vec4(rgb, alpha);
@@ -153,13 +158,15 @@ void main() {
 }`;
 
 const flameFragment = `${COMMON}
+// The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
+float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 uniform vec3 uTint;
 uniform float uDuration;
 uniform vec2 uCard;
 void main() {
     // The quad is the card's width and a fifth again, and 1.6 of its height: the card fills 0..1 of y.
     vec2 p = vec2((vUv.x - 0.5) * 1.2, vUv.y * 1.6);
-    float front = uT * 0.55 - 0.05;
+    float front = burnFront(p.x + 0.5);
     float above = p.y - front;
     float span = 1.0 - smoothstep(0.44, 0.56, abs(p.x));
     // Rising turbulence bends the flames; tongues are noise stretched upward and drawn up fast.
@@ -168,7 +175,7 @@ void main() {
     float tongues = fbm(vec2(px * 6.5, p.y * 1.4 - uT * 4.2));
     float height = 0.45 + 0.55 * fbm(vec2(px * 2.6 + 5.0, uT * 1.4));
     float k = clamp(1.0 - above / height, 0.0, 1.0);
-    float flame = smoothstep(-0.05, 0.02, above) * pow(k, 0.8) * smoothstep(0.38, 0.8, tongues + k * 0.38) * span;
+    float flame = smoothstep(-0.06, 0.03, above + (noise(vec2(px * 9.0, uT * 5.0)) - 0.5) * 0.05) * pow(k, 0.8) * smoothstep(0.38, 0.8, tongues + k * 0.38) * span;
     // On the char below the edge, small flames still flicker.
     float flicker = (1.0 - smoothstep(-0.3, 0.0, above)) * step(above, 0.0) * smoothstep(0.62, 0.9, noise(vec2(px * 14.0, p.y * 9.0 - uT * 6.0))) * 0.55 * span;
     flame = max(flame, flicker);
