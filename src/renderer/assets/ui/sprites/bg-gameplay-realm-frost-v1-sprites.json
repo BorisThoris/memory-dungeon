@@ -1,0 +1,45 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "realm",
+  "sprites": [
+    {
+      "id": "ice-l",
+      "x": 0.0,
+      "y": 0.06,
+      "w": 0.27,
+      "h": 0.68,
+      "frames": 20,
+      "fps": 8,
+      "sheet": "bg-gameplay-realm-frost-v1-sprite-ice-l.webp",
+      "source": "family:ice",
+      "blend": "lighter"
+    },
+    {
+      "id": "ice-r",
+      "x": 0.73,
+      "y": 0.06,
+      "w": 0.27,
+      "h": 0.68,
+      "frames": 20,
+      "fps": 8,
+      "sheet": "bg-gameplay-realm-frost-v1-sprite-ice-r.webp",
+      "source": "family:ice",
+      "blend": "lighter"
+    },
+    {
+      "id": "ring",
+      "x": 0.17,
+      "y": 0.68,
+      "w": 0.66,
+      "h": 0.22,
+      "frames": 20,
+      "fps": 6,
+      "sheet": "bg-gameplay-realm-frost-v1-sprite-ring.webp",
+      "source": "family:ring",
+      "blend": "lighter"
+    }
+  ]
+}

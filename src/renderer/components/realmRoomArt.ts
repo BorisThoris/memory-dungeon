@@ -1,29 +1,54 @@
 import type { RealmId } from '../../shared/contracts';
 import { REALM_IDS } from '../../shared/contracts';
 import { resolveUiBackgroundUrl } from '../assets/ui/modeArt';
+import { SCENE_SPRITES, type SceneSpriteDef } from '../assets/ui/sprites';
 
 /**
- * One room per realm (2026-10-09). A realm used to be the dungeon ring recoloured with weather on
- * it; the plan is a painted room for each, made the way the dungeon ring was: a Z-Image plate at
- * the ring's size and camera (`scripts/card-pipeline/scene-moods.zimage.manifest.json`, the
- * `bg-gameplay-realm-*` entries), cut into a dark base and an additive glow by
- * `scripts/scene-pipeline/` so the room can be lit.
+ * One room per realm (2026-10-09), each broken into the layers that make it live, the way the
+ * dungeon ring is (`scripts/scene-pipeline/realm_layers.py`, `realms.json`):
  *
- * These are the slots. A realm whose painting is not in `assets/ui/backgrounds/` yet resolves to
- * '' and the room stays the dungeon ring, graded, as before; once its base is there, a floor in
- * that realm opens in it (`sceneMood.ts` picks the `realm` plate), its glow rises with the combo,
- * and the realm's weather plays on it. Every slot that resolves is preloaded with the run's other
- * scene art, so nothing streams in play.
+ * - **base**: the painting with its lights taken out.
+ * - **glows**: each of the room's lights on its own additive layer - the lava seams, the braziers,
+ *   the rune ring, the ice, the shaft, the painted lightning - which the frame drives each on its
+ *   own clock (`realmLayerLevel` in `realmRoomLife.ts`).
+ * - **sprites**: parts of the painting set moving as loopable flipbooks - lava flowing down its
+ *   seam, flames licking, water rippling, clouds billowing, vines swaying, light running up the ice -
+ *   over the base (`source-over`) or added with their family's light (`lighter`).
+ *
+ * A realm without its painting resolves to an empty base and the room stays the dungeon ring.
+ * Every layer that exists is preloaded with the run's scene art (the sprites with every scene's).
  */
 export interface RealmRoomArt {
     base: string;
-    glow: string;
+    /** The room's lights, by family name. */
+    glows: Readonly<Record<string, string>>;
+    /** The room's moving parts. */
+    sprites: readonly SceneSpriteDef[];
 }
+
+const glowUrls = import.meta.glob<string>('../assets/ui/backgrounds/bg-gameplay-realm-*-v1-glow-*.webp', { eager: true, query: '?url', import: 'default' });
+
+const glowsOf = (realm: RealmId): Record<string, string> =>
+    Object.fromEntries(
+        Object.entries(glowUrls).flatMap(([path, url]) => {
+            const family = new RegExp(`/bg-gameplay-realm-${realm}-v1-glow-([a-z]+)\\.webp$`).exec(path)?.[1];
+            return family ? [[family, url]] : [];
+        })
+    );
+
+const REALM_SPRITES: Readonly<Record<RealmId, readonly SceneSpriteDef[]>> = {
+    frost: SCENE_SPRITES.realmFrost.sprites,
+    ember: SCENE_SPRITES.realmEmber.sprites,
+    tide: SCENE_SPRITES.realmTide.sprites,
+    storm: SCENE_SPRITES.realmStorm.sprites,
+    grove: SCENE_SPRITES.realmGrove.sprites
+};
 
 export const REALM_ROOM_ART: Readonly<Record<RealmId, RealmRoomArt>> = Object.fromEntries(
     REALM_IDS.map((realm) => [realm, {
         base: resolveUiBackgroundUrl(`bg-gameplay-realm-${realm}-v1-base.webp`, ''),
-        glow: resolveUiBackgroundUrl(`bg-gameplay-realm-${realm}-v1-glow.webp`, '')
+        glows: glowsOf(realm),
+        sprites: REALM_SPRITES[realm]
     }])
 ) as Record<RealmId, RealmRoomArt>;
 
@@ -31,6 +56,6 @@ export const REALM_ROOM_ART: Readonly<Record<RealmId, RealmRoomArt>> = Object.fr
 export const realmRoomFor = (realm: RealmId | null | undefined, art: Readonly<Record<RealmId, RealmRoomArt>> = REALM_ROOM_ART): RealmId | null =>
     realm && art[realm]?.base ? realm : null;
 
-/** Every realm room layer that exists, for the run preloader. */
+/** Every realm room layer that exists, for the run preloader (the sprites go with every scene's). */
 export const getRealmRoomArtUrls = (art: Readonly<Record<RealmId, RealmRoomArt>> = REALM_ROOM_ART): string[] =>
-    REALM_IDS.flatMap((realm) => [art[realm].base, art[realm].glow]).filter(Boolean);
+    REALM_IDS.flatMap((realm) => (art[realm].base ? [art[realm].base, ...Object.values(art[realm].glows)] : [])).filter(Boolean);

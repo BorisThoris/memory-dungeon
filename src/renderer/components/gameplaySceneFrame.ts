@@ -5,7 +5,7 @@ import { SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
-import { REALM_FLOORS, realmRoomLifeDraws } from './realmRoomLife';
+import { REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws } from './realmRoomLife';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
@@ -357,22 +357,26 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     draws.push({ kind: 'image', id: 'base', src: UI_ART.gameplaySceneBase, alpha: input.base * dungeon * missDim });
     draws.push({ kind: 'image', id: 'shop', src: UI_ART.gameplaySceneShop, alpha: input.base * shop * missDim });
     draws.push({ kind: 'image', id: 'void', src: UI_ART.gameplaySceneVoid, alpha: input.base * voidRoom * missDim });
-    // The realm's own room (`realmRoomArt.ts`): its dark base, and its glow rising with the combo -
-    // on the depth, so it never stops: the glow comes up to full, and past that an overdrive of the
-    // same light, brighter with every link and without end.
+    // The realm's own room (`realmRoomArt.ts`), in its layers: the dark base; the painting's moving
+    // parts over it (water rippling, clouds billowing, vines swaying); each of its lights on its own
+    // clock (`realmLayerLevel`), and the moving ones with them (lava flowing, flames licking, light
+    // running up the ice). All of it climbs with the combo on the depth, and past full every light
+    // drives an overdrive of itself, brighter with every link and without end.
     const depth = Math.max(0, input.comboDepth ?? 0);
-    if (realmArt) {
-        const breath = still ? 1 : 0.9 + 0.1 * sceneBreath(roomT, 6_000);
+    if (realmArt && mood?.realmRoom) {
+        const realm = mood.realmRoom;
         draws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * realmRoom * missDim });
-        draws.push({ kind: 'image', id: 'realmGlow', src: realmArt.glow, alpha: realmRoom * (0.35 + 0.65 * comboSoftCap(depth, 1)) * breath, blend: 'lighter' });
-        draws.push({
-            kind: 'image',
-            id: 'realmGlowOver',
-            src: realmArt.glow,
-            alpha: realmRoom * comboSoftCap(Math.max(0, depth - 2), 0.6) * breath,
-            blend: 'lighter',
-            filter: { brightness: 1 + 0.25 * depth, blurPx: 4 }
-        });
+        const parts = realmRoomSpriteDraws(realm, realmArt.sprites, roomT, depth, realmRoom, still);
+        draws.push(...parts.filter((part) => part.blend !== 'lighter'));
+        const over = comboSoftCap(Math.max(0, depth - 2), 0.6);
+        for (const [family, src] of Object.entries(realmArt.glows)) {
+            const level = still ? 0.35 + 0.65 * comboSoftCap(depth, 1) : realmLayerLevel(realm, family, roomT, depth);
+            draws.push({ kind: 'image', id: `realmGlow-${family}`, src, alpha: realmRoom * Math.min(1, level), blend: 'lighter' });
+            if (over > 0.004) {
+                draws.push({ kind: 'image', id: `realmGlowOver-${family}`, src, alpha: realmRoom * over * Math.min(1, level), blend: 'lighter', filter: { brightness: 1 + 0.25 * depth, blurPx: 4 } });
+            }
+        }
+        draws.push(...parts.filter((part) => part.blend === 'lighter'));
     }
 
     if (mood?.elements) {

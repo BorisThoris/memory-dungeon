@@ -3,6 +3,11 @@ import cathedralCandles from './bg-main-menu-cathedral-v2-sprites.json';
 import dungeonFlames from './bg-gameplay-dungeon-ring-v2-sprites.json';
 import portalVortex from './bg-mode-classic-v2-sprites.json';
 import goldCoinTurn from './gold-coin-v1-sprites.json';
+import realmEmber from './bg-gameplay-realm-ember-v1-sprites.json';
+import realmFrost from './bg-gameplay-realm-frost-v1-sprites.json';
+import realmGrove from './bg-gameplay-realm-grove-v1-sprites.json';
+import realmStorm from './bg-gameplay-realm-storm-v1-sprites.json';
+import realmTide from './bg-gameplay-realm-tide-v1-sprites.json';
 
 /**
  * Animated cut-outs of a painted backdrop, from `scripts/scene-pipeline/cut_sprites.py`: each one
@@ -21,6 +26,10 @@ export interface SceneSpriteDef {
     fps: number;
     /** Resolved URL of the strip. */
     sheet: string;
+    /** A realm room's moving part: over the painting, or added as one of its lights (`realm_layers.py`). */
+    blend?: 'source-over' | 'lighter';
+    /** What it moves: 'plate' (the painting) or 'family:<name>' (that light). */
+    source?: string;
 }
 
 export interface SceneSpriteSet {
@@ -33,7 +42,7 @@ export interface SceneSpriteSet {
 interface SceneSpriteManifest {
     plate: number[];
     kind: string;
-    sprites: Array<Omit<SceneSpriteDef, 'sheet'> & { sheet: string }>;
+    sprites: Array<Omit<SceneSpriteDef, 'sheet' | 'blend'> & { sheet: string; blend?: string }>;
 }
 
 const sheetUrls = import.meta.glob<string>('./*.webp', {
@@ -48,7 +57,7 @@ export const resolveSceneSpriteSet = (manifest: SceneSpriteManifest): SceneSprit
     kind: manifest.kind,
     sprites: manifest.sprites.flatMap((sprite) => {
         const sheet = sheetUrls[`./${sprite.sheet}`];
-        return sheet ? [{ ...sprite, sheet }] : [];
+        return sheet ? [{ ...sprite, sheet, blend: sprite.blend === 'lighter' ? 'lighter' : sprite.blend === 'source-over' ? 'source-over' : undefined }] : [];
     })
 });
 
@@ -60,7 +69,13 @@ export const SCENE_SPRITES = {
     /** The vortex in the portal's arch (`PortalScene`): one feathered disc the scene spins, not a flipbook. */
     portalVortex: resolveSceneSpriteSet(portalVortex),
     /** The gold coin turning from face-on through its edge to its back (`bake_coin.py`): the gold that falls in a room. */
-    goldCoin: resolveSceneSpriteSet(goldCoinTurn)
+    goldCoin: resolveSceneSpriteSet(goldCoinTurn),
+    /** Each realm room's moving parts (`realm_layers.py`): flowing lava, licking flames, rippling water, billowing cloud, swaying vines. */
+    realmFrost: resolveSceneSpriteSet(realmFrost),
+    realmEmber: resolveSceneSpriteSet(realmEmber),
+    realmTide: resolveSceneSpriteSet(realmTide),
+    realmStorm: resolveSceneSpriteSet(realmStorm),
+    realmGrove: resolveSceneSpriteSet(realmGrove)
 } as const;
 
 export type SceneSpriteSetKey = keyof typeof SCENE_SPRITES;

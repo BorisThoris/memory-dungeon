@@ -36,7 +36,7 @@ const flamesOf = (draws: readonly SceneDraw[]) => draws.filter((draw): draw is S
 const count = (draws: readonly SceneDraw[], prefix: string) => draws.filter((draw) => draw.id.startsWith(prefix) && draw.alpha > 0.004).length;
 
 const theme = (id: string) => COMBO_HEAT_THEMES.find((candidate) => candidate.id === id)!;
-const NO_REALM_ROOMS = Object.fromEntries(REALM_IDS.map((realm) => [realm, { base: '', glow: '' }])) as Record<RealmId, RealmRoomArt>;
+const NO_REALM_ROOMS = Object.fromEntries(REALM_IDS.map((realm) => [realm, { base: '', glows: {}, sprites: [] }])) as unknown as Record<RealmId, RealmRoomArt>;
 const mood = (temper: string, over: Partial<Parameters<typeof deriveSceneMood>[0]> = {}): SceneMood =>
     deriveSceneMood({
         combo: 0,
@@ -536,11 +536,11 @@ describe('composeGameplayScene', () => {
         const cold = frame({ mood: mood('ember', { run }) });
         const ids = sceneDrawIds(cold);
         expect(findSceneDraw(cold, 'realm')!.src).toContain('bg-gameplay-realm-ember-v1-base');
-        expect(findSceneDraw(cold, 'realmGlow')).toMatchObject({ blend: 'lighter' });
+        expect(findSceneDraw(cold, 'realmGlow-ring')).toMatchObject({ blend: 'lighter' });
         expect(ids).not.toContain('torchLightL');
-        expect(ids.indexOf('element-steam')).toBeGreaterThan(ids.indexOf('realmGlow'));
+        expect(ids.indexOf('element-steam')).toBeGreaterThan(ids.indexOf('realmGlow-ring'));
         expect(findSceneDraw(cold, 'element-steam')).toMatchObject({ blend: 'soft-light' });
-        expect(alphaOf(frame({ mood: mood('ember', { run }), comboDepth: 3 }), 'realmGlow')).toBeGreaterThan(alphaOf(cold, 'realmGlow'));
+        expect(alphaOf(frame({ mood: mood('ember', { run }), comboDepth: 3 }), 'realmGlow-ring')).toBeGreaterThan(alphaOf(cold, 'realmGlow-ring'));
     });
 
     it('keeps every realm room alive, more of it the deeper the chain, halved on a phone and still under reduced motion', () => {
@@ -565,10 +565,10 @@ describe('composeGameplayScene', () => {
         let lastBright = 0;
         for (const depth of [0, 0.5, 1, 2, 3, 5, 8, 12]) {
             const draws = at(depth);
-            const glow = alphaOf(draws, 'realmGlow');
+            const glow = alphaOf(draws, 'realmGlow-ring');
             expect(glow).toBeGreaterThan(lastGlow);
             lastGlow = glow;
-            const over = findSceneDraw(draws, 'realmGlowOver') as SceneImageDraw | undefined;
+            const over = findSceneDraw(draws, 'realmGlowOver-ring') as SceneImageDraw | undefined;
             if (depth > 2) {
                 expect(over!.filter!.brightness!).toBeGreaterThan(lastBright);
                 lastBright = over!.filter!.brightness!;

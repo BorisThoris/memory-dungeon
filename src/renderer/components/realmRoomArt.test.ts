@@ -6,7 +6,7 @@ import { deriveSceneMood } from './sceneMood';
 
 const theme = (id: string) => COMBO_HEAT_THEMES.find((candidate) => candidate.id === id)!;
 const art = (painted: RealmId[]): Record<RealmId, RealmRoomArt> =>
-    Object.fromEntries(REALM_IDS.map((realm) => [realm, painted.includes(realm) ? { base: `${realm}-base.webp`, glow: `${realm}-glow.webp` } : { base: '', glow: '' }])) as Record<RealmId, RealmRoomArt>;
+    Object.fromEntries(REALM_IDS.map((realm) => [realm, painted.includes(realm) ? { base: `${realm}-base.webp`, glows: { ring: `${realm}-glow-ring.webp` }, sprites: [] } : { base: '', glows: {}, sprites: [] }])) as unknown as Record<RealmId, RealmRoomArt>;
 const run = (realmId: RealmId) => ({ status: 'playing', board: { level: 4 }, realmId }) as never;
 
 describe('a room for every realm', () => {
@@ -23,7 +23,7 @@ describe('a room for every realm', () => {
     });
 
     it('preloads every painted layer and nothing that is not there', () => {
-        expect(getRealmRoomArtUrls(art(['tide', 'grove']))).toEqual(['tide-base.webp', 'tide-glow.webp', 'grove-base.webp', 'grove-glow.webp']);
+        expect(getRealmRoomArtUrls(art(['tide', 'grove']))).toEqual(['tide-base.webp', 'tide-glow-ring.webp', 'grove-base.webp', 'grove-glow-ring.webp']);
         expect(getRealmRoomArtUrls(art([]))).toEqual([]);
     });
 });

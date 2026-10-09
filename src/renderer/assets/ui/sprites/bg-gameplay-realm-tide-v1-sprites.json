@@ -1,0 +1,45 @@
+{
+  "plate": [
+    1376,
+    768
+  ],
+  "kind": "realm",
+  "sprites": [
+    {
+      "id": "water",
+      "x": 0.0,
+      "y": 0.64,
+      "w": 1.0,
+      "h": 0.36,
+      "frames": 16,
+      "fps": 8,
+      "sheet": "bg-gameplay-realm-tide-v1-sprite-water.webp",
+      "source": "plate",
+      "blend": "source-over"
+    },
+    {
+      "id": "water-light",
+      "x": 0.0,
+      "y": 0.64,
+      "w": 1.0,
+      "h": 0.36,
+      "frames": 16,
+      "fps": 8,
+      "sheet": "bg-gameplay-realm-tide-v1-sprite-water-light.webp",
+      "source": "family:water",
+      "blend": "lighter"
+    },
+    {
+      "id": "shaft",
+      "x": 0.34,
+      "y": 0.0,
+      "w": 0.32,
+      "h": 0.62,
+      "frames": 24,
+      "fps": 10,
+      "sheet": "bg-gameplay-realm-tide-v1-sprite-shaft.webp",
+      "source": "family:shaft",
+      "blend": "lighter"
+    }
+  ]
+}

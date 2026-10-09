@@ -1,6 +1,6 @@
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import type { RealmId } from '../../shared/contracts';
-import type { AmbientCellName } from '../assets/ui/sprites';
+import type { AmbientCellName, SceneSpriteDef } from '../assets/ui/sprites';
 import { sceneHash, sceneOccurrence, sceneSmoothstep } from './sceneClock';
 import { ambientSprite, crossingDraws, dripDraws, driftDraws, fogDraw, glintDraws, sceneKeyframes } from './sceneAmbient';
 import type { SceneBlend, SceneDraw } from './scenePaint';
@@ -340,6 +340,23 @@ const boltDraws = (id: string, points: ReadonlyArray<readonly [number, number]>,
     { kind: 'line', id, alpha: level * alpha, blend: 'screen', points, color: '#f6f1ff', width }
 ];
 
+/** How bright the storm's lightning is at this moment, 0..1: the brightest strike on any channel. */
+export const stormStrikeLevel = (t: number, depth: number): number => {
+    const pace = realmLifePace(depth);
+    let level = 0;
+    for (let channel = 0; channel < stormStrikeChannels(depth); channel += 1) {
+        const strike = sceneOccurrence(t + channel * 1733, (5600 + channel * 900) / pace, 700, 301 + channel * 17);
+        if (strike) level = Math.max(level, strikeLevel(strike.progress));
+    }
+    return level;
+};
+
+/** The storm's sheet lightning inside the clouds at this moment, 0..1. */
+export const stormSheetLevel = (t: number, depth: number): number => {
+    const sheet = sceneOccurrence(t, 2300 / realmLifePace(depth), 380, 331);
+    return sheet ? Math.sin(sheet.progress * Math.PI) : 0;
+};
+
 /** The storm's strikes at this moment: each channel on its own clock, more channels the deeper the chain. */
 export const stormStrikeDraws = (t: number, depth: number, alpha: number): SceneDraw[] => {
     const pace = realmLifePace(depth);
@@ -516,8 +533,7 @@ const emberLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number):
 const tideLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number): SceneDraw[] => {
     const surface = 0.66;
     const draws: SceneDraw[] = [
-        // The shaft from the broken dome, breathing, with motes turning in it.
-        { ...ambientSprite({ id: 'tide-shaft', cell: 'shafts', x: 0, y: 0, size: 1, alpha: 0 }), rect: { x: 0.36, y: -0.02, w: 0.28, h: 0.68 }, alpha: (0.22 + 0.12 * Math.sin(t / 3100)) * alpha, depth: 0.4 },
+        // Motes turning in the shaft (the shaft itself is the painting's, falling: realm_layers.py).
         ...driftDraws({ idPrefix: 'tide-mote', cell: 'dotTeal', count: realmLifeCount(10, depth, lean), x: 0.4, y: 0.05, w: 0.2, h: 0.55, fall: 0.006 * pace, slide: 0.002, size: 0.01, alpha: 0.6 * alpha, seed: 91 }, t),
         // Bubbles rising off the floor of the vault through the water.
         ...driftDraws({ idPrefix: 'tide-bubble', cell: 'bubble', count: realmLifeCount(14, depth, lean), x: 0.04, y: surface, w: 0.92, h: 0.32, fall: -0.03 * pace, slide: 0.002, size: 0.016, alpha: 0.55 * alpha, seed: 93 }, t),
@@ -542,7 +558,7 @@ const stormLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number):
     // Lightning out of the clouds onto the rods and the horizon, behind everything else.
     ...stormStrikeDraws(t, depth, alpha),
     // Rain driven across the platform: it strikes the stone and splashes, faster and thicker with the chain.
-    ...rainDraws({ idPrefix: 'storm-rain', count: realmLifeCount(60, depth, lean), t, floor: REALM_FLOORS.storm.band, alpha: 0.5 * alpha, seed: 101, pace: Math.sqrt(pace), crowns: !lean }),
+    ...rainDraws({ idPrefix: 'storm-rain', count: realmLifeCount(110, depth, lean), t, floor: REALM_FLOORS.storm.band, alpha: 0.8 * alpha, seed: 101, pace: Math.sqrt(pace), crowns: !lean }),
     // Water standing on the stone catches the light.
     ...glintDraws({ idPrefix: 'storm-puddle', points: STORM_PUDDLES, t, everyMs: 4000 / pace, lastsMs: 700, size: 0.045, alpha: 0.55 * alpha, seed: 104, cell: 'glint' }),
     ...glintDraws({ idPrefix: 'storm-rod', points: STORM_RODS, t, everyMs: 5200 / pace, lastsMs: 500, size: 0.06, alpha: 0.9 * alpha, seed: 103, cell: 'dotViolet' })
@@ -550,7 +566,6 @@ const stormLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number):
 
 const groveLife = ({ t, depth, lean, alpha }: RealmRoomLifeInput, pace: number): SceneDraw[] => {
     const draws: SceneDraw[] = [
-        { ...ambientSprite({ id: 'grove-moonlight', cell: 'shafts', x: 0, y: 0, size: 1, alpha: 0 }), rect: { x: 0.38, y: -0.02, w: 0.26, h: 0.62 }, alpha: (0.16 + 0.08 * Math.sin(t / 4300)) * alpha, depth: 0.4 },
         ...driftDraws({ idPrefix: 'grove-spore', cell: 'dotSpore', count: realmLifeCount(16, depth, lean), x: 0.03, y: 0.1, w: 0.94, h: 0.75, fall: -0.008 * pace, slide: 0.004, size: 0.011, alpha: 0.7 * alpha, seed: 111 }, t),
         ...driftDraws({ idPrefix: 'grove-firefly', cell: 'dotFirefly', count: realmLifeCount(8, depth, lean), x: 0.08, y: 0.45, w: 0.84, h: 0.45, fall: -0.004 * pace, slide: 0.008 * pace, size: 0.016, alpha: 0.85 * alpha, seed: 113 }, t),
         // Leaves coming down through the roots, turning, and lying on the floor a while.
@@ -577,3 +592,72 @@ const LIFE: Readonly<Record<RealmId, (input: RealmRoomLifeInput, pace: number) =
 /** The realm's room's life at this moment: nothing while its room is not showing. */
 export const realmRoomLifeDraws = (input: RealmRoomLifeInput): SceneDraw[] =>
     input.alpha <= 0.004 ? [] : LIFE[input.realm](input, realmLifePace(input.depth));
+
+// ------------------------------------------------------------------ the painting's own layers
+
+/**
+ * How bright one of a realm room's lights is at a moment (`realmRoomArt.ts`: its glow families,
+ * and the moving parts that carry their light). Every one climbs with the combo on its own soft
+ * cap; each has its own life: the storm's painted lightning sits near dark and flashes with the live
+ * strikes, its sky and puddles light with them, the braziers flicker, the shaft breathes, the fungus
+ * pulses, the lava swells.
+ */
+export const realmLayerLevel = (realm: RealmId, family: string, t: number, depth: number): number => {
+    const climb = comboSoftCap(depth, 1);
+    const rest = 0.35 + 0.65 * climb;
+    const breath = (period: number, offset = 0): number => 0.5 + 0.5 * Math.sin((2 * Math.PI * t) / period + offset);
+    if (realm === 'storm') {
+        const strike = stormStrikeLevel(t, depth);
+        const sheet = stormSheetLevel(t, depth);
+        if (family === 'bolts') return 0.06 + 0.94 * strike;
+        if (family === 'sky') return Math.min(1.2, 0.45 + 0.3 * climb + 0.6 * Math.max(strike, sheet * 0.6));
+        if (family === 'puddles') return 0.35 + 0.25 * climb + 0.7 * strike;
+        return rest * (0.9 + 0.1 * breath(5200)) + 0.3 * strike;
+    }
+    if (realm === 'ember') {
+        if (family === 'braziers') return (0.7 + 0.3 * climb) * (0.82 + 0.18 * Math.sin(t / 97) * Math.sin(t / 233));
+        if (family === 'lava') return rest * (0.85 + 0.15 * breath(3600));
+        return rest * (0.9 + 0.1 * breath(4400, 1));
+    }
+    if (realm === 'tide') {
+        if (family === 'shaft') return (0.55 + 0.35 * climb) * (0.8 + 0.2 * breath(6200));
+        if (family === 'water') return rest * (0.85 + 0.15 * breath(2700));
+        if (family === 'pillars') return 0.3 + 0.4 * climb;
+        return rest;
+    }
+    if (realm === 'grove') {
+        if (family === 'fungi') return (0.4 + 0.4 * climb) * (0.6 + 0.4 * breath(2300));
+        if (family === 'canopy') return (0.55 + 0.3 * climb) * (0.8 + 0.2 * breath(7000));
+        return rest;
+    }
+    // frost
+    if (family === 'snow') return 0.6 + 0.2 * climb;
+    if (family === 'ice') return (0.4 + 0.5 * climb) * (0.85 + 0.15 * breath(5200));
+    return rest * (0.9 + 0.1 * breath(4800));
+};
+
+/**
+ * A realm room's moving parts at a moment (`realm_layers.py`): each flipbook stepping on its own
+ * clock, a little faster the deeper the chain; the ones moving the painting drawn over its base, the
+ * ones moving a light added at that light's level.
+ */
+export const realmRoomSpriteDraws = (realm: RealmId, sprites: readonly SceneSpriteDef[], t: number, depth: number, alpha: number, still: boolean): SceneDraw[] => {
+    if (alpha <= 0.004) return [];
+    const pace = still ? 0 : Math.sqrt(realmLifePace(depth));
+    return sprites.map((sprite, index) => {
+        const frames = Math.max(1, sprite.frames);
+        const frame = still ? 0 : Math.floor((t / 1000) * sprite.fps * pace + index * 0.37 * frames) % frames;
+        const family = sprite.source?.startsWith('family:') ? sprite.source.slice(7) : null;
+        const level = family ? realmLayerLevel(realm, family, t, depth) : 1;
+        return {
+            kind: 'image',
+            id: `realm-part-${sprite.id}`,
+            src: sprite.sheet,
+            alpha: alpha * Math.min(1, level),
+            blend: sprite.blend ?? 'source-over',
+            rect: { x: sprite.x, y: sprite.y, w: sprite.w, h: sprite.h },
+            frame: { index: frame, count: frames },
+            depth: 1
+        };
+    });
+};
