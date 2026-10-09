@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3056,
+    "trackedFileCount": 3061,
     "codeFileCount": 1159,
     "exportedSymbolCount": 3659,
     "contentItemCount": 12,
@@ -183,8 +183,8 @@
     {
       "path": "assets/audio/realm-ambience.jobs.json",
       "category": "configuration",
-      "bytes": 3908,
-      "sha256": "330a49e065f9fcdd6760dc3847866bd8427938e0998ade7bc1dbc9cfa54fbd77"
+      "bytes": 4287,
+      "sha256": "fc61b4f4df890185073ed18c324f67cabbf92c82a48fdb44747b3c6a5f7b5d8b"
     },
     {
       "path": "assets/generated/card-backs/memory-dungeon-card-backs.png",
@@ -6285,8 +6285,38 @@
     {
       "path": "src/renderer/assets/audio/music/README.md",
       "category": "source",
-      "bytes": 577,
-      "sha256": "e34b93acd76194edaaf398cf2c9ba3cb6ade0738fe88249716cf1565af60b694"
+      "bytes": 965,
+      "sha256": "4be498c8ee3c2bf8cb9c2c33fe14d47da943f15c7a16a04b1ce1e24b3c77c8d1"
+    },
+    {
+      "path": "src/renderer/assets/audio/music/realm/ember-ambience.ogg",
+      "category": "source",
+      "bytes": 479137,
+      "sha256": "d911b19881477085c3cde3e002717319ead03dae40762b46c0ff69f6c72d095d"
+    },
+    {
+      "path": "src/renderer/assets/audio/music/realm/frost-ambience.ogg",
+      "category": "source",
+      "bytes": 543158,
+      "sha256": "1d1dbc3b840ad94e871bb77f4c77f42267b1d64e8d196ff93fee79fe0e905c1e"
+    },
+    {
+      "path": "src/renderer/assets/audio/music/realm/grove-ambience.ogg",
+      "category": "source",
+      "bytes": 496612,
+      "sha256": "2088ea20a8964774602ab346bcc83f761c8096e239de45499aa4fa488bcceeaf"
+    },
+    {
+      "path": "src/renderer/assets/audio/music/realm/storm-ambience.ogg",
+      "category": "source",
+      "bytes": 444035,
+      "sha256": "5b53a8cd7798b1a03548271790d31c718412117acfd5e7f15ccc9bb21236839a"
+    },
+    {
+      "path": "src/renderer/assets/audio/music/realm/tide-ambience.ogg",
+      "category": "source",
+      "bytes": 509908,
+      "sha256": "b08d259334a2276b9597a766a27da5aa482ea7a226dde0615fe26e8575ce7f7f"
     },
     {
       "path": "src/renderer/assets/audio/music/run-loop.ogg",
