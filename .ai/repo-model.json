@@ -10431,8 +10431,8 @@
     {
       "path": "src/renderer/components/cardShardSystem.ts",
       "category": "source",
-      "bytes": 8562,
-      "sha256": "c6ca79c35fd57af58555dbdd020735136c532a7b157ce447b2df744d30e2be5b"
+      "bytes": 8694,
+      "sha256": "5fddd1efb05722469ab90102acc059f9e655cfe5763df0fd06f6482f00fca782"
     },
     {
       "path": "src/renderer/components/cardStatusPaint.ts",
@@ -21951,7 +21951,7 @@
       "path": "src/renderer/components/cardShardSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 198,
+      "lineCount": 200,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/cardShards.ts",
@@ -45174,16 +45174,16 @@
       "name": "CardShardSystem",
       "kind": "type",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 197,
-      "endLine": 197
+      "line": 199,
+      "endLine": 199
     },
     {
       "id": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
       "name": "createCardShardSystem",
       "kind": "value",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 103,
-      "endLine": 195
+      "line": 105,
+      "endLine": 197
     },
     {
       "id": "symbol:src/renderer/components/cardShardSystem.ts#SHARD_LIFE_SECONDS",
