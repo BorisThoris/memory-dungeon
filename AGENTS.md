@@ -56,13 +56,15 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
   and lie flat with a shadow on that room's floor for as long as the run stays in the room, every
   payout piling on the last (`goldRain.ts`: `goldCoinMotion`, the pile in `GameplayScene`); on water
   they splash and sink. A restore or reduced motion shows the pile lying there.
-- **Every card breaks its element's way, and stays out of the way.** A leaving card breaks into
-  pieces of itself (`cardShards.ts`, `cardShardSystem.ts`), each element with its own matter and
-  look - fire lifts, chars and crumbles to ash; water drops and drains away; ice is glassy, bounces
-  and melts; growth flutters down like leaves, greening from the break; a card with no element is
-  stone chips - and its material spills into the room (`roomSpill.ts`). Never intrusive: a handful
-  of pieces, thrown back behind the board's plane so the cards still in play hide them, gone in
-  under three seconds.
+- **The card itself goes its element's way, and stays out of the way.** A leaving card is a literal
+  card transforming (`cardElementFx.ts`): a water card liquefies - wobbles, slumps and runs down in
+  drips into a puddle on the floor that drains; a fire card combusts - catches at its foot and burns
+  upward, charring and curling behind a glowing edge under rising flames, to ash; a growth card has
+  a growth spurt - swells, veins race over its face, leafy vines sprout from its edges, and it
+  crumbles into the foliage. Ice shatters into glass and a card with no element into stone chips
+  (`cardShards.ts`, `cardShardSystem.ts`). Its material also spills into the room (`roomSpill.ts`).
+  Never intrusive: kept to the card's cell, its floor and a little around it, gone in under two and
+  a half seconds; loose pieces are thrown back behind the board's plane.
 - **High quality on a phone.** A phone held upright shows the middle of a landscape painting across
   its whole height, so the scene canvas there covers only that window (`sceneCanvasWindow`) at the
   screen's own sharpness, under a pixel budget, and the realm rooms' bases are cut at twice the

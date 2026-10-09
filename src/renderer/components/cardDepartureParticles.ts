@@ -11,11 +11,15 @@ import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
  * that fall, ice shards that drift out turning, growth petals and a leaf that drift down. One burst
  * per shape, each a few motes, at event priority so ambient weather cannot crowd it out.
  */
+/*
+ * One small burst each since the card itself breaks its element's way (`cardShards.ts`, 2026-10-09):
+ * the pieces carry the element now, and three bursts of shards over them crowded the next card.
+ */
 export const CARD_DEPARTURE_SHAPES: Readonly<Record<TileSuit, readonly BoardParticleShape[]>> = {
-    ember: ['flame', 'flame'],
-    tide: ['droplet', 'droplet', 'droplet'],
-    bone: ['shard', 'shard', 'shard'],
-    moss: ['petal', 'petal', 'leaf']
+    ember: ['flame'],
+    tide: ['droplet'],
+    bone: ['shard'],
+    moss: ['leaf']
 };
 
 const PETAL_TINT = '#f2d27a';
@@ -50,9 +54,9 @@ export const cardDepartureBursts = ({ suit, x, y, z, seed, time, delay, quality,
         delay: delay + CARD_DEPARTURE_PARTICLE_DELAY + index * 0.04,
         reduceMotion,
         quality,
-        energy: 1,
+        energy: 0.6,
         tint: shape === 'petal' ? PETAL_TINT : ELEMENT_CARD_MOTE[suit].tint,
-        sizeScale: shape === 'flame' ? 0.8 : shape === 'droplet' ? 1.1 : 1.35,
+        sizeScale: shape === 'flame' ? 0.6 : shape === 'droplet' ? 0.8 : 0.9,
         priority: 'event'
     }));
 };

@@ -14,6 +14,7 @@ import { collectGroupArcCues, comboEffectIntensity } from './boardGroupArcs';
 import { collectElementCastParticles } from './elementCastParticles';
 import { cardDepartureBursts, cardDepartureSparkTint, CARD_DEPARTURE_PARTICLE_DELAY } from './cardDepartureParticles';
 import { createCardShardSystem } from './cardShardSystem';
+import { createCardElementFxSystem } from './cardElementFx';
 import { emitRoomSpill } from './roomSpill';
 import { Vector3 } from 'three';
 import { CARD_PLANE_HEIGHT } from './tileShatter';
@@ -47,6 +48,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     // Every card that leaves breaks into pieces that fall and bounce on the board's floor (`cardShards.ts`).
     const shards = useMemo(() => createCardShardSystem(), []);
     const shardBreaks = useRef(0);
+    // A water card liquefies, a fire card combusts, a growth card has a growth spurt (`cardElementFx.ts`).
+    const elementFx = useMemo(() => createCardElementFxSystem(), []);
     const previous = useRef<BoardState | null>(null);
     const motion = useRef(reduceMotion);
     const activeCount = useRef(-1);
@@ -75,12 +78,14 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const departureBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useEffect(() => () => shards.dispose(), [shards]);
+    useEffect(() => () => elementFx.dispose(), [elementFx]);
     useLayoutEffect(() => {
         system.configure(graphicsQuality);
         system.setComboPopEffects(comboPopEffects);
         if (particleBoardChanged(previous.current, board) || motion.current !== reduceMotion) {
             system.clear();
             shards.clear();
+            elementFx.clear();
         }
         motion.current = reduceMotion;
         const intensity = comboEffectIntensity(combo);
@@ -128,7 +133,10 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             // ...and as it leaves, it breaks: its pieces thrown off to fall and bounce on the floor under the board.
             if (cue.kind !== 'flip' && !reduceMotion) {
                 const lowest = Math.min(...board.tiles.map((other, cell) => getTileTransform(other, cell, board.columns, board.rows, compact, true, reduceMotion).baseY));
-                shards.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
+                const transformed = elementFx.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
+                    seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
+                    floorY: lowest - CARD_PLANE_HEIGHT * 0.5 - 0.3, quality: graphicsQuality });
+                if (!transformed) shards.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
                     seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
                     floorY: lowest - CARD_PLANE_HEIGHT * 0.5 - 0.3, quality: graphicsQuality, energy });
                 shardBreaks.current += 1;
@@ -172,7 +180,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, shards, system, time, camera]);
+    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, shards, elementFx, system, time, camera]);
     // Items used on the board (`itemEffects.ts`): each effect's recipe, at its cards or its cell.
     const itemEffectInputs = useRef({ board, compact, graphicsQuality, reduceMotion });
     useLayoutEffect(() => {
@@ -347,6 +355,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         }
         const active = system.advance(time.current);
         shards.advance(time.current);
+        elementFx.advance(time.current);
         if (active > peakCount.current) {
             gl.domElement.setAttribute('data-particle-peak', String(active));
             peakCount.current = active;
@@ -361,5 +370,5 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             pausedFrame.current = paused;
         }
     });
-    return <><primitive object={system.rippleMesh} dispose={null} /><primitive object={system.mesh} dispose={null} /><primitive object={shards.group} dispose={null} /></>;
+    return <><primitive object={system.rippleMesh} dispose={null} /><primitive object={system.mesh} dispose={null} /><primitive object={shards.group} dispose={null} /><primitive object={elementFx.group} dispose={null} /></>;
 };
