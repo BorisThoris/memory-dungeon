@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-09T02:14:46.190Z",
+  "capturedAt": "2026-10-09T02:37:54.354Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 154473,
+      "bytes": 154438,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 15,
         "dark": 0.164,
         "light": 0,
-        "colours": 19
+        "colours": 20
       }
     },
     {
@@ -56,14 +56,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 145323,
+      "bytes": 144899,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 15,
         "dark": 0.125,
         "light": 0,
-        "colours": 20
+        "colours": 21
       }
     },
     {
@@ -71,12 +71,12 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 39250,
+      "bytes": 39247,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 16,
-        "dark": 0.037,
+        "dark": 0.039,
         "light": 0,
         "colours": 26
       }
@@ -86,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 119706,
+      "bytes": 120066,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 15,
-        "dark": 0.123,
+        "dark": 0.124,
         "light": 0,
-        "colours": 21
+        "colours": 22
       }
     },
     {
@@ -101,14 +101,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 109956,
+      "bytes": 110336,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 14,
-        "dark": 0.149,
+        "dark": 0.148,
         "light": 0,
-        "colours": 18
+        "colours": 17
       }
     }
   ]
