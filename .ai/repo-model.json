@@ -4491,8 +4491,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110276,
-      "sha256": "31184e102725c27dfdf6ddd415d5765f494ec91be99b4125bda424ccb18a781b"
+      "bytes": 109851,
+      "sha256": "39168d2919e1ace03a6b9ef062fd9295352ef7ccb0aaeccb7e330d58c5e30d34"
     },
     {
       "path": "public/site.webmanifest",
@@ -10377,8 +10377,8 @@
     {
       "path": "src/renderer/components/cardElementFx.ts",
       "category": "source",
-      "bytes": 19344,
-      "sha256": "38b1fdc423e7464d25558baacd1838ac80b92b53bc80599df6278cde790fd517"
+      "bytes": 19933,
+      "sha256": "a70f872fb1d4c22a306f418ca24e76e1a2dd5029106f8ffa6e4cac4dc2778624"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -21871,7 +21871,7 @@
       "path": "src/renderer/components/cardElementFx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 396,
+      "lineCount": 402,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -45118,16 +45118,16 @@
       "name": "CardElementFxSystem",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 395,
-      "endLine": 395
+      "line": 401,
+      "endLine": 401
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "name": "createCardElementFxSystem",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 296,
-      "endLine": 393
+      "line": 302,
+      "endLine": 399
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
