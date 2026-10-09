@@ -35,6 +35,7 @@ import {
 } from './realmCardMotion';
 import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
 import { setCardDissolve } from './cardDissolveMaterial';
+import { putMeteorThrow, takeBackMeteorThrow } from './meteorImpactMotion';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -231,6 +232,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     });
     // The realm's sway and jolts (`realmCardMotion.ts`) are added after the damping; take last frame's back first.
     takeBackRealmOffset(group);
+    takeBackMeteorThrow(group);
     const realmEvent = useRealmEventPulse.getState().event;
     const joltMs = realmEvent && realmEvent.tileIds.has(p.tile.id) ? now - realmEvent.at : -1;
     const jolting = realmEvent != null && joltMs >= 0 && joltMs < REALM_JOLT_MS;
@@ -240,6 +242,8 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         delta,
         jolting ? REALM_GLIDE_SHAPE[realmEvent.family] : undefined
     );
+    // A card the meteor took is thrown from the crater as it leaves.
+    if (!p.reduceMotion) putMeteorThrow(group, p.departureThrow, departure);
     if (isMatched && pulseRefs.matchedVictoryBurstStartedAt != null) {
         const impact = sampleMatchImpact(time - pulseRefs.matchedVictoryBurstStartedAt, p.reduceMotion);
         group.position.z += impact.z;

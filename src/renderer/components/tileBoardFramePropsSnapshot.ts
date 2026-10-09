@@ -48,6 +48,8 @@ export interface TileBezelFramePropsSnapshot {
     resolvingMatchWaveKey: string | null;
     /** Seconds a removed tile waits for the chunk-break wave before it bursts and leaves. */
     breakWaveDelaySec: number;
+    /** Which way a card the meteor took is thrown as it leaves (`meteorImpactMotion.ts`). */
+    departureThrow?: { x: number; y: number } | null;
 }
 
 export const createTileBezelFramePropsSnapshot = (

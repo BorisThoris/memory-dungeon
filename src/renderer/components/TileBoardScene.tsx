@@ -72,7 +72,8 @@ import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImage
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
 import { TileBoardSceneBoardGroup } from './TileBoardSceneBoardGroup';
-import { ITEM_EFFECT_TRAUMA, useItemEffectChannel } from './itemEffects';
+import { ITEM_EFFECT_TRAUMA, METEOR_IMPACT_DELAY_SECONDS, useItemEffectChannel } from './itemEffects';
+import { createHitStopClock, ITEM_HIT_STOP_SECONDS } from './meteorImpactMotion';
 import { getTileBoardCardWindow } from './tileBoardCardWindow';
 import { DistantCards } from './DistantCards';
 import { retainTileTextureWorkingSet } from './tileTextures';
@@ -272,14 +273,29 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     const comboHeatNow = comboHeatLevels(combo);
     const comboStageSeenRef = useRef<number | null>(null);
     const traumaPulseRef = useRef(0);
-    // Items land on the board (`itemEffects.ts`): a bomb, a meteor, a shuffle each add their trauma.
+    // Items land on the board (`itemEffects.ts`): a bomb, a meteor, a shuffle each add their trauma,
+    // a meteor's when the rock lands; a bomb and a meteor hold the board's clock at the hit
+    // (`meteorImpactMotion.ts`), the meteor twice as long.
+    const visualTime = useRef(0);
+    const hitStop = useMemo(() => createHitStopClock(), []);
+    const delayedTraumaRef = useRef<{ at: number; amount: number }[]>([]);
+    const reduceMotionRef = useRef(reduceMotion);
+    useLayoutEffect(() => {
+        reduceMotionRef.current = reduceMotion;
+    }, [reduceMotion]);
     useEffect(
         () =>
             useItemEffectChannel.subscribe((state, before) => {
                 if (state.serial === before.serial) return;
-                for (const effect of state.latest) traumaPulseRef.current += ITEM_EFFECT_TRAUMA[effect.kind];
+                for (const effect of state.latest) {
+                    const landsIn = effect.kind === 'meteor' && !reduceMotionRef.current ? METEOR_IMPACT_DELAY_SECONDS : 0;
+                    if (landsIn > 0) delayedTraumaRef.current.push({ at: visualTime.current + landsIn, amount: ITEM_EFFECT_TRAUMA[effect.kind] });
+                    else traumaPulseRef.current += ITEM_EFFECT_TRAUMA[effect.kind];
+                    const stop = ITEM_HIT_STOP_SECONDS[effect.kind];
+                    if (stop && !reduceMotionRef.current) hitStop.hold(visualTime.current + landsIn, stop);
+                }
             }),
-        []
+        [hitStop]
     );
     useEffect(() => {
         const seen = comboStageSeenRef.current;
@@ -421,7 +437,6 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     }, [boardRuneFieldMaterial, comboTheme, comboHeatNow.stageIndex]);
     const boardGroupRef = useRef<Group | null>(null);
     const tileFrameBagsRef = useRef(new Map<string, TileBezelFrameBag>());
-    const visualTime = useRef(0);
     const tileFrameIdleStreakRef = useRef(new Map<string, number>());
     const tilePickMeshesRef = useRef(new Map<string, Mesh>());
     const tileFrameRegistry = useTileBoardItemRegistry(tileFrameBagsRef, {
@@ -469,7 +484,13 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     }, [boardViewport.fitZoom, viewportAtFit, fittedPanX, fittedPanY, board.level, board.columns, board.rows]); // eslint-disable-line react-hooks/exhaustive-deps -- resize must fit immediately, including while paused; gesture pan/zoom remains frame-damped
 
     useFrame((_, delta) => {
-        if (runStatus !== 'paused') visualTime.current += Math.max(0, Math.min(delta, 0.1));
+        if (runStatus === 'paused') return;
+        visualTime.current = hitStop.advance(visualTime.current, Math.max(0, Math.min(delta, 0.1)));
+        const due = delayedTraumaRef.current.filter((pulse) => pulse.at <= visualTime.current);
+        if (due.length > 0) {
+            delayedTraumaRef.current = delayedTraumaRef.current.filter((pulse) => pulse.at > visualTime.current);
+            for (const pulse of due) traumaPulseRef.current += pulse.amount;
+        }
     }, -2);
 
     /*

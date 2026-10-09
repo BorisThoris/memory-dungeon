@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3022,
-    "codeFileCount": 1148,
-    "exportedSymbolCount": 3620,
+    "trackedFileCount": 3023,
+    "codeFileCount": 1149,
+    "exportedSymbolCount": 3630,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9674
+    "relationshipCount": 9697
   },
   "inventory": [
     {
@@ -185,12 +185,6 @@
       "category": "asset",
       "bytes": 61963,
       "sha256": "6797a7e752e9dd26785e47ce6c0ef8172490846c8cfb9d95bedcd6df2c5c3af1"
-    },
-    {
-      "path": "back-preview.html",
-      "category": "other",
-      "bytes": 145,
-      "sha256": "7025e313a10668d6cb1734294841d4a43672fbc3b66c06905c0bfb18eb0b4505"
     },
     {
       "path": "build/.gitkeep",
@@ -2422,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "ffe1635c6755fcd2fcc6b3100bee7cd9569decede0dd160254dc570cd3dce7d5"
+      "sha256": "2a6bac539e91a60024ec774dc5afeef58802ffd6485473a6011df5ff9512f340"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4237,6 +4231,12 @@
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
     },
     {
+      "path": "e2e/zz-scratch-meteor.spec.ts",
+      "category": "test",
+      "bytes": 2599,
+      "sha256": "a1b2e9968744ea5e98804feda0d65c3d32bb36356afe431f3940d069c0d6f8b5"
+    },
+    {
       "path": "eslint.config.mjs",
       "category": "configuration",
       "bytes": 4946,
@@ -5723,12 +5723,6 @@
       "category": "script",
       "bytes": 1108,
       "sha256": "8403d18a273984073c352c9721594d49669c7154f1f540f1f4ee04daa7dea804"
-    },
-    {
-      "path": "src/__scratch/backPreview.ts",
-      "category": "source",
-      "bytes": 1339,
-      "sha256": "53e509f7f2f6a2ec8ccecfac4bfbf0ae50f883da89b23c9bd0e7cdadee8d6f00"
     },
     {
       "path": "src/blueprint/definitions/devTerms.blueprint.json",
@@ -9201,8 +9195,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 51552,
-      "sha256": "bc682309ac19d8a9ebf8cc1d17472c6dd33e3584775dd3041aefc24cef28fb73"
+      "bytes": 51804,
+      "sha256": "c2da4e49d509c2819b9e8c2a4ddb491db3d024b1c6ca0741a71cb0fc9cf55dee"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -9627,8 +9621,8 @@
     {
       "path": "src/renderer/components/boardParticleCues.ts",
       "category": "source",
-      "bytes": 1987,
-      "sha256": "2ef8dfea7f9111688bdb7b0af0341deaa551b07bf49a200ddf0e4a57feefd3c6"
+      "bytes": 1962,
+      "sha256": "a47acb2973b0366576fada7dba92f66b52163855ba5941d4a74d83b9542fae89"
     },
     {
       "path": "src/renderer/components/boardParticleRim.test.ts",
@@ -10357,10 +10351,22 @@
       "sha256": "a98e225f51b4ef4e7db38ede898afc9ac05165245e38d250f09c2e9e120ce2e3"
     },
     {
+      "path": "src/renderer/components/meteorImpactMotion.test.ts",
+      "category": "test",
+      "bytes": 2977,
+      "sha256": "2e3ca7215cc046ce2d85ae8c902446c5c7129db0f9cae1332d2e11c1197047c3"
+    },
+    {
+      "path": "src/renderer/components/meteorImpactMotion.ts",
+      "category": "source",
+      "bytes": 6310,
+      "sha256": "9e5fe575c269d598d0363f8b59b3b1e1604125ff1afb39a9a605ae8b43fec661"
+    },
+    {
       "path": "src/renderer/components/MeteorStrike.tsx",
       "category": "source",
-      "bytes": 3746,
-      "sha256": "0b18bfd8d62b284f7c4f8b06d0b0f2d36b1b8f8d2cf7f37126fe37b197851588"
+      "bytes": 7290,
+      "sha256": "52e97fcca621a8893be261200fd2c629822610e4db9efb901ed0995fb781c07b"
     },
     {
       "path": "src/renderer/components/OddCardLegend.module.css",
@@ -10881,8 +10887,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 37511,
-      "sha256": "ea5aad5332365aa9b8eec6e9724f4ccc3f6b9798bbbe0006484ed5a7e5b36569"
+      "bytes": 37688,
+      "sha256": "7fc8d26ecbd5ec1f1faef6ebab868caf44bfb65d0b5c5dac3cf83dfdf1b3e996"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -10911,8 +10917,8 @@
     {
       "path": "src/renderer/components/tileBoardBreakWave.ts",
       "category": "source",
-      "bytes": 3096,
-      "sha256": "964f5dade3f2a461bee7c1251a657558a2335aa366b40e54ada39b5e22b2ec5f"
+      "bytes": 3388,
+      "sha256": "cd637bde8691b3eceebd43d18c07ba46b2e8d942b91d23a1f0f52df9766ecfea"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -11061,8 +11067,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 14318,
-      "sha256": "12a2aa1ba5bf2fa1dec718e354b8c76923ea05fbff5523487aa1133065801b63"
+      "bytes": 14573,
+      "sha256": "bc359a85a07f5c9bf42c9c07c4ef579ded19a17772551c56a6b0a290c5e3b64b"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -11103,8 +11109,8 @@
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "category": "source",
-      "bytes": 2108,
-      "sha256": "694f77b1546b136b326fb67f81868cc86248cfdf42a47e73910100888ffad9a8"
+      "bytes": 2256,
+      "sha256": "1e649f79f070bbe79ed3a20638dab0d50620e0291e9a7489c8049597fb9b78fe"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
@@ -11409,8 +11415,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 26409,
-      "sha256": "844cd4002f55c0dba248b0895d5cf777b3e1075e5a1cfb9b35146d052ee004f8"
+      "bytes": 27838,
+      "sha256": "c097ff5c1e8909d84f8ca9e1861830ee27e7578ab8c5b0a96a967a71c228bc20"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -13815,8 +13821,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 52140,
-      "sha256": "3797bdfac95b6761fd116fb73bf337c789ea159fb8ddd7ae1cd0dce93d19ed6c"
+      "bytes": 52305,
+      "sha256": "1415d10963b3aab148da3d625f0a4e69539083b3879205e8fccc33aadbbfbed8"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14667,8 +14673,8 @@
     {
       "path": "src/shared/meteor-rules.ts",
       "category": "source",
-      "bytes": 2568,
-      "sha256": "bc4de475fdd7f1b9a097d3203f420983115cff883661ceb427154ba6f086df97"
+      "bytes": 2607,
+      "sha256": "f6ea0dd7cfdcf6c456bb31228e4d540c03036e19a0a905b6bfb3d03ef415111b"
     },
     {
       "path": "src/shared/min-type-size.test.ts",
@@ -18147,19 +18153,6 @@
   ],
   "files": [
     {
-      "id": "file:src/__scratch/backPreview.ts",
-      "path": "src/__scratch/backPreview.ts",
-      "layer": "other",
-      "role": "production",
-      "lineCount": 21,
-      "imports": [
-        "file:src/renderer/components/cardBackInk.ts",
-        "file:src/renderer/components/ElementCardBack.tsx"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
       "id": "file:src/blueprint/definitions/devTerms.blueprint.json",
       "path": "src/blueprint/definitions/devTerms.blueprint.json",
       "layer": "blueprint",
@@ -19447,7 +19440,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1272,
+      "lineCount": 1274,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -22453,7 +22446,8 @@
         "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel"
       ],
       "testedBy": [
-        "file:src/renderer/components/itemEffects.test.ts"
+        "file:src/renderer/components/itemEffects.test.ts",
+        "file:src/renderer/components/meteorImpactMotion.test.ts"
       ]
     },
     {
@@ -22711,17 +22705,59 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "path": "src/renderer/components/meteorImpactMotion.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 55,
+      "imports": [
+        "file:src/renderer/components/itemEffects.ts",
+        "file:src/renderer/components/meteorImpactMotion.ts",
+        "file:src/renderer/components/tileBoardBreakWave.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/meteorImpactMotion.ts",
+      "path": "src/renderer/components/meteorImpactMotion.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 128,
+      "imports": [
+        "file:src/renderer/components/itemEffects.ts",
+        "file:src/shared/board-grid-dimensions.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/meteorImpactMotion.ts#createHitStopClock",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#ITEM_HIT_STOP_SECONDS",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_MAX_SECONDS",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_SECONDS_PER_STEP",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_THROW_DISTANCE",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#meteorDepartureDelaySec",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#meteorThrowDirection",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#putMeteorThrow",
+        "symbol:src/renderer/components/meteorImpactMotion.ts#takeBackMeteorThrow"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/meteorImpactMotion.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/MeteorStrike.tsx",
       "path": "src/renderer/components/MeteorStrike.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 75,
+      "lineCount": 135,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/MeteorStrike.tsx#METEOR_GROUND_SHADER",
         "symbol:src/renderer/components/MeteorStrike.tsx#MeteorStrike"
       ],
       "testedBy": []
@@ -24109,7 +24145,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 921,
+      "lineCount": 924,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -24117,6 +24153,7 @@
         "file:src/renderer/components/ElementCardMaterial.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
+        "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/components/RealmTileMarks.tsx",
         "file:src/renderer/components/tileBoardBreakWave.ts",
@@ -24243,8 +24280,9 @@
       "path": "src/renderer/components/tileBoardBreakWave.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 67,
       "imports": [
+        "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts"
       ],
@@ -24258,6 +24296,7 @@
         "symbol:src/renderer/components/tileBoardBreakWave.ts#RIPPLE_WAVE_MAX_OFFSET_SECONDS"
       ],
       "testedBy": [
+        "file:src/renderer/components/meteorImpactMotion.test.ts",
         "file:src/renderer/components/tileBoardBreakWave.test.ts"
       ]
     },
@@ -24716,10 +24755,11 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 351,
+      "lineCount": 355,
       "imports": [
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
+        "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/realmCardMotion.ts",
         "file:src/renderer/components/tileBoardCardBend.ts",
@@ -24831,7 +24871,7 @@
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 58,
+      "lineCount": 60,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -25752,7 +25792,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 598,
+      "lineCount": 619,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -25762,6 +25802,7 @@
         "file:src/renderer/components/ElementCardBack.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/itemEffects.ts",
+        "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardCardWindow.ts",
@@ -32528,7 +32569,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1150,
+      "lineCount": 1152,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -32658,6 +32699,7 @@
         "file:src/renderer/components/ItemDropPopup.test.tsx",
         "file:src/renderer/components/itemEffects.test.ts",
         "file:src/renderer/components/MainMenuBackground.test.tsx",
+        "file:src/renderer/components/meteorImpactMotion.test.ts",
         "file:src/renderer/components/ProfileScreen.test.tsx",
         "file:src/renderer/components/realmParticles.test.ts",
         "file:src/renderer/components/realmTileMarkKey.test.ts",
@@ -35767,7 +35809,7 @@
       "path": "src/shared/meteor-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 42,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -41628,8 +41670,8 @@
       "name": "playItemDropSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1257,
-      "endLine": 1258
+      "line": 1259,
+      "endLine": 1260
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playItemEffectSfx",
@@ -45000,12 +45042,92 @@
       "endLine": 29
     },
     {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#createHitStopClock",
+      "name": "createHitStopClock",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 90,
+      "endLine": 127
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#ITEM_HIT_STOP_SECONDS",
+      "name": "ITEM_HIT_STOP_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 24,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_MAX_SECONDS",
+      "name": "METEOR_RIPPLE_MAX_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_SECONDS_PER_STEP",
+      "name": "METEOR_RIPPLE_SECONDS_PER_STEP",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_THROW_DISTANCE",
+      "name": "METEOR_THROW_DISTANCE",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#meteorDepartureDelaySec",
+      "name": "meteorDepartureDelaySec",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 39,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#meteorThrowDirection",
+      "name": "meteorThrowDirection",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 50,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#putMeteorThrow",
+      "name": "putMeteorThrow",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 75,
+      "endLine": 83
+    },
+    {
+      "id": "symbol:src/renderer/components/meteorImpactMotion.ts#takeBackMeteorThrow",
+      "name": "takeBackMeteorThrow",
+      "kind": "value",
+      "file": "src/renderer/components/meteorImpactMotion.ts",
+      "line": 66,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/components/MeteorStrike.tsx#METEOR_GROUND_SHADER",
+      "name": "METEOR_GROUND_SHADER",
+      "kind": "value",
+      "file": "src/renderer/components/MeteorStrike.tsx",
+      "line": 54,
+      "endLine": 91
+    },
+    {
       "id": "symbol:src/renderer/components/MeteorStrike.tsx#MeteorStrike",
       "name": "MeteorStrike",
       "kind": "function",
       "file": "src/renderer/components/MeteorStrike.tsx",
-      "line": 49,
-      "endLine": 74
+      "line": 94,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/components/OddCardLegend.tsx#OddCardLegend",
@@ -46772,16 +46894,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 920,
-      "endLine": 920
+      "line": 923,
+      "endLine": 923
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 163,
-      "endLine": 167
+      "line": 164,
+      "endLine": 168
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -46812,56 +46934,56 @@
       "name": "BREAK_WAVE_MAX_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 7,
-      "endLine": 7
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_SECONDS_PER_STEP",
       "name": "BREAK_WAVE_SECONDS_PER_STEP",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 5,
-      "endLine": 5
+      "line": 6,
+      "endLine": 6
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#FEVER_WAVE_MAX_DELAY_SECONDS",
       "name": "FEVER_WAVE_MAX_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 15,
-      "endLine": 15
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#FEVER_WAVE_SLOW",
       "name": "FEVER_WAVE_SLOW",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#getBreakWaveDelaySec",
       "name": "getBreakWaveDelaySec",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 33,
-      "endLine": 62
+      "line": 34,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#RIPPLE_WAVE_GAP_SECONDS",
       "name": "RIPPLE_WAVE_GAP_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#RIPPLE_WAVE_MAX_OFFSET_SECONDS",
       "name": "RIPPLE_WAVE_MAX_OFFSET_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardBreakWave.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -47628,8 +47750,8 @@
       "name": "advanceTileBezelFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
-      "line": 45,
-      "endLine": 350
+      "line": 46,
+      "endLine": 354
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -47676,8 +47798,8 @@
       "name": "createTileBezelFramePropsSnapshot",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
-      "line": 53,
-      "endLine": 57
+      "line": 55,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBezelFramePropsSnapshot",
@@ -47685,7 +47807,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "line": 14,
-      "endLine": 51
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBoardFrameHoverTiltState",
@@ -48700,24 +48822,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 597,
-      "endLine": 597
+      "line": 618,
+      "endLine": 618
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 168,
-      "endLine": 168
+      "line": 169,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 85,
-      "endLine": 85
+      "line": 86,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -56916,16 +57038,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1027,
-      "endLine": 1027
+      "line": 1029,
+      "endLine": 1029
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1097,
-      "endLine": 1099
+      "line": 1099,
+      "endLine": 1101
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -56948,8 +57070,8 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 474,
-      "endLine": 509
+      "line": 476,
+      "endLine": 511
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -56980,16 +57102,16 @@
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 544,
-      "endLine": 555
+      "line": 546,
+      "endLine": 557
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 516,
-      "endLine": 532
+      "line": 518,
+      "endLine": 534
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
@@ -57004,8 +57126,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1105,
-      "endLine": 1110
+      "line": 1107,
+      "endLine": 1112
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -57036,8 +57158,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1123,
-      "endLine": 1149
+      "line": 1125,
+      "endLine": 1151
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -57052,16 +57174,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 460,
-      "endLine": 472
+      "line": 462,
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 447,
-      "endLine": 458
+      "line": 449,
+      "endLine": 460
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -57132,24 +57254,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 430,
-      "endLine": 443
+      "line": 432,
+      "endLine": 445
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 444,
-      "endLine": 444
+      "line": 446,
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 421,
-      "endLine": 421
+      "line": 423,
+      "endLine": 423
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -57172,16 +57294,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 676,
-      "endLine": 680
+      "line": 678,
+      "endLine": 682
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 682,
-      "endLine": 692
+      "line": 684,
+      "endLine": 694
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -57196,8 +57318,8 @@
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 536,
-      "endLine": 542
+      "line": 538,
+      "endLine": 544
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -57228,8 +57350,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 575,
-      "endLine": 620
+      "line": 577,
+      "endLine": 622
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -57340,24 +57462,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 705,
-      "endLine": 717
+      "line": 707,
+      "endLine": 719
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 719,
-      "endLine": 732
+      "line": 721,
+      "endLine": 734
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1029,
-      "endLine": 1042
+      "line": 1031,
+      "endLine": 1044
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -57468,16 +57590,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1113,
-      "endLine": 1113
+      "line": 1115,
+      "endLine": 1115
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1116,
-      "endLine": 1121
+      "line": 1118,
+      "endLine": 1123
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -57500,16 +57622,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1090,
-      "endLine": 1094
+      "line": 1092,
+      "endLine": 1096
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1088,
-      "endLine": 1088
+      "line": 1090,
+      "endLine": 1090
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -57524,16 +57646,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1049,
-      "endLine": 1061
+      "line": 1051,
+      "endLine": 1063
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 734,
-      "endLine": 1025
+      "line": 736,
+      "endLine": 1027
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -57548,16 +57670,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 637,
-      "endLine": 674
+      "line": 639,
+      "endLine": 676
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 694,
-      "endLine": 699
+      "line": 696,
+      "endLine": 701
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -57572,8 +57694,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1063,
-      "endLine": 1082
+      "line": 1065,
+      "endLine": 1084
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -57588,8 +57710,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 557,
-      "endLine": 573
+      "line": 559,
+      "endLine": 575
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -57629,7 +57751,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 368,
-      "endLine": 419
+      "endLine": 421
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -57652,8 +57774,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 636,
-      "endLine": 636
+      "line": 638,
+      "endLine": 638
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -57684,16 +57806,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 627,
-      "endLine": 634
+      "line": 629,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 622,
-      "endLine": 625
+      "line": 624,
+      "endLine": 627
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -62429,7 +62551,7 @@
       "kind": "value",
       "file": "src/shared/meteor-rules.ts",
       "line": 13,
-      "endLine": 40
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/meteor-rules.ts#canAimMeteor",
@@ -69356,7 +69478,7 @@
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/components/boardGroupArcs.ts",
@@ -70798,7 +70920,7 @@
         },
         {
           "path": "src/renderer/components/MeteorStrike.tsx",
-          "line": 49
+          "line": 54
         },
         {
           "path": "src/renderer/components/itemEffects.ts",
@@ -78198,6 +78320,66 @@
       "id": "exports:src/renderer/components/metaStackedShellLayout.ts->symbol:src/renderer/components/metaStackedShellLayout.ts#getMetaSubscreenLayout",
       "source": "file:src/renderer/components/metaStackedShellLayout.ts",
       "target": "symbol:src/renderer/components/metaStackedShellLayout.ts#getMetaSubscreenLayout",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#createHitStopClock",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#createHitStopClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#ITEM_HIT_STOP_SECONDS",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#ITEM_HIT_STOP_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_MAX_SECONDS",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_MAX_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_SECONDS_PER_STEP",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_SECONDS_PER_STEP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_THROW_DISTANCE",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_THROW_DISTANCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#meteorDepartureDelaySec",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#meteorDepartureDelaySec",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#meteorThrowDirection",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#meteorThrowDirection",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#putMeteorThrow",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#putMeteorThrow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/meteorImpactMotion.ts->symbol:src/renderer/components/meteorImpactMotion.ts#takeBackMeteorThrow",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "symbol:src/renderer/components/meteorImpactMotion.ts#takeBackMeteorThrow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/MeteorStrike.tsx->symbol:src/renderer/components/MeteorStrike.tsx#METEOR_GROUND_SHADER",
+      "source": "file:src/renderer/components/MeteorStrike.tsx",
+      "target": "symbol:src/renderer/components/MeteorStrike.tsx#METEOR_GROUND_SHADER",
       "kind": "exports"
     },
     {
@@ -97987,18 +98169,6 @@
       "kind": "implemented_by"
     },
     {
-      "id": "imports:src/__scratch/backPreview.ts->src/renderer/components/cardBackInk.ts",
-      "source": "file:src/__scratch/backPreview.ts",
-      "target": "file:src/renderer/components/cardBackInk.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/__scratch/backPreview.ts->src/renderer/components/ElementCardBack.tsx",
-      "source": "file:src/__scratch/backPreview.ts",
-      "target": "file:src/renderer/components/ElementCardBack.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/main/crash-log.test.ts->src/main/crash-log.ts",
       "source": "file:src/main/crash-log.test.ts",
       "target": "file:src/main/crash-log.ts",
@@ -102823,6 +102993,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/meteorImpactMotion.test.ts->src/renderer/components/itemEffects.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.test.ts->src/renderer/components/meteorImpactMotion.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.test.ts->src/renderer/components/tileBoardBreakWave.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "target": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.ts->src/renderer/components/itemEffects.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/meteorImpactMotion.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MeteorStrike.tsx->src/renderer/components/tileBoardPick.ts",
       "source": "file:src/renderer/components/MeteorStrike.tsx",
       "target": "file:src/renderer/components/tileBoardPick.ts",
@@ -104371,6 +104583,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/meteorImpactMotion.ts",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/meteorImpactMotion.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/realmTileMarkKey.ts",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/realmTileMarkKey.ts",
@@ -104821,6 +105039,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardBreakWave.ts->src/renderer/components/meteorImpactMotion.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardBreakWave.ts->src/shared/board-grid-dimensions.ts",
       "source": "file:src/renderer/components/tileBoardBreakWave.ts",
       "target": "file:src/shared/board-grid-dimensions.ts",
@@ -105202,6 +105426,12 @@
       "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/cardDissolveMaterial.ts",
       "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
       "target": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/meteorImpactMotion.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.ts",
       "kind": "imports"
     },
     {
@@ -106318,6 +106548,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/itemEffects.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/meteorImpactMotion.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/meteorImpactMotion.ts",
       "kind": "imports"
     },
     {
@@ -123611,6 +123847,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/itemEffects.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
+      "source": "file:src/renderer/components/itemEffects.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/MainMenu.tsx->file:src/renderer/components/MainMenu.test.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/MainMenu.test.tsx",
@@ -123656,6 +123898,12 @@
       "id": "tested_by:src/renderer/components/metaStackedShellLayout.ts->file:src/renderer/components/metaStackedShellLayout.test.ts",
       "source": "file:src/renderer/components/metaStackedShellLayout.ts",
       "target": "file:src/renderer/components/metaStackedShellLayout.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/meteorImpactMotion.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
+      "source": "file:src/renderer/components/meteorImpactMotion.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123962,6 +124210,12 @@
       "id": "tested_by:src/renderer/components/TileBoard.tsx->file:src/renderer/components/TileBoard.test.tsx",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/TileBoard.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardBreakWave.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126056,6 +126310,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/MainMenuBackground.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/MainMenuBackground.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
       "kind": "tested_by"
     },
     {

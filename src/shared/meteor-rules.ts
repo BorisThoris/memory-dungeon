@@ -25,16 +25,17 @@ export const callMeteor = (run: RunState, tileId: string): RunState => {
     }
     if (pairs.size === 0) return run;
     let cards = 0;
+    const key = (board.meteorImpact?.key ?? 0) + 1;
     const tiles = board.tiles.map(tile => {
         if (!living(tile.state)) return tile;
         if (!pairs.has(tile.pairKey)) return tile.state === 'flipped' ? { ...tile, state:'hidden' as const } : tile;
         cards++;
-        return { ...tile, state:'removed' as const, findableKind:undefined };
+        return { ...tile, state:'removed' as const, findableKind:undefined, meteorStruck:key };
     });
     releaseRealmHoldsIfStuck(tiles);
     const next: RunState = { ...run, meteorCharges: meteorCharges(run)-1, meteorArmed:false, powersUsedThisRun:true,
         pinnedTileIds:run.pinnedTileIds.filter(id=>!board.tiles.some(tile=>tile.id===id&&pairs.has(tile.pairKey))),
         board:{...board,tiles,flippedTileIds:[],matchedPairs:board.matchedPairs+pairs.size,
-            meteorImpact:{key:(board.meteorImpact?.key??0)+1,cell,radius,cards}} };
+            meteorImpact:{key,cell,radius,cards}} };
     return next.board!.matchedPairs >= board.pairCount ? finalizeLevel(next,next.board!) : next;
 };

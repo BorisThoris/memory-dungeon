@@ -22,7 +22,7 @@ export const collectBoardParticleCues = (before: BoardState | null, board: Board
         const old = previous.get(tile.id);
         if (!old || old.state === tile.state || old.state === 'matched' || old.state === 'removed') return [];
         if (tile.state === 'removed') return [{ tileId: tile.id,
-            kind: tile.brokenByChunk ? 'chain' : 'bomb', delay: tile.brokenByChunk ? getBreakWaveDelaySec(board, tile) : 0 }];
+            kind: tile.brokenByChunk ? 'chain' : 'bomb', delay: getBreakWaveDelaySec(board, tile) }];
         if (tile.state === 'matched') return [{ tileId: tile.id, kind: 'match', delay: 0 }];
         return tile.state === 'flipped' ? [{ tileId: tile.id, kind: 'flip', delay: 0 }] : [];
     });

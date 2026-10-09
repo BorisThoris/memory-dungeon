@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending, ShaderMaterial, type Mesh } from 'three';
+import { AdditiveBlending, NormalBlending, ShaderMaterial, type Mesh } from 'three';
 import type { BoardState } from '../../shared/contracts';
 import { getTileColumnSpacing, TILE_SPACING } from './tileShatter';
 import { noopMeshRaycast } from './tileBoardPick';
@@ -45,7 +45,52 @@ void main() {
     #include <colorspace_fragment>
 }`;
 
-/** One pause-aware impact plane; it stops drawing when the final ember fades. */
+/**
+ * The ground under the strike (2026-10-09): while the rock falls, its shadow grows on the table
+ * and a hairline target ring closes on the crater; once it lands, the table is left charred - a
+ * ragged burn with a cooling ember rim - for the rest of the floor. Normal blending, under the
+ * cards: the additive impact above cannot darken anything.
+ */
+export const METEOR_GROUND_SHADER = /* glsl */ `
+precision highp float;
+varying vec2 p;
+uniform float age;
+uniform float calm;
+uniform float seed;
+float h(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7)) + seed) * 43758.5453); }
+float n(vec2 q) {
+    vec2 i = floor(q); vec2 f = fract(q); vec2 u = f * f * (3. - 2. * f);
+    return mix(mix(h(i), h(i + vec2(1., 0.)), u.x), mix(h(i + vec2(0., 1.)), h(i + vec2(1., 1.)), u.x), u.y);
+}
+void main() {
+    float d = length(p);
+    float aa = max(fwidth(d), .004);
+    float fall = clamp(age / .16, 0., 1.);
+    float landed = smoothstep(.15, .2, age);
+    vec4 colour = vec4(0.);
+    if (calm < .5 && landed < 1.) {
+        float shadow = (1. - smoothstep(.04 + .2 * fall, .1 + .26 * fall, d)) * .42 * fall;
+        float target = (1. - smoothstep(.006, .006 + aa * 1.5, abs(d - mix(.8, .26, fall)))) * .7 * fall;
+        colour = vec4(mix(vec3(.04, .03, .03), vec3(.88, .68, .4), target / max(.001, shadow + target)), max(shadow, target) * (1. - landed));
+    }
+    float angle = atan(p.y, p.x);
+    float edge = .36 + .07 * n(vec2(angle * 2.2, 3.1)) + .05 * n(p * 9.);
+    float burn = (1. - smoothstep(edge - .1, edge, d)) * landed;
+    // The rim: hot at first, then a faint ember that never quite goes out, ringed in pale ash so the
+    // burn reads on a dark floor.
+    float rim = (1. - smoothstep(0., .03, abs(d - edge + .04))) * landed;
+    float ember = rim * (.22 + .78 * exp(-max(0., age - .2) * 1.6)) * (.7 + .3 * n(vec2(angle * 6., 1.)));
+    float ash = (1. - smoothstep(0., .05, abs(d - edge - .03))) * landed * (.4 + .6 * n(p * 22.));
+    float scorchAlpha = burn * (.68 + .2 * n(p * 14.));
+    // Linear colours: the colour-space pass lifts them, so char is near zero and ash a mid grey.
+    vec3 scorch = mix(mix(vec3(.004, .003, .002), vec3(.24, .21, .18), ash), vec3(1., .42, .1) * 1.4, ember);
+    float alpha = max(colour.a, max(max(scorchAlpha, ash * .38), ember * .9));
+    if (alpha < .003) discard;
+    gl_FragColor = vec4(mix(colour.rgb, scorch, landed), alpha);
+    #include <colorspace_fragment>
+}`;
+
+/** One pause-aware impact plane; it stops drawing when the final ember fades. The ground stays. */
 export function MeteorStrike({ board, compact, reduceMotion, time }: {
     board: BoardState; compact: boolean; reduceMotion: boolean; time: MutableRefObject<number>;
 }) {
@@ -57,18 +102,33 @@ export function MeteorStrike({ board, compact, reduceMotion, time }: {
         vertexShader: 'varying vec2 p; void main(){p=uv*2.-1.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
         fragmentShader
     }), [reduceMotion]);
+    const ground = useMemo(() => new ShaderMaterial({
+        transparent: true, depthWrite: false, depthTest: false, blending: NormalBlending, toneMapped: false,
+        uniforms: { age: { value: 0 }, calm: { value: reduceMotion ? 1 : 0 }, seed: { value: (board.meteorImpact?.key ?? 0) * 1.37 + (board.meteorImpact?.cell ?? 0) * 0.71 } },
+        vertexShader: 'varying vec2 p; void main(){p=uv*2.-1.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+        fragmentShader: METEOR_GROUND_SHADER
+    }), [board.meteorImpact?.cell, board.meteorImpact?.key, reduceMotion]);
     useEffect(() => () => material.dispose(), [material]);
+    useEffect(() => () => ground.dispose(), [ground]);
     useFrame(() => {
         started.current ??= time.current;
         const age = time.current - started.current;
         material.uniforms.age!.value = age;
+        // The ground's clock stops once the embers have cooled; the scorch is still from then on.
+        ground.uniforms.age!.value = Math.min(age, 4);
         if (mesh.current) mesh.current.visible = age < DURATION;
     });
     const impact = board.meteorImpact!;
     const x = (impact.cell % board.columns - (board.columns - 1) / 2) * getTileColumnSpacing(compact);
     const y = ((board.rows - 1) / 2 - Math.floor(impact.cell / board.columns)) * TILE_SPACING;
     const size = (impact.radius + 1) * TILE_SPACING * 2.4;
-    return <mesh ref={mesh} position={[x, y, .4]} material={material} raycast={noopMeshRaycast} renderOrder={90}>
-        <planeGeometry args={[size, size]} />
-    </mesh>;
+    const groundSize = (impact.radius + 0.6) * TILE_SPACING * 2;
+    return <>
+        <mesh position={[x, y, -0.03]} material={ground} raycast={noopMeshRaycast} renderOrder={-1}>
+            <planeGeometry args={[groundSize, groundSize]} />
+        </mesh>
+        <mesh ref={mesh} position={[x, y, .4]} material={material} raycast={noopMeshRaycast} renderOrder={90}>
+            <planeGeometry args={[size, size]} />
+        </mesh>
+    </>;
 }

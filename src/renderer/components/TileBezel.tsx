@@ -96,6 +96,7 @@ import {
 } from './tileTextures';
 import { disposeTileBoardResources } from './tileBoardDisposables';
 import { createCardDissolveUniforms, installCardDissolve } from './cardDissolveMaterial';
+import { meteorThrowDirection } from './meteorImpactMotion';
 import {
     CARD_PLANE_HEIGHT,
     CARD_PLANE_WIDTH,
@@ -301,6 +302,7 @@ const TileBezelInner = ({
 
     // Where this tile sits in the chunk-break wave, from the board alone: no event plumbing.
     const breakWaveDelaySec = useMemo(() => getBreakWaveDelaySec(board, tile), [board, tile]);
+    const departureThrow = useMemo(() => meteorThrowDirection(board, tile), [board, tile]);
     const propsSnapshot: TileBezelFramePropsSnapshot = {
         boardColumns,
         boardEntranceMotionBudgetMs,
@@ -308,6 +310,7 @@ const TileBezelInner = ({
         boardEntranceStaggerTileCount,
         boardRows,
         breakWaveDelaySec,
+        departureThrow,
         faceUp,
         fieldAmp,
         fieldTiltRef,

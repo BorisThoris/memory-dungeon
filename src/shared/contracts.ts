@@ -381,6 +381,8 @@ export interface Tile {
     brokenAtTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Which wave of the ripple took this tile: 0 for the match's own region, 1 for what its partners popped, and so on. */
     brokenAtWave?: number;
+    /** The meteor impact (`meteorImpact.key`) that took this tile, so it can wait for the rock to land and be thrown from the crater. */
+    meteorStruck?: number;
     /** Visual variant index for atomic-pairs styling (optional). */
     atomicVariant?: number;
     /** If set, matching this pair claims a pickup reward on eligible floors. */

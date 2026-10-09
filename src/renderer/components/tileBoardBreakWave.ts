@@ -1,5 +1,6 @@
 import type { BoardState, Tile } from '../../shared/contracts';
 import { getSafeBoardColumns } from '../../shared/board-grid-dimensions';
+import { meteorDepartureDelaySec } from './meteorImpactMotion';
 
 /** Seconds of wave per grid step, so a chunk reads as a spread from the match, not a blink. */
 export const BREAK_WAVE_SECONDS_PER_STEP = 0.07;
@@ -30,7 +31,10 @@ export const RIPPLE_WAVE_MAX_OFFSET_SECONDS = 1.2;
  * matched clumps share one it is still the nearest that reads right. Computed from the board
  * alone, in the tile, so nothing has to be threaded from the turn event through six components.
  */
-export const getBreakWaveDelaySec = (board: Pick<BoardState, 'columns' | 'tiles'>, tile: Tile): number => {
+export const getBreakWaveDelaySec = (board: Pick<BoardState, 'columns' | 'tiles' | 'meteorImpact'>, tile: Tile): number => {
+    // A card the meteor took waits for the rock, then goes in a ripple from the crater (`meteorImpactMotion.ts`).
+    const meteor = meteorDepartureDelaySec(board, tile);
+    if (meteor != null) return meteor;
     if (tile.state !== 'removed' || !tile.brokenByChunk || !tile.suit) {
         return 0;
     }

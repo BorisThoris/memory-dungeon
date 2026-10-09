@@ -1210,6 +1210,8 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
             scheduleCue(() => {
                 playNoise({ durationSec: 0.08, gain: gain * 1, filter: 'highpass', from: 2600, to: 1500, attackSec: 0.002 });
                 playTone({ frequency: 82, frequencyEnd: 26, durationSec: 0.9, gain: gain * 0.85, type: 'sine', category: 'realm' });
+                // The drop: a sub-bass fall under the thump, longer than the bomb's, so the meteor is the heavier hit.
+                playTone({ frequency: 52, frequencyEnd: 18, durationSec: 1.6, gain: gain * 0.7, type: 'sine', category: 'realm' });
                 playNoise({ durationSec: 1.4, gain: gain * 0.9, filter: 'lowpass', from: 1800, to: 60, attackSec: 0.004 });
             }, METEOR_IMPACT_DELAY_SECONDS * 1000);
             return;
