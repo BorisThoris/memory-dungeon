@@ -3819,8 +3819,8 @@
     {
       "path": "e2e/board-particles.spec.ts",
       "category": "test",
-      "bytes": 12059,
-      "sha256": "7d757d76b33a916f5afaae8befaeb3bccd5ede3c6d19c1662170224f45845a0d"
+      "bytes": 12429,
+      "sha256": "20f6f016e66164499f2faa528cc61eafc0363f6b4f80196df4ae0f3f1c829254"
     },
     {
       "path": "e2e/boardOverlayClearance.ts",
@@ -4005,8 +4005,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 8340,
-      "sha256": "610560294ceb2f6b4930df1086b75ab11287e590931414f45765b06c9bb5f0af"
+      "bytes": 8679,
+      "sha256": "bbbfa78f12dffc8d798c9efe7ab5ad052c97fc8a6891fcaa47198e1bf70e1f6f"
     },
     {
       "path": "e2e/pngDiff.ts",
