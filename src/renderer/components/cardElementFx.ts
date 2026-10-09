@@ -60,13 +60,15 @@ vec4 cardFace(vec2 uv) {
 
 const liquefyVertex = `${COMMON}
 uniform float uFloor;
+uniform vec2 uCard;
 varying float vFall;
 varying float vPool;
 void main() {
     vUv = uv;
     vec3 p = position;
-    float column = floor(uv.x * 16.0);
-    float lag = hash1(column) * 0.28;
+    // Each run of the card lets go on its own beat, varying smoothly across it: a stepped beat per
+    // column tore the mesh's triangles into spikes where one straddled two columns.
+    float lag = noise(vec2(uv.x * 9.0, uSeed)) * 0.28;
     // A wobble first, as it loses its shape.
     float soft = smoothstep(0.0, 0.25, uT);
     p.x += sin(uv.y * 11.0 + uT * 13.0) * 0.012 * soft * (1.0 - uv.y * 0.3);
@@ -74,11 +76,13 @@ void main() {
     float t = max(0.0, uT - 0.18 - lag - (1.0 - uv.y) * 0.12);
     float fall = 4.8 * t * t * (0.35 + 0.65 * uv.y) + 0.12 * t;
     p.y -= fall;
-    // What reaches the floor spreads out over it.
+    // What reaches the floor spreads out over it, but only so far: a puddle about the card's width
+    // each side (the fall is unbounded, and spreading by all of it ran a sheet across the screen).
     float under = max(0.0, uFloor - p.y);
+    float spread = uCard.x * 0.75 * (1.0 - exp(-under * 2.2));
     p.y = max(p.y, uFloor + 0.004 * sin(p.x * 30.0 + uT * 7.0));
-    p.x += sign(p.x + 0.0001) * under * 0.9;
-    p.z += under * 0.35;
+    p.x += sign(p.x + 0.0001) * spread;
+    p.z -= min(under, 0.4) * 0.04;
     vFall = fall;
     vPool = smoothstep(0.0, 0.05, under);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
@@ -113,7 +117,7 @@ void main() {
 
 const combustVertex = `${COMMON}
 // The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
-float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
+float burnFront(float u) { return uT * 0.72 - 0.06 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 varying float vBurn;
 void main() {
     vUv = uv;
@@ -130,7 +134,7 @@ void main() {
 
 const combustFragment = `${COMMON}${FACE}
 // The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
-float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
+float burnFront(float u) { return uT * 0.72 - 0.06 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 uniform vec3 uTint;
 varying float vBurn;
 void main() {
@@ -159,7 +163,7 @@ void main() {
 
 const flameFragment = `${COMMON}
 // The burn line: climbing with time, ragged across the card and wavering, never a straight bar.
-float burnFront(float u) { return uT * 0.55 - 0.05 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
+float burnFront(float u) { return uT * 0.72 - 0.06 + (fbm(vec2(u * 3.4 + 2.0, uT * 0.9)) - 0.5) * 0.26 + (noise(vec2(u * 11.0, uT * 2.0)) - 0.5) * 0.05; }
 uniform vec3 uTint;
 uniform float uDuration;
 uniform vec2 uCard;
@@ -175,7 +179,9 @@ void main() {
     float tongues = fbm(vec2(px * 6.5, p.y * 1.4 - uT * 4.2));
     float height = 0.45 + 0.55 * fbm(vec2(px * 2.6 + 5.0, uT * 1.4));
     float k = clamp(1.0 - above / height, 0.0, 1.0);
-    float flame = smoothstep(-0.06, 0.03, above + (noise(vec2(px * 9.0, uT * 5.0)) - 0.5) * 0.05) * pow(k, 0.8) * smoothstep(0.38, 0.8, tongues + k * 0.38) * span;
+    float flame = smoothstep(-0.06, 0.03, above + (noise(vec2(px * 9.0, uT * 5.0)) - 0.5) * 0.05) * pow(k, 0.8) * smoothstep(0.44, 0.8, tongues + k * 0.16) * span;
+    // Gaps between the tongues reach down to the root, so the base is flames and never a solid bar.
+    flame *= 0.35 + 0.65 * smoothstep(0.3, 0.62, noise(vec2(px * 7.5 + 3.0, uT * 3.0)));
     // On the char below the edge, small flames still flicker.
     float flicker = (1.0 - smoothstep(-0.3, 0.0, above)) * step(above, 0.0) * smoothstep(0.62, 0.9, noise(vec2(px * 14.0, p.y * 9.0 - uT * 6.0))) * 0.55 * span;
     flame = max(flame, flicker);
@@ -183,7 +189,7 @@ void main() {
     // Deep red at the tips, orange in the body, yellow at the root: never blown out to white.
     vec3 colour = mix(vec3(0.5, 0.07, 0.02), vec3(1.0, 0.42, 0.07) * mix(vec3(1.0), uTint * 1.4, 0.25), smoothstep(0.08, 0.5, flame));
     colour = mix(colour, vec3(1.0, 0.8, 0.32), smoothstep(0.55, 0.95, flame));
-    float alpha = flame * life * 0.85;
+    float alpha = flame * life * 0.8;
     if (alpha < 0.01) discard;
     gl_FragColor = vec4(colour * alpha, alpha);
     #include <colorspace_fragment>
