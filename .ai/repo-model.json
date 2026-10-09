@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3146,
     "codeFileCount": 1173,
-    "exportedSymbolCount": 3723,
+    "exportedSymbolCount": 3725,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9889
+    "relationshipCount": 9891
   },
   "inventory": [
     {
@@ -4491,8 +4491,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110294,
-      "sha256": "03b5f560477575557cadcb1a8dae9c17a782b65e7b72f5cf02f93348d6303e1f"
+      "bytes": 110356,
+      "sha256": "c506cb10c230b3bb40d1fb09eb3d547128b84c567024ebc8b5bbe6ecbe54101f"
     },
     {
       "path": "public/site.webmanifest",
@@ -10749,8 +10749,8 @@
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "category": "test",
-      "bytes": 36695,
-      "sha256": "940f1a8ece74a8165f6248905edf828b5c184aa515ec66112fbb0565dfaec50b"
+      "bytes": 37067,
+      "sha256": "2251c2fb51192cc3d3f27b0d3246f1da6a755778231c9f7e06a04ccd7c44ca16"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
@@ -10833,20 +10833,20 @@
     {
       "path": "src/renderer/components/iceSheet.test.ts",
       "category": "test",
-      "bytes": 1227,
-      "sha256": "23688174b92a9298b15bf21bce98a012517807d8f071196ae0a6dad7ee9b54f5"
+      "bytes": 1096,
+      "sha256": "7eb07214eec444d21f6affd4f1c3706bae60762416ac5e7b86ea9c714191fa3b"
     },
     {
       "path": "src/renderer/components/iceSheet.ts",
       "category": "source",
-      "bytes": 3332,
-      "sha256": "2b34b05d643698572bdbfac678b4110c8db7e45708a01d082e560e600c47ea3e"
+      "bytes": 3885,
+      "sha256": "5ce06ed736391e76544a25bfcc59c4313224d982c5f0d3d561b1f23334960700"
     },
     {
       "path": "src/renderer/components/IceSheetOverlay.module.css",
       "category": "source",
-      "bytes": 1753,
-      "sha256": "8373ead68bcf9ee410abd2677d2984cbe1cb841baf721829060458b5ab865e23"
+      "bytes": 1791,
+      "sha256": "643ff5fa378839207b27783ab70a05f13930d93fd13d916db609a1258b8f6506"
     },
     {
       "path": "src/renderer/components/IceSheetOverlay.tsx",
@@ -11205,14 +11205,14 @@
     {
       "path": "src/renderer/components/realmRoomLife.test.ts",
       "category": "test",
-      "bytes": 6119,
-      "sha256": "e87a9555e353d094785a55fc6da9a847343cb94b06275fc601c6dd46a7d1b028"
+      "bytes": 6355,
+      "sha256": "d6b1907828e03a8e3aa9ec981f0df3e4b15f2b96eca0ead05af34906d37abfe7"
     },
     {
       "path": "src/renderer/components/realmRoomLife.ts",
       "category": "source",
-      "bytes": 42148,
-      "sha256": "d6a7e663ebcde880378d39570b27ab1126bcc59bca64bdd8cbe584439d5e15b1"
+      "bytes": 43079,
+      "sha256": "9c732075ad47c2bdd7590b805b0dc164addbc9bc3b257b2e8324ad4eabb9b388"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -11451,8 +11451,8 @@
     {
       "path": "src/renderer/components/scenePaint.ts",
       "category": "source",
-      "bytes": 16535,
-      "sha256": "2f9965dc2af2a3127df9ad4fff0b821aef4c35f4a4e1b4e494c48dc65ba8cbb4"
+      "bytes": 17064,
+      "sha256": "bd1f38478f515bb159adeb24e773074257460acf99a14b3c1f16fd623f48b2f0"
     },
     {
       "path": "src/renderer/components/scenePlate.module.css",
@@ -22874,7 +22874,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 601,
+      "lineCount": 604,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneFrame.ts",
@@ -23241,7 +23241,7 @@
       "path": "src/renderer/components/iceSheet.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 26,
+      "lineCount": 22,
       "imports": [
         "file:src/renderer/components/iceSheet.ts"
       ],
@@ -23253,14 +23253,16 @@
       "path": "src/renderer/components/iceSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 67,
+      "lineCount": 76,
       "imports": [
         "file:src/shared/rng.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
+        "symbol:src/renderer/components/iceSheet.ts#ICE_FRAME_BAND",
         "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
-        "symbol:src/renderer/components/iceSheet.ts#IceCrack"
+        "symbol:src/renderer/components/iceSheet.ts#IceCrack",
+        "symbol:src/renderer/components/iceSheet.ts#inIceFrameBand"
       ],
       "testedBy": [
         "file:src/renderer/components/iceSheet.test.ts"
@@ -24200,7 +24202,7 @@
       "path": "src/renderer/components/realmRoomLife.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 94,
+      "lineCount": 97,
       "imports": [
         "file:src/renderer/components/realmRoomLife.ts",
         "file:src/renderer/components/scenePaint.ts"
@@ -24213,7 +24215,7 @@
       "path": "src/renderer/components/realmRoomLife.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 739,
+      "lineCount": 761,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/goldRain.ts",
@@ -24862,7 +24864,7 @@
       "path": "src/renderer/components/scenePaint.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 406,
+      "lineCount": 415,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
@@ -46268,8 +46270,16 @@
       "name": "buildIceCracks",
       "kind": "value",
       "file": "src/renderer/components/iceSheet.ts",
-      "line": 26,
-      "endLine": 66
+      "line": 35,
+      "endLine": 75
+    },
+    {
+      "id": "symbol:src/renderer/components/iceSheet.ts#ICE_FRAME_BAND",
+      "name": "ICE_FRAME_BAND",
+      "kind": "value",
+      "file": "src/renderer/components/iceSheet.ts",
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
@@ -46286,6 +46296,14 @@
       "file": "src/renderer/components/iceSheet.ts",
       "line": 14,
       "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/iceSheet.ts#inIceFrameBand",
+      "name": "inIceFrameBand",
+      "kind": "value",
+      "file": "src/renderer/components/iceSheet.ts",
+      "line": 28,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/IceSheetOverlay.tsx#IceSheetOverlay",
@@ -47324,8 +47342,8 @@
       "name": "lightningPath",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 306,
-      "endLine": 326
+      "line": 327,
+      "endLine": 347
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
@@ -47340,8 +47358,8 @@
       "name": "rainDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 227,
-      "endLine": 297
+      "line": 238,
+      "endLine": 318
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
@@ -47356,16 +47374,16 @@
       "name": "REALM_WARPS",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 680,
-      "endLine": 691
+      "line": 701,
+      "endLine": 712
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
       "name": "realmLayerLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 607,
-      "endLine": 639
+      "line": 628,
+      "endLine": 660
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifeCount",
@@ -47388,8 +47406,8 @@
       "name": "realmRoomLifeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 595,
-      "endLine": 596
+      "line": 616,
+      "endLine": 617
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RealmRoomLifeInput",
@@ -47404,24 +47422,24 @@
       "name": "realmRoomSpriteDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 646,
-      "endLine": 665
+      "line": 667,
+      "endLine": 686
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomWarpDraws",
       "name": "realmRoomWarpDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 700,
-      "endLine": 738
+      "line": 721,
+      "endLine": 760
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
       "name": "stormSheetLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 355,
-      "endLine": 358
+      "line": 376,
+      "endLine": 379
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
@@ -47436,16 +47454,16 @@
       "name": "stormStrikeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 361,
-      "endLine": 440
+      "line": 382,
+      "endLine": 461
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel",
       "name": "stormStrikeLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 344,
-      "endLine": 352
+      "line": 365,
+      "endLine": 373
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
@@ -48108,32 +48126,32 @@
       "name": "findSceneDraw",
       "kind": "value",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 400,
-      "endLine": 405
+      "line": 409,
+      "endLine": 414
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#paintScene",
       "name": "paintScene",
       "kind": "value",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 358,
-      "endLine": 394
+      "line": 367,
+      "endLine": 403
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#SCENE_ALPHA_FLOOR",
       "name": "SCENE_ALPHA_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 182,
-      "endLine": 182
+      "line": 187,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#SCENE_DEPTH_SHIFT_X",
       "name": "SCENE_DEPTH_SHIFT_X",
       "kind": "value",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 185,
-      "endLine": 185
+      "line": 190,
+      "endLine": 190
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#SceneBlend",
@@ -48156,16 +48174,16 @@
       "name": "SceneDraw",
       "kind": "type",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 117,
-      "endLine": 117
+      "line": 122,
+      "endLine": 122
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#sceneDrawIds",
       "name": "sceneDrawIds",
       "kind": "value",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 397,
-      "endLine": 398
+      "line": 406,
+      "endLine": 407
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#SceneFilter",
@@ -48213,31 +48231,31 @@
       "kind": "interface",
       "file": "src/renderer/components/scenePaint.ts",
       "line": 104,
-      "endLine": 115
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintContext",
       "name": "ScenePaintContext",
       "kind": "type",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 120,
-      "endLine": 146
+      "line": 125,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintEnv",
       "name": "ScenePaintEnv",
       "kind": "interface",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 154,
-      "endLine": 179
+      "line": 159,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#ScenePaintImage",
       "name": "ScenePaintImage",
       "kind": "interface",
       "file": "src/renderer/components/scenePaint.ts",
-      "line": 148,
-      "endLine": 152
+      "line": 153,
+      "endLine": 157
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#SceneRect",
@@ -80291,6 +80309,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#ICE_FRAME_BAND",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "symbol:src/renderer/components/iceSheet.ts#ICE_FRAME_BAND",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
       "source": "file:src/renderer/components/iceSheet.ts",
       "target": "symbol:src/renderer/components/iceSheet.ts#ICE_SHEET_VIEWBOX",
@@ -80300,6 +80324,12 @@
       "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#IceCrack",
       "source": "file:src/renderer/components/iceSheet.ts",
       "target": "symbol:src/renderer/components/iceSheet.ts#IceCrack",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#inIceFrameBand",
+      "source": "file:src/renderer/components/iceSheet.ts",
+      "target": "symbol:src/renderer/components/iceSheet.ts#inIceFrameBand",
       "kind": "exports"
     },
     {
