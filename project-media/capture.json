@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-09T17:43:20.021Z",
+  "capturedAt": "2026-10-09T18:18:44.248Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 154398,
+      "bytes": 154665,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 15,
-        "dark": 0.166,
+        "dark": 0.164,
         "light": 0,
-        "colours": 19
+        "colours": 18
       }
     },
     {
@@ -56,37 +56,7 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 144839,
-      "status": "captured",
-      "stats": {
-        "mean": 24,
-        "std": 15,
-        "dark": 0.123,
-        "light": 0,
-        "colours": 21
-      }
-    },
-    {
-      "profile": "mobile",
-      "file": "mobile.jpg",
-      "width": 430,
-      "height": 932,
-      "bytes": 39335,
-      "status": "captured",
-      "stats": {
-        "mean": 23,
-        "std": 16,
-        "dark": 0.038,
-        "light": 0,
-        "colours": 25
-      }
-    },
-    {
-      "profile": "full",
-      "file": "full.jpg",
-      "width": 1440,
-      "height": 900,
-      "bytes": 119997,
+      "bytes": 145058,
       "status": "captured",
       "stats": {
         "mean": 24,
@@ -97,18 +67,48 @@
       }
     },
     {
+      "profile": "mobile",
+      "file": "mobile.jpg",
+      "width": 430,
+      "height": 932,
+      "bytes": 39377,
+      "status": "captured",
+      "stats": {
+        "mean": 23,
+        "std": 16,
+        "dark": 0.038,
+        "light": 0,
+        "colours": 27
+      }
+    },
+    {
+      "profile": "full",
+      "file": "full.jpg",
+      "width": 1440,
+      "height": 900,
+      "bytes": 120066,
+      "status": "captured",
+      "stats": {
+        "mean": 24,
+        "std": 15,
+        "dark": 0.119,
+        "light": 0,
+        "colours": 21
+      }
+    },
+    {
       "profile": "og",
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 110294,
+      "bytes": 110356,
       "status": "captured",
       "stats": {
         "mean": 25,
         "std": 14,
-        "dark": 0.149,
+        "dark": 0.151,
         "light": 0,
-        "colours": 18
+        "colours": 17
       }
     }
   ]
