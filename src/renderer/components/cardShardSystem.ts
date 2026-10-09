@@ -4,6 +4,7 @@ import { CARD_DISSOLVE_EDGE } from './cardDissolveMaterial';
 import { cardShardPieces, SHARD_STYLES, shardFlight, shardPath, shardPose, shardStyleOf, type ShardFlight, type ShardPath, type ShardPiece, type ShardStyleSpec } from './cardShards';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { getCardFaceStaticTexture, getTileFaceOverlayTexture, getTileFaceTexture } from './tileTextures';
+import { cardDepartureEffectBudget } from './cardDepartureBudget';
 
 /**
  * The pieces of the cards that break (`cardShards.ts`), drawn on the board: each piece a polygon of
@@ -116,6 +117,7 @@ interface Break {
     style: ShardStyleSpec;
     material: ShaderMaterial;
     pieces: ShardMesh[];
+    overlay: Texture | null;
 }
 
 /** A piece's geometry: a fan over its outline, the card's own UVs, and how far each vertex is from the break. */
@@ -157,6 +159,7 @@ export const createCardShardSystem = () => {
             mesh.geometry.dispose();
         }
         shattered.material.dispose();
+        shattered.overlay?.dispose();
     };
     return {
         group,
@@ -165,10 +168,12 @@ export const createCardShardSystem = () => {
          * `delay` seconds after `time`; `floorY` is the floor under the board's lowest row.
          */
         spawn({ tile, x, y, z, seed, time, delay, floorY, quality, energy }: { tile: Tile; x: number; y: number; z: number; seed: number; time: number; delay: number; floorY: number; quality: GraphicsQualityPreset; energy: number }): number {
+            if (breaks.length >= cardDepartureEffectBudget(quality)) return 0;
             const style = SHARD_STYLES[shardStyleOf(tile.suit)];
             const count = Math.max(3, Math.round(style.count * (quality === 'low' ? 0.6 : quality === 'medium' ? 0.8 : 1)));
             const face = getCardFaceStaticTexture();
-            const overlay = getTileFaceOverlayTexture(tile, 'matched', quality);
+            // Own the texture lifetime independently of the visible card window's cache eviction.
+            const overlay = getTileFaceOverlayTexture(tile, 'matched', quality)?.clone() ?? null;
             const back = getTileFaceTexture(tile, 'back', 'hidden', 'panel');
             const material = new ShaderMaterial({
                 vertexShader,
@@ -197,7 +202,7 @@ export const createCardShardSystem = () => {
                 const flight = shardFlight(piece, seed, index, style, energy);
                 return { mesh, flight, path: shardPath(flight, style, x + piece.cx, y + piece.cy, z, floorY) };
             });
-            breaks.push({ start: time + delay, style, material, pieces });
+            breaks.push({ start: time + delay, style, material, pieces, overlay });
             return pieces.length;
         },
         /** Pose every piece at `now`; drop the breaks that are over. Returns how many pieces are showing. */

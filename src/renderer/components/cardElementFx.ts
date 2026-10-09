@@ -3,6 +3,7 @@ import type { GraphicsQualityPreset, Tile, TileSuit } from '../../shared/contrac
 import { CARD_DISSOLVE_EDGE } from './cardDissolveMaterial';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { getCardFaceStaticTexture, getTileFaceOverlayTexture } from './tileTextures';
+import { cardDepartureEffectBudget } from './cardDepartureBudget';
 
 /**
  * The card itself going its element's way when it leaves (2026-10-09, the owner: "a card should
@@ -295,6 +296,7 @@ interface Effect {
     duration: number;
     meshes: Mesh[];
     materials: ShaderMaterial[];
+    overlay: Texture | null;
 }
 
 const BLANK = { value: null as Texture | null };
@@ -309,6 +311,7 @@ export const createCardElementFxSystem = () => {
             mesh.geometry.dispose();
         }
         for (const material of effect.materials) material.dispose();
+        effect.overlay?.dispose();
     };
     return {
         group,
@@ -316,9 +319,13 @@ export const createCardElementFxSystem = () => {
         spawn({ tile, x, y, z, seed, time, delay, floorY, quality }: { tile: Tile; x: number; y: number; z: number; seed: number; time: number; delay: number; floorY: number; quality: GraphicsQualityPreset }): boolean {
             const kind = cardElementFxOf(tile.suit);
             if (!kind) return false;
+            // A handled element must not fall back to shards when its detailed effect pool is full.
+            if (effects.length >= cardDepartureEffectBudget(quality)) return true;
             const duration = CARD_ELEMENT_FX_SECONDS[kind];
             const face = getCardFaceStaticTexture();
-            const overlay = getTileFaceOverlayTexture(tile, 'matched', quality);
+            // The card window can evict its texture while this departure is still drawing.
+            // A clone shares the canvas/source but gives the effect its own disposal lifetime.
+            const overlay = getTileFaceOverlayTexture(tile, 'matched', quality)?.clone() ?? null;
             const tint = new Color(CARD_DISSOLVE_EDGE[tile.suit ?? 'none'] ?? '#ffd27a');
             const shared = {
                 uT: { value: 0 },
@@ -365,7 +372,7 @@ export const createCardElementFxSystem = () => {
                 mesh.frustumCulled = false;
                 group.add(mesh);
             }
-            effects.push({ start: time + delay, duration, meshes, materials: meshes.map((mesh) => mesh.material as ShaderMaterial) });
+            effects.push({ start: time + delay, duration, meshes, materials: meshes.map((mesh) => mesh.material as ShaderMaterial), overlay });
             return true;
         },
         advance(now: number): number {

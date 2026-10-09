@@ -365,6 +365,11 @@ const TileBezelInner = ({
         () => new PlaneGeometry(CARD_BACK_SPIN_SIZE, CARD_BACK_SPIN_SIZE, 1, 1),
         []
     );
+    // Geometry passed as a mesh prop is not a Fiber child: its owner must release it.
+    // These four belong to this card; the shared rim geometries belong to the board cache.
+    useEffect(() => () => disposeTileBoardResources([
+        frontGeometry, backGeometry, overlayGeometry, cardBackSpinGeometry
+    ]), [frontGeometry, backGeometry, overlayGeometry, cardBackSpinGeometry]);
     const isMatched = tile.state === 'matched';
 
     const cardPanelNormalMap = useMemo(() => getCardPanelNormalTexture(), []);

@@ -93,6 +93,12 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         const theme = themeOf(comboTheme);
         const arcTint = theme.arcTints[intensity < 0.35 ? 0 : intensity < 0.6 ? 1 : intensity < 0.8 ? 2 : 3];
         const surge = comboHeatLevels(combo).surge;
+        // Find the floor once for the whole wave, rather than scanning the board for every departure.
+        let lowest = Number.POSITIVE_INFINITY;
+        for (let cell = 0; cell < board.tiles.length; cell++) {
+            lowest = Math.min(lowest, getTileTransform(board.tiles[cell]!, cell, board.columns, board.rows, compact, true, reduceMotion).baseY);
+        }
+        const floorY = (Number.isFinite(lowest) ? lowest : 0) - CARD_PLANE_HEIGHT * 0.5 - 0.3;
         // Where a card stands now: its live group if it has one, its layout slot if not.
         const anchorOf = (tileId: string) => {
             const index = cellById.get(tileId)!;
@@ -111,7 +117,10 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 intensity: arc.kind === 'pair' ? intensity * 0.85 : intensity, reduceMotion, quality: graphicsQuality, tint: arcTint, extraStrands: surge });
             if (emitted > 0) totals.current.arc += 1;
         }
-        for (const cue of collectBoardParticleCues(previous.current, board)) {
+        // Reserve the first detailed departure slots for the pair the player actually matched.
+        const departureCues = collectBoardParticleCues(previous.current, board)
+            .sort((a, b) => Number(b.kind === 'match') - Number(a.kind === 'match'));
+        for (const cue of departureCues) {
             const index = cellById.get(cue.tileId)!;
             const tile = board.tiles[index]!;
             const transform = getTileTransform(tile, index, board.columns, board.rows, compact, true, reduceMotion);
@@ -132,13 +141,12 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             if (emitted > 0) totals.current[cue.kind] += 1;
             // ...and as it leaves, it breaks: its pieces thrown off to fall and bounce on the floor under the board.
             if (cue.kind !== 'flip' && !reduceMotion) {
-                const lowest = Math.min(...board.tiles.map((other, cell) => getTileTransform(other, cell, board.columns, board.rows, compact, true, reduceMotion).baseY));
                 const transformed = elementFx.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
                     seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
-                    floorY: lowest - CARD_PLANE_HEIGHT * 0.5 - 0.3, quality: graphicsQuality });
+                    floorY, quality: graphicsQuality });
                 if (!transformed) shards.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
                     seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
-                    floorY: lowest - CARD_PLANE_HEIGHT * 0.5 - 0.3, quality: graphicsQuality, energy });
+                    floorY, quality: graphicsQuality, energy });
                 shardBreaks.current += 1;
                 // And its material spills into the room, from where the card is on the screen (`roomSpill.ts`).
                 const onScreen = new Vector3(anchor?.x ?? transform.baseX, anchor?.y ?? transform.baseY, anchor?.z ?? 0.04).project(camera);
