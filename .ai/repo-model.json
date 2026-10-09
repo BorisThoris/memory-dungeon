@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3025,
-    "codeFileCount": 1152,
-    "exportedSymbolCount": 3633,
+    "trackedFileCount": 3027,
+    "codeFileCount": 1154,
+    "exportedSymbolCount": 3645,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9705
+    "relationshipCount": 9728
   },
   "inventory": [
     {
@@ -2416,7 +2416,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "5e7559ffe159828a37f921796e2b29fe08fecd2a25d9e7e7e0754e5214a6a183"
+      "sha256": "791472ffdfcf51cf7b78e008eb1bc53f4eb1b529996c88a8a1713994b9c59de8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5985,8 +5985,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 27514,
-      "sha256": "1dc881cf4cf20ebfef2aa4630fe2ef90af16b54e0e650d8b01486c2e17e154ef"
+      "bytes": 27870,
+      "sha256": "30661d532ca67a16c810641aff2524f13b8967d723a4bc48ad1a88036164a0d2"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7737,8 +7737,8 @@
     {
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "category": "source",
-      "bytes": 7010,
-      "sha256": "9b2917e6f2e742d6f789f1e586fc46a39bf3fb4b3d2c4dff936a097716dce486"
+      "bytes": 7131,
+      "sha256": "3535a1ee62e1986fc82005a8102d7be8ea42508e87f340d69b617bc0d64adeb9"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
@@ -9145,6 +9145,18 @@
       "sha256": "c2aa5720ce15c0b7cedd447f57978fa9e22713665050a5a08e9ac8335ce1f0d0"
     },
     {
+      "path": "src/renderer/audio/comboMusicLayers.test.ts",
+      "category": "test",
+      "bytes": 2555,
+      "sha256": "220f7ca31400f5d52511aed9d24a2b362531f4c5dd943434733e21316ff66235"
+    },
+    {
+      "path": "src/renderer/audio/comboMusicLayers.ts",
+      "category": "source",
+      "bytes": 14301,
+      "sha256": "cf36213208269f80e28c3863542e154236d201818b42a4a2980c5c5908b2a3dc"
+    },
+    {
       "path": "src/renderer/audio/comboVoicing.test.ts",
       "category": "test",
       "bytes": 5938,
@@ -9177,8 +9189,8 @@
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 11110,
-      "sha256": "cf3996a7b7e50e6d89b8c05dd202e846ee6e4380ba1edc7a6e3a2e27bce8f26f"
+      "bytes": 11475,
+      "sha256": "476119687024dcbee0f080eab4fb0972c94020bc30f43e7e81509a519e471160"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -18853,9 +18865,10 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 550,
+      "lineCount": 556,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
+        "file:src/renderer/audio/comboMusicLayers.ts",
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/resolutionGapDuck.ts",
@@ -18959,9 +18972,10 @@
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 163,
+      "lineCount": 164,
       "imports": [
         "file:src/renderer/assets/preloadStartupAssets.ts",
+        "file:src/renderer/audio/comboMusicLayers.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -19318,6 +19332,48 @@
       ]
     },
     {
+      "id": "file:src/renderer/audio/comboMusicLayers.test.ts",
+      "path": "src/renderer/audio/comboMusicLayers.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 42,
+      "imports": [
+        "file:src/renderer/audio/comboMusicLayers.ts",
+        "file:src/renderer/audio/musicalScale.ts",
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/comboMusicLayers.ts",
+      "path": "src/renderer/audio/comboMusicLayers.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 288,
+      "imports": [
+        "file:src/renderer/audio/gameplayMusic.ts",
+        "file:src/renderer/audio/webAudioContext.ts",
+        "file:src/shared/combo-heat-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
+        "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/comboMusicLayers.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/audio/comboVoicing.test.ts",
       "path": "src/renderer/audio/comboVoicing.test.ts",
       "layer": "renderer",
@@ -19414,13 +19470,14 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 307,
+      "lineCount": 313,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
       ],
       "exports": [
         "symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
+        "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
         "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
         "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
         "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
@@ -19545,6 +19602,7 @@
         "symbol:src/renderer/audio/musicalScale.ts#semitoneHz"
       ],
       "testedBy": [
+        "file:src/renderer/audio/comboMusicLayers.test.ts",
         "file:src/renderer/audio/comboVoicing.test.ts",
         "file:src/renderer/audio/musicalScale.test.ts"
       ]
@@ -32497,6 +32555,7 @@
         "symbol:src/shared/combo-heat-rules.ts#romanNumeral"
       ],
       "testedBy": [
+        "file:src/renderer/audio/comboMusicLayers.test.ts",
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
@@ -40942,16 +41001,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 549,
-      "endLine": 549
+      "line": 555,
+      "endLine": 555
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -41006,64 +41065,64 @@
       "name": "preloadRunAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 126,
-      "endLine": 155
+      "line": 127,
+      "endLine": 156
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
       "name": "resetRunAssetPreloadForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 157,
-      "endLine": 162
+      "line": 158,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
       "name": "RUN_ASSET_STEP_CAP_MS",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
       "name": "RUN_ASSET_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
       "name": "RunAssetProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 34,
-      "endLine": 39
+      "line": 35,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
       "name": "runAssetsReady",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 120,
-      "endLine": 120
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
       "name": "RunAssetStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
       "name": "subscribeRunAssetProgress",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 112,
-      "endLine": 118
+      "line": 113,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
@@ -41498,6 +41557,94 @@
       "endLine": 27
     },
     {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
+      "name": "COMBO_LAYER_ENTRY_STAGE",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
+      "name": "COMBO_LAYERS_MIX",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 31,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
+      "name": "COMBO_MUSIC_LAYERS",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
+      "name": "comboLayerGains",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 44,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
+      "name": "comboLayerNotes",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 71,
+      "endLine": 97
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
+      "name": "ComboMusicLayer",
+      "kind": "type",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 25,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
+      "name": "preloadComboStems",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 104,
+      "endLine": 121
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
+      "name": "RUN_LOOP_BEAT_PHASE_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 35,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
+      "name": "RUN_LOOP_BEAT_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 34,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
+      "name": "RUN_LOOP_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 33,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
+      "name": "useComboMusicLayers",
+      "kind": "value",
+      "file": "src/renderer/audio/comboMusicLayers.ts",
+      "line": 266,
+      "endLine": 287
+    },
+    {
       "id": "symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
       "name": "__resetComboVoicingForTests",
       "kind": "value",
@@ -41630,16 +41777,24 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 153,
-      "endLine": 172
+      "line": 157,
+      "endLine": 176
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
+      "name": "getRunMusicElement",
+      "kind": "value",
+      "file": "src/renderer/audio/gameplayMusic.ts",
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "name": "musicGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 74,
-      "endLine": 75
+      "line": 78,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
@@ -41654,16 +41809,16 @@
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 108,
-      "endLine": 151
+      "line": 112,
+      "endLine": 155
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic",
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 178,
-      "endLine": 306
+      "line": 182,
+      "endLine": 312
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
@@ -75703,6 +75858,72 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/comboVoicing.ts->symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
@@ -75802,6 +76023,12 @@
       "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
       "source": "file:src/renderer/audio/gameplayMusic.ts",
       "target": "symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
+      "source": "file:src/renderer/audio/gameplayMusic.ts",
+      "target": "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
       "kind": "exports"
     },
     {
@@ -98747,6 +98974,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/audio/comboMusicLayers.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/audio/comboMusicLayers.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/renderer/audio/feverDuck.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/audio/feverDuck.ts",
@@ -98951,6 +99184,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/comboMusicLayers.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/audio/comboMusicLayers.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/gameplayMusic.ts",
       "source": "file:src/renderer/assets/preloadRunAssets.ts",
       "target": "file:src/renderer/audio/gameplayMusic.ts",
@@ -99152,6 +99391,42 @@
       "id": "imports:src/renderer/audio/audioSafety.test.ts->src/renderer/audio/audioSafety.ts",
       "source": "file:src/renderer/audio/audioSafety.test.ts",
       "target": "file:src/renderer/audio/audioSafety.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/renderer/audio/comboMusicLayers.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
+      "target": "file:src/renderer/audio/comboMusicLayers.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/renderer/audio/musicalScale.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
+      "target": "file:src/renderer/audio/musicalScale.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/renderer/audio/gameplayMusic.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "file:src/renderer/audio/gameplayMusic.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/renderer/audio/webAudioContext.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "file:src/renderer/audio/webAudioContext.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -123297,6 +123572,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/comboMusicLayers.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
+      "source": "file:src/renderer/audio/comboMusicLayers.ts",
+      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/comboVoicing.ts->file:src/renderer/audio/comboVoicing.test.ts",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "file:src/renderer/audio/comboVoicing.test.ts",
@@ -123336,6 +123617,12 @@
       "id": "tested_by:src/renderer/audio/gameSfx.ts->file:src/renderer/audio/realmSfx.test.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/renderer/audio/realmSfx.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/audio/musicalScale.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
+      "source": "file:src/renderer/audio/musicalScale.ts",
+      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126222,6 +126509,12 @@
       "id": "tested_by:src/shared/combo-heat-perks.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/shared/combo-heat-perks.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
       "kind": "tested_by"
     },
     {

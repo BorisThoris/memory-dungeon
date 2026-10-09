@@ -26,6 +26,7 @@ import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
+import { useComboMusicLayers } from './audio/comboMusicLayers';
 import { useFeverDuck } from './audio/feverDuck';
 import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
 import { setTelemetrySink } from '../shared/telemetry';
@@ -188,6 +189,11 @@ const App = () => {
         masterVolume: settings.masterVolume,
         musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck * gapDuck,
         suppressed: musicState.suppressed
+    });
+    // The combo's layers over the run loop (`comboMusicLayers.ts`): they follow its volume and beat.
+    useComboMusicLayers({
+        combo: run?.stats.currentStreak ?? 0,
+        active: musicShellActive && musicState.active && musicState.track === 'run' && !musicState.suppressed
     });
 
     const ambientGridState =

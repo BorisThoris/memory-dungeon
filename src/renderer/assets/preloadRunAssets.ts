@@ -1,6 +1,7 @@
 import { preloadSampledSfx } from '../audio/sampledSfx';
 import { preloadUiSfx } from '../audio/uiSfx';
 import { preloadGameplayMusic } from '../audio/gameplayMusic';
+import { preloadComboStems } from '../audio/comboMusicLayers';
 import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry';
 import {
     getCardIllustrationImageByUrl,
@@ -143,7 +144,7 @@ export const preloadRunAssets = (options: { graphicsQuality?: GraphicsQualityPre
         track('tiles', preloadTileTextureImages()),
         track('scene', preloadUiRasterImagesFully()),
         track('sound', Promise.all([preloadSampledSfx(), preloadUiSfx()])),
-        track('music', preloadGameplayMusic()),
+        track('music', Promise.all([preloadGameplayMusic(), preloadComboStems()]).then(() => undefined)),
         track(
             'type',
             Promise.all([loadDocumentFonts(), preloadCardRankOpentypeFont(options.graphicsQuality ?? 'high')])

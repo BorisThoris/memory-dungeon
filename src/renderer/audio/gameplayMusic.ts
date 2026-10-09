@@ -59,6 +59,10 @@ export const preloadGameplayMusic = (): Promise<void> => {
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
+/** The run loop's element while it exists, so the combo's layers can sit on its beat (`comboMusicLayers.ts`). */
+let runMusicElement: HTMLAudioElement | null = null;
+export const getRunMusicElement = (): HTMLAudioElement | null => runMusicElement;
+
 const subscribeToPageVisibility = (onStoreChange: () => void): (() => void) => {
     if (typeof document === 'undefined') {
         return () => undefined;
@@ -201,6 +205,7 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
         el.loop = true;
         el.preload = 'auto';
         audioRef.current = el;
+        if (track === 'run') runMusicElement = el;
 
         let gestureRetryAttached = false;
         let playAttempt = 0;
@@ -283,6 +288,7 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
                 /* media element may already be detached */
             }
             audioRef.current = null;
+            if (runMusicElement === el) runMusicElement = null;
             if (playbackControllerRef.current === playbackController) {
                 playbackControllerRef.current = null;
             }
