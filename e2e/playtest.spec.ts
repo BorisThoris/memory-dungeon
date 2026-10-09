@@ -78,6 +78,11 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
     for (let step = 0; step < 600; step += 1) {
         const s = await snapshot(page);
         if (s.view === 'gameOver' || s.status === 'gameOver') {
+            // The run ends on its cinematic (`RunEndCinematic`); the results screen is one press on, as a player takes it.
+            await shot('run-end');
+            const results = page.getByRole('button', { name: /^results/i });
+            await expect(results).toBeVisible({ timeout: 30_000 });
+            await results.click();
             await expect(page.getByTestId('game-over-end-reason')).toBeVisible({ timeout: 30_000 });
             await shot('results');
             return { ended: 'gameOver' as const, level: s.level, errors };

@@ -107,7 +107,9 @@ for (const reduced of [false, true]) {
             await expect.poll(() => count(page, 'bomb-bursts')).toBe(2);
             await expect.poll(() => count(page, 'peak')).toBeGreaterThan(0);
             const active = await count(page, 'peak');
-            expect(active).toBeLessThanOrEqual(reduced ? 2 : 640);
+            // Reduced motion draws one still particle a burst: the bomb's two cards from the board's cue,
+            // and the same two again from the bomb's item effect (`itemEffects.ts`).
+            expect(active).toBeLessThanOrEqual(reduced ? 4 : 640);
             await expect.poll(() => page.evaluate(() => Boolean((window as unknown as { __particleFrame?: string }).__particleFrame))).toBe(true);
             const particleFrame = await page.evaluate(() => (window as unknown as { __particleFrame: string }).__particleFrame);
             writeFileSync(`output/playwright/particles-burst-${reduced ? 'reduced' : '4k'}.png`, Buffer.from(particleFrame.split(',')[1]!, 'base64'));
@@ -133,10 +135,12 @@ for (const reduced of [false, true]) {
                 capture.observe(node, { attributes: true, attributeFilter: ['data-particle-match-bursts'] });
             });
             await pick(page, 'a-2');
-            await expect.poll(() => count(page, 'match-bursts')).toBe(2);
-            await expect.poll(() => count(page, 'ripple-bursts')).toBe(reduced ? 0 : 2);
-            // The pair arcs between its two cards; reduced motion draws no bolts.
-            await expect.poll(() => count(page, 'arc-bursts')).toBe(reduced ? 0 : 1);
+            // Pair a, then pair c: with b bombed, c is the floor's last pair and turns itself over
+            // (`useFinalPairAutoMatch`), so two matches burst, four cards.
+            await expect.poll(() => count(page, 'match-bursts')).toBe(4);
+            await expect.poll(() => count(page, 'ripple-bursts')).toBe(reduced ? 0 : 4);
+            // Each pair arcs between its two cards; reduced motion draws no bolts.
+            await expect.poll(() => count(page, 'arc-bursts')).toBe(reduced ? 0 : 2);
             await expect.poll(() => page.evaluate(() => (window as unknown as { __rimMatchFrames?: string[] }).__rimMatchFrames?.length)).toBe(3);
             const matchFrames = await page.evaluate(() => (window as unknown as { __rimMatchFrames: string[] }).__rimMatchFrames);
             matchFrames.forEach((frame, index) => writeFileSync(
