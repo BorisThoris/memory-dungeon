@@ -1,27 +1,15 @@
 {
   "plate": [
-    1376,
-    768
+    2752,
+    1536
   ],
   "kind": "realm",
   "sprites": [
     {
-      "id": "clouds",
-      "x": 0.0,
-      "y": 0.0,
-      "w": 1.0,
-      "h": 0.44,
-      "frames": 16,
-      "fps": 5,
-      "sheet": "bg-gameplay-realm-storm-v1-sprite-clouds.webp",
-      "source": "plate",
-      "blend": "source-over"
-    },
-    {
       "id": "sky-light",
-      "x": 0.0,
-      "y": 0.0,
-      "w": 1.0,
+      "x": 0,
+      "y": 0,
+      "w": 1,
       "h": 0.44,
       "frames": 16,
       "fps": 5,
@@ -31,9 +19,9 @@
     },
     {
       "id": "puddles",
-      "x": 0.0,
+      "x": 0,
       "y": 0.5,
-      "w": 1.0,
+      "w": 1,
       "h": 0.5,
       "frames": 16,
       "fps": 8,

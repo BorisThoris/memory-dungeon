@@ -52,6 +52,8 @@ export interface SceneImageDraw {
     rect?: SceneRect;
     /** Which part of the image; all of it when absent. */
     crop?: SceneCrop;
+    /** The same as fractions of the image, for a draw that does not know its size (a live warp of the base). */
+    cropUv?: SceneRect;
     /** One frame of a flipbook laid out left to right inside the crop (or the image). */
     frame?: { index: number; count: number };
     /** Radians about the origin. */
@@ -150,9 +152,15 @@ export interface ScenePaintImage {
 }
 
 export interface ScenePaintEnv {
-    /** The canvas's own pixels. */
+    /**
+     * The whole plate's size in the canvas's pixels. When the canvas is a window onto the plate (a
+     * phone, which shows the middle of the painting), this is bigger than the canvas, and
+     * `originX/originY` say where the window starts, in the same pixels.
+     */
     width: number;
     height: number;
+    originX?: number;
+    originY?: number;
     /** A loaded image, graded if asked; null while it is still loading (the draw is skipped). */
     image: (src: string, filter?: SceneFilter) => ScenePaintImage | null;
     /** Where the player is looking, -1..1 (`useSceneLook`). */
@@ -194,10 +202,10 @@ const paintImage = (context: ScenePaintContext, draw: SceneImageDraw, env: Scene
     const dy = ((rect?.y ?? 0) - env.lookY * depth * SCENE_DEPTH_SHIFT_Y) * env.height;
     const dw = (rect?.w ?? 1) * env.width;
     const dh = (rect?.h ?? 1) * env.height;
-    let sx = draw.crop?.x ?? 0;
-    const sy = draw.crop?.y ?? 0;
-    let sw = draw.crop?.w ?? source.width;
-    const sh = draw.crop?.h ?? source.height;
+    let sx = draw.cropUv ? draw.cropUv.x * source.width : (draw.crop?.x ?? 0);
+    const sy = draw.cropUv ? draw.cropUv.y * source.height : (draw.crop?.y ?? 0);
+    let sw = draw.cropUv ? draw.cropUv.w * source.width : (draw.crop?.w ?? source.width);
+    const sh = draw.cropUv ? draw.cropUv.h * source.height : (draw.crop?.h ?? source.height);
     if (draw.frame && draw.frame.count > 1) {
         sw /= draw.frame.count;
         sx += sw * (((draw.frame.index % draw.frame.count) + draw.frame.count) % draw.frame.count);
@@ -218,9 +226,9 @@ const paintImage = (context: ScenePaintContext, draw: SceneImageDraw, env: Scene
     const oy = dy + dh * (draw.originY ?? 0.5);
     const cos = Math.cos(rotate);
     const sin = Math.sin(rotate);
-    context.setTransform(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, ox, oy);
+    context.setTransform(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, ox - (env.originX ?? 0), oy - (env.originY ?? 0));
     context.drawImage(source.image, sx, sy, sw, sh, dx - ox, dy - oy, dw, dh);
-    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.setTransform(1, 0, 0, 1, (-(env.originX ?? 0) || 0), (-(env.originY ?? 0) || 0));
     if (live) {
         context.filter = 'none';
     }
@@ -236,10 +244,12 @@ const fillEllipseGradient = (
     ry: number,
     stops: ReadonlyArray<readonly [number, string]>,
     width: number,
-    height: number
+    height: number,
+    originX = 0,
+    originY = 0
 ): void => {
     const squash = ry / Math.max(rx, 1e-6);
-    context.setTransform(1, 0, 0, squash, 0, cy - cy * squash);
+    context.setTransform(1, 0, 0, squash, -originX || 0, cy - cy * squash - originY);
     const gradient = context.createRadialGradient(cx, cy, 0, cx, cy, rx);
     for (const [offset, color] of stops) {
         gradient.addColorStop(Math.min(1, Math.max(0, offset)), color);
@@ -247,13 +257,13 @@ const fillEllipseGradient = (
     context.fillStyle = gradient;
     // The fill has to reach the canvas's corners in the squashed space.
     context.fillRect(0, -height / Math.max(squash, 1e-3), width, (height * 3) / Math.max(squash, 1e-3));
-    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.setTransform(1, 0, 0, 1, -originX || 0, -originY || 0);
 };
 
 const paintGlow = (context: ScenePaintContext, draw: SceneGlowDraw, env: ScenePaintEnv): void => {
     context.globalAlpha = clampAlpha(draw.alpha);
     context.globalCompositeOperation = draw.blend ?? 'lighter';
-    fillEllipseGradient(context, draw.cx * env.width, draw.cy * env.height, draw.rx * env.width, draw.ry * env.height, draw.stops, env.width, env.height);
+    fillEllipseGradient(context, draw.cx * env.width, draw.cy * env.height, draw.rx * env.width, draw.ry * env.height, draw.stops, env.width, env.height, env.originX ?? 0, env.originY ?? 0);
 };
 
 const paintFog = (context: ScenePaintContext, draw: SceneFogDraw, env: ScenePaintEnv): boolean => {
@@ -350,6 +360,8 @@ export const paintScene = (context: ScenePaintContext, draws: readonly SceneDraw
     context.globalAlpha = 1;
     context.globalCompositeOperation = 'source-over';
     context.clearRect(0, 0, env.width, env.height);
+    // A window onto the plate: everything below is drawn in the plate's pixels, shifted to the window.
+    context.setTransform(1, 0, 0, 1, (-(env.originX ?? 0) || 0), (-(env.originY ?? 0) || 0));
     const clipped = env.visible && (env.visible.x > 0 || env.visible.y > 0 || env.visible.w < 1 || env.visible.h < 1);
     if (clipped && env.visible) {
         context.save();

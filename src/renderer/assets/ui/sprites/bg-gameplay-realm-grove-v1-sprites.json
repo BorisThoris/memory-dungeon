@@ -1,62 +1,14 @@
 {
   "plate": [
-    1376,
-    768
+    2752,
+    1536
   ],
   "kind": "realm",
   "sprites": [
     {
-      "id": "vines-l",
-      "x": 0.0,
-      "y": 0.0,
-      "w": 0.32,
-      "h": 0.72,
-      "frames": 24,
-      "fps": 8,
-      "sheet": "bg-gameplay-realm-grove-v1-sprite-vines-l.webp",
-      "source": "plate",
-      "blend": "source-over"
-    },
-    {
-      "id": "vines-r",
-      "x": 0.68,
-      "y": 0.0,
-      "w": 0.32,
-      "h": 0.72,
-      "frames": 24,
-      "fps": 8,
-      "sheet": "bg-gameplay-realm-grove-v1-sprite-vines-r.webp",
-      "source": "plate",
-      "blend": "source-over"
-    },
-    {
-      "id": "ferns-l",
-      "x": 0.0,
-      "y": 0.62,
-      "w": 0.3,
-      "h": 0.38,
-      "frames": 24,
-      "fps": 8,
-      "sheet": "bg-gameplay-realm-grove-v1-sprite-ferns-l.webp",
-      "source": "plate",
-      "blend": "source-over"
-    },
-    {
-      "id": "ferns-r",
-      "x": 0.7,
-      "y": 0.62,
-      "w": 0.3,
-      "h": 0.38,
-      "frames": 24,
-      "fps": 8,
-      "sheet": "bg-gameplay-realm-grove-v1-sprite-ferns-r.webp",
-      "source": "plate",
-      "blend": "source-over"
-    },
-    {
       "id": "canopy",
       "x": 0.3,
-      "y": 0.0,
+      "y": 0,
       "w": 0.4,
       "h": 0.3,
       "frames": 16,

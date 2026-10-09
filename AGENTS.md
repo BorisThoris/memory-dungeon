@@ -56,6 +56,19 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
   and lie flat with a shadow on that room's floor for as long as the run stays in the room, every
   payout piling on the last (`goldRain.ts`: `goldCoinMotion`, the pile in `GameplayScene`); on water
   they splash and sink. A restore or reduced motion shows the pile lying there.
+- **Every card breaks its element's way, and stays out of the way.** A leaving card breaks into
+  pieces of itself (`cardShards.ts`, `cardShardSystem.ts`), each element with its own matter and
+  look - fire lifts, chars and crumbles to ash; water drops and drains away; ice is glassy, bounces
+  and melts; growth flutters down like leaves, greening from the break; a card with no element is
+  stone chips - and its material spills into the room (`roomSpill.ts`). Never intrusive: a handful
+  of pieces, thrown back behind the board's plane so the cards still in play hide them, gone in
+  under three seconds.
+- **High quality on a phone.** A phone held upright shows the middle of a landscape painting across
+  its whole height, so the scene canvas there covers only that window (`sceneCanvasWindow`) at the
+  screen's own sharpness, under a pixel budget, and the realm rooms' bases are cut at twice the
+  painting's size (`upscale_realms.py`, `realm_layers.py --scale 2`). The parts that move the
+  painting itself are warped live from that base (`realmRoomWarpDraws`), never baked into a soft
+  flipbook. Check a change on phone viewports (390x844 and 844x390 at DPR 3), not only a desktop.
 - It climbs with the combo (rule 2), halves on the phone tier (`lean`), and stops entirely under
   reduced motion (`still`).
 - The realm rooms do this in `realmRoomLife.ts`; a new room or plate gets the same, a test per room

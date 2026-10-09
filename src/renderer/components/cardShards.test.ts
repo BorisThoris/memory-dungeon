@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cardShardPieces, shardFlight, shardPose } from './cardShards';
+import { cardShardPieces, SHARD_STYLES, shardFlight, shardPath, shardPose, shardStyleOf, type ShardStyle } from './cardShards';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 
 const area = (outline: ReadonlyArray<readonly [number, number]>): number => {
@@ -12,52 +12,73 @@ const area = (outline: ReadonlyArray<readonly [number, number]>): number => {
     return Math.abs(sum) / 2;
 };
 
-describe('a card breaking', () => {
+const flights = (style: ShardStyle, floor = -3) => {
+    const spec = SHARD_STYLES[style];
+    return cardShardPieces(11, spec.count).map((piece, index) => {
+        const flight = shardFlight(piece, 11, index, spec);
+        return { piece, flight, path: shardPath(flight, spec, piece.cx, piece.cy, 0, floor) };
+    });
+};
+
+describe('a card breaking, its element\'s way', () => {
     it('cuts the whole card into pieces, none a sliver, the same way every time for the same card', () => {
-        const pieces = cardShardPieces(42, 9);
-        expect(pieces).toHaveLength(9);
-        const total = pieces.reduce((sum, piece) => sum + area(piece.outline), 0);
-        expect(total).toBeCloseTo(CARD_PLANE_WIDTH * CARD_PLANE_HEIGHT, 6);
-        for (const piece of pieces) {
-            expect(area(piece.outline)).toBeGreaterThan((CARD_PLANE_WIDTH * CARD_PLANE_HEIGHT) / 40);
-            expect(Math.abs(piece.cx)).toBeLessThanOrEqual(CARD_PLANE_WIDTH / 2);
-            expect(Math.abs(piece.cy)).toBeLessThanOrEqual(CARD_PLANE_HEIGHT / 2);
+        for (const count of [4, 6, 8, 9]) {
+            const pieces = cardShardPieces(42, count);
+            expect(pieces).toHaveLength(count);
+            expect(pieces.reduce((sum, piece) => sum + area(piece.outline), 0)).toBeCloseTo(CARD_PLANE_WIDTH * CARD_PLANE_HEIGHT, 6);
+            for (const piece of pieces) expect(area(piece.outline)).toBeGreaterThan((CARD_PLANE_WIDTH * CARD_PLANE_HEIGHT) / (count * 6));
         }
-        expect(cardShardPieces(42, 9)).toEqual(pieces);
-        expect(cardShardPieces(43, 9)).not.toEqual(pieces);
+        expect(cardShardPieces(42, 6)).toEqual(cardShardPieces(42, 6));
+        expect(cardShardPieces(43, 6)).not.toEqual(cardShardPieces(42, 6));
     });
 
-    it('throws each piece out, drops it under gravity onto the floor, bounces it lower each time and lets it rest', () => {
-        const pieces = cardShardPieces(7, 9);
-        const floor = -3;
-        for (const [index, piece] of pieces.entries()) {
-            const flight = shardFlight(piece, 7, index, 2);
-            // Thrown away from the card's centre, toward the camera.
-            expect(Math.sign(flight.vx)).toBe(Math.sign(piece.cx) || Math.sign(flight.vx));
-            expect(flight.vz).toBeGreaterThan(0);
-            let lowest = Infinity;
-            let landedAt = -1;
-            const peaks: number[] = [];
-            let last = -Infinity;
-            let rising = false;
-            for (let t = 0; t <= 3; t += 1 / 240) {
-                const pose = shardPose(flight, t, piece.cx, piece.cy, 0, floor);
-                lowest = Math.min(lowest, pose.y);
-                if (pose.landed && landedAt < 0) landedAt = t;
-                if (landedAt >= 0) {
-                    if (pose.y > last + 1e-6) rising = true;
-                    else if (rising && pose.y < last - 1e-6) {
-                        peaks.push(last);
-                        rising = false;
-                    }
-                }
-                last = pose.y;
+    it('gives each element its own break', () => {
+        expect(shardStyleOf('ember')).toBe('fire');
+        expect(shardStyleOf('tide')).toBe('water');
+        expect(shardStyleOf('bone')).toBe('ice');
+        expect(shardStyleOf('moss')).toBe('growth');
+        expect(shardStyleOf(undefined)).toBe('stone');
+        expect(new Set(Object.values(SHARD_STYLES).map((style) => style.look)).size).toBe(5);
+    });
+
+    it('keeps out of the way: few pieces, thrown back behind the board, gone within three seconds', () => {
+        for (const style of Object.keys(SHARD_STYLES) as ShardStyle[]) {
+            expect(SHARD_STYLES[style].count).toBeLessThanOrEqual(8);
+            expect(SHARD_STYLES[style].life).toBeLessThanOrEqual(3);
+            for (const { flight, path } of flights(style)) {
+                expect(flight.vz).toBeLessThan(0);
+                expect(shardPose(path, 0.5).z).toBeLessThan(0);
             }
-            // Never through the floor; it gets there; each bounce lower than the last; and it comes to rest.
-            expect(lowest).toBeGreaterThanOrEqual(floor - 1e-9);
-            expect(landedAt).toBeGreaterThan(0);
-            for (let k = 1; k < peaks.length; k += 1) expect(peaks[k]!).toBeLessThan(peaks[k - 1]!);
-            expect(shardPose(flight, 3, piece.cx, piece.cy, 0, floor).resting).toBe(true);
+        }
+    });
+
+    it('moves each element as its matter does: ice bounces, water does not, fire lifts, a leaf falls slowest', () => {
+        const bounces = (style: ShardStyle) => flights(style).some(({ path }) => {
+            let wasDown = false;
+            for (let t = 0; t < SHARD_STYLES[style].life; t += 1 / 120) {
+                const pose = shardPose(path, t);
+                if (pose.landed && pose.y > -3 + 0.02) return true;
+                wasDown = wasDown || pose.landed;
+            }
+            return false;
+        });
+        expect(bounces('ice')).toBe(true);
+        expect(bounces('water')).toBe(false);
+        // Fire's pieces rise on their heat before they fall.
+        expect(flights('fire').every(({ piece, path }) => Math.max(...[0.1, 0.2, 0.3].map((t) => shardPose(path, t).y)) > piece.cy)).toBe(true);
+        // The same drop takes a leaf far longer than a stone.
+        const reach = (style: ShardStyle, depth: number) => {
+            const spec = SHARD_STYLES[style];
+            const piece = cardShardPieces(3, spec.count)[0]!;
+            const path = shardPath({ ...shardFlight(piece, 3, 0, spec), vx: 0, vy: 0 }, spec, 0, 0, 0, -depth);
+            return path.landS;
+        };
+        expect(reach('growth', 1.5)).toBeGreaterThan(reach('stone', 1.5) * 1.5);
+        // Never through the floor.
+        for (const style of Object.keys(SHARD_STYLES) as ShardStyle[]) {
+            for (const { path } of flights(style)) {
+                for (let t = 0; t < SHARD_STYLES[style].life; t += 1 / 60) expect(shardPose(path, t).y).toBeGreaterThanOrEqual(-3 - 1e-6);
+            }
         }
     });
 });

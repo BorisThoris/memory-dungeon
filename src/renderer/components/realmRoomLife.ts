@@ -663,3 +663,76 @@ export const realmRoomSpriteDraws = (realm: RealmId, sprites: readonly SceneSpri
         };
     });
 };
+
+// ------------------------------------------------------------------ the painting itself, moving
+
+interface RealmWarp {
+    id: string;
+    /** The part of the painting that moves, fractions of the plate. */
+    box: readonly [number, number, number, number];
+    kind: 'ripple' | 'billow' | 'sway';
+    /** For a sway: where it is rooted (vines hang from the top, ferns grow from the bottom). */
+    anchor?: 'top' | 'bottom';
+    phase?: number;
+}
+
+/** The parts of each painting that move as a whole: water, cloud, vines and ferns (no flipbook: the base itself, warped live). */
+export const REALM_WARPS: Readonly<Record<RealmId, readonly RealmWarp[]>> = {
+    frost: [],
+    ember: [],
+    tide: [{ id: 'water', box: [0, 0.64, 1, 1], kind: 'ripple' }],
+    storm: [{ id: 'clouds', box: [0, 0, 1, 0.44], kind: 'billow' }],
+    grove: [
+        { id: 'vines-l', box: [0, 0, 0.32, 0.72], kind: 'sway', anchor: 'top' },
+        { id: 'vines-r', box: [0.68, 0, 1, 0.72], kind: 'sway', anchor: 'top', phase: 0.45 },
+        { id: 'ferns-l', box: [0, 0.62, 0.3, 1], kind: 'sway', anchor: 'bottom', phase: 0.2 },
+        { id: 'ferns-r', box: [0.7, 0.62, 1, 1], kind: 'sway', anchor: 'bottom', phase: 0.7 }
+    ]
+};
+
+/**
+ * The painting's own moving parts, warped live from the room's base (2026-10-09): the region drawn
+ * again in thin bands across it, each shifted a little along a wave that runs through the bands, so
+ * the water ripples, the clouds churn and the vines sway from their roots - as sharp as the base on
+ * any screen (a baked flipbook of them was soft on a phone), at the cost of a few dozen draws.
+ * The bands at a region's top and bottom fade, so its edge never shows.
+ */
+export const realmRoomWarpDraws = (realm: RealmId, src: string, t: number, depth: number, alpha: number, lean: boolean): SceneDraw[] => {
+    if (alpha <= 0.004 || !src) return [];
+    const s = (t / 1000) * Math.sqrt(realmLifePace(depth));
+    const out: SceneDraw[] = [];
+    for (const warp of REALM_WARPS[realm]) {
+        const [x0, y0, x1, y1] = warp.box;
+        const bands = (lean ? 24 : 44) * (warp.kind === 'sway' ? 1 : 1);
+        const bh = (y1 - y0) / bands;
+        const phase = (warp.phase ?? 0) * Math.PI * 2;
+        for (let band = 0; band < bands; band += 1) {
+            const v = (band + 0.5) / bands;
+            let dx: number;
+            if (warp.kind === 'ripple') {
+                // Water: small waves running across, larger nearer the camera.
+                dx = (0.0011 + 0.0028 * v) * (Math.sin(v * 38 - s * 2.6 + phase) + 0.45 * Math.sin(v * 91 + s * 4.1));
+            } else if (warp.kind === 'billow') {
+                // Cloud: slow broad churning, rolling one way and back.
+                dx = 0.0032 * Math.sin(v * 7 - s * 0.55 + phase) + 0.0016 * Math.sin(v * 17 + s * 0.9);
+            } else {
+                // Vines and ferns: rooted at one end, the free end swaying most, a gust now and then.
+                const free = warp.anchor === 'bottom' ? 1 - v : v;
+                const gust = 0.6 + 0.4 * Math.sin(s * 0.37 + phase * 2);
+                dx = 0.0042 * free ** 1.6 * gust * (Math.sin(s * 1.15 + phase + v * 1.4) + 0.3 * Math.sin(s * 2.7 + v * 3));
+            }
+            const edge = Math.min(1, band / 3, (bands - 1 - band) / 3);
+            out.push({
+                kind: 'image',
+                id: `realm-warp-${warp.id}-${band}`,
+                src,
+                alpha: alpha * (0.35 + 0.65 * Math.max(0, edge)),
+                // A hair taller than the band, so no seam shows between neighbours.
+                rect: { x: x0 + dx, y: y0 + band * bh, w: x1 - x0, h: bh * 1.04 },
+                cropUv: { x: x0, y: y0 + band * bh, w: x1 - x0, h: bh * 1.04 },
+                depth: 0
+            });
+        }
+    }
+    return out;
+};

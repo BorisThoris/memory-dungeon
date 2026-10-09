@@ -15,7 +15,14 @@ for each realm room what scene.sh did for the dungeon ring, from the painting it
    moves the painting itself (drawn over the base) or one family's light (drawn added at that
    family's level; the static layer is cut out under it so nothing doubles).
 
-    py -3.12 scripts/scene-pipeline/realm_layers.py [realm ...] [--check-dir D:/agent-work/...]
+    py -3.12 scripts/scene-pipeline/realm_layers.py [realm ...] [--scale 2] [--check-dir D:/agent-work/...]
+
+With --scale 2 it cuts from the painting at twice its size (upscale_realms.py: -2x.png) and writes
+the base at that size, so a phone, which shows the middle of the room across its whole height, sees
+the painting sharp; the lights are written at the painting's own size (they are soft) and the
+flipbooks at the sizes realms.json gives them. The parts that move the painting itself (water,
+clouds, vines) are not baked here any more: the game warps them live from the base, band by band
+(`realmRoomWarpDraws` in realmRoomLife.ts), so they are as sharp as the base on any screen.
 
 Reads src/renderer/assets/ui/backgrounds/bg-gameplay-realm-<realm>-v1.png (the painting) and writes
 next to it -base and -glow-<family> (PNG masters + WebP), and the flipbooks with their manifest into
@@ -52,7 +59,7 @@ def soften(mask, radius):
     return cv2.GaussianBlur(mask.astype(np.float32), (k, k), radius)
 
 
-def region_mask(shape, family):
+def region_mask(shape, family, k=1):
     h, w = shape
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     u, v = xx / w, yy / h
@@ -62,7 +69,7 @@ def region_mask(shape, family):
     for e in family.get('ellipses', []):
         d = ((u - e['cx']) / e['rx']) ** 2 + ((v - e['cy']) / e['ry']) ** 2
         mask = np.maximum(mask, (d <= 1).astype(np.float32))
-    return soften(mask, 10)
+    return soften(mask, 10 * k)
 
 
 def feather_box(h, w, edge=0.12):
@@ -73,7 +80,7 @@ def feather_box(h, w, edge=0.12):
     return f * f * (3 - 2 * f)
 
 
-def families_of(im, config):
+def families_of(im, config, k=1):
     r, g, b = im[..., 0], im[..., 1], im[..., 2]
     mx, mn = im.max(-1), im.min(-1)
     d = mx - mn + 1e-6
@@ -90,7 +97,7 @@ def families_of(im, config):
             band = ((hue >= h0) & (hue <= h1)) if h0 < h1 else ((hue >= h0) | (hue <= h1))
             tint = band * ramp(sat, family['sat'][0], family['sat'][1]) * ramp(mx, family['val'][0], family['val'][1])
         light = np.maximum(tint, ramp(lum, 0.7, 0.92)) if family.get('hot') else tint
-        light = np.clip(soften(light, 2.0) * 1.3, 0, 1) * region_mask(im.shape[:2], family)
+        light = np.clip(soften(light, 2.0 * k) * 1.3, 0, 1) * region_mask(im.shape[:2], family, k)
         # Each pixel's light belongs to the first family that claims it: no light added twice.
         light = np.minimum(light, 1 - claimed)
         claimed += light
@@ -182,12 +189,13 @@ def webp(png, quality=WEBP_QUALITY):
     return out
 
 
-def build(realm, check_dir):
+def build(realm, check_dir, k=1):
     config = CONFIG[realm]
     prefix = f'bg-gameplay-realm-{realm}-v1'
-    plate = np.asarray(Image.open(BACKGROUNDS / f'{prefix}.png').convert('RGB')).astype(np.float32) / 255
+    source = BACKGROUNDS / (f'{prefix}-2x.png' if k == 2 else f'{prefix}.png')
+    plate = np.asarray(Image.open(source).convert('RGB')).astype(np.float32) / 255
     H, W, _ = plate.shape
-    lights, claimed = families_of(plate, config)
+    lights, claimed = families_of(plate, config, k)
     base = plate * (1 - TAKE * claimed[..., None])
     lum = float((0.2126 * base[..., 0] + 0.7152 * base[..., 1] + 0.0722 * base[..., 2]).mean())
     base *= min(1.0, BASE_MEAN / lum)
@@ -203,7 +211,10 @@ def build(realm, check_dir):
     webp(BACKGROUNDS / f'{prefix}-base.png')
     for name, light in lights.items():
         path = BACKGROUNDS / f'{prefix}-glow-{name}.png'
-        rgba_image(glow_rgb, light * cut[name]).save(path)
+        image = rgba_image(glow_rgb, light * cut[name])
+        if k != 1:
+            image = image.resize((W // k, H // k), Image.LANCZOS)
+        image.save(path)
         webp(path)
     # The moving parts.
     manifest = {'plate': [W, H], 'kind': 'realm', 'sprites': []}
@@ -218,7 +229,7 @@ def build(realm, check_dir):
             crop_rgb = glow_rgb[py0:py1, px0:px1]
             crop_alpha = lights[region['source'][7:]][py0:py1, px0:px1]
         crop = np.dstack([crop_rgb, crop_alpha]).astype(np.float32)
-        scale = region.get('scale', 1.0)
+        scale = region.get('scale', 1.0) / k
         if scale != 1.0:
             crop = cv2.resize(crop, (max(2, int(crop.shape[1] * scale)), max(2, int(crop.shape[0] * scale))), interpolation=cv2.INTER_AREA)
         fh, fw = crop.shape[:2]
@@ -287,6 +298,7 @@ def check(realm, base, glow_rgb, lights, cut, config, previews, check_dir):
 ap = argparse.ArgumentParser()
 ap.add_argument('realms', nargs='*', default=list(k for k in CONFIG if not k.startswith('$')))
 ap.add_argument('--check-dir', default=None)
+ap.add_argument('--scale', type=int, default=1, choices=[1, 2])
 args = ap.parse_args()
 for realm in args.realms:
-    build(realm, args.check_dir)
+    build(realm, args.check_dir, args.scale)

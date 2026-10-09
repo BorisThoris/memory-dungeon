@@ -1,71 +1,700 @@
 {
-  "$comment": "How each realm's painted room is broken into layers (realm_layers.py, 2026-10-09). families: the room's lights, each keyed out by hue (fractions of the wheel; [h0, h1] wraps when h0 > h1) or 'hot' (near-white), saturation and value ramps, inside boxes [x0, y0, x1, y1] or ellipses {cx, cy, rx, ry} as fractions of the plate; each becomes its own additive layer the game drives on its own clock, and its light is taken out of the base. regions: parts of the painting cut out and set moving as loopable flipbooks - flow (lava, down a seam), flame (licks up), ripple (water), billow (cloud), sway (vines from the top, ferns from the bottom), shimmer (a sweep of light up ice), rays (light falling through a shaft). source 'plate' moves the painting itself (drawn over the base); 'family:<name>' moves that light (drawn added, at its family's level, and the static layer is cut out under it). Measured by eye on the paintings on a 10% grid.",
+  "$comment": "How each realm's painted room is broken into layers (realm_layers.py, 2026-10-09). families: the room's lights, each keyed out by hue (fractions of the wheel; [h0, h1] wraps when h0 > h1) or 'hot' (near-white), saturation and value ramps, inside boxes [x0, y0, x1, y1] or ellipses {cx, cy, rx, ry} as fractions of the plate; each becomes its own additive layer the game drives on its own clock, and its light is taken out of the base. regions: parts of the painting cut out and set moving as loopable flipbooks - flow (lava, down a seam), flame (licks up), ripple (water), billow (cloud), sway (vines from the top, ferns from the bottom), shimmer (a sweep of light up ice), rays (light falling through a shaft). the parts that move the painting itself (water, clouds, vines) are warped live by the game (realmRoomWarpDraws), not baked; 'family:<name>' moves that light (drawn added, at its family's level, and the static layer is cut out under it). Measured by eye on the paintings on a 10% grid.",
   "frost": {
     "families": [
-      { "name": "ring", "hue": [0.45, 0.62], "sat": [0.12, 0.35], "val": [0.45, 0.85], "hot": true, "ellipses": [{ "cx": 0.5, "cy": 0.79, "rx": 0.32, "ry": 0.1 }] },
-      { "name": "ice", "hue": [0.45, 0.62], "sat": [0.2, 0.5], "val": [0.4, 0.8], "hot": true, "boxes": [[0, 0, 0.27, 0.74], [0.73, 0, 1, 0.74], [0.27, 0, 0.73, 0.35]] },
-      { "name": "snow", "hue": null, "sat": [0.0, 0.0], "val": [0.6, 0.9], "hot": true, "boxes": [[0, 0.62, 0.3, 1], [0.7, 0.62, 1, 1]] }
+      {
+        "name": "ring",
+        "hue": [
+          0.45,
+          0.62
+        ],
+        "sat": [
+          0.12,
+          0.35
+        ],
+        "val": [
+          0.45,
+          0.85
+        ],
+        "hot": true,
+        "ellipses": [
+          {
+            "cx": 0.5,
+            "cy": 0.79,
+            "rx": 0.32,
+            "ry": 0.1
+          }
+        ]
+      },
+      {
+        "name": "ice",
+        "hue": [
+          0.45,
+          0.62
+        ],
+        "sat": [
+          0.2,
+          0.5
+        ],
+        "val": [
+          0.4,
+          0.8
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0,
+            0.27,
+            0.74
+          ],
+          [
+            0.73,
+            0,
+            1,
+            0.74
+          ],
+          [
+            0.27,
+            0,
+            0.73,
+            0.35
+          ]
+        ]
+      },
+      {
+        "name": "snow",
+        "hue": null,
+        "sat": [
+          0,
+          0
+        ],
+        "val": [
+          0.6,
+          0.9
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0.62,
+            0.3,
+            1
+          ],
+          [
+            0.7,
+            0.62,
+            1,
+            1
+          ]
+        ]
+      }
     ],
     "regions": [
-      { "id": "ice-l", "kind": "shimmer", "box": [0.0, 0.06, 0.27, 0.74], "source": "family:ice", "frames": 20, "fps": 8, "scale": 0.5 },
-      { "id": "ice-r", "kind": "shimmer", "box": [0.73, 0.06, 1.0, 0.74], "source": "family:ice", "frames": 20, "fps": 8, "scale": 0.5, "phase": 0.5 },
-      { "id": "ring", "kind": "shimmer", "box": [0.17, 0.68, 0.83, 0.9], "source": "family:ring", "frames": 20, "fps": 6, "scale": 0.5, "phase": 0.25 }
+      {
+        "id": "ice-l",
+        "kind": "shimmer",
+        "box": [
+          0,
+          0.06,
+          0.27,
+          0.74
+        ],
+        "source": "family:ice",
+        "frames": 20,
+        "fps": 8,
+        "scale": 0.5
+      },
+      {
+        "id": "ice-r",
+        "kind": "shimmer",
+        "box": [
+          0.73,
+          0.06,
+          1,
+          0.74
+        ],
+        "source": "family:ice",
+        "frames": 20,
+        "fps": 8,
+        "scale": 0.5,
+        "phase": 0.5
+      },
+      {
+        "id": "ring",
+        "kind": "shimmer",
+        "box": [
+          0.17,
+          0.68,
+          0.83,
+          0.9
+        ],
+        "source": "family:ring",
+        "frames": 20,
+        "fps": 6,
+        "scale": 0.5,
+        "phase": 0.25
+      }
     ]
   },
   "ember": {
     "families": [
-      { "name": "lava", "hue": [0.98, 0.12], "sat": [0.35, 0.65], "val": [0.35, 0.8], "hot": true, "boxes": [[0, 0, 0.27, 0.72], [0.73, 0, 1, 0.72]] },
-      { "name": "braziers", "hue": [0.98, 0.14], "sat": [0.3, 0.6], "val": [0.4, 0.85], "hot": true, "boxes": [[0.13, 0.46, 0.25, 0.68], [0.28, 0.44, 0.37, 0.58], [0.63, 0.44, 0.72, 0.58], [0.75, 0.46, 0.88, 0.68]] },
-      { "name": "ring", "hue": [0.98, 0.12], "sat": [0.35, 0.6], "val": [0.35, 0.8], "hot": true, "ellipses": [{ "cx": 0.5, "cy": 0.6, "rx": 0.14, "ry": 0.045 }] }
+      {
+        "name": "lava",
+        "hue": [
+          0.98,
+          0.12
+        ],
+        "sat": [
+          0.35,
+          0.65
+        ],
+        "val": [
+          0.35,
+          0.8
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0,
+            0.27,
+            0.72
+          ],
+          [
+            0.73,
+            0,
+            1,
+            0.72
+          ]
+        ]
+      },
+      {
+        "name": "braziers",
+        "hue": [
+          0.98,
+          0.14
+        ],
+        "sat": [
+          0.3,
+          0.6
+        ],
+        "val": [
+          0.4,
+          0.85
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0.13,
+            0.46,
+            0.25,
+            0.68
+          ],
+          [
+            0.28,
+            0.44,
+            0.37,
+            0.58
+          ],
+          [
+            0.63,
+            0.44,
+            0.72,
+            0.58
+          ],
+          [
+            0.75,
+            0.46,
+            0.88,
+            0.68
+          ]
+        ]
+      },
+      {
+        "name": "ring",
+        "hue": [
+          0.98,
+          0.12
+        ],
+        "sat": [
+          0.35,
+          0.6
+        ],
+        "val": [
+          0.35,
+          0.8
+        ],
+        "hot": true,
+        "ellipses": [
+          {
+            "cx": 0.5,
+            "cy": 0.6,
+            "rx": 0.14,
+            "ry": 0.045
+          }
+        ]
+      }
     ],
     "regions": [
-      { "id": "seam-l", "kind": "flow", "box": [0.03, 0.0, 0.24, 0.66], "source": "family:lava", "frames": 24, "fps": 10, "scale": 0.6 },
-      { "id": "seam-r", "kind": "flow", "box": [0.76, 0.0, 0.98, 0.66], "source": "family:lava", "frames": 24, "fps": 10, "scale": 0.6, "phase": 0.4 },
-      { "id": "brazier-ll", "kind": "flame", "box": [0.13, 0.46, 0.25, 0.68], "source": "family:braziers", "frames": 16, "fps": 14, "scale": 1.0 },
-      { "id": "brazier-l", "kind": "flame", "box": [0.28, 0.44, 0.37, 0.58], "source": "family:braziers", "frames": 16, "fps": 14, "scale": 1.0, "phase": 0.3 },
-      { "id": "brazier-r", "kind": "flame", "box": [0.63, 0.44, 0.72, 0.58], "source": "family:braziers", "frames": 16, "fps": 14, "scale": 1.0, "phase": 0.6 },
-      { "id": "brazier-rr", "kind": "flame", "box": [0.75, 0.46, 0.88, 0.68], "source": "family:braziers", "frames": 16, "fps": 14, "scale": 1.0, "phase": 0.85 },
-      { "id": "ring", "kind": "flow", "box": [0.34, 0.54, 0.66, 0.66], "source": "family:ring", "frames": 24, "fps": 8, "scale": 0.8, "direction": "around" }
+      {
+        "id": "seam-l",
+        "kind": "flow",
+        "box": [
+          0.03,
+          0,
+          0.24,
+          0.66
+        ],
+        "source": "family:lava",
+        "frames": 24,
+        "fps": 10,
+        "scale": 0.6
+      },
+      {
+        "id": "seam-r",
+        "kind": "flow",
+        "box": [
+          0.76,
+          0,
+          0.98,
+          0.66
+        ],
+        "source": "family:lava",
+        "frames": 24,
+        "fps": 10,
+        "scale": 0.6,
+        "phase": 0.4
+      },
+      {
+        "id": "brazier-ll",
+        "kind": "flame",
+        "box": [
+          0.13,
+          0.46,
+          0.25,
+          0.68
+        ],
+        "source": "family:braziers",
+        "frames": 16,
+        "fps": 14,
+        "scale": 1
+      },
+      {
+        "id": "brazier-l",
+        "kind": "flame",
+        "box": [
+          0.28,
+          0.44,
+          0.37,
+          0.58
+        ],
+        "source": "family:braziers",
+        "frames": 16,
+        "fps": 14,
+        "scale": 1,
+        "phase": 0.3
+      },
+      {
+        "id": "brazier-r",
+        "kind": "flame",
+        "box": [
+          0.63,
+          0.44,
+          0.72,
+          0.58
+        ],
+        "source": "family:braziers",
+        "frames": 16,
+        "fps": 14,
+        "scale": 1,
+        "phase": 0.6
+      },
+      {
+        "id": "brazier-rr",
+        "kind": "flame",
+        "box": [
+          0.75,
+          0.46,
+          0.88,
+          0.68
+        ],
+        "source": "family:braziers",
+        "frames": 16,
+        "fps": 14,
+        "scale": 1,
+        "phase": 0.85
+      },
+      {
+        "id": "ring",
+        "kind": "flow",
+        "box": [
+          0.34,
+          0.54,
+          0.66,
+          0.66
+        ],
+        "source": "family:ring",
+        "frames": 24,
+        "fps": 8,
+        "scale": 0.8,
+        "direction": "around"
+      }
     ]
   },
   "tide": {
     "families": [
-      { "name": "shaft", "hue": [0.4, 0.58], "sat": [0.1, 0.35], "val": [0.35, 0.75], "hot": true, "boxes": [[0.34, 0, 0.66, 0.62]] },
-      { "name": "ring", "hue": [0.4, 0.58], "sat": [0.15, 0.4], "val": [0.35, 0.75], "hot": true, "ellipses": [{ "cx": 0.5, "cy": 0.63, "rx": 0.24, "ry": 0.06 }] },
-      { "name": "water", "hue": [0.4, 0.6], "sat": [0.15, 0.45], "val": [0.25, 0.6], "hot": true, "boxes": [[0, 0.64, 1, 1]] },
-      { "name": "pillars", "hue": [0.3, 0.5], "sat": [0.3, 0.6], "val": [0.3, 0.7], "hot": false, "boxes": [[0, 0, 0.34, 0.66], [0.66, 0, 1, 0.66]] }
+      {
+        "name": "shaft",
+        "hue": [
+          0.4,
+          0.58
+        ],
+        "sat": [
+          0.1,
+          0.35
+        ],
+        "val": [
+          0.35,
+          0.75
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0.34,
+            0,
+            0.66,
+            0.62
+          ]
+        ]
+      },
+      {
+        "name": "ring",
+        "hue": [
+          0.4,
+          0.58
+        ],
+        "sat": [
+          0.15,
+          0.4
+        ],
+        "val": [
+          0.35,
+          0.75
+        ],
+        "hot": true,
+        "ellipses": [
+          {
+            "cx": 0.5,
+            "cy": 0.63,
+            "rx": 0.24,
+            "ry": 0.06
+          }
+        ]
+      },
+      {
+        "name": "water",
+        "hue": [
+          0.4,
+          0.6
+        ],
+        "sat": [
+          0.15,
+          0.45
+        ],
+        "val": [
+          0.25,
+          0.6
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0.64,
+            1,
+            1
+          ]
+        ]
+      },
+      {
+        "name": "pillars",
+        "hue": [
+          0.3,
+          0.5
+        ],
+        "sat": [
+          0.3,
+          0.6
+        ],
+        "val": [
+          0.3,
+          0.7
+        ],
+        "hot": false,
+        "boxes": [
+          [
+            0,
+            0,
+            0.34,
+            0.66
+          ],
+          [
+            0.66,
+            0,
+            1,
+            0.66
+          ]
+        ]
+      }
     ],
     "regions": [
-      { "id": "water", "kind": "ripple", "box": [0.0, 0.64, 1.0, 1.0], "source": "plate", "frames": 16, "fps": 8, "scale": 0.5 },
-      { "id": "water-light", "kind": "ripple", "box": [0.0, 0.64, 1.0, 1.0], "source": "family:water", "frames": 16, "fps": 8, "scale": 0.5 },
-      { "id": "shaft", "kind": "rays", "box": [0.34, 0.0, 0.66, 0.62], "source": "family:shaft", "frames": 24, "fps": 10, "scale": 0.5 }
+      {
+        "id": "water-light",
+        "kind": "ripple",
+        "box": [
+          0,
+          0.64,
+          1,
+          1
+        ],
+        "source": "family:water",
+        "frames": 16,
+        "fps": 8,
+        "scale": 0.5
+      },
+      {
+        "id": "shaft",
+        "kind": "rays",
+        "box": [
+          0.34,
+          0,
+          0.66,
+          0.62
+        ],
+        "source": "family:shaft",
+        "frames": 24,
+        "fps": 10,
+        "scale": 0.5
+      }
     ]
   },
   "storm": {
     "families": [
-      { "name": "bolts", "hue": null, "sat": [0.0, 0.0], "val": [0.62, 0.9], "hot": true, "boxes": [[0, 0, 1, 0.46]] },
-      { "name": "sky", "hue": [0.68, 0.86], "sat": [0.25, 0.55], "val": [0.3, 0.7], "hot": false, "boxes": [[0, 0, 1, 0.46]] },
-      { "name": "ring", "hue": [0.66, 0.92], "sat": [0.2, 0.5], "val": [0.3, 0.7], "hot": true, "ellipses": [{ "cx": 0.5, "cy": 0.66, "rx": 0.4, "ry": 0.12 }] },
-      { "name": "puddles", "hue": [0.66, 0.9], "sat": [0.2, 0.5], "val": [0.35, 0.75], "hot": true, "boxes": [[0, 0.5, 1, 1]] }
+      {
+        "name": "bolts",
+        "hue": null,
+        "sat": [
+          0,
+          0
+        ],
+        "val": [
+          0.62,
+          0.9
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0,
+            1,
+            0.46
+          ]
+        ]
+      },
+      {
+        "name": "sky",
+        "hue": [
+          0.68,
+          0.86
+        ],
+        "sat": [
+          0.25,
+          0.55
+        ],
+        "val": [
+          0.3,
+          0.7
+        ],
+        "hot": false,
+        "boxes": [
+          [
+            0,
+            0,
+            1,
+            0.46
+          ]
+        ]
+      },
+      {
+        "name": "ring",
+        "hue": [
+          0.66,
+          0.92
+        ],
+        "sat": [
+          0.2,
+          0.5
+        ],
+        "val": [
+          0.3,
+          0.7
+        ],
+        "hot": true,
+        "ellipses": [
+          {
+            "cx": 0.5,
+            "cy": 0.66,
+            "rx": 0.4,
+            "ry": 0.12
+          }
+        ]
+      },
+      {
+        "name": "puddles",
+        "hue": [
+          0.66,
+          0.9
+        ],
+        "sat": [
+          0.2,
+          0.5
+        ],
+        "val": [
+          0.35,
+          0.75
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0,
+            0.5,
+            1,
+            1
+          ]
+        ]
+      }
     ],
     "regions": [
-      { "id": "clouds", "kind": "billow", "box": [0.0, 0.0, 1.0, 0.44], "source": "plate", "frames": 16, "fps": 5, "scale": 0.5 },
-      { "id": "sky-light", "kind": "billow", "box": [0.0, 0.0, 1.0, 0.44], "source": "family:sky", "frames": 16, "fps": 5, "scale": 0.5 },
-      { "id": "puddles", "kind": "ripple", "box": [0.0, 0.5, 1.0, 1.0], "source": "family:puddles", "frames": 16, "fps": 8, "scale": 0.5 }
+      {
+        "id": "sky-light",
+        "kind": "billow",
+        "box": [
+          0,
+          0,
+          1,
+          0.44
+        ],
+        "source": "family:sky",
+        "frames": 16,
+        "fps": 5,
+        "scale": 0.5
+      },
+      {
+        "id": "puddles",
+        "kind": "ripple",
+        "box": [
+          0,
+          0.5,
+          1,
+          1
+        ],
+        "source": "family:puddles",
+        "frames": 16,
+        "fps": 8,
+        "scale": 0.5
+      }
     ]
   },
   "grove": {
     "families": [
-      { "name": "canopy", "hue": [0.2, 0.5], "sat": [0.05, 0.4], "val": [0.45, 0.85], "hot": true, "boxes": [[0.3, 0, 0.7, 0.3]] },
-      { "name": "fungi", "hue": [0.2, 0.42], "sat": [0.35, 0.65], "val": [0.3, 0.6], "hot": false, "boxes": [[0, 0, 1, 1]] },
-      { "name": "ring", "hue": [0.18, 0.42], "sat": [0.2, 0.5], "val": [0.3, 0.6], "hot": true, "ellipses": [{ "cx": 0.5, "cy": 0.79, "rx": 0.33, "ry": 0.09 }] }
+      {
+        "name": "canopy",
+        "hue": [
+          0.2,
+          0.5
+        ],
+        "sat": [
+          0.05,
+          0.4
+        ],
+        "val": [
+          0.45,
+          0.85
+        ],
+        "hot": true,
+        "boxes": [
+          [
+            0.3,
+            0,
+            0.7,
+            0.3
+          ]
+        ]
+      },
+      {
+        "name": "fungi",
+        "hue": [
+          0.2,
+          0.42
+        ],
+        "sat": [
+          0.35,
+          0.65
+        ],
+        "val": [
+          0.3,
+          0.6
+        ],
+        "hot": false,
+        "boxes": [
+          [
+            0,
+            0,
+            1,
+            1
+          ]
+        ]
+      },
+      {
+        "name": "ring",
+        "hue": [
+          0.18,
+          0.42
+        ],
+        "sat": [
+          0.2,
+          0.5
+        ],
+        "val": [
+          0.3,
+          0.6
+        ],
+        "hot": true,
+        "ellipses": [
+          {
+            "cx": 0.5,
+            "cy": 0.79,
+            "rx": 0.33,
+            "ry": 0.09
+          }
+        ]
+      }
     ],
     "regions": [
-      { "id": "vines-l", "kind": "sway", "box": [0.0, 0.0, 0.32, 0.72], "source": "plate", "frames": 24, "fps": 8, "scale": 0.5, "anchor": "top" },
-      { "id": "vines-r", "kind": "sway", "box": [0.68, 0.0, 1.0, 0.72], "source": "plate", "frames": 24, "fps": 8, "scale": 0.5, "anchor": "top", "phase": 0.45 },
-      { "id": "ferns-l", "kind": "sway", "box": [0.0, 0.62, 0.3, 1.0], "source": "plate", "frames": 24, "fps": 8, "scale": 0.5, "anchor": "bottom", "phase": 0.2 },
-      { "id": "ferns-r", "kind": "sway", "box": [0.7, 0.62, 1.0, 1.0], "source": "plate", "frames": 24, "fps": 8, "scale": 0.5, "anchor": "bottom", "phase": 0.7 },
-      { "id": "canopy", "kind": "billow", "box": [0.3, 0.0, 0.7, 0.3], "source": "family:canopy", "frames": 16, "fps": 5, "scale": 0.6 }
+      {
+        "id": "canopy",
+        "kind": "billow",
+        "box": [
+          0.3,
+          0,
+          0.7,
+          0.3
+        ],
+        "source": "family:canopy",
+        "frames": 16,
+        "fps": 5,
+        "scale": 0.6
+      }
     ]
   }
 }

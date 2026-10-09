@@ -1,7 +1,7 @@
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import { getSceneImage, sceneFilterIsLive, sceneLiveFilterCss, subscribeSceneImages } from './sceneBitmaps';
 import { createSceneClock, type SceneClock } from './sceneClock';
-import { SCENE_FPS_FULL, sceneCanvasScale, visiblePlateRect } from './sceneCanvasLayout';
+import { SCENE_CANVAS_PIXEL_BUDGET, SCENE_FPS_FULL, sceneCanvasScale, sceneCanvasWindow, visiblePlateRect } from './sceneCanvasLayout';
 import { paintScene, SCENE_ALPHA_FLOOR, type SceneDraw, type SceneFilter, type ScenePaintContext, type SceneRect } from './scenePaint';
 import styles from './scenePlate.module.css';
 
@@ -145,6 +145,10 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
         canvas.height = plate[1];
         drawing.imageSmoothingQuality = 'medium';
         let scale = 1;
+        // The part of the plate the canvas covers: all of it, or on a phone (which shows the middle of a
+        // landscape painting across its whole height) only the visible window, so the canvas can be as
+        // sharp as the screen without painting the parts of the plate nobody sees.
+        let window_: SceneRect = { x: 0, y: 0, w: 1, h: 1 };
         const clock = createSceneClock();
         // Where the canvas can filter as it draws, a colour grade costs nothing to change; elsewhere it is baked.
         const liveFilter =
@@ -166,14 +170,26 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
             }
             const style = window.getComputedStyle(scene);
             levels = { base: readLevel(style, '--scene-base-opacity'), light: readLevel(style, '--scene-light-opacity') };
-            const shown = canvas.getBoundingClientRect();
+            const plateNode = canvas.parentElement ?? canvas;
+            const shown = plateNode.getBoundingClientRect();
             visible = visiblePlateRect(scene.getBoundingClientRect(), shown);
-            const next = sceneCanvasScale(shown.width, window.devicePixelRatio, plate[0], maxScaleRef.current);
-            if (next !== scale) {
+            const nextWindow = sceneCanvasWindow(visible);
+            const wanted = sceneCanvasScale(shown.width, window.devicePixelRatio, plate[0], maxScaleRef.current);
+            // Held to a budget of pixels: a phone on its side sees the whole plate, and the screen's own sharpness over all of it is more than it can paint twenty-four times a second.
+            const next = Math.min(wanted, Math.max(1, Math.floor(Math.sqrt(SCENE_CANVAS_PIXEL_BUDGET / (plate[0] * plate[1] * nextWindow.w * nextWindow.h)) * 10) / 10));
+            const moved = nextWindow.x !== window_.x || nextWindow.y !== window_.y || nextWindow.w !== window_.w || nextWindow.h !== window_.h;
+            if (moved) {
+                window_ = nextWindow;
+                canvas.style.left = `${window_.x * 100}%`;
+                canvas.style.top = `${window_.y * 100}%`;
+                canvas.style.width = `${window_.w * 100}%`;
+                canvas.style.height = `${window_.h * 100}%`;
+            }
+            if (next !== scale || moved) {
                 // A new surface: the draws are in fractions of the plate, so only the pixel count changes.
                 scale = next;
-                canvas.width = Math.round(plate[0] * scale);
-                canvas.height = Math.round(plate[1] * scale);
+                canvas.width = Math.max(1, Math.round(plate[0] * scale * window_.w));
+                canvas.height = Math.max(1, Math.round(plate[1] * scale * window_.h));
                 drawing.imageSmoothingQuality = 'medium';
                 if (scratch) {
                     scratch.canvas.width = 1;
@@ -199,8 +215,10 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
                 const frame = clock.frame(now, painter.still);
                 const draws = composeRef.current(frame, levels);
                 const made = paintScene(drawing, draws, {
-                    width: canvas.width,
-                    height: canvas.height,
+                    width: plate[0] * scale,
+                    height: plate[1] * scale,
+                    originX: window_.x * plate[0] * scale,
+                    originY: window_.y * plate[1] * scale,
                     image: getSceneImage,
                     liveFilter,
                     lookX: lookRef?.current.x ?? 0,
@@ -209,8 +227,9 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
                     scratch: () => {
                         if (!scratch) {
                             const spare = document.createElement('canvas');
-                            spare.width = Math.max(1, Math.round(canvas.width * SCRATCH_SCALE));
-                            spare.height = Math.max(1, Math.round(canvas.height * SCRATCH_SCALE));
+                            // The fog is built for the whole plate: it is soft, and a quarter of its pixels is plenty.
+                            spare.width = Math.max(1, Math.round(plate[0] * Math.min(scale, 1.5) * SCRATCH_SCALE));
+                            spare.height = Math.max(1, Math.round(plate[1] * Math.min(scale, 1.5) * SCRATCH_SCALE));
                             const spareContext = spare.getContext('2d');
                             if (!spareContext) {
                                 return null;

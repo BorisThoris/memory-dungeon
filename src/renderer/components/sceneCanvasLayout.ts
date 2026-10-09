@@ -47,4 +47,22 @@ export const sceneCanvasScale = (shownWidthCss: number, devicePixelRatio: number
  * half again its size (`scripts/scene-pipeline/upscale_plates.py`), so past that there is nothing
  * more to show. A phone, or the lean tier, keeps the painting's own size.
  */
-export const SCENE_CANVAS_MAX_SCALE = 1.5;
+export const SCENE_CANVAS_MAX_SCALE = 2;
+
+/**
+ * The most a phone's canvas is scaled past its painting (2026-10-09). A phone held upright shows the
+ * middle quarter of a landscape room across its whole height, so the canvas only covers that window
+ * (`sceneCanvasWindow`) and can afford the screen's own sharpness there; the realm rooms' bases are
+ * twice the painting's size (`upscale_realms.py`), so there is detail to show.
+ */
+export const SCENE_CANVAS_PHONE_MAX_SCALE = 2.6;
+
+/** The most pixels a scene canvas paints: about a 1440p screen's worth of window. */
+export const SCENE_CANVAS_PIXEL_BUDGET = 3_700_000;
+
+/**
+ * The part of the plate the canvas covers: the whole plate when the screen shows most of it, or the
+ * visible window when it shows little of it (a phone), so the pixels are spent where they are seen.
+ */
+export const sceneCanvasWindow = (visible: SceneRect): SceneRect =>
+    visible.w * visible.h < 0.7 ? visible : { x: 0, y: 0, w: 1, h: 1 };

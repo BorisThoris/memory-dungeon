@@ -10,7 +10,7 @@ import { prefersCompactSceneArt } from './elementSceneArt';
 import { composeGameplayScene, stormBoltCount } from './gameplaySceneFrame';
 import { sceneFlameLevels, sceneRingLevels, sceneTorchFlarePeak } from './gameplaySceneLevels';
 import { SceneCanvas, type SceneLevels } from './SceneCanvas';
-import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
+import { SCENE_CANVAS_MAX_SCALE, SCENE_CANVAS_PHONE_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN } from './sceneCanvasLayout';
 import type { SceneClock } from './sceneClock';
 import type { SceneMood } from './sceneMood';
 import { GOLD_PILE_SLOTS, GOLD_RAIN_LASTS_MS, type GoldPileShower } from './goldRain';
@@ -249,7 +249,7 @@ export function GameplayScene({
                 <SceneCanvas
                     compose={compose}
                     fps={alive ? SCENE_FPS_FULL : SCENE_FPS_LEAN}
-                    maxScale={effectTier === 'lean' ? 1 : SCENE_CANVAS_MAX_SCALE}
+                    maxScale={effectTier === 'lean' ? SCENE_CANVAS_PHONE_MAX_SCALE : SCENE_CANVAS_MAX_SCALE}
                     lookRef={lookRef}
                     plate={flames.plate}
                     still={still}

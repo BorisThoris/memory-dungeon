@@ -5,7 +5,7 @@ import { SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
-import { REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws } from './realmRoomLife';
+import { REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws, realmRoomWarpDraws } from './realmRoomLife';
 import { roomSpillDraws, type RoomSpill } from './roomSpill';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
@@ -369,6 +369,8 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     if (realmArt && mood?.realmRoom) {
         const realm = mood.realmRoom;
         draws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * realmRoom * missDim });
+        // The painting's own moving parts, warped live from the base: water, cloud, vines (`realmRoomWarpDraws`).
+        if (!still) draws.push(...realmRoomWarpDraws(realm, realmArt.base, roomT, depth, input.base * realmRoom * missDim, lean));
         const parts = realmRoomSpriteDraws(realm, realmArt.sprites, roomT, depth, realmRoom, still);
         draws.push(...parts.filter((part) => part.blend !== 'lighter'));
         const over = comboSoftCap(Math.max(0, depth - 2), 0.6);

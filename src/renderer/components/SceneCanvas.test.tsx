@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { SceneCanvas } from './SceneCanvas';
-import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN, sceneCanvasScale, visiblePlateRect } from './sceneCanvasLayout';
+import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN, sceneCanvasScale, visiblePlateRect, sceneCanvasWindow } from './sceneCanvasLayout';
 import plate from './scenePlate.module.css';
 
 describe('SceneCanvas', () => {
@@ -55,14 +55,22 @@ describe('visiblePlateRect', () => {
     });
 });
 
+describe('sceneCanvasWindow', () => {
+    it('covers the whole plate when the screen shows most of it, and only the visible window on a phone held upright', () => {
+        expect(sceneCanvasWindow({ x: 0, y: 0, w: 1, h: 1 })).toEqual({ x: 0, y: 0, w: 1, h: 1 });
+        expect(sceneCanvasWindow({ x: 0.05, y: 0, w: 0.9, h: 1 })).toEqual({ x: 0, y: 0, w: 1, h: 1 });
+        expect(sceneCanvasWindow({ x: 0.3, y: 0, w: 0.4, h: 1 })).toEqual({ x: 0.3, y: 0, w: 0.4, h: 1 });
+    });
+});
+
 describe('sceneCanvasScale', () => {
     it('gives the canvas as many pixels as the screen shows of the plate, between the painting and the cap', () => {
         // A phone or a small window: the painting's own pixels.
         expect(sceneCanvasScale(412, 1, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(1);
         // 1080p: the plate is shown 1935 wide, so 1.4 canvas pixels to each of the painting's.
         expect(sceneCanvasScale(1935, 1, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(1.4);
-        // 1440p, 4K and a HiDPI laptop all stop at the cap: the masters have nothing more to show.
-        expect(sceneCanvasScale(2580, 1, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(SCENE_CANVAS_MAX_SCALE);
+        // 1440p: 1.9; 4K and a HiDPI laptop stop at the cap (the realm rooms' bases are twice the painting).
+        expect(sceneCanvasScale(2580, 1, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(1.9);
         expect(sceneCanvasScale(1450, 2, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(SCENE_CANVAS_MAX_SCALE);
         // The lean tier asks for none, and nothing measured is no reason to grow.
         expect(sceneCanvasScale(2580, 2, 1376, 1)).toBe(1);
