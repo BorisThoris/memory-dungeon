@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { RunState } from '../../shared/contracts';
-import { getAdaptiveMusicState, musicGainFromSettings, resolveAdaptiveMusicState, useGameplayMusic } from './gameplayMusic';
+import type { RealmId, RunState } from '../../shared/contracts';
+import { getAdaptiveMusicState, musicGainFromSettings, musicTrackKey, MUSIC_CROSSFADE_MS, resolveAdaptiveMusicState, useGameplayMusic } from './gameplayMusic';
 
 class MockAudioElement {
     static instances: MockAudioElement[] = [];
@@ -391,6 +391,42 @@ describe('useGameplayMusic', () => {
         expect(MockAudioElement.instances[0]?.pause).toHaveBeenCalled();
         expect(MockAudioElement.instances[1]?.src).toMatch(/demo-ambience-loop\.ogg|run-loop\.ogg/);
         await waitFor(() => expect(MockAudioElement.instances[1]?.play).toHaveBeenCalled());
+    });
+
+    it("plays the floor realm's music as the run music, and only on the run track", () => {
+        expect(musicTrackKey('run', 'frost')).toBe('realm:frost');
+        expect(musicTrackKey('run', null)).toBe('run');
+        expect(musicTrackKey('menu', 'frost')).toBe('menu');
+    });
+
+    it("fades one realm's music into the next at the settings' volume", async () => {
+        installMockAudio();
+        const { rerender } = renderHook(
+            ({ realm }) => useGameplayMusic({ active: true, track: 'run', realm, masterVolume: 1, musicVolume: 0.5 }),
+            { initialProps: { realm: 'frost' as RealmId } }
+        );
+        const frost = MockAudioElement.instances[0]!;
+        expect(frost.src).toContain('frost-ambience');
+        expect(frost.volume).toBe(0.5);
+        await waitFor(() => expect(frost.play).toHaveBeenCalled());
+
+        vi.useFakeTimers();
+        try {
+            rerender({ realm: 'ember' as RealmId });
+            const ember = MockAudioElement.instances[1]!;
+            expect(ember.src).toContain('ember-ambience');
+            // The old music is still sounding, and the new one comes up from silence.
+            expect(frost.pause).not.toHaveBeenCalled();
+            expect(ember.volume).toBe(0);
+            act(() => {
+                vi.advanceTimersByTime(MUSIC_CROSSFADE_MS + 100);
+            });
+            expect(frost.pause).toHaveBeenCalled();
+            expect(frost.volume).toBe(0);
+            expect(ember.volume).toBeCloseTo(0.5);
+        } finally {
+            vi.useRealTimers();
+        }
     });
 
     it('silences unavailable media after a load error', async () => {

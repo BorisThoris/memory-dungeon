@@ -33,6 +33,7 @@ import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
 import type { MutatorId } from '../shared/contracts';
 import type { TestHallRoomId } from '../shared/test-hall-rooms';
+import { runRealmId } from '../shared/realm-rules';
 import {
     createPlayablePathFixture,
     type PlayablePathFixtureId
@@ -186,6 +187,8 @@ const App = () => {
     useGameplayMusic({
         active: musicShellActive && musicState.active,
         track: musicState.track,
+        // On a floor in a realm, that realm's music is the run music (`gameplayMusic.ts`).
+        realm: run ? runRealmId(run) : null,
         masterVolume: settings.masterVolume,
         musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck * gapDuck,
         suppressed: musicState.suppressed

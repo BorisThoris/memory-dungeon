@@ -3,6 +3,10 @@
 A React + three.js memory-card roguelike (TypeScript, zustand, vitest, Playwright, Vite, Electron).
 Rules here are the owner's decisions and the lessons that cost real time. They override defaults.
 
+**Read [`AGENTS.md`](AGENTS.md) first: the core rules for every agent.** The realm's music is the
+run's music on the settings' music volume; everything the combo drives climbs with it without end
+(`comboDepth`, `comboSoftCap`); a painted room is never still.
+
 ## Delivery
 
 - Finished work goes to `main`: commit on the working branch, `git fetch` and merge `origin/main`,

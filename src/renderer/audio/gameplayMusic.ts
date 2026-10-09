@@ -1,6 +1,6 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
-import type { RunState, ViewState } from '../../shared/contracts';
+import { REALM_IDS, type RealmId, type RunState, type ViewState } from '../../shared/contracts';
 import { lifecycleStateFromSurface } from '../../shared/run-lifecycle-machine';
 
 const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,mp3}', {
@@ -15,11 +15,38 @@ const portfolioMusicUrls = import.meta.glob<string>('../../../assets/audio/portf
     import: 'default'
 });
 
+/**
+ * Each realm's own music (2026-10-09): `assets/audio/music/realm/<realm>-ambience.ogg`, ACE-Step
+ * loops made on the owner's PC. On a floor in a realm it IS the run music - on this element, so the
+ * settings' music volume, the Fever duck and the combo's layers all act on it - and the plain run
+ * loop is only the fallback for a realm without one. The owner's call: "replace the actual
+ * background music ... with this new one".
+ */
+const realmMusicUrls = import.meta.glob<string>('../assets/audio/music/realm/*-ambience.{ogg,mp3}', {
+    eager: true,
+    query: '?url',
+    import: 'default'
+});
+
+export const realmMusicUrl = (realm: RealmId): string | undefined =>
+    Object.entries(realmMusicUrls).find(([path]) => path.includes(`/${realm}-ambience.`))?.[1];
+
+/** What the element plays: the menu loop, a realm's music, or the plain run loop. */
+export type MusicTrackKey = 'menu' | 'run' | `realm:${RealmId}`;
+
+export const musicTrackKey = (track: 'menu' | 'run', realm: RealmId | null | undefined): MusicTrackKey =>
+    track === 'run' && realm && realmMusicUrl(realm) ? `realm:${realm}` : track;
+
+const isRunFamily = (key: MusicTrackKey | null): boolean => key !== null && key !== 'menu';
+
 const resolveMusicUrl = (filename: string): string | undefined => musicUrls[`../assets/audio/music/${filename}`];
 const resolvePortfolioMusicUrl = (filename: string): string | undefined =>
     portfolioMusicUrls[`../../../assets/audio/portfolio-feedback-pack/${filename}`];
-const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
-    if (track === 'run') {
+const resolveTrackUrl = (key: MusicTrackKey): string | undefined => {
+    if (key.startsWith('realm:')) {
+        return realmMusicUrl(key.slice('realm:'.length) as RealmId);
+    }
+    if (key === 'run') {
         // The shipped run loop is the in-run music; the portfolio ambience bed only covers builds without it.
         return resolveMusicUrl('run-loop.ogg') ?? resolvePortfolioMusicUrl('demo-ambience-loop.ogg');
     }
@@ -30,11 +57,14 @@ const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
  * The music, held in memory once loaded (`preloadGameplayMusic`), so starting a track never streams
  * it from disk or network mid-play. Until it lands, the file URL is used as before.
  */
-const preloadedTrackUrls = new Map<'menu' | 'run', string>();
+const preloadedTrackUrls = new Map<MusicTrackKey, string>();
 let musicPreload: Promise<void> | null = null;
 
-const playableTrackUrl = (track: 'menu' | 'run'): string | undefined =>
-    preloadedTrackUrls.get(track) ?? resolveTrackUrl(track);
+const playableTrackUrl = (key: MusicTrackKey): string | undefined =>
+    preloadedTrackUrls.get(key) ?? resolveTrackUrl(key);
+
+/** Every track a session can play: the menu, the run loop and each realm's music. */
+const ALL_TRACK_KEYS: readonly MusicTrackKey[] = ['menu', 'run', ...REALM_IDS.map((realm): MusicTrackKey => `realm:${realm}`)];
 
 export const preloadGameplayMusic = (): Promise<void> => {
     if (musicPreload) return musicPreload;
@@ -42,7 +72,7 @@ export const preloadGameplayMusic = (): Promise<void> => {
         return Promise.resolve();
     }
     musicPreload = Promise.all(
-        (['menu', 'run'] as const).map(async (track) => {
+        ALL_TRACK_KEYS.map(async (track) => {
             const src = resolveTrackUrl(track);
             if (!src || preloadedTrackUrls.has(track)) return;
             try {
@@ -82,11 +112,17 @@ interface GameplayMusicParams {
     /** When false, playback is paused (e.g. settings, codex, game over). */
     active: boolean;
     track: 'menu' | 'run';
+    /** The floor's realm: on the run track its music plays instead of the plain run loop. */
+    realm?: RealmId | null;
     masterVolume: number;
     musicVolume: number;
     /** When true, keep the element paused (e.g. other systems need exclusive control of the output). */
     suppressed?: boolean;
 }
+
+/** One realm's music handing over to the next: the old fades out as the new fades in. */
+export const MUSIC_CROSSFADE_MS = 1200;
+const FADE_TICK_MS = 50;
 
 interface GameplayMusicPlaybackController {
     requestPlay: () => void;
@@ -179,7 +215,14 @@ export const getAdaptiveMusicState = ({
  * Looped background music via `HTMLAudioElement`. Volume follows **`masterVolume` x `musicVolume`**.
  * HTMLMediaElement autoplay rules apply: first successful `play()` may require a user gesture; we retry on the first `pointerdown`.
  */
-export function useGameplayMusic({ active, track, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {
+export function useGameplayMusic({ active, track, realm = null, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {
+    const key = musicTrackKey(track, realm);
+    // The key being rendered, read by the outgoing element's cleanup: a realm handing to a realm fades.
+    const keyRef = useRef<MusicTrackKey | null>(null);
+    const previousKeyRef = useRef<MusicTrackKey | null>(null);
+    keyRef.current = key;
+    const targetVolumeRef = useRef(musicGainFromSettings(masterVolume, musicVolume));
+    const fadeInRef = useRef<{ el: HTMLAudioElement; startedAt: number } | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const audioUnavailableRef = useRef(false);
     const playbackControllerRef = useRef<GameplayMusicPlaybackController | null>(null);
@@ -193,8 +236,10 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
-        const src = playableTrackUrl(track);
+        const src = playableTrackUrl(key);
         audioUnavailableRef.current = false;
+        const handedOver = isRunFamily(previousKeyRef.current) && isRunFamily(key);
+        previousKeyRef.current = key;
         if (!src) {
             audioRef.current = null;
             audioUnavailableRef.current = true;
@@ -205,7 +250,23 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
         el.loop = true;
         el.preload = 'auto';
         audioRef.current = el;
-        if (track === 'run') runMusicElement = el;
+        if (isRunFamily(key)) runMusicElement = el;
+        // Taking over from another realm's music: come up from silence under it.
+        let fadeInTimer: ReturnType<typeof setInterval> | null = null;
+        if (handedOver) {
+            const startedAt = Date.now();
+            fadeInRef.current = { el, startedAt };
+            el.volume = 0;
+            fadeInTimer = setInterval(() => {
+                const into = Math.min(1, (Date.now() - startedAt) / MUSIC_CROSSFADE_MS);
+                el.volume = targetVolumeRef.current * into;
+                if (into >= 1 && fadeInTimer) {
+                    clearInterval(fadeInTimer);
+                    fadeInTimer = null;
+                    if (fadeInRef.current?.el === el) fadeInRef.current = null;
+                }
+            }, FADE_TICK_MS);
+        }
 
         let gestureRetryAttached = false;
         let playAttempt = 0;
@@ -279,13 +340,32 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
         return () => {
             suspend();
+            if (fadeInTimer) clearInterval(fadeInTimer);
+            if (fadeInRef.current?.el === el) fadeInRef.current = null;
             el.removeEventListener('error', silenceUnavailableAudio);
-            el.pause();
-            el.removeAttribute('src');
-            try {
-                el.load();
-            } catch {
-                /* media element may already be detached */
+            const release = (): void => {
+                el.pause();
+                el.removeAttribute('src');
+                try {
+                    el.load();
+                } catch {
+                    /* media element may already be detached */
+                }
+            };
+            // A realm handing over to the next: the old music fades under the new one rather than cutting.
+            if (isRunFamily(key) && isRunFamily(keyRef.current) && keyRef.current !== key && !el.paused && el.volume > 0) {
+                const from = el.volume;
+                const startedAt = Date.now();
+                const fadeOut = setInterval(() => {
+                    const left = 1 - Math.min(1, (Date.now() - startedAt) / MUSIC_CROSSFADE_MS);
+                    el.volume = from * left;
+                    if (left <= 0) {
+                        clearInterval(fadeOut);
+                        release();
+                    }
+                }, FADE_TICK_MS);
+            } else {
+                release();
             }
             audioRef.current = null;
             if (runMusicElement === el) runMusicElement = null;
@@ -293,13 +373,16 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
                 playbackControllerRef.current = null;
             }
         };
-    }, [track]);
+    }, [key]);
 
     useEffect(() => {
         const el = audioRef.current;
         if (!el) return;
 
-        el.volume = musicGainFromSettings(masterVolume, musicVolume);
+        const target = musicGainFromSettings(masterVolume, musicVolume);
+        targetVolumeRef.current = target;
+        const fading = fadeInRef.current?.el === el ? fadeInRef.current : null;
+        el.volume = fading ? target * Math.min(1, (Date.now() - fading.startedAt) / MUSIC_CROSSFADE_MS) : target;
 
         if (!active || suppressed || !pageVisible || audioUnavailableRef.current) {
             playbackControllerRef.current?.suspend();
@@ -308,5 +391,5 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
         }
 
         playbackControllerRef.current?.requestPlay();
-    }, [active, track, masterVolume, musicVolume, pageVisible, suppressed]);
+    }, [active, key, masterVolume, musicVolume, pageVisible, suppressed]);
 }

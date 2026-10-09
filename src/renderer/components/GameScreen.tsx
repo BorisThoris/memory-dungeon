@@ -123,7 +123,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
-import { comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun, comboStageReached } from '../../shared/combo-heat-rules';
+import { comboDepth, comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun, comboStageReached } from '../../shared/combo-heat-rules';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
@@ -1871,6 +1871,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     reduceMotion={reduceMotion}
                     tier={runChainTier(run)}
                     comboHeat={comboHeatLevelsNow.heat}
+                    comboDepth={comboDepth(run.stats.currentStreak)}
                     comboStage={comboHeatLevelsNow.stage}
                     comboHueDeg={comboTemper.ringHueDeg}
                     mood={sceneMood}

@@ -1,11 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { CASCADE_PITCH_CLASSES } from './musicalScale';
 import { COMBO_HEAT_STAGE_FROM } from '../../shared/combo-heat-rules';
-import { COMBO_MUSIC_LAYERS, comboLayerGains, comboLayerNotes, RUN_LOOP_BEAT_SECONDS, RUN_LOOP_SECONDS } from './comboMusicLayers';
+import { COMBO_MUSIC_LAYERS, comboLayerGains, comboMusicDrive, comboLayerNotes, RUN_LOOP_BEAT_SECONDS, RUN_LOOP_SECONDS } from './comboMusicLayers';
 
 const pitchClass = (hz: number): number => (((Math.round(12 * Math.log2(hz / 440)) % 12) + 12) % 12);
 
 describe('combo music layers', () => {
+    it('keeps climbing past every layer: brighter and further forward with each link, the shimmer from Inferno', () => {
+        let last = comboMusicDrive(0);
+        expect(last).toEqual({ brightness: 1, mix: 1, shimmer: 0 });
+        expect(comboMusicDrive(COMBO_HEAT_STAGE_FROM.inferno - 1).shimmer).toBe(0);
+        for (let links = 1; links <= 3000; links += 1) {
+            const now = comboMusicDrive(links);
+            expect(now.brightness).toBeGreaterThan(last.brightness);
+            expect(now.mix).toBeGreaterThan(last.mix);
+            if (links > COMBO_HEAT_STAGE_FROM.inferno) expect(now.shimmer).toBeGreaterThan(last.shimmer);
+            expect(now.mix).toBeLessThan(1.6);
+            expect(now.shimmer).toBeLessThan(1);
+            last = now;
+        }
+    });
+
     it('brings in pad, pulse, bass and lead at warm, hot, blazing and inferno, and drops them all when the combo breaks', () => {
         expect(Object.values(comboLayerGains(0)).every((gain) => gain === 0)).toBe(true);
         expect(comboLayerGains(COMBO_HEAT_STAGE_FROM.warm).pad).toBeGreaterThan(0);

@@ -1,4 +1,4 @@
-import { REALM_IDS, type RealmId } from '../../shared/contracts';
+import type { RealmId } from '../../shared/contracts';
 import { audioNeverThrows } from './audioSafety';
 import { getSharedAudioContext } from './webAudioContext';
 
@@ -49,40 +49,10 @@ export const REALM_BED_ENABLED = false;
 export const REALM_BED_LEVEL = 0.028;
 
 /**
- * Each realm's own recorded ambience (2026-10-09), when there is one: an ACE-Step loop made on the
- * owner's PC from `assets/audio/realm-ambience.jobs.json`, saved as
- * `src/renderer/assets/audio/music/realm/<realm>-ambience.ogg`. A realm with a recording plays it
- * instead of the noise bed, and plays it even while the noise bed is off: it is a piece someone
- * listened to and chose, which the generated bed was not. Decoded with the music before the run
- * (`preloadRealmAmbience`), so nothing streams.
+ * A realm's recorded loop is not played here (2026-10-09): it is the run music now, on the music
+ * element (`gameplayMusic.ts`, `realmMusicUrl`), so the settings' music volume governs it. This bed
+ * is only the generated noise, still off (`REALM_BED_ENABLED`).
  */
-const realmRecordingUrls = import.meta.glob<string>('../assets/audio/music/realm/*-ambience.{ogg,mp3}', { eager: true, query: '?url', import: 'default' });
-const realmRecordings = new Map<RealmId, AudioBuffer>();
-let realmRecordingPreload: Promise<void> | null = null;
-/** A recording's level against the SFX gain: a mixed piece, so higher than the raw noise bed. */
-export const REALM_RECORDING_LEVEL = 0.16;
-
-export const realmRecordingUrl = (realm: RealmId): string | undefined =>
-    Object.entries(realmRecordingUrls).find(([path]) => path.includes(`/${realm}-ambience.`))?.[1];
-
-export const preloadRealmAmbience = (): Promise<void> => {
-    if (realmRecordingPreload) return realmRecordingPreload;
-    const ctx = getSharedAudioContext();
-    if (!ctx || typeof fetch === 'undefined') return Promise.resolve();
-    realmRecordingPreload = Promise.all(
-        REALM_IDS.map(async (realm) => {
-            const url = realmRecordingUrl(realm);
-            if (!url) return;
-            try {
-                const response = await fetch(url);
-                if (response.ok) realmRecordings.set(realm, await ctx.decodeAudioData(await response.arrayBuffer()));
-            } catch {
-                // The realm keeps its noise bed.
-            }
-        })
-    ).then(() => undefined);
-    return realmRecordingPreload;
-};
 const FADE_IN_SEC = 1.6;
 const FADE_OUT_SEC = 1.2;
 
@@ -120,16 +90,7 @@ const startBed = (ctx: AudioContext, realm: RealmId, level: number): PlayingBed 
     master.gain.exponentialRampToValueAtTime(Math.max(0.0002, level), ctx.currentTime + FADE_IN_SEC);
     master.connect(ctx.destination);
     const sources: AudioScheduledSourceNode[] = [];
-    const recording = realmRecordings.get(realm);
-    if (recording) {
-        const source = ctx.createBufferSource();
-        source.buffer = recording;
-        source.loop = true;
-        source.connect(master);
-        source.start(ctx.currentTime);
-        sources.push(source);
-    }
-    for (const layer of recording ? [] : REALM_BED_LAYERS[realm]) {
+    for (const layer of REALM_BED_LAYERS[realm]) {
         const source = ctx.createBufferSource();
         source.buffer = noise(ctx);
         source.loop = true;
@@ -185,8 +146,7 @@ const startBed = (ctx: AudioContext, realm: RealmId, level: number): PlayingBed 
  */
 export const setRealmAmbientBed = (realm: RealmId | null, strength: number, gain: number, enabled = REALM_BED_ENABLED): void =>
     audioNeverThrows(() => {
-        const recorded = realm ? realmRecordings.has(realm) : false;
-        const level = realm && (enabled || recorded) ? gain * (recorded ? REALM_RECORDING_LEVEL : REALM_BED_LEVEL) * (0.6 + 0.4 * Math.max(0, Math.min(1, strength))) : 0;
+        const level = realm && enabled ? gain * REALM_BED_LEVEL * (0.6 + 0.4 * Math.max(0, Math.min(1, strength))) : 0;
         if (!realm || level <= 0.0005) {
             current?.stop();
             current = null;

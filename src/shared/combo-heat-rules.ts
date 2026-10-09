@@ -91,6 +91,19 @@ export const comboAscensionCallout = (legendaryCallout: string, ascension: numbe
     `${legendaryCallout.replace(/!$/, '')} ${romanNumeral(ascension)}!`;
 
 /**
+ * How deep the combo is, unbounded and rising with every single link (2026-10-09, the owner's rule:
+ * "everything needs to scale off combo length infinitely"). Heat levels off by forty links and the
+ * surge only starts at the second ascension, so between them every channel used to stand still;
+ * depth has no such gap. log2(1 + links / 6): 3 ≈ 0.58, 10 ≈ 1.4, 25 ≈ 2.3, 100 ≈ 4.1, 1000 ≈ 7.4.
+ * A surface with a budget (a particle count, an alpha) puts it through `comboSoftCap`, which still
+ * rises with every link; one with no ceiling (a speed, a filter, a size) can take it as it is.
+ */
+export const comboDepth = (combo: number): number => Math.log2(1 + runNonNegativeInteger(combo) / 6);
+
+/** A budgeted surface's share of the depth: approaches `ceiling`, never reaches it, never stops rising. */
+export const comboSoftCap = (depth: number, ceiling: number): number => ceiling * (1 - Math.exp(-Math.max(0, depth) / ceiling));
+
+/**
  * The heat as one number, 0..1, saturating: the first links are where the growth is felt, and a
  * combo carried across five floors still has somewhere to climb. 3 ≈ 0.22, 10 ≈ 0.57, 16 ≈ 0.74,
  * 25 ≈ 0.88, 40 ≈ 0.96.

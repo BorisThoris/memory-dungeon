@@ -5,6 +5,8 @@ import { AMBIENT_SPRITES, SCENE_SPRITES, type AmbientCellName } from '../assets/
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
+import { realmRoomLifeDraws } from './realmRoomLife';
+import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
 import { buildEmberDrift, emberMoteCount, EMBER_VIEWBOX } from './emberDrift';
 import { buildGoldRain, goldCoinFloor, goldCoinSize, GOLD_RAIN_FADE_S, GOLD_RAIN_HOP_S, GOLD_RAIN_REST_S, type GoldCoin } from './goldRain';
@@ -48,6 +50,11 @@ export interface GameplayFrameInput {
     cleared: boolean;
     imminent: boolean;
     comboHeat: number;
+    /**
+     * `comboDepth` of the run's combo: unbounded, rising with every link. What must keep climbing with
+     * the chain (a realm room's glow and its life) reads this rather than the heat, which levels off.
+     */
+    comboDepth?: number;
     comboHueDeg: number;
     mood: SceneMood | undefined;
     runSeed: number;
@@ -271,10 +278,22 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     draws.push({ kind: 'image', id: 'base', src: UI_ART.gameplaySceneBase, alpha: input.base * dungeon * missDim });
     draws.push({ kind: 'image', id: 'shop', src: UI_ART.gameplaySceneShop, alpha: input.base * shop * missDim });
     draws.push({ kind: 'image', id: 'void', src: UI_ART.gameplaySceneVoid, alpha: input.base * voidRoom * missDim });
-    // The realm's own room (`realmRoomArt.ts`): its dark base, and its glow rising with the combo.
+    // The realm's own room (`realmRoomArt.ts`): its dark base, and its glow rising with the combo -
+    // on the depth, so it never stops: the glow comes up to full, and past that an overdrive of the
+    // same light, brighter with every link and without end.
+    const depth = Math.max(0, input.comboDepth ?? 0);
     if (realmArt) {
+        const breath = still ? 1 : 0.9 + 0.1 * sceneBreath(roomT, 6_000);
         draws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * realmRoom * missDim });
-        draws.push({ kind: 'image', id: 'realmGlow', src: realmArt.glow, alpha: realmRoom * (0.35 + 0.65 * input.comboHeat) * (still ? 1 : 0.9 + 0.1 * sceneBreath(roomT, 6_000)), blend: 'lighter' });
+        draws.push({ kind: 'image', id: 'realmGlow', src: realmArt.glow, alpha: realmRoom * (0.35 + 0.65 * comboSoftCap(depth, 1)) * breath, blend: 'lighter' });
+        draws.push({
+            kind: 'image',
+            id: 'realmGlowOver',
+            src: realmArt.glow,
+            alpha: realmRoom * comboSoftCap(Math.max(0, depth - 2), 0.6) * breath,
+            blend: 'lighter',
+            filter: { brightness: 1 + 0.25 * depth, blurPx: 4 }
+        });
     }
 
     if (mood?.elements) {
@@ -490,6 +509,11 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
                 );
             });
         }
+    }
+
+    // A realm's own room is never still: its weather, its light and its creatures (`realmRoomLife.ts`).
+    if (!still && mood?.realmRoom) {
+        draws.push(...realmRoomLifeDraws({ realm: mood.realmRoom, t: roomT, depth, lean, alpha: realmRoom }));
     }
 
     // A payout: coins fall through the room, in front of the stone and behind the cards. Asked every

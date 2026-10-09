@@ -1,0 +1,58 @@
+# Memory Dungeon: core rules for every agent
+
+These are the owner's rules for how the game looks and sounds. They hold for every agent working
+in this repo (Claude, Codex, anyone else) and override a default or an older doc. The day-to-day
+workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the app) is in
+[`CLAUDE.md`](CLAUDE.md); the effects style is in the Effects section of
+[`docs/design/game-view-redesign.md`](docs/design/game-view-redesign.md). Read both.
+
+## 1. The realm's music is the run's music
+
+- On a floor in a realm, that realm's loop (`src/renderer/assets/audio/music/realm/<realm>-ambience.ogg`)
+  **is** the background music: it plays on the music element (`gameplayMusic.ts`, `realmMusicUrl`,
+  `musicTrackKey`), so the Settings music volume, the master volume, the Fever duck and the combo's
+  music layers all act on it. `run-loop` is only the fallback for a realm without a loop; the menu
+  keeps `menu-loop`.
+- Moving from one realm to the next crossfades (`MUSIC_CROSSFADE_MS`); it never cuts.
+- Every track is preloaded with the run (`preloadGameplayMusic`): nothing streams in play.
+- A realm loop is not also played anywhere else (the ambient bed is noise only, and off).
+- Any file in `music/realm/` plays, so a new one is chosen before it is installed. Generated audio
+  (ACE-Step) is chosen **by measurement** (onset spikiness, brightness, level evenness, clipping, the
+  loop seam), not left waiting for someone to listen, and levelled to the run loop (-19.3 LUFS).
+  Record the picks and the criteria in the jobs file (`assets/audio/realm-ambience.jobs.json`).
+
+## 2. Everything the combo drives climbs with it, without end
+
+- "Everything needs to scale off combo length infinitely." A surface that answers the combo reads
+  **`comboDepth`** (`combo-heat-rules.ts`): log2(1 + links / 6), rising with every single link and
+  unbounded. The heat (levels off by forty links) and the surge (starts at the second ascension)
+  each leave a plateau; depth has none.
+- Something with a budget (a particle count, an alpha, a mix level) goes through **`comboSoftCap`**:
+  it approaches its ceiling and keeps rising with every link without reaching it. Something without
+  a ceiling (a speed, a filter cutoff, a brightness, how often a sky breaks) takes the depth as it is.
+  A surface may cap one quantity only if another of its quantities keeps climbing.
+- What does this now: the music layers' drive (`comboMusicDrive`: the voices' brightness, their mix,
+  the lead's octave shimmer), a realm room's glow and its overdrive, and a realm room's life (how much
+  of it, how fast). A new combo-driven surface joins them, and its test walks the combo out to
+  thousands of links and asserts it never stands still.
+
+## 3. A painted room is never still
+
+- Every painted scene ships with the things that move in it, the way the main menu's cathedral has
+  its candles, wisps, dust, moths and bats, and the dungeon its torches, mist, dust, drips, bats, eyes
+  and spider. A painting with only a glow on it is not finished.
+- The minimum for a room: a drift of its own material (snow, sparks, bubbles, rain, spores), a mist
+  or fog where its floor or sky is, light that catches now and then (glints, a breathing shaft, a
+  flash), and one thing that happens (a creature crossing, a drop, the sky breaking). Placed on the
+  painting itself, from the helpers in `sceneAmbient.ts` and the cells of the ambient atlas.
+- It climbs with the combo (rule 2), halves on the phone tier (`lean`), and stops entirely under
+  reduced motion (`still`).
+- The realm rooms do this in `realmRoomLife.ts`; a new room or plate gets the same, a test per room
+  (present, more of it deeper, halved on lean, none when still), and a look at it in the browser.
+
+## 4. How a change to these is checked
+
+- Unit tests for the rule (monotonic in the combo, present per room, the music key and crossfade).
+- A browser look, headless and isolated (see the global rule about the desktop): screenshots of the
+  rooms cold and at a deep combo, and the music element's track and volume against the settings.
+- `e2e/asset-streaming.spec.ts` still sees nothing requested after the board appears.

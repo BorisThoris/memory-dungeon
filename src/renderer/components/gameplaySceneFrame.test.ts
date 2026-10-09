@@ -499,7 +499,41 @@ describe('composeGameplayScene', () => {
         expect(ids).not.toContain('torchLightL');
         expect(ids.indexOf('element-steam')).toBeGreaterThan(ids.indexOf('realmGlow'));
         expect(findSceneDraw(cold, 'element-steam')).toMatchObject({ blend: 'soft-light' });
-        expect(alphaOf(frame({ mood: mood('ember', { run }), comboHeat: 1 }), 'realmGlow')).toBeGreaterThan(alphaOf(cold, 'realmGlow'));
+        expect(alphaOf(frame({ mood: mood('ember', { run }), comboDepth: 3 }), 'realmGlow')).toBeGreaterThan(alphaOf(cold, 'realmGlow'));
+    });
+
+    it('keeps every realm room alive, more of it the deeper the chain, halved on a phone and still under reduced motion', () => {
+        const signature: Record<RealmId, string> = { frost: 'frost-snow-', ember: 'ember-spark-', tide: 'tide-bubble-', storm: 'storm-rain-', grove: 'grove-spore-' };
+        for (const realm of REALM_IDS) {
+            const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: realm });
+            const room = (over: Partial<GameplayFrameInput>) => frame({ mood: mood('ember', { run }), ...over });
+            const life = (draws: readonly SceneDraw[]) => draws.filter((draw) => draw.id.startsWith(signature[realm])).length;
+            const cold = life(room({ comboDepth: 0 }));
+            const deep = life(room({ comboDepth: 6 }));
+            expect(cold, realm).toBeGreaterThan(0);
+            expect(deep, realm).toBeGreaterThan(cold);
+            expect(life(room({ comboDepth: 0, tier: 'lean' })), realm).toBe(Math.ceil(cold / 2));
+            expect(life(room({ comboDepth: 6, tier: 'still' })), realm).toBe(0);
+        }
+    });
+
+    it("lifts a realm room's glow with every link, and past full drives an overdrive of it without end", () => {
+        const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: 'storm' });
+        const at = (depth: number) => frame({ mood: mood('ember', { run }), comboDepth: depth, tier: 'still' });
+        let lastGlow = 0;
+        let lastBright = 0;
+        for (const depth of [0, 0.5, 1, 2, 3, 5, 8, 12]) {
+            const draws = at(depth);
+            const glow = alphaOf(draws, 'realmGlow');
+            expect(glow).toBeGreaterThan(lastGlow);
+            lastGlow = glow;
+            const over = findSceneDraw(draws, 'realmGlowOver') as SceneImageDraw | undefined;
+            if (depth > 2) {
+                expect(over!.filter!.brightness!).toBeGreaterThan(lastBright);
+                lastBright = over!.filter!.brightness!;
+            }
+        }
+        expect(lastGlow).toBeLessThanOrEqual(1);
     });
 
     it('stops the room for a beat when a frost stage is reached, and lets it go', () => {

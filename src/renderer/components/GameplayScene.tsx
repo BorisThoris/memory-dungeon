@@ -95,6 +95,8 @@ export interface GameplaySceneProps {
     tier: ChainTier;
     /** The combo heat (`combo-heat-rules.ts`): the room keeps answering past Fever. */
     comboHeat?: number;
+    /** `comboDepth` of the combo: unbounded, for what must keep climbing (a realm room's glow and life). */
+    comboDepth?: number;
     comboStage?: ComboHeatStage;
     /** The temper's hue (`ComboHeatTheme.ringHueDeg`): where the ring turns at full heat. */
     comboHueDeg?: number;
@@ -116,6 +118,7 @@ export function GameplayScene({
     reduceMotion,
     tier,
     comboHeat = 0,
+    comboDepth = 0,
     comboStage = 'cold',
     comboHueDeg = 0,
     mood: liveMood,
@@ -143,10 +146,10 @@ export function GameplayScene({
     const compose = useCallback(
         (clock: SceneClock, levels: SceneLevels) =>
             composeGameplayScene(
-                { fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboHueDeg, mood, runSeed, tier: effectTier, compactArt: prefersCompactSceneArt(), base: levels.base },
+                { fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboDepth, comboHueDeg, mood, runSeed, tier: effectTier, compactArt: prefersCompactSceneArt(), base: levels.base },
                 clock
             ),
-        [fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboHueDeg, mood, runSeed, effectTier]
+        [fill, memorize, pulse, pulseKey, feverKey, cleared, imminent, comboHeat, comboDepth, comboHueDeg, mood, runSeed, effectTier]
     );
     return (
         <div

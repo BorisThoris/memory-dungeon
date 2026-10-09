@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     COMBO_HEAT_STAGE_FROM,
+    comboDepth,
+    comboSoftCap,
     comboStageReached,
     comboHeat,
     comboHeatLevels,
@@ -66,5 +68,27 @@ describe('combo heat', () => {
         }
         expect(comboHeatLevels(3).embers).toBe(0);
         expect(comboHeatLevels(6).embers).toBeGreaterThan(0);
+    });
+});
+
+describe('combo depth', () => {
+    it('rises with every link, with no plateau anywhere, and has no ceiling', () => {
+        for (let links = 1; links <= 5000; links += 1) {
+            expect(comboDepth(links)).toBeGreaterThan(comboDepth(links - 1));
+        }
+        // Across the old gap (heat level by forty, the surge only from the second ascension).
+        expect(comboDepth(49) - comboDepth(40)).toBeGreaterThan(0.2);
+        expect(comboDepth(1000)).toBeGreaterThan(comboDepth(100) + 3);
+        expect(comboDepth(0)).toBe(0);
+    });
+
+    it('lets a budgeted surface keep rising toward its ceiling without reaching it', () => {
+        let last = -1;
+        for (let links = 0; links <= 5000; links += 25) {
+            const share = comboSoftCap(comboDepth(links), 3);
+            expect(share).toBeGreaterThan(last);
+            expect(share).toBeLessThan(3);
+            last = share;
+        }
     });
 });

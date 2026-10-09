@@ -147,7 +147,10 @@ noise, `boardTrauma.ts`) and a visual-only hit-stop of 0.06 s against 0.12 s
 **The combo climbs, and never saturates.** Every escalating channel - the plasma beam
 (`plasmaRailLook.ts`), the music layers (`comboMusicLayers.ts`), the flame haze - reads heat, which
 levels off by forty links, and the surge past Legendary on a soft cap. A chain of a thousand is
-hotter than a chain of a hundred, and still a board you can read.
+hotter than a chain of a hundred, and still a board you can read. Since the owner made it a core
+rule (`AGENTS.md`, rule 2), what climbs reads `comboDepth`, which rises with every link where heat
+and surge leave a plateau between them: the music's drive (`comboMusicDrive`), a realm room's glow
+and overdrive, and its life (`realmRoomLife.ts`), budgets through `comboSoftCap`.
 
 **Budgets live in materials and particles, not passes.** On a phone, multi-pass post-processing
 costs several times what a glow in a material does, so glow is a material term, an additive mote or a

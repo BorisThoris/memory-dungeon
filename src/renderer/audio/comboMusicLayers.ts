@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { comboHeatLevels } from '../../shared/combo-heat-rules';
+import { COMBO_HEAT_STAGE_FROM, comboDepth, comboHeatLevels, comboSoftCap } from '../../shared/combo-heat-rules';
 import { getRunMusicElement } from './gameplayMusic';
 import { getSharedAudioContext } from './webAudioContext';
 
@@ -56,6 +56,31 @@ export const comboLayerGains = (combo: number): Record<ComboMusicLayer, number> 
     }
     gains.lead = Math.min(1, gains.lead * (1 + 0.15 * (1 - Math.exp(-surge))));
     return gains;
+};
+
+/**
+ * What keeps the music climbing once every layer is in (2026-10-09, "everything scales off combo
+ * length infinitely"): on `comboDepth`, which rises with every link. The voices' filters open
+ * without end (held under the ear's top), the layers sit a little further forward on a soft cap, and
+ * from Inferno a shimmer doubles the lead an octave up, rising on its own soft cap.
+ */
+export interface ComboMusicDrive {
+    /** Multiplies every voice's lowpass cutoff. */
+    brightness: number;
+    /** Multiplies the layers' mix against the loop. */
+    mix: number;
+    /** The octave-up lead's gain, 0..1. */
+    shimmer: number;
+}
+
+export const comboMusicDrive = (combo: number): ComboMusicDrive => {
+    const depth = comboDepth(combo);
+    const { stageIndex } = comboHeatLevels(combo);
+    return {
+        brightness: 1 + 0.35 * depth,
+        mix: 1 + comboSoftCap(depth, 0.6),
+        shimmer: stageIndex < 4 ? 0 : comboSoftCap(Math.max(0, depth - comboDepth(COMBO_HEAT_STAGE_FROM.inferno)), 1)
+    };
 };
 
 const A1 = 55;
@@ -142,7 +167,9 @@ const createEngine = (ctx: AudioContext) => {
     const data = noise.getChannelData(0);
     for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
 
-    const tone = (layer: ComboMusicLayer, hz: number, when: number, seconds: number): void => {
+    /** The voices' brightness at the current combo; read as each note is put on the clock. */
+    let brightness = 1;
+    const tone = (layer: ComboMusicLayer, hz: number, when: number, seconds: number, level = 1): void => {
         const osc = ctx.createOscillator();
         const env = ctx.createGain();
         const filter = ctx.createBiquadFilter();
@@ -150,8 +177,9 @@ const createEngine = (ctx: AudioContext) => {
         osc.frequency.value = hz;
         if (layer === 'pad') osc.detune.value = (Math.random() - 0.5) * 12;
         filter.type = 'lowpass';
-        filter.frequency.value = layer === 'pad' ? 900 : layer === 'bass' ? 420 : 2400;
-        const peak = layer === 'pad' ? 0.06 : layer === 'bass' ? 0.32 : 0.07;
+        // Held under the ear's top: past it, more depth would only be aliasing.
+        filter.frequency.value = Math.min(14_000, (layer === 'pad' ? 900 : layer === 'bass' ? 420 : 2400) * brightness);
+        const peak = (layer === 'pad' ? 0.06 : layer === 'bass' ? 0.32 : 0.07) * level;
         const attack = layer === 'pad' ? seconds * 0.3 : 0.008;
         env.gain.setValueAtTime(0, when);
         env.gain.linearRampToValueAtTime(peak, when + attack);
@@ -217,17 +245,21 @@ const createEngine = (ctx: AudioContext) => {
     const tick = (): void => {
         const element = getRunMusicElement();
         const gains = comboLayerGains(combo);
+        const drive = comboMusicDrive(combo);
+        brightness = drive.brightness;
         if (!running || !element || element.paused) {
             bus.gain.setTargetAtTime(0, ctx.currentTime, 0.15);
             scheduledUntil = null;
             return;
         }
-        bus.gain.setTargetAtTime(element.volume * COMBO_LAYERS_MIX, ctx.currentTime, 0.2);
+        bus.gain.setTargetAtTime(element.volume * COMBO_LAYERS_MIX * drive.mix, ctx.currentTime, 0.2);
         for (const layer of COMBO_MUSIC_LAYERS) stems[layer].gain.setTargetAtTime(gains[layer], ctx.currentTime, 0.6);
         const position = element.currentTime;
-        if (position < lastPosition - RUN_LOOP_SECONDS / 2) loops += 1;
+        // The loop's own length: a realm's music is not the run loop's 24 s (NaN until its metadata is in).
+        const loopSeconds = Number.isFinite(element.duration) && element.duration > 1 ? element.duration : RUN_LOOP_SECONDS;
+        if (position < lastPosition - loopSeconds / 2) loops += 1;
         lastPosition = position;
-        const now = loops * RUN_LOOP_SECONDS + position;
+        const now = loops * loopSeconds + position;
         if (scheduledUntil === null || scheduledUntil < now - 0.5 || scheduledUntil > now + 1) scheduledUntil = now;
         for (const layer of COMBO_MUSIC_LAYERS) if (gains[layer] > 0.01 && stemBuffers.has(layer)) alignStem(layer, position);
         // Every sixteenth whose time falls inside the lookahead window, on the context clock.
@@ -243,6 +275,8 @@ const createEngine = (ctx: AudioContext) => {
                 if (!notes) continue;
                 if (notes.drum) drum(notes.drum, when);
                 else for (const hz of notes.hz) tone(layer, hz, when, notes.seconds);
+                // The shimmer: the lead again an octave up, rising with the depth.
+                if (layer === 'lead' && drive.shimmer > 0.01) for (const hz of notes.hz) tone(layer, hz * 2, when, notes.seconds, 0.6 * drive.shimmer);
             }
         }
         scheduledUntil = now + LOOKAHEAD_SECONDS;
