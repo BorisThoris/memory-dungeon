@@ -80,9 +80,16 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         // on one floor (2026-09-23, `miss-bank.ts`), and the floor still cleared. The trace used to
         // be seven misses; the budget is three now, and this is the bad floor it allows.
         const script: Array<'miss' | 'match'> = ['miss', 'miss', 'match', 'miss', 'match'];
+        let missTurns = 0;
         for (const step of script) {
             if (run.status !== 'playing') break;
+            const mismatchesBefore = run.stats.mismatches;
+            const turnsBefore = run.turnsThisFloor;
             run = step === 'miss' ? playMiss(run) : playMatch(run);
+            if (run.stats.mismatches > mismatchesBefore) {
+                missTurns += 1;
+                expect(run.turnsThisFloor, 'a miss is a turn on the floor').toBe(turnsBefore + 1);
+            }
             expect(run.status, `after a ${step}`).not.toBe('gameOver');
         }
         // Then matches to the end - the budget is spent, so the finish has to be clean, and a clean
@@ -103,14 +110,16 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         const earnedByChain = Math.floor(runNonNegativeInteger(run.bestChainThisFloor) / MISS_BANK_COMBO_RUNG);
         expect(missesLeft(run)).toBe(MISS_BANK_OPENING - run.stats.mismatches + earnedByChain);
 
-        // Compare with clean play on this same deal: a new seed can have a more efficient cascade
-        // route, so three misses need not put every generated board within one turn of par.
-        let clean = startFloorEleven();
-        while (clean.status === 'playing') clean = playMatch(clean);
+        // What the misses cost is the turns they took, and every one of them is on the floor's count.
+        // It is not "more turns than clean play on this deal": the trace's clean player takes the
+        // first pair it finds, and the order the misses force can pop better than that order does -
+        // on rules 63 this deal clears in 13 turns with the misses and 15 without. That compared two
+        // cascade routes, not a bad floor with a good one.
         const result = run.lastLevelResult!;
         expect(result.parTurns).toBe(par);
         expect(result.turnsTaken).toBe(run.turnsThisFloor);
-        expect(result.turnsTaken).toBeGreaterThan(clean.turnsThisFloor);
+        expect(missTurns).toBe(run.stats.mismatches);
+        expect(result.turnsTaken).toBeGreaterThan(missTurns);
         expect(run.stats.totalScore).toBeGreaterThan(scoreBefore);
 
         // Nothing the floor said was a punishment. The chain resetting is the whole cost.

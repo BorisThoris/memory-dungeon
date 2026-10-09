@@ -1,6 +1,6 @@
 import type { BoardState, ColossusEvent, ColossusState, RunState, Tile, TileSuit } from './contracts';
 import { atomicVariantForPairKey } from './board-tile-generation-rules';
-import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ALL_TILE_SYMBOLS_FOR_GALLERY, getSymbolSetForLevel } from './tile-symbol-catalog';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -36,6 +36,25 @@ import { TILE_SUITS } from './tile-suit-rules';
  * mover, tool and counter that walks `tiles` never meets.
  */
 export const COLOSSUS_RULES_FROM = 62;
+/**
+ * The Colossus on the board (rules 63, 2026-10-09). The owner's ask: a great card on the playfield
+ * that shows **one** element and demands pairs of it, and breaks down into more cards if the
+ * challenge fails. So from rules 63:
+ *
+ *   - **One element, all fight long**: "match 3 pairs of Fire". It is one the floor holds enough
+ *     pairs of to be beaten with, picked when the floor is dealt.
+ *   - **A turn that takes a pair of it is a hit**, the pop's pairs included, one blow a turn as
+ *     before. Nothing else hurts it: the chip existed so a Colossus that turned away from the
+ *     player's pairs could still be beaten, and one that never turns needs no consolation.
+ *   - **Out of turns, it breaks**: its four cells' worth of cards, two pairs of its own element,
+ *     dealt face down into cleared cells (or onto the end of the board). They are pairs like any
+ *     other, so the floor can always still be finished.
+ *
+ * The rules-62 Colossus (the turning one) is kept for runs dealt under it: `form` tells them apart.
+ */
+export const COLOSSUS_FIXED_FROM = 63;
+/** Pairs a fixed Colossus breaks into: its four cells' worth. */
+export const COLOSSUS_BREAK_PAIRS = 2;
 /** Floors smaller than this are over before a fight could be. */
 export const COLOSSUS_MIN_PAIRS = 6;
 /** Off-element matches that make one hit. */
@@ -49,6 +68,16 @@ export const colossusHitsForPairs = (pairCount: number): number => (pairCount < 
 
 /** Turns it gives: every hit and a turn's wait for it, and two to spare. */
 export const colossusTurnsForHits = (hits: number): number => 2 * hits + 2;
+
+/** Pairs of each element still on the board, singleton utility cards aside. */
+const livePairsBySuit = (board: Pick<BoardState, 'tiles'>): Map<TileSuit, number> => {
+    const pairs = new Map<TileSuit, Set<string>>();
+    for (const tile of board.tiles) {
+        if (!tile.suit || isSingletonUtilityPairKey(tile.pairKey) || tile.state === 'matched' || tile.state === 'removed') continue;
+        pairs.set(tile.suit, (pairs.get(tile.suit) ?? new Set()).add(tile.pairKey));
+    }
+    return new Map([...pairs.entries()].map(([suit, keys]) => [suit, keys.size]));
+};
 
 const realSuitsOnBoard = (board: Pick<BoardState, 'tiles'>): TileSuit[] => {
     const held = new Set<TileSuit>();
@@ -71,6 +100,31 @@ export const raiseColossus = (board: BoardState, { runSeed, rulesVersion }: { ru
         return board;
     }
     const rng = createMulberry32(hashStringToSeed(`colossus:${runSeed}:${rulesVersion}:${board.level}`));
+    if (rulesVersion >= COLOSSUS_FIXED_FROM) {
+        // One element it can be beaten with: an element the floor holds at least as many pairs of
+        // as it takes hits, and if none does, the most-held one, asking only what is there.
+        const held = livePairsBySuit(board);
+        const want = colossusHitsForPairs(board.pairCount);
+        const enough = suits.filter((suit) => (held.get(suit) ?? 0) >= want);
+        const most = Math.max(...suits.map((suit) => held.get(suit) ?? 0));
+        const pool = enough.length > 0 ? enough : suits.filter((suit) => (held.get(suit) ?? 0) === most);
+        const element = pool[pickRngIndex(rng, pool.length)]!;
+        const fixedHits = Math.max(1, Math.min(want, held.get(element) ?? 0));
+        return {
+            ...board,
+            colossus: {
+                cycle: [element],
+                step: 0,
+                hits: fixedHits,
+                hitsMax: fixedHits,
+                chips: 0,
+                turnsLeft: colossusTurnsForHits(fixedHits),
+                turnsMax: colossusTurnsForHits(fixedHits),
+                status: 'standing',
+                form: 'fixed'
+            }
+        };
+    }
     const hits = colossusHitsForPairs(board.pairCount);
     const colossus: ColossusState = {
         cycle: shuffleWithRng(rng, suits),
@@ -109,6 +163,7 @@ const isGone = (tile: Tile): boolean => tile.state === 'matched' || tile.state =
  * it leaves is spread across the deck and not a clump of one suit. No card already down moves.
  */
 const splitInto = (board: BoardState, colossus: ColossusState, want: number): { board: BoardState; newTileIds: string[]; newPairKeys: string[] } => {
+    // A fixed Colossus breaks into pairs of its own element; the turning one spread them across its cycle.
     const goneByPair = new Map<string, number[]>();
     board.tiles.forEach((tile, index) => {
         if (!isGone(tile) || isSingletonUtilityPairKey(tile.pairKey)) return;
@@ -197,7 +252,7 @@ export const resolveColossusTurn = ({
         // hit, a turn that took none of it is a chip. A reaction clearing six pairs is its own
         // reward (`element-alchemy-rules.ts`); counted pair for pair it felled every Colossus on
         // the turn it stood up (the soak: 351 raised, 351 felled) and the clock never mattered.
-        chipped = on > 0 || all === 0 ? 0 : 1;
+        chipped = on > 0 || all === 0 || colossus.form === 'fixed' ? 0 : 1;
         chips += chipped;
         landed = Math.min(hits, (on > 0 ? 1 : 0) + Math.floor(chips / COLOSSUS_CHIPS_PER_HIT));
         chips %= COLOSSUS_CHIPS_PER_HIT;
@@ -215,17 +270,19 @@ export const resolveColossusTurn = ({
     }
     const turnsLeft = colossus.turnsLeft - 1;
     if (turnsLeft <= 0) {
-        const want = Math.min(COLOSSUS_MAX_SPLIT_PAIRS, hits);
+        const fixed = colossus.form === 'fixed';
+        const want = fixed ? COLOSSUS_BREAK_PAIRS : Math.min(COLOSSUS_MAX_SPLIT_PAIRS, hits);
         const split = splitInto(board, colossus, want);
         return {
             board: { ...split.board, colossus: { ...colossus, hits, chips, turnsLeft: 0, status: 'split', splitPairKeys: split.newPairKeys } },
             event: { key, kind: 'split', element: showing, hits: landed, hitsLeft: hits, turnsLeft: 0, pairs: want },
             scoreDelta: 0,
             goldDelta: 0,
-            litTileIds: split.newTileIds
+            // The turning Colossus's pairs are shown face up; the fixed one's fall face down, to be found.
+            litTileIds: fixed ? [] : split.newTileIds
         };
     }
-    const next: ColossusState = { ...colossus, hits, chips, turnsLeft, step: colossus.step + 1 };
+    const next: ColossusState = { ...colossus, hits, chips, turnsLeft, step: colossus.form === 'fixed' ? 0 : colossus.step + 1 };
     const kind: ColossusEvent['kind'] = landed > 0 ? 'hit' : chipped > 0 ? 'chip' : 'turn';
     return {
         board: { ...board, colossus: next },

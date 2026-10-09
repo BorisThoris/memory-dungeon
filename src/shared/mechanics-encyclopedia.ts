@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 82 as const;
+export const ENCYCLOPEDIA_VERSION = 83 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -613,13 +613,12 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'colossus',
         title: 'The Colossus',
         description:
-            'On a **boss floor** a great card stands over the board: the **Colossus**. It shows one element and **turns to the next every turn**, match or miss. ' +
-            'The order is fixed when the floor is dealt and is all on the card: only the elements this floor\'s deck holds, the one it shows now, the one it shows next. Nothing about it is rolled while you play. ' +
-            '**Match a pair of the element it is showing and it takes a hit.** A pair a reaction bursts counts too, but **a turn lands one blow** however many pairs it took. A match with none of its element is a **chip**, and two chips are a hit, so taking a pair you know is never wasted - but waiting a turn for the right element lands twice as hard. ' +
+            'On a **boss floor** a great card stands at the head of the board, two cards wide and two tall: the **Colossus**. It shows **one element for the whole fight**, picked when the floor is dealt from the elements this floor holds enough pairs of to beat it. ' +
+            '**Each turn that takes a pair of its element is a hit**, and the card cracks. A pair a reaction bursts counts too, but **a turn lands one blow** however many pairs it took. Nothing else hurts it: a match of any other element, a miss, a tool. ' +
             'It takes two hits on a small floor, three on most, four on a large one, and gives you twice that many turns and two more. The card counts both down. ' +
-            '**Out of turns, it splits**: one new pair for every hit it still had in it, two at most, dealt into cells you have already cleared and **shown face up until your next flip** - more floor to clear, but nothing you have to hunt for. It splits once and is gone. ' +
+            '**Out of turns, it breaks**: its four cells\' worth of cards, **two new pairs of its own element**, dealt **face down** into cells you have already cleared, or onto the end of the board. They are pairs like any other, to be found and matched. It breaks once and is gone. ' +
             '**Felled**, it pays 90 score and 2 gold for every hit it took. It never holds the floor: clear every pair and the floor ends whether it stands or not. ' +
-            'A tool that takes no turn - a bomb, a peek, a shuffle - does not turn it.'
+            'A tool that takes no turn - a bomb, a peek, a shuffle - does not move its clock. (A run begun before this Colossus keeps the one it started with, which turned to a new element every turn.)'
     },
     {
         id: 'realms',

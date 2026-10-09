@@ -342,6 +342,7 @@ const useHourglassCallouts = (run: RunState): ScreenCallout[] => {
 /** The Colossus's two stamps (`colossus-rules.ts`): felled, and split. Keyed on the event, so a restore replays neither. */
 const useColossusCallouts = (run: RunState): ScreenCallout[] => {
     const event = run.lastColossusEvent ?? null;
+    const fixed = run.board?.colossus?.form === 'fixed';
     const previous = useRef<string | null | undefined>(undefined);
     const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
     useEffect(() => {
@@ -351,8 +352,8 @@ const useColossusCallouts = (run: RunState): ScreenCallout[] => {
         if (!fresh || !event || (event.kind !== 'felled' && event.kind !== 'split')) return;
         const felled = event.kind === 'felled';
         // eslint-disable-next-line react-hooks/set-state-in-effect -- retain the keyed visual event after the run advances
-        setCallouts((current) => [...current, { key: event.key, kind: felled ? ('milestone' as const) : ('broken' as const), size: 'major' as const, tone: felled ? ('gold' as const) : ('miss' as const), title: felled ? COLOSSUS_COPY.felledTitle : COLOSSUS_COPY.splitTitle, sub: colossusCalloutSub(event) }].slice(-4));
-    }, [event]);
+        setCallouts((current) => [...current, { key: event.key, kind: felled ? ('milestone' as const) : ('broken' as const), size: 'major' as const, tone: felled ? ('gold' as const) : ('miss' as const), title: felled ? COLOSSUS_COPY.felledTitle : fixed ? COLOSSUS_COPY.breakTitle : COLOSSUS_COPY.splitTitle, sub: colossusCalloutSub(event, fixed) }].slice(-4));
+    }, [event, fixed]);
     return callouts;
 };
 
@@ -1476,7 +1477,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }
         if (!colossusEventKey || colossusEventKey === saidColossusKey.current || !colossusEvent || !colossus) return;
         saidColossusKey.current = colossusEventKey;
-        queuePoliteAnnouncement(colossusBeatLine(colossusEvent, colossus.status === 'standing' ? colossusElement(colossus) : null), { dedupeKey: colossusEventKey });
+        queuePoliteAnnouncement(colossusBeatLine(colossusEvent, colossus.status === 'standing' ? colossusElement(colossus) : null, colossus.form === 'fixed'), { dedupeKey: colossusEventKey });
     }, [colossusEventKey, colossusEvent, colossus, queuePoliteAnnouncement]);
 
     // The board as the player can see it (`player-visible-board.ts`): no face-down card shows what

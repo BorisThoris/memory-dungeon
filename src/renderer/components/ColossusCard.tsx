@@ -28,7 +28,8 @@ export function ColossusCard({ colossus, event, reduceMotion }: ColossusCardProp
     const suit = TILE_SUIT_CATALOG[showing];
     const at = colossus.step % colossus.cycle.length;
     const urgent = standing && colossus.turnsLeft <= colossus.hits;
-    const line = event ? colossusBeatLine(event, standing ? showing : null) : COLOSSUS_COPY.rule;
+    const fixed = colossus.form === 'fixed';
+    const line = event ? colossusBeatLine(event, standing ? showing : null, fixed) : fixed ? COLOSSUS_COPY.ruleFixed : COLOSSUS_COPY.rule;
     return (
         <section
             aria-label={colossusCardLabel(colossus, showing, next)}

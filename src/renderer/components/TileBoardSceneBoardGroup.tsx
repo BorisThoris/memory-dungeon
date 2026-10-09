@@ -4,6 +4,7 @@ import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/
 import { TileBoardParticles } from './TileBoardParticles';
 import { ElementGround } from './ElementGround';
 import { MeteorStrike } from './MeteorStrike';
+import { ColossusStone } from './ColossusStone';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -98,6 +99,8 @@ export const TileBoardSceneBoardGroup = ({
         {distantCards}
         <ElementGround board={board} compact={compact} reduceMotion={reduceMotion} />
         {board.meteorImpact && <MeteorStrike key={board.meteorImpact.key} board={board} compact={compact} reduceMotion={reduceMotion} time={visualTime} />}
+        {/* The rules-63 Colossus, two cells by two at the head of the grid (`ColossusStone.tsx`). */}
+        {board.colossus?.form === 'fixed' && <ColossusStone key={board.level} board={board} compact={compact} reduceMotion={reduceMotion} rows={boardRows} time={visualTime} />}
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
             sharedFrameClock={hostConsolidatesTileFrames} />

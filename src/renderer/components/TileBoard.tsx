@@ -1,4 +1,5 @@
 import { boardFitFrame, boardGridWorldSize } from './tileBoardResponsiveLayout';
+import { colossusFitLift, colossusReservedRows } from './colossusStoneLayout';
 import { Canvas } from '@react-three/fiber';
 import {
     forwardRef,
@@ -2109,8 +2110,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */
     const glPowerPreference: WebGLPowerPreference = graphicsQuality === 'high' ? 'high-performance' : 'default';
-    const { width: boardWorldWidth, height: boardWorldHeight } = boardGridWorldSize(board.columns, board.rows, compact);
-    const fitPanY = stageWorldViewport.height * fitFrame.centerYFraction;
+    // A rules-63 Colossus stands in two rows the fit keeps free above the grid (`colossusStoneLayout.ts`).
+    const { width: boardWorldWidth, height: boardWorldHeight } = boardGridWorldSize(board.columns, board.rows + colossusReservedRows(board), compact);
     const fitPanX = stageWorldViewport.width * fitFrame.centerXFraction;
     const fitMargin = getCameraFitMargin({ viewportHeight: stageWorldViewport.height * fitFrame.heightFraction, viewportWidth: stageWorldViewport.width });
     const fitZoom = useMemo(
@@ -2124,6 +2125,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }),
         [boardWorldHeight, boardWorldWidth, fitMargin, fitFrame.heightFraction, fitFrame.widthFraction, stageWorldViewport.height, stageWorldViewport.width]
     );
+    // Lowered by half the Colossus's rows, so they sit above the grid rather than split around it.
+    const fitPanY = stageWorldViewport.height * fitFrame.centerYFraction - colossusFitLift(board) * fitZoom;
     const renderedViewportState = useMemo(() => {
         if (!cameraViewportMode && !desktopCameraMode) {
             return createFittedBoardViewport(fitZoom, fitPanY, fitPanX);

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3027,
-    "codeFileCount": 1154,
-    "exportedSymbolCount": 3645,
+    "trackedFileCount": 3030,
+    "codeFileCount": 1157,
+    "exportedSymbolCount": 3652,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9728
+    "relationshipCount": 9752
   },
   "inventory": [
     {
@@ -819,8 +819,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 58819,
-      "sha256": "7b7d484ec8bfa6c861e3b97ce9d366ea30afa2a151a5ac12b9692c22aa4d720e"
+      "bytes": 60460,
+      "sha256": "38b9836263ce7b591bb690295c6141a284042b545a316490d77ccfa5f13b241e"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2410,13 +2410,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "60c70c03f70707394db948c3b4056b93a5fb70e53b6b35f98bdbc8fbbbe139d6"
+      "sha256": "83473d5ce97127432c11c7eda27bfb76db2d4c9e56fe813203871f488b86ff90"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "791472ffdfcf51cf7b78e008eb1bc53f4eb1b529996c88a8a1713994b9c59de8"
+      "sha256": "af637b25dc3e817ce77d415f16405b48be428f071c954fe459a3a2ecc4f94bd4"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -9849,8 +9849,26 @@
     {
       "path": "src/renderer/components/ColossusCard.tsx",
       "category": "source",
-      "bytes": 5271,
-      "sha256": "eb9aa7dfc7ecf4e832a53d650d43a4fb12249bf1492b1df6d98cf6259d0bb95b"
+      "bytes": 5357,
+      "sha256": "083f19f6744e30a9de42bc2da80aea951d9812a4ac7c0755815d3f946ddc496a"
+    },
+    {
+      "path": "src/renderer/components/ColossusStone.tsx",
+      "category": "source",
+      "bytes": 9764,
+      "sha256": "c199c8e67fff4c700e23b30a16d281bcfe3afc904e971c3d39dcf0e7014d9467"
+    },
+    {
+      "path": "src/renderer/components/colossusStoneLayout.test.ts",
+      "category": "test",
+      "bytes": 1219,
+      "sha256": "d1d5ed5ce66c70bcc814e08da38067f1157b691eda997bce8bd4505bd130d2d1"
+    },
+    {
+      "path": "src/renderer/components/colossusStoneLayout.ts",
+      "category": "source",
+      "bytes": 1642,
+      "sha256": "c63e400e5478adf85653100de866ac940260232a8bb2256fba51065960efe2d7"
     },
     {
       "path": "src/renderer/components/distantCardPage.test.ts",
@@ -10113,8 +10131,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 119013,
-      "sha256": "f14cb3a79f393405799520b23f8b7da93474640a7fbc832a963c64a038e005b7"
+      "bytes": 119146,
+      "sha256": "1f0bd7aaae63d62b1408199d3a3e3dc4b56e71f7b12c754750c7039341596c3a"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10929,8 +10947,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 144041,
-      "sha256": "f715622768b944ca679238c02a5ecad7c83bde337624cb114ed50b33354dae4f"
+      "bytes": 144393,
+      "sha256": "f464a0d788928d1ac859c721fa3b87c2ff771a383e1f5b0533b88d7d8b60f024"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -11445,8 +11463,8 @@
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 8619,
-      "sha256": "6caaa44ba5cd7b928bf4cf2ad5e0703d3d6690723fcc3395ca7e94048802d245"
+      "bytes": 8948,
+      "sha256": "75df7a94e878bcdb31e9cc7d2a4e990284d8f25d80d7352c83c23adfdc827053"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -11919,8 +11937,8 @@
     {
       "path": "src/renderer/copy/colossusBeat.ts",
       "category": "source",
-      "bytes": 2796,
-      "sha256": "4dcba457d6af0fc861c640d67357cde1b69c596fa12033a2fd564b29d3a7852e"
+      "bytes": 4123,
+      "sha256": "eb5524c9bac5f7f82ad8591d13c50786c421aa0419ef8d4841a61d9081ec5354"
     },
     {
       "path": "src/renderer/copy/comboHeatPerksCopy.ts",
@@ -13335,8 +13353,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 59143,
-      "sha256": "535ec8e4a532b139b0e6e6496bece3696cbb08f34c2cc9a589d014310c261308"
+      "bytes": 60784,
+      "sha256": "f9f78aa14d55369313395c4f82dc9c5bac57d36a9be9a847c12a7dd8dfdbc2bf"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -13407,8 +13425,8 @@
     {
       "path": "src/shared/bad-floor-is-quiet.test.ts",
       "category": "test",
-      "bytes": 7420,
-      "sha256": "3b84f0334df6e13a6e05f81209be6e12479b280d84c6e2c4672298ad06b9167d"
+      "bytes": 7969,
+      "sha256": "ea07cd0c27f1e5a49d384e1a00399840eba170069f5366a88cf7812467ef5ed2"
     },
     {
       "path": "src/shared/bake-procedural-illustration-set-script.test.ts",
@@ -13773,14 +13791,14 @@
     {
       "path": "src/shared/colossus-rules.test.ts",
       "category": "test",
-      "bytes": 16735,
-      "sha256": "8cae0f45f6f33afdae361961710625796ac69fe5251f5c3835d5bf2bf9db9c5e"
+      "bytes": 19979,
+      "sha256": "bf503d6ecc07b2f56228d98e6d12cae64a216ee1a52eb071e2abf5f384cbbb4f"
     },
     {
       "path": "src/shared/colossus-rules.ts",
       "category": "source",
-      "bytes": 13271,
-      "sha256": "705a142767d979c77dc6a574551d272338f82fe8af40ff01509baa7f85b76d8b"
+      "bytes": 16595,
+      "sha256": "4e1489cb48564df98341701c8ae11a129c8964709e9b1543d92ac0cc74322a4e"
     },
     {
       "path": "src/shared/combo-heat-perks.test.ts",
@@ -13845,8 +13863,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 52305,
-      "sha256": "1415d10963b3aab148da3d625f0a4e69539083b3879205e8fccc33aadbbfbed8"
+      "bytes": 52627,
+      "sha256": "912e20fc1378418e7fe576cde7627aade324fac71c92b05bd900f705562e9c63"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14637,8 +14655,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 54184,
-      "sha256": "8c5891317be40096699d225ae6b7278b65315a2f4d72a0314dccaca198e4325f"
+      "bytes": 54102,
+      "sha256": "3f83b2205dabb778cf57501802cd8f3deeb72dd5f6c818f8f01ecf99dde701e4"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -15387,8 +15405,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 43135,
-      "sha256": "769563f391249ce1cbca73da8fb4b775d3a6c2b23fe02f05a1bbf2ba8442ef24"
+      "bytes": 44573,
+      "sha256": "69eb24bf85f85dbfe780ec0b9411d21683c2d7110b5633c766cec848c3be95b2"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -15561,8 +15579,8 @@
     {
       "path": "src/shared/sim-endless-output.test.ts",
       "category": "test",
-      "bytes": 11639,
-      "sha256": "344baba4684a720a41922ee6705a5c7a208e520e54aa8ee612a66bac6669c053"
+      "bytes": 11646,
+      "sha256": "30efc8b5fdb0c1bdc18895c3521fc533d9e258a91801720909978601eb27fd67"
     },
     {
       "path": "src/shared/skittish-cards-rules.test.ts",
@@ -15657,8 +15675,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 77006,
-      "sha256": "e9b3df482568dee640310d2c5d28937d587c999c210be04b1e319524579bd8ee"
+      "bytes": 78711,
+      "sha256": "da0dc27b04cea1ac8e0682dfd56e2e295b61b2c51a825b2cbc1f9fd4f306b70b"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -15681,8 +15699,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 151255,
-      "sha256": "d5b369ee08bafa450ae19ba1b0221db840a92169ed368043b300fae8c4ad627f"
+      "bytes": 151695,
+      "sha256": "2408eabc3e8f47f409e7403ccbf76995d7e8fb129f70480f82575481c7cf1d6e"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -15940,7 +15958,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7353,
-      "sha256": "30ffe2078f77543a3675a6eba6556ed74709c23e7cfbb128caabde1c050e5b36"
+      "sha256": "1dc9f6cf57ec5cc5ebedd50fc2568c99a8b9b96b2f8c046e7cbc4bca8ebfe710"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -21365,7 +21383,7 @@
       "path": "src/renderer/components/ColossusCard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 92,
       "imports": [
         "file:src/renderer/copy/colossusBeat.ts",
         "file:src/shared/colossus-rules.ts",
@@ -21378,6 +21396,60 @@
         "symbol:src/renderer/components/ColossusCard.tsx#ColossusCardProps"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/ColossusStone.tsx",
+      "path": "src/renderer/components/ColossusStone.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 186,
+      "imports": [
+        "file:src/renderer/components/cardBackInk.ts",
+        "file:src/renderer/components/cardDissolveMaterial.ts",
+        "file:src/renderer/components/colossusStoneLayout.ts",
+        "file:src/renderer/components/ElementCardBack.tsx",
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/shared/colossus-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/ColossusStone.tsx#ColossusStone"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/colossusStoneLayout.test.ts",
+      "path": "src/renderer/components/colossusStoneLayout.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 24,
+      "imports": [
+        "file:src/renderer/components/colossusStoneLayout.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/colossusStoneLayout.ts",
+      "path": "src/renderer/components/colossusStoneLayout.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 29,
+      "imports": [
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/colossusStoneLayout.ts#COLOSSUS_STONE_ROWS",
+        "symbol:src/renderer/components/colossusStoneLayout.ts#colossusFitLift",
+        "symbol:src/renderer/components/colossusStoneLayout.ts#colossusReservedRows",
+        "symbol:src/renderer/components/colossusStoneLayout.ts#colossusStoneLayout"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/colossusStoneLayout.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/distantCardPage.test.ts",
@@ -22096,7 +22168,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2355,
+      "lineCount": 2356,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -24324,10 +24396,11 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3276,
+      "lineCount": 3279,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
+        "file:src/renderer/components/colossusStoneLayout.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
         "file:src/renderer/components/tileBoardCanvasContext.ts",
         "file:src/renderer/components/tileBoardDomAccessibility.ts",
@@ -25959,8 +26032,9 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 205,
+      "lineCount": 208,
       "imports": [
+        "file:src/renderer/components/ColossusStone.tsx",
         "file:src/renderer/components/ElementGround.tsx",
         "file:src/renderer/components/MeteorStrike.tsx",
         "file:src/renderer/components/TileBezel.tsx",
@@ -26707,6 +26781,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/boardParticleRim.test.ts",
+        "file:src/renderer/components/colossusStoneLayout.test.ts",
         "file:src/renderer/components/tileBoardTransform.test.ts",
         "file:src/renderer/components/tileShatter.test.ts",
         "file:src/renderer/components/tileTextures.test.ts"
@@ -27301,7 +27376,7 @@
       "path": "src/renderer/copy/colossusBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 55,
+      "lineCount": 69,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts"
@@ -31164,7 +31239,7 @@
       "path": "src/shared/bad-floor-is-quiet.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 140,
+      "lineCount": 149,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -32420,7 +32495,7 @@
       "path": "src/shared/colossus-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 293,
+      "lineCount": 349,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/colossus-rules.ts",
@@ -32436,7 +32511,7 @@
       "path": "src/shared/colossus-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 322,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -32448,7 +32523,9 @@
       ],
       "exports": [
         "symbol:src/shared/colossus-rules.ts#applyColossusTurnToRun",
+        "symbol:src/shared/colossus-rules.ts#COLOSSUS_BREAK_PAIRS",
         "symbol:src/shared/colossus-rules.ts#COLOSSUS_CHIPS_PER_HIT",
+        "symbol:src/shared/colossus-rules.ts#COLOSSUS_FIXED_FROM",
         "symbol:src/shared/colossus-rules.ts#COLOSSUS_GOLD_PER_HIT",
         "symbol:src/shared/colossus-rules.ts#COLOSSUS_MAX_SPLIT_PAIRS",
         "symbol:src/shared/colossus-rules.ts#COLOSSUS_MIN_PAIRS",
@@ -32684,7 +32761,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1152,
+      "lineCount": 1158,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -32807,6 +32884,7 @@
         "file:src/renderer/components/boardTrauma.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
+        "file:src/renderer/components/colossusStoneLayout.test.ts",
         "file:src/renderer/components/elementScene.test.ts",
         "file:src/renderer/components/FloorClearBeat.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -35699,7 +35777,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 757,
+      "lineCount": 756,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -38220,7 +38298,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 742,
+      "lineCount": 755,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -39275,7 +39353,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2335,
+      "lineCount": 2337,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -44178,7 +44256,7 @@
       "kind": "function",
       "file": "src/renderer/components/ColossusCard.tsx",
       "line": 24,
-      "endLine": 90
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/ColossusCard.tsx#ColossusCardProps",
@@ -44187,6 +44265,46 @@
       "file": "src/renderer/components/ColossusCard.tsx",
       "line": 9,
       "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/ColossusStone.tsx#ColossusStone",
+      "name": "ColossusStone",
+      "kind": "function",
+      "file": "src/renderer/components/ColossusStone.tsx",
+      "line": 97,
+      "endLine": 185
+    },
+    {
+      "id": "symbol:src/renderer/components/colossusStoneLayout.ts#COLOSSUS_STONE_ROWS",
+      "name": "COLOSSUS_STONE_ROWS",
+      "kind": "value",
+      "file": "src/renderer/components/colossusStoneLayout.ts",
+      "line": 11,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusFitLift",
+      "name": "colossusFitLift",
+      "kind": "value",
+      "file": "src/renderer/components/colossusStoneLayout.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusReservedRows",
+      "name": "colossusReservedRows",
+      "kind": "value",
+      "file": "src/renderer/components/colossusStoneLayout.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusStoneLayout",
+      "name": "colossusStoneLayout",
+      "kind": "value",
+      "file": "src/renderer/components/colossusStoneLayout.ts",
+      "line": 22,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
@@ -44649,8 +44767,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2354,
-      "endLine": 2354
+      "line": 2355,
+      "endLine": 2355
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -47145,24 +47263,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3275,
-      "endLine": 3275
+      "line": 3278,
+      "endLine": 3278
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 293,
-      "endLine": 300
+      "line": 294,
+      "endLine": 301
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 302,
-      "endLine": 306
+      "line": 303,
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -49081,8 +49199,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 57,
-      "endLine": 204
+      "line": 58,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -50729,40 +50847,40 @@
       "name": "COLOSSUS_COPY",
       "kind": "value",
       "file": "src/renderer/copy/colossusBeat.ts",
-      "line": 11,
-      "endLine": 20
+      "line": 12,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/copy/colossusBeat.ts#colossusBeatLine",
       "name": "colossusBeatLine",
       "kind": "value",
       "file": "src/renderer/copy/colossusBeat.ts",
-      "line": 35,
-      "endLine": 50
+      "line": 39,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/copy/colossusBeat.ts#colossusCalloutSub",
       "name": "colossusCalloutSub",
       "kind": "value",
       "file": "src/renderer/copy/colossusBeat.ts",
-      "line": 53,
-      "endLine": 54
+      "line": 63,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/copy/colossusBeat.ts#colossusCardLabel",
       "name": "colossusCardLabel",
       "kind": "value",
       "file": "src/renderer/copy/colossusBeat.ts",
-      "line": 28,
-      "endLine": 32
+      "line": 31,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/copy/colossusBeat.ts#colossusClockLabel",
       "name": "colossusClockLabel",
       "kind": "value",
       "file": "src/renderer/copy/colossusBeat.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/comboHeatPerksCopy.ts#comboHeatPerksLine",
@@ -56681,40 +56799,56 @@
       "name": "applyColossusTurnToRun",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 240,
-      "endLine": 264
+      "line": 297,
+      "endLine": 321
+    },
+    {
+      "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_BREAK_PAIRS",
+      "name": "COLOSSUS_BREAK_PAIRS",
+      "kind": "value",
+      "file": "src/shared/colossus-rules.ts",
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_CHIPS_PER_HIT",
       "name": "COLOSSUS_CHIPS_PER_HIT",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 61,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_FIXED_FROM",
+      "name": "COLOSSUS_FIXED_FROM",
+      "kind": "value",
+      "file": "src/shared/colossus-rules.ts",
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_GOLD_PER_HIT",
       "name": "COLOSSUS_GOLD_PER_HIT",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_MAX_SPLIT_PAIRS",
       "name": "COLOSSUS_MAX_SPLIT_PAIRS",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 62,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_MIN_PAIRS",
       "name": "COLOSSUS_MIN_PAIRS",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_RULES_FROM",
@@ -56729,72 +56863,72 @@
       "name": "COLOSSUS_SCORE_PER_HIT",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#colossusElement",
       "name": "colossusElement",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 143,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#colossusHitsForPairs",
       "name": "colossusHitsForPairs",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#colossusNextElement",
       "name": "colossusNextElement",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 91,
-      "endLine": 91
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#colossusStands",
       "name": "colossusStands",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 92,
-      "endLine": 92
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#ColossusTurn",
       "name": "ColossusTurn",
       "kind": "interface",
       "file": "src/shared/colossus-rules.ts",
-      "line": 94,
-      "endLine": 101
+      "line": 148,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#colossusTurnsForHits",
       "name": "colossusTurnsForHits",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#raiseColossus",
       "name": "raiseColossus",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 65,
-      "endLine": 86
+      "line": 94,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#resolveColossusTurn",
       "name": "resolveColossusTurn",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 171,
-      "endLine": 237
+      "line": 226,
+      "endLine": 294
     },
     {
       "id": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
@@ -57273,16 +57407,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1029,
-      "endLine": 1029
+      "line": 1035,
+      "endLine": 1035
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1099,
-      "endLine": 1101
+      "line": 1105,
+      "endLine": 1107
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -57337,8 +57471,8 @@
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 546,
-      "endLine": 557
+      "line": 552,
+      "endLine": 563
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
@@ -57346,7 +57480,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 518,
-      "endLine": 534
+      "endLine": 540
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
@@ -57361,8 +57495,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1107,
-      "endLine": 1112
+      "line": 1113,
+      "endLine": 1118
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -57393,8 +57527,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1125,
-      "endLine": 1151
+      "line": 1131,
+      "endLine": 1157
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -57529,16 +57663,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 678,
-      "endLine": 682
+      "line": 684,
+      "endLine": 688
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 684,
-      "endLine": 694
+      "line": 690,
+      "endLine": 700
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -57553,8 +57687,8 @@
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 538,
-      "endLine": 544
+      "line": 544,
+      "endLine": 550
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -57585,8 +57719,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 577,
-      "endLine": 622
+      "line": 583,
+      "endLine": 628
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -57697,24 +57831,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 707,
-      "endLine": 719
+      "line": 713,
+      "endLine": 725
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 721,
-      "endLine": 734
+      "line": 727,
+      "endLine": 740
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1031,
-      "endLine": 1044
+      "line": 1037,
+      "endLine": 1050
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -57825,16 +57959,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1115,
-      "endLine": 1115
+      "line": 1121,
+      "endLine": 1121
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1118,
-      "endLine": 1123
+      "line": 1124,
+      "endLine": 1129
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -57857,16 +57991,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1092,
-      "endLine": 1096
+      "line": 1098,
+      "endLine": 1102
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1090,
-      "endLine": 1090
+      "line": 1096,
+      "endLine": 1096
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -57881,16 +58015,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1051,
-      "endLine": 1063
+      "line": 1057,
+      "endLine": 1069
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 736,
-      "endLine": 1027
+      "line": 742,
+      "endLine": 1033
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -57905,16 +58039,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 639,
-      "endLine": 676
+      "line": 645,
+      "endLine": 682
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 696,
-      "endLine": 701
+      "line": 702,
+      "endLine": 707
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -57929,8 +58063,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1065,
-      "endLine": 1084
+      "line": 1071,
+      "endLine": 1090
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -57945,8 +58079,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 559,
-      "endLine": 575
+      "line": 565,
+      "endLine": 581
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -58009,8 +58143,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 638,
-      "endLine": 638
+      "line": 644,
+      "endLine": 644
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -58041,16 +58175,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 629,
-      "endLine": 636
+      "line": 635,
+      "endLine": 642
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 624,
-      "endLine": 627
+      "line": 630,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -62273,16 +62407,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 724,
-      "endLine": 742
+      "line": 723,
+      "endLine": 741
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 745,
-      "endLine": 756
+      "line": 744,
+      "endLine": 755
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -62290,7 +62424,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 585,
-      "endLine": 721
+      "endLine": 720
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -66250,7 +66384,7 @@
       "kind": "value",
       "file": "src/shared/run-soak.ts",
       "line": 156,
-      "endLine": 451
+      "endLine": 464
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -66273,8 +66407,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 463,
-      "endLine": 741
+      "line": 476,
+      "endLine": 754
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -67833,32 +67967,32 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2294,
-      "endLine": 2294
+      "line": 2296,
+      "endLine": 2296
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2167,
-      "endLine": 2271
+      "line": 2169,
+      "endLine": 2273
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2300,
-      "endLine": 2305
+      "line": 2302,
+      "endLine": 2307
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2284,
-      "endLine": 2284
+      "line": 2286,
+      "endLine": 2286
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
@@ -67866,23 +68000,23 @@
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 430,
-      "endLine": 2154
+      "endLine": 2156
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2308,
-      "endLine": 2314
+      "line": 2310,
+      "endLine": 2316
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2334,
-      "endLine": 2334
+      "line": 2336,
+      "endLine": 2336
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
@@ -67905,8 +68039,8 @@
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2273,
-      "endLine": 2276
+      "line": 2275,
+      "endLine": 2278
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
@@ -67929,16 +68063,16 @@
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2287,
-      "endLine": 2291
+      "line": 2289,
+      "endLine": 2293
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2316,
-      "endLine": 2332
+      "line": 2318,
+      "endLine": 2334
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -77832,6 +77966,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/ColossusStone.tsx->symbol:src/renderer/components/ColossusStone.tsx#ColossusStone",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "symbol:src/renderer/components/ColossusStone.tsx#ColossusStone",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/colossusStoneLayout.ts->symbol:src/renderer/components/colossusStoneLayout.ts#COLOSSUS_STONE_ROWS",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "symbol:src/renderer/components/colossusStoneLayout.ts#COLOSSUS_STONE_ROWS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/colossusStoneLayout.ts->symbol:src/renderer/components/colossusStoneLayout.ts#colossusFitLift",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusFitLift",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/colossusStoneLayout.ts->symbol:src/renderer/components/colossusStoneLayout.ts#colossusReservedRows",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusReservedRows",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/colossusStoneLayout.ts->symbol:src/renderer/components/colossusStoneLayout.ts#colossusStoneLayout",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "symbol:src/renderer/components/colossusStoneLayout.ts#colossusStoneLayout",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/distantCardPage.ts->symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
       "source": "file:src/renderer/components/distantCardPage.ts",
       "target": "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
@@ -87204,9 +87368,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/colossus-rules.ts->symbol:src/shared/colossus-rules.ts#COLOSSUS_BREAK_PAIRS",
+      "source": "file:src/shared/colossus-rules.ts",
+      "target": "symbol:src/shared/colossus-rules.ts#COLOSSUS_BREAK_PAIRS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/colossus-rules.ts->symbol:src/shared/colossus-rules.ts#COLOSSUS_CHIPS_PER_HIT",
       "source": "file:src/shared/colossus-rules.ts",
       "target": "symbol:src/shared/colossus-rules.ts#COLOSSUS_CHIPS_PER_HIT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/colossus-rules.ts->symbol:src/shared/colossus-rules.ts#COLOSSUS_FIXED_FROM",
+      "source": "file:src/shared/colossus-rules.ts",
+      "target": "symbol:src/shared/colossus-rules.ts#COLOSSUS_FIXED_FROM",
       "kind": "exports"
     },
     {
@@ -101182,6 +101358,78 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/renderer/components/cardBackInk.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/renderer/components/cardBackInk.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/renderer/components/colossusStoneLayout.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/renderer/components/colossusStoneLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/renderer/components/ElementCardBack.tsx",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/renderer/components/ElementCardBack.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/shared/colossus-rules.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/shared/colossus-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ColossusStone.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/ColossusStone.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/colossusStoneLayout.test.ts->src/renderer/components/colossusStoneLayout.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.test.ts",
+      "target": "file:src/renderer/components/colossusStoneLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/colossusStoneLayout.test.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.test.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/colossusStoneLayout.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/colossusStoneLayout.ts->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/colossusStoneLayout.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/distantCardPage.test.ts->src/renderer/components/distantCardPage.ts",
       "source": "file:src/renderer/components/distantCardPage.test.ts",
       "target": "file:src/renderer/components/distantCardPage.ts",
@@ -105196,6 +105444,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/colossusStoneLayout.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/components/colossusStoneLayout.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/shuffleFlipAnimation.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/shuffleFlipAnimation.ts",
@@ -107125,6 +107379,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/ColossusStone.tsx",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/renderer/components/ColossusStone.tsx",
       "kind": "imports"
     },
     {
@@ -124010,6 +124270,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/colossusStoneLayout.ts->file:src/renderer/components/colossusStoneLayout.test.ts",
+      "source": "file:src/renderer/components/colossusStoneLayout.ts",
+      "target": "file:src/renderer/components/colossusStoneLayout.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/distantCardPage.ts->file:src/renderer/components/distantCardPage.test.ts",
       "source": "file:src/renderer/components/distantCardPage.ts",
       "target": "file:src/renderer/components/distantCardPage.test.ts",
@@ -125027,6 +125293,12 @@
       "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/boardParticleRim.test.ts",
       "source": "file:src/renderer/components/tileShatter.ts",
       "target": "file:src/renderer/components/boardParticleRim.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileShatter.ts->file:src/renderer/components/colossusStoneLayout.test.ts",
+      "source": "file:src/renderer/components/tileShatter.ts",
+      "target": "file:src/renderer/components/colossusStoneLayout.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126689,6 +126961,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/CollectionScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/CollectionScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/colossusStoneLayout.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/colossusStoneLayout.test.ts",
       "kind": "tested_by"
     },
     {

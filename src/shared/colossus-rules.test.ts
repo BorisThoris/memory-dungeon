@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import {
+    COLOSSUS_BREAK_PAIRS,
     COLOSSUS_CHIPS_PER_HIT,
+    COLOSSUS_FIXED_FROM,
     COLOSSUS_GOLD_PER_HIT,
     COLOSSUS_MAX_SPLIT_PAIRS,
     COLOSSUS_MIN_PAIRS,
@@ -288,5 +290,59 @@ describe('the floor under it', () => {
         expect(board.tiles).toHaveLength(16);
         expect(board.tiles.some((tile) => tile.pairKey.includes('colossus'))).toBe(false);
         expect(inspectBoardFairness(board).issues).toEqual([]);
+    });
+});
+
+describe('the fixed Colossus (rules 63)', () => {
+    const fixedBoard = (pairs = 8, suits: readonly TileSuit[] = TWO, runSeed = 11): BoardState =>
+        raiseColossus(makeBoard(deck(pairs, suits), { level: 7, columns: 4, rows: Math.ceil((pairs * 2) / 4), pairCount: pairs, floorTag: 'boss' }), {
+            runSeed,
+            rulesVersion: COLOSSUS_FIXED_FROM
+        });
+
+    it('shows one element it can be beaten with, all fight long', () => {
+        for (const runSeed of [1, 2, 3, 4, 5, 6, 7, 8]) {
+            const board = fixedBoard(8, TWO, runSeed);
+            const colossus = board.colossus!;
+            expect(colossus.form).toBe('fixed');
+            expect(colossus.cycle).toHaveLength(1);
+            const held = new Set(board.tiles.filter((tile) => tile.suit === colossus.cycle[0]).map((tile) => tile.pairKey)).size;
+            expect(held).toBeGreaterThanOrEqual(colossus.hits);
+        }
+        // Asks only for what the floor holds: three pairs of each, and a floor that would ask four.
+        const thin = fixedBoard(16, SUITS);
+        const element = thin.colossus!.cycle[0]!;
+        expect(thin.colossus!.hits).toBeLessThanOrEqual(new Set(thin.tiles.filter((tile) => tile.suit === element).map((tile) => tile.pairKey)).size);
+    });
+
+    it('takes a hit only from its element, never a chip, and keeps showing it', () => {
+        const board = fixedBoard();
+        const element = colossusElement(board.colossus!);
+        const other = TWO.find((suit) => suit !== element)!;
+        const off = resolveColossusTurn({ board, outcome: 'match', pairsBySuit: { [other]: 1 }, turnsThisFloor: 1 });
+        expect(off.event?.kind).toBe('turn');
+        expect(off.board.colossus).toMatchObject({ hits: board.colossus!.hits, chips: 0, step: 0 });
+        expect(colossusElement(off.board.colossus!)).toBe(element);
+        const on = resolveColossusTurn({ board: off.board, outcome: 'match', pairsBySuit: { [element]: 1 }, turnsThisFloor: 2 });
+        expect(on.event?.kind).toBe('hit');
+        expect(on.board.colossus!.hits).toBe(board.colossus!.hits - 1);
+    });
+
+    it('out of turns, breaks into two face-down pairs of its own element', () => {
+        const board = fixedBoard();
+        const last = { ...board, colossus: { ...board.colossus!, turnsLeft: 1 } };
+        const broken = resolveColossusTurn({ board: last, outcome: 'miss', turnsThisFloor: 5 });
+        const element = colossusElement(board.colossus!);
+        expect(broken.event).toMatchObject({ kind: 'split', pairs: COLOSSUS_BREAK_PAIRS });
+        expect(broken.litTileIds).toEqual([]);
+        const pieces = broken.board.tiles.filter((tile) => broken.board.colossus!.splitPairKeys!.includes(tile.pairKey));
+        expect(pieces).toHaveLength(2 * COLOSSUS_BREAK_PAIRS);
+        expect(pieces.every((tile) => tile.suit === element && tile.state === 'hidden')).toBe(true);
+        expect(broken.board.pairCount).toBe(board.pairCount + COLOSSUS_BREAK_PAIRS);
+    });
+
+    it('leaves a rules-62 Colossus turning as it did', () => {
+        expect(bossBoard().colossus!.form).toBeUndefined();
+        expect(bossBoard().colossus!.cycle.length).toBeGreaterThanOrEqual(2);
     });
 });

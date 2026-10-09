@@ -16,7 +16,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 61: automatic camp rewards without a shop stop. */
-export const GAME_RULES_VERSION = 62;
+export const GAME_RULES_VERSION = 63;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -531,6 +531,12 @@ export interface ColossusState {
     status: 'standing' | 'felled' | 'split';
     /** The pairs it split into, once it has. */
     splitPairKeys?: string[];
+    /**
+     * 'fixed' from rules 63 (`COLOSSUS_FIXED_FROM`): one element for the whole fight, a hit for each
+     * turn that takes a pair of it, no chips, and out of turns it breaks into two face-down pairs of
+     * its own element. Absent: the rules-62 Colossus that turns through `cycle`.
+     */
+    form?: 'fixed';
 }
 
 /** What the Colossus did on a turn, for the HUD to say once. */

@@ -1,5 +1,5 @@
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
-import { COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
+import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
@@ -154,21 +154,34 @@ const nonNegativeInteger = (value: unknown): boolean => typeof value === 'number
 
 /** Every invariant, in the order a failure is most useful to read. */
 export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
-    'a standing Colossus has hits and turns left, and an order of two elements or more': (_b, run) => {
+    'a standing Colossus has hits and turns left, and either one element of its own or an order of two or more': (_b, run) => {
         const colossus = run.board?.colossus;
         if (!colossus || colossus.status !== 'standing') return null;
         if (colossus.hits < 1 || colossus.hits > colossus.hitsMax) return `standing with ${colossus.hits} of ${colossus.hitsMax} hits`;
         if (colossus.turnsLeft < 1 || colossus.turnsLeft > colossus.turnsMax) return `standing with ${colossus.turnsLeft} of ${colossus.turnsMax} turns`;
         if (colossus.chips < 0 || colossus.chips >= COLOSSUS_CHIPS_PER_HIT) return `holding ${colossus.chips} chips`;
+        // Rules 63: one element all fight long, and no chips (`COLOSSUS_FIXED_FROM`).
+        if (colossus.form === 'fixed') return colossus.cycle.length === 1 && colossus.chips === 0 && colossus.step === 0 ? null : `a fixed Colossus showing ${colossus.cycle.join(',')} at step ${colossus.step} with ${colossus.chips} chips`;
         return new Set(colossus.cycle).size >= 2 ? null : `its order is ${colossus.cycle.join(',')}`;
     },
-    'a Colossus splits once, into two pairs at most, and only out of turns': (_b, run) => {
+    'a Colossus splits once, into its pairs, and only out of turns': (_b, run) => {
         const colossus = run.board?.colossus;
         if ((run.colossusSplitsThisFloor ?? 0) > 1) return `split ${run.colossusSplitsThisFloor} times on one floor`;
         if (!colossus || colossus.status !== 'split') return null;
         const pairs = colossus.splitPairKeys?.length ?? 0;
-        if (pairs < 1 || pairs > COLOSSUS_MAX_SPLIT_PAIRS || pairs > colossus.hits) return `split into ${pairs} pairs with ${colossus.hits} hits left`;
+        if (colossus.form === 'fixed') {
+            if (pairs !== COLOSSUS_BREAK_PAIRS) return `a fixed Colossus broke into ${pairs} pairs, not ${COLOSSUS_BREAK_PAIRS}`;
+        } else if (pairs < 1 || pairs > COLOSSUS_MAX_SPLIT_PAIRS || pairs > colossus.hits) return `split into ${pairs} pairs with ${colossus.hits} hits left`;
         return colossus.turnsLeft === 0 ? null : `split with ${colossus.turnsLeft} turns left`;
+    },
+    'a fixed Colossus breaks into pairs of its own element, dealt face down': (before, run) => {
+        const colossus = run.board?.colossus;
+        if (!colossus || colossus.form !== 'fixed' || colossus.status !== 'split' || before?.board?.colossus?.status !== 'standing' || !run.board) return null;
+        const element = colossus.cycle[0];
+        const pieces = run.board.tiles.filter((tile) => colossus.splitPairKeys?.includes(tile.pairKey));
+        if (pieces.length !== 2 * COLOSSUS_BREAK_PAIRS) return `it broke into ${pieces.length} cards`;
+        const wrong = pieces.find((tile) => tile.suit !== element || tile.state !== 'hidden' || (run.realmLitTileIds ?? []).includes(tile.id));
+        return wrong ? `piece ${wrong.id} is ${wrong.suit} ${wrong.state}${(run.realmLitTileIds ?? []).includes(wrong.id) ? ' and shown' : ''}, expected a face-down ${element} card` : null;
     },
     'the Colossus moves only when a turn is counted': (before, run) => {
         if (!before) return null;

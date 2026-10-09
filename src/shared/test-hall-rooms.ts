@@ -2057,45 +2057,47 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'colossus',
         title: 'Colossus: the boss card',
-        mechanic: 'On a boss floor a great card stands over the board. It shows one element and turns to the next every turn. Match its element for a hit; any other match is a chip, and two chips are a hit. Fell it in time and it pays.',
+        mechanic: 'On a boss floor a great card stands at the head of the board showing one element, for the whole fight. Each turn that takes a pair of its element is a hit; nothing else hurts it. Fell it in time and it pays.',
         graphMechanicIds: ['hazard.colossus'],
-        tryThis: 'It shows fire, then water, then fire. Match a fire pair (a) now for a hit. Then match off its element and watch a chip land instead.',
-        build: () => colossusRoom(),
+        tryThis: 'It shows fire and takes two hits. Match a fire pair (a) for a hit, then a water pair (b): nothing. Miss, then match fire again (c) to fell it.',
+        // The element is the room's, not the seed's: the deal picks one the floor can beat it with.
+        build: () => colossusRoom((colossus) => ({ ...colossus, cycle: ['ember'] })),
         script: [
-            { step: { do: 'match', pairKey: 'a' }, says: 'fire on fire is a hit, and it turns to water', expect: expectAll(colossusEventIs('hit'), colossusIs({ hits: 1, chips: 0, turnsLeft: 5, showing: 'tide', status: 'standing' }), (r) => (r.colossusHitsThisFloor === 1 ? null : `hits counted ${r.colossusHitsThisFloor}`)) },
-            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss lands nothing, but it still turns, back to fire, and its clock runs', expect: expectAll(colossusEventIs('turn'), colossusIs({ hits: 1, turnsLeft: 4, showing: 'ember' })) },
-            { step: { do: 'match', pairKey: 'b' }, says: 'water while it shows fire is a chip, not a hit', expect: expectAll(colossusEventIs('chip'), colossusIs({ hits: 1, chips: 1, turnsLeft: 3, showing: 'tide' })) },
-            { step: { do: 'match', pairKey: 'c' }, says: 'a second chip makes the last hit: it falls and pays score and gold for both', expect: expectAll(colossusEventIs('felled'), colossusIs({ hits: 0, status: 'felled' }), (r, before) => (runGold(r) - runGold(before) >= 4 ? null : `gold rose by ${runGold(r) - runGold(before)}, expected its 4`), (r) => (r.colossiFelledThisRun === 1 ? null : `felled counted ${r.colossiFelledThisRun}`)) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'fire on fire is a hit, and it keeps showing fire', expect: expectAll(colossusEventIs('hit'), colossusIs({ hits: 1, chips: 0, turnsLeft: 5, showing: 'ember', status: 'standing' }), (r) => (r.colossusHitsThisFloor === 1 ? null : `hits counted ${r.colossusHitsThisFloor}`)) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'a water pair does not hurt a fire Colossus: no hit, no chip, and its clock runs', expect: expectAll(colossusEventIs('turn'), colossusIs({ hits: 1, chips: 0, turnsLeft: 4, showing: 'ember' })) },
+            { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss lands nothing either', expect: expectAll(colossusEventIs('turn'), colossusIs({ hits: 1, turnsLeft: 3, showing: 'ember' })) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'the second fire pair fells it, and it pays score and gold for both hits', expect: expectAll(colossusEventIs('felled'), colossusIs({ hits: 0, status: 'felled' }), (r, before) => (runGold(r) - runGold(before) >= 4 ? null : `gold rose by ${runGold(r) - runGold(before)}, expected its 4`), (r) => (r.colossiFelledThisRun === 1 ? null : `felled counted ${r.colossiFelledThisRun}`)) },
             { step: { do: 'match', pairKey: 'd' }, says: 'felled, it is out of the fight: a match is only a match', expect: expectAll(colossusIs({ status: 'felled' }), colossusEventIs('felled')) },
             { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
         ]
     },
     {
         id: 'colossus-split',
-        title: 'Colossus: out of time, it splits',
-        mechanic: 'A Colossus still standing when its turns run out splits: one new pair for each hit it had left, two at most, dealt into cleared cells and shown face up until the next flip. It never leaves a floor that cannot be finished.',
+        title: 'Colossus: out of time, it breaks',
+        mechanic: 'A Colossus still standing when its turns run out breaks into its four cells\' worth of cards: two new pairs of its own element, dealt face down into cleared cells or onto the end of the board. They are pairs like any other, so the floor can always be finished.',
         graphMechanicIds: ['hazard.colossus'],
-        tryThis: 'It has two turns left and two hits in it. Land one hit (a), then miss: it splits into one pair, in the cells the fire pair left, face up.',
-        build: () => colossusRoom((colossus) => ({ ...colossus, turnsLeft: 2 })),
+        tryThis: 'It shows fire, has two turns left and two hits in it. Land one hit (a), then miss: it breaks into two fire pairs, face down, one where the matched pair was.',
+        build: () => colossusRoom((colossus) => ({ ...colossus, cycle: ['ember'], turnsLeft: 2 })),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'a hit, with one turn left', expect: colossusIs({ hits: 1, turnsLeft: 1, status: 'standing' }) },
             {
                 step: { do: 'miss', a: 'c-1', b: 'd-1' },
-                says: 'time is up: it splits into one pair, where the matched pair was, shown face up',
+                says: 'time is up: it breaks into two fire pairs, face down, the first where the matched pair was',
                 expect: expectAll(
                     colossusEventIs('split'),
                     colossusIs({ status: 'split', turnsLeft: 0 }),
                     (r) => (r.colossusSplitsThisFloor === 1 ? null : `splits counted ${r.colossusSplitsThisFloor}`),
-                    (r, before) => (r.board!.tiles.length === before.board!.tiles.length ? null : 'the board grew instead of reusing the cleared cells'),
+                    (r, before) => (r.board!.tiles.length === before.board!.tiles.length + 2 ? null : `the board has ${r.board!.tiles.length} cards, expected one reused pair and one new`),
                     (r) => {
-                        const shards = r.board!.tiles.filter((t) => t.pairKey === '7-colossus-0');
-                        return shards.length === 2 && shards.every((t) => t.state === 'hidden' && (r.realmLitTileIds ?? []).includes(t.id)) ? null : 'the split pair is not two face-down cards shown lit';
+                        const shards = r.board!.tiles.filter((t) => t.pairKey.startsWith('7-colossus-'));
+                        return shards.length === 4 && shards.every((t) => t.state === 'hidden' && t.suit === 'ember' && !(r.realmLitTileIds ?? []).includes(t.id)) ? null : 'the break is not four face-down fire cards';
                     },
-                    (r) => (r.board!.matchedPairs === 0 ? null : `matched pairs ${r.board!.matchedPairs}, expected the reused pair uncounted`),
+                    (r) => (r.board!.matchedPairs === 0 && r.board!.pairCount === 9 ? null : `matched ${r.board!.matchedPairs} of ${r.board!.pairCount}, expected 0 of 9`),
                     finishable
                 )
             },
-            { step: { do: 'match', pairKey: '7-colossus-0' }, says: 'the split pair is a pair like any other, and it does not split twice', expect: expectAll(isGone('7-colossus-0'), colossusIs({ status: 'split' })) },
+            { step: { do: 'match', pairKey: '7-colossus-0' }, says: 'the broken pieces are pairs like any other, and it does not break twice', expect: expectAll(isGone('7-colossus-0'), colossusIs({ status: 'split' })) },
+            { step: { do: 'match', pairKey: '7-colossus-1' }, says: 'the second piece too', expect: isGone('7-colossus-1') },
             { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
         ]
     },
