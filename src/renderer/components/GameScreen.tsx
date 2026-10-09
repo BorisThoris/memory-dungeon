@@ -1967,7 +1967,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         {/* The board's crown: the Colossus and the odd cards' key, hung under the HUD. The board
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
-                            <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-testid="board-crown">
+                            <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
                                 {colossus ? <ColossusCard colossus={colossus} event={colossusEvent} reduceMotion={reduceMotion} /> : null}
                                 <OddCardLegend entries={oddCardEntries} />
                             </div>

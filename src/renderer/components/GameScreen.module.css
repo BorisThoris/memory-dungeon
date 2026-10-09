@@ -349,6 +349,20 @@
 }
 
 /* The board's crown: the Colossus and the odd cards' key, centred under the HUD and over the stage. */
+/*
+ * While the memorize countdown stands over the board's top edge, the odd cards' key keeps its room
+ * (the board does not refit) but stays hidden, then fades in as play starts: the two used to print
+ * over each other. The cards wear the same marks meanwhile.
+ */
+.boardCrown [data-testid='odd-card-legend'] {
+    transition: opacity 420ms ease;
+}
+
+.boardCrown[data-memorize='true'] [data-testid='odd-card-legend'] {
+    opacity: 0;
+    visibility: hidden;
+}
+
 .boardCrown {
     position: absolute;
     top: 0;
