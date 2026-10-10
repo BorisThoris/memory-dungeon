@@ -1642,7 +1642,8 @@ const pumpDemandOverlayPrewarm = (deadline?: IdleDeadline): void => {
  */
 export const runDemandDrivenTileFaceOverlayPrewarmSession = (
     pairKeys: readonly string[],
-    graphicsQuality: GraphicsQualityPreset
+    graphicsQuality: GraphicsQualityPreset,
+    tiles?: readonly Tile[]
 ): (() => void) => {
     if (!canDraw() || pairKeys.length === 0) {
         return () => undefined;
@@ -1650,13 +1651,20 @@ export const runDemandDrivenTileFaceOverlayPrewarmSession = (
 
     syncIllustrationOverlayCacheVersion();
     demandOverlayPrewarmGraphicsQuality = graphicsQuality;
-    const sessionKeys = new Set(pairKeys);
+    // Loaded illustrations never draw the procedural fallback. Warming it anyway retained
+    // large canvases and scheduled unnecessary image work during the first turns of every floor.
+    const fallbackPairKeys = tiles ? new Set(tiles.filter(tile => {
+        const url = resolveCardIllustrationUrl(tile, CARD_ILLUSTRATION_REGISTRY);
+        if (url && getCardIllustrationImageByUrl(url)?.naturalWidth) return false;
+        return tileUsesProgrammaticFaceMotif(tile) || !isCardRasterDeckEnabled();
+    }).map(tile => tile.pairKey)) : null;
+    const sessionKeys = new Set(pairKeys.filter(key => !fallbackPairKeys || fallbackPairKeys.has(key)));
 
-    for (const k of pairKeys) {
+    for (const k of sessionKeys) {
         demandOverlayPairKeyQueue.add(k);
     }
 
-    if (demandOverlayPrewarmHandle == null) {
+    if (sessionKeys.size > 0 && demandOverlayPrewarmHandle == null) {
         demandOverlayPrewarmHandle = schedulePrewarmStep(pumpDemandOverlayPrewarm);
     }
 

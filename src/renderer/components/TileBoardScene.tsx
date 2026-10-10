@@ -235,10 +235,19 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * transition, rather than on its first reveal, first match and first miss (`tileTextureWarmup`).
      */
     const warmedFloorRef = useRef<string | null>(null);
+    useLayoutEffect(() => () => {
+        warmedFloorRef.current = null;
+        prewarmRealmTileMarks([]);
+    }, []);
     useLayoutEffect(() => {
-        const key = `${board.level}:${board.tiles.length}:${graphicsQuality}`;
+        const hasLiveCards = board.tiles.some(tile => tile.state !== 'matched' && tile.state !== 'removed');
+        const key = `${board.level}:${board.tiles.length}:${graphicsQuality}:${hasLiveCards}`;
         if (warmedFloorRef.current === key) return;
         warmedFloorRef.current = key;
+        if (!hasLiveCards) {
+            prewarmRealmTileMarks([]);
+            return;
+        }
         uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture));
         prewarmPairProximityBadges(board.columns + board.rows);
         prewarmElementCardTextures((texture) => gl.initTexture(texture));
@@ -431,6 +440,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         gl,
         graphicsQuality,
         overlayPrewarmDemandPairKeys,
+        tiles: board.tiles,
         textureRevision
     });
     useEffect(() => {

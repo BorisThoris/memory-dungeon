@@ -3,6 +3,7 @@ import type { Tile, TileSuit } from '../../shared/contracts';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { cardStatusMark, realmTileMarkKey, type RealmTileMark } from './realmTileMarkKey';
 import { paintCardStatus } from './cardStatusPaint';
+import { FROSTBITE_TURNS_RAGING, WILDFIRE_FUSE } from '../../shared/realm-weather-rules';
 
 /** The painted textures of the marks a card wears (`RealmTileMarks`): one canvas per distinct mark and face, shared. */
 const CANVAS_W = 256;
@@ -17,7 +18,7 @@ export const realmTileMarkTexture = (mark: RealmTileMark, faceUp: boolean): Canv
     const canvas = document.createElement('canvas');
     canvas.width = CANVAS_W;
     canvas.height = CANVAS_H;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     if (context) paintCardStatus(context, canvas.width, canvas.height, mark, faceUp);
     const texture = new CanvasTexture(canvas);
     texture.colorSpace = SRGBColorSpace;
@@ -30,6 +31,19 @@ export const realmTileMarkTexture = (mark: RealmTileMark, faceUp: boolean): Canv
 
 const TURNCOAT_SUITS: readonly TileSuit[] = ['ember', 'tide', 'moss', 'bone'];
 
+// A floor can open without marks and acquire them on its very first turn. Warm the common
+// elemental/weather marks too, without taking a Cartesian product of unrelated hazards.
+const DYNAMIC_MARK_TILES: readonly Tile[] = [
+    { frost: FROSTBITE_TURNS_RAGING },
+    { fuse: WILDFIRE_FUSE },
+    { vined: true, seeded: 1 },
+    { vined: true, bloom: true, seeded: 2 },
+    { seeded: 1 },
+    { seeded: 2 },
+    { rime: true },
+    { snowed: true }
+].map((flags, index) => ({ id: `mark-warmup-${index}`, pairKey: '', symbol: '', label: '', state: 'hidden' as const, ...flags }));
+
 /**
  * Paints the countdown variants of the floor's initial marks before its first frame: Hourglass
  * sand and fuses down to zero, Turncoats at every element, frost thawing, locks coming off, both
@@ -39,7 +53,9 @@ const TURNCOAT_SUITS: readonly TileSuit[] = ['ember', 'tide', 'moss', 'bone'];
 export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture: CanvasTexture) => void): number => {
     let painted = 0;
     const seen = new Set<string>();
-    for (const tile of tiles) {
+    const candidates = tiles.some(tile => tile.state !== 'matched' && tile.state !== 'removed')
+        ? [...tiles, ...DYNAMIC_MARK_TILES] : tiles;
+    for (const tile of candidates) {
         if (tile.state === 'matched' || tile.state === 'removed') continue;
         // A committed face-up card may turn back after a miss. Warming again (e.g. a quality
         // change) must retain the hidden-side marks it will need then too.

@@ -15,6 +15,7 @@ import {
     TILE_TEXTURE_IMAGE_IDS
 } from './tileTextures';
 import { retainTileTextureWorkingSet } from './tileTextures';
+import * as illustrationImages from '../cardFace/cardIllustrationImages';
 
 vi.mock('../cardFace/proceduralIllustration/drawProceduralTarotIllustration', () => ({
     drawProceduralTarotIllustration: vi.fn()
@@ -154,6 +155,34 @@ describe('tileTextures layout', () => {
         } finally {
             window.requestIdleCallback = previousRequestIdleCallback;
             window.cancelIdleCallback = previousCancelIdleCallback;
+        }
+    });
+
+    it('skips idle fallback work for loaded art but still warms missing illustrations', () => {
+        const callbacks: IdleRequestCallback[] = [];
+        vi.stubGlobal('requestIdleCallback', (callback: IdleRequestCallback) => {
+            callbacks.push(callback);
+            return callbacks.length;
+        });
+        const image = document.createElement('img');
+        Object.defineProperty(image, 'naturalWidth', { value: 512 });
+        const loaded = vi.spyOn(illustrationImages, 'getCardIllustrationImageByUrl').mockReturnValue(image);
+        try {
+            const tile = baseTile('loaded', 'pair-loaded');
+            const stopLoaded = runDemandDrivenTileFaceOverlayPrewarmSession([tile.pairKey], 'medium', [tile]);
+            expect(callbacks).toHaveLength(0);
+            expect(getIllustrationPipelineDebugState().illustrationBitmap.entryCount).toBe(0);
+            stopLoaded();
+
+            loaded.mockReturnValue(null);
+            const stopMissing = runDemandDrivenTileFaceOverlayPrewarmSession([tile.pairKey], 'medium', [tile]);
+            expect(callbacks).toHaveLength(1);
+            callbacks[0]!({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline);
+            expect(getIllustrationPipelineDebugState().illustrationBitmap.entryCount).toBe(1);
+            stopMissing();
+        } finally {
+            loaded.mockRestore();
+            vi.unstubAllGlobals();
         }
     });
 

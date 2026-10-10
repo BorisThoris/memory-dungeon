@@ -64,6 +64,23 @@ describe('the realm marks are painted before play', () => {
         expect(dispose).not.toHaveBeenCalled();
     });
 
+    it('warms first-turn elemental marks even when the floor starts with unmarked cards', async () => {
+        const { prewarmRealmTileMarks, realmTileMarkTexture } = await import('./realmTileMarkTextures');
+        const upload = vi.fn();
+        prewarmRealmTileMarks([tile({})], upload);
+        // Bounded shared marks, rather than all possible combinations of independent hazards.
+        expect(upload.mock.calls.length).toBeLessThan(80);
+        const create = vi.spyOn(document, 'createElement');
+        for (const flags of [{ frost: 2 }, { frost: 1 }, { fuse: 3 }, { fuse: 2 }, { fuse: 1 },
+            { vined: true, seeded: 1 }, { vined: true, bloom: true, seeded: 2 }, { seeded: 2 }, { rime: true }, { snowed: true }]) {
+            for (const faceUp of [false, true]) for (const locked of [false, true]) {
+                realmTileMarkTexture(cardStatusMark(tile(flags), locked)!, faceUp);
+            }
+        }
+        expect(create).not.toHaveBeenCalledWith('canvas');
+        create.mockRestore();
+    });
+
     it('releases the previous floor\'s status combinations while retaining countdowns the new floor can use', async () => {
         const { prewarmRealmTileMarks } = await import('./realmTileMarkTextures');
         const oldUpload = vi.fn();
@@ -73,7 +90,9 @@ describe('the realm marks are painted before play', () => {
         const nextUpload = vi.fn();
         prewarmRealmTileMarks([tile({ hourglass: 2 })], nextUpload);
         expect(oldTextures.length).toBeGreaterThan(100);
-        expect(disposed.filter((dispose) => dispose.mock.calls.length === 1).length).toBe(oldTextures.length);
+        const nextTextures = new Set(nextUpload.mock.calls.map(([texture]) => texture));
+        expect(disposed.filter((dispose) => dispose.mock.calls.length === 1).length)
+            .toBe(oldTextures.filter(texture => !nextTextures.has(texture)).length);
         const retained = nextUpload.mock.calls.map(([texture]) => vi.spyOn(texture, 'dispose'));
         expect(prewarmRealmTileMarks([tile({ hourglass: 2 })])).toBe(0);
         expect(retained.every((dispose) => dispose.mock.calls.length === 0)).toBe(true);

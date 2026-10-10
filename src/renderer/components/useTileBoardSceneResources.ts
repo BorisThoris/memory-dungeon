@@ -9,7 +9,7 @@ import {
     type ShaderMaterial,
     type WebGLRenderer
 } from 'three';
-import type { GraphicsQualityPreset } from '../../shared/contracts';
+import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { getBoardAnisotropyCap } from '../../shared/graphicsQuality';
 import { preloadCardRankOpentypeFont } from '../cardFace/opentypeCardRankFont';
 import { createBoardRuneFieldMaterial } from './boardRuneFieldMaterial';
@@ -27,6 +27,7 @@ interface UseTileBoardSceneResourcesInput {
     gl: WebGLRenderer;
     graphicsQuality: GraphicsQualityPreset;
     overlayPrewarmDemandPairKeys: readonly string[];
+    tiles: readonly Tile[];
     textureRevision: number;
 }
 
@@ -35,6 +36,7 @@ export const useTileBoardSceneResources = ({
     gl,
     graphicsQuality,
     overlayPrewarmDemandPairKeys,
+    tiles,
     textureRevision
 }: UseTileBoardSceneResourcesInput) => {
     const boardRuneFieldGeometry = useMemo(
@@ -57,8 +59,8 @@ export const useTileBoardSceneResources = ({
     }, [boardRuneFieldMaterial]);
 
     useEffect(() => {
-        return runDemandDrivenTileFaceOverlayPrewarmSession(overlayPrewarmDemandPairKeys, graphicsQuality);
-    }, [graphicsQuality, overlayPrewarmDemandPairKeys]);
+        return runDemandDrivenTileFaceOverlayPrewarmSession(overlayPrewarmDemandPairKeys, graphicsQuality, tiles);
+    }, [graphicsQuality, overlayPrewarmDemandPairKeys, tiles]);
 
     useLayoutEffect(() => {
         syncTileBoardTextureQuality({

@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9914
+    "relationshipCount": 9917
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "1942fb11eb065d785b64f14dba4722dd22ccc623ee182326012cb05d07b31d8c"
+      "sha256": "d7280debf31ebd90df60945cfa0f5a31ada846aafcb9a2fab0ef1fe288fdf386"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4497,8 +4497,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110390,
-      "sha256": "ef6b4b68e7e134fe6e898eb2a57a1fdaffd757aaefe250a6dee6fe5505903e42"
+      "bytes": 110246,
+      "sha256": "b88faccb8be5d18c59e4048b715009e478feed62889bc28a49c5804adee69b1c"
     },
     {
       "path": "public/site.webmanifest",
@@ -11265,14 +11265,14 @@
     {
       "path": "src/renderer/components/realmTileMarkTextures.test.ts",
       "category": "test",
-      "bytes": 5285,
-      "sha256": "c540c4337b5f991969e34f062dc4be5b0b267149fd92a7a3b3b332b98d11c42e"
+      "bytes": 6460,
+      "sha256": "f6804304d53fc442ab5041a4bf73bd38643af671e5369123b222a113988be39a"
     },
     {
       "path": "src/renderer/components/realmTileMarkTextures.ts",
       "category": "source",
-      "bytes": 4357,
-      "sha256": "a619016c1c58ada32d2b83f632117a6c0d17cdaf0e3d8205dc48f62a152d5a69"
+      "bytes": 5213,
+      "sha256": "6816391c258f86b367dbc201356778d2341ee070dc8aaf793bb4638837b63cd9"
     },
     {
       "path": "src/renderer/components/RealmTravel.module.css",
@@ -12183,8 +12183,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 27985,
-      "sha256": "3e9f42e66dc521616668570065b6c4104b36f58830de305421c58025cec61273"
+      "bytes": 28356,
+      "sha256": "afa9ec47b06d19235a816ea47aae78128565c35def4293771aa102d42b1718bd"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -12453,14 +12453,14 @@
     {
       "path": "src/renderer/components/tileTextures.test.ts",
       "category": "test",
-      "bytes": 15722,
-      "sha256": "45121eccea685fe3fb8e1a5c59d6c3a3c854a5a175a838503c093e8972cf2898"
+      "bytes": 17222,
+      "sha256": "49253bdbbf55e6d2ba46aad17ba44a28cc00432a095b940a55634c648a7ee69d"
     },
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 64477,
-      "sha256": "d2deb5e0831745605449ff2527acb1cddab50888708034e014ae6e1e7b697f81"
+      "bytes": 65141,
+      "sha256": "47097b56e882f2731b0c9b199a46e349ba185df1d08342c9f0ece89548f9b8c3"
     },
     {
       "path": "src/renderer/components/tileTextureWarmup.ts",
@@ -12537,8 +12537,8 @@
     {
       "path": "src/renderer/components/useTileBoardSceneResources.ts",
       "category": "source",
-      "bytes": 2797,
-      "sha256": "a36ddd42daa9dc886a0670061f0d0be65ebe7bcbded54819bca4275c0c302ecd"
+      "bytes": 2856,
+      "sha256": "b9f87485ca9166e6071c14d9468e47c5f60665bd488e6f81d5e80c42c78aa6a6"
     },
     {
       "path": "src/renderer/components/useTileBoardTextureRevision.ts",
@@ -20841,7 +20841,8 @@
         "symbol:src/renderer/cardFace/cardIllustrationImages.ts#subscribeCardIllustrationImageReady"
       ],
       "testedBy": [
-        "file:src/renderer/cardFace/cardIllustrationImageReady.test.ts"
+        "file:src/renderer/cardFace/cardIllustrationImageReady.test.ts",
+        "file:src/renderer/components/tileTextures.test.ts"
       ]
     },
     {
@@ -24387,7 +24388,7 @@
       "path": "src/renderer/components/realmTileMarkTextures.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 84,
+      "lineCount": 103,
       "imports": [
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/shared/contracts.ts"
@@ -24400,12 +24401,13 @@
       "path": "src/renderer/components/realmTileMarkTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 96,
       "imports": [
         "file:src/renderer/components/cardStatusPaint.ts",
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/components/tileShatter.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/realm-weather-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
@@ -27084,7 +27086,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 621,
+      "lineCount": 631,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -27898,8 +27900,9 @@
       "path": "src/renderer/components/tileTextures.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 383,
+      "lineCount": 412,
       "imports": [
+        "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
@@ -27914,7 +27917,7 @@
       "path": "src/renderer/components/tileTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1758,
+      "lineCount": 1766,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -28138,7 +28141,7 @@
       "path": "src/renderer/components/useTileBoardSceneResources.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 82,
+      "lineCount": 84,
       "imports": [
         "file:src/renderer/cardFace/opentypeCardRankFont.ts",
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
@@ -47634,16 +47637,16 @@
       "name": "prewarmRealmTileMarks",
       "kind": "value",
       "file": "src/renderer/components/realmTileMarkTextures.ts",
-      "line": 39,
-      "endLine": 79
+      "line": 53,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/components/realmTileMarkTextures.ts#realmTileMarkTexture",
       "name": "realmTileMarkTexture",
       "kind": "value",
       "file": "src/renderer/components/realmTileMarkTextures.ts",
-      "line": 13,
-      "endLine": 29
+      "line": 14,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/RealmTravel.tsx#default",
@@ -50882,8 +50885,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 620,
-      "endLine": 620
+      "line": 630,
+      "endLine": 630
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -51842,8 +51845,8 @@
       "name": "clearTileTextureCachesForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1733,
-      "endLine": 1741
+      "line": 1741,
+      "endLine": 1749
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeFace",
@@ -51874,8 +51877,8 @@
       "name": "forceIllustrationOverlayCacheVersionForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1745,
-      "endLine": 1747
+      "line": 1753,
+      "endLine": 1755
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
@@ -51890,8 +51893,8 @@
       "name": "getCachedTileTextureKeysForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1743,
-      "endLine": 1743
+      "line": 1751,
+      "endLine": 1751
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
@@ -51938,8 +51941,8 @@
       "name": "getCardFaceStaticTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1682,
-      "endLine": 1699
+      "line": 1690,
+      "endLine": 1707
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
@@ -51962,24 +51965,24 @@
       "name": "getIllustrationPipelineDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1749,
-      "endLine": 1757
+      "line": 1757,
+      "endLine": 1765
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
       "name": "getOverlayPrewarmDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1728,
-      "endLine": 1731
+      "line": 1736,
+      "endLine": 1739
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "name": "getOverlayTextureCacheDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1713,
-      "endLine": 1726
+      "line": 1721,
+      "endLine": 1734
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
@@ -52058,8 +52061,8 @@
       "name": "resetDemandDrivenOverlayPrewarmForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1676,
-      "endLine": 1680
+      "line": 1684,
+      "endLine": 1688
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#retainTileTextureWorkingSet",
@@ -52075,7 +52078,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
       "line": 1643,
-      "endLine": 1673
+      "endLine": 1681
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
@@ -52090,8 +52093,8 @@
       "name": "subscribeTextureImageUpdates",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1705,
-      "endLine": 1711
+      "line": 1713,
+      "endLine": 1719
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TILE_TEXTURE_IMAGE_IDS",
@@ -52234,8 +52237,8 @@
       "name": "useTileBoardSceneResources",
       "kind": "value",
       "file": "src/renderer/components/useTileBoardSceneResources.ts",
-      "line": 33,
-      "endLine": 81
+      "line": 34,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/useTileBoardTextureRevision.ts#useTileBoardTextureRevision",
@@ -106693,6 +106696,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/realmTileMarkTextures.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RealmTravel.test.tsx->src/renderer/components/RealmTravel.tsx",
       "source": "file:src/renderer/components/RealmTravel.test.tsx",
       "target": "file:src/renderer/components/RealmTravel.tsx",
@@ -110506,6 +110515,12 @@
       "id": "imports:src/renderer/components/tileShatter.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileShatter.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileTextures.test.ts->src/renderer/cardFace/cardIllustrationImages.ts",
+      "source": "file:src/renderer/components/tileTextures.test.ts",
+      "target": "file:src/renderer/cardFace/cardIllustrationImages.ts",
       "kind": "imports"
     },
     {
@@ -126560,6 +126575,12 @@
       "id": "tested_by:src/renderer/cardFace/cardIllustrationImages.ts->file:src/renderer/cardFace/cardIllustrationImageReady.test.ts",
       "source": "file:src/renderer/cardFace/cardIllustrationImages.ts",
       "target": "file:src/renderer/cardFace/cardIllustrationImageReady.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/cardFace/cardIllustrationImages.ts->file:src/renderer/components/tileTextures.test.ts",
+      "source": "file:src/renderer/cardFace/cardIllustrationImages.ts",
+      "target": "file:src/renderer/components/tileTextures.test.ts",
       "kind": "tested_by"
     },
     {
