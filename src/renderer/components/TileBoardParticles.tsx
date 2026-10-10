@@ -185,7 +185,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 let thrown = 0;
                 for (const burst of cardDepartureBursts({ suit: tile.suit,
                     x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: anchor?.z ?? 0.04,
-                    seed: hashStringToSeed(`${tile.id}:departure`), time: time.current, delay: cue.delay, quality: graphicsQuality, reduceMotion })) thrown += system.emit(burst);
+                    seed: hashStringToSeed(`${tile.id}:departure`), time: time.current, delay: cue.delay, quality: departureQuality, reduceMotion })) thrown += system.emit(burst);
                 if (thrown > 0) departureBursts.current += 1;
             }
             if (cue.kind === 'match' && system.emit({ kind: 'ripple',

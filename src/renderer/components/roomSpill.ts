@@ -52,6 +52,14 @@ const PLATE_ASPECT = 1376 / 768;
 
 const PIECES: Readonly<Record<TileSuit | 'none', number>> = { ember: 8, tide: 7, bone: 6, moss: 6, none: 6 };
 
+const ease = (value: number): number => {
+    const t = Math.min(1, Math.max(0, value));
+    return t * t * (3 - 2 * t);
+};
+
+const restingAngle = (angle: number, rest: number, amount: number): number =>
+    angle + Math.atan2(Math.sin(rest - angle), Math.cos(rest - angle)) * amount;
+
 interface Fall {
     x: number;
     y: number;
@@ -72,7 +80,7 @@ const fall = (x0: number, y0: number, vx: number, vy: number, land: number, seco
         // y + dy s + a s^2 = land (y grows downward on the plate).
         const disc = dy * dy + 4 * a * (land - y);
         const hit = disc < 0 ? 0 : (-dy + Math.sqrt(disc)) / (2 * a);
-        if (left <= hit) return { x: x + dx * left, y: y + dy * left + a * left * left, landed: bounce > 0, since: bounce > 0 ? seconds - left : -1, bounce };
+        if (left <= hit) return { x: x + dx * left, y: y + dy * left + a * left * left, landed: false, since: -1, bounce };
         x += dx * hit;
         left -= hit;
         y = land;
@@ -91,7 +99,7 @@ export const roomSpillDraws = (spill: RoomSpill, band: GoldFloorBand, water: boo
     const seed = Math.abs([...spill.key].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7));
     const out: SceneDraw[] = [];
     const s = spill.seconds;
-    const fade = s > ROOM_SPILL_SECONDS - 1.2 ? (ROOM_SPILL_SECONDS - s) / 1.2 : 1;
+    const fade = ease(s / 0.08) * ease((ROOM_SPILL_SECONDS - s) / 1.2);
     for (let index = 0; index < count; index += 1) {
         const h1 = sceneHash(index, seed);
         const h2 = sceneHash(index, seed + 1);
@@ -108,8 +116,8 @@ export const roomSpillDraws = (spill: RoomSpill, band: GoldFloorBand, water: boo
             const t = Math.min(s, (land - spill.y) / drift);
             const y = spill.y + drift * t;
             const x = spill.x + vx * 0.6 * t + 0.03 * scale * Math.sin(t * 3.1 + index);
-            const lying = s * drift >= land - spill.y;
-            out.push(ambientSprite({ id, cell: h2 > 0.5 ? 'leaf' : 'leafCurled', x, y: y - 0.01 * scale, size: 0.03 * scale, alpha: 0.9 * fade, blend: 'source-over', rotate: lying ? h1 * 6 : t * 2.2 + index, scaleY: lying ? 0.55 : undefined }));
+            const settled = ease((s - (land - spill.y) / drift) / 0.28);
+            out.push(ambientSprite({ id, cell: h2 > 0.5 ? 'leaf' : 'leafCurled', x, y: y - 0.01 * scale, size: 0.03 * scale, alpha: 0.9 * fade, blend: 'source-over', rotate: restingAngle(t * 2.2 + index, h1 * 6, settled), scaleY: 1 - 0.45 * settled }));
             continue;
         }
         if (suit === 'tide') {
@@ -138,9 +146,10 @@ export const roomSpillDraws = (spill: RoomSpill, band: GoldFloorBand, water: boo
         const ice = suit === 'bone';
         const f = fall(spill.x, spill.y, vx, vy, land, s, water && ice ? 0 : 0.35, water && ice ? 0 : 2);
         const length = (ice ? 0.022 : 0.012) * scale * (0.7 + 0.6 * h2);
-        const angle = f.landed ? h1 * Math.PI : (s * (5 + 6 * h3) + index) * (h2 > 0.5 ? 1 : -1);
+        const settled = f.landed ? ease((s - f.since) / 0.24) : 0;
+        const angle = restingAngle(((f.landed ? f.since : s) * (5 + 6 * h3) + index) * (h2 > 0.5 ? 1 : -1), h1 * Math.PI, settled);
         const dx = (Math.cos(angle) * length) / 2 / PLATE_ASPECT;
-        const dy = (Math.sin(angle) * length) / 2 * (f.landed ? 0.35 : 1);
+        const dy = (Math.sin(angle) * length) / 2 * (1 - 0.65 * settled);
         const melt = ice && f.landed ? Math.min(1, Math.max(0, s - f.since - 1.2) / 2) : 0;
         out.push({
             kind: 'line',
@@ -151,8 +160,9 @@ export const roomSpillDraws = (spill: RoomSpill, band: GoldFloorBand, water: boo
             width: (ice ? 0.006 : 0.008) * scale,
             points: [[f.x - dx, f.y - dy], [f.x + dx, f.y + dy]]
         });
-        if (ice && f.landed && (Math.floor(s * 2 + index) % 5 === 0)) {
-            out.push(ambientSprite({ id: `${id}-glint`, cell: 'glint', x: f.x, y: f.y - 0.004, size: 0.03 * scale, alpha: 0.7 * (1 - melt) * fade }));
+        if (ice && f.landed) {
+            const glint = Math.max(0, Math.cos(s * 2.5 + index * 2.4)) ** 12;
+            out.push(ambientSprite({ id: `${id}-glint`, cell: 'glint', x: f.x, y: f.y - 0.004, size: 0.03 * scale, alpha: 0.7 * glint * settled * (1 - melt) * fade }));
         }
     }
     return out;

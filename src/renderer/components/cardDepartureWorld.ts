@@ -25,7 +25,7 @@ void main(){
   gradient+=-6.*k*k*d*scale/(r*r)*p.w;
   hot+=k*k*p.w;
  }
- float edge=smoothstep(.24,.32,density);if(edge<.01)discard;
+ float edge=smoothstep(mix(.24,.16,uFire),.32,density);if(edge<.01)discard;
  vec3 n=normalize(vec3(-gradient*.19,1.));
  vec3 light=normalize(vec3(-.45,.7,.65));
  float spec=pow(max(0.,dot(n,normalize(light+vec3(0.,0.,1.)))),48.);
@@ -33,9 +33,9 @@ void main(){
  vec3 water=uTint*(.08+.17*max(0.,dot(n,light)))+vec3(.85,.96,1.)*(spec*.8+rim*.5);
  float shell=1.-smoothstep(.3,.85,density);
  float heat=clamp(hot*.6,0.,1.);
- vec3 fire=mix(uTint*.75,uTint*2.2,heat)+vec3(1.,.85,.5)*pow(heat,3.)*(1.3+.18*uDrive);
+ vec3 fire=uTint*(.85+.15*heat)+vec3(1.,.85,.5)*pow(heat,3.)*(1.3+.18*uDrive);
  vec3 rgb=mix(water,fire,uFire);
- float alpha=mix((.13+.52*shell+.25*spec)*edge,edge*(.3+.65*heat),uFire);
+ float alpha=mix((.13+.52*shell+.25*spec)*edge,edge*(.3+.65*sqrt(heat)),uFire);
  gl_FragColor=vec4(rgb,alpha);
  #include <colorspace_fragment>
 }`;
@@ -84,6 +84,11 @@ const envelope = (body: DeparturePhysics, source: number, now: number): number =
     return age < 0 ? 0 : Math.min(1, age / .12) * Math.min(1, Math.max(0, (DEPARTURE_PHYSICS_LIFE[body.cluster.material] - age) / .55));
 };
 
+const ease = (value: number): number => {
+    const t = Math.min(1, Math.max(0, value));
+    return t * t * (3 - 2 * t);
+};
+
 const update = (entry: MaterialGroup, now: number): void => {
     const { body, mesh } = entry;
     mesh.visible = now >= body.start;
@@ -93,12 +98,17 @@ const update = (entry: MaterialGroup, now: number): void => {
         const values = mesh.material.uniforms.uParticles!.value as Vector4[];
         const shapes = mesh.material.uniforms.uShape!.value as Vector4[];
         body.particles.forEach((particle, index) => {
-            const fade = Math.min(envelope(body, particle.source, now), particle.feed === undefined ? 1 : envelope(body, particle.feed, now)) * (body.age >= particle.born ? 1 : 0);
             const fire = body.cluster.material === 'fire';
+            const age = body.age - particle.born;
+            // The fixed gas pool recycles at .75 s. Cool each tongue to nothing before moving
+            // it back to its fuel inlet, then kindle it gently instead of teleporting a flame.
+            const emission = fire ? ease(age / .09) * (1 - ease((age - .5) / .24)) : Number(age >= 0);
+            const fade = Math.min(envelope(body, particle.source, now), particle.feed === undefined ? 1 : envelope(body, particle.feed, now)) * emission;
             const radius = departureParticleRadius(body, particle) * (fire ? 1.15 : 1.65);
             const contact = Math.max(0, 1 - (particle.y - body.cluster.sources[particle.source]!.floorY) / .3);
-            const sx = fire ? 1.05 : 1 - contact * .4;
-            const sy = fire ? .45 : 1 + contact * 3.8;
+            const stretch = Math.min(.35, Math.max(0, -particle.vy) * .07) * (1 - contact);
+            const sx = fire ? 1.05 : 1 - contact * .4 + stretch;
+            const sy = fire ? .45 : (1 + contact * 3.8) / (1 + stretch);
             values[index]!.set(particle.x, particle.y, radius, fade * (body.cluster.material === 'fire' ? particle.temperature : 1));
             shapes[index]!.set(sx, sy, particle.vx, particle.vy);
             const reach = radius * (fire ? 2.4 : 1 / Math.min(sx, sy));
@@ -126,7 +136,9 @@ const update = (entry: MaterialGroup, now: number): void => {
         fade = Math.max(fade, localFade);
         const length = Math.hypot(b.x - a.x, b.y - a.y) || .001;
         const nx = -(b.y - a.y) / length, ny = (b.x - a.x) / length;
-        const grown = Math.min(1, Math.max(0, (now - Math.max(body.cluster.sources[a.source]!.start, body.cluster.sources[b.source]!.start)) / .65));
+        const age = now - Math.max(body.cluster.sources[a.source]!.start, body.cluster.sources[b.source]!.start);
+        const segment = stem.junction ? 5 : stem.b % 6;
+        const grown = ease((age - segment * .035) / .5);
         const radius = (stem.junction ? .018 : .012 + .012 * (1 - stem.b % 6 / 6)) * grown * localFade;
         const previous = body.stems.find(link => link.b === stem.a);
         const nextStem = body.stems.find(link => link.a === stem.b);
@@ -147,7 +159,9 @@ const update = (entry: MaterialGroup, now: number): void => {
             ring(t, angle, light); ring(end, next, light); ring(t, next, light);
         }
         for (const side of [-1, 1]) {
-            const leaf = (.085 + .025 * Math.sin(stem.b * 17 + body.cluster.seed)) * grown * localFade;
+            // Alternating leaves unfurl after their stem; junctions remain bare flexible vines.
+            const unfurl = ease((age - .12 - segment * .055 - (side === (stem.b % 2 ? 1 : -1) ? 0 : .13)) / .34);
+            const leaf = stem.junction ? 0 : (.085 + .025 * Math.sin(stem.b * 17 + body.cluster.seed)) * unfurl * localFade;
             const tx = (b.x - a.x) / length, ty = (b.y - a.y) / length;
             const lx = nx * side + tx * .5, ly = ny * side + ty * .5;
             for (let part = 0; part < 6; part++) {
@@ -156,7 +170,7 @@ const update = (entry: MaterialGroup, now: number): void => {
                     const edge = (t: number, ridge: boolean): void => {
                         const width = ridge ? 0 : Math.sin(Math.PI * t) * leaf * .3 * half;
                         put(b.x + lx * leaf * t * 1.9 - ly * width, b.y + ly * leaf * t * 1.9 + lx * width,
-                            b.z - Math.sin(Math.PI * t) * leaf * (ridge ? .16 : .34), half < 0 ? .8 : 1.3);
+                            b.z - Math.sin(Math.PI * t) * leaf * (ridge ? .16 : .34 + (1 - unfurl) * .7), half < 0 ? .8 : 1.3);
                     };
                     edge(t0, true); edge(t0, false); edge(t1, false);
                     edge(t0, true); edge(t1, false); edge(t1, true);
@@ -215,7 +229,8 @@ export const createCardDepartureWorld = () => {
                         const offset = counts.get(key) ?? 0; counts.set(key, offset + 1);
                         const match = previous[offset % previous.length];
                         if (match) {
-                            const source = particle.source, mass = particle.mass, radius = particle.radius;
+                            const source = particle.source, mass = particle.mass;
+                            const radius = cluster.material === 'ice' || cluster.material === 'stone' ? Math.max(particle.radius, match.radius) : particle.radius;
                             const feed = match.feed === undefined ? undefined : cluster.sources.findIndex(item => item.key === prior.cluster.sources[match.feed!]!.key);
                             Object.assign(particle, match, { source, mass, radius, feed: feed === -1 ? undefined : feed, born: match.born + prior.start - body.start });
                         }

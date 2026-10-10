@@ -10407,14 +10407,14 @@
     {
       "path": "src/renderer/components/cardDepartureWorld.test.ts",
       "category": "test",
-      "bytes": 4383,
-      "sha256": "28190ea3166e248439a9c49cfe5a80796c32b08672451a702d4711567d46b1ab"
+      "bytes": 6237,
+      "sha256": "3d398e7e35584b2610d911697fff14a8b995df00a3e4b1c812ba70039335ae53"
     },
     {
       "path": "src/renderer/components/cardDepartureWorld.ts",
       "category": "source",
-      "bytes": 15756,
-      "sha256": "188758b5c013cc31d09160c5a80c80df0ed91d8427e303b4911705dedd74112b"
+      "bytes": 16796,
+      "sha256": "60b84a6bf3acb08a54fb48915f2e63a7923b47c542f3f4424a8f77539d1e61d8"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
@@ -10437,8 +10437,8 @@
     {
       "path": "src/renderer/components/cardElementFx.ts",
       "category": "source",
-      "bytes": 12111,
-      "sha256": "ce482cb852f39942edf71aee522018bf29db696d9933dde126c1332365338999"
+      "bytes": 12306,
+      "sha256": "99bdf7aa517f76683dd04654ac74f8234bd820952c620afc33bbcae3dbeb8f5f"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -10467,8 +10467,8 @@
     {
       "path": "src/renderer/components/cardShardSystem.ts",
       "category": "source",
-      "bytes": 14222,
-      "sha256": "55757b520b8b20c8f54b14f86d78609be1e3374440214d03ab76d08b68ac0216"
+      "bytes": 14297,
+      "sha256": "1bf7d8285402ea15f99f61e5551ff64da5fea3094660e4143676d790ac2d58ac"
     },
     {
       "path": "src/renderer/components/cardStatusPaint.ts",
@@ -11337,14 +11337,14 @@
     {
       "path": "src/renderer/components/roomSpill.test.ts",
       "category": "test",
-      "bytes": 2453,
-      "sha256": "875b918d65d67db9552acb224fe1109385183ea49b5f8a6dafabd7718203f466"
+      "bytes": 4039,
+      "sha256": "846d4b14747dfd298851e2a53d42135ef5843bb0a8bb382c8e76f37013929404"
     },
     {
       "path": "src/renderer/components/roomSpill.ts",
       "category": "source",
-      "bytes": 8090,
-      "sha256": "31876ab8346b1f75bd10be6c1779fbe533f0b92501e982413523ad9a1e5c4421"
+      "bytes": 8509,
+      "sha256": "172e9af1ce4406ff165a15ab0acce66496ddeb12ea52adcf89613f1a640b23db"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
@@ -12075,8 +12075,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 29431,
-      "sha256": "54614c9fee7a93854d4c1eba93a78a5aa9f9024e040492091513384523053355"
+      "bytes": 29432,
+      "sha256": "4d5b676c753c142f8dcae7503e66c666df93a983c4109c5720f11ae4d1d09830"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -22007,7 +22007,7 @@
       "path": "src/renderer/components/cardDepartureWorld.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 79,
+      "lineCount": 116,
       "imports": [
         "file:src/renderer/components/cardDepartureGrouping.ts",
         "file:src/renderer/components/cardDepartureSheet.ts",
@@ -22021,7 +22021,7 @@
       "path": "src/renderer/components/cardDepartureWorld.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 245,
+      "lineCount": 260,
       "imports": [
         "file:src/renderer/components/cardDepartureGrouping.ts",
         "file:src/renderer/components/cardDeparturePhysics.ts",
@@ -22090,7 +22090,7 @@
       "path": "src/renderer/components/cardElementFx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 244,
+      "lineCount": 246,
       "imports": [
         "file:src/renderer/components/cardDepartureBudget.ts",
         "file:src/renderer/components/cardDepartureSheet.ts",
@@ -22191,7 +22191,7 @@
       "path": "src/renderer/components/cardShardSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 285,
+      "lineCount": 286,
       "imports": [
         "file:src/renderer/components/cardDepartureBudget.ts",
         "file:src/renderer/components/cardDepartureWorld.ts",
@@ -24615,7 +24615,7 @@
       "path": "src/renderer/components/roomSpill.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 40,
+      "lineCount": 70,
       "imports": [
         "file:src/renderer/components/roomSpill.ts",
         "file:src/renderer/components/scenePaint.ts",
@@ -24629,7 +24629,7 @@
       "path": "src/renderer/components/roomSpill.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 160,
+      "lineCount": 170,
       "imports": [
         "file:src/renderer/components/goldRain.ts",
         "file:src/renderer/components/sceneAmbient.ts",
@@ -45434,8 +45434,8 @@
       "name": "createCardDepartureWorld",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureWorld.ts",
-      "line": 172,
-      "endLine": 244
+      "line": 186,
+      "endLine": 259
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
@@ -45554,16 +45554,16 @@
       "name": "CardElementFxSystem",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 243,
-      "endLine": 243
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "name": "createCardElementFxSystem",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 153,
-      "endLine": 241
+      "line": 155,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -45714,16 +45714,16 @@
       "name": "CardShardSystem",
       "kind": "type",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 284,
-      "endLine": 284
+      "line": 285,
+      "endLine": 285
     },
     {
       "id": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
       "name": "createCardShardSystem",
       "kind": "value",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 155,
-      "endLine": 282
+      "line": 156,
+      "endLine": 283
     },
     {
       "id": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
@@ -48010,8 +48010,8 @@
       "name": "roomSpillDraws",
       "kind": "value",
       "file": "src/renderer/components/roomSpill.ts",
-      "line": 87,
-      "endLine": 159
+      "line": 95,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/components/roomSpill.ts#RoomSpillEvent",

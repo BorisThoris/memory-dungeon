@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { PlaneGeometry, type Mesh, type Material } from 'three';
+import { PlaneGeometry, type Mesh, type Material, type ShaderMaterial, type Vector4 } from 'three';
 import { createCardDepartureWorld } from './cardDepartureWorld';
 import { createDepartureSheet } from './cardDepartureSheet';
 import type { DepartureSource } from './cardDepartureGrouping';
@@ -8,6 +8,43 @@ const source = (key: string, x = 0, start = 0, material: DepartureSource['materi
     ({ key, material, x, y: 0, z: .04, start, floorY: -1.2, seed: key.charCodeAt(0), combo: 30 });
 
 describe('shared departure world', () => {
+    it('cools recycled flames to zero before returning them to their fuel inlet', () => {
+        const world = createCardDepartureWorld();
+        world.spawnWave([source('f', 0, 0, 'fire')], 'high');
+        const body = world.binding('f')!.body;
+        const material = (world.group.children[0] as Mesh).material as ShaderMaterial;
+        let previous = body.particles.map(() => 0);
+        let recycled = 0, peak = 0;
+        for (let frame = 1; frame <= 240; frame++) {
+            const births = body.particles.map(p => p.born);
+            world.advance(frame / 120);
+            const weights = (material.uniforms.uParticles!.value as Vector4[]).slice(0, body.particles.length).map(p => p.w);
+            weights.forEach((weight, index) => {
+                expect(Math.abs(weight - previous[index]!)).toBeLessThan(.16);
+                peak = Math.max(peak, weight);
+                if (body.particles[index]!.born !== births[index]) {
+                    recycled++;
+                    expect(previous[index]).toBeLessThan(.01);
+                    expect(weight).toBeLessThan(.01);
+                }
+            });
+            previous = weights;
+        }
+        expect(peak).toBeGreaterThan(.5); expect(recycled).toBeGreaterThan(10);
+        world.dispose();
+    });
+
+    it.each(['ice', 'stone'] as const)('preserves the real %s shard contact radius when another card joins', material => {
+        const world = createCardDepartureWorld();
+        world.spawnWave([source('a', 0, 0, material)], 'high');
+        const particle = world.binding('a')!.body.particles[0]!;
+        particle.radius = .37;
+        world.advance(.1);
+        world.spawnWave([source('b', 1, .15, material)], 'high');
+        expect(world.binding('a')!.body.particles[0]!.radius).toBe(.37);
+        world.dispose();
+    });
+
     it('joins neighbouring arrivals without resetting their positions or momentum', () => {
         const world = createCardDepartureWorld();
         world.spawnWave([source('a')], 'high'); world.advance(.25);

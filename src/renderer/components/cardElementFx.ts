@@ -80,10 +80,12 @@ void main() {
     vec3 rgb = mix(colour.rgb, water, wet * (0.45 + 0.4 * smoothstep(0.0, 0.4, vFall)));
     float sheen = smoothstep(0.7, 1.0, sin(vUv.y * 30.0 + uT * 9.0 + vUv.x * 6.0));
     rgb += vec3(0.6, 0.85, 1.0) * sheen * 0.3 * wet + uTint * 0.15 * wet;
-    // Stretched, it is drips: only the middle of each column holds.
-    float columnX = fract(vUv.x * 16.0);
+    // Seeded rivulets meander with height: no regularly spaced comb of identical drips.
+    float stream = vUv.x * 11.0 + (noise(vec2(vUv.x * 5.0, vUv.y * 2.0)) - 0.5) * 2.2;
+    float columnX = fract(stream);
+    float width = mix(0.14, 0.34, hash1(floor(stream)));
     float stretched = smoothstep(0.15, 0.6, vFall) * (1.0 - vPool);
-    float drip = mix(1.0, smoothstep(0.5, 0.18, abs(columnX - 0.5)), stretched);
+    float drip = mix(1.0, 1.0 - smoothstep(width, width + 0.12, abs(columnX - 0.5)), stretched);
     float alpha = colour.a * drip * (1.0 - 0.35 * wet);
     // The puddle thins and drains away.
     alpha *= 1.0 - smoothstep(0.22, 0.8, uT);
@@ -125,7 +127,7 @@ void main() {
     float edgeDist = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
     float vein = 1.0 - abs(fbm(vUv * 6.0 + vec2(0.0, uT * 0.3)) * 2.0 - 1.0);
     float reach = smoothstep(0.1, 1.2, uT) * 0.55;
-    float veins = smoothstep(0.86, 0.97, vein) * step(edgeDist, reach + 0.05);
+    float veins = smoothstep(0.86, 0.97, vein) * (1.0 - smoothstep(reach, reach + 0.08, edgeDist));
     vec3 green = vec3(0.24, 0.52, 0.16);
     vec3 rgb = mix(colour.rgb, green * 1.3 + uTint * 0.2, veins);
     rgb = mix(rgb, green, smoothstep(0.9, uDuration - 0.4, uT) * 0.55);

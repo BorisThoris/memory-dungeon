@@ -85,8 +85,9 @@ void main() {
         rgb += vec3(0.75, 0.95, 1.0) * crack * 1.6;
         float sweep = smoothstep(0.82, 1.0, sin((vUv.x + vUv.y) * 9.0 - uAge * 6.0));
         rgb += vec3(0.85, 0.97, 1.0) * sweep * 0.5;
-        float glint = step(0.993, hash(floor(vUv * 70.0) + floor(uAge * 9.0)));
-        rgb += vec3(1.0) * glint * 1.6;
+        float facet = hash(floor(vUv * 70.0));
+        float glint = smoothstep(0.985, 1.0, facet) * pow(max(0.0, sin(uAge * 5.5 + facet * 6.283)), 12.0);
+        rgb += vec3(1.0) * glint * 1.2;
         alpha *= (1.0 - uGo) * mix(0.95, 0.42, inside) + sweep * 0.25 * (1.0 - uGo);
     } else if (look == 4) {
         // Growth: a leaf's green creeps in from the break; it crumbles away from the edges at the end.
