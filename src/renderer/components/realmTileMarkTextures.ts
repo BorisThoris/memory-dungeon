@@ -40,9 +40,12 @@ export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture:
     let painted = 0;
     const seen = new Set<string>();
     for (const tile of tiles) {
-        if (tile.state !== 'hidden') continue;
-        const mark = cardStatusMark(tile, false);
-        const lockable = cardStatusMark(tile, true)!;
+        if (tile.state === 'matched' || tile.state === 'removed') continue;
+        // A committed face-up card may turn back after a miss. Warming again (e.g. a quality
+        // change) must retain the hidden-side marks it will need then too.
+        const hidden = tile.state === 'hidden' ? tile : { ...tile, state: 'hidden' as const };
+        const mark = cardStatusMark(hidden, false);
+        const lockable = cardStatusMark(hidden, true)!;
         for (const base of mark ? [mark, lockable] : [lockable]) {
             const sands = Array.from({ length: (base.hourglass ?? 0) + 1 }, (_, index) => index);
             const fuses = Array.from({ length: base.fuse + 1 }, (_, index) => index);
@@ -52,10 +55,10 @@ export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture:
                 const variant: RealmTileMark = { ...base, frost, fuse, hourglass, ...(turncoat ? { turncoat } : {}) };
                 if (!variant.frost && !variant.snowed && !variant.fuse && !variant.vined && !variant.rime && !variant.seeded && !variant.openingLocked && !variant.turncoat && !variant.hourglass) continue;
                 for (const faceUp of [true, false]) {
-                    const key = `${realmTileMarkKey(variant)}:${faceUp}`;
+                    const key = `${realmTileMarkKey(variant)}:${faceUp ? 'front' : 'back'}`;
                     if (seen.has(key)) continue;
                     seen.add(key);
-                    const fresh = !textures.has(`${realmTileMarkKey(variant)}:${faceUp ? 'front' : 'back'}`);
+                    const fresh = !textures.has(key);
                     const texture = realmTileMarkTexture(variant, faceUp);
                     if (fresh) {
                         painted += 1;
@@ -64,6 +67,13 @@ export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture:
                 }
             }
         }
+    }
+    // Only this floor's reachable countdowns belong to the board. Without this, travelling through
+    // realms accumulated every combination of frost, fuse, sand and locks for the whole session.
+    for (const [key, texture] of textures) {
+        if (seen.has(key)) continue;
+        texture.dispose();
+        textures.delete(key);
     }
     return painted;
 };

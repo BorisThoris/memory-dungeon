@@ -44,6 +44,24 @@ describe('cardIllustrationDraw bitmap cache', () => {
         expect(state.keys.some((key) => key.includes('pair-259|'))).toBe(true);
     });
 
+    it('bounds full-resolution panel pixels and releases evicted backing stores', () => {
+        clearProceduralIllustrationBitmapCache();
+        const create = vi.spyOn(document, 'createElement');
+        for (let index = 0; index < 24; index++) {
+            prewarmProceduralIllustrationBitmap(`large-${index}`, 'full', palette, 1024, 1024);
+        }
+        const state = getProceduralIllustrationBitmapCacheDebugState();
+        expect(state.pixelCount).toBeLessThanOrEqual(state.maxPixels);
+        expect(state.entryCount).toBe(16);
+        const canvases = create.mock.results.map(result => result.value as HTMLCanvasElement);
+        expect(canvases.slice(0, 8).every(canvas => canvas.width === 1 && canvas.height === 1)).toBe(true);
+        expect(canvases.slice(8).every(canvas => canvas.width === 1024 && canvas.height === 1024)).toBe(true);
+        clearProceduralIllustrationBitmapCache();
+        expect(canvases.every(canvas => canvas.width === 1 && canvas.height === 1)).toBe(true);
+        expect(getProceduralIllustrationBitmapCacheDebugState().pixelCount).toBe(0);
+        create.mockRestore();
+    });
+
     it('purges cached bitmaps when the illustration version token changes', () => {
         clearProceduralIllustrationBitmapCache();
         prewarmProceduralIllustrationBitmap('pair-alpha', 'full', palette, 48, 68);

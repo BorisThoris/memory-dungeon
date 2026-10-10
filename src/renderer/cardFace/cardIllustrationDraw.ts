@@ -26,6 +26,9 @@ const prepareHighQualityBitmapSampling = (ctx: CanvasRenderingContext2D): void =
 
 const canCacheProceduralIllustrations = (): boolean => typeof document !== 'undefined';
 const MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_ENTRIES = 256;
+// Entry counts alone allowed hundreds of MB of full-resolution panels to survive floor changes.
+const MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_PIXELS = 16 * 1024 * 1024;
+let proceduralIllustrationBitmapCachePixels = 0;
 
 const getProceduralIllustrationPaletteSignature = (palette: CardFaceOverlayColors): string =>
     [palette.sigilFillLight, palette.sigilFillDark, palette.sigilStroke, palette.sigilHighlight].join('|');
@@ -38,6 +41,8 @@ export type ProceduralIllustrationBitmapCacheDebugState = {
     keys: string[];
     lastPurgeReason: string | null;
     maxEntries: number;
+    pixelCount: number;
+    maxPixels: number;
     missCount: number;
     purgeCount: number;
     versionToken: string;
@@ -76,7 +81,12 @@ const purgeProceduralIllustrationBitmapCache = (
     nextVersionToken: string = proceduralIllustrationBitmapCacheVersionToken
 ): void => {
     proceduralIllustrationBitmapCacheVersionToken = nextVersionToken;
+    for (const canvas of proceduralIllustrationBitmapCache.values()) {
+        canvas.width = 1;
+        canvas.height = 1;
+    }
     proceduralIllustrationBitmapCache.clear();
+    proceduralIllustrationBitmapCachePixels = 0;
     proceduralIllustrationBitmapCacheStats.lastPurgeReason = reason;
     proceduralIllustrationBitmapCacheStats.purgeCount += 1;
     proceduralIllustrationBitmapCacheStats.versionToken = nextVersionToken;
@@ -92,16 +102,25 @@ const syncProceduralIllustrationBitmapCacheVersion = (
 };
 
 const cacheProceduralIllustrationBitmap = (cacheKey: string, canvas: HTMLCanvasElement): HTMLCanvasElement => {
-    while (proceduralIllustrationBitmapCache.size >= MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_ENTRIES) {
+    const pixels = canvas.width * canvas.height;
+    while (proceduralIllustrationBitmapCache.size >= MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_ENTRIES ||
+        (proceduralIllustrationBitmapCachePixels + pixels > MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_PIXELS && proceduralIllustrationBitmapCache.size > 0)) {
         const oldestKey = proceduralIllustrationBitmapCache.keys().next().value;
         if (oldestKey == null) {
             break;
         }
+        const oldest = proceduralIllustrationBitmapCache.get(oldestKey)!;
+        proceduralIllustrationBitmapCachePixels -= oldest.width * oldest.height;
         proceduralIllustrationBitmapCache.delete(oldestKey);
+        // Every consumer copies the panel into its own overlay synchronously. Release its pixels
+        // immediately after eviction, rather than waiting for the next browser GC.
+        oldest.width = 1;
+        oldest.height = 1;
         proceduralIllustrationBitmapCacheStats.evictedCount += 1;
     }
 
     proceduralIllustrationBitmapCache.set(cacheKey, canvas);
+    proceduralIllustrationBitmapCachePixels += pixels;
     proceduralIllustrationBitmapCacheStats.createdCount += 1;
     return canvas;
 };
@@ -141,7 +160,7 @@ const getProceduralIllustrationBitmap = (
     canvas.width = width;
     canvas.height = height;
 
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) {
         return null;
     }
@@ -166,6 +185,8 @@ export const getProceduralIllustrationBitmapCacheDebugState = (): ProceduralIllu
     keys: getProceduralIllustrationBitmapCacheKeys(),
     lastPurgeReason: proceduralIllustrationBitmapCacheStats.lastPurgeReason,
     maxEntries: proceduralIllustrationBitmapCacheStats.maxEntries,
+    pixelCount: proceduralIllustrationBitmapCachePixels,
+    maxPixels: MAX_PROCEDURAL_ILLUSTRATION_BITMAP_CACHE_PIXELS,
     missCount: proceduralIllustrationBitmapCacheStats.missCount,
     purgeCount: proceduralIllustrationBitmapCacheStats.purgeCount,
     versionToken: proceduralIllustrationBitmapCacheStats.versionToken

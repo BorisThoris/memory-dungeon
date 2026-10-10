@@ -105,6 +105,12 @@ export const useHudPoliteLiveAnnouncement = ({
         forgottenTileCount: number;
     } | null>(null);
     const announcedGameplayFeedbackEventIdsRef = useRef<Set<string>>(new Set());
+    useEffect(() => {
+        const currentIds = new Set(gameplayFeedback.map((item) => item.eventId));
+        for (const id of announcedGameplayFeedbackEventIdsRef.current) {
+            if (!currentIds.has(id)) announcedGameplayFeedbackEventIdsRef.current.delete(id);
+        }
+    }, [gameplayFeedback]);
     // Read inside the effects rather than during render: whether a feedback event has
     // already been spoken is not a rendering concern, and a render-time read of the ref
     // returns whatever the last committed effect left there.

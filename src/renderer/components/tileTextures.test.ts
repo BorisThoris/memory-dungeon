@@ -68,6 +68,7 @@ describe('tileTextures layout', () => {
     it('reuses the same overlay texture after warm-up requests', () => {
         clearTileTextureCachesForDebug();
         const tile = baseTile('alpha', 'pair-alpha');
+        const getContext = vi.spyOn(HTMLCanvasElement.prototype, 'getContext');
 
         const cold = getTileFaceOverlayTexture(tile, 'active', 'high');
         const warm = getTileFaceOverlayTexture(tile, 'active', 'high');
@@ -78,6 +79,8 @@ describe('tileTextures layout', () => {
         expect(state.overlayTexture.createdCount).toBe(1);
         expect(state.overlayTexture.hitCount).toBe(1);
         expect(state.illustrationBitmap.createdCount).toBe(1);
+        expect(getContext).toHaveBeenCalledWith('2d', { willReadFrequently: true });
+        getContext.mockRestore();
     });
 
     it('disposes offscreen card textures but preserves the mounted working set', () => {

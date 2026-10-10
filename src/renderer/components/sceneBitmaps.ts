@@ -6,9 +6,9 @@ import type { SceneFilter, ScenePaintImage } from './scenePaint';
  * A background image on an element is decoded when the browser first rasters it and can be thrown
  * away and decoded again whenever its cache is under pressure, and each time that happens the
  * element is blank for a frame. Here every image is decoded up front (`HTMLImageElement.decode`),
- * turned into an `ImageBitmap` where the browser has them (a bitmap is already on the GPU's side
- * of the fence), and kept for the life of the page, so a scene never draws a frame it has to wait
- * for.
+ * reused directly from the preloader, so a scene never draws a frame it has to wait for. Do not
+ * promote them to a second ImageBitmap: that retained another full set of room pixels, and the
+ * reported Chrome renderer crashes occurred in its GPU image decode path while painting a canvas.
  *
  * A graded copy (`SceneFilter`: the ring turning rose with the chain, the snow's blurred glow) is
  * baked into its own small canvas the first time it is asked for and reused, a few to an image.
@@ -25,6 +25,23 @@ const listeners = new Set<() => void>();
 
 /** Graded copies kept per image; the oldest goes when a new grade is asked for past this. */
 const SCENE_GRADES_HELD = 4;
+/** A session-wide pixel budget, rather than four full-resolution copies of every room layer. */
+const SCENE_GRADE_PIXEL_BUDGET = 8 * 1024 * 1024;
+const gradedImages = new Map<ScenePaintImage, { entry: Held; key: string }>();
+let gradedPixels = 0;
+
+const releaseGrade = (image: ScenePaintImage): void => {
+    const owner = gradedImages.get(image);
+    if (!owner) return;
+    owner.entry.graded.delete(owner.key);
+    gradedImages.delete(image);
+    gradedPixels -= image.width * image.height;
+    // Return the backing store now, rather than waiting for a JS garbage collection.
+    if (image.image instanceof HTMLCanvasElement) {
+        image.image.width = 1;
+        image.image.height = 1;
+    }
+};
 
 const notify = (): void => {
     for (const listener of listeners) {
@@ -61,17 +78,6 @@ const load = (src: string, entry: Held): void => {
         }
         entry.image = { image: element, width, height };
         notify();
-        if (typeof createImageBitmap === 'function') {
-            createImageBitmap(element)
-                .then((bitmap) => {
-                    entry.image = { image: bitmap, width: bitmap.width, height: bitmap.height };
-                    entry.graded.clear();
-                    notify();
-                })
-                .catch(() => {
-                    /* The element itself draws fine; the bitmap was only the faster road. */
-                });
-        }
     };
     if (ready) {
         settle();
@@ -208,7 +214,9 @@ const grade = (source: ScenePaintImage, filter: Required<SceneFilter>): ScenePai
     const canvas = document.createElement('canvas');
     canvas.width = source.width;
     canvas.height = source.height;
-    const context = canvas.getContext('2d');
+    // These are one-time cached paints. Keep their pixels on the CPU instead of asking Chrome's
+    // accelerated canvas image decoder to create another GPU surface for every grade.
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) {
         return null;
     }
@@ -260,6 +268,9 @@ export const getSceneImage = (src: string, filter?: SceneFilter): ScenePaintImag
         // Most recently used goes to the back of the line.
         entry.graded.delete(key);
         entry.graded.set(key, ready);
+        const owner = gradedImages.get(ready)!;
+        gradedImages.delete(ready);
+        gradedImages.set(ready, owner);
         return ready;
     }
     const baked = grade(entry.image, quantized);
@@ -267,12 +278,14 @@ export const getSceneImage = (src: string, filter?: SceneFilter): ScenePaintImag
         return entry.image;
     }
     entry.graded.set(key, baked);
-    while (entry.graded.size > SCENE_GRADES_HELD) {
-        const oldest = entry.graded.keys().next().value;
-        if (oldest === undefined) {
-            break;
-        }
-        entry.graded.delete(oldest);
+    gradedImages.set(baked, { entry, key });
+    gradedPixels += baked.width * baked.height;
+    while (entry.graded.size > SCENE_GRADES_HELD || (gradedPixels > SCENE_GRADE_PIXEL_BUDGET && gradedImages.size > 1)) {
+        const oldest = entry.graded.size > SCENE_GRADES_HELD
+            ? entry.graded.values().next().value
+            : gradedImages.keys().next().value;
+        if (!oldest) break;
+        releaseGrade(oldest);
     }
     return baked;
 };

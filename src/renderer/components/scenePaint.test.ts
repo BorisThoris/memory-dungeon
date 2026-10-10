@@ -35,6 +35,21 @@ const image = { image: {} as CanvasImageSource, width: 200, height: 100 };
 const env = (over: Partial<ScenePaintEnv> = {}): ScenePaintEnv => ({ width: 1000, height: 500, image: () => image, lookX: 0, lookY: 0, ...over });
 
 describe('paintScene', () => {
+    it('reuses a fixed blur while a combo changes its live brightness on every link', () => {
+        const { context } = recorder();
+        const requested: unknown[] = [];
+        const live: unknown[] = [];
+        for (const brightness of [1.4, 1.5, 1.6]) {
+            paintScene(context, [{ kind: 'image', id: 'combo-glow', src: 'glow', alpha: 1, filter: { brightness, blurPx: 4 } }], env({
+                image: (_src, filter) => { requested.push(filter); return image; },
+                liveFilter: (filter) => { live.push(filter); return `brightness(${filter.brightness})`; }
+            }));
+        }
+        expect(requested).toEqual([{ blurPx: 4 }, { blurPx: 4 }, { blurPx: 4 }]);
+        expect(live).toEqual([{ brightness: 1.4, blurPx: 0 }, { brightness: 1.5, blurPx: 0 }, { brightness: 1.6, blurPx: 0 }]);
+        expect(context.filter).toBe('none');
+    });
+
     it('paints a layer over the whole canvas at its strength, adding light and covering with paint', () => {
         const { context, draws } = recorder();
         const made = paintScene(

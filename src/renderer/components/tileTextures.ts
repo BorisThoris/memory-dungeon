@@ -557,7 +557,10 @@ const createTexture = (
     canvas.width = width;
     canvas.height = height;
 
-    const context = canvas.getContext('2d');
+    // Bake once on the CPU, then upload through three.js. Chrome 155 renderer dumps faulted in
+    // GpuImageDecodeCache while a 2D canvas rasterized images; these cached surfaces do not need
+    // a second accelerated image-decode surface before the WebGL upload.
+    const context = canvas.getContext('2d', { willReadFrequently: true });
 
     if (!context) {
         return null;
@@ -1552,7 +1555,7 @@ export const retainTileTextureWorkingSet = (cardIds: ReadonlySet<string>): void 
 
 /** Paint the same face/back assets into a small atlas slot without allocating a cached GPU texture per card. */
 export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: boolean, openingLocked = false): void => {
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
     const base = faceUp ? getCardFaceStaticTexture() : tile.suit ? elementTexture(tile.suit, false) : getTileFaceTexture(tile, 'back', 'hidden', 'panel');
@@ -1560,7 +1563,7 @@ export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: 
     if (faceUp) {
         const overlay = document.createElement('canvas');
         overlay.width = canvas.width; overlay.height = canvas.height;
-        const overlayContext = overlay.getContext('2d');
+        const overlayContext = overlay.getContext('2d', { willReadFrequently: true });
         if (overlayContext) {
             drawCardFrontOverlay(overlayContext, overlay, tile, 'active', 'standard');
             context.drawImage(overlay, 0, 0);

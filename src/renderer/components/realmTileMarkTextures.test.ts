@@ -53,4 +53,31 @@ describe('the realm marks are painted before play', () => {
         expect(nextUpload.mock.calls).toEqual(firstUpload.mock.calls);
         expect(create).not.toHaveBeenCalledWith('canvas');
     });
+
+    it('retains face-up marks when a quality change warms the current floor again', async () => {
+        const { prewarmRealmTileMarks, realmTileMarkTexture } = await import('./realmTileMarkTextures');
+        const card = tile({ hourglass: 2 });
+        prewarmRealmTileMarks([card]);
+        const texture = realmTileMarkTexture(cardStatusMark(card, false)!, true);
+        const dispose = vi.spyOn(texture, 'dispose');
+        expect(prewarmRealmTileMarks([{ ...card, state: 'flipped' }])).toBe(0);
+        expect(dispose).not.toHaveBeenCalled();
+    });
+
+    it('releases the previous floor\'s status combinations while retaining countdowns the new floor can use', async () => {
+        const { prewarmRealmTileMarks } = await import('./realmTileMarkTextures');
+        const oldUpload = vi.fn();
+        prewarmRealmTileMarks([tile({ frost: 2, fuse: 3, turncoat: 'tide', hourglass: 4 })], oldUpload);
+        const oldTextures = oldUpload.mock.calls.map(([texture]) => texture);
+        const disposed = oldTextures.map((texture) => vi.spyOn(texture, 'dispose'));
+        const nextUpload = vi.fn();
+        prewarmRealmTileMarks([tile({ hourglass: 2 })], nextUpload);
+        expect(oldTextures.length).toBeGreaterThan(100);
+        expect(disposed.filter((dispose) => dispose.mock.calls.length === 1).length).toBe(oldTextures.length);
+        const retained = nextUpload.mock.calls.map(([texture]) => vi.spyOn(texture, 'dispose'));
+        expect(prewarmRealmTileMarks([tile({ hourglass: 2 })])).toBe(0);
+        expect(retained.every((dispose) => dispose.mock.calls.length === 0)).toBe(true);
+        prewarmRealmTileMarks([]);
+        expect(retained.every((dispose) => dispose.mock.calls.length === 1)).toBe(true);
+    });
 });

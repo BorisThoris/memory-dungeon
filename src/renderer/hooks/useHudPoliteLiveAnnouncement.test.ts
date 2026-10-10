@@ -455,6 +455,28 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.priority).toBe('error');
     });
 
+    it('forgets retired feedback IDs so a restarted run can announce its events again', async () => {
+        const feedback: GameplayFeedbackPresentation = {
+            audioCategory: 'match-resolution', commandId: 'flip-1', cue: 'findable.claimed',
+            eventId: 'flip-1:1', message: 'Cache claimed.', priority: 'info',
+            source: { kind: 'findable', id: 'cache' }, tone: 'reward'
+        };
+        const { result, rerender } = renderHook(
+            (p: { feedback: readonly GameplayFeedbackPresentation[] }) =>
+                useHudPoliteLiveAnnouncement({ ...base, gameplayFeedback: p.feedback }),
+            { initialProps: { feedback: [] as readonly GameplayFeedbackPresentation[] } }
+        );
+        await act(async () => { rerender({ feedback: [feedback] }); });
+        await flushRaf();
+        expect(result.current.message).toBe('Cache claimed.');
+        await act(async () => { rerender({ feedback: [] }); });
+        // A new command after a reset may reuse the previous run's event ID.
+        await act(async () => { rerender({ feedback: [{ ...feedback, message: 'New cache claimed.' }] }); });
+        await act(async () => { await new Promise(resolve => setTimeout(resolve, 450)); });
+        await flushRaf();
+        expect(result.current.message).toBe('New cache claimed.');
+    });
+
     it('uses one typed reward message instead of duplicate legacy resource-gain copy', async () => {
         const feedback: GameplayFeedbackPresentation = {
             audioCategory: 'match-resolution',

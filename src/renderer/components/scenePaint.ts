@@ -193,8 +193,13 @@ const SCENE_DEPTH_SHIFT_Y = 0.003;
 const clampAlpha = (alpha: number): number => (Number.isFinite(alpha) ? Math.min(1, Math.max(0, alpha)) : 0);
 
 const paintImage = (context: ScenePaintContext, draw: SceneImageDraw, env: ScenePaintEnv): boolean => {
-    const live = draw.filter && env.liveFilter ? env.liveFilter(draw.filter) : null;
-    const source = env.image(draw.src, live === null ? draw.filter : undefined);
+    // A blur's pixels are constant even when the combo keeps brightening them. Bake only the
+    // blur, then apply its colour live; otherwise every combo step retained another room-sized
+    // canvas and repeatedly rebuilt the same blur.
+    const color = draw.filter ? { ...draw.filter, blurPx: 0 } : undefined;
+    const live = color && env.liveFilter ? env.liveFilter(color) : null;
+    const bakedFilter = live === null ? draw.filter : draw.filter?.blurPx ? { blurPx: draw.filter.blurPx } : undefined;
+    const source = env.image(draw.src, bakedFilter);
     if (!source) {
         return false;
     }

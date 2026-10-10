@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
     getSceneImage,
     offerSceneImage,
@@ -100,6 +100,42 @@ describe('scene images', () => {
         offerSceneImage('/a.webp', first);
         offerSceneImage('/a.webp', loaded(200, 100));
         expect(getSceneImage('/a.webp')!.width).toBe(100);
+    });
+
+    it('reuses decoded preloaded pixels without retaining a second bitmap for every scene layer', async () => {
+        const createBitmap = vi.fn();
+        vi.stubGlobal('createImageBitmap', createBitmap);
+        try {
+            const element = loaded();
+            offerSceneImage('/single-decoded-source.webp', element);
+            expect(getSceneImage('/single-decoded-source.webp')?.image).toBe(element);
+            await Promise.resolve();
+            expect(createBitmap).not.toHaveBeenCalled();
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
+
+    it('bounds filtered backing stores across all rooms and releases evicted pixels immediately', () => {
+        const getContext = vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+            filter: 'none', drawImage: vi.fn()
+        } as unknown as ReturnType<HTMLCanvasElement['getContext']>);
+        try {
+            const copies: HTMLCanvasElement[] = [];
+            for (let room = 0; room < 24; room++) {
+                const src = `/bounded-grade-${room}.webp`;
+                offerSceneImage(src, loaded(1024, 1024));
+                copies.push(getSceneImage(src, { brightness: 1.5, blurPx: 4 })!.image as HTMLCanvasElement);
+            }
+            expect(copies.filter((copy) => copy.width > 1)).toHaveLength(8);
+            expect(copies[0]!.width).toBe(1);
+            expect(copies[0]!.height).toBe(1);
+            expect(getContext).toHaveBeenCalledWith('2d', { willReadFrequently: true });
+            const latest = copies.at(-1)!;
+            expect(getSceneImage('/bounded-grade-23.webp', { brightness: 1.5, blurPx: 4 })?.image).toBe(latest);
+        } finally {
+            getContext.mockRestore();
+        }
     });
 
     it('has nothing for an image still on its way, and nothing for no image at all', () => {
