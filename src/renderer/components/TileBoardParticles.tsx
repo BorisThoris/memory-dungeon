@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, type RefObject } from 'rea
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { readElementalGround } from '../../shared/element-ground-rules';
 import { hashStringToSeed } from '../../shared/rng';
+import { getSceneEffectTier } from '../../shared/graphicsQuality';
 import { boardParticleBudget, createBoardParticleSystem } from './boardParticleSystem';
 import { collectBoardParticleCues, particleBoardChanged } from './boardParticleCues';
 import { itemEffectRecipe, useItemEffectChannel } from './itemEffects';
@@ -15,6 +16,8 @@ import { collectElementCastParticles } from './elementCastParticles';
 import { cardDepartureBursts, cardDepartureSparkTint, CARD_DEPARTURE_PARTICLE_DELAY } from './cardDepartureParticles';
 import { createCardShardSystem } from './cardShardSystem';
 import { createCardElementFxSystem } from './cardElementFx';
+import { createCardDepartureWorld } from './cardDepartureWorld';
+import type { DepartureSource } from './cardDepartureGrouping';
 import { emitRoomSpill } from './roomSpill';
 import { Vector3 } from 'three';
 import { CARD_PLANE_HEIGHT } from './tileShatter';
@@ -26,6 +29,7 @@ import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, realmEventMote, REALM_MOTE_SIZE,
 
 const PARTICLE_KINDS = ['bomb', 'match', 'flip', 'chain', 'rim', 'ripple', 'arc', 'ember'] as const;
 const themeOf = (id: ComboHeatThemeId | undefined) => heatThemeById(id);
+let departureInstanceSerial = 0;
 
 export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMotion, runStatus, frames, cardHeat, combo = 0, comboTheme, time, sharedFrameClock }: {
     board: BoardState;
@@ -44,14 +48,21 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
 }) => {
     const { gl, camera } = useThree();
     const comboPopEffects = useDevOptions(state => state.comboPopEffects);
+    const departureQuality = getSceneEffectTier({ quality: graphicsQuality, reduceMotion,
+        coarsePointer: typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches,
+        viewportWidth: typeof window === 'undefined' ? 1280 : window.innerWidth }) === 'lean' ? 'low' : graphicsQuality;
     const system = useMemo(() => createBoardParticleSystem(), []);
     // Every card that leaves breaks into pieces that fall and bounce on the board's floor (`cardShards.ts`).
     const shards = useMemo(() => createCardShardSystem(), []);
     const shardBreaks = useRef(0);
+    const departureWorld = useMemo(() => createCardDepartureWorld(), []);
+    const departureSerial = useRef(0);
+    const departureInstance = useMemo(() => `${performance.timeOrigin}:${++departureInstanceSerial}`, []);
     // A water card liquefies, a fire card combusts, a growth card has a growth spurt (`cardElementFx.ts`).
     const elementFx = useMemo(() => createCardElementFxSystem(), []);
     const previous = useRef<BoardState | null>(null);
     const motion = useRef(reduceMotion);
+    const physicalQuality = useRef(departureQuality);
     const activeCount = useRef(-1);
     const peakCount = useRef(0);
     const totals = useRef({ bomb: 0, match: 0, flip: 0, chain: 0, rim: 0, ripple: 0, arc: 0, ember: 0 });
@@ -78,16 +89,19 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const departureBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useEffect(() => () => shards.dispose(), [shards]);
+    useEffect(() => () => departureWorld.dispose(), [departureWorld]);
     useEffect(() => () => elementFx.dispose(), [elementFx]);
     useLayoutEffect(() => {
         system.configure(graphicsQuality);
         system.setComboPopEffects(comboPopEffects);
-        if (particleBoardChanged(previous.current, board) || motion.current !== reduceMotion) {
+        if (particleBoardChanged(previous.current, board) || motion.current !== reduceMotion || physicalQuality.current !== departureQuality) {
             system.clear();
             shards.clear();
+            departureWorld.clear();
             elementFx.clear();
         }
         motion.current = reduceMotion;
+        physicalQuality.current = departureQuality;
         const intensity = comboEffectIntensity(combo);
         const energy = Math.max(cardHeat, intensity);
         const theme = themeOf(comboTheme);
@@ -120,6 +134,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         // Reserve the first detailed departure slots for the pair the player actually matched.
         const departureCues = collectBoardParticleCues(previous.current, board)
             .sort((a, b) => Number(b.kind === 'match') - Number(a.kind === 'match'));
+        const physicalSources: DepartureSource[] = [];
+        const occurrence = ++departureSerial.current;
         for (const cue of departureCues) {
             const index = cellById.get(cue.tileId)!;
             const tile = board.tiles[index]!;
@@ -129,6 +145,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             const group = frame?.groupRef.current;
             group?.updateMatrix();
             const anchor = group?.position;
+            if (cue.kind === 'match' && !reduceMotion) departureWorld.impulse(anchor?.x ?? transform.baseX, anchor?.y ?? transform.baseY, 0, .12);
             const emitted = system.emit({ ...cue,
                 delay: cue.delay + (cue.kind === 'match' && !reduceMotion ? MATCH_CONTACT_SECONDS : 0),
                 x: anchor?.x ?? transform.baseX + transform.layoutJitterX,
@@ -141,12 +158,19 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             if (emitted > 0) totals.current[cue.kind] += 1;
             // ...and as it leaves, it breaks: its pieces thrown off to fall and bounce on the floor under the board.
             if (cue.kind !== 'flip' && !reduceMotion) {
+                const sourceKey = `${departureInstance}:${tile.id}:${occurrence}:${time.current.toFixed(3)}`;
+                physicalSources.push({ key: sourceKey,
+                    material: tile.suit === 'tide' ? 'water' : tile.suit === 'ember' ? 'fire' : tile.suit === 'moss' ? 'growth' : tile.suit === 'bone' ? 'ice' : 'stone',
+                    x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: anchor?.z ?? .04,
+                    start: time.current + cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * .6,
+                    floorY, seed: hashStringToSeed(sourceKey), combo });
+                const binding = () => departureWorld.binding(sourceKey);
                 const transformed = elementFx.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
-                    seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
-                    floorY, quality: graphicsQuality });
+                    seed: hashStringToSeed(sourceKey), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
+                    floorY, quality: departureQuality, binding });
                 if (!transformed) shards.spawn({ tile, x: anchor?.x ?? transform.baseX + transform.layoutJitterX, y: anchor?.y ?? transform.baseY + transform.layoutJitterY, z: (anchor?.z ?? 0.04) + 0.02,
-                    seed: hashStringToSeed(`${tile.id}:shards`), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
-                    floorY, quality: graphicsQuality, energy });
+                    seed: hashStringToSeed(sourceKey), time: time.current, delay: cue.delay + CARD_DEPARTURE_PARTICLE_DELAY * 0.6,
+                    floorY, quality: departureQuality, energy, binding });
                 shardBreaks.current += 1;
                 // And its material spills into the room, from where the card is on the screen (`roomSpill.ts`).
                 const onScreen = new Vector3(anchor?.x ?? transform.baseX, anchor?.y ?? transform.baseY, anchor?.z ?? 0.04).project(camera);
@@ -169,6 +193,8 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 time: time.current, delay: MATCH_CONTACT_SECONDS, seed: transform.seed,
                 reduceMotion, quality: graphicsQuality, energy }) > 0) totals.current.ripple += 1;
         }
+        if (physicalSources.length) departureWorld.spawnWave(physicalSources, departureQuality);
+        shards.preparePhysics();
         for (const cue of collectElementCastParticles(previous.current, board, graphicsQuality, compact, reduceMotion, time.current)) {
             if (system.emit(cue) > 0) castBursts.current += 1;
         }
@@ -188,7 +214,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const kind of PARTICLE_KINDS) {
             canvas.setAttribute(`data-particle-${kind}-bursts`, String(totals.current[kind]));
         }
-    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, reduceMotion, sharedFrameClock, shards, elementFx, system, time, camera]);
+    }, [board, cardHeat, cellById, combo, comboTheme, comboPopEffects, compact, frames, gl, graphicsQuality, departureQuality, departureInstance, reduceMotion, sharedFrameClock, shards, elementFx, departureWorld, system, time, camera]);
     // Items used on the board (`itemEffects.ts`): each effect's recipe, at its cards or its cell.
     const itemEffectInputs = useRef({ board, compact, graphicsQuality, reduceMotion });
     useLayoutEffect(() => {
@@ -362,6 +388,10 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             gl.domElement.setAttribute('data-particle-ground-bursts', String(groundBursts.current));
         }
         const active = system.advance(time.current);
+        departureWorld.advance(time.current);
+        const departures = departureWorld.stats();
+        gl.domElement.setAttribute('data-departure-groups', String(departures.groups));
+        gl.domElement.setAttribute('data-departure-physics-particles', String(departures.particles));
         shards.advance(time.current);
         elementFx.advance(time.current);
         if (active > peakCount.current) {
@@ -378,5 +408,5 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
             pausedFrame.current = paused;
         }
     });
-    return <><primitive object={system.rippleMesh} dispose={null} /><primitive object={system.mesh} dispose={null} /><primitive object={shards.group} dispose={null} /><primitive object={elementFx.group} dispose={null} /></>;
+    return <><primitive object={system.rippleMesh} dispose={null} /><primitive object={system.mesh} dispose={null} /><primitive object={departureWorld.group} dispose={null} /><primitive object={shards.group} dispose={null} /><primitive object={elementFx.group} dispose={null} /></>;
 };

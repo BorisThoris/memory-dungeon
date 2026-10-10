@@ -66,6 +66,7 @@ test('repeated matches and large cascades keep GPU resources bounded', async ({ 
     });
     await page.goto('/?hallRoom=fever-bridge', { timeout: 180_000 });
     await page.waitForSelector('canvas[data-webgl-draw-calls]', { timeout: 180_000 });
+    const originalCanvas = await page.locator('canvas[data-webgl-draw-calls]').elementHandle();
     const rooms = ['fever-bridge', 'clean-pop', 'element-fire', 'element-water', 'element-frost',
         'element-grove', 'element-steam', 'element-blaze', 'element-frostbloom', 'hourglass'] as const;
     const readGpu = () => page.evaluate(() => ({ ...(window as unknown as {
@@ -78,9 +79,12 @@ test('repeated matches and large cascades keep GPU resources bounded', async ({ 
         await page.evaluate(async ({ id, turn }) => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             const { testHallRoom } = await import('/src/shared/test-hall-rooms.ts');
-            const hooks = window as unknown as { __memoryDungeonE2e: { startTestHallRoom(id: string): Promise<boolean> } };
-            const started = await hooks.__memoryDungeonE2e.startTestHallRoom(id);
-            if (!started) throw new Error(`Could not start ${id}`);
+            const { startTestHallRoom } = await import('/src/renderer/dev/testHallLoader.ts');
+            // Use the run lifecycle to cancel delayed resolution from the preceding room.
+            // Load the next fixture synchronously in the same batch: awaiting the public hook
+            // here unmounts the canvas, so a global buffer tracker also counts retired contexts.
+            useAppStore.getState().goToMenu();
+            startTestHallRoom(id);
             await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
             const step = testHallRoom(id)!.script.find(entry => entry.step.do === 'match')?.step;
             if (!step || step.do !== 'match') throw new Error(`${id} has no match`);
@@ -93,16 +97,32 @@ test('repeated matches and large cascades keep GPU resources bounded', async ({ 
                 stats: { ...run.stats, currentStreak: [0, 8, 24, 64, 256, 3000][turn % 6]! } } });
             for (const tile of pair) useAppStore.getState().pressTile(tile.id);
         }, { id: rooms[turn % rooms.length]!, turn });
-        await expect.poll(async () => page.evaluate(async () => {
-            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            return useAppStore.getState().run?.board?.matchedPairs ?? 0;
-        })).toBeGreaterThan(0);
+        try {
+            await expect.poll(async () => page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                return useAppStore.getState().run?.board?.matchedPairs ?? 0;
+            }), { message: `Resolved stress match ${turn} in ${rooms[turn % rooms.length]}` }).toBeGreaterThan(0);
+        } catch (error) {
+            const state = await page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const state = useAppStore.getState();
+                return { view: state.view, status: state.run?.status, pairs: state.run?.board?.matchedPairs,
+                    flipped: state.run?.board?.flippedTileIds, timers: state.run?.timerState,
+                    renderedStatus: document.querySelector('[data-board-run-status]')?.getAttribute('data-board-run-status') };
+            });
+            await testInfo.attach('failed-match-state', { body: JSON.stringify({ turn, room: rooms[turn % rooms.length], state, gpu: await readGpu(), errors }), contentType: 'application/json' });
+            throw error;
+        }
         await page.waitForTimeout(450);
         if (turn < 30 && turn % 6 === 5) {
             await page.screenshot({ path: testInfo.outputPath(`realm-combo-${turn}.png`) });
         }
         if (turn % rooms.length === rooms.length - 1) {
             await page.waitForTimeout(3000);
+            // The scene clock slows on low-FPS headless runs. Sample after the actual effects
+            // expire, rather than comparing a live departure against an idle room.
+            await expect(page.locator('canvas[data-departure-groups]')).toHaveAttribute('data-departure-groups', '0', { timeout: 30_000 });
+            expect(await originalCanvas!.evaluate(canvas => canvas.isConnected)).toBe(true);
             samples.push(await readGpu());
             await cdp.send('HeapProfiler.collectGarbage');
             await page.waitForTimeout(100);
@@ -111,6 +131,7 @@ test('repeated matches and large cascades keep GPU resources bounded', async ({ 
             }).__matchMemory()));
         }
     }
+    await testInfo.attach('warmed-gpu-resource-samples', { body: JSON.stringify(samples, null, 2), contentType: 'application/json' });
     // Compare identical warmed rooms: the old card planes leaked ~248 buffers per ten turns.
     for (const sample of samples.slice(1)) expect(sample.buffers).toBeLessThanOrEqual(samples[0]!.buffers + 32);
     for (const sample of samples.slice(1)) expect(sample.textures).toBeLessThanOrEqual(samples[0]!.textures + 8);

@@ -5,6 +5,7 @@ import { cardShardPieces, SHARD_STYLES, shardFlight, shardPath, shardPose, shard
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { getCardFaceStaticTexture, getTileFaceOverlayTexture, getTileFaceTexture } from './tileTextures';
 import { cardDepartureEffectBudget } from './cardDepartureBudget';
+import type { DepartureBinding } from './cardDepartureWorld';
 
 /**
  * The pieces of the cards that break (`cardShards.ts`), drawn on the board: each piece a polygon of
@@ -110,6 +111,7 @@ interface ShardMesh {
     mesh: Mesh;
     path: ShardPath;
     flight: ShardFlight;
+    origin: readonly [number, number, number];
 }
 
 interface Break {
@@ -118,6 +120,8 @@ interface Break {
     material: ShaderMaterial;
     pieces: ShardMesh[];
     overlay: Texture | null;
+    binding?: () => DepartureBinding | undefined;
+    prepared?: boolean;
 }
 
 /** A piece's geometry: a fan over its outline, the card's own UVs, and how far each vertex is from the break. */
@@ -142,6 +146,7 @@ const pieceGeometry = (piece: ShardPiece): BufferGeometry => {
     geometry.setAttribute('position', new BufferAttribute(new Float32Array(positions), 3));
     geometry.setAttribute('uv', new BufferAttribute(new Float32Array(uvs), 2));
     geometry.setAttribute('edge', new BufferAttribute(new Float32Array(edges), 1));
+    geometry.computeBoundingSphere();
     return geometry;
 };
 
@@ -167,10 +172,10 @@ export const createCardShardSystem = () => {
          * Break a card, its element's way: its pieces start where they lie on it and are thrown off,
          * `delay` seconds after `time`; `floorY` is the floor under the board's lowest row.
          */
-        spawn({ tile, x, y, z, seed, time, delay, floorY, quality, energy }: { tile: Tile; x: number; y: number; z: number; seed: number; time: number; delay: number; floorY: number; quality: GraphicsQualityPreset; energy: number }): number {
+        spawn({ tile, x, y, z, seed, time, delay, floorY, quality, energy, binding }: { tile: Tile; x: number; y: number; z: number; seed: number; time: number; delay: number; floorY: number; quality: GraphicsQualityPreset; energy: number; binding?: () => DepartureBinding | undefined }): number {
             if (breaks.length >= cardDepartureEffectBudget(quality)) return 0;
             const style = SHARD_STYLES[shardStyleOf(tile.suit)];
-            const count = Math.max(3, Math.round(style.count * (quality === 'low' ? 0.6 : quality === 'medium' ? 0.8 : 1)));
+            const count = Math.max(3, Math.round(style.count * (quality === 'low' ? 0.5 : quality === 'medium' ? 0.75 : 1)));
             const face = getCardFaceStaticTexture();
             // Own the texture lifetime independently of the visible card window's cache eviction.
             const overlay = getTileFaceOverlayTexture(tile, 'matched', quality)?.clone() ?? null;
@@ -200,10 +205,32 @@ export const createCardShardSystem = () => {
                 mesh.frustumCulled = false;
                 group.add(mesh);
                 const flight = shardFlight(piece, seed, index, style, energy);
-                return { mesh, flight, path: shardPath(flight, style, x + piece.cx, y + piece.cy, z, floorY) };
+                return { mesh, flight, origin: [x + piece.cx, y + piece.cy, z] as const, path: shardPath(flight, style, x + piece.cx, y + piece.cy, z, floorY) };
             });
-            breaks.push({ start: time + delay, style, material, pieces, overlay });
+            breaks.push({ start: time + delay, style, material, pieces, overlay, binding });
             return pieces.length;
+        },
+        /** Start simulated fragments where they actually lay on the departing card. */
+        preparePhysics(): void {
+            for (const shattered of breaks) {
+                if (shattered.prepared) continue;
+                const binding = shattered.binding?.();
+                if (!binding) continue;
+                const particles = binding.body.particles.filter(particle => particle.source === binding.source);
+                particles.forEach((particle, index) => {
+                    const piece = shattered.pieces[index];
+                    if (!piece) return;
+                    [particle.x, particle.y, particle.z] = piece.origin;
+                    particle.z = Math.min(-.025, particle.z);
+                    particle.vx = piece.flight.vx * binding.body.drive;
+                    particle.vy = piece.flight.vy * binding.body.drive;
+                    particle.vz = piece.flight.vz;
+                    particle.angle = 0;
+                    particle.angularVelocity = piece.flight.spin * binding.body.drive;
+                    particle.radius = piece.mesh.geometry.boundingSphere!.radius;
+                });
+                shattered.prepared = true;
+            }
         },
         /** Pose every piece at `now`; drop the breaks that are over. Returns how many pieces are showing. */
         advance(now: number): number {
@@ -220,16 +247,24 @@ export const createCardShardSystem = () => {
                 uniforms.uAge!.value = Math.max(0, t);
                 uniforms.uGo!.value = Math.min(1, Math.max(0, (t - shattered.style.goFrom) / (shattered.style.life - shattered.style.goFrom)));
                 uniforms.uFade!.value = t < 0 ? 0 : Math.min(1, t / 0.05);
-                for (const { mesh, path, flight } of shattered.pieces) {
+                const binding = shattered.binding?.();
+                const physical = binding?.body.particles.filter(particle => particle.source === binding.source);
+                for (let pieceIndex = 0; pieceIndex < shattered.pieces.length; pieceIndex++) {
+                    const { mesh, path, flight } = shattered.pieces[pieceIndex]!;
                     if (t < 0) {
                         mesh.visible = false;
                         continue;
                     }
                     const pose = shardPose(path, t);
                     mesh.visible = true;
-                    mesh.position.set(pose.x, pose.y, pose.z);
+                    // The solver and renderer share a debris budget. At coarse LOD, draw the
+                    // representative pieces once rather than stacking duplicates on one body.
+                    if (physical?.length && pieceIndex >= physical.length) { mesh.visible = false; continue; }
+                    const particle = physical?.[pieceIndex];
+                    if (particle) particle.radius = Math.max(particle.radius, mesh.geometry.boundingSphere!.radius);
+                    mesh.position.set(particle?.x ?? pose.x, particle?.y ?? pose.y, particle?.z ?? pose.z);
                     axis.set(flight.axis[0], flight.axis[1], flight.axis[2]);
-                    quaternion.setFromAxisAngle(axis, pose.angle);
+                    quaternion.setFromAxisAngle(axis, particle ? particle.angle : pose.angle);
                     mesh.quaternion.copy(quaternion);
                     live += 1;
                 }

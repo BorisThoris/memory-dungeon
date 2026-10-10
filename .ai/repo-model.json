@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3151,
-    "codeFileCount": 1177,
-    "exportedSymbolCount": 3728,
+    "trackedFileCount": 3158,
+    "codeFileCount": 1183,
+    "exportedSymbolCount": 3748,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9917
+    "relationshipCount": 9966
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d7280debf31ebd90df60945cfa0f5a31ada846aafcb9a2fab0ef1fe288fdf386"
+      "sha256": "66a7f7c4ee9da8310f88fc8f53a73abde00f9c94bafc3be039c04148d7556e00"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3841,10 +3841,16 @@
       "sha256": "088b4fd7b1e2ccdcca204c9f89f088252ea18d24ba559deec25c31cca171d33b"
     },
     {
+      "path": "e2e/card-departure-groups.spec.ts",
+      "category": "test",
+      "bytes": 8861,
+      "sha256": "eb1b7ccfc55121f3fb2ed71ddd726ac34d1921a5cf0a1234630e537fe39c2ffc"
+    },
+    {
       "path": "e2e/card-matching-stress.spec.ts",
       "category": "test",
-      "bytes": 12693,
-      "sha256": "bb02543bd2a619631dfb6bdae31892f73418f30646a744292aaab9d1515d40db"
+      "bytes": 14443,
+      "sha256": "6f810e4ece9b526eff4a13e5659b77b6dd14c8906f8d5f90e7a4b5f972580a95"
     },
     {
       "path": "e2e/cascade-chain.spec.ts",
@@ -10357,6 +10363,12 @@
       "sha256": "ddf9fa767b029bb1b33a5aa8a75813c364de1d3ca5a907b65c7fa7e6c5da3456"
     },
     {
+      "path": "src/renderer/components/cardDepartureGrouping.ts",
+      "category": "source",
+      "bytes": 3770,
+      "sha256": "7583507caa514af16438af03882d070c9362f3d36f82b3f8c1f40b7396053d98"
+    },
+    {
       "path": "src/renderer/components/cardDepartureParticles.test.ts",
       "category": "test",
       "bytes": 1441,
@@ -10369,10 +10381,40 @@
       "sha256": "fb606b70f4cf2a854b39e5496b1ee737f35992b49d7be11fe57ea5249b9f982d"
     },
     {
+      "path": "src/renderer/components/cardDeparturePhysics.test.ts",
+      "category": "test",
+      "bytes": 7834,
+      "sha256": "63f13a451b05740ed85f0332f9b861c0771022f44b5b96c4b3adb64d59180371"
+    },
+    {
+      "path": "src/renderer/components/cardDeparturePhysics.ts",
+      "category": "source",
+      "bytes": 15873,
+      "sha256": "764bba147a71d63469b50bcfae089701098e26ff9c3496f31a482ec8daf314ab"
+    },
+    {
       "path": "src/renderer/components/cardDepartureResources.test.ts",
       "category": "test",
-      "bytes": 3901,
-      "sha256": "d50b851286b38b6dade4337e2c8fb8096bc9a627fd66f78e545565a16c87d00e"
+      "bytes": 5192,
+      "sha256": "64d50fbdfa5dc2f00380fa16b64b2a572ed7253761956caf397f979e08c56a71"
+    },
+    {
+      "path": "src/renderer/components/cardDepartureSheet.ts",
+      "category": "source",
+      "bytes": 4933,
+      "sha256": "c7c9b2abfb231946e29f23cd57357c1ac4757df8f7f599fe294f878e7bddd0d0"
+    },
+    {
+      "path": "src/renderer/components/cardDepartureWorld.test.ts",
+      "category": "test",
+      "bytes": 4383,
+      "sha256": "28190ea3166e248439a9c49cfe5a80796c32b08672451a702d4711567d46b1ab"
+    },
+    {
+      "path": "src/renderer/components/cardDepartureWorld.ts",
+      "category": "source",
+      "bytes": 15756,
+      "sha256": "188758b5c013cc31d09160c5a80c80df0ed91d8427e303b4911705dedd74112b"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
@@ -10395,8 +10437,8 @@
     {
       "path": "src/renderer/components/cardElementFx.ts",
       "category": "source",
-      "bytes": 20462,
-      "sha256": "ff921b1cba0f2c869dd0967e1ca138a1f721610864cecdc344edecf082e88e95"
+      "bytes": 12111,
+      "sha256": "ce482cb852f39942edf71aee522018bf29db696d9933dde126c1332365338999"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -10425,8 +10467,8 @@
     {
       "path": "src/renderer/components/cardShardSystem.ts",
       "category": "source",
-      "bytes": 11855,
-      "sha256": "f1779a4fd62d6e3ec31e98e17a6492af2f31e51f03a6f7a610ab6b26b2b9ef3e"
+      "bytes": 14222,
+      "sha256": "55757b520b8b20c8f54b14f86d78609be1e3374440214d03ab76d08b68ac0216"
     },
     {
       "path": "src/renderer/components/cardStatusPaint.ts",
@@ -12033,8 +12075,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 26849,
-      "sha256": "5beed13cb11f511d91506b1f18dc70036557785d1537cddf0bc4c477379fed19"
+      "bytes": 29431,
+      "sha256": "54614c9fee7a93854d4c1eba93a78a5aa9f9024e040492091513384523053355"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -21826,6 +21868,29 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "path": "src/renderer/components/cardDepartureGrouping.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 91,
+      "imports": [
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_DISTANCE",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_SECONDS",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureCluster",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureMaterial",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureSource",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#departureSourcesTouch",
+        "symbol:src/renderer/components/cardDepartureGrouping.ts#groupCardDepartures"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardDeparturePhysics.test.ts",
+        "file:src/renderer/components/cardDepartureWorld.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardDepartureParticles.test.ts",
       "path": "src/renderer/components/cardDepartureParticles.test.ts",
       "layer": "renderer",
@@ -21863,12 +21928,54 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "path": "src/renderer/components/cardDeparturePhysics.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 129,
+      "imports": [
+        "file:src/renderer/components/cardDepartureGrouping.ts",
+        "file:src/renderer/components/cardDeparturePhysics.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "path": "src/renderer/components/cardDeparturePhysics.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 285,
+      "imports": [
+        "file:src/renderer/components/cardDepartureGrouping.ts",
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#advanceDeparturePhysics",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#createDeparturePhysics",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_LIFE",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_STEP",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureParticle",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#departureParticleRadius",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#DeparturePhysics",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#departurePhysicsBudget",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureStem",
+        "symbol:src/renderer/components/cardDeparturePhysics.ts#impulseDeparturePhysics"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardDeparturePhysics.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/cardDepartureResources.test.ts",
       "path": "src/renderer/components/cardDepartureResources.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 93,
       "imports": [
+        "file:src/renderer/components/cardDepartureWorld.ts",
         "file:src/renderer/components/cardElementFx.ts",
         "file:src/renderer/components/cardShardSystem.ts",
         "file:src/renderer/components/tileTextures.ts",
@@ -21876,6 +21983,58 @@
       ],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardDepartureSheet.ts",
+      "path": "src/renderer/components/cardDepartureSheet.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 74,
+      "imports": [
+        "file:src/renderer/components/cardDepartureGrouping.ts",
+        "file:src/renderer/components/cardDeparturePhysics.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardDepartureWorld.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "path": "src/renderer/components/cardDepartureWorld.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 79,
+      "imports": [
+        "file:src/renderer/components/cardDepartureGrouping.ts",
+        "file:src/renderer/components/cardDepartureSheet.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/cardDepartureWorld.ts",
+      "path": "src/renderer/components/cardDepartureWorld.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 245,
+      "imports": [
+        "file:src/renderer/components/cardDepartureGrouping.ts",
+        "file:src/renderer/components/cardDeparturePhysics.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
+        "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/cardDepartureResources.test.ts",
+        "file:src/renderer/components/cardDepartureWorld.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/cardDissolveMaterial.test.ts",
@@ -21931,9 +22090,11 @@
       "path": "src/renderer/components/cardElementFx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 409,
+      "lineCount": 244,
       "imports": [
         "file:src/renderer/components/cardDepartureBudget.ts",
+        "file:src/renderer/components/cardDepartureSheet.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
@@ -22030,9 +22191,10 @@
       "path": "src/renderer/components/cardShardSystem.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 250,
+      "lineCount": 285,
       "imports": [
         "file:src/renderer/components/cardDepartureBudget.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/cardShards.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -26609,14 +26771,16 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 383,
+      "lineCount": 413,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/boardParticleCues.ts",
         "file:src/renderer/components/boardParticleRim.ts",
         "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/cardDepartureGrouping.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts",
         "file:src/renderer/components/cardElementFx.ts",
         "file:src/renderer/components/cardShardSystem.ts",
         "file:src/renderer/components/elementCastParticles.ts",
@@ -26632,6 +26796,7 @@
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-ground-rules.ts",
+        "file:src/shared/graphicsQuality.ts",
         "file:src/shared/rng.ts"
       ],
       "exports": [
@@ -45089,6 +45254,62 @@
       "endLine": 5
     },
     {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_DISTANCE",
+      "name": "DEPARTURE_JOIN_DISTANCE",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 27,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_SECONDS",
+      "name": "DEPARTURE_JOIN_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 28,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureCluster",
+      "name": "DepartureCluster",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 18,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureMaterial",
+      "name": "DepartureMaterial",
+      "kind": "type",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 3,
+      "endLine": 3
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureSource",
+      "name": "DepartureSource",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 5,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#departureSourcesTouch",
+      "name": "departureSourcesTouch",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 30,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureGrouping.ts#groupCardDepartures",
+      "name": "groupCardDepartures",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureGrouping.ts",
+      "line": 35,
+      "endLine": 90
+    },
+    {
       "id": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
       "name": "CARD_DEPARTURE_PARTICLE_DELAY",
       "kind": "value",
@@ -45119,6 +45340,110 @@
       "file": "src/renderer/components/cardDepartureParticles.ts",
       "line": 31,
       "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#advanceDeparturePhysics",
+      "name": "advanceDeparturePhysics",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 272,
+      "endLine": 278
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#createDeparturePhysics",
+      "name": "createDeparturePhysics",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 60,
+      "endLine": 145
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_LIFE",
+      "name": "DEPARTURE_PHYSICS_LIFE",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 7,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_STEP",
+      "name": "DEPARTURE_PHYSICS_STEP",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 6,
+      "endLine": 6
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureParticle",
+      "name": "DepartureParticle",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 13,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#departureParticleRadius",
+      "name": "departureParticleRadius",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 280,
+      "endLine": 283
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#DeparturePhysics",
+      "name": "DeparturePhysics",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 38,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#departurePhysicsBudget",
+      "name": "departurePhysicsBudget",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 10,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureStem",
+      "name": "DepartureStem",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 30,
+      "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDeparturePhysics.ts#impulseDeparturePhysics",
+      "name": "impulseDeparturePhysics",
+      "kind": "value",
+      "file": "src/renderer/components/cardDeparturePhysics.ts",
+      "line": 148,
+      "endLine": 155
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet",
+      "name": "createDepartureSheet",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureSheet.ts",
+      "line": 7,
+      "endLine": 73
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
+      "name": "createCardDepartureWorld",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureWorld.ts",
+      "line": 172,
+      "endLine": 244
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
+      "name": "DepartureBinding",
+      "kind": "interface",
+      "file": "src/renderer/components/cardDepartureWorld.ts",
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
@@ -45205,40 +45530,40 @@
       "name": "CARD_ELEMENT_FX_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
       "name": "CardElementFx",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
       "name": "cardElementFxOf",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 27,
-      "endLine": 28
+      "line": 29,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
       "name": "CardElementFxSystem",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 408,
-      "endLine": 408
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "name": "createCardElementFxSystem",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 304,
-      "endLine": 406
+      "line": 153,
+      "endLine": 241
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -45389,16 +45714,16 @@
       "name": "CardShardSystem",
       "kind": "type",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 249,
-      "endLine": 249
+      "line": 284,
+      "endLine": 284
     },
     {
       "id": "symbol:src/renderer/components/cardShardSystem.ts#createCardShardSystem",
       "name": "createCardShardSystem",
       "kind": "value",
       "file": "src/renderer/components/cardShardSystem.ts",
-      "line": 150,
-      "endLine": 247
+      "line": 155,
+      "endLine": 282
     },
     {
       "id": "symbol:src/renderer/components/cardStatusPaint.ts#paintCardStatus",
@@ -50285,8 +50610,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 30,
-      "endLine": 382
+      "line": 34,
+      "endLine": 412
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -71961,7 +72286,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 24
+          "line": 27
         }
       ],
       "tests": [
@@ -79470,6 +79795,48 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_DISTANCE",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_DISTANCE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_SECONDS",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#DEPARTURE_JOIN_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureCluster",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureCluster",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureMaterial",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureMaterial",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureSource",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#DepartureSource",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#departureSourcesTouch",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#departureSourcesTouch",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureGrouping.ts->symbol:src/renderer/components/cardDepartureGrouping.ts#groupCardDepartures",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "symbol:src/renderer/components/cardDepartureGrouping.ts#groupCardDepartures",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
       "source": "file:src/renderer/components/cardDepartureParticles.ts",
       "target": "symbol:src/renderer/components/cardDepartureParticles.ts#CARD_DEPARTURE_PARTICLE_DELAY",
@@ -79491,6 +79858,84 @@
       "id": "exports:src/renderer/components/cardDepartureParticles.ts->symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
       "source": "file:src/renderer/components/cardDepartureParticles.ts",
       "target": "symbol:src/renderer/components/cardDepartureParticles.ts#cardDepartureSparkTint",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#advanceDeparturePhysics",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#advanceDeparturePhysics",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#createDeparturePhysics",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#createDeparturePhysics",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_LIFE",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_LIFE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_STEP",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#DEPARTURE_PHYSICS_STEP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureParticle",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureParticle",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#departureParticleRadius",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#departureParticleRadius",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#DeparturePhysics",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#DeparturePhysics",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#departurePhysicsBudget",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#departurePhysicsBudget",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureStem",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#DepartureStem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDeparturePhysics.ts->symbol:src/renderer/components/cardDeparturePhysics.ts#impulseDeparturePhysics",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "symbol:src/renderer/components/cardDeparturePhysics.ts#impulseDeparturePhysics",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureSheet.ts->symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureWorld.ts->symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDepartureWorld.ts->symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
       "kind": "exports"
     },
     {
@@ -103054,6 +103499,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardDepartureGrouping.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardDepartureParticles.test.ts->src/renderer/components/cardDepartureParticles.ts",
       "source": "file:src/renderer/components/cardDepartureParticles.test.ts",
       "target": "file:src/renderer/components/cardDepartureParticles.ts",
@@ -103102,6 +103553,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.test.ts->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.test.ts->src/renderer/components/cardDeparturePhysics.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.ts->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDeparturePhysics.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureResources.test.ts->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/cardDepartureResources.test.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/cardDepartureResources.test.ts->src/renderer/components/cardElementFx.ts",
       "source": "file:src/renderer/components/cardDepartureResources.test.ts",
       "target": "file:src/renderer/components/cardElementFx.ts",
@@ -103122,6 +103615,60 @@
     {
       "id": "imports:src/renderer/components/cardDepartureResources.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/cardDepartureResources.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureSheet.ts->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureSheet.ts->src/renderer/components/cardDeparturePhysics.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureSheet.ts->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.test.ts->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.test.ts->src/renderer/components/cardDepartureSheet.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "target": "file:src/renderer/components/cardDepartureSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.test.ts->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.ts->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.ts->src/renderer/components/cardDeparturePhysics.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureWorld.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
       "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
@@ -103147,6 +103694,18 @@
       "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/cardDepartureBudget.ts",
       "source": "file:src/renderer/components/cardElementFx.ts",
       "target": "file:src/renderer/components/cardDepartureBudget.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/cardDepartureSheet.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/cardDepartureSheet.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardElementFx.ts->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
       "kind": "imports"
     },
     {
@@ -103213,6 +103772,12 @@
       "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/cardDepartureBudget.ts",
       "source": "file:src/renderer/components/cardShardSystem.ts",
       "target": "file:src/renderer/components/cardDepartureBudget.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardShardSystem.ts->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/cardShardSystem.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
       "kind": "imports"
     },
     {
@@ -109222,9 +109787,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardDepartureGrouping.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardDepartureParticles.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/cardDepartureParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
       "kind": "imports"
     },
     {
@@ -109315,6 +109892,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/element-ground-rules.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/shared/element-ground-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/graphicsQuality.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/shared/graphicsQuality.ts",
       "kind": "imports"
     },
     {
@@ -126800,9 +127383,45 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/cardDepartureGrouping.ts->file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDepartureGrouping.ts->file:src/renderer/components/cardDepartureWorld.test.ts",
+      "source": "file:src/renderer/components/cardDepartureGrouping.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/cardDepartureParticles.ts->file:src/renderer/components/cardDepartureParticles.test.ts",
       "source": "file:src/renderer/components/cardDepartureParticles.ts",
       "target": "file:src/renderer/components/cardDepartureParticles.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDeparturePhysics.ts->file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDepartureSheet.ts->file:src/renderer/components/cardDepartureWorld.test.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDepartureWorld.ts->file:src/renderer/components/cardDepartureResources.test.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "file:src/renderer/components/cardDepartureResources.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDepartureWorld.ts->file:src/renderer/components/cardDepartureWorld.test.ts",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "file:src/renderer/components/cardDepartureWorld.test.ts",
       "kind": "tested_by"
     },
     {

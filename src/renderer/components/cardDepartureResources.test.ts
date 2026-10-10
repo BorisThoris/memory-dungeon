@@ -3,6 +3,7 @@ import { type Mesh, type ShaderMaterial, type Texture } from 'three';
 import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { createCardElementFxSystem } from './cardElementFx';
 import { createCardShardSystem } from './cardShardSystem';
+import { createCardDepartureWorld } from './cardDepartureWorld';
 import { getTileFaceOverlayTexture } from './tileTextures';
 
 vi.mock('./tileTextures', async () => {
@@ -22,6 +23,26 @@ const spawn = { tile, x: 0, y: 0, z: 0, seed: 42, time: 0, delay: 1,
 describe('departure graphics resources', () => {
     beforeEach(() => vi.clearAllMocks());
 
+    it('initializes shared debris at the card fragments and preserves its later momentum', () => {
+        const world = createCardDepartureWorld();
+        const shards = createCardShardSystem();
+        shards.spawn({ ...spawn, delay: 0, tile: { ...tile, suit: 'bone' }, binding: () => world.binding('fracture') });
+        world.spawnWave([{ key: 'fracture', material: 'ice', x: 0, y: 0, z: 0, floorY: -3, start: 0, seed: 42, combo: 8 }], 'medium');
+        shards.preparePhysics();
+        const body = world.binding('fracture')!.body;
+        shards.advance(0);
+        body.particles.forEach((particle, index) => {
+            const mesh = shards.group.children[index] as Mesh;
+            expect(mesh.position.toArray()).toEqual([particle.x, particle.y, particle.z]);
+            expect(particle.radius).toBe(mesh.geometry.boundingSphere!.radius);
+        });
+        body.particles[0]!.vx = 123;
+        shards.preparePhysics();
+        expect(body.particles[0]!.vx).toBe(123);
+        shards.dispose();
+        world.dispose();
+    });
+
     it.each(['low', 'medium', 'high'] as const)('bounds allocations before drawing textures for a 2,048-card %s cascade', quality => {
         const elements = createCardElementFxSystem();
         const shards = createCardShardSystem();
@@ -31,7 +52,9 @@ describe('departure graphics resources', () => {
             shards.spawn({ ...spawn, quality, tile: { ...tile, suit: 'bone' } });
         }
         expect(getTileFaceOverlayTexture).toHaveBeenCalledTimes(budget * 2);
-        expect(elements.group.children).toHaveLength(budget * 2);
+        // Flame and vine bodies live in the shared, separately bounded world; each detailed
+        // departing card owns just its face rather than another independent effect sheet.
+        expect(elements.group.children).toHaveLength(budget);
         expect(shards.group.children.length).toBeLessThanOrEqual(budget * 12);
         // Pending waves count too: none of these meshes has started yet.
         expect(elements.advance(0)).toBe(0);
