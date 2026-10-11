@@ -522,6 +522,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'feedback.gameplay_hud',
         verdict: 'changed',
         generation: 261,
+        present: ['FloorResident', 'resident-conversation', 'resident-reply'],
         gone: ['guard cache', 'patrol path'],
         note: 'Twenty-one branches of the in-run feedback rail watched for announcements the game cannot produce - guard caches, patrol paths, shop gold. Removed, and gated so no branch can outlive its announcement. Gen 212 then checked the rail the other way, laying the HUD out around the seven-digit score a sixty-floor run really carries rather than the three digits floor one produces. Gen 261 brought the entry up to the chrome that shipped after it, because the rail was the most-changed surface in the game and this note stopped forty-nine generations short: the chain HUD overlapped at 1.1 (Gen 239), the chain rail was drawn over the floor-clear beat at the same scale (Gen 240, 257 - the box never contained its own read), and the dock declared a toolbar it had wired none of (Gen 258). All three were painted-versus-layout px, all three are now measured by the fit contract and gate:controller at every scale the slider offers.'
     },

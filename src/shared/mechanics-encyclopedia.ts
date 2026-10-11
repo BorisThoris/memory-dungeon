@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 83 as const;
+export const ENCYCLOPEDIA_VERSION = 84 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;

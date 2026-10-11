@@ -9,8 +9,9 @@ import type { RunState } from '../../shared/contracts';
  * statement, and `runShellToolCatalog.test.ts` checks it against the charge fields on RunState —
  * a power a run can hold charges for, with no tool that spends them, is a power a player cannot use.
  *
- * `spends: null` marks a tool with no charge of its own: pin, undo and greet are governed by their
+ * `spends: null` marks a tool with no charge of its own: pin and undo are governed by their
  * own rules rather than a counter.
+ * Greeting lives in FloorResident's conversation beside the dock, rather than in this tool list.
  */
 export type RunShellToolId =
     | 'shuffle'
@@ -23,7 +24,6 @@ export type RunShellToolId =
     | 'ignite'
     | 'flash'
     | 'undo'
-    | 'greet'
     | 'fit';
 
 /** The charge fields on RunState that a dock tool is expected to spend. */
@@ -62,9 +62,6 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },
-    // Greeting the floor's resident costs nothing and is governed by a once-per-floor rule rather
-    // than a counter, so it spends no charge.
-    { conditional: false, id: 'greet', label: 'Greet', spends: null },
     // The camera, not a power: brings a zoomed or panned board back to the screen. Always on the
     // dock and disabled while the board already fits, so a finger that pinched too far has a way
     // back that does not go through the pause menu.

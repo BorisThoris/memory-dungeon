@@ -15,6 +15,7 @@ import { togglePinnedTile } from './board-power-state';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
+import { greetFloorCurio } from './floor-curio-greeting-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { canAimMeteor, callMeteor } from './meteor-rules';
 import { missBankCap, missesLeft } from './miss-bank';
@@ -48,6 +49,7 @@ import { tileCharge } from './element-alchemy-rules';
  * script through the board, which is the half of a mechanic a unit test cannot see.
  */
 export type TestHallRoomId =
+    | 'resident-greeting'
     | 'pairs'
     | 'combo-carries'
     | 'combo-ends-on-miss'
@@ -148,6 +150,7 @@ export type TestHallRoomId =
     | 'hourglass-runs-out';
 
 export type TestHallStep =
+    | { readonly do: 'greet' }
     | { readonly do: 'match'; readonly pairKey: string }
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
@@ -428,6 +431,15 @@ const reactedOnce = (kind: NonNullable<RunState['lastRealmEvent']>['kind'], pote
     );
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
+    {
+        id: 'resident-greeting',
+        title: 'Meet the torchbearer',
+        mechanic: 'The resident beside the tools has a name and a conversation. Saying hello is free, once per floor; the torchbearer gives one peek.',
+        graphMechanicIds: ['feedback.gameplay_hud', 'power.peek'],
+        tryThis: 'Open the torchbearer beside the tools. Say hello, read his reply and check your peek count. Close the conversation to return to the cards.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { run: { floorCurioId: 'nervous_torchbearer', floorCurioGreeted: false, peekCharges: 1 } }),
+        script: [{ step: { do: 'greet' }, says: 'the resident has been greeted and adds one peek without taking a turn', expect: (r, b) => r.floorCurioGreeted && r.peekCharges === b.peekCharges + 1 && r.stats.tries === b.stats.tries ? null : 'greeting did not pay one free peek' }]
+    },
     ...([
         ['element-single-fire', 'Fire', 'e', 'b', 'scorch'],
         ['element-single-water', 'Water', 't', 'b', 'wash'],
@@ -2168,6 +2180,10 @@ const halvesOf = (run: RunState, pairKey: string): Tile[] =>
  */
 export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | null => {
     switch (step.do) {
+        case 'greet': {
+            const greeted = greetFloorCurio(run);
+            return greeted === run ? null : greeted;
+        }
         case 'match': {
             const [first, second] = halvesOf(run, step.pairKey);
             if (!first || !second) return null;

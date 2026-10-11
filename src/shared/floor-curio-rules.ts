@@ -73,7 +73,7 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
     {
         id: 'hoarding_rat',
         name: 'A hoarding rat',
-        line: 'It has been collecting. Looks. It will let you have one.',
+        line: 'It has been collecting. Looks. It would prefer that you stopped looking at the pile.',
         // Its coins went with the shop (Gen 174) and there was nothing left for them to buy, so
         // what it hoards now is the one thing a memory game has to spare: a look at the board.
         effectSummary: 'A peek, from a pile of them. It is keeping the rest.',
@@ -90,7 +90,7 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
     {
         id: 'off_duty_guard',
         name: 'An off-duty guard',
-        line: 'Not paid enough to fight anything. Will absolutely let you have a look and look the other way.',
+        line: 'Not paid enough to fight anything. Very interested in looking the other way.',
         effectSummary: 'One peek, no questions.',
         effect: { ...NOTHING, peekCharges: 1 }
     },

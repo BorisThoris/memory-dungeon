@@ -18,6 +18,7 @@ import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { REALM_HUD_COPY } from '../copy/realmCopy';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
+import FloorResident from './FloorResident';
 import styles from './RunShell.module.css';
 import { MEMORIZE_SKIP_COPY, MISS_BANK_TITLE, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
@@ -88,6 +89,7 @@ export interface RunShellProps {
     shellLayout?: GameShellLayout;
     tools: readonly RunShellTool[];
     onPause: () => void;
+    onGreetResident?: () => void;
 }
 
 /** How long the ladder reads as draining after a chain drops. */
@@ -280,6 +282,7 @@ const RunShell = ({
     politeAnnouncement,
     tools,
     onPause,
+    onGreetResident,
     reduceMotion = false,
     sfxGain = 0,
     shellLayout = 'desktop'
@@ -730,6 +733,7 @@ const RunShell = ({
             </header>
 
             <footer className={styles.foot} data-testid="game-action-dock">
+                {onGreetResident ? <FloorResident key={`${run.runSeed}:${run.board?.level ?? 0}`} onGreet={onGreetResident} run={run} /> : null}
                 {/*
                   * The caption under the board is no longer drawn (2026-09-30): the owner read it as
                   * filler - a sentence restating what the board, the combo and the score pop had just

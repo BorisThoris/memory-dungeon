@@ -59,7 +59,7 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     hoarding_rat: {
         curioId: 'hoarding_rat',
         reply: 'It considers you at length, moves itself between you and the pile, and does not blink.',
-        gained: 'Nothing more. It gave you one look on the way down, and a hoarder does not part with two.',
+        gained: 'Nothing more. It is keeping the pile.',
         // The rat's gift is its arrival peek; the greeting pays nothing on purpose, because a
         // hoarder that hands over a second thing when asked nicely is not a hoarder.
         effect: NOTHING
@@ -82,7 +82,7 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     off_duty_guard: {
         curioId: 'off_duty_guard',
         reply: '"Bird about," he says, without looking up. "Takes things. Already looked the other way once for you; twice gets noticed."',
-        gained: 'Nothing more - the look was on the way in - and a warning about the magpie you were going to need anyway.',
+        gained: 'No supplies. Just a warning about the magpie.',
         // Gen 183: the token he lent bought a life, and there are no lives. His gift is the peek on
         // arrival (`floor-curio-rules.ts`); the torchbearer's greeting is the one that pays a peek,
         // and a cast where two residents hand over the same thing is one button with two labels.

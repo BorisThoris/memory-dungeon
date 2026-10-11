@@ -439,7 +439,9 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
+        fireEvent.click(screen.getByLabelText('Meet an off-duty guard'));
         const greet = screen.getByTestId('tool-greet');
+        expect(greet).toBeVisible();
         expect(greet).toBeEnabled();
 
         act(() => {

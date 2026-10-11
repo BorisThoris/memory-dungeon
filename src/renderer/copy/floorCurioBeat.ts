@@ -20,9 +20,10 @@ export const FLOOR_CURIO_COPY = {
     codexTitle: 'The residents',
     codexDescription:
         'Every floor has someone else on it, rolled from your run seed. Most of them help. One of them ' +
-        'talks over the memorize window. One of them is a sock. You are told who is coming before you ' +
-        'take the stairs, and once you are down there you can say hello — free, once per floor, from ' +
-        'the Greet control. It never costs you anything, and most of them give you something for it.'
+        'talks over the memorize window. One of them is a sock. Their portrait and name stay beside ' +
+        'the tools. After the first floor, their arrival can change your study time or supplies. Open the resident to read ' +
+        'their story and say hello — free, once per floor. Some offer supplies; others offer advice ' +
+        'or absolutely nothing.'
 } as const;
 
 /** "Downstairs: A hoarding rat. It has been collecting..." — the note on the floor-clear beat. */

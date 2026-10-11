@@ -76,7 +76,6 @@ import { resolveBoardFloaterAnchor, type BoardFloaterAnchor, type StageRelativeR
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
-import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import {
     chainMomentum,
     chainRungApproach,
@@ -1100,16 +1099,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
             : null;
     const nextFloorObjectiveLabel = getFeaturedObjectiveLabel(nextFloorPreview?.featuredObjectiveId ?? null);
-    /**
-     * Named from the same seed, rules version and floor number the advance will use, so the
-     * promise made here is the resident who actually arrives.
-     */
-    const canGreetResident = canGreetFloorCurio(run);
-    const residentGreetTitle = canGreetResident
-        ? RUN_TOOL_REASONS.greet.available
-        : run.floorCurioGreeted === true
-          ? RUN_TOOL_REASONS.greet.alreadyGreeted
-          : RUN_TOOL_REASONS.greet.nobodyHome;
     /*
      * The break, on the whole stage. Projected from the latest resolved-turn event rather than a
      * board diff: a break is a chunk counter moving on that event. The pulse lives until a timer
@@ -1786,18 +1775,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   ]
                 : []),
             {
-                /*
-                 * The one control that talks rather than moves tiles. Disabled on exactly the rule
-                 * the action applies, with the reason spelled out: an affordance that stays lit
-                 * and swallows the press is how the stray button used to behave.
-                 */
-                ...toolSpec('greet'),
-                glyph: RUN_SHELL_GLYPHS.greet,
-                disabled: !canGreetResident,
-                title: residentGreetTitle,
-                onClick: greetFloorResident
-            },
-            {
                 // Same rule as `createUndoResolvingSurfaceResult`: only while a pair is resolving.
                 ...toolSpec('undo'),
                 glyph: RUN_SHELL_GLYPHS.undo,
@@ -1937,6 +1914,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             feedback={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : ''}
                             onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
                             onPause={pause}
+                            onGreetResident={greetFloorResident}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
                             politeAnnouncement={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
                             reduceMotion={reduceMotion}

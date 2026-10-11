@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3170,
-    "codeFileCount": 1187,
-    "exportedSymbolCount": 3741,
+    "trackedFileCount": 3173,
+    "codeFileCount": 1189,
+    "exportedSymbolCount": 3742,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9963
+    "relationshipCount": 9976
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 60460,
-      "sha256": "38b9836263ce7b591bb690295c6141a284042b545a316490d77ccfa5f13b241e"
+      "sha256": "b8e1da5dc4a1070ac5d92dc7ad8748ed2a034b004d24034e15d7bb36e217f336"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "48800f5c52a36d4813c1e46f003709fffabbfaecaa9c5408948e1cd8dbfeea96"
+      "sha256": "2d2fe25ab6ee28090eea3c4ed6178ba4ae071a49f82fa935f854804eb50f0710"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4533,8 +4533,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 112402,
-      "sha256": "98cf26ac3857c3626556a99cad9bf5403048cc23982306f2a798d65092e392f2"
+      "bytes": 115209,
+      "sha256": "c11dc8b76dc565283292c141aeafb7bc938a36798f3e16dd02671e13ea17e60a"
     },
     {
       "path": "public/site.webmanifest",
@@ -10783,6 +10783,24 @@
       "sha256": "8b3e8786b2038198d0e62ec9813dce5e39087c0ce74642db990c9e23170a5336"
     },
     {
+      "path": "src/renderer/components/FloorResident.module.css",
+      "category": "source",
+      "bytes": 1829,
+      "sha256": "dff4f7e86c3a14ff81c8c90c2c5692bc001ae7319a346f5cd26fd8fb063c9b24"
+    },
+    {
+      "path": "src/renderer/components/FloorResident.test.tsx",
+      "category": "test",
+      "bytes": 2153,
+      "sha256": "c69544f60453bf952ea96d4664067cc74f87a7b0d8e4ba32a23ac3e551d62c27"
+    },
+    {
+      "path": "src/renderer/components/FloorResident.tsx",
+      "category": "source",
+      "bytes": 3286,
+      "sha256": "cd8a7755239280b6b62f4e398b7c1f4e0d3819f2bb6d864e3ca061b1ce484189"
+    },
+    {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
       "bytes": 6515,
@@ -10863,14 +10881,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 77175,
-      "sha256": "6363f6ff1bd8f62d41fb1b717860955239a072be5bd3e1c2d2db21846af956f5"
+      "bytes": 77286,
+      "sha256": "1eecdfb62c880825d16dc1fe8ccedf59ae5cf58f9deda644f79630377af441b4"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 119365,
-      "sha256": "67c7d8ba830a2f3e878b861646a1454a13098bdb309b4de603f9079a0c4e5ad5"
+      "bytes": 118333,
+      "sha256": "2232d040e5d64d426f8d7e8803dcd2db37c91ae385f1b7edc6393108b44417c0"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11451,8 +11469,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 47243,
-      "sha256": "6f67fc6ab72e488c3cffb4ee327816ec443a307580044fe711286eef5c7d0ff5"
+      "bytes": 47488,
+      "sha256": "37a0f3f7d82f98baaad836b75140eca8cae39c959c8efa60d14f337571c1c3ac"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -11475,8 +11493,8 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 3827,
-      "sha256": "180f46b7322897a475e574fc5a4a65b511b6b0a892fa78871ae46e80f6a9f3fd"
+      "bytes": 3687,
+      "sha256": "46a752b325f0750e6d9eed451243bd7245d2694560649b8a6e0179c47a0639f3"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -12777,8 +12795,8 @@
     {
       "path": "src/renderer/copy/floorCurioBeat.ts",
       "category": "source",
-      "bytes": 2274,
-      "sha256": "ab7b12c6833ac67036532223d2b182ef0e7022bcc9c3d7f179e733318d318cd9"
+      "bytes": 2329,
+      "sha256": "f1fa07b6f4401d179259a9b061f2d48d35886db1cab871ad5e2e63b2769f5de3"
     },
     {
       "path": "src/renderer/copy/gameOverScreen.test.ts",
@@ -14188,7 +14206,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 60784,
-      "sha256": "f9f78aa14d55369313395c4f82dc9c5bac57d36a9be9a847c12a7dd8dfdbc2bf"
+      "sha256": "cc867075dd0a4b090e2e9cc7e9ded4809602c124fb820a62dc71e3cb08e80665"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14991,8 +15009,8 @@
     {
       "path": "src/shared/floor-curio-greeting-rules.ts",
       "category": "source",
-      "bytes": 7264,
-      "sha256": "c8c827c06972851e51dda668cb98fa1ad6558916adb458de2568c3a583e35dea"
+      "bytes": 7152,
+      "sha256": "1ee8f54c8769b442b61aa8aa40e606dc577e7d90350221811512c66cfb99fff1"
     },
     {
       "path": "src/shared/floor-curio-rules.test.ts",
@@ -15003,8 +15021,8 @@
     {
       "path": "src/shared/floor-curio-rules.ts",
       "category": "source",
-      "bytes": 7656,
-      "sha256": "b57a9ba780361cbbd2017441ea6504d5d745bed4308db907bf350aea5cccb876"
+      "bytes": 7666,
+      "sha256": "cc96756ee1451433c347757febd8c94c57f63dbfd123ab40e1a8e5bfe8d2888c"
     },
     {
       "path": "src/shared/floor-mutator-schedule.test.ts",
@@ -15496,7 +15514,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
       "bytes": 54102,
-      "sha256": "3f83b2205dabb778cf57501802cd8f3deeb72dd5f6c818f8f01ecf99dde701e4"
+      "sha256": "0d23cfaea996f9f7da976de1c7eae94cf285acde841719656986fb3f038aabb3"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16515,8 +16533,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 78711,
-      "sha256": "da0dc27b04cea1ac8e0682dfd56e2e295b61b2c51a825b2cbc1f9fd4f306b70b"
+      "bytes": 78790,
+      "sha256": "c263b2579d213813f90f9c351b7c0559e3bbc0a9ba076a6c1e19e552fb8a340b"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16539,8 +16557,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 151695,
-      "sha256": "2408eabc3e8f47f409e7403ccbf76995d7e8fb129f70480f82575481c7cf1d6e"
+      "bytes": 152841,
+      "sha256": "37d604ae3565e0b65fcaa1f7b12faf82ded9c6b083bc8b2dfa408ce59f1f78db"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -22998,6 +23016,39 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/FloorResident.test.tsx",
+      "path": "src/renderer/components/FloorResident.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 35,
+      "imports": [
+        "file:src/renderer/components/FloorResident.tsx",
+        "file:src/shared/floor-curio-greeting-rules.ts",
+        "file:src/shared/floor-curio-rules.ts",
+        "file:src/shared/game.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/FloorResident.tsx",
+      "path": "src/renderer/components/FloorResident.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 49,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-curio-greeting-rules.ts",
+        "file:src/shared/floor-curio-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/FloorResident.tsx#default"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/FloorResident.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/GameOverScreen.test.tsx",
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
@@ -23255,7 +23306,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1772,
+      "lineCount": 1774,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -23276,7 +23327,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2358,
+      "lineCount": 2336,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -23348,7 +23399,6 @@
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/focusDimmedTileIds.ts",
@@ -24831,12 +24881,13 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 840,
+      "lineCount": 844,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/ElementResonanceStrip.tsx",
+        "file:src/renderer/components/FloorResident.tsx",
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/components/PlasmaRail.tsx",
         "file:src/renderer/copy/chainBeat.ts",
@@ -24917,7 +24968,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 77,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -28805,7 +28856,7 @@
       "path": "src/renderer/copy/floorCurioBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 40,
       "imports": [
         "file:src/shared/floor-curio-rules.ts"
       ],
@@ -35361,6 +35412,7 @@
         "symbol:src/shared/floor-curio-greeting-rules.ts#runFloorCurioGreeting"
       ],
       "testedBy": [
+        "file:src/renderer/components/FloorResident.test.tsx",
         "file:src/shared/floor-curio-greeting-rules.test.ts"
       ]
     },
@@ -35400,6 +35452,7 @@
         "symbol:src/shared/floor-curio-rules.ts#seatFloorCurio"
       ],
       "testedBy": [
+        "file:src/renderer/components/FloorResident.test.tsx",
         "file:src/renderer/copy/floorCurioBeat.test.ts",
         "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -35890,6 +35943,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/ElementCastGuide.test.tsx",
+        "file:src/renderer/components/FloorResident.test.tsx",
         "file:src/renderer/components/ItemDropPopup.test.tsx",
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
@@ -40680,7 +40734,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 661,
+      "lineCount": 662,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -40752,7 +40806,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2337,
+      "lineCount": 2353,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -40762,6 +40816,7 @@
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
@@ -46218,6 +46273,14 @@
       "endLine": 39
     },
     {
+      "id": "symbol:src/renderer/components/FloorResident.tsx#default",
+      "name": "default",
+      "kind": "function",
+      "file": "src/renderer/components/FloorResident.tsx",
+      "line": 17,
+      "endLine": 48
+    },
+    {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -46422,40 +46485,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2357,
-      "endLine": 2357
+      "line": 2335,
+      "endLine": 2335
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 258,
-      "endLine": 258
+      "line": 257,
+      "endLine": 257
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 256,
-      "endLine": 256
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 259,
+      "endLine": 259
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 249,
+      "endLine": 249
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -48134,24 +48197,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 839,
-      "endLine": 839
+      "line": 843,
+      "endLine": 843
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 61,
-      "endLine": 91
+      "line": 62,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 48,
-      "endLine": 59
+      "line": 49,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -48166,8 +48229,8 @@
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 77,
-      "endLine": 79
+      "line": 74,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
@@ -48175,7 +48238,7 @@
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 49,
-      "endLine": 72
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
@@ -48190,7 +48253,7 @@
       "name": "RunShellToolId",
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 15,
+      "line": 16,
       "endLine": 27
     },
     {
@@ -48198,8 +48261,8 @@
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 74,
-      "endLine": 74
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
@@ -52998,8 +53061,8 @@
       "name": "codexResidentDescription",
       "kind": "value",
       "file": "src/renderer/copy/floorCurioBeat.ts",
-      "line": 33,
-      "endLine": 34
+      "line": 34,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/copy/floorCurioBeat.ts#FLOOR_CURIO_COPY",
@@ -53007,23 +53070,23 @@
       "kind": "value",
       "file": "src/renderer/copy/floorCurioBeat.ts",
       "line": 16,
-      "endLine": 26
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/copy/floorCurioBeat.ts#floorClearResidentLine",
       "name": "floorClearResidentLine",
       "kind": "value",
       "file": "src/renderer/copy/floorCurioBeat.ts",
-      "line": 29,
-      "endLine": 30
+      "line": 30,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/copy/floorCurioBeat.ts#floorCurioAnnouncement",
       "name": "floorCurioAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/floorCurioBeat.ts",
-      "line": 37,
-      "endLine": 38
+      "line": 38,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
@@ -69926,16 +69989,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 657,
-      "endLine": 660
+      "line": 658,
+      "endLine": 661
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 637,
-      "endLine": 642
+      "line": 638,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -69943,7 +70006,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 625
+      "endLine": 626
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -69966,8 +70029,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 627,
-      "endLine": 628
+      "line": 628,
+      "endLine": 629
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -69982,16 +70045,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 651,
-      "endLine": 654
+      "line": 652,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 631,
-      "endLine": 634
+      "line": 632,
+      "endLine": 635
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -70078,112 +70141,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2296,
-      "endLine": 2296
+      "line": 2312,
+      "endLine": 2312
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2169,
-      "endLine": 2273
+      "line": 2181,
+      "endLine": 2289
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2302,
-      "endLine": 2307
+      "line": 2318,
+      "endLine": 2323
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2286,
-      "endLine": 2286
+      "line": 2302,
+      "endLine": 2302
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 430,
-      "endLine": 2156
+      "line": 433,
+      "endLine": 2168
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2310,
-      "endLine": 2316
+      "line": 2326,
+      "endLine": 2332
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2336,
-      "endLine": 2336
+      "line": 2352,
+      "endLine": 2352
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 191,
-      "endLine": 208
+      "line": 194,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 50,
-      "endLine": 148
+      "line": 51,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2275,
-      "endLine": 2278
+      "line": 2291,
+      "endLine": 2294
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 184,
-      "endLine": 189
+      "line": 187,
+      "endLine": 192
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 150,
-      "endLine": 182
+      "line": 152,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2289,
-      "endLine": 2293
+      "line": 2305,
+      "endLine": 2309
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2318,
-      "endLine": 2334
+      "line": 2334,
+      "endLine": 2350
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -71970,7 +72033,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 96
+          "line": 98
         }
       ],
       "tests": [
@@ -73971,7 +74034,7 @@
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
-          "line": 21
+          "line": 22
         }
       ],
       "tests": [
@@ -74820,7 +74883,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 353
+          "line": 356
         }
       ],
       "tests": [
@@ -74859,7 +74922,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 353
+          "line": 356
         }
       ],
       "tests": [
@@ -74893,7 +74956,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 353
+          "line": 356
         }
       ],
       "tests": [
@@ -74927,7 +74990,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 353
+          "line": 356
         }
       ],
       "tests": [
@@ -80488,6 +80551,12 @@
       "id": "exports:src/renderer/components/FloorJourney.tsx->symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
       "source": "file:src/renderer/components/FloorJourney.tsx",
       "target": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FloorResident.tsx->symbol:src/renderer/components/FloorResident.tsx#default",
+      "source": "file:src/renderer/components/FloorResident.tsx",
+      "target": "symbol:src/renderer/components/FloorResident.tsx#default",
       "kind": "exports"
     },
     {
@@ -104903,6 +104972,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FloorResident.test.tsx->src/renderer/components/FloorResident.tsx",
+      "source": "file:src/renderer/components/FloorResident.test.tsx",
+      "target": "file:src/renderer/components/FloorResident.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.test.tsx->src/shared/floor-curio-greeting-rules.ts",
+      "source": "file:src/renderer/components/FloorResident.test.tsx",
+      "target": "file:src/shared/floor-curio-greeting-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.test.tsx->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/components/FloorResident.test.tsx",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.test.tsx->src/shared/game.ts",
+      "source": "file:src/renderer/components/FloorResident.test.tsx",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/FloorResident.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.tsx->src/shared/floor-curio-greeting-rules.ts",
+      "source": "file:src/renderer/components/FloorResident.tsx",
+      "target": "file:src/shared/floor-curio-greeting-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorResident.tsx->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/components/FloorResident.tsx",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -105914,12 +106025,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/floor-curio-greeting-rules.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/floor-curio-greeting-rules.ts",
       "kind": "imports"
     },
     {
@@ -107522,6 +107627,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/ElementResonanceStrip.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/ElementResonanceStrip.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/FloorResident.tsx",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/FloorResident.tsx",
       "kind": "imports"
     },
     {
@@ -122429,6 +122540,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/floor-curio-greeting-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/floor-curio-greeting-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/floor-curio-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/floor-curio-rules.ts",
@@ -127617,6 +127734,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/FloorResident.tsx->file:src/renderer/components/FloorResident.test.tsx",
+      "source": "file:src/renderer/components/FloorResident.tsx",
+      "target": "file:src/renderer/components/FloorResident.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/GameOverScreen.tsx->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -131625,9 +131748,21 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-curio-greeting-rules.ts->file:src/renderer/components/FloorResident.test.tsx",
+      "source": "file:src/shared/floor-curio-greeting-rules.ts",
+      "target": "file:src/renderer/components/FloorResident.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-curio-greeting-rules.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/floor-curio-greeting-rules.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/renderer/components/FloorResident.test.tsx",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/renderer/components/FloorResident.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -132102,6 +132237,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/renderer/components/ElementCastGuide.test.tsx",
       "source": "file:src/shared/game.ts",
       "target": "file:src/renderer/components/ElementCastGuide.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/renderer/components/FloorResident.test.tsx",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/renderer/components/FloorResident.test.tsx",
       "kind": "tested_by"
     },
     {
