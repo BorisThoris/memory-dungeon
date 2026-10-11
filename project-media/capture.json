@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-10T20:48:34.925Z",
+  "capturedAt": "2026-10-11T01:15:39.117Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 154939,
+      "bytes": 157269,
       "status": "captured",
       "stats": {
         "mean": 24,
-        "std": 15,
-        "dark": 0.171,
+        "std": 14,
+        "dark": 0.173,
         "light": 0,
-        "colours": 18
+        "colours": 16
       }
     },
     {
@@ -56,12 +56,12 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 144922,
+      "bytes": 146544,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 15,
-        "dark": 0.132,
+        "dark": 0.128,
         "light": 0,
         "colours": 20
       }
@@ -71,14 +71,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 39604,
+      "bytes": 40479,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 16,
-        "dark": 0.037,
+        "dark": 0.038,
         "light": 0,
-        "colours": 28
+        "colours": 27
       }
     },
     {
@@ -86,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 119905,
+      "bytes": 120948,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 15,
-        "dark": 0.135,
+        "dark": 0.126,
         "light": 0,
-        "colours": 21
+        "colours": 20
       }
     },
     {
@@ -101,14 +101,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 110400,
+      "bytes": 112402,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 14,
-        "dark": 0.158,
+        "dark": 0.153,
         "light": 0,
-        "colours": 18
+        "colours": 17
       }
     }
   ]
