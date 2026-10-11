@@ -3933,8 +3933,8 @@
     {
       "path": "e2e/global-record.spec.ts",
       "category": "test",
-      "bytes": 3420,
-      "sha256": "a86de264ad3879a8693c2e85dd387944792d9bba1a951cd762f9ff95afb161e8"
+      "bytes": 4200,
+      "sha256": "6edafe8cb5b8808ec9cb46bc27c002cbfa2dae364ae13af67c0fec95610f7efc"
     },
     {
       "path": "e2e/living-elements.spec.ts",
@@ -4533,8 +4533,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 110400,
-      "sha256": "eb89114d05685753434e9e8f23b4e38fd7237ef192e8deb68a763227371f41ae"
+      "bytes": 112402,
+      "sha256": "98cf26ac3857c3626556a99cad9bf5403048cc23982306f2a798d65092e392f2"
     },
     {
       "path": "public/site.webmanifest",
@@ -10899,20 +10899,20 @@
     {
       "path": "src/renderer/components/GlobalRecord.module.css",
       "category": "source",
-      "bytes": 1214,
-      "sha256": "28780b4e4e4270c0d32be8d2c80f8d4ad3e967d2f4c5c09ab187a9b6ee4f7e1e"
+      "bytes": 3784,
+      "sha256": "461d4567f26d22a58a4a7aeb54a2c80b37f08a96b29401fd91de18e86af31113"
     },
     {
       "path": "src/renderer/components/GlobalRecord.test.tsx",
       "category": "test",
-      "bytes": 4994,
-      "sha256": "7cabef4a431df1e969c277ad709d0d651ac07c1a9a48d6a7e9aa7bac058a71cf"
+      "bytes": 5971,
+      "sha256": "971311a50a903d33e67e208a56d188b92b3794cec292a6db3fc0220a982a8d6e"
     },
     {
       "path": "src/renderer/components/GlobalRecord.tsx",
       "category": "source",
-      "bytes": 4151,
-      "sha256": "5e1acb231e5cd3b093309864a48c8ee2aa7707ac7d7a9bfd2dd51394a15a8bb4"
+      "bytes": 5136,
+      "sha256": "666b923c7d55dd568fb006186b499db86516b456365c76f1d128cae4ceedaef0"
     },
     {
       "path": "src/renderer/components/goldRain.test.ts",
@@ -11025,14 +11025,14 @@
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 6601,
-      "sha256": "c0e89ba3aaa39cc71de862d0c6887145d83c5527bbde83dd515489e71aa2a2e5"
+      "bytes": 6705,
+      "sha256": "a2c9caae5b75481ea62837d0e9d1db522d70499ef0205842fffb0144d6133406"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13702,
-      "sha256": "d1d91c10055da84d70fb331dc8abf997ebfa8f089fb6919bb5c03ea48488b411"
+      "bytes": 13756,
+      "sha256": "f8c16d6b598685bdf0fd3f605fdef7d8542697d7462a67eeec30dbd8004fab4b"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -12939,8 +12939,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 3840,
-      "sha256": "5225052522d3900ce61104b35e0d5293a5a80e0b472106c13fa89ca54dafc7a6"
+      "bytes": 4072,
+      "sha256": "091ff53d03add3e5c82c36dd658bf2ea1136c874f34d3fa0beff091d221aa222"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -23442,7 +23442,7 @@
       "path": "src/renderer/components/GlobalRecord.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 72,
+      "lineCount": 87,
       "imports": [
         "file:src/renderer/components/GlobalRecord.tsx",
         "file:src/renderer/records/globalRecord.ts"
@@ -23455,7 +23455,7 @@
       "path": "src/renderer/components/GlobalRecord.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 83,
       "imports": [
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/copy/screenCopy.ts",
@@ -23753,7 +23753,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 151,
+      "lineCount": 152,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -29251,7 +29251,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 90,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -46519,15 +46519,15 @@
       "kind": "value",
       "file": "src/renderer/components/GlobalRecord.tsx",
       "line": 8,
-      "endLine": 19
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordResult",
       "name": "GlobalRecordResult",
       "kind": "value",
       "file": "src/renderer/components/GlobalRecord.tsx",
-      "line": 21,
-      "endLine": 70
+      "line": 33,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
@@ -53598,8 +53598,8 @@
       "name": "CLASSIC_SETUP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 70,
-      "endLine": 83
+      "line": 76,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
@@ -53623,7 +53623,7 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 40,
-      "endLine": 61
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",

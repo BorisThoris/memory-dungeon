@@ -13,7 +13,20 @@ test('global record: qualify only above the record, moderate names, claim and fi
         } else await route.fulfill({ json: { record } });
     });
     await openMainMenuFromSave(page, true);
-    await expect(page.getByLabel('Global high score')).toContainText('Dungeon Master · Boris · 500');
+    const throne = page.getByLabel('Global high score');
+    await expect(throne).toContainText('Boris');
+    await expect(throne).toContainText('500');
+    for (const [width, height] of [[1280, 720], [960, 600], [390, 844], [844, 390]]) {
+        await page.setViewportSize({ width, height });
+        const box = await throne.boundingBox();
+        expect(box!.x).toBeGreaterThanOrEqual(0);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+        expect(box!.y + box!.height).toBeLessThanOrEqual(height);
+        await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeInViewport();
+        await page.screenshot({ path: `test-results/dungeon-master-menu-${width}x${height}.png` });
+    }
+    await page.getByRole('button', { name: 'Take the crown' }).click();
+    await expect(page.getByRole('button', { name: 'Set up your run' })).toBeVisible();
     const endRun = async (score: number) => page.evaluate(async value => {
         const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
         const { createNewRun, createRunSummary, finishMemorizePhase } = await import('/src/shared/game-core.ts');

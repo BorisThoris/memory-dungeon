@@ -109,9 +109,10 @@ describe('MainMenu as a title page', () => {
         expect(names).toEqual(['Play', 'Tutorial Hall', 'Collection', 'Profile', 'Inventory', 'Codex', 'Settings']);
         expect(group.textContent).toMatch(/^I\s*Play/);
         expect(group.textContent).toContain('VIISettings');
-        // The one document heading is the title; nothing in the contents is a heading.
+        // The title and global champion are headings; the contents remain an action ladder.
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Memory\s*Dungeon/);
-        expect(screen.queryAllByRole('heading')).toHaveLength(1);
+        expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Dungeon Master');
+        expect(group.querySelectorAll('h1, h2, h3')).toHaveLength(0);
     });
 
     it('says where the profile stands in the colophon, and what the last descent reached', () => {

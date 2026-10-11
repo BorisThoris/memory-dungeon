@@ -65,7 +65,22 @@ describe('one global high score', () => {
     });
     it('shows the same single global record on the menu', async () => {
         vi.mocked(fetchGlobalRecord).mockResolvedValue({ record });
-        render(<GlobalRecordBadge />);
-        await waitFor(() => expect(screen.getByLabelText('Global high score')).toHaveTextContent('Dungeon Master · Boris · 500'));
+        const onChallenge = vi.fn();
+        render(<GlobalRecordBadge onChallenge={onChallenge} />);
+        expect(await screen.findByText('Boris')).toBeVisible();
+        expect(screen.getByRole('heading', { name: 'Dungeon Master' })).toBeVisible();
+        expect(screen.getByLabelText('Global high score')).toHaveTextContent('500World record');
+        fireEvent.click(screen.getByRole('button', { name: 'Take the crown' }));
+        expect(onChallenge).toHaveBeenCalledOnce();
+    });
+    it('invites the first champion and handles an unavailable record without inventing a holder', async () => {
+        vi.mocked(fetchGlobalRecord).mockResolvedValue({ record: null });
+        const view = render(<GlobalRecordBadge onChallenge={vi.fn()} />);
+        expect(await screen.findByText('The throne is unclaimed')).toBeVisible();
+        view.unmount();
+        vi.mocked(fetchGlobalRecord).mockRejectedValue(new Error('offline'));
+        render(<GlobalRecordBadge onChallenge={vi.fn()} />);
+        expect(await screen.findByText('Record unavailable')).toBeVisible();
+        expect(screen.queryByText('World record')).not.toBeInTheDocument();
     });
 });

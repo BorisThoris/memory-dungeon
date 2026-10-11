@@ -1,4 +1,31 @@
-.badge { flex-basis: 100%; letter-spacing: .08em; overflow-wrap: anywhere; }
+.badge {
+    box-sizing: border-box; width: 100%; max-width: 25rem; margin-top: clamp(.8rem, 2.5vh, 1.6rem);
+    padding: .8rem 1.1rem .3rem; border-block: 1px solid var(--margin-rule, #8e7750);
+    background: radial-gradient(ellipse at top, #e1ad6614, transparent 75%), linear-gradient(#131111b8, #13111175);
+    color: var(--margin-paper, #f8f4f4); text-align: center;
+}
+.rank { display: flex; align-items: center; justify-content: center; gap: .65rem; color: var(--margin-gold, #e1ad66); }
+.rank h2 { margin: 0; font-family: var(--margin-body-font, Georgia, serif); font-size: .75rem; font-weight: 500; letter-spacing: .19em; text-transform: uppercase; }
+.crown { width: 2rem; height: 1.5rem; flex: none; }
+.champion { display: flex; align-items: center; justify-content: center; gap: 1.1rem; margin-top: .45rem; min-height: 2.9rem; }
+.holder, .empty { margin: 0; min-width: 0; overflow-wrap: anywhere; font-family: var(--margin-heading-font, Georgia, serif); line-height: 1.1; }
+.holder { font-size: clamp(1.6rem, 3.8vh, 2.15rem); font-weight: 600; }
+.empty { font-size: clamp(1.25rem, 3vh, 1.65rem); }
+.recordScore { box-sizing: border-box; max-width: 55%; margin: 0; padding-left: 1.1rem; border-left: 1px solid var(--margin-rule, #8e7750); flex: none; }
+.recordScore strong { display: block; overflow-wrap: anywhere; font-family: var(--margin-heading-font, Georgia, serif); font-size: 1.65rem; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.recordScore span { display: block; margin-top: .35rem; color: var(--margin-paper-dim, #bab6b6); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; }
+.challengeHint { margin: .55rem 0 .25rem; color: var(--margin-paper-soft, #d7d3d3); font-family: var(--margin-heading-font, Georgia, serif); font-style: italic; font-size: 1rem; line-height: 1.2; }
+.challenge { display: flex; align-items: center; justify-content: center; gap: .8rem; width: 100%; min-height: 44px; padding: .4rem; border: 0; background: transparent; color: var(--margin-gold, #e1ad66); font: inherit; font-size: .8rem; letter-spacing: .1em; cursor: pointer; }
+.challenge:hover { color: var(--margin-fever, #facb8d); background: #e1ad660a; }
+.challenge:focus-visible { outline: 2px solid var(--margin-gold, #e1ad66); outline-offset: 3px; }
+@media (max-height: 450px) and (min-width: 500px) {
+    .badge { margin-top: .6rem; padding: .45rem .75rem 0; }
+    .champion { margin-top: .2rem; min-height: 2.3rem; }
+    .holder { font-size: 1.6rem; }
+    .challengeHint { margin-top: .3rem; font-size: .85rem; }
+    .rank h2 { font-size: .75rem; }
+    .crown { width: 1.6rem; height: 1.2rem; }
+}
 .form { display: grid; gap: .8rem; max-width: 30rem; margin-inline: auto; }
 .score { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 7vw, 3.5rem); color: var(--margin-paper, #eee4d2); margin: 0; }
 .input { box-sizing: border-box; width: 100%; min-height: 44px; border: 1px solid #8e7750; border-radius: 4px; background: #101720; color: #eee4d2; font: inherit; font-size: 16px; padding: .75rem; }

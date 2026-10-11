@@ -185,6 +185,7 @@ const MainMenu = ({
                         </h1>
                         <span aria-hidden="true" className={styles.rule} />
                         <p className={styles.tagline}>Test your mind. Conquer the depths.</p>
+                        <GlobalRecordBadge onChallenge={() => { playMenuOpen(); onPlay(); }} />
                     </header>
 
                     <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
@@ -253,7 +254,6 @@ const MainMenu = ({
                 </div>
 
                 <footer className={styles.colophon} data-testid="main-menu-colophon">
-                    <GlobalRecordBadge />
                     <span>Level {profileLevel}</span>
                     <span aria-hidden="true">·</span>
                     <span>Best {bestScore}</span>

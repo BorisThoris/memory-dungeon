@@ -5,7 +5,7 @@ import OverlayModal from './OverlayModal';
 import styles from './GlobalRecord.module.css';
 import { GLOBAL_RECORD_COPY as COPY } from '../copy/screenCopy';
 
-export const GlobalRecordBadge = () => {
+export const GlobalRecordBadge = ({ onChallenge }: { onChallenge: () => void }) => {
     const [record, setRecord] = useState<GlobalRecord | null | undefined>();
     const [offline, setOffline] = useState(false);
     useEffect(() => {
@@ -13,9 +13,21 @@ export const GlobalRecordBadge = () => {
         void fetchGlobalRecord().then(({ record: row }) => { if (alive) setRecord(row); }, () => { if (alive) setOffline(true); });
         return () => { alive = false; };
     }, []);
-    return <span className={styles.badge} aria-label={COPY.label}>{record
-        ? COPY.holder(record.name, record.score.toLocaleString())
-        : offline ? COPY.offline : record === null ? COPY.first : COPY.loading}</span>;
+    return <section className={styles.badge} aria-label={COPY.label}>
+        <div className={styles.rank}>
+            <svg className={styles.crown} viewBox="0 0 40 30" fill="none" aria-hidden="true">
+                <path d="m5 9 7 5 8-10 8 10 7-5-4 15H9L5 9Z M10 28h20" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                <path d="m20 13 3 4-3 4-3-4 3-4Z" fill="currentColor" />
+            </svg>
+            <h2>{COPY.rank}</h2>
+        </div>
+        <div className={styles.champion} aria-live="polite">
+            <p className={record ? styles.holder : styles.empty}>{record?.name ?? (offline ? COPY.offline : record === null ? COPY.first : COPY.loading)}</p>
+            {record && <p className={styles.recordScore}><strong>{record.score.toLocaleString()}</strong><span>{COPY.points}</span></p>}
+        </div>
+        <p className={styles.challengeHint}>{record ? COPY.challengeHint : offline ? COPY.offlineHint : record === null ? COPY.firstHint : COPY.loadingHint}</p>
+        <button className={styles.challenge} type="button" onClick={onChallenge}>{COPY.challenge}<span aria-hidden="true">↗</span></button>
+    </section>;
 };
 
 export const GlobalRecordResult = ({ score, resultKey, eligible = true }: { score: number; resultKey: string; eligible?: boolean }) => {
