@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-11T01:15:39.117Z",
+  "capturedAt": "2026-10-11T12:16:30.634Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 157269,
+      "bytes": 160275,
       "status": "captured",
       "stats": {
         "mean": 24,
         "std": 14,
-        "dark": 0.173,
+        "dark": 0.174,
         "light": 0,
-        "colours": 16
+        "colours": 19
       }
     },
     {
@@ -56,14 +56,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 146544,
+      "bytes": 150620,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 15,
-        "dark": 0.128,
+        "dark": 0.139,
         "light": 0,
-        "colours": 20
+        "colours": 18
       }
     },
     {
@@ -71,14 +71,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 40479,
+      "bytes": 48563,
       "status": "captured",
       "stats": {
-        "mean": 23,
-        "std": 16,
-        "dark": 0.038,
+        "mean": 25,
+        "std": 17,
+        "dark": 0.016,
         "light": 0,
-        "colours": 27
+        "colours": 28
       }
     },
     {
@@ -86,14 +86,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 120948,
+      "bytes": 124813,
       "status": "captured",
       "stats": {
         "mean": 25,
         "std": 15,
-        "dark": 0.126,
+        "dark": 0.134,
         "light": 0,
-        "colours": 20
+        "colours": 18
       }
     },
     {
@@ -101,14 +101,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 112402,
+      "bytes": 115209,
       "status": "captured",
       "stats": {
-        "mean": 24,
+        "mean": 25,
         "std": 14,
-        "dark": 0.153,
+        "dark": 0.148,
         "light": 0,
-        "colours": 17
+        "colours": 18
       }
     }
   ]
