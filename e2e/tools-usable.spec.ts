@@ -1,6 +1,7 @@
 import { expect as baseExpect, test, type Page } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSaveAndQuery, mainMenuPlayButton, startClassicRunFromModeSelect } from './visualScreenHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
+import { SCENE_CANVAS_PIXEL_BUDGET } from '../src/renderer/components/sceneCanvasLayout';
 
 // A software-rendered WebGL frame can delay even a successful state read past five seconds.
 // Keep the actual inventory/board assertions, with the same deadline as room readiness.
@@ -120,20 +121,32 @@ for (const display of [
                 await expect(bomb).toHaveAttribute('aria-pressed', 'true');
                 await expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
             }
-            // The room is one canvas the size of its art on every display: 4K gets the full scene
-            // (it was once held to lean, when each light was a blended layer the size of the screen)
-            // and nothing in the room is blended by the page at any size.
+            // The room uses one canvas: phones spend pixels on the visible window, while larger
+            // displays scale the painting within its pixel budget. No CSS-blended layers return.
             const scene = page.getByTestId('gameplay-scene');
             if (display.name.includes('4K')) {
                 await expect(scene).toHaveAttribute('data-scene-effect-tier', 'full');
             }
-            expect(
-                await scene.evaluate((node) => {
+            const painting = await scene.evaluate((node) => {
                     const canvas = node.querySelector<HTMLCanvasElement>('[data-testid="gameplay-scene-canvas"]');
                     const blended = [...node.querySelectorAll('*')].filter((el) => getComputedStyle(el).mixBlendMode !== 'normal').length;
                     return { width: canvas?.width, height: canvas?.height, blended, images: node.querySelectorAll('img').length };
-                })
-            ).toEqual({ width: 1376, height: 768, blended: 0, images: 0 });
+                });
+            expect({ blended: painting.blended, images: painting.images }).toEqual({ blended: 0, images: 0 });
+            expect(painting.width).toBeGreaterThan(0);
+            expect(painting.height).toBeGreaterThan(0);
+            // Allow rounding the window's fractional dimensions to whole pixels.
+            expect(painting.width! * painting.height!).toBeLessThanOrEqual(SCENE_CANVAS_PIXEL_BUDGET * 1.01);
+            if (display.name === 'phone') {
+                expect(painting.width).toBeLessThan(1376);
+                expect(painting.width).toBeGreaterThanOrEqual(display.width);
+                expect(painting.height).toBeGreaterThanOrEqual(display.height);
+            } else if (display.name.includes('4K')) {
+                expect(painting.width).toBeGreaterThan(1376);
+                expect(painting.height).toBeGreaterThan(768);
+            } else {
+                expect({ width: painting.width, height: painting.height }).toEqual({ width: 1376, height: 768 });
+            }
             const target = await page.evaluate(() => {
                 const w = window as unknown as {
                     __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } | null;
@@ -202,7 +215,7 @@ test.describe('Every tool can be used from the dock', () => {
             return useAppStore.getState().run?.zone?.pairs ?? 0;
         })).toBe(3);
         await expect(page.getByTestId('zone-veil')).toHaveAttribute('data-zone', 'true');
-        await expect(page.getByTestId('hud-zone')).toHaveText('Zone · 0 of 6 cards');
+        await expect(page.getByTestId('hud-zone')).toHaveText('ZONE');
         for (const id of ['a-1', 'a-2', 'c-1', 'd-1']) await pick(page, id);
         await expect.poll(async () => (await read(page)).flipped.length).toBe(4);
         expect((await read(page)).status).toBe('playing');

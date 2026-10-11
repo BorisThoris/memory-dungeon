@@ -222,7 +222,7 @@ export async function openRunSettings(page: Page): Promise<void> {
 }
 
 /**
- * Reads every ordinary pair tile still in play, by grid cell.
+ * Reads every ordinary pair tile that can be turned, by grid cell.
  *
  * Two things this has to get right, both of which it got wrong first. The grid hooks are 1-based,
  * so a scan starting at zero silently reads an offset board. And a matched tile keeps its id, so
@@ -233,7 +233,12 @@ export async function readPairTileCells(
     page: Page,
     span = 8
 ): Promise<{ cell: [number, number]; pairKey: string }[]> {
-    return page.evaluate((size) => {
+    return page.evaluate(async (size) => {
+        const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        const { isTileFlipBlocked } = await import('/src/shared/realm-weather-rules.ts');
+        const blocked = new Set(
+            (useAppStore.getState().run?.board?.tiles ?? []).filter(isTileFlipBlocked).map(tile => tile.id)
+        );
         const w = window as Window & {
             __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
             __e2eGetTileStateAtGrid1?: (row: number, col: number) => string | null;
@@ -247,7 +252,9 @@ export async function readPairTileCells(
         for (let row = 1; row <= size; row += 1) {
             for (let column = 1; column <= size; column += 1) {
                 const id = readId(row, column);
-                if (id && /-[AB]$/u.test(id) && readState(row, column) === 'hidden') {
+                // Vines and frost leave a card hidden but refuse its flip. Picking the first such
+                // pair forever misses the free pair whose cast would release the rest of the floor.
+                if (id && /-[AB]$/u.test(id) && readState(row, column) === 'hidden' && !blocked.has(id)) {
                     found.push({ cell: [row, column], pairKey: id.replace(/-[AB]$/u, '') });
                 }
             }

@@ -4137,14 +4137,14 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 13825,
-      "sha256": "43bedd96aba6024db7ee2e317f82eb3b30d3185ddc0c42e3c8eacef7907cfb31"
+      "bytes": 14382,
+      "sha256": "46c44373739076917a5cd17e68b7052906de2ae81970dd3fab0b0a06395ebd7a"
     },
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 16742,
-      "sha256": "f9d48401965e22b442d880fa45a33d792220b173a9a60023b0f5f5ab483cb403"
+      "bytes": 17655,
+      "sha256": "53f4c394146c6baa1f36558f329a0d27a2af047c1f765d4a736e99fb7e7d7b70"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
