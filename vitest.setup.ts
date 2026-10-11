@@ -1,6 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { afterEach, vi } from 'vitest';
+
+// Unit UI fixtures never contact or mutate the public record service.
+vi.mock('./src/renderer/records/globalRecord', () => ({
+    fetchGlobalRecord: vi.fn(async () => ({ record: { name: 'Test Record', score: Number.MAX_SAFE_INTEGER, at: '2026-10-11T00:00:00Z' } })),
+    submitGlobalRecord: vi.fn(async () => ({ record: null, accepted: false }))
+}));
 
 /**
  * The game's copy is English and the tests assert English number formatting ("1,200 points").

@@ -18,7 +18,7 @@ const portfolioMusicUrls = import.meta.glob<string>('../../../assets/audio/portf
 /**
  * Each realm's own music (2026-10-09): `assets/audio/music/realm/<realm>-ambience.ogg`, ACE-Step
  * loops made on the owner's PC. On a floor in a realm it IS the run music - on this element, so the
- * settings' music volume, the Fever duck and the combo's layers all act on it - and the plain run
+ * settings' music volume and the Fever duck act on it - and the plain run
  * loop is only the fallback for a realm without one. The owner's call: "replace the actual
  * background music ... with this new one".
  */
@@ -89,9 +89,6 @@ export const preloadGameplayMusic = (): Promise<void> => {
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
-/** The run loop's element while it exists, so the combo's layers can sit on its beat (`comboMusicLayers.ts`). */
-let runMusicElement: HTMLAudioElement | null = null;
-export const getRunMusicElement = (): HTMLAudioElement | null => runMusicElement;
 
 const subscribeToPageVisibility = (onStoreChange: () => void): (() => void) => {
     if (typeof document === 'undefined') {
@@ -250,7 +247,6 @@ export function useGameplayMusic({ active, track, realm = null, masterVolume, mu
         el.loop = true;
         el.preload = 'auto';
         audioRef.current = el;
-        if (isRunFamily(key)) runMusicElement = el;
         // Taking over from another realm's music: come up from silence under it.
         let fadeInTimer: ReturnType<typeof setInterval> | null = null;
         if (handedOver) {
@@ -368,7 +364,6 @@ export function useGameplayMusic({ active, track, realm = null, masterVolume, mu
                 release();
             }
             audioRef.current = null;
-            if (runMusicElement === el) runMusicElement = null;
             if (playbackControllerRef.current === playbackController) {
                 playbackControllerRef.current = null;
             }

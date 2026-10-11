@@ -22,10 +22,10 @@ describe('the renderer content security policy', () => {
         expect(policyAllowsDevServer(policy)).toBe(true);
     });
 
-    it('ships nothing beyond self on connect-src', () => {
+    it('allows only self and the global record service on production connect-src', () => {
         const policy = buildContentSecurityPolicy({ allowDevServer: false });
 
-        expect(policy).toContain("connect-src 'self';");
+        expect(policy).toContain("connect-src 'self' https://memory-dungeon-scores.modaxxx009.workers.dev;");
         expect(policy).not.toMatch(/wss?:\/\//u);
         expect(policyAllowsDevServer(policy)).toBe(false);
     });

@@ -32,11 +32,16 @@ export default tseslint.config(
             '**/.venv*/**',
             'third_party/**',
             'scripts/**/*.mjs',
-            'scripts/**/*.cjs'
+            'scripts/**/*.cjs',
+            'leaderboard/.wrangler/**'
         ]
     },
     js.configs.recommended,
     ...tseslint.configs.recommended,
+    {
+        files: ['leaderboard/**/*.mjs'],
+        languageOptions: { globals: { ...globals.worker, ...globals.node } }
+    },
     {
         files: [
             'src/**/*.{ts,tsx}',

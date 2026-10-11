@@ -18,6 +18,7 @@ import { SAVE_RECOVERY_COPY } from '../copy/saveRecoveryNotice';
 import { useTutorialHall } from './tutorialHallContext';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
+import { GlobalRecordBadge } from './GlobalRecord';
 
 interface MainMenuProps {
     saveData: SaveData;
@@ -252,6 +253,7 @@ const MainMenu = ({
                 </div>
 
                 <footer className={styles.colophon} data-testid="main-menu-colophon">
+                    <GlobalRecordBadge />
                     <span>Level {profileLevel}</span>
                     <span aria-hidden="true">·</span>
                     <span>Best {bestScore}</span>

@@ -37,6 +37,29 @@ export const GAME_OVER_LABELS = {
     returnToMenuMobile: 'Mobile return to the main menu'
 } as const;
 
+export const GLOBAL_RECORD_COPY = {
+    label: 'Global high score',
+    holder: (name: string, score: string): string => `Dungeon Master · ${name} · ${score}`,
+    offline: 'Dungeon Master · Record offline',
+    first: 'Dungeon Master · Claim the first record',
+    loading: 'Dungeon Master · Loading…',
+    title: 'New global high score',
+    savedTitle: 'The global record is yours',
+    beatenTitle: 'A new score just arrived',
+    subtitle: 'One record. Everyone plays for it.',
+    savedSubtitle: 'Your name is now on the record.',
+    beatenSubtitle: 'Another player reached the record before yours was saved.',
+    continue: 'Continue',
+    claim: 'Claim global record',
+    saving: 'Saving…',
+    skip: 'Not now',
+    name: 'Your name',
+    help: 'Up to 16 characters, with at least two letters. This name will be public.',
+    previous: (name: string, score: string): string => `Record to beat: ${name} · ${score}`,
+    current: (name: string, score: string): string => `Global record: ${name} · ${score}`,
+    failed: 'Could not save. Please try again.'
+} as const;
+
 /**
  * The Classic setup sheet: how this run should be played, asked once, in front of the run.
  *

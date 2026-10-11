@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildContentSecurityPolicy } from '../shared/content-security-policy';
+import { GLOBAL_RECORD_API_URL } from '../shared/global-record-config';
 
 /**
  * This used to read the literal policy out of `index.html`. The file now carries a placeholder the
@@ -25,8 +26,10 @@ describe('renderer content security policy', () => {
     });
 
     it('gives the hot-reload socket to the dev server and to nothing else', () => {
-        expect(buildContentSecurityPolicy({ allowDevServer: true })).toContain("connect-src 'self' ws://127.0.0.1:*");
-        expect(buildContentSecurityPolicy({ allowDevServer: false })).toContain("connect-src 'self';");
+        expect(buildContentSecurityPolicy({ allowDevServer: true })).toContain(`connect-src 'self' ${GLOBAL_RECORD_API_URL} ws://127.0.0.1:*`);
+        const production = buildContentSecurityPolicy({ allowDevServer: false });
+        expect(production).toContain(`connect-src 'self' ${GLOBAL_RECORD_API_URL};`);
+        expect(production).not.toMatch(/\bwss?:\/\//u);
     });
 
     it('keeps the template a placeholder so the two cannot drift', () => {

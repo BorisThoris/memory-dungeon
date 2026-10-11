@@ -1,3 +1,5 @@
+import { GLOBAL_RECORD_API_URL } from './global-record-config';
+
 /**
  * The renderer's Content-Security-Policy, in one place so the shipped one can differ from the one
  * the dev server needs.
@@ -24,7 +26,7 @@ export interface ContentSecurityPolicyOptions {
 }
 
 export const buildContentSecurityPolicy = ({ allowDevServer }: ContentSecurityPolicyOptions): string => {
-    const connectSrc = ["'self'", ...(allowDevServer ? DEV_SERVER_SOCKETS : [])].join(' ');
+    const connectSrc = ["'self'", GLOBAL_RECORD_API_URL, ...(allowDevServer ? DEV_SERVER_SOCKETS : [])].join(' ');
     return [
         "default-src 'self'",
         "base-uri 'self'",

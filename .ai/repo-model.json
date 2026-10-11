@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3158,
-    "codeFileCount": 1183,
-    "exportedSymbolCount": 3748,
+    "trackedFileCount": 3170,
+    "codeFileCount": 1187,
+    "exportedSymbolCount": 3741,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 9966
+    "relationshipCount": 9963
   },
   "inventory": [
     {
@@ -117,8 +117,8 @@
     {
       "path": "AGENTS.md",
       "category": "other",
-      "bytes": 7182,
-      "sha256": "07bce88d23e930dc19ecf553e079f8050c6a9e94262638797507508e6d8ba001"
+      "bytes": 7145,
+      "sha256": "21a114024765f50648884505c1134e5136051b833527cf8f0a3cdae7cdb29ae9"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack.jobs.json",
@@ -345,8 +345,8 @@
     {
       "path": "docs/design/game-view-redesign.md",
       "category": "documentation",
-      "bytes": 11369,
-      "sha256": "e58f0f479c058aa45e9f20652529e331c754a66bc34a0a8d0302d571d84ff4ac"
+      "bytes": 11480,
+      "sha256": "99607c1a3ab6c946d3fabef429b4e893fe4bfb323dac139be12ddc7efab2c359"
     },
     {
       "path": "docs/DOC_CHECKBOX_INVENTORY.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "66a7f7c4ee9da8310f88fc8f53a73abde00f9c94bafc3be039c04148d7556e00"
+      "sha256": "48800f5c52a36d4813c1e46f003709fffabbfaecaa9c5408948e1cd8dbfeea96"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3931,6 +3931,12 @@
       "sha256": "9e8bdf47bf4dd2bc8033433c7c2f9bcc03088f2540de2fda4b0a5b93a8d81af4"
     },
     {
+      "path": "e2e/global-record.spec.ts",
+      "category": "test",
+      "bytes": 3420,
+      "sha256": "a86de264ad3879a8693c2e85dd387944792d9bba1a951cd762f9ff95afb161e8"
+    },
+    {
       "path": "e2e/living-elements.spec.ts",
       "category": "test",
       "bytes": 7783,
@@ -4023,8 +4029,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 8679,
-      "sha256": "bbbfa78f12dffc8d798c9efe7ab5ad052c97fc8a6891fcaa47198e1bf70e1f6f"
+      "bytes": 9044,
+      "sha256": "36a88090fcfdb2659e0cdd078a75fa7712600c79768099b71dcd57ca82b2035f"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4257,8 +4263,8 @@
     {
       "path": "eslint.config.mjs",
       "category": "configuration",
-      "bytes": 4946,
-      "sha256": "cac3dc80130a340137fb9daa688f3a1162bbf25ba7090ccbeb5a92a8fa7dc82c"
+      "bytes": 5117,
+      "sha256": "5b8b7a2909f5d2990a44cc99262f8b74f1dbd3083d7b5defd44553420322f898"
     },
     {
       "path": "index.html",
@@ -4271,6 +4277,30 @@
       "category": "configuration",
       "bytes": 2056,
       "sha256": "6881477ab45083623a11bdd11f762e6d096e7d8020fdc9774f92ae89073894e0"
+    },
+    {
+      "path": "leaderboard/check-api.mjs",
+      "category": "other",
+      "bytes": 1915,
+      "sha256": "fe54178b70a99dc1ab0cc6a00505c97556ab8b581bb7b8f0ebfb49fac8bde01e"
+    },
+    {
+      "path": "leaderboard/README.md",
+      "category": "documentation",
+      "bytes": 1426,
+      "sha256": "90e15c0f8019c073cb31e26ba494bf29b42bc74d65e6c14ee7ba3a7a51c22b0c"
+    },
+    {
+      "path": "leaderboard/worker.mjs",
+      "category": "other",
+      "bytes": 4708,
+      "sha256": "d2eef7daa456960f9083fa94a7e3d97a401f925c3988ca5052500363e6868f77"
+    },
+    {
+      "path": "leaderboard/wrangler.toml",
+      "category": "configuration",
+      "bytes": 252,
+      "sha256": "144e1971d2e5ba10fa2c40714fa9337c7abbe4b712668381d060e2a72d05e9d8"
     },
     {
       "path": "legacy/README.md",
@@ -4503,8 +4533,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 111206,
-      "sha256": "849f9e3388adda74bc9a78b6d7f8fd5c49fabd12fb6aee4d0e12795744e72cc1"
+      "bytes": 110400,
+      "sha256": "eb89114d05685753434e9e8f23b4e38fd7237ef192e8deb68a763227371f41ae"
     },
     {
       "path": "public/site.webmanifest",
@@ -5883,8 +5913,8 @@
     {
       "path": "src/main/renderer-csp.test.ts",
       "category": "test",
-      "bytes": 2031,
-      "sha256": "4aaa04dd1feba8fcc0ba041832db7d3163eca2672c9169a5e0931e4150690eb1"
+      "bytes": 2248,
+      "sha256": "82061a770abdf6e67bbc86003843c00c40e3a8f2b86893f9d5cc572ce97326c1"
     },
     {
       "path": "src/main/renderer-loader.test.ts",
@@ -6051,8 +6081,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 28059,
-      "sha256": "ab116b523fc53ec1c68ebc3c8453ac7eca2feff2bd41ce431f3dca11e1312527"
+      "bytes": 27703,
+      "sha256": "c80f4f9cacd69634fbff63b0780e8174e39c3f737c822a756a9d11398775d4e1"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7833,8 +7863,8 @@
     {
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "category": "source",
-      "bytes": 7131,
-      "sha256": "3535a1ee62e1986fc82005a8102d7be8ea42508e87f340d69b617bc0d64adeb9"
+      "bytes": 7010,
+      "sha256": "9b2917e6f2e742d6f789f1e586fc46a39bf3fb4b3d2c4dff936a097716dce486"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
@@ -9201,8 +9231,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 2024,
-      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
+      "bytes": 1931,
+      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9243,8 +9273,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 887,
-      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
+      "bytes": 842,
+      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9261,8 +9291,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 354,
-      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
+      "bytes": 333,
+      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9291,8 +9321,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 622,
-      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
+      "bytes": 589,
+      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9321,8 +9351,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 629,
-      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+      "bytes": 596,
+      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9711,8 +9741,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 267,
-      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+      "bytes": 248,
+      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -9793,18 +9823,6 @@
       "sha256": "c2aa5720ce15c0b7cedd447f57978fa9e22713665050a5a08e9ac8335ce1f0d0"
     },
     {
-      "path": "src/renderer/audio/comboMusicLayers.test.ts",
-      "category": "test",
-      "bytes": 3359,
-      "sha256": "597b7ece583ebb3ce57f7ae8d1b45bd4007b9c5647ba8137b808a8d555907545"
-    },
-    {
-      "path": "src/renderer/audio/comboMusicLayers.ts",
-      "category": "source",
-      "bytes": 16181,
-      "sha256": "fa3dd8cec1a76a5f93415d0bebe7f35bfb9946c61eb67dba7eb14deca2f0401d"
-    },
-    {
       "path": "src/renderer/audio/comboVoicing.test.ts",
       "category": "test",
       "bytes": 5938,
@@ -9837,8 +9855,8 @@
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 15860,
-      "sha256": "275e95493cb04b290b0804dbc154f9fa6dca3f53f9bf9698985b4b5b2f994714"
+      "bytes": 15471,
+      "sha256": "f91c307c7c649b7e0aca334facdce593bc181673dc45ff36386dab5705da4ed6"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -10779,8 +10797,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 22512,
-      "sha256": "82e93541c1dc4f89e0e90be0eee9ace7c840987c7a0f5a699b9cb8c571149eb7"
+      "bytes": 22902,
+      "sha256": "dde0ffb9b8c3cf006c3da910ef036378f8693416edf8e3b59bffa82834055850"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -10877,6 +10895,24 @@
       "category": "source",
       "bytes": 1169,
       "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
+    },
+    {
+      "path": "src/renderer/components/GlobalRecord.module.css",
+      "category": "source",
+      "bytes": 1214,
+      "sha256": "28780b4e4e4270c0d32be8d2c80f8d4ad3e967d2f4c5c09ab187a9b6ee4f7e1e"
+    },
+    {
+      "path": "src/renderer/components/GlobalRecord.test.tsx",
+      "category": "test",
+      "bytes": 4994,
+      "sha256": "7cabef4a431df1e969c277ad709d0d651ac07c1a9a48d6a7e9aa7bac058a71cf"
+    },
+    {
+      "path": "src/renderer/components/GlobalRecord.tsx",
+      "category": "source",
+      "bytes": 4151,
+      "sha256": "5e1acb231e5cd3b093309864a48c8ee2aa7707ac7d7a9bfd2dd51394a15a8bb4"
     },
     {
       "path": "src/renderer/components/goldRain.test.ts",
@@ -10995,8 +11031,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13608,
-      "sha256": "a9914d3ea0970831ef9579f6cb46decb0bd67846891717c9246d505cb593f184"
+      "bytes": 13702,
+      "sha256": "d1d91c10055da84d70fb331dc8abf997ebfa8f089fb6919bb5c03ea48488b411"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -12903,8 +12939,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 2752,
-      "sha256": "583c9a6e131bcd7a1231c4c2aef6184f46c42c88e119c78a6b46784c92a46e75"
+      "bytes": 3840,
+      "sha256": "5225052522d3900ce61104b35e0d5293a5a80e0b472106c13fa89ca54dafc7a6"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -13487,6 +13523,36 @@
       "category": "source",
       "bytes": 10620,
       "sha256": "54a99e6906d7224b9370b70414c41030940a1e060037a2768a102f9b83fd76db"
+    },
+    {
+      "path": "src/renderer/records/globalRecord.test.ts",
+      "category": "test",
+      "bytes": 1777,
+      "sha256": "b0c4d31ef0e04030065e3d75e4d6d6c2126aa29cf19ad2d5962dd469ee88809e"
+    },
+    {
+      "path": "src/renderer/records/globalRecord.ts",
+      "category": "source",
+      "bytes": 2124,
+      "sha256": "c2ffe2dff078279b25d8e1a99bcbebe4380cddc467e695ce6f8ad18cf94d4580"
+    },
+    {
+      "path": "src/renderer/records/playerNames.d.mts",
+      "category": "source",
+      "bytes": 327,
+      "sha256": "f30fb08182ef785292f3f1fa77f65d052054639c47bf1a1bbccaaf9a5d41c788"
+    },
+    {
+      "path": "src/renderer/records/playerNames.mjs",
+      "category": "source",
+      "bytes": 24889,
+      "sha256": "5ec28d461bbff5e5950f631db3d6a5b8095641cf396aa74e0f6de81253624fcf"
+    },
+    {
+      "path": "src/renderer/records/playerNames.test.ts",
+      "category": "test",
+      "bytes": 1151,
+      "sha256": "21a091168ecb7a13967fd9fd504c898a712578e109d4bfa97fa7f251b21cde62"
     },
     {
       "path": "src/renderer/steamStorePage.ts",
@@ -14619,14 +14685,14 @@
     {
       "path": "src/shared/content-security-policy.test.ts",
       "category": "test",
-      "bytes": 3061,
-      "sha256": "c6cfa17f6489fe7eaf08421861a8c16d6ec4533e9456a909c113cd7d427cf8e0"
+      "bytes": 3146,
+      "sha256": "9ac1ec3e890ee01fe75b338eec5764a7eca882506dacccc0952e6af0e54fdb4c"
     },
     {
       "path": "src/shared/content-security-policy.ts",
       "category": "source",
-      "bytes": 2232,
-      "sha256": "342be9416a1b1494873a19f529ff4fe8e218d26e956dfd436ea528de1115ac1e"
+      "bytes": 2320,
+      "sha256": "57d0ad2d57c7888639b524fd223db52e55678bbac28c4210a209e578dabf690d"
     },
     {
       "path": "src/shared/contracts.ts",
@@ -15215,6 +15281,12 @@
       "category": "test",
       "bytes": 6516,
       "sha256": "fc20cd0f93724625e345c3f95be7b0dfd3db0c06ceb26f3596c206feda3a428e"
+    },
+    {
+      "path": "src/shared/global-record-config.ts",
+      "category": "source",
+      "bytes": 152,
+      "sha256": "af11b82be361fbdcb57a3c0a41a02a3d256ee2bce08840dd369032bba0959f69"
     },
     {
       "path": "src/shared/graphicsQuality.test.ts",
@@ -18945,8 +19017,8 @@
     {
       "path": "vitest.setup.ts",
       "category": "configuration",
-      "bytes": 4523,
-      "sha256": "80c6e3b49d9cd36cb4b07ced1a29fda32c2916e6be25322388670d6bdf3102e3"
+      "bytes": 4880,
+      "sha256": "34f88b79d45d486eabeed8225805ba3acd2e0c25837df3839c400fbcc8bd2f9f"
     },
     {
       "path": "wrangler.toml",
@@ -19223,9 +19295,10 @@
       "path": "src/main/renderer-csp.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 40,
+      "lineCount": 43,
       "imports": [
-        "file:src/shared/content-security-policy.ts"
+        "file:src/shared/content-security-policy.ts",
+        "file:src/shared/global-record-config.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -19651,10 +19724,9 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 559,
+      "lineCount": 553,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
-        "file:src/renderer/audio/comboMusicLayers.ts",
         "file:src/renderer/audio/feverDuck.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/resolutionGapDuck.ts",
@@ -19759,10 +19831,9 @@
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 164,
+      "lineCount": 163,
       "imports": [
         "file:src/renderer/assets/preloadStartupAssets.ts",
-        "file:src/renderer/audio/comboMusicLayers.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -20186,50 +20257,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/audio/comboMusicLayers.test.ts",
-      "path": "src/renderer/audio/comboMusicLayers.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 57,
-      "imports": [
-        "file:src/renderer/audio/comboMusicLayers.ts",
-        "file:src/renderer/audio/musicalScale.ts",
-        "file:src/shared/combo-heat-rules.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/audio/comboMusicLayers.ts",
-      "path": "src/renderer/audio/comboMusicLayers.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 322,
-      "imports": [
-        "file:src/renderer/audio/gameplayMusic.ts",
-        "file:src/renderer/audio/webAudioContext.ts",
-        "file:src/shared/combo-heat-rules.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#comboMusicDrive",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicDrive",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
-        "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers"
-      ],
-      "testedBy": [
-        "file:src/renderer/audio/comboMusicLayers.test.ts"
-      ]
-    },
-    {
       "id": "file:src/renderer/audio/comboVoicing.test.ts",
       "path": "src/renderer/audio/comboVoicing.test.ts",
       "layer": "renderer",
@@ -20326,14 +20353,13 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 396,
+      "lineCount": 391,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
       ],
       "exports": [
         "symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
-        "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
         "symbol:src/renderer/audio/gameplayMusic.ts#MUSIC_CROSSFADE_MS",
         "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
         "symbol:src/renderer/audio/gameplayMusic.ts#musicTrackKey",
@@ -20462,7 +20488,6 @@
         "symbol:src/renderer/audio/musicalScale.ts#semitoneHz"
       ],
       "testedBy": [
-        "file:src/renderer/audio/comboMusicLayers.test.ts",
         "file:src/renderer/audio/comboVoicing.test.ts",
         "file:src/renderer/audio/musicalScale.test.ts"
       ]
@@ -22993,10 +23018,11 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 447,
+      "lineCount": 450,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/GlobalRecord.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/RunEndCinematic.tsx",
         "file:src/renderer/components/RunEndStamp.tsx",
@@ -23412,6 +23438,38 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/GlobalRecord.test.tsx",
+      "path": "src/renderer/components/GlobalRecord.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 72,
+      "imports": [
+        "file:src/renderer/components/GlobalRecord.tsx",
+        "file:src/renderer/records/globalRecord.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/GlobalRecord.tsx",
+      "path": "src/renderer/components/GlobalRecord.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 71,
+      "imports": [
+        "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/copy/screenCopy.ts",
+        "file:src/renderer/records/globalRecord.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordBadge",
+        "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordResult"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GlobalRecord.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/goldRain.test.ts",
       "path": "src/renderer/components/goldRain.test.ts",
       "layer": "renderer",
@@ -23708,11 +23766,12 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 271,
+      "lineCount": 273,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/GlobalRecord.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/tutorialHallContext.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
@@ -29192,13 +29251,14 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 61,
+      "lineCount": 84,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
         "symbol:src/renderer/copy/screenCopy.ts#CLASSIC_SETUP_COPY",
         "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
-        "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS"
+        "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
+        "symbol:src/renderer/copy/screenCopy.ts#GLOBAL_RECORD_COPY"
       ],
       "testedBy": [
         "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
@@ -30623,6 +30683,47 @@
       "testedBy": [
         "file:src/renderer/platformTilt/usePlatformTiltField.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/records/globalRecord.test.ts",
+      "path": "src/renderer/records/globalRecord.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 28,
+      "imports": [
+        "file:src/renderer/records/globalRecord.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/records/globalRecord.ts",
+      "path": "src/renderer/records/globalRecord.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 40,
+      "imports": [
+        "file:src/shared/global-record-config.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/records/globalRecord.ts#fetchGlobalRecord",
+        "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+        "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GlobalRecord.test.tsx",
+        "file:src/renderer/records/globalRecord.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/records/playerNames.test.ts",
+      "path": "src/renderer/records/playerNames.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 19,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/steamStorePage.ts",
@@ -33909,7 +34010,6 @@
         "symbol:src/shared/combo-heat-rules.ts#romanNumeral"
       ],
       "testedBy": [
-        "file:src/renderer/audio/comboMusicLayers.test.ts",
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/realmRoomArt.test.ts",
         "file:src/renderer/components/sceneMood.test.ts",
@@ -34021,8 +34121,10 @@
       "path": "src/shared/content-security-policy.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 46,
-      "imports": [],
+      "lineCount": 48,
+      "imports": [
+        "file:src/shared/global-record-config.ts"
+      ],
       "exports": [
         "symbol:src/shared/content-security-policy.ts#buildContentSecurityPolicy",
         "symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
@@ -36451,6 +36553,20 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/global-record-config.ts",
+      "path": "src/shared/global-record-config.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 3,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/global-record-config.ts#GLOBAL_RECORD_API_URL"
+      ],
+      "testedBy": [
+        "file:src/main/renderer-csp.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/graphicsQuality.test.ts",
@@ -42362,16 +42478,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 46,
-      "endLine": 46
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 558,
-      "endLine": 558
+      "line": 552,
+      "endLine": 552
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -42426,64 +42542,64 @@
       "name": "preloadRunAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 127,
-      "endLine": 156
+      "line": 126,
+      "endLine": 155
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
       "name": "resetRunAssetPreloadForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 158,
-      "endLine": 163
+      "line": 157,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
       "name": "RUN_ASSET_STEP_CAP_MS",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 53,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
       "name": "RUN_ASSET_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 50,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
       "name": "RunAssetProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 34,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
       "name": "runAssetsReady",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 120,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
       "name": "RunAssetStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
       "name": "subscribeRunAssetProgress",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 113,
-      "endLine": 119
+      "line": 112,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
@@ -42918,110 +43034,6 @@
       "endLine": 27
     },
     {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
-      "name": "COMBO_LAYER_ENTRY_STAGE",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 29,
-      "endLine": 29
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
-      "name": "COMBO_LAYERS_MIX",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 31,
-      "endLine": 31
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
-      "name": "COMBO_MUSIC_LAYERS",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 26,
-      "endLine": 26
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
-      "name": "comboLayerGains",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 44,
-      "endLine": 59
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
-      "name": "comboLayerNotes",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 96,
-      "endLine": 122
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#comboMusicDrive",
-      "name": "comboMusicDrive",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 76,
-      "endLine": 84
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicDrive",
-      "name": "ComboMusicDrive",
-      "kind": "interface",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 67,
-      "endLine": 74
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
-      "name": "ComboMusicLayer",
-      "kind": "type",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 25,
-      "endLine": 25
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
-      "name": "preloadComboStems",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 129,
-      "endLine": 146
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
-      "name": "RUN_LOOP_BEAT_PHASE_SECONDS",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 35,
-      "endLine": 35
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
-      "name": "RUN_LOOP_BEAT_SECONDS",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 34,
-      "endLine": 34
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
-      "name": "RUN_LOOP_SECONDS",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 33,
-      "endLine": 33
-    },
-    {
-      "id": "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
-      "name": "useComboMusicLayers",
-      "kind": "value",
-      "file": "src/renderer/audio/comboMusicLayers.ts",
-      "line": 300,
-      "endLine": 321
-    },
-    {
       "id": "symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
       "name": "__resetComboVoicingForTests",
       "kind": "value",
@@ -43154,32 +43166,24 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 193,
-      "endLine": 212
-    },
-    {
-      "id": "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
-      "name": "getRunMusicElement",
-      "kind": "value",
-      "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 94,
-      "endLine": 94
+      "line": 190,
+      "endLine": 209
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#MUSIC_CROSSFADE_MS",
       "name": "MUSIC_CROSSFADE_MS",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 124,
-      "endLine": 124
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "name": "musicGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 108,
-      "endLine": 109
+      "line": 105,
+      "endLine": 106
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicTrackKey",
@@ -43218,16 +43222,16 @@
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 148,
-      "endLine": 191
+      "line": 145,
+      "endLine": 188
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic",
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 218,
-      "endLine": 395
+      "line": 215,
+      "endLine": 390
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
@@ -46218,8 +46222,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 446,
-      "endLine": 446
+      "line": 449,
+      "endLine": 449
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -46508,6 +46512,22 @@
       "file": "src/renderer/components/gameScreenStoreSelectors.ts",
       "line": 5,
       "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordBadge",
+      "name": "GlobalRecordBadge",
+      "kind": "value",
+      "file": "src/renderer/components/GlobalRecord.tsx",
+      "line": 8,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordResult",
+      "name": "GlobalRecordResult",
+      "kind": "value",
+      "file": "src/renderer/components/GlobalRecord.tsx",
+      "line": 21,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/goldRain.ts#buildGoldRain",
@@ -46978,8 +46998,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 270,
-      "endLine": 270
+      "line": 272,
+      "endLine": 272
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -53578,8 +53598,8 @@
       "name": "CLASSIC_SETUP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 47,
-      "endLine": 60
+      "line": 70,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
@@ -53596,6 +53616,14 @@
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 34,
       "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/copy/screenCopy.ts#GLOBAL_RECORD_COPY",
+      "name": "GLOBAL_RECORD_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/screenCopy.ts",
+      "line": 40,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -54812,6 +54840,30 @@
       "file": "src/renderer/platformTilt/usePlatformTiltField.ts",
       "line": 105,
       "endLine": 309
+    },
+    {
+      "id": "symbol:src/renderer/records/globalRecord.ts#fetchGlobalRecord",
+      "name": "fetchGlobalRecord",
+      "kind": "value",
+      "file": "src/renderer/records/globalRecord.ts",
+      "line": 34,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+      "name": "GlobalRecord",
+      "kind": "interface",
+      "file": "src/renderer/records/globalRecord.ts",
+      "line": 4,
+      "endLine": 4
+    },
+    {
+      "id": "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
+      "name": "submitGlobalRecord",
+      "kind": "value",
+      "file": "src/renderer/records/globalRecord.ts",
+      "line": 35,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/steamStorePage.ts#getSteamStorePageUrl",
@@ -59426,24 +59478,24 @@
       "name": "buildContentSecurityPolicy",
       "kind": "value",
       "file": "src/shared/content-security-policy.ts",
-      "line": 26,
-      "endLine": 41
+      "line": 28,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
       "name": "ContentSecurityPolicyOptions",
       "kind": "interface",
       "file": "src/shared/content-security-policy.ts",
-      "line": 21,
-      "endLine": 24
+      "line": 23,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/content-security-policy.ts#policyAllowsDevServer",
       "name": "policyAllowsDevServer",
       "kind": "value",
       "file": "src/shared/content-security-policy.ts",
-      "line": 44,
-      "endLine": 45
+      "line": 46,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementId",
@@ -63636,6 +63688,14 @@
       "file": "src/shared/generated/blueprintGlossaryGen.ts",
       "line": 3,
       "endLine": 6
+    },
+    {
+      "id": "symbol:src/shared/global-record-config.ts#GLOBAL_RECORD_API_URL",
+      "name": "GLOBAL_RECORD_API_URL",
+      "kind": "value",
+      "file": "src/shared/global-record-config.ts",
+      "line": 2,
+      "endLine": 2
     },
     {
       "id": "symbol:src/shared/graphicsQuality.ts#ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD",
@@ -78043,84 +78103,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYER_ENTRY_STAGE",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_LAYERS_MIX",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#COMBO_MUSIC_LAYERS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerGains",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#comboLayerNotes",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#comboMusicDrive",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#comboMusicDrive",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicDrive",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicDrive",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#ComboMusicLayer",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#preloadComboStems",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_PHASE_SECONDS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_BEAT_SECONDS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#RUN_LOOP_SECONDS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/comboMusicLayers.ts->symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "symbol:src/renderer/audio/comboMusicLayers.ts#useComboMusicLayers",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/audio/comboVoicing.ts->symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "symbol:src/renderer/audio/comboVoicing.ts#__resetComboVoicingForTests",
@@ -78220,12 +78202,6 @@
       "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
       "source": "file:src/renderer/audio/gameplayMusic.ts",
       "target": "symbol:src/renderer/audio/gameplayMusic.ts#getAdaptiveMusicState",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
-      "source": "file:src/renderer/audio/gameplayMusic.ts",
-      "target": "symbol:src/renderer/audio/gameplayMusic.ts#getRunMusicElement",
       "kind": "exports"
     },
     {
@@ -80734,6 +80710,18 @@
       "id": "exports:src/renderer/components/gameScreenStoreSelectors.ts->symbol:src/renderer/components/gameScreenStoreSelectors.ts#useGameScreenBoardVisualSettings",
       "source": "file:src/renderer/components/gameScreenStoreSelectors.ts",
       "target": "symbol:src/renderer/components/gameScreenStoreSelectors.ts#useGameScreenBoardVisualSettings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GlobalRecord.tsx->symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordBadge",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordBadge",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/GlobalRecord.tsx->symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordResult",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordResult",
       "kind": "exports"
     },
     {
@@ -86053,6 +86041,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#GLOBAL_RECORD_COPY",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "symbol:src/renderer/copy/screenCopy.ts#GLOBAL_RECORD_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/settingsHints.ts->symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
       "source": "file:src/renderer/copy/settingsHints.ts",
       "target": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -86962,6 +86956,24 @@
       "id": "exports:src/renderer/platformTilt/usePlatformTiltField.ts->symbol:src/renderer/platformTilt/usePlatformTiltField.ts#usePlatformTiltField",
       "source": "file:src/renderer/platformTilt/usePlatformTiltField.ts",
       "target": "symbol:src/renderer/platformTilt/usePlatformTiltField.ts#usePlatformTiltField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#fetchGlobalRecord",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "symbol:src/renderer/records/globalRecord.ts#fetchGlobalRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
       "kind": "exports"
     },
     {
@@ -93580,6 +93592,12 @@
       "id": "exports:src/shared/generated/blueprintGlossaryGen.ts->symbol:src/shared/generated/blueprintGlossaryGen.ts#BLUEPRINT_GLOSSARY",
       "source": "file:src/shared/generated/blueprintGlossaryGen.ts",
       "target": "symbol:src/shared/generated/blueprintGlossaryGen.ts#BLUEPRINT_GLOSSARY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/global-record-config.ts->symbol:src/shared/global-record-config.ts#GLOBAL_RECORD_API_URL",
+      "source": "file:src/shared/global-record-config.ts",
+      "target": "symbol:src/shared/global-record-config.ts#GLOBAL_RECORD_API_URL",
       "kind": "exports"
     },
     {
@@ -101555,6 +101573,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/main/renderer-csp.test.ts->src/shared/global-record-config.ts",
+      "source": "file:src/main/renderer-csp.test.ts",
+      "target": "file:src/shared/global-record-config.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/renderer-loader.test.ts->src/main/renderer-loader.ts",
       "source": "file:src/main/renderer-loader.test.ts",
       "target": "file:src/main/renderer-loader.ts",
@@ -101777,12 +101801,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/App.tsx->src/renderer/audio/comboMusicLayers.ts",
-      "source": "file:src/renderer/App.tsx",
-      "target": "file:src/renderer/audio/comboMusicLayers.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/App.tsx->src/renderer/audio/feverDuck.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/audio/feverDuck.ts",
@@ -101990,12 +102008,6 @@
       "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/assets/preloadStartupAssets.ts",
       "source": "file:src/renderer/assets/preloadRunAssets.ts",
       "target": "file:src/renderer/assets/preloadStartupAssets.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/comboMusicLayers.ts",
-      "source": "file:src/renderer/assets/preloadRunAssets.ts",
-      "target": "file:src/renderer/audio/comboMusicLayers.ts",
       "kind": "imports"
     },
     {
@@ -102242,42 +102254,6 @@
       "id": "imports:src/renderer/audio/audioSafety.test.ts->src/renderer/audio/audioSafety.ts",
       "source": "file:src/renderer/audio/audioSafety.test.ts",
       "target": "file:src/renderer/audio/audioSafety.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/renderer/audio/comboMusicLayers.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
-      "target": "file:src/renderer/audio/comboMusicLayers.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/renderer/audio/musicalScale.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
-      "target": "file:src/renderer/audio/musicalScale.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.test.ts->src/shared/combo-heat-rules.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.test.ts",
-      "target": "file:src/shared/combo-heat-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/renderer/audio/gameplayMusic.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "file:src/renderer/audio/gameplayMusic.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/renderer/audio/webAudioContext.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "file:src/renderer/audio/webAudioContext.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/audio/comboMusicLayers.ts->src/shared/combo-heat-rules.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -104969,6 +104945,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/GlobalRecord.tsx",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/components/GlobalRecord.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/components/MainMenuBackground.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/MainMenuBackground.tsx",
@@ -106073,6 +106055,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GlobalRecord.test.tsx->src/renderer/components/GlobalRecord.tsx",
+      "source": "file:src/renderer/components/GlobalRecord.test.tsx",
+      "target": "file:src/renderer/components/GlobalRecord.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GlobalRecord.test.tsx->src/renderer/records/globalRecord.ts",
+      "source": "file:src/renderer/components/GlobalRecord.test.tsx",
+      "target": "file:src/renderer/records/globalRecord.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GlobalRecord.tsx->src/renderer/components/OverlayModal.tsx",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "file:src/renderer/components/OverlayModal.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GlobalRecord.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GlobalRecord.tsx->src/renderer/records/globalRecord.ts",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "file:src/renderer/records/globalRecord.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/goldRain.test.ts->src/renderer/components/goldRain.ts",
       "source": "file:src/renderer/components/goldRain.test.ts",
       "target": "file:src/renderer/components/goldRain.ts",
@@ -106358,6 +106370,12 @@
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/CathedralScene.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/CathedralScene.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/GlobalRecord.tsx",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/components/GlobalRecord.tsx",
       "kind": "imports"
     },
     {
@@ -112661,6 +112679,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/records/globalRecord.test.ts->src/renderer/records/globalRecord.ts",
+      "source": "file:src/renderer/records/globalRecord.test.ts",
+      "target": "file:src/renderer/records/globalRecord.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/records/globalRecord.ts->src/shared/global-record-config.ts",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "file:src/shared/global-record-config.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/achievementPersistence.test.ts->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/store/achievementPersistence.test.ts",
       "target": "file:src/renderer/desktop-client.ts",
@@ -116354,6 +116384,12 @@
       "id": "imports:src/shared/content-security-policy.test.ts->src/shared/content-security-policy.ts",
       "source": "file:src/shared/content-security-policy.test.ts",
       "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/content-security-policy.ts->src/shared/global-record-config.ts",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "file:src/shared/global-record-config.ts",
       "kind": "imports"
     },
     {
@@ -127005,12 +127041,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/audio/comboMusicLayers.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
-      "source": "file:src/renderer/audio/comboMusicLayers.ts",
-      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/audio/comboVoicing.ts->file:src/renderer/audio/comboVoicing.test.ts",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "file:src/renderer/audio/comboVoicing.test.ts",
@@ -127050,12 +127080,6 @@
       "id": "tested_by:src/renderer/audio/gameSfx.ts->file:src/renderer/audio/realmSfx.test.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/renderer/audio/realmSfx.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/audio/musicalScale.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
-      "source": "file:src/renderer/audio/musicalScale.ts",
-      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127710,6 +127734,12 @@
       "id": "tested_by:src/renderer/components/gameScreenFeedback.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/GlobalRecord.tsx->file:src/renderer/components/GlobalRecord.test.tsx",
+      "source": "file:src/renderer/components/GlobalRecord.tsx",
+      "target": "file:src/renderer/components/GlobalRecord.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -129153,6 +129183,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/records/globalRecord.ts->file:src/renderer/components/GlobalRecord.test.tsx",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "file:src/renderer/components/GlobalRecord.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/records/globalRecord.ts->file:src/renderer/records/globalRecord.test.ts",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "file:src/renderer/records/globalRecord.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/achievementPersistence.ts->file:src/renderer/store/achievementPersistence.test.ts",
       "source": "file:src/renderer/store/achievementPersistence.ts",
       "target": "file:src/renderer/store/achievementPersistence.test.ts",
@@ -130080,12 +130122,6 @@
       "id": "tested_by:src/shared/combo-heat-perks.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/shared/combo-heat-perks.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/audio/comboMusicLayers.test.ts",
-      "source": "file:src/shared/combo-heat-rules.ts",
-      "target": "file:src/renderer/audio/comboMusicLayers.test.ts",
       "kind": "tested_by"
     },
     {
@@ -132522,6 +132558,12 @@
       "id": "tested_by:src/shared/generated/blueprintGlossaryGen.ts->file:src/shared/blueprintGlossaryGen.test.ts",
       "source": "file:src/shared/generated/blueprintGlossaryGen.ts",
       "target": "file:src/shared/blueprintGlossaryGen.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/global-record-config.ts->file:src/main/renderer-csp.test.ts",
+      "source": "file:src/shared/global-record-config.ts",
+      "target": "file:src/main/renderer-csp.test.ts",
       "kind": "tested_by"
     },
     {

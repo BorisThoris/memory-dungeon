@@ -24,6 +24,7 @@ import { useAppStore } from '../store/useAppStore';
 import { CathedralScene } from './CathedralScene';
 import MainMenuBackground from './MainMenuBackground';
 import styles from './GameOverScreen.module.css';
+import { GlobalRecordResult } from './GlobalRecord';
 import { GAME_OVER_LABELS } from '../copy/screenCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { isPassAndPlayRun, resolvePassAndPlayOutcome } from '../../shared/pass-and-play-rules';
@@ -208,6 +209,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 />
             </div>
             <div className={styles.scrim} />
+            <GlobalRecordResult key={`${run.runSeed}:${summary.totalScore}:${summary.highestLevel}`} score={summary.totalScore} resultKey={`${run.runSeed}:${summary.totalScore}:${summary.highestLevel}`}
+                eligible={!summary.practiceMode && !run.debugUsed && (summary.achievementsEnabled || passAndPlayOutcome !== null)} />
             <p
                 aria-atomic="true"
                 aria-label="Run summary announcement"

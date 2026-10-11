@@ -1,0 +1,12 @@
+name = "memory-dungeon-scores"
+main = "worker.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "GLOBAL_RECORD"
+class_name = "GlobalRecord"
+
+[exports.GlobalRecord]
+type = "durable-object"
+storage = "sqlite"

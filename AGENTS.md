@@ -10,8 +10,8 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
 
 - On a floor in a realm, that realm's loop (`src/renderer/assets/audio/music/realm/<realm>-ambience.ogg`)
   **is** the background music: it plays on the music element (`gameplayMusic.ts`, `realmMusicUrl`,
-  `musicTrackKey`), so the Settings music volume, the master volume, the Fever duck and the combo's
-  music layers all act on it. `run-loop` is only the fallback for a realm without a loop; the menu
+  `musicTrackKey`), so the Settings music volume, master volume and Fever duck act on it.
+  `run-loop` is only the fallback for a realm without a loop; the menu
   keeps `menu-loop`.
 - Moving from one realm to the next crossfades (`MUSIC_CROSSFADE_MS`); it never cuts.
 - Every track is preloaded with the run (`preloadGameplayMusic`): nothing streams in play.
@@ -31,8 +31,8 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
   it approaches its ceiling and keeps rising with every link without reaching it. Something without
   a ceiling (a speed, a filter cutoff, a brightness, how often a sky breaks) takes the depth as it is.
   A surface may cap one quantity only if another of its quantities keeps climbing.
-- What does this now: the music layers' drive (`comboMusicDrive`: the voices' brightness, their mix,
-  the lead's octave shimmer), a realm room's glow and its overdrive, and a realm room's life (how much
+- The progressive combo music overlays were removed at the owner's request for the beta. Do not restore them.
+- What does this now: a realm room's glow and its overdrive, and a realm room's life (how much
   of it, how fast). A new combo-driven surface joins them, and its test walks the combo out to
   thousands of links and asserts it never stands still.
 

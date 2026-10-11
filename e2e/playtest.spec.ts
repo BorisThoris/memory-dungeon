@@ -3,6 +3,13 @@ import { mkdirSync } from 'node:fs';
 import { boardDrawCallBudget } from '../src/shared/graphicsQuality';
 import { startClassicFromMenu } from './playablePathHelpers';
 
+// This suite exercises the run, while global-record.spec covers the record popup separately.
+test.beforeEach(async ({ page }) => {
+    await page.route('https://memory-dungeon-scores.modaxxx009.workers.dev/record', route => route.fulfill({
+        json: { record: { name: 'Test Record', score: Number.MAX_SAFE_INTEGER, at: '2026-10-11T00:00:00Z' } }
+    }));
+});
+
 /**
  * The playtest (`yarn test:e2e:playtest`): a whole run, played from the main menu the way a player
  * plays it, with screenshots of every floor transition in `test-results/playtest/` for a human to
