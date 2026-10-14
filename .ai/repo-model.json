@@ -16545,8 +16545,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 79846,
-      "sha256": "a426f9ff686be04d63652bea5c025df683226b6ab2d71383b1d8e482463f6d43"
+      "bytes": 80971,
+      "sha256": "9f46b838d5e11ac55758c2331caa2cf20f0be0d95b72ad7c3bf74e86b236e36a"
     },
     {
       "path": "src/shared/telemetry.test.ts",
