@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3175,
     "codeFileCount": 1190,
-    "exportedSymbolCount": 3750,
+    "exportedSymbolCount": 3753,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10015
+    "relationshipCount": 10019
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 525827,
-      "sha256": "91f130d3cfa85e9ea18f78e99d0139539f4e2c650ace3c6f7ac7257245d86e3c"
+      "bytes": 526891,
+      "sha256": "273a7fe95740357abc0bae1c0c30baf307d5f1aeef4313788ec62153554dc507"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 61516,
-      "sha256": "876db52d85f98fbc9c0cc7537448b0ba8320ce826c5d214a8692d861b7f05c9b"
+      "bytes": 62973,
+      "sha256": "6ea182b4cce6c9945036ec68e5b674cc838e0d8219f8b66035d9fc30de691a8b"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d91264b8d3bd1411ccca31ef9411def0f0a0882f629565699a0c7696469915e5"
+      "sha256": "ec0aac5f2160bccab65a2004aba45c7e7b5337a1f58e9818de6fb57cf7f66dca"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14211,8 +14211,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 61840,
-      "sha256": "a7c752bd82e93cbcd78e7dd93f829a806f596280c6e21f707ff5980af42408fb"
+      "bytes": 63297,
+      "sha256": "b892c70922b11a6c88610a3619b9147583f9f6a2e1be8032fba9e7cb0d652f77"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15993,8 +15993,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 50568,
-      "sha256": "8a09fd7f28cee8c82e89919d822d9f0698eb53c8e53cdb178075c41a10dd0b4a"
+      "bytes": 50936,
+      "sha256": "4eeec892df8f57510551513c3be4556f80607da3128d57f21aa13c752044c699"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -16203,8 +16203,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 7208,
-      "sha256": "64419f0df8d1c3374250466c3775df1eeb86c641edb03a06866596be6746091c"
+      "bytes": 7220,
+      "sha256": "8e648c1a5559e0dfeddacbcb788d00fa30ca6b8ff745ea4936987206851d6802"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -16389,8 +16389,8 @@
     {
       "path": "src/shared/secondary-objective-rules.ts",
       "category": "source",
-      "bytes": 7076,
-      "sha256": "444a389e13f31b528be02e36746b3df5d2fb8de84f58db4a800412dd9f2cec31"
+      "bytes": 7872,
+      "sha256": "e35b5e231649dd5d75e446a93a755ebbb2e8fa716347b05a505649771d77534c"
     },
     {
       "path": "src/shared/secondary-objectives.test.ts",
@@ -16533,8 +16533,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 59793,
-      "sha256": "f23a48463af16d424ecdd0380049c6f999d45dfcd4abb36e79a4579dd6be9828"
+      "bytes": 60525,
+      "sha256": "081382889e0b5fca4b23471fccce7c616b86a47fb7fd098208f39f0338b41da3"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -16545,8 +16545,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 80971,
-      "sha256": "9f46b838d5e11ac55758c2331caa2cf20f0be0d95b72ad7c3bf74e86b236e36a"
+      "bytes": 81303,
+      "sha256": "c8423a411332f78c611e14f2176f12ed550c8d60870ce6bdce6c59f12cb4b2a7"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -38847,7 +38847,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1026,
+      "lineCount": 1029,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -38865,6 +38865,7 @@
         "file:src/shared/realm-sway-rules.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/secondary-objective-rules.ts",
         "file:src/shared/skittish-cards-rules.ts",
         "file:src/shared/tile-identity.ts"
       ],
@@ -40280,7 +40281,7 @@
       "path": "src/shared/secondary-objective-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 190,
+      "lineCount": 204,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -40290,6 +40291,7 @@
       "exports": [
         "symbol:src/shared/secondary-objective-rules.ts#DefaultClearObjectiveBonusResult",
         "symbol:src/shared/secondary-objective-rules.ts#FEATURED_OBJECTIVE_BONUS_SCORES",
+        "symbol:src/shared/secondary-objective-rules.ts#FEATURED_RECIPE_WEATHER_GUARD_FROM",
         "symbol:src/shared/secondary-objective-rules.ts#FeaturedObjectiveClearResult",
         "symbol:src/shared/secondary-objective-rules.ts#featuredRecipePairKeys",
         "symbol:src/shared/secondary-objective-rules.ts#FloorClearObjectiveResult",
@@ -40300,7 +40302,8 @@
         "symbol:src/shared/secondary-objective-rules.ts#getFloorClearObjectiveResult",
         "symbol:src/shared/secondary-objective-rules.ts#isEndlessFeaturedObjectiveBoard",
         "symbol:src/shared/secondary-objective-rules.ts#isFeaturedObjectiveCompleted",
-        "symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar"
+        "symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar",
+        "symbol:src/shared/secondary-objective-rules.ts#weatherGuardedRecipeTileIds"
       ],
       "testedBy": [
         "file:src/shared/elemental-encounter-goals.test.ts",
@@ -40729,7 +40732,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1109,
+      "lineCount": 1120,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -40758,6 +40761,7 @@
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
         "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
         "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
+        "symbol:src/shared/system-occupancy-simulation.ts#RUN_OCCUPANCY_SEEDS",
         "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
         "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
@@ -67235,176 +67239,176 @@
       "name": "applyRealmTurnToRun",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 961,
-      "endLine": 1018
+      "line": 964,
+      "endLine": 1021
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#BLOOM_CUT_GOLD",
       "name": "BLOOM_CUT_GOLD",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 68,
-      "endLine": 68
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#boardHasTurnablePair",
       "name": "boardHasTurnablePair",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 418,
-      "endLine": 430
+      "line": 419,
+      "endLine": 431
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#BURNOUT_GOLD",
       "name": "BURNOUT_GOLD",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 65,
-      "endLine": 65
+      "line": 66,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#DOUSE_GOLD",
       "name": "DOUSE_GOLD",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 64,
-      "endLine": 64
+      "line": 65,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#FIRESTORM_MAX_BURNING",
       "name": "FIRESTORM_MAX_BURNING",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 72,
-      "endLine": 72
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS",
       "name": "FROSTBITE_TURNS",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 57,
-      "endLine": 57
+      "line": 58,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#FROSTBITE_TURNS_RAGING",
       "name": "FROSTBITE_TURNS_RAGING",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#isRealmPeak",
       "name": "isRealmPeak",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 86,
-      "endLine": 86
+      "line": 87,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#isTileFlipBlocked",
       "name": "isTileFlipBlocked",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 77,
-      "endLine": 78
+      "line": 78,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#nextRealmWeather",
       "name": "nextRealmWeather",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 92,
-      "endLine": 102
+      "line": 93,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#REALM_PEAK_EVERY",
       "name": "REALM_PEAK_EVERY",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#RealmTurnInput",
       "name": "RealmTurnInput",
       "kind": "interface",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 106,
-      "endLine": 121
+      "line": 107,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#RealmTurnResult",
       "name": "RealmTurnResult",
       "kind": "interface",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 123,
-      "endLine": 157
+      "line": 124,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#releaseRealmHoldsIfStuck",
       "name": "releaseRealmHoldsIfStuck",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 437,
-      "endLine": 448
+      "line": 438,
+      "endLine": 449
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#resolveRealmBacklash",
       "name": "resolveRealmBacklash",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 323,
-      "endLine": 398
+      "line": 324,
+      "endLine": 399
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#resolveRealmTurn",
       "name": "resolveRealmTurn",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 451,
-      "endLine": 955
+      "line": 452,
+      "endLine": 958
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#SCALD_FUSE",
       "name": "SCALD_FUSE",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 74,
-      "endLine": 74
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#shedSnow",
       "name": "shedSnow",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 1021,
-      "endLine": 1025
+      "line": 1024,
+      "endLine": 1028
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#VINE_CUT_GOLD",
       "name": "VINE_CUT_GOLD",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#WILDFIRE_FUSE",
       "name": "WILDFIRE_FUSE",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 61,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#WILDFIRE_MAX_BURNING",
       "name": "WILDFIRE_MAX_BURNING",
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
-      "line": 62,
-      "endLine": 62
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/recall-rules.ts#calculateRecallMatchBonus",
@@ -69347,104 +69351,120 @@
       "name": "DefaultClearObjectiveBonusResult",
       "kind": "interface",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 69,
-      "endLine": 72
+      "line": 83,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#FEATURED_OBJECTIVE_BONUS_SCORES",
       "name": "FEATURED_OBJECTIVE_BONUS_SCORES",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 30,
-      "endLine": 36
+      "line": 44,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/shared/secondary-objective-rules.ts#FEATURED_RECIPE_WEATHER_GUARD_FROM",
+      "name": "FEATURED_RECIPE_WEATHER_GUARD_FROM",
+      "kind": "value",
+      "file": "src/shared/secondary-objective-rules.ts",
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#FeaturedObjectiveClearResult",
       "name": "FeaturedObjectiveClearResult",
       "kind": "interface",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 100,
-      "endLine": 103
+      "line": 114,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#featuredRecipePairKeys",
       "name": "featuredRecipePairKeys",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 18,
-      "endLine": 28
+      "line": 32,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#FloorClearObjectiveResult",
       "name": "FloorClearObjectiveResult",
       "kind": "interface",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 143,
-      "endLine": 149
+      "line": 157,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#getDefaultClearObjectiveBonus",
       "name": "getDefaultClearObjectiveBonus",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 74,
-      "endLine": 98
+      "line": 88,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#getFeaturedObjectiveBonusScore",
       "name": "getFeaturedObjectiveBonusScore",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 38,
-      "endLine": 39
+      "line": 52,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#getFeaturedObjectiveClearResult",
       "name": "getFeaturedObjectiveClearResult",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 105,
-      "endLine": 136
+      "line": 119,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#getFeaturedObjectiveRewardCopy",
       "name": "getFeaturedObjectiveRewardCopy",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 186,
-      "endLine": 189
+      "line": 200,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#getFloorClearObjectiveResult",
       "name": "getFloorClearObjectiveResult",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 151,
-      "endLine": 184
+      "line": 165,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#isEndlessFeaturedObjectiveBoard",
       "name": "isEndlessFeaturedObjectiveBoard",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 138,
-      "endLine": 141
+      "line": 152,
+      "endLine": 155
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#isFeaturedObjectiveCompleted",
       "name": "isFeaturedObjectiveCompleted",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 50,
-      "endLine": 67
+      "line": 64,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar",
       "name": "isWithinFloorPar",
       "kind": "value",
       "file": "src/shared/secondary-objective-rules.ts",
-      "line": 47,
-      "endLine": 48
+      "line": 61,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/shared/secondary-objective-rules.ts#weatherGuardedRecipeTileIds",
+      "name": "weatherGuardedRecipeTileIds",
+      "kind": "value",
+      "file": "src/shared/secondary-objective-rules.ts",
+      "line": 26,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/secondary-objectives.ts#formatLevelResultObjectiveLine",
@@ -69971,48 +69991,48 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1087,
-      "endLine": 1090
+      "line": 1098,
+      "endLine": 1101
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1004,
-      "endLine": 1009
+      "line": 1015,
+      "endLine": 1020
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1045,
-      "endLine": 1085
+      "line": 1056,
+      "endLine": 1096
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1011,
-      "endLine": 1033
+      "line": 1022,
+      "endLine": 1044
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 971,
-      "endLine": 994
+      "line": 982,
+      "endLine": 1005
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 801,
-      "endLine": 801
+      "line": 808,
+      "endLine": 808
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
@@ -70021,6 +70041,14 @@
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 427,
       "endLine": 431
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#RUN_OCCUPANCY_SEEDS",
+      "name": "RUN_OCCUPANCY_SEEDS",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 680,
+      "endLine": 680
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
@@ -70035,56 +70063,56 @@
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 675,
-      "endLine": 789
+      "line": 682,
+      "endLine": 796
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 803,
-      "endLine": 848
+      "line": 810,
+      "endLine": 855
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 791,
-      "endLine": 799
+      "line": 798,
+      "endLine": 806
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1092,
-      "endLine": 1108
+      "line": 1103,
+      "endLine": 1119
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 855,
-      "endLine": 875
+      "line": 862,
+      "endLine": 886
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 925,
-      "endLine": 945
+      "line": 936,
+      "endLine": 956
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 962,
-      "endLine": 962
+      "line": 973,
+      "endLine": 973
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -97948,6 +97976,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/secondary-objective-rules.ts->symbol:src/shared/secondary-objective-rules.ts#FEATURED_RECIPE_WEATHER_GUARD_FROM",
+      "source": "file:src/shared/secondary-objective-rules.ts",
+      "target": "symbol:src/shared/secondary-objective-rules.ts#FEATURED_RECIPE_WEATHER_GUARD_FROM",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/secondary-objective-rules.ts->symbol:src/shared/secondary-objective-rules.ts#FeaturedObjectiveClearResult",
       "source": "file:src/shared/secondary-objective-rules.ts",
       "target": "symbol:src/shared/secondary-objective-rules.ts#FeaturedObjectiveClearResult",
@@ -98011,6 +98045,12 @@
       "id": "exports:src/shared/secondary-objective-rules.ts->symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar",
       "source": "file:src/shared/secondary-objective-rules.ts",
       "target": "symbol:src/shared/secondary-objective-rules.ts#isWithinFloorPar",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/secondary-objective-rules.ts->symbol:src/shared/secondary-objective-rules.ts#weatherGuardedRecipeTileIds",
+      "source": "file:src/shared/secondary-objective-rules.ts",
+      "target": "symbol:src/shared/secondary-objective-rules.ts#weatherGuardedRecipeTileIds",
       "kind": "exports"
     },
     {
@@ -98443,6 +98483,12 @@
       "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "source": "file:src/shared/system-occupancy-simulation.ts",
       "target": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#RUN_OCCUPANCY_SEEDS",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#RUN_OCCUPANCY_SEEDS",
       "kind": "exports"
     },
     {
@@ -120845,6 +120891,12 @@
       "id": "imports:src/shared/realm-weather-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/realm-weather-rules.ts->src/shared/secondary-objective-rules.ts",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "file:src/shared/secondary-objective-rules.ts",
       "kind": "imports"
     },
     {
