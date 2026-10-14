@@ -10,7 +10,7 @@ import {
     type WeakerShuffleMode
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
-import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
+import { CHAOS_MUTATORS, pickFloorScheduleEntry, runFollowsFloorSchedule, scheduledFloorMutators } from './floor-mutator-schedule';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { openingMissBank } from './miss-bank';
@@ -67,13 +67,13 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     const useOnboardingSafeFirstFloor = options.onboardingSafeFirstFloor === true && gameMode === 'endless';
     if (
         gameMode === 'endless' &&
-        usesEndlessFloorSchedule(gameMode, rulesVersion) &&
-        !options.wildMenuRun &&
+        runFollowsFloorSchedule(gameMode, rulesVersion, options.wildMenuRun === true) &&
         !useOnboardingSafeFirstFloor &&
-        activeMutators.length === 0
+        // A Wild run arrives with its chaos set already chosen; any other preset set opts out.
+        (activeMutators.length === 0 || options.wildMenuRun === true)
     ) {
         const entry = pickFloorScheduleEntry(runSeed, rulesVersion, 1, gameMode);
-        activeMutators = filterMutatorsByContentLock(entry.mutators);
+        activeMutators = filterMutatorsByContentLock(scheduledFloorMutators(entry.mutators, options.wildMenuRun === true));
         initialFloorTag = entry.floorTag;
         initialFloorArchetypeId = entry.floorArchetypeId;
         initialFeaturedObjectiveId = entry.featuredObjectiveId;
@@ -236,6 +236,6 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
     createNewRun(bestScore, {
         enableWildJoker: true,
         wildMenuRun: true,
-        activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor'],
+        activeMutators: [...CHAOS_MUTATORS],
         ...extra
     });

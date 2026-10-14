@@ -94,6 +94,15 @@ describe('the run soak', () => {
         expect(report.violations).toEqual([]);
     });
 
+    it('takes a Wild run through the floor schedule: its players meet the Colossus too', () => {
+        // Before rules 65 a Wild run skipped the schedule and never saw a boss floor (0 raised in 2,012 soaked floors).
+        const reports = Array.from({ length: 6 }, (_unused, index) =>
+            soakRun({ seed: 31_337 + index * 7_919, player: SOAK_PLAYERS.wild, playerName: 'wild', maxFloors: 12 })
+        );
+        expect(reports.some((report) => report.colossiRaised > 0), 'no wild run ever met a Colossus').toBe(true);
+        expect(reports.flatMap((report) => report.violations)).toEqual([]);
+    });
+
     it('catches a broken invariant rather than passing it', () => {
         // The harness is only worth anything if it can fail: feed it a run the rules say cannot exist.
         const check = SOAK_INVARIANTS['charges, gold and counters are whole numbers, never negative']!;

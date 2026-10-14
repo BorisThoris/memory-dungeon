@@ -644,3 +644,23 @@ export const pickFloorScheduleEntry = (
 
 export const usesEndlessFloorSchedule = (gameMode: GameMode, rulesVersion: number): boolean =>
     gameMode === 'endless' && rulesVersion >= FLOOR_SCHEDULE_RULES_VERSION;
+
+/** The chaotic set a Wild run carries on every floor. */
+export const CHAOS_MUTATORS: readonly MutatorId[] = ['sticky_fingers', 'short_memorize', 'findables_floor'];
+
+/**
+ * From this rules version a Wild run follows the floor schedule like any descent - boss floors and
+ * their Colossus, breathers, archetypes, featured goals, the rotating in-play mutators - with its
+ * chaos set added on top. Before it, a Wild run skipped the schedule and played the same three
+ * mutators on every floor ("a chaotic floor set" that never changed); older saves and share keys
+ * keep that.
+ */
+export const WILD_SCHEDULE_RULES_VERSION = 65;
+
+/** Whether this run's floors come from the schedule. */
+export const runFollowsFloorSchedule = (gameMode: GameMode, rulesVersion: number, wildMenuRun: boolean): boolean =>
+    usesEndlessFloorSchedule(gameMode, rulesVersion) && (!wildMenuRun || rulesVersion >= WILD_SCHEDULE_RULES_VERSION);
+
+/** A scheduled floor's mutators, with a Wild run's chaos set folded in (each once). */
+export const scheduledFloorMutators = (scheduled: readonly MutatorId[], wildMenuRun: boolean): MutatorId[] =>
+    wildMenuRun ? [...new Set<MutatorId>([...CHAOS_MUTATORS, ...scheduled])] : [...scheduled];

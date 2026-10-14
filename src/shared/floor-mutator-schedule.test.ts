@@ -8,8 +8,12 @@ import {
     getFloorArchetypeProgressionReport,
     getFloorArchetypeProgressionRows,
     getFloorChapterIdentity,
+    CHAOS_MUTATORS,
     pickFloorScheduleEntry,
-    usesEndlessFloorSchedule
+    runFollowsFloorSchedule,
+    scheduledFloorMutators,
+    usesEndlessFloorSchedule,
+    WILD_SCHEDULE_RULES_VERSION
 } from './floor-mutator-schedule';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard, inspectBoardFairness } from './board-generation';
@@ -395,5 +399,19 @@ describe('warden rotation', () => {
             const bosses = levels.filter((level) => scheduleFor(level).floorTag === 'boss');
             expect(bosses, `cycle ${cycle} boss count`).toHaveLength(2);
         }
+    });
+});
+
+describe('a Wild run on the floor schedule', () => {
+    it('follows the schedule from rules 65, and an older Wild save keeps its fixed floors', () => {
+        expect(WILD_SCHEDULE_RULES_VERSION).toBe(65);
+        expect(runFollowsFloorSchedule('endless', 65, true)).toBe(true);
+        expect(runFollowsFloorSchedule('endless', 64, true)).toBe(false);
+        expect(runFollowsFloorSchedule('endless', 64, false)).toBe(true);
+    });
+
+    it('adds the chaos set to a scheduled floor once, and leaves any other run its schedule', () => {
+        expect(scheduledFloorMutators(['short_memorize', 'restless_floor'], true)).toEqual([...CHAOS_MUTATORS, 'restless_floor']);
+        expect(scheduledFloorMutators(['restless_floor'], false)).toEqual(['restless_floor']);
     });
 });

@@ -178,7 +178,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         } else if (pairs < 1 || pairs > COLOSSUS_MAX_SPLIT_PAIRS || pairs > colossus.hits) return `split into ${pairs} pairs with ${colossus.hits} hits left`;
         return colossus.turnsLeft === 0 ? null : `split with ${colossus.turnsLeft} turns left`;
     },
-    'a fixed Colossus breaks into pairs of its own element, dealt face down': (before, run) => {
+    'a fixed Colossus breaks into pairs of its own element, dealt face down': (before, run, action) => {
+        // A Zone replays several turns in one action: a piece dealt by one of them can be taken by a
+        // later one (its pop, a reaction), which is play, not a bad deal. The deal is judged per turn.
+        if (action === 'zone-flip' || action === 'zone-resolve') return null;
         const colossus = run.board?.colossus;
         if (!colossus || colossus.form !== 'fixed' || colossus.status !== 'split' || before?.board?.colossus?.status !== 'standing' || !run.board) return null;
         const element = colossus.cycle[0];

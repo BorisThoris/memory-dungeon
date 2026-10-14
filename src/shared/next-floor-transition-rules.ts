@@ -8,7 +8,8 @@ import {
 import { filterMutatorsByContentLock } from './content-lock-state';
 import {
     pickFloorScheduleEntry,
-    usesEndlessFloorSchedule
+    runFollowsFloorSchedule,
+    scheduledFloorMutators
 } from './floor-mutator-schedule';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { buildBoard } from './board-build-rules';
@@ -31,9 +32,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     let nextFloorArchetypeId: FloorArchetypeId | null = null;
     let nextFeaturedObjectiveId: FeaturedObjectiveId | null = null;
     let nextCycleFloor: number | null = null;
-    if (usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion) && !run.wildMenuRun) {
+    if (runFollowsFloorSchedule(run.gameMode, run.runRulesVersion, run.wildMenuRun === true)) {
         const entry = pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, nextLevelNum, run.gameMode);
-        nextActiveMutators = filterMutatorsByContentLock(entry.mutators);
+        nextActiveMutators = filterMutatorsByContentLock(scheduledFloorMutators(entry.mutators, run.wildMenuRun === true));
         nextFloorTag = entry.floorTag;
         nextFloorArchetypeId = entry.floorArchetypeId;
         nextFeaturedObjectiveId = entry.featuredObjectiveId;

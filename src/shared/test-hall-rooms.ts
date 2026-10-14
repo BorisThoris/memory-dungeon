@@ -13,7 +13,7 @@ import type { BoardState, ColossusState, MutatorId, RunState, Tile, TileSuit, Ti
 import { colossusElement, raiseColossus } from './colossus-rules';
 import { togglePinnedTile } from './board-power-state';
 import { countFindablePairs } from './board-tile-generation-rules';
-import { pickFloorScheduleEntry } from './floor-mutator-schedule';
+import { CHAOS_MUTATORS, pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { greetFloorCurio } from './floor-curio-greeting-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
@@ -105,6 +105,7 @@ export type TestHallRoomId =
     | 'short-memorize'
     | 'dense-pickups'
     | 'wild-run'
+    | 'wild-boss'
     | 'no-shuffle'
     | 'session-stats'
     | 'journal'
@@ -1424,10 +1425,40 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'clear' }, says: 'the real pairs clear the floor with the joker standing', expect: expectAll(statusIs('levelComplete'), (r) => (r.wildMatchesRemaining === 1 ? null : `jokers ${r.wildMatchesRemaining}`)) },
             {
                 step: { do: 'advance' },
-                says: 'the next floor deals one joker and the token comes too, with no floor mutators',
+                says: 'the next floor deals one joker and the token comes too, under the chaos set and the mutators of that floor',
                 expect: (r) => {
                     const jokers = (r.board?.tiles ?? []).filter((t) => t.pairKey === WILD_PAIR_KEY).length;
-                    return jokers === 1 && r.wildMatchesRemaining === 1 && r.activeMutators.length === 0 ? null : `jokers dealt ${jokers}, tokens ${r.wildMatchesRemaining}, mutators ${r.activeMutators.join(',')}`;
+                    const wanted = [...CHAOS_MUTATORS, ...scheduled(r).mutators];
+                    const missing = wanted.filter((id) => !r.activeMutators.includes(id));
+                    return jokers === 1 && r.wildMatchesRemaining === 1 && missing.length === 0 ? null : `jokers dealt ${jokers}, tokens ${r.wildMatchesRemaining}, mutators ${r.activeMutators.join(',')} (missing ${missing.join(',')})`;
+                }
+            },
+            { step: { do: 'study' }, says: 'play starts with a way to finish', expect: expectAll(statusIs('playing'), finishable) }
+        ]
+    },
+    {
+        id: 'wild-boss',
+        title: 'The Wild run meets the Colossus',
+        mechanic: 'A Wild run follows the floor schedule like any descent, its chaos set on top: a boss floor raises the Colossus with the joker still in hand.',
+        graphMechanicIds: ['mode.wild_run', 'hazard.colossus'],
+        tryThis: 'Clear floor six with the joker standing. Floor seven is a boss floor: the Colossus stands, the joker is dealt again, and the chaos mutators are still there.',
+        build: () =>
+            room(['a:e b:t c:m', 'd:b a:e b:t', 'c:m d:b w:e'], {
+                level: 6,
+                run: { wildMenuRun: true, wildMatchesRemaining: 1 },
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'w' ? { ...t, id: 'joker', pairKey: WILD_PAIR_KEY } : t))
+            }),
+        script: [
+            { step: { do: 'clear' }, says: 'floor six clears with the joker standing', expect: statusIs('levelComplete') },
+            {
+                step: { do: 'advance' },
+                says: 'floor seven is a boss floor on the schedule: the Colossus stands, the joker comes down, the chaos set holds',
+                expect: (r) => {
+                    const jokers = (r.board?.tiles ?? []).filter((t) => t.pairKey === WILD_PAIR_KEY).length;
+                    const chaos = CHAOS_MUTATORS.every((id) => r.activeMutators.includes(id));
+                    return r.board?.level === 7 && r.board.floorTag === 'boss' && r.board.colossus && jokers === 1 && chaos
+                        ? null
+                        : `floor ${r.board?.level} ${r.board?.floorTag}, colossus ${r.board?.colossus ? 'up' : 'none'}, jokers ${jokers}, mutators ${r.activeMutators.join(',')}`;
                 }
             },
             { step: { do: 'study' }, says: 'play starts with a way to finish', expect: expectAll(statusIs('playing'), finishable) }

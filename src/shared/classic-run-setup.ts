@@ -1,5 +1,6 @@
 import type { ContractFlags, MutatorId, RunState } from './contracts';
 import type { CreateRunOptions } from './run-creation-rules';
+import { CHAOS_MUTATORS } from './floor-mutator-schedule';
 
 /**
  * How a Classic run is set up before it starts.
@@ -44,8 +45,8 @@ export const DEFAULT_CLASSIC_RUN_SETUP: ClassicRunSetup = {
     vows: []
 };
 
-/** The chaotic set the Wild card used to start. */
-export const CHAOS_MUTATORS: readonly MutatorId[] = ['sticky_fingers', 'short_memorize', 'findables_floor'];
+/** The chaotic set the Wild card starts (`floor-mutator-schedule.ts`, which also keeps it on every later floor). */
+export { CHAOS_MUTATORS } from './floor-mutator-schedule';
 
 /**
  * The contract a set of vows adds up to.
