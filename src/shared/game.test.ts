@@ -1,4 +1,5 @@
 import { isTileFlipBlocked } from './realm-weather-rules';
+import { WILD_SCHEDULE_RULES_VERSION } from './floor-mutator-schedule';
 import { describe, expect, it } from 'vitest';
 import type {
     BoardState,
@@ -479,7 +480,9 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         const cleared = {
             ...playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1),
             activeMutators: Number.NaN as unknown as RunState['activeMutators'],
-            wildMenuRun: true
+            // A rules-64 Wild run carries its mutators rather than taking the schedule's, which is the path under test.
+            wildMenuRun: true,
+            runRulesVersion: WILD_SCHEDULE_RULES_VERSION - 1
         };
 
         const next = advanceToNextLevel(cleared);

@@ -102,9 +102,10 @@ describe('runStartState', () => {
     it('restarts wild and practice runs with their setup preserved', () => {
         const saveData = createDefaultSaveData();
 
+        // The chaos set survives the restart; from rules 65 the floor's own scheduled mutator joins it.
         expect(createRestartRun(createWildRun(0), saveData)).toMatchObject({
             wildMenuRun: true,
-            activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor']
+            activeMutators: expect.arrayContaining(['sticky_fingers', 'short_memorize', 'findables_floor'])
         });
         expect(createRestartRun(createNewRun(0, { practiceMode: true }), saveData).practiceMode).toBe(true);
     });
