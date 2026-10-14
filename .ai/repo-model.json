@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10013
+    "relationshipCount": 10015
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "a0f73763a7c88171eacc005fd8a40aae57f7e2b1aaf0c1715828cf790c255ae3"
+      "sha256": "d91264b8d3bd1411ccca31ef9411def0f0a0882f629565699a0c7696469915e5"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -13845,8 +13845,8 @@
     {
       "path": "src/renderer/store/runStartState.test.ts",
       "category": "test",
-      "bytes": 5400,
-      "sha256": "ab15d25da81f6b835c11627bd91ffc1bebd2be8e488c619f4921250b5fc1ec15"
+      "bytes": 5529,
+      "sha256": "e0bdf790bd8ea7c64ca9d72aa3466616caa1e04f6d24ca24adb5ed26643a18ff"
     },
     {
       "path": "src/renderer/store/runStartState.ts",
@@ -15123,8 +15123,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 68236,
-      "sha256": "53338623893f50d2c522712e5cd713ff1735f6240f73aa0391da981b2b7102f5"
+      "bytes": 68491,
+      "sha256": "5e139da662cb3d266d8e2ed3d5fdd2378bb19eb8b4459ae01661ccf32c6f0f86"
     },
     {
       "path": "src/shared/game.ts",
@@ -31603,7 +31603,7 @@
       "path": "src/renderer/store/runStartState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 134,
+      "lineCount": 135,
       "imports": [
         "file:src/renderer/store/runStartState.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -35572,6 +35572,7 @@
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/floor-schedule-reachability.test.ts",
+        "file:src/shared/game.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/version-gate.test.ts"
@@ -35879,13 +35880,14 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1712,
+      "lineCount": 1715,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/pair-curve.ts",
@@ -72766,7 +72768,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -73181,7 +73183,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 12
+          "line": 13
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
@@ -73553,7 +73555,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 132
+          "line": 133
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -73657,7 +73659,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 6
+          "line": 2
         }
       ],
       "enables": [
@@ -73905,7 +73907,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 12
+          "line": 2
         }
       ],
       "enables": [
@@ -73948,7 +73950,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 26
+          "line": 2
         },
         {
           "path": "src/shared/softlock-fairness.test.ts",
@@ -73990,7 +73992,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 11
+          "line": 12
         }
       ],
       "enables": [],
@@ -74036,7 +74038,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 5
+          "line": 2
         }
       ],
       "enables": [
@@ -74662,7 +74664,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 12
+          "line": 2
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
@@ -117996,6 +117998,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/game.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/game.test.ts->src/shared/floor-par.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/floor-par.ts",
@@ -132157,6 +132165,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/floor-schedule-reachability.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/floor-schedule-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/game.test.ts",
       "kind": "tested_by"
     },
     {
