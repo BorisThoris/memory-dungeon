@@ -692,6 +692,24 @@ describe('save normalization', () => {
         expect(normalized.runHistory).toHaveLength(1);
         assertNoUndefinedDeep(normalized, 'schema7.');
     });
+
+    it('loads schema-8 rematch records without inventing completed-floor pace', () => {
+        const normalized = normalizeUnknownSaveDataOrThrow({
+            schemaVersion: 8,
+            runHistory: [{
+                endedAtIso: '2026-10-14T10:00:00.000Z',
+                highestLevel: 4,
+                mode: 'Classic Dungeon',
+                shareKey: 'md1:classic:64:17',
+                totalScore: 1234,
+                turnsRelativeToPar: -7,
+                missesSpent: 2
+            }]
+        });
+        expect(normalized.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
+        expect(normalized.runHistory?.[0]).toMatchObject({ turnsRelativeToPar: -7, missesSpent: 2 });
+        expect(normalized.runHistory?.[0]?.clearedTurnsRelativeToPar).toBeUndefined();
+    });
 });
 
 describe('the chain in the save', () => {

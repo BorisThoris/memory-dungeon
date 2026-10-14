@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3175,
+    "trackedFileCount": 3176,
     "codeFileCount": 1190,
     "exportedSymbolCount": 3746,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10006
+    "relationshipCount": 10008
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 523768,
-      "sha256": "752989995b900cbe4f8431b72fcbe08413f86b584edd5a46da8ca58e76f63e6c"
+      "bytes": 524329,
+      "sha256": "59b01b080567a803f752785bc0824b7f035b198fec2cb6174d2c5a794d3827c4"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "6a2951449562ec691b666d8cdce1a8a894616eaad416e1051c1213518e61c20e"
+      "sha256": "2b8129103fb40f4005252deac11e34f01a64cda32786a2eec618247c17ecf48b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14721,8 +14721,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 53029,
-      "sha256": "88a8fb03af57ca5d5edc788acefb04b9dcc7707628315fe4226de14de646e35d"
+      "bytes": 53174,
+      "sha256": "b3ca82a47e55b1653369fccde256b46e940d00829560594be44f31cc3b3141cc"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16107,14 +16107,14 @@
     {
       "path": "src/shared/run-history-log.test.ts",
       "category": "test",
-      "bytes": 4895,
-      "sha256": "f734d7f55f24682c7ec2b078ec6dc6947ecb109e1e4666f36a60ff3db1ae10ee"
+      "bytes": 6099,
+      "sha256": "f21a2934836555097e1283648523916f9e041d810d0d0124bd4dd1fb3229b30e"
     },
     {
       "path": "src/shared/run-history-log.ts",
       "category": "source",
-      "bytes": 6090,
-      "sha256": "36721531edfd5c0c0bce30005be471d3be93b5c90726a58e3f066b67f61ba22c"
+      "bytes": 6624,
+      "sha256": "3715d54bf90dea6581e8e6d1c5b715247d1afa4db971bc030cae8b6188eeadbe"
     },
     {
       "path": "src/shared/run-history.test.ts",
@@ -16317,8 +16317,8 @@
     {
       "path": "src/shared/save-data.test.ts",
       "category": "test",
-      "bytes": 32197,
-      "sha256": "fd9fdce36f541f70afa4acb782a5e50ed4df70d23f67d0629beebf09e22ea5a2"
+      "bytes": 32978,
+      "sha256": "89a91b28c16b746e66418a6b7fb093def502e33e12777feccd9c3f9fc22189f7"
     },
     {
       "path": "src/shared/save-data.ts",
@@ -19037,6 +19037,12 @@
       "category": "configuration",
       "bytes": 431,
       "sha256": "c8bcbe5eb7117a15509bff1b47b5e61385dd5ea9ca979e26b8c6cd958819a298"
+    },
+    {
+      "path": "verify-live.ps1",
+      "category": "other",
+      "bytes": 762,
+      "sha256": "c14513e0757e0d111de0e23d3642114cac4c1ecbd158b328188663e10b6f3820"
     },
     {
       "path": "vite.config.mts",
@@ -34210,7 +34216,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1167,
+      "lineCount": 1169,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -35624,7 +35630,8 @@
         "file:src/shared/difficulty-curve-simulation.test.ts",
         "file:src/shared/floor-par.test.ts",
         "file:src/shared/game.test.ts",
-        "file:src/shared/mechanics-encyclopedia.test.ts"
+        "file:src/shared/mechanics-encyclopedia.test.ts",
+        "file:src/shared/run-history-log.test.ts"
       ]
     },
     {
@@ -39268,8 +39275,9 @@
       "path": "src/shared/run-history-log.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 120,
       "imports": [
+        "file:src/shared/floor-par.ts",
         "file:src/shared/run-creation-rules.ts",
         "file:src/shared/run-history-log.ts",
         "file:src/shared/save-data.ts"
@@ -39282,7 +39290,7 @@
       "path": "src/shared/run-history-log.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 106,
+      "lineCount": 111,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-par.ts",
@@ -39985,7 +39993,7 @@
       "path": "src/shared/save-data.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 750,
+      "lineCount": 768,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts",
@@ -59650,8 +59658,8 @@
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1114,
-      "endLine": 1116
+      "line": 1116,
+      "endLine": 1118
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -59730,8 +59738,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1122,
-      "endLine": 1127
+      "line": 1124,
+      "endLine": 1129
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -59762,8 +59770,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1140,
-      "endLine": 1166
+      "line": 1142,
+      "endLine": 1168
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -60194,16 +60202,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1130,
-      "endLine": 1130
+      "line": 1132,
+      "endLine": 1132
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1133,
-      "endLine": 1138
+      "line": 1135,
+      "endLine": 1140
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -60226,16 +60234,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1107,
-      "endLine": 1111
+      "line": 1109,
+      "endLine": 1113
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1105,
-      "endLine": 1105
+      "line": 1107,
+      "endLine": 1107
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -60251,7 +60259,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 1063,
-      "endLine": 1078
+      "endLine": 1080
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -60298,8 +60306,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1080,
-      "endLine": 1099
+      "line": 1082,
+      "endLine": 1101
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -67730,32 +67738,32 @@
       "name": "appendRunHistory",
       "kind": "value",
       "file": "src/shared/run-history-log.ts",
-      "line": 89,
-      "endLine": 90
+      "line": 92,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/run-history-log.ts#buildRunHistoryRecord",
       "name": "buildRunHistoryRecord",
       "kind": "value",
       "file": "src/shared/run-history-log.ts",
-      "line": 66,
-      "endLine": 86
+      "line": 67,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/run-history-log.ts#describeRematchComparison",
       "name": "describeRematchComparison",
       "kind": "value",
       "file": "src/shared/run-history-log.ts",
-      "line": 94,
-      "endLine": 105
+      "line": 97,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/run-history-log.ts#normalizeRunHistory",
       "name": "normalizeRunHistory",
       "kind": "value",
       "file": "src/shared/run-history-log.ts",
-      "line": 56,
-      "endLine": 64
+      "line": 57,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/run-history-log.ts#normalizeRunHistoryRecord",
@@ -67763,7 +67771,7 @@
       "kind": "value",
       "file": "src/shared/run-history-log.ts",
       "line": 27,
-      "endLine": 50
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/run-history-log.ts#RUN_HISTORY_LIMIT",
@@ -121227,6 +121235,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-history-log.test.ts->src/shared/floor-par.ts",
+      "source": "file:src/shared/run-history-log.test.ts",
+      "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-history-log.test.ts->src/shared/run-creation-rules.ts",
       "source": "file:src/shared/run-history-log.test.ts",
       "target": "file:src/shared/run-creation-rules.ts",
@@ -132142,6 +132156,12 @@
       "id": "tested_by:src/shared/floor-par.ts->file:src/shared/mechanics-encyclopedia.test.ts",
       "source": "file:src/shared/floor-par.ts",
       "target": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-par.ts->file:src/shared/run-history-log.test.ts",
+      "source": "file:src/shared/floor-par.ts",
+      "target": "file:src/shared/run-history-log.test.ts",
       "kind": "tested_by"
     },
     {

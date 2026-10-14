@@ -8,7 +8,7 @@
  */
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
 
-export const SAVE_SCHEMA_VERSION = 8;
+export const SAVE_SCHEMA_VERSION = 9;
 
 /** One deposit in the miss bank (`miss-bank.ts`): how many misses, and the floor they were earned on. */
 export interface MissBankGrant {
@@ -1074,6 +1074,8 @@ export interface RunHistoryRecord {
     readonly biggestChunk?: number;
     readonly missesSpent?: number;
     readonly turnsRelativeToPar?: number;
+    /** Only cleared floors contribute; older rows may not have this comparable pace metric. */
+    readonly clearedTurnsRelativeToPar?: number;
     readonly strongestReaction?: number;
 }
 

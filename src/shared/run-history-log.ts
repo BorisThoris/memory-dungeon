@@ -43,6 +43,7 @@ export const normalizeRunHistoryRecord = (input: unknown): RunHistoryRecord | nu
         totalScore: runNonNegativeInteger(input.totalScore),
         ...(typeof input.missesSpent === 'number' && Number.isSafeInteger(input.missesSpent) ? { missesSpent: runNonNegativeInteger(input.missesSpent) } : {}),
         ...(typeof input.turnsRelativeToPar === 'number' && Number.isSafeInteger(input.turnsRelativeToPar) ? { turnsRelativeToPar: input.turnsRelativeToPar } : {}),
+        ...(typeof input.clearedTurnsRelativeToPar === 'number' && Number.isSafeInteger(input.clearedTurnsRelativeToPar) ? { clearedTurnsRelativeToPar: input.clearedTurnsRelativeToPar } : {}),
         ...(typeof input.strongestReaction === 'number' && Number.isSafeInteger(input.strongestReaction) ? { strongestReaction: runNonNegativeInteger(input.strongestReaction) } : {}),
         ...(bestChain > 0 ? { bestChain } : {}),
         ...(biggestChunk > 0 ? { biggestChunk } : {})
@@ -79,6 +80,8 @@ export const buildRunHistoryRecord = (run: RunState, endedAtIso: string): RunHis
         totalScore: runNonNegativeInteger(summary?.totalScore ?? run.stats.totalScore),
         missesSpent: run.missesSpentThisRun ?? run.stats.mismatches,
         turnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + (run.lastLevelResult?.level === run.board?.level ? 0 : run.turnsThisFloor - parTurnsForBoard(run.board)),
+        ...((run.clearedTurnsRelativeToPar !== undefined || (summary?.levelsCleared ?? run.stats.levelsCleared) === 0)
+            ? { clearedTurnsRelativeToPar: run.clearedTurnsRelativeToPar ?? 0 } : {}),
         strongestReaction: runNonNegativeInteger(run.strongestReactionThisRun),
         ...(bestChain > 0 ? { bestChain } : {}),
         ...(biggestChunk > 0 ? { biggestChunk } : {})
@@ -98,7 +101,9 @@ export const describeRematchComparison = (run: RunState, history: readonly RunHi
     const delta = (value: number) => value > 0 ? `+${value}` : String(value);
     const rows = [`floor ${previous.highestLevel} → ${current.highestLevel}`];
     if (previous.missesSpent !== undefined) rows.push(`misses spent ${previous.missesSpent} → ${current.missesSpent}`);
-    if (previous.turnsRelativeToPar !== undefined) rows.push(`turns vs par ${delta(previous.turnsRelativeToPar)} → ${delta(current.turnsRelativeToPar ?? 0)}`);
+    const previousPace = previous.clearedTurnsRelativeToPar;
+    const currentPace = current.clearedTurnsRelativeToPar;
+    rows.push(`cleared turns vs par ${previousPace === undefined ? 'unavailable' : delta(previousPace)} → ${currentPace === undefined ? 'unavailable' : delta(currentPace)}`);
     if (previous.strongestReaction !== undefined) rows.push(`reaction ×${previous.strongestReaction} → ×${current.strongestReaction}`);
     if (previous.bestChain !== undefined) rows.push(`chain ${previous.bestChain} → ${current.bestChain ?? 0}`);
     return `Previous attempt → this attempt: ${rows.join(' · ')}.`;

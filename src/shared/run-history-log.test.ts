@@ -9,6 +9,7 @@ import {
     RUN_HISTORY_LIMIT,
     describeRematchComparison
 } from './run-history-log';
+import { parTurnsForBoard } from './floor-par';
 
 const AT = '2026-09-04T12:00:00.000Z';
 
@@ -22,6 +23,20 @@ const record = (over: Partial<ReturnType<typeof buildRunHistoryRecord>> = {}) =>
 });
 
 describe('buildRunHistoryRecord', () => {
+    it('tracks completed-floor pace separately from the historical all-turn metric', () => {
+        const run = { ...createNewRun(0, { runSeed: 17 }), clearedTurnsRelativeToPar: 3, turnsThisFloor: 1 };
+        const record = buildRunHistoryRecord(run, AT);
+        expect(record.clearedTurnsRelativeToPar).toBe(3);
+        expect(record.turnsRelativeToPar).toBe(4 - parTurnsForBoard(run.board));
+
+        const previous = buildRunHistoryRecord({ ...run, clearedTurnsRelativeToPar: 5 }, AT);
+        expect(describeRematchComparison(run, [previous])).toContain('cleared turns vs par +5 → +3');
+        const legacy = { ...previous, clearedTurnsRelativeToPar: undefined };
+        expect(describeRematchComparison(run, [legacy])).toContain('cleared turns vs par unavailable → +3');
+        expect(normalizeRunHistoryRecord({ ...previous, clearedTurnsRelativeToPar: Infinity })?.clearedTurnsRelativeToPar).toBeUndefined();
+        const resumedOldRun = { ...run, clearedTurnsRelativeToPar: undefined, stats: { ...run.stats, levelsCleared: 3 } };
+        expect(buildRunHistoryRecord(resumedOldRun, AT).clearedTurnsRelativeToPar).toBeUndefined();
+    });
     it('compares only the same recipe and reads old rows without inventing metrics', () => {
         const run = createNewRun(0, { runSeed: 17 });
         const previous = buildRunHistoryRecord({ ...run, bestChainThisRun: 4, missesSpentThisRun: 2, strongestReactionThisRun: 3 }, AT);
