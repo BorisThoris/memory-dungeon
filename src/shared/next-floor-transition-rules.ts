@@ -64,7 +64,12 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
-    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields, ...(run.realmChill ? { realmChill: 0 } : {}) }, {
+    const freshRecipe = run.runRulesVersion >= 64 && (nextFeaturedObjectiveId === 'amplified_reaction' || nextFeaturedObjectiveId === 'calm_reaction');
+    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields,
+        // These rooms open with an empty elemental hand, so an incoming amplified burst
+        // cannot consume the recipe before the player has a chance to attempt it.
+        ...(freshRecipe ? { elementStreak: null } : {}),
+        ...(run.realmChill ? { realmChill: 0 } : {}) }, {
         activeMutators: nextActiveMutators,
         board: nextBoard,
         memorizeRemainingMs: baseMemorizeMs

@@ -154,6 +154,10 @@ const nonNegativeInteger = (value: unknown): boolean => typeof value === 'number
 
 /** Every invariant, in the order a failure is most useful to read. */
 export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
+    'featured reaction progress cannot be lost on a turn of the same floor': (before, run) => {
+        if (!before || before.board?.level !== run.board?.level) return null;
+        return (before.amplifiedGoalThisFloor && !run.amplifiedGoalThisFloor) || (before.calmGoalThisFloor && !run.calmGoalThisFloor) ? 'secured elemental goal was lost' : null;
+    },
     'a standing Colossus has hits and turns left, and either one element of its own or an order of two or more': (_b, run) => {
         const colossus = run.board?.colossus;
         if (!colossus || colossus.status !== 'standing') return null;
@@ -479,6 +483,7 @@ export const soakRun = ({
     playerName,
     maxFloors = 30,
     maxActions = 4000,
+    campPreference,
     observe
 }: {
     seed: number;
@@ -486,6 +491,7 @@ export const soakRun = ({
     playerName: string;
     maxFloors?: number;
     maxActions?: number;
+    campPreference?: RunState['campPreference'];
     /** Sees every action as it is taken, for an instrument measuring something the report does not count. */
     observe?: (before: RunState, next: RunState, action: string) => void;
 }): SoakRunReport => {
@@ -493,8 +499,8 @@ export const soakRun = ({
     const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
     const violations: SoakViolation[] = [];
     let run: RunState = player.wild
-        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed })
-        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed });
+        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference })
+        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference });
     let step = 0;
     let turns = 0;
     let purchases = 0;

@@ -20,6 +20,46 @@ import { pairsForFloor } from './pair-curve';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
+import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+
+/** Two seeded encounter deals. Pair halves retain their identity and are separated across
+ * the two halves of the deck. The first circuit supplies two primers and a catalyst;
+ * the ribbon interleaves Water and Ice so Freeze-over is a deliberate ordering decision.
+ * No card is removed or made unturnable by either layout. */
+export const dealElementalEncounter = (tiles: Tile[], seed: number, level: number, goal: FeaturedObjectiveId | null): Tile[] => {
+    if (goal !== 'amplified_reaction' && goal !== 'calm_reaction') return tiles;
+    const rng = createMulberry32(hashStringToSeed(`elemental-encounter:${seed}:${level}:${goal}`));
+    const groups = new Map<string, Tile[]>();
+    for (const tile of tiles) {
+        if (isSingletonUtilityPairKey(tile.pairKey)) continue;
+        groups.set(tile.pairKey, [...(groups.get(tile.pairKey) ?? []), tile]);
+    }
+    const pairs = shuffleWithRng(rng, [...groups.values()].filter(pair => pair.length === 2));
+    if (pairs.length < 3) return tiles;
+    const suits = goal === 'calm_reaction' ? ['tide', 'tide', 'bone', 'ember', 'moss'] as const : ['ember', 'ember', 'tide', 'moss', 'bone'] as const;
+    const dealt = pairs.map((pair, index) => pair.map(tile => ({ ...tile,
+        suit: suits[index % suits.length] })));
+    const ordered = goal === 'calm_reaction'
+        ? [...dealt.filter((_, i) => i % 3 !== 1), ...dealt.filter((_, i) => i % 3 === 1)] : dealt;
+    // Shuffle the return half independently: the recipe must never reveal twins by position.
+    const columns = Math.ceil(Math.sqrt(tiles.length));
+    const firstCells = new Map(ordered.map((pair, index) => [pair[0]!.pairKey, index]));
+    const separationCost = (candidate: typeof ordered) => candidate.reduce((sum, pair, index) => {
+        const a = firstCells.get(pair[0]!.pairKey)!;
+        const b = ordered.length + index;
+        const distance = Math.abs(a % columns - b % columns) + Math.abs(Math.floor(a / columns) - Math.floor(b / columns));
+        return sum + Math.max(0, 3 - distance);
+    }, 0);
+    let returnHalf = shuffleWithRng(rng, ordered);
+    let cost = separationCost(returnHalf);
+    for (let attempt = 0; attempt < 32 && cost > 0; attempt++) {
+        const candidate = shuffleWithRng(rng, ordered);
+        const nextCost = separationCost(candidate);
+        if (nextCost < cost) { returnHalf = candidate; cost = nextCost; }
+    }
+    return [...ordered.map(pair => pair[0]!), ...returnHalf.map(pair => pair[1]!),
+        ...tiles.filter(tile => isSingletonUtilityPairKey(tile.pairKey))];
+};
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
@@ -150,8 +190,9 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
     const columns = authoredTiles && authored ? authored.columns : clamp(Math.ceil(Math.sqrt(tileCount)), 2, rulesVersion >= 60 ? 128 : 8);
     // Suits go on before anything reads positions. Gen 204: shuffled, then repaired so no run of
     // one suit is long enough to read as a painted zone (`tile-suit-rules.ts`).
-    const tiles =
+    const ordinaryTiles =
         authoredTiles ?? dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
+    const tiles = rulesVersion >= 64 ? dealElementalEncounter(ordinaryTiles, runSeed, level, featuredObjectiveId) : ordinaryTiles;
     const rows = Math.ceil(tileCount / columns);
     const baseBoard: BoardState = {
         level,

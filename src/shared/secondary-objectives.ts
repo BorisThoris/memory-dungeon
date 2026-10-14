@@ -33,6 +33,8 @@ export interface SecondaryObjectiveProgress {
 }
 
 export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultTagDefinition> = {
+    amplified_reaction: { id: 'amplified_reaction', label: 'Amplified reaction', shortCopy: 'Reaction triggered.', journalCopy: 'Triggered a primed elemental reaction.', priority: 55, rewardBearing: true },
+    calm_reaction: { id: 'calm_reaction', label: 'Calm the realm', shortCopy: 'Freeze-over calmed hazards.', journalCopy: 'Held realm hazards still with Freeze-over.', priority: 55, rewardBearing: true },
     scholar_style: {
         id: 'scholar_style',
         label: 'Scholar style',
@@ -137,6 +139,12 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
     }
 
     switch (id) {
+        case 'amplified_reaction':
+        case 'calm_reaction':
+            state = (id === 'amplified_reaction' ? run.amplifiedGoalThisFloor : run.calmGoalThisFloor) ? 'completed' : 'active';
+            condition = id === 'amplified_reaction' ? 'Match two pairs of one element, then another element without a miss.' : 'Match two Water pairs, then an Ice pair without a miss to hold hazards still.';
+            detail = state === 'completed' ? 'Goal secured; clear the floor for the reward.' : condition;
+            break;
         case 'scholar_style':
             state = run.shuffleUsedThisFloor ? 'failed' : 'active';
             condition = 'Clear without a shuffle or a swap.';

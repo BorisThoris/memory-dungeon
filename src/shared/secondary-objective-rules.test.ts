@@ -36,6 +36,8 @@ const tilesOf = (pairs: number, suits: number): Tile[] => {
 describe('secondary objective rules', () => {
     it('keeps featured objective bonuses tied to contract constants', () => {
         expect(FEATURED_OBJECTIVE_BONUS_SCORES).toEqual({
+            amplified_reaction: FLIP_PAR_BONUS_SCORE,
+            calm_reaction: FLIP_PAR_BONUS_SCORE,
             scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
             cursed_last: CURSED_LAST_BONUS_SCORE,
             flip_par: FLIP_PAR_BONUS_SCORE

@@ -6,7 +6,8 @@ import {
     buildRunHistoryRecord,
     normalizeRunHistory,
     normalizeRunHistoryRecord,
-    RUN_HISTORY_LIMIT
+    RUN_HISTORY_LIMIT,
+    describeRematchComparison
 } from './run-history-log';
 
 const AT = '2026-09-04T12:00:00.000Z';
@@ -21,6 +22,19 @@ const record = (over: Partial<ReturnType<typeof buildRunHistoryRecord>> = {}) =>
 });
 
 describe('buildRunHistoryRecord', () => {
+    it('compares only the same recipe and reads old rows without inventing metrics', () => {
+        const run = createNewRun(0, { runSeed: 17 });
+        const previous = buildRunHistoryRecord({ ...run, bestChainThisRun: 4, missesSpentThisRun: 2, strongestReactionThisRun: 3 }, AT);
+        const comparison = describeRematchComparison(run, [previous]);
+        expect(comparison).toContain('floor 1 → 1');
+        expect(comparison).toContain('misses spent 2 → 0');
+        expect(comparison).toContain('turns vs par');
+        expect(comparison).toContain('reaction ×3 → ×0');
+        expect(describeRematchComparison(createNewRun(0, { runSeed: 18 }), [previous])).toBeNull();
+        const old = normalizeRunHistoryRecord({ ...previous, missesSpent: undefined, turnsRelativeToPar: undefined, strongestReaction: undefined })!;
+        expect(describeRematchComparison(run, [old])).not.toContain('misses spent');
+        expect(normalizeRunHistoryRecord({ ...previous, turnsRelativeToPar: Infinity })?.turnsRelativeToPar).toBeUndefined();
+    });
     it('records the mode a player picked, not the game mode underneath it', () => {
         expect(buildRunHistoryRecord(createWildRun(0), AT).mode).toBe('Wild Run');
     });

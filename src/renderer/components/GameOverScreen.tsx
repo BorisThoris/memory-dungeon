@@ -10,6 +10,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
+import { describeRematchComparison } from '../../shared/run-history-log';
 import { buildRunShareText } from '../../shared/run-share-text';
 import { describeRunShareKey, encodeRunShareKey } from '../../shared/run-share-key';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
@@ -86,6 +87,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         strength: 1
     });
     const summary = run.lastRunSummary;
+    const rematchComparison = describeRematchComparison(run, runStartSaveData?.runHistory);
     const passAndPlayOutcome = isPassAndPlayRun(run.passAndPlay) ? resolvePassAndPlayOutcome(run.passAndPlay) : null;
 
     const politeRunSummaryText = useMemo(
@@ -219,10 +221,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 role="status"
             >
                 {spokenRunSummary}
+                {rematchComparison}
             </p>
 
             {page === 'cinematic' ? (
                 <RunEndCinematic
+                    comparison={rematchComparison}
                     actions={[
                         ...stampActions,
                         { id: 'record', label: RUN_END_STAMP_COPY.record, ariaLabel: gameOverScreenCopy.recordAriaLabel, testId: 'run-end-cinematic-record', onClick: () => setPage('record') }
@@ -323,6 +327,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
 
                         </div>
 
+                        {rematchComparison ? <p className={styles.personalBest} data-testid="rematch-comparison">{rematchComparison}</p> : null}
                         {personalBest === null ? null : (
                             <p
                                 className={styles.personalBest}

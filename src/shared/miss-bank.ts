@@ -187,7 +187,7 @@ export const applyMissBudget = (before: RunState, after: RunState): RunState => 
         const cost = Math.max(1, runNonNegativeInteger(after.stats.tries) - runNonNegativeInteger(before.stats.tries));
         let missBank = after.missBank;
         for (let spent = 0; spent < Math.min(cost, left); spent += 1) missBank = spendMiss(missBank);
-        return { ...after, missBank };
+        return { ...after, missBank, missesSpentThisRun: (before.missesSpentThisRun ?? 0) + Math.min(cost, left) };
     }
     if (after.status !== 'playing') {
         return after;

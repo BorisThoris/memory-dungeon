@@ -197,6 +197,14 @@
     font-variant-numeric: tabular-nums;
 }
 
+.comparison {
+    max-width: 52rem;
+    margin: 0.25rem 0;
+    color: var(--margin-paper, #f8f4f4);
+    font: 400 0.875rem/1.4 'Source Sans 3', sans-serif;
+    overflow-wrap: anywhere;
+}
+
 .choices {
     display: flex;
     flex-direction: column;

@@ -987,6 +987,9 @@ export const applyRealmTurnToRun = (run: RunState, result: RealmTurnResult): Par
         elementResonance: result.resonance,
         elementStreak: result.streak,
         elementReactionsThisFloor: runNonNegativeInteger(run.elementReactionsThisFloor ?? 0) + result.elementReactions,
+        amplifiedGoalThisFloor: run.amplifiedGoalThisFloor || result.elementReactions > 0,
+        calmGoalThisFloor: run.calmGoalThisFloor || (result.board.elementCast?.reactions ?? []).some(reaction => reaction.scope === 'streak' && reaction.kind === 'freezeover'),
+        strongestReactionThisRun: Math.max(run.strongestReactionThisRun ?? 0, ...(result.board.elementCast?.reactions ?? []).map(reaction => reaction.potency)),
         elementReactionsThisRun: runNonNegativeInteger(run.elementReactionsThisRun ?? 0) + result.elementReactions,
         realmStillTurns: result.stillTurns,
         // What the stacks and a Thaw scored joins the turn's score.

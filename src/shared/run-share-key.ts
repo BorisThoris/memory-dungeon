@@ -22,6 +22,7 @@ export const RUN_SHARE_KEY_PREFIX = 'md1';
 export type RunShareVariant = 'classic' | 'wild' | 'practice' | 'scholar' | 'pin_vow';
 
 export interface RunShareKey {
+    readonly campPreference?: RunState['campPreference'];
     readonly variant: RunShareVariant;
     readonly rulesVersion: number;
     readonly seed: number;
@@ -63,11 +64,11 @@ export const describeRunShareKey = (run: RunState): { key: RunShareKey } | { ref
     }
     const seed = run.lastRunSummary?.runSeed ?? run.runSeed;
     const rulesVersion = run.lastRunSummary?.runRulesVersion ?? run.runRulesVersion;
-    return { key: { rulesVersion, seed, variant } };
+    return { key: { rulesVersion, seed, variant, ...(rulesVersion >= 64 && run.campPreference ? { campPreference: run.campPreference } : {}) } };
 };
 
 export const encodeRunShareKey = (key: RunShareKey): string =>
-    `${RUN_SHARE_KEY_PREFIX}:${key.variant}:${key.rulesVersion}:${key.seed}`;
+    `${RUN_SHARE_KEY_PREFIX}:${key.variant}:${key.rulesVersion}:${key.seed}${key.rulesVersion >= 64 && key.campPreference ? `:${key.campPreference}` : ''}`;
 
 const VARIANTS: ReadonlySet<string> = new Set<RunShareVariant>(['classic', 'pin_vow', 'practice', 'scholar', 'wild']);
 
@@ -77,7 +78,7 @@ const VARIANTS: ReadonlySet<string> = new Set<RunShareVariant>(['classic', 'pin_
  * required to be the whole of it.
  */
 export const parseRunShareKey = (input: string): RunShareKey | null => {
-    const match = /md1:([a-z_]+):(\d+):(\d+)/iu.exec(input.trim());
+    const match = /md1:([a-z_]+):(\d+):(\d+)(?::([a-z_]+))?/iu.exec(input.trim());
     if (!match) {
         return null;
     }
@@ -91,5 +92,7 @@ export const parseRunShareKey = (input: string): RunShareKey | null => {
     if (!Number.isSafeInteger(rulesVersion) || !Number.isSafeInteger(seed)) {
         return null;
     }
-    return { rulesVersion, seed, variant: variant as RunShareVariant };
+    if (match[4] && !['survive', 'study', 'score'].includes(match[4].toLowerCase())) return null;
+    return { rulesVersion, seed, variant: variant as RunShareVariant,
+        ...(rulesVersion >= 64 && match[4] ? { campPreference: match[4].toLowerCase() as RunState['campPreference'] } : {}) };
 };

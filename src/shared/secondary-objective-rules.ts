@@ -13,7 +13,23 @@ import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { parTurnsForBoard, turnsTakenThisFloor } from './floor-par';
 import { runNonNegativeInteger } from './run-number-guards';
 
+/** Keep a minimal three-pair recipe stable while the rest of the deck still deepens
+ * with attunement and can carry a Turncoat. These are ordinary, readable pairs. */
+export const featuredRecipePairKeys = (board: BoardState): Set<string> => {
+    const id = board.featuredObjectiveId;
+    if (id !== 'amplified_reaction' && id !== 'calm_reaction') return new Set();
+    const primer = id === 'calm_reaction' ? 'tide' : 'ember';
+    const catalyst = id === 'calm_reaction' ? 'bone' : 'tide';
+    const pairs = new Map(board.tiles.map(tile => [tile.pairKey, tile.suit]));
+    return new Set([
+        ...[...pairs].filter(([, suit]) => suit === primer).slice(0, 2).map(([key]) => key),
+        ...[...pairs].filter(([, suit]) => suit === catalyst).slice(0, 1).map(([key]) => key)
+    ]);
+};
+
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
+    amplified_reaction: FLIP_PAR_BONUS_SCORE,
+    calm_reaction: FLIP_PAR_BONUS_SCORE,
     scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
     cursed_last: CURSED_LAST_BONUS_SCORE,
     flip_par: FLIP_PAR_BONUS_SCORE
@@ -37,6 +53,8 @@ export const isFeaturedObjectiveCompleted = (
     objectiveId: FeaturedObjectiveId
 ): boolean => {
     switch (objectiveId) {
+        case 'amplified_reaction': return run.amplifiedGoalThisFloor === true;
+        case 'calm_reaction': return run.calmGoalThisFloor === true;
         case 'scholar_style':
             return !run.shuffleUsedThisFloor;
         case 'cursed_last':

@@ -111,6 +111,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
 
     return {
         ...run,
+        clearedTurnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + turnsTaken - parTurns,
         status: 'levelComplete',
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
         board,

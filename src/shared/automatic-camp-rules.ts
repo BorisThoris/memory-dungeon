@@ -27,8 +27,13 @@ export function automaticCampReward(run: RunState): CampReward {
     const available = storeOffer(run).filter((row) => row.blocked === null);
     const find = (id: string) => available.find((row) => row.id === id);
     const upgrades = [...CAMP_UPGRADE_IDS].sort((a, b) => relicRank(run, a) - relicRank(run, b));
+    const preference = (run.runRulesVersion ?? 0) >= 64 ? run.campPreference : undefined;
+    const preferred = preference === 'study' ? ['long_look', 'peek']
+        : preference === 'score' ? ['gilded_chain']
+        : preference === 'survive' ? ['miss', 'deep_pockets', 'bomb'] : [];
     // Rescue a nearly empty bank first, otherwise grow the least developed affordable upgrade.
-    let reward: StoreOfferRow | undefined = (missesLeft(run) ?? Infinity) <= 1 ? find('miss') : undefined;
+    let reward: StoreOfferRow | undefined = preferred.map(find).find(Boolean);
+    reward ??= (missesLeft(run) ?? Infinity) <= 1 ? find('miss') : undefined;
     reward ??= upgrades.map(find).find(Boolean);
     reward ??= find('miss');
     reward ??= (run.bombCharges ?? 0) < 1 ? find('bomb') : undefined;

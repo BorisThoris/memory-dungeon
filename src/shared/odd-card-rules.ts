@@ -4,6 +4,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { TILE_SUITS } from './tile-suit-rules';
+import { featuredRecipePairKeys } from './secondary-objective-rules';
 
 /**
  * The odd cards (2026-10-07), dealt beside the Colossus: two pairs that are not like the others,
@@ -103,7 +104,8 @@ export const dealOddCards = (board: BoardState, { runSeed, rulesVersion }: { run
     };
     const suitsHeld = new Set(tiles.filter((tile) => tile.suit && !isSingletonUtilityPairKey(tile.pairKey)).map((tile) => tile.suit));
     if (board.level >= TURNCOAT_FROM_FLOOR && suitsHeld.size >= 2 && (colossusStands(board) || turncoatRoll < 0.5)) {
-        const candidates = plainPairKeys({ ...board, tiles });
+        const protectedKeys = rulesVersion >= 64 ? featuredRecipePairKeys(board) : new Set<string>();
+        const candidates = plainPairKeys({ ...board, tiles }).filter(key => !protectedKeys.has(key));
         if (candidates.length > 0) {
             const pairKey = candidates[pickRngIndex(rng, candidates.length)]!;
             const own = tiles.find((tile) => tile.pairKey === pairKey)!.suit!;

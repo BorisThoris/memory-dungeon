@@ -16,6 +16,15 @@ const clearedCamp = (): RunState => {
     return {...finalizeLevel({...run,board},board),gold:20,missBank:[{floor:3,misses:4}]};
 };
 describe('automatic camp rewards',()=>{
+    it('prioritizes the selected preference and ignores it on legacy rules', () => {
+        const run = clearedCamp();
+        expect(automaticCampReward({ ...run, campPreference: 'survive' }).receipt).toContain('Deep Pockets');
+        expect(automaticCampReward({ ...run, campPreference: 'study' }).receipt).toContain('Long Look');
+        expect(automaticCampReward({ ...run, campPreference: 'score' }).receipt).toContain('Gilded Chain');
+        const legacy = automaticCampReward({ ...run, runRulesVersion: 63, campPreference: 'score' });
+        expect(legacy.receipt).toBe(automaticCampReward({ ...run, runRulesVersion: 63 }).receipt);
+        expect(legacy.run.storePurchases).toEqual(automaticCampReward({ ...run, runRulesVersion: 63 }).run.storePurchases);
+    });
     it('previews one affordable upgrade without mutating or spending the input',()=>{
         const run=clearedCamp();const before=structuredClone(run);
         const reward=automaticCampReward(run);

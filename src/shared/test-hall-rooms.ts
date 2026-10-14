@@ -63,6 +63,9 @@ export type TestHallRoomId =
     | 'meteor-shard'
     | 'bomb-last-pair'
     | 'store-stop'
+    | 'camp-survive'
+    | 'camp-study'
+    | 'camp-score'
     | 'deep-pockets'
     | 'long-look'
     | 'tallow-candle'
@@ -95,6 +98,8 @@ export type TestHallRoomId =
     | 'silhouette'
     | 'floor-pay'
     | 'featured-streak'
+    | 'featured-amplified-reaction'
+    | 'featured-calm-reaction'
     | 'featured-streak-miss'
     | 'next-floor'
     | 'short-memorize'
@@ -431,6 +436,47 @@ const reactedOnce = (kind: NonNullable<RunState['lastRealmEvent']>['kind'], pote
     );
 
 export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
+    ...(['survive', 'study', 'score'] as const).map((preference): TestHallRoom => ({
+        id: `camp-${preference}`,
+        title: `Camp: ${preference}`,
+        mechanic: 'The selected camp preference buys one affordable reward automatically, without a shop stop.',
+        graphMechanicIds: ['progression.store_stop', 'economy.gold'],
+        tryThis: 'Clear floor 3 and advance. The chosen spending policy supplies the next floor.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { gold: 20, campPreference: preference } }),
+        script: [
+            { step: { do: 'clear' }, says: 'camp floor clears', expect: statusIs('levelComplete') },
+            { step: { do: 'advance' }, says: 'one preferred reward is funded', expect: r => {
+                const id = preference === 'survive' ? 'deep_pockets' : preference === 'study' ? 'long_look' : 'gilded_chain';
+                return r.board?.level === 4 && r.storePurchases?.[id] === 1 ? null : 'preferred reward missing';
+            } }
+        ]
+    })),
+    {
+        id: 'featured-amplified-reaction', title: 'Featured elemental circuit',
+        mechanic: 'Two matching element pairs prime a reaction; the catalyst secures the featured score reward.',
+        graphMechanicIds: ['board.element_resonance'],
+        tryThis: 'Match a, then c, then b: Fire, Fire, Water.',
+        build: () => room(SIX_ELEMENTS, { board: { featuredObjectiveId: 'amplified_reaction' }, run: realmRun('storm', 'calm') }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'first primer', expect: streakIs('ember', 1) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'second primer', expect: streakIs('ember', 2) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'goal secured by Steam', expect: r => r.amplifiedGoalThisFloor ? null : 'goal not secured' },
+            { step: { do: 'clear' }, says: 'featured reward pays on clear', expect: r => r.lastLevelResult?.featuredObjectiveCompleted ? null : 'featured reward missing' }
+        ]
+    },
+    {
+        id: 'featured-calm-reaction', title: 'Featured Water and Ice ribbon',
+        mechanic: 'Water, Water, Ice makes Freeze-over and secures the calm-hazards featured score reward.',
+        graphMechanicIds: ['board.element_resonance'],
+        tryThis: 'Match a, then c, then b: Water, Water, Ice.',
+        build: () => room(SIX_ELEMENTS.map(row => row.replace(/:e/g, ':t').replace(/b:t/g, 'b:b').replace(/d:t/g, 'd:b')), { board: { featuredObjectiveId: 'calm_reaction' }, run: realmRun('storm', 'calm') }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'first Water primer', expect: streakIs('tide', 1) },
+            { step: { do: 'match', pairKey: 'c' }, says: 'second Water primer', expect: streakIs('tide', 2) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'Freeze-over calms hazards', expect: r => r.calmGoalThisFloor && (r.realmStillTurns ?? 0) > 0 ? null : 'realm not calmed' },
+            { step: { do: 'clear' }, says: 'featured reward pays on clear', expect: r => r.lastLevelResult?.featuredObjectiveCompleted ? null : 'featured reward missing' }
+        ]
+    },
     {
         id: 'resident-greeting',
         title: 'Meet the torchbearer',

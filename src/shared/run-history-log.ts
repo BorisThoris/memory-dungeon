@@ -2,6 +2,7 @@ import type { RunHistoryRecord, RunState, SaveData, RunSummary } from './contrac
 import { describeRunModeIdentity } from './run-mode-identity';
 import { describeRunShareKey, encodeRunShareKey } from './run-share-key';
 import { runNonNegativeInteger } from './run-number-guards';
+import { parTurnsForBoard } from './floor-par';
 
 /**
  * The last few runs, so a player has a record of more than the one they just finished.
@@ -40,6 +41,9 @@ export const normalizeRunHistoryRecord = (input: unknown): RunHistoryRecord | nu
         mode,
         shareKey: typeof input.shareKey === 'string' && input.shareKey.length > 0 ? input.shareKey : null,
         totalScore: runNonNegativeInteger(input.totalScore),
+        ...(typeof input.missesSpent === 'number' && Number.isSafeInteger(input.missesSpent) ? { missesSpent: runNonNegativeInteger(input.missesSpent) } : {}),
+        ...(typeof input.turnsRelativeToPar === 'number' && Number.isSafeInteger(input.turnsRelativeToPar) ? { turnsRelativeToPar: input.turnsRelativeToPar } : {}),
+        ...(typeof input.strongestReaction === 'number' && Number.isSafeInteger(input.strongestReaction) ? { strongestReaction: runNonNegativeInteger(input.strongestReaction) } : {}),
         ...(bestChain > 0 ? { bestChain } : {}),
         ...(biggestChunk > 0 ? { biggestChunk } : {})
     };
@@ -73,6 +77,9 @@ export const buildRunHistoryRecord = (run: RunState, endedAtIso: string): RunHis
         mode: describeRunModeIdentity(run).label,
         shareKey: 'refusal' in recipe ? null : encodeRunShareKey(recipe.key),
         totalScore: runNonNegativeInteger(summary?.totalScore ?? run.stats.totalScore),
+        missesSpent: run.missesSpentThisRun ?? run.stats.mismatches,
+        turnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + (run.lastLevelResult?.level === run.board?.level ? 0 : run.turnsThisFloor - parTurnsForBoard(run.board)),
+        strongestReaction: runNonNegativeInteger(run.strongestReactionThisRun),
         ...(bestChain > 0 ? { bestChain } : {}),
         ...(biggestChunk > 0 ? { biggestChunk } : {})
     };
@@ -81,3 +88,18 @@ export const buildRunHistoryRecord = (run: RunState, endedAtIso: string): RunHis
 /** Newest first, capped. The oldest run falls off the end rather than the newest being refused. */
 export const appendRunHistory = (save: SaveData, record: RunHistoryRecord): RunHistoryRecord[] =>
     [record, ...normalizeRunHistory(save.runHistory)].slice(0, RUN_HISTORY_LIMIT);
+
+/** The previous matching recipe is read from the run-start snapshot, before this attempt
+ * is appended. Missing metrics on legacy rows stay unknown, never invented as zero. */
+export const describeRematchComparison = (run: RunState, history: readonly RunHistoryRecord[] = []): string | null => {
+    const current = buildRunHistoryRecord(run, '2000-01-01T00:00:00.000Z');
+    const previous = history.find(record => record.shareKey != null && record.shareKey === current.shareKey);
+    if (!previous) return null;
+    const delta = (value: number) => value > 0 ? `+${value}` : String(value);
+    const rows = [`floor ${previous.highestLevel} → ${current.highestLevel}`];
+    if (previous.missesSpent !== undefined) rows.push(`misses spent ${previous.missesSpent} → ${current.missesSpent}`);
+    if (previous.turnsRelativeToPar !== undefined) rows.push(`turns vs par ${delta(previous.turnsRelativeToPar)} → ${delta(current.turnsRelativeToPar ?? 0)}`);
+    if (previous.strongestReaction !== undefined) rows.push(`reaction ×${previous.strongestReaction} → ×${current.strongestReaction}`);
+    if (previous.bestChain !== undefined) rows.push(`chain ${previous.bestChain} → ${current.bestChain ?? 0}`);
+    return `Previous attempt → this attempt: ${rows.join(' · ')}.`;
+};

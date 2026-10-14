@@ -6,7 +6,6 @@ import { countFindablePairs } from './board-tile-generation-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { parTurnsForFloor } from './floor-par';
 import { MISS_BANK_COMBO_RUNG, MISS_BANK_OPENING, missesLeft } from './miss-bank';
-import { runNonNegativeInteger } from './run-number-guards';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -81,11 +80,14 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         // be seven misses; the budget is three now, and this is the bad floor it allows.
         const script: Array<'miss' | 'match'> = ['miss', 'miss', 'match', 'miss', 'match'];
         let missTurns = 0;
+        let earnedByChain = 0;
         for (const step of script) {
             if (run.status !== 'playing') break;
             const mismatchesBefore = run.stats.mismatches;
             const turnsBefore = run.turnsThisFloor;
+            const chainBefore = run.stats.currentStreak;
             run = step === 'miss' ? playMiss(run) : playMatch(run);
+            earnedByChain += Math.max(0, Math.floor(run.stats.currentStreak / MISS_BANK_COMBO_RUNG) - Math.floor(chainBefore / MISS_BANK_COMBO_RUNG));
             if (run.stats.mismatches > mismatchesBefore) {
                 missTurns += 1;
                 expect(run.turnsThisFloor, 'a miss is a turn on the floor').toBe(turnsBefore + 1);
@@ -96,7 +98,11 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         // finish earns whatever rung it honestly climbs to. The trace is about the misses, not the
         // rung: nothing about the three of them is said back as a punishment.
         while (run.status === 'playing') {
+            const chainBefore = run.stats.currentStreak;
+            const mismatchesBefore = run.stats.mismatches;
             run = playMatch(run);
+            missTurns += run.stats.mismatches - mismatchesBefore;
+            earnedByChain += Math.max(0, Math.floor(run.stats.currentStreak / MISS_BANK_COMBO_RUNG) - Math.floor(chainBefore / MISS_BANK_COMBO_RUNG));
         }
 
         // The floor cleared and the run went on: the misses were inside the budget, and nothing on
@@ -107,7 +113,8 @@ describe('a bad floor is quiet, not punishing (thesis §67, trace 4)', () => {
         // The three misses came out of the bank; the clean finish that followed put back whatever
         // its chain earned (one per five in a row, 2026-09-24), which is the recovery and not a
         // softening: the count never reads higher than the chain honestly paid for.
-        const earnedByChain = Math.floor(runNonNegativeInteger(run.bestChainThisFloor) / MISS_BANK_COMBO_RUNG);
+        // Count rungs in every chain, including one earned before the third miss. A longest
+        // chain alone undercounts grants when the reseeded deal makes two rewarding chains.
         expect(missesLeft(run)).toBe(MISS_BANK_OPENING - run.stats.mismatches + earnedByChain);
 
         // What the misses cost is the turns they took, and every one of them is on the floor's count.

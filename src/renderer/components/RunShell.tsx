@@ -20,7 +20,7 @@ import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sw
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
 import styles from './RunShell.module.css';
-import { MEMORIZE_SKIP_COPY, MISS_BANK_TITLE, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
+import { FEATURED_FLOOR_GOAL_COPY, MEMORIZE_SKIP_COPY, MISS_BANK_TITLE, RUN_SHELL_LABELS, RUN_SHELL_LINE_COPY, RUN_SHELL_PAR_COPY } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
@@ -34,6 +34,7 @@ import { playStudyClosingTickSfx } from '../audio/gameSfx';
 import { tapStudyClosing } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
+import { getSecondaryObjectiveProgress } from '../../shared/secondary-objectives';
 
 /**
  * The HTML layer over the 3D board during a run: "The Margin".
@@ -331,6 +332,8 @@ const RunShell = ({
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
+    const objective = getSecondaryObjectiveProgress(run);
+    const elementalGoal = objective?.id === 'amplified_reaction' || objective?.id === 'calm_reaction' ? objective : null;
     const said = feedback || null;
     const line = memorize
         ? said ?? RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds)
@@ -510,6 +513,13 @@ const RunShell = ({
                                 <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
                                 {missesEarned > 0 ? <span className={styles.parEarned} data-testid="hud-miss-earned">{RUN_SHELL_PAR_COPY.earned(missesEarned)}</span> : null}
                             </span>
+                        ) : null}
+                        {elementalGoal ? (
+                            <p className={styles.featuredGoal} data-testid="featured-floor-goal" role="status" aria-live="polite"
+                                title={`${elementalGoal.condition} ${elementalGoal.reward}`}>
+                                {FEATURED_FLOOR_GOAL_COPY.label} {elementalGoal.id === 'calm_reaction' ? FEATURED_FLOOR_GOAL_COPY.calm : FEATURED_FLOOR_GOAL_COPY.amplified}
+                                {' · '}{elementalGoal.state === 'completed' ? FEATURED_FLOOR_GOAL_COPY.secured : elementalGoal.reward}
+                            </p>
                         ) : null}
                         <details className={styles.context} data-testid="run-details" onKeyDown={(event) => {
                             if (event.key !== 'Escape') return;

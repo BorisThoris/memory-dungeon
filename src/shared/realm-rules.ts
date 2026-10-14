@@ -12,6 +12,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { attunementGoldBonus } from './realm-carryover-rules';
 import { SUIT_REALM } from './realm-sway-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
+import { featuredRecipePairKeys } from './secondary-objective-rules';
 
 /**
  * The realms: where a floor is played, and what the place does to the board while it is played.
@@ -303,6 +304,8 @@ export const freshRealmFloorCounters = (): Pick<
     | 'elementEmpoweredThisFloor'
     | 'elementNeutralizedThisFloor'
     | 'elementReactionsThisFloor'
+    | 'amplifiedGoalThisFloor'
+    | 'calmGoalThisFloor'
     | 'realmStillTurns'
     | 'lastRealmEvent'
     | 'lastElementCastEvent'
@@ -321,6 +324,8 @@ export const freshRealmFloorCounters = (): Pick<
     elementEmpoweredThisFloor: 0,
     elementNeutralizedThisFloor: 0,
     elementReactionsThisFloor: 0,
+    amplifiedGoalThisFloor: false,
+    calmGoalThisFloor: false,
     realmStillTurns: 0,
     lastRealmEvent: null,
     lastElementCastEvent: null,
@@ -338,6 +343,7 @@ export const DEEP_DECK_SHARE = 0.5;
  * storm has no element, so its floors are dealt as they come.
  */
 export const deepenFloorDeck = (board: BoardState, realmId: RealmId, depth: number, runSeed: number, rulesVersion: number): BoardState => {
+    const recipe = rulesVersion >= 64 ? featuredRecipePairKeys(board) : new Set<string>();
     const element = (Object.keys(SUIT_REALM) as TileSuit[]).find((suit) => SUIT_REALM[suit] === realmId);
     const levels = runNonNegativeInteger(depth);
     if (!element || levels === 0) return board;
@@ -348,7 +354,7 @@ export const deepenFloorDeck = (board: BoardState, realmId: RealmId, depth: numb
     const take = Math.min(levels, Math.floor(suitByPair.size * DEEP_DECK_SHARE) - own);
     if (take <= 0) return board;
     const rng = createMulberry32(hashStringToSeed(`realm-deck:${Math.floor(runSeed)}:${rulesVersion}:${board.level}`));
-    const taken = new Set(shuffleWithRng(rng, [...suitByPair.keys()].filter((pairKey) => suitByPair.get(pairKey) !== element)).slice(0, take));
+    const taken = new Set(shuffleWithRng(rng, [...suitByPair.keys()].filter((pairKey) => suitByPair.get(pairKey) !== element && !recipe.has(pairKey))).slice(0, take));
     return { ...board, tiles: board.tiles.map((tile) => (taken.has(tile.pairKey) ? { ...tile, suit: element } : tile)) };
 };
 

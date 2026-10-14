@@ -22,6 +22,7 @@ import { createPassAndPlayState } from './pass-and-play-rules';
 import { enterRealmFloor, openingRealmDoor } from './realm-rules';
 
 export interface CreateRunOptions {
+    campPreference?: RunState['campPreference'];
     runSeed?: number;
     gameMode?: RunState['gameMode'];
     activeMutators?: MutatorId[];
@@ -120,6 +121,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         lastRunSummary: null,
         runSeed,
         runRulesVersion: rulesVersion,
+        ...(rulesVersion >= 64 && options.campPreference ? { campPreference: options.campPreference } : {}),
         gameMode,
         shuffleNonce: 0,
         activeMutators,

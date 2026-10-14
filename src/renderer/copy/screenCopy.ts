@@ -74,6 +74,12 @@ export const GLOBAL_RECORD_COPY = {
  * are saying how hard they want this one to be.
  */
 export const CLASSIC_SETUP_COPY = {
+    campLabel: 'Automatic camp spending',
+    campHint: 'One reward every 3 floors. Default keeps the current balanced policy.',
+    campDefault: 'Default · balanced',
+    campSurvive: 'Survive · misses, capacity, bombs',
+    campStudy: 'Study · study time, peeks',
+    campScore: 'Score · combo gold',
     title: 'Set up your run',
     subtitle: 'Optional challenges and pacing.',
     vowsLabel: 'Vows',

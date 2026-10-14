@@ -109,6 +109,8 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
 };
 
 export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
+    amplified_reaction: 'Amplified reaction',
+    calm_reaction: 'Calm the realm',
     scholar_style: 'Scholar style',
     cursed_last: 'Cursed last',
     flip_par: 'Flip par'
@@ -116,6 +118,8 @@ export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
 
 /** Endless objective pill `title` — align with `isFeaturedObjectiveCompleted` in `game.ts`. */
 export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string> = {
+    amplified_reaction: 'Match two pairs of one element, then a different element without a miss to trigger an amplified reaction.',
+    calm_reaction: 'Match two Water pairs, then an Ice pair without a miss: Freeze-over holds realm hazards still.',
     flip_par:
         'Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par shown on the run bar.',
     scholar_style: 'Do not use board shuffle or tile swap on this floor.',
@@ -623,7 +627,10 @@ export const pickFloorScheduleEntry = (
         idx + 1 === BOSS_ROTATION_CYCLE_POSITION
             ? POSITION_NINE_ROTATION[cycleIndex % POSITION_NINE_ROTATION.length]
             : undefined;
-    const base = rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    const legacyBase = rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
+        : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;
+    const base: FloorScheduleEntry = goal ? { ...legacyBase, featuredObjectiveId: goal } : legacyBase;
     const rng = createMulberry32(hashStringToSeed(`floorSchedule:${rulesVersion}:${runSeed}:${level}`));
     /** Optional micro-variation: swap in distraction_channel on ~1/4 boss floors (seeded). */
     if (base.floorTag === 'boss' && rng() < 0.25) {

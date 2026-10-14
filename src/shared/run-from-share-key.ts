@@ -26,7 +26,8 @@ export const createRunFromShareKey = (
     const seeded: Partial<CreateRunOptions> = {
         ...meta,
         runRulesVersionOverride: key.rulesVersion,
-        runSeed: key.seed
+        runSeed: key.seed,
+        campPreference: key.campPreference
     };
 
     switch (key.variant) {

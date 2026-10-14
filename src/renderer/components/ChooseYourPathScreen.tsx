@@ -592,6 +592,17 @@ const ChooseYourPathScreen = (): ReactElement => {
                 >
                     <div className={styles.setupGroups}>
                         <fieldset className={styles.setupGroup}>
+                            <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.campLabel}</legend>
+                            <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.campHint}</p>
+                            <select aria-label={CLASSIC_SETUP_COPY.campLabel} value={setup.campPreference ?? 'default'}
+                                onChange={event => setSetup({ ...setup, campPreference: event.target.value === 'default' ? undefined : event.target.value as 'survive' | 'study' | 'score' })}>
+                                <option value="default">{CLASSIC_SETUP_COPY.campDefault}</option>
+                                <option value="survive">{CLASSIC_SETUP_COPY.campSurvive}</option>
+                                <option value="study">{CLASSIC_SETUP_COPY.campStudy}</option>
+                                <option value="score">{CLASSIC_SETUP_COPY.campScore}</option>
+                            </select>
+                        </fieldset>
+                        <fieldset className={styles.setupGroup}>
                             <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.vowsLabel}</legend>
                             <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.vowsHint}</p>
                             {([

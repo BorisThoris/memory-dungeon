@@ -25,6 +25,7 @@ export type ClassicRunVowId = 'scholar' | 'pin_vow';
 export type ClassicRunPacingId = 'standard' | 'calm';
 
 export interface ClassicRunSetup {
+    readonly campPreference?: RunState['campPreference'];
     readonly vows: readonly ClassicRunVowId[];
     readonly pacing: ClassicRunPacingId;
     /** The old Wild run: a joker tile, a stray-remove charge and a chaotic mutator set. */
@@ -70,6 +71,7 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
     const chaosMutators = setup.chaos ? CHAOS_MUTATORS : [];
     const activeMutators = [...new Set([...chaosMutators, ...setup.focusMutators])];
     return {
+        ...(setup.campPreference ? { campPreference: setup.campPreference } : {}),
         ...(contract ? { activeContract: contract } : {}),
         ...(activeMutators.length > 0 ? { activeMutators } : {}),
         // `wildMenuRun` is the flag the HUD identity and the restart precedence read for a wild run;
@@ -91,7 +93,7 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
  * recoverable from a run (the floor schedule writes the same field) and come back empty.
  */
 export const classicRunSetupFromRun = (
-    run: Pick<RunState, 'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'resolveDelayMultiplier'>
+    run: Pick<RunState, 'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'resolveDelayMultiplier' | 'campPreference'>
 ): ClassicRunSetup | null => {
     if (run.gameMode !== 'endless') {
         return null;
@@ -102,6 +104,7 @@ export const classicRunSetupFromRun = (
     if (contract?.maxPinsTotalRun != null) vows.push('pin_vow');
     return {
         chaos: run.wildMenuRun === true,
+        ...(run.campPreference ? { campPreference: run.campPreference } : {}),
         focusMutators: [],
         pacing: Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1 ? 'calm' : 'standard',
         unrecorded: run.practiceMode === true,
@@ -115,7 +118,8 @@ export const isDefaultClassicRunSetup = (setup: ClassicRunSetup): boolean =>
     setup.focusMutators.length === 0 &&
     setup.pacing === 'standard' &&
     !setup.chaos &&
-    !setup.unrecorded;
+    !setup.unrecorded &&
+    !setup.campPreference;
 
 /** A short line naming what the player asked for, for the HUD and the results screen. */
 export const describeClassicRunSetup = (setup: ClassicRunSetup): string[] => {

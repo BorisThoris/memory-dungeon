@@ -15,8 +15,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 61: automatic camp rewards without a shop stop. */
-export const GAME_RULES_VERSION = 63;
+/** Bump when generation or player-visible gameplay rules change. 64: featured elemental encounters and camp preferences. */
+export const GAME_RULES_VERSION = 64;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -155,7 +155,7 @@ export interface RealmEvent {
 }
 /** A relic bought in the store (`run-relic-rules.ts`). */
 export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle';
-export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par';
+export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par' | 'amplified_reaction' | 'calm_reaction';
 /**
  * Every screen the app can be showing, as a value.
  *
@@ -921,6 +921,12 @@ export interface RunState {
      * run has bought, which prices climb on and which stores camp upgrade ranks.
      */
     gold?: number;
+    campPreference?: 'survive' | 'study' | 'score';
+    amplifiedGoalThisFloor?: boolean;
+    calmGoalThisFloor?: boolean;
+    strongestReactionThisRun?: number;
+    missesSpentThisRun?: number;
+    clearedTurnsRelativeToPar?: number;
     storePurchases?: Partial<Record<'miss' | 'peek' | 'shuffle' | 'bomb' | RelicId | ElementalStoreId, number>>;
     /** Historical rules 55–57: essence finds and focus purchases. Not awarded in current runs. */
     elementalEssence?: ElementalPouch;
@@ -1066,6 +1072,9 @@ export interface RunHistoryRecord {
     /** The chain's records for this run: longest chain and biggest chunk in pairs. Absent on older rows. */
     readonly bestChain?: number;
     readonly biggestChunk?: number;
+    readonly missesSpent?: number;
+    readonly turnsRelativeToPar?: number;
+    readonly strongestReaction?: number;
 }
 
 export interface SaveData {

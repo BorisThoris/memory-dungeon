@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 84 as const;
+export const ENCYCLOPEDIA_VERSION = 85 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -364,6 +364,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'store',
         title: 'Gold and camp upgrades',
         description:
+            'Choose automatic spending in Classic setup: **Survive** prioritizes misses, capacity and bombs; **Study** prioritizes study time and peeks; **Score** prioritizes combo gold. The default keeps the balanced policy. Each preference falls back to the balanced policy when its priority is unavailable. Shared keys and rematches retain the preference. ' +
             'Clear floors and build combos to earn **gold**. A clear pays two gold, plus one per chain rung and up to three for turns under par. Arena difficulty can increase the payout. ' +
             'After every third floor, **camp automatically spends gold** on one useful reward. It restores a miss first when only one remains; otherwise it chooses the lowest-rank affordable upgrade, then a missing supply. There is no shop screen. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
             '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). Each upgrade has three ranks and lasts this run. ' +
@@ -474,6 +475,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_floor_schedule_and_featured_objective',
         title: 'Floor schedule, featured objectives, and the objective streak',
         description:
+            `Rules 64 add **Amplified reaction** in Anchor Chain and **Calm the realm** in Trap Hall. Match two pairs of one element, then another without a miss; for Calm the realm use Water, Water, Ice to hold hazards still with Freeze-over. Each pays **+${FLIP_PAR_BONUS_SCORE}** score and uses the existing objective streak. Seeded circuits and ribbons guarantee a stable three-pair recipe while the rest of the deck can deepen or carry a Turncoat. ` +
             `**Classic Run** uses a repeating chapter schedule: each floor has a **name**, a short **hint**, and **one featured objective** — **Scholar style**, **Flip par**, or **Cursed last** — that pays a floor bonus when you clear with it intact. Consecutive featured-objective clears build an **objective streak**: the first clear starts it, and each clear after that adds a **+${FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP}** score kicker per streak step, capped at **+${FEATURED_OBJECTIVE_STREAK_BONUS_MAX}**. Missing the featured objective on a clear decays the streak by **${FEATURED_OBJECTIVE_STREAK_MISS_DECAY}**; a floor without a featured objective leaves it untouched.`
     },
     {

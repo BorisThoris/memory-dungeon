@@ -23,6 +23,7 @@ export const RUN_END_VERDICT_MS = 2300;
 export const RUN_END_FLOURISH_MS = 1400;
 
 export interface RunEndCinematicProps {
+    comparison?: string | null;
     summary: Pick<RunSummary, 'totalScore' | 'highestLevel' | 'bestStreak'>;
     reason: RunEndReason | null | undefined;
     runSeed: number;
@@ -31,7 +32,7 @@ export interface RunEndCinematicProps {
     reduceMotion: boolean;
 }
 
-export function RunEndCinematic({ summary, reason, runSeed, personalBest, actions, reduceMotion }: RunEndCinematicProps) {
+export function RunEndCinematic({ summary, reason, runSeed, personalBest, actions, reduceMotion, comparison }: RunEndCinematicProps) {
     const temper = comboHeatThemeForSeed(runSeed);
     const verdict = runEndVerdict(reason);
     const flourish = runEndFlourish(summary, personalBest);
@@ -73,6 +74,7 @@ export function RunEndCinematic({ summary, reason, runSeed, personalBest, action
                     <div className={styles.held} data-testid="run-end-cinematic-held">
                         <h1 className={styles.heldVerdict}>{verdict}</h1>
                         <span className={styles.heldLine}>{runEndScoreLine(summary.totalScore, summary.highestLevel)}</span>
+                        {comparison ? <p className={styles.comparison} data-testid="rematch-comparison">{comparison}</p> : null}
                     </div>
                     <div className={styles.choices} data-testid="run-end-cinematic-choices" role="group" aria-label="What next">
                         {actions.map((action, index) => (

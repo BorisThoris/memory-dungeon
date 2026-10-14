@@ -144,3 +144,9 @@ export const PERFECT_MEMORY_COPY = {
 
 /** The miss bank's tooltip in the run rail. */
 export const MISS_BANK_TITLE = 'A mismatch spends one life. Earn more through combos and floor clears.';
+export const FEATURED_FLOOR_GOAL_COPY = {
+    label: 'Goal:',
+    amplified: 'Two of one element → another',
+    calm: 'Water → Water → Ice',
+    secured: 'secured'
+};
