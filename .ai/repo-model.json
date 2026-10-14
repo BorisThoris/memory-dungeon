@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72343,
-      "sha256": "29512ddb787d712309c515aab17566364d3388886283ceffb39453ceb073fc27"
+      "bytes": 72478,
+      "sha256": "0fa2e3aabe2bca51d703e4333183ffa1118f3cfbbb05d95672dfc700eee7a3cd"
     },
     {
       "path": "public/site.webmanifest",
@@ -11044,7 +11044,7 @@
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
       "bytes": 19244,
-      "sha256": "7f52ce3242b1553d4bdcd37d2aed97ea34af3225245fc42099fcb2a9582ccb52"
+      "sha256": "161b5f09f87e339d3c06c50e22b56eabe277bf753d9f37726a4cd652272d3c35"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -11625,8 +11625,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 9004,
-      "sha256": "3e0c10ee7f9ec5d24404336a60753da9802d51ddf83604677c9574b0bf66cb34"
+      "bytes": 9302,
+      "sha256": "7f0bfd5ed49a50d2ccbb0c55f50a2234c34d58c5542b9d098cb530a1dc494acf"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
@@ -11637,8 +11637,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3090,
-      "sha256": "eab597a0fd8ec1664e11dacb4794a59fe4e2c239e778c05a6bc4e4835ef2ce5f"
+      "bytes": 3245,
+      "sha256": "fa6e0233787e20ef6b94daba45109ba9e2781872316f7e835853a6719d8c81e4"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
@@ -16383,14 +16383,14 @@
     {
       "path": "src/shared/secondary-objective-rules.test.ts",
       "category": "test",
-      "bytes": 10079,
-      "sha256": "6c9ac13806961c63fb9fa4309111fa53ddbd1a2f1c1e7c06e63bf77813d8c5ed"
+      "bytes": 10077,
+      "sha256": "4fdc95ba82bc7479c8d7c2d02353ed6140b4719369b02451419c50cbd514f1f4"
     },
     {
       "path": "src/shared/secondary-objective-rules.ts",
       "category": "source",
-      "bytes": 7078,
-      "sha256": "4cdac27bb0cad27e3bba503daa0479bdd8413f47cc407384a2a8137ce9d96465"
+      "bytes": 7076,
+      "sha256": "444a389e13f31b528be02e36746b3df5d2fb8de84f58db4a800412dd9f2cec31"
     },
     {
       "path": "src/shared/secondary-objectives.test.ts",
@@ -25376,7 +25376,7 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 72,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts"
       ],
@@ -49021,7 +49021,7 @@
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
       "line": 23,
-      "endLine": 70
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
