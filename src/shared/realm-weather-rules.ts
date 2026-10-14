@@ -29,6 +29,7 @@ import {
     type ElementStreak
 } from './element-resonance-rules';
 import { realmAttunementLevel, realmBacklashRuns, realmDepthReach, realmResonanceBonus } from './realm-carryover-rules';
+import { weatherGuardedRecipeTileIds } from './secondary-objective-rules';
 
 /**
  * What a realm does to the board on a resolved turn (`realm-rules.ts` has the realms themselves).
@@ -497,7 +498,9 @@ export const resolveRealmTurn = ({
     const turns = runNonNegativeInteger(turnsThisFloor);
     let ground = readElementalGround(board);
     let castImpact = board.elementCast;
-    const pinned = new Set([...pinnedTileIds, ...groundAnchoredTileIds(board.tiles, ground)]);
+    // A featured floor's recipe (`weatherGuardedRecipeTileIds`) is held by nothing: weather, casts and the hold policy all pass it by.
+    const recipeGuard = weatherGuardedRecipeTileIds(board, runNonNegativeInteger(run.runRulesVersion));
+    const pinned = new Set([...pinnedTileIds, ...groundAnchoredTileIds(board.tiles, ground), ...recipeGuard]);
     const tiles: Tile[] = [...board.tiles];
     const indexOf = new Map(tiles.map((tile, index) => [tile.id, index]));
     const events: RealmEvent[] = [];
@@ -689,7 +692,7 @@ export const resolveRealmTurn = ({
             pinned.clear();
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
         }
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned: new Set(pinnedTileIds), anchored: pinned, alchemy, tier, still,
+        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned: new Set([...pinnedTileIds, ...recipeGuard]), anchored: pinned, alchemy, tier, still,
             combo: run.stats.currentStreak, quenchFire: field?.quenchFire || ['steam', 'melt'].includes(resonanceTurn.reaction?.definition.kind ?? ''), multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
             const forged = applyForgedCast(tiles, cast.touchedTileIds, cast.suit, focusOf(run, cast.suit));
@@ -898,7 +901,7 @@ export const resolveRealmTurn = ({
 
     // 5. Holds are whole, ambiguous cohorts. A new request may recruit a second pair; a cut
     // or expiry can only release a cohort, never silently replace it with another pair.
-    const holdPins = new Set([...pinnedTileIds, ...tiles.filter(tile => tile.rime).map(tile => tile.id)]);
+    const holdPins = new Set([...pinnedTileIds, ...recipeGuard, ...tiles.filter(tile => tile.rime).map(tile => tile.id)]);
     const holdPolicy = reconcileRealmHolds(tiles, board.columns, board.tiles, holdPins);
     const freed = [...new Set([...holdPolicy.freed, ...releaseRealmHoldsIfStuck(tiles)])];
     frozen = tiles.filter(tile => tile.state === 'hidden' && (tile.frost ?? 0) > 0 &&

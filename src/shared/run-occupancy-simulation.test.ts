@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
     judgeRunOccupancy,
     judgeSystemOccupancy,
-    OCCUPANCY_SEEDS,
+    RUN_OCCUPANCY_SEEDS,
     simulateRunOccupancy,
     simulateSystemOccupancy,
     summarizeRunOccupancy,
@@ -71,8 +71,8 @@ describe('the run census', () => {
          * sentence held in step, so the next change to either census dimension fails here rather
          * than quietly re-banding a system that is doing exactly what it was written to do.
          */
-        const oneFloor = 1 / (OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
-        expect(report.floors).toBe(OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
+        const oneFloor = 1 / (RUN_OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
+        expect(report.floors).toBe(RUN_OCCUPANCY_SEEDS.length * SYSTEM_OCCUPANCY_BASELINE_FLOORS);
         expect(SYSTEM_OCCUPANCY_BANDS.rare.min).toBeLessThanOrEqual(oneFloor);
         expect(SYSTEM_OCCUPANCY_BANDS.rare.min).toBeGreaterThan(0);
     });

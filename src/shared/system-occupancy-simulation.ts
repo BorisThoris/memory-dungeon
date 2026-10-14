@@ -672,9 +672,16 @@ export interface RunOccupancyReport {
     }>;
 }
 
+/**
+ * The run census plays whole runs, so ten of them are 240 floors and a share a core system sits
+ * near reads either side of its bar with the seeds: the peek read 0.904 at rules 64 and 0.875 at
+ * 65 on the same ten, and 0.876 / 0.901 over forty. Forty runs (960 floors) resolve it.
+ */
+export const RUN_OCCUPANCY_SEEDS: readonly number[] = Array.from({ length: 40 }, (_unused, index) => 1_000 + index * 7_919);
+
 export const simulateRunOccupancy = ({
     floors = 24,
-    seeds = OCCUPANCY_SEEDS,
+    seeds = RUN_OCCUPANCY_SEEDS,
     missRate = 0.15,
     maxTurns = 240
 }: {
@@ -870,8 +877,12 @@ export const SYSTEM_OCCUPANCY_BANDS = {
      * Written as a literal rather than derived from the two constants because they are declared
      * below this object; the case `the census resolves one floor` in
      * `run-occupancy-simulation.test.ts` holds the number and this sentence in step.
+     *
+     * **Rules 65 gave the run census forty runs (`RUN_OCCUPANCY_SEEDS`, 960 floors)** because a core
+     * share near its bar read either side of it with ten; one floor of it is 0.00104, so the bar is
+     * 0.001 - still one firing, now in the larger census, and below the floor census's 0.0042 too.
      */
-    rare: { min: 0.004, max: 0.25 }
+    rare: { min: 0.001, max: 0.25 }
 } as const;
 
 /**

@@ -15,6 +15,20 @@ import { runNonNegativeInteger } from './run-number-guards';
 
 /** Keep a minimal three-pair recipe stable while the rest of the deck still deepens
  * with attunement and can carry a Turncoat. These are ordinary, readable pairs. */
+/**
+ * From this rules version the realm's weather leaves a featured floor's recipe alone: a raging
+ * grove vined the catalyst of the amplified goal's three-pair recipe (seed 42001, floor 5) and the
+ * guaranteed recipe could not be played. Deepening and Turncoats already spared it; now weather does.
+ */
+export const FEATURED_RECIPE_WEATHER_GUARD_FROM = 65;
+
+/** The card ids the weather must not hold on this floor (none before the guard's rules version). */
+export const weatherGuardedRecipeTileIds = (board: BoardState, rulesVersion: number): string[] => {
+    if (rulesVersion < FEATURED_RECIPE_WEATHER_GUARD_FROM) return [];
+    const keys = featuredRecipePairKeys(board);
+    return keys.size === 0 ? [] : board.tiles.filter((tile) => keys.has(tile.pairKey)).map((tile) => tile.id);
+};
+
 export const featuredRecipePairKeys = (board: BoardState): Set<string> => {
     const id = board.featuredObjectiveId;
     if (id !== 'amplified_reaction' && id !== 'calm_reaction') return new Set();
