@@ -185,5 +185,5 @@ export const getFloorClearObjectiveResult = (run: RunState, board: BoardState): 
 
 export const getFeaturedObjectiveRewardCopy = (id: FeaturedObjectiveId): string => {
     const score = getFeaturedObjectiveBonusScore(id);
-    return `+${score} score when scheduled.`;
+    return `+${score} score on the clear.`;
 };

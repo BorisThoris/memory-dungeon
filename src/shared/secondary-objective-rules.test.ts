@@ -85,7 +85,7 @@ describe('secondary objective rules', () => {
 
     it('uses the score table in reward copy', () => {
         expect(getFeaturedObjectiveRewardCopy('cursed_last')).toBe(
-            `+${CURSED_LAST_BONUS_SCORE} score when scheduled.`
+            `+${CURSED_LAST_BONUS_SCORE} score on the clear.`
         );
     });
 

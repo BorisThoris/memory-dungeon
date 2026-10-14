@@ -78,7 +78,10 @@
     font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
     font-weight: 700;
     font-style: italic;
-    font-size: clamp(1.75rem, 11cqi, 7.5rem);
+    /* Never wider than the stage: a long title (a realm's place name) shrinks to fit one line,
+       where a short shout keeps its full size. About 0.67em a letter with the tracking. */
+    font-size: clamp(1.75rem, min(11cqi, calc(130cqi / var(--stamp-chars, 8))), 7.5rem);
+    text-align: center;
     text-wrap: balance;
     overflow-wrap: anywhere;
     line-height: 1;
@@ -92,7 +95,7 @@
 }
 
 .callout[data-callout-size='minor'] .stampText {
-    font-size: clamp(1.4rem, 6.5cqi, 4.4rem);
+    font-size: clamp(1.4rem, min(6.5cqi, calc(130cqi / var(--stamp-chars, 8))), 4.4rem);
 }
 
 /* The sheen: the same word in a diagonal band of white light, clipped to the letters, swept

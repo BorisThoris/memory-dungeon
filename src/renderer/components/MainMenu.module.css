@@ -434,7 +434,7 @@
     .crestMount { margin-bottom: 0.2rem; }
     .contentsHead { display: none; }
     .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; margin-top: 0.65rem; }
-    .entries .entry { grid-template-columns: 1.1rem minmax(0, 1fr); align-items: center; gap: 0.5rem; padding: 0.65rem 0.5rem; border: 1px solid var(--margin-hairline); border-radius: 6px; background: linear-gradient(130deg, #e1ad660e, #131111a8); }
+    .entries .entry { grid-template-columns: 1.9rem minmax(0, 1fr); align-items: center; gap: 0.5rem; padding: 0.65rem 0.5rem; border: 1px solid var(--margin-hairline); border-radius: 6px; background: linear-gradient(130deg, #e1ad660e, #131111a8); }
     .entries .entryTitle { font-size: 1.125rem; }
     .entries .entryNote, .entries .leader { display: none; }
     .entryPlay { min-height: 3.8rem; }

@@ -53,7 +53,8 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
             data-low-quality={lowQuality ? 'true' : 'false'}
             data-testid="screen-callout"
             key={showing.key}
-            style={showing.color ? ({ '--stamp': showing.color } as CSSProperties) : undefined}
+            // How long the title is, so a place name fits on one line where a short shout stays huge.
+            style={{ ...(showing.color ? { '--stamp': showing.color } : {}), '--stamp-chars': Math.max(1, showing.title.length) } as CSSProperties}
         >
             <span className={styles.flash} />
             <span className={styles.ring} />
