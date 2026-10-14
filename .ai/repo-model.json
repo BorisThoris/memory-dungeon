@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72478,
-      "sha256": "0fa2e3aabe2bca51d703e4333183ffa1118f3cfbbb05d95672dfc700eee7a3cd"
+      "bytes": 72474,
+      "sha256": "2ae3ac1afaa56480a4b723a404fd17145f0e9fb7e82cff6908a09c4c19604cbf"
     },
     {
       "path": "public/site.webmanifest",
@@ -10791,8 +10791,8 @@
     {
       "path": "src/renderer/components/FloorResident.module.css",
       "category": "source",
-      "bytes": 1829,
-      "sha256": "dff4f7e86c3a14ff81c8c90c2c5692bc001ae7319a346f5cd26fd8fb063c9b24"
+      "bytes": 2138,
+      "sha256": "07733279b0b45f604e72322d68a031d34fd2ddfbfbd0f7858c21288252e0f3af"
     },
     {
       "path": "src/renderer/components/FloorResident.test.tsx",
