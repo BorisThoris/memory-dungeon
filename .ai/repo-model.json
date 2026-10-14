@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3175,
     "codeFileCount": 1190,
-    "exportedSymbolCount": 3746,
+    "exportedSymbolCount": 3750,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10008
+    "relationshipCount": 10013
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 524329,
-      "sha256": "59b01b080567a803f752785bc0824b7f035b198fec2cb6174d2c5a794d3827c4"
+      "bytes": 525827,
+      "sha256": "91f130d3cfa85e9ea18f78e99d0139539f4e2c650ace3c6f7ac7257245d86e3c"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -2422,13 +2422,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "336aae2bc77567355d82879574edfb26fae715623a3e4e1b1a0ee6c5134c41d3"
+      "sha256": "5ebc8bbf37b8a42675cd9cf92920f5bfd3361edd3c8f05aaf35df70cf49df69b"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2b8129103fb40f4005252deac11e34f01a64cda32786a2eec618247c17ecf48b"
+      "sha256": "a0f73763a7c88171eacc005fd8a40aae57f7e2b1aaf0c1715828cf790c255ae3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72474,
-      "sha256": "2ae3ac1afaa56480a4b723a404fd17145f0e9fb7e82cff6908a09c4c19604cbf"
+      "bytes": 72445,
+      "sha256": "b06c31f6c817fde68a311d87445b64d2dc5a958fba4ed5b5f2357b16bc042901"
     },
     {
       "path": "public/site.webmanifest",
@@ -14619,8 +14619,8 @@
     {
       "path": "src/shared/classic-run-setup.ts",
       "category": "source",
-      "bytes": 6272,
-      "sha256": "b30e9f3751992174e3d99ded1cf4d601645e5b37cf4711f435e356daaa4e5970"
+      "bytes": 6346,
+      "sha256": "2165ee9081df47e108b17d4d0125f8ee452a858de089396f55f746433b6043d4"
     },
     {
       "path": "src/shared/clump-read-rules.test.ts",
@@ -14721,8 +14721,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 53174,
-      "sha256": "b3ca82a47e55b1653369fccde256b46e940d00829560594be44f31cc3b3141cc"
+      "bytes": 53177,
+      "sha256": "5a846a1e996ce396b578dbee12c90f76ca910060e11077f07dff21d6b2ba7095"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15039,14 +15039,14 @@
     {
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "category": "test",
-      "bytes": 16740,
-      "sha256": "1920ba96ede59fdb3068c37fa1a7701206897bc8e2623b9f9c28e0ffec4aa094"
+      "bytes": 17628,
+      "sha256": "96e10e6bd6975b2452f80b18881ff7d346793d8ed64ddee484ec45d95c9b6aaa"
     },
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 26120,
-      "sha256": "7fdd5e69ff3a06bc3f7496671c4b34e2f321470b3d3b5cf60cfc39c7d0599d90"
+      "bytes": 27338,
+      "sha256": "6b899db17de09c64d06eb25ce91595f2e7e6c0e5f30f58c01532b94ca7962922"
     },
     {
       "path": "src/shared/floor-par.test.ts",
@@ -15663,8 +15663,8 @@
     {
       "path": "src/shared/next-floor-transition-rules.ts",
       "category": "source",
-      "bytes": 3985,
-      "sha256": "0d6278d88e0d9be4a25b333765c6a664b7017f29ed623f50998c57e8a6913fe9"
+      "bytes": 4067,
+      "sha256": "bfb6334e8d7d632276256e6ad04ac0d8eba339bbc2c0255ca1cd7220e7c7447a"
     },
     {
       "path": "src/shared/objective-board.test.ts",
@@ -16089,8 +16089,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 10034,
-      "sha256": "82693831033b678eadf706f9d57557762a276af99beddacb1899f25d10ae2f53"
+      "bytes": 10218,
+      "sha256": "817a215b778c3c4f6a79209b279681ca0bcc7694d8596e74659a0c0bd21046f7"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -16269,14 +16269,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 8957,
-      "sha256": "f394cd2d18c7313e2fafb474f9eacaf03dd4f742916561f747d1667194e8ba68"
+      "bytes": 9571,
+      "sha256": "a60fac898a02347a215d984b369356a618f89bfe7f06aa844caf5bbbb224a009"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 45033,
-      "sha256": "10427652bc4f4dc9ba61f648eabe273210dcd302190f8245a57384c3e235edfe"
+      "bytes": 45325,
+      "sha256": "4bca21ee79d6154817debaae8b2af860e635f37162e93955ebd4d6877a8779be"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -16569,8 +16569,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 156166,
-      "sha256": "639d84b098987bf9df4254455439bd8a2de0399b9529135503d3792bece1a8da"
+      "bytes": 158312,
+      "sha256": "0fbd9d9a95ab20cd33031b68f6f2a39be078b2dabc7a0beaa5e0df0ca020592a"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -16828,7 +16828,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7353,
-      "sha256": "73c38bcf23ede74317cb47c776712b2e22eb817a6a0a4ec4109cb94c76bbe154"
+      "sha256": "7e48589223c54055f3b69f3f40a1bb66d142ee9a857cd3b38f9f6bc127876383"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -33836,9 +33836,10 @@
       "path": "src/shared/classic-run-setup.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 145,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/run-creation-rules.ts"
       ],
       "exports": [
@@ -35507,7 +35508,7 @@
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 400,
+      "lineCount": 418,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -35521,13 +35522,14 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 647,
+      "lineCount": 667,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
+        "symbol:src/shared/floor-mutator-schedule.ts#CHAOS_MUTATORS",
         "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
         "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomeDefinition",
         "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomePresentation",
@@ -35554,7 +35556,10 @@
         "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
         "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
         "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
-        "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule"
+        "symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
+        "symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
+        "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
+        "symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION"
       ],
       "testedBy": [
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -37746,7 +37751,7 @@
       "path": "src/shared/next-floor-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 79,
       "imports": [
         "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/board-build-rules.ts",
@@ -39791,7 +39796,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 108,
+      "lineCount": 117,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -39804,7 +39809,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 761,
+      "lineCount": 764,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -40861,7 +40866,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2399,
+      "lineCount": 2430,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -58820,80 +58825,80 @@
       "name": "buildClassicRunOptions",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 69,
-      "endLine": 86
+      "line": 70,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildVowContract",
       "name": "buildVowContract",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 56,
-      "endLine": 66
+      "line": 57,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#CHAOS_MUTATORS",
       "name": "CHAOS_MUTATORS",
-      "kind": "value",
+      "kind": "ExportSpecifier",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunPacingId",
       "name": "ClassicRunPacingId",
       "kind": "type",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunSetup",
       "name": "ClassicRunSetup",
       "kind": "interface",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 27,
-      "endLine": 37
+      "line": 28,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#classicRunSetupFromRun",
       "name": "classicRunSetupFromRun",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 95,
-      "endLine": 113
+      "line": 96,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunVowId",
       "name": "ClassicRunVowId",
       "kind": "type",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#DEFAULT_CLASSIC_RUN_SETUP",
       "name": "DEFAULT_CLASSIC_RUN_SETUP",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 39,
-      "endLine": 45
+      "line": 40,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#describeClassicRunSetup",
       "name": "describeClassicRunSetup",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 125,
-      "endLine": 143
+      "line": 126,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
       "name": "isDefaultClassicRunSetup",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 116,
-      "endLine": 122
+      "line": 117,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#ClumpRead",
@@ -61744,6 +61749,14 @@
       "endLine": 153
     },
     {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAOS_MUTATORS",
+      "name": "CHAOS_MUTATORS",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 649,
+      "endLine": 649
+    },
+    {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
       "name": "CHAPTER_ACT_BIOME_STRUCTURE",
       "kind": "value",
@@ -61952,12 +61965,36 @@
       "endLine": 465
     },
     {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
+      "name": "runFollowsFloorSchedule",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 661,
+      "endLine": 662
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
+      "name": "scheduledFloorMutators",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 665,
+      "endLine": 666
+    },
+    {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
       "line": 645,
       "endLine": 646
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION",
+      "name": "WILD_SCHEDULE_RULES_VERSION",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 658,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_FLAT_RATE_PAIRS",
@@ -65436,8 +65473,8 @@
       "name": "advanceToNextLevel",
       "kind": "value",
       "file": "src/shared/next-floor-transition-rules.ts",
-      "line": 23,
-      "endLine": 77
+      "line": 24,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/objective-board.ts#buildObjectiveBoardRows",
@@ -68637,7 +68674,7 @@
       "kind": "value",
       "file": "src/shared/run-soak.ts",
       "line": 156,
-      "endLine": 468
+      "endLine": 471
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
@@ -68660,8 +68697,8 @@
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 480,
-      "endLine": 760
+      "line": 483,
+      "endLine": 763
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
@@ -70228,64 +70265,64 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2358,
-      "endLine": 2358
+      "line": 2389,
+      "endLine": 2389
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2227,
-      "endLine": 2335
+      "line": 2258,
+      "endLine": 2366
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2364,
-      "endLine": 2369
+      "line": 2395,
+      "endLine": 2400
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2348,
-      "endLine": 2348
+      "line": 2379,
+      "endLine": 2379
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 438,
-      "endLine": 2214
+      "line": 439,
+      "endLine": 2245
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2372,
-      "endLine": 2378
+      "line": 2403,
+      "endLine": 2409
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2398,
-      "endLine": 2398
+      "line": 2429,
+      "endLine": 2429
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 199,
-      "endLine": 216
+      "line": 200,
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -70293,47 +70330,47 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 51,
-      "endLine": 155
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2337,
-      "endLine": 2340
+      "line": 2368,
+      "endLine": 2371
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 192,
-      "endLine": 197
+      "line": 193,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 157,
-      "endLine": 190
+      "line": 158,
+      "endLine": 191
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2351,
-      "endLine": 2355
+      "line": 2382,
+      "endLine": 2386
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2380,
-      "endLine": 2396
+      "line": 2411,
+      "endLine": 2427
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -72597,7 +72634,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 62
+          "line": 63
         },
         {
           "path": "src/renderer/components/cardStatusPaint.ts",
@@ -72903,7 +72940,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/renderer/components/RealmTravel.tsx",
@@ -73034,7 +73071,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 62
+          "line": 63
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -73180,7 +73217,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 20
+          "line": 21
         },
         {
           "path": "src/renderer/components/ColossusCard.tsx",
@@ -73616,7 +73653,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.test.ts",
-          "line": 13
+          "line": 11
         },
         {
           "path": "src/shared/game.test.ts",
@@ -73854,7 +73891,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 34
+          "line": 35
         }
       ],
       "tests": [
@@ -73901,7 +73938,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 34
+          "line": 35
         }
       ],
       "tests": [
@@ -92203,6 +92240,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#CHAOS_MUTATORS",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#CHAOS_MUTATORS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
@@ -92359,9 +92402,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION",
       "kind": "exports"
     },
     {
@@ -116360,6 +116421,12 @@
       "id": "imports:src/shared/classic-run-setup.ts->src/shared/contracts.ts",
       "source": "file:src/shared/classic-run-setup.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/classic-run-setup.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
