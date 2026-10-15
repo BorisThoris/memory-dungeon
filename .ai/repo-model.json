@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72473,
-      "sha256": "6df8a798b6b2664869d932d149033f4fdc7ab3eda0ae91c526844e7ebee6fa5c"
+      "bytes": 72383,
+      "sha256": "b3c250c16d27e9c1e02edc27b06c687ca8d5ca2d6313007d087bb6fca9645fcb"
     },
     {
       "path": "public/site.webmanifest",
@@ -10647,8 +10647,8 @@
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
       "category": "source",
-      "bytes": 8698,
-      "sha256": "2240fdff034042a38b12d8f2cb30a5182bb7cebf92bc57b708369ffc4d64186d"
+      "bytes": 8762,
+      "sha256": "691eae5a2872a8e477bc2bd8cafc5aebf6d3f02313f81feccadb387431f51b09"
     },
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
@@ -11217,8 +11217,8 @@
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
       "category": "source",
-      "bytes": 2634,
-      "sha256": "61a12eb44cb8d6681ff947d0458b47dad4c9195e84eae806a20ca633fe44bb71"
+      "bytes": 2666,
+      "sha256": "c9af70ecce0c98765f42794e3345ce038d28f248b4ba2491bc116b12112074ed"
     },
     {
       "path": "src/renderer/components/PlasmaRail.tsx",
@@ -11367,8 +11367,8 @@
     {
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "category": "source",
-      "bytes": 1749,
-      "sha256": "e2cc3982c6843faaeec7d05d2bf547d6229b9f92c0b35fd5cbede7df2018a85f"
+      "bytes": 1781,
+      "sha256": "b53595135ceb4e6b721d8c7d442f0fb313b349a78f5274319360a1ff1b21b3de"
     },
     {
       "path": "src/renderer/components/realmTileMarkTextures.test.ts",
@@ -11769,8 +11769,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 38492,
-      "sha256": "591bff4f2823c9a43ce0620a4f4b343e225c174e39f0f7645b1048e925026a36"
+      "bytes": 38508,
+      "sha256": "f6044eca90614770edf08b988b7dc28b46d28d80d6b86f198b046ded6f79e4b6"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -12207,8 +12207,8 @@
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "category": "source",
-      "bytes": 75445,
-      "sha256": "58df325071975e011e7445d120b36f2d575a3016d981c45d17891a1e024505f6"
+      "bytes": 76365,
+      "sha256": "908a7ff6871ee819baa9d21d92ade4b8e168d0ba5cba6b6f0833dc407cc581d4"
     },
     {
       "path": "src/renderer/components/tileBoardRegistry.test.ts",
@@ -12603,8 +12603,8 @@
     {
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
       "category": "source",
-      "bytes": 3021,
-      "sha256": "361d8dc003d9b1e219e90d431881ca6c55489a7dabdeca2cb13b943f0c5ddf8d"
+      "bytes": 3057,
+      "sha256": "52870b072fb92d34a76c7790a71be543ec0619438463f63dd8ada8c545cf28b0"
     },
     {
       "path": "src/renderer/components/UiInteractionParticles.module.css",
@@ -22680,7 +22680,7 @@
       "path": "src/renderer/components/ElementCardBack.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 209,
+      "lineCount": 211,
       "imports": [
         "file:src/renderer/components/cardBackInk.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -24220,7 +24220,7 @@
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 62,
+      "lineCount": 63,
       "imports": [
         "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -24681,7 +24681,7 @@
       "path": "src/renderer/components/RealmTileMarks.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 40,
+      "lineCount": 41,
       "imports": [
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/components/realmTileMarkTextures.ts",
@@ -27136,7 +27136,7 @@
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1428,
+      "lineCount": 1447,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -28376,7 +28376,7 @@
       "path": "src/renderer/components/TutorialPairMarkerPlane.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 92,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileShatter.ts"
@@ -46168,8 +46168,8 @@
       "name": "ElementCardBack",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 173,
-      "endLine": 208
+      "line": 174,
+      "endLine": 210
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#elementTexture",
@@ -47505,7 +47505,7 @@
       "kind": "value",
       "file": "src/renderer/components/PairProximityHintPlane.tsx",
       "line": 19,
-      "endLine": 61
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/components/PlasmaRail.tsx#PlasmaRail",
@@ -48160,8 +48160,8 @@
       "name": "RealmTileMarks",
       "kind": "value",
       "file": "src/renderer/components/RealmTileMarks.tsx",
-      "line": 30,
-      "endLine": 40
+      "line": 31,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/components/realmTileMarkTextures.ts#prewarmRealmTileMarks",
@@ -51080,8 +51080,8 @@
       "name": "TileBoardReadabilityMarkers",
       "kind": "value",
       "file": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
-      "line": 177,
-      "endLine": 1427
+      "line": 178,
+      "endLine": 1446
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRegistry.ts#createTileBoardItemRegistry",
@@ -52713,7 +52713,7 @@
       "kind": "value",
       "file": "src/renderer/components/TutorialPairMarkerPlane.tsx",
       "line": 36,
-      "endLine": 90
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/UiInteractionParticles.tsx#UiInteractionParticles",
