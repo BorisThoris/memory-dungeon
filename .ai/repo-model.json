@@ -63,8 +63,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 823,
-      "sha256": "3c08cde0b345f62f37d32ec85899e83d83d85f376a0e9ff0475504ad254a7ff2"
+      "bytes": 900,
+      "sha256": "25a9d6607638f82ddb89dea3287ef2a32fc1a9b4afc336f0a010394435cc889a"
     },
     {
       "path": ".idea/.gitignore",
@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72436,
-      "sha256": "06d3704e96ef96f3d9d8c1aef3994b1cc340bf1f5f413c97cfec5223683c5cbd"
+      "bytes": 72376,
+      "sha256": "b766d5bf09f5770ea8d171db06503820b76e7b5096461628c7942e0da3a5d3cd"
     },
     {
       "path": "public/site.webmanifest",
@@ -19047,8 +19047,8 @@
     {
       "path": "vite.config.mts",
       "category": "configuration",
-      "bytes": 6831,
-      "sha256": "68fb101c95ac269c498b79fc4eb0ac75048c8ffc4cd1f12bc4041253ecc34990"
+      "bytes": 7394,
+      "sha256": "30a19c5ae7d5f0c49e1113d3f37e7a411777d0e23ca52362c06f6c2c6a3902ee"
     },
     {
       "path": "vitest.setup.ts",
