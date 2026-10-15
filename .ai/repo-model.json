@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3176,
     "codeFileCount": 1191,
-    "exportedSymbolCount": 3753,
+    "exportedSymbolCount": 3754,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10029
+    "relationshipCount": 10030
   },
   "inventory": [
     {
@@ -11763,8 +11763,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 38075,
-      "sha256": "272e59555182db71a62e52c97c432d9b0e17b747d8a731622d21a597ef77a80d"
+      "bytes": 38492,
+      "sha256": "591bff4f2823c9a43ce0620a4f4b343e225c174e39f0f7645b1048e925026a36"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -11811,14 +11811,14 @@
     {
       "path": "src/renderer/components/tileBoardCardBend.test.ts",
       "category": "test",
-      "bytes": 33932,
-      "sha256": "a80465ef82d48f4412d0adbffefa03170bbfc8014f0615bd30648cb4586e162d"
+      "bytes": 34756,
+      "sha256": "6cf45b8c44667404effaf52da387591f9bfb26fec7835cc1fdd1d4515efaf943"
     },
     {
       "path": "src/renderer/components/tileBoardCardBend.ts",
       "category": "source",
-      "bytes": 19005,
-      "sha256": "0fabea3cb09b683792d0833f372509992d27664de7ec480e3bd9c0c0c6838d1d"
+      "bytes": 19604,
+      "sha256": "0836844b65b241aaafacb67d28a31e2fedcc04d27f64273fccd0a86442a2cdf2"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
@@ -25744,7 +25744,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 929,
+      "lineCount": 936,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -25934,7 +25934,7 @@
       "path": "src/renderer/components/tileBoardCardBend.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 954,
+      "lineCount": 969,
       "imports": [
         "file:src/renderer/components/tileBoardCardBend.ts"
       ],
@@ -25946,7 +25946,7 @@
       "path": "src/renderer/components/tileBoardCardBend.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 748,
+      "lineCount": 757,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileBoardCardBend.ts#addPersistentBendStamp",
@@ -25960,6 +25960,7 @@
         "symbol:src/renderer/components/tileBoardCardBend.ts#CARD_BEND_SEGMENTS",
         "symbol:src/renderer/components/tileBoardCardBend.ts#CARD_WEAR_Z_SLIVER",
         "symbol:src/renderer/components/tileBoardCardBend.ts#CardBendFace",
+        "symbol:src/renderer/components/tileBoardCardBend.ts#cardBendSegmentsFor",
         "symbol:src/renderer/components/tileBoardCardBend.ts#CardWearAssetSet",
         "symbol:src/renderer/components/tileBoardCardBend.ts#CardWearTextureAssets",
         "symbol:src/renderer/components/tileBoardCardBend.ts#cloneBasePositions",
@@ -49458,8 +49459,8 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 928,
-      "endLine": 928
+      "line": 935,
+      "endLine": 935
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
@@ -49570,64 +49571,64 @@
       "name": "addPersistentBendStamp",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 506,
-      "endLine": 526
+      "line": 515,
+      "endLine": 535
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#applyCardWearTextureAnisotropy",
       "name": "applyCardWearTextureAnisotropy",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 645,
-      "endLine": 655
+      "line": 654,
+      "endLine": 664
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#applyLiveCardBend",
       "name": "applyLiveCardBend",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 557,
-      "endLine": 606
+      "line": 566,
+      "endLine": 615
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#BEND_BUILDUP_MAX",
       "name": "BEND_BUILDUP_MAX",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#BEND_BUILDUP_PER_PRESS",
       "name": "BEND_BUILDUP_PER_PRESS",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#BEND_UV_SAME_SPOT",
       "name": "BEND_UV_SAME_SPOT",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#bendFalloffAtUv",
       "name": "bendFalloffAtUv",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 241,
-      "endLine": 256
+      "line": 250,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#CARD_BEND_MAX_DEPTH",
       "name": "CARD_BEND_MAX_DEPTH",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#CARD_BEND_SEGMENTS",
@@ -49642,240 +49643,248 @@
       "name": "CARD_WEAR_Z_SLIVER",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 12,
-      "endLine": 12
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#CardBendFace",
       "name": "CardBendFace",
       "kind": "type",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 31,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardCardBend.ts#cardBendSegmentsFor",
+      "name": "cardBendSegmentsFor",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardCardBend.ts",
+      "line": 18,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#CardWearAssetSet",
       "name": "CardWearAssetSet",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 30,
-      "endLine": 33
+      "line": 39,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#CardWearTextureAssets",
       "name": "CardWearTextureAssets",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 24,
-      "endLine": 28
+      "line": 33,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#cloneBasePositions",
       "name": "cloneBasePositions",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 232,
-      "endLine": 233
+      "line": 241,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#commitPersistentCardBend",
       "name": "commitPersistentCardBend",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 715,
-      "endLine": 747
+      "line": 724,
+      "endLine": 756
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#composeCardPositions",
       "name": "composeCardPositions",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 528,
-      "endLine": 555
+      "line": 537,
+      "endLine": 564
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardBendSyncDecision",
       "name": "computeCardBendSyncDecision",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 262,
-      "endLine": 289
+      "line": 271,
+      "endLine": 298
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardBendSyncState",
       "name": "computeCardBendSyncState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 291,
-      "endLine": 343
+      "line": 300,
+      "endLine": 352
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardClickState",
       "name": "computeCardClickState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 419,
-      "endLine": 421
+      "line": 428,
+      "endLine": 430
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardHoverTiltDecision",
       "name": "computeCardHoverTiltDecision",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 374,
-      "endLine": 392
+      "line": 383,
+      "endLine": 401
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardHoverTiltState",
       "name": "computeCardHoverTiltState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 394,
-      "endLine": 412
+      "line": 403,
+      "endLine": 421
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerDownState",
       "name": "computeCardPointerDownState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 414,
-      "endLine": 417
+      "line": 423,
+      "endLine": 426
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerMoveState",
       "name": "computeCardPointerMoveState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 423,
-      "endLine": 426
+      "line": 432,
+      "endLine": 435
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerOutDecision",
       "name": "computeCardPointerOutDecision",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 450,
-      "endLine": 465
+      "line": 459,
+      "endLine": 474
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerOutState",
       "name": "computeCardPointerOutState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 467,
-      "endLine": 487
+      "line": 476,
+      "endLine": 496
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerUpDecision",
       "name": "computeCardPointerUpDecision",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 428,
-      "endLine": 443
+      "line": 437,
+      "endLine": 452
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardPointerUpState",
       "name": "computeCardPointerUpState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 445,
-      "endLine": 448
+      "line": 454,
+      "endLine": 457
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeLiveCardBendState",
       "name": "computeLiveCardBendState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 489,
-      "endLine": 503
+      "line": 498,
+      "endLine": 512
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#createCardWearAssetSet",
       "name": "createCardWearAssetSet",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 634,
-      "endLine": 643
+      "line": 643,
+      "endLine": 652
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#createWearTextureAndContext",
       "name": "createWearTextureAndContext",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 608,
-      "endLine": 632
+      "line": 617,
+      "endLine": 641
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#disposeCardWearAssetSet",
       "name": "disposeCardWearAssetSet",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 657,
-      "endLine": 664
+      "line": 666,
+      "endLine": 673
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#drawWearStamp",
       "name": "drawWearStamp",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 694,
-      "endLine": 713
+      "line": 703,
+      "endLine": 722
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#hitUvToCanonicalBendUv",
       "name": "hitUvToCanonicalBendUv",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 259,
-      "endLine": 260
+      "line": 268,
+      "endLine": 269
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#nextBendBuildupForHit",
       "name": "nextBendBuildupForHit",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 345,
-      "endLine": 367
+      "line": 354,
+      "endLine": 376
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#planeVertexToUv",
       "name": "planeVertexToUv",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 236,
-      "endLine": 239
+      "line": 245,
+      "endLine": 248
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#pointerUvToHoverTilt",
       "name": "pointerUvToHoverTilt",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 369,
-      "endLine": 372
+      "line": 378,
+      "endLine": 381
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#prepareCardBendBaseGeometryState",
       "name": "prepareCardBendBaseGeometryState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 666,
-      "endLine": 692
+      "line": 675,
+      "endLine": 701
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#resolveCardBendFaceFromHit",
       "name": "resolveCardBendFaceFromHit",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 208,
-      "endLine": 230
+      "line": 217,
+      "endLine": 239
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#WEAR_TEX_SIZE",
       "name": "WEAR_TEX_SIZE",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardHeat.ts#CARD_BREAK_DROP",
@@ -83198,6 +83207,12 @@
       "id": "exports:src/renderer/components/tileBoardCardBend.ts->symbol:src/renderer/components/tileBoardCardBend.ts#CardBendFace",
       "source": "file:src/renderer/components/tileBoardCardBend.ts",
       "target": "symbol:src/renderer/components/tileBoardCardBend.ts#CardBendFace",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardCardBend.ts->symbol:src/renderer/components/tileBoardCardBend.ts#cardBendSegmentsFor",
+      "source": "file:src/renderer/components/tileBoardCardBend.ts",
+      "target": "symbol:src/renderer/components/tileBoardCardBend.ts#cardBendSegmentsFor",
       "kind": "exports"
     },
     {
