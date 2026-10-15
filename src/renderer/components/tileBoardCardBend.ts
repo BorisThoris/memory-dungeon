@@ -547,17 +547,34 @@ export const composeCardPositions = (
     const array = positions.array as Float32Array;
     const vertexCount = array.length / 3;
     const liveDepth = CARD_BEND_MAX_DEPTH * liveDepthScale;
+    /*
+     * `bendFalloffAtUv(planeVertexToUv(...))` inlined: every card pops at once when a memorize ends,
+     * and this ran for three planes of every card each frame with an object and a hypot per vertex
+     * (151ms of a 330ms frame on a 48-card floor). Same smoothstep; outside the radius it is zero,
+     * so no square root there. (u - bendU) * width is px + width * (0.5 - bendU), and the same in v.
+     */
+    const radius = 0.52 * Math.min(width, height);
+    const radiusSq = radius * radius;
+    const shiftX = width * (0.5 - bendU);
+    const shiftY = height * (0.5 - bendV);
 
     for (let index = 0; index < vertexCount; index += 1) {
         const offset = index * 3;
         const px = base[offset];
         const py = base[offset + 1];
-        const z0 = base[offset + 2];
-        const { u, v } = planeVertexToUv(px, py, width, height);
-        const wgt = bendFalloffAtUv(u, v, bendU, bendV, width, height);
+        let wgt = 0;
+        if (liveDepth !== 0) {
+            const dx = px + shiftX;
+            const dy = py + shiftY;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < radiusSq) {
+                const s = 1 - Math.sqrt(distSq) / radius;
+                wgt = s * s * (3 - 2 * s);
+            }
+        }
         array[offset] = px;
         array[offset + 1] = py;
-        array[offset + 2] = z0 + persistentZ[index] + liveDepth * wgt;
+        array[offset + 2] = base[offset + 2] + persistentZ[index] + liveDepth * wgt;
     }
 
     positions.needsUpdate = true;

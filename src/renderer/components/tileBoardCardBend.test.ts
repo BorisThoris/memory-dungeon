@@ -966,3 +966,24 @@ describe('card geometry follows the size of a card on screen', () => {
         expect(triangles(cardBendSegmentsFor(48, 'high')) * 4).toBe(triangles(CARD_BEND_SEGMENTS));
     });
 });
+
+describe('the inlined bend loop', () => {
+    it('places every vertex where the falloff formula says, for any bend point and depth', () => {
+        const width = 1.1;
+        const height = 1.54;
+        const geometry = new PlaneGeometry(width, height, 24, 24);
+        const base = cloneBasePositions(geometry);
+        const persistent = new Float32Array(base.length / 3).map((_unused, index) => (index % 7) * 0.001);
+        const positions = geometry.attributes.position as BufferAttribute;
+        for (const [bendU, bendV, scale] of [[0.5, 0.5, 1], [0.1, 0.9, 0.4], [0.93, 0.07, 2.75], [0.3, 0.6, 0]] as const) {
+            composeCardPositions(positions, base, persistent, bendU, bendV, width, height, scale);
+            const array = positions.array as Float32Array;
+            for (let index = 0; index < base.length / 3; index += 1) {
+                const { u, v } = planeVertexToUv(base[index * 3]!, base[index * 3 + 1]!, width, height);
+                const expected = base[index * 3 + 2]! + persistent[index]! + CARD_BEND_MAX_DEPTH * scale * bendFalloffAtUv(u, v, bendU, bendV, width, height);
+                expect(array[index * 3 + 2]).toBeCloseTo(expected, 5);
+                expect(array[index * 3]).toBe(base[index * 3]);
+            }
+        }
+    });
+});
