@@ -39,6 +39,14 @@ const pruneWipPublicAssetsFromBuild = () => ({
 });
 
 export default defineConfig(({ mode }) => ({
+    /*
+     * One dependency cache per checkout. A worktree's `node_modules` is a junction to the main
+     * checkout's, so the default `node_modules/.vite` was one cache for every dev server on the
+     * machine - the main checkout, each worktree, the e2e server - and each hashes its own path into
+     * the config, so starting one re-optimized the deps under another's loading page. The e2e runs
+     * that stalled on the boot splash for minutes and passed alone fit that.
+     */
+    cacheDir: path.resolve(__dirname, '.vite-cache'),
     plugins: [
         injectContentSecurityPolicy(mode !== 'production'),
         viteDevBlueprintApi(),
@@ -99,7 +107,7 @@ export default defineConfig(({ mode }) => ({
             allow: [__dirname, fs.realpathSync(path.join(__dirname, 'node_modules'))]
         },
         watch: {
-            ignored: ['**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
+            ignored: ['**/.vite-cache/**', '**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
         }
     },
     test: {

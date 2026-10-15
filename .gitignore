@@ -36,3 +36,5 @@ steam_appid.txt.bak
 *.pyc
 # recorded trailer masters (scripts/build-project-trailers.mjs)
 project-media/.captures/
+# Per-checkout Vite dependency cache (vite.config.mts cacheDir)
+.vite-cache/
