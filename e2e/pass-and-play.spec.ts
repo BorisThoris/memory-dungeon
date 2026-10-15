@@ -188,7 +188,8 @@ test.describe('pass and play', () => {
         // And it clears when that player acts, rather than sitting over their board.
         await flipTileAtGridCellViaDevHook(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
         await page.waitForTimeout(600);
-        await expect(banner, 'the pass clears once the next player acts').toBeHidden();
+        // Headless WebGL under load turns a flip slowly; the banner must clear, not clear within 5s.
+        await expect(banner, 'the pass clears once the next player acts').toBeHidden({ timeout: 15_000 });
     });
 
     test('the table reaches the ending it agreed to', async ({ page }) => {
