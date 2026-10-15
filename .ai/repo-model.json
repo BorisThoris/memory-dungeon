@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72383,
-      "sha256": "b3c250c16d27e9c1e02edc27b06c687ca8d5ca2d6313007d087bb6fca9645fcb"
+      "bytes": 76868,
+      "sha256": "0babc73c9bcba1f1b571071f154817b1a508071d86fc46c93c5f7c6bd1742abb"
     },
     {
       "path": "public/site.webmanifest",
@@ -12297,8 +12297,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 28810,
-      "sha256": "5de4606702b211f1f1eab645d848956c2fb85a6c8ec1c32309ebb4699fc1c4d4"
+      "bytes": 29044,
+      "sha256": "7c61a3e56d3f20be9d7e7540f8d2190f426912d7143116a120b2985432bf88ee"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -27421,7 +27421,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 635,
+      "lineCount": 637,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -51424,8 +51424,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 634,
-      "endLine": 634
+      "line": 636,
+      "endLine": 636
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
