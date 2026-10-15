@@ -528,6 +528,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 census[key] = (census[key] ?? 0) + 1;
             });
             (window as unknown as { __boardDrawCensus?: Record<string, number> }).__boardDrawCensus = census;
+            // Dev only: live GPU geometries and textures, for finding what a floor leaves behind.
+            (window as unknown as { __boardMemory?: { geometries: number; textures: number } }).__boardMemory = { ...gl.info.memory };
             // Dev only: the compiled shader programs, for finding what compiles mid-play.
             (window as unknown as { __boardPrograms?: string[] }).__boardPrograms = (gl.info.programs ?? []).map((program) => `${program.name}|${program.cacheKey}`);
         }
