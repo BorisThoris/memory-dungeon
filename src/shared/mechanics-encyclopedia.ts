@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 86 as const;
+export const ENCYCLOPEDIA_VERSION = 87 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -342,7 +342,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
         id: 'endless',
         title: 'Classic Run',
         description:
-            'Remember pairs and build momentum through procedural floors. At Clean, matches can pop nearby pairs of the same suit; climb to Sharp and Fever for larger reactions. Each floor has its own layout, hint and bonus objective. Choose your run settings before you descend.'
+            'Remember pairs and build momentum through procedural floors. At Clean, matches can pop nearby pairs of the same suit; climb to Sharp and Fever for larger reactions. Each floor has its own layout, hint and bonus objective, and stands in a **realm** with weather of its own. You open with **three misses**; clearing floors and long chains earn more, and a miss with none left ends the run. Every third floor the **camp** spends your gold on an upgrade. Choose your run settings before you descend.'
     },
 ];
 
@@ -747,7 +747,13 @@ export const ENCYCLOPEDIA_FEATURED_RUN_TOPICS: readonly EncyclopediaTopic[] = [
     {
         id: 'featured_practice',
         title: 'Practice',
-        description: 'Endless-style run with achievements relaxed—good for learning flows.'
+        description: 'A descent that is not recorded: achievements are off, and you hold a **Flash pair** charge - a brief look at one hidden pair - to learn with.'
+    },
+    {
+        id: 'featured_pass_and_play',
+        title: 'Pass and Play',
+        description:
+            'Two to four players, one device, one board. Find a pair and you go again; miss and the device moves on. The floor’s turns are shared - they are the clock the table races. The table plays **three floors** and the highest total wins. Achievements are off at a shared table.'
     },
     {
         id: 'featured_wild',
