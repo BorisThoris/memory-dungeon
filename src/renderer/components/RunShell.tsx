@@ -35,6 +35,23 @@ import { tapStudyClosing } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 import { getSecondaryObjectiveProgress } from '../../shared/secondary-objectives';
+import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
+import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
+import type { TileSuit } from '../../shared/contracts';
+
+/** An element's name in a goal's recipe, in that element's colour, as the board's own odd-card chips are. */
+const ELEMENT_BY_NAME = new Map<string, TileSuit>([
+    ...(Object.entries(ELEMENT_NAMES) as [TileSuit, string][]).map(([suit, name]) => [name, suit] as [string, TileSuit]),
+    // The calm goal says Ice for the frost element.
+    ['Ice', 'bone']
+]);
+const recipeWords = (recipe: string): ReactElement[] =>
+    recipe.split(/(\s*→\s*)/u).map((part, index) => {
+        const suit = ELEMENT_BY_NAME.get(part);
+        return suit
+            ? <span className={styles.goalElement} key={index} style={{ '--goal-hue': TILE_SUIT_CATALOG[suit].hue } as CSSProperties}>{part}</span>
+            : <span key={index}>{part}</span>;
+    });
 
 /**
  * The HTML layer over the 3D board during a run: "The Margin".
@@ -529,7 +546,7 @@ const RunShell = ({
                         {elementalGoal ? (
                             <p className={styles.featuredGoal} data-testid="featured-floor-goal" role="status" aria-live="polite"
                                 title={`${elementalGoal.condition} ${elementalGoal.reward}`}>
-                                {FEATURED_FLOOR_GOAL_COPY.label} {elementalGoal.id === 'calm_reaction' ? FEATURED_FLOOR_GOAL_COPY.calm : FEATURED_FLOOR_GOAL_COPY.amplified}
+                                {FEATURED_FLOOR_GOAL_COPY.label} {recipeWords(elementalGoal.id === 'calm_reaction' ? FEATURED_FLOOR_GOAL_COPY.calm : FEATURED_FLOOR_GOAL_COPY.amplified)}
                                 {' · '}{elementalGoal.state === 'completed' ? FEATURED_FLOOR_GOAL_COPY.secured : elementalGoal.reward}
                             </p>
                         ) : null}

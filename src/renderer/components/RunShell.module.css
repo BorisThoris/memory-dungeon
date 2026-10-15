@@ -45,6 +45,11 @@
     letter-spacing: normal;
 }
 
+.goalElement {
+    color: var(--goal-hue, var(--paper));
+    font-weight: 600;
+}
+
 .shell[data-chain-tier='clean'] {
     --marker: var(--gold);
 }
