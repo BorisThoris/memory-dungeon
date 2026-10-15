@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-15T12:22:36.755Z",
+  "capturedAt": "2026-10-15T12:48:32.482Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 149846,
+      "bytes": 93033,
       "status": "captured",
       "stats": {
         "mean": 22,
         "std": 12,
         "dark": 0,
         "light": 0,
-        "colours": 12
+        "colours": 11
       },
       "skipped": [
         "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
@@ -59,7 +59,7 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 83576,
+      "bytes": 83675,
       "status": "captured",
       "stats": {
         "mean": 22,
@@ -95,7 +95,7 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 72314,
+      "bytes": 72336,
       "status": "captured",
       "stats": {
         "mean": 22,
@@ -103,28 +103,22 @@
         "dark": 0,
         "light": 0,
         "colours": 13
-      },
-      "skipped": [
-        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
-      ]
+      }
     },
     {
       "profile": "og",
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 103873,
+      "bytes": 72328,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 12,
-        "dark": 0.002,
+        "dark": 0,
         "light": 0,
-        "colours": 11
-      },
-      "skipped": [
-        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
-      ]
+        "colours": 10
+      }
     }
   ]
 }
