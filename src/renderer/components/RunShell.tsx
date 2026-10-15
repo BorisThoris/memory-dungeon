@@ -360,6 +360,18 @@ const RunShell = ({
     const floorLevel = run.board?.level ?? 0;
     const [trayOpenOnFloor, setTrayOpenOnFloor] = useState<number | null>(null);
     const trayOpen = compactDock && trayOpenOnFloor === floorLevel;
+    // Escape closes the open tray and nothing else. Caught on the window in the capture phase so it
+    // runs before the game screen's pause shortcut (capture on the document), which then sees it handled.
+    useEffect(() => {
+        if (!trayOpen) return;
+        const onKeyDown = (event: KeyboardEvent): void => {
+            if (event.key !== 'Escape' || event.defaultPrevented) return;
+            event.preventDefault();
+            setTrayOpenOnFloor(null);
+        };
+        window.addEventListener('keydown', onKeyDown, true);
+        return () => window.removeEventListener('keydown', onKeyDown, true);
+    }, [trayOpen]);
     const armedTool = visibleTools.find((tool) => tool.armed);
     // Fit undoes a pinch, so once there is a pinch to undo it stands on the bar beside Items.
     const barTools = compactDock ? visibleTools.filter((tool) => tool.id === 'fit' && !tool.disabled) : [];

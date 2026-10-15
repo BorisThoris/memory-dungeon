@@ -28,6 +28,26 @@ describe('RunShell item tray (phone)', () => {
         expect(screen.queryByTestId('tool-tray')).not.toBeInTheDocument();
     });
 
+    it('closes the open bag on Escape before the pause shortcut can take the key', async () => {
+        // Found in a browser audit: Escape with the bag open paused the run. The pause shortcut listens
+        // on the document in the capture phase and skips a key already handled; this stands in for it.
+        const pauseShortcut = vi.fn((event: KeyboardEvent) => (event.defaultPrevented ? 'skipped' : 'paused'));
+        document.addEventListener('keydown', pauseShortcut, true);
+        try {
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run()} shellLayout="phone-portrait" tools={[tool('peek'), tool('bomb')]} />);
+            await userEvent.click(screen.getByTestId('tool-tray-toggle'));
+            expect(screen.getByTestId('tool-tray')).toBeInTheDocument();
+            await userEvent.keyboard('{Escape}');
+            expect(screen.queryByTestId('tool-tray')).not.toBeInTheDocument();
+            expect(pauseShortcut.mock.results.at(-1)?.value).toBe('skipped');
+            // With the bag shut, Escape reaches the pause shortcut again.
+            await userEvent.keyboard('{Escape}');
+            expect(pauseShortcut.mock.results.at(-1)?.value).toBe('paused');
+        } finally {
+            document.removeEventListener('keydown', pauseShortcut, true);
+        }
+    });
+
     it('names an armed tool on the Items button so it can be found and cancelled', () => {
         render(
             <RunShell

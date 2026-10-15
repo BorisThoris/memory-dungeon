@@ -870,7 +870,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 if (guide?.dataset.castGuideOpen === 'true') return;
                 // Toggle events are coalesced; the native state is authoritative between events.
                 try { if (guide?.matches(':popover-open')) return; } catch { /* DOMs without native popovers use the dataset. */ }
-                const details = document.querySelector<HTMLDetailsElement>('[data-testid="run-details"][open]');
+                // An open panel over the board (run details, the floor resident's conversation) closes first: Escape must not also pause.
+                const details = document.querySelector<HTMLDetailsElement>('[data-testid="run-details"][open], [data-testid="floor-resident"][open]');
                 if (details) {
                     event.preventDefault();
                     event.stopPropagation();

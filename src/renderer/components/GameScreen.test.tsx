@@ -1107,6 +1107,26 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
+    it('closes the floor resident\'s conversation before Escape can pause the game', () => {
+        // Found in a browser audit: Escape closed the conversation and paused the run in the same press.
+        const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
+        try {
+            render(
+                <PlatformTiltProvider><NotificationHost><GameScreen achievements={[]} run={finishMemorizePhase(createNewRun(0))} /></NotificationHost></PlatformTiltProvider>
+            );
+            const resident = screen.getByTestId('floor-resident') as HTMLDetailsElement;
+            resident.open = true;
+            fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+            expect(resident.open).toBe(false);
+            expect(pauseSpy).not.toHaveBeenCalled();
+            // With nothing open, Escape pauses as before.
+            fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+            expect(pauseSpy).toHaveBeenCalledTimes(1);
+        } finally {
+            pauseSpy.mockRestore();
+        }
+    });
+
     it('lets Escape dismiss a native cast guide before its toggle event updates the dataset', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause').mockImplementation(() => undefined);
         try {
