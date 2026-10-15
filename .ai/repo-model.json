@@ -3999,8 +3999,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 13222,
-      "sha256": "97c85348f4d2dac607012b203e99ffd23e84437e288d9111e70c97b1e5976094"
+      "bytes": 13343,
+      "sha256": "d8041413fcda19c4db7055e901149f184b54569e7247d317bc46ff6ca6982f57"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 76868,
-      "sha256": "0babc73c9bcba1f1b571071f154817b1a508071d86fc46c93c5f7c6bd1742abb"
+      "bytes": 72344,
+      "sha256": "c82315725b4e130226e122d8b73483c89588396793e55f8c0c2c8f39c326c668"
     },
     {
       "path": "public/site.webmanifest",
