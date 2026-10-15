@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72334,
-      "sha256": "532fb0b34a95a3cfc88b2777227721eaa7ee8c0ac0711cd4b777de1f85c1a973"
+      "bytes": 72461,
+      "sha256": "e4ced511c9e1c11326d8041656abe88eca783ce193a92c88830ab2acaf81a789"
     },
     {
       "path": "public/site.webmanifest",
@@ -10593,8 +10593,8 @@
     {
       "path": "src/renderer/components/ColossusCard.module.css",
       "category": "source",
-      "bytes": 6172,
-      "sha256": "6c29d8c7af8305bee0352f2bc12017e830bbd24e9b81301204d1aecd81c303bc"
+      "bytes": 6819,
+      "sha256": "41fb9b70bf26a0e96bde1335ab74ceb2c9f07f4b8d9d494ea08acaf012037e73"
     },
     {
       "path": "src/renderer/components/ColossusCard.tsx",
@@ -10881,8 +10881,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 53761,
-      "sha256": "46fee26f23b57efaa5a473d6347fb51c231e9812ef98581a77cca3be02bd9b6e"
+      "bytes": 54170,
+      "sha256": "f483adba66a6808a6a40bf8816131c864e945c09e8d71947193039a762bf300c"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
