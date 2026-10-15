@@ -13125,8 +13125,8 @@
     {
       "path": "src/renderer/dev/TestHall.module.css",
       "category": "source",
-      "bytes": 2284,
-      "sha256": "764d6f9a999b9283008f28a8773c3a669dfe529a11f1bb8db26007075a4fc556"
+      "bytes": 2857,
+      "sha256": "52bae7593a89c9e1bb8833b5892ec4c28b9e92078132324e8749a4ae7c3a500a"
     },
     {
       "path": "src/renderer/dev/TestHall.tsx",
@@ -13137,8 +13137,8 @@
     {
       "path": "src/renderer/dev/TestHallBadge.tsx",
       "category": "source",
-      "bytes": 641,
-      "sha256": "6f72bdd5b1a5a21d477168603c96045f5d2258b07c728690787712877e6008a9"
+      "bytes": 1012,
+      "sha256": "4d1369aad7efb34253764898927dd3823d18722d6afb6e82aaa6d60a084d1c08"
     },
     {
       "path": "src/renderer/dev/testHallLoader.ts",
@@ -29692,7 +29692,7 @@
       "path": "src/renderer/dev/TestHallBadge.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 16,
+      "lineCount": 23,
       "imports": [
         "file:src/shared/test-hall-rooms.ts"
       ],
@@ -54083,8 +54083,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/dev/TestHallBadge.tsx",
-      "line": 15,
-      "endLine": 15
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/dev/testHallLoader.ts#isTestHallRoomId",
