@@ -12,6 +12,7 @@ const MarkPlane = ({ mark, z, faceUp }: { mark: RealmTileMark; z: number; faceUp
         <mesh position={[0, 0, z]} raycast={noopMeshRaycast} renderOrder={30}>
             <planeGeometry args={[CARD_PLANE_WIDTH * 1.08, CARD_PLANE_HEIGHT * 1.04]} />
             <meshBasicMaterial
+                forceSinglePass
                 depthTest
                 depthWrite={false}
                 map={texture}

@@ -91,6 +91,7 @@ const ReadabilityMaterialMesh = ({
         scale={scale}
     >
         <meshBasicMaterial
+            forceSinglePass
             color={color}
             depthTest
             depthWrite={false}
@@ -320,6 +321,7 @@ export const TileBoardReadabilityMarkers = ({
                                 scale={[0.975, 0.975, 1]}
                             >
                                 <meshBasicMaterial
+                                    forceSinglePass
                                     color="#050409"
                                     depthTest
                                     depthWrite={false}
@@ -336,6 +338,7 @@ export const TileBoardReadabilityMarkers = ({
                                 scale={[0.94, 0.94, 1]}
                             >
                                 <meshBasicMaterial
+                                    forceSinglePass
                                     color={hiddenReadabilityAccentColor}
                                     depthTest
                                     depthWrite={false}
@@ -355,6 +358,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder - 1}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#07060b"
                                 depthTest
                                 depthWrite={false}
@@ -374,6 +378,7 @@ export const TileBoardReadabilityMarkers = ({
                             rotation={[0, 0, Math.PI / 4]}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#5ee0c8"
                                 depthTest
                                 depthWrite={false}
@@ -392,6 +397,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={9}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#ff7a6a"
                                 depthTest
                                 depthWrite={false}
@@ -410,6 +416,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={9}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#5ee0c8"
                                 depthTest
                                 depthWrite={false}
@@ -428,6 +435,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#59b4d9"
                                 depthTest
                                 depthWrite={false}
@@ -446,6 +454,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#7de8b8"
                                 depthTest
                                 depthWrite={false}
@@ -464,6 +473,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#7de8b8"
                                 depthTest
                                 depthWrite={false}
@@ -482,6 +492,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#e8c878"
                                 depthTest
                                 depthWrite={false}
@@ -500,6 +511,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#5dd6ff"
                                 depthTest
                                 depthWrite={false}
@@ -518,6 +530,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={11}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#f2f9ff"
                                 depthTest
                                 depthWrite={false}
@@ -536,6 +549,7 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
                             >
                                 <meshBasicMaterial
+                                    forceSinglePass
                                     color={tileTraitColor(tile.tileTraitKind)}
                                     depthTest
                                     depthWrite={false}
@@ -564,6 +578,7 @@ export const TileBoardReadabilityMarkers = ({
                                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
                                 >
                                     <meshBasicMaterial
+                                        forceSinglePass
                                         color="#100d14"
                                         depthTest
                                         depthWrite={false}
@@ -1245,6 +1260,7 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.passiveHover.renderOrder}
                             >
                                 <meshBasicMaterial
+                                    forceSinglePass
                                     color="#b6a4bd"
                                     depthTest
                                     depthWrite={false}
@@ -1262,6 +1278,7 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, -Math.PI / 4]}
                             >
                                 <meshBasicMaterial
+                                    forceSinglePass
                                     color="#d6cce0"
                                     depthTest
                                     depthWrite={false}
@@ -1281,6 +1298,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color={ANCHOR_MARK_COLOR}
                                 depthTest
                                 depthWrite={false}
@@ -1299,6 +1317,7 @@ export const TileBoardReadabilityMarkers = ({
                             renderOrder={10}
                         >
                             <meshBasicMaterial
+                                forceSinglePass
                                 color="#c65a28"
                                 depthTest
                                 depthWrite={false}

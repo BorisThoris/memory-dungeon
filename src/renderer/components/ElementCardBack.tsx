@@ -155,6 +155,7 @@ const EmpoweredGlow = ({ suit, reduceMotion }: { suit: TileSuit; reduceMotion: b
         <mesh position={[0, 0, 0.0505]} raycast={noopMeshRaycast} renderOrder={7}>
             <planeGeometry args={[CARD_PLANE_WIDTH * GLOW_SPILL, CARD_PLANE_HEIGHT * GLOW_SPILL]} />
             <meshBasicMaterial
+                forceSinglePass
                 blending={AdditiveBlending}
                 depthTest
                 depthWrite={false}
@@ -191,6 +192,7 @@ export const ElementCardBack = ({
         <mesh position={[0, 0, 0.05]} raycast={noopMeshRaycast} renderOrder={7}>
             <planeGeometry args={[CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT]} />
             <meshBasicMaterial
+                forceSinglePass
                 ref={ink}
                 depthTest
                 depthWrite={false}

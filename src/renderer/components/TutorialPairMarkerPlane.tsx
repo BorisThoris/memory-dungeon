@@ -74,6 +74,7 @@ export const TutorialPairMarkerPlane = ({
             <mesh position={[x, y, z]} raycast={noopMeshRaycast} renderOrder={11}>
                 <planeGeometry args={[0.16, 0.16]} />
                 <meshBasicMaterial
+                    forceSinglePass
                     depthTest
                     depthWrite={false}
                     map={texture}

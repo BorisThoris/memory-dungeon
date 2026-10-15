@@ -46,6 +46,7 @@ export const PairProximityHintPlane = ({ distance, faceZ }: { distance: number; 
         <mesh position={[x, y, z]} raycast={noopMeshRaycast} ref={mesh} renderOrder={19}>
             <planeGeometry args={[PAIR_HINT_SIZE, PAIR_HINT_SIZE]} />
             <meshBasicMaterial
+                forceSinglePass
                 depthTest
                 depthWrite={false}
                 map={texture}
