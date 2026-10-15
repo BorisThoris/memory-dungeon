@@ -241,6 +241,30 @@
     }
 }
 
+/*
+ * A phone on its side (390px tall): the compact plate above still took ~85px of it with its chips
+ * stacked under, and left the board two rows of 25px cards. Here it is one slim strip, and the odd
+ * cards' chips sit beside it (`GameScreen.module.css` .boardCrown), so the board gets the height back.
+ */
+@media (max-height: 450px) {
+    .card {
+        width: min(100%, 22rem);
+        gap: 0.35rem;
+        padding: 0.18rem 0.4rem 0.18rem 0.18rem;
+        margin-bottom: 0;
+    }
+    .face {
+        width: 1.8rem;
+        min-height: 2.2rem;
+    }
+    .rune {
+        font-size: 1.05rem;
+    }
+    .cycle {
+        display: none;
+    }
+}
+
 /* Room to spare: the face stands taller than any card on the board. */
 @media (min-width: 900px) and (min-height: 720px) {
     .card {

@@ -376,6 +376,21 @@
     pointer-events: none;
 }
 
+/* A phone on its side: the crown's plate and chips share one row, so it costs the board one strip of height. */
+@media (max-height: 450px) {
+    .boardCrown {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        column-gap: 0.4rem;
+    }
+    .boardCrown [data-testid='odd-card-legend'] {
+        width: auto;
+        margin: 0;
+    }
+}
+
 /* Glass deck for run stats (actions live in the left toolbar). */
 .hudRow {
     display: flex;
