@@ -1,7 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { uploadBoardTileTextures } from './tileTextureWarmup';
 import { prewarmPairProximityBadges } from './pairProximityBadges';
-import { prewarmElementCardTextures } from './ElementCardBack';
+import { prewarmCardBackShaders, prewarmElementCardTextures } from './ElementCardBack';
 import { prewarmRealmTileMarks } from './realmTileMarkTextures';
 import {
     forwardRef,
@@ -254,6 +254,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         prewarmRealmTileMarks(board.tiles, (texture) => gl.initTexture(texture));
         try {
             gl.compile(scene, camera);
+            // Card backs join the scene only once the faces go down: compile theirs now too.
+            prewarmCardBackShaders((warm) => gl.compile(warm, camera, scene));
         } catch {
             // Shaders still compile on first use.
         }
@@ -526,6 +528,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 census[key] = (census[key] ?? 0) + 1;
             });
             (window as unknown as { __boardDrawCensus?: Record<string, number> }).__boardDrawCensus = census;
+            // Dev only: the compiled shader programs, for finding what compiles mid-play.
+            (window as unknown as { __boardPrograms?: string[] }).__boardPrograms = (gl.info.programs ?? []).map((program) => `${program.name}|${program.cacheKey}`);
         }
     });
 

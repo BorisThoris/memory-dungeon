@@ -1,6 +1,6 @@
 import { useCallback, useRef, type ReactElement } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending, CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, type MeshBasicMaterial } from 'three';
+import { AdditiveBlending, CanvasTexture, DoubleSide, LinearFilter, LinearMipmapLinearFilter, Mesh, MeshBasicMaterial, PlaneGeometry, Scene, SRGBColorSpace } from 'three';
 import type { TileSuit } from '../../shared/contracts';
 import { getTileSuit, TILE_SUITS } from '../../shared/tile-suit-rules';
 import { noopMeshRaycast } from './tileBoardPick';
@@ -116,6 +116,33 @@ export const prewarmElementCardTextures = (upload?: (texture: CanvasTexture) => 
         upload?.(elementTexture(suit, false));
         upload?.(elementTexture(suit, true));
     }
+};
+
+/**
+ * The inked card back is one shader program (`installCardBackInk` keys them all alike), and a back
+ * only joins the scene when cards go face down - after the floor's warm-up compile, which runs while
+ * the faces are up. So the first flip of a floor compiled it mid-frame (part of a ~300ms frame on a
+ * deep floor, profiled). This compiles a stand-in back with the same settings during the warm-up.
+ * The stand-in is kept: disposing it would release the very program it compiled.
+ */
+let warmBack: Scene | null = null;
+export const prewarmCardBackShaders = (compile: (scene: Scene) => void): void => {
+    if (!warmBack) {
+        const material = new MeshBasicMaterial({
+            map: elementTexture('ember', false),
+            depthTest: true,
+            depthWrite: false,
+            polygonOffset: true,
+            polygonOffsetFactor: -1,
+            polygonOffsetUnits: -1,
+            side: DoubleSide,
+            toneMapped: false
+        });
+        installCardBackInk(material, 'ember', 0);
+        warmBack = new Scene();
+        warmBack.add(new Mesh(new PlaneGeometry(CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT), material));
+    }
+    compile(warmBack);
 };
 
 const EmpoweredGlow = ({ suit, reduceMotion }: { suit: TileSuit; reduceMotion: boolean }): ReactElement => {
