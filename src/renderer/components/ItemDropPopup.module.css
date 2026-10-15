@@ -15,6 +15,17 @@
     z-index: 9;
 }
 
+/*
+ * On a phone the board runs right down to the dock, so 'just above the dock' was the bottom row of
+ * cards - covered for up to three seconds of a six-second study. There the pill lands on the dock
+ * row itself; it takes no taps, so the dock under it still works.
+ */
+@media (max-width: 600px), (max-height: 450px) {
+    .layer {
+        bottom: max(0.35rem, env(safe-area-inset-bottom, 0px));
+    }
+}
+
 .drop {
     --rarity: #c3cfdb;
     --launch-ms: 860ms;
