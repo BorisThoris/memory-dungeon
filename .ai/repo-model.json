@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3176,
-    "codeFileCount": 1191,
-    "exportedSymbolCount": 3754,
+    "trackedFileCount": 3177,
+    "codeFileCount": 1192,
+    "exportedSymbolCount": 3755,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10030
+    "relationshipCount": 10033
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d861a1f31707be181772429016120d4b325ed46ef7ecb480dbd843148e4cdb69"
+      "sha256": "245e6880547ba47c39f2c4d6bb6e440d5d15343cb6cded34f718b176b0aa26b4"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4539,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72401,
-      "sha256": "808da441bae716b311151dad1e67672bc29d036bac7e3340668c92dc58fb1525"
+      "bytes": 72473,
+      "sha256": "6df8a798b6b2664869d932d149033f4fdc7ab3eda0ae91c526844e7ebee6fa5c"
     },
     {
       "path": "public/site.webmanifest",
@@ -10639,10 +10639,16 @@
       "sha256": "d4aedce0f75c1b4d416ac5b0ae9fc944dc8f31738b6090ce3d0bfa8a63778f41"
     },
     {
+      "path": "src/renderer/components/ElementCardBack.test.ts",
+      "category": "test",
+      "bytes": 1021,
+      "sha256": "5f81d1c8eae9d6b36d9bedadceb8987939d9f52f9e7d8c32b3216608d073621a"
+    },
+    {
       "path": "src/renderer/components/ElementCardBack.tsx",
       "category": "source",
-      "bytes": 7495,
-      "sha256": "7c49443db516e6dbcff186c79334f3fda025d880676b7a4d6a2ff4f0ee0de380"
+      "bytes": 8698,
+      "sha256": "2240fdff034042a38b12d8f2cb30a5182bb7cebf92bc57b708369ffc4d64186d"
     },
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
@@ -12291,8 +12297,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 28356,
-      "sha256": "afa9ec47b06d19235a816ea47aae78128565c35def4293771aa102d42b1718bd"
+      "bytes": 28810,
+      "sha256": "5de4606702b211f1f1eab645d848956c2fb85a6c8ec1c32309ebb4699fc1c4d4"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -22658,11 +22664,23 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/ElementCardBack.test.ts",
+      "path": "src/renderer/components/ElementCardBack.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 22,
+      "imports": [
+        "file:src/renderer/components/ElementCardBack.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/ElementCardBack.tsx",
       "path": "src/renderer/components/ElementCardBack.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 182,
+      "lineCount": 209,
       "imports": [
         "file:src/renderer/components/cardBackInk.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -22673,9 +22691,12 @@
       "exports": [
         "symbol:src/renderer/components/ElementCardBack.tsx#ElementCardBack",
         "symbol:src/renderer/components/ElementCardBack.tsx#elementTexture",
+        "symbol:src/renderer/components/ElementCardBack.tsx#prewarmCardBackShaders",
         "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/ElementCardBack.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/ElementCardMaterial.tsx",
@@ -27400,7 +27421,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 631,
+      "lineCount": 635,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -46147,8 +46168,8 @@
       "name": "ElementCardBack",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 146,
-      "endLine": 181
+      "line": 173,
+      "endLine": 208
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#elementTexture",
@@ -46157,6 +46178,14 @@
       "file": "src/renderer/components/ElementCardBack.tsx",
       "line": 94,
       "endLine": 110
+    },
+    {
+      "id": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmCardBackShaders",
+      "name": "prewarmCardBackShaders",
+      "kind": "value",
+      "file": "src/renderer/components/ElementCardBack.tsx",
+      "line": 129,
+      "endLine": 146
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures",
@@ -51395,8 +51424,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 630,
-      "endLine": 630
+      "line": 634,
+      "endLine": 634
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -80588,6 +80617,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/ElementCardBack.tsx->symbol:src/renderer/components/ElementCardBack.tsx#prewarmCardBackShaders",
+      "source": "file:src/renderer/components/ElementCardBack.tsx",
+      "target": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmCardBackShaders",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/ElementCardBack.tsx->symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures",
       "source": "file:src/renderer/components/ElementCardBack.tsx",
       "target": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures",
@@ -104730,6 +104765,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ElementCardBack.test.ts->src/renderer/components/ElementCardBack.tsx",
+      "source": "file:src/renderer/components/ElementCardBack.test.ts",
+      "target": "file:src/renderer/components/ElementCardBack.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ElementCardBack.tsx->src/renderer/components/cardBackInk.ts",
       "source": "file:src/renderer/components/ElementCardBack.tsx",
       "target": "file:src/renderer/components/cardBackInk.ts",
@@ -128077,6 +128118,12 @@
       "id": "tested_by:src/renderer/components/distantCardPage.ts->file:src/renderer/components/distantCardPage.test.ts",
       "source": "file:src/renderer/components/distantCardPage.ts",
       "target": "file:src/renderer/components/distantCardPage.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/ElementCardBack.tsx->file:src/renderer/components/ElementCardBack.test.ts",
+      "source": "file:src/renderer/components/ElementCardBack.tsx",
+      "target": "file:src/renderer/components/ElementCardBack.test.ts",
       "kind": "tested_by"
     },
     {
