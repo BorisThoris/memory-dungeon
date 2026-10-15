@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3175,
-    "codeFileCount": 1190,
+    "trackedFileCount": 3176,
+    "codeFileCount": 1191,
     "exportedSymbolCount": 3753,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10019
+    "relationshipCount": 10029
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "ec0aac5f2160bccab65a2004aba45c7e7b5337a1f58e9818de6fb57cf7f66dca"
+      "sha256": "d861a1f31707be181772429016120d4b325ed46ef7ecb480dbd843148e4cdb69"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11463,8 +11463,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 61820,
-      "sha256": "e5ec7fb3b72971188c6883d8f5d07438aa5310e0d9a2086c211868d85dbdef53"
+      "bytes": 61902,
+      "sha256": "b06da85a100928bb1a448745510fffe6dd3ed3b46b15e5e8d95f3280403b93c1"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11475,8 +11475,14 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 49058,
-      "sha256": "920253ff082f11666744cf51c6b30b261874bb8929a31941eeeca03bf2e11a15"
+      "bytes": 50006,
+      "sha256": "34321a918bd644640127c0a072578075e09216ea899dc19a0f3684b882a3c254"
+    },
+    {
+      "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "category": "test",
+      "bytes": 1687,
+      "sha256": "01e757bac13a0a5e26db677e33c17111e69673f37035c5e5db38435819e10040"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -24894,7 +24900,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 866,
+      "lineCount": 883,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -24915,6 +24921,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/miss-bank.ts",
@@ -24925,6 +24932,7 @@
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/secondary-objectives.ts",
+        "file:src/shared/tile-suit-rules.ts",
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
@@ -24934,8 +24942,24 @@
       ],
       "testedBy": [
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
         "file:src/renderer/components/RunShellItemTray.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/components/RunShell.tsx",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/next-floor-transition-rules.ts",
+        "file:src/shared/tile-suit-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/runShellGlyphs.tsx",
@@ -35797,6 +35821,7 @@
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
         "file:src/renderer/components/RunShellItemTray.test.tsx",
         "file:src/renderer/store/runLifecycleController.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
@@ -37772,6 +37797,7 @@
         "symbol:src/shared/next-floor-transition-rules.ts#advanceToNextLevel"
       ],
       "testedBy": [
+        "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/meteor-rules.test.ts",
         "file:src/shared/miss-bank.test.ts",
@@ -41180,6 +41206,7 @@
       "testedBy": [
         "file:src/renderer/components/cardDepartureParticles.test.ts",
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
         "file:src/shared/archetype-pressure-simulation.test.ts",
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
@@ -48263,24 +48290,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 865,
-      "endLine": 865
+      "line": 882,
+      "endLine": 882
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 63,
-      "endLine": 94
+      "line": 80,
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 50,
-      "endLine": 61
+      "line": 67,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -72187,7 +72214,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 99
+          "line": 116
         }
       ],
       "tests": [
@@ -75037,7 +75064,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 359
+          "line": 376
         }
       ],
       "tests": [
@@ -75076,7 +75103,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 359
+          "line": 376
         }
       ],
       "tests": [
@@ -75110,7 +75137,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 359
+          "line": 376
         }
       ],
       "tests": [
@@ -75144,7 +75171,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 359
+          "line": 376
         }
       ],
       "tests": [
@@ -107946,6 +107973,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/element-alchemy-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/floor-par.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/floor-par.ts",
@@ -108006,9 +108039,39 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/tile-suit-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/zone-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/zone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShellFeaturedGoal.test.tsx->src/renderer/components/RunShell.tsx",
+      "source": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShellFeaturedGoal.test.tsx->src/shared/game-core.ts",
+      "source": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShellFeaturedGoal.test.tsx->src/shared/next-floor-transition-rules.ts",
+      "source": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShellFeaturedGoal.test.tsx->src/shared/tile-suit-rules.ts",
+      "source": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "target": "file:src/shared/tile-suit-rules.ts",
       "kind": "imports"
     },
     {
@@ -128440,6 +128503,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/RunShell.tsx->file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/RunShell.tsx->file:src/renderer/components/RunShellItemTray.test.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/RunShellItemTray.test.tsx",
@@ -132376,6 +132445,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/RunShellItemTray.test.tsx",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/components/RunShellItemTray.test.tsx",
@@ -133357,6 +133432,12 @@
       "id": "tested_by:src/shared/next-floor-run-state-rules.ts->file:src/shared/next-floor-run-state-rules.test.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/next-floor-transition-rules.ts->file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -135187,6 +135268,12 @@
       "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-suit-rules.ts->file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "file:src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "kind": "tested_by"
     },
     {
