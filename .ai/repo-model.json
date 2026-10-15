@@ -11007,8 +11007,8 @@
     {
       "path": "src/renderer/components/ItemDropPopup.module.css",
       "category": "source",
-      "bytes": 4232,
-      "sha256": "aaf093f6c2d6d1a180ffd43486475d0cebf0012e5f2e79fe1da0254cb7b7b51a"
+      "bytes": 4640,
+      "sha256": "5169552274dffb50c941cadd11d373d0d5770be727d21f6d8b097ae84b483f24"
     },
     {
       "path": "src/renderer/components/ItemDropPopup.test.tsx",
