@@ -11475,14 +11475,14 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 50006,
-      "sha256": "34321a918bd644640127c0a072578075e09216ea899dc19a0f3684b882a3c254"
+      "bytes": 50079,
+      "sha256": "add2125bf890731b8241e5471abf8ac60f1f4005b8aff70579b4d840650f9272"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "category": "test",
-      "bytes": 1687,
-      "sha256": "01e757bac13a0a5e26db677e33c17111e69673f37035c5e5db38435819e10040"
+      "bytes": 2453,
+      "sha256": "62139061104088ed70d2fbe2581eb35477dc978aec89dc98d7626ff2b1be3675"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -12945,8 +12945,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7147,
-      "sha256": "9f60e8d6beeef455f4a176726314e042aaa11aa47988693f8505ad90794dfbe8"
+      "bytes": 7295,
+      "sha256": "8a3c176513b75edd210f41c2c327fdc9a9ce8a13072384e89b0eaff442c86c1d"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -24951,7 +24951,7 @@
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 32,
+      "lineCount": 46,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/game-core.ts",
@@ -29261,7 +29261,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 153,
+      "lineCount": 154,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -53555,7 +53555,7 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 147,
-      "endLine": 152
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
