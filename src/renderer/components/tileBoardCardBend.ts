@@ -8,6 +8,15 @@ import type { BufferAttribute, PlaneGeometry } from 'three';
 
 /** Segments per card face: bend deformation + enough tessellation for displacement maps. */
 export const CARD_BEND_SEGMENTS = 48;
+
+/**
+ * Segments per face for a board of this many cards. Three planes a card at 48x48 is ~14k triangles,
+ * and a floor-60 board of 48 cards drew 1.1M while memorizing (45-47fps on a desktop GPU); its cards
+ * are ~60px tall there, so 48 segments was about one a pixel. The emboss and the press-bulge keep
+ * their shape at a segment every few pixels, so the count follows the card's size on screen.
+ */
+export const cardBendSegmentsFor = (cards: number, quality: 'low' | 'medium' | 'high' | string): number =>
+    quality === 'low' ? 16 : cards <= 16 ? CARD_BEND_SEGMENTS : cards <= 32 ? 32 : 24;
 /** Keep wear multiply layer above peak displacement (front/back). */
 export const CARD_WEAR_Z_SLIVER = 0.0052;
 /** Base bulge depth (world units); tuned so a single click is clearly visible. */

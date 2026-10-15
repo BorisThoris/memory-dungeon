@@ -6,6 +6,8 @@ import {
     BEND_BUILDUP_MAX,
     BEND_BUILDUP_PER_PRESS,
     BEND_UV_SAME_SPOT,
+    CARD_BEND_SEGMENTS,
+    cardBendSegmentsFor,
     CARD_BEND_MAX_DEPTH,
     WEAR_TEX_SIZE,
     addPersistentBendStamp,
@@ -949,5 +951,18 @@ describe('tileBoardCardBend', () => {
         expect(context.createRadialGradient).toHaveBeenCalledWith(WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.25, 0, WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.14);
         expect(gradient.addColorStop).toHaveBeenCalledTimes(3);
         expect(context.fillRect).toHaveBeenCalledWith(0, 0, WEAR_TEX_SIZE, WEAR_TEX_SIZE);
+    });
+});
+
+describe('card geometry follows the size of a card on screen', () => {
+    it('keeps full tessellation for a small board and spends less on the cards of a big one', () => {
+        expect(cardBendSegmentsFor(8, 'high')).toBe(CARD_BEND_SEGMENTS);
+        expect(cardBendSegmentsFor(16, 'high')).toBe(CARD_BEND_SEGMENTS);
+        expect(cardBendSegmentsFor(32, 'medium')).toBe(32);
+        expect(cardBendSegmentsFor(48, 'high')).toBe(24);
+        expect(cardBendSegmentsFor(8, 'low')).toBe(16);
+        // Triangles for a 48-card board's three planes a card: 4x fewer than before.
+        const triangles = (segments: number) => 48 * 3 * 2 * segments * segments;
+        expect(triangles(cardBendSegmentsFor(48, 'high')) * 4).toBe(triangles(CARD_BEND_SEGMENTS));
     });
 });

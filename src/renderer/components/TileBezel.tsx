@@ -39,7 +39,7 @@ import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
 import { TileBoardHoverChrome } from './TileBoardHoverChrome';
 import { TileBoardReadabilityMarkers } from './TileBoardReadabilityMarkers';
 import {
-    CARD_BEND_SEGMENTS,
+    cardBendSegmentsFor,
     applyCardWearTextureAnisotropy,
     commitPersistentCardBend,
     computeCardBendSyncState,
@@ -263,23 +263,24 @@ const TileBezelInner = ({
     const bagRef = useRef<TileBezelFrameBag | null>(null);
     const pickable = !interactionSuppressed && isTilePickable(tile, interactive, flipLocked);
 
+    const segments = cardBendSegmentsFor(board.tiles.length, graphicsQuality);
     const frontGeometry = useMemo(
-        () => new PlaneGeometry(CARD_WIDTH, CARD_HEIGHT, CARD_BEND_SEGMENTS, CARD_BEND_SEGMENTS),
-        []
+        () => new PlaneGeometry(CARD_WIDTH, CARD_HEIGHT, segments, segments),
+        [segments]
     );
     const backGeometry = useMemo(
-        () => new PlaneGeometry(CARD_WIDTH, CARD_HEIGHT, CARD_BEND_SEGMENTS, CARD_BEND_SEGMENTS),
-        []
+        () => new PlaneGeometry(CARD_WIDTH, CARD_HEIGHT, segments, segments),
+        [segments]
     );
     const overlayGeometry = useMemo(
         () =>
             new PlaneGeometry(
                 CARD_FACE_WIDTH,
                 CARD_FACE_HEIGHT,
-                CARD_BEND_SEGMENTS,
-                CARD_BEND_SEGMENTS
+                segments,
+                segments
             ),
-        []
+        [segments]
     );
     const curseRingGeometry = useMemo(() => getSharedCurseRingGeometry(), []);
     const findableCornerRingGeometry = useMemo(() => getSharedFindableCornerRingGeometry(), []);
@@ -387,7 +388,7 @@ const TileBezelInner = ({
     const backBaseRef = useRef<Float32Array | null>(null);
     const overlayBaseRef = useRef<Float32Array | null>(null);
 
-    const vertexCount = (CARD_BEND_SEGMENTS + 1) * (CARD_BEND_SEGMENTS + 1);
+    const vertexCount = (segments + 1) * (segments + 1);
     const frontPersistentRef = useRef<Float32Array>(new Float32Array(vertexCount));
     const backPersistentRef = useRef<Float32Array>(new Float32Array(vertexCount));
     const overlayPersistentRef = useRef<Float32Array>(new Float32Array(vertexCount));
@@ -554,7 +555,13 @@ const TileBezelInner = ({
         frontBaseRef.current = bendBaseState.frontBase;
         backBaseRef.current = bendBaseState.backBase;
         overlayBaseRef.current = bendBaseState.overlayBase;
-    }, [backGeometry, frontGeometry, overlayGeometry]);
+        // A new segment count is a new vertex grid: the press marks start again on it.
+        if (frontPersistentRef.current.length !== vertexCount) {
+            frontPersistentRef.current = new Float32Array(vertexCount);
+            backPersistentRef.current = new Float32Array(vertexCount);
+            overlayPersistentRef.current = new Float32Array(vertexCount);
+        }
+    }, [backGeometry, frontGeometry, overlayGeometry, vertexCount]);
 
     useLayoutEffect(() => {
         const cap = Math.min(8, gl.capabilities.getMaxAnisotropy());
