@@ -11811,14 +11811,14 @@
     {
       "path": "src/renderer/components/tileBoardCardBend.test.ts",
       "category": "test",
-      "bytes": 34756,
-      "sha256": "6cf45b8c44667404effaf52da387591f9bfb26fec7835cc1fdd1d4515efaf943"
+      "bytes": 36042,
+      "sha256": "dbee8358fc84dbd14e79655a82a6d5dce9eda082aeeaee60a20e95c387fe2d6f"
     },
     {
       "path": "src/renderer/components/tileBoardCardBend.ts",
       "category": "source",
-      "bytes": 19604,
-      "sha256": "0836844b65b241aaafacb67d28a31e2fedcc04d27f64273fccd0a86442a2cdf2"
+      "bytes": 20369,
+      "sha256": "ea0be137e7ff731191047185ed47cc55007a0f7b0ef3956674a7738f6bde4996"
     },
     {
       "path": "src/renderer/components/tileBoardCardHeat.test.ts",
@@ -25934,7 +25934,7 @@
       "path": "src/renderer/components/tileBoardCardBend.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 969,
+      "lineCount": 990,
       "imports": [
         "file:src/renderer/components/tileBoardCardBend.ts"
       ],
@@ -25946,7 +25946,7 @@
       "path": "src/renderer/components/tileBoardCardBend.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 757,
+      "lineCount": 774,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileBoardCardBend.ts#addPersistentBendStamp",
@@ -49579,16 +49579,16 @@
       "name": "applyCardWearTextureAnisotropy",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 654,
-      "endLine": 664
+      "line": 671,
+      "endLine": 681
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#applyLiveCardBend",
       "name": "applyLiveCardBend",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 566,
-      "endLine": 615
+      "line": 583,
+      "endLine": 632
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#BEND_BUILDUP_MAX",
@@ -49691,8 +49691,8 @@
       "name": "commitPersistentCardBend",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 724,
-      "endLine": 756
+      "line": 741,
+      "endLine": 773
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#composeCardPositions",
@@ -49700,7 +49700,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
       "line": 537,
-      "endLine": 564
+      "endLine": 581
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#computeCardBendSyncDecision",
@@ -49803,32 +49803,32 @@
       "name": "createCardWearAssetSet",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 643,
-      "endLine": 652
+      "line": 660,
+      "endLine": 669
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#createWearTextureAndContext",
       "name": "createWearTextureAndContext",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 617,
-      "endLine": 641
+      "line": 634,
+      "endLine": 658
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#disposeCardWearAssetSet",
       "name": "disposeCardWearAssetSet",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 666,
-      "endLine": 673
+      "line": 683,
+      "endLine": 690
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#drawWearStamp",
       "name": "drawWearStamp",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 703,
-      "endLine": 722
+      "line": 720,
+      "endLine": 739
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#hitUvToCanonicalBendUv",
@@ -49867,8 +49867,8 @@
       "name": "prepareCardBendBaseGeometryState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardBend.ts",
-      "line": 675,
-      "endLine": 701
+      "line": 692,
+      "endLine": 718
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardBend.ts#resolveCardBendFaceFromHit",
