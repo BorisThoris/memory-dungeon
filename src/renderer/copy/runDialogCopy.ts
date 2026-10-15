@@ -146,7 +146,8 @@ export const PERFECT_MEMORY_COPY = {
 export const MISS_BANK_TITLE = 'A mismatch spends one life. Earn more through combos and floor clears.';
 export const FEATURED_FLOOR_GOAL_COPY = {
     label: 'Goal:',
-    amplified: 'Two of one element → another',
+    // Any reaction counts; the floor always deals Fire, Fire, then Water (`featuredRecipePairKeys`), so name that one.
+    amplified: 'Two of one element → another, as Fire → Fire → Water',
     calm: 'Water → Water → Ice',
     secured: 'secured'
 };

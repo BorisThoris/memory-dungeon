@@ -46,7 +46,7 @@ const ELEMENT_BY_NAME = new Map<string, TileSuit>([
     ['Ice', 'bone']
 ]);
 const recipeWords = (recipe: string): ReactElement[] =>
-    recipe.split(/(\s*→\s*)/u).map((part, index) => {
+    recipe.split(new RegExp(`(\\b(?:${[...ELEMENT_BY_NAME.keys()].join('|')})\\b)`, 'u')).filter(Boolean).map((part, index) => {
         const suit = ELEMENT_BY_NAME.get(part);
         return suit
             ? <span className={styles.goalElement} key={index} style={{ '--goal-hue': TILE_SUIT_CATALOG[suit].hue } as CSSProperties}>{part}</span>
