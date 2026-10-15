@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 62973,
-      "sha256": "6ea182b4cce6c9945036ec68e5b674cc838e0d8219f8b66035d9fc30de691a8b"
+      "sha256": "fb01e5640e5d1b5167cb099efb9c4b7fe90a96ff59a8170c90469b1c916289b0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -14212,7 +14212,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 63297,
-      "sha256": "b892c70922b11a6c88610a3619b9147583f9f6a2e1be8032fba9e7cb0d652f77"
+      "sha256": "07aee533f52ad97a1d9ab2d164fba6113cf591199c052c4a37702b78ba05a0a7"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15525,8 +15525,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 54922,
-      "sha256": "42d2a913cec5e198a28ad6f064e2372aa2024f78dc22db45954d49c832fe0b40"
+      "bytes": 55221,
+      "sha256": "adef303840703e0396aeec4862266a1ad36c10cfb346a8f261d40f7c3476f705"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -37281,7 +37281,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 758,
+      "lineCount": 759,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -64704,7 +64704,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 746,
-      "endLine": 757
+      "endLine": 758
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
