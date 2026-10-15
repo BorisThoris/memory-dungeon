@@ -1,6 +1,6 @@
 {
   "slug": "memory-dungeon",
-  "capturedAt": "2026-10-15T13:03:10.897Z",
+  "capturedAt": "2026-10-15T13:35:47.844Z",
   "source": "deployment",
   "url": "https://memory-dungeon-git.pages.dev/",
   "recipe": {
@@ -41,14 +41,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 162096,
+      "bytes": 149518,
       "status": "captured",
       "stats": {
-        "mean": 24,
-        "std": 15,
-        "dark": 0.109,
+        "mean": 22,
+        "std": 12,
+        "dark": 0.125,
         "light": 0,
-        "colours": 19
+        "colours": 12
       },
       "skipped": [
         "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
@@ -59,14 +59,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 151504,
+      "bytes": 83632,
       "status": "captured",
       "stats": {
-        "mean": 23,
+        "mean": 22,
         "std": 13,
-        "dark": 0.096,
+        "dark": 0,
         "light": 0,
-        "colours": 14
+        "colours": 13
       },
       "skipped": [
         "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
@@ -77,7 +77,7 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 43345,
+      "bytes": 43346,
       "status": "captured",
       "stats": {
         "mean": 25,
@@ -95,7 +95,7 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 72360,
+      "bytes": 72302,
       "status": "captured",
       "stats": {
         "mean": 22,
@@ -110,18 +110,15 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 72436,
+      "bytes": 72376,
       "status": "captured",
       "stats": {
         "mean": 23,
         "std": 12,
         "dark": 0,
         "light": 0,
-        "colours": 9
-      },
-      "skipped": [
-        "optional step skipped (leave the studio splash): locator.click: Timeout 10000ms exceeded."
-      ]
+        "colours": 10
+      }
     }
   ]
 }
