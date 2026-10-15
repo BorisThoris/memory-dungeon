@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 85 as const;
+export const ENCYCLOPEDIA_VERSION = 86 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -752,6 +752,7 @@ export const ENCYCLOPEDIA_FEATURED_RUN_TOPICS: readonly EncyclopediaTopic[] = [
     {
         id: 'featured_wild',
         title: 'Wild / joker run',
-        description: 'Endless run with wild-tile rules enabled from the menu for a different pairing puzzle.'
+        description:
+            'A descent with a **joker** in hand: it pairs with any card, and one you do not spend comes down to the next floor with you. Every floor also carries the Wild set of **Sticky fingers**, **Short memorize** and **Dense pickups**, on top of that floor’s own schedule - its boss floors and **Colossus**, breathers, featured goals and mutators, the same as any classic descent.'
     }
 ];
