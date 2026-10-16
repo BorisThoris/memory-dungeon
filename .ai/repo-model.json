@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3183,
     "codeFileCount": 1197,
-    "exportedSymbolCount": 3777,
+    "exportedSymbolCount": 3779,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10080
+    "relationshipCount": 10083
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "956f5fcd087226fc2b9ca589fa90cdced4350eec73fd56f6504f045b70971a42"
+      "sha256": "2091c2ebec4282bd2c36bca6fa417f411f1640ca0aeca2358bc51c60ddf8c845"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72403,
-      "sha256": "7b233eb253507da961962891bdfede8a5c8b2e3cec63aef8130397331a429d5a"
+      "bytes": 72416,
+      "sha256": "31b8cb6efb877758238de4f6c29a902a060f8ff10f2470f65ee65bc10f3eed20"
     },
     {
       "path": "public/site.webmanifest",
@@ -12255,14 +12255,14 @@
     {
       "path": "src/renderer/components/tileBoardResponsiveLayout.test.ts",
       "category": "test",
-      "bytes": 3575,
-      "sha256": "9be27d927ba15b21491a62615434d8d2294c72ccb3f88d33bf5e9064e6ce7f2e"
+      "bytes": 4532,
+      "sha256": "9ab8458e7c2b098a6f7cd38c788a5d6b9c5667c66c28e2d60200e2df1b00ff5a"
     },
     {
       "path": "src/renderer/components/tileBoardResponsiveLayout.ts",
       "category": "source",
-      "bytes": 2705,
-      "sha256": "584367ee8193515447ec575dbcf8e8d80d1a6783aba3f8becbef274fce2d0091"
+      "bytes": 3876,
+      "sha256": "8311813437743029b8c963863cd6a9d52625305461cbdfecab47bd4f94ba8266"
     },
     {
       "path": "src/renderer/components/tileBoardRimGeometry.test.ts",
@@ -12327,8 +12327,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 32357,
-      "sha256": "2e95fcaad4f7fb7ef10ca289c757a97e253c6fdbba2a14da2b2cb68f9c68e3c0"
+      "bytes": 32801,
+      "sha256": "203b87634936a81483e396724052a720b082952ae000271329d9c777c2c8b424"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -13401,8 +13401,8 @@
     {
       "path": "src/renderer/hooks/useResponsiveBoardLayout.ts",
       "category": "source",
-      "bytes": 3070,
-      "sha256": "6822ca44747f708a3b055d2e5db09501ee2a64fb81ae99302bc89d74c662a158"
+      "bytes": 3212,
+      "sha256": "046d34fbad250a71ef7cb2ceae9549dc463a5de00a655b69c74c81f5cbdfdb6f"
     },
     {
       "path": "src/renderer/hooks/useRichPresence.test.ts",
@@ -27302,7 +27302,7 @@
       "path": "src/renderer/components/tileBoardResponsiveLayout.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 74,
       "imports": [
         "file:src/renderer/components/tileBoardResponsiveLayout.ts",
         "file:src/renderer/components/tileBoardViewport.ts"
@@ -27315,13 +27315,15 @@
       "path": "src/renderer/components/tileBoardResponsiveLayout.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 67,
       "imports": [
         "file:src/renderer/components/tileShatter.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#boardFitFrame",
         "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#boardGridWorldSize",
+        "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#predictReflowedBoardShape",
+        "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#rememberBoardFit",
         "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#responsiveBoardColumns"
       ],
       "testedBy": [
@@ -27538,7 +27540,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 696,
+      "lineCount": 701,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -27557,6 +27559,7 @@
         "file:src/renderer/components/tileBoardFrameAdvance.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardRegistry.ts",
+        "file:src/renderer/components/tileBoardResponsiveLayout.ts",
         "file:src/renderer/components/tileBoardRuneField.ts",
         "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
         "file:src/renderer/components/tileBoardSceneFrame.ts",
@@ -30415,7 +30418,7 @@
       "path": "src/renderer/hooks/useResponsiveBoardLayout.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 50,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/tileBoardResponsiveLayout.ts",
@@ -51374,8 +51377,8 @@
       "name": "boardFitFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardResponsiveLayout.ts",
-      "line": 30,
-      "endLine": 48
+      "line": 48,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#boardGridWorldSize",
@@ -51384,6 +51387,22 @@
       "file": "src/renderer/components/tileBoardResponsiveLayout.ts",
       "line": 3,
       "endLine": 6
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#predictReflowedBoardShape",
+      "name": "predictReflowedBoardShape",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardResponsiveLayout.ts",
+      "line": 41,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#rememberBoardFit",
+      "name": "rememberBoardFit",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardResponsiveLayout.ts",
+      "line": 37,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#responsiveBoardColumns",
@@ -51686,24 +51705,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 695,
-      "endLine": 695
+      "line": 700,
+      "endLine": 700
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 174,
-      "endLine": 174
+      "line": 175,
+      "endLine": 175
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 91,
-      "endLine": 91
+      "line": 92,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -54871,7 +54890,7 @@
       "kind": "value",
       "file": "src/renderer/hooks/useResponsiveBoardLayout.ts",
       "line": 9,
-      "endLine": 48
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
@@ -84733,6 +84752,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardResponsiveLayout.ts->symbol:src/renderer/components/tileBoardResponsiveLayout.ts#predictReflowedBoardShape",
+      "source": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
+      "target": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#predictReflowedBoardShape",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardResponsiveLayout.ts->symbol:src/renderer/components/tileBoardResponsiveLayout.ts#rememberBoardFit",
+      "source": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
+      "target": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#rememberBoardFit",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardResponsiveLayout.ts->symbol:src/renderer/components/tileBoardResponsiveLayout.ts#responsiveBoardColumns",
       "source": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
       "target": "symbol:src/renderer/components/tileBoardResponsiveLayout.ts#responsiveBoardColumns",
@@ -111446,6 +111477,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileBoardRegistry.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/tileBoardRegistry.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileBoardResponsiveLayout.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/tileBoardResponsiveLayout.ts",
       "kind": "imports"
     },
     {
