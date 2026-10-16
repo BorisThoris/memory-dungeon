@@ -282,3 +282,27 @@
     font-style: italic;
     color: var(--margin-paper-dim);
 }
+
+/*
+ * Arriving, not cutting in: every screen change used to swap in one frame (recorded 2026-10-16, the
+ * menu to Choose Your Path to the loading screen to the run). The results fade up over the
+ * dark between screens. Opacity only: a transform here would capture every fixed child inside it.
+ */
+.shell {
+    animation: screenArrive 240ms ease-out both;
+}
+
+@keyframes screenArrive {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+:global([data-reduce-motion='true']) .shell {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shell {
+        animation: none;
+    }
+}

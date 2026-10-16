@@ -10527,8 +10527,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 22814,
-      "sha256": "de4464044fefbaf55bc8ad8148cdb93c674169fa8bb0c044f28ade686d042303"
+      "bytes": 23419,
+      "sha256": "a0e0b791ef0d1d4ee348f0863fbfa7c2b2983916810acd65621c9230a1dc99b7"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -10821,8 +10821,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 6515,
-      "sha256": "bcf7adc5fc0590ae7462865b564fe1d768f792814deedcb6dc29025c1941ef35"
+      "bytes": 7111,
+      "sha256": "ae1f7e856b1887f6d89dbdb65007bd5debc57a85aa39f2f6883253edd12e83f6"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -10893,8 +10893,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 54356,
-      "sha256": "9b73d74c9f8d865950ae3c140c0cafa18390fe11f361137032a70d169c855860"
+      "bytes": 54975,
+      "sha256": "f311d123e267297678aaa0be425aed49d63467dc5a89fe636f46b126ffada221"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -11457,8 +11457,8 @@
     {
       "path": "src/renderer/components/RunLoadingScreen.module.css",
       "category": "source",
-      "bytes": 5034,
-      "sha256": "8158d8652396f70e7a30a63890b4ce6197689d1f50762bfc681859ccc5bdd4fe"
+      "bytes": 5647,
+      "sha256": "5b8a1898118ea906cf28fe1b2f680cf5a40e415113983ab9495460ed9ad088d9"
     },
     {
       "path": "src/renderer/components/runLoadingScreen.test.tsx",
@@ -14121,8 +14121,8 @@
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 4237,
-      "sha256": "f94c04035f5936d533b3ea23c98c8ce0ea8b8fb8cfeb6fd767c713529e43bd51"
+      "bytes": 4872,
+      "sha256": "49a46c42f728e50bbd36d74ef83822d84c19deb32f57675a260e924b87bc875a"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",

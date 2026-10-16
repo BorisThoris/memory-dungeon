@@ -175,3 +175,27 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 55%, transparent);
     animation: none;
 }
+
+/*
+ * Arriving, not cutting in: every screen change used to swap in one frame (recorded 2026-10-16, the
+ * menu to Choose Your Path to the loading screen to the run). The run's loading screen fades up over the
+ * dark between screens. Opacity only: a transform here would capture every fixed child inside it.
+ */
+.screen {
+    animation: screenArrive 240ms ease-out both;
+}
+
+@keyframes screenArrive {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+:global([data-reduce-motion='true']) .screen {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .screen {
+        animation: none;
+    }
+}
