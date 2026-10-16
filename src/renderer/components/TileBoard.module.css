@@ -406,10 +406,30 @@ block board gestures so pan/zoom does not fight the deal. */
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    /*
+     * A veil, not a blackout: at 56-82% black with a 7px blur the floor change dipped to night and
+     * snapped back, and the next room's crossfade played unseen behind it (recorded 2026-10-16). The
+     * room stays legible through it now, and it comes and goes on a fade (`prestageVeilIn`/`Out`).
+     */
     background:
-        radial-gradient(ellipse 78% 62% at 50% 42%, rgba(18, 24, 40, 0.18) 0%, rgba(18, 24, 40, 0.06) 34%, transparent 64%),
-        radial-gradient(ellipse 120% 92% at 50% 50%, rgba(5, 8, 14, 0.56) 0%, rgba(4, 6, 12, 0.82) 100%);
-    backdrop-filter: blur(7px) saturate(1.04);
+        radial-gradient(ellipse 78% 62% at 50% 42%, rgba(18, 24, 40, 0.14) 0%, rgba(18, 24, 40, 0.04) 34%, transparent 64%),
+        radial-gradient(ellipse 120% 92% at 50% 50%, rgba(5, 8, 14, 0.24) 0%, rgba(4, 6, 12, 0.48) 100%);
+    backdrop-filter: blur(3px) saturate(1.04);
+    animation: prestageVeilIn 200ms ease-out both;
+}
+
+.prestageOverlay[data-leaving='true'] {
+    animation: prestageVeilOut 220ms ease-in both;
+}
+
+@keyframes prestageVeilIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes prestageVeilOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 .prestageDeck {

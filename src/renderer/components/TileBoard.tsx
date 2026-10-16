@@ -110,7 +110,7 @@ import { buildTileBoardDomSurfaceModel } from './tileBoardDomSurfaceModel';
 import { getTraitRouteReadabilityBeatCount } from './tileBoardReadability';
 import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
 import { canUseWebGL } from './tileBoardWebglSupport';
-import { TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
+import { PRESTAGE_VEIL_EXIT_MS, TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
 import { getTileBoardCanvasContextConfig } from './tileBoardCanvasContext';
 import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextRecovery';
 
@@ -901,6 +901,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
      */
     const effectivePreStage: 'dealIn' | 'idle' | 'loading' =
         !reduceMotion && boardPreStage === 'idle' && settledEntranceKey !== boardEntranceKey ? 'loading' : boardPreStage;
+    // The veil stays a moment after loading ends, fading over the board as it deals in. Decided in
+    // the render that ends the loading (React's adjust-state-while-rendering), so no frame goes by
+    // with the veil gone before its fade begins.
+    const veilLoading = effectivePreStage === 'loading';
+    const [veilWasLoading, setVeilWasLoading] = useState(veilLoading);
+    const [veilLeaving, setVeilLeaving] = useState(false);
+    if (veilLoading !== veilWasLoading) {
+        setVeilWasLoading(veilLoading);
+        setVeilLeaving(!veilLoading);
+    }
+    useEffect(() => {
+        if (!veilLeaving) return undefined;
+        const end = window.setTimeout(() => setVeilLeaving(false), PRESTAGE_VEIL_EXIT_MS);
+        return () => window.clearTimeout(end);
+    }, [veilLeaving]);
 
     const notifyMemorizeBoardReady = useCallback(
         (key: string): void => {
@@ -3210,8 +3225,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 stays visible, reload the page or update GPU drivers.
                             </div>
                         ) : null}
-                        {effectivePreStage === 'loading' && baselineWebGl && !gpuSurfaceLost ? (
-                            <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} />
+                        {(effectivePreStage === 'loading' || veilLeaving) && baselineWebGl && !gpuSurfaceLost ? (
+                            <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} leaving={effectivePreStage !== 'loading'} />
                         ) : null}
                         <TileBoardErrorBoundary fallback={sceneErrorFallback}>
                             <div className={styles.scene} data-testid="tile-board-stage"

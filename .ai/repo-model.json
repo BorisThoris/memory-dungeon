@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3179,
     "codeFileCount": 1193,
-    "exportedSymbolCount": 3766,
+    "exportedSymbolCount": 3767,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10054
+    "relationshipCount": 10055
   },
   "inventory": [
     {
@@ -11781,8 +11781,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 21594,
-      "sha256": "1444faae00ba72c66de54f6f5345dddd03bf30c6b072fc84e44c043b8cab80b9"
+      "bytes": 22215,
+      "sha256": "0a1e3798a852be3d2b89530db35acb64573f6719d9eeeb8425f15c5854f5ee85"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -11793,8 +11793,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 146617,
-      "sha256": "c27033fb056b1fd44f741ceed641f1d7c1cde86c17413c31db94877fa1696fd6"
+      "bytes": 147489,
+      "sha256": "d98e85e2623e53c4dcb43243d6f2e4ea6e9a316a9bf9ec8c66e93aee5d9f5ccf"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -12195,8 +12195,8 @@
     {
       "path": "src/renderer/components/TileBoardPrestageOverlay.tsx",
       "category": "source",
-      "bytes": 914,
-      "sha256": "6de2ee3280e775d455a1e8ba87d0aece0f7977b03af660ae3f267aab05240740"
+      "bytes": 1291,
+      "sha256": "486f1b35c7682f5dcc4d66ab424ad056ed10191d753a6d26922053d222f03cb6"
     },
     {
       "path": "src/renderer/components/tileBoardReadability.test.ts",
@@ -25853,7 +25853,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3309,
+      "lineCount": 3324,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -27095,9 +27095,10 @@
       "path": "src/renderer/components/TileBoardPrestageOverlay.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 30,
+      "lineCount": 36,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#PRESTAGE_VEIL_EXIT_MS",
         "symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#TileBoardPrestageOverlay"
       ],
       "testedBy": []
@@ -49589,8 +49590,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3308,
-      "endLine": 3308
+      "line": 3323,
+      "endLine": 3323
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -51001,12 +51002,20 @@
       "endLine": 41
     },
     {
+      "id": "symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#PRESTAGE_VEIL_EXIT_MS",
+      "name": "PRESTAGE_VEIL_EXIT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/TileBoardPrestageOverlay.tsx",
+      "line": 11,
+      "endLine": 11
+    },
+    {
       "id": "symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#TileBoardPrestageOverlay",
       "name": "TileBoardPrestageOverlay",
       "kind": "value",
       "file": "src/renderer/components/TileBoardPrestageOverlay.tsx",
-      "line": 8,
-      "endLine": 29
+      "line": 13,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#ANCHOR_MARK_COLOR",
@@ -84329,6 +84338,12 @@
       "id": "exports:src/renderer/components/tileBoardPresentationState.ts->symbol:src/renderer/components/tileBoardPresentationState.ts#getTileBoardPresentationState",
       "source": "file:src/renderer/components/tileBoardPresentationState.ts",
       "target": "symbol:src/renderer/components/tileBoardPresentationState.ts#getTileBoardPresentationState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/TileBoardPrestageOverlay.tsx->symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#PRESTAGE_VEIL_EXIT_MS",
+      "source": "file:src/renderer/components/TileBoardPrestageOverlay.tsx",
+      "target": "symbol:src/renderer/components/TileBoardPrestageOverlay.tsx#PRESTAGE_VEIL_EXIT_MS",
       "kind": "exports"
     },
     {
