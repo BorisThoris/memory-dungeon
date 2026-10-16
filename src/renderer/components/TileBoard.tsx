@@ -3225,7 +3225,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 stays visible, reload the page or update GPU drivers.
                             </div>
                         ) : null}
-                        {(effectivePreStage === 'loading' || veilLeaving) && baselineWebGl && !gpuSurfaceLost ? (
+                        {/*
+                          * Not on the run's first board: the run's loading screen has just done this
+                          * job, and a second loading motif after it read as loading twice (recorded
+                          * 2026-10-16). The scene still waits hidden and comes in dealing.
+                          */}
+                        {(effectivePreStage === 'loading' || veilLeaving) && settledEntranceKey !== null && baselineWebGl && !gpuSurfaceLost ? (
                             <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} leaving={effectivePreStage !== 'loading'} />
                         ) : null}
                         <TileBoardErrorBoundary fallback={sceneErrorFallback}>
