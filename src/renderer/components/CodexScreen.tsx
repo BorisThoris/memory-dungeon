@@ -18,6 +18,7 @@ import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { FittedGrid, MetaShell, SectionRail, UiButton } from '../ui';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
+import { useViewportSize } from '../hooks/useViewportSize';
 import {
     buildCodexModeRows,
     buildCodexMutatorRows,
@@ -82,6 +83,14 @@ const CARD_SUMMARY_LIMIT = 78;
  * be clicked back.
  */
 const CODEX_CARD_ROW_HEIGHT = 160;
+/**
+ * A short window (a phone held sideways: 812x375) gives the grid 190px, and a 160px row plus the
+ * pager's 58 did not fit - the pager sat under the bottom edge. There the card is its kicker and
+ * title, which is 95px by the sum above; the summary is in the entry a tap away
+ * (`CodexScreen.module.css`, the same 480px line).
+ */
+const CODEX_SHORT_CARD_ROW_HEIGHT = 100;
+const CODEX_SHORT_WINDOW_MAX_HEIGHT = 480;
 
 const summarize = (description: string): string => {
     const plain = plainText(description).trim();
@@ -106,6 +115,9 @@ const renderEmphasis = (text: string): ReactNode[] =>
     );
 
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
+    const { height: viewportHeight } = useViewportSize();
+    const cardRowHeight =
+        viewportHeight > 0 && viewportHeight <= CODEX_SHORT_WINDOW_MAX_HEIGHT ? CODEX_SHORT_CARD_ROW_HEIGHT : CODEX_CARD_ROW_HEIGHT;
     const { closeSubscreen, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
@@ -268,7 +280,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                         </button>
                     )}
                     resetKey={filtering ? `filter:${debouncedFilterQuery}` : `section:${activeSectionId}`}
-                    rowHeight={CODEX_CARD_ROW_HEIGHT}
+                    rowHeight={cardRowHeight}
                     testId="codex-entries"
                 />
             )}

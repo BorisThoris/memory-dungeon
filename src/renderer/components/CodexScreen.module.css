@@ -108,6 +108,13 @@
     color: var(--margin-paper-soft);
 }
 
+/* A short window: the card is its kicker and title (`CODEX_SHORT_CARD_ROW_HEIGHT`); the entry holds the rest. */
+@media (max-height: 480px) {
+    .cardBody {
+        display: none;
+    }
+}
+
 .srOnly {
     position: absolute;
     width: 1px;

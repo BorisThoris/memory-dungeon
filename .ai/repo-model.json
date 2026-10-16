@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10042
+    "relationshipCount": 10043
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "6c2624ab867f7dd329bce74b349fcfb5fbc30a504cd0d233ff7eb18a9c094e85"
+      "sha256": "d2f325b510cc457ee85ea58613e1f02ba9fa546b17dec5c108ea5b00f13cac65"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10551,8 +10551,8 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 3655,
-      "sha256": "8ae083e911f5c4b0c1e9d0885d36c9c6a6b1056c2c3a1d571e218b5623881da8"
+      "bytes": 3846,
+      "sha256": "7b27b9116bf24714a0751ffb3e8b99aa3b8b9627ef1c2a849ce2f406f2613375"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
@@ -10563,8 +10563,8 @@
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 12893,
-      "sha256": "658f0fcef980d10bd9bc1c1aad61f49331392e3ded3c8194d060b1c28e3893eb"
+      "bytes": 13583,
+      "sha256": "5d20453a54a05e127daefeb6cb89d19973a1b85a0005a74cd41b50d05560b045"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -22445,11 +22445,12 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 280,
+      "lineCount": 292,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
         "file:src/renderer/copy/screenCopy.ts",
+        "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/content-lock-state.ts",
@@ -46007,8 +46008,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 279,
-      "endLine": 279
+      "line": 291,
+      "endLine": 291
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexModeRows",
@@ -104529,6 +104530,12 @@
       "id": "imports:src/renderer/components/CodexScreen.tsx->src/renderer/copy/screenCopy.ts",
       "source": "file:src/renderer/components/CodexScreen.tsx",
       "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CodexScreen.tsx->src/renderer/hooks/useViewportSize.ts",
+      "source": "file:src/renderer/components/CodexScreen.tsx",
+      "target": "file:src/renderer/hooks/useViewportSize.ts",
       "kind": "imports"
     },
     {
