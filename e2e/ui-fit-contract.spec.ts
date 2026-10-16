@@ -333,6 +333,14 @@ test.describe('UI fit contract', () => {
                         (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat = true;
                     });
                 }
+                if (fixture === 'gameOver') {
+                    // The run-end cinematic slams its verdict in with an overshoot and moves on; the
+                    // screen a player reads is the held one with the choices. Read mid-slam, "JOURNEY
+                    // OVER" on the Deck was a frame of animation past the bottom edge (2026-10-16).
+                    await page
+                        .getByTestId('run-end-cinematic-choices')
+                        .waitFor({ state: 'visible', timeout: 15_000 });
+                }
                 await page.waitForTimeout(700);
             }, undefined, fixture === 'floorClearWithRouteChoices'
                 ? async () => (await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status)) === 'levelComplete'

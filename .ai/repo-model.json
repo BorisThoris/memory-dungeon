@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3181,
+    "trackedFileCount": 3179,
     "codeFileCount": 1193,
     "exportedSymbolCount": 3766,
     "contentItemCount": 12,
@@ -4167,8 +4167,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 15926,
-      "sha256": "789d04d587a0076bff1e26b2d94c9ea275deb88d9b153ae1d8eba72f4a133e29"
+      "bytes": 16466,
+      "sha256": "fac932493ab096cb1c3aca275c96ba9055b5db79f236f9e0f90a16bb22064025"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -4271,12 +4271,6 @@
       "category": "test",
       "bytes": 1041,
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
-    },
-    {
-      "path": "e2e/zz-transition-video.spec.ts",
-      "category": "test",
-      "bytes": 1417,
-      "sha256": "672e8a28553c928570fffe7dc8c6a2ea8b59dee732e117ea7211b31f7ba11b5d"
     },
     {
       "path": "eslint.config.mjs",
@@ -19091,12 +19085,6 @@
       "category": "other",
       "bytes": 316232,
       "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
-    },
-    {
-      "path": "zz-pw.config.ts",
-      "category": "configuration",
-      "bytes": 524,
-      "sha256": "5bde16749531ad55a9a6048ed889a03bd1d5bc5d030ea41d40deaab6e434798e"
     }
   ],
   "files": [
