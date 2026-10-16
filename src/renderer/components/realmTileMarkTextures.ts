@@ -51,6 +51,18 @@ const DYNAMIC_MARK_TILES: readonly Tile[] = [
  * number of new canvases; uploads cached textures too, since a new renderer has its own GPU cache.
  */
 export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture: CanvasTexture) => void): number => {
+    const steps = realmTileMarkWarmupSteps(tiles, upload);
+    let result = steps.next();
+    while (!result.done) result = steps.next();
+    return result.value;
+};
+
+/**
+ * `prewarmRealmTileMarks` one texture at a time: yields after each mark it paints or uploads, and
+ * prunes at the end, so a floor clear can step it under a frame budget for the floor after it
+ * (`createBoardTextureWarmupQueue`). Given both floors' tiles, it keeps the marks either needs.
+ */
+export function* realmTileMarkWarmupSteps(tiles: readonly Tile[], upload?: (texture: CanvasTexture) => void): Generator<void, number, void> {
     let painted = 0;
     const seen = new Set<string>();
     const candidates = tiles.some(tile => tile.state !== 'matched' && tile.state !== 'removed')
@@ -80,6 +92,7 @@ export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture:
                         painted += 1;
                     }
                     upload?.(texture);
+                    yield;
                 }
             }
         }
@@ -92,4 +105,4 @@ export const prewarmRealmTileMarks = (tiles: readonly Tile[], upload?: (texture:
         textures.delete(key);
     }
     return painted;
-};
+}

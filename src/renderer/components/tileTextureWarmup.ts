@@ -25,17 +25,24 @@ import {
 
 const FACE_UP_VARIANTS = ['active', 'matched', 'mismatch'] as const;
 
-const texturesForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset): Texture[] => {
-    const out: (Texture | null)[] = [
-        getTileFaceTexture(tile, 'back', 'hidden', 'panel'),
-        getTileFaceRoughnessTexture(tile, 'back', 'hidden', 'panel')
-    ];
-    for (const variant of FACE_UP_VARIANTS) {
-        out.push(getTileFaceOverlayTexture(tile, variant, graphicsQuality));
-        out.push(getTileFaceRoughnessTexture(tile, 'front', variant, 'panel'));
-    }
-    return out.filter((texture): texture is Texture => texture != null);
-};
+/**
+ * One getter per texture a tile uses, back first: the order the tiles themselves ask in. Faces
+ * first looked better for a floor that opens face up, and made the opening turns draw seven
+ * canvases mid-play (`asset-streaming.spec.ts`) - keep this order.
+ */
+const textureDrawsForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset): (() => Texture | null)[] => [
+    () => getTileFaceTexture(tile, 'back', 'hidden', 'panel'),
+    () => getTileFaceRoughnessTexture(tile, 'back', 'hidden', 'panel'),
+    ...FACE_UP_VARIANTS.flatMap((variant) => [
+        () => getTileFaceOverlayTexture(tile, variant, graphicsQuality),
+        () => getTileFaceRoughnessTexture(tile, 'front', variant, 'panel')
+    ])
+];
+
+const texturesForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset): Texture[] =>
+    textureDrawsForTile(tile, graphicsQuality)
+        .map((draw) => draw())
+        .filter((texture): texture is Texture => texture != null);
 
 const sharedTextures = (): Texture[] => {
     const shared: (Texture | null)[] = [getCardFaceStaticTexture(), getCardPanelNormalTexture(), getCardPanelDisplacementTexture()];
@@ -85,4 +92,41 @@ export const uploadBoardTileTextures = (
         }
     }
     return textures.size;
+};
+
+/**
+ * The next floor's textures, drawn and uploaded a few at a time while this floor's clear plays.
+ *
+ * Floor 2 opened on an 830ms frame (measured 2026-10-16 on the 3090): `uploadBoardTileTextures`
+ * drew and uploaded every face of the new board in the layout effect that mounts it - 63% of it in
+ * `texSubImage2D` - because a later floor has no loading screen to hide behind. The clear beat
+ * holds the screen for about two seconds with the next board already decided, so the scene steps
+ * this queue once a frame under a budget in that time. One step is one texture, since a single
+ * upload runs about 5ms; the board's own warm-up then finds them drawn and on the GPU. Whatever is
+ * left when the board arrives - or differs, if a door chose another floor - uploads there, as before.
+ */
+export const createBoardTextureWarmupQueue = (
+    board: BoardState,
+    graphicsQuality: GraphicsQualityPreset,
+    initTexture: (texture: Texture) => void
+): ((budgetMs: number) => boolean) => {
+    const draws: (() => Texture | null)[] = [...sharedTextures().map((texture) => () => texture)];
+    for (const tile of board.tiles.length > 48 ? [] : liveTiles(board)) draws.push(...textureDrawsForTile(tile, graphicsQuality));
+    let next = 0;
+    return (budgetMs) => {
+        const started = performance.now();
+        while (next < draws.length) {
+            const texture = draws[next]!();
+            next += 1;
+            if (texture) {
+                try {
+                    initTexture(texture);
+                } catch {
+                    // Uploads on first use instead.
+                }
+            }
+            if (performance.now() - started >= budgetMs) break;
+        }
+        return next >= draws.length;
+    };
 };

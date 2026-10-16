@@ -653,9 +653,17 @@ describe('tileBoardCardBend', () => {
         expect(state.frontBase).toEqual(cloneBasePositions(front));
         expect(state.backBase).toEqual(cloneBasePositions(back));
         expect(state.overlayBase).toEqual(cloneBasePositions(overlay));
-        expect(frontTangents).toHaveBeenCalledTimes(1);
-        expect(backTangents).toHaveBeenCalledTimes(1);
+        // The back is the same grid as the front: it takes a copy of the front's tangents rather than
+        // running the pass again (a third of a floor's first frame once its textures were warmed).
+        expect(frontTangents.mock.calls.length + backTangents.mock.calls.length).toBeLessThanOrEqual(1);
+        const reference = new PlaneGeometry(2, 2, 2, 2);
+        reference.computeTangents();
+        const expected = Array.from(reference.getAttribute('tangent').array);
+        expect(Array.from(front.getAttribute('tangent').array)).toEqual(expected);
+        expect(Array.from(back.getAttribute('tangent').array)).toEqual(expected);
+        expect(back.getAttribute('tangent').array).not.toBe(front.getAttribute('tangent').array);
         expect(overlayTangents).not.toHaveBeenCalled();
+        reference.dispose();
 
         front.dispose();
         back.dispose();

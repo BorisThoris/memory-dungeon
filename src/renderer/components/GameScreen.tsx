@@ -127,7 +127,8 @@ import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
-import { runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { nextFloorRealmDoor, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { realmRoomPlateUrls } from './realmRoomArt';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
@@ -1580,6 +1581,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [run, comboTemper, latestLossEvent, latestTurnForPulse, scenePayout?.key, scenePayout?.gold]
     );
 
+    // The room the next floor opens in, decoded by the scene while this one's clear plays.
+    const nextRoomDoor = run.status === 'levelComplete' ? nextFloorRealmDoor(run) : null;
+    const nextRoomPrimeKey = nextRoomDoor ? `${nextRoomDoor.realmId}:${nextRoomDoor.confluence ?? ''}` : '';
+    const nextRoomPrime = useMemo(
+        () => (nextRoomDoor ? [nextRoomDoor.realmId, ...(nextRoomDoor.confluence ? [nextRoomDoor.confluence] : [])].flatMap((realm) => realmRoomPlateUrls(realm)) : []),
+        // Keyed by the door, which is all the list depends on.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [nextRoomPrimeKey]
+    );
+
     if (!run.board) {
         return null;
     }
@@ -1854,6 +1865,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     comboStage={comboHeatLevelsNow.stage}
                     comboHueDeg={comboTemper.ringHueDeg}
                     mood={sceneMood}
+                    primeSrcs={nextRoomPrime}
                     runSeed={run.runSeed}
                 />
             </div>

@@ -1,8 +1,10 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { uploadBoardTileTextures } from './tileTextureWarmup';
+import { createBoardTextureWarmupQueue, uploadBoardTileTextures } from './tileTextureWarmup';
+import { advanceToNextLevel } from '../../shared/next-floor-transition-rules';
+import { useAppStore } from '../store/useAppStore';
 import { prewarmPairProximityBadges } from './pairProximityBadges';
 import { prewarmCardBackShaders, prewarmElementCardTextures } from './ElementCardBack';
-import { prewarmRealmTileMarks } from './realmTileMarkTextures';
+import { prewarmRealmTileMarks, realmTileMarkWarmupSteps } from './realmTileMarkTextures';
 import {
     forwardRef,
     useEffect,
@@ -13,7 +15,8 @@ import {
 } from 'react';
 import {
     type Group,
-    type Mesh
+    type Mesh,
+    type Texture
 } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import {
@@ -77,7 +80,7 @@ import { ITEM_EFFECT_TRAUMA, METEOR_IMPACT_DELAY_SECONDS, useItemEffectChannel }
 import { createHitStopClock, ITEM_HIT_STOP_SECONDS } from './meteorImpactMotion';
 import { getTileBoardCardWindow } from './tileBoardCardWindow';
 import { DistantCards } from './DistantCards';
-import { retainTileTextureWorkingSet } from './tileTextures';
+import { reserveTileTextureCards, retainTileTextureWorkingSet } from './tileTextures';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -169,6 +172,8 @@ interface TileBoardSceneProps {
 
 export type { TileBoardSceneHandle } from './useTileBoardSceneImperativeHandle';
 
+/** Per frame, for the next floor's textures: a third of a 60 fps frame, so the beat keeps its rate. */
+const NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS = 5;
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
@@ -238,6 +243,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     useLayoutEffect(() => () => {
         warmedFloorRef.current = null;
         prewarmRealmTileMarks([]);
+        reserveTileTextureCards(new Set());
     }, []);
     useLayoutEffect(() => {
         const hasLiveCards = board.tiles.some(tile => tile.state !== 'matched' && tile.state !== 'removed');
@@ -249,6 +255,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             return;
         }
         uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture));
+        // This board's cards are the working set now; what was set aside for it is no longer special.
+        reserveTileTextureCards(new Set());
         prewarmPairProximityBadges(board.columns + board.rows);
         prewarmElementCardTextures((texture) => gl.initTexture(texture));
         prewarmRealmTileMarks(board.tiles, (texture) => gl.initTexture(texture));
@@ -260,6 +268,47 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             // Shaders still compile on first use.
         }
     }, [board, camera, gl, graphicsQuality, scene]);
+    /*
+     * The NEXT floor, during this one's clear: the board it will deal is already decided
+     * (`advanceToNextLevel` is a pure step from the clear), so its faces are drawn and uploaded a
+     * texture at a time under a frame budget while the beat plays, rather than all in the frame that
+     * mounts it - an 830ms stall at the top of every floor (`createBoardTextureWarmupQueue`).
+     */
+    const nextFloorWarmupRef = useRef<((budgetMs: number) => boolean) | null>(null);
+    useEffect(() => {
+        if (runStatus !== 'levelComplete') return undefined;
+        const run = useAppStore.getState().run;
+        if (!run || run.status !== 'levelComplete') return undefined;
+        let nextBoard: BoardState | null = null;
+        try {
+            nextBoard = advanceToNextLevel(run).board;
+        } catch {
+            return undefined;
+        }
+        if (!nextBoard || nextBoard === run.board) return undefined;
+        reserveTileTextureCards(new Set(nextBoard.tiles.map((tile) => tile.id)));
+        const upload = (texture: Texture) => gl.initTexture(texture);
+        const faces = createBoardTextureWarmupQueue(nextBoard, graphicsQuality, upload);
+        // Then the marks both floors wear - this one's are still on screen under the beat.
+        const marks = realmTileMarkWarmupSteps([...(run.board?.tiles ?? []), ...nextBoard.tiles], upload);
+        let facesDone = false;
+        nextFloorWarmupRef.current = (budgetMs) => {
+            const started = performance.now();
+            if (!facesDone) facesDone = faces(budgetMs);
+            if (!facesDone) return false;
+            while (performance.now() - started < budgetMs) {
+                if (marks.next().done) return true;
+            }
+            return false;
+        };
+        return () => {
+            nextFloorWarmupRef.current = null;
+        };
+    }, [gl, graphicsQuality, runStatus]);
+    useFrame(() => {
+        const step = nextFloorWarmupRef.current;
+        if (step?.(NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS)) nextFloorWarmupRef.current = null;
+    });
     const { colors } = RENDERER_THEME;
     const sceneRenderQuality = gameplayRenderQualityProfile(graphicsQuality);
     const tileFieldParallaxEnabled = useMemo(

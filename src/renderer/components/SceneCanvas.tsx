@@ -2,7 +2,7 @@ import { useEffect, useRef, type MutableRefObject } from 'react';
 import { getSceneImage, sceneFilterIsLive, sceneLiveFilterCss, subscribeSceneImages } from './sceneBitmaps';
 import { createSceneClock, type SceneClock } from './sceneClock';
 import { SCENE_CANVAS_PIXEL_BUDGET, SCENE_FPS_FULL, sceneCanvasScale, sceneCanvasWindow, visiblePlateRect } from './sceneCanvasLayout';
-import { paintScene, SCENE_ALPHA_FLOOR, type SceneDraw, type SceneFilter, type ScenePaintContext, type SceneRect } from './scenePaint';
+import { paintScene, SCENE_ALPHA_FLOOR, SCENE_PRIME_ALPHA, type SceneDraw, type SceneFilter, type ScenePaintContext, type SceneRect } from './scenePaint';
 import styles from './scenePlate.module.css';
 
 /**
@@ -39,6 +39,13 @@ interface SceneCanvasProps {
     testId?: string;
     /** The most canvas pixels per painting pixel (`sceneCanvasScale`); 1 keeps the painting's size. */
     maxScale?: number;
+    /**
+     * Full-plate images this scene is about to show (the next floor's room, during the clear). Each
+     * is drawn once at `SCENE_PRIME_ALPHA`, one a frame, so the browser has it decoded at the
+     * plate's size before the room crossfades in: the first frame of a new realm decoded seven WebP
+     * layers inside a 300ms frame (2026-10-16).
+     */
+    prime?: readonly string[];
 }
 
 /** The fog is built at a fraction of the plate's size: it is soft, and a quarter of the pixels is a quarter of the work. */
@@ -116,13 +123,17 @@ const readLevel = (style: CSSStyleDeclaration, name: string): number => {
     return Number.isFinite(value) ? value : 1;
 };
 
-export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookRef, testId = 'scene-canvas', maxScale = 1 }: SceneCanvasProps) {
+const NO_PRIME: readonly string[] = [];
+
+export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookRef, testId = 'scene-canvas', maxScale = 1, prime = NO_PRIME }: SceneCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const composeRef = useRef(compose);
     const painterRef = useRef<Painter | null>(null);
     const maxScaleRef = useRef(maxScale);
+    const primeRef = useRef(prime);
     composeRef.current = compose;
     maxScaleRef.current = maxScale;
+    primeRef.current = prime;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -199,6 +210,25 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
             }
         };
 
+        // The layers this canvas has decoded (`ScenePaintEnv.primed`); a new surface keeps them, the browser's cache does.
+        const primed = new Set<string>();
+        const primedPlates = new Set<string>();
+        const primeNextPlate = (): void => {
+            for (const src of primeRef.current) {
+                if (primedPlates.has(src)) continue;
+                const source = getSceneImage(src);
+                if (!source) return;
+                drawing.save();
+                drawing.setTransform(1, 0, 0, 1, 0, 0);
+                drawing.globalAlpha = SCENE_PRIME_ALPHA;
+                drawing.globalCompositeOperation = 'source-over';
+                if (typeof drawing.filter === 'string') drawing.filter = 'none';
+                drawing.drawImage(source.image, -window_.x * plate[0] * scale, -window_.y * plate[1] * scale, plate[0] * scale, plate[1] * scale);
+                drawing.restore();
+                primedPlates.add(src);
+                return;
+            }
+        };
         const painter: Painter = {
             fps,
             last: Number.NEGATIVE_INFINITY,
@@ -224,6 +254,7 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
                     lookX: lookRef?.current.x ?? 0,
                     lookY: lookRef?.current.y ?? 0,
                     visible,
+                    primed,
                     scratch: () => {
                         if (!scratch) {
                             const spare = document.createElement('canvas');
@@ -239,6 +270,7 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
                         return scratch;
                     }
                 });
+                primeNextPlate();
                 // Shown once it is whole: the first frame with every image in it, or after a moment
                 // regardless, so a cold start fades a finished room in instead of assembling one.
                 if (!shown) {

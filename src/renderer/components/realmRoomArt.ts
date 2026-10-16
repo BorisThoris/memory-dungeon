@@ -56,6 +56,15 @@ export const REALM_ROOM_ART: Readonly<Record<RealmId, RealmRoomArt>> = Object.fr
 export const realmRoomFor = (realm: RealmId | null | undefined, art: Readonly<Record<RealmId, RealmRoomArt>> = REALM_ROOM_ART): RealmId | null =>
     realm && art[realm]?.base ? realm : null;
 
+/**
+ * One room's full-plate layers - its painting and its lights - for the scene to decode before it
+ * crossfades in (`SceneCanvas`'s `prime`). The sprites are drawn small and decode cheaply where they land.
+ */
+export const realmRoomPlateUrls = (realm: RealmId, art: Readonly<Record<RealmId, RealmRoomArt>> = REALM_ROOM_ART): string[] => {
+    const room = art[realm];
+    return room?.base ? [room.base, ...Object.values(room.glows)] : [];
+};
+
 /** Every realm room layer that exists, for the run preloader (the sprites go with every scene's). */
 export const getRealmRoomArtUrls = (art: Readonly<Record<RealmId, RealmRoomArt>> = REALM_ROOM_ART): string[] =>
     REALM_IDS.flatMap((realm) => (art[realm].base ? [art[realm].base, ...Object.values(art[realm].glows)] : [])).filter(Boolean);

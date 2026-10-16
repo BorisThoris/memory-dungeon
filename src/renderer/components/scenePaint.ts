@@ -181,10 +181,19 @@ export interface ScenePaintEnv {
     liveFilter?: (filter: SceneFilter) => string | null;
     /** A small spare canvas the fog is built in before it is added to the room. */
     scratch?: () => { canvas: CanvasImageSource; context: ScenePaintContext; width: number; height: number } | null;
+    /**
+     * Image layers this canvas has drawn at least once, by draw id. A layer that waits at zero for
+     * its moment (a light pass, a flash) is primed here: drawn once at `SCENE_PRIME_ALPHA`, one
+     * layer a frame. Without it the frame that first shows it decoded it - measured as a 136ms
+     * `GpuImageDecodeCache::DecodeImage` in the middle of the floor-clear beat (2026-10-16).
+     */
+    primed?: Set<string>;
 }
 
 /** Below this a draw changes nothing a player can see, so it is not made. */
 export const SCENE_ALPHA_FLOOR = 0.004;
+/** A priming draw: one 8-bit step at most, for one frame - enough for the browser to decode the image at its drawn size. */
+export const SCENE_PRIME_ALPHA = 1 / 255;
 
 /** How far the things in the room turn with the pointer beyond the plate, as a fraction of the plate per unit of depth. */
 export const SCENE_DEPTH_SHIFT_X = 0.0045;
@@ -384,12 +393,20 @@ export const paintScene = (context: ScenePaintContext, draws: readonly SceneDraw
         context.clip();
     }
     let made = 0;
+    let primeLeft = env.primed ? 1 : 0;
     for (const draw of draws) {
         if (!(draw.alpha > SCENE_ALPHA_FLOOR)) {
+            if (primeLeft > 0 && draw.kind === 'image' && !env.primed!.has(draw.id)) {
+                primeLeft -= 1;
+                // Ungraded: the decode is what costs, and a grade baked for a layer at rest would take a slot it never uses.
+                if (paintImage(context, { ...draw, alpha: SCENE_PRIME_ALPHA, filter: undefined }, env)) env.primed!.add(draw.id);
+            }
             continue;
         }
         if (draw.kind === 'image') {
-            made += paintImage(context, draw, env) ? 1 : 0;
+            const painted = paintImage(context, draw, env);
+            if (painted) env.primed?.add(draw.id);
+            made += painted ? 1 : 0;
         } else if (draw.kind === 'glow') {
             paintGlow(context, draw, env);
             made += 1;

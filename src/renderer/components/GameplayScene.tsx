@@ -110,6 +110,8 @@ export interface GameplaySceneProps {
      * stays in this room, floor after floor, and is swept when it moves to another.
      */
     roomKey?: string;
+    /** The next room's full-plate layers, decoded ahead of its crossfade (`SceneCanvas`'s `prime`). */
+    primeSrcs?: readonly string[];
 }
 
 export function GameplayScene({
@@ -129,7 +131,8 @@ export function GameplayScene({
     comboHueDeg = 0,
     mood: liveMood,
     runSeed = 0,
-    roomKey = ''
+    roomKey = '',
+    primeSrcs
 }: GameplaySceneProps) {
     // A shower of gold outlives the beat that paid it: the coins land and go out on their own time.
     const goldRain = useHeld(liveMood?.goldRain ?? null, (rain) => rain.key, GOLD_RAIN_LASTS_MS);
@@ -252,6 +255,7 @@ export function GameplayScene({
                     maxScale={effectTier === 'lean' ? SCENE_CANVAS_PHONE_MAX_SCALE : SCENE_CANVAS_MAX_SCALE}
                     lookRef={lookRef}
                     plate={flames.plate}
+                    prime={primeSrcs}
                     still={still}
                     testId="gameplay-scene-canvas"
                 />

@@ -1545,11 +1545,21 @@ export const getTileFaceOverlayTexture = (
     return texture;
 };
 
+/**
+ * Cards the next floor will deal, whose textures are drawn during this floor's clear
+ * (`createBoardTextureWarmupQueue`). The working-set prune below keeps them: they are on no
+ * board yet, and throwing them away would put their whole cost back on the next floor's first frame.
+ */
+let reservedCardIds: ReadonlySet<string> = new Set();
+export const reserveTileTextureCards = (cardIds: ReadonlySet<string>): void => {
+    reservedCardIds = cardIds;
+};
+
 /** Called after React commits a card window, when its old materials have unmounted. */
 export const retainTileTextureWorkingSet = (cardIds: ReadonlySet<string>): void => {
     for (const [key, texture] of textureCache) {
         const id: unknown = texture.userData.cardId;
-        if (typeof id === 'string' && !cardIds.has(id)) disposeCachedTexture(key);
+        if (typeof id === 'string' && !cardIds.has(id) && !reservedCardIds.has(id)) disposeCachedTexture(key);
     }
 };
 

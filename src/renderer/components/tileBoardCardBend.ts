@@ -4,6 +4,7 @@ import {
     MathUtils,
     SRGBColorSpace
 } from 'three';
+import { BufferAttribute as Float32Attribute } from 'three';
 import type { BufferAttribute, PlaneGeometry } from 'three';
 
 /** Segments per card face: bend deformation + enough tessellation for displacement maps. */
@@ -689,6 +690,49 @@ export const disposeCardWearAssetSet = (wear: CardWearAssetSet | null): void => 
     wear.back.texture.dispose();
 };
 
+/*
+ * Tangents per grid, not per card. Every card on a floor mounts its own planes, and each ran
+ * `computeTangents` on a grid identical to its neighbours' - a third of the 259ms the next floor's
+ * first frame still cost once its textures were warmed (2026-10-16). A grid whose positions, UVs and
+ * normals and indices equal one already done gets a copy of those tangents (they are a function of
+ * nothing else): the comparison is a pass over the
+ * arrays, the tangent pass is several, with a normalisation per vertex.
+ */
+interface TangentTemplate {
+    index: ArrayLike<number>;
+    normal: ArrayLike<number>;
+    position: ArrayLike<number>;
+    tangent: Float32Array;
+    uv: ArrayLike<number>;
+}
+const tangentTemplates: TangentTemplate[] = [];
+const TANGENT_TEMPLATE_LIMIT = 8;
+const sameArray = (a: ArrayLike<number>, b: ArrayLike<number>): boolean => {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i += 1) if (a[i] !== b[i]) return false;
+    return true;
+};
+const computeSharedTangents = (geometry: PlaneGeometry): void => {
+    const index = geometry.index?.array;
+    const position = geometry.getAttribute('position')?.array;
+    const uv = geometry.getAttribute('uv')?.array;
+    const normal = geometry.getAttribute('normal')?.array;
+    if (!index || !position || !uv || !normal) {
+        geometry.computeTangents();
+        return;
+    }
+    const template = tangentTemplates.find((entry) => sameArray(entry.position, position) && sameArray(entry.uv, uv) && sameArray(entry.normal, normal) && sameArray(entry.index, index));
+    if (template) {
+        geometry.setAttribute('tangent', new Float32Attribute(template.tangent.slice(), 4));
+        return;
+    }
+    geometry.computeTangents();
+    const tangent = geometry.getAttribute('tangent')?.array;
+    if (!(tangent instanceof Float32Array)) return;
+    tangentTemplates.push({ index: Array.from(index), normal: Float32Array.from(normal), position: Float32Array.from(position), tangent: tangent.slice(), uv: Float32Array.from(uv) });
+    if (tangentTemplates.length > TANGENT_TEMPLATE_LIMIT) tangentTemplates.shift();
+};
+
 export const prepareCardBendBaseGeometryState = ({
     backGeometry,
     frontGeometry,
@@ -708,7 +752,7 @@ export const prepareCardBendBaseGeometryState = ({
         }
 
         try {
-            geometry.computeTangents();
+            computeSharedTangents(geometry);
         } catch {
             /* bend-deformed planes still approximate OK for subtle normal map */
         }
