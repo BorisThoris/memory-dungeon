@@ -1,4 +1,5 @@
-import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
+import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
+import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
@@ -260,15 +261,17 @@ const useMemorizeCountdown = (run: RunState): MemorizeCountdown | null => {
     const memorizing = run.status === 'memorize';
     const snapshotMs = run.timerState.memorizeRemainingMs;
     const [countdown, setCountdown] = useState<MemorizeCountdown | null>(null);
+    // The store's own start (`memorizeClock.ts`): until the board is dealt it has not begun.
+    const clock = useSyncExternalStore(subscribeMemorizeClock, getMemorizeClock, getMemorizeClock);
     useEffect(() => {
         if (!memorizing) {
             const clear = window.setTimeout(() => setCountdown(null), 0);
             return () => window.clearTimeout(clear);
         }
-        const startedAt = Date.now();
-        const totalMs = Math.max(0, snapshotMs ?? 0);
+        const startedAt = clock?.startedAt ?? null;
+        const totalMs = Math.max(0, clock?.durationMs ?? snapshotMs ?? 0);
         const read = (): MemorizeCountdown => {
-            const elapsed = Math.max(0, Date.now() - startedAt);
+            const elapsed = startedAt === null ? 0 : Math.max(0, Date.now() - startedAt);
             const remaining = Math.max(0, totalMs - elapsed);
             return {
                 seconds: Math.ceil(remaining / 1000),
@@ -283,7 +286,7 @@ const useMemorizeCountdown = (run: RunState): MemorizeCountdown | null => {
             window.clearTimeout(first);
             window.clearInterval(tick);
         };
-    }, [memorizing, snapshotMs]);
+    }, [memorizing, snapshotMs, clock]);
     if (!memorizing) {
         return null;
     }

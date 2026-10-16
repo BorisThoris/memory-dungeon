@@ -531,6 +531,33 @@ describe('composeGameplayScene', () => {
         expect(sceneDrawIds(frame({ mood: mood('ember') })).some((id) => id.startsWith('element-'))).toBe(false);
     });
 
+    it('crossfades one realm room into the next instead of swapping the painting in a frame', () => {
+        const inRealm = (realmId: RealmId) => mood('ember', { run: makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId }) });
+        const clock = createSceneClock();
+        // Frames at 60 fps: the clock caps one frame's step, so a jump is not a way to skip a fade.
+        let now = 0;
+        const play = (realm: RealmId, untilMs: number) => {
+            let draws: readonly SceneDraw[] = [];
+            for (; now <= untilMs; now += 16) draws = composeGameplayScene({ ...rest, mood: inRealm(realm) }, clock.frame(now));
+            return draws;
+        };
+        play('ember', 1000);
+        // Partway through the 900ms fade into the storm: both rooms are on screen.
+        const mid = play('storm', 1250);
+        expect(findSceneDraw(mid, 'realm')!.src).toContain('realm-storm');
+        expect(findSceneDraw(mid, 'realm@ember')!.src).toContain('realm-ember');
+        expect(alphaOf(mid, 'realm')).toBeGreaterThan(0);
+        expect(alphaOf(mid, 'realm')).toBeLessThan(rest.base);
+        expect(alphaOf(mid, 'realm@ember')).toBeGreaterThan(0);
+        // The room being left is drawn under the one being entered.
+        const ids = sceneDrawIds(mid);
+        expect(ids.indexOf('realm@ember')).toBeLessThan(ids.indexOf('realm'));
+        // And once it is over, only the storm is left.
+        const after = play('storm', 4000);
+        expect(sceneDrawIds(after).some((id) => id.endsWith('@ember'))).toBe(false);
+        expect(alphaOf(after, 'realm')).toBeCloseTo(rest.base, 2);
+    });
+
     it('opens a realm floor in its own painted room, its glow on the combo and its chemistry a tint over it', () => {
         const run = makeRun([...makePair('a', 'A'), ...makePair('b', 'B')], { realmId: 'ember', realmSecondaryId: 'tide' });
         const cold = frame({ mood: mood('ember', { run }) });

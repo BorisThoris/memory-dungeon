@@ -361,6 +361,17 @@ block board gestures so pan/zoom does not fight the deal. */
     z-index: 0;
     pointer-events: none;
     background: transparent;
+    transition: opacity 160ms ease-out;
+}
+
+/*
+ * Under the veil the deck's gather motif is the board. The scene behind it is still settling into
+ * the deal's first pose, and seen through the veil it was a floor at rest jumping out to deal in;
+ * it comes in when the veil lifts, already dealing.
+ */
+[data-board-prestage='loading'] .scene {
+    opacity: 0;
+    transition: none;
 }
 
 .canvas {

@@ -341,7 +341,17 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     const shop = clock.smooth('plate:shop', plateId === 'shop' ? 1 : 0, 900);
     const voidRoom = clock.smooth('plate:void', plateId === 'void' ? 1 : 0, 900);
     const realmRoom = clock.smooth('plate:realm', plateId === 'realm' ? 1 : 0, 900);
-    const realmArt = mood?.realmRoom ? REALM_ROOM_ART[mood.realmRoom] : null;
+    /*
+     * Realm to realm is a crossfade too. The plate weights above only blend KINDS of room, so a
+     * floor that walked from one realm into another kept "realm" at 1 and swapped the painting in a
+     * single frame (recorded 2026-10-16: the grove, then the storm, nothing between). Each realm
+     * has its own weight; the one being left fades out under the one being entered.
+     */
+    const realmWeights = (Object.keys(REALM_ROOM_ART) as (keyof typeof REALM_ROOM_ART)[])
+        .map((id) => ({ id, weight: clock.smooth(`plate:realm:${id}`, plateId === 'realm' && mood?.realmRoom === id ? 1 : 0, 900) }))
+        .filter(({ id, weight }) => weight > 0.004 || id === mood?.realmRoom)
+        // The room being left first, so the one being entered is drawn over it.
+        .sort((a, b) => Number(a.id === mood?.realmRoom) - Number(b.id === mood?.realmRoom));
 
     // The beats: each keyed to the turn that made it, so one turn is one beat and a restore replays none.
     // Asked every frame, break or no break: the clock has to have seen "no break" for the first one to be a change.
@@ -366,23 +376,31 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     // running up the ice). All of it climbs with the combo on the depth, and past full every light
     // drives an overdrive of itself, brighter with every link and without end.
     const depth = Math.max(0, input.comboDepth ?? 0);
-    if (realmArt && mood?.realmRoom) {
-        const realm = mood.realmRoom;
-        draws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * realmRoom * missDim });
+    for (const { id: realm, weight } of realmWeights) {
+        const realmArt = REALM_ROOM_ART[realm];
+        if (!realmArt) continue;
+        const room = realmRoom * weight;
+        // The room being entered keeps the plain ids; the one being left is told apart from it.
+        const leaving = realm !== mood?.realmRoom;
+        const tag = <T extends SceneDraw>(draw: T): T => (leaving ? { ...draw, id: `${draw.id}@${realm}` } : draw);
+        const roomDraws: SceneDraw[] = [];
+        roomDraws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * room * missDim });
         // The painting's own moving parts, warped live from the base: water, cloud, vines (`realmRoomWarpDraws`).
-        if (!still) draws.push(...realmRoomWarpDraws(realm, realmArt.base, roomT, depth, input.base * realmRoom * missDim, lean));
-        const parts = realmRoomSpriteDraws(realm, realmArt.sprites, roomT, depth, realmRoom, still);
-        draws.push(...parts.filter((part) => part.blend !== 'lighter'));
+        if (!still) roomDraws.push(...realmRoomWarpDraws(realm, realmArt.base, roomT, depth, input.base * room * missDim, lean));
+        const parts = realmRoomSpriteDraws(realm, realmArt.sprites, roomT, depth, room, still);
+        roomDraws.push(...parts.filter((part) => part.blend !== 'lighter'));
         const over = comboSoftCap(Math.max(0, depth - 2), 0.6);
         for (const [family, src] of Object.entries(realmArt.glows)) {
             const level = still ? 0.35 + 0.65 * comboSoftCap(depth, 1) : realmLayerLevel(realm, family, roomT, depth);
-            draws.push({ kind: 'image', id: `realmGlow-${family}`, src, alpha: realmRoom * Math.min(1, level), blend: 'lighter' });
+            roomDraws.push({ kind: 'image', id: `realmGlow-${family}`, src, alpha: room * Math.min(1, level), blend: 'lighter' });
             if (over > 0.004) {
-                draws.push({ kind: 'image', id: `realmGlowOver-${family}`, src, alpha: realmRoom * over * Math.min(1, level), blend: 'lighter', filter: { brightness: 1 + 0.25 * depth, blurPx: 4 } });
+                roomDraws.push({ kind: 'image', id: `realmGlowOver-${family}`, src, alpha: room * over * Math.min(1, level), blend: 'lighter', filter: { brightness: 1 + 0.25 * depth, blurPx: 4 } });
             }
         }
-        draws.push(...parts.filter((part) => part.blend === 'lighter'));
+        roomDraws.push(...parts.filter((part) => part.blend === 'lighter'));
+        draws.push(...roomDraws.map(tag));
     }
+    const enteredRealmWeight = realmWeights.find(({ id }) => id === mood?.realmRoom)?.weight ?? 1;
 
     if (mood?.elements) {
         draws.push(...elementDraws(mood.elements, plateId, clock, input.compactArt ?? false));
@@ -601,7 +619,8 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
 
     // A realm's own room is never still: its weather, its light and its creatures (`realmRoomLife.ts`).
     if (!still && mood?.realmRoom) {
-        draws.push(...realmRoomLifeDraws({ realm: mood.realmRoom, t: roomT, depth, lean, alpha: realmRoom }));
+        // The new realm's weather and creatures come in with its room, not ahead of it.
+        draws.push(...realmRoomLifeDraws({ realm: mood.realmRoom, t: roomT, depth, lean, alpha: realmRoom * enteredRealmWeight }));
     }
 
     // A payout: coins fall through the room, in front of the stone and behind the cards. Asked every

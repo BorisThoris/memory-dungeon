@@ -376,3 +376,12 @@
         display: none;
     }
 }
+
+/* Yielding to the floor-clear beat (`quiet`): out of the way in SCREEN_CALLOUT_YIELD_MS. */
+.callout[data-yielding='true'] {
+    animation: calloutYield 180ms ease-in forwards;
+}
+
+@keyframes calloutYield {
+    to { opacity: 0; transform: scale(0.92); }
+}

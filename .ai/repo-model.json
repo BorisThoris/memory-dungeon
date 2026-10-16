@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3179,
-    "codeFileCount": 1192,
-    "exportedSymbolCount": 3760,
+    "trackedFileCount": 3181,
+    "codeFileCount": 1193,
+    "exportedSymbolCount": 3766,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10044
+    "relationshipCount": 10054
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "bafa1602223ac8f5c5206ed44ed015a0db692dacb94145121db69855da78bfcc"
+      "sha256": "2354995d816a8e4c9ce12981d916e446ef2955328a93b2960465ed21477cf0a8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3813,8 +3813,8 @@
     {
       "path": "e2e/asset-streaming.spec.ts",
       "category": "test",
-      "bytes": 3661,
-      "sha256": "1da71549f131ca86cf57de83cc373d8886e18fc9c65b27060184042fa62c7e0f"
+      "bytes": 4124,
+      "sha256": "a34f58d717c4fa8ce7c315315693af4f45c3c2e01f1b57489d5d5eaee30cb4a5"
     },
     {
       "path": "e2e/blueprint-explorer.spec.ts",
@@ -4275,8 +4275,8 @@
     {
       "path": "e2e/zz-transition-video.spec.ts",
       "category": "test",
-      "bytes": 1372,
-      "sha256": "992506ab3fdf4398e7359cd80ba0c14bf53897a6d46d3790c65efa53dfdfc875"
+      "bytes": 1417,
+      "sha256": "672e8a28553c928570fffe7dc8c6a2ea8b59dee732e117ea7211b31f7ba11b5d"
     },
     {
       "path": "eslint.config.mjs",
@@ -10773,8 +10773,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 1688,
-      "sha256": "bfca110e1a1f57ee87df41aed16e09e4a77cd81f9afb584b70dd3412c583d5e0"
+      "bytes": 2127,
+      "sha256": "3d1b99b1b979143ced383239a42e871b8f5b983750ed53a247ce55c3a4d3e919"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
@@ -10785,8 +10785,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 1369,
-      "sha256": "0ab96fa7d50cb2f1f59307ff7a4fe78cf3ebb2bcb1041ac1c9ed8b9bb8569d53"
+      "bytes": 1859,
+      "sha256": "e66f437281bc12fadcadef1fb0049746544bf15c7a5cc86d4b4ece58c42a9f81"
     },
     {
       "path": "src/renderer/components/FloorJourney.module.css",
@@ -10869,14 +10869,14 @@
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "category": "test",
-      "bytes": 37067,
-      "sha256": "2251c2fb51192cc3d3f27b0d3246f1da6a755778231c9f7e06a04ccd7c44ca16"
+      "bytes": 38691,
+      "sha256": "7f8f8f99c136da81c72fe622e2aac3c3bd1fb7d9d71b51768a55d5de56e049b2"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "category": "source",
-      "bytes": 38605,
-      "sha256": "a4e715af937289cc82caf2397ac155928f817a7ef6ed7b4aca44300040ec4383"
+      "bytes": 40059,
+      "sha256": "6ceb95ec19d20060a34e3a243cb794374a5a4a025d6b4883406d142daed61c58"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -10911,8 +10911,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 119915,
-      "sha256": "f55aedbb81e6aa0db8b31e259840a57ada6555eaa98fc8ed3ed23b82d3622aca"
+      "bytes": 121491,
+      "sha256": "f0df670f3fccff65dfcacecb4b37cb702a8c082357a425c6160ded6e433d5150"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11487,14 +11487,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 34071,
-      "sha256": "2c0352cb7a3e60e754a85c321b56a5f2c7c9ed092f16e21a4752887b8a0be614"
+      "bytes": 35681,
+      "sha256": "743059a9dbf24a4d480dd5fecb994080535888a08cf5b6eae5fb713c3443ae4a"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 50079,
-      "sha256": "add2125bf890731b8241e5471abf8ac60f1f4005b8aff70579b4d840650f9272"
+      "bytes": 50445,
+      "sha256": "2dd6ed95c6b1439ef857dc45e029cf07cfd710e830993f289797fa37491af0d6"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11649,8 +11649,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.module.css",
       "category": "source",
-      "bytes": 9302,
-      "sha256": "7f0bfd5ed49a50d2ccbb0c55f50a2234c34d58c5542b9d098cb530a1dc494acf"
+      "bytes": 9559,
+      "sha256": "c008f573c2708d61de4029d2370dc408fee336e587ffc605ccbd3e9ebe81aff0"
     },
     {
       "path": "src/renderer/components/ScreenCalloutQueue.test.tsx",
@@ -11661,8 +11661,8 @@
     {
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "category": "source",
-      "bytes": 3245,
-      "sha256": "fa6e0233787e20ef6b94daba45109ba9e2781872316f7e835853a6719d8c81e4"
+      "bytes": 4184,
+      "sha256": "d926d4761eaadaca9643a1d50db595fb1562c592050eb87e82f37ced889b0cf4"
     },
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
@@ -11715,8 +11715,8 @@
     {
       "path": "src/renderer/components/shuffleFlipAnimation.ts",
       "category": "source",
-      "bytes": 6996,
-      "sha256": "944c736e1ab260c3bf58c75d698b59a3d4802d420903c40bd9e43f6b8e133b6c"
+      "bytes": 7287,
+      "sha256": "7f6034239717b192018df47229fc31839fc35636161ef5244830aada5fd2b4ab"
     },
     {
       "path": "src/renderer/components/StartupIntro.module.css",
@@ -11787,8 +11787,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 21214,
-      "sha256": "42e21252f00e90ce62a88c3f667275cc5abe30eb0d35c2d2899fda105a6fd929"
+      "bytes": 21594,
+      "sha256": "1444faae00ba72c66de54f6f5345dddd03bf30c6b072fc84e44c043b8cab80b9"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -11799,8 +11799,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 144610,
-      "sha256": "70d83e2ebed9a4cd0f25fa7dbfcbbb2ca2d6c01cdfcca11c83a8de8766b42079"
+      "bytes": 146617,
+      "sha256": "c27033fb056b1fd44f741ceed641f1d7c1cde86c17413c31db94877fa1696fd6"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -13729,6 +13729,12 @@
       "sha256": "eddadd2d3ce215b8a004d82f42e5b0ec8fad05674ddfab09c43e3f64453d3e2d"
     },
     {
+      "path": "src/renderer/store/memorizeClock.ts",
+      "category": "source",
+      "bytes": 1221,
+      "sha256": "e2e44c41262368ae4b5c646c11ca00f4d3c9cbe098cb139404e9ee173072a4d3"
+    },
+    {
       "path": "src/renderer/store/menuSurfaceState.test.ts",
       "category": "test",
       "bytes": 782,
@@ -13899,8 +13905,8 @@
     {
       "path": "src/renderer/store/runTimerController.ts",
       "category": "source",
-      "bytes": 11365,
-      "sha256": "ba99f5d99584ca8efc6708cdedc9c5246acd30aa72e4d5c7d41f580bf022d339"
+      "bytes": 11560,
+      "sha256": "bef7eb2990f456ea3ed75330a81a0fc52840ebbc5f2c55e8a9fec13344f098af"
     },
     {
       "path": "src/renderer/store/runTimerResumeConditions.test.ts",
@@ -19085,6 +19091,12 @@
       "category": "other",
       "bytes": 316232,
       "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
+    },
+    {
+      "path": "zz-pw.config.ts",
+      "category": "configuration",
+      "bytes": 524,
+      "sha256": "5bde16749531ad55a9a6048ed889a03bd1d5bc5d030ea41d40deaab6e434798e"
     }
   ],
   "files": [
@@ -23019,13 +23031,14 @@
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 46,
       "imports": [
         "file:src/renderer/copy/floorClearChain.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/FloorClearBeat.tsx#default",
+        "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
         "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps"
       ],
       "testedBy": [
@@ -23231,7 +23244,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 604,
+      "lineCount": 631,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/gameplaySceneFrame.ts",
@@ -23254,7 +23267,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 660,
+      "lineCount": 679,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -23380,7 +23393,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2365,
+      "lineCount": 2394,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -24924,9 +24937,10 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 622,
+      "lineCount": 657,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
+        "file:src/renderer/store/memorizeClock.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/tile-suit-rules.ts"
@@ -24939,7 +24953,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 883,
+      "lineCount": 886,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -24955,6 +24969,7 @@
         "file:src/renderer/gameShellLayout.ts",
         "file:src/renderer/hooks/useCountUp.ts",
         "file:src/renderer/input/touchHaptics.ts",
+        "file:src/renderer/store/memorizeClock.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -25440,13 +25455,14 @@
       "path": "src/renderer/components/ScreenCalloutQueue.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 72,
+      "lineCount": 88,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MAJOR_MS",
         "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MINOR_MS",
+        "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_YIELD_MS",
         "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueue",
         "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps"
       ],
@@ -25604,7 +25620,7 @@
       "path": "src/renderer/components/shuffleFlipAnimation.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 230,
+      "lineCount": 233,
       "imports": [
         "file:src/renderer/components/tileShatter.ts"
       ],
@@ -25849,7 +25865,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3281,
+      "lineCount": 3309,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -31256,6 +31272,23 @@
       ]
     },
     {
+      "id": "file:src/renderer/store/memorizeClock.ts",
+      "path": "src/renderer/store/memorizeClock.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/store/memorizeClock.ts#getMemorizeClock",
+        "symbol:src/renderer/store/memorizeClock.ts#MemorizeClock",
+        "symbol:src/renderer/store/memorizeClock.ts#setMemorizeClock",
+        "symbol:src/renderer/store/memorizeClock.ts#subscribeMemorizeClock"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/store/menuSurfaceState.test.ts",
       "path": "src/renderer/store/menuSurfaceState.test.ts",
       "layer": "renderer",
@@ -31792,9 +31825,10 @@
       "path": "src/renderer/store/runTimerController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 325,
+      "lineCount": 329,
       "imports": [
         "file:src/renderer/store/activeTimer.ts",
+        "file:src/renderer/store/memorizeClock.ts",
         "file:src/renderer/store/runTimerResumeConditions.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-adapters.ts",
@@ -46399,8 +46433,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 38,
-      "endLine": 38
+      "line": 45,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
+      "name": "FLOOR_CLEAR_BEAT_EXIT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/FloorClearBeat.tsx",
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
@@ -46408,7 +46450,7 @@
       "kind": "interface",
       "file": "src/renderer/components/FloorClearBeat.tsx",
       "line": 6,
-      "endLine": 9
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
@@ -46480,7 +46522,7 @@
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
       "line": 328,
-      "endLine": 659
+      "endLine": 678
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
@@ -46631,40 +46673,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2364,
-      "endLine": 2364
+      "line": 2393,
+      "endLine": 2393
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 258,
-      "endLine": 258
+      "line": 259,
+      "endLine": 259
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 256,
-      "endLine": 256
+      "line": 257,
+      "endLine": 257
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 251,
+      "endLine": 251
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -48359,24 +48401,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 882,
-      "endLine": 882
+      "line": 885,
+      "endLine": 885
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 80,
-      "endLine": 111
+      "line": 81,
+      "endLine": 112
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 67,
-      "endLine": 78
+      "line": 68,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -49131,20 +49173,28 @@
       "endLine": 15
     },
     {
+      "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_YIELD_MS",
+      "name": "SCREEN_CALLOUT_YIELD_MS",
+      "kind": "value",
+      "file": "src/renderer/components/ScreenCalloutQueue.tsx",
+      "line": 17,
+      "endLine": 17
+    },
+    {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueue",
       "name": "ScreenCalloutQueue",
       "kind": "function",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 23,
-      "endLine": 71
+      "line": 31,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#ScreenCalloutQueueProps",
       "name": "ScreenCalloutQueueProps",
       "kind": "interface",
       "file": "src/renderer/components/ScreenCalloutQueue.tsx",
-      "line": 17,
-      "endLine": 21
+      "line": 19,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
@@ -49336,15 +49386,15 @@
       "kind": "function",
       "file": "src/renderer/components/shuffleFlipAnimation.ts",
       "line": 171,
-      "endLine": 207
+      "endLine": 210
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceRemainderXY",
       "name": "computeBoardEntranceRemainderXY",
       "kind": "function",
       "file": "src/renderer/components/shuffleFlipAnimation.ts",
-      "line": 210,
-      "endLine": 229
+      "line": 213,
+      "endLine": 232
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeShuffleMotionBudgetMs",
@@ -49551,24 +49601,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3280,
-      "endLine": 3280
+      "line": 3308,
+      "endLine": 3308
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 294,
-      "endLine": 301
+      "line": 302,
+      "endLine": 309
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 303,
-      "endLine": 307
+      "line": 311,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -55595,6 +55645,38 @@
       "endLine": 125
     },
     {
+      "id": "symbol:src/renderer/store/memorizeClock.ts#getMemorizeClock",
+      "name": "getMemorizeClock",
+      "kind": "value",
+      "file": "src/renderer/store/memorizeClock.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/store/memorizeClock.ts#MemorizeClock",
+      "name": "MemorizeClock",
+      "kind": "interface",
+      "file": "src/renderer/store/memorizeClock.ts",
+      "line": 10,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/store/memorizeClock.ts#setMemorizeClock",
+      "name": "setMemorizeClock",
+      "kind": "value",
+      "file": "src/renderer/store/memorizeClock.ts",
+      "line": 22,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/store/memorizeClock.ts#subscribeMemorizeClock",
+      "name": "subscribeMemorizeClock",
+      "kind": "value",
+      "file": "src/renderer/store/memorizeClock.ts",
+      "line": 28,
+      "endLine": 33
+    },
+    {
       "id": "symbol:src/renderer/store/menuSurfaceState.ts#createMenuSurfacePatch",
       "name": "createMenuSurfacePatch",
       "kind": "value",
@@ -56183,8 +56265,8 @@
       "name": "createRunTimerController",
       "kind": "value",
       "file": "src/renderer/store/runTimerController.ts",
-      "line": 49,
-      "endLine": 324
+      "line": 50,
+      "endLine": 328
     },
     {
       "id": "symbol:src/renderer/store/runTimerResumeConditions.ts#shouldScheduleDebugRevealTimerOnResume",
@@ -72315,7 +72397,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 116
+          "line": 117
         }
       ],
       "tests": [
@@ -72341,7 +72423,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 84
+          "line": 90
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -72426,7 +72508,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 5
+          "line": 6
         }
       ],
       "tests": [
@@ -73024,7 +73106,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 41
+          "line": 42
         }
       ],
       "tests": [
@@ -73167,7 +73249,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 14
+          "line": 15
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -73189,7 +73271,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 20
+          "line": 26
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -73609,7 +73691,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 3
+          "line": 4
         }
       ],
       "tests": [
@@ -73797,7 +73879,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 11
+          "line": 12
         }
       ],
       "tests": [
@@ -74180,7 +74262,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 17
+          "line": 18
         }
       ],
       "tests": [
@@ -74971,7 +75053,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 41
+          "line": 42
         }
       ],
       "tests": [
@@ -75165,7 +75247,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 376
+          "line": 379
         }
       ],
       "tests": [
@@ -75204,7 +75286,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 376
+          "line": 379
         }
       ],
       "tests": [
@@ -75238,7 +75320,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 376
+          "line": 379
         }
       ],
       "tests": [
@@ -75272,7 +75354,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 376
+          "line": 379
         }
       ],
       "tests": [
@@ -80830,6 +80912,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/FloorClearBeat.tsx->symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
+      "source": "file:src/renderer/components/FloorClearBeat.tsx",
+      "target": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/FloorClearBeat.tsx->symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
@@ -82873,6 +82961,12 @@
       "id": "exports:src/renderer/components/ScreenCalloutQueue.tsx->symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MINOR_MS",
       "source": "file:src/renderer/components/ScreenCalloutQueue.tsx",
       "target": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_MINOR_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/ScreenCalloutQueue.tsx->symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_YIELD_MS",
+      "source": "file:src/renderer/components/ScreenCalloutQueue.tsx",
+      "target": "symbol:src/renderer/components/ScreenCalloutQueue.tsx#SCREEN_CALLOUT_YIELD_MS",
       "kind": "exports"
     },
     {
@@ -87721,6 +87815,30 @@
       "id": "exports:src/renderer/store/matchScorePop.ts->symbol:src/renderer/store/matchScorePop.ts#MismatchScorePop",
       "source": "file:src/renderer/store/matchScorePop.ts",
       "target": "symbol:src/renderer/store/matchScorePop.ts#MismatchScorePop",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/memorizeClock.ts->symbol:src/renderer/store/memorizeClock.ts#getMemorizeClock",
+      "source": "file:src/renderer/store/memorizeClock.ts",
+      "target": "symbol:src/renderer/store/memorizeClock.ts#getMemorizeClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/memorizeClock.ts->symbol:src/renderer/store/memorizeClock.ts#MemorizeClock",
+      "source": "file:src/renderer/store/memorizeClock.ts",
+      "target": "symbol:src/renderer/store/memorizeClock.ts#MemorizeClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/memorizeClock.ts->symbol:src/renderer/store/memorizeClock.ts#setMemorizeClock",
+      "source": "file:src/renderer/store/memorizeClock.ts",
+      "target": "symbol:src/renderer/store/memorizeClock.ts#setMemorizeClock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/memorizeClock.ts->symbol:src/renderer/store/memorizeClock.ts#subscribeMemorizeClock",
+      "source": "file:src/renderer/store/memorizeClock.ts",
+      "target": "symbol:src/renderer/store/memorizeClock.ts#subscribeMemorizeClock",
       "kind": "exports"
     },
     {
@@ -108014,6 +108132,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/store/memorizeClock.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/renderer/store/memorizeClock.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/shared/contracts.ts",
@@ -108113,6 +108237,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/input/touchHaptics.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/input/touchHaptics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/store/memorizeClock.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/store/memorizeClock.ts",
       "kind": "imports"
     },
     {
@@ -114341,6 +114471,12 @@
       "id": "imports:src/renderer/store/runTimerController.ts->src/renderer/store/activeTimer.ts",
       "source": "file:src/renderer/store/runTimerController.ts",
       "target": "file:src/renderer/store/activeTimer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runTimerController.ts->src/renderer/store/memorizeClock.ts",
+      "source": "file:src/renderer/store/runTimerController.ts",
+      "target": "file:src/renderer/store/memorizeClock.ts",
       "kind": "imports"
     },
     {
@@ -130041,6 +130177,12 @@
       "id": "tested_by:src/renderer/store/matchScorePop.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/renderer/store/matchScorePop.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/memorizeClock.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/renderer/store/memorizeClock.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {

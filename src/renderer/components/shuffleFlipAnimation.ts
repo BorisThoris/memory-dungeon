@@ -177,8 +177,11 @@ export function computeBoardEntranceMotionTransform(
     rows: number,
     columns: number
 ): BoardMotionTransform {
+    // Before the window opens the cards hold where the deal starts (`BOARD_ENTRANCE_REVEAL_LEAD_MS`),
+    // rather than sitting at rest: at rest they showed for a moment and then jumped out to deal in.
+    const startMs = deadlineMs - budgetMs;
     const state = computeBoardMotionState(
-        nowMs,
+        budgetMs > 0 && nowMs < startMs ? startMs : nowMs,
         deadlineMs,
         budgetMs,
         boardOrderIndex,

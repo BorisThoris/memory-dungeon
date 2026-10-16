@@ -1,10 +1,16 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
+import { setMemorizeClock } from '../store/memorizeClock';
+
+/** What the store does once the board reports itself dealt: the study clock starts (`memorizeClock.ts`). */
+const startStudyClock = (durationMs: number): void => {
+    act(() => setMemorizeClock({ startedAt: Date.now(), durationMs }));
+};
 
 const sfxMocks = vi.hoisted(() => ({ playStudyClosingTickSfx: vi.fn() }));
 vi.mock('../audio/gameSfx', () => sfxMocks);
@@ -346,6 +352,30 @@ describe('RunShell', () => {
 });
 
 describe('RunShell — The Margin', () => {
+    afterEach(() => setMemorizeClock(null));
+
+    it('holds the study count at its full window until the store starts the clock', () => {
+        // The deal-in and the veil before it are not study time: the store starts its timer when
+        // the board reports itself dealt, and the head used to count down through them anyway.
+        vi.useFakeTimers();
+        try {
+            const base = createNewRun(0, { echoFeedbackEnabled: false });
+            const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 4000 } };
+            render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(1500);
+            });
+            expect(screen.getByTestId('hud-memorize')).toHaveTextContent('Memorize · 4');
+            startStudyClock(4000);
+            act(() => {
+                vi.advanceTimersByTime(1100);
+            });
+            expect(screen.getByTestId('hud-memorize')).toHaveTextContent('Memorize · 3');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('sets the study period on the running head as a count, and says so in the caption', () => {
         vi.useFakeTimers();
         try {
@@ -353,6 +383,7 @@ describe('RunShell — The Margin', () => {
             const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 4000 } };
             expect(run.status).toBe('memorize');
             render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+            startStudyClock(4000);
 
             const head = screen.getByTestId('hud-memorize');
             expect(head).toHaveTextContent('Memorize · 4');
@@ -381,6 +412,7 @@ describe('RunShell — The Margin', () => {
             const base = createNewRun(0, { echoFeedbackEnabled: false });
             const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 10_000 } };
             render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+            startStudyClock(10_000);
 
             const urgency = () => Number(screen.getByTestId('hud-memorize-bar').style.getPropertyValue('--memorize-urgency'));
             const closing = () => screen.getByTestId('hud-memorize-bar').getAttribute('data-closing');
@@ -419,6 +451,7 @@ describe('RunShell — The Margin', () => {
             const base = createNewRun(0, { echoFeedbackEnabled: false });
             const run: RunState = { ...base, timerState: { ...base.timerState, memorizeRemainingMs: 10_000 } };
             render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} sfxGain={0.5} tools={[]} />);
+            startStudyClock(10_000);
 
             act(() => {
                 vi.advanceTimersByTime(8_000);
@@ -461,6 +494,7 @@ describe('RunShell — The Margin', () => {
             const { rerender } = render(
                 <RunShell onPause={vi.fn()} personalBestDepth={false} run={run} sfxGain={0.5} tools={[]} />
             );
+            startStudyClock(10_000);
             for (let i = 0; i < 40; i += 1) {
                 act(() => {
                     vi.advanceTimersByTime(250);
@@ -483,6 +517,7 @@ describe('RunShell — The Margin', () => {
             rerender(
                 <RunShell onPause={vi.fn()} personalBestDepth={false} reduceMotion run={quiet} sfxGain={0.5} tools={[]} />
             );
+            startStudyClock(9_000);
             for (let i = 0; i < 40; i += 1) {
                 act(() => {
                     vi.advanceTimersByTime(250);

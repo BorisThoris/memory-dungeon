@@ -8,6 +8,7 @@ import {
 import type { GameplayPauseTimerSnapshot } from '../../shared/gameplay-core-contracts';
 import { memorizeSkipReward } from '../../shared/memorize-skip-reward-rules';
 import { getMemorizeDurationForRun } from '../../shared/scoring-rules';
+import { setMemorizeClock } from './memorizeClock';
 import {
     clearActiveTimer,
     createActiveTimer,
@@ -84,6 +85,7 @@ export const createRunTimerController = ({
     const clearMemorizeTimer = (): void => {
         clearActiveTimer(memorizeTimer);
         memorizeTimer = null;
+        setMemorizeClock(null);
     };
 
     const getMemorizeBoardKey = (run: RunState): string | null =>
@@ -133,8 +135,10 @@ export const createRunTimerController = ({
             return;
         }
 
+        setMemorizeClock({ startedAt: Date.now(), durationMs: duration });
         memorizeTimer = createActiveTimer(duration, () => {
             memorizeTimer = null;
+            setMemorizeClock(null);
             const { run } = getState();
 
             if (!run || run.status !== 'memorize') {

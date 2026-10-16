@@ -13,14 +13,22 @@ import styles from './ScreenCalloutQueue.module.css';
  */
 export const SCREEN_CALLOUT_MAJOR_MS = 1150;
 export const SCREEN_CALLOUT_MINOR_MS = 820;
+/** How fast a stamp gets out of the way of the floor-clear beat (`quiet`). */
+export const SCREEN_CALLOUT_YIELD_MS = 180;
 
 export interface ScreenCalloutQueueProps {
     callouts: readonly ScreenCallout[];
     reduceMotion: boolean;
     lowQuality?: boolean;
+    /**
+     * Something bigger owns the screen (the floor-clear beat): the stamp showing fades out fast and
+     * nothing new is stamped. The last pair's reaction ("STEAM!") used to sit printed over
+     * "FLOOR 1 CLEARED" for most of the beat (recorded 2026-10-16).
+     */
+    quiet?: boolean;
 }
 
-export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false }: ScreenCalloutQueueProps) {
+export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false, quiet = false }: ScreenCalloutQueueProps) {
     const seen = useRef<Set<string> | null>(null);
     const [showing, setShowing] = useState<ScreenCallout | null>(null);
     // The first render's callouts are the state the screen opened on, not moments to stamp.
@@ -29,8 +37,15 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
         const fresh = callouts.filter((callout) => !seen.current!.has(callout.key));
         if (fresh.length === 0) return;
         for (const callout of fresh) seen.current!.add(callout.key);
-        setShowing(fresh[0]!);
+        if (!quiet) setShowing(fresh[0]!);
+        // Read when the callouts change, not when quiet does: a beat's end must not replay a stamp.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [callouts]);
+    useEffect(() => {
+        if (!quiet || !showing) return undefined;
+        const timer = window.setTimeout(() => setShowing(null), reduceMotion ? 0 : SCREEN_CALLOUT_YIELD_MS);
+        return () => window.clearTimeout(timer);
+    }, [quiet, showing, reduceMotion]);
     useEffect(() => {
         if (!showing) return undefined;
         const timer = window.setTimeout(
@@ -51,6 +66,7 @@ export function ScreenCalloutQueue({ callouts, reduceMotion, lowQuality = false 
             data-callout-rare={showing.rare ? 'true' : 'false'}
             data-reduce-motion={reduceMotion ? 'true' : 'false'}
             data-low-quality={lowQuality ? 'true' : 'false'}
+            data-yielding={quiet ? 'true' : undefined}
             data-testid="screen-callout"
             key={showing.key}
             // How long the title is, so a place name fits on one line where a short shout stays huge.

@@ -6,18 +6,25 @@ import styles from './FloorClearBeat.module.css';
 export interface FloorClearBeatProps {
     result: LevelResult;
     personalBest: boolean;
+    /** The beat is over and the stamp is on its way out (`FLOOR_CLEAR_BEAT_EXIT_MS`): drawn, not announced. */
+    leaving?: boolean;
 }
 
+/** How long the stamp takes to leave once the next floor takes over; matches `floorClearBeatOut`. */
+export const FLOOR_CLEAR_BEAT_EXIT_MS = 320;
+
 /** A brief, unframed payout over the board while the next floor prepares. */
-const FloorClearBeat = ({ personalBest, result }: FloorClearBeatProps) => (
+const FloorClearBeat = ({ leaving = false, personalBest, result }: FloorClearBeatProps) => (
     <div
-        aria-live="polite"
+        aria-hidden={leaving ? true : undefined}
+        aria-live={leaving ? undefined : 'polite'}
         className={styles.beat}
+        data-leaving={leaving ? 'true' : undefined}
         data-personal-best={personalBest ? 'true' : undefined}
-        data-testid="floor-clear-beat"
+        data-testid={leaving ? 'floor-clear-beat-leaving' : 'floor-clear-beat'}
         data-board-overlay="floor-clear"
         data-tier={result.momentumBonusTier ?? 'none'}
-        role="status"
+        role={leaving ? undefined : 'status'}
     >
         <div className={styles.stamp}>
             <p className={styles.title} data-testid="floor-clear-title">

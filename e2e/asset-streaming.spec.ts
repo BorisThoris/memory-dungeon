@@ -18,7 +18,11 @@ test('a run plays from memory: no asset is requested and no card texture drawn a
         w.__countCanvases = false;
         const create = Document.prototype.createElement;
         Document.prototype.createElement = function (this: Document, tag: string, options?: ElementCreationOptions) {
-            if (w.__countCanvases && String(tag).toLowerCase() === 'canvas') w.__lateCanvases += 1;
+            // Not while a floor is cleared: the next floor's faces are drawn then on purpose, a few a
+            // frame under the beat (`createBoardTextureWarmupQueue`), so its first frame draws none.
+            // Six turns clear a small first floor, and every one of those canvases was counted here.
+            const status = document.querySelector('[data-testid="tile-board-frame"]')?.getAttribute('data-board-run-status');
+            if (w.__countCanvases && String(tag).toLowerCase() === 'canvas' && status !== 'levelComplete') w.__lateCanvases += 1;
             return (create as (this: Document, name: string, opts?: ElementCreationOptions) => HTMLElement).call(this, tag, options);
         } as typeof Document.prototype.createElement;
     });

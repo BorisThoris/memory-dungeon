@@ -116,6 +116,14 @@ import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextReco
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
 const BOARD_PRESTAGE_DWELL_MS = 360;
+/**
+ * How far ahead of the reveal the deal-in is armed. The veil came off in the same commit that armed
+ * it, and the WebGL scene took the new deadline a few frames later: the board showed at rest for
+ * about 160ms, then every card jumped out and dealt in (recorded 2026-10-16). Armed this far ahead,
+ * the scene is holding the deal's first pose under the veil when it lifts. It is taken out of
+ * BOARD_PRESTAGE_DWELL_MS, not added to it: the floor change is no longer than it was.
+ */
+const BOARD_ENTRANCE_REVEAL_LEAD_MS = 150;
 
 /** Decorative deck cards in the prestaging overlay (must match `--prestage-cards` in CSS math). */
 const PRESTAGE_CARD_COUNT = 8;
@@ -677,6 +685,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardAppRef = useRef<HTMLDivElement>(null);
     const shuffleClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const entranceClearTimeoutRef = useRef<number | null>(null);
+    const entranceRevealTimeoutRef = useRef<number | null>(null);
     const entranceMotionKeyRef = useRef<string | null>(null);
     const entranceReadyFrameRef = useRef<number | null>(null);
     const [shuffleAnimating, setShuffleAnimating] = useState(false);
@@ -689,6 +698,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [boardEntranceStaggerTileCount, setBoardEntranceStaggerTileCount] = useState(0);
     const [boardEntranceAnimating, setBoardEntranceAnimating] = useState(false);
     const [boardPreStage, setBoardPreStage] = useState<'dealIn' | 'idle' | 'loading'>('idle');
+    /** The board whose deal has finished (or that was shown without one); any other board is still to deal. */
+    const [settledEntranceKey, setSettledEntranceKey] = useState<string | null>(null);
     const prestageRunIdRef = useRef(0);
     const cancelBoardEntranceWork = useCallback((): void => {
         prestageRunIdRef.current += 1;
@@ -699,6 +710,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         if (entranceReadyFrameRef.current !== null) {
             window.cancelAnimationFrame(entranceReadyFrameRef.current);
             entranceReadyFrameRef.current = null;
+        }
+        if (entranceRevealTimeoutRef.current !== null) {
+            window.clearTimeout(entranceRevealTimeoutRef.current);
+            entranceRevealTimeoutRef.current = null;
         }
         entranceMotionKeyRef.current = null;
     }, []);
@@ -879,6 +894,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
     const prevBoardEntranceKeyRef = useRef<string | null>(null);
     const notifiedBoardReadyKeyRef = useRef<string | null>(null);
+    /*
+     * A new board is "loading" from the render that brings it, not from the microtask after: the
+     * stage used to read idle for that first commit, and the WebGL scene drew the new floor at rest,
+     * unveiled, for a few frames before the veil and the deal (recorded 2026-10-16).
+     */
+    const effectivePreStage: 'dealIn' | 'idle' | 'loading' =
+        !reduceMotion && boardPreStage === 'idle' && settledEntranceKey !== boardEntranceKey ? 'loading' : boardPreStage;
 
     const notifyMemorizeBoardReady = useCallback(
         (key: string): void => {
@@ -901,6 +923,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     return;
                 }
                 resetBoardEntranceMotionState();
+                setSettledEntranceKey(boardEntranceKey);
                 entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
                     entranceReadyFrameRef.current = null;
                     if (
@@ -939,13 +962,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const armEntrance = (): void => {
             const tileCountForBudget = board.tiles.filter((t) => t.state !== 'removed').length;
             const motionBudgetMs = computeBoardEntranceMotionBudgetMs(tileCountForBudget);
-            const deadline = performance.now() + motionBudgetMs;
+            const deadline = performance.now() + BOARD_ENTRANCE_REVEAL_LEAD_MS + motionBudgetMs;
 
             setBoardEntranceMotionDeadlineMs(deadline);
             setBoardEntranceMotionBudgetMs(motionBudgetMs);
             setBoardEntranceStaggerTileCount(tileCountForBudget);
             setBoardEntranceAnimating(true);
-            setBoardPreStage('dealIn');
+            const revealId = window.setTimeout(() => {
+                if (entranceMotionKeyRef.current === boardEntranceKey) setBoardPreStage('dealIn');
+            }, BOARD_ENTRANCE_REVEAL_LEAD_MS);
+            entranceRevealTimeoutRef.current = revealId;
 
             entranceMotionKeyRef.current = boardEntranceKey;
             const timeoutId = window.setTimeout(() => {
@@ -959,13 +985,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 entranceMotionKeyRef.current = null;
                 prevBoardEntranceKeyRef.current = boardEntranceKey;
                 resetBoardEntranceMotionState();
+                setSettledEntranceKey(boardEntranceKey);
                 entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
                     entranceReadyFrameRef.current = null;
                     if (prevBoardEntranceKeyRef.current === boardEntranceKey) {
                         notifyMemorizeBoardReady(boardEntranceKey);
                     }
                 });
-            }, motionBudgetMs + 100);
+            }, BOARD_ENTRANCE_REVEAL_LEAD_MS + motionBudgetMs + 100);
             entranceClearTimeoutRef.current = timeoutId;
         };
 
@@ -982,7 +1009,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
                 }),
                 new Promise<void>((resolve) => {
-                    window.setTimeout(resolve, BOARD_PRESTAGE_DWELL_MS);
+                    // The lead is spent inside the dwell, so the veil lifts when it always did.
+                    window.setTimeout(resolve, BOARD_PRESTAGE_DWELL_MS - BOARD_ENTRANCE_REVEAL_LEAD_MS);
                 }),
                 Promise.race([preloadReady, preloadTimeout])
             ]);
@@ -2972,12 +3000,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     return (
         <div
-            aria-busy={boardPreStage === 'loading'}
+            aria-busy={effectivePreStage === 'loading'}
             className={`${styles.frame} ${cameraViewportMode ? styles.frameMobileCamera : ''} ${
                 boardMotionAnimating ? styles.frameShuffleAnimating : ''
             } ${gambitPickWindowOpen && !reduceMotion ? styles.frameGambitWindow : ''}`}
             data-board-gambit-window={gambitPickWindowOpen ? 'true' : 'false'}
-            data-board-prestage={boardPreStage}
+            data-board-prestage={effectivePreStage}
             data-board-columns={board.columns}
             data-board-rows={board.rows}
             data-board-run-status={runStatus}
@@ -3182,7 +3210,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 stays visible, reload the page or update GPU drivers.
                             </div>
                         ) : null}
-                        {boardPreStage === 'loading' && baselineWebGl && !gpuSurfaceLost ? (
+                        {effectivePreStage === 'loading' && baselineWebGl && !gpuSurfaceLost ? (
                             <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} />
                         ) : null}
                         <TileBoardErrorBoundary fallback={sceneErrorFallback}>

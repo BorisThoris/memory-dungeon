@@ -10,6 +10,7 @@ import {
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
+    type LevelResult,
     type RealmId,
     type RunState
 } from '../../shared/contracts';
@@ -101,7 +102,7 @@ import { profileDeepestFloor } from '../../shared/profile-deepest-floor';
 import { describeRunModeIdentity } from '../../shared/run-mode-identity';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
-import FloorClearBeat from './FloorClearBeat';
+import FloorClearBeat, { FLOOR_CLEAR_BEAT_EXIT_MS } from './FloorClearBeat';
 import OverlayModal from './OverlayModal';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
@@ -1333,6 +1334,32 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         };
     }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
 
+    /*
+     * The stamp's exit. The beat used to vanish in one frame as the next board arrived (recorded
+     * 2026-10-16: "FLOOR 1 CLEARED +550" on one frame, an empty room on the next); the last stamp
+     * is kept for FLOOR_CLEAR_BEAT_EXIT_MS and lifts away while the next floor deals in.
+     */
+    const shownFloorClearRef = useRef<{ result: LevelResult; personalBest: boolean } | null>(null);
+    const [leavingFloorClear, setLeavingFloorClear] = useState<{ result: LevelResult; personalBest: boolean } | null>(null);
+    if (floorClearBeatShown && run.lastLevelResult) {
+        shownFloorClearRef.current = {
+            result: run.lastLevelResult,
+            personalBest: run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)
+        };
+    }
+    useEffect(() => {
+        if (floorClearBeatShown) {
+            setLeavingFloorClear(null);
+            return undefined;
+        }
+        const last = shownFloorClearRef.current;
+        if (!last || reduceMotion) return undefined;
+        shownFloorClearRef.current = null;
+        setLeavingFloorClear(last);
+        const timer = window.setTimeout(() => setLeavingFloorClear(null), FLOOR_CLEAR_BEAT_EXIT_MS);
+        return () => window.clearTimeout(timer);
+    }, [floorClearBeatShown, reduceMotion]);
+
     const nextFloorIdentity = nextFloorPreview
         ? getFloorIdentityContract({
               floorTag: nextFloorPreview.floorTag,
@@ -1889,7 +1916,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             <div aria-hidden="true" className={styles.comboAura} data-combo-stage={comboHeatLevelsNow.stage} data-combo-theme={comboTemper.id} data-testid="combo-aura" />
             {/* The Zone's veil: time stopped, the room held in a cold light until the resolve. */}
             <div aria-hidden="true" className={styles.zoneVeil} data-testid="zone-veil" data-zone={isZoneActive(run) ? 'true' : 'false'} />
-            <ScreenCalloutQueue callouts={stampCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} />
+            <ScreenCalloutQueue callouts={stampCallouts} reduceMotion={reduceMotion} lowQuality={settingsGraphicsQuality === 'low'} quiet={floorClearBeatShown} />
             <ItemDropPopup onShow={playDropSting} reduceMotion={reduceMotion} />
             {/* The wipe: drawn frames of ink across the screen on the way into the shop and out of it. */}
             {/* The ice sheet over the whole screen on a frost run; its variables are the room's. */}
@@ -2014,6 +2041,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
                                 />
+                            ) : leavingFloorClear ? (
+                                <FloorClearBeat leaving personalBest={leavingFloorClear.personalBest} result={leavingFloorClear.result} />
                             ) : null}
                             <MemoTileBoard
                                 ref={tileBoardRef}
