@@ -71,3 +71,16 @@
     .title { font-size: 1.8rem; }
     .score { font-size: 2.8rem; }
 }
+
+/* The payout's final figure, for the live region; the counting one beside it is for the eye. */
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}

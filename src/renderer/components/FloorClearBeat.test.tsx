@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import type { LevelResult } from '../../shared/contracts';
 import FloorClearBeat from './FloorClearBeat';
 
@@ -19,6 +19,24 @@ const result: LevelResult = {
 };
 
 describe('FloorClearBeat', () => {
+    it('counts the payout up for the eye while the live region carries the final figure', () => {
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'performance'] });
+        try {
+            render(<FloorClearBeat countUp personalBest={false} result={result} />);
+            const score = screen.getByTestId('floor-clear-score');
+            const counting = score.querySelector('[aria-hidden="true"]')!;
+            // The figure a screen reader is given is the final one from the first frame.
+            expect(score).toHaveTextContent('+2,400');
+            expect(counting).toHaveTextContent('+0');
+            act(() => {
+                vi.advanceTimersByTime(1200);
+            });
+            expect(counting).toHaveTextContent('+2,400');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('shows only the floor and payout, with nothing to press', () => {
         render(<FloorClearBeat personalBest={false} result={result} />);
         const beat = screen.getByTestId('floor-clear-beat');

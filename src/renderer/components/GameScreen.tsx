@@ -2039,6 +2039,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             <div className={styles.boardGlow} aria-hidden="true" />
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
+                                    countUp={!reduceMotion}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
                                 />
