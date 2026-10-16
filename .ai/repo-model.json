@@ -10767,8 +10767,8 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 2995,
-      "sha256": "2c87fb436c32744f06814289dcc3736dfc25bd2d2143228aeffd8fc970104cee"
+      "bytes": 3627,
+      "sha256": "ad01c69a1715af0837b84bc6415e1e982e075b4f9e5eda1cc0a3222a1cc7718a"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",

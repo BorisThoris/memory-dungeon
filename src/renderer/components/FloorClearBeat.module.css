@@ -12,10 +12,26 @@
 }
 
 .stamp {
+    position: relative;
+    isolation: isolate;
     max-width: 100%;
     font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
     text-shadow: 0 2px 4px #131111, 0 0 20px #131111;
     animation: floorClearBeatIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/*
+ * A pool of dark under the words, not a plate: on a phone the board sits right behind the stamp, and
+ * the last pair burning there ran its flames and ash through "FLOOR 1 CLEARED" (recorded 2026-10-16).
+ * A soft radial falloff a little larger than the text keeps it legible over anything, with no edge.
+ */
+.stamp::before {
+    content: '';
+    position: absolute;
+    inset: -2.4rem -3.2rem;
+    z-index: -1;
+    background: radial-gradient(ellipse closest-side at 50% 50%, rgba(12, 10, 10, 0.62) 0%, rgba(12, 10, 10, 0.38) 55%, transparent 100%);
+    pointer-events: none;
 }
 
 .title {
