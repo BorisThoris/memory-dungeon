@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, type RefObject } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
-import { boardFitFrame, responsiveBoardColumns } from '../components/tileBoardResponsiveLayout';
+import { boardFitFrame, rememberBoardFit, responsiveBoardColumns } from '../components/tileBoardResponsiveLayout';
 import { canReflowRunBoard } from '../../shared/board-layout-rules';
 import { useAppStore } from '../store/useAppStore';
 
@@ -29,6 +29,7 @@ export const useResponsiveBoardLayout = (shellRef: RefObject<HTMLElement | null>
             const fit = boardFitFrame(rect, hud?.getBoundingClientRect().bottom ?? rect.top, dock?.getBoundingClientRect().top ?? rect.bottom, shell.querySelector('[data-testid="hud-chain"]')?.getBoundingClientRect());
             const compact = window.innerWidth <= VIEWPORT_MOBILE_MAX || isNarrowShortLandscapeForMenuStack(window.innerWidth, window.innerHeight);
             const columns = responsiveBoardColumns(current.board.tiles.length, rect.width * fit.widthFraction, rect.height * fit.heightFraction, compact);
+            rememberBoardFit({ width: rect.width * fit.widthFraction, height: rect.height * fit.heightFraction, compact });
             applied.current = key;
             state.reflowBoard(columns);
         };

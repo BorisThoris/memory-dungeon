@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { boardFitFrame, boardGridWorldSize, responsiveBoardColumns } from './tileBoardResponsiveLayout';
+import { boardFitFrame, boardGridWorldSize, predictReflowedBoardShape, rememberBoardFit, responsiveBoardColumns } from './tileBoardResponsiveLayout';
 import { getBoardFitZoom, createFittedBoardViewport, isBoardViewportAtRest, carryBoardViewportForward } from './tileBoardViewport';
 
 describe('responsive board layout', () => {
@@ -49,5 +49,25 @@ describe('responsive board layout', () => {
             previousMetrics: { boardWidth: 200, boardHeight: 500, viewportWidth: 390, viewportHeight: 800, fitZoom: zoom, fitPanY },
             nextMetrics: { boardWidth: 200, boardHeight: 500, viewportWidth: 390, viewportHeight: 800, fitZoom: 1, fitPanY: -20 } });
         expect(carried).toEqual(createFittedBoardViewport(1, -20));
+    });
+});
+
+describe('predicting the shape a new floor is reflowed to', () => {
+    const dealt = { columns: 4, rows: 3, tiles: Array.from({ length: 12 }, (_, index) => index) };
+
+    it('keeps the dealt shape until a fit has been measured', () => {
+        rememberBoardFit(null);
+        expect(predictReflowedBoardShape(dealt)).toBe(dealt);
+    });
+
+    it('gives the shape the reflow will pick for the last fit, so faces are baked for the board that appears', () => {
+        const fit = { width: 1300, height: 450, compact: false };
+        rememberBoardFit(fit);
+        const columns = responsiveBoardColumns(12, fit.width, fit.height, fit.compact);
+        const predicted = predictReflowedBoardShape(dealt);
+        expect(predicted.columns).toBe(columns);
+        expect(predicted.rows).toBe(Math.ceil(12 / columns));
+        expect(predicted.tiles).toBe(dealt.tiles);
+        rememberBoardFit(null);
     });
 });

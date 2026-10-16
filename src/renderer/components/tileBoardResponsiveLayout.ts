@@ -27,6 +27,24 @@ export const responsiveBoardColumns = (count: number, width: number, height: num
 };
 
 /** A centered camera wastes space when the HUD and dock have different heights. */
+/**
+ * The frame the board on screen was last reflowed to (`useResponsiveBoardLayout`). A new floor is
+ * dealt in its natural shape and reflowed to this frame as it mounts, so anything prepared for it
+ * ahead of time - the next floor's card faces, baked during the clear - must use the shape it will
+ * be reflowed to, or it prepares a board that never appears.
+ */
+let lastBoardFit: { width: number; height: number; compact: boolean } | null = null;
+export const rememberBoardFit = (fit: { width: number; height: number; compact: boolean } | null): void => {
+    lastBoardFit = fit;
+};
+/** The shape a board will take once reflowed to the last fit (unchanged if none was measured). */
+export const predictReflowedBoardShape = <B extends { columns: number; rows: number; tiles: readonly unknown[] }>(board: B): B => {
+    if (!lastBoardFit || board.tiles.length < 1) return board;
+    const columns = responsiveBoardColumns(board.tiles.length, lastBoardFit.width, lastBoardFit.height, lastBoardFit.compact);
+    const rows = Math.ceil(board.tiles.length / columns);
+    return columns === board.columns && rows === board.rows ? board : { ...board, columns, rows };
+};
+
 export const boardFitFrame = (
     stage: Pick<DOMRect, 'top' | 'bottom' | 'height' | 'left' | 'right' | 'width'>,
     hudBottom: number,

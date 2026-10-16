@@ -82,6 +82,7 @@ import { getTileBoardCardWindow } from './tileBoardCardWindow';
 import { DistantCards } from './DistantCards';
 import { reserveTileTextureCards, retainTileTextureWorkingSet, setCurrentTileFaceHeight } from './tileTextures';
 import { cardFaceHeightFor, currentCardFaceView } from './cardFaceDetail';
+import { predictReflowedBoardShape } from './tileBoardResponsiveLayout';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -241,12 +242,14 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * transition, rather than on its first reveal, first match and first miss (`tileTextureWarmup`).
      */
     const warmedFloorRef = useRef<string | null>(null);
-    // The floor's face detail, chosen once per board from how large its cards stand on screen; a
-    // pinch or a resize mid-floor does not re-bake every face (`cardFaceDetail.ts`).
+    // The floor's face detail, chosen once per floor from how large its cards stand on screen; a
+    // pinch, a resize or the reflow a new floor gets as it mounts does not re-bake every face
+    // (`cardFaceDetail.ts`). Judged on the shape the board is reflowed to, as the clear's warm-up
+    // judged it, so the faces baked then are the ones used.
     const faceHeight = useMemo(
-        () => cardFaceHeightFor(board, currentCardFaceView()),
+        () => cardFaceHeightFor(predictReflowedBoardShape(board), currentCardFaceView()),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [board.level, board.columns, board.rows, board.colossus?.form]
+        [board.level, board.tiles.length, board.colossus?.form]
     );
     useLayoutEffect(() => () => {
         warmedFloorRef.current = null;
@@ -290,7 +293,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         if (!run || run.status !== 'levelComplete') return undefined;
         let nextBoard: BoardState | null = null;
         try {
-            nextBoard = advanceToNextLevel(run).board;
+            // In the shape it will be reflowed to as it mounts, so its faces are baked at its own detail.
+            const dealt = advanceToNextLevel(run).board;
+            nextBoard = dealt ? predictReflowedBoardShape(dealt) : null;
         } catch {
             return undefined;
         }
