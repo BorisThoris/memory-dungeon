@@ -294,3 +294,98 @@
     .meteorCallout { padding: 0.5rem; gap: 0.4rem 0.6rem; }
     .meteorCopy p { font-size: 0.75rem; }
 }
+
+/*
+ * A phone, either way up (`INVENTORY_TABS_MAX_WIDTH` / `_HEIGHT` in the component): one section to
+ * a page under a row of tabs, so nothing scrolls. The tabs are Profile's ledger tabs.
+ */
+.tabbed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tabs {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0 1.2rem;
+    border-bottom: 1px solid var(--margin-hairline);
+}
+
+.tab {
+    min-height: 44px;
+    margin-bottom: -1px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--margin-paper-dim);
+    font-family: var(--margin-body-font);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.tab:hover,
+.tab:focus-visible {
+    color: var(--margin-paper);
+    outline: none;
+}
+
+.tab[data-selected='true'] {
+    border-bottom-color: var(--margin-gold);
+    color: var(--margin-gold);
+}
+
+.tabPanel {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* A page is the section alone: the panel's own frame and padding are the tabs' to lose. */
+.tabPanel > *,
+.tabPanel > * > * {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Sideways: the upgrades and the charges read two abreast, the meteor beside its counts. */
+@media (orientation: landscape) {
+    /* The title keeps the gold; the line explaining it is the 30px the second row of upgrades needs. */
+    .tabPanel .upgradesNote {
+        display: none;
+    }
+
+    .tabPanel .chips {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.35rem 1rem;
+    }
+
+    .tabPanel .supplies .section {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        grid-template-rows: auto 1fr;
+        gap: 0.4rem 1rem;
+    }
+
+    .tabPanel .supplies .sectionTitle {
+        grid-column: 1 / -1;
+    }
+
+    .tabPanel .charges {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+    }
+
+    .tabPanel .chargeRow {
+        min-height: 2rem;
+        padding: 0.2rem 0.5rem;
+    }
+}

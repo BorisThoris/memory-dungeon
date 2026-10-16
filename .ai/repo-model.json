@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3178,
+    "trackedFileCount": 3179,
     "codeFileCount": 1192,
     "exportedSymbolCount": 3760,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10043
+    "relationshipCount": 10044
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d2f325b510cc457ee85ea58613e1f02ba9fa546b17dec5c108ea5b00f13cac65"
+      "sha256": "bafa1602223ac8f5c5206ed44ed015a0db692dacb94145121db69855da78bfcc"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4271,6 +4271,12 @@
       "category": "test",
       "bytes": 1041,
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
+    },
+    {
+      "path": "e2e/zz-transition-video.spec.ts",
+      "category": "test",
+      "bytes": 1372,
+      "sha256": "992506ab3fdf4398e7359cd80ba0c14bf53897a6d46d3790c65efa53dfdfc875"
     },
     {
       "path": "eslint.config.mjs",
@@ -10527,8 +10533,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 22345,
-      "sha256": "235bd55f19ae42cdc457603b909161419ab5b4001a42f1ed1fb97269ece2623c"
+      "bytes": 22814,
+      "sha256": "de4464044fefbaf55bc8ad8148cdb93c674169fa8bb0c044f28ade686d042303"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -10989,8 +10995,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 6981,
-      "sha256": "4a7deee84367eedb23ef03da9a54a1548c8f4dfe14ff561b91417f70ebecbc00"
+      "bytes": 9140,
+      "sha256": "00e5b528f1123a489b8253930d885846afed3c11fec28fd1846644659d13668d"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -11001,8 +11007,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 9646,
-      "sha256": "cf2bd777cab20632b80cd6795448e6e144e47169bc66ddd93a12a3edf91bcb7c"
+      "bytes": 12225,
+      "sha256": "6dd2dc499a75a45f4a939951600b4854dd6e16684445f91b81a9d6dcd3ad4696"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -23684,12 +23690,13 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 187,
+      "lineCount": 251,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/components/metaStackedShellLayout.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
+        "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/game-catalog.ts",
@@ -46984,8 +46991,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 186,
-      "endLine": 186
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -106660,6 +106667,12 @@
       "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/hooks/useEscapeLeaves.ts",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/hooks/useViewportSize.ts",
+      "source": "file:src/renderer/components/InventoryScreen.tsx",
+      "target": "file:src/renderer/hooks/useViewportSize.ts",
       "kind": "imports"
     },
     {

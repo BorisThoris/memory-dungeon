@@ -749,6 +749,18 @@
     min-height: 0;
 }
 
+/*
+ * A phone held sideways: two 16rem columns stacked Pacing under the camp picker and ran Wild and
+ * "Do not record this run" 81px past a 210px body, which scrolled. Three narrower columns - camp,
+ * vows, pacing - leave each group its own height, and the tallest (pacing) is about 170px.
+ */
+@media (max-height: 480px) and (orientation: landscape) {
+    .setupGroups {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem 1.25rem;
+    }
+}
+
 .setupGroup {
     display: flex;
     flex-direction: column;

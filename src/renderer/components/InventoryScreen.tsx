@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
-import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
+import { useViewportSize } from '../hooks/useViewportSize';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
@@ -34,8 +35,29 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id: 'undo_charge', label: 'Undo this floor' }
 ];
 
+/**
+ * A phone, either way up, cannot show the three sections at once: sideways the body is 231px and
+ * the two columns asked about 380 each, so the body scrolled and the fit contract failed it. There
+ * the run's Inventory is tabs, one section to a page, charges first - the actions a player opens it
+ * for mid-run. A window this short or narrow gets them; everything else keeps the two columns.
+ */
+const INVENTORY_TABS_MAX_WIDTH = 600;
+const INVENTORY_TABS_MAX_HEIGHT = 560;
+type InventoryTab = 'charges' | 'upgrades' | 'mutators';
+const INVENTORY_TAB_LABEL: Readonly<Record<InventoryTab, string>> = {
+    charges: 'Charges',
+    upgrades: 'Upgrades',
+    mutators: 'Mutators'
+};
+
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
+    const [tab, setTab] = useState<InventoryTab>('charges');
+    const { height: viewportHeight, width: viewportWidth } = useViewportSize();
+    const tabbed =
+        stackedOnGameplay &&
+        ((viewportWidth > 0 && viewportWidth <= INVENTORY_TABS_MAX_WIDTH) ||
+            (viewportHeight > 0 && viewportHeight <= INVENTORY_TABS_MAX_HEIGHT));
     const { closeSubscreen, run, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
@@ -95,6 +117,77 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         `Score ${run.stats.totalScore.toLocaleString()}`
     ].join(' · ');
 
+    const upgradesSection = usesCampUpgrades(run) ? (
+        <Panel className={panelClassName} padding="lg" variant="default">
+            <section aria-label="Run upgrades" className={styles.section}>
+                <h2 className={styles.sectionTitle}>Run upgrades · {runGold(run)} gold</h2>
+                <p className={styles.upgradesNote}>Gold buys automatic upgrades every 3 floors.</p>
+                <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
+                    <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
+                    <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
+                </li>)}</ul>
+            </section>
+        </Panel>
+    ) : null;
+    const mutatorsSection = (
+        <MetaFrame data-testid="inventory-meta-frame-mutators">
+            <Panel className={panelClassName} padding="lg" variant="default">
+                <section aria-labelledby="inventory-mutators-title" className={styles.section}>
+                    <h2 className={styles.sectionTitle} id="inventory-mutators-title">
+                        Mutators
+                    </h2>
+                    {run.activeMutators.length > 0 ? (
+                        <ul className={styles.chips}>
+                            {run.activeMutators.map((id) => {
+                                const def = MUTATOR_CATALOG[id];
+                                return (
+                                    <li className={styles.chip} key={id} title={def?.description}>
+                                        <strong>{def?.title ?? id}</strong>
+                                        {def?.description ? <span>{def.description}</span> : null}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    ) : (
+                        <p className={styles.empty}>{getUiStateCopy('inventory_no_mutators').message}</p>
+                    )}
+                </section>
+            </Panel>
+        </MetaFrame>
+    );
+    const suppliesSection = (
+        <Panel className={`${panelClassName} ${styles.supplies}`} padding="lg" variant="default">
+            <section aria-labelledby="inventory-charges-title" className={styles.section} data-testid="inventory-charges-panel">
+                <h2 className={styles.sectionTitle} id="inventory-charges-title">
+                    Charges and tokens
+                </h2>
+                <div className={styles.meteorCallout}>
+                    <span className={styles.meteorGlyph} aria-hidden="true">☄</span>
+                    <div className={styles.meteorCopy}>
+                        <strong>Meteor strike</strong>
+                        <p>Collect shards, then choose a target.</p>
+                    </div>
+                    <UiButton type="button" variant="primary" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
+                        onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
+                </div>
+                <dl className={styles.charges}>
+                    {CHARGE_ROWS.map((row) => (
+                        <div className={styles.chargeRow} key={row.id}>
+                            <dt>{row.label}</dt>
+                            <dd>{quantities.get(row.id) ?? 0}</dd>
+                        </div>
+                    ))}
+                    <div className={styles.chargeRow}>
+                        <dt>Match score multiplier</dt>
+                        <dd>{run.matchScoreMultiplier.toFixed(2)}&times;</dd>
+                    </div>
+                </dl>
+            </section>
+        </Panel>
+    );
+    const tabs: InventoryTab[] = upgradesSection ? ['charges', 'upgrades', 'mutators'] : ['charges', 'mutators'];
+    const shownTab = tabs.includes(tab) ? tab : 'charges';
+
     return (
         <section aria-label="Inventory" className={shellClassName} role="region">
             <header className={metaStyles.header} data-testid="inventory-meta-frame-run">
@@ -112,73 +205,44 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 </UiButton>
             </header>
 
-            <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.columns}`}>
-                <div className={styles.main}>
-                    {usesCampUpgrades(run) ? <Panel className={panelClassName} padding="lg" variant="default">
-                        <section aria-label="Run upgrades" className={styles.section}>
-                            <h2 className={styles.sectionTitle}>Run upgrades · {runGold(run)} gold</h2>
-                            <p>Gold buys automatic upgrades every 3 floors.</p>
-                            <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
-                                <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
-                                <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
-                            </li>)}</ul>
-                        </section>
-                    </Panel> : null}
-                    <MetaFrame data-testid="inventory-meta-frame-mutators">
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <section aria-labelledby="inventory-mutators-title" className={styles.section}>
-                                <h2 className={styles.sectionTitle} id="inventory-mutators-title">
-                                    Mutators
-                                </h2>
-                                {run.activeMutators.length > 0 ? (
-                                    <ul className={styles.chips}>
-                                        {run.activeMutators.map((id) => {
-                                            const def = MUTATOR_CATALOG[id];
-                                            return (
-                                                <li className={styles.chip} key={id} title={def?.description}>
-                                                    <strong>{def?.title ?? id}</strong>
-                                                    {def?.description ? <span>{def.description}</span> : null}
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                ) : (
-                                    <p className={styles.empty}>{getUiStateCopy('inventory_no_mutators').message}</p>
-                                )}
-                            </section>
-                        </Panel>
-                    </MetaFrame>
+            {tabbed ? (
+                <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.tabbed}`} data-testid="inventory-tabbed">
+                    <div aria-label="Inventory sections" className={styles.tabs} role="tablist">
+                        {tabs.map((id) => (
+                            <button
+                                aria-controls={`inventory-tab-panel-${id}`}
+                                aria-selected={shownTab === id}
+                                className={styles.tab}
+                                data-selected={shownTab === id}
+                                data-testid={`inventory-tab-${id}`}
+                                id={`inventory-tab-${id}`}
+                                key={id}
+                                onClick={() => {
+                                    resumeUiSfxContext();
+                                    playUiClickSfx(uiGain);
+                                    setTab(id);
+                                }}
+                                role="tab"
+                                type="button"
+                            >
+                                {INVENTORY_TAB_LABEL[id]}
+                            </button>
+                        ))}
+                    </div>
+                    <div aria-labelledby={`inventory-tab-${shownTab}`} className={styles.tabPanel} id={`inventory-tab-panel-${shownTab}`} role="tabpanel">
+                        {shownTab === 'charges' ? suppliesSection : shownTab === 'upgrades' ? upgradesSection : mutatorsSection}
+                    </div>
                 </div>
+            ) : (
+                <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.columns}`}>
+                    <div className={styles.main}>
+                        {upgradesSection}
+                        {mutatorsSection}
+                    </div>
 
-                <Panel className={`${panelClassName} ${styles.supplies}`} padding="lg" variant="default">
-                    <section aria-labelledby="inventory-charges-title" className={styles.section} data-testid="inventory-charges-panel">
-                        <h2 className={styles.sectionTitle} id="inventory-charges-title">
-                            Charges and tokens
-                        </h2>
-                        <div className={styles.meteorCallout}>
-                            <span className={styles.meteorGlyph} aria-hidden="true">☄</span>
-                            <div className={styles.meteorCopy}>
-                                <strong>Meteor strike</strong>
-                                <p>Collect shards, then choose a target.</p>
-                            </div>
-                            <UiButton type="button" variant="primary" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
-                                onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
-                        </div>
-                        <dl className={styles.charges}>
-                            {CHARGE_ROWS.map((row) => (
-                                <div className={styles.chargeRow} key={row.id}>
-                                    <dt>{row.label}</dt>
-                                    <dd>{quantities.get(row.id) ?? 0}</dd>
-                                </div>
-                            ))}
-                            <div className={styles.chargeRow}>
-                                <dt>Match score multiplier</dt>
-                                <dd>{run.matchScoreMultiplier.toFixed(2)}&times;</dd>
-                            </div>
-                        </dl>
-                    </section>
-                </Panel>
-            </div>
+                    {suppliesSection}
+                </div>
+            )}
         </section>
     );
 };
