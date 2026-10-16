@@ -17,6 +17,11 @@ export const FLOOR_CLEAR_COPY = {
     titleLine: (level: number): string => `Floor ${runNonNegativeInteger(level)} cleared`,
     /** The marker when the cleared floor is deeper than any the profile has seen. */
     personalBest: 'New deepest floor',
+    /**
+     * `Onward to the Thunder Spire`: the realm the next floor opens in, named as its room fades in
+     * behind the beat - only when it is another realm than this one.
+     */
+    onwardLine: (place: string): string => `Onward to ${place.replace(/^The /u, 'the ')}`,
     /** `+1,234`: what the floor paid, bonus included. */
     scoreLine: (scoreGained: number): string => `+${runNonNegativeInteger(scoreGained).toLocaleString()}`,
     runTotalLine: (totalScore: number): string => `Run total ${runNonNegativeInteger(totalScore).toLocaleString()}`,

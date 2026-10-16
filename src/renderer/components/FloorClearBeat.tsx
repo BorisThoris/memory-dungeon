@@ -10,6 +10,8 @@ export interface FloorClearBeatProps {
     leaving?: boolean;
     /** Count the payout up as the stamp lands (off under reduced motion, and for the leaving copy). */
     countUp?: boolean;
+    /** The next floor's realm, when it is another one: named as its room crossfades in behind the beat. */
+    nextPlace?: string | null;
 }
 
 /** The payout counts up over this, after the stamp has landed (`floorClearBeatIn`, 320ms). */
@@ -42,7 +44,7 @@ const useCountUp = (target: number, enabled: boolean): number => {
 export const FLOOR_CLEAR_BEAT_EXIT_MS = 320;
 
 /** A brief, unframed payout over the board while the next floor prepares. */
-const FloorClearBeat = ({ countUp = false, leaving = false, personalBest, result }: FloorClearBeatProps) => {
+const FloorClearBeat = ({ countUp = false, leaving = false, nextPlace = null, personalBest, result }: FloorClearBeatProps) => {
     const shownScore = useCountUp(result.scoreGained, countUp && !leaving);
     return (
     <div
@@ -67,6 +69,11 @@ const FloorClearBeat = ({ countUp = false, leaving = false, personalBest, result
             {personalBest ? (
                 <p className={styles.personalBest} data-testid="floor-clear-personal-best">
                     {FLOOR_CLEAR_COPY.personalBest}
+                </p>
+            ) : null}
+            {nextPlace ? (
+                <p className={styles.onward} data-testid="floor-clear-onward">
+                    {FLOOR_CLEAR_COPY.onwardLine(nextPlace)}
                 </p>
             ) : null}
         </div>

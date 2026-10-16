@@ -10767,20 +10767,20 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 2415,
-      "sha256": "710ecb6a2bbd1362e33fff3783c8fa004bd12c3b082d934a01da948f6da53817"
+      "bytes": 2995,
+      "sha256": "2c87fb436c32744f06814289dcc3736dfc25bd2d2143228aeffd8fc970104cee"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "category": "test",
-      "bytes": 4411,
-      "sha256": "6a9792f38f3038868e88fa1c5358509c3b4a32bef82ba21e7df2ff121759cd58"
+      "bytes": 4904,
+      "sha256": "ebb71439d133eb915857a873768bd7f51167ee4710630fea545df2a563b424ac"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 3393,
-      "sha256": "f88c9914f25dba593e5d979d855d00b4a8fa1e1aac35331ac70053d90d9eb762"
+      "bytes": 3760,
+      "sha256": "e637c6643bf44dd87056e94048d08887028c1ec876f47769532df1e0e9c45709"
     },
     {
       "path": "src/renderer/components/FloorJourney.module.css",
@@ -10905,8 +10905,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 121774,
-      "sha256": "7864ac8211ade50ae84f76d063d096b9624856e591f2b51e8868905fcfadea7c"
+      "bytes": 121931,
+      "sha256": "bd919186240ad84b43ee866d7722cdc65b74419da3bc1a5163a7c3bd70a20198"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -12819,8 +12819,8 @@
     {
       "path": "src/renderer/copy/floorClearChain.ts",
       "category": "source",
-      "bytes": 2419,
-      "sha256": "30879caf0c019bd4368c602110439e9b108bafefd2d73190f52fd872df3244b7"
+      "bytes": 2696,
+      "sha256": "6581a46fc81cff371fda383ffd30a824767890fd1456d630314dcfe094ee7c93"
     },
     {
       "path": "src/renderer/copy/floorCurioBeat.test.ts",
@@ -23018,7 +23018,7 @@
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 92,
+      "lineCount": 99,
       "imports": [
         "file:src/renderer/components/FloorClearBeat.tsx",
         "file:src/shared/contracts.ts"
@@ -23031,7 +23031,7 @@
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 85,
       "imports": [
         "file:src/renderer/copy/floorClearChain.ts",
         "file:src/shared/contracts.ts"
@@ -23394,7 +23394,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2400,
+      "lineCount": 2401,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -28956,7 +28956,7 @@
       "path": "src/renderer/copy/floorClearChain.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 47,
+      "lineCount": 52,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -46463,24 +46463,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 77,
-      "endLine": 77
+      "line": 84,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
       "name": "FLOOR_CLEAR_BEAT_EXIT_MS",
       "kind": "value",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 42,
-      "endLine": 42
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_COUNT_UP_MS",
       "name": "FLOOR_CLEAR_COUNT_UP_MS",
       "kind": "value",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 16,
-      "endLine": 16
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
@@ -46488,7 +46488,7 @@
       "kind": "interface",
       "file": "src/renderer/components/FloorClearBeat.tsx",
       "line": 6,
-      "endLine": 13
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
@@ -46711,8 +46711,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2399,
-      "endLine": 2399
+      "line": 2400,
+      "endLine": 2400
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -53360,7 +53360,7 @@
       "kind": "value",
       "file": "src/renderer/copy/floorClearChain.ts",
       "line": 15,
-      "endLine": 46
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/copy/floorCurioBeat.ts#codexResidentDescription",

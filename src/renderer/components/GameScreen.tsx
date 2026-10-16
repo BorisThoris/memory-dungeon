@@ -129,7 +129,7 @@ import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
-import { nextFloorRealmDoor, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { nextFloorRealmDoor, REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { realmRoomPlateUrls } from './realmRoomArt';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
@@ -2040,6 +2040,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
                                     countUp={!reduceMotion}
+                                    nextPlace={nextRoomDoor && nextRoomDoor.realmId !== runRealmId(run) ? REALMS[nextRoomDoor.realmId].place : null}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
                                 />

@@ -72,6 +72,26 @@
     .score { font-size: 2.8rem; }
 }
 
+/* The next realm, under the payout: quieter than the score, arriving after it. */
+.onward {
+    margin: 0.65rem 0 0;
+    font-family: var(--margin-body-font, 'Lora', Georgia, serif);
+    font-size: 0.85rem;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    color: var(--margin-paper-soft, #d8cfc4);
+    animation: floorClearOnwardIn 420ms ease-out 520ms both;
+}
+
+@keyframes floorClearOnwardIn {
+    from { opacity: 0; transform: translateY(0.35rem); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .onward { animation: none; }
+}
+
 /* The payout's final figure, for the live region; the counting one beside it is for the eye. */
 .srOnly {
     position: absolute;

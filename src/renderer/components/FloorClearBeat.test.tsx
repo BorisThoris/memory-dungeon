@@ -19,6 +19,13 @@ const result: LevelResult = {
 };
 
 describe('FloorClearBeat', () => {
+    it('names the realm the next floor opens in, and says nothing when it stays', () => {
+        const { rerender } = render(<FloorClearBeat nextPlace="The Thunder Spire" personalBest={false} result={result} />);
+        expect(screen.getByTestId('floor-clear-onward')).toHaveTextContent('Onward to the Thunder Spire');
+        rerender(<FloorClearBeat nextPlace={null} personalBest={false} result={result} />);
+        expect(screen.queryByTestId('floor-clear-onward')).toBeNull();
+    });
+
     it('counts the payout up for the eye while the live region carries the final figure', () => {
         vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'performance'] });
         try {
