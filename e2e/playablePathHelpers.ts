@@ -218,6 +218,11 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
         await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 30_000 });
         return;
     }
+    if (id === 'floorClearWithRouteChoices') {
+        // Arrived when the beat is up (held, in the fit contract) or the run has already moved on.
+        await expect(page.getByTestId('floor-clear-beat').or(page.getByTestId('game-hud')).first()).toBeVisible({ timeout: 30_000 });
+        return;
+    }
     await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
 }
 

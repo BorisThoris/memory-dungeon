@@ -3165,7 +3165,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     onKeyDown={handleBoardApplicationKeyDown}
                     ref={boardAppRef}
                     role="application"
-                    tabIndex={0}
+                    // A cleared floor has nothing to press, and its beat and route choice sit over
+                    // the board: Tab goes to those, not to a board under them.
+                    tabIndex={runStatus === 'levelComplete' ? -1 : 0}
                 >
                     <div
                         className={styles.stage}

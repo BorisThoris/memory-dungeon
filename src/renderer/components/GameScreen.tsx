@@ -1295,7 +1295,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         let last: number | null = null;
         let frame = 0;
         const afterBeat = continueToNextLevel;
+        // Dev only: the fit contract holds the beat to measure it, rather than racing its 1.6s.
+        const held = (): boolean =>
+            import.meta.env.DEV && (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat === true;
         const tick = (now: number) => {
+            if (held()) {
+                last = now;
+                frame = window.requestAnimationFrame(tick);
+                return;
+            }
             if (last !== null) {
                 elapsed += Math.min(now - last, FLOOR_CLEAR_BEAT_FRAME_CAP_MS);
             }
@@ -1307,10 +1315,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             frame = window.requestAnimationFrame(tick);
         };
         frame = window.requestAnimationFrame(tick);
-        const safety = window.setTimeout(() => {
-            window.cancelAnimationFrame(frame);
-            afterBeat();
-        }, FLOOR_CLEAR_BEAT_STALL_CAP_MS);
+        let safety = 0;
+        const armSafety = (): void => {
+            safety = window.setTimeout(() => {
+                if (held()) {
+                    armSafety();
+                    return;
+                }
+                window.cancelAnimationFrame(frame);
+                afterBeat();
+            }, FLOOR_CLEAR_BEAT_STALL_CAP_MS);
+        };
+        armSafety();
         return () => {
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);

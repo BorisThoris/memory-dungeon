@@ -80,7 +80,14 @@ const atEverySize = async (
     page: Page,
     label: string,
     arrive: () => Promise<void>,
-    settle?: () => Promise<void>
+    settle?: () => Promise<void>,
+    /**
+     * For a MOMENT rather than a screen (the floor clear plays its beat and moves on): a reading
+     * counts only if this still holds when it is finished, and the window is arrived at again if
+     * not. Read once, the route choices were reported as covering the board when the run had
+     * already gone on to the next floor's study intro (2026-10-16).
+     */
+    stillThere?: () => Promise<boolean>
 ): Promise<void> => {
     if (settle) {
         await arrive();
@@ -88,13 +95,19 @@ const atEverySize = async (
     const failures: string[] = [];
     for (const viewport of VIEWPORTS) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
-        if (settle) {
-            await settle();
-        } else {
-            await arrive();
+        let reading: string[] | null = null;
+        for (let attempt = 0; attempt < (stillThere ? 3 : 1) && reading === null; attempt += 1) {
+            if (settle) {
+                await settle();
+            } else {
+                await arrive();
+            }
+            await page.waitForTimeout(700);
+            const rows = await fitFailures(page, label, viewport.id);
+            if (!stillThere || (await stillThere())) reading = rows;
         }
-        await page.waitForTimeout(700);
-        failures.push(...(await fitFailures(page, label, viewport.id)));
+        if (reading === null) throw new Error(`${label} @ ${viewport.id}: the moment never held still long enough to measure`);
+        failures.push(...reading);
     }
     // One assertion for the whole sweep: every window that failed, not just the first.
     expect(failures, `${label}: does not fit every window`).toEqual([]);
@@ -301,6 +314,13 @@ test.describe('UI fit contract', () => {
             // as a failure with no report of what did not fit.
             test.setTimeout(720_000);
             await atEverySize(page, fixture, async () => {
+                // The floor clear is a moment: hold its beat (a dev-only seam in `GameScreen`) so
+                // every window measures the beat rather than whatever the run has moved on to.
+                if (fixture === 'floorClearWithRouteChoices') {
+                    await page.addInitScript(() => {
+                        (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat = true;
+                    });
+                }
                 // The dev-only fixture hook can miss a beat right after a navigation.
                 try {
                     await openPlayablePathFixture(page, fixture);
@@ -308,8 +328,15 @@ test.describe('UI fit contract', () => {
                     await page.waitForTimeout(1500);
                     await openPlayablePathFixture(page, fixture);
                 }
+                if (fixture === 'floorClearWithRouteChoices') {
+                    await page.evaluate(() => {
+                        (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat = true;
+                    });
+                }
                 await page.waitForTimeout(700);
-            });
+            }, undefined, fixture === 'floorClearWithRouteChoices'
+                ? async () => (await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run?.status)) === 'levelComplete'
+                : undefined);
         });
     }
 });
