@@ -38,6 +38,8 @@ interface TileBoardSceneBoardGroupProps {
     flipLocked: boolean;
     focusedTileId: string | null;
     graphicsQuality: GraphicsQualityPreset;
+    /** The height this floor's faces are baked at (`cardFaceDetail.ts`). */
+    faceHeight?: number;
     hostConsolidatesTileFrames: boolean;
     hoverTiltRef: MutableRefObject<TileHoverTiltState>;
     interactionSuppressed: boolean;
@@ -79,6 +81,7 @@ export const TileBoardSceneBoardGroup = ({
     flipLocked,
     focusedTileId,
     graphicsQuality,
+    faceHeight,
     hostConsolidatesTileFrames,
     hoverTiltRef,
     interactionSuppressed,
@@ -198,6 +201,7 @@ export const TileBoardSceneBoardGroup = ({
                     tile={tile}
                     transform={transform}
                     graphicsQuality={graphicsQuality}
+                    faceHeight={faceHeight}
                 />
             )
         )}

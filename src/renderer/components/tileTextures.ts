@@ -1357,8 +1357,21 @@ const buildKey = (tile: Tile, face: TileFace, variant: FaceVariant, layer: TileL
 export const getTileFaceOverlayTextureCacheKey = (
     tile: Tile,
     variant: Exclude<FaceVariant, 'hidden'>,
-    graphicsQuality: GraphicsQualityPreset
-): string => `${buildKey(tile, 'front', variant, 'panel')}:overlay:${graphicsQuality}:illustrationSchema=${ILLUSTRATION_GEN_SCHEMA_VERSION}`;
+    graphicsQuality: GraphicsQualityPreset,
+    faceHeight: number = STATIC_CARD_TEXTURE_HEIGHT
+): string =>
+    `${buildKey(tile, 'front', variant, 'panel')}:overlay:${graphicsQuality}:illustrationSchema=${ILLUSTRATION_GEN_SCHEMA_VERSION}${
+        faceHeight === STATIC_CARD_TEXTURE_HEIGHT ? '' : `:h${faceHeight}`
+    }`;
+
+/**
+ * The face height the board on screen bakes at (`cardFaceDetail.ts`), for callers that clone a face
+ * mid-play (the match effects) and must find the board's own textures rather than bake a second set.
+ */
+let currentTileFaceHeight: number = STATIC_CARD_TEXTURE_HEIGHT;
+export const setCurrentTileFaceHeight = (height: number): void => {
+    currentTileFaceHeight = height;
+};
 
 export const getTileFaceOverlayRegressionStamp = (
     tile: Tile,
@@ -1530,16 +1543,17 @@ export const getTileFaceRoughnessTexture = (
 export const getTileFaceOverlayTexture = (
     tile: Tile,
     variant: Exclude<FaceVariant, 'hidden'>,
-    graphicsQuality: GraphicsQualityPreset
+    graphicsQuality: GraphicsQualityPreset,
+    faceHeight: number = currentTileFaceHeight
 ): CanvasTexture | null => {
     syncIllustrationOverlayCacheVersion();
     const tier = overlayDrawTierFromGraphicsQuality(graphicsQuality);
     const texture = createTexture(
-        getTileFaceOverlayTextureCacheKey(tile, variant, graphicsQuality),
+        getTileFaceOverlayTextureCacheKey(tile, variant, graphicsQuality, faceHeight),
         (context, canvas) => drawCardFrontOverlay(context, canvas, tile, variant, tier),
         SRGBColorSpace,
-        STATIC_CARD_TEXTURE_WIDTH,
-        STATIC_CARD_TEXTURE_HEIGHT
+        Math.max(2, Math.round((STATIC_CARD_TEXTURE_WIDTH * faceHeight) / STATIC_CARD_TEXTURE_HEIGHT)),
+        faceHeight
     );
     if (texture) texture.userData.cardId = tile.id;
     return texture;

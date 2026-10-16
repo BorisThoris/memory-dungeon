@@ -247,6 +247,21 @@ const grade = (source: ScenePaintImage, filter: Required<SceneFilter>): ScenePai
 };
 
 /** The image for a draw, graded if asked; null until it has loaded. Asking starts the load. */
+/**
+ * An image only if it is already in memory - held, or handed over complete by the preloader - and
+ * never a fetch. For priming a room ahead of its crossfade (`SceneCanvas`'s `prime`): asking with
+ * `getSceneImage` started a load when the boot preload had not reached that layer yet, and a run
+ * that cleared its first floor quickly requested the next realm's plates mid-play (2026-10-17).
+ */
+export const peekSceneImage = (src: string): ScenePaintImage | null => {
+    if (!src) return null;
+    const entry = held.get(src);
+    if (entry?.image) return entry.image;
+    const offeredImage = offered.get(src);
+    if (!offeredImage || !offeredImage.complete || offeredImage.naturalWidth <= 0) return null;
+    return entryFor(src).image;
+};
+
 export const getSceneImage = (src: string, filter?: SceneFilter): ScenePaintImage | null => {
     if (!src) {
         return null;

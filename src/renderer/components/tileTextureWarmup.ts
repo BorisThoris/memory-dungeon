@@ -30,17 +30,17 @@ const FACE_UP_VARIANTS = ['active', 'matched', 'mismatch'] as const;
  * first looked better for a floor that opens face up, and made the opening turns draw seven
  * canvases mid-play (`asset-streaming.spec.ts`) - keep this order.
  */
-const textureDrawsForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset): (() => Texture | null)[] => [
+const textureDrawsForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset, faceHeight?: number): (() => Texture | null)[] => [
     () => getTileFaceTexture(tile, 'back', 'hidden', 'panel'),
     () => getTileFaceRoughnessTexture(tile, 'back', 'hidden', 'panel'),
     ...FACE_UP_VARIANTS.flatMap((variant) => [
-        () => getTileFaceOverlayTexture(tile, variant, graphicsQuality),
+        () => getTileFaceOverlayTexture(tile, variant, graphicsQuality, faceHeight),
         () => getTileFaceRoughnessTexture(tile, 'front', variant, 'panel')
     ])
 ];
 
-const texturesForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset): Texture[] =>
-    textureDrawsForTile(tile, graphicsQuality)
+const texturesForTile = (tile: Tile, graphicsQuality: GraphicsQualityPreset, faceHeight?: number): Texture[] =>
+    textureDrawsForTile(tile, graphicsQuality, faceHeight)
         .map((draw) => draw())
         .filter((texture): texture is Texture => texture != null);
 
@@ -58,7 +58,8 @@ const liveTiles = (board: BoardState): Tile[] => board.tiles.filter((tile) => ti
 export const drawBoardTileTextures = async (
     board: BoardState,
     graphicsQuality: GraphicsQualityPreset,
-    tilesPerSlice = 4
+    tilesPerSlice = 4,
+    faceHeight?: number
 ): Promise<void> => {
     // The board sets this when it mounts, and a change of quality throws every overlay away; set it
     // first, or the board's first sync would discard all the faces drawn here (measured: 7 of them).
@@ -67,7 +68,7 @@ export const drawBoardTileTextures = async (
     if (board.tiles.length > 48) return;
     const tiles = liveTiles(board);
     for (let index = 0; index < tiles.length; index += 1) {
-        texturesForTile(tiles[index]!, graphicsQuality);
+        texturesForTile(tiles[index]!, graphicsQuality, faceHeight);
         if ((index + 1) % tilesPerSlice === 0) {
             await new Promise<void>((resolve) => globalThis.setTimeout(resolve, 0));
         }
@@ -78,11 +79,12 @@ export const drawBoardTileTextures = async (
 export const uploadBoardTileTextures = (
     board: BoardState,
     graphicsQuality: GraphicsQualityPreset,
-    initTexture: (texture: Texture) => void
+    initTexture: (texture: Texture) => void,
+    faceHeight?: number
 ): number => {
     const textures = new Set<Texture>(sharedTextures());
     for (const tile of board.tiles.length > 48 ? [] : liveTiles(board)) {
-        for (const texture of texturesForTile(tile, graphicsQuality)) textures.add(texture);
+        for (const texture of texturesForTile(tile, graphicsQuality, faceHeight)) textures.add(texture);
     }
     for (const texture of textures) {
         try {
@@ -108,10 +110,11 @@ export const uploadBoardTileTextures = (
 export const createBoardTextureWarmupQueue = (
     board: BoardState,
     graphicsQuality: GraphicsQualityPreset,
-    initTexture: (texture: Texture) => void
+    initTexture: (texture: Texture) => void,
+    faceHeight?: number
 ): ((budgetMs: number) => boolean) => {
     const draws: (() => Texture | null)[] = [...sharedTextures().map((texture) => () => texture)];
-    for (const tile of board.tiles.length > 48 ? [] : liveTiles(board)) draws.push(...textureDrawsForTile(tile, graphicsQuality));
+    for (const tile of board.tiles.length > 48 ? [] : liveTiles(board)) draws.push(...textureDrawsForTile(tile, graphicsQuality, faceHeight));
     let next = 0;
     return (budgetMs) => {
         const started = performance.now();

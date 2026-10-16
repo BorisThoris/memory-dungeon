@@ -80,7 +80,8 @@ import { ITEM_EFFECT_TRAUMA, METEOR_IMPACT_DELAY_SECONDS, useItemEffectChannel }
 import { createHitStopClock, ITEM_HIT_STOP_SECONDS } from './meteorImpactMotion';
 import { getTileBoardCardWindow } from './tileBoardCardWindow';
 import { DistantCards } from './DistantCards';
-import { reserveTileTextureCards, retainTileTextureWorkingSet } from './tileTextures';
+import { reserveTileTextureCards, retainTileTextureWorkingSet, setCurrentTileFaceHeight } from './tileTextures';
+import { cardFaceHeightFor, currentCardFaceView } from './cardFaceDetail';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -240,6 +241,13 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * transition, rather than on its first reveal, first match and first miss (`tileTextureWarmup`).
      */
     const warmedFloorRef = useRef<string | null>(null);
+    // The floor's face detail, chosen once per board from how large its cards stand on screen; a
+    // pinch or a resize mid-floor does not re-bake every face (`cardFaceDetail.ts`).
+    const faceHeight = useMemo(
+        () => cardFaceHeightFor(board, currentCardFaceView()),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [board.level, board.columns, board.rows, board.colossus?.form]
+    );
     useLayoutEffect(() => () => {
         warmedFloorRef.current = null;
         prewarmRealmTileMarks([]);
@@ -254,7 +262,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             prewarmRealmTileMarks([]);
             return;
         }
-        uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture));
+        setCurrentTileFaceHeight(faceHeight);
+        uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture), faceHeight);
         // This board's cards are the working set now; what was set aside for it is no longer special.
         reserveTileTextureCards(new Set());
         prewarmPairProximityBadges(board.columns + board.rows);
@@ -267,7 +276,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         } catch {
             // Shaders still compile on first use.
         }
-    }, [board, camera, gl, graphicsQuality, scene]);
+    }, [board, camera, faceHeight, gl, graphicsQuality, scene]);
     /*
      * The NEXT floor, during this one's clear: the board it will deal is already decided
      * (`advanceToNextLevel` is a pure step from the clear), so its faces are drawn and uploaded a
@@ -288,7 +297,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         if (!nextBoard || nextBoard === run.board) return undefined;
         reserveTileTextureCards(new Set(nextBoard.tiles.map((tile) => tile.id)));
         const upload = (texture: Texture) => gl.initTexture(texture);
-        const faces = createBoardTextureWarmupQueue(nextBoard, graphicsQuality, upload);
+        const faces = createBoardTextureWarmupQueue(nextBoard, graphicsQuality, upload, cardFaceHeightFor(nextBoard, currentCardFaceView()));
         // Then the marks both floors wear - this one's are still on screen under the beat.
         const marks = realmTileMarkWarmupSteps([...(run.board?.tiles ?? []), ...nextBoard.tiles], upload);
         let facesDone = false;
@@ -655,6 +664,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 flipLocked={flipLocked}
                 focusedTileId={focusedTileId}
                 graphicsQuality={graphicsQuality}
+                faceHeight={faceHeight}
                 hostConsolidatesTileFrames={hostConsolidatesTileFrames}
                 hoverTiltRef={hoverTiltRef}
                 interactionSuppressed={interactionSuppressed}

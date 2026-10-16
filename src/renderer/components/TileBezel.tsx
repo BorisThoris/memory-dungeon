@@ -135,6 +135,8 @@ interface TileBezelProps {
     tile: Tile;
     transform: TileTransform;
     graphicsQuality: GraphicsQualityPreset;
+    /** The height this floor's faces are baked at (`cardFaceDetail.ts`). */
+    faceHeight?: number;
     memorizeCurseHighlight?: boolean;
     spotlightWardHighlight?: boolean;
     spotlightBountyHighlight?: boolean;
@@ -206,6 +208,7 @@ const TileBezelInner = ({
     fieldTiltRef,
     flipLocked,
     graphicsQuality,
+    faceHeight,
     hoverTiltRef,
     interactionSuppressed,
     interactive,
@@ -757,7 +760,7 @@ const TileBezelInner = ({
     const cardFrontArtTexture = getCardFaceStaticTexture();
     const overlayVariant = overlayVariantForSurface(surfaceVariant);
     const overlayTexture =
-        overlayVariant === null ? null : getTileFaceOverlayTexture(tile, overlayVariant, graphicsQuality);
+        overlayVariant === null ? null : getTileFaceOverlayTexture(tile, overlayVariant, graphicsQuality, faceHeight);
     const forceTextureRefreshKey = textureRevision;
 
     useLayoutEffect(() => {

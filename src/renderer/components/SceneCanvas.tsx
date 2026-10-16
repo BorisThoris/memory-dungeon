@@ -1,5 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react';
-import { getSceneImage, sceneFilterIsLive, sceneLiveFilterCss, subscribeSceneImages } from './sceneBitmaps';
+import { getSceneImage, peekSceneImage, sceneFilterIsLive, sceneLiveFilterCss, subscribeSceneImages } from './sceneBitmaps';
 import { createSceneClock, type SceneClock } from './sceneClock';
 import { SCENE_CANVAS_PIXEL_BUDGET, SCENE_FPS_FULL, sceneCanvasScale, sceneCanvasWindow, visiblePlateRect } from './sceneCanvasLayout';
 import { paintScene, SCENE_ALPHA_FLOOR, SCENE_PRIME_ALPHA, type SceneDraw, type SceneFilter, type ScenePaintContext, type SceneRect } from './scenePaint';
@@ -216,8 +216,9 @@ export function SceneCanvas({ plate, compose, still, fps = SCENE_FPS_FULL, lookR
         const primeNextPlate = (): void => {
             for (const src of primeRef.current) {
                 if (primedPlates.has(src)) continue;
-                const source = getSceneImage(src);
-                if (!source) return;
+                // Only what is already in memory: priming must never be the thing that fetches.
+                const source = peekSceneImage(src);
+                if (!source) continue;
                 drawing.save();
                 drawing.setTransform(1, 0, 0, 1, 0, 0);
                 drawing.globalAlpha = SCENE_PRIME_ALPHA;

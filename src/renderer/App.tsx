@@ -57,8 +57,12 @@ const GameScreen = lazy(async () => {
     // three.js stays in the gameplay chunk.
     const { board } = useAppStore.getState().run ?? {};
     if (board) {
-        const { drawBoardTileTextures } = await import('./components/tileTextureWarmup');
-        await drawBoardTileTextures(board, useAppStore.getState().settings.graphicsQuality).catch(() => undefined);
+        const [{ drawBoardTileTextures }, { cardFaceHeightFor, currentCardFaceView }] = await Promise.all([
+            import('./components/tileTextureWarmup'),
+            import('./components/cardFaceDetail')
+        ]);
+        const faceHeight = cardFaceHeightFor(board, currentCardFaceView());
+        await drawBoardTileTextures(board, useAppStore.getState().settings.graphicsQuality, 4, faceHeight).catch(() => undefined);
     }
     return module;
 });
