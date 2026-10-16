@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3177,
+    "trackedFileCount": 3178,
     "codeFileCount": 1192,
     "exportedSymbolCount": 3755,
     "contentItemCount": 12,
@@ -2733,44 +2733,50 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 334349,
-      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 326270,
-      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 351103,
-      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
+      "bytes": 395039,
+      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 262999,
-      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
+      "bytes": 74007,
+      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 160622,
-      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
+      "bytes": 47216,
+      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 263076,
-      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
+      "bytes": 89413,
+      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 241706,
-      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
+      "bytes": 58618,
+      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
+    },
+    {
+      "path": "docs/ui-design-reference/390x844/01f-profile.png",
+      "category": "documentation",
+      "bytes": 84953,
+      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -4179,8 +4185,8 @@
     {
       "path": "e2e/ui-scale-ceiling.spec.ts",
       "category": "test",
-      "bytes": 17934,
-      "sha256": "5d7d7929284bd0a01c15613e2eb8bd60a5cf6b514cde40b4c65bddef6bee7b5f"
+      "bytes": 18740,
+      "sha256": "3aea96f7e01f595acee2a4b3c75b7d4e3eff748a49f3c483d1a768f0887ef508"
     },
     {
       "path": "e2e/ui-screenshots.spec.ts",
@@ -4191,8 +4197,8 @@
     {
       "path": "e2e/uiFit.ts",
       "category": "test",
-      "bytes": 10902,
-      "sha256": "aa7553e293f5659a100daa438939cd13413f8c38da4c187b059440f4d11bf80c"
+      "bytes": 12676,
+      "sha256": "846e98e0e5589a7731618d40e0d4430c23c80a3ca7c1f3a291733894916ec6d0"
     },
     {
       "path": "e2e/uiReachability.ts",
@@ -10797,8 +10803,8 @@
     {
       "path": "src/renderer/components/FloorResident.module.css",
       "category": "source",
-      "bytes": 2138,
-      "sha256": "07733279b0b45f604e72322d68a031d34fd2ddfbfbd0f7858c21288252e0f3af"
+      "bytes": 2237,
+      "sha256": "2425266e12f77b42586641e04c61e48b2427bb66e7ec3b361586b597ff6e372d"
     },
     {
       "path": "src/renderer/components/FloorResident.test.tsx",
@@ -10887,8 +10893,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 54170,
-      "sha256": "f483adba66a6808a6a40bf8816131c864e945c09e8d71947193039a762bf300c"
+      "bytes": 54356,
+      "sha256": "9b73d74c9f8d865950ae3c140c0cafa18390fe11f361137032a70d169c855860"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -11049,8 +11055,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 19244,
-      "sha256": "161b5f09f87e339d3c06c50e22b56eabe277bf753d9f37726a4cd652272d3c35"
+      "bytes": 19510,
+      "sha256": "4d817f2cd7b49ec1e2863af52891400c702be8a47aeee3baa2f17254e3cb4e71"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -14205,14 +14211,14 @@
     {
       "path": "src/renderer/uiScaleLimits.test.ts",
       "category": "test",
-      "bytes": 4387,
-      "sha256": "0144a32c49b18a5a07bac5c9a3957168fdf6a6994db845c7e9c22e5a018c77b5"
+      "bytes": 4478,
+      "sha256": "a832d783cddf67ce80cc98d47f5cdbcea230b050f94d0139d4dc3cfad31fe1ba"
     },
     {
       "path": "src/renderer/uiScaleLimits.ts",
       "category": "source",
-      "bytes": 6385,
-      "sha256": "fdb82504b7613fcadaadbf69d33913c9c1ec38fd64a8bc498a71bac512acbaa1"
+      "bytes": 6980,
+      "sha256": "178e9924632d37f4f735574a5daa7b23b45a3d020d78a9c1b072f02e87ea592e"
     },
     {
       "path": "src/renderer/viewportMatrix.ts",
@@ -16335,8 +16341,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 28312,
-      "sha256": "a4c43149e9059f6b3d688553d6463eb0920ba16ff25298e7ff259dccd092ee47"
+      "bytes": 28311,
+      "sha256": "96930825dc149e8e3e7b923d9c945e62f473164d627e42cc0d6d165f117f4c32"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -32464,7 +32470,7 @@
       "path": "src/renderer/uiScaleLimits.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 72,
+      "lineCount": 73,
       "imports": [
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/uiScaleLimits.ts",
@@ -32478,7 +32484,7 @@
       "path": "src/renderer/uiScaleLimits.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 107,
+      "lineCount": 114,
       "imports": [
         "file:src/renderer/breakpoints.ts"
       ],
@@ -57016,56 +57022,56 @@
       "name": "isCompactUiViewport",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 95,
-      "endLine": 97
+      "line": 102,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#isShortLandscapeDesktop",
       "name": "isShortLandscapeDesktop",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 92,
-      "endLine": 93
+      "line": 99,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#safeUiScaleFor",
       "name": "safeUiScaleFor",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 100,
-      "endLine": 106
+      "line": 107,
+      "endLine": 113
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#SCREEN_SCALE_CEILINGS",
       "name": "SCREEN_SCALE_CEILINGS",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 66,
-      "endLine": 73
+      "line": 73,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_COMPACT",
       "name": "UI_SCALE_COMPACT",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 84,
-      "endLine": 84
+      "line": 91,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UI_SCALE_MAX",
       "name": "UI_SCALE_MAX",
       "kind": "value",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 76,
-      "endLine": 76
+      "line": 83,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/uiScaleLimits.ts#UiScaleViewport",
       "name": "UiScaleViewport",
       "kind": "interface",
       "file": "src/renderer/uiScaleLimits.ts",
-      "line": 86,
-      "endLine": 89
+      "line": 93,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/viewportMatrix.ts#classifyResponsiveViewport",

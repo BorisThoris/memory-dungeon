@@ -41,15 +41,16 @@ describe('the UI scale limits', () => {
          * layout improves raises the cap by moving its own row and cannot leave this stale.
          */
         expect(UI_SCALE_MAX).toBe(Math.min(...Object.values(SCREEN_SCALE_CEILINGS)));
-        expect(UI_SCALE_MAX).toBe(1.05);
+        expect(UI_SCALE_MAX).toBe(1.2);
         // The blocker, named rather than implied: whoever is lowest is what the player is held to.
-        expect(SCREEN_SCALE_CEILINGS['floor clear']).toBe(UI_SCALE_MAX);
+        // Since 2026-10-16 that is the main menu (1.2): the run and the beat now hold to 1.4.
+        expect(SCREEN_SCALE_CEILINGS['main menu']).toBe(UI_SCALE_MAX);
         // Every ceiling is a scale the app could actually be asked for, and above the floor.
         for (const ceiling of Object.values(SCREEN_SCALE_CEILINGS)) {
             expect(ceiling).toBeGreaterThan(SETTINGS_NUMERIC_RANGES.uiScale.min);
         }
         expect(safeUiScaleFor(2, { height: 900, width: 1440 })).toBe(UI_SCALE_MAX);
-        expect(safeUiScaleFor(1.15, { height: 800, width: 1280 })).toBe(UI_SCALE_MAX);
+        expect(safeUiScaleFor(1.3, { height: 800, width: 1280 })).toBe(UI_SCALE_MAX);
         // Under the cap the player gets what they asked for, including scales below 1.
         expect(safeUiScaleFor(1.02, { height: 900, width: 1440 })).toBe(1.02);
         expect(safeUiScaleFor(0.8, { height: 900, width: 1440 })).toBe(0.8);

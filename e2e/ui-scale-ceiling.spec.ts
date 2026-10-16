@@ -2,7 +2,6 @@ import { expect, test, type Page } from '@playwright/test';
 import { SETTINGS_NUMERIC_RANGES } from '../src/shared/save-data';
 import { SCREEN_SCALE_CEILINGS, UI_SCALE_MAX } from '../src/renderer/uiScaleLimits';
 import { describeFit } from './uiFit';
-import { dismissStartupIntro } from './startupIntroHelpers';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import {
     buildPopulatedProfileSaveJson,
@@ -91,20 +90,16 @@ const SCREENS = [
  * player passes through and never by the one they play on.
  */
 const startRun = async (page: Page): Promise<void> => {
-    await page.goto('/');
-    await dismissStartupIntro(page);
-    await page.getByRole('button', { name: /^play$/i }).waitFor({ state: 'visible', timeout: 30_000 });
-    const dismiss = page.getByRole('button', { name: /^dismiss$/i });
-    if (await dismiss.isVisible().catch(() => false)) {
-        await dismiss.click();
-    }
-    await page.getByRole('button', { name: /^play$/i }).click();
-    await page.getByRole('region', { name: /choose your path/i }).waitFor({ state: 'visible', timeout: 30_000 });
-    await page.locator('button', { hasText: /start run/i }).first().click();
-    await page
-        .getByRole('heading', { name: /level 1/i })
-        .waitFor({ state: 'visible', timeout: 60_000 })
-        .catch(() => undefined);
+    // From a returning player's save: a first launch with no save never put the HUD on screen in
+    // two minutes, while this route reaches it in seconds.
+    await gotoWithSave(page, buildVisualSaveJson(true));
+    await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+    await mainMenuPlayButton(page).click({ force: true });
+    await page.getByRole('button', { name: 'Start run', exact: true }).click();
+    // The HUD, not a heading, and not forgiven: the old wait swallowed its own timeout, and a probe
+    // that never reached the board measured whatever was on screen instead (2026-10-16: the run
+    // "fit at 2.4" while its dock ran off the window's edge).
+    await page.getByTestId('game-hud').waitFor({ state: 'visible', timeout: 120_000 });
     await page.waitForTimeout(3000);
 };
 
@@ -231,15 +226,24 @@ test.describe('the UI scale ceiling', () => {
         const ceiling = SCREEN_SCALE_CEILINGS['floor clear'];
         const arrive = async (viewport: { width: number; height: number }, uiScale: number): Promise<string[]> => {
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
-            try {
-                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
-            } catch {
-                await page.waitForTimeout(1500);
-                await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+            const beat = page.getByTestId('floor-clear-beat');
+            // A reading counts only if the beat was still up when it finished. On a loaded machine
+            // the fixture moved on to the next floor's study intro mid-measure and that title card,
+            // half animated in, was reported as the beat breaking at 1.05 (2026-10-16).
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+                try {
+                    await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+                } catch {
+                    await page.waitForTimeout(1500);
+                    await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+                }
+                await forceScale(page, uiScale);
+                if (!(await beat.isVisible().catch(() => false))) continue;
+                const report = await describeFit(page);
+                if (!(await beat.isVisible().catch(() => false))) continue;
+                return Object.entries(report).flatMap(([kind, rows]) => (rows as string[]).map((row) => `${kind}: ${row}`));
             }
-            await forceScale(page, uiScale);
-            const report = await describeFit(page);
-            return Object.values(report).flat() as string[];
+            throw new Error(`floor clear @ ${viewport.width}x${viewport.height} x${uiScale}: the beat never held still long enough to measure`);
         };
 
         const failures: string[] = [];

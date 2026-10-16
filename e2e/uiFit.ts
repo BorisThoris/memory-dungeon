@@ -37,6 +37,25 @@ export const describeFit = async (page: Page): Promise<FitReport> =>
                 r.left >= window.innerWidth
             );
         };
+        // A caption kept for screen readers (RunShell's .srOnly) hides its children too: its kicker
+        // span is not itself clipped, but nobody can see it, so it cannot fail to fit either.
+        // An ANCESTOR counts only as the real pattern - a box of a pixel or less that also clips.
+        // Judged by `srOnly` alone, every `display: contents` wrapper (a 0x0 box) hid its subtree,
+        // and the run's whole dock went unmeasured: "fits at 2.4" with Pause half off the window.
+        const srOnlyBox = (node: Element): boolean => {
+            const r = node.getBoundingClientRect();
+            const cs = getComputedStyle(node);
+            if (cs.display === 'contents') return false;
+            const clips = /hidden|clip/.test(`${cs.overflowX}${cs.overflowY}`) || cs.clip !== 'auto' || cs.clipPath !== 'none';
+            return clips && (r.width <= 1 || r.height <= 1);
+        };
+        const insideSrOnly = (el: Element): boolean => {
+            if (srOnly(el)) return true;
+            for (let node: Element | null = el.parentElement; node; node = node.parentElement) {
+                if (srOnlyBox(node)) return true;
+            }
+            return false;
+        };
         const shown = (el: Element): boolean => {
             const r = el.getBoundingClientRect();
             const cs = getComputedStyle(el);
@@ -46,7 +65,7 @@ export const describeFit = async (page: Page): Promise<FitReport> =>
                 cs.visibility !== 'hidden' &&
                 cs.display !== 'none' &&
                 cs.opacity !== '0' &&
-                !srOnly(el)
+                !insideSrOnly(el)
             );
         };
         const name = (el: Element): string => {
@@ -122,7 +141,10 @@ export const describeFit = async (page: Page): Promise<FitReport> =>
                 if (el.closest('[aria-hidden="true"], [inert]')) return clampCuts || ellipsisCuts || hiddenCuts;
                 const own = el.getBoundingClientRect();
                 const seen = visibleRect(el);
-                const ancestorCuts = own.height > 0 && seen.height < own.height - 4;
+                // Sideways too: at a high scale the dock runs past the window and its last label is
+                // sliced at the edge (PAUSE read as PAU at x2, 2026-10-16) while every height fits.
+                const ancestorCuts =
+                    (own.height > 0 && seen.height < own.height - 4) || (own.width > 0 && seen.width < own.width - 4);
                 return clampCuts || ellipsisCuts || hiddenCuts || ancestorCuts;
             })
             .map(name);
@@ -132,7 +154,10 @@ export const describeFit = async (page: Page): Promise<FitReport> =>
         const belowFold = [...new Set([...leaves, ...all.filter((el) => el.getAttribute('data-testid') && shown(el))])]
             .filter((el) => {
                 const r = el.getBoundingClientRect();
-                return r.bottom > window.innerHeight + 8 && r.height < window.innerHeight;
+                // Or text past a side edge: nothing scrolls the run sideways either. Text only, since
+                // the scene plates bleed past the window on purpose.
+                const pastSide = leaves.includes(el) && (r.right > window.innerWidth + 8 || r.left < -8);
+                return (r.bottom > window.innerHeight + 8 && r.height < window.innerHeight) || pastSide;
             })
             .map(name);
 

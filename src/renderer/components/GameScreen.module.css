@@ -1358,6 +1358,12 @@ where that rule
     font-variant-numeric: tabular-nums;
 }
 
+/* The misses' shelf note. A bare <small> is `smaller` than the 14px row: 11.7px, under the floor. */
+.pauseStats dd small {
+    font-size: 0.75rem;
+    color: var(--margin-paper-2);
+}
+
 .pauseStats dd[data-state='eligible'] {
     color: var(--margin-gold);
 }

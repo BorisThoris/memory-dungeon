@@ -14,5 +14,6 @@
 .actions button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .actions button:disabled { opacity: 0.5; cursor: default; }
 @media (max-width: 900px) { .resident { flex: 1 1 8rem; } .portrait { flex-basis: 1.65rem; width: 1.65rem; height: 1.65rem; } }
-/* On a phone the dock is narrow: the name takes two short lines rather than losing its end ("An off-duty gu…"). */
-@media (max-width: 600px) { .name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; white-space: normal; font-size: 0.875rem; line-height: 1.15; } }
+/* Wherever the resident shares the dock (phone, and a tablet held upright from 2026-10-16, where "A hoarding
+   rat" lost its end), the name takes two short lines rather than losing its end ("An off-duty gu…"). */
+@media (max-width: 900px) { .name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; white-space: normal; font-size: 0.875rem; line-height: 1.15; } }

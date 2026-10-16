@@ -53,6 +53,13 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * nothing had ever given it a row. Fixing it (task #250) takes the cap to 1.2 - the run's number -
  * and after that to 1.4, where Codex and Settings are waiting.
  *
+ * **Re-measured 2026-10-16**, after the fit check itself was repaired. The main menu now breaks at
+ * 1.4 on the Deck panel - the Dungeon Master record joined the title column and it scrolls - so it
+ * holds to 1.2, down from 1.6. Settings holds to 1.6. The run and the floor-clear beat hold to 1.4
+ * and break at 1.6, where the floor resident's name loses its end; at 2 the dock runs off the
+ * window. (A first pass read both as fitting at 2.4: the check treated every `display: contents`
+ * wrapper as screen-reader text and so never looked at the dock.) The cap is 1.2, set by the menu.
+ *
  * The cap is the smallest of them, so it is derived rather than restated: a screen that gets its
  * layout fixed raises the cap by moving its own row, and one that regresses lowers it in the same
  * place. `ui-scale-ceiling.spec.ts` holds both directions - every screen fits at its own ceiling,
@@ -64,12 +71,12 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
  * without losing a control.
  */
 export const SCREEN_SCALE_CEILINGS = {
-    'floor clear': 1.05,
-    'in run': 1.2,
-    'main menu': 1.6,
+    'floor clear': 1.4,
+    'in run': 1.4,
+    'main menu': 1.2,
     codex: 1.4,
     profile: 1.6,
-    settings: 1.4
+    settings: 1.6
 } as const satisfies Record<string, number>;
 
 /** The cap: the smallest screen ceiling, because the scale is one setting for the whole app. */
