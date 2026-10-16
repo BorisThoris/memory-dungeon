@@ -59,10 +59,34 @@ const installFakePad = async (page: Page): Promise<void> => {
 const pressPad = async (page: Page, button: number): Promise<void> => {
     await page.evaluate(async (code) => {
         (window as PadWindow).__holdPad?.([code]);
-        await new Promise((resolve) => setTimeout(resolve, 120));
+        /*
+         * Held for 120ms AND until a frame has run since the press: the game reads the pad once a
+         * frame (`useGamepadNavigation`), and headless under load draws a frame every few hundred
+         * ms, so a fixed 120ms tap fell between two reads and was never seen (2026-10-16: "the
+         * d-pad never reached Collection" while the pad's own walk went Profile → Collection →
+         * Play). The repeat clock starts at the first read, so a slow frame adds no repeats.
+         */
+        await new Promise<void>((resolve) => {
+            const started = performance.now();
+            let frames = 0;
+            const tick = (): void => {
+                frames += 1;
+                if (frames >= 1 && performance.now() - started >= 120) resolve();
+                else requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        });
         (window as PadWindow).__holdPad?.([]);
+        // And the release is read before the next press, or two taps arrive as one hold.
+        await new Promise<void>((resolve) => {
+            const started = performance.now();
+            const tick = (): void => {
+                if (performance.now() - started >= 120) resolve();
+                else requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        });
     }, button);
-    await page.waitForTimeout(120);
 };
 
 const DPAD_DOWN = 13;

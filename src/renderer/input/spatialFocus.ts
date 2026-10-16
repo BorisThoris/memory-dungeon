@@ -54,9 +54,22 @@ export const pickSpatialNeighbour = <T>(
         const { rect } = candidate;
         let along: number;
         let across: number;
+        /*
+         * A control laid over the current one (the HUD over the board's full-stage region) has no
+         * edge past the board's in any direction, so edges alone made it unreachable: the only way
+         * "up" out of the board was the 1x1 skip link above the window. Inside an enclosing rect,
+         * which way it lies is read from the centres instead.
+         */
+        const enclosed = rect.left >= from.left && rect.right <= from.right && rect.top >= from.top && rect.bottom <= from.bottom;
 
         if (direction === 'up' || direction === 'down') {
-            const forward = direction === 'up' ? from.top - rect.top : rect.top - from.top;
+            const forward = enclosed
+                ? direction === 'up'
+                    ? centre(from.top, from.bottom) - centre(rect.top, rect.bottom)
+                    : centre(rect.top, rect.bottom) - centre(from.top, from.bottom)
+                : direction === 'up'
+                  ? from.top - rect.top
+                  : rect.top - from.top;
             if (forward < EDGE_THRESHOLD_PX) {
                 continue;
             }
@@ -64,7 +77,13 @@ export const pickSpatialNeighbour = <T>(
             const shared = overlap(from.left, from.right, rect.left, rect.right);
             across = shared > 0 ? 0 : Math.abs(centre(rect.left, rect.right) - centre(from.left, from.right));
         } else {
-            const forward = direction === 'left' ? from.left - rect.left : rect.left - from.left;
+            const forward = enclosed
+                ? direction === 'left'
+                    ? centre(from.left, from.right) - centre(rect.left, rect.right)
+                    : centre(rect.left, rect.right) - centre(from.left, from.right)
+                : direction === 'left'
+                  ? from.left - rect.left
+                  : rect.left - from.left;
             if (forward < EDGE_THRESHOLD_PX) {
                 continue;
             }

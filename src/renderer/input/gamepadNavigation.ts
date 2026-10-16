@@ -39,6 +39,12 @@ export const listNavigableElements = (root: Document = document): HTMLElement[] 
         if (rect.width <= 0 || rect.height <= 0) {
             return false;
         }
+        // A screen-reader-only control (the skip link: a 1x1 box at -1,-1) is a Tab stop, not a
+        // place on screen. As a spatial candidate it won "up" from the menu's Take the crown by
+        // five points over Settings, and the ring sat on it with nothing above (2026-10-16).
+        if (rect.width <= 1 && rect.height <= 1) {
+            return false;
+        }
         const style = root.defaultView?.getComputedStyle(element);
         return !style || (style.visibility !== 'hidden' && style.display !== 'none');
     });

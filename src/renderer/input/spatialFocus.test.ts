@@ -55,4 +55,13 @@ describe('pickSpatialNeighbour', () => {
     it('has nowhere to go on an empty screen', () => {
         expect(pickSpatialNeighbour(box(0, 0), [], 'up')).toBeNull();
     });
+
+    it('reaches a control laid over the current one by where its centre lies', () => {
+        // The board's application region fills the stage; the HUD and the dock sit inside it.
+        const board = box(0, 0, 1280, 720);
+        const overlay = named({ hud: box(1100, 10, 120, 40), dock: box(500, 660, 300, 50) });
+        expect(pickSpatialNeighbour(board, overlay, 'up')).toBe('hud');
+        expect(pickSpatialNeighbour(board, overlay, 'down')).toBe('dock');
+        expect(pickSpatialNeighbour(board, overlay, 'left')).toBeNull();
+    });
 });

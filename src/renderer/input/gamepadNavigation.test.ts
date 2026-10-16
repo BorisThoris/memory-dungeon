@@ -36,6 +36,23 @@ describe('listNavigableElements', () => {
         place(collapsed, 0, 0, 0, 0);
         expect(listNavigableElements(document)).toEqual([real]);
     });
+
+    it('leaves the screen-reader skip link to Tab, so up from the crown reaches the menu', () => {
+        // The main menu at 1280x800: a 1x1 skip link at -1,-1 used to win "up" from Take the crown.
+        const skip = document.createElement('a');
+        skip.href = '#app-main';
+        skip.textContent = 'Skip to main content';
+        place(skip, -1, -1, 1, 1);
+        document.body.append(skip);
+        const settings = button('Settings', 697, 537);
+        place(settings, 697, 537, 480, 48);
+        const crown = button('Take the crown', 173, 585);
+        place(crown, 173, 585, 365, 44);
+        expect(listNavigableElements(document)).not.toContain(skip);
+        crown.focus();
+        applyGamepadAction('up', document);
+        expect(document.activeElement).toBe(settings);
+    });
 });
 
 describe('applyGamepadAction', () => {

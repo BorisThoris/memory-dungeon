@@ -3873,8 +3873,8 @@
     {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
-      "bytes": 21051,
-      "sha256": "e1afbd3531fb09718d4d2c4195f086b116b521a54d371940e284e384b7311926"
+      "bytes": 22258,
+      "sha256": "85543a5698391da12ed079c163f3e32839f4160bde9bdbcaa6a023cc88b5a318"
     },
     {
       "path": "e2e/cyp-review-capture.spec.ts",
@@ -3885,8 +3885,8 @@
     {
       "path": "e2e/deck-controller-reach.spec.ts",
       "category": "test",
-      "bytes": 4136,
-      "sha256": "7977da1a51ace75c30ec7dd1820752911d3a71d4b34fb36b1d0d8a85ad8f0ca3"
+      "bytes": 4049,
+      "sha256": "b4442a32bba51ba43f1d0dfa3366aa6e58b0ff20c7146ccb7546635063d80cc9"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -13437,14 +13437,14 @@
     {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
       "category": "test",
-      "bytes": 6350,
-      "sha256": "7e515af27e9e707c7c361be4c3766285cbeced3589e9f2b5d1a19b367fcec657"
+      "bytes": 7153,
+      "sha256": "537491758c5333bca1ea34f75aa0fb9a3357b4d967ddcc758b07caac690dc119"
     },
     {
       "path": "src/renderer/input/gamepadNavigation.ts",
       "category": "source",
-      "bytes": 6801,
-      "sha256": "1151e415baf9798eebe4671ed345f86f29a75e27a10de3b626a81ce30d8bf02e"
+      "bytes": 7176,
+      "sha256": "868d3dee52d71637af167453a837d2fd50feff1946d16b8d5c2d65534bfc6948"
     },
     {
       "path": "src/renderer/input/gamepadRumble.test.ts",
@@ -13461,14 +13461,14 @@
     {
       "path": "src/renderer/input/spatialFocus.test.ts",
       "category": "test",
-      "bytes": 2609,
-      "sha256": "af7a534868d7e59c36945914811c2d301bd3906d02098ac3e0fd11e067f091b6"
+      "bytes": 3158,
+      "sha256": "d2de9668ea67c3e2f035ada2af4b258ec32ce87853af2522818e2094c0896540"
     },
     {
       "path": "src/renderer/input/spatialFocus.ts",
       "category": "source",
-      "bytes": 3415,
-      "sha256": "896c2746b9c6bffd8f45f6bbf06c2c0af822d6ec3adda7711576c06e893ff112"
+      "bytes": 4468,
+      "sha256": "c8d3dca04ee13a95421e355c5beacd57b387f6b43b9474284b35dca54d9162b8"
     },
     {
       "path": "src/renderer/input/touchHaptics.test.ts",
@@ -30458,7 +30458,7 @@
       "path": "src/renderer/input/gamepadNavigation.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 166,
+      "lineCount": 183,
       "imports": [
         "file:src/renderer/input/gamepadNavigation.ts"
       ],
@@ -30470,7 +30470,7 @@
       "path": "src/renderer/input/gamepadNavigation.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 159,
+      "lineCount": 165,
       "imports": [
         "file:src/renderer/a11y/focusables.ts",
         "file:src/renderer/input/spatialFocus.ts",
@@ -30525,7 +30525,7 @@
       "path": "src/renderer/input/spatialFocus.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 59,
+      "lineCount": 68,
       "imports": [
         "file:src/renderer/input/spatialFocus.ts"
       ],
@@ -30537,7 +30537,7 @@
       "path": "src/renderer/input/spatialFocus.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 85,
+      "lineCount": 104,
       "imports": [],
       "exports": [
         "symbol:src/renderer/input/spatialFocus.ts#FocusDirection",
@@ -54696,8 +54696,8 @@
       "name": "applyGamepadAction",
       "kind": "value",
       "file": "src/renderer/input/gamepadNavigation.ts",
-      "line": 113,
-      "endLine": 158
+      "line": 119,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
@@ -54712,8 +54712,8 @@
       "name": "isDispatchingGamepadKey",
       "kind": "value",
       "file": "src/renderer/input/gamepadNavigation.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 60,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#listNavigableElements",
@@ -54721,7 +54721,7 @@
       "kind": "value",
       "file": "src/renderer/input/gamepadNavigation.ts",
       "line": 36,
-      "endLine": 44
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/input/gamepadRumble.ts#RUMBLE_BY_TIER",
@@ -54793,7 +54793,7 @@
       "kind": "value",
       "file": "src/renderer/input/spatialFocus.ts",
       "line": 45,
-      "endLine": 84
+      "endLine": 103
     },
     {
       "id": "symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",

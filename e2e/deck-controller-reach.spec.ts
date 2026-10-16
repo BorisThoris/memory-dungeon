@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { dismissStartupIntro } from './startupIntroHelpers';
+import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 
 /**
@@ -35,16 +35,12 @@ test.describe('Deck Verified: the default controller reaches the board', () => {
     test('flips a tile with the keys a pad sends, not a dev hook', async ({ page }) => {
         test.setTimeout(180_000);
         await page.setViewportSize(DECK_VIEWPORT);
-        await page.goto('/');
-        await dismissStartupIntro(page);
-        await expect(page.getByRole('button', { name: /^play$/i })).toBeVisible();
-        const dismiss = page.getByRole('button', { name: /^dismiss$/i });
-        if (await dismiss.isVisible().catch(() => false)) {
-            await dismiss.click();
-        }
-        await page.getByRole('button', { name: /^play$/i }).click();
-        await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-        await page.locator('button', { hasText: /start run/i }).first().click();
+        // From a returning player's save: a first launch with no save never showed Choose Your Path
+        // (2026-10-16), so this measured nothing about the pad.
+        await gotoWithSave(page, buildVisualSaveJson(true));
+        await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 30_000 });
+        await mainMenuPlayButton(page).click({ force: true });
+        await page.getByRole('button', { name: 'Start run', exact: true }).click();
         await waitForBoardPlayPhase(page);
 
         const boardApplication = page.getByTestId('tile-board-application');
