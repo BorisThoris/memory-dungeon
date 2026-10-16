@@ -379,6 +379,16 @@
         display: none;
     }
 
+    /*
+     * A phone sideways (812x375) gave the page a 289px body and asked 332 of it: the ledger's
+     * 14rem floor would not give, and the next goal sat under the bottom edge with the body
+     * scrolling. A two-line card needs about 3rem, so a 10rem ledger still draws a whole row.
+     */
+    .ledger {
+        min-height: 10rem;
+        flex: 1 1 10rem;
+    }
+
     .progressCard {
         gap: 0.1rem;
         padding: 0.3rem 0.6rem;

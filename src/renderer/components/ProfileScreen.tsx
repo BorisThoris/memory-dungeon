@@ -27,6 +27,7 @@ import {
     type ProfileLedgerView
 } from '../copy/runHistory';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useViewportSize } from '../hooks/useViewportSize';
 import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import styles from './ProfileScreen.module.css';
@@ -77,6 +78,11 @@ const ProfileScreen = () => {
     // one of them was pressed.
     const [copiedRunKey, setCopiedRunKey] = useState<string | null>(null);
     const [ledgerView, setLedgerView] = useState<ProfileLedgerView>('progress');
+    // A phone held sideways leaves the ledger about 180px. A 104px row plus the pager's 58 and the
+    // header did not fit, and the pager landed on the next goal; there the card sheds its kicker and
+    // two lines need about 72px.
+    const { height: viewportHeight } = useViewportSize();
+    const progressRowHeight = viewportHeight > 0 && viewportHeight <= 480 ? 72 : 104;
 
     return (
         <MetaShell
@@ -158,7 +164,7 @@ const ProfileScreen = () => {
                             </article>
                         )}
                         resetKey="progress"
-                        rowHeight={104}
+                        rowHeight={progressRowHeight}
                         testId="profile-progress-grid"
                     />
                 ) : ledgerView === 'records' ? (
