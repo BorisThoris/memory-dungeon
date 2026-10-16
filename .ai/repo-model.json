@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3179,
-    "codeFileCount": 1193,
-    "exportedSymbolCount": 3767,
+    "trackedFileCount": 3181,
+    "codeFileCount": 1195,
+    "exportedSymbolCount": 3769,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10055
+    "relationshipCount": 10060
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2354995d816a8e4c9ce12981d916e446ef2955328a93b2960465ed21477cf0a8"
+      "sha256": "af82a054763b4f4f26b5fea5da15bd1bc1a7bfca0187fd9d75ceaa0645fe12de"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10821,8 +10821,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 7111,
-      "sha256": "ae1f7e856b1887f6d89dbdb65007bd5debc57a85aa39f2f6883253edd12e83f6"
+      "bytes": 7450,
+      "sha256": "450a318a5d14e6276620982d0ac522dbd5eaec35254a9b2bcf58f0bd4c3a9fef"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -10905,8 +10905,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 121491,
-      "sha256": "f0df670f3fccff65dfcacecb4b37cb702a8c082357a425c6160ded6e433d5150"
+      "bytes": 121714,
+      "sha256": "67c30d1e0e485e279ae5823d2f505f8d229053c1e65352d076216c09a7ac667d"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11199,8 +11199,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 22146,
-      "sha256": "7c1efbdd19ca4b5921ea1d4d4984b5515250977048d89611cfeb03f2f437ce02"
+      "bytes": 23121,
+      "sha256": "dbf59c8d7b7fec01fc700845d962bf695d1b3099d49ed5cd3cd9fc8d62b2a0f1"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -11211,8 +11211,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 11051,
-      "sha256": "2a4054b49f137d8f0a4d48d46e7bb5b361010ece775ab6649131662f90b617ec"
+      "bytes": 11199,
+      "sha256": "0ee264c51d260f4e0ac7345eabf5cbe0bc37f63b2ef55f10cc60efe42ca669fc"
     },
     {
       "path": "src/renderer/components/pairProximityBadges.ts",
@@ -11273,6 +11273,18 @@
       "category": "source",
       "bytes": 1236,
       "sha256": "d1b78d36257d44715dd003f0b247a4439a34c82d165fcfd4664af5127307449c"
+    },
+    {
+      "path": "src/renderer/components/Presence.test.tsx",
+      "category": "test",
+      "bytes": 1772,
+      "sha256": "6f4cb9dbdec2dae239555638cfe275a989c8168aa638c350f2fa51265c47d6ee"
+    },
+    {
+      "path": "src/renderer/components/Presence.tsx",
+      "category": "source",
+      "bytes": 1731,
+      "sha256": "590619d05dd6d85e5581ae5e8103a62c730c2ffbdcbfc376c8bb6a0e75343ced"
     },
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
@@ -23381,7 +23393,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2394,
+      "lineCount": 2399,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -23402,6 +23414,7 @@
         "file:src/renderer/components/MemorizeSkipLayer.tsx",
         "file:src/renderer/components/OddCardLegend.tsx",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/components/Presence.tsx",
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/realmRoomArt.ts",
         "file:src/renderer/components/RealmScreenOverlay.tsx",
@@ -24201,7 +24214,7 @@
       "path": "src/renderer/components/OverlayModal.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 286,
+      "lineCount": 289,
       "imports": [
         "file:src/renderer/a11y/overlayModalBodyState.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -24212,7 +24225,8 @@
       ],
       "exports": [
         "symbol:src/renderer/components/OverlayModal.tsx#default",
-        "symbol:src/renderer/components/OverlayModal.tsx#ModalAction"
+        "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
+        "symbol:src/renderer/components/OverlayModal.tsx#OVERLAY_MODAL_EXIT_MS"
       ],
       "testedBy": [
         "file:src/renderer/components/OverlayModal.test.tsx"
@@ -24393,6 +24407,32 @@
       ],
       "testedBy": [
         "file:src/renderer/components/PortalScene.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/Presence.test.tsx",
+      "path": "src/renderer/components/Presence.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 40,
+      "imports": [
+        "file:src/renderer/components/Presence.tsx"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/Presence.tsx",
+      "path": "src/renderer/components/Presence.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 38,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/Presence.tsx#Presence"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/Presence.test.tsx"
       ]
     },
     {
@@ -46662,40 +46702,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2393,
-      "endLine": 2393
+      "line": 2398,
+      "endLine": 2398
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 259,
-      "endLine": 259
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 257,
-      "endLine": 257
+      "line": 258,
+      "endLine": 258
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 261,
-      "endLine": 261
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -47510,8 +47550,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/OverlayModal.tsx",
-      "line": 285,
-      "endLine": 285
+      "line": 288,
+      "endLine": 288
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
@@ -47520,6 +47560,14 @@
       "file": "src/renderer/components/OverlayModal.tsx",
       "line": 11,
       "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/components/OverlayModal.tsx#OVERLAY_MODAL_EXIT_MS",
+      "name": "OVERLAY_MODAL_EXIT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/OverlayModal.tsx",
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
@@ -47680,6 +47728,14 @@
       "file": "src/renderer/components/portalSceneMotes.ts",
       "line": 14,
       "endLine": 28
+    },
+    {
+      "id": "symbol:src/renderer/components/Presence.tsx#Presence",
+      "name": "Presence",
+      "kind": "function",
+      "file": "src/renderer/components/Presence.tsx",
+      "line": 14,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/components/ProfileScreen.tsx#default",
@@ -81731,6 +81787,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/OverlayModal.tsx->symbol:src/renderer/components/OverlayModal.tsx#OVERLAY_MODAL_EXIT_MS",
+      "source": "file:src/renderer/components/OverlayModal.tsx",
+      "target": "symbol:src/renderer/components/OverlayModal.tsx#OVERLAY_MODAL_EXIT_MS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/pairProximityBadges.ts->symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
       "source": "file:src/renderer/components/pairProximityBadges.ts",
       "target": "symbol:src/renderer/components/pairProximityBadges.ts#badgeTexture",
@@ -81848,6 +81910,12 @@
       "id": "exports:src/renderer/components/portalSceneMotes.ts->symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
       "source": "file:src/renderer/components/portalSceneMotes.ts",
       "target": "symbol:src/renderer/components/portalSceneMotes.ts#portalMotes",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/Presence.tsx->symbol:src/renderer/components/Presence.tsx#Presence",
+      "source": "file:src/renderer/components/Presence.tsx",
+      "target": "symbol:src/renderer/components/Presence.tsx#Presence",
       "kind": "exports"
     },
     {
@@ -106251,6 +106319,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/Presence.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/Presence.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/realmAmbience.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/realmAmbience.ts",
@@ -107532,6 +107606,12 @@
       "id": "imports:src/renderer/components/portalSceneMotes.ts->src/renderer/components/sceneSpriteClocks.ts",
       "source": "file:src/renderer/components/portalSceneMotes.ts",
       "target": "file:src/renderer/components/sceneSpriteClocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/Presence.test.tsx->src/renderer/components/Presence.tsx",
+      "source": "file:src/renderer/components/Presence.test.tsx",
+      "target": "file:src/renderer/components/Presence.tsx",
       "kind": "imports"
     },
     {
@@ -128734,6 +128814,12 @@
       "id": "tested_by:src/renderer/components/portalSceneMotes.ts->file:src/renderer/components/PortalScene.test.tsx",
       "source": "file:src/renderer/components/portalSceneMotes.ts",
       "target": "file:src/renderer/components/PortalScene.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/Presence.tsx->file:src/renderer/components/Presence.test.tsx",
+      "source": "file:src/renderer/components/Presence.tsx",
+      "target": "file:src/renderer/components/Presence.test.tsx",
       "kind": "tested_by"
     },
     {

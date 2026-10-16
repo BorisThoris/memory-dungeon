@@ -20,6 +20,9 @@ type OverlayModalActionPlacement = OverlayActionPlacement | 'auto';
 /** META-009: pause=blue-neutral, floor=gold+success well — only when `ornamentalHeaderPlate`. */
 type OverlayModalHeaderPlateTone = 'neutral' | 'success' | 'pause' | 'danger';
 
+/** How long a dialog held by `Presence` takes to leave; matches `ovr-scrim-exit` / `ovr-plate-exit`. */
+export const OVERLAY_MODAL_EXIT_MS = 160;
+
 interface OverlayModalProps {
     title: string;
     subtitle?: string;

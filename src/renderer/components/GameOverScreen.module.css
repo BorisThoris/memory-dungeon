@@ -306,3 +306,18 @@
         animation: none;
     }
 }
+
+/* The record arrives out of the cinematic on the same fade, not in one frame (recorded 2026-10-16). */
+.foreground {
+    animation: screenArrive 240ms ease-out both;
+}
+
+:global([data-reduce-motion='true']) .foreground {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .foreground {
+        animation: none;
+    }
+}

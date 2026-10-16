@@ -421,6 +421,38 @@
         var(--theme-modal-plate-enter-ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
+/*
+ * The scrim comes and goes too. The plate rose in but the dark and the blur behind it switched on and
+ * off in one frame, so opening pause read as a cut (recorded 2026-10-16). It fades in with the plate,
+ * and out with it when the dialog is held for its exit (`Presence`, OVERLAY_MODAL_EXIT_MS).
+ */
+:global([data-reduce-motion='false']) .backdrop {
+    animation: ovr-scrim-enter 180ms ease-out both;
+}
+
+:global([data-reduce-motion='false']) [data-presence-leaving='true'] .backdrop {
+    animation: ovr-scrim-exit 160ms ease-in both;
+}
+
+:global([data-reduce-motion='false']) [data-presence-leaving='true'] .modal {
+    animation: ovr-plate-exit 160ms ease-in both;
+}
+
+@keyframes ovr-scrim-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes ovr-scrim-exit {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes ovr-plate-exit {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(0.4rem) scale(0.985); }
+}
+
 :global([data-reduce-motion='true']) .backdrop,
 :global([data-reduce-motion='true']) .modal {
     backdrop-filter: none;

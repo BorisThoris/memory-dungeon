@@ -103,7 +103,8 @@ import { describeRunModeIdentity } from '../../shared/run-mode-identity';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import FloorClearBeat, { FLOOR_CLEAR_BEAT_EXIT_MS } from './FloorClearBeat';
-import OverlayModal from './OverlayModal';
+import OverlayModal, { OVERLAY_MODAL_EXIT_MS } from './OverlayModal';
+import { Presence } from './Presence';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 
@@ -2187,7 +2188,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 </div>
 
                 {/* One modal at a time: Controls opens over pause, and closing it comes back here. */}
-                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused' && (
+                <Presence
+                    exitMs={OVERLAY_MODAL_EXIT_MS}
+                    reduceMotion={reduceMotion}
+                    show={!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused'}
+                >
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
@@ -2317,7 +2322,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             ) : null}
                         </dl>
                     </OverlayModal>
-                )}
+                </Presence>
                 {!suppressStatusOverlays && shortcutsHelpOpen ? (
                     <OverlayModal
                         actions={[
