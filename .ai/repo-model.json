@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3186,
     "codeFileCount": 1200,
-    "exportedSymbolCount": 3789,
+    "exportedSymbolCount": 3791,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10104
+    "relationshipCount": 10108
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "204354468d51644779aaa93745eeb0dcb64219c8e9ef7172101d8af372a4eab8"
+      "sha256": "99da694a2c3043666d5322e376850712551d6d2775366fedb2958f78cd76c330"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72119,
-      "sha256": "7872fb12a2e4efbf226630c50b4e6db6341734a19d57829c02d0b5cdc074105d"
+      "bytes": 72160,
+      "sha256": "13665e67eaa590b69eeedc116fccf6b6c76fe002217018a86b967f8ef2d4b61e"
     },
     {
       "path": "public/site.webmanifest",
@@ -10449,8 +10449,8 @@
     {
       "path": "src/renderer/components/cardDepartureWorld.ts",
       "category": "source",
-      "bytes": 16796,
-      "sha256": "60b84a6bf3acb08a54fb48915f2e63a7923b47c542f3f4424a8f77539d1e61d8"
+      "bytes": 18370,
+      "sha256": "9800eeef0f8fdb10573958040a31f3aaf6bd0610ce36eee5857fc81321e7704c"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
@@ -10473,8 +10473,8 @@
     {
       "path": "src/renderer/components/cardElementFx.ts",
       "category": "source",
-      "bytes": 12306,
-      "sha256": "99bdf7aa517f76683dd04654ac74f8234bd820952c620afc33bbcae3dbeb8f5f"
+      "bytes": 13672,
+      "sha256": "0e2780de6e612976b60d537a17f9a9c5a66c420bcfbebe513a2231a72a1b62d9"
     },
     {
       "path": "src/renderer/components/cardFaceDetail.test.ts",
@@ -12345,8 +12345,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 34402,
-      "sha256": "2e3520c19f6ac260ad1556bf4cc657968b5012d2929c1935d3567611eba568c1"
+      "bytes": 34803,
+      "sha256": "6793879c0edb29d6da9195faa3c31d43d2d5f3f370840b5872c9e0da644dd1ab"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -22159,7 +22159,7 @@
       "path": "src/renderer/components/cardDepartureWorld.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 260,
+      "lineCount": 289,
       "imports": [
         "file:src/renderer/components/cardDepartureGrouping.ts",
         "file:src/renderer/components/cardDeparturePhysics.ts",
@@ -22167,7 +22167,8 @@
       ],
       "exports": [
         "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
-        "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding"
+        "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
+        "symbol:src/renderer/components/cardDepartureWorld.ts#prewarmCardDepartureShaders"
       ],
       "testedBy": [
         "file:src/renderer/components/cardDepartureResources.test.ts",
@@ -22228,7 +22229,7 @@
       "path": "src/renderer/components/cardElementFx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 246,
+      "lineCount": 271,
       "imports": [
         "file:src/renderer/components/cardDepartureBudget.ts",
         "file:src/renderer/components/cardDepartureSheet.ts",
@@ -22243,7 +22244,8 @@
         "symbol:src/renderer/components/cardElementFx.ts#CardElementFx",
         "symbol:src/renderer/components/cardElementFx.ts#cardElementFxOf",
         "symbol:src/renderer/components/cardElementFx.ts#CardElementFxSystem",
-        "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem"
+        "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
+        "symbol:src/renderer/components/cardElementFx.ts#prewarmCardElementFxShaders"
       ],
       "testedBy": [
         "file:src/renderer/components/cardDepartureResources.test.ts",
@@ -27612,12 +27614,14 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 729,
+      "lineCount": 734,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
         "file:src/renderer/components/boardTrauma.ts",
+        "file:src/renderer/components/cardDepartureWorld.ts",
+        "file:src/renderer/components/cardElementFx.ts",
         "file:src/renderer/components/cardFaceDetail.ts",
         "file:src/renderer/components/DistantCards.tsx",
         "file:src/renderer/components/ElementCardBack.tsx",
@@ -45834,8 +45838,8 @@
       "name": "createCardDepartureWorld",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureWorld.ts",
-      "line": 186,
-      "endLine": 259
+      "line": 215,
+      "endLine": 288
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureWorld.ts#DepartureBinding",
@@ -45844,6 +45848,14 @@
       "file": "src/renderer/components/cardDepartureWorld.ts",
       "line": 51,
       "endLine": 51
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureWorld.ts#prewarmCardDepartureShaders",
+      "name": "prewarmCardDepartureShaders",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureWorld.ts",
+      "line": 67,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
@@ -45954,16 +45966,24 @@
       "name": "CardElementFxSystem",
       "kind": "type",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 245,
-      "endLine": 245
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "name": "createCardElementFxSystem",
       "kind": "value",
       "file": "src/renderer/components/cardElementFx.ts",
-      "line": 155,
-      "endLine": 243
+      "line": 180,
+      "endLine": 268
+    },
+    {
+      "id": "symbol:src/renderer/components/cardElementFx.ts#prewarmCardElementFxShaders",
+      "name": "prewarmCardElementFxShaders",
+      "kind": "value",
+      "file": "src/renderer/components/cardElementFx.ts",
+      "line": 166,
+      "endLine": 178
     },
     {
       "id": "symbol:src/renderer/components/cardFaceDetail.ts#CARD_FACE_HEIGHTS",
@@ -51858,24 +51878,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 728,
-      "endLine": 728
+      "line": 733,
+      "endLine": 733
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 176,
-      "endLine": 176
+      "line": 178,
+      "endLine": 178
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 93,
-      "endLine": 93
+      "line": 95,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -80693,6 +80713,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardDepartureWorld.ts->symbol:src/renderer/components/cardDepartureWorld.ts#prewarmCardDepartureShaders",
+      "source": "file:src/renderer/components/cardDepartureWorld.ts",
+      "target": "symbol:src/renderer/components/cardDepartureWorld.ts#prewarmCardDepartureShaders",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_EDGE",
@@ -80780,6 +80806,12 @@
       "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
       "source": "file:src/renderer/components/cardElementFx.ts",
       "target": "symbol:src/renderer/components/cardElementFx.ts#createCardElementFxSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardElementFx.ts->symbol:src/renderer/components/cardElementFx.ts#prewarmCardElementFxShaders",
+      "source": "file:src/renderer/components/cardElementFx.ts",
+      "target": "symbol:src/renderer/components/cardElementFx.ts#prewarmCardElementFxShaders",
       "kind": "exports"
     },
     {
@@ -111648,6 +111680,18 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/boardTrauma.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/boardTrauma.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/cardDepartureWorld.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/cardDepartureWorld.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/cardElementFx.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/cardElementFx.ts",
       "kind": "imports"
     },
     {
