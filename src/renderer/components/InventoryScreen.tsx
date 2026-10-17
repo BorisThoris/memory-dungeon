@@ -58,9 +58,10 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         stackedOnGameplay &&
         ((viewportWidth > 0 && viewportWidth <= INVENTORY_TABS_MAX_WIDTH) ||
             (viewportHeight > 0 && viewportHeight <= INVENTORY_TABS_MAX_HEIGHT));
-    const { closeSubscreen, run, settings } = useAppStore(
+    const { closeSubscreen, openModeSelect, run, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
+            openModeSelect: state.openModeSelect,
             run: state.run,
             settings: state.settings
         }))
@@ -99,9 +100,22 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 <div ref={bodyScrollRef} className={metaStyles.body}>
                     <MetaFrame data-testid="inventory-meta-frame-empty">
                         <Panel className={panelClassName} padding="lg" variant="default">
-                            <p className={styles.empty}>
-                                {emptyState.message} {emptyState.actionLabel}.
-                            </p>
+                            {/* What lives here and the way to it: the bare action label was all that showed. */}
+                            <div className={styles.emptyState}>
+                                <p className={styles.empty}>{emptyState.body}</p>
+                                <UiButton
+                                    size="md"
+                                    variant="primary"
+                                    type="button"
+                                    onClick={() => {
+                                        resumeUiSfxContext();
+                                        playUiClickSfx(uiGain);
+                                        openModeSelect();
+                                    }}
+                                >
+                                    {emptyState.actionLabel}
+                                </UiButton>
+                            </div>
                         </Panel>
                     </MetaFrame>
                 </div>

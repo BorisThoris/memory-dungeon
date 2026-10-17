@@ -8,10 +8,12 @@ vi.mock('zustand/react/shallow', () => ({
 }));
 
 const closeSubscreen = vi.fn();
+const openModeSelect = vi.fn();
 let currentRun: ReturnType<typeof createNewRun> | null = null;
 
 beforeEach(() => {
     closeSubscreen.mockClear();
+    openModeSelect.mockClear();
     currentRun = {
         ...createNewRun(0),
         activeMutators: ['wide_recall']
@@ -23,6 +25,7 @@ vi.mock('../store/useAppStore', () => ({
         (selector: (state: unknown) => unknown) =>
             selector({
                 closeSubscreen,
+                openModeSelect,
                 run: currentRun,
                 settings: { masterVolume: 0, sfxVolume: 0 },
                 saveData: { unlocks: [] }
@@ -35,6 +38,7 @@ vi.mock('../store/useAppStore', () => ({
 
 vi.mock('../audio/uiSfx', () => ({
     playUiBackSfx: vi.fn(),
+    playUiClickSfx: vi.fn(),
     resumeUiSfxContext: vi.fn(),
     uiSfxGainFromSettings: () => 0
 }));
@@ -86,5 +90,14 @@ describe('InventoryScreen', () => {
         expect(screen.getByTestId('inventory-meta-frame-empty')).toHaveTextContent(/start a run/i);
         screen.getByRole('button', { name: /^back$/i }).click();
         expect(closeSubscreen).toHaveBeenCalledTimes(1);
+    });
+
+    it('says what the empty inventory will hold and offers the way to a run', () => {
+        currentRun = null;
+        render(<InventoryScreen />);
+        expect(screen.getByTestId('inventory-meta-frame-empty')).toHaveTextContent(/show here once a descent is under way/i);
+        expect(screen.getByTestId('inventory-meta-frame-empty')).not.toHaveTextContent(/undefined/);
+        screen.getByRole('button', { name: /^start a run$/i }).click();
+        expect(openModeSelect).toHaveBeenCalledTimes(1);
     });
 });

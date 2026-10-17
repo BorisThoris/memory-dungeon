@@ -26,7 +26,7 @@ const DEFAULT_UI_STATE_COPY_ROW: UiStateCopyRow = {
     id: 'inventory_no_run',
     kind: 'empty',
     title: 'No active expedition',
-    body: 'Loadout appears here once a descent is in progress. Return to the hub, pick a mode, and jump in to see relics, mutators, and charges.',
+    body: "Your charges, run upgrades and the floor's mutators show here once a descent is under way.",
     actionLabel: 'Start a run',
     action: 'Start a run from Choose Your Path',
     localOnly: true,
