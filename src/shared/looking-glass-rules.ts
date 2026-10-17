@@ -37,7 +37,6 @@ export const lookingGlassAxis = (board: Pick<BoardState, 'columns' | 'rows'>): L
 export const lookingGlassTurnsOnMatch = (matchesAfter: number): boolean =>
     matchesAfter > 0 && Math.floor(matchesAfter) % LOOKING_GLASS_EVERY_MATCHES === 0;
 
-
 /**
  * The swaps that mirror the board: each cell trades with its reflection, unless either holds a
  * card that stays (pinned, or in `stayTileIds`). Applied with `applyRestlessDrift`.
