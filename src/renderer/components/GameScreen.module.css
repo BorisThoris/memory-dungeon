@@ -1371,6 +1371,23 @@ where that rule
 .pauseStats dd[data-state='locked'] {
     color: var(--margin-paper-3);
 }
+
+/*
+ * A phone on its side (844x390): nine rows of run stats under the title and the button rows ran
+ * past the plate, Score sliced through by the buttons and Turns, Misses, Gold and Relics out of
+ * sight with nothing to say they were there. The plate is wide there, so two pairs share a row.
+ */
+@media (max-height: 560px) and (min-width: 600px) {
+    .pauseStats {
+        grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+        column-gap: 0.9rem;
+    }
+
+    .pauseStats dt,
+    .pauseStats dd {
+        padding: 0.35rem 0;
+    }
+}
 /*
  * Short landscape. The draft's preamble - how many picks this visit, and the footnotes about
  * chapter alignment and banked favor - was taking 87px of a 375px window and pushing the
