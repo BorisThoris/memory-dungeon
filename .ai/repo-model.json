@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3183,
-    "codeFileCount": 1197,
-    "exportedSymbolCount": 3779,
+    "trackedFileCount": 3184,
+    "codeFileCount": 1198,
+    "exportedSymbolCount": 3784,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10083
+    "relationshipCount": 10092
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2091c2ebec4282bd2c36bca6fa417f411f1640ca0aeca2358bc51c60ddf8c845"
+      "sha256": "bd1b8ca346ccc2d589764ac694588d96ddd4b3dada23758f956fdbd3684c18a2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72416,
-      "sha256": "31b8cb6efb877758238de4f6c29a902a060f8ff10f2470f65ee65bc10f3eed20"
+      "bytes": 72337,
+      "sha256": "fac7bfc7728eaf4195a511a54c8bbb75b53b5273531cee08aba50519e52693df"
     },
     {
       "path": "public/site.webmanifest",
@@ -10911,14 +10911,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 78376,
-      "sha256": "4632f63fa1db07bfb1fd5e0ec28c6f33a2b0b6a436a33f35d5f1ca900e39daf6"
+      "bytes": 80686,
+      "sha256": "664ec6c0d9fe22b5d82b4a2bab33fd685176d45c1f989f48fac01a4300fb524e"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 121931,
-      "sha256": "bd919186240ad84b43ee866d7722cdc65b74419da3bc1a5163a7c3bd70a20198"
+      "bytes": 122530,
+      "sha256": "82da644c7c9145b144f0324e5437c029647459f7fc86e53a7da63bff19cb371d"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11195,6 +11195,12 @@
       "category": "source",
       "bytes": 7290,
       "sha256": "52e97fcca621a8893be261200fd2c629822610e4db9efb901ed0995fb781c07b"
+    },
+    {
+      "path": "src/renderer/components/nextFloorWarmupState.ts",
+      "category": "source",
+      "bytes": 1395,
+      "sha256": "15a9b7ee4692b30852ae0844254dee69a408cc7ef51cb6ec8f2325c6bf5b72fa"
     },
     {
       "path": "src/renderer/components/OddCardLegend.module.css",
@@ -12327,8 +12333,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 32801,
-      "sha256": "203b87634936a81483e396724052a720b082952ae000271329d9c777c2c8b424"
+      "bytes": 33284,
+      "sha256": "7007d58efe18bed6aab9a8f0588622784b583dfee68a230eceb8bd0c36f011db"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -23424,10 +23430,11 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1794,
+      "lineCount": 1849,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
+        "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/store/matchScorePop.ts",
@@ -23445,7 +23452,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2401,
+      "lineCount": 2409,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -23464,6 +23471,7 @@
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/components/MemorizeSkipLayer.tsx",
+        "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/components/OddCardLegend.tsx",
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/Presence.tsx",
@@ -24231,6 +24239,24 @@
         "symbol:src/renderer/components/MeteorStrike.tsx#MeteorStrike"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "path": "src/renderer/components/nextFloorWarmupState.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupPending",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/GameScreen.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/OddCardLegend.tsx",
@@ -27540,7 +27566,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 701,
+      "lineCount": 710,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -27552,6 +27578,7 @@
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/itemEffects.ts",
         "file:src/renderer/components/meteorImpactMotion.ts",
+        "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/realmTileMarkTextures.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -46809,40 +46836,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2400,
-      "endLine": 2400
+      "line": 2408,
+      "endLine": 2408
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 258,
-      "endLine": 258
+      "line": 259,
+      "endLine": 259
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 262,
-      "endLine": 262
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 252,
-      "endLine": 252
+      "line": 253,
+      "endLine": 253
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -47643,6 +47670,46 @@
       "file": "src/renderer/components/MeteorStrike.tsx",
       "line": 94,
       "endLine": 134
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
+      "name": "isNextFloorWarmupHurried",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 31,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupPending",
+      "name": "isNextFloorWarmupPending",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+      "name": "NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
+      "name": "setNextFloorWarmupHurried",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 27,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
+      "name": "setNextFloorWarmupPending",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 19,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/OddCardLegend.tsx#OddCardLegend",
@@ -51705,24 +51772,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 700,
-      "endLine": 700
+      "line": 709,
+      "endLine": 709
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 175,
-      "endLine": 175
+      "line": 176,
+      "endLine": 176
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 92,
-      "endLine": 92
+      "line": 93,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -81944,6 +82011,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupPending",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupPending",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/OddCardLegend.tsx->symbol:src/renderer/components/OddCardLegend.tsx#OddCardLegend",
       "source": "file:src/renderer/components/OddCardLegend.tsx",
       "target": "symbol:src/renderer/components/OddCardLegend.tsx#OddCardLegend",
@@ -106404,6 +106501,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.test.tsx->src/renderer/components/nextFloorWarmupState.ts",
+      "source": "file:src/renderer/components/GameScreen.test.tsx",
+      "target": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.test.tsx->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/components/GameScreen.test.tsx",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -106551,6 +106654,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/MemorizeSkipLayer.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/MemorizeSkipLayer.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/nextFloorWarmupState.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/nextFloorWarmupState.ts",
       "kind": "imports"
     },
     {
@@ -111435,6 +111544,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/meteorImpactMotion.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/meteorImpactMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/nextFloorWarmupState.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/nextFloorWarmupState.ts",
       "kind": "imports"
     },
     {
@@ -129055,6 +129170,12 @@
       "id": "tested_by:src/renderer/components/meteorImpactMotion.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
       "source": "file:src/renderer/components/meteorImpactMotion.ts",
       "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/nextFloorWarmupState.ts->file:src/renderer/components/GameScreen.test.tsx",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "file:src/renderer/components/GameScreen.test.tsx",
       "kind": "tested_by"
     },
     {
