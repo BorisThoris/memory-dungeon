@@ -4,6 +4,7 @@ import { runChainTier } from './chain-tier-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from './turn-resolution';
 import { runNonNegativeInteger } from './run-number-guards';
+import { lookingGlassAxis, type LookingGlassAxis } from './looking-glass-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 
 /**
@@ -50,6 +51,8 @@ export interface BoardTurnAnnouncementFacts {
     skittishFlinchesAfter: number;
     /** Cards the lantern lit on this turn (none unless it was a match on a lantern floor). */
     lanternLitCount: number;
+    /** Which way the looking glass turned the board on this turn, or null if it did not (every third match on its floor). */
+    lookingGlassTurned: LookingGlassAxis | null;
     /** Anchors matched this floor, before and after this turn, and whether this turn named a new one. */
     anchorClaimsBefore: number;
     anchorClaimsAfter: number;
@@ -210,6 +213,10 @@ export const getBoardTurnAnnouncementFacts = (
         anchorClaimsAfter: runNonNegativeInteger(after.anchorClaimsThisFloor),
         anchorMoved: after.nBackAnchorPairKey != null && after.nBackAnchorPairKey !== before.nBackAnchorPairKey,
         // Lit by the lantern, the candle or the combo's afterglow: the lit set is always this turn's, since a flip clears it.
+        lookingGlassTurned:
+            runNonNegativeInteger(after.lookingGlassTurnsThisFloor) > runNonNegativeInteger(before.lookingGlassTurnsThisFloor) && after.board
+                ? lookingGlassAxis(after.board)
+                : null,
         lanternLitCount:
             runNonNegativeInteger(after.lanternLightsThisFloor) > runNonNegativeInteger(before.lanternLightsThisFloor) ||
             runNonNegativeInteger(after.heatPerkTurnsThisFloor) > runNonNegativeInteger(before.heatPerkTurnsThisFloor)

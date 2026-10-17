@@ -81,6 +81,7 @@ export const createNextFloorRunState = (
         lastColossusEvent: null,
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
+        lookingGlassTurnsThisFloor: 0,
         heatPerkTurnsThisFloor: 0,
         // A Zone never crosses the stairs: the floor it opened on resolves it or ends it.
         zone: null,

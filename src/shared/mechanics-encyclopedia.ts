@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 87 as const;
+export const ENCYCLOPEDIA_VERSION = 88 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -322,6 +322,12 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         title: 'The magpie',
         description:
             'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing.'
+    },
+    looking_glass: {
+        id: 'looking_glass',
+        title: 'Looking glass',
+        description:
+            'Every **third match** of the floor turns the board over in a **mirror**: each card trades places with its reflection across the board\u2019s long side - left and right on a wide board, top and bottom on a tall one. Everything you know stays true, only reflected. **Pinned** cards stay put, and so does the pair you just matched.'
     },
     lantern_light: {
         id: 'lantern_light',

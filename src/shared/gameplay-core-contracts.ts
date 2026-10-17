@@ -260,6 +260,7 @@ export const boardTurnAnnouncementFactsSchema = z
         skittishFlinchesBefore: z.number().int().nonnegative().default(0),
         skittishFlinchesAfter: z.number().int().nonnegative().default(0),
         lanternLitCount: z.number().int().nonnegative().default(0),
+        lookingGlassTurned: z.enum(['left_right', 'top_bottom']).nullable().default(null),
         anchorClaimsBefore: z.number().int().nonnegative().default(0),
         anchorClaimsAfter: z.number().int().nonnegative().default(0),
         anchorMoved: z.boolean().default(false),

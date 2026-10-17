@@ -217,6 +217,21 @@ export const getFloorIdentityContract = ({
     mutators: readonly MutatorId[];
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
+    // The looking glass is a boss floor with its own lesson: ahead of the keystone's, which teaches the palette.
+    if (floorArchetypeId === 'mirror_hall') {
+        return {
+            id: 'looking_glass',
+            label: 'Looking-glass hall',
+            teachingSentence: `Every third match turns the board over in a mirror: each card trades places with its reflection.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'What you know stays true, only reflected. Count your matches, and pin the card you most need to keep where it is.',
+            floorClearSentence: 'Looking-glass hall cleared. You held the board in your head and turned it.',
+            atmosphericFeedback: 'The glass goes still, and the hall looks back at you the right way round.',
+            activeReminder: 'Looking glass: every third match mirrors the board.',
+            warningLevel: 'danger',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
     if (floorTag === 'boss' || floorArchetypeId === 'rush_recall') {
         // Gen 261: read the palette rather than asserting it. A boss-tagged `treasure_gallery` deals
         // four suits, and this branch told it it dealt two.

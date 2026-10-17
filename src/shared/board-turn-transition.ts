@@ -17,6 +17,7 @@ import { comboHeatPerksActive, runComboHeatPerks } from './combo-heat-perks';
 import { hasRelic } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
+import { lookingGlassSwaps, lookingGlassTurnsOnMatch } from './looking-glass-rules';
 import { hasMutator } from './mutators';
 import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
@@ -227,7 +228,24 @@ export const createResolveBoardTurnTransition = ({
                   rulesVersion: run.runRulesVersion
               })
             : null;
-        const boardAfterDrift = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
+        const boardAfterRestless = drift?.kind === 'drift' ? applyRestlessDrift(spun.board, drift.swaps) : spun.board;
+        /*
+         * The looking glass turns on every third match of the floor, before anything that reads
+         * where cards are (the lantern, the realm, the anchor, sticky fingers), so they all read the
+         * mirrored board. The pair just matched and every pair the pop took are still burning where
+         * they were taken, and pinned cards are paid for: those stay (`looking-glass-rules.ts`).
+         */
+        const glassTurns = hasMutator(run, 'looking_glass') && lookingGlassTurnsOnMatch(progress.matchResolutionsThisFloor);
+        const glassStays = glassTurns
+            ? [
+                  firstTile.id,
+                  secondTile.id,
+                  ...sourceBoard.tiles.filter((tile) => chunkBreak.brokenPairKeys.includes(tile.pairKey)).map((tile) => tile.id)
+              ]
+            : [];
+        const boardAfterDrift = glassTurns
+            ? applyRestlessDrift(boardAfterRestless, lookingGlassSwaps(boardAfterRestless, boardCleanup.pinnedTileIds, glassStays))
+            : boardAfterRestless;
         /*
          * The lantern lights last, on the board the player will look at: after the pop has taken
          * what it takes and any drift has moved what it moves, so a lit face is where it will be.
@@ -308,6 +326,7 @@ export const createResolveBoardTurnTransition = ({
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             restlessDriftsThisFloor:
                 runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
+            lookingGlassTurnsThisFloor: runNonNegativeInteger(run.lookingGlassTurnsThisFloor) + (glassTurns ? 1 : 0),
             lanternLitTileIds: lanternLit,
             // The lantern's own count: the afterglow is counted by the heat perks, not here.
             lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLights && lanternLit.length > 0 ? 1 : 0),

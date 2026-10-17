@@ -62,6 +62,7 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'hazard.restless_floor': ['restlessDrifts'],
     'hazard.skittish_cards': ['skittishFlinches'],
     'board.lantern_light': ['lanternLights'],
+    'hazard.looking_glass': ['lookingGlassTurns'],
     'board.combo_heat_perks': ['heatPerkTurns'],
     'board.n_back_anchor': ['anchorClaims'],
     'power.peek': ['peek'],

@@ -226,7 +226,8 @@ export const MUTATOR_IDS = [
     'shifting_spotlight',
     'magpie_thief',
     'skittish_cards',
-    'lantern_light'
+    'lantern_light',
+    'looking_glass'
 ] as const;
 export type MutatorId = (typeof MUTATOR_IDS)[number];
 
@@ -440,6 +441,7 @@ export const FLOOR_ARCHETYPE_IDS = [
     'rush_recall',
     'skittish_hall',
     'lantern_hall',
+    'mirror_hall',
     'spotlight_hunt',
     'breather'
 ] as const;
@@ -955,6 +957,8 @@ export interface RunState {
     lanternLitTileIds: string[];
     /** `lantern_light`: matches this floor that lit at least one card. */
     lanternLightsThisFloor: number;
+    /** `looking_glass`: times this floor the board turned over in the mirror (every third match). */
+    lookingGlassTurnsThisFloor: number;
     /** `combo_heat_perks`: matches this floor resolved with a heat perk on (afterglow, a wider pop, a longer reach). */
     heatPerkTurnsThisFloor: number;
     /** `shifting_spotlight`: increments each time ward/bounty rotates this floor (seed step for next pick). */

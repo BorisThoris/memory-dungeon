@@ -311,6 +311,7 @@
                 "skittishFlinchesThisFloor",
                 "lanternLitTileIds",
                 "lanternLightsThisFloor",
+                "lookingGlassTurnsThisFloor",
                 "anchorClaimsThisFloor",
                 "heatPerkTurnsThisFloor",
                 "zone",
@@ -2433,6 +2434,38 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "hazard.looking_glass",
+            "label": "Looking Glass",
+            "kind": "hazard",
+            "role": "mirrors_the_board_across_its_long_side_on_every_third_match",
+            "evidence": [
+                "src/shared/looking-glass-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/copy/lookingGlassBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pinnedTileIds",
+                "activeMutators",
+                "matchResolutionsThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "lookingGlassTurnsThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "pinned-cards-never-move",
+                "pair-just-matched-stays",
+                "permutation-keeps-every-card"
+            ],
+            "tests": [
+                "src/shared/looking-glass-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3551,6 +3584,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the card shows its sand, the key says the prize, and a catch is stamped and announced"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "hazard.looking_glass",
+            "kind": "triggers",
+            "label": "every third match turns the board in the mirror"
+        },
+        {
+            "source": "power.pin",
+            "target": "hazard.looking_glass",
+            "kind": "counterplay",
+            "label": "a pinned card stays where it is"
+        },
+        {
+            "source": "hazard.looking_glass",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "every turn of the glass is announced"
         }
     ],
     "coverage": {

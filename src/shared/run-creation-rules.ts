@@ -206,6 +206,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         lastColossusEvent: null,
         lanternLitTileIds: [],
         lanternLightsThisFloor: 0,
+        lookingGlassTurnsThisFloor: 0,
         heatPerkTurnsThisFloor: 0,
         zone: null,
         zonesThisRun: 0,

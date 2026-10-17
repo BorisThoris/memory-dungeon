@@ -343,7 +343,9 @@ describe('floor archetype progression contract', () => {
         expect(report.archetypeCounts.treasure_gallery).toBe(1);
         expect(report.archetypeCounts.lantern_hall).toBe(1);
         expect(report.archetypeCounts.trap_hall).toBe(1);
-        expect(report.archetypeCounts.rush_recall).toBe(1);
+        // Floor 9 of the first cycle is the looking-glass hall; the rush recall is the second cycle's.
+        expect(report.archetypeCounts.mirror_hall).toBe(1);
+        expect(report.archetypeCounts.rush_recall).toBeUndefined();
     });
 
     it('generates fair boards for each authored archetype row', () => {
@@ -382,11 +384,11 @@ describe('warden rotation', () => {
         // warden the game defines rather than the same two.
         expect(bossFloors.map(({ entry }) => entry.floorArchetypeId)).toEqual([
             'trap_hall',
+            'mirror_hall',
+            'trap_hall',
             'rush_recall',
             'trap_hall',
-            'treasure_gallery',
-            'trap_hall',
-            'spotlight_hunt'
+            'treasure_gallery'
         ]);
     });
 

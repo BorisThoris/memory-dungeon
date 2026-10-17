@@ -28,6 +28,7 @@ import { runChainTier } from './chain-tier-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
+import { lookingGlassSwaps } from './looking-glass-rules';
 import { tileCharge } from './element-alchemy-rules';
 
 /**
@@ -88,6 +89,7 @@ export type TestHallRoomId =
     | 'sticky-fingers'
     | 'skittish'
     | 'lantern'
+    | 'looking-glass'
     | 'heat-afterglow'
     | 'heat-pop'
     | 'zone'
@@ -1093,6 +1095,46 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                         : `lit ${r.lanternLitTileIds.join(',')}, peeks ${r.peekRevealedTileIds.length}`
             },
             { step: { do: 'flip', tileId: 'g-1' }, says: 'the next flip puts the light out', expect: (r) => (r.lanternLitTileIds.length === 0 ? null : `still lit ${r.lanternLitTileIds.join(',')}`) }
+        ]
+    },
+    {
+        id: 'looking-glass',
+        title: 'Looking glass',
+        mechanic: 'Every third match turns the board over in a mirror. Pinned cards and the pair just matched stay put.',
+        graphMechanicIds: ['hazard.looking_glass', 'power.pin'],
+        tryThis: 'Pin c-1, then match a, b and e. The third match mirrors the board: every card crosses to its reflection, the pinned one and the pair just taken stay.',
+        // Four wide, three tall: a wide board mirrors left to right.
+        // No two cards of one element touch, so no match pops a neighbour and the clock counts only these three.
+        build: () => room(['a:e b:t c:m d:b', 'e:m f:b a:e b:t', 'd:b c:m f:b e:m'], { mutators: ['looking_glass'] }),
+        script: [
+            { step: { do: 'pin', tileId: 'c-1' }, says: 'c-1 is pinned', expect: (r) => (r.pinnedTileIds.includes('c-1') ? null : 'c-1 is not pinned') },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the first match moves nothing', expect: (r, b) => (positionOf(r, 'd-1') === positionOf(b, 'd-1') && r.lookingGlassTurnsThisFloor === 0 ? null : 'the board moved on the first match') },
+            { step: { do: 'match', pairKey: 'b' }, says: 'nor does the second', expect: (r, b) => (positionOf(r, 'f-1') === positionOf(b, 'f-1') && r.lookingGlassTurnsThisFloor === 0 ? null : 'the board moved on the second match') },
+            {
+                step: { do: 'match', pairKey: 'e' },
+                says: 'the third match mirrors the board: every card that moves lands on its reflection; the pinned card and the pair just taken stay',
+                // Read against the board as it stood, not a fixed layout: the window reflows the grid.
+                expect: (r, b) => {
+                    if (r.lookingGlassTurnsThisFloor !== 1) return `turns ${r.lookingGlassTurnsThisFloor}`;
+                    const reflection = new Map<number, number>();
+                    for (const { a, b: other } of lookingGlassSwaps(b.board!, [], [])) {
+                        reflection.set(a, other);
+                        reflection.set(other, a);
+                    }
+                    let moved = 0;
+                    for (const card of b.board!.tiles) {
+                        const from = positionOf(b, card.id);
+                        const to = positionOf(r, card.id);
+                        if (to === from) continue;
+                        moved += 1;
+                        if (reflection.get(from) !== to) return `${card.id} went ${from} to ${to}, not its reflection ${reflection.get(from)}`;
+                    }
+                    if (moved < 2) return 'the board did not turn';
+                    if (positionOf(r, 'c-1') !== positionOf(b, 'c-1')) return 'the pinned card moved';
+                    if (positionOf(r, 'e-1') !== positionOf(b, 'e-1') || positionOf(r, 'e-2') !== positionOf(b, 'e-2')) return 'the pair just matched moved';
+                    return null;
+                }
+            }
         ]
     },
     {

@@ -82,6 +82,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
     },
+    mirror_hall: {
+        title: 'Looking-Glass Hall',
+        hint: 'Every third match turns the board over in a mirror. Everything you know stays true - reflected.',
+        theme: 'Glass',
+        riskProfile: 'A boss floor that tests the map in your head: the board you learned turns over every third match.'
+    },
     lantern_hall: {
         title: 'Lantern Hall',
         hint: 'Every match lights the cards beside it until you turn the next one. Match where the dark is.',
@@ -404,9 +410,14 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
  * a run met; the wardens went with the dungeon, and what rotates now is the room itself.
  */
 const POSITION_NINE_ROTATION: readonly FloorScheduleEntry[] = [
+    /*
+     * The Looking-Glass Hall opens the rotation, the first boss room a run meets past floor 8. It
+     * took the spotlight hunt's turn: that room is floor 12 of every cycle already, so as a boss it
+     * was a repeat, and the rotation's promise - every warden by floor 33 - holds with three rooms.
+     */
+    makeEntry(9, 'mirror_hall', 'flip_par', ['looking_glass'], 'boss'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
-    makeEntry(9, 'treasure_gallery', 'scholar_style', ['findables_floor'], 'boss'),
-    makeEntry(9, 'spotlight_hunt', 'flip_par', ['shifting_spotlight'], 'boss')
+    makeEntry(9, 'treasure_gallery', 'scholar_style', ['findables_floor'], 'boss')
 ];
 
 const BOSS_ROTATION_CYCLE_POSITION = 9;

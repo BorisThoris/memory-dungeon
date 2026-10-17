@@ -29,6 +29,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     skittishFlinchesBefore: 0,
     skittishFlinchesAfter: 0,
     lanternLitCount: 0,
+    lookingGlassTurned: null,
     anchorClaimsBefore: 0,
     anchorClaimsAfter: 0,
     anchorMoved: false,

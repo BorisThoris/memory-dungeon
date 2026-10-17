@@ -1,5 +1,6 @@
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { restlessDriftAnnouncement } from './restlessFloorBeat';
+import { lookingGlassAnnouncement } from './lookingGlassBeat';
 import { ANCHOR_CLAIMED_ANNOUNCEMENT, ANCHOR_MARKED_ANNOUNCEMENT } from './anchorBeat';
 import { lanternLitAnnouncement } from './lanternLightBeat';
 import { SKITTISH_FLINCH_ANNOUNCEMENT } from './skittishCardsBeat';
@@ -130,6 +131,12 @@ export const anchorAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
 export const lanternAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =>
     turnEvent.announcement.lanternLitCount > 0 ? [lanternLitAnnouncement(turnEvent.announcement.lanternLitCount)] : [];
 
+/** The looking glass's line for the match that turned the board. */
+export const lookingGlassAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
+    const axis = turnEvent.announcement.lookingGlassTurned;
+    return axis ? [lookingGlassAnnouncement(axis)] : [];
+};
+
 export const restlessAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
     const { restlessDriftsBefore, restlessDriftsAfter } = turnEvent.announcement;
     return restlessDriftsAfter > restlessDriftsBefore
@@ -178,6 +185,8 @@ export const buildBoardTurnAnnouncement = (
          */
         ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
+        // The whole board moved: said before anything that names a card's place.
+        ...lookingGlassAnnouncementLines(turnEvent),
         ...(includeSkittish ? skittishAnnouncementLines(turnEvent) : []),
         ...lanternAnnouncementLines(turnEvent),
         ...anchorAnnouncementLines(turnEvent),
