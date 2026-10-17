@@ -37,9 +37,6 @@ export const lookingGlassAxis = (board: Pick<BoardState, 'columns' | 'rows'>): L
 export const lookingGlassTurnsOnMatch = (matchesAfter: number): boolean =>
     matchesAfter > 0 && Math.floor(matchesAfter) % LOOKING_GLASS_EVERY_MATCHES === 0;
 
-/** Matches until the board next turns, counting the one that turns it (3, 2, 1, then 3 again). */
-export const lookingGlassMatchesUntilTurn = (matchesSoFar: number): number =>
-    LOOKING_GLASS_EVERY_MATCHES - (Math.max(0, Math.floor(matchesSoFar)) % LOOKING_GLASS_EVERY_MATCHES);
 
 /**
  * The swaps that mirror the board: each cell trades with its reflection, unless either holds a

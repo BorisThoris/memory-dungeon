@@ -3,7 +3,6 @@ import type { BoardState, Tile } from './contracts';
 import {
     LOOKING_GLASS_EVERY_MATCHES,
     lookingGlassAxis,
-    lookingGlassMatchesUntilTurn,
     lookingGlassSwaps,
     lookingGlassTurnsOnMatch
 } from './looking-glass-rules';
@@ -19,11 +18,10 @@ const mirror = (board: Pick<BoardState, 'columns' | 'rows' | 'tiles'>, pinned: s
     applyRestlessDrift(board as BoardState, lookingGlassSwaps(board, pinned, stay));
 
 describe('the looking glass', () => {
-    it('turns on every third match of the floor, and counts down to it', () => {
+    it('turns on every third match of the floor', () => {
         const turns = Array.from({ length: 9 }, (_, i) => lookingGlassTurnsOnMatch(i + 1));
         expect(turns).toEqual([false, false, true, false, false, true, false, false, true]);
         expect(lookingGlassTurnsOnMatch(0)).toBe(false);
-        expect([0, 1, 2, 3].map(lookingGlassMatchesUntilTurn)).toEqual([3, 2, 1, 3]);
         expect(LOOKING_GLASS_EVERY_MATCHES).toBe(3);
     });
 
