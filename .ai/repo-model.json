@@ -11457,8 +11457,8 @@
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
       "category": "source",
-      "bytes": 10658,
-      "sha256": "c6678e07cd68834b9e2ff053e0148e145944da1138c445c6e0beaf908ccc0b43"
+      "bytes": 11527,
+      "sha256": "a79bbc3aeb5e0736c65a8e9767dcac39cda7c1358d568969faacfda7b2263297"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
