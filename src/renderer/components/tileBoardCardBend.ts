@@ -512,6 +512,26 @@ export const computeLiveCardBendState = ({
     };
 };
 
+/*
+ * What each plane's positions were last composed from, so a card at rest is not rewritten and
+ * re-uploaded every frame. composeCardPositions ran for three planes of every card each frame and
+ * flagged all three for upload (4x CPU throttle, measured 2026-10-17: the second-largest script cost
+ * in play, after the face uploads). The dent buffer only changes through addPersistentBendStamp,
+ * which bumps its version.
+ */
+const persistentVersions = new WeakMap<Float32Array, number>();
+interface ComposedPlane {
+    base: Float32Array;
+    persistent: Float32Array;
+    version: number;
+    liveDepth: number;
+    bendU: number;
+    bendV: number;
+    width: number;
+    height: number;
+}
+const composedPlanes = new WeakMap<BufferAttribute, ComposedPlane>();
+
 /** Add permanent Z offsets into a persistent per-vertex depth buffer for one bend stamp. */
 export const addPersistentBendStamp = (
     persistent: Float32Array,
@@ -533,6 +553,7 @@ export const addPersistentBendStamp = (
         const wgt = bendFalloffAtUv(u, v, bendU, bendV, width, height);
         persistent[index] += depth * wgt;
     }
+    persistentVersions.set(persistent, (persistentVersions.get(persistent) ?? 0) + 1);
 };
 
 export const composeCardPositions = (
@@ -545,9 +566,25 @@ export const composeCardPositions = (
     height: number,
     liveDepthScale: number
 ): void => {
+    const liveDepth = CARD_BEND_MAX_DEPTH * liveDepthScale;
+    const version = persistentVersions.get(persistentZ) ?? 0;
+    const last = composedPlanes.get(positions);
+    if (
+        last &&
+        last.base === base &&
+        last.persistent === persistentZ &&
+        last.version === version &&
+        last.liveDepth === liveDepth &&
+        last.width === width &&
+        last.height === height &&
+        // Where the press is only matters while it presses.
+        (liveDepth === 0 || (last.bendU === bendU && last.bendV === bendV))
+    ) {
+        return;
+    }
+    composedPlanes.set(positions, { base, persistent: persistentZ, version, liveDepth, bendU, bendV, width, height });
     const array = positions.array as Float32Array;
     const vertexCount = array.length / 3;
-    const liveDepth = CARD_BEND_MAX_DEPTH * liveDepthScale;
     /*
      * `bendFalloffAtUv(planeVertexToUv(...))` inlined: every card pops at once when a memorize ends,
      * and this ran for three planes of every card each frame with an object and a hypot per vertex

@@ -995,3 +995,36 @@ describe('the inlined bend loop', () => {
         }
     });
 });
+
+describe('composing a card plane only when something changed', () => {
+    const plane = () => {
+        const geometry = new PlaneGeometry(1, 1.4, 4, 4);
+        const positions = geometry.attributes.position as BufferAttribute;
+        return { positions, base: cloneBasePositions(geometry), persistent: new Float32Array(positions.count) };
+    };
+
+    it('leaves a card at rest unwritten and unflagged frame after frame', () => {
+        const { positions, base, persistent } = plane();
+        composeCardPositions(positions, base, persistent, 0.5, 0.5, 1, 1.4, 0);
+        const version = positions.version;
+        composeCardPositions(positions, base, persistent, 0.2, 0.8, 1, 1.4, 0);
+        expect(positions.version).toBe(version);
+    });
+
+    it('recomposes when a press lands, moves, or a dent is stamped', () => {
+        const { positions, base, persistent } = plane();
+        composeCardPositions(positions, base, persistent, 0.5, 0.5, 1, 1.4, 0);
+        let version = positions.version;
+        composeCardPositions(positions, base, persistent, 0.5, 0.5, 1, 1.4, 1);
+        expect(positions.version).toBeGreaterThan(version);
+        version = positions.version;
+        composeCardPositions(positions, base, persistent, 0.3, 0.5, 1, 1.4, 1);
+        expect(positions.version).toBeGreaterThan(version);
+        version = positions.version;
+        addPersistentBendStamp(persistent, base, 0.5, 0.5, 1, 1.4, 1);
+        composeCardPositions(positions, base, persistent, 0.3, 0.5, 1, 1.4, 1);
+        expect(positions.version).toBeGreaterThan(version);
+        const dented = positions.array[2 + 3 * 12];
+        expect(dented).not.toBe(base[2 + 3 * 12]);
+    });
+});
