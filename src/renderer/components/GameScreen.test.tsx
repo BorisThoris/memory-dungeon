@@ -10,6 +10,7 @@ import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
 import GameScreen, { FLOOR_CLEAR_BEAT_MS, LAST_PAIR_HOLD_MS } from './GameScreen';
+import { isNextFloorWarmupHurried, NEXT_FLOOR_WARMUP_HOLD_CAP_MS, setNextFloorWarmupPending } from './nextFloorWarmupState';
 
 /** The beat counts rendered frames (16 ms rAF ticks under fake timers); the first tick only starts the count. */
 const TWO_PAINTED_FRAMES_MS = 3 * 16;
@@ -414,6 +415,60 @@ describe('GameScreen (OVR-014)', () => {
             });
             expect(continueSpy).toHaveBeenCalledTimes(1);
         } finally {
+            continueSpy.mockRestore();
+            vi.useRealTimers();
+        }
+    });
+
+    it('holds the floor change while the next floor is still warming up, and never past the cap', () => {
+        vi.useFakeTimers();
+        const continueSpy = vi.spyOn(useAppStore.getState(), 'continueToNextLevel');
+        try {
+            setNextFloorWarmupPending(true);
+            render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={levelCompleteRunFixture()} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            act(() => {
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + TWO_PAINTED_FRAMES_MS + 10);
+            });
+            // The beat has had its time but the faces are not up yet: it holds, and hurries them.
+            expect(continueSpy).not.toHaveBeenCalled();
+            expect(isNextFloorWarmupHurried()).toBe(true);
+
+            act(() => {
+                setNextFloorWarmupPending(false);
+                vi.advanceTimersByTime(TWO_PAINTED_FRAMES_MS);
+            });
+            expect(continueSpy).toHaveBeenCalledTimes(1);
+        } finally {
+            setNextFloorWarmupPending(false);
+            continueSpy.mockRestore();
+            vi.useRealTimers();
+        }
+    });
+
+    it('goes on when the cap runs out even if the warm-up never finishes', () => {
+        vi.useFakeTimers();
+        const continueSpy = vi.spyOn(useAppStore.getState(), 'continueToNextLevel');
+        try {
+            setNextFloorWarmupPending(true);
+            render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={levelCompleteRunFixture()} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            act(() => {
+                vi.advanceTimersByTime(FLOOR_CLEAR_BEAT_MS + NEXT_FLOOR_WARMUP_HOLD_CAP_MS + TWO_PAINTED_FRAMES_MS + 10);
+            });
+            expect(continueSpy).toHaveBeenCalledTimes(1);
+        } finally {
+            setNextFloorWarmupPending(false);
             continueSpy.mockRestore();
             vi.useRealTimers();
         }

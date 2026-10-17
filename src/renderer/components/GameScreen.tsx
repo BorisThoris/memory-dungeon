@@ -156,6 +156,7 @@ import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '.
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText, scoreTermsLiveRegionText } from '../copy/matchScoreFloater';
+import { isNextFloorWarmupPending, NEXT_FLOOR_WARMUP_HOLD_CAP_MS, setNextFloorWarmupHurried } from './nextFloorWarmupState';
 import {
     mismatchFloaterLiveRegionText,
     mismatchFloaterNextAction,
@@ -1311,6 +1312,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             }
             last = now;
             if (elapsed >= FLOOR_CLEAR_BEAT_MS) {
+                // The next floor's faces are still uploading: hold the clear on its stamp a little
+                // rather than freeze the new floor's first frames (`nextFloorWarmupState.ts`).
+                if (isNextFloorWarmupPending() && elapsed < FLOOR_CLEAR_BEAT_MS + NEXT_FLOOR_WARMUP_HOLD_CAP_MS) {
+                    setNextFloorWarmupHurried(true);
+                    frame = window.requestAnimationFrame(tick);
+                    return;
+                }
                 afterBeat();
                 return;
             }

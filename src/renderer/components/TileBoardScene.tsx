@@ -83,6 +83,7 @@ import { DistantCards } from './DistantCards';
 import { reserveTileTextureCards, retainTileTextureWorkingSet, setCurrentTileFaceHeight } from './tileTextures';
 import { cardFaceHeightFor, currentCardFaceView } from './cardFaceDetail';
 import { predictReflowedBoardShape } from './tileBoardResponsiveLayout';
+import { isNextFloorWarmupHurried, setNextFloorWarmupPending } from './nextFloorWarmupState';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -176,6 +177,8 @@ export type { TileBoardSceneHandle } from './useTileBoardSceneImperativeHandle';
 
 /** Per frame, for the next floor's textures: a third of a 60 fps frame, so the beat keeps its rate. */
 const NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS = 5;
+/** Once the beat has played and holds only for the warm-up (`nextFloorWarmupState.ts`). */
+const NEXT_FLOOR_WARMUP_HURRIED_BUDGET_MS = 12;
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
@@ -306,6 +309,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         // Then the marks both floors wear - this one's are still on screen under the beat.
         const marks = realmTileMarkWarmupSteps([...(run.board?.tiles ?? []), ...nextBoard.tiles], upload);
         let facesDone = false;
+        setNextFloorWarmupPending(true);
         nextFloorWarmupRef.current = (budgetMs) => {
             const started = performance.now();
             if (!facesDone) facesDone = faces(budgetMs);
@@ -317,11 +321,16 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         };
         return () => {
             nextFloorWarmupRef.current = null;
+            setNextFloorWarmupPending(false);
         };
     }, [gl, graphicsQuality, runStatus]);
     useFrame(() => {
         const step = nextFloorWarmupRef.current;
-        if (step?.(NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS)) nextFloorWarmupRef.current = null;
+        if (!step) return;
+        if (step(isNextFloorWarmupHurried() ? NEXT_FLOOR_WARMUP_HURRIED_BUDGET_MS : NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS)) {
+            nextFloorWarmupRef.current = null;
+            setNextFloorWarmupPending(false);
+        }
     });
     const { colors } = RENDERER_THEME;
     const sceneRenderQuality = gameplayRenderQualityProfile(graphicsQuality);
