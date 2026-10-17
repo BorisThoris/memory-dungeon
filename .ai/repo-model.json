@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72096,
-      "sha256": "502189068347e827cef9f2e77660b9304ff17d4d5004498ce5ecedccfb98cf0d"
+      "bytes": 72076,
+      "sha256": "7558b9174911549ede1ea6b98278d16d99fe2a0a7e9e648807662ba218e876b6"
     },
     {
       "path": "public/site.webmanifest",
@@ -11001,20 +11001,20 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 9152,
-      "sha256": "767c0a6c1fefc14f99c2ffa8af128f0884c6d32a3bdd43361cf6e94b5f41dcaa"
+      "bytes": 9260,
+      "sha256": "48ef803cd26c0bceab36a16dbe49d4617b451589ac00f6b6b61c3f11ebc10f57"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
       "category": "test",
-      "bytes": 3488,
-      "sha256": "bf42916414c51ce5c8309a08eb6ceab9ce1462c6c329b31c8620373a06747686"
+      "bytes": 4128,
+      "sha256": "80e0ab84ae6fd2f1b0a63dd7af7eb9d6a029c98ad85abbc6eb7552b00eea14d4"
     },
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 12225,
-      "sha256": "6dd2dc499a75a45f4a939951600b4854dd6e16684445f91b81a9d6dcd3ad4696"
+      "bytes": 13024,
+      "sha256": "146c0e2961cdc243cc42e27b4f0b44c1a29c55dfe4b214be4f25ac2f073a6a3c"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -16881,8 +16881,8 @@
     {
       "path": "src/shared/ui-state-copy.ts",
       "category": "source",
-      "bytes": 4600,
-      "sha256": "370b4eb51788f1970ab2246b3832fb3a7a55db558dc2efc5cc167060f5d4825f"
+      "bytes": 4557,
+      "sha256": "0561726e14e7b4e1108b927d4806bb3a71e1ea4505d85c725d5d388016739faa"
     },
     {
       "path": "src/shared/version-gate.test.ts",
@@ -23757,7 +23757,7 @@
       "path": "src/renderer/components/InventoryScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 104,
       "imports": [
         "file:src/renderer/components/InventoryScreen.tsx",
         "file:src/shared/game-core.ts"
@@ -23770,7 +23770,7 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 251,
+      "lineCount": 265,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
@@ -47220,8 +47220,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 264,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
