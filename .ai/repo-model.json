@@ -10833,8 +10833,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 7462,
-      "sha256": "74a7716f8898d21b515338c9a3a6a6795095f202442ff5a065b13e6298588afa"
+      "bytes": 7715,
+      "sha256": "1afbc636007fa9de88e8a4afbe52cd8589969dba3a92950d8dfb68b20dcbb543"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -11475,8 +11475,8 @@
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
       "category": "source",
-      "bytes": 1615,
-      "sha256": "2e7fd14c493538f9a2bedf679c0ffaf1e2c293f409ba46c266bb93922596e8b1"
+      "bytes": 2149,
+      "sha256": "ce7c4d6b5ff002027e886fe9ff5e7445568506edf1556042711152cf0911dc6c"
     },
     {
       "path": "src/renderer/components/RunEndStamp.test.tsx",
