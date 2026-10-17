@@ -10905,8 +10905,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 55035,
-      "sha256": "691d2176a330df661d6b92c241c0e31c56e3983d7837cd0db8b676604b9c9f6e"
+      "bytes": 55588,
+      "sha256": "69969d9aea76ccd7921c594b656c357d6cf139398ed7bb49083c9ef3b7342845"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
