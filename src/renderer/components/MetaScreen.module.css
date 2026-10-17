@@ -225,6 +225,19 @@
         align-items: stretch;
     }
 
+    /*
+     * The in-run plate's row alignment (flex-end, the button centred) outranked the stack above,
+     * and in a column flex-end is the right edge: the title sat pushed right with Back floating
+     * in the middle, over left-aligned tabs.
+     */
+    .modalInnerDesk .header {
+        align-items: stretch;
+    }
+
+    .modalInnerDesk .header :global(button) {
+        align-self: stretch;
+    }
+
     .header :global(button) {
         width: 100%;
     }
