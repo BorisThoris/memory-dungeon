@@ -14157,8 +14157,8 @@
     {
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
-      "bytes": 4872,
-      "sha256": "49a46c42f728e50bbd36d74ef83822d84c19deb32f57675a260e924b87bc875a"
+      "bytes": 5006,
+      "sha256": "9f98ada9d7b5b02902575afe8a688246290f59b05e8da2b9300c559142421a89"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
