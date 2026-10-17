@@ -253,9 +253,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     // (`cardFaceDetail.ts`). Judged on the shape the board is reflowed to, as the clear's warm-up
     // judged it, so the faces baked then are the ones used.
     const faceHeight = useMemo(
-        () => cardFaceHeightFor(predictReflowedBoardShape(board), currentCardFaceView()),
+        () => cardFaceHeightFor(predictReflowedBoardShape(board), currentCardFaceView(), graphicsQuality),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [board.level, board.tiles.length, board.colossus?.form]
+        [board.level, board.tiles.length, board.colossus?.form, graphicsQuality]
     );
     useLayoutEffect(() => () => {
         warmedFloorRef.current = null;
@@ -319,7 +319,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         if (!nextBoard || nextBoard === run.board) return undefined;
         reserveTileTextureCards(new Set(nextBoard.tiles.map((tile) => tile.id)));
         const upload = (texture: Texture) => gl.initTexture(texture);
-        const faces = createBoardTextureWarmupQueue(nextBoard, graphicsQuality, upload, cardFaceHeightFor(nextBoard, currentCardFaceView()));
+        const faces = createBoardTextureWarmupQueue(nextBoard, graphicsQuality, upload, cardFaceHeightFor(nextBoard, currentCardFaceView(), graphicsQuality));
         // Then the marks both floors wear - this one's are still on screen under the beat.
         const marks = realmTileMarkWarmupSteps([...(run.board?.tiles ?? []), ...nextBoard.tiles], upload);
         let facesDone = false;

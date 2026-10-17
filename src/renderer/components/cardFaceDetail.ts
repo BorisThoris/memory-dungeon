@@ -1,4 +1,4 @@
-import type { BoardState } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
 import { STATIC_CARD_TEXTURE_HEIGHT } from '../cardFace/staticCardTextureSize';
 import { colossusReservedRows } from './colossusStoneLayout';
 import { boardGridWorldSize } from './tileBoardResponsiveLayout';
@@ -32,6 +32,14 @@ const CARD_FACE_OVERSAMPLE = 3;
 const BOARD_FRAME_WIDTH_SHARE = 0.9;
 const BOARD_FRAME_HEIGHT_SHARE = 0.62;
 
+/**
+ * The Low graphics setting's ceiling. On a slow device the faces' uploads are the largest cost in
+ * play (4x CPU throttle, measured 2026-10-17: texSubImage2D ahead of everything else), and Low is
+ * the setting for that device: its faces are baked at the smallest height, 2.25x fewer pixels to
+ * upload than 768.
+ */
+const LOW_QUALITY_FACE_HEIGHT: CardFaceHeight = CARD_FACE_HEIGHTS[0];
+
 export interface CardFaceView {
     /** CSS pixels. */
     width: number;
@@ -41,8 +49,10 @@ export interface CardFaceView {
 
 export const cardFaceHeightFor = (
     board: Pick<BoardState, 'columns' | 'rows' | 'colossus'>,
-    view: CardFaceView
+    view: CardFaceView,
+    graphicsQuality?: GraphicsQualityPreset
 ): CardFaceHeight => {
+    if (graphicsQuality === 'low') return LOW_QUALITY_FACE_HEIGHT;
     const { width: boardWidth, height: boardHeight } = boardGridWorldSize(board.columns, board.rows + colossusReservedRows(board), false);
     if (!(boardWidth > 0 && boardHeight > 0 && view.width > 0 && view.height > 0)) return STATIC_CARD_TEXTURE_HEIGHT;
     const pixelsPerWorld = Math.min((view.width * BOARD_FRAME_WIDTH_SHARE) / boardWidth, (view.height * BOARD_FRAME_HEIGHT_SHARE) / boardHeight);

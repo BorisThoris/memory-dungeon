@@ -61,8 +61,9 @@ const GameScreen = lazy(async () => {
             import('./components/tileTextureWarmup'),
             import('./components/cardFaceDetail')
         ]);
-        const faceHeight = cardFaceHeightFor(board, currentCardFaceView());
-        await drawBoardTileTextures(board, useAppStore.getState().settings.graphicsQuality, 4, faceHeight).catch(() => undefined);
+        const { graphicsQuality } = useAppStore.getState().settings;
+        const faceHeight = cardFaceHeightFor(board, currentCardFaceView(), graphicsQuality);
+        await drawBoardTileTextures(board, graphicsQuality, 4, faceHeight).catch(() => undefined);
     }
     return module;
 });

@@ -2,6 +2,14 @@ import type { DepartureBinding } from './cardDepartureWorld';
 import type { DepartureMaterial } from './cardDepartureGrouping';
 import { DEPARTURE_PHYSICS_STEP } from './cardDeparturePhysics';
 
+/**
+ * Catch-up steps per frame for the departing card's sheet. Each step searches the bound body's
+ * particles for every vertex, and the loop had no cap: on a slow device (4x CPU throttle, measured
+ * 2026-10-17) a long frame queued more steps, which made the next frame longer. Six steps is 50ms
+ * of simulation - a 30 fps frame needs four - so motion is unchanged at 30 fps and above.
+ */
+export const DEPARTURE_SHEET_MAX_STEPS_PER_FRAME = 6;
+
 /** A little destructible cloth/soft-body surface preserves the departing card's real art.
  * Its positions are integrated and constrained; the face shader only shades/dissolves them. */
 export const createDepartureSheet = (original: Float32Array, columns: number, rows: number, material: DepartureMaterial, seed: number) => {
@@ -22,7 +30,11 @@ export const createDepartureSheet = (original: Float32Array, columns: number, ro
     return {
         positions,
         advance(age: number, floor: number, binding?: DepartureBinding): void {
-            while (clock + DEPARTURE_PHYSICS_STEP <= age + 1e-8) {
+            // At most a few steps a frame: identical motion down to 30 fps, and below that the
+            // sheet runs slow rather than feeding a spiral of ever longer catch-up frames.
+            let steps = 0;
+            while (clock + DEPARTURE_PHYSICS_STEP <= age + 1e-8 && steps < DEPARTURE_SHEET_MAX_STEPS_PER_FRAME) {
+                steps += 1;
                 const dt = DEPARTURE_PHYSICS_STEP;
                 clock += dt; before.set(positions);
                 const softness = material === 'water' ? Math.max(0, 1 - clock * 2) : material === 'fire' ? Math.max(0, 1 - clock * .6) : .9;

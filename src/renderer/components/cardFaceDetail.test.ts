@@ -25,6 +25,11 @@ describe('cardFaceHeightFor', () => {
         }
     });
 
+    it('bakes the smallest faces on Low, whatever the board', () => {
+        expect(cardFaceHeightFor(board(4, 2), desktop, 'low')).toBe(CARD_FACE_HEIGHTS[0]);
+        expect(cardFaceHeightFor(board(4, 2), desktop, 'high')).toBe(cardFaceHeightFor(board(4, 2), desktop));
+    });
+
     it('falls back to the full face when it cannot measure', () => {
         expect(cardFaceHeightFor(board(4, 2), { width: 0, height: 0, devicePixelRatio: 1 })).toBe(STATIC_CARD_TEXTURE_HEIGHT);
     });
