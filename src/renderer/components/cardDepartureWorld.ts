@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Color, DoubleSide, Group, Mesh, NormalBlending, PlaneGeometry, ShaderMaterial, Vector4 } from 'three';
+import { BufferAttribute, BufferGeometry, Color, DoubleSide, Group, Mesh, NormalBlending, PlaneGeometry, Scene, ShaderMaterial, Vector4 } from 'three';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { groupCardDepartures, type DepartureSource } from './cardDepartureGrouping';
 import { advanceDeparturePhysics, createDeparturePhysics, departureParticleRadius, impulseDeparturePhysics, DEPARTURE_PHYSICS_LIFE, type DeparturePhysics } from './cardDeparturePhysics';
@@ -52,6 +52,35 @@ export interface DepartureBinding { body: DeparturePhysics; source: number }
 const groupBudget = (quality: GraphicsQualityPreset): number => quality === 'low' ? 4 : quality === 'medium' ? 6 : 8;
 const tint = { water: '#5fd8ff', fire: '#ff8a2a', growth: '#8ef05a', ice: '#e8f6ff', stone: '#bcae93' };
 
+/** One construction per departure material, so the kept warm copies share their programs. */
+const particleMaterial = (uniforms: ShaderMaterial['uniforms']): ShaderMaterial =>
+    new ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true, depthWrite: false, blending: NormalBlending, side: DoubleSide });
+const vineMaterial = (uniforms: ShaderMaterial['uniforms']): ShaderMaterial =>
+    new ShaderMaterial({ vertexShader: vineVertex, fragmentShader: vineFragment, uniforms, side: DoubleSide, transparent: true, depthWrite: false });
+
+/*
+ * Kept copies of the particle field and the vines, compiled with the board (`TileBoardScene`).
+ * Each departure built and disposed its own, and three frees a program no material holds, so every
+ * match compiled the particle shader again mid-play (measured 2026-10-17). Never disposed.
+ */
+let warmDeparture: Scene | null = null;
+export const prewarmCardDepartureShaders = (compile: (scene: Scene) => void): void => {
+    if (!warmDeparture) {
+        warmDeparture = new Scene();
+        warmDeparture.add(new Mesh(new PlaneGeometry(1, 1), particleMaterial({
+            uBounds: { value: new Vector4() }, uCount: { value: 0 },
+            uParticles: { value: Array.from({ length: 48 }, () => new Vector4()) },
+            uShape: { value: Array.from({ length: 48 }, () => new Vector4()) },
+            uTint: { value: new Color() }, uFire: { value: 0 }, uDrive: { value: 0 }
+        })));
+        const vines = new BufferGeometry();
+        vines.setAttribute('position', new BufferAttribute(new Float32Array(9), 3));
+        vines.setAttribute('shade', new BufferAttribute(new Float32Array(9), 3));
+        warmDeparture.add(new Mesh(vines, vineMaterial({ uFade: { value: 0 }, uTint: { value: new Color() } })));
+    }
+    compile(warmDeparture);
+};
+
 const build = (body: DeparturePhysics): MaterialGroup => {
     if (body.cluster.material !== 'growth') {
         const uniforms = {
@@ -61,7 +90,7 @@ const build = (body: DeparturePhysics): MaterialGroup => {
             uTint: { value: new Color(tint[body.cluster.material]) },
             uFire: { value: body.cluster.material === 'fire' ? 1 : 0 }, uDrive: { value: body.drive }
         };
-        const mesh = new Mesh(new PlaneGeometry(1, 1), new ShaderMaterial({ vertexShader: vertex, fragmentShader: fragment, uniforms, transparent: true, depthWrite: false, blending: NormalBlending, side: DoubleSide }));
+        const mesh = new Mesh(new PlaneGeometry(1, 1), particleMaterial(uniforms));
         mesh.position.z = -.021;
         mesh.renderOrder = 2; mesh.frustumCulled = false; mesh.visible = false;
         return { body, mesh };
@@ -73,7 +102,7 @@ const build = (body: DeparturePhysics): MaterialGroup => {
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new BufferAttribute(positions, 3));
     geometry.setAttribute('shade', new BufferAttribute(shades, 3));
-    const material = new ShaderMaterial({ vertexShader: vineVertex, fragmentShader: vineFragment, uniforms: { uFade: { value: 0 }, uTint: { value: new Color(tint.growth) } }, side: DoubleSide, transparent: true, depthWrite: false });
+    const material = vineMaterial({ uFade: { value: 0 }, uTint: { value: new Color(tint.growth) } });
     const mesh = new Mesh(geometry, material);
     mesh.frustumCulled = false; mesh.visible = false; mesh.renderOrder = 2;
     return { body, mesh, positions, shades };

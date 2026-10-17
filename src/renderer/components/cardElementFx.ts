@@ -1,4 +1,4 @@
-import { Color, DoubleSide, Group, Mesh, NormalBlending, PlaneGeometry, ShaderMaterial, type Texture } from 'three';
+import { Color, DoubleSide, Group, Mesh, NormalBlending, PlaneGeometry, Scene, ShaderMaterial, type Texture } from 'three';
 import type { GraphicsQualityPreset, Tile, TileSuit } from '../../shared/contracts';
 import { CARD_DISSOLVE_EDGE } from './cardDissolveMaterial';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
@@ -152,6 +152,31 @@ interface Effect {
 
 const BLANK = { value: null as Texture | null };
 
+/** The element departure's material: one construction, so the kept warm copy shares its program. */
+const elementFxMaterial = (vertexShader: string, fragmentShader: string, uniforms: ShaderMaterial['uniforms']): ShaderMaterial =>
+    new ShaderMaterial({ vertexShader, fragmentShader, uniforms, side: DoubleSide, transparent: true, depthWrite: false, blending: NormalBlending });
+
+/*
+ * A kept copy of each element look, compiled with the board (`TileBoardScene`). Every departure
+ * built its own material and disposed it when done, and three frees a program no material holds:
+ * the next match compiled the same shader again, mid-play (one link per match, measured
+ * 2026-10-17). These copies are never disposed, so the program stays.
+ */
+let warmElementFx: Scene | null = null;
+export const prewarmCardElementFxShaders = (compile: (scene: Scene) => void): void => {
+    if (!warmElementFx) {
+        warmElementFx = new Scene();
+        const uniforms = {
+            uT: { value: 0 }, uSeed: { value: 0 }, uTint: { value: new Color() }, uDuration: { value: 1 }, uFloor: { value: 0 },
+            uFace: BLANK, uOverlay: BLANK, uHasOverlay: { value: 0 }
+        };
+        for (const fragment of [liquefyFragment, combustFragment, sproutFragment]) {
+            warmElementFx.add(new Mesh(new PlaneGeometry(CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT), elementFxMaterial(physicalVertex, fragment, uniforms)));
+        }
+    }
+    compile(warmElementFx);
+};
+
 export const createCardElementFxSystem = () => {
     const group = new Group();
     group.name = 'card-element-fx';
@@ -190,7 +215,7 @@ export const createCardElementFxSystem = () => {
             };
             const segments = quality === 'low' ? [4, 6] : [6, 8];
             const card = (vertexShader: string, fragmentShader: string): Mesh => {
-                const material = new ShaderMaterial({ vertexShader, fragmentShader, uniforms: shared, side: DoubleSide, transparent: true, depthWrite: false, blending: NormalBlending });
+                const material = elementFxMaterial(vertexShader, fragmentShader, shared);
                 const mesh = new Mesh(new PlaneGeometry(CARD_PLANE_WIDTH, CARD_PLANE_HEIGHT, segments[0], segments[1]), material);
                 mesh.position.set(x, y, z + 0.012);
                 return mesh;
