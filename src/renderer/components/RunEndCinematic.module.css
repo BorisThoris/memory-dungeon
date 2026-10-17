@@ -448,6 +448,11 @@
         font-size: clamp(1.3rem, 5vi, 2rem);
     }
 
+    /* The lead choice keeps its step up, within the short window (its own rule outranks the one above). */
+    .choice[data-action='play-again'] .stampText {
+        font-size: clamp(1.6rem, 6vi, 2.5rem);
+    }
+
     .choices {
         gap: 0.1rem;
     }
