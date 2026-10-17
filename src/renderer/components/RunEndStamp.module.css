@@ -70,3 +70,23 @@
         grid-column: 1 / -1;
     }
 }
+/*
+ * A phone held sideways (390px tall): the desktop verdict and spacing put the results card past
+ * the window's bottom, Run details under the edge. The verdict and score line step down and the
+ * gaps close up so the card ends on screen.
+ */
+@media (max-height: 560px) {
+    .stampHero {
+        gap: 0.25rem;
+    }
+    .verdict {
+        font-size: clamp(1.9rem, 8vh, 2.4rem);
+    }
+    .scoreLine {
+        margin-top: 0;
+        font-size: clamp(1.2rem, 4.5vh, 1.5rem);
+    }
+    .actions {
+        margin-top: 0.4rem;
+    }
+}

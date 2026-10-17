@@ -213,6 +213,16 @@
     .heroPanel {
         padding: 1rem;
     }
+    /* With the stamp's short sizes (`RunEndStamp.module.css`): the card ends on a 390px screen. */
+    .copy {
+        margin-top: 0.4rem;
+    }
+    .summaryGrid {
+        margin-top: 0.6rem;
+    }
+    .personalBest {
+        margin-top: 0.5rem;
+    }
 }
 .visuallyHidden {
     position: absolute;
