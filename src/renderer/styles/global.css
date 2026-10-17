@@ -67,6 +67,13 @@ body,
 body {
     overflow: hidden;
     overscroll-behavior-y: none;
+    /*
+     * Lining figures everywhere. Cormorant Garamond draws old-style ones by default, where a zero
+     * is a lowercase o ("Rank o/3", "o · Floor 1"), and this game's type is labels and values far
+     * more than prose. Set as a feature rather than font-variant-numeric so that the many rules
+     * using the font shorthand, which resets font-variant, still inherit it.
+     */
+    font-feature-settings: 'lnum' 1;
     background:
         radial-gradient(
             circle at 18% 15%,
