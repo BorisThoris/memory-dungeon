@@ -25,7 +25,7 @@
     margin: 0.25rem 0 0;
     color: var(--margin-gold);
     font: 500 clamp(1.3rem, 4vw, 1.8rem)/1.2 var(--margin-heading-font);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 .flourish {
     color: var(--margin-gold);

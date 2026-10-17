@@ -18,7 +18,7 @@
     gap: 0.25em;
     color: color-mix(in srgb, var(--element-color, #fff) 70%, #cfc8dc);
     opacity: 0.72;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .element[data-in-hand='true'] {

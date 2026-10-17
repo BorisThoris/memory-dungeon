@@ -63,7 +63,7 @@
     font-weight: 600;
     letter-spacing: 0;
     color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .tab[aria-selected='true'] .badge {

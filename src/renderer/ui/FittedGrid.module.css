@@ -69,7 +69,7 @@
     font-style: italic;
     font-size: 0.95rem;
     color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .pageButton {

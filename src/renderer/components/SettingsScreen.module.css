@@ -667,7 +667,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     text-align: right;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     color: var(--margin-gold);
 }
 

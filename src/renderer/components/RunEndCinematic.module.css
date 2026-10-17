@@ -150,7 +150,7 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     color: var(--margin-gold, #e1ad66);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     text-shadow: 0 2px 14px color-mix(in srgb, var(--margin-ink, #131111) 90%, transparent);
 }
 
@@ -194,7 +194,7 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     color: var(--margin-gold, #e1ad66);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .comparison {

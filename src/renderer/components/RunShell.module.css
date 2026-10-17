@@ -162,7 +162,7 @@
     font-size: 2.125rem;
     line-height: 1;
     color: var(--paper);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 /*
@@ -177,7 +177,7 @@
 
 .par {
     color: var(--paper-2);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* The par two turns from its ceiling: the one pressure read in the head, on the number itself. */
@@ -213,7 +213,7 @@
 
 .realmClock {
     color: var(--paper);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .realm[data-peak-next='true'] .realmClock {
@@ -346,7 +346,7 @@
 
 .goldLabel {
     color: var(--paper-2);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 /*
@@ -378,7 +378,7 @@
     font-size: 2.5rem;
     line-height: 1;
     color: var(--paper);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .memorizeCount {
@@ -583,7 +583,7 @@
 .rungMultiplier {
     margin-left: 0.4rem;
     opacity: 0.8;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .ladderFill {
@@ -634,7 +634,7 @@
     font-size: 1.7rem;
     line-height: 1;
     color: var(--marker);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     text-shadow: 0 2px 18px color-mix(in srgb, var(--ink) 90%, transparent);
 }
 
@@ -654,7 +654,7 @@
     font-size: calc(3.6rem * (1 + 0.12 * var(--combo-surge, 0)));
     line-height: 1;
     color: color-mix(in srgb, var(--combo-flame) calc(100% * var(--combo-aura, 0)), var(--marker));
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     /* The aura: nothing at cold, a halo in the flame's colour that widens with the heat. */
     text-shadow:
         0 2px 18px color-mix(in srgb, var(--ink) 90%, transparent),
@@ -1006,7 +1006,7 @@
     font-size: 0.8125rem;
     line-height: 1;
     color: var(--gold);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .toolPause {
@@ -1070,7 +1070,7 @@
     font-size: 1.1rem;
     line-height: 1;
     color: var(--paper);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .seatLabelShort {
@@ -1749,7 +1749,7 @@
 .shell[data-layout^='phone'] .floor { grid-area: 1 / 1; font-weight: 600; font-size: 1.5rem; }
 .shell[data-layout^='phone'] .score {
     justify-content: flex-end;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 .shell[data-layout^='phone'] .scoreValue { font: 600 1.125rem/1 'Source Sans 3', sans-serif; white-space: nowrap; }
 .shell[data-layout^='phone'] .gold { font-size: 0.75rem; gap: 0.2rem; }
@@ -1810,14 +1810,14 @@
 .shell .floor { grid-area: 1 / 1; font-size: 1.5rem; white-space: nowrap; }
 .shell .floorWord { font: 600 0.75rem/1 'Source Sans 3', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
 .shell .score { grid-area: 1 / 3; justify-self: end; max-width: 100%; gap: 0.45rem; margin: 0; }
-.shell .scoreValue { font: 600 1.375rem/1 'Source Sans 3', sans-serif; font-variant-numeric: tabular-nums; }
+.shell .scoreValue { font: 600 1.375rem/1 'Source Sans 3', sans-serif; font-variant-numeric: lining-nums tabular-nums; }
 .shell .scoreLabel { font: 400 0.75rem/1 'Source Sans 3', sans-serif; letter-spacing: 0.04em; }
 .shell .gold { font-size: 0.75rem; gap: 0.2rem; }
 .shell .goldValue { font-size: 0.875rem; }
 .shell .headRule { display: none; }
 .lives { --life-stone: #963c46; --life-light: #db9683; grid-area: 1 / 2; display: inline-flex; gap: 0.35rem; align-items: center; color: #f4e4cb; white-space: nowrap; position: relative; font-family: 'Source Sans 3', sans-serif; }
 .lives svg { width: 1.4rem; height: 1.6rem; flex: none; filter: drop-shadow(0 2px 2px #000) drop-shadow(0 0 4px #bd78452e); }
-.lifeCount { font-size: 1.65rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.lifeCount { font-size: 1.65rem; font-weight: 700; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
 .lifeLabel { font-size: 0.75rem; }
 .lives[data-low='true'] { color: #fff; text-shadow: 0 0 9px #ed384f; }
 .lives[data-low='true'] svg { --life-stone: #d04443; --life-light: #ffd2a1; filter: drop-shadow(0 0 5px #c84432a6); }

@@ -455,7 +455,7 @@
     font-family: var(--ui-font-display-family);
     font-size: 1.18rem;
     font-weight: 800;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     letter-spacing: 0.04em;
     color: var(--theme-text);
     line-height: 1;
@@ -744,7 +744,7 @@ under pause/relic modals.
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     font-family: var(--margin-body-font);
     font-weight: 400;
     /* Grows with the combo heat (--combo-heat is on the shell): half again at Legendary. */
@@ -914,7 +914,7 @@ subdued cool palette. */
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     font-family: var(--margin-body-font);
     font-weight: 400;
     font-size: clamp(0.8rem, 2vi, 0.95rem);
@@ -1355,7 +1355,7 @@ where that rule
     font-size: 0.875rem;
     font-weight: 400;
     color: var(--margin-paper);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* The misses' shelf note. A bare <small> is `smaller` than the 14px row: 11.7px, under the floor. */
@@ -1597,7 +1597,7 @@ where that rule
     color: var(--theme-gold-bright);
     font: inherit;
     font-size: 0.8125rem;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     cursor: pointer;
 }
 

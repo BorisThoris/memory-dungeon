@@ -613,7 +613,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     white-space: nowrap;
 }
 
@@ -658,7 +658,7 @@
     font-family: var(--margin-heading-font);
     font-size: 0.9rem;
     letter-spacing: 0;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* ---- the last entry: a shared run --------------------------------------------------- */

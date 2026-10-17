@@ -38,7 +38,7 @@
     font-size: clamp(1.4rem, 3.4vh, 1.9rem);
     font-weight: 600;
     line-height: 1.05;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .valueAccent {

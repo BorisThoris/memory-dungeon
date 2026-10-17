@@ -41,7 +41,7 @@
     font-weight: 600;
     line-height: 1;
     color: var(--margin-gold);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .tiers {
@@ -193,7 +193,7 @@
     font-size: 0.78rem;
     font-style: italic;
     color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .progressCard[data-status='completed'] {
@@ -257,13 +257,13 @@
 
 .historyResult {
     color: var(--margin-paper-soft);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .historyDate {
     font-style: italic;
     color: var(--margin-paper-dim);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .footer {

@@ -12,7 +12,7 @@
 .holder { font-size: clamp(1.6rem, 3.8vh, 2.15rem); font-weight: 600; }
 .empty { font-size: clamp(1.25rem, 3vh, 1.65rem); }
 .recordScore { box-sizing: border-box; max-width: 55%; margin: 0; padding-left: 1.1rem; border-left: 1px solid var(--margin-rule, #8e7750); flex: none; }
-.recordScore strong { display: block; overflow-wrap: anywhere; font-family: var(--margin-heading-font, Georgia, serif); font-size: 1.65rem; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.recordScore strong { display: block; overflow-wrap: anywhere; font-family: var(--margin-heading-font, Georgia, serif); font-size: 1.65rem; font-weight: 500; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
 .recordScore span { display: block; margin-top: .35rem; color: var(--margin-paper-dim, #bab6b6); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; }
 .challengeHint { margin: .55rem 0 .25rem; color: var(--margin-paper-soft, #d7d3d3); font-family: var(--margin-heading-font, Georgia, serif); font-style: italic; font-size: 1rem; line-height: 1.2; }
 .challenge { display: flex; align-items: center; justify-content: center; gap: .8rem; width: 100%; min-height: 44px; padding: .4rem; border: 0; background: transparent; color: var(--margin-gold, #e1ad66); font: inherit; font-size: .8rem; letter-spacing: .1em; cursor: pointer; }

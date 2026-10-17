@@ -49,7 +49,7 @@
     font-weight: 700;
     font-size: clamp(2.8rem, 9vmin, 5rem);
     line-height: 1;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
     color: var(--margin-fever, #facb8d);
 }
 

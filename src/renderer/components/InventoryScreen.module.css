@@ -169,7 +169,7 @@
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--margin-gold);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: lining-nums tabular-nums;
 }
 
 .empty {
