@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3184,
-    "codeFileCount": 1198,
-    "exportedSymbolCount": 3784,
+    "trackedFileCount": 3185,
+    "codeFileCount": 1199,
+    "exportedSymbolCount": 3788,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10092
+    "relationshipCount": 10099
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "bd1b8ca346ccc2d589764ac694588d96ddd4b3dada23758f956fdbd3684c18a2"
+      "sha256": "f5adf82ca407083e30e2ba7845a5b3b2aa31ef1dc4094d7a32bd7a63c45227b2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72337,
-      "sha256": "fac7bfc7728eaf4195a511a54c8bbb75b53b5273531cee08aba50519e52693df"
+      "bytes": 71799,
+      "sha256": "9524ce2e206c43d15b4991f3bf6d548c08d8b3a2d22a4d7724a2bfeb8a7b4318"
     },
     {
       "path": "public/site.webmanifest",
@@ -11197,10 +11197,16 @@
       "sha256": "52e97fcca621a8893be261200fd2c629822610e4db9efb901ed0995fb781c07b"
     },
     {
+      "path": "src/renderer/components/nextFloorWarmupState.test.ts",
+      "category": "test",
+      "bytes": 1292,
+      "sha256": "9f56e1068553898d7f955e5706ba7cc594c55b03cb0929fcbbb76be3055da35b"
+    },
+    {
       "path": "src/renderer/components/nextFloorWarmupState.ts",
       "category": "source",
-      "bytes": 1395,
-      "sha256": "15a9b7ee4692b30852ae0844254dee69a408cc7ef51cb6ec8f2325c6bf5b72fa"
+      "bytes": 2784,
+      "sha256": "21bf53d590d139e5e262ea52edd081e753e13f19b2fb472903ed6ae99e837da3"
     },
     {
       "path": "src/renderer/components/OddCardLegend.module.css",
@@ -11823,8 +11829,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 147873,
-      "sha256": "96d762b1f2f6801fae56204553bad4774b3a854186e737aa2ee50d3f16e56894"
+      "bytes": 148091,
+      "sha256": "b15eaeb99e526393b2e70dfced3b87145b23fc2a96faeb75e773afc5a66ad0fb"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -12333,8 +12339,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 33284,
-      "sha256": "7007d58efe18bed6aab9a8f0588622784b583dfee68a230eceb8bd0c36f011db"
+      "bytes": 34351,
+      "sha256": "011daf088030d59203b594ef43b54571c86b758388523361a3789dd1099525d9"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -24241,21 +24247,38 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/nextFloorWarmupState.test.ts",
+      "path": "src/renderer/components/nextFloorWarmupState.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 39,
+      "imports": [
+        "file:src/renderer/components/nextFloorWarmupState.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/nextFloorWarmupState.ts",
       "path": "src/renderer/components/nextFloorWarmupState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 32,
+      "lineCount": 67,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#BOARD_WARMUP_WAIT_CAP_MS",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#isBoardWarmupPending",
         "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
         "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupPending",
         "symbol:src/renderer/components/nextFloorWarmupState.ts#NEXT_FLOOR_WARMUP_HOLD_CAP_MS",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#setBoardWarmupPending",
         "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
-        "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending"
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
+        "symbol:src/renderer/components/nextFloorWarmupState.ts#waitForBoardWarmup"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameScreen.test.tsx"
+        "file:src/renderer/components/GameScreen.test.tsx",
+        "file:src/renderer/components/nextFloorWarmupState.test.ts"
       ]
     },
     {
@@ -25972,11 +25995,12 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3329,
+      "lineCount": 3332,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/colossusStoneLayout.ts",
+        "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/components/shuffleFlipAnimation.ts",
         "file:src/renderer/components/tileBoardCanvasContext.ts",
         "file:src/renderer/components/tileBoardDomAccessibility.ts",
@@ -27566,7 +27590,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 710,
+      "lineCount": 729,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -47672,6 +47696,22 @@
       "endLine": 134
     },
     {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#BOARD_WARMUP_WAIT_CAP_MS",
+      "name": "BOARD_WARMUP_WAIT_CAP_MS",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 43,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#isBoardWarmupPending",
+      "name": "isBoardWarmupPending",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 52,
+      "endLine": 52
+    },
+    {
       "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
       "name": "isNextFloorWarmupHurried",
       "kind": "value",
@@ -47696,6 +47736,14 @@
       "endLine": 17
     },
     {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#setBoardWarmupPending",
+      "name": "setBoardWarmupPending",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 45,
+      "endLine": 50
+    },
+    {
       "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
       "name": "setNextFloorWarmupHurried",
       "kind": "value",
@@ -47710,6 +47758,14 @@
       "file": "src/renderer/components/nextFloorWarmupState.ts",
       "line": 19,
       "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/components/nextFloorWarmupState.ts#waitForBoardWarmup",
+      "name": "waitForBoardWarmup",
+      "kind": "value",
+      "file": "src/renderer/components/nextFloorWarmupState.ts",
+      "line": 55,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/OddCardLegend.tsx#OddCardLegend",
@@ -49828,24 +49884,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3328,
-      "endLine": 3328
+      "line": 3331,
+      "endLine": 3331
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 302,
-      "endLine": 309
+      "line": 303,
+      "endLine": 310
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 311,
-      "endLine": 315
+      "line": 312,
+      "endLine": 316
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -51772,8 +51828,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 709,
-      "endLine": 709
+      "line": 728,
+      "endLine": 728
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -82011,6 +82067,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#BOARD_WARMUP_WAIT_CAP_MS",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#BOARD_WARMUP_WAIT_CAP_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#isBoardWarmupPending",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#isBoardWarmupPending",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
       "source": "file:src/renderer/components/nextFloorWarmupState.ts",
       "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#isNextFloorWarmupHurried",
@@ -82029,6 +82097,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#setBoardWarmupPending",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#setBoardWarmupPending",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
       "source": "file:src/renderer/components/nextFloorWarmupState.ts",
       "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupHurried",
@@ -82038,6 +82112,12 @@
       "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
       "source": "file:src/renderer/components/nextFloorWarmupState.ts",
       "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#setNextFloorWarmupPending",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/nextFloorWarmupState.ts->symbol:src/renderer/components/nextFloorWarmupState.ts#waitForBoardWarmup",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "symbol:src/renderer/components/nextFloorWarmupState.ts#waitForBoardWarmup",
       "kind": "exports"
     },
     {
@@ -107701,6 +107781,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/nextFloorWarmupState.test.ts->src/renderer/components/nextFloorWarmupState.ts",
+      "source": "file:src/renderer/components/nextFloorWarmupState.test.ts",
+      "target": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/OddCardLegend.tsx->src/renderer/copy/oddCardBeat.ts",
       "source": "file:src/renderer/components/OddCardLegend.tsx",
       "target": "file:src/renderer/copy/oddCardBeat.ts",
@@ -109738,6 +109824,12 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/colossusStoneLayout.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/colossusStoneLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/nextFloorWarmupState.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/components/nextFloorWarmupState.ts",
       "kind": "imports"
     },
     {
@@ -129176,6 +129268,12 @@
       "id": "tested_by:src/renderer/components/nextFloorWarmupState.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/nextFloorWarmupState.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/nextFloorWarmupState.ts->file:src/renderer/components/nextFloorWarmupState.test.ts",
+      "source": "file:src/renderer/components/nextFloorWarmupState.ts",
+      "target": "file:src/renderer/components/nextFloorWarmupState.test.ts",
       "kind": "tested_by"
     },
     {
