@@ -29,3 +29,38 @@ export const setNextFloorWarmupHurried = (value: boolean): void => {
 };
 
 export const isNextFloorWarmupHurried = (): boolean => hurried;
+
+/*
+ * The board's own floor, from its mount: whatever the clear's warm-up left undone is uploaded under
+ * the veil a slice a frame, and the veil stays up until it is done (`TileBoard`'s entrance waits on
+ * `waitForBoardWarmup`). The mount used to upload all of it in its first frame - after a held beat
+ * that ran out on a saturated machine, still 600-700ms frozen.
+ */
+let boardPending = false;
+const boardListeners = new Set<() => void>();
+
+/** The longest the veil waits on the board's warm-up. */
+export const BOARD_WARMUP_WAIT_CAP_MS = 1500;
+
+export const setBoardWarmupPending = (value: boolean): void => {
+    boardPending = value;
+    if (value) return;
+    for (const listener of [...boardListeners]) listener();
+    boardListeners.clear();
+};
+
+export const isBoardWarmupPending = (): boolean => boardPending;
+
+/** Resolves once the board's textures are up, or after `capMs`, whichever is first. */
+export const waitForBoardWarmup = (capMs: number = BOARD_WARMUP_WAIT_CAP_MS): Promise<void> =>
+    boardPending
+        ? new Promise<void>((resolve) => {
+              const done = (): void => {
+                  window.clearTimeout(timer);
+                  boardListeners.delete(done);
+                  resolve();
+              };
+              const timer = window.setTimeout(done, capMs);
+              boardListeners.add(done);
+          })
+        : Promise.resolve();

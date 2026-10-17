@@ -112,6 +112,7 @@ import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
 import { canUseWebGL } from './tileBoardWebglSupport';
 import { PRESTAGE_VEIL_EXIT_MS, TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
 import { getTileBoardCanvasContextConfig } from './tileBoardCanvasContext';
+import { waitForBoardWarmup } from './nextFloorWarmupState';
 import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextRecovery';
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
@@ -1027,7 +1028,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     // The lead is spent inside the dwell, so the veil lifts when it always did.
                     window.setTimeout(resolve, BOARD_PRESTAGE_DWELL_MS - BOARD_ENTRANCE_REVEAL_LEAD_MS);
                 }),
-                Promise.race([preloadReady, preloadTimeout])
+                Promise.race([preloadReady, preloadTimeout]),
+                // The board's textures, uploaded under the veil rather than in one frame (`nextFloorWarmupState.ts`).
+                waitForBoardWarmup()
             ]);
 
             if (runId !== prestageRunIdRef.current) {

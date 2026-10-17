@@ -83,7 +83,7 @@ import { DistantCards } from './DistantCards';
 import { reserveTileTextureCards, retainTileTextureWorkingSet, setCurrentTileFaceHeight } from './tileTextures';
 import { cardFaceHeightFor, currentCardFaceView } from './cardFaceDetail';
 import { predictReflowedBoardShape } from './tileBoardResponsiveLayout';
-import { isNextFloorWarmupHurried, setNextFloorWarmupPending } from './nextFloorWarmupState';
+import { isNextFloorWarmupHurried, setBoardWarmupPending, setNextFloorWarmupPending } from './nextFloorWarmupState';
 import { useTileBoardSceneResources } from './useTileBoardSceneResources';
 import {
     useTileBoardSceneImperativeHandle,
@@ -179,6 +179,8 @@ export type { TileBoardSceneHandle } from './useTileBoardSceneImperativeHandle';
 const NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS = 5;
 /** Once the beat has played and holds only for the warm-up (`nextFloorWarmupState.ts`). */
 const NEXT_FLOOR_WARMUP_HURRIED_BUDGET_MS = 12;
+/** Per frame for the board's own textures under the veil, where only the composited deck moves. */
+const BOARD_WARMUP_FRAME_BUDGET_MS = 12;
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
 const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
@@ -245,6 +247,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * transition, rather than on its first reveal, first match and first miss (`tileTextureWarmup`).
      */
     const warmedFloorRef = useRef<string | null>(null);
+    const boardWarmupRef = useRef<((budgetMs: number) => boolean) | null>(null);
     // The floor's face detail, chosen once per floor from how large its cards stand on screen; a
     // pinch, a resize or the reflow a new floor gets as it mounts does not re-bake every face
     // (`cardFaceDetail.ts`). Judged on the shape the board is reflowed to, as the clear's warm-up
@@ -256,6 +259,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     );
     useLayoutEffect(() => () => {
         warmedFloorRef.current = null;
+        boardWarmupRef.current = null;
+        setBoardWarmupPending(false);
         prewarmRealmTileMarks([]);
         reserveTileTextureCards(new Set());
     }, []);
@@ -269,7 +274,16 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             return;
         }
         setCurrentTileFaceHeight(faceHeight);
-        uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture), faceHeight);
+        if (reduceMotionRef.current) {
+            // No veil to wait under: the board shows at once, so everything goes up now.
+            uploadBoardTileTextures(board, graphicsQuality, (texture) => gl.initTexture(texture), faceHeight);
+        } else {
+            // What the clear's warm-up left undone goes up under the veil, a slice a frame.
+            const step = createBoardTextureWarmupQueue(board, graphicsQuality, (texture) => gl.initTexture(texture), faceHeight);
+            const done = step(BOARD_WARMUP_FRAME_BUDGET_MS);
+            boardWarmupRef.current = done ? null : step;
+            setBoardWarmupPending(!done);
+        }
         // This board's cards are the working set now; what was set aside for it is no longer special.
         reserveTileTextureCards(new Set());
         prewarmPairProximityBadges(board.columns + board.rows);
@@ -325,6 +339,11 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         };
     }, [gl, graphicsQuality, runStatus]);
     useFrame(() => {
+        const boardStep = boardWarmupRef.current;
+        if (boardStep?.(BOARD_WARMUP_FRAME_BUDGET_MS)) {
+            boardWarmupRef.current = null;
+            setBoardWarmupPending(false);
+        }
         const step = nextFloorWarmupRef.current;
         if (!step) return;
         if (step(isNextFloorWarmupHurried() ? NEXT_FLOOR_WARMUP_HURRIED_BUDGET_MS : NEXT_FLOOR_WARMUP_FRAME_BUDGET_MS)) {
