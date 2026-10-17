@@ -11163,8 +11163,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 7808,
-      "sha256": "1361fcd55d7197ab21871ece3f8b41d3419066400d063454d7bb8084f812ae91"
+      "bytes": 8213,
+      "sha256": "38fadfcf70d3de0a2b67cc385257062855e1ad46fa6fb7dacedda18a153d3451"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
