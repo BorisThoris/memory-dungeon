@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3185,
-    "codeFileCount": 1199,
-    "exportedSymbolCount": 3788,
+    "trackedFileCount": 3186,
+    "codeFileCount": 1200,
+    "exportedSymbolCount": 3789,
     "contentItemCount": 12,
     "mechanicCount": 65,
     "stateFieldCount": 133,
-    "relationshipCount": 10099
+    "relationshipCount": 10104
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "f5adf82ca407083e30e2ba7845a5b3b2aa31ef1dc4094d7a32bd7a63c45227b2"
+      "sha256": "204354468d51644779aaa93745eeb0dcb64219c8e9ef7172101d8af372a4eab8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -6093,8 +6093,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 27928,
-      "sha256": "9ed99220a25ceb1995ecc72ea7926ccfde8a4f4bf939da1c5291fe0e4e6de248"
+      "bytes": 27982,
+      "sha256": "a653e79074216817483f9bea3e22c8f2ad9321936a8c167153e832aac4241139"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -10429,10 +10429,16 @@
       "sha256": "64d50fbdfa5dc2f00380fa16b64b2a572ed7253761956caf397f979e08c56a71"
     },
     {
+      "path": "src/renderer/components/cardDepartureSheet.test.ts",
+      "category": "test",
+      "bytes": 1598,
+      "sha256": "a22d32b82facd8a4f7ef6f65e50ea5f4adba18fcbd7f09e2c47574f9241efc6a"
+    },
+    {
       "path": "src/renderer/components/cardDepartureSheet.ts",
       "category": "source",
-      "bytes": 4933,
-      "sha256": "c7c9b2abfb231946e29f23cd57357c1ac4757df8f7f599fe294f878e7bddd0d0"
+      "bytes": 5672,
+      "sha256": "eebd2d4505402a8907b43f49c68a0156b5f84c14ab20311af785d5aeef66608a"
     },
     {
       "path": "src/renderer/components/cardDepartureWorld.test.ts",
@@ -10473,14 +10479,14 @@
     {
       "path": "src/renderer/components/cardFaceDetail.test.ts",
       "category": "test",
-      "bytes": 2157,
-      "sha256": "f2e0a1f3acb3b4e175c4a422da72ea11cde3aadafc8bcb4ef8d08ec6a565f6fb"
+      "bytes": 2438,
+      "sha256": "aee373da95ab89369d8207767dea979a4a5ee982510edf23c7c7ce09186d3b26"
     },
     {
       "path": "src/renderer/components/cardFaceDetail.ts",
       "category": "source",
-      "bytes": 3117,
-      "sha256": "f7c7bf778bcfbc34440a236290f6a9f5bc6176a24720d7e882338f07fc2f589d"
+      "bytes": 3647,
+      "sha256": "edf46de6199174f90fd715826fa917cf9fdb0276f75eabafabb258f7d62fc458"
     },
     {
       "path": "src/renderer/components/cardGlowFrame.test.ts",
@@ -12339,8 +12345,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 34351,
-      "sha256": "011daf088030d59203b594ef43b54571c86b758388523361a3789dd1099525d9"
+      "bytes": 34402,
+      "sha256": "2e3520c19f6ac260ad1556bf4cc657968b5012d2929c1935d3567611eba568c1"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -19814,7 +19820,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 557,
+      "lineCount": 558,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -22081,7 +22087,8 @@
         "symbol:src/renderer/components/cardDeparturePhysics.ts#impulseDeparturePhysics"
       ],
       "testedBy": [
-        "file:src/renderer/components/cardDeparturePhysics.test.ts"
+        "file:src/renderer/components/cardDeparturePhysics.test.ts",
+        "file:src/renderer/components/cardDepartureSheet.test.ts"
       ]
     },
     {
@@ -22101,20 +22108,35 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/cardDepartureSheet.test.ts",
+      "path": "src/renderer/components/cardDepartureSheet.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 29,
+      "imports": [
+        "file:src/renderer/components/cardDeparturePhysics.ts",
+        "file:src/renderer/components/cardDepartureSheet.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/cardDepartureSheet.ts",
       "path": "src/renderer/components/cardDepartureSheet.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 86,
       "imports": [
         "file:src/renderer/components/cardDepartureGrouping.ts",
         "file:src/renderer/components/cardDeparturePhysics.ts",
         "file:src/renderer/components/cardDepartureWorld.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet"
+        "symbol:src/renderer/components/cardDepartureSheet.ts#createDepartureSheet",
+        "symbol:src/renderer/components/cardDepartureSheet.ts#DEPARTURE_SHEET_MAX_STEPS_PER_FRAME"
       ],
       "testedBy": [
+        "file:src/renderer/components/cardDepartureSheet.test.ts",
         "file:src/renderer/components/cardDepartureWorld.test.ts"
       ]
     },
@@ -22233,7 +22255,7 @@
       "path": "src/renderer/components/cardFaceDetail.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 39,
+      "lineCount": 44,
       "imports": [
         "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/cardFaceDetail.ts",
@@ -22247,7 +22269,7 @@
       "path": "src/renderer/components/cardFaceDetail.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 58,
+      "lineCount": 68,
       "imports": [
         "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/colossusStoneLayout.ts",
@@ -42852,8 +42874,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 556,
-      "endLine": 556
+      "line": 557,
+      "endLine": 557
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -45796,8 +45818,16 @@
       "name": "createDepartureSheet",
       "kind": "value",
       "file": "src/renderer/components/cardDepartureSheet.ts",
-      "line": 7,
-      "endLine": 73
+      "line": 15,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDepartureSheet.ts#DEPARTURE_SHEET_MAX_STEPS_PER_FRAME",
+      "name": "DEPARTURE_SHEET_MAX_STEPS_PER_FRAME",
+      "kind": "value",
+      "file": "src/renderer/components/cardDepartureSheet.ts",
+      "line": 11,
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
@@ -45956,24 +45986,24 @@
       "name": "cardFaceHeightFor",
       "kind": "value",
       "file": "src/renderer/components/cardFaceDetail.ts",
-      "line": 42,
-      "endLine": 51
+      "line": 50,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/cardFaceDetail.ts#CardFaceView",
       "name": "CardFaceView",
       "kind": "interface",
       "file": "src/renderer/components/cardFaceDetail.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 43,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/components/cardFaceDetail.ts#currentCardFaceView",
       "name": "currentCardFaceView",
       "kind": "value",
       "file": "src/renderer/components/cardFaceDetail.ts",
-      "line": 54,
-      "endLine": 57
+      "line": 64,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/cardGlowFrame.ts#advanceCardGlowFrame",
@@ -80645,6 +80675,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/cardDepartureSheet.ts->symbol:src/renderer/components/cardDepartureSheet.ts#DEPARTURE_SHEET_MAX_STEPS_PER_FRAME",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "symbol:src/renderer/components/cardDepartureSheet.ts#DEPARTURE_SHEET_MAX_STEPS_PER_FRAME",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/cardDepartureWorld.ts->symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
       "source": "file:src/renderer/components/cardDepartureWorld.ts",
       "target": "symbol:src/renderer/components/cardDepartureWorld.ts#createCardDepartureWorld",
@@ -104616,6 +104652,18 @@
       "id": "imports:src/renderer/components/cardDepartureResources.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/cardDepartureResources.test.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureSheet.test.ts->src/renderer/components/cardDeparturePhysics.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.test.ts",
+      "target": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/cardDepartureSheet.test.ts->src/renderer/components/cardDepartureSheet.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.test.ts",
+      "target": "file:src/renderer/components/cardDepartureSheet.ts",
       "kind": "imports"
     },
     {
@@ -128824,6 +128872,18 @@
       "id": "tested_by:src/renderer/components/cardDeparturePhysics.ts->file:src/renderer/components/cardDeparturePhysics.test.ts",
       "source": "file:src/renderer/components/cardDeparturePhysics.ts",
       "target": "file:src/renderer/components/cardDeparturePhysics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDeparturePhysics.ts->file:src/renderer/components/cardDepartureSheet.test.ts",
+      "source": "file:src/renderer/components/cardDeparturePhysics.ts",
+      "target": "file:src/renderer/components/cardDepartureSheet.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/cardDepartureSheet.ts->file:src/renderer/components/cardDepartureSheet.test.ts",
+      "source": "file:src/renderer/components/cardDepartureSheet.ts",
+      "target": "file:src/renderer/components/cardDepartureSheet.test.ts",
       "kind": "tested_by"
     },
     {
