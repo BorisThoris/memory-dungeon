@@ -14031,8 +14031,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 7853,
-      "sha256": "1e38ef243fc2be6d9229f91cc1859633d2586c350a72c45138cb4ed87684b64e"
+      "bytes": 8279,
+      "sha256": "264b026de01b94cefbd992711b22194dd523217074385cac152ec17619b929f0"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
