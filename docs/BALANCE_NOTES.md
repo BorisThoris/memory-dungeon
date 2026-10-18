@@ -3411,3 +3411,8 @@ A Curio now holds a Crucible or a Storm Glass (`curioItemsForRules`); a rules-66
 only crucibles, so `GAME_RULES_VERSION` 66 → 67. The glass calls the realm's peak on demand and
 keeps the weather clock's count. The reseed moved the census again (the ledger quotes the rules-67
 figures); peek reads 0.876 of a run's floors and stays banded common.
+
+The difficulty-curve gate flapped on this reseed: its ten seeds read the narrow-palette par gap at
+0.132 (0.119 on rules 66), over the 0.12 band, while a hundred seeds read 0.088 (0.087 on rules 66)
+- the deal had not moved, the sample had. `CURVE_SEEDS` is now the original ten plus ninety (19 s
+for the check); the band is unchanged.

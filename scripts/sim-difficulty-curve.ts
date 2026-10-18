@@ -50,7 +50,13 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/
 import { SCATTERED_SUIT_CEILING, boardPaletteWidth } from '../src/shared/tile-suit-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
 
-export const CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
+/**
+ * The curve's players: the original ten, then ninety more. Ten seeds read the narrow-palette gap
+ * at 0.119 on rules 66 and 0.132 on the rules-67 reseed, flapping across the 0.12 band on a deal
+ * that had not changed; a hundred read 0.087 and 0.088 (2026-10-18). Sample, not threshold.
+ */
+const ORIGINAL_CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
+export const CURVE_SEEDS: readonly number[] = [...ORIGINAL_CURVE_SEEDS, ...Array.from({ length: 90 }, (_, index) => 100_003 + index * 7919)];
 export const CURVE_FLOORS = 52;
 
 /**
