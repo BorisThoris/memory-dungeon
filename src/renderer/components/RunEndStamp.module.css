@@ -17,6 +17,7 @@
     margin: 0;
     color: var(--stamp);
     font: 600 clamp(2rem, 6vw, 3.25rem)/1.05 var(--margin-heading-font);
+    font-feature-settings: 'lnum' 1;
 }
 .stampText {
     color: inherit;
@@ -25,6 +26,7 @@
     margin: 0.25rem 0 0;
     color: var(--margin-gold);
     font: 500 clamp(1.3rem, 4vw, 1.8rem)/1.2 var(--margin-heading-font);
+    font-feature-settings: 'lnum' 1;
     font-variant-numeric: lining-nums tabular-nums;
 }
 .flourish {

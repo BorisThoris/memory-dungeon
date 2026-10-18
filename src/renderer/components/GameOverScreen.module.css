@@ -155,6 +155,7 @@
 .achievementHeading {
     margin: 0;
     font: 500 1.25rem var(--margin-heading-font);
+    font-feature-settings: 'lnum' 1;
     color: var(--margin-gold);
 }
 .achievementList {
