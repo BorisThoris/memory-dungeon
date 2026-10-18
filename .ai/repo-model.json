@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 527884,
-      "sha256": "dfbe9ed4991624c77450b11d2c028164786a8f2192d850a0c9e291011b81eef9"
+      "bytes": 528221,
+      "sha256": "b417a94fbbc877457f5b22352a6bf8ec43220e9676eb82aa1f25208984801583"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -5715,8 +5715,8 @@
     {
       "path": "scripts/sim-difficulty-curve.ts",
       "category": "script",
-      "bytes": 16710,
-      "sha256": "514ab0a3351cd267b8c14b799b21e73e54e96e762cb01a9ae8a0eaed8fac9478"
+      "bytes": 17151,
+      "sha256": "f667ee18ab8a98a86086d152be8c5ef6dbe0ef6e01bf95f6db13c2fb0da5df1b"
     },
     {
       "path": "scripts/sim-endless.ts",
