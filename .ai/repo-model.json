@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3195,
     "codeFileCount": 1209,
-    "exportedSymbolCount": 3822,
+    "exportedSymbolCount": 3825,
     "contentItemCount": 12,
     "mechanicCount": 66,
     "stateFieldCount": 134,
-    "relationshipCount": 10191
+    "relationshipCount": 10199
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "053942f19ded7b4ee4d80ebed7729fc8ff16d4959f733cf1170c77baad01ec9d"
+      "sha256": "22ab36ce3d7f268f80f78527eda9a9f6d5732c9c1ab71f5d0492b48b3ef1bf1b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72145,
-      "sha256": "c726c24720912b1ca3d8d4362359fe6ea1777ea3f984e1a8687fbff9e3e14c95"
+      "bytes": 71896,
+      "sha256": "6f3433545780bc7eb80f7425570c437b00ea9ef888cc13e3261cd6db5c5664c6"
     },
     {
       "path": "public/site.webmanifest",
@@ -9849,8 +9849,8 @@
     {
       "path": "src/renderer/audio/dailyMusic.ts",
       "category": "source",
-      "bytes": 3081,
-      "sha256": "5564144059cd448e03a58dd635213e5ac4acd47bc9bc1f7bf4da88c53c9b5c5a"
+      "bytes": 4076,
+      "sha256": "a1e5967a619c57567bd5ef91eab369adb9f8586f091ce1ddc2c13c292e4f0d73"
     },
     {
       "path": "src/renderer/audio/dailyMusicRender.test.ts",
@@ -10941,8 +10941,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 123049,
-      "sha256": "f675266cca81285cb45f04f4855ba50e1360a2b9be89a20ef2985d1716d49136"
+      "bytes": 123278,
+      "sha256": "71d3f34e22f3091467401b2d0a95e10b25752e4aae3a817d7b226f041a4ec869"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -10965,8 +10965,8 @@
     {
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
       "category": "source",
-      "bytes": 1169,
-      "sha256": "b4b14f25d865aa5048d0c70207f52043f43d9fa145c742b7b792d66de44ed745"
+      "bytes": 1234,
+      "sha256": "2b298a92238ed8109a05b15f90c6137d5d24aee9a840082177db5437009f6247"
     },
     {
       "path": "src/renderer/components/GlobalRecord.module.css",
@@ -11535,20 +11535,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 62091,
-      "sha256": "a3280aed05139b706d06c7f198b00fbff97b800f772531d38c4a66f67fa04efa"
+      "bytes": 62310,
+      "sha256": "f3a5c9defe469d357eca0861aaff09336070194201761fcd1305ae729f1fdfb0"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 36130,
-      "sha256": "a0a6134a448d72ecbb5ef425b31d839558c7ebf52081986dce54a8d9d7ff8e2d"
+      "bytes": 36944,
+      "sha256": "63dbea4314b30f6de2d164b447b3a3d67d894bb26d8dd3c83a7493e1230f1809"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 50857,
-      "sha256": "0250698fa3d8500ae93ab3e58a98026c6d55a00385b478b25a705f75c31c6d36"
+      "bytes": 51351,
+      "sha256": "ebb504b240545a6773fcf9a709b37bdddf0652542eb0951255873bf7fe9765cf"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -13011,8 +13011,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 6317,
-      "sha256": "ed49d8934224f2220d456b2d8a18b65b3533e1c1f17c543ea178d4d9caa41c23"
+      "bytes": 7340,
+      "sha256": "45649de7b7fcd1ac9c19c62bbd21bfcb50593ff034f6e603fc833856b25814ce"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -20454,14 +20454,17 @@
       "path": "src/renderer/audio/dailyMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 69,
+      "lineCount": 85,
       "imports": [
         "file:src/renderer/audio/dailyMusicRender.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
+        "file:src/renderer/copy/realmCopy.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/daily-music-composer.ts"
       ],
       "exports": [
+        "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCredit",
+        "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCreditLine",
         "symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
         "symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic"
       ],
@@ -23592,8 +23595,9 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2416,
+      "lineCount": 2419,
       "imports": [
+        "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -23748,7 +23752,7 @@
       "path": "src/renderer/components/gameScreenStoreSelectors.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 21,
+      "lineCount": 22,
       "imports": [
         "file:src/renderer/store/useAppStore.ts"
       ],
@@ -25202,9 +25206,10 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 665,
+      "lineCount": 678,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
+        "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/store/memorizeClock.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
@@ -25218,7 +25223,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 893,
+      "lineCount": 901,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -29590,20 +29595,24 @@
       "path": "src/renderer/copy/realmCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 101,
+      "lineCount": 128,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/daily-music-composer.ts",
         "file:src/shared/realm-carryover-rules.ts",
         "file:src/shared/realm-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/realmCopy.ts#attunementNumeral",
+        "symbol:src/renderer/copy/realmCopy.ts#DAILY_MUSIC_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_TRAVEL_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#realmCarryoverLines"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/restlessFloorBeat.test.ts",
@@ -43744,20 +43753,36 @@
       "endLine": 50
     },
     {
+      "id": "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCredit",
+      "name": "dailyMusicCredit",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusic.ts",
+      "line": 49,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCreditLine",
+      "name": "dailyMusicCreditLine",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusic.ts",
+      "line": 53,
+      "endLine": 56
+    },
+    {
       "id": "symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
       "name": "playerMusicKey",
       "kind": "value",
       "file": "src/renderer/audio/dailyMusic.ts",
-      "line": 19,
-      "endLine": 38
+      "line": 20,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic",
       "name": "prepareDailyMusic",
       "kind": "value",
       "file": "src/renderer/audio/dailyMusic.ts",
-      "line": 45,
-      "endLine": 68
+      "line": 59,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/audio/dailyMusicRender.ts#dailyPieceSeconds",
@@ -47228,40 +47253,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2415,
-      "endLine": 2415
+      "line": 2418,
+      "endLine": 2418
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 263,
-      "endLine": 263
+      "line": 264,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 261,
-      "endLine": 261
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 265,
-      "endLine": 265
+      "line": 266,
+      "endLine": 266
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 255,
-      "endLine": 255
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -47317,7 +47342,7 @@
       "kind": "value",
       "file": "src/renderer/components/gameScreenStoreSelectors.ts",
       "line": 5,
-      "endLine": 20
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/GlobalRecord.tsx#GlobalRecordBadge",
@@ -49044,8 +49069,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 892,
-      "endLine": 892
+      "line": 900,
+      "endLine": 900
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -49053,7 +49078,7 @@
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
       "line": 83,
-      "endLine": 114
+      "endLine": 116
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
@@ -54364,40 +54389,48 @@
       "name": "attunementNumeral",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 24,
-      "endLine": 34
+      "line": 51,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/copy/realmCopy.ts#DAILY_MUSIC_COPY",
+      "name": "DAILY_MUSIC_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/realmCopy.ts",
+      "line": 26,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
       "name": "FLOOR_JOURNEY_REWARDS_LABEL",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 100,
-      "endLine": 100
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
       "name": "REALM_HUD_COPY",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 6,
-      "endLine": 20
+      "line": 33,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_TRAVEL_COPY",
       "name": "REALM_TRAVEL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 58,
-      "endLine": 97
+      "line": 85,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#realmCarryoverLines",
       "name": "realmCarryoverLines",
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
-      "line": 38,
-      "endLine": 55
+      "line": 65,
+      "endLine": 82
     },
     {
       "id": "symbol:src/renderer/copy/restlessFloorBeat.ts#restlessDriftAnnouncement",
@@ -73240,7 +73273,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 119
+          "line": 121
         }
       ],
       "tests": [
@@ -73266,7 +73299,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 98
+          "line": 111
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -74114,7 +74147,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 26
+          "line": 27
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -76128,7 +76161,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 386
+          "line": 389
         }
       ],
       "tests": [
@@ -76167,7 +76200,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 386
+          "line": 389
         }
       ],
       "tests": [
@@ -76201,7 +76234,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 386
+          "line": 389
         }
       ],
       "tests": [
@@ -76235,7 +76268,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 386
+          "line": 389
         }
       ],
       "tests": [
@@ -79503,6 +79536,18 @@
       "id": "exports:src/renderer/audio/comboVoicing.ts->symbol:src/renderer/audio/comboVoicing.ts#ComboVoicingLayers",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "symbol:src/renderer/audio/comboVoicing.ts#ComboVoicingLayers",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusic.ts->symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCredit",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCredit",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusic.ts->symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCreditLine",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "symbol:src/renderer/audio/dailyMusic.ts#dailyMusicCreditLine",
       "kind": "exports"
     },
     {
@@ -87471,6 +87516,12 @@
       "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#attunementNumeral",
       "source": "file:src/renderer/copy/realmCopy.ts",
       "target": "symbol:src/renderer/copy/realmCopy.ts#attunementNumeral",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#DAILY_MUSIC_COPY",
+      "source": "file:src/renderer/copy/realmCopy.ts",
+      "target": "symbol:src/renderer/copy/realmCopy.ts#DAILY_MUSIC_COPY",
       "kind": "exports"
     },
     {
@@ -104152,6 +104203,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/audio/dailyMusic.ts->src/renderer/copy/realmCopy.ts",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "file:src/renderer/copy/realmCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/dailyMusic.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/audio/dailyMusic.ts",
       "target": "file:src/shared/contracts.ts",
@@ -107512,6 +107569,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/audio/dailyMusic.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/audio/dailyMusic.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/audio/gameSfx.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/audio/gameSfx.ts",
@@ -109543,6 +109606,12 @@
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/components/RunShell.tsx",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/copy/realmCopy.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/renderer/copy/realmCopy.ts",
       "kind": "imports"
     },
     {
@@ -114073,6 +114142,12 @@
       "id": "imports:src/renderer/copy/realmCopy.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/copy/realmCopy.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/realmCopy.ts->src/shared/daily-music-composer.ts",
+      "source": "file:src/renderer/copy/realmCopy.ts",
+      "target": "file:src/shared/daily-music-composer.ts",
       "kind": "imports"
     },
     {
@@ -131375,6 +131450,12 @@
       "id": "tested_by:src/renderer/copy/passAndPlay.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/copy/passAndPlay.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/realmCopy.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/renderer/copy/realmCopy.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
