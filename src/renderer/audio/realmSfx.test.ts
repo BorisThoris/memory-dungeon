@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RealmEvent, RunState } from '../../shared/contracts';
-import { REALM_EVENT_SOUND, __resetGameSfxEngineForTests, playRealmEventSfx, playResolveSfx, playVoidSpewSfx, sfxGainFromSettings } from './gameSfx';
+import { REALM_EVENT_SOUND, __resetGameSfxEngineForTests, playLookingGlassSfx, playRealmEventSfx, playResolveSfx, playVoidSpewSfx, sfxGainFromSettings } from './gameSfx';
 
 const param = () => ({ value: 0, setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() });
 
@@ -79,5 +79,26 @@ describe('the realm, heard', () => {
         expect(made.noises).toBe(firstNoises);
         playResolveSfx(after, { ...after, voidSpewsThisFloor: 1 } as RunState, sfxGainFromSettings(1, 1));
         expect(made.noises).toBeGreaterThan(firstNoises);
+    });
+
+    it('rings the looking glass on the match that turns the board, and not on any other', () => {
+        vi.useFakeTimers();
+        const heard = (glass: boolean): number => {
+            __resetGameSfxEngineForTests();
+            const made = stubContext();
+            const before = { stats: { matchesFound: 2, tries: 2, currentStreak: 2 }, board: { level: 9 }, lastRealmEvent: null, voidSpewsThisFloor: 0, lookingGlassTurnsThisFloor: 0 } as unknown as RunState;
+            const after = { ...before, stats: { matchesFound: 3, tries: 3, currentStreak: 3 }, lookingGlassTurnsThisFloor: glass ? 1 : 0 } as unknown as RunState;
+            playResolveSfx(before, after, sfxGainFromSettings(1, 1));
+            vi.advanceTimersByTime(1000);
+            const count = made.tones + made.noises;
+            vi.unstubAllGlobals();
+            return count;
+        };
+        expect(heard(true)).toBeGreaterThan(heard(false));
+        __resetGameSfxEngineForTests();
+        const muted = stubContext();
+        playLookingGlassSfx(sfxGainFromSettings(1, 0));
+        vi.advanceTimersByTime(1000);
+        expect(muted.tones + muted.noises).toBe(0);
     });
 });

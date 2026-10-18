@@ -442,6 +442,22 @@ export const playVoidSpewSfx = (rawGain: number): void => {
     scheduleCue(() => playTone({ frequency: 55, frequencyEnd: 220, durationSec: 0.4, gain: gain * 0.45, type: 'triangle', category: 'realm' }), 550);
 };
 
+/**
+ * The looking glass turning the board (`looking-glass-rules.ts`): a pane of glass rung and turned.
+ * Two bell partials cross - one climbs while the other falls, the mirror in pitch - over an airy
+ * shimmer, a beat after the match's own cue so the two do not mask each other.
+ */
+export const playLookingGlassSfx = (rawGain: number): void => {
+    if (rawGain <= 0.001) return;
+    const gain = rawGain * 0.6;
+    scheduleCue(() => {
+        playTone({ frequency: 1320, frequencyEnd: 2640, durationSec: 0.42, gain: gain * 0.32, type: 'sine', category: 'realm' });
+        playTone({ frequency: 2640, frequencyEnd: 1320, durationSec: 0.42, gain: gain * 0.26, type: 'sine', category: 'realm' });
+        playNoise({ durationSec: 0.5, gain: gain * 0.22, filter: 'bandpass', from: 2400, peak: 6200, to: 3800, attackSec: 0.02 });
+    }, 160);
+    scheduleCue(() => playTone({ frequency: 660, frequencyEnd: 990, durationSec: 0.3, gain: gain * 0.2, type: 'triangle', category: 'realm' }), 380);
+};
+
 /** The realm's sounds for a resolved turn: its newest event, and the void if it spat. */
 const playRealmTurnSfx = (before: RunState, after: RunState, gain: number): void => {
     const event = after.lastRealmEvent;
@@ -1047,6 +1063,10 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         }
         if (rewardChannelCount >= 3) {
             playStackedRewardBurstSfx(gain, rewardChannelCount);
+        }
+        // The board turned in the mirror on this match.
+        if ((after.lookingGlassTurnsThisFloor ?? 0) > (before.lookingGlassTurnsThisFloor ?? 0)) {
+            playLookingGlassSfx(gain);
         }
     } else if (after.stats.tries > before.stats.tries) {
         playMismatchSfx(gain, runChainMeter(before));
