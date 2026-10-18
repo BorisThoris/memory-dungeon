@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3190,
-    "codeFileCount": 1204,
-    "exportedSymbolCount": 3802,
+    "trackedFileCount": 3195,
+    "codeFileCount": 1209,
+    "exportedSymbolCount": 3821,
     "contentItemCount": 12,
     "mechanicCount": 66,
     "stateFieldCount": 134,
-    "relationshipCount": 10155
+    "relationshipCount": 10190
   },
   "inventory": [
     {
@@ -117,8 +117,8 @@
     {
       "path": "AGENTS.md",
       "category": "other",
-      "bytes": 7145,
-      "sha256": "21a114024765f50648884505c1134e5136051b833527cf8f0a3cdae7cdb29ae9"
+      "bytes": 7821,
+      "sha256": "c2cbae4cbf283daafc0215c8ed56415f532a94b049b6f6a72e1bf7e43026937f"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack.jobs.json",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "18285450b902d53bb89973a13e791e761d7a2517d05f303b09ea7229eb206c6f"
+      "sha256": "053942f19ded7b4ee4d80ebed7729fc8ff16d4959f733cf1170c77baad01ec9d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72036,
-      "sha256": "d6c4b86fbe4a0aecaa0df12aec9e13b2b5a690c857131cf0e07ef7917fca4444"
+      "bytes": 72169,
+      "sha256": "9771b801b4de1e184fa1171b3adab4c1b2303f5ed69a1309e93a26e5d8bd611b"
     },
     {
       "path": "public/site.webmanifest",
@@ -7875,8 +7875,8 @@
     {
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "category": "source",
-      "bytes": 7010,
-      "sha256": "9b2917e6f2e742d6f789f1e586fc46a39bf3fb4b3d2c4dff936a097716dce486"
+      "bytes": 7216,
+      "sha256": "37b57d3816a218c5f5fac2ee9d30bc00c9aaa811617db13e5e440347c58175d2"
     },
     {
       "path": "src/renderer/assets/preloadStartupAssets.test.ts",
@@ -9847,6 +9847,24 @@
       "sha256": "03e395fe2802d73cff2212dd6983edc5c4f690a30cfdf1827946a07ff9f4e30e"
     },
     {
+      "path": "src/renderer/audio/dailyMusic.ts",
+      "category": "source",
+      "bytes": 3081,
+      "sha256": "5564144059cd448e03a58dd635213e5ac4acd47bc9bc1f7bf4da88c53c9b5c5a"
+    },
+    {
+      "path": "src/renderer/audio/dailyMusicRender.test.ts",
+      "category": "test",
+      "bytes": 2271,
+      "sha256": "386571d1904481c625384231ac83848890b2d3eda06bb8d27317f32537d0e4f8"
+    },
+    {
+      "path": "src/renderer/audio/dailyMusicRender.ts",
+      "category": "source",
+      "bytes": 15535,
+      "sha256": "58001669274a23aaac80eab2863b02581aa7e6abcea5130119c7f6b42080e11b"
+    },
+    {
       "path": "src/renderer/audio/feverDuck.test.ts",
       "category": "test",
       "bytes": 1646,
@@ -9867,8 +9885,8 @@
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 15471,
-      "sha256": "f91c307c7c649b7e0aca334facdce593bc181673dc45ff36386dab5705da4ed6"
+      "bytes": 15878,
+      "sha256": "98a41b8aafce9fe31878f52a6759a8200d09d7078adcac05fb4611adff65f64d"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -14867,6 +14885,18 @@
       "category": "test",
       "bytes": 4188,
       "sha256": "eff750aff6d3606874323df68cc997154e3e3b89bb7456a493b3ec8c65cc566e"
+    },
+    {
+      "path": "src/shared/daily-music-composer.test.ts",
+      "category": "test",
+      "bytes": 4732,
+      "sha256": "0af7e42cb7f97d1a8851e447895ddff1e468c1b3777a09619a84baba70cdd39d"
+    },
+    {
+      "path": "src/shared/daily-music-composer.ts",
+      "category": "source",
+      "bytes": 16767,
+      "sha256": "39a55ac424f47eb181fdceea43ab29a8784ec5284a9897898a6728883ba8da09"
     },
     {
       "path": "src/shared/desktop-api-boundary.test.ts",
@@ -19951,9 +19981,10 @@
       "path": "src/renderer/assets/preloadRunAssets.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 163,
+      "lineCount": 165,
       "imports": [
         "file:src/renderer/assets/preloadStartupAssets.ts",
+        "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -20419,6 +20450,58 @@
       ]
     },
     {
+      "id": "file:src/renderer/audio/dailyMusic.ts",
+      "path": "src/renderer/audio/dailyMusic.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 69,
+      "imports": [
+        "file:src/renderer/audio/dailyMusicRender.ts",
+        "file:src/renderer/audio/gameplayMusic.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/daily-music-composer.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
+        "symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/dailyMusicRender.test.ts",
+      "path": "src/renderer/audio/dailyMusicRender.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 44,
+      "imports": [
+        "file:src/renderer/audio/dailyMusicRender.ts",
+        "file:src/shared/daily-music-composer.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/audio/dailyMusicRender.ts",
+      "path": "src/renderer/audio/dailyMusicRender.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 329,
+      "imports": [
+        "file:src/shared/daily-music-composer.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/audio/dailyMusicRender.ts#dailyPieceSeconds",
+        "symbol:src/renderer/audio/dailyMusicRender.ts#encodeWav",
+        "symbol:src/renderer/audio/dailyMusicRender.ts#foldLoop",
+        "symbol:src/renderer/audio/dailyMusicRender.ts#levelLoop",
+        "symbol:src/renderer/audio/dailyMusicRender.ts#loopReverb",
+        "symbol:src/renderer/audio/dailyMusicRender.ts#renderDailyPiece"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/dailyMusicRender.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/audio/feverDuck.test.ts",
       "path": "src/renderer/audio/feverDuck.test.ts",
       "layer": "renderer",
@@ -20473,7 +20556,7 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 391,
+      "lineCount": 400,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -20487,6 +20570,7 @@
         "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
         "symbol:src/renderer/audio/gameplayMusic.ts#realmMusicUrl",
         "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
+        "symbol:src/renderer/audio/gameplayMusic.ts#setDailyTrackUrl",
         "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic"
       ],
       "testedBy": [
@@ -34753,6 +34837,7 @@
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/colossus-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/daily-music-composer.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-chemistry.test.ts",
@@ -35014,6 +35099,46 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/daily-music-composer.test.ts",
+      "path": "src/shared/daily-music-composer.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 81,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/daily-music-composer.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/daily-music-composer.ts",
+      "path": "src/shared/daily-music-composer.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 327,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
+        "symbol:src/shared/daily-music-composer.ts#DAILY_MUSIC_MODES",
+        "symbol:src/shared/daily-music-composer.ts#DailyMusicMode",
+        "symbol:src/shared/daily-music-composer.ts#DailyMusicNote",
+        "symbol:src/shared/daily-music-composer.ts#DailyMusicPiece",
+        "symbol:src/shared/daily-music-composer.ts#dailyMusicSalt",
+        "symbol:src/shared/daily-music-composer.ts#DailyMusicTimbre",
+        "symbol:src/shared/daily-music-composer.ts#DailyMusicVoice",
+        "symbol:src/shared/daily-music-composer.ts#degreePitch",
+        "symbol:src/shared/daily-music-composer.ts#localDateKey"
+      ],
+      "testedBy": [
+        "file:src/renderer/audio/dailyMusicRender.test.ts",
+        "file:src/shared/daily-music-composer.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/desktop-api-boundary.test.ts",
@@ -43038,64 +43163,64 @@
       "name": "preloadRunAssets",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 126,
-      "endLine": 155
+      "line": 127,
+      "endLine": 157
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#resetRunAssetPreloadForTests",
       "name": "resetRunAssetPreloadForTests",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 157,
-      "endLine": 162
+      "line": 159,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_CAP_MS",
       "name": "RUN_ASSET_STEP_CAP_MS",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RUN_ASSET_STEP_TOTAL",
       "name": "RUN_ASSET_STEP_TOTAL",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetProgress",
       "name": "RunAssetProgress",
       "kind": "interface",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 34,
-      "endLine": 39
+      "line": 35,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#runAssetsReady",
       "name": "runAssetsReady",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 120,
-      "endLine": 120
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#RunAssetStepId",
       "name": "RunAssetStepId",
       "kind": "type",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/assets/preloadRunAssets.ts#subscribeRunAssetProgress",
       "name": "subscribeRunAssetProgress",
       "kind": "value",
       "file": "src/renderer/assets/preloadRunAssets.ts",
-      "line": 112,
-      "endLine": 118
+      "line": 113,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/assets/preloadStartupAssets.ts#preloadModePosterRasterImages",
@@ -43618,6 +43743,70 @@
       "endLine": 50
     },
     {
+      "id": "symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
+      "name": "playerMusicKey",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusic.ts",
+      "line": 19,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic",
+      "name": "prepareDailyMusic",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusic.ts",
+      "line": 45,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#dailyPieceSeconds",
+      "name": "dailyPieceSeconds",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 194,
+      "endLine": 194
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#encodeWav",
+      "name": "encodeWav",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 261,
+      "endLine": 290
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#foldLoop",
+      "name": "foldLoop",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 197,
+      "endLine": 201
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#levelLoop",
+      "name": "levelLoop",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 242,
+      "endLine": 258
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#loopReverb",
+      "name": "loopReverb",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 208,
+      "endLine": 239
+    },
+    {
+      "id": "symbol:src/renderer/audio/dailyMusicRender.ts#renderDailyPiece",
+      "name": "renderDailyPiece",
+      "kind": "value",
+      "file": "src/renderer/audio/dailyMusicRender.ts",
+      "line": 296,
+      "endLine": 328
+    },
+    {
       "id": "symbol:src/renderer/audio/feverDuck.ts#FEVER_DUCK_MS",
       "name": "FEVER_DUCK_MS",
       "kind": "value",
@@ -43662,24 +43851,24 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 190,
-      "endLine": 209
+      "line": 199,
+      "endLine": 218
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#MUSIC_CROSSFADE_MS",
       "name": "MUSIC_CROSSFADE_MS",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 130,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "name": "musicGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 105,
-      "endLine": 106
+      "line": 114,
+      "endLine": 115
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicTrackKey",
@@ -43702,8 +43891,8 @@
       "name": "preloadGameplayMusic",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 69,
-      "endLine": 88
+      "line": 78,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#realmMusicUrl",
@@ -43718,16 +43907,24 @@
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 145,
-      "endLine": 188
+      "line": 154,
+      "endLine": 197
+    },
+    {
+      "id": "symbol:src/renderer/audio/gameplayMusic.ts#setDailyTrackUrl",
+      "name": "setDailyTrackUrl",
+      "kind": "value",
+      "file": "src/renderer/audio/gameplayMusic.ts",
+      "line": 68,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic",
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 215,
-      "endLine": 390
+      "line": 224,
+      "endLine": 399
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
@@ -61392,6 +61589,86 @@
       "file": "src/shared/crash-report-summary.ts",
       "line": 13,
       "endLine": 21
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
+      "name": "composeDailyPiece",
+      "kind": "value",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 230,
+      "endLine": 326
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DAILY_MUSIC_MODES",
+      "name": "DAILY_MUSIC_MODES",
+      "kind": "value",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 32,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DailyMusicMode",
+      "name": "DailyMusicMode",
+      "kind": "type",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 39,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DailyMusicNote",
+      "name": "DailyMusicNote",
+      "kind": "interface",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 43,
+      "endLine": 53
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DailyMusicPiece",
+      "name": "DailyMusicPiece",
+      "kind": "interface",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 58,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#dailyMusicSalt",
+      "name": "dailyMusicSalt",
+      "kind": "value",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 223,
+      "endLine": 223
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DailyMusicTimbre",
+      "name": "DailyMusicTimbre",
+      "kind": "type",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 56,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#DailyMusicVoice",
+      "name": "DailyMusicVoice",
+      "kind": "type",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 41,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#degreePitch",
+      "name": "degreePitch",
+      "kind": "value",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 131,
+      "endLine": 135
+    },
+    {
+      "id": "symbol:src/shared/daily-music-composer.ts#localDateKey",
+      "name": "localDateKey",
+      "kind": "value",
+      "file": "src/shared/daily-music-composer.ts",
+      "line": 226,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
@@ -79220,6 +79497,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/audio/dailyMusic.ts->symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "symbol:src/renderer/audio/dailyMusic.ts#playerMusicKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusic.ts->symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "symbol:src/renderer/audio/dailyMusic.ts#prepareDailyMusic",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#dailyPieceSeconds",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#dailyPieceSeconds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#encodeWav",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#encodeWav",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#foldLoop",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#foldLoop",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#levelLoop",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#levelLoop",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#loopReverb",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#loopReverb",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/dailyMusicRender.ts->symbol:src/renderer/audio/dailyMusicRender.ts#renderDailyPiece",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "symbol:src/renderer/audio/dailyMusicRender.ts#renderDailyPiece",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/audio/feverDuck.ts->symbol:src/renderer/audio/feverDuck.ts#FEVER_DUCK_MS",
       "source": "file:src/renderer/audio/feverDuck.ts",
       "target": "symbol:src/renderer/audio/feverDuck.ts#FEVER_DUCK_MS",
@@ -79295,6 +79620,12 @@
       "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
       "source": "file:src/renderer/audio/gameplayMusic.ts",
       "target": "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#setDailyTrackUrl",
+      "source": "file:src/renderer/audio/gameplayMusic.ts",
+      "target": "symbol:src/renderer/audio/gameplayMusic.ts#setDailyTrackUrl",
       "kind": "exports"
     },
     {
@@ -92552,6 +92883,66 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DAILY_MUSIC_MODES",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DAILY_MUSIC_MODES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DailyMusicMode",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DailyMusicMode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DailyMusicNote",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DailyMusicNote",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DailyMusicPiece",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DailyMusicPiece",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#dailyMusicSalt",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#dailyMusicSalt",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DailyMusicTimbre",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DailyMusicTimbre",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#DailyMusicVoice",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#DailyMusicVoice",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#degreePitch",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#degreePitch",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#localDateKey",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "symbol:src/shared/daily-music-composer.ts#localDateKey",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/desktop-api-boundary.ts->symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
       "source": "file:src/shared/desktop-api-boundary.ts",
       "target": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
@@ -103446,6 +103837,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/dailyMusic.ts",
+      "source": "file:src/renderer/assets/preloadRunAssets.ts",
+      "target": "file:src/renderer/audio/dailyMusic.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/preloadRunAssets.ts->src/renderer/audio/gameplayMusic.ts",
       "source": "file:src/renderer/assets/preloadRunAssets.ts",
       "target": "file:src/renderer/audio/gameplayMusic.ts",
@@ -103725,6 +104122,48 @@
       "id": "imports:src/renderer/audio/comboVoicing.ts->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/audio/comboVoicing.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusic.ts->src/renderer/audio/dailyMusicRender.ts",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "file:src/renderer/audio/dailyMusicRender.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusic.ts->src/renderer/audio/gameplayMusic.ts",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "file:src/renderer/audio/gameplayMusic.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusic.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusic.ts->src/shared/daily-music-composer.ts",
+      "source": "file:src/renderer/audio/dailyMusic.ts",
+      "target": "file:src/shared/daily-music-composer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusicRender.test.ts->src/renderer/audio/dailyMusicRender.ts",
+      "source": "file:src/renderer/audio/dailyMusicRender.test.ts",
+      "target": "file:src/renderer/audio/dailyMusicRender.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusicRender.test.ts->src/shared/daily-music-composer.ts",
+      "source": "file:src/renderer/audio/dailyMusicRender.test.ts",
+      "target": "file:src/shared/daily-music-composer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/audio/dailyMusicRender.ts->src/shared/daily-music-composer.ts",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "file:src/shared/daily-music-composer.ts",
       "kind": "imports"
     },
     {
@@ -118248,6 +118687,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/daily-music-composer.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/daily-music-composer.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/daily-music-composer.test.ts->src/shared/daily-music-composer.ts",
+      "source": "file:src/shared/daily-music-composer.test.ts",
+      "target": "file:src/shared/daily-music-composer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/daily-music-composer.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/daily-music-composer.ts->src/shared/rng.ts",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/desktop-api-boundary.test.ts->src/shared/desktop-api-boundary.ts",
       "source": "file:src/shared/desktop-api-boundary.test.ts",
       "target": "file:src/shared/desktop-api-boundary.ts",
@@ -129016,6 +129479,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/dailyMusicRender.ts->file:src/renderer/audio/dailyMusicRender.test.ts",
+      "source": "file:src/renderer/audio/dailyMusicRender.ts",
+      "target": "file:src/renderer/audio/dailyMusicRender.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/feverDuck.ts->file:src/renderer/audio/feverDuck.test.ts",
       "source": "file:src/renderer/audio/feverDuck.ts",
       "target": "file:src/renderer/audio/feverDuck.test.ts",
@@ -132880,6 +133349,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/daily-music-composer.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/daily-music-composer.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/difficulty-profile.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/difficulty-profile.test.ts",
@@ -133453,6 +133928,18 @@
       "id": "tested_by:src/shared/crash-report-summary.ts->file:src/shared/crash-report-summary.test.ts",
       "source": "file:src/shared/crash-report-summary.ts",
       "target": "file:src/shared/crash-report-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/daily-music-composer.ts->file:src/renderer/audio/dailyMusicRender.test.ts",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "file:src/renderer/audio/dailyMusicRender.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/daily-music-composer.ts->file:src/shared/daily-music-composer.test.ts",
+      "source": "file:src/shared/daily-music-composer.ts",
+      "target": "file:src/shared/daily-music-composer.test.ts",
       "kind": "tested_by"
     },
     {
