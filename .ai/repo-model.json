@@ -9,7 +9,7 @@
     "contentItemCount": 12,
     "mechanicCount": 66,
     "stateFieldCount": 134,
-    "relationshipCount": 10153
+    "relationshipCount": 10154
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "7b5d4fc9c4467e28c2689104fc565be90b04edbeaca3f4251f82f59fa8144adc"
+      "sha256": "18285450b902d53bb89973a13e791e761d7a2517d05f303b09ea7229eb206c6f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72094,
-      "sha256": "6439d1cbbc84986624f67ff558659a729c76a5efa5e1aeaa43c048d971b332ab"
+      "bytes": 72107,
+      "sha256": "ffe1007b138b88d296894f362866e49dd70b4147d3713a7474b46de5b9e76a1e"
     },
     {
       "path": "public/site.webmanifest",
@@ -12633,14 +12633,14 @@
     {
       "path": "src/renderer/components/TutorialHall.module.css",
       "category": "source",
-      "bytes": 4251,
-      "sha256": "c96499c45cce174fe5e891c370dce85c33d4b3e8c0d7e7e09b398c21a4532b1f"
+      "bytes": 4871,
+      "sha256": "dd74bb603ac5ac664f4e6036263687a57316f5278e9b48396b76a98cec2407ff"
     },
     {
       "path": "src/renderer/components/TutorialHall.tsx",
       "category": "source",
-      "bytes": 9715,
-      "sha256": "260610062142e3f15b7f91841e919c54a90e9a0437338eab870d7c4ccce63744"
+      "bytes": 11248,
+      "sha256": "dcbd850b47a899de26785bed983c3a765a736957835cf1a5200b25217c8e24c7"
     },
     {
       "path": "src/renderer/components/tutorialHallContext.ts",
@@ -13077,8 +13077,8 @@
     {
       "path": "src/renderer/copy/tutorialHallCopy.ts",
       "category": "source",
-      "bytes": 247,
-      "sha256": "d9d55b9159323afed4969c4907c094636e58aa7c17297d94bc82e14310aeef39"
+      "bytes": 468,
+      "sha256": "c44b74ba312f42408afae35cee06e7adf2c34ad3179db83639e383ce5b7ed5bc"
     },
     {
       "path": "src/renderer/copy/voidSpewCopy.ts",
@@ -28571,12 +28571,13 @@
       "path": "src/renderer/components/TutorialHall.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 122,
+      "lineCount": 159,
       "imports": [
         "file:src/renderer/components/ScreenCalloutQueue.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/copy/tutorialHallCopy.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
+        "file:src/renderer/ui/index.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/element-reaction-feedback.ts",
@@ -29740,7 +29741,7 @@
       "path": "src/renderer/copy/tutorialHallCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 7,
+      "lineCount": 12,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/tutorialHallCopy.ts#TUTORIAL_HALL_COPY"
@@ -53268,8 +53269,8 @@
       "name": "default",
       "kind": "function",
       "file": "src/renderer/components/TutorialHall.tsx",
-      "line": 16,
-      "endLine": 121
+      "line": 17,
+      "endLine": 158
     },
     {
       "id": "symbol:src/renderer/components/tutorialHallContext.ts#TutorialHallContext",
@@ -54557,7 +54558,7 @@
       "kind": "value",
       "file": "src/renderer/copy/tutorialHallCopy.ts",
       "line": 2,
-      "endLine": 6
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
@@ -113009,6 +113010,12 @@
       "id": "imports:src/renderer/components/TutorialHall.tsx->src/renderer/hooks/useEscapeLeaves.ts",
       "source": "file:src/renderer/components/TutorialHall.tsx",
       "target": "file:src/renderer/hooks/useEscapeLeaves.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TutorialHall.tsx->src/renderer/ui/index.ts",
+      "source": "file:src/renderer/components/TutorialHall.tsx",
+      "target": "file:src/renderer/ui/index.ts",
       "kind": "imports"
     },
     {
