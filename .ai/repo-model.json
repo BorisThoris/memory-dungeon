@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3200,
     "codeFileCount": 1214,
-    "exportedSymbolCount": 3846,
+    "exportedSymbolCount": 3847,
     "contentItemCount": 14,
     "mechanicCount": 68,
     "stateFieldCount": 135,
-    "relationshipCount": 10306
+    "relationshipCount": 10307
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 526891,
-      "sha256": "273a7fe95740357abc0bae1c0c30baf307d5f1aeef4313788ec62153554dc507"
+      "bytes": 527476,
+      "sha256": "b77d3e5e8c7f676185965182c5b3a735d3a0ffbfc6ad025cfa0f9b02f9745105"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 66434,
-      "sha256": "da00a50bd532562339b619d0d8eddcafe1c54683da90655fb713ea06d0636e8f"
+      "bytes": 67700,
+      "sha256": "3701ae160ef8ea3e9d7b06e927cb08282c1f65644120dfde5ae49c357b9d7be1"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2422,13 +2422,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "5ebc8bbf37b8a42675cd9cf92920f5bfd3361edd3c8f05aaf35df70cf49df69b"
+      "sha256": "0e127baae3a7a86f177c0910c802c3fe886db2410754f773039181a35cb38cda"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "694be1d1bb8da2944abbfd6fbff96939e0d8b68dabcb612f8ac1c10a459f1eb2"
+      "sha256": "20f697adde0649bea594b359e930ed0037dbd0a870b1ef04a679174f5dabec54"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14313,8 +14313,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 66764,
-      "sha256": "7826de6e9aab53892dc95100ab697979d5232d09eadd89dac98f46cb684d1c42"
+      "bytes": 68030,
+      "sha256": "d71745baf5b650dcf6b9c85c464974d269e40a821223341a4cee7419462f841d"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14547,8 +14547,8 @@
     {
       "path": "src/shared/board-tile-generation-rules.ts",
       "category": "source",
-      "bytes": 6061,
-      "sha256": "123f5008c60858278b27e2c72a58578068f6938b22d2573bcbc77ce35666c284"
+      "bytes": 6099,
+      "sha256": "c3559d20739281d2edc3f00303c3cf250f362aa6b77557724da18a48abb20eb7"
     },
     {
       "path": "src/shared/board-turn-event-facts.chunk-style.test.ts",
@@ -14824,7 +14824,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 54196,
-      "sha256": "7c6bcbb43203738dad20efd165bb4b030f7d4b9506fcb66ac1d7c7d7ba5383d9"
+      "sha256": "bb3272b19042dd8363846e9404da347e1cbf3a167d1e79d4d5c53307c05108b0"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14883,14 +14883,14 @@
     {
       "path": "src/shared/crucible-rules.test.ts",
       "category": "test",
-      "bytes": 7305,
-      "sha256": "c2a654fa3908496e1f7825ab6529f06853aa52880c421c43edf82fa002d8118a"
+      "bytes": 8193,
+      "sha256": "499f22fc592bac4c803adead326b32ef9ee50171af95e2cc8f26f54c60b2c444"
     },
     {
       "path": "src/shared/crucible-rules.ts",
       "category": "source",
-      "bytes": 8977,
-      "sha256": "6408de16f0721425d5c571eacaf6755e37f6e1baf93e051d6febe22706961b1e"
+      "bytes": 9236,
+      "sha256": "eaf3fae21dfc8eb730240b4d9a650a043cdb407173a36cfce5cefcc090fb51c0"
     },
     {
       "path": "src/shared/css-custom-properties.test.ts",
@@ -14907,14 +14907,14 @@
     {
       "path": "src/shared/curio-rules.test.ts",
       "category": "test",
-      "bytes": 3199,
-      "sha256": "fa87abe1d040f4e971a743a9c82b0f25cc890fef88b8c479a48e4c930978fb30"
+      "bytes": 3567,
+      "sha256": "f46ded3748ee5aee26599c7feed1625dfafd6088852d6b09d693ded2540d7f00"
     },
     {
       "path": "src/shared/curio-rules.ts",
       "category": "source",
-      "bytes": 3048,
-      "sha256": "a325fabd8ed96cd8d0ab4d4f85aece04b9a6e24f440014fbe274ec09f75804a1"
+      "bytes": 3250,
+      "sha256": "9693fa7e826372c805fb6182362c17ddcaf6f7c512866f40a6e356df60efb90f"
     },
     {
       "path": "src/shared/daily-music-composer.test.ts",
@@ -15675,8 +15675,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 57301,
-      "sha256": "281ece3fecea247386d01a49ec22bfea61f566aea5609d6d562c274b429b50dc"
+      "bytes": 57330,
+      "sha256": "fb6f3a0d7928021f4f06a8aec5d74e2e5b6fd7f523325ec989ec7870d15fa673"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16683,8 +16683,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 60835,
-      "sha256": "977aebb14f4478310113e7dda274e159951760341b19f2ff1aa82cc1470a173f"
+      "bytes": 61036,
+      "sha256": "28f725cb0c93c887c8099f1f9356c196f9da5ca144aa537a94b4481c01129807"
     },
     {
       "path": "src/shared/system-refinement-ledger.test.ts",
@@ -16695,8 +16695,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 85333,
-      "sha256": "45167aa863a037fdb70f222322d6462c942a7b7d3730f14ec5b882e8f0dfb08a"
+      "bytes": 86599,
+      "sha256": "b09638b4bf95b7f1bb4a1b0e3b511c3a63098a8bf0ac59680c61220c555e7565"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16977,8 +16977,8 @@
     {
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
-      "bytes": 7353,
-      "sha256": "7e48589223c54055f3b69f3f40a1bb66d142ee9a857cd3b38f9f6bc127876383"
+      "bytes": 7363,
+      "sha256": "1db925d99689477c233de1aba311c85c67c3ea33827a3cb14455c0778ef85106"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -35159,7 +35159,7 @@
       "path": "src/shared/crucible-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 118,
+      "lineCount": 129,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/crucible-rules.ts",
@@ -35176,7 +35176,7 @@
       "path": "src/shared/crucible-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 166,
+      "lineCount": 169,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35226,7 +35226,7 @@
       "path": "src/shared/curio-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 60,
+      "lineCount": 65,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35242,7 +35242,7 @@
       "path": "src/shared/curio-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 63,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -35253,6 +35253,7 @@
         "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
         "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
         "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+        "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
         "symbol:src/shared/curio-rules.ts#curioCharges",
         "symbol:src/shared/curio-rules.ts#curioItemFor",
         "symbol:src/shared/curio-rules.ts#CurioItemId",
@@ -41402,7 +41403,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1122,
+      "lineCount": 1124,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-power-actions.ts",
@@ -61848,8 +61849,8 @@
       "name": "applyCrucible",
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
-      "line": 64,
-      "endLine": 158
+      "line": 66,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
@@ -61864,8 +61865,8 @@
       "name": "crucibleFeedbackLine",
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
-      "line": 161,
-      "endLine": 165
+      "line": 164,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
@@ -61880,40 +61881,40 @@
       "name": "CrucibleResult",
       "kind": "interface",
       "file": "src/shared/crucible-rules.ts",
-      "line": 53,
-      "endLine": 61
+      "line": 55,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#crucibleTargetTileId",
       "name": "crucibleTargetTileId",
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
-      "line": 42,
-      "endLine": 51
+      "line": 44,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#claimCurio",
       "name": "claimCurio",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 48,
-      "endLine": 58
+      "line": 52,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
       "name": "CURIO_FROM_FLOOR",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
       "name": "CURIO_GLINT_SHARE",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
@@ -61924,20 +61925,28 @@
       "endLine": 21
     },
     {
+      "id": "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
+      "name": "CURIO_RULES_VERSION",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
       "id": "symbol:src/shared/curio-rules.ts#curioCharges",
       "name": "curioCharges",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 38,
-      "endLine": 39
+      "line": 42,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#curioItemFor",
       "name": "curioItemFor",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 42,
-      "endLine": 45
+      "line": 46,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CurioItemId",
@@ -61952,8 +61961,8 @@
       "name": "curioReplacesGlint",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 29,
-      "endLine": 31
+      "line": 32,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
@@ -71408,128 +71417,128 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1100,
-      "endLine": 1103
+      "line": 1102,
+      "endLine": 1105
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#floorBandedRows",
       "name": "floorBandedRows",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1017,
-      "endLine": 1022
+      "line": 1019,
+      "endLine": 1024
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeRunOccupancy",
       "name": "judgeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1058,
-      "endLine": 1098
+      "line": 1060,
+      "endLine": 1100
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1024,
-      "endLine": 1046
+      "line": 1026,
+      "endLine": 1048
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 984,
-      "endLine": 1007
+      "line": 986,
+      "endLine": 1009
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
       "name": "OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 810,
-      "endLine": 810
+      "line": 812,
+      "endLine": 812
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OccupancyFloorResult",
       "name": "OccupancyFloorResult",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 429,
-      "endLine": 433
+      "line": 431,
+      "endLine": 435
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RUN_OCCUPANCY_SEEDS",
       "name": "RUN_OCCUPANCY_SEEDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 682,
-      "endLine": 682
+      "line": 684,
+      "endLine": 684
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#RunOccupancyReport",
       "name": "RunOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 657,
-      "endLine": 675
+      "line": 659,
+      "endLine": 677
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateRunOccupancy",
       "name": "simulateRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 684,
-      "endLine": 798
+      "line": 686,
+      "endLine": 800
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
       "name": "simulateSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 812,
-      "endLine": 857
+      "line": 814,
+      "endLine": 859
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeRunOccupancy",
       "name": "summarizeRunOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 800,
-      "endLine": 808
+      "line": 802,
+      "endLine": 810
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 1105,
-      "endLine": 1121
+      "line": 1107,
+      "endLine": 1123
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
       "name": "SYSTEM_OCCUPANCY_BANDS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 864,
-      "endLine": 888
+      "line": 866,
+      "endLine": 890
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE",
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 938,
-      "endLine": 958
+      "line": 940,
+      "endLine": 960
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 975,
-      "endLine": 975
+      "line": 977,
+      "endLine": 977
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -71537,7 +71546,7 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 123,
-      "endLine": 263
+      "endLine": 265
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
@@ -71552,8 +71561,8 @@
       "name": "SystemOccupancyReport",
       "kind": "interface",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 294,
-      "endLine": 306
+      "line": 296,
+      "endLine": 308
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#staleLedgerIds",
@@ -93544,6 +93553,12 @@
       "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
       "source": "file:src/shared/curio-rules.ts",
       "target": "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
       "kind": "exports"
     },
     {
