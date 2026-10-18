@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3200,
     "codeFileCount": 1214,
-    "exportedSymbolCount": 3847,
+    "exportedSymbolCount": 3846,
     "contentItemCount": 14,
     "mechanicCount": 68,
     "stateFieldCount": 135,
-    "relationshipCount": 10307
+    "relationshipCount": 10306
   },
   "inventory": [
     {
@@ -14907,14 +14907,14 @@
     {
       "path": "src/shared/curio-rules.test.ts",
       "category": "test",
-      "bytes": 3567,
-      "sha256": "f46ded3748ee5aee26599c7feed1625dfafd6088852d6b09d693ded2540d7f00"
+      "bytes": 3543,
+      "sha256": "f840719a76c52a6b3b6070673ed0655ab3e6effd7870201586871cce02d81afa"
     },
     {
       "path": "src/shared/curio-rules.ts",
       "category": "source",
-      "bytes": 3250,
-      "sha256": "9693fa7e826372c805fb6182362c17ddcaf6f7c512866f40a6e356df60efb90f"
+      "bytes": 3048,
+      "sha256": "e68145a6a018e3877e1cb8051dc39a70bfcb28da323ff0eebefe6e095c50510b"
     },
     {
       "path": "src/shared/daily-music-composer.test.ts",
@@ -35242,7 +35242,7 @@
       "path": "src/shared/curio-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 59,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -35254,7 +35254,6 @@
         "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
         "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
         "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
-        "symbol:src/shared/curio-rules.ts#curioCharges",
         "symbol:src/shared/curio-rules.ts#curioItemFor",
         "symbol:src/shared/curio-rules.ts#CurioItemId",
         "symbol:src/shared/curio-rules.ts#curioReplacesGlint"
@@ -61897,8 +61896,8 @@
       "name": "claimCurio",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 52,
-      "endLine": 62
+      "line": 48,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
@@ -61933,20 +61932,12 @@
       "endLine": 24
     },
     {
-      "id": "symbol:src/shared/curio-rules.ts#curioCharges",
-      "name": "curioCharges",
-      "kind": "value",
-      "file": "src/shared/curio-rules.ts",
-      "line": 42,
-      "endLine": 43
-    },
-    {
       "id": "symbol:src/shared/curio-rules.ts#curioItemFor",
       "name": "curioItemFor",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 46,
-      "endLine": 49
+      "line": 42,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CurioItemId",
@@ -93559,12 +93550,6 @@
       "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
       "source": "file:src/shared/curio-rules.ts",
       "target": "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#curioCharges",
-      "source": "file:src/shared/curio-rules.ts",
-      "target": "symbol:src/shared/curio-rules.ts#curioCharges",
       "kind": "exports"
     },
     {
