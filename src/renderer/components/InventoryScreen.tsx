@@ -192,7 +192,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                         </div>
                     ))}
                     <div className={styles.chargeRow}>
-                        <dt>Match score multiplier</dt>
+                        <dt>Score multiplier</dt>
                         <dd>{run.matchScoreMultiplier.toFixed(2)}&times;</dd>
                     </div>
                 </dl>

@@ -66,7 +66,7 @@ describe('InventoryScreen', () => {
         const charges = screen.getByTestId('inventory-charges-panel');
         expect(charges).toHaveTextContent(/Peek\s*\d/);
         expect(charges).not.toHaveTextContent(/Guard tokens/);
-        expect(charges).toHaveTextContent(/Match score multiplier/);
+        expect(charges).toHaveTextContent(/Score multiplier/);
     });
 
     it('uses normalized inventory quantities in the charges summary', () => {
