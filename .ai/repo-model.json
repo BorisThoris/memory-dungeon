@@ -10839,8 +10839,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 7715,
-      "sha256": "1afbc636007fa9de88e8a4afbe52cd8589969dba3a92950d8dfb68b20dcbb543"
+      "bytes": 7752,
+      "sha256": "ea8807be09cc29a8862fef006a0516d700fc2cb525467797696a1e5a4390019f"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -11481,8 +11481,8 @@
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
       "category": "source",
-      "bytes": 2149,
-      "sha256": "ce7c4d6b5ff002027e886fe9ff5e7445568506edf1556042711152cf0911dc6c"
+      "bytes": 2223,
+      "sha256": "cd1c2876cd220825113e353ebac2c39068fafc7e543bd08e898ae2c53069c261"
     },
     {
       "path": "src/renderer/components/RunEndStamp.test.tsx",
@@ -11517,8 +11517,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 62058,
-      "sha256": "2ec3a8e27e0264e78a891eef40af1291d2efbc227a9b632ec438baa7fb4e746e"
+      "bytes": 62091,
+      "sha256": "a3280aed05139b706d06c7f198b00fbff97b800f772531d38c4a66f67fa04efa"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -12633,8 +12633,8 @@
     {
       "path": "src/renderer/components/TutorialHall.module.css",
       "category": "source",
-      "bytes": 4218,
-      "sha256": "1f2fd4f721da4b79399a57749744bb4496bd3c8be37193a2c55de59a72ef5f06"
+      "bytes": 4251,
+      "sha256": "c96499c45cce174fe5e891c370dce85c33d4b3e8c0d7e7e09b398c21a4532b1f"
     },
     {
       "path": "src/renderer/components/TutorialHall.tsx",
@@ -14049,8 +14049,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 8279,
-      "sha256": "264b026de01b94cefbd992711b22194dd523217074385cac152ec17619b929f0"
+      "bytes": 8308,
+      "sha256": "95367bf68a4504492ffe8a5dbaddea5c46485060800ae65441acfcfb874fab45"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
