@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { RealmId, RunState } from '../../shared/contracts';
-import { getAdaptiveMusicState, musicGainFromSettings, musicTrackKey, MUSIC_CROSSFADE_MS, resolveAdaptiveMusicState, useGameplayMusic } from './gameplayMusic';
+import { getAdaptiveMusicState, musicGainFromSettings, musicTrackKey, MUSIC_CROSSFADE_MS, playableTrackUrl, resolveAdaptiveMusicState, setDailyTrackUrl, useGameplayMusic } from './gameplayMusic';
 
 class MockAudioElement {
     static instances: MockAudioElement[] = [];
@@ -451,5 +451,15 @@ describe('useGameplayMusic', () => {
         expect(audio?.removeAttribute).toHaveBeenCalledWith('src');
         expect(audio?.load).toHaveBeenCalled();
         expect(audio?.play).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe("today's music", () => {
+    it("plays the day's piece in a realm's slot, and the recorded loop when the player turns it off", () => {
+        const recorded = playableTrackUrl('realm:tide', false);
+        setDailyTrackUrl('realm:tide', 'blob:today-tide');
+        expect(playableTrackUrl('realm:tide')).toBe('blob:today-tide');
+        expect(playableTrackUrl('realm:tide', false)).toBe(recorded);
+        expect(recorded).not.toBe('blob:today-tide');
     });
 });

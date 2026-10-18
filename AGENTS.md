@@ -13,7 +13,8 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
   each realm from the player's install key and their date; `dailyMusicRender.ts` renders it to a
   seamless loop at boot; `dailyMusic.ts` hands it to the music element in the realm's slot. It stays
   on tonic A in a mode holding the cascade's A, B, D and E. The recorded realm loops below are the
-  **fallback**: a device or a piece that cannot render plays them.
+  **fallback**: a device or a piece that cannot render plays them, and so does a player who turns
+  off Today's Music (Settings, Audio; `dailyMusicEnabled`, on by default).
 - On a floor in a realm, that realm's loop (`src/renderer/assets/audio/music/realm/<realm>-ambience.ogg`)
   **is** the background music when the day's piece is not there: it plays on the music element (`gameplayMusic.ts`, `realmMusicUrl`,
   `musicTrackKey`), so the Settings music volume, master volume and Fever duck act on it.

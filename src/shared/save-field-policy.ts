@@ -16,7 +16,7 @@ export interface SaveFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const SAVE_FIELD_POLICY_VERSION = 'save-224-v9';
+export const SAVE_FIELD_POLICY_VERSION = 'save-224-v10';
 
 const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
     {
@@ -114,6 +114,13 @@ const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
         owner: 'Settings',
         migrationRequiredWhenChanged: true,
         recoveryPolicy: 'Invalid proximity hint toggles fall back to the default enabled state.'
+    },
+    {
+        field: 'settings.dailyMusicEnabled',
+        scope: 'persisted_save',
+        owner: 'Settings',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy: "A missing or invalid daily music toggle falls back to the day's music on."
     }
 ];
 

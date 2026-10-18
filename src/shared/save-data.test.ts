@@ -518,7 +518,7 @@ describe('save normalization', () => {
     it('documents which persisted fields require save migrations', () => {
         const policies = getSaveFieldPolicies();
 
-        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-224-v9');
+        expect(SAVE_FIELD_POLICY_VERSION).toBe('save-224-v10');
         expect(policies.map((policy) => policy.field)).toEqual([
             'runHistory',
             'runHistory.shareKey',
@@ -532,7 +532,8 @@ describe('save normalization', () => {
             'playerStats.sharpFloors',
             'playerStats.feverFloors',
             'settings.cameraViewportModePreference',
-            'settings.pairProximityHintsEnabled'
+            'settings.pairProximityHintsEnabled',
+            'settings.dailyMusicEnabled'
         ]);
         expect(policies.every((policy) => policy.scope === 'persisted_save')).toBe(true);
         expect(shouldSaveFieldRequireMigration('runHistory')).toBe(true);

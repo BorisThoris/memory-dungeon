@@ -195,6 +195,7 @@ const App = () => {
         realm: run ? runRealmId(run) : null,
         masterVolume: settings.masterVolume,
         musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck * gapDuck,
+        dailyMusic: settings.dailyMusicEnabled,
         suppressed: musicState.suppressed
     });
 

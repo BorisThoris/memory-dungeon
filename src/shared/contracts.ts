@@ -327,6 +327,11 @@ export type GraphicsQualityPreset = 'low' | 'medium' | 'high';
 export interface Settings {
     masterVolume: number;
     musicVolume: number;
+    /**
+     * The run's music is the day's own composition for this player (`dailyMusic.ts`); off plays the
+     * recorded realm loops instead.
+     */
+    dailyMusicEnabled: boolean;
     sfxVolume: number;
     displayMode: DisplayMode;
     uiScale: number;

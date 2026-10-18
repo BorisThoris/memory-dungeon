@@ -457,6 +457,12 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     value={draft.musicVolume}
                                                     valueLabel={`${Math.round(draft.musicVolume * 100)}%`}
                                                 />
+                                                <ToggleRow
+                                                    checked={draft.dailyMusicEnabled}
+                                                    hint={SETTINGS_HINTS.dailyMusicEnabled}
+                                                    label="Today's Music"
+                                                    onChange={(next) => patchSettings('dailyMusicEnabled', next)}
+                                                />
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.sfxVolume}
                                                     label="SFX"

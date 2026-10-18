@@ -27,6 +27,7 @@ import { normalizeGameplayJournalSnapshot } from './gameplay-journal';
 export const DEFAULT_SETTINGS: Settings = {
     masterVolume: 0.8,
     musicVolume: 0.55,
+    dailyMusicEnabled: true,
     sfxVolume: 0.8,
     displayMode: 'windowed',
     uiScale: 1,
@@ -386,6 +387,7 @@ export const settingsBoundarySchema = z.object({
     graphicsQuality: z.unknown().optional(),
     masterVolume: z.unknown().optional(),
     musicVolume: z.unknown().optional(),
+    dailyMusicEnabled: z.unknown().optional(),
     pairProximityHintsEnabled: z.unknown().optional(),
     reduceMotion: z.unknown().optional(),
     resolveDelayMultiplier: z.unknown().optional(),
@@ -453,6 +455,8 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
             DEFAULT_SETTINGS.musicVolume,
             SETTINGS_NUMERIC_RANGES.musicVolume
         ),
+        dailyMusicEnabled:
+            typeof source.dailyMusicEnabled === 'boolean' ? source.dailyMusicEnabled : DEFAULT_SETTINGS.dailyMusicEnabled,
         sfxVolume: finiteClampedNumber(
             source.sfxVolume,
             DEFAULT_SETTINGS.sfxVolume,

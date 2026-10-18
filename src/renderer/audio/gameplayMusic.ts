@@ -69,8 +69,8 @@ export const setDailyTrackUrl = (key: MusicTrackKey, url: string): void => {
     dailyTrackUrls.set(key, url);
 };
 
-const playableTrackUrl = (key: MusicTrackKey): string | undefined =>
-    dailyTrackUrls.get(key) ?? preloadedTrackUrls.get(key) ?? resolveTrackUrl(key);
+export const playableTrackUrl = (key: MusicTrackKey, daily = true): string | undefined =>
+    (daily ? dailyTrackUrls.get(key) : undefined) ?? preloadedTrackUrls.get(key) ?? resolveTrackUrl(key);
 
 /** Every track a session can play: the menu, the run loop and each realm's music. */
 const ALL_TRACK_KEYS: readonly MusicTrackKey[] = ['menu', 'run', ...REALM_IDS.map((realm): MusicTrackKey => `realm:${realm}`)];
@@ -122,6 +122,8 @@ interface GameplayMusicParams {
     realm?: RealmId | null;
     masterVolume: number;
     musicVolume: number;
+    /** The day's composed pieces ahead of the recorded loops (Settings, Audio); default on. */
+    dailyMusic?: boolean;
     /** When true, keep the element paused (e.g. other systems need exclusive control of the output). */
     suppressed?: boolean;
 }
@@ -221,7 +223,7 @@ export const getAdaptiveMusicState = ({
  * Looped background music via `HTMLAudioElement`. Volume follows **`masterVolume` x `musicVolume`**.
  * HTMLMediaElement autoplay rules apply: first successful `play()` may require a user gesture; we retry on the first `pointerdown`.
  */
-export function useGameplayMusic({ active, track, realm = null, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {
+export function useGameplayMusic({ active, track, realm = null, masterVolume, musicVolume, dailyMusic = true, suppressed = false }: GameplayMusicParams): void {
     const key = musicTrackKey(track, realm);
     // The key being rendered, read by the outgoing element's cleanup: a realm handing to a realm fades.
     const keyRef = useRef<MusicTrackKey | null>(null);
@@ -242,7 +244,7 @@ export function useGameplayMusic({ active, track, realm = null, masterVolume, mu
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
-        const src = playableTrackUrl(key);
+        const src = playableTrackUrl(key, dailyMusic);
         audioUnavailableRef.current = false;
         const handedOver = isRunFamily(previousKeyRef.current) && isRunFamily(key);
         previousKeyRef.current = key;
@@ -377,7 +379,7 @@ export function useGameplayMusic({ active, track, realm = null, masterVolume, mu
                 playbackControllerRef.current = null;
             }
         };
-    }, [key]);
+    }, [key, dailyMusic]);
 
     useEffect(() => {
         const el = audioRef.current;
@@ -395,5 +397,5 @@ export function useGameplayMusic({ active, track, realm = null, masterVolume, mu
         }
 
         playbackControllerRef.current?.requestPlay();
-    }, [active, key, masterVolume, musicVolume, pageVisible, suppressed]);
+    }, [active, dailyMusic, key, masterVolume, musicVolume, pageVisible, suppressed]);
 }
