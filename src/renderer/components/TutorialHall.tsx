@@ -90,18 +90,18 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
     if (!session) {
         return (
             <MetaShell
-                eyebrow="Tutorial Hall"
+                eyebrow={TUTORIAL_HALL_COPY.eyebrow}
                 label="Tutorial Hall"
                 onBack={onClose}
-                subtitle="Practice only. Your run and records stay untouched."
+                subtitle={TUTORIAL_HALL_COPY.practiceNote}
                 testId="tutorial-hall"
-                title="Learn by playing"
+                title={TUTORIAL_HALL_COPY.title}
                 toolbar={
                     <SectionRail
                         activeId={category}
                         controls="tutorial-lessons"
                         idPrefix="tutorial-tab"
-                        label="Lesson category"
+                        label={TUTORIAL_HALL_COPY.categoryRail}
                         onSelect={(id) => setCategory(id as (typeof categories)[number])}
                         options={categories.map((item) => ({ id: item, label: item, badge: String(TUTORIAL_LESSONS.filter((lesson) => lesson.category === item).length) }))}
                     />
