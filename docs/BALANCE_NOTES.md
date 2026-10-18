@@ -3404,3 +3404,10 @@ changed, so `GAME_RULES_VERSION` 65 → 66 and Curios are gated on `CURIO_RULES_
 shared key on rules 65 deals the board it always dealt. The 200-seed soak (four players, 800 runs,
 0 violations) claims about one Curio every four to five floors (careful 1784 on 7890 floors) and
 uses nearly every crucible it is given.
+
+## The Storm Glass (rules 67, 2026-10-18)
+
+A Curio now holds a Crucible or a Storm Glass (`curioItemsForRules`); a rules-66 run still draws
+only crucibles, so `GAME_RULES_VERSION` 66 → 67. The glass calls the realm's peak on demand and
+keeps the weather clock's count. The reseed moved the census again (the ledger quotes the rules-67
+figures); peek reads 0.876 of a run's floors and stays banded common.

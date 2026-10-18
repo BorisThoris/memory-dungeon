@@ -2538,6 +2538,43 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "inventory.storm_glass_charge",
+            "label": "Storm Glass Charge Inventory",
+            "kind": "inventory",
+            "role": "call_the_realm_peak_now",
+            "evidence": [
+                "src/shared/storm-glass-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/gameplay-core.ts",
+                "src/renderer/components/itemEffects.ts"
+            ],
+            "reads": [
+                "stormGlassCharges",
+                "tileStates",
+                "runStatus"
+            ],
+            "writes": [
+                "stormGlassCharges",
+                "tileStates",
+                "gameplayCommands",
+                "gameplayEvents"
+            ],
+            "enables": [
+                "board.realm_weather"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "turnable-pair-always-left",
+                "weather-clock-keeps-its-count",
+                "tile-ids-kept"
+            ],
+            "tests": [
+                "src/shared/storm-glass-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3704,6 +3741,24 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the crucible tool and count, the melt, the recast wave, shake and sound"
+        },
+        {
+            "source": "findable.curio",
+            "target": "inventory.storm_glass_charge",
+            "kind": "grants",
+            "label": "from rules 67 a matched Curio may hold a storm glass"
+        },
+        {
+            "source": "inventory.storm_glass_charge",
+            "target": "board.realm_weather",
+            "kind": "triggers",
+            "label": "the realm’s peak strikes now, on top of its clock"
+        },
+        {
+            "source": "inventory.storm_glass_charge",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the storm glass tool and count, the shattered glass, the storm, the lit cards, shake and sound"
         }
     ],
     "coverage": {

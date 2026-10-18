@@ -1,5 +1,6 @@
 import { create } from 'zustand/react';
-import type { BoardState, GraphicsQualityPreset, TileSuit } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset, RealmId, TileSuit } from '../../shared/contracts';
+import { REALMS } from '../../shared/realm-rules';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { hashStringToSeed } from '../../shared/rng';
 import type { BoardArcBurst, BoardParticleBurst, BoardParticleShape } from './boardParticleSystem';
@@ -27,6 +28,7 @@ export type ItemEffectKind =
     | 'bomb'
     | 'meteor'
     | 'crucible'
+    | 'storm_glass'
     | 'peek'
     | 'pin'
     | 'shuffle'
@@ -47,6 +49,8 @@ export interface ItemEffect {
     cell?: number;
     /** The Crucible: the element melted and the element it was recast in; `tileIds` holds the melted pair first. */
     melt?: { from: TileSuit | null; to: TileSuit | null; meltedCount: number };
+    /** The Storm Glass: the realm whose weather it called; `tileIds` holds the cards the storm touched. */
+    realm?: RealmId;
 }
 
 /** Trauma each item adds to the board (0..1; shake is trauma cubed, `boardTrauma.ts`). */
@@ -54,6 +58,7 @@ export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     bomb: 0.62,
     meteor: 0.85,
     crucible: 0.42,
+    storm_glass: 0.7,
     peek: 0,
     pin: 0,
     shuffle: 0.22,
@@ -86,6 +91,9 @@ export const itemEffectsFromEvents = (
         switch (event.type) {
             case 'board.bombed':
                 effects.push({ key, kind: 'bomb', tileIds: cardsOf(boardBefore ?? boardAfter, event.targetTileId) });
+                break;
+            case 'realm.weather_called':
+                effects.push({ key, kind: 'storm_glass', tileIds: [...event.touchedTileIds], realm: event.realmId as RealmId });
                 break;
             case 'board.transmuted':
                 effects.push({
@@ -231,6 +239,20 @@ export const itemEffectRecipe = ({
                 if (origin && index < 4) {
                     arcs.push({ from: origin, to: anchor, seed: seed(`recast-arc${index}`), time: time + delay, intensity: 0.5, reduceMotion, quality, tint: toTint });
                 }
+            });
+            break;
+        }
+        case 'storm_glass': {
+            // The glass breaks over the board and the realm pours out of it: shards of glass and the
+            // realm's light on every card the storm reached, a bolt running card to card, a ring under each.
+            const tint = effect.realm ? REALMS[effect.realm].color : '#b69bff';
+            at.forEach((anchor, index) => {
+                const delay = index * 0.035;
+                motes(anchor, 'shard', '#e6f6ff', 0.75, `glass${index}`, delay, 0.9);
+                motes(anchor, 'spark', tint, 0.9, `storm${index}`, delay);
+                shockwave(anchor, 0.4, `storm-ring${index}`, delay);
+                const next = at[index + 1];
+                if (next && index < 7) arcs.push({ from: anchor, to: next, seed: seed(`storm-arc${index}`), time: time + delay, intensity: 0.75, reduceMotion, quality, tint });
             });
             break;
         }

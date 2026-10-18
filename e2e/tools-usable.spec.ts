@@ -224,6 +224,19 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-crucible')).toBeDisabled();
     });
 
+    test('storm glass: press it on a calm realm floor and the realm\'s peak strikes, lighting what it moved', async ({ page }) => {
+        await openRoom(page, 'storm-glass');
+        await expect(page.getByTestId('tool-storm_glass')).toBeEnabled();
+        await page.getByTestId('tool-storm_glass').click();
+        await expect.poll(async () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            return { glasses: run.stormGlassCharges, kind: run.lastRealmEvent?.kind ?? null, lit: (run.realmLitTileIds ?? []).length > 0 };
+        })).toEqual({ glasses: 0, kind: 'springtide', lit: true });
+        await openRoom(page, 'storm-glass-dark');
+        await expect(page.getByTestId('tool-storm_glass')).toBeDisabled();
+    });
+
     test('curio: match its pair and a crucible appears in the dock, ready to use', async ({ page }) => {
         await openRoom(page, 'curio');
         await expect(page.getByTestId('tool-crucible')).toHaveCount(0);

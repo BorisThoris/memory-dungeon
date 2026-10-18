@@ -164,6 +164,17 @@ export function GameplayCrucibleIcon({ className, ...rest }: GameplayIconProps) 
     );
 }
 
+/** The Storm Glass: an hourglass-shaped vial with a bolt inside, the dock's curio that calls the weather. */
+export function GameplayStormGlassIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M7 3h10M7 21h10" />
+            <path d="M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9" fill="none" />
+            <path d="m12.6 8.5-1.6 3h2l-1.6 3" />
+        </svg>
+    );
+}
+
 /** The satchel a phone's dock folds its tools into. */
 export function GameplayItemsIcon({ className, ...rest }: GameplayIconProps) {
     return (

@@ -321,6 +321,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         .strict(),
     z.object({ ...commandBase, type: z.literal('board.meteor'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.crucible'), targetTileId: z.string().min(1).max(160) }).strict(),
+    z.object({ ...commandBase, type: z.literal('board.storm_glass') }).strict(),
     z
         .object({
             ...commandBase,
@@ -624,6 +625,18 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('realm.weather_called'),
+            realmId: z.string().min(1).max(40),
+            weatherKind: z.string().min(1).max(40),
+            touchedTileIds: z.array(z.string().min(1).max(160)).max(4096),
+            litTileIds: z.array(z.string().min(1).max(160)).max(4096),
+            stormGlassChargesBefore: z.number().int().nonnegative(),
+            stormGlassChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('board.transmuted'),
             targetTileId: z.string().min(1).max(160),
             meltedTileIds: z.array(z.string().min(1).max(160)).max(2),
@@ -771,6 +784,9 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
         type: 'board.bomb',
         targetTileId
     });
+
+export const createGameplayStormGlassCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.storm_glass' });
 
 export const createGameplayCrucibleCommand = (commandId: string, targetTileId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.crucible', targetTileId });

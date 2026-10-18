@@ -59,6 +59,11 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         source: 'Match a violet Curio pickup.',
         useRule: 'Turn a card over, then choose Crucible: its pair melts and every other face-down pair of its element is recast as another.'
     },
+    storm_glass_charge: {
+        id: 'storm_glass_charge', kind: 'consumable', label: 'Storm Glass', stackLimit: null, mutableAt: 'mid_run',
+        source: 'Match a violet Curio pickup.',
+        useRule: 'On a realm floor with nothing face up, choose Storm Glass: the realm\'s peak weather strikes now, and the cards it moves stay lit until your next flip.'
+    },
     shuffle_charge: {
         id: 'shuffle_charge',
         kind: 'consumable',
@@ -161,6 +166,8 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
             return runNonNegativeInteger(run.meteorCharges);
         case 'crucible_charge':
             return runNonNegativeInteger(run.crucibleCharges);
+        case 'storm_glass_charge':
+            return runNonNegativeInteger(run.stormGlassCharges);
         case 'shuffle_charge':
             return runNonNegativeInteger(run.shuffleCharges);
         case 'region_shuffle_charge':
@@ -343,6 +350,7 @@ export const previewRunInventoryItemGain = (
 const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural: string }> = {
     meteor_charge: { singular: 'meteor', plural: 'meteors' },
     crucible_charge: { singular: 'crucible', plural: 'crucibles' },
+    storm_glass_charge: { singular: 'storm glass', plural: 'storm glasses' },
     shuffle_charge: { singular: 'shuffle charge', plural: 'shuffle charges' },
     region_shuffle_charge: { singular: 'row/swap charge', plural: 'row/swap charges' },
     peek_charge: { singular: 'peek charge', plural: 'peek charges' },
@@ -421,6 +429,8 @@ export const gainRunInventoryItem = (
             return { ...run, meteorCharges: runNonNegativeInteger(run.meteorCharges) + gain };
         case 'crucible_charge':
             return { ...run, crucibleCharges: runNonNegativeInteger(run.crucibleCharges) + gain };
+        case 'storm_glass_charge':
+            return { ...run, stormGlassCharges: runNonNegativeInteger(run.stormGlassCharges) + gain };
         case 'shuffle_charge':
             return { ...run, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + gain };
         case 'region_shuffle_charge':
@@ -450,6 +460,8 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
             return { run: { ...run, meteorCharges: decrementRunCounter(run.meteorCharges) }, itemId, applied: true };
         case 'crucible_charge':
             return { run: { ...run, crucibleCharges: decrementRunCounter(run.crucibleCharges) }, itemId, applied: true };
+        case 'storm_glass_charge':
+            return { run: { ...run, stormGlassCharges: decrementRunCounter(run.stormGlassCharges) }, itemId, applied: true };
         case 'shuffle_charge':
             return { run: { ...run, shuffleCharges: decrementRunCounter(run.shuffleCharges) }, itemId, applied: true };
         case 'region_shuffle_charge':

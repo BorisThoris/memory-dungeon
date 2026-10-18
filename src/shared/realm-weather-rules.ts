@@ -449,6 +449,102 @@ export const releaseRealmHoldsIfStuck = (tiles: Tile[]): string[] => {
 };
 
 /** Resolves the realm's part of a turn. A run with no realm gets its board back untouched. */
+/** One strike of a realm's weather on `tiles` (mutated): the cards it touched, what it was, and the cards it lit. */
+interface WeatherStrike {
+    touched: string[];
+    kind: RealmEvent['kind'];
+    lit: string[];
+}
+
+const strikeWeather = ({
+    weatherRealm,
+    peak,
+    tiles,
+    board,
+    pinned,
+    rng,
+    alchemy,
+    run,
+    level,
+    count,
+    weatherReach
+}: {
+    weatherRealm: RealmId;
+    peak: boolean;
+    tiles: Tile[];
+    board: BoardState;
+    pinned: ReadonlySet<string>;
+    rng: () => number;
+    alchemy: AlchemyLog;
+    run: RunState;
+    level: number;
+    count: number;
+    weatherReach: number;
+}): WeatherStrike => {
+    let touched: string[] = [];
+    let kind: RealmEvent['kind'] = 'blizzard';
+    let lit: string[] = [];
+    switch (weatherRealm) {
+        case 'frost': {
+            if (peak) {
+                // Whiteout: every face-down card is snowed over.
+                tiles.forEach((tile, index) => {
+                    if (tile.state === 'hidden' && elementLands(tiles, index, 'bone', alchemy)) tiles[index] = { ...tile, snowed: true };
+                });
+                touched = tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
+                kind = 'whiteout';
+                break;
+            }
+            // The wind holds its direction for a floor, so a player can learn which way it blows.
+            const windEast = hashStringToSeed(`realm-wind:${run.runSeed}:${level}`) % 2 === 0;
+            touched = blizzard(tiles, board, pinned, rng, windEast, alchemy);
+            kind = 'blizzard';
+            break;
+        }
+        case 'ember':
+            touched = wildfire(tiles, rng, weatherReach, alchemy);
+            if (peak) {
+                touched = [...touched, ...spreadEveryFire(tiles, board, rng, alchemy)];
+                kind = 'firestorm';
+            } else {
+                kind = 'wildfire';
+            }
+            break;
+        case 'tide': {
+            const first = current(tiles, board, pinned, count, alchemy);
+            touched = first.ids;
+            kind = 'current';
+            if (peak && first.col >= 0) {
+                touched = [...touched, ...current(tiles, board, pinned, first.col + 1, alchemy).ids.filter((id) => !first.ids.includes(id))];
+                kind = 'springtide';
+            }
+            break;
+        }
+        case 'storm':
+            if (peak) {
+                touched = thunderclap(tiles, board);
+                kind = 'thunderclap';
+            } else {
+                touched = lightning(tiles, pinned, rng, weatherReach);
+                kind = 'lightning';
+            }
+            lit = [...touched];
+            break;
+        case 'grove':
+            touched = overgrowth(tiles, board, pinned, rng, weatherReach, alchemy);
+            kind = 'overgrowth';
+            if (peak) {
+                tiles.forEach((tile, index) => {
+                    if (tile.state === 'hidden' && tile.vined === true) tiles[index] = { ...tile, bloom: true };
+                });
+                touched = tiles.filter((tile) => tile.state === 'hidden' && tile.bloom === true).map((tile) => tile.id);
+                kind = 'bloom';
+            }
+            break;
+    }
+    return { touched, kind, lit };
+};
+
 export const resolveRealmTurn = ({
     run,
     board,
@@ -824,66 +920,10 @@ export const resolveRealmTurn = ({
         const weatherReach = REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(realmAttunementLevel(run, weatherRealm)) : 0);
         const peak = isRealmPeak(count);
         const rng = rngFor(weatherRealm, run, level, turns);
-        let touched: string[] = [];
-        let kind: RealmEvent['kind'] = 'blizzard';
-        switch (weatherRealm) {
-            case 'frost': {
-                if (peak) {
-                    // Whiteout: every face-down card is snowed over.
-                    tiles.forEach((tile, index) => {
-                        if (tile.state === 'hidden' && elementLands(tiles, index, 'bone', alchemy)) tiles[index] = { ...tile, snowed: true };
-                    });
-                    touched = tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
-                    kind = 'whiteout';
-                    break;
-                }
-                // The wind holds its direction for a floor, so a player can learn which way it blows.
-                const windEast = hashStringToSeed(`realm-wind:${run.runSeed}:${level}`) % 2 === 0;
-                touched = blizzard(tiles, board, pinned, rng, windEast, alchemy);
-                kind = 'blizzard';
-                break;
-            }
-            case 'ember':
-                touched = wildfire(tiles, rng, weatherReach, alchemy);
-                if (peak) {
-                    touched = [...touched, ...spreadEveryFire(tiles, board, rng, alchemy)];
-                    kind = 'firestorm';
-                } else {
-                    kind = 'wildfire';
-                }
-                break;
-            case 'tide': {
-                const first = current(tiles, board, pinned, count, alchemy);
-                touched = first.ids;
-                kind = 'current';
-                if (peak && first.col >= 0) {
-                    touched = [...touched, ...current(tiles, board, pinned, first.col + 1, alchemy).ids.filter((id) => !first.ids.includes(id))];
-                    kind = 'springtide';
-                }
-                break;
-            }
-            case 'storm':
-                if (peak) {
-                    touched = thunderclap(tiles, board);
-                    kind = 'thunderclap';
-                } else {
-                    touched = lightning(tiles, pinned, rng, weatherReach);
-                    kind = 'lightning';
-                }
-                litTileIds = [...litTileIds, ...touched];
-                break;
-            case 'grove':
-                touched = overgrowth(tiles, board, pinned, rng, weatherReach, alchemy);
-                kind = 'overgrowth';
-                if (peak) {
-                    tiles.forEach((tile, index) => {
-                        if (tile.state === 'hidden' && tile.vined === true) tiles[index] = { ...tile, bloom: true };
-                    });
-                    touched = tiles.filter((tile) => tile.state === 'hidden' && tile.bloom === true).map((tile) => tile.id);
-                    kind = 'bloom';
-                }
-                break;
-        }
+        const strike = strikeWeather({ weatherRealm, peak, tiles, board, pinned, rng, alchemy, run, level, count, weatherReach });
+        const touched = strike.touched;
+        const kind = strike.kind;
+        litTileIds = [...litTileIds, ...strike.lit];
         if (touched.length > 0) {
             weather += 1;
             if (peak) peaks += 1;
@@ -1025,4 +1065,73 @@ export const shedSnow = (tile: Tile): Tile => {
     if (tile.snowed == null) return tile;
     const { snowed: _snowed, ...rest } = tile;
     return rest;
+};
+
+/** How many seeded strikes a called storm gets to find something to land on. */
+const CALLED_WEATHER_ATTEMPTS = 4;
+
+/** Weathers that move cards: the ones whose cards a called storm lights, so the player sees where they went. */
+const MOVING_WEATHER: ReadonlySet<RealmEvent['kind']> = new Set(['blizzard', 'current', 'springtide', 'lightning']);
+
+export interface CalledWeather {
+    readonly board: BoardState;
+    readonly event: RealmEvent;
+    /** Cards to show face up until the next flip: those the weather moved, and what thunder lit. */
+    readonly litTileIds: readonly string[];
+}
+
+/**
+ * The realm's weather, called now at its peak and on top of its own clock (the Storm Glass,
+ * `storm-glass-rules.ts`). The same strike the clock brings (`strikeWeather`), on the floor's own
+ * realm, with the holds reconciled after it and a turnable pair always left. The clock's count is
+ * not touched, so the realm's next weather comes when it would have. Null off a realm floor, or
+ * when the weather found nothing to touch.
+ */
+export const callRealmWeather = (run: RunState, salt: string): CalledWeather | null => {
+    const realmId = runRealmId(run);
+    const board = run.board;
+    if (!realmId || !board) return null;
+    const severity = runRealmSeverity(run);
+    const level = board.level;
+    const turns = runNonNegativeInteger(run.turnsThisFloor);
+    const ground = readElementalGround(board);
+    const recipeGuard = weatherGuardedRecipeTileIds(board, runNonNegativeInteger(run.runRulesVersion));
+    const pinnedTileIds = Array.isArray(run.pinnedTileIds) ? run.pinnedTileIds.filter((id): id is string => typeof id === 'string') : [];
+    const pinned = new Set([...pinnedTileIds, ...groundAnchoredTileIds(board.tiles, ground), ...recipeGuard]);
+    // A called storm blows at least as hard as a raging floor's, and a strike that found nothing to
+    // land on (fire on a board of water) is struck again, so a glass broken is never a glass wasted.
+    const weatherReach = Math.max(REALM_SEVERITIES.raging.reach, REALM_SEVERITIES[severity].reach + (severity === 'raging' ? realmDepthReach(realmAttunementLevel(run, realmId)) : 0));
+    let tiles: Tile[] = [...board.tiles];
+    let strike: WeatherStrike = { touched: [], kind: 'blizzard', lit: [] };
+    let alchemy = createAlchemyLog();
+    const landed = (): boolean => strike.touched.length > 0 || alchemy.empowered.length > 0;
+    for (let attempt = 0; attempt < CALLED_WEATHER_ATTEMPTS && !landed(); attempt += 1) {
+        tiles = [...board.tiles];
+        alchemy = createAlchemyLog();
+        strike = strikeWeather({
+            weatherRealm: realmId,
+            peak: true,
+            tiles,
+            board,
+            pinned,
+            rng: rngFor(`glass:${salt}:${attempt}`, run, level, turns),
+            alchemy,
+            run,
+            level,
+            count: runNonNegativeInteger(run.realmWeatherThisFloor ?? 0),
+            weatherReach
+        });
+    }
+    if (!landed()) return null;
+    // Weather that only met its own kind fed it: those cards drank a charge (`element-alchemy-rules.ts`).
+    if (strike.touched.length === 0) strike = { touched: [...alchemy.empowered], kind: 'empowered', lit: [] };
+    reconcileRealmHolds(tiles, board.columns, board.tiles, new Set([...pinnedTileIds, ...recipeGuard, ...tiles.filter((tile) => tile.rime).map((tile) => tile.id)]));
+    releaseRealmHoldsIfStuck(tiles);
+    const hidden = new Set(tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id));
+    const lit = [...new Set([...strike.lit, ...(MOVING_WEATHER.has(strike.kind) ? strike.touched : [])])].filter((id) => hidden.has(id));
+    return {
+        board: { ...board, tiles },
+        event: { key: eventKey(run, level, turns, `glass-${salt}-${strike.kind}`), kind: strike.kind, tileIds: strike.touched },
+        litTileIds: lit
+    };
 };

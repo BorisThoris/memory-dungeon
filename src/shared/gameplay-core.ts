@@ -1,3 +1,5 @@
+import { runRealmId } from './realm-rules';
+import { applyStormGlass, STORM_GLASS_SOURCE_ID, stormGlassFeedbackLine } from './storm-glass-rules';
 import { applyCrucible, CRUCIBLE_SOURCE_ID, crucibleFeedbackLine } from './crucible-rules';
 import { reflowRunBoard } from './board-layout-rules';
 import { revealFinalPair } from './final-pair-rules';
@@ -80,6 +82,7 @@ const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const BOMB_SOURCE: GameplaySource = { kind: 'power', id: 'bomb' };
 const CRUCIBLE_SOURCE: GameplaySource = { kind: 'power', id: CRUCIBLE_SOURCE_ID };
+const STORM_GLASS_SOURCE: GameplaySource = { kind: 'power', id: STORM_GLASS_SOURCE_ID };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
@@ -243,6 +246,35 @@ const applyBombCommand = (
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
+};
+
+const applyStormGlassCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.storm_glass' }>
+): GameplayCommandResult => {
+    const result = applyStormGlass(run);
+    if (!result) {
+        return rejectedResult(run, command.commandId, 'A storm glass needs a realm floor in play with nothing face up.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, STORM_GLASS_SOURCE, events);
+    const after = runNonNegativeInteger(result.run.stormGlassCharges);
+    writeEvent({
+        type: 'realm.weather_called',
+        realmId: runRealmId(run) ?? 'none',
+        weatherKind: result.event.kind,
+        touchedTileIds: [...result.event.tileIds],
+        litTileIds: [...result.litTileIds],
+        stormGlassChargesBefore: runNonNegativeInteger(run.stormGlassCharges),
+        stormGlassChargesAfter: after
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.storm_glass.used',
+        message: stormGlassFeedbackLine(result.event.kind, result.event.tileIds.length, result.litTileIds.length, after),
+        tone: 'information'
+    });
+    return { run: result.run, command, events, accepted: true };
 };
 
 const applyCrucibleCommand = (
@@ -1038,6 +1070,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'board.storm_glass') {
+        return applyStormGlassCommand(run, command);
     }
     if (command.type === 'board.crucible') {
         return applyCrucibleCommand(run, command);

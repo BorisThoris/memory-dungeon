@@ -51,7 +51,7 @@ const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'lo
 export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
     if (RELICS.has(id)) return 'epic';
     // A Curio's item is the strangest find on the board.
-    if (id === 'crucible' || id === 'curio') return 'epic';
+    if (id === 'crucible' || id === 'storm_glass' || id === 'curio') return 'epic';
     if (id === 'meteor_shard' || id.startsWith('focus_')) return 'rare';
     if (id.startsWith('prime_') || id === 'bomb' || id === 'hourglass_prize') return 'uncommon';
     return 'common';
@@ -73,6 +73,7 @@ export const itemDropGlyph = (id: ItemDropId): ItemDropGlyph => {
         case 'bomb':
             return 'bomb';
         case 'crucible':
+        case 'storm_glass':
         case 'curio':
             return 'flask';
         case 'hourglass_prize':

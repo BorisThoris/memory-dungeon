@@ -16,9 +16,14 @@ import { runNonNegativeInteger } from './run-number-guards';
  * (`board-tile-generation-rules.ts`), so the meteor shards and every other draw land where they
  * always did.
  */
-export type CurioItemId = 'crucible';
+export type CurioItemId = 'crucible' | 'storm_glass';
 
-export const CURIO_ITEM_IDS: readonly CurioItemId[] = ['crucible'];
+/** Rules 67 add the Storm Glass to what a Curio may hold (`storm-glass-rules.ts`). */
+export const STORM_GLASS_RULES_VERSION = 67;
+
+/** What a Curio may hold under a run's rules: a rules-66 key draws what it always drew. */
+export const curioItemsForRules = (rulesVersion: number): readonly CurioItemId[] =>
+    rulesVersion >= STORM_GLASS_RULES_VERSION ? ['crucible', 'storm_glass'] : ['crucible'];
 
 /** Rules 66 deal Curios; a run (or a shared key) on older rules never sees one, so its replay deals what it dealt. */
 export const CURIO_RULES_VERSION = 66;
@@ -34,14 +39,16 @@ export const curioReplacesGlint = (runSeed: number, rulesVersion: number, level:
     level >= CURIO_FROM_FLOOR &&
     createMulberry32(hashStringToSeed(`curio:${rulesVersion}:${runSeed}:${level}:${pairKey}`))() < CURIO_GLINT_SHARE;
 
-const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges'>> = {
-    crucible: 'crucibleCharges'
+const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges' | 'stormGlassCharges'>> = {
+    crucible: 'crucibleCharges',
+    storm_glass: 'stormGlassCharges'
 };
 
 /** The item a claimed Curio grants: seeded by run, floor and how many Curios this run has opened. */
-export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'curiosClaimedThisRun'>, level: number): CurioItemId => {
+export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'curiosClaimedThisRun'>, level: number): CurioItemId => {
+    const pool = curioItemsForRules(runNonNegativeInteger(run.runRulesVersion));
     const rng = createMulberry32(hashStringToSeed(`curio-item:${run.runSeed}:${level}:${runNonNegativeInteger(run.curiosClaimedThisRun)}`));
-    return CURIO_ITEM_IDS[pickRngIndex(rng, CURIO_ITEM_IDS.length)]!;
+    return pool[pickRngIndex(rng, pool.length)]!;
 };
 
 /** The run after a Curio's pair is matched: one curio item in hand, and the drop recorded for the HUD. */

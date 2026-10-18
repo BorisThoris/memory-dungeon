@@ -10,9 +10,10 @@ describe('Curios', () => {
     it('put a curio item in hand and record the drop when their pair is matched', () => {
         const run: RunState = finishMemorizePhase(createNewRun(0, { runSeed: 77, realm: null }));
         const claimed = claimCurio(run, 4, 'pair-x');
-        expect(claimed.crucibleCharges).toBe(1);
+        const item = claimed.lastCurioDrop!.item;
+        expect((item === 'crucible' ? claimed.crucibleCharges : claimed.stormGlassCharges)).toBe(1);
         expect(claimed.curiosClaimedThisRun).toBe(1);
-        expect(claimed.lastCurioDrop).toEqual({ key: 'curio:77:4:0:pair-x', item: 'crucible' });
+        expect(claimed.lastCurioDrop).toEqual({ key: 'curio:77:4:0:pair-x', item: curioItemFor(run, 4) });
         expect(claimCurio(claimed, 4, 'pair-y').lastCurioDrop?.key).not.toBe(claimed.lastCurioDrop?.key);
         expect(curioItemFor(run, 4)).toBe(curioItemFor(run, 4));
     });

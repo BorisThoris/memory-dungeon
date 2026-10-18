@@ -79,6 +79,21 @@ describe('item effects', () => {
         expect(ITEM_EFFECT_TRAUMA.crucible).toBeLessThan(ITEM_EFFECT_TRAUMA.bomb);
     });
 
+    it('a storm glass shatters over every card the storm reached, in the realm\u2019s light, a bolt running card to card', () => {
+        const [effect] = itemEffectsFromEvents(
+            [event('realm.weather_called', { realmId: 'storm', weatherKind: 'thunderclap', touchedTileIds: ['a-A', 'b-A', 'c-A'], litTileIds: ['a-A', 'b-A', 'c-A'] })],
+            null,
+            null
+        );
+        expect(effect).toMatchObject({ kind: 'storm_glass', tileIds: ['a-A', 'b-A', 'c-A'], realm: 'storm' });
+        const { bursts, arcs } = itemEffectRecipe({ effect: effect!, anchors: [0, 1, 2].map(at), time: 0, quality: 'high', reduceMotion: false });
+        expect(bursts.some((burst) => burst.shape === 'shard' && burst.tint === '#e6f6ff')).toBe(true);
+        expect(bursts.some((burst) => burst.shape === 'spark' && burst.tint === '#b69bff')).toBe(true);
+        expect(arcs).toHaveLength(2);
+        expect(ITEM_EFFECT_TRAUMA.storm_glass).toBeGreaterThan(ITEM_EFFECT_TRAUMA.crucible);
+        expect(ITEM_EFFECT_TRAUMA.storm_glass).toBeLessThan(ITEM_EFFECT_TRAUMA.meteor);
+    });
+
     it('the big items shake hardest, the quiet ones not at all', () => {
         expect(ITEM_EFFECT_TRAUMA.meteor).toBeGreaterThan(ITEM_EFFECT_TRAUMA.bomb);
         expect(ITEM_EFFECT_TRAUMA.bomb).toBeGreaterThan(ITEM_EFFECT_TRAUMA.shuffle);

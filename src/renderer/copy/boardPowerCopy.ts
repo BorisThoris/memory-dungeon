@@ -54,7 +54,16 @@ export const BOARD_SHUFFLE_COPY = {
 
 /** What a Curio held, in its drop balloon (`itemDropFeed.ts`). */
 export const CURIO_DROP_COPY = {
-    crucible: { title: 'CRUCIBLE', line: 'Melt a pair; its element pours out as another' }
+    crucible: { title: 'CRUCIBLE', line: 'Melt a pair; its element pours out as another' },
+    storm_glass: { title: 'STORM GLASS', line: 'Break it: the realm\'s peak strikes when you choose' }
+} as const;
+
+/** The Storm Glass's dock tooltips (`storm-glass-rules.ts`). */
+export const STORM_GLASS_TOOL_COPY = {
+    ready: 'Storm Glass: the realm\'s peak strikes now; the cards it moves stay lit until your next flip',
+    noRealm: 'Storm Glass: there is no realm on this floor to call',
+    faceUp: 'Storm Glass: finish the current pair first',
+    unavailable: 'Storm Glass: wait for the floor to begin'
 } as const;
 
 /** The Crucible's dock tooltips (`crucible-rules.ts`): it acts on the one card face up. */

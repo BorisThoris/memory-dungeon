@@ -1224,6 +1224,15 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
             playTone({ frequency: 110, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.7, type: 'sine', category: 'realm' });
             playNoise({ durationSec: 0.9, gain: gain * 0.75, filter: 'lowpass', from: 2200, to: 90, attackSec: 0.004, delaySec: 0.02 });
             return;
+        case 'storm_glass':
+            // Glass breaks, high and bright, then the realm's storm rolls in under it.
+            playNoise({ durationSec: 0.18, gain: gain * 0.6, filter: 'highpass', from: 6500, to: 4200, attackSec: 0.001 });
+            [0, 40, 95, 150].forEach((delayMs, index) =>
+                scheduleCue(() => playTone({ frequency: 2637 + index * 330, durationSec: 0.12, gain: gain * 0.09, type: 'sine', category: 'realm' }), delayMs)
+            );
+            scheduleCue(() => playNoise({ durationSec: 1.3, gain: gain * 0.55, filter: 'lowpass', from: 900, to: 70, attackSec: 0.25 }), 120);
+            scheduleCue(() => playTone({ frequency: 55, frequencyEnd: 41, durationSec: 1.1, gain: gain * 0.4, type: 'sine', category: 'realm' }), 160);
+            return;
         case 'crucible':
             // A molten hiss, the pot bubbling, then the new element rings out on A and E.
             playNoise({ durationSec: 0.5, gain: gain * 0.45, filter: 'bandpass', from: 5200, to: 900, q: 0.9, attackSec: 0.01 });

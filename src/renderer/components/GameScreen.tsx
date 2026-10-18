@@ -43,10 +43,11 @@ import { runGold } from '../../shared/run-store-rules';
 import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 import { crucibleTargetTileId } from '../../shared/crucible-rules';
+import { canBreakStormGlass } from '../../shared/storm-glass-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
-import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY } from '../copy/boardPowerCopy';
+import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY, STORM_GLASS_TOOL_COPY } from '../copy/boardPowerCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1802,6 +1803,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     : run.board.flippedTileIds.length === 0 ? CRUCIBLE_TOOL_COPY.waiting
                     : CRUCIBLE_TOOL_COPY.noPartner,
                 onClick: () => useAppStore.getState().useCrucible()
+            },
+            {
+                ...toolSpec('storm_glass'),
+                glyph: RUN_SHELL_GLYPHS.storm_glass,
+                charges: run.stormGlassCharges ?? 0,
+                disabled: !canBreakStormGlass(run),
+                title: canBreakStormGlass(run) ? STORM_GLASS_TOOL_COPY.ready
+                    : run.status !== 'playing' ? STORM_GLASS_TOOL_COPY.unavailable
+                    : run.realmId == null ? STORM_GLASS_TOOL_COPY.noRealm
+                    : STORM_GLASS_TOOL_COPY.faceUp,
+                onClick: () => useAppStore.getState().useStormGlass()
             },
             {
                 ...toolSpec('bomb'),

@@ -258,6 +258,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 270,
         reason: 'Crucibles come only from Curios and are aimed by the player; the census players never spend one. The whole-run soak uses every crucible it is given and holds each to one charge and one more pair gone, and two hall rooms walk the melt and the last-pair guard.'
     },
+    'inventory.storm_glass_charge': {
+        generation: 271,
+        reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
+    },
     'board.element_resonance': {
         generation: 269,
         reason: 'Resonance, the streak and the reactions live on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak requires a reaction, a stack past five, a card holding more than one charge and a realm deeper than the old cap of three, and checks every turn that a reaction spent a primed streak; eight test hall rooms walk the stacks, each of the six reactions and a deep realm striking back.'

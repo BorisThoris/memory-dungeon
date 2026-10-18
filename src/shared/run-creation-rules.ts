@@ -138,6 +138,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         bombCharges: rulesVersion >= 51 ? 1 : 0,
         meteorCharges: 0,
         crucibleCharges: 0,
+        stormGlassCharges: 0,
         meteorArmed: false,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,

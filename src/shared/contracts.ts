@@ -16,7 +16,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. */
-export const GAME_RULES_VERSION = 66;
+export const GAME_RULES_VERSION = 67;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -755,12 +755,15 @@ export interface RunState {
     meteorArmed?: boolean;
     /** Crucibles in hand (`crucible-rules.ts`): from a Curio pickup; never fire by themselves. */
     crucibleCharges?: number;
+    /** Storm Glasses in hand (`storm-glass-rules.ts`), and broken this run (it seeds each storm). */
+    stormGlassCharges?: number;
+    stormGlassUsesThisRun?: number;
     /** Crucibles used this run: seeds each recast so a replay melts the same way. */
     crucibleUsesThisRun?: number;
     /** Curio pickups opened this run (`curio-rules.ts`): seeds which item the next one holds. */
     curiosClaimedThisRun?: number;
     /** The last Curio opened and what it held, for the drop balloon. */
-    lastCurioDrop?: { key: string; item: 'crucible' };
+    lastCurioDrop?: { key: string; item: 'crucible' | 'storm_glass' };
     status: RunStatus;
     /** Set once the run is over, and only then: what ended it. */
     runEndReason: RunEndReason | null;

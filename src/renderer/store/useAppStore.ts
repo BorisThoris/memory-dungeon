@@ -8,7 +8,8 @@ import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contract
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
-import { createGameplayBombCommand, createGameplayCrucibleCommand } from '../../shared/gameplay-core-contracts';
+import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStormGlassCommand } from '../../shared/gameplay-core-contracts';
+import { canBreakStormGlass } from '../../shared/storm-glass-rules';
 import { crucibleTargetTileId } from '../../shared/crucible-rules';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
@@ -659,6 +660,16 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 
+    useStormGlass: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canBreakStormGlass(run)) return;
+        const command = createGameplayStormGlassCommand(`storm-glass:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.stormGlassUsesThisRun)}`);
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        // The storm's sound plays off the journal (`useItemEffectPublisher`), with its effect.
+        void resumeAudioContext();
+        set({ run: appendGameplayJournal(result.run, [command], result.events) });
+    },
     useCrucible: () => {
         const { run, view } = get();
         if (!run || view !== 'playing') return;

@@ -82,6 +82,8 @@ export interface AppState {
     useBomb: () => void;
     /** Melt the face-up card's pair and recast its element (`crucible-rules.ts`). */
     useCrucible: () => void;
+    /** Break a storm glass: the realm's peak weather now (`storm-glass-rules.ts`). */
+    useStormGlass: () => void;
     armMeteor: () => void;
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */

@@ -1,3 +1,4 @@
+import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
@@ -82,6 +83,8 @@ export interface SoakRunReport {
     /** Curios matched (`curio-rules.ts`) and crucibles melted, every one the run was given. */
     curiosClaimed: number;
     cruciblesUsed: number;
+    /** Storm glasses broken (`storm-glass-rules.ts`), every one the run was given. */
+    stormGlassesBroken: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
@@ -272,6 +275,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
             ['flashPairCharges', run.flashPairCharges],
             ['bombCharges', run.bombCharges],
             ['crucibleCharges', run.crucibleCharges ?? 0],
+            ['stormGlassCharges', run.stormGlassCharges ?? 0],
             ['gold', run.gold ?? 0],
             ['turnsThisFloor', run.turnsThisFloor],
             ['totalScore', run.stats.totalScore],
@@ -337,6 +341,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.stats.totalScore !== before.stats.totalScore) return 'a crucible paid score';
         if ((run.crucibleCharges ?? 0) !== (before.crucibleCharges ?? 0) - 1) return `crucibles ${before.crucibleCharges} -> ${run.crucibleCharges}`;
         if (run.board.matchedPairs !== before.board.matchedPairs + 1) return `matched ${before.board.matchedPairs} -> ${run.board.matchedPairs}`;
+        return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
+    },
+    'a storm glass costs one glass, no turn, no miss, and leaves the weather clock where it was': (before, run, action) => {
+        if (!before?.board || !run.board || action !== 'storm-glass') return null;
+        if (run.turnsThisFloor !== before.turnsThisFloor) return 'a storm glass counted a turn';
+        if (run.stats.mismatches !== before.stats.mismatches) return 'a storm glass counted a miss';
+        if ((run.stormGlassCharges ?? 0) !== (before.stormGlassCharges ?? 0) - 1) return `glasses ${before.stormGlassCharges} -> ${run.stormGlassCharges}`;
+        if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
         return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
     },
     'a miss costs the tries it charged, as far as the bank covers them': (before, run, action) => {
@@ -524,6 +536,7 @@ export const soakRun = ({
     let purchases = 0;
     let bombsUsed = 0;
     let cruciblesUsed = 0;
+    let stormGlassesBroken = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -703,6 +716,15 @@ export const soakRun = ({
         const inHand = runElementStreak(run);
         const wanted = inHand && rng() < player.elementRate ? pool.filter((tile) => (tile.suit === inHand.suit) !== isStreakPrimed(inHand)) : [];
         const first = pick(wanted.length > 0 ? wanted : pool);
+        // Every storm glass the run is given gets broken, at the top of a turn on a realm floor.
+        if (canBreakStormGlass(run)) {
+            const broken = applyStormGlass(run);
+            if (broken) {
+                stormGlassesBroken += 1;
+                act('storm-glass', broken.run);
+                continue;
+            }
+        }
         act('flip', flipTile(run, first.id));
         // A previously refused opener can leave one card up. This flip may already complete
         // that pair; resolve it before looking for a second hidden card (there may be none free).
@@ -744,6 +766,7 @@ export const soakRun = ({
         bombsUsed,
         curiosClaimed: runNonNegativeInteger(run.curiosClaimedThisRun),
         cruciblesUsed,
+        stormGlassesBroken,
         goldEarned,
         missesGranted,
         relicsBought,

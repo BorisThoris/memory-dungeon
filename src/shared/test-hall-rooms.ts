@@ -1,3 +1,4 @@
+import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import {
     applyBomb,
@@ -67,6 +68,8 @@ export type TestHallRoomId =
     | 'crucible'
     | 'crucible-last-pair'
     | 'curio'
+    | 'storm-glass'
+    | 'storm-glass-dark'
     | 'store-stop'
     | 'camp-survive'
     | 'camp-study'
@@ -168,6 +171,7 @@ export type TestHallStep =
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
+    | { readonly do: 'stormGlass' }
     | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
@@ -762,7 +766,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         tryThis: 'Match a, the pair with the violet ring: a Crucible is yours. Flip b and melt it.',
         build: () =>
             room(['a:e b:t c:t', 'c:t a:e b:t'], {
-                run: { crucibleCharges: 0 },
+                // Rules 66: a Curio held only crucibles then, so the room's draw is pinned at every reseed.
+                run: { crucibleCharges: 0, runRulesVersion: 66 },
                 tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, findableKind: 'curio' as const } : t))
             }),
         script: [
@@ -776,6 +781,39 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return recast.length === 2 && recast.every((t) => t.suit === 'ember') ? null : `recast ${recast.map((t) => t.suit).join(',')}`;
                 })
             }
+        ]
+    },
+    {
+        id: 'storm-glass',
+        title: 'The storm glass',
+        mechanic: 'Break the storm glass on a realm floor with nothing face up: the realm\'s peak strikes now, on top of its clock, and the cards a moving storm moved stay lit until your next flip.',
+        graphMechanicIds: ['inventory.storm_glass_charge', 'board.realm_weather'],
+        tryThis: 'A calm tide floor, where the weather never comes by itself. Press Storm Glass: a springtide runs two columns, and the cards it carried show their faces until you flip.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], { run: realmRun('tide', 'calm', { stormGlassCharges: 1 }) }),
+        script: [
+            {
+                step: { do: 'stormGlass' },
+                says: 'the springtide runs, the clock keeps its count, and what it moved is lit',
+                expect: expectAll(realmEventIs('springtide'), (r) => {
+                    const lit = r.realmLitTileIds ?? [];
+                    if (lit.length === 0) return 'nothing it moved is lit';
+                    if ((r.realmWeatherThisFloor ?? 0) !== 0) return `the clock moved to ${r.realmWeatherThisFloor}`;
+                    if (lit.some((id) => r.board?.tiles.find((t) => t.id === id)?.state !== 'hidden')) return 'a lit card is not face down';
+                    return r.stormGlassCharges === 0 ? null : `glasses ${r.stormGlassCharges}`;
+                })
+            },
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'a flip puts the lights out', expect: (r) => ((r.realmLitTileIds ?? []).length === 0 ? null : 'the storm lights outlived the flip') }
+        ]
+    },
+    {
+        id: 'storm-glass-dark',
+        title: 'The storm glass with no realm',
+        mechanic: 'Off a realm floor there is no weather to call: the storm glass stays dark, and so it does with a card face up.',
+        graphMechanicIds: ['inventory.storm_glass_charge'],
+        tryThis: 'No realm here: the Storm Glass will not break. Neither will it on a tide floor while a card is face up.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { run: { stormGlassCharges: 1 } }),
+        script: [
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'no realm, a card up: the glass is dark', expect: (r) => (canBreakStormGlass(r) || canBreakStormGlass({ ...r, board: { ...r.board!, flippedTileIds: [] } }) ? 'the glass would break off a realm' : null) }
         ]
     },
     {
@@ -2387,6 +2425,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             const target = bombTargetTileId(run);
             return target ? applyBomb(run, target) : null;
         }
+        case 'stormGlass':
+            return applyStormGlass(run)?.run ?? null;
         case 'crucible': {
             const target = crucibleTargetTileId(run);
             return target ? applyCrucible(run, target)?.run ?? null : null;
