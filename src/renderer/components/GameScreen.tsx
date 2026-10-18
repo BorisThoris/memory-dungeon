@@ -157,6 +157,8 @@ import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '.
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText, scoreTermsLiveRegionText } from '../copy/matchScoreFloater';
 import { isNextFloorWarmupPending, NEXT_FLOOR_WARMUP_HOLD_CAP_MS, setNextFloorWarmupHurried } from './nextFloorWarmupState';
+import { lookingGlassLegendEntry } from '../copy/lookingGlassBeat';
+import { lookingGlassMatchesUntilTurn } from '../../shared/looking-glass-rules';
 import {
     mismatchFloaterLiveRegionText,
     mismatchFloaterNextAction,
@@ -1528,7 +1530,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const visibleBoard = useMemo(() => (run.board ? playerVisibleBoard(run.board) : null), [run.board]);
     // The odd cards' key, and the Hourglass said once when it is caught or runs out (`oddCardBeat.ts`).
     const boardTilesForLegend = run.board?.tiles;
-    const oddCardEntries = useMemo(() => oddCardLegend(boardTilesForLegend ?? []), [boardTilesForLegend]);
+    // The looking glass keeps its clock in the same key: the board cannot show when it will turn.
+    const glassClock = run.activeMutators.includes('looking_glass') ? lookingGlassMatchesUntilTurn(runNonNegativeInteger(run.matchResolutionsThisFloor)) : null;
+    const oddCardEntries = useMemo(
+        () => [...oddCardLegend(boardTilesForLegend ?? []), ...(glassClock === null ? [] : [lookingGlassLegendEntry(glassClock)])],
+        [boardTilesForLegend, glassClock]
+    );
     const hourglassEvent = run.lastHourglassEvent?.key.startsWith(`hourglass:${run.board?.level}:`) ? run.lastHourglassEvent : null;
     const hourglassEventKey = hourglassEvent?.key ?? null;
     const saidHourglassKey = useRef<string | null | undefined>(undefined);

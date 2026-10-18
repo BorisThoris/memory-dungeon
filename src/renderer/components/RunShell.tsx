@@ -38,6 +38,8 @@ import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-pl
 import { getSecondaryObjectiveProgress } from '../../shared/secondary-objectives';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
+import { lookingGlassHudTitle } from '../copy/lookingGlassBeat';
+import { lookingGlassMatchesUntilTurn } from '../../shared/looking-glass-rules';
 import type { TileSuit } from '../../shared/contracts';
 
 /** An element's name in a goal's recipe, in that element's colour, as the board's own odd-card chips are. */
@@ -308,7 +310,12 @@ const RunShell = ({
     sfxGain = 0,
     shellLayout = 'desktop'
 }: RunShellProps): ReactElement => {
-    const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
+    // The looking glass carries its clock in its chip: the board cannot show when it will turn.
+    const mutatorTitles = run.activeMutators.map((id) =>
+        id === 'looking_glass'
+            ? lookingGlassHudTitle(lookingGlassMatchesUntilTurn(runNonNegativeInteger(run.matchResolutionsThisFloor)))
+            : MUTATOR_CATALOG[id]?.title ?? id
+    );
     // The total counts up to what a break paid (thesis §45.2): the rise is the part the player
     // watches land, and a number that snaps from 70 to 575 gives it nothing to look at.
     const shownScore = useCountUp(runNonNegativeInteger(run.stats.totalScore), { reduceMotion });

@@ -31,7 +31,8 @@ export const hourglassAnnouncement = (event: HourglassEvent): string =>
     event.kind === 'caught' ? `Hourglass caught: ${event.gold} gold and ${event.score} score.` : ODD_CARD_COPY.spentAnnouncement;
 
 export interface OddCardLegendEntry {
-    readonly id: 'turncoat' | 'hourglass';
+    /** The odd cards, and the looking glass's clock, which shares their key above the board. */
+    readonly id: 'turncoat' | 'hourglass' | 'looking_glass';
     readonly name: string;
     readonly line: string;
     /** The element whose colour the entry wears: a Turncoat's current one. */

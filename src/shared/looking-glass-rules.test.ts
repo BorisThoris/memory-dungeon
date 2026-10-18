@@ -3,6 +3,7 @@ import type { BoardState, Tile } from './contracts';
 import {
     LOOKING_GLASS_EVERY_MATCHES,
     lookingGlassAxis,
+    lookingGlassMatchesUntilTurn,
     lookingGlassSwaps,
     lookingGlassTurnsOnMatch
 } from './looking-glass-rules';
@@ -22,6 +23,8 @@ describe('the looking glass', () => {
         const turns = Array.from({ length: 9 }, (_, i) => lookingGlassTurnsOnMatch(i + 1));
         expect(turns).toEqual([false, false, true, false, false, true, false, false, true]);
         expect(lookingGlassTurnsOnMatch(0)).toBe(false);
+        // The HUD's clock counts down to it, the turning match included.
+        expect([0, 1, 2, 3, 4].map(lookingGlassMatchesUntilTurn)).toEqual([3, 2, 1, 3, 2]);
         expect(LOOKING_GLASS_EVERY_MATCHES).toBe(3);
     });
 

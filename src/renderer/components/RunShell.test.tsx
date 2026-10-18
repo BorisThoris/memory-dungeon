@@ -25,6 +25,14 @@ vi.mock('../input/touchHaptics', () => hapticMocks);
 // A fixed seed: the temper (and so the heat stage's name) is rolled from it, and the tests read the ember names.
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 90_210, realm: null }));
 
+describe('the looking glass in the HUD', () => {
+    it('shows how many matches until the board turns', () => {
+        const run: RunState = { ...playingRun(), activeMutators: ['looking_glass'], matchResolutionsThisFloor: 1 };
+        render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[]} />);
+        expect(screen.getByTestId('hud-mutators')).toHaveTextContent('Looking glass \u00b7 turns in 2 matches');
+    });
+});
+
 /**
  * Floor 1's board carries two suits, and since Gen 259 par reads the palette off the board - so a
  * fixture that overrides `pairCount` to stand in for a bigger board has to deal the palette that
