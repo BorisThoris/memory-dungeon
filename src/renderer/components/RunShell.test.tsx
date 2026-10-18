@@ -5,6 +5,7 @@ import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
+import { DAILY_MUSIC_COPY } from '../copy/realmCopy';
 import { setMemorizeClock } from '../store/memorizeClock';
 
 /** What the store does once the board reports itself dealt: the study clock starts (`memorizeClock.ts`). */
@@ -24,6 +25,18 @@ vi.mock('../input/touchHaptics', () => hapticMocks);
 
 // A fixed seed: the temper (and so the heat stage's name) is rolled from it, and the tests read the ember names.
 const playingRun = (): RunState => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 90_210, realm: null }));
+
+describe("today's music in the run details", () => {
+    it('names the piece written for the player today, and says nothing on a recorded loop', () => {
+        const credit = DAILY_MUSIC_COPY.credit({ bpm: 78, mode: 'dorian', timbre: 'glass' });
+        expect(credit).toBe("Today's music \u00b7 A Dorian \u00b7 78 bpm \u00b7 glass bells");
+        const { unmount } = render(<RunShell musicCredit={credit} personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+        expect(screen.getByTestId('hud-music')).toHaveTextContent(credit);
+        unmount();
+        render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+        expect(screen.queryByTestId('hud-music')).toBeNull();
+    });
+});
 
 describe('the looking glass in the HUD', () => {
     it('shows how many matches until the board turns', () => {

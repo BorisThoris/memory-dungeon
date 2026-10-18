@@ -1,6 +1,33 @@
 import type { LevelResult, RealmDoor, RealmId, RealmSeverity, RunState } from '../../shared/contracts';
 import { SMOKE_STUDY_CUT_PER_BURNOUT, attunementGoldBonus, realmBacklashRuns } from '../../shared/realm-carryover-rules';
 import { CONFLUENCE_GOLD_MULTIPLIER, REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } from '../../shared/realm-rules';
+import type { DailyMusicMode, DailyMusicTimbre } from '../../shared/daily-music-composer';
+
+const DAILY_MUSIC_KEY: Readonly<Record<DailyMusicMode, string>> = {
+    aeolian: 'A minor',
+    dorian: 'A Dorian',
+    mixolydian: 'A Mixolydian',
+    ionian: 'A major',
+    harmonicMinor: 'A harmonic minor'
+};
+
+const DAILY_MUSIC_VOICE: Readonly<Record<DailyMusicTimbre, string>> = {
+    warm: 'warm keys',
+    glass: 'glass bells',
+    reed: 'reeds',
+    wood: 'marimba',
+    electric: 'electric lead'
+};
+
+/**
+ * The run details' music line (`RunShell`): the piece this realm plays today was written for this
+ * player (`dailyMusic.ts`), and this is the one place that says so.
+ */
+export const DAILY_MUSIC_COPY = {
+    credit: (piece: { bpm: number; mode: DailyMusicMode; timbre: DailyMusicTimbre }): string =>
+        `Today's music · ${DAILY_MUSIC_KEY[piece.mode]} · ${piece.bpm} bpm · ${DAILY_MUSIC_VOICE[piece.timbre]}`,
+    title: 'Written for you today; a new piece tomorrow. Settings, Audio turns it off.'
+} as const;
 
 /** The realm chip in the HUD (`RunShell`): where the floor is, and the turns until its weather. */
 export const REALM_HUD_COPY = {

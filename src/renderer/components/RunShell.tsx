@@ -16,7 +16,7 @@ import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
-import { REALM_HUD_COPY } from '../copy/realmCopy';
+import { DAILY_MUSIC_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
@@ -88,6 +88,8 @@ export interface RunShellProps {
      * moment the run became the best one.
      */
     personalBestDepth: boolean;
+    /** Today's piece playing on this floor (`DAILY_MUSIC_COPY.credit`), or null on the recorded loops. */
+    musicCredit?: string | null;
     /** The one line under the board. Feedback wins over the first-run instruction. */
     feedback?: string | null;
     feedbackPriority?: 'info' | 'error';
@@ -299,6 +301,7 @@ const useMemorizeCountdown = (run: RunState): MemorizeCountdown | null => {
 const RunShell = ({
     run,
     personalBestDepth,
+    musicCredit = null,
     feedback,
     feedbackPriority = 'info',
     onboardingLine,
@@ -627,6 +630,11 @@ const RunShell = ({
                                 {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
                                     <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
                                         {mutatorTitles.join(' · ')}
+                                    </span>
+                                ) : null}
+                                {musicCredit ? (
+                                    <span className={styles.music} data-testid="hud-music" title={DAILY_MUSIC_COPY.title}>
+                                        {musicCredit}
                                     </span>
                                 ) : null}
 

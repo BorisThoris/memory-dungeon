@@ -9,6 +9,7 @@ export const useGameScreenBoardVisualSettings = () =>
             boardPresentation: state.settings.boardPresentation,
             boardScreenSpaceAA: state.settings.boardScreenSpaceAA,
             cameraViewportModePreference: state.settings.cameraViewportModePreference,
+            dailyMusicEnabled: state.settings.dailyMusicEnabled,
             distractionChannelEnabled: state.settings.distractionChannelEnabled,
             graphicsQuality: state.settings.graphicsQuality,
             pairProximityHintsEnabled: state.settings.pairProximityHintsEnabled,

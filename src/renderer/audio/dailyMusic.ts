@@ -1,5 +1,6 @@
 import { REALM_IDS, type RealmId } from '../../shared/contracts';
-import { composeDailyPiece, dailyMusicSalt, localDateKey } from '../../shared/daily-music-composer';
+import { composeDailyPiece, dailyMusicSalt, localDateKey, type DailyMusicPiece } from '../../shared/daily-music-composer';
+import { DAILY_MUSIC_COPY } from '../copy/realmCopy';
 import { renderDailyPiece } from './dailyMusicRender';
 import { setDailyTrackUrl } from './gameplayMusic';
 
@@ -41,6 +42,19 @@ const DAILY_PIECES: readonly (RealmId | 'run')[] = [...REALM_IDS, 'run'];
 
 let prepared: Promise<void> | null = null;
 
+/** The pieces that rendered today, for the run details' credit line: only music that is actually playing is named. */
+const renderedPieces = new Map<RealmId | 'run', Pick<DailyMusicPiece, 'bpm' | 'mode' | 'timbre'>>();
+
+/** Today's piece in this realm (the plain run's off a realm), or null when that realm plays its recorded loop. */
+export const dailyMusicCredit = (realm: RealmId | null): Pick<DailyMusicPiece, 'bpm' | 'mode' | 'timbre'> | null =>
+    renderedPieces.get(realm ?? 'run') ?? null;
+
+/** The run details' music line: today's piece in this realm, or null on a recorded loop. */
+export const dailyMusicCreditLine = (realm: RealmId | null): string | null => {
+    const piece = dailyMusicCredit(realm);
+    return piece ? DAILY_MUSIC_COPY.credit(piece) : null;
+};
+
 /** Compose and render today's pieces once per session; resolves when every one is ready or has fallen back. */
 export const prepareDailyMusic = (now: Date = new Date()): Promise<void> => {
     if (prepared) return prepared;
@@ -57,8 +71,10 @@ export const prepareDailyMusic = (now: Date = new Date()): Promise<void> => {
     prepared = Promise.all(
         DAILY_PIECES.map(async (realm) => {
             try {
-                const wav = await renderDailyPiece(composeDailyPiece(salt, realm));
+                const piece = composeDailyPiece(salt, realm);
+                const wav = await renderDailyPiece(piece);
                 setDailyTrackUrl(realm === 'run' ? 'run' : `realm:${realm}`, URL.createObjectURL(wav));
+                renderedPieces.set(realm, { bpm: piece.bpm, mode: piece.mode, timbre: piece.timbre });
             } catch {
                 // That realm keeps its recorded loop.
             }

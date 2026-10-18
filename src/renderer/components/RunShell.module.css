@@ -1831,6 +1831,8 @@
 .contextPanel { position: absolute; right: 1rem; top: calc(100% + 0.25rem); z-index: 8; display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem 1rem; max-width: min(34rem, calc(100% - 2rem)); padding: 0.85rem 1rem; max-height: min(45dvh, 18rem); overflow: auto; background: #131117; border-top: 1px solid var(--gold); box-shadow: 0 12px 32px #0009; }
 .shell .contextPanel .par, .shell .contextPanel .realmAnchor, .shell .contextPanel .mutator { display: inline-flex; grid-area: auto; white-space: normal; margin: 0; }
 .shell .contextPanel .realmAnchor { flex-wrap: wrap; }
+/* Today's music: a quiet credit at the foot of the run details. */
+.shell .contextPanel .music { display: inline-flex; font-style: italic; font-size: 0.86em; color: color-mix(in srgb, var(--paper) 72%, transparent); }
 .shell .contextPanel .parWord { display: inline; }
 .shell .seats { grid-column: 1 / -1; }
 .shell[data-layout^='phone'] .stats { grid-template-columns: auto auto minmax(0, 1fr) 2.75rem; gap: 0.1rem 0.65rem; }

@@ -130,6 +130,7 @@ import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood'
 import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { nextFloorRealmDoor, REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
+import { dailyMusicCreditLine } from '../audio/dailyMusic';
 import { realmRoomPlateUrls } from './realmRoomArt';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
@@ -510,6 +511,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         boardPresentation: settingsBoardPresentation,
         boardScreenSpaceAA: settingsBoardScreenSpaceAA,
         cameraViewportModePreference: settingsCameraViewportModePreference,
+        dailyMusicEnabled: settingsDailyMusicEnabled,
         distractionChannelEnabled: settingsDistractionChannelEnabled,
         graphicsQuality: settingsGraphicsQuality,
         pairProximityHintsEnabled: settingsPairProximityHintsEnabled,
@@ -1988,6 +1990,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             onPause={pause}
                             onGreetResident={greetFloorResident}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}
+                            musicCredit={settingsDailyMusicEnabled ? dailyMusicCreditLine(runRealmId(run)) : null}
                             politeAnnouncement={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : politeHudAnnouncement}
                             reduceMotion={reduceMotion}
                             run={run}
