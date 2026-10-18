@@ -21,7 +21,7 @@ import {
 } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 88 as const;
+export const ENCYCLOPEDIA_VERSION = 89 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -458,6 +458,12 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         title: 'Wild / joker match',
         description:
             'Special wild tile can pair with a real symbol under rules shown on the board. Wild use counts as a power for perfect-clear tracking.'
+    },
+    {
+        id: 'power_crucible',
+        title: 'Curios and the Crucible',
+        description:
+            'From floor 2 some pickups are **Curios**, a violet ring on the card once it is face up: match the pair and a **curio item** is yours, kept in the dock until you use it. A break that takes a Curio smashes it. The first curio item is the **Crucible**. Turn a card over and press **Crucible**: that card and its twin **melt** off the board with no turn, no miss and no score (never the last pair on the floor). Then every other face-down pair of the **same element** is **recast** as the element it puts out (Fire becomes Frost, Frost becomes Grove, Grove becomes Water, Water becomes Fire), under **faces you have never seen**, shuffled among the same cells. A free pair and a board leaning to a new element, at the price of everything you remembered about the old one. Cards the realm is holding keep their element.'
     }
 ];
 

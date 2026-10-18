@@ -1,5 +1,6 @@
 import {
     GameplayBombIcon,
+    GameplayCrucibleIcon,
     GameplayExitIcon,
     GameplayFitIcon,
     GameplayGreetIcon,
@@ -16,6 +17,7 @@ export const RUN_SHELL_GLYPHS = {
     pin: <GameplayPinIcon />,
     peek: <GameplayPeekIcon />,
     bomb: <GameplayBombIcon />,
+    crucible: <GameplayCrucibleIcon />,
     ignite: <GameplayIgniteIcon />,
     undo: <GameplayUndoIcon />,
     greet: <GameplayGreetIcon />,

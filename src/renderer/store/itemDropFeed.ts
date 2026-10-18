@@ -2,6 +2,7 @@ import { create } from 'zustand/react';
 import type { GameplayEventJournalEntry, RunState } from '../../shared/contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { hourglassCalloutSub, ODD_CARD_COPY } from '../copy/oddCardBeat';
+import { CURIO_DROP_COPY } from '../copy/boardPowerCopy';
 import { itemDropFromCallout, type ItemDrop } from '../components/itemDrops';
 import { derivePurchaseCallouts, type ScreenCallout } from '../components/screenCallouts';
 
@@ -55,10 +56,15 @@ export const itemDropsBetween = (before: RunState | null | undefined, after: Run
         for (const entry of Array.isArray(after.gameplayEventJournal) ? after.gameplayEventJournal : []) {
             if (seen.has(entry.eventId) || entry.type !== 'board.turn_resolved') continue;
             const kind = (entry as unknown as { matchedFindableKind?: string | null }).matchedFindableKind;
+            // A Curio's drop is the item it held, named below off `lastCurioDrop`.
             if (kind === 'score_glint' || kind === 'meteor_shard') {
                 callouts.push({ key: `pickup:${entry.eventId}`, kind: 'pickup', size: 'minor', tone: 'cyan', title: getFindableKindLabel(kind).toUpperCase(), sub: getFindableRewardCopy(kind), drop: kind });
             }
         }
+    }
+    const curio = after.lastCurioDrop;
+    if (curio && curio.key !== before.lastCurioDrop?.key) {
+        callouts.push({ key: curio.key, kind: 'pickup', size: 'minor', tone: 'gold', title: CURIO_DROP_COPY[curio.item].title, sub: CURIO_DROP_COPY[curio.item].line, drop: curio.item });
     }
     const hourglass = after.lastHourglassEvent;
     if (hourglass && hourglass.kind === 'caught' && hourglass.key !== before.lastHourglassEvent?.key) {

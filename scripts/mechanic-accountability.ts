@@ -250,6 +250,14 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 268,
         reason: 'Alchemy answers elements on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak counts empowered and neutralized cards across its runs and requires both, and the kin and counter rooms in the test hall walk a card drinking frost and paying for it and a fire card melting a frostbite.'
     },
+    'findable.curio': {
+        generation: 270,
+        reason: 'A Curio is a score glint turned over by its own roll, and the census counts findables claimed as one channel. The whole-run soak requires Curios to be claimed across its runs, and the curio room in the test hall walks a claim putting a crucible in hand.'
+    },
+    'inventory.crucible_charge': {
+        generation: 270,
+        reason: 'Crucibles come only from Curios and are aimed by the player; the census players never spend one. The whole-run soak uses every crucible it is given and holds each to one charge and one more pair gone, and two hall rooms walk the melt and the last-pair guard.'
+    },
     'board.element_resonance': {
         generation: 269,
         reason: 'Resonance, the streak and the reactions live on realm floors, and the census builds realm-free floors to measure the pair curve. The whole-run soak requires a reaction, a stack past five, a card holding more than one charge and a realm deeper than the old cap of three, and checks every turn that a reaction spent a primed streak; eight test hall rooms walk the stacks, each of the six reactions and a deep realm striking back.'

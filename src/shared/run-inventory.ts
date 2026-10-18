@@ -54,6 +54,11 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         source:'Match an amber Meteor shard pickup.',
         useRule:'Choose Meteor in your inventory or dock, then select a card to strike its area. Cancelling costs nothing.'
     },
+    crucible_charge: {
+        id: 'crucible_charge', kind: 'consumable', label: 'Crucible', stackLimit: null, mutableAt: 'mid_run',
+        source: 'Match a violet Curio pickup.',
+        useRule: 'Turn a card over, then choose Crucible: its pair melts and every other face-down pair of its element is recast as another.'
+    },
     shuffle_charge: {
         id: 'shuffle_charge',
         kind: 'consumable',
@@ -154,6 +159,8 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
     switch (id) {
         case 'meteor_charge':
             return runNonNegativeInteger(run.meteorCharges);
+        case 'crucible_charge':
+            return runNonNegativeInteger(run.crucibleCharges);
         case 'shuffle_charge':
             return runNonNegativeInteger(run.shuffleCharges);
         case 'region_shuffle_charge':
@@ -335,6 +342,7 @@ export const previewRunInventoryItemGain = (
 
 const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural: string }> = {
     meteor_charge: { singular: 'meteor', plural: 'meteors' },
+    crucible_charge: { singular: 'crucible', plural: 'crucibles' },
     shuffle_charge: { singular: 'shuffle charge', plural: 'shuffle charges' },
     region_shuffle_charge: { singular: 'row/swap charge', plural: 'row/swap charges' },
     peek_charge: { singular: 'peek charge', plural: 'peek charges' },
@@ -411,6 +419,8 @@ export const gainRunInventoryItem = (
     switch (itemId) {
         case 'meteor_charge':
             return { ...run, meteorCharges: runNonNegativeInteger(run.meteorCharges) + gain };
+        case 'crucible_charge':
+            return { ...run, crucibleCharges: runNonNegativeInteger(run.crucibleCharges) + gain };
         case 'shuffle_charge':
             return { ...run, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + gain };
         case 'region_shuffle_charge':
@@ -438,6 +448,8 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
     switch (itemId) {
         case 'meteor_charge':
             return { run: { ...run, meteorCharges: decrementRunCounter(run.meteorCharges) }, itemId, applied: true };
+        case 'crucible_charge':
+            return { run: { ...run, crucibleCharges: decrementRunCounter(run.crucibleCharges) }, itemId, applied: true };
         case 'shuffle_charge':
             return { run: { ...run, shuffleCharges: decrementRunCounter(run.shuffleCharges) }, itemId, applied: true };
         case 'region_shuffle_charge':

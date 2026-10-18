@@ -1,3 +1,5 @@
+import { runNonNegativeInteger } from './run-number-guards';
+import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
 import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
@@ -77,6 +79,9 @@ export interface SoakRunReport {
     ended: string;
     purchases: number;
     bombsUsed: number;
+    /** Curios matched (`curio-rules.ts`) and crucibles melted, every one the run was given. */
+    curiosClaimed: number;
+    cruciblesUsed: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
@@ -266,6 +271,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
             ['peekCharges', run.peekCharges],
             ['flashPairCharges', run.flashPairCharges],
             ['bombCharges', run.bombCharges],
+            ['crucibleCharges', run.crucibleCharges ?? 0],
             ['gold', run.gold ?? 0],
             ['turnsThisFloor', run.turnsThisFloor],
             ['totalScore', run.stats.totalScore],
@@ -323,6 +329,15 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.stats.totalScore !== before.stats.totalScore) return 'a bomb paid score';
         if (run.bombCharges !== before.bombCharges - 1) return `bombs ${before.bombCharges} -> ${run.bombCharges}`;
         return null;
+    },
+    'a crucible costs one charge and one pair: no turn, no miss and no score': (before, run, action) => {
+        if (!before?.board || !run.board || action !== 'crucible') return null;
+        if (run.turnsThisFloor !== before.turnsThisFloor) return 'a crucible counted a turn';
+        if (run.stats.mismatches !== before.stats.mismatches) return 'a crucible counted a miss';
+        if (run.stats.totalScore !== before.stats.totalScore) return 'a crucible paid score';
+        if ((run.crucibleCharges ?? 0) !== (before.crucibleCharges ?? 0) - 1) return `crucibles ${before.crucibleCharges} -> ${run.crucibleCharges}`;
+        if (run.board.matchedPairs !== before.board.matchedPairs + 1) return `matched ${before.board.matchedPairs} -> ${run.board.matchedPairs}`;
+        return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
     },
     'a miss costs the tries it charged, as far as the bank covers them': (before, run, action) => {
         if (!before || action !== 'resolve' || run.stats.mismatches <= before.stats.mismatches) return null;
@@ -508,6 +523,7 @@ export const soakRun = ({
     let turns = 0;
     let purchases = 0;
     let bombsUsed = 0;
+    let cruciblesUsed = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -700,6 +716,15 @@ export const soakRun = ({
             act('bomb', applyBomb(run, first.id));
             continue;
         }
+        // Every crucible the run is given gets used, on the first card it can melt.
+        if (crucibleTargetTileId(run) === first.id) {
+            const melted = applyCrucible(run, first.id);
+            if (melted) {
+                cruciblesUsed += 1;
+                act('crucible', melted.run);
+                continue;
+            }
+        }
         const rest = hiddenReal(run);
         const partner = rest.find((tile) => tile.pairKey === first.pairKey);
         const others = rest.filter((tile) => tile.pairKey !== first.pairKey);
@@ -717,6 +742,8 @@ export const soakRun = ({
         ended: run.status === 'gameOver' ? String(run.runEndReason) : run.status,
         purchases,
         bombsUsed,
+        curiosClaimed: runNonNegativeInteger(run.curiosClaimedThisRun),
+        cruciblesUsed,
         goldEarned,
         missesGranted,
         relicsBought,

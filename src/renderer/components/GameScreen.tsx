@@ -42,10 +42,11 @@ import { missBankSoonestToGo, missesLeft } from '../../shared/miss-bank';
 import { runGold } from '../../shared/run-store-rules';
 import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-power-actions';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
+import { crucibleTargetTileId } from '../../shared/crucible-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
-import { METEOR_TOOL_COPY } from '../copy/boardPowerCopy';
+import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY } from '../copy/boardPowerCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1788,6 +1789,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 disabled: !canAimMeteor(run),
                 title: run.meteorArmed ? METEOR_TOOL_COPY.armedTitle : METEOR_TOOL_COPY.idleTitle,
                 onClick: () => useAppStore.getState().armMeteor()
+            },
+            {
+                ...toolSpec('crucible'),
+                glyph: RUN_SHELL_GLYPHS.crucible,
+                charges: run.crucibleCharges ?? 0,
+                disabled: crucibleTargetTileId(run) === null,
+                title: crucibleTargetTileId(run) !== null ? CRUCIBLE_TOOL_COPY.ready
+                    : run.status === 'resolving' ? CRUCIBLE_TOOL_COPY.resolving
+                    : run.status !== 'playing' ? CRUCIBLE_TOOL_COPY.unavailable
+                    : run.board.pairCount - run.board.matchedPairs <= 1 ? CRUCIBLE_TOOL_COPY.lastPair
+                    : run.board.flippedTileIds.length === 0 ? CRUCIBLE_TOOL_COPY.waiting
+                    : CRUCIBLE_TOOL_COPY.noPartner,
+                onClick: () => useAppStore.getState().useCrucible()
             },
             {
                 ...toolSpec('bomb'),

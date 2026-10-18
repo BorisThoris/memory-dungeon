@@ -8,7 +8,9 @@ import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contract
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
-import { createGameplayBombCommand } from '../../shared/gameplay-core-contracts';
+import { createGameplayBombCommand, createGameplayCrucibleCommand } from '../../shared/gameplay-core-contracts';
+import { crucibleTargetTileId } from '../../shared/crucible-rules';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { create } from 'zustand/react';
@@ -653,6 +655,22 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         // The blast's own sound plays off the journal (`useItemEffectPublisher`), with its effect.
+        void resumeAudioContext();
+        set({ run: appendGameplayJournal(result.run, [command], result.events) });
+    },
+
+    useCrucible: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing') return;
+        const target = crucibleTargetTileId(run);
+        if (!target) return;
+        const command = createGameplayCrucibleCommand(
+            `crucible:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.crucibleUsesThisRun)}:${target}`,
+            target
+        );
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        // The melt's sound plays off the journal (`useItemEffectPublisher`), with its effect.
         void resumeAudioContext();
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },

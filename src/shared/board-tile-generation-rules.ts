@@ -1,3 +1,4 @@
+import { curioReplacesGlint } from './curio-rules';
 import { type FindableKind, type MutatorId, type Tile } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
 import {
@@ -169,6 +170,12 @@ export const assignFindableKindsToTiles = (
     for (const key of picked) {
         const roll = rng();
         kindByKey.set(key, rulesVersion < 60 ? 'score_glint' : pickFindableKind(roll));
+    }
+    // Some glints are Curios (`curio-rules.ts`), on their own roll so no other draw moves.
+    if (rulesVersion >= 60) {
+        for (const key of picked) {
+            if (kindByKey.get(key) === 'score_glint' && curioReplacesGlint(runSeed, rulesVersion, level, key)) kindByKey.set(key, 'curio');
+        }
     }
     return tiles.map((t) => {
         const kind = kindByKey.get(t.pairKey);

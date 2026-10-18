@@ -1,3 +1,4 @@
+import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import {
     applyBomb,
     applyFlashPair,
@@ -63,6 +64,9 @@ export type TestHallRoomId =
     | 'meteor-strike'
     | 'meteor-shard'
     | 'bomb-last-pair'
+    | 'crucible'
+    | 'crucible-last-pair'
+    | 'curio'
     | 'store-stop'
     | 'camp-survive'
     | 'camp-study'
@@ -163,6 +167,7 @@ export type TestHallStep =
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
+    | { readonly do: 'crucible' }
     | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
@@ -705,6 +710,72 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             }),
         script: [
             { step: { do: 'flip', tileId: 'b-1' }, says: 'the bomb has no target on the last pair', expect: (r) => (bombTargetTileId(r) === null ? null : 'the bomb would take the last pair') }
+        ]
+    },
+    {
+        id: 'crucible',
+        title: 'The crucible',
+        mechanic: 'Flip a card and use the crucible: its pair melts with no miss, turn or score, and every other face-down pair of its element is recast as the element it puts out, new faces in the same cells.',
+        graphMechanicIds: ['inventory.crucible_charge'],
+        tryThis: 'Flip a Fire card and press Crucible. Its pair melts, and the other Fire pair turns to Frost with faces you have never seen.',
+        build: () => room(['a:e b:t c:e d:m', 'c:e d:m a:e b:t'], { run: { crucibleCharges: 1 } }),
+        script: [
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'one card face up readies the crucible', expect: (r) => (crucibleTargetTileId(r) === 'a-1' ? null : 'the crucible is not aimed at the flipped card') },
+            {
+                step: { do: 'crucible' },
+                says: 'pair a melts; pair c is Frost now, under new faces; Water and Grove stand untouched',
+                expect: expectAll(isGone('a'), isStanding('b'), isStanding('d'), missesAre(3), turnsAre(0), (r) => {
+                    const tiles = r.board?.tiles ?? [];
+                    if (tiles.some((t) => t.state === 'hidden' && t.suit === 'ember')) return 'a Fire card is still face down';
+                    const recast = tiles.filter((t) => t.pairKey.includes('crucible'));
+                    if (recast.length !== 2 || recast.some((t) => t.suit !== 'bone' || t.state !== 'hidden')) return `recast ${recast.map((t) => t.suit).join(',')}`;
+                    if (recast.some((t) => t.symbol === 'C')) return 'the recast pair kept its old face';
+                    return r.crucibleCharges === 0 && r.board?.matchedPairs === 1 ? null : `crucibles ${r.crucibleCharges}, matched ${r.board?.matchedPairs}`;
+                })
+            }
+        ]
+    },
+    {
+        id: 'crucible-last-pair',
+        title: 'The crucible and the last pair',
+        mechanic: 'A crucible never melts the floor\'s last pair: that pair is the clear.',
+        graphMechanicIds: ['inventory.crucible_charge', 'objective.floor_clear'],
+        tryThis: 'One real pair and a joker left. Flip a card: the Crucible stays dark. Match the pair instead.',
+        build: () =>
+            room(['a:e b:t', 'a:e b:t'], {
+                run: { crucibleCharges: 1 },
+                board: { matchedPairs: 1, rows: 3 },
+                tiles: (tiles) => [
+                    ...tiles.map((t) => (t.pairKey === 'a' ? { ...t, state: 'matched' as const } : t)),
+                    tile('joker', WILD_PAIR_KEY, 'bone')
+                ]
+            }),
+        script: [
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'the crucible has no target on the last pair', expect: (r) => (crucibleTargetTileId(r) === null ? null : 'the crucible would melt the last pair') }
+        ]
+    },
+    {
+        id: 'curio',
+        title: 'The curio',
+        mechanic: 'Matching the pair that carries a Curio puts a curio item in your hand; this one holds a crucible.',
+        graphMechanicIds: ['findable.curio', 'inventory.crucible_charge'],
+        tryThis: 'Match a, the pair with the violet ring: a Crucible is yours. Flip b and melt it.',
+        build: () =>
+            room(['a:e b:t c:t', 'c:t a:e b:t'], {
+                run: { crucibleCharges: 0 },
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, findableKind: 'curio' as const } : t))
+            }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the curio holds a crucible', expect: (r) => (r.crucibleCharges === 1 && r.lastCurioDrop?.item === 'crucible' ? null : `crucibles ${r.crucibleCharges}`) },
+            { step: { do: 'flip', tileId: 'b-1' }, says: 'a Water card face up readies it', expect: (r) => (crucibleTargetTileId(r) === 'b-1' ? null : 'the crucible is not aimed') },
+            {
+                step: { do: 'crucible' },
+                says: 'pair b melts, and the other Water pair turns to Fire',
+                expect: expectAll(isGone('b'), (r) => {
+                    const recast = (r.board?.tiles ?? []).filter((t) => t.pairKey.includes('crucible'));
+                    return recast.length === 2 && recast.every((t) => t.suit === 'ember') ? null : `recast ${recast.map((t) => t.suit).join(',')}`;
+                })
+            }
         ]
     },
     {
@@ -2315,6 +2386,10 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'bomb': {
             const target = bombTargetTileId(run);
             return target ? applyBomb(run, target) : null;
+        }
+        case 'crucible': {
+            const target = crucibleTargetTileId(run);
+            return target ? applyCrucible(run, target)?.run ?? null : null;
         }
         case 'meteor': {
             if (!canAimMeteor(run)) return null;

@@ -1224,6 +1224,16 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
             playTone({ frequency: 110, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.7, type: 'sine', category: 'realm' });
             playNoise({ durationSec: 0.9, gain: gain * 0.75, filter: 'lowpass', from: 2200, to: 90, attackSec: 0.004, delaySec: 0.02 });
             return;
+        case 'crucible':
+            // A molten hiss, the pot bubbling, then the new element rings out on A and E.
+            playNoise({ durationSec: 0.5, gain: gain * 0.45, filter: 'bandpass', from: 5200, to: 900, q: 0.9, attackSec: 0.01 });
+            playTone({ frequency: 82, frequencyEnd: 55, durationSec: 0.6, gain: gain * 0.5, type: 'sine', category: 'realm' });
+            [0.08, 0.17, 0.27].forEach((delaySec, index) =>
+                scheduleCue(() => playTone({ frequency: 180 + index * 40, frequencyEnd: 320 + index * 50, durationSec: 0.07, gain: gain * 0.16, type: 'sine', category: 'realm' }), delaySec * 1000)
+            );
+            scheduleCue(() => playTone({ frequency: 880, durationSec: 0.9, gain: gain * 0.2, type: 'triangle', category: 'realm' }), 240);
+            scheduleCue(() => playTone({ frequency: 1318.5, durationSec: 0.8, gain: gain * 0.14, type: 'sine', category: 'realm' }), 320);
+            return;
         case 'meteor':
             playTone({ frequency: 1800, frequencyEnd: 260, durationSec: METEOR_IMPACT_DELAY_SECONDS, gain: gain * 0.18, type: 'sine', category: 'realm' });
             playNoise({ durationSec: 0.3, gain: gain * 0.35, filter: 'bandpass', from: 4000, to: 600, q: 1.2, attackSec: 0.08 });

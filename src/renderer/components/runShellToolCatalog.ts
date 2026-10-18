@@ -21,6 +21,7 @@ export type RunShellToolId =
     | 'peek'
     | 'bomb'
     | 'meteor'
+    | 'crucible'
     | 'ignite'
     | 'flash'
     | 'undo'
@@ -34,6 +35,7 @@ export type RunPowerChargeField = Extract<
     | 'peekCharges'
     | 'bombCharges'
     | 'meteorCharges'
+    | 'crucibleCharges'
     | 'flashPairCharges'
 >;
 
@@ -56,6 +58,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // Bought at the store stop (2026-09-24). Hidden like every tool with no charges left.
     { conditional: false, id: 'bomb', label: 'Bomb', spends: 'bombCharges' },
     { conditional: false, id:'meteor',label:'Meteor',spends:'meteorCharges' },
+    // A Curio's item (`curio-rules.ts`): hidden like every tool with no charges left.
+    { conditional: false, id: 'crucible', label: 'Crucible', spends: 'crucibleCharges' },
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
     // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
     { conditional: true, id: 'ignite', label: 'Ignite', spends: null },

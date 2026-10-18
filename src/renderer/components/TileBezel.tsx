@@ -102,6 +102,7 @@ import {
     CARD_PLANE_WIDTH,
     TILE_DEPTH
 } from './tileShatter';
+import { FINDABLE_MARKER_COLOR, findableWearsRing } from './findableMarkerColor';
 
 interface TileBezelProps {
     faceUp: boolean;
@@ -790,10 +791,10 @@ const TileBezelInner = ({
             {!hostConsolidatesTileFrames ? <TileBezelLegacyFrameDriver bagRef={bagRef} /> : null}
             <group ref={groupRef}>
                 <group scale={[transform.bezelScale, transform.bezelScale, transform.bezelScale]}>
-                    {tile.findableKind === 'meteor_shard' && tile.state !== 'matched' && tile.state !== 'removed' && <>
+                    {findableWearsRing(tile.findableKind) && tile.state !== 'matched' && tile.state !== 'removed' && <>
                         {[1,-1].map(side => <mesh key={side} geometry={findableCornerRingGeometry}
                             position={[CARD_WIDTH*.34,CARD_HEIGHT*.39,side*(faceZ+.02)]} raycast={noopMeshRaycast} renderOrder={10}>
-                            <meshBasicMaterial forceSinglePass color="#ffb561" side={DoubleSide} transparent opacity={.95} depthWrite={false} toneMapped={false} />
+                            <meshBasicMaterial forceSinglePass color={FINDABLE_MARKER_COLOR[tile.findableKind ?? 'meteor_shard']} side={DoubleSide} transparent opacity={.95} depthWrite={false} toneMapped={false} />
                         </mesh>)}
                     </>}
                     <mesh

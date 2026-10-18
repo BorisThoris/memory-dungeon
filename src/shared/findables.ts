@@ -11,9 +11,14 @@ export interface FindableRewardRow {
 }
 
 /** Match rewards: immediate score or a player-triggered inventory item. */
-const FINDABLE_REWARD_ROW_ORDER = ['score_glint', 'meteor_shard'] as const satisfies readonly FindableKind[];
+const FINDABLE_REWARD_ROW_ORDER = ['score_glint', 'meteor_shard', 'curio'] as const satisfies readonly FindableKind[];
 
 const FINDABLE_REWARD_ROW_BY_KIND = {
+    curio: {
+        kind: 'curio', label: 'Curio', marker: 'Violet keyhole corner glyph',
+        rewardText: 'a curio item in your hand', claimRule: 'Match the carrier pair; the item waits in the dock until you use it.',
+        breakRule: 'A break that takes the carrier smashes the curio; nothing is kept.'
+    },
     meteor_shard: {
         kind: 'meteor_shard', label: 'Meteor shard', marker: 'Amber meteor corner glyph',
         rewardText: '+1 meteor in your inventory', claimRule: 'Match the carrier pair, then call the meteor yourself.',

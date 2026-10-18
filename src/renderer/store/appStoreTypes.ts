@@ -80,6 +80,8 @@ export interface AppState {
     travelThroughRealmDoor: (index: number) => void;
     /** Spends a bomb on the one card face up (`applyBomb`), or does nothing when it cannot. */
     useBomb: () => void;
+    /** Melt the face-up card's pair and recast its element (`crucible-rules.ts`). */
+    useCrucible: () => void;
     armMeteor: () => void;
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */

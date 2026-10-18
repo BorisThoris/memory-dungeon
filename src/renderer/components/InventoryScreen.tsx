@@ -29,6 +29,7 @@ interface InventoryScreenProps {
 
 const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id:'meteor_charge',label:'Meteors' },
+    { id: 'crucible_charge', label: 'Crucibles' },
     { id: 'shuffle_charge', label: 'Full shuffle' },
     { id: 'region_shuffle_charge', label: 'Row / swap' },
     { id: 'peek_charge', label: 'Peek' },

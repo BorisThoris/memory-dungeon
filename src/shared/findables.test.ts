@@ -16,11 +16,15 @@ describe('REG-049 findable reward copy', () => {
             {
                 id: 'meteor_shard', label: 'Meteor shard', rewardText: '+1 meteor in your inventory',
                 score: 0, spawnWeight: 20, breakText: 'Destroyed shards are lost; meteors never refill themselves.'
+            },
+            {
+                id: 'curio', label: 'Curio', rewardText: 'a curio item in your hand',
+                score: 0, spawnWeight: 0, breakText: 'A break that takes the carrier smashes the curio; nothing is kept.'
             }
         ]);
         expect(getFindableRewardText('score_glint')).toBe('Score glint pickup: +25 score.');
-        expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({ score_glint: 80, meteor_shard: 20 });
+        expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({ score_glint: 80, meteor_shard: 20, curio: 0 });
         expect(getFindableSpawnWeightRows()).toEqual([{ id: 'score_glint', label: 'Score glint', weight: 80 },
-            { id: 'meteor_shard', label: 'Meteor shard', weight: 20 }]);
+            { id: 'meteor_shard', label: 'Meteor shard', weight: 20 }, { id: 'curio', label: 'Curio', weight: 0 }]);
     });
 });

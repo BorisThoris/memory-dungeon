@@ -1,5 +1,6 @@
 import type { FindableKind } from '../../shared/contracts';
 import type { StoreItemId } from '../../shared/run-store-rules';
+import type { CurioItemId } from '../../shared/curio-rules';
 import type { ScreenCallout } from './screenCallouts';
 
 /**
@@ -16,7 +17,7 @@ import type { ScreenCallout } from './screenCallouts';
  * that launches from the bottom of the play area, lands above the dock and goes by itself, taking
  * no tap or key (`ItemDropPopup.tsx`). The rarity colour stays; the beam and the skip went.
  */
-export type ItemDropId = FindableKind | StoreItemId | 'hourglass_prize';
+export type ItemDropId = FindableKind | StoreItemId | CurioItemId | 'hourglass_prize';
 export type ItemDropRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 export type ItemDropGlyph = 'star' | 'comet' | 'heart' | 'eye' | 'shuffle' | 'bomb' | 'gem' | 'flask' | 'focus' | 'hourglass';
 
@@ -49,6 +50,8 @@ const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'lo
 
 export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
     if (RELICS.has(id)) return 'epic';
+    // A Curio's item is the strangest find on the board.
+    if (id === 'crucible' || id === 'curio') return 'epic';
     if (id === 'meteor_shard' || id.startsWith('focus_')) return 'rare';
     if (id.startsWith('prime_') || id === 'bomb' || id === 'hourglass_prize') return 'uncommon';
     return 'common';
@@ -69,6 +72,9 @@ export const itemDropGlyph = (id: ItemDropId): ItemDropGlyph => {
             return 'shuffle';
         case 'bomb':
             return 'bomb';
+        case 'crucible':
+        case 'curio':
+            return 'flask';
         case 'hourglass_prize':
             return 'hourglass';
         default:

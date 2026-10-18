@@ -52,6 +52,21 @@ export const BOARD_SHUFFLE_COPY = {
     scholarContract: 'Scholar contract: shuffle disabled'
 } as const;
 
+/** What a Curio held, in its drop balloon (`itemDropFeed.ts`). */
+export const CURIO_DROP_COPY = {
+    crucible: { title: 'CRUCIBLE', line: 'Melt a pair; its element pours out as another' }
+} as const;
+
+/** The Crucible's dock tooltips (`crucible-rules.ts`): it acts on the one card face up. */
+export const CRUCIBLE_TOOL_COPY = {
+    waiting: 'Crucible: turn a card over, then melt its element into another',
+    ready: 'Crucible: melt this pair. Every other face-down pair of its element is recast as another, new faces in new places',
+    resolving: 'Crucible: finish the current pair first',
+    unavailable: 'Crucible: wait for the floor to begin',
+    lastPair: 'Crucible: the last pair must be matched',
+    noPartner: 'Crucible: its twin must still be face down'
+} as const;
+
 export const METEOR_TOOL_COPY = {
     armedTitle: 'Select a card for the meteor strike. Click Meteor again or press Escape to cancel without spending.',
     idleTitle: 'Spend one stored meteor: choose a card and strike the surrounding area.',

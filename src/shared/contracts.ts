@@ -239,17 +239,20 @@ export type MutatorId = (typeof MUTATOR_IDS)[number];
  * nothing, and a pickup that pays nothing is a stop. Two kinds remain, both paying on the spot.
  */
 /** Gen 184: one kind. The Shard Spark went with the shard it paid; see docs/REMOVED_LIVES.md. */
-export type FindableKind = 'score_glint' | 'meteor_shard';
+export type FindableKind = 'score_glint' | 'meteor_shard' | 'curio';
 
 /** Flat score added on top of normal match score when a findable pair is matched. */
 export const FINDABLE_MATCH_SCORE: Record<FindableKind, number> = {
     score_glint: 25,
-    meteor_shard: 0
+    meteor_shard: 0,
+    curio: 0
 };
 /** Relative spawn weights for current-rules findable kind assignment. */
 export const FINDABLE_KIND_SPAWN_WEIGHTS: Record<FindableKind, number> = {
     score_glint: 80,
-    meteor_shard: 20
+    meteor_shard: 20,
+    // Never drawn by weight: a Curio is a score glint turned over by its own roll (`curio-rules.ts`).
+    curio: 0
 };
 
 /** Hidden shuffle: full Fisher–Yates vs row-preserving permute. */
@@ -750,6 +753,14 @@ export interface RunState {
     /** Stored pickup; never fires automatically. */
     meteorCharges?: number;
     meteorArmed?: boolean;
+    /** Crucibles in hand (`crucible-rules.ts`): from a Curio pickup; never fire by themselves. */
+    crucibleCharges?: number;
+    /** Crucibles used this run: seeds each recast so a replay melts the same way. */
+    crucibleUsesThisRun?: number;
+    /** Curio pickups opened this run (`curio-rules.ts`): seeds which item the next one holds. */
+    curiosClaimedThisRun?: number;
+    /** The last Curio opened and what it held, for the drop balloon. */
+    lastCurioDrop?: { key: string; item: 'crucible' };
     status: RunStatus;
     /** Set once the run is over, and only then: what ended it. */
     runEndReason: RunEndReason | null;

@@ -206,6 +206,38 @@ test.describe('Every tool can be used from the dock', () => {
         expect((await read(page)).bombs).toBe(0);
     });
 
+    test('crucible: turn a card, press Crucible, its pair melts and its element is recast', async ({ page }) => {
+        await openRoom(page, 'crucible');
+        await expect(page.getByTestId('tool-crucible')).toBeDisabled();
+        await pick(page, 'a-1');
+        await expect(page.getByTestId('tool-crucible')).toBeEnabled();
+        await page.getByTestId('tool-crucible').click();
+        await expect.poll(async () => (await read(page)).states['a-2']).toBe('removed');
+        const suits = await page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            return { crucibles: run.crucibleCharges, recast: run.board!.tiles.filter((tile) => tile.pairKey.includes('crucible')).map((tile) => tile.suit) };
+        });
+        expect(suits).toEqual({ crucibles: 0, recast: ['bone', 'bone'] });
+        await openRoom(page, 'crucible-last-pair');
+        await pick(page, 'b-1');
+        await expect(page.getByTestId('tool-crucible')).toBeDisabled();
+    });
+
+    test('curio: match its pair and a crucible appears in the dock, ready to use', async ({ page }) => {
+        await openRoom(page, 'curio');
+        await expect(page.getByTestId('tool-crucible')).toHaveCount(0);
+        await pick(page, 'a-1');
+        await pick(page, 'a-2');
+        await expect.poll(async () => (await read(page)).states['a-2'], { timeout: 30_000 }).toBe('matched');
+        await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
+        await openItemsIfFolded(page);
+        await pick(page, 'b-1');
+        await expect(page.getByTestId('tool-crucible')).toBeEnabled();
+        await page.getByTestId('tool-crucible').click();
+        await expect.poll(async () => (await read(page)).states['b-2']).toBe('removed');
+    });
+
     test('ignite: at Inferno press Ignite, turn four cards with nothing resolving, press Resolve', async ({ page }) => {
         await openRoom(page, 'zone');
         await expect(tool(page, /ignite/i)).toBeEnabled();

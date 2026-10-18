@@ -440,6 +440,20 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second.'
     },
     {
+        id: 'findable.curio',
+        verdict: 'changed',
+        generation: 270,
+        present: ['curioReplacesGlint', 'claimCurio', 'CURIO_GLINT_SHARE', 'lastCurioDrop'],
+        note: 'The Curio (2026-10-18): the owner asked for more items that do interesting and different things. With no store screen, items reach the player on the board: a fifth of the score glints from floor 2 on are Curios, on their own seeded roll so no other pickup moves, and matching one puts a curio item in hand with an epic drop. One pickup carries every curio item, so the next items need no new marker.'
+    },
+    {
+        id: 'inventory.crucible_charge',
+        verdict: 'changed',
+        generation: 270,
+        present: ['crucibleTargetTileId', 'applyCrucible', 'crucibleCharges', 'board.transmuted'],
+        note: 'The Crucible (2026-10-18), the first curio item: aimed at the one face-up card, it melts that pair (no turn, miss or score, never the last pair) and recasts every other face-down pair of its element as the element it puts out, new faces shuffled among the same cells. The pro is a free pair and a board leaning to another element; the con is that everything memorised about that element is gone. Its effect melts the pair its element\u2019s way and runs a wave of the new element across the recast cards, with a molten hiss and an A-E chime.'
+    },
+    {
         id: 'inventory.meteor_charge',
         verdict: 'changed',
         generation: 268,

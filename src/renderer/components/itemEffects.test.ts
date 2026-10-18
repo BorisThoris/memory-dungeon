@@ -57,6 +57,28 @@ describe('item effects', () => {
         expect(Math.min(...bursts.map((burst) => burst.delay ?? 0))).toBeCloseTo(METEOR_IMPACT_DELAY_SECONDS);
     });
 
+    it('a crucible melts its pair the way its element breaks, then runs the new element across every card it recast', () => {
+        const [effect] = itemEffectsFromEvents(
+            [event('board.transmuted', { targetTileId: 'a-A', meltedTileIds: ['a-A', 'a-B'], recastTileIds: ['c-A', 'c-B', 'd-A', 'd-B'], fromSuit: 'ember', toSuit: 'bone' })],
+            null,
+            null
+        );
+        expect(effect).toMatchObject({ kind: 'crucible', tileIds: ['a-A', 'a-B', 'c-A', 'c-B', 'd-A', 'd-B'], melt: { from: 'ember', to: 'bone', meltedCount: 2 } });
+        const { bursts, arcs } = itemEffectRecipe({ effect: effect!, anchors: [0, 1, 2, 3, 4, 5].map(at), time: 0, quality: 'high', reduceMotion: false });
+        const melt = bursts.filter((burst) => burst.x <= 1);
+        const recast = bursts.filter((burst) => burst.x >= 2);
+        // The melt breaks up as fire (the element melted), the recast comes in as frost shards.
+        expect(melt.some((burst) => burst.shape === 'flame' && burst.tint === '#ff8a2a')).toBe(true);
+        expect(recast.some((burst) => burst.shape === 'shard' && burst.tint === '#e8f6ff')).toBe(true);
+        // A wave: each recast card lights a little after the one before, after the melt.
+        const firstDelay = (x: number) => Math.min(...recast.filter((burst) => burst.x === x).map((burst) => burst.delay ?? 0));
+        expect(firstDelay(2)).toBeGreaterThan(0);
+        expect(firstDelay(5)).toBeGreaterThan(firstDelay(2));
+        expect(arcs).toHaveLength(4);
+        expect(ITEM_EFFECT_TRAUMA.crucible).toBeGreaterThan(ITEM_EFFECT_TRAUMA.swap);
+        expect(ITEM_EFFECT_TRAUMA.crucible).toBeLessThan(ITEM_EFFECT_TRAUMA.bomb);
+    });
+
     it('the big items shake hardest, the quiet ones not at all', () => {
         expect(ITEM_EFFECT_TRAUMA.meteor).toBeGreaterThan(ITEM_EFFECT_TRAUMA.bomb);
         expect(ITEM_EFFECT_TRAUMA.bomb).toBeGreaterThan(ITEM_EFFECT_TRAUMA.shuffle);

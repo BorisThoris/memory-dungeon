@@ -33,6 +33,8 @@ describe('the run soak', () => {
         for (const seed of [34, 44]) reports.push(soakRun({ seed, player: SOAK_PLAYERS.average, playerName: 'average' }));
         expect(reports.some((report) => report.purchases > 0), 'no run ever shopped at a stop').toBe(true);
         expect(reports.some((report) => report.bombsUsed > 0), 'no run ever threw a bomb').toBe(true);
+        expect(reports.some((report) => report.curiosClaimed > 0), 'no run ever opened a curio').toBe(true);
+        expect(reports.some((report) => report.cruciblesUsed > 0), 'no run ever melted a crucible').toBe(true);
         /* The five run-economy mechanics have no row in the floor census (the reference player never
            shops), so this is where `scripts/mechanic-accountability.ts` points for proof they happen. */
         expect(reports.some((report) => report.goldEarned > 0), 'no run ever earned gold').toBe(true);

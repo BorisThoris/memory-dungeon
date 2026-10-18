@@ -1,8 +1,10 @@
 import { create } from 'zustand/react';
-import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset, TileSuit } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { hashStringToSeed } from '../../shared/rng';
 import type { BoardArcBurst, BoardParticleBurst, BoardParticleShape } from './boardParticleSystem';
+import { CARD_DEPARTURE_SHAPES } from './cardDepartureParticles';
+import { CARD_DISSOLVE_EDGE } from './cardDissolveMaterial';
 
 /**
  * What using an item looks, feels and sounds like (2026-10-08).
@@ -24,6 +26,7 @@ import type { BoardArcBurst, BoardParticleBurst, BoardParticleShape } from './bo
 export type ItemEffectKind =
     | 'bomb'
     | 'meteor'
+    | 'crucible'
     | 'peek'
     | 'pin'
     | 'shuffle'
@@ -42,12 +45,15 @@ export interface ItemEffect {
     tileIds: readonly string[];
     /** The meteor's impact cell, from `board.meteorImpact`. */
     cell?: number;
+    /** The Crucible: the element melted and the element it was recast in; `tileIds` holds the melted pair first. */
+    melt?: { from: TileSuit | null; to: TileSuit | null; meltedCount: number };
 }
 
 /** Trauma each item adds to the board (0..1; shake is trauma cubed, `boardTrauma.ts`). */
 export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     bomb: 0.62,
     meteor: 0.85,
+    crucible: 0.42,
     peek: 0,
     pin: 0,
     shuffle: 0.22,
@@ -80,6 +86,14 @@ export const itemEffectsFromEvents = (
         switch (event.type) {
             case 'board.bombed':
                 effects.push({ key, kind: 'bomb', tileIds: cardsOf(boardBefore ?? boardAfter, event.targetTileId) });
+                break;
+            case 'board.transmuted':
+                effects.push({
+                    key,
+                    kind: 'crucible',
+                    tileIds: [...event.meltedTileIds, ...event.recastTileIds],
+                    melt: { from: event.fromSuit, to: event.toSuit, meltedCount: event.meltedTileIds.length }
+                });
                 break;
             case 'board.peeked':
                 effects.push({ key, kind: 'peek', tileIds: [event.targetTileId] });
@@ -187,6 +201,37 @@ export const itemEffectRecipe = ({
             motes(anchor, 'shard', '#ffb070', 1, 'rock', delay, 1.6);
             motes(anchor, 'spark', '#fff4d6', 1, 'sparks', delay);
             motes(anchor, 'vapor', '#4a3c38', 0.8, 'dust', delay + 0.18, 1.8);
+            break;
+        }
+        case 'crucible': {
+            // The pair melts its own element's way, white-hot at the core; then the new element runs
+            // out across every card it recast, a wave from the melt outward, each card its spark.
+            const melted = effect.melt?.meltedCount ?? 2;
+            const from = effect.melt?.from ?? null;
+            const to = effect.melt?.to ?? null;
+            const fromTint = CARD_DISSOLVE_EDGE[from ?? 'none'];
+            const toTint = CARD_DISSOLVE_EDGE[to ?? 'none'];
+            const fromShape: BoardParticleShape = from ? CARD_DEPARTURE_SHAPES[from][0]! : 'flame';
+            const toShape: BoardParticleShape = to ? CARD_DEPARTURE_SHAPES[to][0]! : 'spark';
+            const melt = at.slice(0, melted);
+            const recast = at.slice(melted);
+            melt.forEach((anchor, index) => {
+                shockwave(anchor, 0.7, `melt-wave${index}`);
+                bursts.push({ ...base, kind: 'bomb', energy: 0.55, x: anchor.x, y: anchor.y, z: anchor.z, seed: seed(`melt${index}`) });
+                motes(anchor, fromShape, fromTint, 1, `melt-element${index}`, 0.02, 1.3);
+                motes(anchor, 'flame', '#ffcf6a', 0.8, `melt-heat${index}`, 0.04, 1.1);
+                motes(anchor, 'vapor', '#6a5876', 0.5, `melt-smoke${index}`, 0.16, 1.2);
+            });
+            const origin = melt[0];
+            recast.forEach((anchor, index) => {
+                const delay = 0.22 + index * 0.05;
+                motes(anchor, toShape, toTint, 0.85, `recast${index}`, delay, 1.1);
+                motes(anchor, 'spark', '#fff6e0', 0.6, `recast-spark${index}`, delay);
+                shockwave(anchor, 0.3, `recast-ring${index}`, delay);
+                if (origin && index < 4) {
+                    arcs.push({ from: origin, to: anchor, seed: seed(`recast-arc${index}`), time: time + delay, intensity: 0.5, reduceMotion, quality, tint: toTint });
+                }
+            });
             break;
         }
         case 'peek':

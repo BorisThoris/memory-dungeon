@@ -1,3 +1,4 @@
+import { claimCurio } from './curio-rules';
 import {
     type BoardState,
     type FindableKind,
@@ -136,6 +137,9 @@ export const createResolveBoardTurnTransition = ({
         } = deriveMatchClaimContext(firstTile, secondTile);
         if (claimedFindableKind === 'meteor_shard') {
             run = { ...run, meteorCharges: runNonNegativeInteger(run.meteorCharges) + 1 };
+        }
+        if (claimedFindableKind === 'curio') {
+            run = claimCurio(run, sourceBoard.level, firstTile.pairKey);
         }
         const matchResolutions = runNonNegativeInteger(run.matchResolutionsThisFloor);
         const findableReward = resolveFindableMatchRewardThroughGameplayCore(

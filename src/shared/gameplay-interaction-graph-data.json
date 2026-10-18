@@ -2466,6 +2466,78 @@
                 "src/shared/looking-glass-rules.test.ts",
                 "src/shared/test-hall-rooms.test.ts"
             ]
+        },
+        {
+            "id": "findable.curio",
+            "label": "Curio Findable",
+            "kind": "findable",
+            "role": "remembered_pair_grants_a_curio_item",
+            "evidence": [
+                "src/shared/curio-rules.ts",
+                "src/shared/board-tile-generation-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/store/itemDropFeed.ts"
+            ],
+            "reads": [
+                "matchedFindables",
+                "tileStates"
+            ],
+            "writes": [
+                "crucibleCharges",
+                "feedbackLines"
+            ],
+            "enables": [
+                "inventory.crucible_charge"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "matched-pair-only",
+                "face-down-carrier-unmarked"
+            ],
+            "tests": [
+                "src/shared/curio-rules.test.ts",
+                "src/shared/findables.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
+        },
+        {
+            "id": "inventory.crucible_charge",
+            "label": "Crucible Charge Inventory",
+            "kind": "inventory",
+            "role": "melt_a_pair_recast_its_element",
+            "evidence": [
+                "src/shared/crucible-rules.ts",
+                "src/shared/gameplay-core.ts",
+                "src/renderer/components/runShellToolCatalog.ts",
+                "src/renderer/components/itemEffects.ts"
+            ],
+            "reads": [
+                "crucibleCharges",
+                "tileStates",
+                "pairKeys",
+                "runStatus"
+            ],
+            "writes": [
+                "crucibleCharges",
+                "tileStates",
+                "matchedPairs",
+                "gameplayCommands",
+                "gameplayEvents"
+            ],
+            "enables": [
+                "objective.floor_clear"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "never-the-last-pair",
+                "whole-pairs-recast-in-place",
+                "realm-held-cards-keep-their-element"
+            ],
+            "tests": [
+                "src/shared/crucible-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3602,6 +3674,36 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "every turn of the glass is announced"
+        },
+        {
+            "source": "findable.curio",
+            "target": "inventory.crucible_charge",
+            "kind": "grants",
+            "label": "a matched Curio puts a crucible in hand"
+        },
+        {
+            "source": "findable.curio",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the violet corner ring, and the item it held as an epic drop"
+        },
+        {
+            "source": "inventory.crucible_charge",
+            "target": "objective.floor_clear",
+            "kind": "enables",
+            "label": "melts a pair, never the last one"
+        },
+        {
+            "source": "inventory.crucible_charge",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "a melt is not a match: no chain, no pop"
+        },
+        {
+            "source": "inventory.crucible_charge",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the crucible tool and count, the melt, the recast wave, shake and sound"
         }
     ],
     "coverage": {

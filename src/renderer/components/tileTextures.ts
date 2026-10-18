@@ -52,6 +52,7 @@ import {
 } from '../cardFace/proceduralIllustration/illustrationCacheKey';
 import { ILLUSTRATION_GEN_SCHEMA_VERSION } from '../cardFace/proceduralIllustration/illustrationSchemaVersion';
 import { GAMEPLAY_CARD_VISUALS } from './gameplayVisualConfig';
+import { FINDABLE_MARKER_COLOR } from './findableMarkerColor';
 
 export type FaceVariant = 'hidden' | 'active' | 'matched' | 'mismatch';
 export type TileFace = 'front' | 'back' | 'left' | 'right' | 'top' | 'bottom';
@@ -1594,7 +1595,7 @@ export const paintDistantCard = (canvas: HTMLCanvasElement, tile: Tile, faceUp: 
         }
     }
     if (tile.findableKind) {
-        context.fillStyle = tile.findableKind === 'meteor_shard' ? '#ffb561' : '#87eafa';
+        context.fillStyle = FINDABLE_MARKER_COLOR[tile.findableKind];
         context.beginPath(); context.arc(canvas.width*.8, canvas.height*.12, canvas.width*.05, 0, Math.PI*2); context.fill();
     }
     const status = cardStatusMark(tile, openingLocked);

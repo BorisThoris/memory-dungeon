@@ -137,6 +137,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         // Shared runs from older rules retain their original starting inventory.
         bombCharges: rulesVersion >= 51 ? 1 : 0,
         meteorCharges: 0,
+        crucibleCharges: 0,
         meteorArmed: false,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,

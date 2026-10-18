@@ -115,9 +115,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(sumFindableKindCounts(result.aggregate.findableKindCounts)).toBe(total);
             const shares = getFindableKindShares(result.aggregate.findableKindCounts);
 
-            // Gen 184: one kind, so its share is the whole of the spawn.
+            // A fifth of the glints from floor 2 on are Curios (`curio-rules.ts`).
             const bounds: Record<FindableKind, { min: number; max: number }> = {
-                score_glint: { min: .65, max: .95 }, meteor_shard: { min: .05, max: .35 }
+                score_glint: { min: .5, max: .9 }, meteor_shard: { min: .05, max: .35 }, curio: { min: .04, max: .25 }
             };
 
             for (const row of getFindableSpawnWeightRows()) {
@@ -130,8 +130,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     );
 
     it('summarizes findable kind shares from aggregate counts', () => {
-        expect(getFindableKindShares({ score_glint: 70, meteor_shard: 30 })).toEqual({ score_glint: .7, meteor_shard: .3 });
-        expect(getFindableKindShares({ score_glint: 0, meteor_shard: 0 })).toEqual({ score_glint: 0, meteor_shard: 0 });
+        expect(getFindableKindShares({ score_glint: 60, meteor_shard: 30, curio: 10 })).toEqual({ score_glint: .6, meteor_shard: .3, curio: .1 });
+        expect(getFindableKindShares({ score_glint: 0, meteor_shard: 0, curio: 0 })).toEqual({ score_glint: 0, meteor_shard: 0, curio: 0 });
     });
 
     it('guards the shipped balance baseline against large drift', () => {

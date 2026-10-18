@@ -3,6 +3,7 @@ import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
+import { FINDABLE_BACK_TINT } from './findableMarkerColor';
 
 /** FX-006 / HOVER_DOM_WEBGL_TOKENS: border emphasis -> warm tint lerp. */
 const HOVER_RIM_TINT = new Color('#fff0d4');
@@ -55,7 +56,7 @@ export const applyTileBoardCardTint = (
     } else if (nonPickableBack) {
         target.set('#9a94a3');
     } else if (!faceUp && tile.state === 'hidden' && tile.findableKind != null) {
-        target.lerp(scratch.set(tile.findableKind === 'meteor_shard' ? '#ffb561' : '#5ee0c8'), 0.12);
+        target.lerp(scratch.set(FINDABLE_BACK_TINT[tile.findableKind]), 0.12);
     } else if (tile.state === 'matched' && faceUp) {
         if (graphicsQuality === 'low') {
             target.lerp(MATCH_FACE_GLOW, 0.32);

@@ -153,6 +153,17 @@ export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** The Crucible: a melting pot over a flame, the dock's curio that recasts an element. */
+export function GameplayCrucibleIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M5 7h14l-1.6 7.5a5.5 5.5 0 0 1-10.8 0Z" fill="none" />
+            <path d="M8.5 10.5c1.2.8 2.3.8 3.5 0s2.3-.8 3.5 0" />
+            <path d="M12 4.5v-1.5M9 5l-.6-1.3M15 5l.6-1.3" />
+        </svg>
+    );
+}
+
 /** The satchel a phone's dock folds its tools into. */
 export function GameplayItemsIcon({ className, ...rest }: GameplayIconProps) {
     return (

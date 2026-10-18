@@ -1,3 +1,4 @@
+import { applyCrucible, CRUCIBLE_SOURCE_ID, crucibleFeedbackLine } from './crucible-rules';
 import { reflowRunBoard } from './board-layout-rules';
 import { revealFinalPair } from './final-pair-rules';
 import {
@@ -78,6 +79,7 @@ export interface GameplayReplayResult {
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const BOMB_SOURCE: GameplaySource = { kind: 'power', id: 'bomb' };
+const CRUCIBLE_SOURCE: GameplaySource = { kind: 'power', id: CRUCIBLE_SOURCE_ID };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
@@ -241,6 +243,36 @@ const applyBombCommand = (
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
+};
+
+const applyCrucibleCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.crucible' }>
+): GameplayCommandResult => {
+    const result = applyCrucible(run, command.targetTileId);
+    if (!result) {
+        return rejectedResult(run, command.commandId, 'A crucible needs one card face up whose pair is not the last on the floor.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, CRUCIBLE_SOURCE, events);
+    const after = runNonNegativeInteger(result.run.crucibleCharges);
+    writeEvent({
+        type: 'board.transmuted',
+        targetTileId: command.targetTileId,
+        meltedTileIds: [...result.meltedTileIds],
+        recastTileIds: [...result.recastTileIds],
+        fromSuit: result.fromSuit,
+        toSuit: result.toSuit,
+        crucibleChargesBefore: runNonNegativeInteger(run.crucibleCharges),
+        crucibleChargesAfter: after
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.crucible.used',
+        message: crucibleFeedbackLine(result.fromSuit, result.toSuit, result.recastTileIds.length / 2, after),
+        tone: 'information'
+    });
+    return { run: result.run, command, events, accepted: true };
 };
 
 const applyGambitCommitCommand = (
@@ -1006,6 +1038,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'board.crucible') {
+        return applyCrucibleCommand(run, command);
     }
     if (command.type === 'board.bomb') {
         return applyBombCommand(run, command);

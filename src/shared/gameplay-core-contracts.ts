@@ -5,7 +5,7 @@ import { MEMORIZE_SKIP_MOMENTUM_MAX } from './memorize-skip-reward-rules';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
-export const GAMEPLAY_FINDABLE_KINDS = ['score_glint', 'meteor_shard'] as const satisfies readonly FindableKind[];
+export const GAMEPLAY_FINDABLE_KINDS = ['score_glint', 'meteor_shard', 'curio'] as const satisfies readonly FindableKind[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = ['echo', 'heavy', 'conduit', 'stasis'] as const satisfies readonly TileTraitKind[];
 
@@ -320,6 +320,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         })
         .strict(),
     z.object({ ...commandBase, type: z.literal('board.meteor'), targetTileId: z.string().min(1).max(160) }).strict(),
+    z.object({ ...commandBase, type: z.literal('board.crucible'), targetTileId: z.string().min(1).max(160) }).strict(),
     z
         .object({
             ...commandBase,
@@ -623,6 +624,19 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('board.transmuted'),
+            targetTileId: z.string().min(1).max(160),
+            meltedTileIds: z.array(z.string().min(1).max(160)).max(2),
+            recastTileIds: z.array(z.string().min(1).max(160)).max(4096),
+            fromSuit: z.enum(['ember', 'tide', 'moss', 'bone']).nullable(),
+            toSuit: z.enum(['ember', 'tide', 'moss', 'bone']).nullable(),
+            crucibleChargesBefore: z.number().int().nonnegative(),
+            crucibleChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('board.bombed'),
             targetTileId: z.string().min(1).max(160),
             pairKey: z.string().min(1).max(160),
@@ -757,6 +771,9 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
         type: 'board.bomb',
         targetTileId
     });
+
+export const createGameplayCrucibleCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.crucible', targetTileId });
 
 export const createGameplayMeteorCommand = (commandId: string, targetTileId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.meteor', targetTileId });
