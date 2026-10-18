@@ -60,8 +60,17 @@ const resolveTrackUrl = (key: MusicTrackKey): string | undefined => {
 const preloadedTrackUrls = new Map<MusicTrackKey, string>();
 let musicPreload: Promise<void> | null = null;
 
+/**
+ * The day's composed pieces (`dailyMusic.ts`), ahead of the recorded loops: on the run track each
+ * realm plays the piece written for this player today, and its recorded loop only if none rendered.
+ */
+const dailyTrackUrls = new Map<MusicTrackKey, string>();
+export const setDailyTrackUrl = (key: MusicTrackKey, url: string): void => {
+    dailyTrackUrls.set(key, url);
+};
+
 const playableTrackUrl = (key: MusicTrackKey): string | undefined =>
-    preloadedTrackUrls.get(key) ?? resolveTrackUrl(key);
+    dailyTrackUrls.get(key) ?? preloadedTrackUrls.get(key) ?? resolveTrackUrl(key);
 
 /** Every track a session can play: the menu, the run loop and each realm's music. */
 const ALL_TRACK_KEYS: readonly MusicTrackKey[] = ['menu', 'run', ...REALM_IDS.map((realm): MusicTrackKey => `realm:${realm}`)];

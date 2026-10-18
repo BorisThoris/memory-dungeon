@@ -8,13 +8,20 @@ workflow (delivery to `main`, the gate, testing, the hall, the soak, driving the
 
 ## 1. The realm's music is the run's music
 
+- **The run's music is the day's own composition** (the owner's call, 2026-10-18: "daily salt based
+  unique background music", per player and per day). `daily-music-composer.ts` writes a piece for
+  each realm from the player's install key and their date; `dailyMusicRender.ts` renders it to a
+  seamless loop at boot; `dailyMusic.ts` hands it to the music element in the realm's slot. It stays
+  on tonic A in a mode holding the cascade's A, B, D and E. The recorded realm loops below are the
+  **fallback**: a device or a piece that cannot render plays them.
 - On a floor in a realm, that realm's loop (`src/renderer/assets/audio/music/realm/<realm>-ambience.ogg`)
-  **is** the background music: it plays on the music element (`gameplayMusic.ts`, `realmMusicUrl`,
+  **is** the background music when the day's piece is not there: it plays on the music element (`gameplayMusic.ts`, `realmMusicUrl`,
   `musicTrackKey`), so the Settings music volume, master volume and Fever duck act on it.
   `run-loop` is only the fallback for a realm without a loop; the menu
   keeps `menu-loop`.
 - Moving from one realm to the next crossfades (`MUSIC_CROSSFADE_MS`); it never cuts.
-- Every track is preloaded with the run (`preloadGameplayMusic`): nothing streams in play.
+- Every track is preloaded with the run (`preloadGameplayMusic`, and the day's pieces through
+  `prepareDailyMusic` in the same step): nothing streams or renders in play.
 - A realm loop is not also played anywhere else (the ambient bed is noise only, and off).
 - Any file in `music/realm/` plays, so a new one is chosen before it is installed. Generated audio
   (ACE-Step) is chosen **by measurement** (onset spikiness, brightness, level evenness, clipping, the

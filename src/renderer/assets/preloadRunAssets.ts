@@ -1,6 +1,7 @@
 import { preloadSampledSfx } from '../audio/sampledSfx';
 import { preloadUiSfx } from '../audio/uiSfx';
 import { preloadGameplayMusic } from '../audio/gameplayMusic';
+import { prepareDailyMusic } from '../audio/dailyMusic';
 import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry';
 import {
     getCardIllustrationImageByUrl,
@@ -143,7 +144,8 @@ export const preloadRunAssets = (options: { graphicsQuality?: GraphicsQualityPre
         track('tiles', preloadTileTextureImages()),
         track('scene', preloadUiRasterImagesFully()),
         track('sound', Promise.all([preloadSampledSfx(), preloadUiSfx()])),
-        track('music', preloadGameplayMusic()),
+        // The recorded loops, and the day's own pieces composed and rendered for this player (`dailyMusic.ts`).
+        track('music', Promise.all([preloadGameplayMusic(), prepareDailyMusic()])),
         track(
             'type',
             Promise.all([loadDocumentFonts(), preloadCardRankOpentypeFont(options.graphicsQuality ?? 'high')])
