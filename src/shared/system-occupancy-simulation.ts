@@ -181,7 +181,9 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     // 0.9 threshold. This classifies observed tool use; it does not alter charge grants or the player.
     // `core` since 2026-10-08: an Echo match pays a peek, Echo is dealt on 98% of floors, and a
     // tooled run spends one on 0.933 of its floors - over `common`'s 0.9, a tool of every floor.
-    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'core', kind: 'spend', player: 'tooled', scope: 'run' },
+    // Rules 66 (2026-10-18): the reseed for the Curios moved it to 0.892 (0.900 before), with or
+    // without Curios dealt - common again under the unchanged 0.9 line; no grant or player changed.
+    { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },
     // Was `core` on the floor census's 1.000. A run starts with one shuffle charge and one curio
     // grants another, so it lands on 0.196 of a run's floors: a tool you keep for when you need it.
     { id: 'shuffle', key: 'shuffleCharges', label: 'The board was shuffled', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },

@@ -34,6 +34,11 @@ describe('Curios', () => {
             }
         }
         expect(curios).toBeGreaterThan(0);
+        // Rules 65 and older never deal one: an old shared key replays the board it dealt.
+        for (let seed = 1; seed <= 300; seed += 1) {
+            const old = assignFindableKindsToTiles(tiles.map((tile) => ({ ...tile, findableKind: undefined })), [], seed, 65, 6);
+            expect(old.some((tile) => tile.findableKind === 'curio')).toBe(false);
+        }
         expect(curios / (curios + glints)).toBeLessThan(0.25);
     });
 });

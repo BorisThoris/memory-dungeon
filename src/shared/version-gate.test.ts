@@ -85,8 +85,8 @@ describe('REG-089 local version gate', () => {
     });
 
     it('covers the current findable weighting rules under the game-rules gate', () => {
-        expect(GAME_RULES_VERSION).toBe(65);
-        expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({ score_glint: 80, meteor_shard: 20 });
+        expect(GAME_RULES_VERSION).toBe(66);
+        expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({ score_glint: 80, meteor_shard: 20, curio: 0 });
 
         const decision = assessVersionGate({
             kinds: ['gameplay_rules', 'generation_rules'],

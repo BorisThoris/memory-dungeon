@@ -81,6 +81,17 @@ describe('the Crucible', () => {
         expect(result.run.lanternLitTileIds).toEqual([]);
     });
 
+    it('leaves the odd cards their element: a Turncoat turns its own and an Hourglass keeps its count', () => {
+        const run = floorFive();
+        const first = run.board!.tiles.find((tile) => tile.state === 'hidden')!;
+        const odd = run.board!.tiles.find((tile) => tile.state === 'hidden' && tile.suit === first.suit && tile.pairKey !== first.pairKey)!;
+        const marked: RunState = { ...run, board: { ...run.board!, tiles: run.board!.tiles.map((tile) => (tile.pairKey === odd.pairKey ? { ...tile, turncoat: 'tide' as const } : tile)) } };
+        const result = applyCrucible(flipTile(marked, first.id), first.id)!;
+        const after = result.run.board!.tiles.filter((tile) => tile.id === odd.id)[0]!;
+        expect(after).toMatchObject({ pairKey: odd.pairKey, suit: odd.suit, turncoat: 'tide' });
+        expect(result.recastTileIds).not.toContain(odd.id);
+    });
+
     it('recasts the same way every time from the same run', () => {
         const run = floorFive();
         const first = run.board!.tiles.find((tile) => tile.state === 'hidden')!;

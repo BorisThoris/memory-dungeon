@@ -24,12 +24,14 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  *
  * The floor stays finishable: it removes one pair (never the last) and swaps faces within whole
  * pairs, so `tiles.length` and `matchedPairs` keep their meaning. Cards a realm is holding (frost,
- * fuse, vines, snow) keep their element, as they do for the Turncoat.
+ * fuse, vines, snow) keep their element, as they do for the Turncoat, and so do the odd cards.
  */
 export const CRUCIBLE_SOURCE_ID = 'crucible';
 
 /** The element a melted element is recast in. */
 export const crucibleRecastSuit = (suit: TileSuit): TileSuit => ELEMENT_NEUTRALIZES[suit];
+
+const isOddCard = (tile: Tile): boolean => tile.turncoat != null || tile.hourglass != null;
 
 const livePairKeys = (tiles: readonly Tile[]): Set<string> =>
     new Set(
@@ -77,7 +79,8 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
             : candidate
     );
 
-    // The rest of the element: whole pairs face down, neither card held by the realm.
+    // The rest of the element: whole pairs face down, neither card held by the realm nor odd (a
+    // Turncoat turns its own element and an Hourglass keeps its own count; the recast leaves both be).
     const cellsByPair = new Map<string, number[]>();
     if (fromSuit && toSuit) {
         tiles.forEach((tile, index) => {
@@ -85,7 +88,7 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
             cellsByPair.set(tile.pairKey, [...(cellsByPair.get(tile.pairKey) ?? []), index]);
         });
         for (const [key, cells] of [...cellsByPair]) {
-            if (cells.length !== 2 || cells.some((cell) => isRealmHeld(tiles[cell]!))) cellsByPair.delete(key);
+            if (cells.length !== 2 || cells.some((cell) => isRealmHeld(tiles[cell]!) || isOddCard(tiles[cell]!))) cellsByPair.delete(key);
         }
     }
 

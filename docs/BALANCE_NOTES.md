@@ -3395,3 +3395,12 @@ in Gen 261's census above) and the carry-over moved it to one.
 The bar is now 0.004 and `the census resolves one floor` in `run-occupancy-simulation.test.ts`
 holds the number and the sentence in step, so the next change to either census dimension fails
 there rather than quietly re-banding a system doing exactly what it was written to do.
+
+## Curios and the Crucible (rules 66, 2026-10-18)
+
+From floor 2 a fifth of the score glints are Curios (`curio-rules.ts`), on a roll of their own so
+no other pickup moves; matching one grants a curio item, the first being the Crucible. Generation
+changed, so `GAME_RULES_VERSION` 65 → 66 and Curios are gated on `CURIO_RULES_VERSION`: a run or a
+shared key on rules 65 deals the board it always dealt. The 200-seed soak (four players, 800 runs,
+0 violations) claims about one Curio every four to five floors (careful 1784 on 7890 floors) and
+uses nearly every crucible it is given.

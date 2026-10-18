@@ -20,6 +20,9 @@ export type CurioItemId = 'crucible';
 
 export const CURIO_ITEM_IDS: readonly CurioItemId[] = ['crucible'];
 
+/** Rules 66 deal Curios; a run (or a shared key) on older rules never sees one, so its replay deals what it dealt. */
+export const CURIO_RULES_VERSION = 66;
+
 /** The first floor a Curio can ride a card: floor 1 teaches the board, not the items. */
 export const CURIO_FROM_FLOOR = 2;
 /** The share of a floor's score glints that turn into Curios (about one Curio every five floors). */
@@ -27,6 +30,7 @@ export const CURIO_GLINT_SHARE = 0.2;
 
 /** True when a score glint on this card becomes a Curio. Its own stream: no other draw moves. */
 export const curioReplacesGlint = (runSeed: number, rulesVersion: number, level: number, pairKey: string): boolean =>
+    rulesVersion >= CURIO_RULES_VERSION &&
     level >= CURIO_FROM_FLOOR &&
     createMulberry32(hashStringToSeed(`curio:${rulesVersion}:${runSeed}:${level}:${pairKey}`))() < CURIO_GLINT_SHARE;
 
