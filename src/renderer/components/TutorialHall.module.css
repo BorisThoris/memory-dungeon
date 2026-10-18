@@ -6,15 +6,6 @@
 .hall button { min-height: 44px; border: 1px solid #a88d6455; border-radius: 5px; padding: 0.5rem 0.85rem; background: #24202a; color: inherit; font: 600 0.9375rem/1.2 'Source Sans 3', sans-serif; cursor: pointer; touch-action: manipulation; }
 .hall button:hover { border-color: #e6be7f; background: #332d35; }
 .hall button:focus-visible { outline: 2px solid #fbd9a3; outline-offset: 3px; }
-.tabs { display: flex; flex: 0 0 auto; gap: 0.4rem; flex-wrap: wrap; }
-.tabs button[aria-pressed='true'] { background: #e3b778; color: #191418; border-color: #e3b778; }
-.lessons { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 0.7rem; grid-auto-rows: max-content; align-content: start; overflow: auto; min-height: 0; flex: 1; }
-.lessons .lesson { display: grid; justify-items: start; align-content: start; gap: 0.4rem; text-align: left; padding: 1rem; background: linear-gradient(135deg, #34304377, #17161b); }
-.lesson strong { font-size: 1.25rem; }
-.lesson > span:not(.elements) { font-weight: 400; color: #c9c3c7; }
-.lesson small { font-size: 0.75rem; color: #deb986; }
-.elements { font-size: 1.7rem; letter-spacing: 0.1em; }
-.note { margin: 0; font-size: 0.8125rem; color: #bcb5be; text-align: center; }
 .progress { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
 .progress > span:not(.readout) { width: 1.5rem; height: 1.5rem; border: 1px solid #75604e; border-radius: 50%; text-align: center; font-size: 0.875rem; }
 .progress > span[data-current='true'], .progress > span[data-done='true'] { color: #171219; background: #e5b777; }
@@ -38,3 +29,13 @@
     .coach { min-height: 44px; padding: 0.4rem 0.7rem; }
     .coach p { font-size: 0.875rem; }
 }
+
+/* The lesson list on the meta shell: cards in the Margin's ink, as the Codex's are. */
+.lessonGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: 0.7rem; align-content: start; }
+.lessonCard { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; min-height: 44px; padding: 0.7rem 0.85rem 0.8rem; border: 1px solid var(--margin-hairline); border-top-width: 2px; border-radius: 3px; background: color-mix(in srgb, var(--margin-ink) 55%, transparent); color: var(--margin-paper); font-family: var(--margin-body-font); text-align: left; cursor: pointer; touch-action: manipulation; transition: border-color 140ms ease, background-color 140ms ease; }
+.lessonCard:hover, .lessonCard:focus-visible { border-top-color: var(--margin-gold); background: color-mix(in srgb, var(--margin-gold) 6%, color-mix(in srgb, var(--margin-ink) 55%, transparent)); outline: none; }
+.lessonCard:focus-visible .lessonTitle { text-decoration: underline; text-decoration-color: var(--margin-gold); text-underline-offset: 0.18em; }
+.lessonElements { font-size: 1.1rem; line-height: 1; }
+.lessonTitle { font-family: var(--margin-heading-font); font-size: 1.2rem; font-weight: 600; line-height: 1.2; color: var(--margin-paper); }
+.lessonBody { font-size: 0.875rem; line-height: 1.4; color: var(--margin-paper-2); }
+.lessonMeta { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--margin-gold); }

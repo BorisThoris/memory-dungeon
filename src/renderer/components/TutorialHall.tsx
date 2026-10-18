@@ -9,6 +9,7 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import styles from './TutorialHall.module.css';
 import { TUTORIAL_HALL_COPY } from '../copy/tutorialHallCopy';
+import { MetaShell, SectionRail } from '../ui';
 
 interface Props { initialLessonId?: string; onClose: () => void; reduceMotion: boolean; graphicsQuality: GraphicsQualityPreset }
 const categories = ['Essentials', 'Elements', 'Combinations', 'Interactions'] as const;
@@ -31,7 +32,8 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         setSession(current => current ? selectTutorialTile(current, id) : null);
     }, []);
     const leave = useCallback(() => session ? setSession(null) : onClose(), [session, onClose]);
-    useEscapeLeaves(leave);
+    // The lesson list is a meta screen, whose shell answers Escape; a lesson answers it here.
+    useEscapeLeaves(leave, session !== null);
     useEffect(() => { heading.current?.focus({ preventScroll: true }); }, [session?.lesson.id]);
     useEffect(() => {
         if (session?.phase !== 'resolve') return;
@@ -80,20 +82,55 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         title: session.lesson.reaction && session.step === 2 ? session.lesson.title.toUpperCase() + '!' : session.run.stats.currentStreak ? 'MATCH!' : 'COMBO BROKEN', sub: ''
     }] : [];
 
+    /*
+     * The lesson list is a meta screen like the Codex and the Collection, and wears their frame: the
+     * shell's title and Back, the section rail for the four kinds of lesson, cards in the Margin's
+     * ink. It had its own buttons and type, the one menu screen that did not look like the others.
+     */
+    if (!session) {
+        return (
+            <MetaShell
+                eyebrow="Tutorial Hall"
+                label="Tutorial Hall"
+                onBack={onClose}
+                subtitle="Practice only. Your run and records stay untouched."
+                testId="tutorial-hall"
+                title="Learn by playing"
+                toolbar={
+                    <SectionRail
+                        activeId={category}
+                        controls="tutorial-lessons"
+                        idPrefix="tutorial-tab"
+                        label="Lesson category"
+                        onSelect={(id) => setCategory(id as (typeof categories)[number])}
+                        options={categories.map((item) => ({ id: item, label: item, badge: String(TUTORIAL_LESSONS.filter((lesson) => lesson.category === item).length) }))}
+                    />
+                }
+            >
+                <div className={styles.lessonGrid} id="tutorial-lessons" role="tabpanel">
+                    {TUTORIAL_LESSONS.filter((lesson) => lesson.category === category).map((lesson) => (
+                        <button className={styles.lessonCard} data-testid={`tutorial-lesson-${lesson.id}`} key={lesson.id} onClick={() => begin(lesson)} type="button">
+                            <span aria-hidden="true" className={styles.lessonElements}>
+                                {lesson.elements.map((suit, index) => (
+                                    <span key={suit} style={{ color: getTileSuit(suit).hue }}>{index ? ' + ' : ''}{getTileSuit(suit).rune}</span>
+                                ))}
+                            </span>
+                            <strong className={styles.lessonTitle}>{lesson.title}</strong>
+                            <span className={styles.lessonBody}>{lesson.category === 'Combinations' ? lesson.elements.map((suit) => ELEMENT_NAMES[suit]).join(' + ') : lesson.outcome}</span>
+                            <small className={styles.lessonMeta}>{completed.has(lesson.id) ? '\u2713 Practised' : `${lesson.steps.length * 2} guided taps`}</small>
+                        </button>
+                    ))}
+                </div>
+            </MetaShell>
+        );
+    }
+
     return <section className={styles.hall} data-testid="tutorial-hall" aria-label="Tutorial Hall" data-reduce-motion={reduceMotion}>
         <header className={styles.header}>
             <div><span className={styles.eyebrow}>Tutorial Hall</span><h1 ref={heading} tabIndex={-1}>{session?.lesson.title ?? 'Learn by playing'}</h1></div>
             <button type="button" onClick={leave}>{session ? 'Lessons' : 'Back'}</button>
         </header>
-        {!session ? <>
-            <div className={styles.tabs} role="group" aria-label="Lesson category">{categories.map(item => <button key={item} type="button" aria-pressed={item === category} onClick={() => setCategory(item)}>{item}</button>)}</div>
-            <div className={styles.lessons}>{TUTORIAL_LESSONS.filter(lesson => lesson.category === category).map(lesson => <button className={styles.lesson} key={lesson.id} type="button" onClick={() => begin(lesson)} data-testid={`tutorial-lesson-${lesson.id}`}>
-                <span className={styles.elements} aria-hidden="true">{lesson.elements.map((suit, index) => <span key={suit} style={{ color: getTileSuit(suit).hue }}>{index ? ' + ' : ''}{getTileSuit(suit).rune}</span>)}</span>
-                <strong>{lesson.title}</strong><span>{lesson.category === 'Combinations' ? lesson.elements.map(suit => ELEMENT_NAMES[suit]).join(' + ') : lesson.outcome}</span>
-                <small>{completed.has(lesson.id) ? '✓ Practised' : `${lesson.steps.length * 2} guided taps`}</small>
-            </button>)}</div>
-            <p className={styles.note}>Practice only. Your run and records stay untouched.</p>
-        </> : <>
+        <>
             <div className={styles.progress} aria-label="Lesson progress">
                 {session.lesson.steps.map((item, index) => <span key={index} data-current={index === session.step} data-done={index < session.step || session.phase === 'complete'}>{index + 1}</span>)}
                 <span className={styles.readout}>Combo {session.run.stats.currentStreak}{session.run.elementStreak ? ` · ${ELEMENT_NAMES[session.run.elementStreak.suit]} ×${session.run.elementStreak.links}` : ''}</span>
@@ -116,6 +153,6 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
                 {session.phase === 'result' ? <button type="button" className={styles.primary} onClick={next} autoFocus>{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</button> : null}
                 {session.phase === 'complete' ? <button type="button" className={styles.primary} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }}>Choose a lesson</button> : null}
             </div>
-        </>}
+        </>
     </section>;
 }
