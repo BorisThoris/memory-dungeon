@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { assignFindableKindsToTiles } from './board-tile-generation-rules';
-import { claimCurio, CURIO_FROM_FLOOR, curioCharges, curioItemFor } from './curio-rules';
+import { claimCurio, CURIO_FROM_FLOOR, curioItemFor } from './curio-rules';
 import { GAME_RULES_VERSION } from './contracts';
 import { flipTile, resolveBoardTurn } from './game';
 
@@ -10,7 +10,7 @@ describe('Curios', () => {
     it('put a curio item in hand and record the drop when their pair is matched', () => {
         const run: RunState = finishMemorizePhase(createNewRun(0, { runSeed: 77, realm: null }));
         const claimed = claimCurio(run, 4, 'pair-x');
-        expect(curioCharges(claimed, 'crucible')).toBe(1);
+        expect(claimed.crucibleCharges).toBe(1);
         expect(claimed.curiosClaimedThisRun).toBe(1);
         expect(claimed.lastCurioDrop).toEqual({ key: 'curio:77:4:0:pair-x', item: 'crucible' });
         expect(claimCurio(claimed, 4, 'pair-y').lastCurioDrop?.key).not.toBe(claimed.lastCurioDrop?.key);

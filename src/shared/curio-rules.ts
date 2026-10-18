@@ -38,10 +38,6 @@ const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges'>> = {
     crucible: 'crucibleCharges'
 };
 
-/** How many of a curio item the player holds. */
-export const curioCharges = (run: Pick<RunState, 'crucibleCharges'>, item: CurioItemId): number =>
-    runNonNegativeInteger(run[CHARGE_FIELD[item]]);
-
 /** The item a claimed Curio grants: seeded by run, floor and how many Curios this run has opened. */
 export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'curiosClaimedThisRun'>, level: number): CurioItemId => {
     const rng = createMulberry32(hashStringToSeed(`curio-item:${run.runSeed}:${level}:${runNonNegativeInteger(run.curiosClaimedThisRun)}`));
