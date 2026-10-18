@@ -9,7 +9,7 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import styles from './TutorialHall.module.css';
 import { TUTORIAL_HALL_COPY } from '../copy/tutorialHallCopy';
-import { MetaShell, SectionRail } from '../ui';
+import { MetaShell, SectionRail, UiButton } from '../ui';
 
 interface Props { initialLessonId?: string; onClose: () => void; reduceMotion: boolean; graphicsQuality: GraphicsQualityPreset }
 const categories = ['Essentials', 'Elements', 'Combinations', 'Interactions'] as const;
@@ -128,13 +128,13 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
     return <section className={styles.hall} data-testid="tutorial-hall" aria-label="Tutorial Hall" data-reduce-motion={reduceMotion}>
         <header className={styles.header}>
             <div><span className={styles.eyebrow}>Tutorial Hall</span><h1 ref={heading} tabIndex={-1}>{session?.lesson.title ?? 'Learn by playing'}</h1></div>
-            <button type="button" onClick={leave}>{session ? 'Lessons' : 'Back'}</button>
+            <UiButton onClick={leave} size="md" variant="secondary">Lessons</UiButton>
         </header>
         <>
             <div className={styles.progress} aria-label="Lesson progress">
                 {session.lesson.steps.map((item, index) => <span key={index} data-current={index === session.step} data-done={index < session.step || session.phase === 'complete'}>{index + 1}</span>)}
                 <span className={styles.readout}>Combo {session.run.stats.currentStreak}{session.run.elementStreak ? ` · ${ELEMENT_NAMES[session.run.elementStreak.suit]} ×${session.run.elementStreak.links}` : ''}</span>
-                <button type="button" onClick={() => begin(session.lesson)}>Restart</button>
+                <UiButton onClick={() => begin(session.lesson)} size="sm" variant="secondary">Restart</UiButton>
             </div>
             <div className={styles.stage} ref={stage} data-testid="tutorial-board-stage">
                 <TileBoard key={`${session.lesson.id}:${attempt}`} ref={board} board={session.run.board!} interactive={session.phase === 'select'}
@@ -150,8 +150,8 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
             </div>
             <div className={styles.coach}>
                 <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? TUTORIAL_HALL_COPY.complete : session.phase === 'result' ? reactionResult ? `${session.lesson.title}: ${elementReactionResult(reactionResult)}.` : step?.result : session.hint || (session.phase === 'resolve' ? TUTORIAL_HALL_COPY.resolving : session.half === 1 ? TUTORIAL_HALL_COPY.nextCard : step?.instruction)}</p>
-                {session.phase === 'result' ? <button type="button" className={styles.primary} onClick={next} autoFocus>{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</button> : null}
-                {session.phase === 'complete' ? <button type="button" className={styles.primary} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }}>Choose a lesson</button> : null}
+                {session.phase === 'result' ? <UiButton className={styles.coachAction} onClick={next} autoFocus size="md" variant="primary">{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</UiButton> : null}
+                {session.phase === 'complete' ? <UiButton className={styles.coachAction} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }} size="md" variant="primary">Choose a lesson</UiButton> : null}
             </div>
         </>
     </section>;

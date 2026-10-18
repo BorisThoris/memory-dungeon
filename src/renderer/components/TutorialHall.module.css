@@ -3,23 +3,22 @@
 .header h1 { margin: 0; font: 600 clamp(1.5rem, 4vw, 2.3rem)/1.1 'Cormorant Garamond', serif; font-feature-settings: 'lnum' 1; }
 .header h1:focus { outline: none; }
 .eyebrow { font-size: 0.75rem; letter-spacing: 0.17em; color: #d6ab6d; text-transform: uppercase; }
-.hall button { min-height: 44px; border: 1px solid #a88d6455; border-radius: 5px; padding: 0.5rem 0.85rem; background: #24202a; color: inherit; font: 600 0.9375rem/1.2 'Source Sans 3', sans-serif; cursor: pointer; touch-action: manipulation; }
-.hall button:hover { border-color: #e6be7f; background: #332d35; }
-.hall button:focus-visible { outline: 2px solid #fbd9a3; outline-offset: 3px; }
 .progress { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
 .progress > span:not(.readout) { width: 1.5rem; height: 1.5rem; border: 1px solid #75604e; border-radius: 50%; text-align: center; font-size: 0.875rem; }
 .progress > span[data-current='true'], .progress > span[data-done='true'] { color: #171219; background: #e5b777; }
 .progress button { margin-left: auto; }
 .readout { color: #e0c5a2; font-size: 0.875rem; }
 .stage { flex: 1; min-height: 0; position: relative; overflow: hidden; border: 1px solid #9a806138; border-radius: 10px; background: radial-gradient(ellipse at 50% 65%, #e3b77815, transparent 65%); }
-.stage .target { position: absolute; z-index: 8; border: 2px solid #ffe4a3; padding: 0; min-height: 0; border-radius: 8px; background: transparent; box-shadow: 0 0 18px #efb46077, inset 0 0 12px #efb46044; }
+/* The one button the hall styles itself: the ring over the card to tap. The rest are UiButtons. */
+.stage .target { cursor: pointer; touch-action: manipulation; color: inherit; font: inherit; position: absolute; z-index: 8; border: 2px solid #ffe4a3; padding: 0; min-height: 0; border-radius: 8px; background: transparent; box-shadow: 0 0 18px #efb46077, inset 0 0 12px #efb46044; }
 .stage .target:hover { background: #ffe4a312; }
+.stage .target:focus-visible { outline: 2px solid #fbd9a3; outline-offset: 3px; }
+.coachAction { flex: 0 0 auto; }
 .target span { position: absolute; bottom: calc(100% + 0.3rem); left: 50%; transform: translateX(-50%); padding: 0.25rem 0.5rem; border-radius: 4px; color: #21151b; background: #ffe4a3; white-space: nowrap; font-size: 0.8125rem; }
 .target[data-label-inside='true'] span { bottom: auto; top: 2px; }
 .coach { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; min-height: 64px; flex: 0 0 auto; padding: 0.7rem 0.9rem; background: #211c25; border-left: 3px solid #e3b778; }
 .coach p { margin: 0; font-size: clamp(0.9375rem, 2vw, 1.125rem); line-height: 1.35; }
-.coach .primary { background: #e3b778; color: #1a111a; flex: 0 0 auto; }
-@media (max-width: 420px) { .coach { flex-direction: column; align-items: stretch; } .coach .primary { width: 100%; } .readout { font-size: 0.75rem; } }
+@media (max-width: 420px) { .coach { flex-direction: column; align-items: stretch; } .coachAction { width: 100%; } .readout { font-size: 0.75rem; } }
 @media (max-height: 480px) and (min-width: 500px) {
     .hall { gap: 0.3rem; padding-block: 0.4rem; }
     .eyebrow { display: none; }
