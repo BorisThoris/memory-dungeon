@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3190,
     "codeFileCount": 1204,
-    "exportedSymbolCount": 3798,
+    "exportedSymbolCount": 3801,
     "contentItemCount": 12,
     "mechanicCount": 66,
     "stateFieldCount": 134,
-    "relationshipCount": 10145
+    "relationshipCount": 10153
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "cc648b06f01a39c482497a18b0d02d0417a886e5fffdff7898fdf558925ffa1f"
+      "sha256": "7b5d4fc9c4467e28c2689104fc565be90b04edbeaca3f4251f82f59fa8144adc"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 74128,
-      "sha256": "260b13453d438b54c2e7dc94544296d4723204743da45a40723d898f391ec8f3"
+      "bytes": 72067,
+      "sha256": "70dfea693622402d67d65f8c6818eea7aab6b8ce3ee6d2f73e81632047bf57e0"
     },
     {
       "path": "public/site.webmanifest",
@@ -10923,8 +10923,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 122530,
-      "sha256": "82da644c7c9145b144f0324e5437c029647459f7fc86e53a7da63bff19cb371d"
+      "bytes": 123049,
+      "sha256": "f675266cca81285cb45f04f4855ba50e1360a2b9be89a20ef2985d1716d49136"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11523,14 +11523,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 35681,
-      "sha256": "743059a9dbf24a4d480dd5fecb994080535888a08cf5b6eae5fb713c3443ae4a"
+      "bytes": 36130,
+      "sha256": "a0a6134a448d72ecbb5ef425b31d839558c7ebf52081986dce54a8d9d7ff8e2d"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 50445,
-      "sha256": "2dd6ed95c6b1439ef857dc45e029cf07cfd710e830993f289797fa37491af0d6"
+      "bytes": 50857,
+      "sha256": "0250698fa3d8500ae93ab3e58a98026c6d55a00385b478b25a705f75c31c6d36"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12921,14 +12921,14 @@
     {
       "path": "src/renderer/copy/lookingGlassBeat.test.ts",
       "category": "test",
-      "bytes": 531,
-      "sha256": "e247193fc724b042fa7dcf33dfc8ac71394bb24f0c0e17a2b18367e954bde428"
+      "bytes": 1177,
+      "sha256": "cce1d4b2cc1d6e73990424d79c89511d23e990d0443136a12bea92f22b5f06ba"
     },
     {
       "path": "src/renderer/copy/lookingGlassBeat.ts",
       "category": "source",
-      "bytes": 664,
-      "sha256": "2a0b04a56b69cf0b100f089de0d90c15ab4319febf4da7d94a567705dfc11a27"
+      "bytes": 1693,
+      "sha256": "2f2f3a77b4db2ab72ae9729cd2ae8cb5fa3f34158c6ecf97add6efb2e8e7e6db"
     },
     {
       "path": "src/renderer/copy/magpieBeat.test.ts",
@@ -12975,8 +12975,8 @@
     {
       "path": "src/renderer/copy/oddCardBeat.ts",
       "category": "source",
-      "bytes": 2769,
-      "sha256": "0677696b4437e1df665ae6f80dbb7cc7a4b9f6eed163bd1a70beea7ea50e20cd"
+      "bytes": 2884,
+      "sha256": "148a0553f645e4fa4edf2ed5e803f811f613bdc625146316403e36d58ce00b21"
     },
     {
       "path": "src/renderer/copy/passAndPlay.ts",
@@ -15531,14 +15531,14 @@
     {
       "path": "src/shared/looking-glass-rules.test.ts",
       "category": "test",
-      "bytes": 2926,
-      "sha256": "539243250b24233442cee5c90c5aee56755fe26794fea6d94966261874db5fc6"
+      "bytes": 3126,
+      "sha256": "8c9f922ab58a82740c51ec13edc67650c491a1ed0019b2958ce19fb0848d0992"
     },
     {
       "path": "src/shared/looking-glass-rules.ts",
       "category": "source",
-      "bytes": 3798,
-      "sha256": "b24db4fe479c8f638d67fbc975c51bb7fbaa65619fff0f75691460e055081222"
+      "bytes": 4098,
+      "sha256": "75914fdeea869f8a5a73c37dc3ba911a277e63f9514807d6e3c51987458cc54b"
     },
     {
       "path": "src/shared/magpie-rules.test.ts",
@@ -23506,7 +23506,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2409,
+      "lineCount": 2416,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/realmAmbientBed.ts",
@@ -23543,6 +23543,7 @@
         "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/colossusBeat.ts",
         "file:src/renderer/copy/gameplayHints.ts",
+        "file:src/renderer/copy/lookingGlassBeat.ts",
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
         "file:src/renderer/copy/oddCardBeat.ts",
@@ -23585,6 +23586,7 @@
         "file:src/shared/floor-par.ts",
         "file:src/shared/focusDimmedTileIds.ts",
         "file:src/shared/held-pair-rules.ts",
+        "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/meteor-rules.ts",
         "file:src/shared/miss-bank.ts",
@@ -25114,7 +25116,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 657,
+      "lineCount": 665,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/store/memorizeClock.ts",
@@ -25130,7 +25132,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 886,
+      "lineCount": 893,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25140,6 +25142,7 @@
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/components/PlasmaRail.tsx",
         "file:src/renderer/copy/chainBeat.ts",
+        "file:src/renderer/copy/lookingGlassBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -25154,6 +25157,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/floor-par.ts",
+        "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/pass-and-play-rules.ts",
@@ -29306,7 +29310,7 @@
       "path": "src/renderer/copy/lookingGlassBeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 11,
+      "lineCount": 21,
       "imports": [
         "file:src/renderer/copy/lookingGlassBeat.ts"
       ],
@@ -29318,12 +29322,15 @@
       "path": "src/renderer/copy/lookingGlassBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 13,
+      "lineCount": 34,
       "imports": [
+        "file:src/renderer/copy/oddCardBeat.ts",
         "file:src/shared/looking-glass-rules.ts"
       ],
       "exports": [
-        "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassAnnouncement"
+        "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassAnnouncement",
+        "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassHudTitle",
+        "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassLegendEntry"
       ],
       "testedBy": [
         "file:src/renderer/copy/lookingGlassBeat.test.ts"
@@ -29442,7 +29449,7 @@
       "path": "src/renderer/copy/oddCardBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 52,
+      "lineCount": 53,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/element-alchemy-rules.ts",
@@ -37397,7 +37404,7 @@
       "path": "src/shared/looking-glass-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 63,
+      "lineCount": 66,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/looking-glass-rules.ts",
@@ -37411,7 +37418,7 @@
       "path": "src/shared/looking-glass-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 81,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/restless-floor-rules.ts"
@@ -37420,6 +37427,7 @@
         "symbol:src/shared/looking-glass-rules.ts#LOOKING_GLASS_EVERY_MATCHES",
         "symbol:src/shared/looking-glass-rules.ts#lookingGlassAxis",
         "symbol:src/shared/looking-glass-rules.ts#LookingGlassAxis",
+        "symbol:src/shared/looking-glass-rules.ts#lookingGlassMatchesUntilTurn",
         "symbol:src/shared/looking-glass-rules.ts#lookingGlassSwaps",
         "symbol:src/shared/looking-glass-rules.ts#lookingGlassTurnsOnMatch"
       ],
@@ -47004,40 +47012,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2408,
-      "endLine": 2408
+      "line": 2415,
+      "endLine": 2415
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 261,
-      "endLine": 261
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 259,
-      "endLine": 259
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 263,
-      "endLine": 263
+      "line": 265,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 253,
-      "endLine": 253
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -48820,24 +48828,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 885,
-      "endLine": 885
+      "line": 892,
+      "endLine": 892
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 81,
-      "endLine": 112
+      "line": 83,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 68,
-      "endLine": 79
+      "line": 70,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -53956,8 +53964,24 @@
       "name": "lookingGlassAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/lookingGlassBeat.ts",
-      "line": 9,
-      "endLine": 12
+      "line": 30,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassHudTitle",
+      "name": "lookingGlassHudTitle",
+      "kind": "value",
+      "file": "src/renderer/copy/lookingGlassBeat.ts",
+      "line": 14,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassLegendEntry",
+      "name": "lookingGlassLegendEntry",
+      "kind": "value",
+      "file": "src/renderer/copy/lookingGlassBeat.ts",
+      "line": 22,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/copy/magpieBeat.ts#MAGPIE_BEAT_COPY",
@@ -54068,8 +54092,8 @@
       "name": "oddCardLegend",
       "kind": "value",
       "file": "src/renderer/copy/oddCardBeat.ts",
-      "line": 43,
-      "endLine": 51
+      "line": 44,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/copy/oddCardBeat.ts#OddCardLegendEntry",
@@ -54077,7 +54101,7 @@
       "kind": "interface",
       "file": "src/renderer/copy/oddCardBeat.ts",
       "line": 33,
-      "endLine": 40
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/copy/oddCardBeat.ts#turncoatLegend",
@@ -65152,12 +65176,20 @@
       "endLine": 30
     },
     {
+      "id": "symbol:src/shared/looking-glass-rules.ts#lookingGlassMatchesUntilTurn",
+      "name": "lookingGlassMatchesUntilTurn",
+      "kind": "value",
+      "file": "src/shared/looking-glass-rules.ts",
+      "line": 41,
+      "endLine": 42
+    },
+    {
       "id": "symbol:src/shared/looking-glass-rules.ts#lookingGlassSwaps",
       "name": "lookingGlassSwaps",
       "kind": "value",
       "file": "src/shared/looking-glass-rules.ts",
-      "line": 44,
-      "endLine": 76
+      "line": 48,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/looking-glass-rules.ts#lookingGlassTurnsOnMatch",
@@ -72912,7 +72944,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 117
+          "line": 119
         }
       ],
       "tests": [
@@ -72938,7 +72970,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 90
+          "line": 98
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -75800,7 +75832,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 379
+          "line": 386
         }
       ],
       "tests": [
@@ -75839,7 +75871,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 379
+          "line": 386
         }
       ],
       "tests": [
@@ -75873,7 +75905,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 379
+          "line": 386
         }
       ],
       "tests": [
@@ -75907,7 +75939,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 379
+          "line": 386
         }
       ],
       "tests": [
@@ -86942,6 +86974,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/lookingGlassBeat.ts->symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassHudTitle",
+      "source": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "target": "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassHudTitle",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/lookingGlassBeat.ts->symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassLegendEntry",
+      "source": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "target": "symbol:src/renderer/copy/lookingGlassBeat.ts#lookingGlassLegendEntry",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/magpieBeat.ts->symbol:src/renderer/copy/magpieBeat.ts#MAGPIE_BEAT_COPY",
       "source": "file:src/renderer/copy/magpieBeat.ts",
       "target": "symbol:src/renderer/copy/magpieBeat.ts#MAGPIE_BEAT_COPY",
@@ -95333,6 +95377,12 @@
       "id": "exports:src/shared/looking-glass-rules.ts->symbol:src/shared/looking-glass-rules.ts#LookingGlassAxis",
       "source": "file:src/shared/looking-glass-rules.ts",
       "target": "symbol:src/shared/looking-glass-rules.ts#LookingGlassAxis",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/looking-glass-rules.ts->symbol:src/shared/looking-glass-rules.ts#lookingGlassMatchesUntilTurn",
+      "source": "file:src/shared/looking-glass-rules.ts",
+      "target": "symbol:src/shared/looking-glass-rules.ts#lookingGlassMatchesUntilTurn",
       "kind": "exports"
     },
     {
@@ -107202,6 +107252,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/lookingGlassBeat.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/matchScoreFloater.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/matchScoreFloater.ts",
@@ -107451,6 +107507,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/held-pair-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/held-pair-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/looking-glass-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/looking-glass-rules.ts",
       "kind": "imports"
     },
     {
@@ -109086,6 +109148,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/lookingGlassBeat.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
@@ -109167,6 +109235,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/floor-par.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/looking-glass-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/looking-glass-rules.ts",
       "kind": "imports"
     },
     {
@@ -113397,6 +113471,12 @@
       "id": "imports:src/renderer/copy/lookingGlassBeat.test.ts->src/renderer/copy/lookingGlassBeat.ts",
       "source": "file:src/renderer/copy/lookingGlassBeat.test.ts",
       "target": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/lookingGlassBeat.ts->src/renderer/copy/oddCardBeat.ts",
+      "source": "file:src/renderer/copy/lookingGlassBeat.ts",
+      "target": "file:src/renderer/copy/oddCardBeat.ts",
       "kind": "imports"
     },
     {
