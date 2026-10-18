@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3195,
     "codeFileCount": 1209,
-    "exportedSymbolCount": 3821,
+    "exportedSymbolCount": 3822,
     "contentItemCount": 12,
     "mechanicCount": 66,
     "stateFieldCount": 134,
-    "relationshipCount": 10190
+    "relationshipCount": 10191
   },
   "inventory": [
     {
@@ -117,8 +117,8 @@
     {
       "path": "AGENTS.md",
       "category": "other",
-      "bytes": 7821,
-      "sha256": "c2cbae4cbf283daafc0215c8ed56415f532a94b049b6f6a72e1bf7e43026937f"
+      "bytes": 7927,
+      "sha256": "903227b7934527825fe3b3988e8e969b8a67b6f471483aaec17c26bf3a014597"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack.jobs.json",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72169,
-      "sha256": "9771b801b4de1e184fa1171b3adab4c1b2303f5ed69a1309e93a26e5d8bd611b"
+      "bytes": 72145,
+      "sha256": "c726c24720912b1ca3d8d4362359fe6ea1777ea3f984e1a8687fbff9e3e14c95"
     },
     {
       "path": "public/site.webmanifest",
@@ -6093,8 +6093,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 27982,
-      "sha256": "a653e79074216817483f9bea3e22c8f2ad9321936a8c167153e832aac4241139"
+      "bytes": 28030,
+      "sha256": "e397778f482455962a0b0d5a0d3c239094bbe6c8c1694fcd9340f6ebc89a840a"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -9879,14 +9879,14 @@
     {
       "path": "src/renderer/audio/gameplayMusic.test.ts",
       "category": "test",
-      "bytes": 15920,
-      "sha256": "17f758c23ded6f69944a707ab0f4b37fd4b2d82d4833cded00ce001a7f4cf7b5"
+      "bytes": 16432,
+      "sha256": "bcaca76424851234a6473627da8c93cc2fc671b41cd51e7e459385309405c377"
     },
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 15878,
-      "sha256": "98a41b8aafce9fe31878f52a6759a8200d09d7078adcac05fb4611adff65f64d"
+      "bytes": 16098,
+      "sha256": "ebab9c7d0d69f5681436340b6b4ac29d10cb534fc7a0f6470f4a546d56845ff0"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -11757,8 +11757,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45506,
-      "sha256": "4cb370e7277f57ccde564dc3f3851dea1066187793370ce84644de4c6d974b35"
+      "bytes": 45982,
+      "sha256": "8170511b4e7fd683291cc7e96746e03d2e1ee37b0049ae93672e2aab3a36c35a"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -13059,8 +13059,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2253,
-      "sha256": "940d7e3fdb2b2e69a93e88410ff2ae3a3a4b33ca1946d10249268082400c293c"
+      "bytes": 2357,
+      "sha256": "a0ae159dcce858561c515b02166aecdf179c93c0a40538420fabc7d425ddc276"
     },
     {
       "path": "src/renderer/copy/skittishCardsBeat.test.ts",
@@ -14817,8 +14817,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 53359,
-      "sha256": "0d31e6898e2132a2dd5c80e20d4dc4eabb328891d22c182a9bbab19d9bd55aeb"
+      "bytes": 53545,
+      "sha256": "1a585dc48b7ddbdcd3ba4df25c974ae58b888cec24a81bef0c6cc10ca968635b"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16437,14 +16437,14 @@
     {
       "path": "src/shared/save-data.test.ts",
       "category": "test",
-      "bytes": 32978,
-      "sha256": "89a91b28c16b746e66418a6b7fb093def502e33e12777feccd9c3f9fc22189f7"
+      "bytes": 33021,
+      "sha256": "7cdfb7df548086a0c405c8286b9c26bbb17d766a7a185ddd2222e58101ceb116"
     },
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 28311,
-      "sha256": "96930825dc149e8e3e7b923d9c945e62f473164d627e42cc0d6d165f117f4c32"
+      "bytes": 28537,
+      "sha256": "4c231942bb1d773b504e7b6c53816c0b01f563c8021ebe2c208ec96e3200874e"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -16455,8 +16455,8 @@
     {
       "path": "src/shared/save-field-policy.ts",
       "category": "source",
-      "bytes": 5236,
-      "sha256": "971286e46c6001e3aa1954568ed2411eb9c58c95e05b048d4a8adb6188071e14"
+      "bytes": 5499,
+      "sha256": "de0cd6f03a5488f9ec66a03f454ea1dbc51edd4a8e712adcf37120b0ffcc4343"
     },
     {
       "path": "src/shared/save-location.test.ts",
@@ -19874,7 +19874,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 558,
+      "lineCount": 559,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -20543,7 +20543,7 @@
       "path": "src/renderer/audio/gameplayMusic.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 456,
+      "lineCount": 466,
       "imports": [
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/shared/contracts.ts"
@@ -20556,7 +20556,7 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 400,
+      "lineCount": 402,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -20567,6 +20567,7 @@
         "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
         "symbol:src/renderer/audio/gameplayMusic.ts#musicTrackKey",
         "symbol:src/renderer/audio/gameplayMusic.ts#MusicTrackKey",
+        "symbol:src/renderer/audio/gameplayMusic.ts#playableTrackUrl",
         "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
         "symbol:src/renderer/audio/gameplayMusic.ts#realmMusicUrl",
         "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
@@ -25839,7 +25840,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 733,
+      "lineCount": 739,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -29732,7 +29733,7 @@
       "path": "src/renderer/copy/settingsHints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 38,
+      "lineCount": 39,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -34628,7 +34629,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1173,
+      "lineCount": 1178,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -40493,7 +40494,7 @@
       "path": "src/shared/save-data.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 768,
+      "lineCount": 769,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts",
@@ -40508,7 +40509,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 664,
+      "lineCount": 668,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -40612,7 +40613,7 @@
       "path": "src/shared/save-field-policy.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 127,
+      "lineCount": 134,
       "imports": [],
       "exports": [
         "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -43107,8 +43108,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 557,
-      "endLine": 557
+      "line": 558,
+      "endLine": 558
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -43851,16 +43852,16 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 199,
-      "endLine": 218
+      "line": 201,
+      "endLine": 220
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#MUSIC_CROSSFADE_MS",
       "name": "MUSIC_CROSSFADE_MS",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 130,
-      "endLine": 130
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
@@ -43887,6 +43888,14 @@
       "endLine": 35
     },
     {
+      "id": "symbol:src/renderer/audio/gameplayMusic.ts#playableTrackUrl",
+      "name": "playableTrackUrl",
+      "kind": "value",
+      "file": "src/renderer/audio/gameplayMusic.ts",
+      "line": 72,
+      "endLine": 73
+    },
+    {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#preloadGameplayMusic",
       "name": "preloadGameplayMusic",
       "kind": "value",
@@ -43907,8 +43916,8 @@
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 154,
-      "endLine": 197
+      "line": 156,
+      "endLine": 199
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#setDailyTrackUrl",
@@ -43923,8 +43932,8 @@
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 224,
-      "endLine": 399
+      "line": 226,
+      "endLine": 401
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
@@ -50011,8 +50020,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 732,
-      "endLine": 732
+      "line": 738,
+      "endLine": 738
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -54651,8 +54660,8 @@
       "name": "SETTINGS_FOOTER_HINT",
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
@@ -54660,7 +54669,7 @@
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
       "line": 8,
-      "endLine": 34
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/copy/skittishCardsBeat.ts#SKITTISH_FLINCH_ANNOUNCEMENT",
@@ -60571,16 +60580,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1045,
-      "endLine": 1045
+      "line": 1050,
+      "endLine": 1050
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1120,
-      "endLine": 1122
+      "line": 1125,
+      "endLine": 1127
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -60603,8 +60612,8 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 478,
-      "endLine": 513
+      "line": 483,
+      "endLine": 518
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -60635,16 +60644,16 @@
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 554,
-      "endLine": 565
+      "line": 559,
+      "endLine": 570
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 520,
-      "endLine": 542
+      "line": 525,
+      "endLine": 547
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
@@ -60659,8 +60668,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1128,
-      "endLine": 1133
+      "line": 1133,
+      "endLine": 1138
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -60691,8 +60700,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1146,
-      "endLine": 1172
+      "line": 1151,
+      "endLine": 1177
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -60707,16 +60716,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 464,
-      "endLine": 476
+      "line": 469,
+      "endLine": 481
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 451,
-      "endLine": 462
+      "line": 456,
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -60787,24 +60796,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 433,
-      "endLine": 447
+      "line": 438,
+      "endLine": 452
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 448,
-      "endLine": 448
+      "line": 453,
+      "endLine": 453
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 424,
-      "endLine": 424
+      "line": 429,
+      "endLine": 429
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -60827,16 +60836,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 686,
-      "endLine": 690
+      "line": 691,
+      "endLine": 695
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 692,
-      "endLine": 702
+      "line": 697,
+      "endLine": 707
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -60851,8 +60860,8 @@
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 546,
-      "endLine": 552
+      "line": 551,
+      "endLine": 557
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -60883,8 +60892,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 585,
-      "endLine": 630
+      "line": 590,
+      "endLine": 635
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -60995,24 +61004,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 715,
-      "endLine": 727
+      "line": 720,
+      "endLine": 732
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 729,
-      "endLine": 742
+      "line": 734,
+      "endLine": 747
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1047,
-      "endLine": 1060
+      "line": 1052,
+      "endLine": 1065
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -61123,16 +61132,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1136,
-      "endLine": 1136
+      "line": 1141,
+      "endLine": 1141
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1139,
-      "endLine": 1144
+      "line": 1144,
+      "endLine": 1149
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -61155,16 +61164,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1113,
-      "endLine": 1117
+      "line": 1118,
+      "endLine": 1122
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1111,
-      "endLine": 1111
+      "line": 1116,
+      "endLine": 1116
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -61179,16 +61188,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1067,
-      "endLine": 1084
+      "line": 1072,
+      "endLine": 1089
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 744,
-      "endLine": 1043
+      "line": 749,
+      "endLine": 1048
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -61203,16 +61212,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 647,
-      "endLine": 684
+      "line": 652,
+      "endLine": 689
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 704,
-      "endLine": 709
+      "line": 709,
+      "endLine": 714
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -61227,8 +61236,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1086,
-      "endLine": 1105
+      "line": 1091,
+      "endLine": 1110
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -61243,8 +61252,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 567,
-      "endLine": 583
+      "line": 572,
+      "endLine": 588
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -61252,7 +61261,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 327,
-      "endLine": 367
+      "endLine": 372
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -61283,8 +61292,8 @@
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 369,
-      "endLine": 422
+      "line": 374,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -61307,8 +61316,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 646,
-      "endLine": 646
+      "line": 651,
+      "endLine": 651
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -61339,16 +61348,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 637,
-      "endLine": 644
+      "line": 642,
+      "endLine": 649
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 632,
-      "endLine": 635
+      "line": 637,
+      "endLine": 640
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -70019,24 +70028,24 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 93,
-      "endLine": 116
+      "line": 94,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 118,
-      "endLine": 125
+      "line": 119,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 357,
-      "endLine": 369
+      "line": 358,
+      "endLine": 370
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
@@ -70044,127 +70053,127 @@
       "kind": "value",
       "file": "src/shared/save-data.ts",
       "line": 27,
-      "endLine": 52
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 643,
-      "endLine": 654
+      "line": 647,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 616,
-      "endLine": 629
+      "line": 620,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 656,
-      "endLine": 663
+      "line": 660,
+      "endLine": 667
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 635,
-      "endLine": 641
+      "line": 639,
+      "endLine": 645
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 254,
-      "endLine": 355
+      "line": 255,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 558,
-      "endLine": 609
+      "line": 562,
+      "endLine": 613
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 526,
-      "endLine": 529
+      "line": 530,
+      "endLine": 533
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 531,
-      "endLine": 543
+      "line": 535,
+      "endLine": 547
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 545,
-      "endLine": 548
+      "line": 549,
+      "endLine": 552
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 550,
-      "endLine": 556
+      "line": 554,
+      "endLine": 560
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
       "name": "RUN_HISTORY_SEED_CAP",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 141,
-      "endLine": 141
+      "line": 142,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 402,
-      "endLine": 417
+      "line": 404,
+      "endLine": 419
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 84,
-      "endLine": 91
+      "line": 85,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 377,
-      "endLine": 398
+      "line": 378,
+      "endLine": 400
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
       "name": "getSaveFieldPolicies",
       "kind": "value",
       "file": "src/shared/save-field-policy.ts",
-      "line": 120,
-      "endLine": 121
+      "line": 127,
+      "endLine": 128
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#SAVE_FIELD_POLICY_VERSION",
@@ -70195,8 +70204,8 @@
       "name": "shouldSaveFieldRequireMigration",
       "kind": "value",
       "file": "src/shared/save-field-policy.ts",
-      "line": 123,
-      "endLine": 126
+      "line": 130,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/save-location.ts#formatSteamCloudRules",
@@ -79602,6 +79611,12 @@
       "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#MusicTrackKey",
       "source": "file:src/renderer/audio/gameplayMusic.ts",
       "target": "symbol:src/renderer/audio/gameplayMusic.ts#MusicTrackKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/audio/gameplayMusic.ts->symbol:src/renderer/audio/gameplayMusic.ts#playableTrackUrl",
+      "source": "file:src/renderer/audio/gameplayMusic.ts",
+      "target": "symbol:src/renderer/audio/gameplayMusic.ts#playableTrackUrl",
       "kind": "exports"
     },
     {
