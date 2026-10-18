@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3195,
-    "codeFileCount": 1209,
-    "exportedSymbolCount": 3825,
-    "contentItemCount": 12,
-    "mechanicCount": 66,
-    "stateFieldCount": 134,
-    "relationshipCount": 10199
+    "trackedFileCount": 3200,
+    "codeFileCount": 1214,
+    "exportedSymbolCount": 3846,
+    "contentItemCount": 14,
+    "mechanicCount": 68,
+    "stateFieldCount": 135,
+    "relationshipCount": 10306
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 65406,
-      "sha256": "264e1c8fa0a5114ad964167fdca05289792996df10fae8b784d5205eae5de9c5"
+      "bytes": 66434,
+      "sha256": "da00a50bd532562339b619d0d8eddcafe1c54683da90655fb713ea06d0636e8f"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "22ab36ce3d7f268f80f78527eda9a9f6d5732c9c1ab71f5d0492b48b3ef1bf1b"
+      "sha256": "694be1d1bb8da2944abbfd6fbff96939e0d8b68dabcb612f8ac1c10a459f1eb2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4155,8 +4155,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 17655,
-      "sha256": "53f4c394146c6baa1f36558f329a0d27a2af047c1f765d4a736e99fb7e7d7b70"
+      "bytes": 19534,
+      "sha256": "366a1dfe8102c6273ef1a34c67f4f64e3f2f8b46a2cfc79d044290d63de217a5"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71896,
-      "sha256": "6f3433545780bc7eb80f7425570c437b00ea9ef888cc13e3261cd6db5c5664c6"
+      "bytes": 72058,
+      "sha256": "4cd4bb85c22f99a724c437b4c20d7c129ba869c04096e80a75df5409b1157d88"
     },
     {
       "path": "public/site.webmanifest",
@@ -5319,8 +5319,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 21732,
-      "sha256": "444740fa8c1a5c6793884459f3499dca594a7568154c982a7ec86c05f412a806"
+      "bytes": 22404,
+      "sha256": "d15f9d5473de51e28c46f547ae485ea913c6d7eb7b610533921db89056edb3d0"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5721,8 +5721,8 @@
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 30316,
-      "sha256": "234721a8c1b65e1bc0548ed4839541a5f34676d2f17d7b0e161a097c5b568e60"
+      "bytes": 30326,
+      "sha256": "5f840c4588f51465b83c3a78860ecd1954fcf1e51ea37d24eafed9812ef09b99"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -5763,8 +5763,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 3837,
-      "sha256": "dfba2738909ca08fbb60159d921635bee307e96267c94ac07bcfd25f038ae1ce"
+      "bytes": 3922,
+      "sha256": "397ccbfa64f4590e3624885e5570578cdf609910e962975a8974ea5c5fabe8c0"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -9897,8 +9897,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 53006,
-      "sha256": "83d81a90d7550c8ee2d3894af303014ce2a32d4b0294686c56c9934be0f98d8a"
+      "bytes": 53950,
+      "sha256": "0d11b5f35e71d8d166669ed8569657296d8ea5d4e05f75cc46d55cda512f64e1"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -10801,6 +10801,12 @@
       "sha256": "a05b77347db8cc1d4541e5ac308d40a907c9dcabfbd7eee9c2bf1394ccfa7e08"
     },
     {
+      "path": "src/renderer/components/findableMarkerColor.ts",
+      "category": "source",
+      "bytes": 967,
+      "sha256": "821b27a930c24c4f7ec5e73f45075b19e3e1678ead4f8852b536488d193ba427"
+    },
+    {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
       "bytes": 3639,
@@ -10941,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 123278,
-      "sha256": "71d3f34e22f3091467401b2d0a95e10b25752e4aae3a817d7b226f041a4ec869"
+      "bytes": 124155,
+      "sha256": "09c70e286cadc34798dc7acbf1292ea6a0e4359553bf7bc826821cfa4a469220"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11037,8 +11043,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 13018,
-      "sha256": "f29c48c69d0b7e04f5b687705b6574dcc6c775969344bbdfa0f17177024a0649"
+      "bytes": 13069,
+      "sha256": "842a8c11ba4311bcdfbee9fe1d50fff48c609bb61f3c2a596122f85b64ae8619"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -11073,20 +11079,20 @@
     {
       "path": "src/renderer/components/itemDrops.ts",
       "category": "source",
-      "bytes": 3783,
-      "sha256": "2a05b99df9e45136c09e2d33c78f12c1dc002e261d465b868264a6ef6f14ff9f"
+      "bytes": 4051,
+      "sha256": "26675214830c8769cf84b663b3b83cc3bc27fb3b823126473db29345aa4651bd"
     },
     {
       "path": "src/renderer/components/itemEffects.test.ts",
       "category": "test",
-      "bytes": 4958,
-      "sha256": "b273685c0a7c48cb1c18f1d318fb30bc4ecfd246b81dc5f8ee6868eec1fd215f"
+      "bytes": 6651,
+      "sha256": "b17d942d9a385d0ef58903b22ede72dd4450ae34a2bd8fa9514f359059bf856b"
     },
     {
       "path": "src/renderer/components/itemEffects.ts",
       "category": "source",
-      "bytes": 11152,
-      "sha256": "96dce59566b1dfe0a56373d8322b25785f6db9414b655f2b96d184487e071f55"
+      "bytes": 13860,
+      "sha256": "de0ac8eb42ce0f5d56eabc4efdf9c5874fa64e835b2c148cad8248d90b115a29"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -11559,8 +11565,8 @@
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "category": "source",
-      "bytes": 643,
-      "sha256": "13d6f73d0147fbf19471633c6f6e22b2e07f952b8b3d965261d71e12a12a6978"
+      "bytes": 709,
+      "sha256": "5159d178eba0aea9d489d78b52bc3674f11677f259efbd815e7690040bb25412"
     },
     {
       "path": "src/renderer/components/RunShellItemTray.test.tsx",
@@ -11577,8 +11583,8 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 3687,
-      "sha256": "46a752b325f0750e6d9eed451243bd7245d2694560649b8a6e0179c47a0639f3"
+      "bytes": 3905,
+      "sha256": "68d46e7984c3ddcd824c149c3ca4df9e3e728bf54e11ba13cc54e55ac5f9d1cc"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -11835,8 +11841,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 38638,
-      "sha256": "56cedce64f72e88d67dac32d8bddbcc7506c47436ee2c61aac3aa83ea0935d23"
+      "bytes": 38771,
+      "sha256": "a5d9be214b68e55c4d2f0aa470cf5f68866b12de5cfa94aa67ddcfc250a99640"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -11919,8 +11925,8 @@
     {
       "path": "src/renderer/components/tileBoardCardTint.ts",
       "category": "source",
-      "bytes": 3220,
-      "sha256": "9658ef0016aead1931d7766608c2d9e099ee5c71f8f7997e2c2392d392258346"
+      "bytes": 3257,
+      "sha256": "ad0bec9c4d6c4d5a6ec89a25c07abbfc19fc1cf0d68a2a376ddd7134dfda890a"
     },
     {
       "path": "src/renderer/components/tileBoardCardWindow.test.ts",
@@ -12639,8 +12645,8 @@
     {
       "path": "src/renderer/components/tileTextures.ts",
       "category": "source",
-      "bytes": 66264,
-      "sha256": "faf073e7bb250b21abfb06b7c6d9186a3bf4b157ffa50ea255af1462e60a07d1"
+      "bytes": 66307,
+      "sha256": "540c77e3e338b85d9a1ffe0574b3aee15f0d85bc862bf1770228190b79b81793"
     },
     {
       "path": "src/renderer/components/tileTextureWarmup.ts",
@@ -12759,8 +12765,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 2612,
-      "sha256": "bd36f5c7e35a1347d17092b1114e2c2ef169174d46333e4d751592f388947117"
+      "bytes": 3397,
+      "sha256": "cbf6f2110c6fbca7433e8f2edc73209e84250f4f9dc93eb4445ebd4ae457c0f2"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -13707,8 +13713,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 5208,
-      "sha256": "500c485e22c746e24d5a9348ad9c1fb16e192dfa24fcb312078b621868a63651"
+      "bytes": 5323,
+      "sha256": "b03869be1832a598e49e2ed0d09632ef8b17d8711aa16dcd82ec4ed121a69edc"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -13755,8 +13761,8 @@
     {
       "path": "src/renderer/store/itemDropFeed.ts",
       "category": "source",
-      "bytes": 3909,
-      "sha256": "de20e898d923d91a478d54402063453d694f883c9ca27e9d69e63cb4009301b4"
+      "bytes": 4343,
+      "sha256": "994c7f2513e410e5965bc37b6f1d536e857f5057424eb950c1fd6676ca5cd857"
     },
     {
       "path": "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -14055,8 +14061,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 28416,
-      "sha256": "a37b99bbafe2f8684c588ee54e66d7e1e6a01f05035f464f3ca1f6c995ac1f92"
+      "bytes": 29304,
+      "sha256": "0dbd32e0abc9821f28115526cf6d0a97e5b78fbb374cd3ffe336367be3962718"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -14163,8 +14169,8 @@
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "category": "source",
-      "bytes": 5515,
-      "sha256": "9dfc18dfd121b4356f835fc7631e15fe879a3fd60001f7c463d0a1aea7915329"
+      "bytes": 5986,
+      "sha256": "cf6dc4f5314b5bf7f06cc128d7b49727dea57c834fd423a2c9f453c54fbed5f2"
     },
     {
       "path": "src/renderer/ui/index.ts",
@@ -14307,8 +14313,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 65732,
-      "sha256": "7b5172270f35d1eed57c53fbc5809e62947e76f1ccfba294324030cc2dec8357"
+      "bytes": 66764,
+      "sha256": "7826de6e9aab53892dc95100ab697979d5232d09eadd89dac98f46cb684d1c42"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14397,14 +14403,14 @@
     {
       "path": "src/shared/balance-simulation.test.ts",
       "category": "test",
-      "bytes": 9257,
-      "sha256": "e5fd0be546387ac294e6f3ff395650a680cab463d086b4c06da7c9c519b1be2d"
+      "bytes": 9338,
+      "sha256": "e6647dad23fe0baa12cd0f463fc5050017ea875ba4d97081774c00d4cf38897b"
     },
     {
       "path": "src/shared/balance-simulation.ts",
       "category": "source",
-      "bytes": 20141,
-      "sha256": "627f7216bd276b227dcebc7d125f724a6837e86a0793a9db03f40ff7ed267445"
+      "bytes": 20151,
+      "sha256": "0e6ae68e15c042b0558f23514d6b7e2986e098c868cd463a5d012fe1a6603196"
     },
     {
       "path": "src/shared/blueprintAstPoc.ts",
@@ -14541,8 +14547,8 @@
     {
       "path": "src/shared/board-tile-generation-rules.ts",
       "category": "source",
-      "bytes": 5695,
-      "sha256": "0eeb44916129b76453c4ef724ecc56b4700de82a4d555397ad1772095ab606bf"
+      "bytes": 6061,
+      "sha256": "123f5008c60858278b27e2c72a58578068f6938b22d2573bcbc77ce35666c284"
     },
     {
       "path": "src/shared/board-turn-event-facts.chunk-style.test.ts",
@@ -14565,8 +14571,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 23923,
-      "sha256": "1a23a016710ded4b84dfca2a8654980d49ff6dccac31f63d2bb9928382178a4e"
+      "bytes": 24097,
+      "sha256": "12a83df86f05423b08bcc4195fe03d77876ea773e9059ff279340ba684c1510b"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -14817,8 +14823,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 53545,
-      "sha256": "1a585dc48b7ddbdcd3ba4df25c974ae58b888cec24a81bef0c6cc10ca968635b"
+      "bytes": 54196,
+      "sha256": "7c6bcbb43203738dad20efd165bb4b030f7d4b9506fcb66ac1d7c7d7ba5383d9"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14875,6 +14881,18 @@
       "sha256": "39dbe88097e37840744f2c64f20710ef4db20a8c324cecdb361ea127140849cb"
     },
     {
+      "path": "src/shared/crucible-rules.test.ts",
+      "category": "test",
+      "bytes": 7305,
+      "sha256": "c2a654fa3908496e1f7825ab6529f06853aa52880c421c43edf82fa002d8118a"
+    },
+    {
+      "path": "src/shared/crucible-rules.ts",
+      "category": "source",
+      "bytes": 8977,
+      "sha256": "6408de16f0721425d5c571eacaf6755e37f6e1baf93e051d6febe22706961b1e"
+    },
+    {
       "path": "src/shared/css-custom-properties.test.ts",
       "category": "test",
       "bytes": 4225,
@@ -14885,6 +14903,18 @@
       "category": "test",
       "bytes": 4188,
       "sha256": "eff750aff6d3606874323df68cc997154e3e3b89bb7456a493b3ec8c65cc566e"
+    },
+    {
+      "path": "src/shared/curio-rules.test.ts",
+      "category": "test",
+      "bytes": 3199,
+      "sha256": "fa87abe1d040f4e971a743a9c82b0f25cc890fef88b8c479a48e4c930978fb30"
+    },
+    {
+      "path": "src/shared/curio-rules.ts",
+      "category": "source",
+      "bytes": 3048,
+      "sha256": "a325fabd8ed96cd8d0ab4d4f85aece04b9a6e24f440014fbe274ec09f75804a1"
     },
     {
       "path": "src/shared/daily-music-composer.test.ts",
@@ -15069,14 +15099,14 @@
     {
       "path": "src/shared/findables.test.ts",
       "category": "test",
-      "bytes": 1393,
-      "sha256": "6581e50c33342515be902fa519dfecf9e5fc19cf83f7fe2c26666e08dead7cdf"
+      "bytes": 1684,
+      "sha256": "cce7657d008ae82e1f9483e04237ca5c2c6bcdcf53fdc19e97c3ac5e7334bda8"
     },
     {
       "path": "src/shared/findables.ts",
       "category": "source",
-      "bytes": 2433,
-      "sha256": "8c03334da1c000fea61c39f15ea6ff59ff579de21143267fc6a1ef962fb63646"
+      "bytes": 2760,
+      "sha256": "2843172ede899116ba6ccf83d36a16c8e7b21d63bac148e45c3366ac0339a378"
     },
     {
       "path": "src/shared/first-run-help-center.test.ts",
@@ -15261,8 +15291,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 33810,
-      "sha256": "a2ff52615b86b15bfcaf54ad89941ebf74c812a7614ef4d7ed3d6a231f530472"
+      "bytes": 34788,
+      "sha256": "342b7f9282f26b0fc831ee0849bf9c989b532b9a473dcadddc25a56def77decf"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -15303,8 +15333,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 45873,
-      "sha256": "8688f63f0307314b7330304c5daee3b7182974ae93d15007ab1e2eaa995ef6c8"
+      "bytes": 47402,
+      "sha256": "15689eab7c9ecb2072f51cdea2587be4104b1016b95a780bd1b2b2a4fe3f9ade"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -15339,8 +15369,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 124511,
-      "sha256": "40abf0355da9bcf2ec01a255938a9c6bc4c6579a340e8c30569920f6c551ae7b"
+      "bytes": 127997,
+      "sha256": "80a330e689439bcd1b575ac538c1d490eee4c2ab1a25691ebc8acc9e8cc37fe1"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -15610,7 +15640,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
       "bytes": 5803,
-      "sha256": "32dc7fcde147d3c5f95e1c6a1e899d681dec1045b384c9497ac5e8b9d9bf54a2"
+      "sha256": "6d3eb1a9ad458f77691e8ac62ed3f229befd990cbccda39e02edb30fedae2c17"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -15645,8 +15675,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 56366,
-      "sha256": "5e25eb1f2cd3867e3dfde11f84e6b1211053fc9d8f09421a2439beb6884091f5"
+      "bytes": 57301,
+      "sha256": "281ece3fecea247386d01a49ec22bfea61f566aea5609d6d562c274b429b50dc"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16209,8 +16239,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 10257,
-      "sha256": "1c6a6dc03d104a6162a0daf17a0f48049ddaf5890c67dd3c2dd9c41508f77bd1"
+      "bytes": 10285,
+      "sha256": "d389b4bfc27c27a3b287f7d7b3f81b8a7f93b69262a45a614a8baab0ae4084e0"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -16251,8 +16281,8 @@
     {
       "path": "src/shared/run-inventory-contracts.ts",
       "category": "source",
-      "bytes": 588,
-      "sha256": "b86c0c34988951832c9aad5c15bca3bb0aa20c8ad432dd8732437165c92f729b"
+      "bytes": 635,
+      "sha256": "b897f621a9c351b7254df27629a87fd6268dc0db122ea2e4cbcbdf00979686cb"
     },
     {
       "path": "src/shared/run-inventory.test.ts",
@@ -16263,8 +16293,8 @@
     {
       "path": "src/shared/run-inventory.ts",
       "category": "source",
-      "bytes": 18096,
-      "sha256": "bd200f95fdfa0bbfa10942913a3dc1cc8f78962bf9e23a56ad1e3ea3c77db228"
+      "bytes": 18874,
+      "sha256": "d8ecd53c3d2ba29f8bd73083ccfe92c6bd6ccbcdcafb32835438b66dfabad314"
     },
     {
       "path": "src/shared/run-lifecycle-machine.test.ts",
@@ -16389,14 +16419,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 9571,
-      "sha256": "a60fac898a02347a215d984b369356a618f89bfe7f06aa844caf5bbbb224a009"
+      "bytes": 9792,
+      "sha256": "cddc3c6c4c0c9283e04d7ad9dd11f0fb7cd8d407d7385f62858b54128074ceeb"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 45325,
-      "sha256": "4bca21ee79d6154817debaae8b2af860e635f37162e93955ebd4d6877a8779be"
+      "bytes": 47061,
+      "sha256": "e65eedab104970063fd066ff0f1933e441cc43265464d183a391563030cdbfa7"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -16665,8 +16695,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 83964,
-      "sha256": "afc1c97d495583e101ca4d783d2a74dd6816e2021239b725b8a20834c7715a65"
+      "bytes": 85333,
+      "sha256": "45167aa863a037fdb70f222322d6462c942a7b7d3730f14ec5b882e8f0dfb08a"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16689,8 +16719,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 161389,
-      "sha256": "b7660cc06c17f2770e5547b0b44a57bc0828bf45da2d047597ac1d497e8be110"
+      "bytes": 166075,
+      "sha256": "ce8d722add3f9dffeca19897637970454fc964a1e4b335ba09a6ac967cb7acec"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -20603,7 +20633,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1294,
+      "lineCount": 1304,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -23214,6 +23244,22 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/findableMarkerColor.ts",
+      "path": "src/renderer/components/findableMarkerColor.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 24,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
+        "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_MARKER_COLOR",
+        "symbol:src/renderer/components/findableMarkerColor.ts#findableWearsRing"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "layer": "renderer",
@@ -23595,7 +23641,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2419,
+      "lineCount": 2433,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -23672,6 +23718,7 @@
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/focusDimmedTileIds.ts",
@@ -23910,7 +23957,7 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 266,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
@@ -24007,10 +24054,11 @@
       "path": "src/renderer/components/itemDrops.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 104,
+      "lineCount": 110,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/curio-rules.ts",
         "file:src/shared/run-store-rules.ts"
       ],
       "exports": [
@@ -24034,7 +24082,7 @@
       "path": "src/renderer/components/itemEffects.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 85,
+      "lineCount": 107,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/itemEffects.ts",
@@ -24049,9 +24097,11 @@
       "path": "src/renderer/components/itemEffects.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 248,
+      "lineCount": 293,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
+        "file:src/renderer/components/cardDepartureParticles.ts",
+        "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/rng.ts"
@@ -25292,7 +25342,7 @@
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 25,
+      "lineCount": 27,
       "imports": [
         "file:src/renderer/ui/gameplayIcons.tsx"
       ],
@@ -25332,7 +25382,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 81,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -26073,12 +26123,13 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 939,
+      "lineCount": 940,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/ElementCardBack.tsx",
         "file:src/renderer/components/ElementCardMaterial.tsx",
+        "file:src/renderer/components/findableMarkerColor.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
         "file:src/renderer/components/meteorImpactMotion.ts",
@@ -26392,8 +26443,9 @@
       "path": "src/renderer/components/tileBoardCardTint.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 91,
       "imports": [
+        "file:src/renderer/components/findableMarkerColor.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/renderer/styles/theme.ts",
@@ -28571,7 +28623,7 @@
       "path": "src/renderer/components/tileTextures.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1790,
+      "lineCount": 1791,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -28587,6 +28639,7 @@
         "file:src/renderer/cardFace/staticCardTextureSize.ts",
         "file:src/renderer/components/cardStatusPaint.ts",
         "file:src/renderer/components/ElementCardBack.tsx",
+        "file:src/renderer/components/findableMarkerColor.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/realmTileMarkKey.ts",
         "file:src/renderer/styles/theme.ts",
@@ -28909,10 +28962,12 @@
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 75,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
@@ -31298,7 +31353,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 120,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -31436,10 +31491,11 @@
       "path": "src/renderer/store/itemDropFeed.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 69,
+      "lineCount": 75,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/components/screenCallouts.ts",
+        "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/oddCardBeat.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts"
@@ -32391,7 +32447,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 803,
+      "lineCount": 821,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -32425,12 +32481,14 @@
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/meteor-rules.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/realm-rules.ts",
+        "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-share-key.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/save-data.ts",
@@ -32611,10 +32669,11 @@
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 166,
+      "lineCount": 177,
       "imports": [],
       "exports": [
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBombIcon",
+        "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayCrucibleIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitBoardIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayFitIcon",
@@ -33635,9 +33694,10 @@
       "path": "src/shared/board-tile-generation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 178,
+      "lineCount": 185,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/curio-rules.ts",
         "file:src/shared/findables.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/tile-identity.ts",
@@ -33652,7 +33712,8 @@
       ],
       "testedBy": [
         "file:src/shared/bad-floor-is-quiet.test.ts",
-        "file:src/shared/board-tile-generation-rules.test.ts"
+        "file:src/shared/board-tile-generation-rules.test.ts",
+        "file:src/shared/curio-rules.test.ts"
       ]
     },
     {
@@ -33709,7 +33770,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 514,
+      "lineCount": 518,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -33717,6 +33778,7 @@
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/curio-rules.ts",
         "file:src/shared/gambit-match-rules.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-journal.ts",
@@ -34638,7 +34700,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1178,
+      "lineCount": 1189,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -34847,6 +34909,8 @@
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/colossus-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/crucible-rules.test.ts",
+        "file:src/shared/curio-rules.test.ts",
         "file:src/shared/daily-music-composer.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
@@ -35091,6 +35155,53 @@
       ]
     },
     {
+      "id": "file:src/shared/crucible-rules.test.ts",
+      "path": "src/shared/crucible-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 118,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/crucible-rules.ts",
+      "path": "src/shared/crucible-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 166,
+      "imports": [
+        "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/odd-card-rules.ts",
+        "file:src/shared/realm-weather-rules.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-array-guards.ts",
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/tile-identity.ts",
+        "file:src/shared/tile-symbol-catalog.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/crucible-rules.ts#applyCrucible",
+        "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
+        "symbol:src/shared/crucible-rules.ts#crucibleFeedbackLine",
+        "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
+        "symbol:src/shared/crucible-rules.ts#CrucibleResult",
+        "symbol:src/shared/crucible-rules.ts#crucibleTargetTileId"
+      ],
+      "testedBy": [
+        "file:src/shared/crucible-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/css-custom-properties.test.ts",
       "path": "src/shared/css-custom-properties.test.ts",
       "layer": "shared",
@@ -35109,6 +35220,47 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/curio-rules.test.ts",
+      "path": "src/shared/curio-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 60,
+      "imports": [
+        "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/curio-rules.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/game.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/curio-rules.ts",
+      "path": "src/shared/curio-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 59,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/curio-rules.ts#claimCurio",
+        "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
+        "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
+        "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+        "symbol:src/shared/curio-rules.ts#curioCharges",
+        "symbol:src/shared/curio-rules.ts#curioItemFor",
+        "symbol:src/shared/curio-rules.ts#CurioItemId",
+        "symbol:src/shared/curio-rules.ts#curioReplacesGlint"
+      ],
+      "testedBy": [
+        "file:src/shared/curio-rules.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/daily-music-composer.test.ts",
@@ -35720,7 +35872,7 @@
       "path": "src/shared/findables.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 27,
+      "lineCount": 31,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts"
@@ -35733,7 +35885,7 @@
       "path": "src/shared/findables.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 61,
+      "lineCount": 66,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -36281,6 +36433,8 @@
         "file:src/shared/board-layout-rules.test.ts",
         "file:src/shared/board-turn-event-facts.chunk-style.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
+        "file:src/shared/crucible-rules.test.ts",
+        "file:src/shared/curio-rules.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/game-over-next-run.test.ts",
@@ -36472,6 +36626,8 @@
         "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/colossus-rules.test.ts",
+        "file:src/shared/crucible-rules.test.ts",
+        "file:src/shared/curio-rules.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-coatings.test.ts",
         "file:src/shared/element-every-match.test.ts",
@@ -36578,7 +36734,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 928,
+      "lineCount": 945,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/memorize-skip-reward-rules.ts",
@@ -36588,6 +36744,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#boardTurnAnnouncementFactsSchema",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBoardTurnResolveCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayCrucibleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
@@ -36637,6 +36794,7 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
         "file:src/shared/board-layout-rules.test.ts",
         "file:src/shared/bomb-power.test.ts",
+        "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/final-pair-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -36774,7 +36932,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1093,
+      "lineCount": 1128,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
@@ -36784,6 +36942,7 @@
         "file:src/shared/board-turn-event-facts.ts",
         "file:src/shared/board-turn-transition.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
         "file:src/shared/final-pair-rules.ts",
         "file:src/shared/flip-tile-transition.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -36813,6 +36972,7 @@
       "testedBy": [
         "file:src/shared/board-layout-rules.test.ts",
         "file:src/shared/bomb-power.test.ts",
+        "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/final-pair-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/gameplay-core.test.ts",
@@ -36923,7 +37083,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3628,
+      "lineCount": 3730,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -37787,7 +37947,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 771,
+      "lineCount": 777,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -39698,7 +39858,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 243,
+      "lineCount": 244,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -39871,7 +40031,7 @@
       "path": "src/shared/run-inventory-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 25,
+      "lineCount": 27,
       "imports": [],
       "exports": [
         "symbol:src/shared/run-inventory-contracts.ts#RUN_INVENTORY_ITEM_IDS",
@@ -39899,7 +40059,7 @@
       "path": "src/shared/run-inventory.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 474,
+      "lineCount": 486,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-array-guards.ts",
@@ -40307,7 +40467,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 117,
+      "lineCount": 119,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -40320,13 +40480,14 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 764,
+      "lineCount": 791,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/elemental-loot-rules.ts",
@@ -40336,6 +40497,7 @@
         "file:src/shared/realm-rules.ts",
         "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/rng.ts",
+        "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/tile-identity.ts",
@@ -41308,7 +41470,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 670,
+      "lineCount": 684,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -41380,7 +41542,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2472,
+      "lineCount": 2547,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -41389,6 +41551,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crucible-rules.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-curio-rules.ts",
@@ -44021,8 +44184,8 @@
       "name": "playItemDropSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1279,
-      "endLine": 1280
+      "line": 1289,
+      "endLine": 1290
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playItemEffectSfx",
@@ -47001,6 +47164,30 @@
       "endLine": 33
     },
     {
+      "id": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
+      "name": "FINDABLE_BACK_TINT",
+      "kind": "value",
+      "file": "src/renderer/components/findableMarkerColor.ts",
+      "line": 15,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_MARKER_COLOR",
+      "name": "FINDABLE_MARKER_COLOR",
+      "kind": "value",
+      "file": "src/renderer/components/findableMarkerColor.ts",
+      "line": 8,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/findableMarkerColor.ts#findableWearsRing",
+      "name": "findableWearsRing",
+      "kind": "value",
+      "file": "src/renderer/components/findableMarkerColor.ts",
+      "line": 22,
+      "endLine": 23
+    },
+    {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -47253,40 +47440,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2418,
-      "endLine": 2418
+      "line": 2432,
+      "endLine": 2432
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 264,
-      "endLine": 264
+      "line": 265,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 262,
-      "endLine": 262
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 266,
-      "endLine": 266
+      "line": 267,
+      "endLine": 267
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 256,
-      "endLine": 256
+      "line": 257,
+      "endLine": 257
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -47613,8 +47800,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 264,
-      "endLine": 264
+      "line": 265,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -47669,160 +47856,160 @@
       "name": "ITEM_DROP_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 40,
-      "endLine": 46
+      "line": 41,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_COLOR",
       "name": "ITEM_DROP_RARITY_COLOR",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 23,
-      "endLine": 29
+      "line": 24,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_LABEL",
       "name": "ITEM_DROP_RARITY_LABEL",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 31,
-      "endLine": 37
+      "line": 32,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDrop",
       "name": "ItemDrop",
       "kind": "interface",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 79,
-      "endLine": 88
+      "line": 85,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropFromCallout",
       "name": "itemDropFromCallout",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 91,
-      "endLine": 103
+      "line": 97,
+      "endLine": 109
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropGlyph",
       "name": "itemDropGlyph",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 57,
-      "endLine": 77
+      "line": 60,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropGlyph",
       "name": "ItemDropGlyph",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropId",
       "name": "ItemDropId",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropRarity",
       "name": "itemDropRarity",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 50,
-      "endLine": 55
+      "line": 51,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropRarity",
       "name": "ItemDropRarity",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_MAX_CARDS",
       "name": "ITEM_EFFECT_MAX_CARDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 132,
-      "endLine": 132
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_TRAUMA",
       "name": "ITEM_EFFECT_TRAUMA",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 48,
-      "endLine": 60
+      "line": 53,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffect",
       "name": "ItemEffect",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 37,
-      "endLine": 45
+      "line": 40,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectAnchor",
       "name": "ItemEffectAnchor",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 123,
-      "endLine": 127
+      "line": 137,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectKind",
       "name": "ItemEffectKind",
       "kind": "type",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 24,
-      "endLine": 35
+      "line": 26,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectRecipe",
       "name": "itemEffectRecipe",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 138,
-      "endLine": 235
+      "line": 152,
+      "endLine": 280
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
       "name": "itemEffectsFromEvents",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 72,
-      "endLine": 121
+      "line": 78,
+      "endLine": 135
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#METEOR_IMPACT_DELAY_SECONDS",
       "name": "METEOR_IMPACT_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 130,
-      "endLine": 130
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#publishItemEffects",
       "name": "publishItemEffects",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 244,
-      "endLine": 247
+      "line": 289,
+      "endLine": 292
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
       "name": "useItemEffectChannel",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 242,
-      "endLine": 242
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -49093,32 +49280,32 @@
       "name": "RUN_SHELL_GLYPHS",
       "kind": "value",
       "file": "src/renderer/components/runShellGlyphs.tsx",
-      "line": 14,
-      "endLine": 24
+      "line": 15,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 74,
-      "endLine": 76
+      "line": 78,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
       "name": "RUN_SHELL_TOOL_CATALOG",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 49,
-      "endLine": 69
+      "line": 51,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
       "name": "RunPowerChargeField",
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 30,
-      "endLine": 38
+      "line": 31,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
@@ -49126,23 +49313,23 @@
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 16,
-      "endLine": 27
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 71,
-      "endLine": 71
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "name": "RunShellToolSpec",
       "kind": "interface",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 40,
-      "endLine": 47
+      "line": 42,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
@@ -50261,16 +50448,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 938,
-      "endLine": 938
+      "line": 939,
+      "endLine": 939
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 166,
-      "endLine": 170
+      "line": 167,
+      "endLine": 171
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -50757,16 +50944,16 @@
       "name": "applyTileBoardCardTint",
       "kind": "value",
       "file": "src/renderer/components/tileBoardCardTint.ts",
-      "line": 32,
-      "endLine": 89
+      "line": 33,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardTint.ts#TileBoardCardTintInput",
       "name": "TileBoardCardTintInput",
       "kind": "interface",
       "file": "src/renderer/components/tileBoardCardTint.ts",
-      "line": 18,
-      "endLine": 30
+      "line": 19,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCardWindow.ts#CardWindow",
@@ -53173,312 +53360,312 @@
       "name": "applyAnisotropyToCachedTileTextures",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 631,
-      "endLine": 645
+      "line": 632,
+      "endLine": 646
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#clearTileTextureCachesForDebug",
       "name": "clearTileTextureCachesForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1765,
-      "endLine": 1773
+      "line": 1766,
+      "endLine": 1774
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeFace",
       "name": "CubeFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 103,
-      "endLine": 103
+      "line": 104,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#CubeLayer",
       "name": "CubeLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 104,
-      "endLine": 104
+      "line": 105,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#FaceVariant",
       "name": "FaceVariant",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#forceIllustrationOverlayCacheVersionForTest",
       "name": "forceIllustrationOverlayCacheVersionForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1777,
-      "endLine": 1779
+      "line": 1778,
+      "endLine": 1780
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#formatTileFaceOverlayRegressionLogLine",
       "name": "formatTileFaceOverlayRegressionLogLine",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1394,
-      "endLine": 1398
+      "line": 1395,
+      "endLine": 1399
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCachedTileTextureKeysForDebug",
       "name": "getCachedTileTextureKeysForDebug",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1775,
-      "endLine": 1775
+      "line": 1776,
+      "endLine": 1776
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackGlowTexture",
       "name": "getCardBackGlowTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 712,
-      "endLine": 712
+      "line": 713,
+      "endLine": 713
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackRasterNormalMapTexture",
       "name": "getCardBackRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 672,
-      "endLine": 684
+      "line": 673,
+      "endLine": 685
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardBackSpinTexture",
       "name": "getCardBackSpinTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 715,
-      "endLine": 715
+      "line": 716,
+      "endLine": 716
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceGlowTexture",
       "name": "getCardFaceGlowTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 718,
-      "endLine": 718
+      "line": 719,
+      "endLine": 719
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceRasterNormalMapTexture",
       "name": "getCardFaceRasterNormalMapTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 657,
-      "endLine": 669
+      "line": 658,
+      "endLine": 670
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardFaceStaticTexture",
       "name": "getCardFaceStaticTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1714,
-      "endLine": 1731
+      "line": 1715,
+      "endLine": 1732
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelDisplacementTexture",
       "name": "getCardPanelDisplacementTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 804,
-      "endLine": 821
+      "line": 805,
+      "endLine": 822
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getCardPanelNormalTexture",
       "name": "getCardPanelNormalTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 751,
-      "endLine": 768
+      "line": 752,
+      "endLine": 769
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getIllustrationPipelineDebugState",
       "name": "getIllustrationPipelineDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1781,
-      "endLine": 1789
+      "line": 1782,
+      "endLine": 1790
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayPrewarmDebugState",
       "name": "getOverlayPrewarmDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1760,
-      "endLine": 1763
+      "line": 1761,
+      "endLine": 1764
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getOverlayTextureCacheDebugState",
       "name": "getOverlayTextureCacheDebugState",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1745,
-      "endLine": 1758
+      "line": 1746,
+      "endLine": 1759
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayRegressionStamp",
       "name": "getTileFaceOverlayRegressionStamp",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1376,
-      "endLine": 1392
+      "line": 1377,
+      "endLine": 1393
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTexture",
       "name": "getTileFaceOverlayTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1543,
-      "endLine": 1560
+      "line": 1544,
+      "endLine": 1561
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceOverlayTextureCacheKey",
       "name": "getTileFaceOverlayTextureCacheKey",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1357,
-      "endLine": 1365
+      "line": 1358,
+      "endLine": 1366
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceRoughnessTexture",
       "name": "getTileFaceRoughnessTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1528,
-      "endLine": 1541
+      "line": 1529,
+      "endLine": 1542
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#getTileFaceTexture",
       "name": "getTileFaceTexture",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1514,
-      "endLine": 1526
+      "line": 1515,
+      "endLine": 1527
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#invalidateVersionedTileFaceTextureCaches",
       "name": "invalidateVersionedTileFaceTextureCaches",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 281,
-      "endLine": 289
+      "line": 282,
+      "endLine": 290
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#OverlayPrewarmDebugState",
       "name": "OverlayPrewarmDebugState",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 89,
-      "endLine": 98
+      "line": 90,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#paintDistantCard",
       "name": "paintDistantCard",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1581,
-      "endLine": 1602
+      "line": 1582,
+      "endLine": 1603
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#preloadTileTextureImages",
       "name": "preloadTileTextureImages",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 436,
-      "endLine": 442
+      "line": 437,
+      "endLine": 443
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#reserveTileTextureCards",
       "name": "reserveTileTextureCards",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1568,
-      "endLine": 1570
+      "line": 1569,
+      "endLine": 1571
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#resetDemandDrivenOverlayPrewarmForTest",
       "name": "resetDemandDrivenOverlayPrewarmForTest",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1708,
-      "endLine": 1712
+      "line": 1709,
+      "endLine": 1713
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#retainTileTextureWorkingSet",
       "name": "retainTileTextureWorkingSet",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1573,
-      "endLine": 1578
+      "line": 1574,
+      "endLine": 1579
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#runDemandDrivenTileFaceOverlayPrewarmSession",
       "name": "runDemandDrivenTileFaceOverlayPrewarmSession",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1667,
-      "endLine": 1705
+      "line": 1668,
+      "endLine": 1706
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setCurrentTileFaceHeight",
       "name": "setCurrentTileFaceHeight",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1372,
-      "endLine": 1374
+      "line": 1373,
+      "endLine": 1375
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#setTileTextureSamplingQuality",
       "name": "setTileTextureSamplingQuality",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 130,
-      "endLine": 149
+      "line": 131,
+      "endLine": 150
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#subscribeTextureImageUpdates",
       "name": "subscribeTextureImageUpdates",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 1737,
-      "endLine": 1743
+      "line": 1738,
+      "endLine": 1744
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TILE_TEXTURE_IMAGE_IDS",
       "name": "TILE_TEXTURE_IMAGE_IDS",
       "kind": "value",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 320,
-      "endLine": 331
+      "line": 321,
+      "endLine": 332
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFace",
       "name": "TileFace",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 57,
-      "endLine": 57
+      "line": 58,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileFaceOverlayRegressionStamp",
       "name": "TileFaceOverlayRegressionStamp",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 79,
-      "endLine": 87
+      "line": 80,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/tileTextures.ts#TileLayer",
       "name": "TileLayer",
       "kind": "type",
       "file": "src/renderer/components/tileTextures.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/tileTextureWarmup.ts#createBoardTextureWarmupQueue",
@@ -53649,6 +53836,22 @@
       "endLine": 53
     },
     {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
+      "name": "CRUCIBLE_TOOL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 61,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
+      "name": "CURIO_DROP_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 56,
+      "endLine": 58
+    },
+    {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
       "name": "FLASH_PAIR_COPY",
       "kind": "value",
@@ -53661,8 +53864,8 @@
       "name": "METEOR_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 55,
-      "endLine": 59
+      "line": 70,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
@@ -56006,7 +56209,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 14,
-      "endLine": 117
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -56101,56 +56304,56 @@
       "name": "claimItemDropSting",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 36,
-      "endLine": 40
+      "line": 37,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#clearItemDrops",
       "name": "clearItemDrops",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 29,
-      "endLine": 32
+      "line": 30,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#dismissItemDrop",
       "name": "dismissItemDrop",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#enqueueItemDrops",
       "name": "enqueueItemDrops",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 19,
-      "endLine": 25
+      "line": 20,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#ITEM_DROP_QUEUE_LIMIT",
       "name": "ITEM_DROP_QUEUE_LIMIT",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#itemDropsBetween",
       "name": "itemDropsBetween",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 49,
-      "endLine": 68
+      "line": 50,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/store/itemDropFeed.ts#useItemDropFeed",
       "name": "useItemDropFeed",
       "kind": "value",
       "file": "src/renderer/store/itemDropFeed.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/store/levelCompleteContinuationExecutor.ts#executeContinueToNextLevel",
@@ -57149,8 +57352,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 240,
-      "endLine": 790
+      "line": 242,
+      "endLine": 808
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -57297,6 +57500,14 @@
       "endLine": 154
     },
     {
+      "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayCrucibleIcon",
+      "name": "GameplayCrucibleIcon",
+      "kind": "function",
+      "file": "src/renderer/ui/gameplayIcons.tsx",
+      "line": 157,
+      "endLine": 165
+    },
+    {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
       "name": "GameplayExitIcon",
       "kind": "function",
@@ -57349,8 +57560,8 @@
       "name": "GameplayItemsIcon",
       "kind": "function",
       "file": "src/renderer/ui/gameplayIcons.tsx",
-      "line": 157,
-      "endLine": 165
+      "line": 168,
+      "endLine": 176
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayMenuIcon",
@@ -58837,40 +59048,40 @@
       "name": "assignFindableKindsToTiles",
       "kind": "value",
       "file": "src/shared/board-tile-generation-rules.ts",
-      "line": 119,
-      "endLine": 177
+      "line": 120,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#atomicVariantForPairKey",
       "name": "atomicVariantForPairKey",
       "kind": "value",
       "file": "src/shared/board-tile-generation-rules.ts",
-      "line": 24,
-      "endLine": 30
+      "line": 25,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#countFindablePairs",
       "name": "countFindablePairs",
       "kind": "value",
       "file": "src/shared/board-tile-generation-rules.ts",
-      "line": 103,
-      "endLine": 104
+      "line": 104,
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#createTiles",
       "name": "createTiles",
       "kind": "value",
       "file": "src/shared/board-tile-generation-rules.ts",
-      "line": 52,
-      "endLine": 101
+      "line": 53,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#pickCursedPairKey",
       "name": "pickCursedPairKey",
       "kind": "value",
       "file": "src/shared/board-tile-generation-rules.ts",
-      "line": 32,
-      "endLine": 50
+      "line": 33,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/board-turn-event-facts.ts#BoardTurnAnnouncementFacts",
@@ -58893,40 +59104,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 79,
-      "endLine": 89
+      "line": 80,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 45,
-      "endLine": 50
+      "line": 46,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 58,
-      "endLine": 77
+      "line": 59,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 52,
-      "endLine": 56
+      "line": 53,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 111,
-      "endLine": 513
+      "line": 112,
+      "endLine": 517
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -60605,48 +60816,48 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 267,
-      "endLine": 299
+      "line": 270,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1050,
-      "endLine": 1050
+      "line": 1061,
+      "endLine": 1061
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1125,
-      "endLine": 1127
+      "line": 1136,
+      "endLine": 1138
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 308,
-      "endLine": 308
+      "line": 311,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 322,
-      "endLine": 322
+      "line": 325,
+      "endLine": 325
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 483,
-      "endLine": 518
+      "line": 486,
+      "endLine": 521
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -60669,40 +60880,40 @@
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 315,
-      "endLine": 315
+      "line": 318,
+      "endLine": 318
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusEvent",
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 559,
-      "endLine": 570
+      "line": 562,
+      "endLine": 573
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 525,
-      "endLine": 547
+      "line": 528,
+      "endLine": 550
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 258,
-      "endLine": 263
+      "line": 261,
+      "endLine": 266
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1133,
-      "endLine": 1138
+      "line": 1144,
+      "endLine": 1149
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -60725,16 +60936,16 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 301,
-      "endLine": 305
+      "line": 304,
+      "endLine": 308
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1151,
-      "endLine": 1177
+      "line": 1162,
+      "endLine": 1188
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -60749,16 +60960,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 469,
-      "endLine": 481
+      "line": 472,
+      "endLine": 484
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 456,
-      "endLine": 467
+      "line": 459,
+      "endLine": 470
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -60797,8 +61008,8 @@
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 250,
-      "endLine": 253
+      "line": 251,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
@@ -60806,7 +61017,7 @@
       "kind": "value",
       "file": "src/shared/contracts.ts",
       "line": 245,
-      "endLine": 248
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
@@ -60829,24 +61040,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 438,
-      "endLine": 452
+      "line": 441,
+      "endLine": 455
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 453,
-      "endLine": 453
+      "line": 456,
+      "endLine": 456
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 429,
-      "endLine": 429
+      "line": 432,
+      "endLine": 432
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -60869,32 +61080,32 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 691,
-      "endLine": 695
+      "line": 694,
+      "endLine": 698
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 697,
-      "endLine": 707
+      "line": 700,
+      "endLine": 710
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 325,
-      "endLine": 325
+      "line": 328,
+      "endLine": 328
     },
     {
       "id": "symbol:src/shared/contracts.ts#HourglassEvent",
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 551,
-      "endLine": 557
+      "line": 554,
+      "endLine": 560
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -60925,8 +61136,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 590,
-      "endLine": 635
+      "line": 593,
+      "endLine": 638
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -61037,24 +61248,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 720,
-      "endLine": 732
+      "line": 723,
+      "endLine": 735
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 734,
-      "endLine": 747
+      "line": 737,
+      "endLine": 750
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1052,
-      "endLine": 1065
+      "line": 1063,
+      "endLine": 1076
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -61165,16 +61376,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1141,
-      "endLine": 1141
+      "line": 1152,
+      "endLine": 1152
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1144,
-      "endLine": 1149
+      "line": 1155,
+      "endLine": 1160
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -61189,24 +61400,24 @@
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 264,
-      "endLine": 264
+      "line": 267,
+      "endLine": 267
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1118,
-      "endLine": 1122
+      "line": 1129,
+      "endLine": 1133
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1116,
-      "endLine": 1116
+      "line": 1127,
+      "endLine": 1127
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -61221,40 +61432,40 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1072,
-      "endLine": 1089
+      "line": 1083,
+      "endLine": 1100
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 749,
-      "endLine": 1048
+      "line": 752,
+      "endLine": 1059
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 265,
-      "endLine": 265
+      "line": 268,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 652,
-      "endLine": 689
+      "line": 655,
+      "endLine": 692
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 709,
-      "endLine": 714
+      "line": 712,
+      "endLine": 717
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -61269,8 +61480,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1091,
-      "endLine": 1110
+      "line": 1102,
+      "endLine": 1121
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -61285,16 +61496,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 572,
-      "endLine": 588
+      "line": 575,
+      "endLine": 591
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 327,
-      "endLine": 372
+      "line": 330,
+      "endLine": 375
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -61325,8 +61536,8 @@
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 374,
-      "endLine": 427
+      "line": 377,
+      "endLine": 430
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -61349,8 +61560,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 651,
-      "endLine": 651
+      "line": 654,
+      "endLine": 654
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -61373,24 +61584,24 @@
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 256,
-      "endLine": 256
+      "line": 259,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 642,
-      "endLine": 649
+      "line": 645,
+      "endLine": 652
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 637,
-      "endLine": 640
+      "line": 640,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -61631,6 +61842,118 @@
       "file": "src/shared/crash-report-summary.ts",
       "line": 13,
       "endLine": 21
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#applyCrucible",
+      "name": "applyCrucible",
+      "kind": "value",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 64,
+      "endLine": 158
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
+      "name": "CRUCIBLE_SOURCE_ID",
+      "kind": "value",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#crucibleFeedbackLine",
+      "name": "crucibleFeedbackLine",
+      "kind": "value",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 161,
+      "endLine": 165
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
+      "name": "crucibleRecastSuit",
+      "kind": "value",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 32,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#CrucibleResult",
+      "name": "CrucibleResult",
+      "kind": "interface",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 53,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/crucible-rules.ts#crucibleTargetTileId",
+      "name": "crucibleTargetTileId",
+      "kind": "value",
+      "file": "src/shared/crucible-rules.ts",
+      "line": 42,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#claimCurio",
+      "name": "claimCurio",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 48,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
+      "name": "CURIO_FROM_FLOOR",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
+      "name": "CURIO_GLINT_SHARE",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+      "name": "CURIO_ITEM_IDS",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#curioCharges",
+      "name": "curioCharges",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 38,
+      "endLine": 39
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#curioItemFor",
+      "name": "curioItemFor",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 42,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#CurioItemId",
+      "name": "CurioItemId",
+      "kind": "type",
+      "file": "src/shared/curio-rules.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#curioReplacesGlint",
+      "name": "curioReplacesGlint",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 29,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
@@ -62517,8 +62840,8 @@
       "name": "FINDABLE_REWARD_ROWS",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 32,
-      "endLine": 34
+      "line": 37,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/findables.ts#FindableRewardRow",
@@ -62533,48 +62856,48 @@
       "name": "getFindableKindLabel",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardCopy",
       "name": "getFindableRewardCopy",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardRow",
       "name": "getFindableRewardRow",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRewardText",
       "name": "getFindableRewardText",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 42,
-      "endLine": 43
+      "line": 47,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableRows",
       "name": "getFindableRows",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 45,
-      "endLine": 53
+      "line": 50,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/findables.ts#getFindableSpawnWeightRows",
       "name": "getFindableSpawnWeightRows",
       "kind": "value",
       "file": "src/shared/findables.ts",
-      "line": 55,
-      "endLine": 60
+      "line": 60,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/first-run-help-center.ts#firstRunHelpCenterComplete",
@@ -64149,184 +64472,192 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 836,
-      "endLine": 845
+      "line": 853,
+      "endLine": 862
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
       "name": "createGameplayBombCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 753,
-      "endLine": 759
+      "line": 767,
+      "endLine": 773
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayCrucibleCommand",
+      "name": "createGameplayCrucibleCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 775,
+      "endLine": 776
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 900,
-      "endLine": 909
+      "line": 917,
+      "endLine": 926
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 911,
-      "endLine": 920
+      "line": 928,
+      "endLine": 937
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 726,
-      "endLine": 743
+      "line": 740,
+      "endLine": 757
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
       "name": "createGameplayFinalPairRevealCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 926,
-      "endLine": 927
+      "line": 943,
+      "endLine": 944
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 808,
-      "endLine": 813
+      "line": 825,
+      "endLine": 830
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 829,
-      "endLine": 834
+      "line": 846,
+      "endLine": 851
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 772,
-      "endLine": 778
+      "line": 789,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGreetCurioCommand",
       "name": "createGameplayGreetCurioCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 815,
-      "endLine": 820
+      "line": 832,
+      "endLine": 837
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 868,
-      "endLine": 877
+      "line": 885,
+      "endLine": 894
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMeteorCommand",
       "name": "createGameplayMeteorCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 761,
-      "endLine": 762
+      "line": 778,
+      "endLine": 779
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 879,
-      "endLine": 890
+      "line": 896,
+      "endLine": 907
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 745,
-      "endLine": 751
+      "line": 759,
+      "endLine": 765
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 764,
-      "endLine": 770
+      "line": 781,
+      "endLine": 787
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayReflowCommand",
       "name": "createGameplayReflowCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 923,
-      "endLine": 924
+      "line": 940,
+      "endLine": 941
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 787,
-      "endLine": 793
+      "line": 804,
+      "endLine": 810
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 892,
-      "endLine": 898
+      "line": 909,
+      "endLine": 915
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 780,
-      "endLine": 785
+      "line": 797,
+      "endLine": 802
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 860,
-      "endLine": 866
+      "line": 877,
+      "endLine": 883
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 795,
-      "endLine": 806
+      "line": 812,
+      "endLine": 823
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 822,
-      "endLine": 827
+      "line": 839,
+      "endLine": 844
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 847,
-      "endLine": 858
+      "line": 864,
+      "endLine": 875
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
@@ -64373,8 +64704,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 718,
-      "endLine": 718
+      "line": 732,
+      "endLine": 732
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -64382,7 +64713,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 284,
-      "endLine": 442
+      "endLine": 443
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -64437,16 +64768,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 719,
-      "endLine": 719
+      "line": 733,
+      "endLine": 733
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 452,
-      "endLine": 716
+      "line": 453,
+      "endLine": 730
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -64501,8 +64832,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 723,
-      "endLine": 724
+      "line": 737,
+      "endLine": 738
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreBoundedMemoryPolicy",
@@ -64621,32 +64952,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 64,
-      "endLine": 69
+      "line": 65,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 71,
-      "endLine": 76
+      "line": 72,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 972,
-      "endLine": 1077
+      "line": 1004,
+      "endLine": 1112
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1079,
-      "endLine": 1092
+      "line": 1114,
+      "endLine": 1127
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -65781,24 +66112,24 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 731,
-      "endLine": 749
+      "line": 737,
+      "endLine": 755
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 752,
-      "endLine": 770
+      "line": 758,
+      "endLine": 776
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 593,
-      "endLine": 728
+      "line": 599,
+      "endLine": 734
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -65806,23 +66137,23 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 407,
-      "endLine": 462
+      "endLine": 468
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 467,
-      "endLine": 541
+      "line": 473,
+      "endLine": 547
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 546,
-      "endLine": 590
+      "line": 552,
+      "endLine": 596
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -68830,7 +69161,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 58,
-      "endLine": 234
+      "endLine": 235
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -68845,8 +69176,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 236,
-      "endLine": 242
+      "line": 237,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -69013,8 +69344,8 @@
       "name": "RUN_INVENTORY_ITEM_IDS",
       "kind": "value",
       "file": "src/shared/run-inventory-contracts.ts",
-      "line": 13,
-      "endLine": 24
+      "line": 14,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/run-inventory-contracts.ts#RunInventoryItemId",
@@ -69022,95 +69353,95 @@
       "kind": "type",
       "file": "src/shared/run-inventory-contracts.ts",
       "line": 1,
-      "endLine": 11
+      "endLine": 12
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#buildRunInventory",
       "name": "buildRunInventory",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 263,
-      "endLine": 267
+      "line": 270,
+      "endLine": 274
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#gainRunInventoryItem",
       "name": "gainRunInventoryItem",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 402,
-      "endLine": 431
+      "line": 410,
+      "endLine": 441
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunConsumableRows",
       "name": "getRunConsumableRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 234,
-      "endLine": 237
+      "line": 241,
+      "endLine": 244
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryGainFeedback",
       "name": "getRunInventoryGainFeedback",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 365,
-      "endLine": 400
+      "line": 373,
+      "endLine": 408
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryItemPayoutRows",
       "name": "getRunInventoryItemPayoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 145,
-      "endLine": 151
+      "line": 150,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryItemQuantity",
       "name": "getRunInventoryItemQuantity",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 153,
-      "endLine": 178
+      "line": 158,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryLoadoutRows",
       "name": "getRunInventoryLoadoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 244,
-      "endLine": 261
+      "line": 251,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryRows",
       "name": "getRunInventoryRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 211,
-      "endLine": 232
+      "line": 218,
+      "endLine": 239
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunLoadoutRows",
       "name": "getRunLoadoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 239,
-      "endLine": 240
+      "line": 246,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunLoadoutSummary",
       "name": "getRunLoadoutSummary",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 460,
-      "endLine": 473
+      "line": 472,
+      "endLine": 485
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#previewRunInventoryItemGain",
       "name": "previewRunInventoryItemGain",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 292,
-      "endLine": 334
+      "line": 299,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RUN_INVENTORY_CATALOG",
@@ -69118,7 +69449,7 @@
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
       "line": 51,
-      "endLine": 138
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RUN_INVENTORY_ITEM_IDS",
@@ -69133,16 +69464,16 @@
       "name": "RUN_LOADOUT_SLOT_LIMIT",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 242,
-      "endLine": 242
+      "line": 249,
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryActionResult",
       "name": "RunInventoryActionResult",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 269,
-      "endLine": 274
+      "line": 276,
+      "endLine": 281
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryDefinition",
@@ -69157,16 +69488,16 @@
       "name": "RunInventoryGainFeedback",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 286,
-      "endLine": 290
+      "line": 293,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryGainPreview",
       "name": "RunInventoryGainPreview",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 276,
-      "endLine": 284
+      "line": 283,
+      "endLine": 291
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryItemId",
@@ -69189,8 +69520,8 @@
       "name": "RunInventoryItemPayoutRow",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 140,
-      "endLine": 143
+      "line": 145,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryMutability",
@@ -69229,8 +69560,8 @@
       "name": "useRunInventoryItem",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 433,
-      "endLine": 458
+      "line": 443,
+      "endLine": 470
     },
     {
       "id": "symbol:src/shared/run-lifecycle-machine.ts#isResumableLifecycleState",
@@ -69765,48 +70096,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 156,
-      "endLine": 471
+      "line": 161,
+      "endLine": 486
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 56,
-      "endLine": 61
+      "line": 58,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 35,
-      "endLine": 54
+      "line": 37,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 483,
-      "endLine": 763
+      "line": 498,
+      "endLine": 790
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 72,
-      "endLine": 139
+      "line": 74,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 63,
-      "endLine": 70
+      "line": 65,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -71229,16 +71560,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 666,
-      "endLine": 669
+      "line": 680,
+      "endLine": 683
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 646,
-      "endLine": 651
+      "line": 660,
+      "endLine": 665
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -71246,7 +71577,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 634
+      "endLine": 648
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -71269,8 +71600,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 636,
-      "endLine": 637
+      "line": 650,
+      "endLine": 651
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -71285,16 +71616,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 660,
-      "endLine": 663
+      "line": 674,
+      "endLine": 677
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 640,
-      "endLine": 643
+      "line": 654,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -71381,112 +71712,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2431,
-      "endLine": 2431
+      "line": 2506,
+      "endLine": 2506
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2300,
-      "endLine": 2408
+      "line": 2371,
+      "endLine": 2483
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2437,
-      "endLine": 2442
+      "line": 2512,
+      "endLine": 2517
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2421,
-      "endLine": 2421
+      "line": 2496,
+      "endLine": 2496
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 441,
-      "endLine": 2287
+      "line": 446,
+      "endLine": 2358
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2445,
-      "endLine": 2451
+      "line": 2520,
+      "endLine": 2526
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2471,
-      "endLine": 2471
+      "line": 2546,
+      "endLine": 2546
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 202,
-      "endLine": 219
+      "line": 207,
+      "endLine": 224
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 52,
-      "endLine": 158
+      "line": 53,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2410,
-      "endLine": 2413
+      "line": 2485,
+      "endLine": 2488
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 195,
-      "endLine": 200
+      "line": 200,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 160,
-      "endLine": 193
+      "line": 164,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2424,
-      "endLine": 2428
+      "line": 2499,
+      "endLine": 2503
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2453,
-      "endLine": 2469
+      "line": 2528,
+      "endLine": 2544
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -73099,6 +73430,17 @@
   ],
   "content": [
     {
+      "id": "content:findable.curio",
+      "contentId": "curio",
+      "kind": "findable",
+      "registry": "FINDABLE_REWARD_ROW_ORDER",
+      "expectedMechanicId": "findable.curio",
+      "source": {
+        "path": "src/shared/findables.ts",
+        "line": 14
+      }
+    },
+    {
       "id": "content:findable.meteor_shard",
       "contentId": "meteor_shard",
       "kind": "findable",
@@ -73128,7 +73470,18 @@
       "expectedMechanicId": "inventory.contract_loadout",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
+      }
+    },
+    {
+      "id": "content:inventory_item.crucible_charge",
+      "contentId": "crucible_charge",
+      "kind": "inventory_item",
+      "registry": "RUN_INVENTORY_ITEM_IDS",
+      "expectedMechanicId": "inventory.crucible_charge",
+      "source": {
+        "path": "src/shared/run-inventory-contracts.ts",
+        "line": 14
       }
     },
     {
@@ -73139,7 +73492,7 @@
       "expectedMechanicId": "inventory.flash_pair_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73150,7 +73503,7 @@
       "expectedMechanicId": "inventory.gambit_token",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73161,7 +73514,7 @@
       "expectedMechanicId": "inventory.meteor_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73172,7 +73525,7 @@
       "expectedMechanicId": "inventory.mutator_loadout",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73183,7 +73536,7 @@
       "expectedMechanicId": "inventory.peek_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73194,7 +73547,7 @@
       "expectedMechanicId": "inventory.region_shuffle_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73205,7 +73558,7 @@
       "expectedMechanicId": "inventory.shuffle_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73216,7 +73569,7 @@
       "expectedMechanicId": "inventory.undo_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     },
     {
@@ -73227,7 +73580,7 @@
       "expectedMechanicId": "inventory.wild_match_token",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 13
+        "line": 14
       }
     }
   ],
@@ -73253,7 +73606,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/renderer/copy/chainBeat.ts",
@@ -73376,7 +73729,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 16
+          "line": 17
         },
         {
           "path": "src/renderer/copy/comboHeatPerksCopy.ts",
@@ -73398,7 +73751,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 54
+          "line": 56
         }
       ],
       "enables": [
@@ -73446,7 +73799,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 43
         }
       ],
       "enables": [
@@ -73493,7 +73846,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 43
         }
       ],
       "enables": [
@@ -73540,7 +73893,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 43
         }
       ],
       "enables": [
@@ -73565,7 +73918,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 14
+          "line": 15
         },
         {
           "path": "src/renderer/copy/lanternLightBeat.ts",
@@ -73604,7 +73957,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/renderer/components/tileBoardPresentationState.ts",
@@ -73645,7 +73998,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 40
+          "line": 41
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
@@ -73663,7 +74016,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 59
+          "line": 61
         }
       ],
       "enables": [
@@ -73688,7 +74041,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 22
+          "line": 23
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -73714,7 +74067,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 59
+          "line": 61
         }
       ],
       "enables": [
@@ -73742,7 +74095,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -73776,7 +74129,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 42
+          "line": 44
         }
       ],
       "enables": [
@@ -73798,7 +74151,7 @@
       "evidence": [
         {
           "path": "src/shared/board-tile-generation-rules.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/tile-identity.ts",
@@ -73848,7 +74201,7 @@
       "evidence": [
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
@@ -73864,7 +74217,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -73917,7 +74270,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -73992,7 +74345,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 38
+          "line": 40
         }
       ],
       "enables": [
@@ -74018,7 +74371,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 6
+          "line": 8
         }
       ],
       "tests": [
@@ -74028,7 +74381,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 39
+          "line": 41
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -74070,7 +74423,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 59
+          "line": 61
         }
       ],
       "enables": [
@@ -74167,6 +74520,53 @@
       ]
     },
     {
+      "id": "mechanic:findable.curio",
+      "mechanicId": "findable.curio",
+      "label": "Curio Findable",
+      "kind": "findable",
+      "role": "remembered_pair_grants_a_curio_item",
+      "evidence": [
+        {
+          "path": "src/shared/curio-rules.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/board-tile-generation-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/board-turn-transition.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/itemDropFeed.ts",
+          "line": 3
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/curio-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/findables.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [
+        "inventory.crucible_charge"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "matched-pair-only",
+        "face-down-carrier-unmarked"
+      ]
+    },
+    {
       "id": "mechanic:findable.hourglass_pair",
       "mechanicId": "findable.hourglass_pair",
       "label": "Hourglass pair",
@@ -74179,7 +74579,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -74217,7 +74617,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 42
+          "line": 44
         }
       ],
       "enables": [],
@@ -74240,7 +74640,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/renderer/store/itemDropFeed.ts",
@@ -74325,7 +74725,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 38
+          "line": 39
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -74382,7 +74782,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 20
+          "line": 21
         },
         {
           "path": "src/renderer/copy/lookingGlassBeat.ts",
@@ -74462,7 +74862,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 19
+          "line": 20
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -74638,6 +75038,54 @@
       ]
     },
     {
+      "id": "mechanic:inventory.crucible_charge",
+      "mechanicId": "inventory.crucible_charge",
+      "label": "Crucible Charge Inventory",
+      "kind": "inventory",
+      "role": "melt_a_pair_recast_its_element",
+      "evidence": [
+        {
+          "path": "src/shared/crucible-rules.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/components/runShellToolCatalog.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/components/itemEffects.ts",
+          "line": 29
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/crucible-rules.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 37
+        }
+      ],
+      "enables": [
+        "objective.floor_clear"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "never-the-last-pair",
+        "whole-pairs-recast-in-place",
+        "realm-held-cards-keep-their-element"
+      ]
+    },
+    {
       "id": "mechanic:inventory.flash_pair_charge",
       "mechanicId": "inventory.flash_pair_charge",
       "label": "Flash Pair Charge",
@@ -74650,7 +75098,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -74685,11 +75133,11 @@
       "evidence": [
         {
           "path": "src/shared/run-inventory.ts",
-          "line": 102
+          "line": 107
         },
         {
           "path": "src/shared/run-creation-rules.ts",
-          "line": 143
+          "line": 144
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -74745,7 +75193,7 @@
         },
         {
           "path": "src/renderer/components/itemEffects.ts",
-          "line": 10
+          "line": 12
         }
       ],
       "tests": [
@@ -74839,7 +75287,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/power-verbs.ts",
@@ -74882,7 +75330,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -74954,7 +75402,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 7
+          "line": 8
         }
       ],
       "tests": [
@@ -74990,11 +75438,11 @@
       "evidence": [
         {
           "path": "src/shared/run-inventory.ts",
-          "line": 93
+          "line": 98
         },
         {
           "path": "src/shared/run-creation-rules.ts",
-          "line": 142
+          "line": 143
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -75041,7 +75489,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 41
+          "line": 42
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -75308,7 +75756,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -75348,7 +75796,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75389,7 +75837,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -75458,7 +75906,7 @@
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
-          "line": 59
+          "line": 63
         },
         {
           "path": "src/renderer/copy/zoneToolCopy.ts",
@@ -75480,7 +75928,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 56
+          "line": 58
         }
       ],
       "enables": [
@@ -75507,7 +75955,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75561,7 +76009,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 12
+          "line": 13
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -75603,7 +76051,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75653,7 +76101,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75698,7 +76146,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75749,7 +76197,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -75798,7 +76246,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 41
+          "line": 42
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -75857,7 +76305,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -76040,7 +76488,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 807
+          "line": 839
         }
       ],
       "tests": [
@@ -76070,7 +76518,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -76460,6 +76908,17 @@
       ]
     },
     {
+      "id": "state:crucibleCharges",
+      "name": "crucibleCharges",
+      "readBy": [
+        "mechanic:inventory.crucible_charge"
+      ],
+      "writtenBy": [
+        "mechanic:findable.curio",
+        "mechanic:inventory.crucible_charge"
+      ]
+    },
+    {
       "id": "state:currentLevelScore",
       "name": "currentLevelScore",
       "readBy": [
@@ -76602,6 +77061,7 @@
         "mechanic:board.chain_chunk_fever",
         "mechanic:core.gameplay_commands",
         "mechanic:feedback.gameplay_hud",
+        "mechanic:findable.curio",
         "mechanic:findable.meteor_shard",
         "mechanic:findable.score_glint",
         "mechanic:inventory.wild_match_token",
@@ -76753,6 +77213,7 @@
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
+        "mechanic:inventory.crucible_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:power.bomb",
         "mechanic:power.flash_pair",
@@ -76782,6 +77243,7 @@
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:core.gameplay_commands",
+        "mechanic:inventory.crucible_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:power.bomb",
         "mechanic:power.flash_pair",
@@ -76963,6 +77425,7 @@
       "name": "matchedFindables",
       "readBy": [
         "mechanic:core.gameplay_commands",
+        "mechanic:findable.curio",
         "mechanic:findable.meteor_shard",
         "mechanic:findable.score_glint"
       ],
@@ -76980,6 +77443,7 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:hazard.colossus",
         "mechanic:hazard.void_spew",
+        "mechanic:inventory.crucible_charge",
         "mechanic:power.bomb"
       ]
     },
@@ -77129,6 +77593,7 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:hazard.magpie_thief",
         "mechanic:hazard.restless_floor",
+        "mechanic:inventory.crucible_charge",
         "mechanic:power.bomb",
         "mechanic:power.wild_match"
       ],
@@ -77489,6 +77954,7 @@
       "name": "runStatus",
       "readBy": [
         "mechanic:core.board_turn_resolution",
+        "mechanic:inventory.crucible_charge",
         "mechanic:power.bomb",
         "mechanic:power.ignition_zone",
         "mechanic:power.undo_resolve"
@@ -77637,6 +78103,7 @@
         "mechanic:board.turncoat_pair",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
+        "mechanic:findable.curio",
         "mechanic:findable.hourglass_pair",
         "mechanic:findable.meteor_shard",
         "mechanic:findable.score_glint",
@@ -77646,6 +78113,7 @@
         "mechanic:hazard.restless_floor",
         "mechanic:hazard.skittish_cards",
         "mechanic:hazard.void_spew",
+        "mechanic:inventory.crucible_charge",
         "mechanic:inventory.meteor_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:objective.floor_clear",
@@ -77677,6 +78145,7 @@
         "mechanic:hazard.restless_floor",
         "mechanic:hazard.skittish_cards",
         "mechanic:hazard.void_spew",
+        "mechanic:inventory.crucible_charge",
         "mechanic:inventory.meteor_charge",
         "mechanic:power.bomb",
         "mechanic:power.ignition_zone",
@@ -78030,6 +78499,12 @@
       "label": "bridges one remembered target toward completion"
     },
     {
+      "id": "declared_by:content:findable.curio->file:src/shared/findables.ts",
+      "source": "content:findable.curio",
+      "target": "file:src/shared/findables.ts",
+      "kind": "declared_by"
+    },
+    {
       "id": "declared_by:content:findable.meteor_shard->file:src/shared/findables.ts",
       "source": "content:findable.meteor_shard",
       "target": "file:src/shared/findables.ts",
@@ -78044,6 +78519,12 @@
     {
       "id": "declared_by:content:inventory_item.contract_loadout->file:src/shared/run-inventory-contracts.ts",
       "source": "content:inventory_item.contract_loadout",
+      "target": "file:src/shared/run-inventory-contracts.ts",
+      "kind": "declared_by"
+    },
+    {
+      "id": "declared_by:content:inventory_item.crucible_charge->file:src/shared/run-inventory-contracts.ts",
+      "source": "content:inventory_item.crucible_charge",
       "target": "file:src/shared/run-inventory-contracts.ts",
       "kind": "declared_by"
     },
@@ -78220,6 +78701,13 @@
       "label": "flash pair charge availability"
     },
     {
+      "id": "displays:mechanic:findable.curio->mechanic:feedback.gameplay_hud:the violet corner ring, and the item it held as an epic drop",
+      "source": "mechanic:findable.curio",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the violet corner ring, and the item it held as an epic drop"
+    },
+    {
       "id": "displays:mechanic:findable.hourglass_pair->mechanic:feedback.gameplay_hud:the card shows its sand, the key says the prize, and a catch is stamped and announced",
       "source": "mechanic:findable.hourglass_pair",
       "target": "mechanic:feedback.gameplay_hud",
@@ -78288,6 +78776,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows locked restrictions beside affected powers"
+    },
+    {
+      "id": "displays:mechanic:inventory.crucible_charge->mechanic:feedback.gameplay_hud:the crucible tool and count, the melt, the recast wave, shake and sound",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the crucible tool and count, the melt, the recast wave, shake and sound"
     },
     {
       "id": "displays:mechanic:inventory.gambit_token->mechanic:feedback.gameplay_hud:shows whether the floor rescue remains",
@@ -78469,6 +78964,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "reward copy"
+    },
+    {
+      "id": "enables:mechanic:inventory.crucible_charge->mechanic:objective.floor_clear:melts a pair, never the last one",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "enables",
+      "label": "melts a pair, never the last one"
     },
     {
       "id": "enables:mechanic:inventory.flash_pair_charge->mechanic:power.flash_pair:funds one deterministic pair reveal",
@@ -81972,6 +82474,24 @@
       "id": "exports:src/renderer/components/emberDrift.ts->symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
       "source": "file:src/renderer/components/emberDrift.ts",
       "target": "symbol:src/renderer/components/emberDrift.ts#emberMoteCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/findableMarkerColor.ts->symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
+      "source": "file:src/renderer/components/findableMarkerColor.ts",
+      "target": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/findableMarkerColor.ts->symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_MARKER_COLOR",
+      "source": "file:src/renderer/components/findableMarkerColor.ts",
+      "target": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_MARKER_COLOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/findableMarkerColor.ts->symbol:src/renderer/components/findableMarkerColor.ts#findableWearsRing",
+      "source": "file:src/renderer/components/findableMarkerColor.ts",
+      "target": "symbol:src/renderer/components/findableMarkerColor.ts#findableWearsRing",
       "kind": "exports"
     },
     {
@@ -86961,6 +87481,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
       "source": "file:src/renderer/copy/boardPowerCopy.ts",
       "target": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
@@ -89694,6 +90226,12 @@
       "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBombIcon",
       "source": "file:src/renderer/ui/gameplayIcons.tsx",
       "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBombIcon",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayCrucibleIcon",
+      "source": "file:src/renderer/ui/gameplayIcons.tsx",
+      "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayCrucibleIcon",
       "kind": "exports"
     },
     {
@@ -92949,6 +93487,90 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#applyCrucible",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#applyCrucible",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#crucibleFeedbackLine",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#crucibleFeedbackLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#CrucibleResult",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#CrucibleResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crucible-rules.ts->symbol:src/shared/crucible-rules.ts#crucibleTargetTileId",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "symbol:src/shared/crucible-rules.ts#crucibleTargetTileId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#claimCurio",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#claimCurio",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#CURIO_ITEM_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#curioCharges",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#curioCharges",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#curioItemFor",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#curioItemFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#CurioItemId",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#CurioItemId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#curioReplacesGlint",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#curioReplacesGlint",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
       "source": "file:src/shared/daily-music-composer.ts",
       "target": "symbol:src/shared/daily-music-composer.ts#composeDailyPiece",
@@ -94842,6 +95464,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayCrucibleCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayCrucibleCommand",
       "kind": "exports"
     },
     {
@@ -101610,6 +102238,13 @@
       "label": "every fifth link earns a miss"
     },
     {
+      "id": "grants:mechanic:findable.curio->mechanic:inventory.crucible_charge:a matched Curio puts a crucible in hand",
+      "source": "mechanic:findable.curio",
+      "target": "mechanic:inventory.crucible_charge",
+      "kind": "grants",
+      "label": "a matched Curio puts a crucible in hand"
+    },
+    {
       "id": "grants:mechanic:mode.wild_run->mechanic:inventory.wild_match_token:starts the run with one wildcard spend",
       "source": "mechanic:mode.wild_run",
       "target": "mechanic:inventory.wild_match_token",
@@ -102199,6 +102834,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:findable.curio->file:src/renderer/store/itemDropFeed.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/renderer/store/itemDropFeed.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.curio->file:src/shared/board-tile-generation-rules.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.curio->file:src/shared/board-turn-transition.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/board-turn-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.curio->file:src/shared/curio-rules.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/curio-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:findable.hourglass_pair->file:src/renderer/components/cardStatusPaint.ts",
       "source": "mechanic:findable.hourglass_pair",
       "target": "file:src/renderer/components/cardStatusPaint.ts",
@@ -102466,6 +103125,30 @@
       "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/run-inventory.ts",
       "source": "mechanic:inventory.contract_loadout",
       "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.crucible_charge->file:src/renderer/components/itemEffects.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.crucible_charge->file:src/renderer/components/runShellToolCatalog.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.crucible_charge->file:src/shared/crucible-rules.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/shared/crucible-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.crucible_charge->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -106843,6 +107526,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/findableMarkerColor.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/findableMarkerColor.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/FloorClearBeat.test.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
@@ -108019,6 +108708,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/crucible-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/crucible-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/floor-mutator-schedule.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/floor-mutator-schedule.ts",
@@ -108397,6 +109092,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/itemDrops.ts->src/shared/curio-rules.ts",
+      "source": "file:src/renderer/components/itemDrops.ts",
+      "target": "file:src/shared/curio-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/itemDrops.ts->src/shared/run-store-rules.ts",
       "source": "file:src/renderer/components/itemDrops.ts",
       "target": "file:src/shared/run-store-rules.ts",
@@ -108430,6 +109131,18 @@
       "id": "imports:src/renderer/components/itemEffects.ts->src/renderer/components/boardParticleSystem.ts",
       "source": "file:src/renderer/components/itemEffects.ts",
       "target": "file:src/renderer/components/boardParticleSystem.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/itemEffects.ts->src/renderer/components/cardDepartureParticles.ts",
+      "source": "file:src/renderer/components/itemEffects.ts",
+      "target": "file:src/renderer/components/cardDepartureParticles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/itemEffects.ts->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/itemEffects.ts",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
       "kind": "imports"
     },
     {
@@ -110563,6 +111276,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/findableMarkerColor.ts",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/findableMarkerColor.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/gameplayRenderProfile.ts",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -111124,6 +111843,12 @@
       "id": "imports:src/renderer/components/tileBoardCardTint.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileBoardCardTint.test.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardCardTint.ts->src/renderer/components/findableMarkerColor.ts",
+      "source": "file:src/renderer/components/tileBoardCardTint.ts",
+      "target": "file:src/renderer/components/findableMarkerColor.ts",
       "kind": "imports"
     },
     {
@@ -113491,6 +114216,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/findableMarkerColor.ts",
+      "source": "file:src/renderer/components/tileTextures.ts",
+      "target": "file:src/renderer/components/findableMarkerColor.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileTextures.ts->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/tileTextures.ts",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -115201,6 +115932,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/itemDropFeed.ts->src/renderer/copy/boardPowerCopy.ts",
+      "source": "file:src/renderer/store/itemDropFeed.ts",
+      "target": "file:src/renderer/copy/boardPowerCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/itemDropFeed.ts->src/renderer/copy/oddCardBeat.ts",
       "source": "file:src/renderer/store/itemDropFeed.ts",
       "target": "file:src/renderer/copy/oddCardBeat.ts",
@@ -116557,6 +117294,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/crucible-rules.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/crucible-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -116590,6 +117333,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/realm-rules.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -117637,6 +118386,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-tile-generation-rules.ts->src/shared/curio-rules.ts",
+      "source": "file:src/shared/board-tile-generation-rules.ts",
+      "target": "file:src/shared/curio-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-tile-generation-rules.ts->src/shared/findables.ts",
       "source": "file:src/shared/board-tile-generation-rules.ts",
       "target": "file:src/shared/findables.ts",
@@ -117754,6 +118509,12 @@
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/contracts.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/curio-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/curio-rules.ts",
       "kind": "imports"
     },
     {
@@ -118774,6 +119535,150 @@
       "id": "imports:src/shared/crash-report-summary.ts->src/shared/contracts.ts",
       "source": "file:src/shared/crash-report-summary.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/crucible-rules.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/crucible-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.test.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/crucible-rules.test.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/board-tile-generation-rules.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/element-alchemy-rules.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/odd-card-rules.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/odd-card-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/run-array-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/tile-identity.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/tile-symbol-catalog.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/tile-symbol-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.test.ts->src/shared/board-tile-generation-rules.ts",
+      "source": "file:src/shared/curio-rules.test.ts",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/curio-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.test.ts->src/shared/curio-rules.ts",
+      "source": "file:src/shared/curio-rules.test.ts",
+      "target": "file:src/shared/curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/curio-rules.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/curio-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/curio-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -120520,6 +121425,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/contracts.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/crucible-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/crucible-rules.ts",
       "kind": "imports"
     },
     {
@@ -123781,6 +124692,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/crucible-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/crucible-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/element-alchemy-rules.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/element-alchemy-rules.ts",
@@ -123832,6 +124749,12 @@
       "id": "imports:src/shared/run-soak.ts->src/shared/rng.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -124888,6 +125811,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/contracts.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/crucible-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/crucible-rules.ts",
       "kind": "imports"
     },
     {
@@ -126173,6 +127102,13 @@
       "label": "new pairs fill cleared cells and every face-down card moves"
     },
     {
+      "id": "modifies:mechanic:inventory.crucible_charge->mechanic:board.chain_chunk_fever:a melt is not a match: no chain, no pop",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "a melt is not a match: no chain, no pop"
+    },
+    {
       "id": "modifies:mechanic:inventory.mutator_loadout->mechanic:phase.memorize:projects timing mutators into the study window",
       "source": "mechanic:inventory.mutator_loadout",
       "target": "mechanic:phase.memorize",
@@ -127120,6 +128056,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:findable.curio->state:matchedFindables",
+      "source": "mechanic:findable.curio",
+      "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:findable.curio->state:tileStates",
+      "source": "mechanic:findable.curio",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:findable.hourglass_pair->state:pairCount",
       "source": "mechanic:findable.hourglass_pair",
       "target": "state:pairCount",
@@ -127351,6 +128299,30 @@
       "id": "reads:mechanic:inventory.contract_loadout->state:noShuffle",
       "source": "mechanic:inventory.contract_loadout",
       "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.crucible_charge->state:crucibleCharges",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:crucibleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.crucible_charge->state:pairKeys",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:pairKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.crucible_charge->state:runStatus",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:runStatus",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.crucible_charge->state:tileStates",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:tileStates",
       "kind": "reads"
     },
     {
@@ -128456,6 +129428,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:findable.curio->file:src/shared/curio-rules.test.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:findable.curio->file:src/shared/findables.test.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/findables.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:findable.curio->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:findable.curio",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:findable.hourglass_pair->file:src/shared/odd-card-rules.test.ts",
       "source": "mechanic:findable.hourglass_pair",
       "target": "file:src/shared/odd-card-rules.test.ts",
@@ -128609,6 +129599,24 @@
       "id": "tested_by:mechanic:inventory.contract_loadout->file:src/shared/softlock-generator-contract.test.ts",
       "source": "mechanic:inventory.contract_loadout",
       "target": "file:src/shared/softlock-generator-contract.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.crucible_charge->file:src/shared/crucible-rules.test.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.crucible_charge->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.crucible_charge->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -132485,6 +133493,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-tile-generation-rules.ts->file:src/shared/curio-rules.test.ts",
+      "source": "file:src/shared/board-tile-generation-rules.ts",
+      "target": "file:src/shared/curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-turn-event-facts.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "source": "file:src/shared/board-turn-event-facts.ts",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -133445,6 +134459,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/curio-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/daily-music-composer.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/daily-music-composer.test.ts",
@@ -134024,6 +135050,18 @@
       "id": "tested_by:src/shared/crash-report-summary.ts->file:src/shared/crash-report-summary.test.ts",
       "source": "file:src/shared/crash-report-summary.ts",
       "target": "file:src/shared/crash-report-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/crucible-rules.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/crucible-rules.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/curio-rules.ts->file:src/shared/curio-rules.test.ts",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "file:src/shared/curio-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -134639,6 +135677,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/curio-rules.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/elemental-loot-rules.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/elemental-loot-rules.test.ts",
@@ -134846,6 +135896,18 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/colossus-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/colossus-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/curio-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/curio-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -135059,6 +136121,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/final-pair-rules.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/final-pair-rules.test.ts",
@@ -135146,6 +136214,12 @@
       "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/bomb-power.test.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/bomb-power.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/crucible-rules.test.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/crucible-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138358,6 +139432,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:findable.curio->state:crucibleCharges",
+      "source": "mechanic:findable.curio",
+      "target": "state:crucibleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:findable.curio->state:feedbackLines",
+      "source": "mechanic:findable.curio",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:findable.hourglass_pair->state:hourglassesCaughtThisRun",
       "source": "mechanic:findable.hourglass_pair",
       "target": "state:hourglassesCaughtThisRun",
@@ -138523,6 +139609,36 @@
       "id": "writes:mechanic:hazard.void_spew->state:voidSpewsThisFloor",
       "source": "mechanic:hazard.void_spew",
       "target": "state:voidSpewsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.crucible_charge->state:crucibleCharges",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:crucibleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.crucible_charge->state:gameplayCommands",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:gameplayCommands",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.crucible_charge->state:gameplayEvents",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.crucible_charge->state:matchedPairs",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:matchedPairs",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.crucible_charge->state:tileStates",
+      "source": "mechanic:inventory.crucible_charge",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
