@@ -12633,14 +12633,14 @@
     {
       "path": "src/renderer/components/TutorialHall.module.css",
       "category": "source",
-      "bytes": 4871,
-      "sha256": "dd74bb603ac5ac664f4e6036263687a57316f5278e9b48396b76a98cec2407ff"
+      "bytes": 4695,
+      "sha256": "8f6660c88104a330f4699d5ce7ae525c01d3fb9c03e4750ba1d900befc112abd"
     },
     {
       "path": "src/renderer/components/TutorialHall.tsx",
       "category": "source",
-      "bytes": 11248,
-      "sha256": "dcbd850b47a899de26785bed983c3a765a736957835cf1a5200b25217c8e24c7"
+      "bytes": 11319,
+      "sha256": "009f443b2a1dcbb7a537839f2f35bfaa96512254f1114df72ee96b13f645258b"
     },
     {
       "path": "src/renderer/components/tutorialHallContext.ts",
