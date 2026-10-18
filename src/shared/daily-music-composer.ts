@@ -125,7 +125,7 @@ const PAD_TONIC = 57;
 const LEAD_TONIC = 69;
 
 const pick = <T>(rng: () => number, items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
-const between = (rng: () => number, low: number, high: number): number => low + Math.floor(rng() * (high - low + 1));
+const between = (rng: () => number, low: number, high: number): number => low + pickRngIndex(rng, high - low + 1);
 
 /** The MIDI pitch of a scale degree (which may run past seven, into the next octave). */
 export const degreePitch = (mode: readonly number[], degree: number, tonic: number): number => {
