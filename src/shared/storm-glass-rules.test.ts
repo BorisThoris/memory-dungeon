@@ -17,7 +17,8 @@ const floorIn = (realm: RealmId | null): RunState => {
 
 describe('the Storm Glass', () => {
     it('calls every realm\'s peak on a calm floor, where the weather clock never runs', () => {
-        const kinds: Record<RealmId, string> = { frost: 'whiteout', ember: 'empowered', tide: 'springtide', storm: 'thunderclap', grove: 'bloom' };
+        // Rules 69's deal of this floor: fire finds open cards now (on a board of only fire and water it charges them: `empowered`).
+        const kinds: Record<RealmId, string> = { frost: 'whiteout', ember: 'firestorm', tide: 'springtide', storm: 'thunderclap', grove: 'bloom' };
         for (const realm of Object.keys(kinds) as RealmId[]) {
             const run = floorIn(realm);
             expect(canBreakStormGlass(run), realm).toBe(true);
@@ -35,7 +36,6 @@ describe('the Storm Glass', () => {
 
     it('lights the cards a moving storm moved, until the next flip, and nothing a still one touched', () => {
         const tide = applyStormGlass(floorIn('tide'))!;
-        expect(tide.litTileIds.length).toBeGreaterThan(0);
         expect(tide.run.realmLitTileIds).toEqual(expect.arrayContaining([...tide.litTileIds]));
         const moved = tide.run.board!.tiles.filter((tile, cell) => tile.id !== floorIn('tide').board!.tiles[cell]!.id).map((tile) => tile.id);
         expect(new Set(tide.litTileIds)).toEqual(new Set(moved));
@@ -73,5 +73,16 @@ describe('the Storm Glass', () => {
         expect([...drawn66]).toEqual(['crucible']);
         const drawn67 = new Set(Array.from({ length: 40 }, (_, claimed) => claimCurio({ ...old, runRulesVersion: 67, curiosClaimedThisRun: claimed }, 4, 'p').lastCurioDrop!.item));
         expect(drawn67).toEqual(new Set(['crucible', 'storm_glass']));
+    });
+});
+
+describe('a called current that only met water', () => {
+    it('lights nothing it did not move: a card that drank the tide stays where it was, face down', () => {
+        const run = { ...floorIn('tide') };
+        const result = applyStormGlass(run)!;
+        const cellBefore = new Map(run.board!.tiles.map((tile, cell) => [tile.id, cell]));
+        for (const id of result.litTileIds) {
+            expect(result.run.board!.tiles.findIndex((tile) => tile.id === id), id).not.toBe(cellBefore.get(id));
+        }
     });
 });

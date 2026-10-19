@@ -84,6 +84,8 @@ export interface AppState {
     useCrucible: () => void;
     /** Break a storm glass: the realm's peak weather now (`storm-glass-rules.ts`). */
     useStormGlass: () => void;
+    /** Ring a still bell: the realm lets go of its cards, then answers (`still-bell-rules.ts`). */
+    useStillBell: () => void;
     /** Take up the Miser's Purse a Curio offered (`misers-purse-rules.ts`). */
     takeMisersPurse: () => void;
     armMeteor: () => void;

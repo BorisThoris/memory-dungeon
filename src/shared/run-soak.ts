@@ -1,3 +1,4 @@
+import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -88,6 +89,8 @@ export interface SoakRunReport {
     stormGlassesBroken: number;
     /** True when the run carried the Miser's Purse (`curio-rules.ts`) at its end. */
     carriedMisersPurse: boolean;
+    /** Still bells rung (`still-bell-rules.ts`), whenever the realm held cards. */
+    stillBellsRung: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
@@ -279,6 +282,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
             ['bombCharges', run.bombCharges],
             ['crucibleCharges', run.crucibleCharges ?? 0],
             ['stormGlassCharges', run.stormGlassCharges ?? 0],
+            ['stillBellCharges', run.stillBellCharges ?? 0],
             ['gold', run.gold ?? 0],
             ['turnsThisFloor', run.turnsThisFloor],
             ['totalScore', run.stats.totalScore],
@@ -351,6 +355,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.turnsThisFloor !== before.turnsThisFloor) return 'a storm glass counted a turn';
         if (run.stats.mismatches !== before.stats.mismatches) return 'a storm glass counted a miss';
         if ((run.stormGlassCharges ?? 0) !== (before.stormGlassCharges ?? 0) - 1) return `glasses ${before.stormGlassCharges} -> ${run.stormGlassCharges}`;
+        if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
+        return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
+    },
+    'a still bell costs one bell, no turn, no miss, and leaves the weather clock where it was': (before, run, action) => {
+        if (!before?.board || !run.board || action !== 'still-bell') return null;
+        if (run.turnsThisFloor !== before.turnsThisFloor) return 'a still bell counted a turn';
+        if (run.stats.mismatches !== before.stats.mismatches) return 'a still bell counted a miss';
+        if ((run.stillBellCharges ?? 0) !== (before.stillBellCharges ?? 0) - 1) return `bells ${before.stillBellCharges} -> ${run.stillBellCharges}`;
         if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
         return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
     },
@@ -540,6 +552,7 @@ export const soakRun = ({
     let bombsUsed = 0;
     let cruciblesUsed = 0;
     let stormGlassesBroken = 0;
+    let stillBellsRung = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -727,6 +740,15 @@ export const soakRun = ({
                 continue;
             }
         }
+        // A still bell rings as soon as the realm holds a card.
+        if (canRingStillBell(run)) {
+            const rung = applyStillBell(run);
+            if (rung) {
+                stillBellsRung += 1;
+                act('still-bell', rung.run);
+                continue;
+            }
+        }
         // Every storm glass the run is given gets broken, at the top of a turn on a realm floor.
         if (canBreakStormGlass(run)) {
             const broken = applyStormGlass(run);
@@ -779,6 +801,7 @@ export const soakRun = ({
         cruciblesUsed,
         stormGlassesBroken,
         carriedMisersPurse: (run.relics ?? []).includes('misers_purse'),
+        stillBellsRung,
         goldEarned,
         missesGranted,
         relicsBought,

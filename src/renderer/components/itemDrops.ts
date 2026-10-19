@@ -19,7 +19,7 @@ import type { ScreenCallout } from './screenCallouts';
  */
 export type ItemDropId = FindableKind | StoreItemId | CurioItemId | 'hourglass_prize';
 export type ItemDropRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-export type ItemDropGlyph = 'star' | 'comet' | 'heart' | 'eye' | 'shuffle' | 'bomb' | 'gem' | 'flask' | 'focus' | 'hourglass' | 'crucible' | 'storm_glass' | 'purse';
+export type ItemDropGlyph = 'star' | 'comet' | 'heart' | 'eye' | 'shuffle' | 'bomb' | 'gem' | 'flask' | 'focus' | 'hourglass' | 'crucible' | 'storm_glass' | 'purse' | 'bell';
 
 export const ITEM_DROP_RARITY_COLOR: Readonly<Record<ItemDropRarity, string>> = {
     common: '#c3cfdb',
@@ -51,7 +51,7 @@ const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'lo
 export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
     if (RELICS.has(id)) return 'epic';
     // A Curio's item is the strangest find on the board.
-    if (id === 'crucible' || id === 'storm_glass' || id === 'curio') return 'epic';
+    if (id === 'crucible' || id === 'storm_glass' || id === 'still_bell' || id === 'curio') return 'epic';
     if (id === 'meteor_shard' || id.startsWith('focus_')) return 'rare';
     if (id.startsWith('prime_') || id === 'bomb' || id === 'hourglass_prize') return 'uncommon';
     return 'common';
@@ -79,6 +79,8 @@ export const itemDropGlyph = (id: ItemDropId): ItemDropGlyph => {
             return 'storm_glass';
         case 'misers_purse':
             return 'purse';
+        case 'still_bell':
+            return 'bell';
         case 'curio':
             return 'flask';
         case 'hourglass_prize':

@@ -175,6 +175,16 @@ export function GameplayStormGlassIcon({ className, ...rest }: GameplayIconProps
     );
 }
 
+/** The Still Bell: a hand bell with its clapper. */
+export function GameplayBellIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M12 4.5c-3.6 0-5.5 2.8-5.5 6.2v3.4L4.8 17h14.4l-1.7-2.9v-3.4c0-3.4-1.9-6.2-5.5-6.2Z" fill="none" />
+            <path d="M10.2 19.5a1.9 1.9 0 0 0 3.6 0M12 2.5v2" />
+        </svg>
+    );
+}
+
 /** The Miser's Purse: a drawstring purse with a coin at its mouth. */
 export function GameplayPurseIcon({ className, ...rest }: GameplayIconProps) {
     return (

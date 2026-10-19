@@ -30,6 +30,7 @@ export type ItemEffectKind =
     | 'crucible'
     | 'storm_glass'
     | 'misers_purse'
+    | 'still_bell'
     | 'peek'
     | 'pin'
     | 'shuffle'
@@ -52,6 +53,8 @@ export interface ItemEffect {
     melt?: { from: TileSuit | null; to: TileSuit | null; meltedCount: number };
     /** The Storm Glass: the realm whose weather it called; `tileIds` holds the cards the storm touched. */
     realm?: RealmId;
+    /** The Still Bell: how many of `tileIds` (first) it let go; the rest are the realm's answer. */
+    freedCount?: number;
 }
 
 /** Trauma each item adds to the board (0..1; shake is trauma cubed, `boardTrauma.ts`). */
@@ -61,6 +64,7 @@ export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     crucible: 0.42,
     storm_glass: 0.7,
     misers_purse: 0.12,
+    still_bell: 0.3,
     peek: 0,
     pin: 0,
     shuffle: 0.22,
@@ -100,6 +104,9 @@ export const itemEffectsFromEvents = (
                 effects.push({ key, kind: 'misers_purse', tileIds: hidden });
                 break;
             }
+            case 'realm.stilled':
+                effects.push({ key, kind: 'still_bell', tileIds: [...event.freedTileIds, ...event.answerTileIds], realm: event.realmId as RealmId, freedCount: event.freedTileIds.length });
+                break;
             case 'realm.weather_called':
                 effects.push({ key, kind: 'storm_glass', tileIds: [...event.touchedTileIds], realm: event.realmId as RealmId });
                 break;
@@ -247,6 +254,24 @@ export const itemEffectRecipe = ({
                 if (origin && index < 4) {
                     arcs.push({ from: origin, to: anchor, seed: seed(`recast-arc${index}`), time: time + delay, intensity: 0.5, reduceMotion, quality, tint: toTint });
                 }
+            });
+            break;
+        }
+        case 'still_bell': {
+            // The bell's ring goes out across the board: a still white ring and a breath of vapour on every
+            // card let go; then, a beat later, the realm's answer sparks in its own colour where it lands.
+            const freed = effect.freedCount ?? at.length;
+            const tint = effect.realm ? REALMS[effect.realm].color : '#b69bff';
+            at.slice(0, freed).forEach((anchor, index) => {
+                const delay = index * 0.03;
+                shockwave(anchor, 0.35, `bell-ring${index}`, delay);
+                motes(anchor, 'vapor', '#e8f4ff', 0.45, `bell-breath${index}`, delay, 0.9);
+                motes(anchor, 'spark', '#ffffff', 0.4, `bell-glint${index}`, delay);
+            });
+            at.slice(freed).forEach((anchor, index) => {
+                const delay = 0.45 + index * 0.04;
+                motes(anchor, 'spark', tint, 0.8, `answer${index}`, delay);
+                shockwave(anchor, 0.3, `answer-ring${index}`, delay);
             });
             break;
         }

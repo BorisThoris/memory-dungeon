@@ -2575,6 +2575,43 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
+        },
+        {
+            "id": "inventory.still_bell_charge",
+            "label": "Still Bell Charge Inventory",
+            "kind": "inventory",
+            "role": "free_the_realm_holds_and_take_its_answer",
+            "evidence": [
+                "src/shared/still-bell-rules.ts",
+                "src/shared/realm-weather-rules.ts",
+                "src/shared/gameplay-core.ts",
+                "src/renderer/components/itemEffects.ts"
+            ],
+            "reads": [
+                "stillBellCharges",
+                "tileStates",
+                "runStatus"
+            ],
+            "writes": [
+                "stillBellCharges",
+                "tileStates",
+                "gameplayCommands",
+                "gameplayEvents"
+            ],
+            "enables": [
+                "board.realm_weather"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "turnable-pair-always-left",
+                "weather-clock-keeps-its-count",
+                "tile-ids-kept"
+            ],
+            "tests": [
+                "src/shared/still-bell-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -3771,6 +3808,24 @@
             "target": "economy.miss_bank",
             "kind": "modifies",
             "label": "the Miser's Purse takes one slot from the bank"
+        },
+        {
+            "source": "findable.curio",
+            "target": "inventory.still_bell_charge",
+            "kind": "grants",
+            "label": "from rules 69 a matched Curio may hold a still bell"
+        },
+        {
+            "source": "inventory.still_bell_charge",
+            "target": "board.realm_weather",
+            "kind": "triggers",
+            "label": "the held cards go free, and the realm answers with one strike"
+        },
+        {
+            "source": "inventory.still_bell_charge",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the bell tool and count, the ring over the freed cards, the answer, and the bell"
         }
     ],
     "coverage": {

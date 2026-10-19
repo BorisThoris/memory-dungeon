@@ -103,6 +103,14 @@ describe('item effects', () => {
         expect(ITEM_EFFECT_TRAUMA.misers_purse).toBeLessThan(ITEM_EFFECT_TRAUMA.crucible);
     });
 
+    it('a still bell rings white over the cards it freed, then the answer sparks in the realm\u2019s colour', () => {
+        const [effect] = itemEffectsFromEvents([event('realm.stilled', { realmId: 'frost', freedTileIds: ['a-A', 'a-B'], answerKind: 'blizzard', answerTileIds: ['c-A'] })], null, null);
+        expect(effect).toMatchObject({ kind: 'still_bell', tileIds: ['a-A', 'a-B', 'c-A'], freedCount: 2 });
+        const { bursts } = itemEffectRecipe({ effect: effect!, anchors: [0, 1, 2].map(at), time: 0, quality: 'high', reduceMotion: false });
+        expect(bursts.some((burst) => burst.x === 0 && burst.shape === 'vapor')).toBe(true);
+        expect(bursts.some((burst) => burst.x === 2 && burst.tint === '#9fdcff' && (burst.delay ?? 0) > 0.3)).toBe(true);
+    });
+
     it('the big items shake hardest, the quiet ones not at all', () => {
         expect(ITEM_EFFECT_TRAUMA.meteor).toBeGreaterThan(ITEM_EFFECT_TRAUMA.bomb);
         expect(ITEM_EFFECT_TRAUMA.bomb).toBeGreaterThan(ITEM_EFFECT_TRAUMA.shuffle);

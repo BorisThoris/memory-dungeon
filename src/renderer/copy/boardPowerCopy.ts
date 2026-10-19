@@ -57,7 +57,8 @@ export const BOARD_SHUFFLE_COPY = {
 export const CURIO_DROP_COPY = {
     crucible: { title: 'CRUCIBLE', line: 'Melt a pair; its element pours out as another' },
     storm_glass: { title: 'STORM GLASS', line: 'Break it: the realm\'s peak strikes when you choose' },
-    misers_purse: { title: "MISER'S PURSE", line: 'On offer in your dock: double gold, one miss fewer' }
+    misers_purse: { title: "MISER'S PURSE", line: 'On offer in your dock: double gold, one miss fewer' },
+    still_bell: { title: 'STILL BELL', line: 'Ring it: the realm lets go, then answers' }
 } as const;
 
 /**
@@ -68,15 +69,17 @@ export const CURIO_DROP_COPY = {
 export const CURIO_HINT_COPY = {
     crucible: 'Crucible in hand: turn a card over, then press Crucible to melt its pair and recast its element.',
     storm_glass: 'Storm Glass in hand: on a realm floor with nothing face up, press it to call the storm now.',
-    misers_purse: "Miser's Purse on offer: press Purse to take it up - double gold from every clear, one miss fewer."
+    misers_purse: "Miser's Purse on offer: press Purse to take it up - double gold from every clear, one miss fewer.",
+    still_bell: 'Still Bell in hand: when the realm holds cards, press Bell to free them all - the realm answers with its weather.'
 } as const;
 
 /** The curio item to explain now, if any: the first one held and not yet tried this run. */
-export const curioItemHint = (run: Pick<RunState, 'status' | 'crucibleCharges' | 'crucibleUsesThisRun' | 'stormGlassCharges' | 'stormGlassUsesThisRun' | 'misersPurseOffers'>): string | null => {
+export const curioItemHint = (run: Pick<RunState, 'status' | 'crucibleCharges' | 'crucibleUsesThisRun' | 'stormGlassCharges' | 'stormGlassUsesThisRun' | 'misersPurseOffers' | 'stillBellCharges' | 'stillBellUsesThisRun'>): string | null => {
     if (run.status !== 'playing') return null;
     if ((run.misersPurseOffers ?? 0) > 0) return CURIO_HINT_COPY.misers_purse;
     if ((run.crucibleCharges ?? 0) > 0 && (run.crucibleUsesThisRun ?? 0) === 0) return CURIO_HINT_COPY.crucible;
     if ((run.stormGlassCharges ?? 0) > 0 && (run.stormGlassUsesThisRun ?? 0) === 0) return CURIO_HINT_COPY.storm_glass;
+    if ((run.stillBellCharges ?? 0) > 0 && (run.stillBellUsesThisRun ?? 0) === 0) return CURIO_HINT_COPY.still_bell;
     return null;
 };
 
@@ -84,6 +87,15 @@ export const curioItemHint = (run: Pick<RunState, 'status' | 'crucibleCharges' |
 export const MISERS_PURSE_TOOL_COPY = {
     ready: (cap: number): string => `Take up the Miser's Purse: every clear pays double gold, and the miss bank holds ${cap}`,
     unavailable: "Miser's Purse: wait for the floor to begin"
+} as const;
+
+/** The Still Bell's dock tooltips (`still-bell-rules.ts`). */
+export const STILL_BELL_TOOL_COPY = {
+    ready: 'Still Bell: every card the realm holds is let go now, and the realm answers with one strike of its weather',
+    nothingHeld: 'Still Bell: the realm holds nothing to let go',
+    noRealm: 'Still Bell: there is no realm on this floor',
+    faceUp: 'Still Bell: finish the current pair first',
+    unavailable: 'Still Bell: wait for the floor to begin'
 } as const;
 
 /** The Storm Glass's dock tooltips (`storm-glass-rules.ts`). */

@@ -140,6 +140,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         crucibleCharges: 0,
         stormGlassCharges: 0,
         misersPurseOffers: 0,
+        stillBellCharges: 0,
         meteorArmed: false,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,

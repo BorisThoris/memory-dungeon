@@ -3428,3 +3428,10 @@ runs with 0 violations.
 The run census now plays 160 runs, not 40: the peek, at 0.890 of a run's floors over 160, read
 0.876 to 0.902 over forty across three reseeds and failed common or core in turn. The rare bar
 follows the census to one floor in 3840 (0.0002). The ledger quotes the rules-68 figures.
+
+## The Still Bell (rules 69, 2026-10-19)
+
+A Curio may now hold a Still Bell: on a realm floor where cards are held, it lets every frozen,
+snowed, vined and burning card go at once, and the realm answers with one strike of its everyday
+weather, on top of its clock. A rules-68 Curio draws what it drew, so `GAME_RULES_VERSION` 68 → 69;
+the ledger quotes the rules-69 census.

@@ -9,15 +9,15 @@ exports[`mechanics-catalog-appendix-builder > matches stable appendix snapshot 1
 
 | Constant / count | Value |
 | --- | --- |
-| \`GAME_RULES_VERSION\` | 68 |
-| \`ENCYCLOPEDIA_VERSION\` | 91 |
+| \`GAME_RULES_VERSION\` | 69 |
+| \`ENCYCLOPEDIA_VERSION\` | 92 |
 | Mutator entries (\`MUTATOR_CATALOG\`) | 13 |
 | Achievement entries (\`ACHIEVEMENT_CATALOG\`) | 22 |
 | \`GameMode\` codex ids | endless |
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 52 changed, 22 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 53 changed, 22 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -68,6 +68,7 @@ Every system in the game, with the last generation that passed over it. 52 chang
 | \`safety.softlock_fairness\` | confirmed | 261 | A guarantee rather than an occurrence, so its gate is the softlock seed sweep - 0 issue floors across the endless health check - not an occupancy row. Re-run at Gen 261 against the par Gens 220 and 259 set and the palette Gen 260 dealt: 430 of 430 playable floors and 0 fairness issues on every seed in the sweep, which is the first time this has been checked since par stopped being one rate for every palette. |
 | \`findable.score_glint\` | changed | 261 | Its reward row carried a field saying Destroy forfeits the score. Replaced with the rule that is true: a break which takes the carrier spills the glint and pays it. Gen 213 found the same dead promise a second time in the economy row for findable pickups and repointed it; Gen 214 found that row had no reader at all and removed it, so the rule now lives in one place rather than two. |
 | \`findable.meteor_shard\` | changed | 268 | The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second. |
+| \`inventory.still_bell_charge\` | changed | 272 | The Still Bell (2026-10-19), the fourth curio item and the owner’s neutralizer: on a realm floor with nothing face up and cards held, every frozen, snowed, vined or burning card is let go at once, and the realm answers with one strike of its everyday weather on top of its clock, which keeps its count. A freed fire or vine pays nothing. Its effect is a still white ring and a breath of vapour on each card let go, then the answer sparking in the realm’s colour, over a long hand bell on A. |
 | \`inventory.storm_glass_charge\` | changed | 271 | The Storm Glass (2026-10-18), the second curio item and the owner’s arena trigger: on a realm floor with nothing face up it calls the realm’s peak now - whiteout, firestorm, springtide, thunderclap, bloom - on top of the clock, which keeps its count. On calm and wild floors, where the clock never runs, it is the only weather there is. A called storm blows at least as hard as a raging one and is struck again if it found nothing (fire that only met its own kind charges those cards instead); the cards a moving storm moved stay lit until the next flip. Its effect is glass shards and the realm’s light on every card it reached, a bolt running card to card, and a high shatter over a rolling storm. |
 | \`findable.curio\` | changed | 270 | The Curio (2026-10-18): the owner asked for more items that do interesting and different things. With no store screen, items reach the player on the board: a fifth of the score glints from floor 2 on are Curios, on their own seeded roll so no other pickup moves, and matching one puts a curio item in hand with an epic drop. One pickup carries every curio item, so the next items need no new marker. |
 | \`inventory.crucible_charge\` | changed | 270 | The Crucible (2026-10-18), the first curio item: aimed at the one face-up card, it melts that pair (no turn, miss or score, never the last pair) and recasts every other face-down pair of its element as the element it puts out, new faces shuffled among the same cells. The pro is a free pair and a board leaning to another element; the con is that everything memorised about that element is gone. Its effect melts the pair its element’s way and runs a wave of the new element across the recast cards, with a molten hiss and an A-E chime. |
