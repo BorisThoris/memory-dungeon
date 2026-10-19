@@ -122,8 +122,9 @@ describe('sim-endless CSV output', () => {
         const plays = lines.filter((line) => line.startsWith('mechanicPlayed,'));
         expect(plays).toHaveLength(endlessMechanicKeys().length);
         for (const line of plays) expect(Number(line.split(',')[2]), line).toBeGreaterThanOrEqual(MIN_PLAYS_PER_MECHANIC);
-        // Twenty-four floors of seed 42001 (rules 63) deal the Rush Recall archetype once: the second comes from seed 42002.
-        expect(lines.some((line) => line.startsWith('mechanicTopUp,archetype:rush_recall@4200'))).toBe(true);
+        // Twenty-four floors of seed 42001 deal some mechanic once, and its second play comes from a later seed
+        // (rules 63: the Rush Recall archetype; rules 68: the distraction channel and the looking glass).
+        expect(lines.some((line) => /^mechanicTopUp,[^,]+@4200[2-9]/u.test(line))).toBe(true);
         expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
     }, 120_000);
 

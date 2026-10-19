@@ -21,7 +21,8 @@ const rich = (overrides: Partial<RunState> = {}): RunState => ({
 describe('relics in the store', () => {
     it('sells each relic once, and marks it owned after', () => {
         let run = rich();
-        for (const relic of RELICS) {
+        // The relics a store sells: a Curio's relic (the Miser's Purse) never has a row.
+        for (const relic of RELICS.filter((candidate) => !candidate.curio)) {
             const bought = buyStoreItem(run, relic.id);
             expect(bought, relic.id).not.toBeNull();
             run = bought!;
@@ -29,7 +30,8 @@ describe('relics in the store', () => {
             expect(storeOffer(run).find((row) => row.id === relic.id)?.blocked).toBe('owned');
             expect(buyStoreItem(run, relic.id)).toBeNull();
         }
-        expect(runGold(run)).toBe(40 - RELICS.reduce((sum, relic) => sum + relic.price, 0));
+        expect(runGold(run)).toBe(40 - RELICS.filter((relic) => !relic.curio).reduce((sum, relic) => sum + relic.price, 0));
+        expect(buyStoreItem(rich(), 'misers_purse')).toBeNull();
     });
 
     it('refuses a relic the purse cannot pay for', () => {
