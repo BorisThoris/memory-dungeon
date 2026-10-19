@@ -3435,3 +3435,12 @@ A Curio may now hold a Still Bell: on a realm floor where cards are held, it let
 snowed, vined and burning card go at once, and the realm answers with one strike of its everyday
 weather, on top of its clock. A rules-68 Curio draws what it drew, so `GAME_RULES_VERSION` 68 → 69;
 the ledger quotes the rules-69 census.
+
+## What the curio items do to a run's length (2026-10-19)
+
+`yarn sim:survival --items` lets the perfect-memory player use what its Curios hold (take the
+Miser's Purse, ring the Still Bell, break the Storm Glass, melt with the Crucible). Twenty seeds,
+rules 69, median floor without → with: 10% misses 60 → 60 (the cap; mean 51.1 → 49.2), 15% 20 →
+19.5, 20% 11 → 11.5, 25% 6.5 → 6.5, 35% 4 → 4. The items change how a run plays, not how long it
+lasts: a free pair from the Crucible is paid back by the Purse's smaller bank, and the Bell and the
+Glass trade board state rather than misses. Runs stay as punishing as the bank was tuned to be.
