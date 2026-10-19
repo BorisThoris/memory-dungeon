@@ -49,7 +49,7 @@ import { missBankCap } from '../../shared/miss-bank';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
-import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY, MISERS_PURSE_TOOL_COPY, STORM_GLASS_TOOL_COPY } from '../copy/boardPowerCopy';
+import { CRUCIBLE_TOOL_COPY, curioItemHint, METEOR_TOOL_COPY, MISERS_PURSE_TOOL_COPY, STORM_GLASS_TOOL_COPY } from '../copy/boardPowerCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -2023,6 +2023,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         <RunShell
                             feedback={run.meteorArmed ? METEOR_TOOL_COPY.armed : bombArmed ? BOMB_TOOL_COPY.armed : ''}
                             onboardingLine={!bombArmed && onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
+                            hintLine={bombArmed || run.meteorArmed ? null : curioItemHint(run)}
                             onPause={pause}
                             onGreetResident={greetFloorResident}
                             personalBestDepth={run.achievementsEnabled && (run.board?.level ?? 0) > profileDeepestFloor(saveData)}

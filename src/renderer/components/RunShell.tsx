@@ -96,6 +96,8 @@ export interface RunShellProps {
     feedbackPriority?: 'info' | 'error';
     /** First-run instruction, shown only until the first clear. */
     onboardingLine?: string | null;
+    /** A curio item held and not yet used this run: how to use it, when nothing else is being said (`curioItemHint`). */
+    hintLine?: string | null;
     /** Screen-reader status line, unchanged from the previous HUD's contract. */
     politeAnnouncement?: string;
     /** Reduced motion: the score total changes on the frame rather than counting up. */
@@ -306,6 +308,7 @@ const RunShell = ({
     feedback,
     feedbackPriority = 'info',
     onboardingLine,
+    hintLine = null,
     politeAnnouncement,
     tools,
     onPause,
@@ -368,7 +371,7 @@ const RunShell = ({
     const said = feedback || null;
     const line = memorize
         ? said ?? RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds)
-        : said ?? onboardingLine ?? null;
+        : said ?? onboardingLine ?? hintLine ?? null;
     const lineTone = said ? feedbackPriority : 'info';
     const kicker = memorize
         ? RUN_SHELL_LINE_COPY.studyKicker
@@ -376,8 +379,10 @@ const RunShell = ({
           ? RUN_SHELL_LINE_COPY.missKicker
           : !said && onboardingLine
             ? RUN_SHELL_LINE_COPY.firstFloorKicker
+            : !said && hintLine
+              ? RUN_SHELL_LINE_COPY.newItemKicker
             : RUN_SHELL_LINE_COPY.chainKicker(chain, CHAIN_TIER_LABELS[tier]);
-    const kickerTier = memorize || lineTone === 'error' || (!said && onboardingLine) ? 'none' : tier;
+    const kickerTier = memorize || lineTone === 'error' || (!said && (onboardingLine || hintLine)) ? 'none' : tier;
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
 
     // A tool that just came into the hand glows for a moment (`runShellFreshTools.ts`).

@@ -1,3 +1,4 @@
+import type { RunState } from '../../shared/contracts';
 /**
  * What each tool in the run dock is called, and why it is greyed out when it is.
  *
@@ -58,6 +59,26 @@ export const CURIO_DROP_COPY = {
     storm_glass: { title: 'STORM GLASS', line: 'Break it: the realm\'s peak strikes when you choose' },
     misers_purse: { title: "MISER'S PURSE", line: 'On offer in your dock: double gold, one miss fewer' }
 } as const;
+
+/**
+ * How to use a curio item, said under the board while one is held and not yet used this run
+ * (`RunShell`'s caption, when nothing else is being said). The drop balloon names it for two seconds;
+ * this stays until the player has tried it.
+ */
+export const CURIO_HINT_COPY = {
+    crucible: 'Crucible in hand: turn a card over, then press Crucible to melt its pair and recast its element.',
+    storm_glass: 'Storm Glass in hand: on a realm floor with nothing face up, press it to call the storm now.',
+    misers_purse: "Miser's Purse on offer: press Purse to take it up - double gold from every clear, one miss fewer."
+} as const;
+
+/** The curio item to explain now, if any: the first one held and not yet tried this run. */
+export const curioItemHint = (run: Pick<RunState, 'status' | 'crucibleCharges' | 'crucibleUsesThisRun' | 'stormGlassCharges' | 'stormGlassUsesThisRun' | 'misersPurseOffers'>): string | null => {
+    if (run.status !== 'playing') return null;
+    if ((run.misersPurseOffers ?? 0) > 0) return CURIO_HINT_COPY.misers_purse;
+    if ((run.crucibleCharges ?? 0) > 0 && (run.crucibleUsesThisRun ?? 0) === 0) return CURIO_HINT_COPY.crucible;
+    if ((run.stormGlassCharges ?? 0) > 0 && (run.stormGlassUsesThisRun ?? 0) === 0) return CURIO_HINT_COPY.storm_glass;
+    return null;
+};
 
 /** The Miser's Purse on offer (`misers-purse-rules.ts`). */
 export const MISERS_PURSE_TOOL_COPY = {

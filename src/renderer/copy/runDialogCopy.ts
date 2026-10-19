@@ -110,6 +110,7 @@ export const RUN_SHELL_LINE_COPY = {
     chainKicker: (chain: number, tierLabel: string): string =>
         chain <= 0 ? 'No chain' : tierLabel ? `Chain ${chain} · ${tierLabel}` : `Chain ${chain}`,
     firstFloorKicker: 'First floor',
+    newItemKicker: 'New item',
     missKicker: 'No match',
     /** `6 pairs. Every face shows for 4 seconds; then the floor begins.` */
     study: (pairs: number, seconds: number): string =>

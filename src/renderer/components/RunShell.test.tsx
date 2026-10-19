@@ -6,6 +6,7 @@ import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
 import { TOOL_FRESH_MS } from './runShellFreshTools';
+import { CURIO_HINT_COPY, curioItemHint } from '../copy/boardPowerCopy';
 import { DAILY_MUSIC_COPY } from '../copy/realmCopy';
 import { setMemorizeClock } from '../store/memorizeClock';
 
@@ -693,5 +694,17 @@ describe('a tool that just came into the hand', () => {
         } finally {
             vi.useRealTimers();
         }
+    });
+});
+
+describe('a curio item not yet tried', () => {
+    it('says how to use it under the board, until the player has', () => {
+        const held = curioItemHint({ ...playingRun(), crucibleCharges: 1, crucibleUsesThisRun: 0 });
+        expect(held).toBe(CURIO_HINT_COPY.crucible);
+        expect(curioItemHint({ ...playingRun(), crucibleCharges: 1, crucibleUsesThisRun: 1 })).toBeNull();
+        expect(curioItemHint({ ...playingRun(), misersPurseOffers: 1, crucibleCharges: 1 })).toBe(CURIO_HINT_COPY.misers_purse);
+        render(<RunShell hintLine={held} personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+        expect(screen.getByText(CURIO_HINT_COPY.crucible)).toBeInTheDocument();
+        expect(screen.getByText('New item')).toBeInTheDocument();
     });
 });
