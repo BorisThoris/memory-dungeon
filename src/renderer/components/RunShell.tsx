@@ -17,8 +17,9 @@ import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
-import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
+import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, MILESTONE_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
 import { dreadForRun, dreadTier } from '../../shared/dread-rules';
+import { nextMilestone } from '../../shared/milestone-rules';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
@@ -366,6 +367,8 @@ const RunShell = ({
     const comingWeather = nextRealmWeather(run);
     // Dread (`dread-rules.ts`): where the run is, never how it plays. A shared game counts floors to an end instead.
     const dread = isPassAndPlayRun(run.passAndPlay) ? null : dreadTier(dreadForRun(run));
+    // The milestone ahead (`milestone-rules.ts`), as a share of the act: effort follows the fraction left.
+    const milestone = isPassAndPlayRun(run.passAndPlay) ? null : nextMilestone(run.board?.level ?? 1);
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
@@ -583,6 +586,20 @@ const RunShell = ({
                                 </span>
                             ) : null}
                         </span>
+                        {milestone ? (
+                            <span
+                                aria-label={MILESTONE_HUD_COPY.aria(milestone.name, milestone.floorsDone, milestone.floorsTotal)}
+                                className={styles.milestone}
+                                data-testid="hud-milestone"
+                                role="img"
+                                style={{ '--milestone-fill': milestone.fraction } as CSSProperties}
+                                title={MILESTONE_HUD_COPY.title}
+                            >
+                                {compactHud ? null : <span className={styles.milestoneName}>{MILESTONE_HUD_COPY.name(milestone.name)}</span>}
+                                <span className={styles.milestoneFraction}>{MILESTONE_HUD_COPY.fraction(milestone.floorsDone, milestone.floorsTotal)}</span>
+                                <span aria-hidden="true" className={styles.milestoneBar} />
+                            </span>
+                        ) : null}
                         {missesRemaining != null ? (
                             <span className={styles.lives} data-testid="hud-misses-left"
                                 data-low={missesRemaining <= 1 ? 'true' : undefined}

@@ -81,7 +81,8 @@ import { resolveGameShellProfile } from '../gameShellLayout';
 import { resolveBoardFloaterAnchor, type BoardFloaterAnchor, type StageRelativeRect } from './boardFloaterPlacement';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
-import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
+import { describePassAndPlayChainLost, isPassAndPlayRun } from '../../shared/pass-and-play-rules';
+import { milestoneAfterClear } from '../../shared/milestone-rules';
 import {
     chainMomentum,
     chainRungApproach,
@@ -2109,6 +2110,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
                                     countUp={!reduceMotion}
+                                    milestone={isPassAndPlayRun(run.passAndPlay) ? null : milestoneAfterClear(run.lastLevelResult.level)}
                                     nextPlace={nextRoomDoor && nextRoomDoor.realmId !== runRealmId(run) ? REALMS[nextRoomDoor.realmId].place : null}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}

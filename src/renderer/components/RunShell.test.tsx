@@ -299,6 +299,16 @@ describe('RunShell', () => {
         expect(screen.getByTestId('hud-floor')).toHaveTextContent(/(^|\D)3(\D|$)/);
     });
 
+    it('shows the next milestone as a fraction of the act, outside the floor reading (DGE-004)', () => {
+        const base = playingRun();
+        render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, board: { ...base.board!, level: 7 } }} tools={[]} />);
+        const milestone = screen.getByTestId('hud-milestone');
+        expect(milestone).toHaveTextContent('Next: The Living Dungeon');
+        expect(milestone).toHaveTextContent('7 of 12');
+        expect(milestone).toHaveAttribute('aria-label', 'Next milestone: The Living Dungeon, floor 7 of 12');
+        expect(within(screen.getByTestId('hud-floor')).queryByTestId('hud-milestone')).toBeNull();
+    });
+
     it('carries nothing about which run this is: the mode and the perfect-memory stakes live in the pause menu', () => {
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={playingRun()} tools={[]} />);
 

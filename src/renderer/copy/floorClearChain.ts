@@ -22,6 +22,13 @@ export const FLOOR_CLEAR_COPY = {
      * behind the beat - only when it is another realm than this one.
      */
     onwardLine: (place: string): string => `Onward to ${place.replace(/^The /u, 'the ')}`,
+    /** `Three floors to the Keeper of Halls`: the next milestone, in view at the reward (DGE-004). */
+    milestoneLine: (name: string, floorsToGo: number): string => {
+        const words = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+        const count = runNonNegativeInteger(floorsToGo);
+        const floors = `${words[count] ?? count.toLocaleString()} ${count === 1 ? 'floor' : 'floors'}`;
+        return `${floors} to ${name.replace(/^The /u, 'the ')}`;
+    },
     /** `+1,234`: what the floor paid, bonus included. */
     scoreLine: (scoreGained: number): string => `+${runNonNegativeInteger(scoreGained).toLocaleString()}`,
     runTotalLine: (totalScore: number): string => `Run total ${runNonNegativeInteger(totalScore).toLocaleString()}`,

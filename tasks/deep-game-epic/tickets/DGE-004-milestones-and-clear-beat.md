@@ -1,7 +1,7 @@
 # DGE-004: Milestone fractions on the run bar and the clear beat
 
 ## Status
-Not started
+Done (2026-10-20) for the run bar and the clear beat; the camp parts are moot (see notes).
 
 ## Priority
 P0
@@ -50,4 +50,9 @@ From floor one the run bar shows "Next: The Keeper of Halls, 7 of 12" as a fract
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-20:
+- `src/shared/milestone-rules.ts`: `nextMilestone(level)` gives the milestone a floor walks toward: the end of its Descent act. Those are The Living Dungeon (12), The Keeper of Halls (24), The Cartographer (40) and The Warden (60), the names from `02-deep-game-plan.md`. It returns floorsDone, floorsTotal and a proportional fraction measured from the act's start (6 of 12 is 0.5, and floor 32 is 8 of 16). `milestoneAfterClear(level)` gives the same for the floor after a clear, plus floorsToGo. Past 60 the Abyss repeats, so the Warden stands every twenty floors and no track is endless (tested to floor 1000).
+- Run bar: `hud-milestone` ("Next: The Keeper of Halls  7 of 12", a gold hairline filling under it) sits in its own cell, outside `hud-floor`, so the floor reading's digits stay alone. Phone layouts show the fraction only. Clear beat: `floor-clear-milestone` ("Three floors to the Keeper of Halls") under the payout. Pass-and-play shows neither, because its floors count to an agreed end.
+- Moot: the camp header and the Descend focus order. The store stop became automatic camp upgrades (no screen, the next floor starts by itself; hall room `store-stop`), so the clear beat is the one reward moment and carries the line. Endowed progress has no track to open yet (Depths is DGE-006); add `endowedProgress` with the first track that opens mid-run.
+- The boss names are placeholders for the act boss floors, which still raise the Keystone Warden identity until DGE-011, DGE-018 and DGE-005 land. Those tickets should keep `DESCENT_MILESTONE_NAMES` in step.
+- Checklist rows: no rules change, no graph node (a reading of the schedule, not a mechanic), unit tests for the rules, the beat and the bar; ui-fit, HUD layout and playtest screenshots checked.

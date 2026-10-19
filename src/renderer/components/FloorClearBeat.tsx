@@ -12,6 +12,8 @@ export interface FloorClearBeatProps {
     countUp?: boolean;
     /** The next floor's realm, when it is another one: named as its room crossfades in behind the beat. */
     nextPlace?: string | null;
+    /** The next milestone and the floors to it (`milestone-rules.ts`), so the reward is never the end of the view. */
+    milestone?: { readonly name: string; readonly floorsToGo: number } | null;
 }
 
 /** The payout counts up over this, after the stamp has landed (`floorClearBeatIn`, 320ms). */
@@ -44,7 +46,7 @@ const useCountUp = (target: number, enabled: boolean): number => {
 export const FLOOR_CLEAR_BEAT_EXIT_MS = 320;
 
 /** A brief, unframed payout over the board while the next floor prepares. */
-const FloorClearBeat = ({ countUp = false, leaving = false, nextPlace = null, personalBest, result }: FloorClearBeatProps) => {
+const FloorClearBeat = ({ countUp = false, leaving = false, milestone = null, nextPlace = null, personalBest, result }: FloorClearBeatProps) => {
     const shownScore = useCountUp(result.scoreGained, countUp && !leaving);
     return (
     <div
@@ -74,6 +76,11 @@ const FloorClearBeat = ({ countUp = false, leaving = false, nextPlace = null, pe
             {nextPlace ? (
                 <p className={styles.onward} data-testid="floor-clear-onward">
                     {FLOOR_CLEAR_COPY.onwardLine(nextPlace)}
+                </p>
+            ) : null}
+            {milestone ? (
+                <p className={styles.milestone} data-testid="floor-clear-milestone">
+                    {FLOOR_CLEAR_COPY.milestoneLine(milestone.name, milestone.floorsToGo)}
                 </p>
             ) : null}
         </div>

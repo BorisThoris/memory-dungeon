@@ -1900,12 +1900,22 @@
 .shell[data-layout='desktop'] .comboLabel { min-width: 0; overflow-wrap: anywhere; }
 
 /* Dread (`dread-rules.ts`): the tier on the run bar, a thin bar filling toward the next tier's name.
-   The bar hangs under the tier like the lives' earned note, so the run bar is no taller for it. */
+   The bar hangs under the tier like the lives' earned note, so the run bar is no taller for it,
+   and reaches left, under the floor, so it never meets that note. */
 .dread { position: relative; display: inline-block; min-width: 0; font-family: 'Source Sans 3', sans-serif; line-height: 1; white-space: nowrap; color: #d9c7ad; }
 .floor .dread { margin-left: 0.6rem; vertical-align: 0.15em; }
 .dreadTier { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: lining-nums; }
-.dreadNext { position: absolute; top: calc(100% + 0.2rem); left: 0; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: var(--dread-next, #b9a37f); opacity: 0.85; }
+.dreadNext { position: absolute; top: calc(100% + 0.2rem); right: 0; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: var(--dread-next, #b9a37f); opacity: 0.85; }
 .dreadBar { position: relative; width: 2.6rem; height: 3px; border-radius: 2px; background: #ffffff1f; overflow: hidden; }
 .dreadBar::after { content: ''; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--dread-fill, 0)); background: var(--dread-next, #b9a37f); transition: transform 600ms ease-out; }
 .dread[data-dread-tier='knows'] .dreadTier, .dread[data-dread-tier='coming'] .dreadTier { color: #f2b2a4; text-shadow: 0 0 8px #c8443280; }
 @media (prefers-reduced-motion: reduce) { .dreadBar::after { transition: none; } }
+
+/* The next milestone (DGE-004): its name and the act's fraction, a hairline filling under them. */
+.milestone { position: relative; display: inline-flex; align-items: baseline; gap: 0.4rem; min-width: 0; padding-bottom: 0.25rem; font-family: 'Source Sans 3', sans-serif; font-size: 0.75rem; line-height: 1; white-space: nowrap; color: #cdb898; font-variant-numeric: lining-nums tabular-nums; }
+.milestoneName { overflow: hidden; text-overflow: ellipsis; }
+.milestoneFraction { color: var(--gold, #e1ad66); font-weight: 600; }
+.milestoneBar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 1px; background: #ffffff1a; }
+.milestoneBar::after { content: ''; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--milestone-fill, 0)); background: var(--gold, #e1ad66); transition: transform 600ms ease-out; }
+.shell .milestone { grid-area: 1 / 3; justify-self: start; }
+@media (prefers-reduced-motion: reduce) { .milestoneBar::after { transition: none; } }

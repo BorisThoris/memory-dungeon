@@ -26,6 +26,15 @@ describe('FloorClearBeat', () => {
         expect(screen.queryByTestId('floor-clear-onward')).toBeNull();
     });
 
+    it('keeps the next milestone in view at the reward (DGE-004)', () => {
+        const { rerender } = render(<FloorClearBeat milestone={{ name: 'The Keeper of Halls', floorsToGo: 3 }} personalBest={false} result={result} />);
+        expect(screen.getByTestId('floor-clear-milestone')).toHaveTextContent('Three floors to the Keeper of Halls');
+        rerender(<FloorClearBeat milestone={{ name: 'The Living Dungeon', floorsToGo: 1 }} personalBest={false} result={result} />);
+        expect(screen.getByTestId('floor-clear-milestone')).toHaveTextContent('One floor to the Living Dungeon');
+        rerender(<FloorClearBeat personalBest={false} result={result} />);
+        expect(screen.queryByTestId('floor-clear-milestone')).toBeNull();
+    });
+
     it('counts the payout up for the eye while the live region carries the final figure', () => {
         vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'performance'] });
         try {

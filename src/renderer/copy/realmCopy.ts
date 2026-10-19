@@ -137,3 +137,11 @@ export const DREAD_HUD_COPY = {
             ? `Dread: ${tier}, deeper still`
             : `Dread: ${tier}, ${Math.round(fraction * 100)} percent of the way to ${next}`
 } as const;
+
+/** The next milestone on the run bar (`milestone-rules.ts`, DGE-004). */
+export const MILESTONE_HUD_COPY = {
+    title: 'The next milestone: the end of this act of the Descent, and how much of the act is behind you.',
+    name: (name: string): string => `Next: ${name}`,
+    fraction: (done: number, total: number): string => `${done} of ${total}`,
+    aria: (name: string, done: number, total: number): string => `Next milestone: ${name}, floor ${done} of ${total}`
+} as const;
