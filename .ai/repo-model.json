@@ -16161,8 +16161,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 55875,
-      "sha256": "f9c896dae061caf73642cd437b1f49b2c9a524921cef93e1bf072699acfd6aa6"
+      "bytes": 56056,
+      "sha256": "35748cb66feceb1170a0c17da0d4ff537cb8701eab8c75eee753551d6ef59077"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -16683,14 +16683,14 @@
     {
       "path": "src/shared/still-bell-rules.test.ts",
       "category": "test",
-      "bytes": 4617,
-      "sha256": "f59ed69a0584659de70fd59bbb0658cf7d1b1595e48b0a21d7fa9f20b7c9ef9b"
+      "bytes": 4983,
+      "sha256": "e3c6e9b34e6d89e07b53c02e2f1ad19cc03e982b17dd522d698d75d2b0ae73c0"
     },
     {
       "path": "src/shared/still-bell-rules.ts",
       "category": "source",
-      "bytes": 3842,
-      "sha256": "7ff6fecc6dd274c3e7a243221f6e5e051bba1030a3f20228fd684f12ef3cbcf8"
+      "bytes": 3947,
+      "sha256": "363ad9fa11384077aefb0672d1c5b3a617c3048393135267aba2e25f4a431957"
     },
     {
       "path": "src/shared/store-stock.test.ts",
@@ -39663,7 +39663,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1141,
+      "lineCount": 1146,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -41527,7 +41527,7 @@
       "path": "src/shared/still-bell-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 69,
+      "lineCount": 78,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/curio-rules.ts",
@@ -41546,7 +41546,7 @@
       "path": "src/shared/still-bell-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 78,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-rules.ts",
@@ -69099,7 +69099,7 @@
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
       "line": 1090,
-      "endLine": 1140
+      "endLine": 1145
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#DOUSE_GOLD",
@@ -71851,7 +71851,7 @@
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
       "line": 42,
-      "endLine": 69
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#canRingStillBell",
@@ -71874,8 +71874,8 @@
       "name": "stillBellFeedbackLine",
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 72,
-      "endLine": 76
+      "line": 73,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#StillBellResult",
