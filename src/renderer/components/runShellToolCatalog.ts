@@ -23,6 +23,7 @@ export type RunShellToolId =
     | 'meteor'
     | 'crucible'
     | 'storm_glass'
+    | 'misers_purse'
     | 'ignite'
     | 'flash'
     | 'undo'
@@ -38,6 +39,7 @@ export type RunPowerChargeField = Extract<
     | 'meteorCharges'
     | 'crucibleCharges'
     | 'stormGlassCharges'
+    | 'misersPurseOffers'
     | 'flashPairCharges'
 >;
 
@@ -63,6 +65,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // A Curio's item (`curio-rules.ts`): hidden like every tool with no charges left.
     { conditional: false, id: 'crucible', label: 'Crucible', spends: 'crucibleCharges' },
     { conditional: false, id: 'storm_glass', label: 'Storm Glass', spends: 'stormGlassCharges' },
+    // The Miser's Purse on offer: pressed, it is taken up for the rest of the run.
+    { conditional: false, id: 'misers_purse', label: 'Purse', spends: 'misersPurseOffers' },
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
     // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
     { conditional: true, id: 'ignite', label: 'Ignite', spends: null },

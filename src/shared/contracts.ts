@@ -16,7 +16,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. */
-export const GAME_RULES_VERSION = 67;
+export const GAME_RULES_VERSION = 68;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -154,7 +154,7 @@ export interface RealmEvent {
     gold?: number;
 }
 /** A relic bought in the store (`run-relic-rules.ts`). */
-export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle';
+export type RelicId = 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle' | 'misers_purse';
 export type FeaturedObjectiveId = 'scholar_style' | 'cursed_last' | 'flip_par' | 'amplified_reaction' | 'calm_reaction';
 /**
  * Every screen the app can be showing, as a value.
@@ -616,6 +616,8 @@ export interface LevelResult {
     chainTier?: 'none' | 'clean' | 'sharp' | 'fever';
     /** Gold the clear paid into the purse (`run-store-rules.ts`). */
     goldEarned?: number;
+    /** True when the Miser's Purse doubled it (`run-relic-rules.ts`). */
+    goldDoubled?: boolean;
     elementalDrops?: ElementalPouch;
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
@@ -758,12 +760,14 @@ export interface RunState {
     /** Storm Glasses in hand (`storm-glass-rules.ts`), and broken this run (it seeds each storm). */
     stormGlassCharges?: number;
     stormGlassUsesThisRun?: number;
+    /** The Miser's Purse a Curio offered and the player has not taken up (0 or 1; `misers-purse-rules.ts`). */
+    misersPurseOffers?: number;
     /** Crucibles used this run: seeds each recast so a replay melts the same way. */
     crucibleUsesThisRun?: number;
     /** Curio pickups opened this run (`curio-rules.ts`): seeds which item the next one holds. */
     curiosClaimedThisRun?: number;
     /** The last Curio opened and what it held, for the drop balloon. */
-    lastCurioDrop?: { key: string; item: 'crucible' | 'storm_glass' };
+    lastCurioDrop?: { key: string; item: 'crucible' | 'storm_glass' | 'misers_purse' };
     status: RunStatus;
     /** Set once the run is over, and only then: what ended it. */
     runEndReason: RunEndReason | null;

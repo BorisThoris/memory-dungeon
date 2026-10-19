@@ -77,7 +77,7 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
         kind: 'consumable'
     },
     // Relics (2026-09-24, `run-relic-rules.ts`): bought once, kept to the end of the run.
-    ...RELICS.map(
+    ...RELICS.filter((relic) => !relic.curio).map(
         (relic): StoreItemDefinition => ({
             id: relic.id,
             title: relic.title,
@@ -133,7 +133,7 @@ export const rollStoreStock = (runSeed: number, floor: number, owned: readonly R
     for (const id of ['peek', 'shuffle', 'bomb'] as const) {
         if ((id === 'bomb' && floor <= STORE_STOP_EVERY_FLOORS) || rng() < 0.67) stock.push(id);
     }
-    const relics = RELICS.map((relic) => relic.id).filter((id) => !owned.includes(id));
+    const relics = RELICS.filter((relic) => !relic.curio).map((relic) => relic.id).filter((id) => !owned.includes(id));
     const picked = shuffleWithRng(rng, [...relics]).slice(0, 2).sort((a, b) => relics.indexOf(a) - relics.indexOf(b));
     return [...stock, ...picked];
 };

@@ -46,7 +46,7 @@ export const ITEM_DROP_HOLD_MS: Readonly<Record<ItemDropRarity, number>> = {
     legendary: 3000
 };
 
-const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']);
+const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle', 'misers_purse']);
 
 export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
     if (RELICS.has(id)) return 'epic';

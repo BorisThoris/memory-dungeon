@@ -1,3 +1,5 @@
+import { missBankCap as purseBankCap, missesLeft as purseMissesLeft } from './miss-bank';
+import { MISERS_PURSE_SOURCE_ID, takeMisersPurse } from './misers-purse-rules';
 import { runRealmId } from './realm-rules';
 import { applyStormGlass, STORM_GLASS_SOURCE_ID, stormGlassFeedbackLine } from './storm-glass-rules';
 import { applyCrucible, CRUCIBLE_SOURCE_ID, crucibleFeedbackLine } from './crucible-rules';
@@ -83,6 +85,7 @@ const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const BOMB_SOURCE: GameplaySource = { kind: 'power', id: 'bomb' };
 const CRUCIBLE_SOURCE: GameplaySource = { kind: 'power', id: CRUCIBLE_SOURCE_ID };
 const STORM_GLASS_SOURCE: GameplaySource = { kind: 'power', id: STORM_GLASS_SOURCE_ID };
+const MISERS_PURSE_SOURCE: GameplaySource = { kind: 'power', id: MISERS_PURSE_SOURCE_ID };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
@@ -243,6 +246,28 @@ const applyBombCommand = (
         type: 'feedback.requested',
         cue: 'power.bomb.used',
         message: `Bomb took that card and its twin off the board; ${chargesLeft(after, 'bomb')}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyTakeRelicCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.take_relic' }>
+): GameplayCommandResult => {
+    const nextRun = takeMisersPurse(run);
+    if (!nextRun) {
+        return rejectedResult(run, command.commandId, "There is no Miser's Purse on offer.", command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, MISERS_PURSE_SOURCE, events);
+    const before = purseMissesLeft(run) ?? 0;
+    const after = purseMissesLeft(nextRun) ?? 0;
+    writeEvent({ type: 'run.relic_taken', relicId: 'misers_purse', missesBefore: before, missesAfter: after });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.misers_purse.taken',
+        message: `You took up the Miser's Purse: clears pay double gold, and the bank holds ${purseBankCap(nextRun)}${after < before ? `; ${before - after} miss went to make room` : ''}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1070,6 +1095,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'run.take_relic') {
+        return applyTakeRelicCommand(run, command);
     }
     if (command.type === 'board.storm_glass') {
         return applyStormGlassCommand(run, command);

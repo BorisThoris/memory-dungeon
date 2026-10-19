@@ -94,6 +94,15 @@ describe('item effects', () => {
         expect(ITEM_EFFECT_TRAUMA.storm_glass).toBeLessThan(ITEM_EFFECT_TRAUMA.meteor);
     });
 
+    it('taking up the purse spills coins over the face-down cards, gently', () => {
+        const after = board([card('a-A', 'a'), card('a-B', 'a', 'matched'), card('b-A', 'b')]);
+        const [effect] = itemEffectsFromEvents([event('run.relic_taken', { relicId: 'misers_purse', missesBefore: 4, missesAfter: 3 })], after, after);
+        expect(effect).toMatchObject({ kind: 'misers_purse', tileIds: ['a-A', 'b-A'] });
+        const { bursts } = itemEffectRecipe({ effect: effect!, anchors: [0, 1].map(at), time: 0, quality: 'high', reduceMotion: false });
+        expect(bursts.some((burst) => burst.shape === 'shard' && burst.tint === '#ffd56a')).toBe(true);
+        expect(ITEM_EFFECT_TRAUMA.misers_purse).toBeLessThan(ITEM_EFFECT_TRAUMA.crucible);
+    });
+
     it('the big items shake hardest, the quiet ones not at all', () => {
         expect(ITEM_EFFECT_TRAUMA.meteor).toBeGreaterThan(ITEM_EFFECT_TRAUMA.bomb);
         expect(ITEM_EFFECT_TRAUMA.bomb).toBeGreaterThan(ITEM_EFFECT_TRAUMA.shuffle);

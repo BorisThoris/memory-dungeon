@@ -29,6 +29,7 @@ export type ItemEffectKind =
     | 'meteor'
     | 'crucible'
     | 'storm_glass'
+    | 'misers_purse'
     | 'peek'
     | 'pin'
     | 'shuffle'
@@ -59,6 +60,7 @@ export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     meteor: 0.85,
     crucible: 0.42,
     storm_glass: 0.7,
+    misers_purse: 0.12,
     peek: 0,
     pin: 0,
     shuffle: 0.22,
@@ -92,6 +94,12 @@ export const itemEffectsFromEvents = (
             case 'board.bombed':
                 effects.push({ key, kind: 'bomb', tileIds: cardsOf(boardBefore ?? boardAfter, event.targetTileId) });
                 break;
+            case 'run.relic_taken': {
+                // The purse opens over the board: its gold falls on the face-down cards.
+                const hidden = (boardAfter ?? boardBefore)?.tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id) ?? [];
+                effects.push({ key, kind: 'misers_purse', tileIds: hidden });
+                break;
+            }
             case 'realm.weather_called':
                 effects.push({ key, kind: 'storm_glass', tileIds: [...event.touchedTileIds], realm: event.realmId as RealmId });
                 break;
@@ -242,6 +250,15 @@ export const itemEffectRecipe = ({
             });
             break;
         }
+        case 'misers_purse':
+            // Coins: gold glints tumbling over the board in a wave, a soft ring where each lands.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.045;
+                motes(anchor, 'shard', '#ffd56a', 0.7, `coin${index}`, delay, 0.8);
+                motes(anchor, 'spark', '#fff1b8', 0.5, `glint${index}`, delay + 0.05);
+                shockwave(anchor, 0.2, `coin-ring${index}`, delay + 0.08);
+            });
+            break;
         case 'storm_glass': {
             // The glass breaks over the board and the realm pours out of it: shards of glass and the
             // realm's light on every card the storm reached, a bolt running card to card, a ring under each.

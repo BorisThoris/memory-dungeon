@@ -237,6 +237,18 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-storm_glass')).toBeDisabled();
     });
 
+    test("purse: press it and the Miser's Purse is taken up, the bank down to three", async ({ page }) => {
+        await openRoom(page, 'misers-purse-offer');
+        await expect(page.getByTestId('tool-misers_purse')).toBeEnabled();
+        await page.getByTestId('tool-misers_purse').click();
+        await expect.poll(async () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            return { relics: run.relics ?? [], offers: run.misersPurseOffers };
+        })).toEqual({ relics: ['misers_purse'], offers: 0 });
+        await expect(page.getByTestId('tool-misers_purse')).toHaveCount(0);
+    });
+
     test('curio: match its pair and a crucible appears in the dock, ready to use', async ({ page }) => {
         await openRoom(page, 'curio');
         await expect(page.getByTestId('tool-crucible')).toHaveCount(0);

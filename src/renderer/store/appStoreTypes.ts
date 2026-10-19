@@ -84,6 +84,8 @@ export interface AppState {
     useCrucible: () => void;
     /** Break a storm glass: the realm's peak weather now (`storm-glass-rules.ts`). */
     useStormGlass: () => void;
+    /** Take up the Miser's Purse a Curio offered (`misers-purse-rules.ts`). */
+    takeMisersPurse: () => void;
     armMeteor: () => void;
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */

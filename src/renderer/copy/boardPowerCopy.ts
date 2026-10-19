@@ -55,7 +55,14 @@ export const BOARD_SHUFFLE_COPY = {
 /** What a Curio held, in its drop balloon (`itemDropFeed.ts`). */
 export const CURIO_DROP_COPY = {
     crucible: { title: 'CRUCIBLE', line: 'Melt a pair; its element pours out as another' },
-    storm_glass: { title: 'STORM GLASS', line: 'Break it: the realm\'s peak strikes when you choose' }
+    storm_glass: { title: 'STORM GLASS', line: 'Break it: the realm\'s peak strikes when you choose' },
+    misers_purse: { title: "MISER'S PURSE", line: 'On offer in your dock: double gold, one miss fewer' }
+} as const;
+
+/** The Miser's Purse on offer (`misers-purse-rules.ts`). */
+export const MISERS_PURSE_TOOL_COPY = {
+    ready: (cap: number): string => `Take up the Miser's Purse: every clear pays double gold, and the miss bank holds ${cap}`,
+    unavailable: "Miser's Purse: wait for the floor to begin"
 } as const;
 
 /** The Storm Glass's dock tooltips (`storm-glass-rules.ts`). */

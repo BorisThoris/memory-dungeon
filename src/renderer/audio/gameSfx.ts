@@ -1224,6 +1224,13 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
             playTone({ frequency: 110, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.7, type: 'sine', category: 'realm' });
             playNoise({ durationSec: 0.9, gain: gain * 0.75, filter: 'lowpass', from: 2200, to: 90, attackSec: 0.004, delaySec: 0.02 });
             return;
+        case 'misers_purse':
+            // The drawstring pulls and coins spill: a soft thud, then bright clinks on A and E.
+            playNoise({ durationSec: 0.12, gain: gain * 0.25, filter: 'lowpass', from: 900, to: 300, attackSec: 0.004 });
+            [0, 70, 130, 210, 260].forEach((delayMs, index) =>
+                scheduleCue(() => playTone({ frequency: [1760, 2637, 2093, 3520, 2637][index]!, durationSec: 0.09, gain: gain * 0.1, type: 'triangle', category: 'realm' }), 60 + delayMs)
+            );
+            return;
         case 'storm_glass':
             // Glass breaks, high and bright, then the realm's storm rolls in under it.
             playNoise({ durationSec: 0.18, gain: gain * 0.6, filter: 'highpass', from: 6500, to: 4200, attackSec: 0.001 });

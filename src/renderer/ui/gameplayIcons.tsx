@@ -175,6 +175,17 @@ export function GameplayStormGlassIcon({ className, ...rest }: GameplayIconProps
     );
 }
 
+/** The Miser's Purse: a drawstring purse with a coin at its mouth. */
+export function GameplayPurseIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M8.5 8.5c-3 2.2-4 5.4-3 8.2C6.4 19.3 9 20.5 12 20.5s5.6-1.2 6.5-3.8c1-2.8 0-6-3-8.2" fill="none" />
+            <path d="M8.5 8.5h7M9.5 8.5 8 5.5h8l-1.5 3" fill="none" />
+            <circle cx="12" cy="14.5" r="2" />
+        </svg>
+    );
+}
+
 /** The satchel a phone's dock folds its tools into. */
 export function GameplayItemsIcon({ className, ...rest }: GameplayIconProps) {
     return (

@@ -1,3 +1,4 @@
+import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
@@ -85,6 +86,8 @@ export interface SoakRunReport {
     cruciblesUsed: number;
     /** Storm glasses broken (`storm-glass-rules.ts`), every one the run was given. */
     stormGlassesBroken: number;
+    /** True when the run carried the Miser's Purse (`curio-rules.ts`) at its end. */
+    carriedMisersPurse: boolean;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
@@ -716,6 +719,14 @@ export const soakRun = ({
         const inHand = runElementStreak(run);
         const wanted = inHand && rng() < player.elementRate ? pool.filter((tile) => (tile.suit === inHand.suit) !== isStreakPrimed(inHand)) : [];
         const first = pick(wanted.length > 0 ? wanted : pool);
+        // Every player takes up the Miser's Purse when a Curio offers it: the soak wants it carried.
+        if (canTakeMisersPurse(run)) {
+            const taken = takeMisersPurse(run);
+            if (taken) {
+                act('take-purse', taken);
+                continue;
+            }
+        }
         // Every storm glass the run is given gets broken, at the top of a turn on a realm floor.
         if (canBreakStormGlass(run)) {
             const broken = applyStormGlass(run);
@@ -767,6 +778,7 @@ export const soakRun = ({
         curiosClaimed: runNonNegativeInteger(run.curiosClaimedThisRun),
         cruciblesUsed,
         stormGlassesBroken,
+        carriedMisersPurse: (run.relics ?? []).includes('misers_purse'),
         goldEarned,
         missesGranted,
         relicsBought,

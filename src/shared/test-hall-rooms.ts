@@ -1,3 +1,4 @@
+import { takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import {
@@ -70,6 +71,8 @@ export type TestHallRoomId =
     | 'curio'
     | 'storm-glass'
     | 'storm-glass-dark'
+    | 'misers-purse'
+    | 'misers-purse-offer'
     | 'store-stop'
     | 'camp-survive'
     | 'camp-study'
@@ -172,6 +175,7 @@ export type TestHallStep =
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
     | { readonly do: 'stormGlass' }
+    | { readonly do: 'takePurse' }
     | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
@@ -814,6 +818,42 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(['a:e b:t', 'b:t a:e'], { run: { stormGlassCharges: 1 } }),
         script: [
             { step: { do: 'flip', tileId: 'a-1' }, says: 'no realm, a card up: the glass is dark', expect: (r) => (canBreakStormGlass(r) || canBreakStormGlass({ ...r, board: { ...r.board!, flippedTileIds: [] } }) ? 'the glass would break off a realm' : null) }
+        ]
+    },
+    {
+        id: 'misers-purse-offer',
+        title: "The Miser's Purse on offer",
+        mechanic: "A Curio offers the Miser's Purse; it waits in the dock until you take it up. Taken, it is yours for the run, and a full bank gives up its soonest miss.",
+        graphMechanicIds: ['inventory.relics', 'economy.miss_bank'],
+        tryThis: "Four misses in the bank and a purse on offer. Press Purse: it is yours, and the bank holds three.",
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { misersPurseOffers: 1 } }),
+        script: [
+            {
+                step: { do: 'takePurse' },
+                says: 'the purse is taken up, and the bank drops to three',
+                expect: (r) => ((r.relics ?? []).includes('misers_purse') && r.misersPurseOffers === 0 && missesLeft(r) === 3 && missBankCap(r) === 3 ? null : `relics ${String(r.relics)}, misses ${missesLeft(r)}, cap ${missBankCap(r)}`)
+            }
+        ]
+    },
+    {
+        id: 'misers-purse',
+        title: "The Miser's Purse",
+        mechanic: "A relic found in a Curio: every floor clear pays twice the gold, and the miss bank holds one fewer.",
+        graphMechanicIds: ['inventory.relics', 'economy.gold', 'economy.miss_bank'],
+        tryThis: "Carry the purse and clear the floor: the clear says what the purse doubled, and the bank has a slot less.",
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 2, run: { relics: ['misers_purse'], gold: 0 } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the clear pays double gold into the purse, and the bank holds three',
+                expect: (r) => {
+                    const gold = r.lastLevelResult?.goldEarned ?? 0;
+                    if (!r.lastLevelResult?.goldDoubled) return 'the clear did not say the purse doubled it';
+                    if (gold <= 0 || gold % 2 !== 0) return `a doubled clear paid ${gold}`;
+                    if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
+                    return missBankCap(r) === 3 ? null : `the bank holds ${missBankCap(r)}`;
+                }
+            }
         ]
     },
     {
@@ -2425,6 +2465,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             const target = bombTargetTileId(run);
             return target ? applyBomb(run, target) : null;
         }
+        case 'takePurse':
+            return takeMisersPurse(run);
         case 'stormGlass':
             return applyStormGlass(run)?.run ?? null;
         case 'crucible': {

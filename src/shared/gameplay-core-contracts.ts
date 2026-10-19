@@ -322,6 +322,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z.object({ ...commandBase, type: z.literal('board.meteor'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.crucible'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.storm_glass') }).strict(),
+    z.object({ ...commandBase, type: z.literal('run.take_relic'), relicId: z.literal('misers_purse') }).strict(),
     z
         .object({
             ...commandBase,
@@ -625,6 +626,15 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('run.relic_taken'),
+            relicId: z.literal('misers_purse'),
+            missesBefore: z.number().int().nonnegative(),
+            missesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('realm.weather_called'),
             realmId: z.string().min(1).max(40),
             weatherKind: z.string().min(1).max(40),
@@ -784,6 +794,9 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
         type: 'board.bomb',
         targetTileId
     });
+
+export const createGameplayTakeRelicCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'run.take_relic', relicId: 'misers_purse' });
 
 export const createGameplayStormGlassCommand = (commandId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.storm_glass' });

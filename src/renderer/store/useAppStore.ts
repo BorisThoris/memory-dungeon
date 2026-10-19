@@ -8,7 +8,8 @@ import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contract
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
-import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStormGlassCommand } from '../../shared/gameplay-core-contracts';
+import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStormGlassCommand, createGameplayTakeRelicCommand } from '../../shared/gameplay-core-contracts';
+import { canTakeMisersPurse } from '../../shared/misers-purse-rules';
 import { canBreakStormGlass } from '../../shared/storm-glass-rules';
 import { crucibleTargetTileId } from '../../shared/crucible-rules';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
@@ -660,6 +661,15 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 
+    takeMisersPurse: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canTakeMisersPurse(run)) return;
+        const command = createGameplayTakeRelicCommand(`take-relic:${run.runSeed}:${run.board?.level ?? 0}:misers_purse`);
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) return;
+        void resumeAudioContext();
+        set({ run: appendGameplayJournal(result.run, [command], result.events) });
+    },
     useStormGlass: () => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canBreakStormGlass(run)) return;

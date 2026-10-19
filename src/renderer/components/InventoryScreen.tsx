@@ -12,7 +12,7 @@ import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
-import { CAMP_UPGRADE_IDS, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit } from '../../shared/run-relic-rules';
+import { CAMP_UPGRADE_IDS, CURIO_RELIC_IDS, hasRelic, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit } from '../../shared/run-relic-rules';
 import { runGold } from '../../shared/run-store-rules';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 
@@ -141,6 +141,10 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
                     <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
                     <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
+                </li>)}
+                {CURIO_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
+                    <strong>{relicDefinition(id).title}</strong>
+                    <span>{relicDefinition(id).body}</span>
                 </li>)}</ul>
             </section>
         </Panel>

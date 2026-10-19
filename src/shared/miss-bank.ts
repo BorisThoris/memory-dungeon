@@ -58,7 +58,8 @@ export const MISS_BANK_CAP = 4;
 
 /** The cap this run is held to: four plus the Deep Pockets rank (`run-relic-rules.ts`). */
 export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion'>>): number =>
-    MISS_BANK_CAP + relicRank(run, 'deep_pockets');
+    // The Miser's Purse (`run-relic-rules.ts`) takes one slot back for the gold it doubles.
+    MISS_BANK_CAP + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0);
 
 export type { MissBankGrant };
 

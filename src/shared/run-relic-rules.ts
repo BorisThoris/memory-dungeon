@@ -20,6 +20,8 @@ export interface RelicDefinition {
     title: string;
     body: string;
     price: number;
+    /** Found in a Curio (`curio-rules.ts`), never sold: the store and its historical stock never see it. */
+    curio?: true;
 }
 
 /** The miss bank's cap with Deep Pockets. */
@@ -58,8 +60,30 @@ export const RELICS: readonly RelicDefinition[] = [
         title: 'Tallow Candle',
         body: 'Your first match on every floor lights the face-down cards beside it until your next flip.',
         price: 8
+    },
+    {
+        /*
+         * The owner's pros-and-cons relic (2026-10-18), found in a Curio from rules 68: every floor
+         * clear pays twice the gold, so the camps buy their ranks sooner, and the miss bank holds one
+         * fewer. A run that plays it is richer and has less room to be wrong.
+         */
+        id: 'misers_purse',
+        title: "Miser's Purse",
+        body: 'Every floor clear pays twice the gold. The miss bank holds one fewer.',
+        price: 0,
+        curio: true
     }
 ];
+
+/** What a floor clear's gold is multiplied by while the Miser's Purse is held. */
+export const MISERS_PURSE_GOLD_MULTIPLIER = 2;
+
+/** The relics only a Curio holds. */
+export const CURIO_RELIC_IDS: readonly RelicId[] = ['misers_purse'];
+
+/** A floor clear's gold after the Miser's Purse. */
+export const misersPurseGold = (run: Pick<RunState, 'relics'>, gold: number): number =>
+    (run.relics ?? []).includes('misers_purse') ? gold * MISERS_PURSE_GOLD_MULTIPLIER : gold;
 
 export const RELIC_IDS: readonly RelicId[] = RELICS.map((relic) => relic.id);
 

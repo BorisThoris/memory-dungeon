@@ -44,7 +44,7 @@ export const FLOOR_CLEAR_COPY = {
         // The purse (run-store-rules.ts): what this clear paid toward the store.
         const gold = runNonNegativeInteger(result.goldEarned);
         if (gold > 0) {
-            terms.push(`+${gold} gold`);
+            terms.push(result.goldDoubled ? `+${gold} gold (Miser's Purse \u00d72)` : `+${gold} gold`);
         }
         return terms.length > 0 ? terms.join(' \u00b7 ') : null;
     }

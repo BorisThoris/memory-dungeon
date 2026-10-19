@@ -3416,3 +3416,15 @@ The difficulty-curve gate flapped on this reseed: its ten seeds read the narrow-
 0.132 (0.119 on rules 66), over the 0.12 band, while a hundred seeds read 0.088 (0.087 on rules 66)
 - the deal had not moved, the sample had. `CURVE_SEEDS` is now the original ten plus ninety (19 s
 for the check); the band is unchanged.
+
+## The Miser's Purse (rules 68, 2026-10-18)
+
+A Curio may now offer the Miser's Purse, once a run; it waits in the dock until the player takes
+it up. Taken, every floor clear pays twice the gold and the miss bank holds one fewer (a full bank
+gives up its soonest-to-expire miss). It is never sold, so the historical store stock is unchanged.
+`GAME_RULES_VERSION` 67 → 68. The soak (every player takes it) carries it in 190 of 200 careful
+runs with 0 violations.
+
+The run census now plays 160 runs, not 40: the peek, at 0.890 of a run's floors over 160, read
+0.876 to 0.902 over forty across three reseeds and failed common or core in turn. The rare bar
+follows the census to one floor in 3840 (0.0002). The ledger quotes the rules-68 figures.

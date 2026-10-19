@@ -8,7 +8,8 @@ import { flipTile, resolveBoardTurn } from './game';
 
 describe('Curios', () => {
     it('put a curio item in hand and record the drop when their pair is matched', () => {
-        const run: RunState = finishMemorizePhase(createNewRun(0, { runSeed: 77, realm: null }));
+        // Rules 66: a Curio held only crucibles, so the claim itself is what is measured.
+        const run: RunState = { ...finishMemorizePhase(createNewRun(0, { runSeed: 77, realm: null })), runRulesVersion: 66 };
         const claimed = claimCurio(run, 4, 'pair-x');
         const item = claimed.lastCurioDrop!.item;
         expect((item === 'crucible' ? claimed.crucibleCharges : claimed.stormGlassCharges)).toBe(1);
@@ -46,7 +47,7 @@ describe('Curios', () => {
 
 describe('a Curio on the board', () => {
     it('is claimed by matching its pair, like any pickup', () => {
-        const run = finishMemorizePhase(createNewRun(0, { runSeed: 4242, realm: null }));
+        const run: RunState = { ...finishMemorizePhase(createNewRun(0, { runSeed: 4242, realm: null })), runRulesVersion: 66 };
         const carrier = run.board!.tiles.find((tile) => tile.state === 'hidden')!;
         const seeded: RunState = {
             ...run,

@@ -1,3 +1,4 @@
+import { hasRelic, misersPurseGold } from './run-relic-rules';
 import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
@@ -81,11 +82,15 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     // What the clear pays into the purse: the rung it cleared at and the turns it came in under.
     // A realm's weather multiplies it: the harder the door the floor was entered by, the more it pays.
     const realmId = runRealmId(run);
-    const goldEarned = realmClearGold(
-        floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
-        realmId ? runRealmSeverity(run) : null,
-        runRealmSecondaryId(run) != null,
-        realmAttunementLevel(run, realmId)
+    const goldDoubled = hasRelic(run, 'misers_purse');
+    const goldEarned = misersPurseGold(
+        run,
+        realmClearGold(
+            floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
+            realmId ? runRealmSeverity(run) : null,
+            runRealmSecondaryId(run) != null,
+            realmAttunementLevel(run, realmId)
+        )
     );
     // What the floor sends on: smoke, chill, and the attunement a clean clear earned.
     const carryover = realmCarryoverAtClear(run, realmId, turnsTaken, parTurns);
@@ -156,6 +161,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         lastLevelResult: {
             ...lastLevelResult,
             goldEarned,
+            ...(goldDoubled && goldEarned > 0 ? { goldDoubled: true } : {}),
             ...(usesElementalLoot(run) ? { elementalDrops } : {}),
             ...(floorChainTier === 'none' ? {} : { chainTier: floorChainTier }),
             ...(realmId

@@ -16,14 +16,22 @@ import { runNonNegativeInteger } from './run-number-guards';
  * (`board-tile-generation-rules.ts`), so the meteor shards and every other draw land where they
  * always did.
  */
-export type CurioItemId = 'crucible' | 'storm_glass';
+export type CurioItemId = 'crucible' | 'storm_glass' | 'misers_purse';
 
 /** Rules 67 add the Storm Glass to what a Curio may hold (`storm-glass-rules.ts`). */
 export const STORM_GLASS_RULES_VERSION = 67;
 
-/** What a Curio may hold under a run's rules: a rules-66 key draws what it always drew. */
+/** Rules 68 add the Miser's Purse, a relic, to what a Curio may hold (`run-relic-rules.ts`). */
+export const MISERS_PURSE_RULES_VERSION = 68;
+
+/** What a Curio may hold under a run's rules: an older key draws what it always drew. */
 export const curioItemsForRules = (rulesVersion: number): readonly CurioItemId[] =>
-    rulesVersion >= STORM_GLASS_RULES_VERSION ? ['crucible', 'storm_glass'] : ['crucible'];
+    rulesVersion >= MISERS_PURSE_RULES_VERSION
+        ? ['crucible', 'storm_glass', 'misers_purse']
+        : rulesVersion >= STORM_GLASS_RULES_VERSION
+          ? ['crucible', 'storm_glass']
+          : ['crucible'];
+
 
 /** Rules 66 deal Curios; a run (or a shared key) on older rules never sees one, so its replay deals what it dealt. */
 export const CURIO_RULES_VERSION = 66;
@@ -39,14 +47,18 @@ export const curioReplacesGlint = (runSeed: number, rulesVersion: number, level:
     level >= CURIO_FROM_FLOOR &&
     createMulberry32(hashStringToSeed(`curio:${rulesVersion}:${runSeed}:${level}:${pairKey}`))() < CURIO_GLINT_SHARE;
 
-const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges' | 'stormGlassCharges'>> = {
+const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges' | 'stormGlassCharges' | 'misersPurseOffers'>> = {
     crucible: 'crucibleCharges',
-    storm_glass: 'stormGlassCharges'
+    storm_glass: 'stormGlassCharges',
+    // A relic is offered, not forced: it waits in the dock until the player takes it up (`misers-purse-rules.ts`).
+    misers_purse: 'misersPurseOffers'
 };
 
 /** The item a claimed Curio grants: seeded by run, floor and how many Curios this run has opened. */
-export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'curiosClaimedThisRun'>, level: number): CurioItemId => {
-    const pool = curioItemsForRules(runNonNegativeInteger(run.runRulesVersion));
+export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'curiosClaimedThisRun' | 'relics' | 'misersPurseOffers'>, level: number): CurioItemId => {
+    // A relic comes once: a Curio never offers the purse to a run that carries it or has it on offer.
+    const purseSeen = (run.relics ?? []).includes('misers_purse') || runNonNegativeInteger(run.misersPurseOffers) > 0;
+    const pool = curioItemsForRules(runNonNegativeInteger(run.runRulesVersion)).filter((item) => item !== 'misers_purse' || !purseSeen);
     const rng = createMulberry32(hashStringToSeed(`curio-item:${run.runSeed}:${level}:${runNonNegativeInteger(run.curiosClaimedThisRun)}`));
     return pool[pickRngIndex(rng, pool.length)]!;
 };
@@ -54,12 +66,8 @@ export const curioItemFor = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' |
 /** The run after a Curio's pair is matched: one curio item in hand, and the drop recorded for the HUD. */
 export const claimCurio = (run: RunState, level: number, pairKey: string): RunState => {
     const item = curioItemFor(run, level);
-    const field = CHARGE_FIELD[item];
     const claimed = runNonNegativeInteger(run.curiosClaimedThisRun);
-    return {
-        ...run,
-        [field]: runNonNegativeInteger(run[field]) + 1,
-        curiosClaimedThisRun: claimed + 1,
-        lastCurioDrop: { key: `curio:${run.runSeed}:${level}:${claimed}:${pairKey}`, item }
-    };
+    const drop = { curiosClaimedThisRun: claimed + 1, lastCurioDrop: { key: `curio:${run.runSeed}:${level}:${claimed}:${pairKey}`, item } };
+    const field = CHARGE_FIELD[item];
+    return { ...run, ...drop, [field]: runNonNegativeInteger(run[field]) + 1 };
 };

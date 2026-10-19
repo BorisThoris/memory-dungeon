@@ -44,10 +44,12 @@ import { bombSelectableTileIds, bombTargetTileId } from '../../shared/board-powe
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 import { crucibleTargetTileId } from '../../shared/crucible-rules';
 import { canBreakStormGlass } from '../../shared/storm-glass-rules';
+import { canTakeMisersPurse } from '../../shared/misers-purse-rules';
+import { missBankCap } from '../../shared/miss-bank';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { SKITTISH_FLOATER_REASON } from '../copy/skittishCardsBeat';
 import { BOMB_TOOL_COPY } from '../copy/storeSheet';
-import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY, STORM_GLASS_TOOL_COPY } from '../copy/boardPowerCopy';
+import { CRUCIBLE_TOOL_COPY, METEOR_TOOL_COPY, MISERS_PURSE_TOOL_COPY, STORM_GLASS_TOOL_COPY } from '../copy/boardPowerCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1814,6 +1816,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     : run.realmId == null ? STORM_GLASS_TOOL_COPY.noRealm
                     : STORM_GLASS_TOOL_COPY.faceUp,
                 onClick: () => useAppStore.getState().useStormGlass()
+            },
+            {
+                ...toolSpec('misers_purse'),
+                glyph: RUN_SHELL_GLYPHS.misers_purse,
+                charges: run.misersPurseOffers ?? 0,
+                disabled: !canTakeMisersPurse(run),
+                title: canTakeMisersPurse(run) ? MISERS_PURSE_TOOL_COPY.ready(missBankCap(run) - 1) : MISERS_PURSE_TOOL_COPY.unavailable,
+                onClick: () => useAppStore.getState().takeMisersPurse()
             },
             {
                 ...toolSpec('bomb'),

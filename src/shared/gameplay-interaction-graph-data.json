@@ -3759,6 +3759,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the storm glass tool and count, the shattered glass, the storm, the lit cards, shake and sound"
+        },
+        {
+            "source": "findable.curio",
+            "target": "inventory.relics",
+            "kind": "grants",
+            "label": "from rules 68 a matched Curio may hold the Miser's Purse"
+        },
+        {
+            "source": "inventory.relics",
+            "target": "economy.miss_bank",
+            "kind": "modifies",
+            "label": "the Miser's Purse takes one slot from the bank"
         }
     ],
     "coverage": {
