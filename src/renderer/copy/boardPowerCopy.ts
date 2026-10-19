@@ -102,6 +102,7 @@ export const STILL_BELL_TOOL_COPY = {
 export const STORM_GLASS_TOOL_COPY = {
     ready: 'Storm Glass: the realm\'s peak strikes now; the cards it moves stay lit until your next flip',
     noRealm: 'Storm Glass: there is no realm on this floor to call',
+    nothingToTouch: 'Storm Glass: the storm would find nothing to touch on this board',
     faceUp: 'Storm Glass: finish the current pair first',
     unavailable: 'Storm Glass: wait for the floor to begin'
 } as const;

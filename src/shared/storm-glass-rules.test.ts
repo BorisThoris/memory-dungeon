@@ -86,3 +86,13 @@ describe('a called current that only met water', () => {
         }
     });
 });
+
+describe('a storm with nothing to touch', () => {
+    it('is not offered: fire over a board of water would do nothing, so the glass stays dark', () => {
+        const ember = floorIn('ember');
+        const allWater: RunState = { ...ember, board: { ...ember.board!, tiles: ember.board!.tiles.map((tile) => ({ ...tile, suit: 'tide' as const })) } };
+        expect(applyStormGlass(allWater)).toBeNull();
+        expect(canBreakStormGlass(allWater)).toBe(false);
+        expect(canBreakStormGlass(ember)).toBe(true);
+    });
+});

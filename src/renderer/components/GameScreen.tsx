@@ -1815,7 +1815,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 title: canBreakStormGlass(run) ? STORM_GLASS_TOOL_COPY.ready
                     : run.status !== 'playing' ? STORM_GLASS_TOOL_COPY.unavailable
                     : run.realmId == null ? STORM_GLASS_TOOL_COPY.noRealm
-                    : STORM_GLASS_TOOL_COPY.faceUp,
+                    : run.board.flippedTileIds.length > 0 ? STORM_GLASS_TOOL_COPY.faceUp
+                    : STORM_GLASS_TOOL_COPY.nothingToTouch,
                 onClick: () => useAppStore.getState().useStormGlass()
             },
             {

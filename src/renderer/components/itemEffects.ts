@@ -57,6 +57,9 @@ export interface ItemEffect {
     freedCount?: number;
 }
 
+/** The realm's colour for an effect, or the curio violet when the journal named no realm it knows. */
+const realmTint = (realm: RealmId | undefined): string => (realm && realm in REALMS ? REALMS[realm].color : '#b69bff');
+
 /** Trauma each item adds to the board (0..1; shake is trauma cubed, `boardTrauma.ts`). */
 export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     bomb: 0.62,
@@ -261,7 +264,7 @@ export const itemEffectRecipe = ({
             // The bell's ring goes out across the board: a still white ring and a breath of vapour on every
             // card let go; then, a beat later, the realm's answer sparks in its own colour where it lands.
             const freed = effect.freedCount ?? at.length;
-            const tint = effect.realm ? REALMS[effect.realm].color : '#b69bff';
+            const tint = realmTint(effect.realm);
             at.slice(0, freed).forEach((anchor, index) => {
                 const delay = index * 0.03;
                 shockwave(anchor, 0.35, `bell-ring${index}`, delay);
@@ -287,7 +290,7 @@ export const itemEffectRecipe = ({
         case 'storm_glass': {
             // The glass breaks over the board and the realm pours out of it: shards of glass and the
             // realm's light on every card the storm reached, a bolt running card to card, a ring under each.
-            const tint = effect.realm ? REALMS[effect.realm].color : '#b69bff';
+            const tint = realmTint(effect.realm);
             at.forEach((anchor, index) => {
                 const delay = index * 0.035;
                 motes(anchor, 'shard', '#e6f6ff', 0.75, `glass${index}`, delay, 0.9);

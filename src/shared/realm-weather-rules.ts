@@ -1135,7 +1135,8 @@ export const callRealmWeather = (
     const hidden = new Set(tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id));
     // Only what a moving storm actually carried is lit: a card that drank the current stayed where it was.
     const cellBefore = new Map(board.tiles.map((tile, cell) => [tile.id, cell]));
-    const moved = lightMoved && MOVING_WEATHER.has(strike.kind) ? strike.touched.filter((id) => tiles.findIndex((tile) => tile.id === id) !== cellBefore.get(id)) : [];
+    const cellAfter = new Map(tiles.map((tile, cell) => [tile.id, cell]));
+    const moved = lightMoved && MOVING_WEATHER.has(strike.kind) ? strike.touched.filter((id) => cellAfter.get(id) !== cellBefore.get(id)) : [];
     const lit = [...new Set([...strike.lit, ...moved])].filter((id) => hidden.has(id));
     return {
         board: { ...board, tiles },

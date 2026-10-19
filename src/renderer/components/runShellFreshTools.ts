@@ -28,3 +28,19 @@ export const risenToolCharges = (
     }
     return { counts, risen };
 };
+
+/*
+ * The counts last seen, per run. The game screen remounts behind the loading screen between floors,
+ * so a baseline kept in the component would be lost exactly when a floor's last match paid an item
+ * - and that item would never glow. Kept here, keyed by the run, it survives the remount; a new run
+ * starts a new baseline.
+ */
+let lastSeen: { runSeed: number; counts: Map<string, number> } | null = null;
+
+/** The baseline for this run: what was last seen of it, or null for a run not seen before. */
+export const toolChargeBaseline = (runSeed: number): ReadonlyMap<string, number> | null =>
+    lastSeen && lastSeen.runSeed === runSeed ? lastSeen.counts : null;
+
+export const rememberToolCharges = (runSeed: number, counts: Map<string, number>): void => {
+    lastSeen = { runSeed, counts };
+};

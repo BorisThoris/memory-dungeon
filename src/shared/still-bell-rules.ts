@@ -1,4 +1,5 @@
 import type { RealmEvent, RunState, Tile } from './contracts';
+import { isRealmHeld } from './odd-card-rules';
 import { callRealmWeather } from './realm-weather-rules';
 import { runRealmId } from './realm-rules';
 import { runFilteredStringArray } from './run-array-guards';
@@ -18,8 +19,8 @@ import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards'
  */
 export const STILL_BELL_SOURCE_ID = 'still_bell';
 
-const isHeld = (tile: Tile): boolean =>
-    tile.state === 'hidden' && (runNonNegativeInteger(tile.frost ?? 0) > 0 || tile.snowed === true || tile.vined === true || tile.fuse != null);
+// Held by the realm in the one sense the rest of the game uses (`isRealmHeld`), and face down.
+const isHeld = (tile: Tile): boolean => tile.state === 'hidden' && isRealmHeld(tile);
 
 /** True when the bell can ring: a realm floor in play, a bell in hand, nothing face up, and something held. */
 export const canRingStillBell = (run: RunState): boolean =>
