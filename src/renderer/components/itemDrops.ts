@@ -19,7 +19,7 @@ import type { ScreenCallout } from './screenCallouts';
  */
 export type ItemDropId = FindableKind | StoreItemId | CurioItemId | 'hourglass_prize';
 export type ItemDropRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-export type ItemDropGlyph = 'star' | 'comet' | 'heart' | 'eye' | 'shuffle' | 'bomb' | 'gem' | 'flask' | 'focus' | 'hourglass';
+export type ItemDropGlyph = 'star' | 'comet' | 'heart' | 'eye' | 'shuffle' | 'bomb' | 'gem' | 'flask' | 'focus' | 'hourglass' | 'crucible' | 'storm_glass' | 'purse';
 
 export const ITEM_DROP_RARITY_COLOR: Readonly<Record<ItemDropRarity, string>> = {
     common: '#c3cfdb',
@@ -58,7 +58,7 @@ export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
 };
 
 export const itemDropGlyph = (id: ItemDropId): ItemDropGlyph => {
-    if (RELICS.has(id)) return 'gem';
+    if (RELICS.has(id) && id !== 'misers_purse') return 'gem';
     if (id.startsWith('focus_')) return 'focus';
     if (id.startsWith('prime_')) return 'flask';
     switch (id) {
@@ -72,8 +72,13 @@ export const itemDropGlyph = (id: ItemDropId): ItemDropGlyph => {
             return 'shuffle';
         case 'bomb':
             return 'bomb';
+        // Each curio item wears the shape its dock tool does (`gameplayIcons.tsx`).
         case 'crucible':
+            return 'crucible';
         case 'storm_glass':
+            return 'storm_glass';
+        case 'misers_purse':
+            return 'purse';
         case 'curio':
             return 'flask';
         case 'hourglass_prize':

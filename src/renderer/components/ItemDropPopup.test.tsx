@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ITEM_DROP_LEAVE_MS, ITEM_DROP_TICK_MS, ItemDropPopup } from './ItemDropPopup';
-import { ITEM_DROP_HOLD_MS, itemDropFromCallout, itemDropRarity, type ItemDrop } from './itemDrops';
+import { ITEM_DROP_HOLD_MS, itemDropFromCallout, itemDropGlyph, itemDropRarity, type ItemDrop } from './itemDrops';
 import { derivePurchaseCallouts } from './screenCallouts';
 import { clearItemDrops, enqueueItemDrops, itemDropsBetween } from '../store/itemDropFeed';
 import { createNewRun } from '../../shared/game';
@@ -89,5 +89,15 @@ describe('item drops', () => {
         fireEvent.keyDown(window, { key: 'Escape' });
         fireEvent.keyDown(window, { key: 'Enter' });
         expect(screen.getByTestId('item-drop')).toBe(balloon);
+    });
+});
+
+describe('the curio items in a drop', () => {
+    it('wear the shapes their dock tools do, and stay epic', () => {
+        expect(itemDropGlyph('crucible')).toBe('crucible');
+        expect(itemDropGlyph('storm_glass')).toBe('storm_glass');
+        expect(itemDropGlyph('misers_purse')).toBe('purse');
+        expect(itemDropGlyph('deep_pockets')).toBe('gem');
+        for (const id of ['crucible', 'storm_glass', 'misers_purse'] as const) expect(itemDropRarity(id)).toBe('epic');
     });
 });

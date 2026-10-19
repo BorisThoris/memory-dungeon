@@ -36,7 +36,27 @@ const GLYPH_PATHS: Readonly<Record<ItemDropGlyph, ReactElement>> = {
     gem: <path d="M18 10h28l12 14-26 32L6 24zM6 24h52M24 10l-6 14 14 32 14-32-6-14" fill="currentColor" stroke="rgba(0,0,0,0.35)" strokeLinejoin="round" strokeWidth="2" />,
     flask: <path d="M24 6h16M27 6v16L10 52a5 5 0 004 7h36a5 5 0 004-7L37 22V6" />,
     focus: <path d="M32 4l24 28-24 28L8 32z" />,
-    hourglass: <path d="M14 6h36M14 58h36M18 6c0 16 28 16 28 26S18 42 18 58h28c0-16-28-16-28-26S46 22 46 6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="5" />
+    hourglass: <path d="M14 6h36M14 58h36M18 6c0 16 28 16 28 26S18 42 18 58h28c0-16-28-16-28-26S46 22 46 6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="5" />,
+    // The curio items, in the shapes their dock tools wear.
+    crucible: (
+        <>
+            <path d="M10 22h44l-5 20a17 17 0 01-34 0z" />
+            <path d="M24 12v-6M32 14V4M40 12v-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="4" />
+        </>
+    ),
+    storm_glass: (
+        <>
+            <path d="M16 6h32M16 58h32M20 6c0 16 24 16 24 26S20 42 20 58M44 6c0 16-24 16-24 26s24 10 24 26" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="4" />
+            <path d="M35 20l-7 13h8l-6 12" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" />
+        </>
+    ),
+    purse: (
+        <>
+            <path d="M22 20c-11 8-14 20-10 29 3 7 11 11 20 11s17-4 20-11c4-9 1-21-10-29z" />
+            <path d="M22 20L14 7l9 4 9-6 9 6 9-4-8 13z" />
+            <path d="M22 21h20" fill="none" stroke="rgba(0,0,0,0.45)" strokeLinecap="round" strokeWidth="3" />
+        </>
+    )
 };
 
 /**
