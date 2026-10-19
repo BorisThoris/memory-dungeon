@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 72803,
-      "sha256": "8614f4c541d3a502ce79f285487cf55d043656d52dbed9b654a194caadefb265"
+      "bytes": 73346,
+      "sha256": "0fbfcfc60069fe1c46f94eaf3befd056e510ddde3c61dd6f74c648e1c5997b1d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72136,
-      "sha256": "ad9e4522ee683512a013fede94c1cbf1c7317af0c46c679f6c7b6b4c19b32cba"
+      "bytes": 71766,
+      "sha256": "ee3f542be11dcdb964f11bb9c8f4824a7bd024403cbe28f7c6a71314dde8c397"
     },
     {
       "path": "public/site.webmanifest",
@@ -14325,8 +14325,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 73137,
-      "sha256": "e646a81c7092bb26ca2b708e776855420e254c911080f76b00d8381e7235d078"
+      "bytes": 73680,
+      "sha256": "c22603c9c2701647d54e0c13d6fb012a92155764b7412ead08965f50f5139b95"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
