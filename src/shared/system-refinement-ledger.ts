@@ -444,7 +444,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 273,
         present: ['dreadForRun', 'dreadTier', 'DREAD_TIERS', 'countDreadFloor', 'dreadRagingFloors'],
-        note: 'Dread (2026-10-19, DGE-003): one number, three per floor multiplied by 1.15 for every raging floor and 1.05 for every wild floor entered, read as eight named tiers from Quiet to It is coming, the next always named on the run bar before it arrives. Realm severities are seeded at each clear and a sway tip keeps the severity, so play never moves it; it never falls, and past the last tier it counts doublings. The priced composition table ships as data; the board builder spends it with DGE-009, in one rules bump.'
+        note: 'Dread (2026-10-19, DGE-003): one number, three per floor multiplied by 1.15 for every raging floor and 1.05 for every wild floor entered, read as eight named tiers from Quiet to It is coming, the next always named on the run bar before it arrives. Realm severities are seeded at each clear and a sway tip keeps the severity, so play never moves it; it never falls, and past the last tier it counts doublings. The priced composition arrives with DGE-009, whose board builder spends it, in one rules bump.'
     },
     {
         id: 'inventory.still_bell_charge',

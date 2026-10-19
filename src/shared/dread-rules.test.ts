@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game';
 import { rollRealmDoors } from './realm-rules';
-import { DREAD_PRICES, DREAD_TIERS, countDreadFloor, dreadAt, dreadForRun, dreadTier } from './dread-rules';
+import { DREAD_TIERS, countDreadFloor, dreadAt, dreadForRun, dreadTier } from './dread-rules';
 import type { RealmDoor, RealmId, RealmSeverity } from './contracts';
 
 describe('Dread (DGE-003)', () => {
@@ -75,11 +75,5 @@ describe('Dread (DGE-003)', () => {
         const run = createNewRun(0, { runSeed: 4401, realm: { realmId: 'ember', severity: 'raging' } });
         expect(run.dreadRagingFloors).toBe(1);
         expect(dreadForRun(run)).toBeCloseTo(3 * 1.15);
-    });
-
-    it('prices the composition rows the board builder will spend Dread on (DGE-009)', () => {
-        const prices = Object.values(DREAD_PRICES);
-        expect(prices.every((price) => price > 0)).toBe(true);
-        expect([...prices].sort((a, b) => a - b)).toEqual(prices);
     });
 });

@@ -41,20 +41,6 @@ export const DREAD_TIERS: readonly DreadTierDefinition[] = [
     { id: 'coming', name: 'It is coming', from: 7000 }
 ];
 
-/**
- * What one floor would cost to compose (DGE-003's priced table). Not read by the board builder
- * yet: composing floors from a Dread budget changes generation, a `GAME_RULES_VERSION` bump the
- * ticket batches with DGE-009, whose Wanderer, Mask and Sleeper are the rows that make it matter.
- */
-export const DREAD_PRICES = {
-    pair: 1,
-    wanderer: 4,
-    mask: 6,
-    sleeper: 9,
-    stacked_mutator: 12,
-    boss_rule: 20
-} as const;
-
 /** The run's count of floors entered in a raging and a wild realm, the first floor included. */
 export const dreadFloorCounts = (run: Pick<RunState, 'dreadRagingFloors' | 'dreadWildFloors'>): { raging: number; wild: number } => ({
     raging: runNonNegativeInteger(run.dreadRagingFloors),
