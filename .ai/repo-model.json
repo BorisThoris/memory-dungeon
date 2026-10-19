@@ -213,8 +213,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 9733,
-      "sha256": "bbfaf10c3767eb72ff59514ad0ce9a696f03d4e47641cf8acf7a6ee74e517b4a"
+      "bytes": 9825,
+      "sha256": "84d21fab614e44300f920c726f7de7a3b0aaaf0082317e8613a1563e92050604"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -3927,8 +3927,8 @@
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
       "category": "test",
-      "bytes": 11423,
-      "sha256": "6f922d17d860dab0e81306eeb8eef0e79c40a7104b643ca67ad8860e089c05b5"
+      "bytes": 12946,
+      "sha256": "319b10bcf1b3583dbaa5d62c3299c89caf74362c1ab8290e8443a70d2374c6f3"
     },
     {
       "path": "e2e/gameplay-readability.spec.ts",
@@ -3957,8 +3957,8 @@
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
       "category": "test",
-      "bytes": 4406,
-      "sha256": "9077b23d9f09a6e337fabc49f4d9278cd7151df2ef0a6529e5680662b6272eac"
+      "bytes": 6605,
+      "sha256": "9bff1e8364a9b8ef5f614cae7af57203561bca83e7b11d9874a58de71d60c305"
     },
     {
       "path": "e2e/memorizeSnapshot.ts",
@@ -5721,8 +5721,8 @@
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 30326,
-      "sha256": "5f840c4588f51465b83c3a78860ecd1954fcf1e51ea37d24eafed9812ef09b99"
+      "bytes": 30527,
+      "sha256": "09abe596045fa38397027246d65312cde31b0deddc031d2f917e15acc9820edc"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -11541,8 +11541,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 65665,
-      "sha256": "91dcd8e71f9848dc4c12ac77631a1a4a5fe5fd06338ba87bcfb1109e5ac66393"
+      "bytes": 65667,
+      "sha256": "c55df01da416013033815c25bda63e394144257b5da2a373d009b9a12ac6e6f0"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -16857,8 +16857,8 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 21756,
-      "sha256": "385922b8748492e4483452562e60e135bcb742bb136f437a2cbaba1b37d54c75"
+      "bytes": 21783,
+      "sha256": "282e93f36c6dfefaf46ca0f9da9551dc4861ef6fca02bd0772cbcaf898fa5ae4"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
@@ -42474,7 +42474,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 399,
+      "lineCount": 400,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -74903,7 +74903,7 @@
         },
         {
           "path": "src/shared/tile-suit-rules.test.ts",
-          "line": 315
+          "line": 316
         },
         {
           "path": "src/shared/cascade-balance-simulation.test.ts",
