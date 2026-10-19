@@ -65,7 +65,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'bomb', label: 'Bomb', spends: 'bombCharges' },
     { conditional: false, id:'meteor',label:'Meteor',spends:'meteorCharges' },
     // A Curio's item (`curio-rules.ts`): hidden like every tool with no charges left.
-    { conditional: false, id: 'crucible', label: 'Crucible', spends: 'crucibleCharges' },
+    // 'Crucible' ran wider than its button into its neighbours (1024-1366 wide, 2026-10-19): the dock says what it does.
+    { conditional: false, id: 'crucible', label: 'Melt', spends: 'crucibleCharges' },
     // One word, like every label on the dock: two would wrap the button taller than its neighbours.
     { conditional: false, id: 'storm_glass', label: 'Storm', spends: 'stormGlassCharges' },
     { conditional: false, id: 'still_bell', label: 'Bell', spends: 'stillBellCharges' },
