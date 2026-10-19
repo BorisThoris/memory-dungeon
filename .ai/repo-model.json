@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3204,
-    "codeFileCount": 1218,
-    "exportedSymbolCount": 3867,
+    "trackedFileCount": 3205,
+    "codeFileCount": 1219,
+    "exportedSymbolCount": 3869,
     "contentItemCount": 15,
     "mechanicCount": 69,
     "stateFieldCount": 136,
-    "relationshipCount": 10403
+    "relationshipCount": 10408
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "cb80b96cf405bb4112d99bcfcf13c1250f17a1741cbbc35df564484dd7c4aa98"
+      "sha256": "d6d13bfcda74e05bd0ec675ce5447726f9c162477c913b13e1138f54061854a5"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11541,26 +11541,32 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 62310,
-      "sha256": "f3a5c9defe469d357eca0861aaff09336070194201761fcd1305ae729f1fdfb0"
+      "bytes": 63271,
+      "sha256": "f894f1f9eccbf30463d16123661da67d87f79a5807f63f3533563d77f297f03a"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 36944,
-      "sha256": "63dbea4314b30f6de2d164b447b3a3d67d894bb26d8dd3c83a7493e1230f1809"
+      "bytes": 38043,
+      "sha256": "e184dee11d83cc7ae493f7c28060b8cd401550e55414595b8b4a0847a899d732"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 51351,
-      "sha256": "ebb504b240545a6773fcf9a709b37bdddf0652542eb0951255873bf7fe9765cf"
+      "bytes": 52450,
+      "sha256": "7901479acd49ccc01db106da1305ee2e399be72646a08b761fc1f3b69023e777"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "category": "test",
       "bytes": 2453,
       "sha256": "62139061104088ed70d2fbe2581eb35477dc978aec89dc98d7626ff2b1be3675"
+    },
+    {
+      "path": "src/renderer/components/runShellFreshTools.ts",
+      "category": "source",
+      "bytes": 1311,
+      "sha256": "79ffda8d8fff73d4f54ab224666b093dd8e589d2d6dd331a28ca5964b5f45dea"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -25283,9 +25289,10 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 678,
+      "lineCount": 698,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
+        "file:src/renderer/components/runShellFreshTools.ts",
         "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/store/memorizeClock.ts",
         "file:src/shared/contracts.ts",
@@ -25300,7 +25307,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 901,
+      "lineCount": 919,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25309,6 +25316,7 @@
         "file:src/renderer/components/FloorResident.tsx",
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/components/PlasmaRail.tsx",
+        "file:src/renderer/components/runShellFreshTools.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/lookingGlassBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -25363,6 +25371,21 @@
       ],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/runShellFreshTools.ts",
+      "path": "src/renderer/components/runShellFreshTools.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 31,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
+        "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/runShellGlyphs.tsx",
@@ -49405,24 +49428,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 900,
-      "endLine": 900
+      "line": 918,
+      "endLine": 918
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 83,
-      "endLine": 116
+      "line": 84,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 70,
-      "endLine": 81
+      "line": 71,
+      "endLine": 82
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
+      "name": "risenToolCharges",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 18,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+      "name": "TOOL_FRESH_MS",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -73954,7 +73993,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 121
+          "line": 122
         }
       ],
       "tests": [
@@ -73980,7 +74019,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 111
+          "line": 112
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -74065,7 +74104,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 6
+          "line": 7
         }
       ],
       "tests": [
@@ -74806,7 +74845,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -74828,7 +74867,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -75333,7 +75372,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 4
+          "line": 5
         }
       ],
       "tests": [
@@ -75569,7 +75608,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 12
+          "line": 13
         }
       ],
       "tests": [
@@ -76985,7 +77024,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 389
+          "line": 405
         }
       ],
       "tests": [
@@ -77024,7 +77063,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 389
+          "line": 405
         }
       ],
       "tests": [
@@ -77058,7 +77097,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 389
+          "line": 405
         }
       ],
       "tests": [
@@ -77092,7 +77131,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 389
+          "line": 405
         }
       ],
       "tests": [
@@ -84462,6 +84501,18 @@
       "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
       "kind": "exports"
     },
     {
@@ -110908,6 +110959,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/components/runShellFreshTools.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/renderer/components/runShellFreshTools.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/copy/realmCopy.ts",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/renderer/copy/realmCopy.ts",
@@ -110977,6 +111034,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/PlasmaRail.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/PlasmaRail.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/runShellFreshTools.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/runShellFreshTools.ts",
       "kind": "imports"
     },
     {
@@ -132421,6 +132484,12 @@
       "id": "tested_by:src/renderer/components/RunShell.tsx->file:src/renderer/components/RunShellItemTray.test.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/RunShellItemTray.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/runShellFreshTools.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
