@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3253,
-    "codeFileCount": 1224,
-    "exportedSymbolCount": 3901,
+    "trackedFileCount": 3255,
+    "codeFileCount": 1226,
+    "exportedSymbolCount": 3905,
     "contentItemCount": 16,
     "mechanicCount": 71,
     "stateFieldCount": 139,
-    "relationshipCount": 10526
+    "relationshipCount": 10537
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "cbef9b0baaa9e896a3397f7a2054f87765323c3f61dc6058a2436c5df3e8cccb"
+      "sha256": "427e2720a0f731c356f047fb405bcb869d9c72f59768d76baa97683c69870714"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72012,
-      "sha256": "9c14d3b00673db1ccf79418d8c7175072794d75506508766223276d2a7b3c788"
+      "bytes": 72135,
+      "sha256": "8d01300adb871e9f92444c07279d2a21b88df89cb804e0a014f1260c6336e8b1"
     },
     {
       "path": "public/site.webmanifest",
@@ -10809,20 +10809,20 @@
     {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
-      "bytes": 3639,
-      "sha256": "38806b4a9bed737caa0c3949ab0ad161853be8345d0d30a68f711c3598e8a257"
+      "bytes": 3932,
+      "sha256": "e9529fc5a3cda03afd405a0c789f01bf3b834143449494ffe89c582254afb03a"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "category": "test",
-      "bytes": 4904,
-      "sha256": "ebb71439d133eb915857a873768bd7f51167ee4710630fea545df2a563b424ac"
+      "bytes": 5655,
+      "sha256": "0400cfbaedd5d9175ce46f7b84bc8e18366de3c9dc38dc2cfeb701d2397e6fe4"
     },
     {
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "category": "source",
-      "bytes": 3760,
-      "sha256": "e637c6643bf44dd87056e94048d08887028c1ec876f47769532df1e0e9c45709"
+      "bytes": 4222,
+      "sha256": "79955f8fd4f26bc26b22e09731d5c5e500ca53811a2cbbe13d98cf639d2f52d5"
     },
     {
       "path": "src/renderer/components/FloorJourney.module.css",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 126389,
-      "sha256": "3a6bc28d11de508a88bcbfb5852ef119423ebd99212bcd69fcecb971a6e50303"
+      "bytes": 126613,
+      "sha256": "229889fc45c34e68c12a335107ee5442c50f9f11cbfd678fbeb0605654f15d07"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11541,20 +11541,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 64588,
-      "sha256": "fc1168d2119066bd8b5f3abf26fbf13d63669dccd44dda3d0c315cded8feb2d9"
+      "bytes": 65665,
+      "sha256": "91dcd8e71f9848dc4c12ac77631a1a4a5fe5fd06338ba87bcfb1109e5ac66393"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 40713,
-      "sha256": "3c37360cda2dd41462e8640eb357414cad65902c9f1829b6132bc95f697c6e6a"
+      "bytes": 41403,
+      "sha256": "11715083601ea333ff3ef90b71102f4da1735710a6b2da032b49e3b3587b74c7"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 54655,
-      "sha256": "b6d78aaf479e13f9097694d667984fffd0e5982ee5bafb9cdd49974a26f6f8f6"
+      "bytes": 55971,
+      "sha256": "741128740ba9f23a9dd2448aa3fc5c8b593d7f8cedb295bf03251206cd812bbb"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12879,8 +12879,8 @@
     {
       "path": "src/renderer/copy/floorClearChain.ts",
       "category": "source",
-      "bytes": 2759,
-      "sha256": "5fe4e949bcb36208fd7828f7818fec275335feafbfbfbbabf18ab6384ae271af"
+      "bytes": 3291,
+      "sha256": "407c44b0a68608ccd38cf13866db887a3c1bdba11d8f815ef479119a52bec108"
     },
     {
       "path": "src/renderer/copy/floorCurioBeat.test.ts",
@@ -13023,8 +13023,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 8218,
-      "sha256": "9a4d131fa41af0bd723a6929035fad901ec3a2ad7940002f23ad8cecc9e36959"
+      "bytes": 8699,
+      "sha256": "29f606d1a2f6413b5c70d2b684e6a9fee7c1df120842b4f05864db4152f9bcf0"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -15769,6 +15769,18 @@
       "sha256": "f6ea0dd7cfdcf6c456bb31228e4d540c03036e19a0a905b6bfb3d03ef415111b"
     },
     {
+      "path": "src/shared/milestone-rules.test.ts",
+      "category": "test",
+      "bytes": 2191,
+      "sha256": "82259bd2b3d9dacf5d7121d66c899808fa9868205b304bbd9745cc9558d8a833"
+    },
+    {
+      "path": "src/shared/milestone-rules.ts",
+      "category": "source",
+      "bytes": 2553,
+      "sha256": "fdd2ac2dcbe545007c825d8614bab91fc7ceeda5a588fd4923084b2d07f6c689"
+    },
+    {
       "path": "src/shared/min-type-size.test.ts",
       "category": "test",
       "bytes": 4170,
@@ -17115,8 +17127,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 3329,
-      "sha256": "ef5c6fb79ea774c18338719accbab14b09deddaef9c6f83e4b48871fa9ebdd30"
+      "bytes": 3804,
+      "sha256": "d849c4efbb1b0772b476aa877462fbb44f2af8589eb1bfc490dd825c0941f46a"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17169,8 +17181,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-004-milestones-and-clear-beat.md",
       "category": "other",
-      "bytes": 2847,
-      "sha256": "2ddf37643216283c91b9e309365bbd89280a91574ae8a4d75f9f5ba4866213ed"
+      "bytes": 4616,
+      "sha256": "7ccad5b03bec2fefadf017a7452e7a0b8e4b45f243ad668e6bd8d98822a4e019"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-005-warden-floor-v1.md",
@@ -23582,7 +23594,7 @@
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 99,
+      "lineCount": 108,
       "imports": [
         "file:src/renderer/components/FloorClearBeat.tsx",
         "file:src/shared/contracts.ts"
@@ -23595,7 +23607,7 @@
       "path": "src/renderer/components/FloorClearBeat.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 85,
+      "lineCount": 92,
       "imports": [
         "file:src/renderer/copy/floorClearChain.ts",
         "file:src/shared/contracts.ts"
@@ -23961,7 +23973,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2470,
+      "lineCount": 2472,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24046,6 +24058,7 @@
         "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/meteor-rules.ts",
+        "file:src/shared/milestone-rules.ts",
         "file:src/shared/misers-purse-rules.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/pass-and-play-rules.ts",
@@ -25580,7 +25593,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 741,
+      "lineCount": 751,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -25599,7 +25612,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 950,
+      "lineCount": 967,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25628,6 +25641,7 @@
         "file:src/shared/floor-par.ts",
         "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
+        "file:src/shared/milestone-rules.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/realm-rules.ts",
@@ -29622,7 +29636,7 @@
       "path": "src/renderer/copy/floorClearChain.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 52,
+      "lineCount": 59,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -30004,7 +30018,7 @@
       "path": "src/renderer/copy/realmCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 140,
+      "lineCount": 148,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/daily-music-composer.ts",
@@ -30016,6 +30030,7 @@
         "symbol:src/renderer/copy/realmCopy.ts#DAILY_MUSIC_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#DREAD_HUD_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#FLOOR_JOURNEY_REWARDS_LABEL",
+        "symbol:src/renderer/copy/realmCopy.ts#MILESTONE_HUD_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#REALM_TRAVEL_COPY",
         "symbol:src/renderer/copy/realmCopy.ts#realmCarryoverLines"
@@ -36629,6 +36644,7 @@
         "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
+        "file:src/shared/milestone-rules.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/version-gate.test.ts"
       ]
@@ -38644,6 +38660,37 @@
       "testedBy": [
         "file:src/shared/late-board.test.ts",
         "file:src/shared/meteor-rules.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/milestone-rules.test.ts",
+      "path": "src/shared/milestone-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 37,
+      "imports": [
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/milestone-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/milestone-rules.ts",
+      "path": "src/shared/milestone-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 50,
+      "imports": [
+        "file:src/shared/floor-mutator-schedule.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/milestone-rules.ts#Milestone",
+        "symbol:src/shared/milestone-rules.ts#milestoneAfterClear",
+        "symbol:src/shared/milestone-rules.ts#nextMilestone"
+      ],
+      "testedBy": [
+        "file:src/shared/milestone-rules.test.ts"
       ]
     },
     {
@@ -47797,24 +47844,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 84,
-      "endLine": 84
+      "line": 91,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_BEAT_EXIT_MS",
       "name": "FLOOR_CLEAR_BEAT_EXIT_MS",
       "kind": "value",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 44,
-      "endLine": 44
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FLOOR_CLEAR_COUNT_UP_MS",
       "name": "FLOOR_CLEAR_COUNT_UP_MS",
       "kind": "value",
       "file": "src/renderer/components/FloorClearBeat.tsx",
-      "line": 18,
-      "endLine": 18
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#FloorClearBeatProps",
@@ -47822,7 +47869,7 @@
       "kind": "interface",
       "file": "src/renderer/components/FloorClearBeat.tsx",
       "line": 6,
-      "endLine": 15
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/components/FloorJourney.tsx#FloorJourney",
@@ -48045,40 +48092,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2469,
-      "endLine": 2469
+      "line": 2471,
+      "endLine": 2471
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 269,
-      "endLine": 269
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 267,
-      "endLine": 267
+      "line": 268,
+      "endLine": 268
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 271,
-      "endLine": 271
+      "line": 272,
+      "endLine": 272
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 261,
-      "endLine": 261
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -49861,24 +49908,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 949,
-      "endLine": 949
+      "line": 966,
+      "endLine": 966
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 85,
-      "endLine": 120
+      "line": 86,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 72,
-      "endLine": 83
+      "line": 73,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -54894,7 +54941,7 @@
       "kind": "value",
       "file": "src/renderer/copy/floorClearChain.ts",
       "line": 15,
-      "endLine": 51
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/copy/floorCurioBeat.ts#codexResidentDescription",
@@ -55295,6 +55342,14 @@
       "file": "src/renderer/copy/realmCopy.ts",
       "line": 127,
       "endLine": 127
+    },
+    {
+      "id": "symbol:src/renderer/copy/realmCopy.ts#MILESTONE_HUD_COPY",
+      "name": "MILESTONE_HUD_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/realmCopy.ts",
+      "line": 142,
+      "endLine": 147
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
@@ -67537,6 +67592,30 @@
       "endLine": 8
     },
     {
+      "id": "symbol:src/shared/milestone-rules.ts#Milestone",
+      "name": "Milestone",
+      "kind": "interface",
+      "file": "src/shared/milestone-rules.ts",
+      "line": 20,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/milestone-rules.ts#milestoneAfterClear",
+      "name": "milestoneAfterClear",
+      "kind": "value",
+      "file": "src/shared/milestone-rules.ts",
+      "line": 46,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/milestone-rules.ts#nextMilestone",
+      "name": "nextMilestone",
+      "kind": "value",
+      "file": "src/shared/milestone-rules.ts",
+      "line": 34,
+      "endLine": 43
+    },
+    {
       "id": "symbol:src/shared/misers-purse-rules.ts#canTakeMisersPurse",
       "name": "canTakeMisersPurse",
       "kind": "value",
@@ -74693,7 +74772,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 125
+          "line": 126
         }
       ],
       "tests": [
@@ -77820,7 +77899,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 417
+          "line": 420
         }
       ],
       "tests": [
@@ -77859,7 +77938,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 417
+          "line": 420
         }
       ],
       "tests": [
@@ -77893,7 +77972,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 417
+          "line": 420
         }
       ],
       "tests": [
@@ -77927,7 +78006,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 417
+          "line": 420
         }
       ],
       "tests": [
@@ -89426,6 +89505,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#MILESTONE_HUD_COPY",
+      "source": "file:src/renderer/copy/realmCopy.ts",
+      "target": "symbol:src/renderer/copy/realmCopy.ts#MILESTONE_HUD_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/realmCopy.ts->symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
       "source": "file:src/renderer/copy/realmCopy.ts",
       "target": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
@@ -98603,6 +98688,24 @@
       "id": "exports:src/shared/meteor-rules.ts->symbol:src/shared/meteor-rules.ts#meteorCharges",
       "source": "file:src/shared/meteor-rules.ts",
       "target": "symbol:src/shared/meteor-rules.ts#meteorCharges",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/milestone-rules.ts->symbol:src/shared/milestone-rules.ts#Milestone",
+      "source": "file:src/shared/milestone-rules.ts",
+      "target": "symbol:src/shared/milestone-rules.ts#Milestone",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/milestone-rules.ts->symbol:src/shared/milestone-rules.ts#milestoneAfterClear",
+      "source": "file:src/shared/milestone-rules.ts",
+      "target": "symbol:src/shared/milestone-rules.ts#milestoneAfterClear",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/milestone-rules.ts->symbol:src/shared/milestone-rules.ts#nextMilestone",
+      "source": "file:src/shared/milestone-rules.ts",
+      "target": "symbol:src/shared/milestone-rules.ts#nextMilestone",
       "kind": "exports"
     },
     {
@@ -110494,6 +110597,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/milestone-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/milestone-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/misers-purse-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/misers-purse-rules.ts",
@@ -112285,6 +112394,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/mechanics-encyclopedia.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/mechanics-encyclopedia.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/milestone-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/milestone-rules.ts",
       "kind": "imports"
     },
     {
@@ -124477,6 +124592,24 @@
       "id": "imports:src/shared/meteor-rules.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/meteor-rules.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/milestone-rules.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/milestone-rules.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/milestone-rules.test.ts->src/shared/milestone-rules.ts",
+      "source": "file:src/shared/milestone-rules.test.ts",
+      "target": "file:src/shared/milestone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/milestone-rules.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/milestone-rules.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
@@ -137836,6 +137969,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/milestone-rules.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/milestone-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/softlock-fairness.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/softlock-fairness.test.ts",
@@ -138997,6 +139136,12 @@
       "id": "tested_by:src/shared/meteor-rules.ts->file:src/shared/meteor-rules.test.ts",
       "source": "file:src/shared/meteor-rules.ts",
       "target": "file:src/shared/meteor-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/milestone-rules.ts->file:src/shared/milestone-rules.test.ts",
+      "source": "file:src/shared/milestone-rules.ts",
+      "target": "file:src/shared/milestone-rules.test.ts",
       "kind": "tested_by"
     },
     {
