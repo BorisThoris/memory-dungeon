@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3257,
-    "codeFileCount": 1228,
-    "exportedSymbolCount": 3911,
+    "trackedFileCount": 3261,
+    "codeFileCount": 1232,
+    "exportedSymbolCount": 3917,
     "contentItemCount": 16,
     "mechanicCount": 72,
     "stateFieldCount": 142,
-    "relationshipCount": 10591
+    "relationshipCount": 10633
   },
   "inventory": [
     {
@@ -213,8 +213,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 9825,
-      "sha256": "84d21fab614e44300f920c726f7de7a3b0aaaf0082317e8613a1563e92050604"
+      "bytes": 10439,
+      "sha256": "52b5d60b5f7a0eaa3a52155c24b2fd2832641d7483794d4848e029cd684feb8b"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "0555dbe1bec994968f6a622f0e6f80df31fc12c34d332c32471ca2f31feb7da9"
+      "sha256": "5bef2bb5d979f97dd7fe0d61a4264bbeba08f07348193ce9ff14bc65835bb185"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4035,14 +4035,14 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 12730,
-      "sha256": "9118ae7f52ccd90af76e00c84209ffb21e553ae2afb6147aa58d61c49dc7029a"
+      "bytes": 12859,
+      "sha256": "61235830fdd60660d0593b966b6d086556e1de4b62a938e31c389f8c29a9cf22"
     },
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 9044,
-      "sha256": "36a88090fcfdb2659e0cdd078a75fa7712600c79768099b71dcd57ca82b2035f"
+      "bytes": 9982,
+      "sha256": "088bd4c6c74b2b76264a28d498ab684996b2ebdba5e3dc313123f0ce0fd3b517"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4257,8 +4257,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 34975,
-      "sha256": "793547647195b2ddae302f85c2a912c5a384e1f108e716af37089e6641aba7cc"
+      "bytes": 35090,
+      "sha256": "06ab9a918eab69166b2fc6635dc64e31e136bc3f553ac6eec5a536dabca296a1"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72156,
-      "sha256": "abc512d4ed6d0577c5cdbcc09b82621a3916dc4c14b9fb2c16e040ccee8d13bf"
+      "bytes": 71934,
+      "sha256": "d88c5cd54365abb812c7e183adc463c7817cd622f5da7e4d35fdbeea51ae9467"
     },
     {
       "path": "public/site.webmanifest",
@@ -10875,8 +10875,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24574,
-      "sha256": "f47030cf3f61b5e70d2d96e2f1d444f3cd1a9760172245adaa0320d8f67f142a"
+      "bytes": 24648,
+      "sha256": "96b811adad7a702ba64e250e0d790141c07304615f8475c2c7576f58f04256f5"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -10935,8 +10935,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 55588,
-      "sha256": "69969d9aea76ccd7921c594b656c357d6cf139398ed7bb49083c9ef3b7342845"
+      "bytes": 56159,
+      "sha256": "f24d17996aa5747612dce8e99071c4f5ec56732b40b541795a417f98d2faad75"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 126613,
-      "sha256": "229889fc45c34e68c12a335107ee5442c50f9f11cbfd678fbeb0605654f15d07"
+      "bytes": 127512,
+      "sha256": "8733c782bbfb1e6c8403ca6a38b2795be346778835e3f5498cea7e8d4de9e1e7"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11547,14 +11547,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 42222,
-      "sha256": "20f22be12a750189208f2e78a9356b3a35b50c9b9cf84505f0f8df97a942e976"
+      "bytes": 42762,
+      "sha256": "70ae7cb0128d0cc52f16c63a55b768f5d7f401bc758c7b01ac6cba59a64b49b6"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 56331,
-      "sha256": "5b79b77ca435a6488bb5369da2fdf333fcd1cefe3e057f6316528ee3a336b57d"
+      "bytes": 56937,
+      "sha256": "ad136c2ac72143d5da683774f45f93c4ab310a8b83e0f8a8f983843e81c9f677"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12903,8 +12903,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 8529,
-      "sha256": "beb5bec67f55b78b5428abbcb8fd9a03aa7693db926d771aa997d65b8ecaf24a"
+      "bytes": 8740,
+      "sha256": "fd34d3271aba61752e61393ae95fa9447666cb4caf96edf2a8bd2769d2aee3c6"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -13041,8 +13041,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7646,
-      "sha256": "be5d344fef3a08efb2860d3ccd9ea921d65a59d22a10cff6b01b9cb223d219f1"
+      "bytes": 8033,
+      "sha256": "aaca52748b9d2bbe6d08b24c6e9ab98e2ada33ad443a75a44e66795f552218cc"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -13959,8 +13959,8 @@
     {
       "path": "src/renderer/store/runStartState.ts",
       "category": "source",
-      "bytes": 6298,
-      "sha256": "bfa3621934211914b666eaa54e711e1516c14a5864896cda3c50e8b2394f9c08"
+      "bytes": 6912,
+      "sha256": "42580096380d5568f6ecb1a1649a4fb846deffbdf14c688d449d6a2a2df23061"
     },
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -14111,6 +14111,18 @@
       "category": "test",
       "bytes": 2352,
       "sha256": "68289a4a4901f769aa554537f9ee36ee02790f8b2fc81bfb70766123aa7e7cfa"
+    },
+    {
+      "path": "src/renderer/testPace.test.ts",
+      "category": "test",
+      "bytes": 1769,
+      "sha256": "fb8ca7157d7d2794d01074fdee7dd446ffc8aa404dd3fe1f0aaeae3b59a0c724"
+    },
+    {
+      "path": "src/renderer/testPace.ts",
+      "category": "source",
+      "bytes": 626,
+      "sha256": "497ddc55db24b38be5fbd5f52922b391c513dafc656464c8780e30827b1a1cf2"
     },
     {
       "path": "src/renderer/ui/AccentBanner.module.css",
@@ -14835,8 +14847,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 55346,
-      "sha256": "306ff5a1dda98980dd1d540d74091930ddea6ec05d6f9c20ce1a1c62a8606f77"
+      "bytes": 55500,
+      "sha256": "bed6a05c616430466b8b3c96486e37d54ebd18c56530125838e60c96e50b92ce"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14939,6 +14951,18 @@
       "category": "source",
       "bytes": 16767,
       "sha256": "39a55ac424f47eb181fdceea43ab29a8784ec5284a9897898a6728883ba8da09"
+    },
+    {
+      "path": "src/shared/descent-pace-rules.test.ts",
+      "category": "test",
+      "bytes": 4182,
+      "sha256": "df3c933099db36acf2cb9f7504664bf4ed20222a10a9869564d076d2a335063c"
+    },
+    {
+      "path": "src/shared/descent-pace-rules.ts",
+      "category": "source",
+      "bytes": 3816,
+      "sha256": "81f44432290360fb97e641de120742ff7218205b6d1919452ee18be9859c419a"
     },
     {
       "path": "src/shared/descent-schedule-golden.test.ts",
@@ -15867,8 +15891,8 @@
     {
       "path": "src/shared/next-floor-transition-rules.ts",
       "category": "source",
-      "bytes": 4067,
-      "sha256": "bfb6334e8d7d632276256e6ad04ac0d8eba339bbc2c0255ca1cd7220e7c7447a"
+      "bytes": 4383,
+      "sha256": "461d196c21c5ca46b792547a89dc5724b798f5ecc379550444fa187166733cfd"
     },
     {
       "path": "src/shared/objective-board.test.ts",
@@ -16455,8 +16479,8 @@
     {
       "path": "src/shared/run-share-key.ts",
       "category": "source",
-      "bytes": 4499,
-      "sha256": "c1f1892cf4cce40ba4d4a6ec32cbe1cad0f117b029e4377fcd699896c6512aa6"
+      "bytes": 4706,
+      "sha256": "174315c145cca9dedcf827b62ca6f9b546141b7adbf8e4924c7a4bb52e00e1e5"
     },
     {
       "path": "src/shared/run-share-text.test.ts",
@@ -17199,8 +17223,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-005-warden-floor-v1.md",
       "category": "other",
-      "bytes": 5737,
-      "sha256": "0103ce15b6b387a5fd2191a77c0218abbc84d3a52fc8830de8c1fd08f3142db6"
+      "bytes": 5857,
+      "sha256": "629444158ba409b6170fbd1c97c85e163bf23add7ba8793da722d8316ca9a305"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-006-endless-gated-mode.md",
@@ -23723,7 +23747,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 476,
+      "lineCount": 477,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -23985,7 +24009,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2472,
+      "lineCount": 2484,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24087,6 +24111,7 @@
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
+        "file:src/shared/warden-rules.ts",
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
@@ -25605,7 +25630,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 765,
+      "lineCount": 773,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -25624,7 +25649,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 972,
+      "lineCount": 983,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -29709,7 +29734,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 167,
+      "lineCount": 173,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30082,7 +30107,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 159,
+      "lineCount": 164,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -32483,11 +32508,13 @@
       "path": "src/renderer/store/runStartState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 171,
+      "lineCount": 181,
       "imports": [
         "file:src/renderer/store/runSurfaceState.ts",
+        "file:src/renderer/testPace.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/descent-pace-rules.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/run-from-share-key.ts",
         "file:src/shared/run-settings-rules.ts",
@@ -32503,7 +32530,8 @@
         "symbol:src/renderer/store/runStartState.ts#RunStartTelemetryExtra"
       ],
       "testedBy": [
-        "file:src/renderer/store/runStartState.test.ts"
+        "file:src/renderer/store/runStartState.test.ts",
+        "file:src/renderer/testPace.test.ts"
       ]
     },
     {
@@ -32953,6 +32981,37 @@
       ],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/testPace.test.ts",
+      "path": "src/renderer/testPace.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 29,
+      "imports": [
+        "file:src/renderer/store/runStartState.ts",
+        "file:src/renderer/testPace.ts",
+        "file:src/shared/descent-pace-rules.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/run-share-key.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/testPace.ts",
+      "path": "src/renderer/testPace.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 11,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/testPace.ts#fastDescentRequested"
+      ],
+      "testedBy": [
+        "file:src/renderer/testPace.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/ui/AccentBanner.tsx",
@@ -35092,7 +35151,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1207,
+      "lineCount": 1209,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -35304,6 +35363,7 @@
         "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/curio-rules.test.ts",
         "file:src/shared/daily-music-composer.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/descent-schedule-golden.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/dread-rules.test.ts",
@@ -35707,6 +35767,50 @@
       ]
     },
     {
+      "id": "file:src/shared/descent-pace-rules.test.ts",
+      "path": "src/shared/descent-pace-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 80,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/descent-pace-rules.ts",
+        "file:src/shared/dread-rules.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/realm-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/descent-pace-rules.ts",
+      "path": "src/shared/descent-pace-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 64,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/dread-rules.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/miss-bank.ts",
+        "file:src/shared/realm-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/descent-pace-rules.ts#FAST_DESCENT_LADDER",
+        "symbol:src/shared/descent-pace-rules.ts#isFastDescent",
+        "symbol:src/shared/descent-pace-rules.ts#nextDescentLevel",
+        "symbol:src/shared/descent-pace-rules.ts#settleDescentJump",
+        "symbol:src/shared/descent-pace-rules.ts#withFastDescent"
+      ],
+      "testedBy": [
+        "file:src/renderer/testPace.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/descent-schedule-golden.test.ts",
       "path": "src/shared/descent-schedule-golden.test.ts",
       "layer": "shared",
@@ -35846,6 +35950,7 @@
         "symbol:src/shared/dread-rules.ts#DreadTierId"
       ],
       "testedBy": [
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/dread-rules.test.ts"
       ]
     },
@@ -36656,6 +36761,7 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/descent-schedule-golden.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
@@ -37094,6 +37200,7 @@
         "file:src/renderer/components/ItemDropPopup.test.tsx",
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
+        "file:src/renderer/testPace.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/bomb-power.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
@@ -37101,6 +37208,7 @@
         "file:src/shared/colossus-rules.test.ts",
         "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/curio-rules.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/dread-rules.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-coatings.test.ts",
@@ -38819,6 +38927,7 @@
         "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/mechanics-encyclopedia.test.ts",
         "file:src/shared/misers-purse.test.ts",
         "file:src/shared/miss-bank.test.ts",
@@ -38987,13 +39096,14 @@
       "path": "src/shared/next-floor-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 79,
+      "lineCount": 83,
       "imports": [
         "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/descent-pace-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/next-floor-run-state-rules.ts",
         "file:src/shared/odd-card-rules.ts",
@@ -40015,6 +40125,7 @@
       ],
       "testedBy": [
         "file:src/shared/camp-upgrades.test.ts",
+        "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/dread-rules.test.ts",
         "file:src/shared/element-ground-rules.test.ts",
         "file:src/shared/element-resonance-rules.test.ts",
@@ -40987,7 +41098,7 @@
       "path": "src/shared/run-share-key.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 99,
+      "lineCount": 103,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -41001,6 +41112,7 @@
         "symbol:src/shared/run-share-key.ts#RunShareVariant"
       ],
       "testedBy": [
+        "file:src/renderer/testPace.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-share-key.test.ts"
@@ -41325,6 +41437,7 @@
         "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
         "file:src/renderer/store/saveReadRecovery.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/renderer/testPace.test.ts",
         "file:src/renderer/uiScaleLimits.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
@@ -47961,8 +48074,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 475,
-      "endLine": 475
+      "line": 476,
+      "endLine": 476
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -48161,40 +48274,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2471,
-      "endLine": 2471
+      "line": 2483,
+      "endLine": 2483
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 270,
-      "endLine": 270
+      "line": 272,
+      "endLine": 272
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 268,
-      "endLine": 268
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 272,
-      "endLine": 272
+      "line": 274,
+      "endLine": 274
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 262,
-      "endLine": 262
+      "line": 264,
+      "endLine": 264
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -49977,8 +50090,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 971,
-      "endLine": 971
+      "line": 982,
+      "endLine": 982
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -55049,8 +55162,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 147,
-      "endLine": 166
+      "line": 148,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -55058,15 +55171,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 133
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 139,
-      "endLine": 140
+      "line": 140,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -55465,8 +55578,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 152,
-      "endLine": 158
+      "line": 157,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -55481,16 +55594,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 135,
-      "endLine": 138
+      "line": 140,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 151,
-      "endLine": 151
+      "line": 156,
+      "endLine": 156
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -55505,8 +55618,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 144,
-      "endLine": 148
+      "line": 149,
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -55522,15 +55635,15 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 67,
-      "endLine": 75
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 109,
-      "endLine": 125
+      "line": 112,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -55545,8 +55658,8 @@
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 84,
-      "endLine": 102
+      "line": 87,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -57793,56 +57906,56 @@
       "name": "createRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 119,
-      "endLine": 170
+      "line": 124,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartPlan",
       "name": "createRunStartPlan",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 61,
-      "endLine": 117
+      "line": 63,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartStatePatch",
       "name": "createRunStartStatePatch",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 25,
-      "endLine": 31
+      "line": 27,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartTelemetryPayload",
       "name": "createRunStartTelemetryPayload",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 33,
-      "endLine": 42
+      "line": 35,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartRequest",
       "name": "RunStartRequest",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 50,
-      "endLine": 53
+      "line": 52,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartStatePatch",
       "name": "RunStartStatePatch",
       "kind": "interface",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 18,
-      "endLine": 23
+      "line": 20,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartTelemetryExtra",
       "name": "RunStartTelemetryExtra",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
@@ -58203,6 +58316,14 @@
       "file": "src/renderer/styles/theme.ts",
       "line": 436,
       "endLine": 436
+    },
+    {
+      "id": "symbol:src/renderer/testPace.ts#fastDescentRequested",
+      "name": "fastDescentRequested",
+      "kind": "value",
+      "file": "src/renderer/testPace.ts",
+      "line": 6,
+      "endLine": 10
     },
     {
       "id": "symbol:src/renderer/ui/AccentBanner.tsx#default",
@@ -61657,16 +61778,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1079,
-      "endLine": 1079
+      "line": 1081,
+      "endLine": 1081
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1154,
-      "endLine": 1156
+      "line": 1156,
+      "endLine": 1158
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -61745,8 +61866,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1162,
-      "endLine": 1167
+      "line": 1164,
+      "endLine": 1169
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -61777,8 +61898,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1180,
-      "endLine": 1206
+      "line": 1182,
+      "endLine": 1208
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -62097,8 +62218,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1081,
-      "endLine": 1094
+      "line": 1083,
+      "endLine": 1096
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -62209,16 +62330,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1170,
-      "endLine": 1170
+      "line": 1172,
+      "endLine": 1172
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1173,
-      "endLine": 1178
+      "line": 1175,
+      "endLine": 1180
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -62241,16 +62362,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1147,
-      "endLine": 1151
+      "line": 1149,
+      "endLine": 1153
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1145,
-      "endLine": 1145
+      "line": 1147,
+      "endLine": 1147
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -62265,8 +62386,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1101,
-      "endLine": 1118
+      "line": 1103,
+      "endLine": 1120
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -62274,7 +62395,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 755,
-      "endLine": 1077
+      "endLine": 1079
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -62313,8 +62434,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1120,
-      "endLine": 1139
+      "line": 1122,
+      "endLine": 1141
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -62891,6 +63012,46 @@
       "file": "src/shared/daily-music-composer.ts",
       "line": 226,
       "endLine": 227
+    },
+    {
+      "id": "symbol:src/shared/descent-pace-rules.ts#FAST_DESCENT_LADDER",
+      "name": "FAST_DESCENT_LADDER",
+      "kind": "value",
+      "file": "src/shared/descent-pace-rules.ts",
+      "line": 24,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/shared/descent-pace-rules.ts#isFastDescent",
+      "name": "isFastDescent",
+      "kind": "value",
+      "file": "src/shared/descent-pace-rules.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/descent-pace-rules.ts#nextDescentLevel",
+      "name": "nextDescentLevel",
+      "kind": "value",
+      "file": "src/shared/descent-pace-rules.ts",
+      "line": 29,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/shared/descent-pace-rules.ts#settleDescentJump",
+      "name": "settleDescentJump",
+      "kind": "value",
+      "file": "src/shared/descent-pace-rules.ts",
+      "line": 43,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/descent-pace-rules.ts#withFastDescent",
+      "name": "withFastDescent",
+      "kind": "value",
+      "file": "src/shared/descent-pace-rules.ts",
+      "line": 36,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
@@ -67961,8 +68122,8 @@
       "name": "advanceToNextLevel",
       "kind": "value",
       "file": "src/shared/next-floor-transition-rules.ts",
-      "line": 24,
-      "endLine": 78
+      "line": 25,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/objective-board.ts#buildObjectiveBoardRows",
@@ -71129,24 +71290,24 @@
       "name": "describeRunShareKey",
       "kind": "value",
       "file": "src/shared/run-share-key.ts",
-      "line": 60,
-      "endLine": 68
+      "line": 64,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/run-share-key.ts#encodeRunShareKey",
       "name": "encodeRunShareKey",
       "kind": "value",
       "file": "src/shared/run-share-key.ts",
-      "line": 70,
-      "endLine": 71
+      "line": 74,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/run-share-key.ts#parseRunShareKey",
       "name": "parseRunShareKey",
       "kind": "value",
       "file": "src/shared/run-share-key.ts",
-      "line": 80,
-      "endLine": 98
+      "line": 84,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/run-share-key.ts#RUN_SHARE_KEY_PREFIX",
@@ -75366,7 +75527,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 63
+          "line": 65
         },
         {
           "path": "src/renderer/components/cardStatusPaint.ts",
@@ -75598,7 +75759,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 42
+          "line": 44
         }
       ],
       "tests": [
@@ -75850,7 +76011,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 63
+          "line": 65
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -76902,7 +77063,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 35
+          "line": 37
         }
       ],
       "tests": [
@@ -76949,7 +77110,7 @@
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
-          "line": 35
+          "line": 37
         }
       ],
       "tests": [
@@ -77033,7 +77194,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 18
+          "line": 1
         }
       ],
       "tests": [
@@ -77872,7 +78033,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 42
+          "line": 44
         }
       ],
       "tests": [
@@ -91814,6 +91975,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/testPace.ts->symbol:src/renderer/testPace.ts#fastDescentRequested",
+      "source": "file:src/renderer/testPace.ts",
+      "target": "symbol:src/renderer/testPace.ts#fastDescentRequested",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/AccentBanner.tsx->symbol:src/renderer/ui/AccentBanner.tsx#default",
       "source": "file:src/renderer/ui/AccentBanner.tsx",
       "target": "symbol:src/renderer/ui/AccentBanner.tsx#default",
@@ -95327,6 +95494,36 @@
       "id": "exports:src/shared/daily-music-composer.ts->symbol:src/shared/daily-music-composer.ts#localDateKey",
       "source": "file:src/shared/daily-music-composer.ts",
       "target": "symbol:src/shared/daily-music-composer.ts#localDateKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-pace-rules.ts->symbol:src/shared/descent-pace-rules.ts#FAST_DESCENT_LADDER",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "symbol:src/shared/descent-pace-rules.ts#FAST_DESCENT_LADDER",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-pace-rules.ts->symbol:src/shared/descent-pace-rules.ts#isFastDescent",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "symbol:src/shared/descent-pace-rules.ts#isFastDescent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-pace-rules.ts->symbol:src/shared/descent-pace-rules.ts#nextDescentLevel",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "symbol:src/shared/descent-pace-rules.ts#nextDescentLevel",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-pace-rules.ts->symbol:src/shared/descent-pace-rules.ts#settleDescentJump",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "symbol:src/shared/descent-pace-rules.ts#settleDescentJump",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-pace-rules.ts->symbol:src/shared/descent-pace-rules.ts#withFastDescent",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "symbol:src/shared/descent-pace-rules.ts#withFastDescent",
       "kind": "exports"
     },
     {
@@ -110980,6 +111177,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/warden-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/warden-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/zone-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/zone-rules.ts",
@@ -118834,6 +119037,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runStartState.ts->src/renderer/testPace.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/renderer/testPace.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runStartState.ts->src/shared/classic-run-setup.ts",
       "source": "file:src/renderer/store/runStartState.ts",
       "target": "file:src/shared/classic-run-setup.ts",
@@ -118843,6 +119052,12 @@
       "id": "imports:src/renderer/store/runStartState.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/runStartState.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runStartState.ts->src/shared/descent-pace-rules.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/shared/descent-pace-rules.ts",
       "kind": "imports"
     },
     {
@@ -119605,6 +119820,42 @@
       "id": "imports:src/renderer/styles/theme.wcag.test.ts->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/styles/theme.wcag.test.ts",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/renderer/store/runStartState.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/renderer/store/runStartState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/renderer/testPace.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/renderer/testPace.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/shared/descent-pace-rules.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/shared/descent-pace-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/shared/game.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/shared/run-share-key.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/testPace.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/testPace.test.ts",
+      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {
@@ -121927,6 +122178,84 @@
       "id": "imports:src/shared/daily-music-composer.ts->src/shared/rng.ts",
       "source": "file:src/shared/daily-music-composer.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/descent-pace-rules.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/descent-pace-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/dread-rules.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/dread-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.test.ts->src/shared/realm-rules.ts",
+      "source": "file:src/shared/descent-pace-rules.test.ts",
+      "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/dread-rules.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/dread-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/miss-bank.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/realm-rules.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-pace-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -125257,6 +125586,12 @@
       "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/next-floor-transition-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/descent-pace-rules.ts",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/shared/descent-pace-rules.ts",
       "kind": "imports"
     },
     {
@@ -135940,6 +136275,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/runStartState.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/renderer/testPace.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/runSurfaceState.ts->file:src/renderer/store/rowShuffleReachability.test.ts",
       "source": "file:src/renderer/store/runSurfaceState.ts",
       "target": "file:src/renderer/store/rowShuffleReachability.test.ts",
@@ -136069,6 +136410,12 @@
       "id": "tested_by:src/renderer/styles/theme.ts->file:src/renderer/styles/theme.wcag.test.ts",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "file:src/renderer/styles/theme.wcag.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/testPace.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/renderer/testPace.ts",
+      "target": "file:src/renderer/testPace.test.ts",
       "kind": "tested_by"
     },
     {
@@ -137404,6 +137751,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/descent-schedule-golden.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/descent-schedule-golden.test.ts",
@@ -138058,6 +138411,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/descent-pace-rules.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/renderer/testPace.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/descent-pace-rules.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/descent-pace-rules.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/desktop-api-boundary.ts->file:src/shared/desktop-api-boundary.test.ts",
       "source": "file:src/shared/desktop-api-boundary.ts",
       "target": "file:src/shared/desktop-api-boundary.test.ts",
@@ -138085,6 +138450,12 @@
       "id": "tested_by:src/shared/difficulty-profile.ts->file:src/shared/mechanics-encyclopedia.test.ts",
       "source": "file:src/shared/difficulty-profile.ts",
       "target": "file:src/shared/mechanics-encyclopedia.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/dread-rules.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/dread-rules.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138397,6 +138768,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/content-lock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138898,6 +139275,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/renderer/testPace.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/bad-floor-is-quiet.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/bad-floor-is-quiet.test.ts",
@@ -138937,6 +139320,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/curio-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -139654,6 +140043,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/miss-bank.ts->file:src/shared/mechanics-encyclopedia.test.ts",
       "source": "file:src/shared/miss-bank.ts",
       "target": "file:src/shared/mechanics-encyclopedia.test.ts",
@@ -140077,6 +140472,12 @@
       "id": "tested_by:src/shared/realm-rules.ts->file:src/shared/camp-upgrades.test.ts",
       "source": "file:src/shared/realm-rules.ts",
       "target": "file:src/shared/camp-upgrades.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/realm-rules.ts->file:src/shared/descent-pace-rules.test.ts",
+      "source": "file:src/shared/realm-rules.ts",
+      "target": "file:src/shared/descent-pace-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -140572,6 +140973,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-share-key.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/renderer/testPace.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/elemental-encounter-goals.test.ts",
       "source": "file:src/shared/run-share-key.ts",
       "target": "file:src/shared/elemental-encounter-goals.test.ts",
@@ -140821,6 +141228,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/testPace.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/testPace.test.ts",
       "kind": "tested_by"
     },
     {
