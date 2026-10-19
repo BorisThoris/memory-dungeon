@@ -180,6 +180,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         summary
     });
     const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
+    const curioChips = gameOverScreenCopy.curioChips(run);
     const stampActions: RunEndStampAction[] = [
         { id: 'play-again', label: RUN_END_STAMP_COPY.playAgain, ariaLabel: gameOverScreenCopy.playAgainAriaLabel, onClick: restartRun },
         ...(rematchKey !== null
@@ -354,6 +355,16 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 <div className={styles.metaStrip} data-testid="game-over-meta-strip">
                                     {mutatorChips.map((label) => (
                                         <span className={styles.metaChip} data-testid="game-over-mutator-chip" key={label}>
+                                            {label}
+                                        </span>
+                                    ))}
+                                </div>
+                            ) : null}
+
+                            {curioChips.length > 0 ? (
+                                <div className={styles.metaStrip} data-testid="game-over-curio-strip">
+                                    {curioChips.map((label) => (
+                                        <span className={styles.metaChip} key={label}>
                                             {label}
                                         </span>
                                     ))}

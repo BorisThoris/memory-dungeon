@@ -348,3 +348,21 @@ describe('GameOverScreen (REF-031)', () => {
         expect(screen.getByTestId('game-over-mode-identity')).toHaveTextContent(/no full-board shuffle/i);
     });
 });
+
+describe('the curios a run found', () => {
+    it('are told in the run details: how many, what was used, and the purse if it was carried', () => {
+        const run: RunState = { ...gameOverRunFixture(1200), curiosClaimedThisRun: 3, crucibleUsesThisRun: 2, stillBellUsesThisRun: 1, relics: ['misers_purse'] };
+        renderScreen(run);
+        const strip = screen.getByTestId('game-over-curio-strip');
+        expect(strip).toHaveTextContent('3 curios found');
+        expect(strip).toHaveTextContent('Crucible \u00d72');
+        expect(strip).toHaveTextContent('Still Bell \u00d71');
+        expect(strip).toHaveTextContent("Miser's Purse carried");
+        expect(strip).not.toHaveTextContent('Storm Glass');
+    });
+
+    it('stay out of a run that found none', () => {
+        renderScreen(gameOverRunFixture(1200));
+        expect(screen.queryByTestId('game-over-curio-strip')).toBeNull();
+    });
+});
