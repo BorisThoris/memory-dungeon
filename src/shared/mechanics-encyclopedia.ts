@@ -20,9 +20,10 @@ import {
     type MutatorId
 } from './contracts';
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
+import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 93 as const;
+export const ENCYCLOPEDIA_VERSION = 94 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -481,6 +482,16 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
             `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
             `a room whose mutators stack as no floor before it does. Past floor ${DESCENT_FLOOR_COUNT} the Abyss goes on.`
+    },
+    {
+        id: 'sys_dread',
+        title: 'Dread',
+        description:
+            'Beside the floor number, **Dread** says how bad the dungeon has become. It rises with every floor, and every floor entered in a ' +
+            `**wild** realm raises it ${Math.round((DREAD_WILD_MULTIPLIER - 1) * 100)}% more and every **raging** one ${Math.round((DREAD_RAGING_MULTIPLIER - 1) * 100)}%. ` +
+            'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
+            DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
+            '. Past the last, it only deepens.'
     },
     {
         id: 'sys_void_spew',

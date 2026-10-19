@@ -995,6 +995,9 @@ export interface RunState {
      */
     realmId?: RealmId | null;
     realmSeverity?: RealmSeverity;
+    /** Floors this run entered in a raging and in a wild realm, the first included: what raises Dread (`dread-rules.ts`). */
+    dreadRagingFloors?: number;
+    dreadWildFloors?: number;
     /** A confluence floor's second realm: its weather alternates with the first's, and both answer the player. */
     realmSecondaryId?: RealmId | null;
     /** Peak weather this floor (every third weather event), and confluence floors this run. */

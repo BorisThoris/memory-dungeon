@@ -1898,3 +1898,14 @@
 .shell[data-layout='desktop'] .combo { flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.5rem; }
 .shell[data-layout='desktop'] .comboCount { font-size: clamp(2.5rem, calc(2.5rem * (1 + 0.12 * var(--combo-surge, 0))), 3.5rem); }
 .shell[data-layout='desktop'] .comboLabel { min-width: 0; overflow-wrap: anywhere; }
+
+/* Dread (`dread-rules.ts`): the tier on the run bar, a thin bar filling toward the next tier's name.
+   The bar hangs under the tier like the lives' earned note, so the run bar is no taller for it. */
+.dread { position: relative; display: inline-block; min-width: 0; font-family: 'Source Sans 3', sans-serif; line-height: 1; white-space: nowrap; color: #d9c7ad; }
+.floor .dread { margin-left: 0.6rem; vertical-align: 0.15em; }
+.dreadTier { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: lining-nums; }
+.dreadNext { position: absolute; top: calc(100% + 0.2rem); left: 0; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: var(--dread-next, #b9a37f); opacity: 0.85; }
+.dreadBar { position: relative; width: 2.6rem; height: 3px; border-radius: 2px; background: #ffffff1f; overflow: hidden; }
+.dreadBar::after { content: ''; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--dread-fill, 0)); background: var(--dread-next, #b9a37f); transition: transform 600ms ease-out; }
+.dread[data-dread-tier='knows'] .dreadTier, .dread[data-dread-tier='coming'] .dreadTier { color: #f2b2a4; text-shadow: 0 0 8px #c8443280; }
+@media (prefers-reduced-motion: reduce) { .dreadBar::after { transition: none; } }

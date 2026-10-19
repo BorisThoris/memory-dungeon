@@ -1,7 +1,7 @@
 # DGE-003: Dread: one coefficient, named tiers on the HUD
 
 ## Status
-Not started
+Done in part (2026-10-19): Dread, its tiers and every reading of them. The priced composition waits for DGE-009.
 
 ## Priority
 P0
@@ -55,4 +55,10 @@ A Dread bar on the run bar with eight named tiers (Quiet, Stirring, Restless, Hu
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-19:
+- `src/shared/dread-rules.ts`: `dreadAt(floor, raging, wild)` = 3 x floor x 1.15^raging x 1.05^wild, `dreadForRun`, `dreadTier` (tier, next, fraction, and `beyond`: doublings past "It is coming", without end), `DREAD_TIERS` (Quiet 0, Stirring 8, Restless 30, Hungry 75, Awake 160, Watching 320, It knows you 1500, It is coming 7000) and `DREAD_PRICES`.
+- The doors are retired, so "per raging door taken" became "per raging floor entered": `RunState.dreadRagingFloors` / `dreadWildFloors`, counted in `enterRealmFloor`, which both run creation and every advance go through (the first floor counts). Severities are seeded at the clear by `rollRealmDoors` and a sway tip keeps the severity, so play never moves Dread (thesis 25.13). Dread itself is derived, not stored.
+- Tiers were set from a 200-seed probe: median 19 at floor 5, 73 at 12, 310 at 24, 1450 at 40, 7200 at 60. Floor 2 is always Quiet (at most 6 x 1.15^2 = 7.9) and floor 3 always Stirring, which the hall room "Dread stirs" walks.
+- HUD: `hud-dread` inside `hud-floor` (tier, a thin bar in the realm's colour filling toward the next tier's name; tier only on phone layouts; past the last tier a Roman numeral, so the floor number stays the only digit in `hud-floor`). Results: `game-over-dread` ("Dread: Watching"). Codex: "Dread" topic built from `DREAD_TIERS` (encyclopedia 94). All three read the one table.
+- Not done, on purpose: the board builder spending a Dread budget (and its acceptance case "a floor at Dread 80 has nothing priced under 4") changes generation, a `GAME_RULES_VERSION` bump; the ticket's own risk note batches it with DGE-009, whose Wanderer, Mask and Sleeper are the only rows that make the budget matter. `DREAD_PRICES` ships as data for it. The door display in `RealmTravel.tsx` is dead code (test-only since 2026-10-07) and was dropped.
+- Checklist rows: graph node `progression.dread` (enabled by realm travel, `displays` to the HUD), ledger entry, census exemption (it acts on nothing in a floor), mechanic count 71, soak invariant "Dread never falls, and every descent raises it" plus a report that some run reaches Hungry, hall room, Codex. No rules bump, no reseed.

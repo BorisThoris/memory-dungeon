@@ -125,3 +125,15 @@ export const REALM_TRAVEL_COPY = {
 
 /** The floor journey's rewards row, as a screen reader names it. */
 export const FLOOR_JOURNEY_REWARDS_LABEL = 'Rewards earned on this floor';
+
+/** Dread on the run bar (`dread-rules.ts`): the tier, the next one's name, and what a screen reader hears. */
+export const DREAD_HUD_COPY = {
+    title: 'Dread: how bad the dungeon has become. It rises with every floor, faster in wild and raging realms, and never falls.',
+    // A numeral, not digits: the tier sits inside the floor reading, whose number is the only digit there.
+    beyond: (beyond: number): string => (beyond > 0 ? ` ${attunementNumeral(beyond + 1)}` : ''),
+    results: (tier: string, beyond: number): string => `Dread: ${tier}${beyond > 0 ? ` ${attunementNumeral(beyond + 1)}` : ''}`,
+    aria: (tier: string, next: string, fraction: number, beyond: number): string =>
+        beyond > 0 || tier === next
+            ? `Dread: ${tier}, deeper still`
+            : `Dread: ${tier}, ${Math.round(fraction * 100)} percent of the way to ${next}`
+} as const;

@@ -34,6 +34,7 @@ import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
 import { lookingGlassSwaps } from './looking-glass-rules';
 import { tileCharge } from './element-alchemy-rules';
+import { dreadForRun, dreadTier } from './dread-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -77,6 +78,7 @@ export type TestHallRoomId =
     | 'still-bell'
     | 'still-bell-quiet'
     | 'store-stop'
+    | 'dread-stirs'
     | 'camp-survive'
     | 'camp-study'
     | 'camp-score'
@@ -891,6 +893,33 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (gold <= 0 || gold % 2 !== 0) return `a doubled clear paid ${gold}`;
                     if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
                     return missBankCap(r) === 3 ? null : `the bank holds ${missBankCap(r)}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'dread-stirs',
+        title: 'Dread stirs',
+        mechanic: 'Dread rises with every floor and never falls; floor 2 is always Quiet and the third floor of every run is Stirring.',
+        graphMechanicIds: ['progression.dread'],
+        tryThis: 'Clear floor 2 and descend: the run bar beside the floor turns from Quiet to Stirring, and named Stirring before it came.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 2 }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'floor 2 clears, still Quiet, with Stirring named as the next tier',
+                expect: (r) => {
+                    const reading = dreadTier(dreadForRun(r));
+                    return reading.tier.id === 'quiet' && reading.next.id === 'stirring' ? null : `floor 2 reads ${reading.tier.name}, next ${reading.next.name}`;
+                }
+            },
+            {
+                step: { do: 'advance' },
+                says: 'floor 3 opens Stirring, and Dread rose',
+                expect: (r, b) => {
+                    if (r.board?.level !== 3) return `descended to ${r.board?.level}`;
+                    if (dreadForRun(r) <= dreadForRun(b)) return `Dread ${dreadForRun(b)} -> ${dreadForRun(r)}`;
+                    return dreadTier(dreadForRun(r)).tier.id === 'stirring' ? null : `floor 3 reads ${dreadTier(dreadForRun(r)).tier.name}`;
                 }
             }
         ]

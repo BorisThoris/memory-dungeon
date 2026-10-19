@@ -1,4 +1,5 @@
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
+import { dreadForRun, dreadTier } from './dread-rules';
 import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -91,6 +92,8 @@ export interface SoakRunReport {
     carriedMisersPurse: boolean;
     /** Still bells rung (`still-bell-rules.ts`), whenever the realm held cards. */
     stillBellsRung: number;
+    /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
+    dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
@@ -357,6 +360,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if ((run.stormGlassCharges ?? 0) !== (before.stormGlassCharges ?? 0) - 1) return `glasses ${before.stormGlassCharges} -> ${run.stormGlassCharges}`;
         if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
         return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
+    },
+    'Dread never falls, and every descent raises it': (before, run, action) => {
+        if (!before) return null;
+        const [was, now] = [dreadForRun(before), dreadForRun(run)];
+        if (now < was) return `Dread fell ${was.toFixed(2)} -> ${now.toFixed(2)}`;
+        return action === 'descend' && run.board?.level !== before.board?.level && now <= was ? `a descent left Dread at ${now.toFixed(2)}` : null;
     },
     'a still bell costs one bell, no turn, no miss, and leaves the weather clock where it was': (before, run, action) => {
         if (!before?.board || !run.board || action !== 'still-bell') return null;
@@ -802,6 +811,7 @@ export const soakRun = ({
         stormGlassesBroken,
         carriedMisersPurse: (run.relics ?? []).includes('misers_purse'),
         stillBellsRung,
+        dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,
         relicsBought,

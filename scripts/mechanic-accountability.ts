@@ -262,6 +262,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'progression.dread': {
+        generation: 273,
+        reason: 'Dread is read off the floor and the realm severities a run has entered; it acts on nothing inside a floor, so the floor census has nothing to count. The whole-run soak checks after every action that it never falls, and a hall room walks it from Quiet into Stirring across a clear.'
+    },
     'inventory.still_bell_charge': {
         generation: 272,
         reason: 'Still bells come only from Curios and are rung by the player when the realm holds cards; the census players never ring one. The whole-run soak rings every bell it can and holds each to one charge with the clock untouched, and two hall rooms walk a thaw answered by a blizzard and a bell with nothing to free.'

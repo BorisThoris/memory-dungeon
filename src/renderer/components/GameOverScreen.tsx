@@ -28,6 +28,8 @@ import styles from './GameOverScreen.module.css';
 import { GlobalRecordResult } from './GlobalRecord';
 import { GAME_OVER_LABELS } from '../copy/screenCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { DREAD_HUD_COPY } from '../copy/realmCopy';
+import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { isPassAndPlayRun, resolvePassAndPlayOutcome } from '../../shared/pass-and-play-rules';
 
 interface GameOverScreenProps {
@@ -181,6 +183,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     });
     const mutatorChips = summary.activeMutators?.map((id) => mutatorLabel(id)) ?? [];
     const curioChips = gameOverScreenCopy.curioChips(run);
+    // How bad the dungeon had become where the run ended: the run bar's own table (`dread-rules.ts`).
+    const dreadReached = isPassAndPlayRun(run.passAndPlay) ? null : dreadTier(dreadForRun(run));
     const stampActions: RunEndStampAction[] = [
         { id: 'play-again', label: RUN_END_STAMP_COPY.playAgain, ariaLabel: gameOverScreenCopy.playAgainAriaLabel, onClick: restartRun },
         ...(rematchKey !== null
@@ -358,6 +362,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             {label}
                                         </span>
                                     ))}
+                                </div>
+                            ) : null}
+
+                            {dreadReached ? (
+                                <div className={styles.metaStrip} data-testid="game-over-dread">
+                                    <span className={styles.metaChip}>{DREAD_HUD_COPY.results(dreadReached.tier.name, dreadReached.beyond)}</span>
                                 </div>
                             ) : null}
 

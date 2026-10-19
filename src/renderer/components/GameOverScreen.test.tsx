@@ -366,3 +366,13 @@ describe('the curios a run found', () => {
         expect(screen.queryByTestId('game-over-curio-strip')).toBeNull();
     });
 });
+
+describe('the Dread a run reached (DGE-003)', () => {
+    it('names the tier the run bar showed where the run ended', () => {
+        const base = gameOverRunFixture(1200);
+        const run: RunState = { ...base, board: base.board ? { ...base.board, level: 24 } : base.board, dreadRagingFloors: 8, dreadWildFloors: 8 };
+        renderScreen(run);
+        // 3 x 24 x 1.15^8 x 1.05^8 = 326: Watching.
+        expect(screen.getByTestId('game-over-dread')).toHaveTextContent('Dread: Watching');
+    });
+});

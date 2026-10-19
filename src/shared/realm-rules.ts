@@ -13,6 +13,7 @@ import { attunementGoldBonus } from './realm-carryover-rules';
 import { SUIT_REALM } from './realm-sway-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { featuredRecipePairKeys } from './secondary-objective-rules';
+import { countDreadFloor } from './dread-rules';
 
 /**
  * The realms: where a floor is played, and what the place does to the board while it is played.
@@ -362,7 +363,7 @@ export const deepenFloorDeck = (board: BoardState, realmId: RealmId, depth: numb
  * A floor about to be played in a realm: its board, and the run fields that say where it is. A run without realms gets its board back and nothing to write.
  */
 export const enterRealmFloor = (
-    run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'realmAttunement'>,
+    run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'realmAttunement' | 'dreadRagingFloors' | 'dreadWildFloors'>,
     board: BoardState,
     door: RealmDoor | null
 ): { board: BoardState; fields: Partial<RunState> } => {
@@ -377,6 +378,8 @@ export const enterRealmFloor = (
             realmSecondaryId: isRealmId(door.confluence) && door.confluence !== door.realmId ? door.confluence : null,
             realmDoors: null,
             nextRealm: null,
+            // The severity entered is seeded at the clear, so Dread reads where the run is, never how it plays.
+            ...countDreadFloor(run, door.severity),
             ...freshRealmFloorCounters()
         }
     };

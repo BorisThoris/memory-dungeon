@@ -2577,6 +2577,39 @@
             ]
         },
         {
+            "id": "progression.dread",
+            "label": "Dread",
+            "kind": "progression",
+            "role": "one_coefficient_of_floor_and_realm_severity_entered_read_as_eight_named_tiers_that_never_fall",
+            "evidence": [
+                "src/shared/dread-rules.ts",
+                "src/shared/realm-rules.ts",
+                "src/renderer/components/RunShell.tsx",
+                "src/renderer/components/GameOverScreen.tsx"
+            ],
+            "reads": [
+                "realmSeverity",
+                "nextFloor",
+                "dreadRagingFloors",
+                "dreadWildFloors"
+            ],
+            "writes": [
+                "dreadRagingFloors",
+                "dreadWildFloors"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "dread-never-falls"
+            ],
+            "tests": [
+                "src/shared/dread-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts",
+                "src/renderer/components/RunShell.test.tsx"
+            ]
+        },
+        {
             "id": "inventory.still_bell_charge",
             "label": "Still Bell Charge Inventory",
             "kind": "inventory",
@@ -3820,6 +3853,18 @@
             "target": "board.realm_weather",
             "kind": "triggers",
             "label": "the held cards go free, and the realm answers with one strike"
+        },
+        {
+            "source": "economy.realm_travel",
+            "target": "progression.dread",
+            "kind": "enables",
+            "label": "every wild or raging floor entered raises Dread for the rest of the run"
+        },
+        {
+            "source": "progression.dread",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the tier beside the floor, a bar toward the next tier named before it arrives, and the tier reached on the results"
         },
         {
             "source": "inventory.still_bell_charge",

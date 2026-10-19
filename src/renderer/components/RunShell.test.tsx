@@ -287,6 +287,18 @@ describe('RunShell', () => {
         expect(within(floor).getByRole('img', { name: /deepest floor yet/i })).toBeInTheDocument();
     });
 
+    it('reads Dread beside the floor: the tier, and the next tier named before it arrives (DGE-003)', () => {
+        const base = playingRun();
+        const run = { ...base, board: { ...base.board!, level: 3 }, dreadRagingFloors: 0, dreadWildFloors: 0 };
+        render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        const dread = within(screen.getByTestId('hud-floor')).getByTestId('hud-dread');
+        expect(dread).toHaveAttribute('data-dread-tier', 'stirring');
+        expect(dread).toHaveTextContent('Stirring');
+        expect(dread).toHaveTextContent('Restless');
+        expect(dread).toHaveAttribute('aria-label', expect.stringContaining('of the way to Restless'));
+        expect(screen.getByTestId('hud-floor')).toHaveTextContent(/(^|\D)3(\D|$)/);
+    });
+
     it('carries nothing about which run this is: the mode and the perfect-memory stakes live in the pause menu', () => {
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={playingRun()} tools={[]} />);
 

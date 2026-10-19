@@ -250,8 +250,10 @@
  * The Deck's 1280x800 in-run: the overlay sits on the board stage, its body is about 280px,
  * and ten charge rows in one column are 480. Two short columns, the same answer the narrow
  * rule gives, and the last row ("Match score multiplier") stops going under the body's edge.
+ * Every desktop height since the curios (2026-10-19): their three charge rows put the list 10px
+ * under the body's edge at 1440x900 too.
  */
-@media (max-height: 820px) and (min-height: 561px) and (min-width: 861px) {
+@media (min-height: 561px) and (min-width: 861px) {
     .inRunShell .charges {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -386,13 +388,21 @@
         grid-column: 1 / -1;
     }
 
+    /* Three abreast since the curios brought three more charges: two columns ran the last row
+       ("Score multiplier") under the panel's edge at 812x375. */
     .tabPanel .charges {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0;
     }
 
     .tabPanel .chargeRow {
         min-height: 2rem;
-        padding: 0.2rem 0.5rem;
+        padding: 0.2rem 0.4rem;
+        gap: 0.4rem;
+    }
+
+    .tabPanel .chargeRow dt {
+        font-size: 0.78rem;
+        line-height: 1.15;
     }
 }

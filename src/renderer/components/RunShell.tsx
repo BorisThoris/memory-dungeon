@@ -17,7 +17,8 @@ import { GameplayItemsIcon, GameplayMenuIcon } from '../ui/gameplayIcons';
 import { useCountUp } from '../hooks/useCountUp';
 import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
-import { DAILY_MUSIC_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
+import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
+import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
@@ -363,6 +364,8 @@ const RunShell = ({
     const weatherIn = realm ? turnsUntilRealmWeather(realm, realmSeverity, runNonNegativeInteger(run.turnsThisFloor)) : 0;
     const realmSecondary = runRealmSecondaryId(run);
     const comingWeather = nextRealmWeather(run);
+    // Dread (`dread-rules.ts`): where the run is, never how it plays. A shared game counts floors to an end instead.
+    const dread = isPassAndPlayRun(run.passAndPlay) ? null : dreadTier(dreadForRun(run));
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
@@ -558,6 +561,25 @@ const RunShell = ({
                                     role="img"
                                 >
                                     {compactHud ? '✦' : RUN_SHELL_LABELS.personalBest}
+                                </span>
+                            ) : null}
+                            {dread ? (
+                                <span
+                                    aria-label={DREAD_HUD_COPY.aria(dread.tier.name, dread.next.name, dread.fraction, dread.beyond)}
+                                    className={styles.dread}
+                                    data-dread-tier={dread.tier.id}
+                                    data-testid="hud-dread"
+                                    role="img"
+                                    style={{ '--dread-fill': dread.fraction, ...(realm ? { '--dread-next': REALMS[realm].color } : {}) } as CSSProperties}
+                                    title={DREAD_HUD_COPY.title}
+                                >
+                                    <span className={styles.dreadTier}>{dread.tier.name}{DREAD_HUD_COPY.beyond(dread.beyond)}</span>
+                                    {compactHud ? null : (
+                                        <span aria-hidden="true" className={styles.dreadNext}>
+                                            <span className={styles.dreadBar} />
+                                            {dread.next.name}
+                                        </span>
+                                    )}
                                 </span>
                             ) : null}
                         </span>
