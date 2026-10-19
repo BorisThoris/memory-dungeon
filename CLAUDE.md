@@ -87,8 +87,8 @@ weather strikes in the background, and gold lies where it fell.
   after editing source: HMR serves a second store instance.
 - The desktop Browser pane: `requestAnimationFrame` does not fire and a hidden pane is 0x0; front the
   tab and `resize_window` before measuring. If it will not navigate, fall back to headless Playwright.
-- Known pre-existing e2e failure on this machine: `e2e/gameplay-hud-layout.spec.ts` at 620x900 and
-  560x900.
+- `e2e/gameplay-hud-layout.spec.ts` and `e2e/long-run-feedback-hud.spec.ts` read par and the mutators
+  in the run-details disclosure since the slim run bar (2026-10-06); they pass at every size again.
 - A fresh worktree needs `node_modules` junctioned to the main checkout's; if it looks half
   installed, another session is running `yarn install` - wait, do not reinstall over it.
 

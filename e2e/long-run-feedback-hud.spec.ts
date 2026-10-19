@@ -42,10 +42,22 @@ test.describe('Long-run feedback HUD readability', () => {
             // The bar is numbers only; the score is the one that is always there.
             await expect(page.getByTestId('hud-score')).toBeVisible();
 
+            /*
+             * The bar carries the floor, the lives and the score (and the Dread and the milestone
+             * beside the floor); par, the realm and the mutators moved into the run-details
+             * disclosure on 2026-10-06 (`RunShell`, "Slim gameplay HUD"). So the bar is checked for
+             * what it shows, and par is checked where it lives: open the disclosure, read it, close it.
+             */
             const stats = hud.getByRole('group', { name: /run stats/i });
-            for (const testId of ['hud-floor', 'hud-score', 'hud-par']) {
+            for (const testId of ['hud-floor', 'hud-score', 'hud-misses-left']) {
                 await expect(stats.getByTestId(testId)).toBeVisible();
             }
+            const details = hud.getByTestId('run-details');
+            await details.locator('summary').click();
+            await expect(details.getByTestId('hud-par')).toBeVisible();
+            await expectLocatorFullyInWindowViewport(page, details.getByTestId('hud-par'), 8);
+            await details.locator('summary').click();
+            await expect(details.getByTestId('hud-par')).toBeHidden();
 
             await expectNoHorizontalOverflow(page);
             await expectAppScrollportHasNoVerticalOverflow(page, 18);
@@ -79,20 +91,37 @@ async function expectRunBarTextStaysCoherent(page: Page): Promise<void> {
     const metrics = await page
         .locator('[data-testid="game-hud"] [data-testid^="hud-"]')
         .evaluateAll((items) =>
-            items.map((item) => {
-                const box = item.getBoundingClientRect();
-                return {
-                    height: box.height,
-                    scrollHeight: item.scrollHeight,
-                    text: item.textContent ?? '',
-                    width: box.width
-                };
-            })
+            // What the bar draws: a closed disclosure's readings have no box until it is opened, and
+            // the personal-best mark is one glyph on a phone, read by its label rather than its width.
+            // The polite live region is for screen readers (a 1px box on purpose), an aria-hidden cell
+            // is decoration, and a cell with no text (a meter's track) has nothing to read.
+            items
+                .filter(
+                    (item) =>
+                        item.getClientRects().length > 0 &&
+                        item.getAttribute('data-testid') !== 'hud-personal-best' &&
+                        item.getAttribute('data-testid') !== 'hud-polite-live-region' &&
+                        item.closest('[aria-hidden="true"]') === null &&
+                        (item.textContent ?? '').trim() !== ''
+                )
+                .map((item) => {
+                    const box = item.getBoundingClientRect();
+                    // A cell can only clip what it hides: a note hung below it (the lives' earned miss,
+                    // Dread's next tier) overflows on purpose and is painted in full.
+                    const hides = getComputedStyle(item).overflowY !== 'visible';
+                    return {
+                        height: box.height,
+                        scrollHeight: hides ? item.scrollHeight : box.height,
+                        text: `${item.getAttribute('data-testid')} "${(item.textContent ?? '').trim()}"`,
+                        width: box.width
+                    };
+                })
         );
 
     expect(metrics.length).toBeGreaterThan(0);
     for (const item of metrics) {
-        expect(item.width, `${item.text} should keep a stable readable width`).toBeGreaterThan(24);
+        // A phone's compact cells are a glyph and a number (the gold, ◆0): a readable box, not a collapsed one.
+        expect(item.width, `${item.text} should keep a stable readable width`).toBeGreaterThan(14);
         expect(item.height, `${item.text} should keep a stable readable height`).toBeGreaterThan(16);
         expect(item.scrollHeight, `${item.text} should not vertically clip`).toBeLessThanOrEqual(item.height + 8);
     }

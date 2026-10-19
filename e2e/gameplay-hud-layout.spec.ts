@@ -24,8 +24,11 @@ import { dismissStartupIntro } from './startupIntroHelpers';
 const localChromium = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 test.use(localChromium ? { launchOptions: { executablePath: localChromium } } : {});
 
-/** Lanes a player has to read to make a decision. */
-const MUST_READ_LANES = ['Floor', 'Par', 'Score'];
+/**
+ * Lanes a player has to read to make a decision, by their visible label. Par moved into the run-details
+ * disclosure on 2026-10-06; the lives took its place on the bar.
+ */
+const MUST_READ_LANES = ['Floor', 'Score', 'lives'];
 
 const startRun = async (page: import('@playwright/test').Page): Promise<void> => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -47,8 +50,16 @@ const startRun = async (page: import('@playwright/test').Page): Promise<void> =>
 };
 
 test.describe('gameplay HUD layout', () => {
+    // Starting a run costs most of the default thirty seconds before a test does anything.
+    test.beforeEach(() => {
+        test.setTimeout(180_000);
+    });
+
     test('keeps the floating overlays off each other and inside the viewport', async ({ page }) => {
         await startRun(page);
+        // A callout stamp ("BLAZING!", the floor's name) is struck across the board for a moment on
+        // purpose; the panels are measured once it has gone.
+        await expect(page.getByTestId('screen-callout-stamp')).toHaveCount(0, { timeout: 20_000 });
 
         const report = await page.evaluate(() => {
             const box = (el: Element): DOMRect => el.getBoundingClientRect();
@@ -180,6 +191,8 @@ test.describe('gameplay HUD layout', () => {
             });
         });
         await expect(page.getByTestId('hud-score')).toContainText('1,605,856');
+        // The mutators and par are run details now (2026-10-06): opened, they read inside their panel.
+        await page.getByTestId('run-details').locator('summary').click();
         await expect(page.getByTestId('hud-mutators')).toContainText('Short memorize');
 
         for (const size of [
@@ -195,7 +208,14 @@ test.describe('gameplay HUD layout', () => {
         ]) {
             await page.setViewportSize(size);
             const clipped = await page.evaluate(() =>
-                ['hud-score', 'hud-floor', 'hud-par', 'hud-chain', 'hud-mutators']
+                ['hud-score', 'hud-floor', 'hud-chain', 'hud-par', 'hud-mutators']
+                    // The phone-portrait shell leaves the mutator chip out of the details on purpose
+                    // (`RunShell`): there is no lane to clip, so it is not asked for.
+                    .filter(
+                        (id) =>
+                            id !== 'hud-mutators' ||
+                            document.querySelector('[data-testid="run-shell"]')?.getAttribute('data-layout') !== 'phone-portrait'
+                    )
                     .map((id) => {
                         const lane = document.querySelector(`[data-testid="${id}"]`);
                         if (!lane) return { id, missing: true, overflowBy: 0, outsideBarBy: 0 };
@@ -208,9 +228,14 @@ test.describe('gameplay HUD layout', () => {
                         // And the lane itself has to sit inside the chrome it belongs to. The chain is
                         // the one lane the head does not box: on a desktop it stands as a ladder in
                         // the left margin (The Margin, `RunShell`), so its box is the run shell.
-                        const bar = document
-                            .querySelector(id === 'hud-chain' ? '[data-testid="run-shell"]' : '[data-testid="game-hud"]')
-                            ?.getBoundingClientRect();
+                        // Par and the mutators sit in the run-details panel, so that panel is their box.
+                        const chrome =
+                            id === 'hud-chain'
+                                ? '[data-testid="run-shell"]'
+                                : id === 'hud-par' || id === 'hud-mutators'
+                                  ? '[data-testid="run-details"] > div'
+                                  : '[data-testid="game-hud"]';
+                        const bar = document.querySelector(chrome)?.getBoundingClientRect();
                         const box = lane.getBoundingClientRect();
                         const outsideBarBy = bar
                             ? Math.max(0, bar.left - box.left, box.right - bar.right)

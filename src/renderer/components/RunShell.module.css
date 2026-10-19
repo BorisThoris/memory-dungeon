@@ -1912,7 +1912,7 @@
 @media (prefers-reduced-motion: reduce) { .dreadBar::after { transition: none; } }
 
 /* The next milestone (DGE-004): its name and the act's fraction, a hairline filling under them. */
-.milestone { position: relative; display: inline-flex; align-items: baseline; gap: 0.4rem; min-width: 0; padding-bottom: 0.25rem; font-family: 'Source Sans 3', sans-serif; font-size: 0.75rem; line-height: 1; white-space: nowrap; color: #cdb898; font-variant-numeric: lining-nums tabular-nums; }
+.milestone { position: relative; display: inline-flex; align-items: baseline; gap: 0.4rem; min-width: 0; padding-bottom: 0.25rem; font-family: 'Source Sans 3', sans-serif; font-size: 0.75rem; line-height: 1.3; white-space: nowrap; color: #cdb898; font-variant-numeric: lining-nums tabular-nums; }
 .milestoneName { overflow: hidden; text-overflow: ellipsis; }
 .milestoneFraction { color: var(--gold, #e1ad66); font-weight: 600; }
 .milestoneBar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 1px; background: #ffffff1a; }
