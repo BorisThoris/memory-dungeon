@@ -11542,7 +11542,7 @@
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
       "bytes": 64588,
-      "sha256": "643d3e2993b6c62b6c36d245054a33c0780fe28b0b952272d789a463a941ecb8"
+      "sha256": "fc1168d2119066bd8b5f3abf26fbf13d63669dccd44dda3d0c315cded8feb2d9"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
