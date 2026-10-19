@@ -64,7 +64,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id:'meteor',label:'Meteor',spends:'meteorCharges' },
     // A Curio's item (`curio-rules.ts`): hidden like every tool with no charges left.
     { conditional: false, id: 'crucible', label: 'Crucible', spends: 'crucibleCharges' },
-    { conditional: false, id: 'storm_glass', label: 'Storm Glass', spends: 'stormGlassCharges' },
+    // One word, like every label on the dock: two would wrap the button taller than its neighbours.
+    { conditional: false, id: 'storm_glass', label: 'Storm', spends: 'stormGlassCharges' },
     // The Miser's Purse on offer: pressed, it is taken up for the rest of the run.
     { conditional: false, id: 'misers_purse', label: 'Purse', spends: 'misersPurseOffers' },
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
