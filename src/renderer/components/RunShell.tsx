@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
-import { risenToolCharges, TOOL_FRESH_MS } from './runShellFreshTools';
+import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
@@ -386,18 +386,22 @@ const RunShell = ({
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
 
     // A tool that just came into the hand glows for a moment (`runShellFreshTools.ts`).
-    const previousCharges = useRef<Map<string, number> | null>(null);
-    const freshTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const freshTimers = useRef(new Set<ReturnType<typeof setTimeout>>());
     const [freshTools, setFreshTools] = useState<ReadonlySet<string>>(() => new Set());
     useEffect(() => {
-        const { counts, risen } = risenToolCharges(previousCharges.current, tools);
-        previousCharges.current = counts;
+        const { counts, risen } = risenToolCharges(toolChargeBaseline(run.runSeed), tools);
+        rememberToolCharges(run.runSeed, counts);
         if (risen.length === 0) return;
+        // The counts are read against a baseline outside React (it outlives the remount between floors),
+        // so the glow is set from the effect that compares them, once per rise.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFreshTools((current) => new Set([...current, ...risen]));
-        freshTimers.current.push(
-            setTimeout(() => setFreshTools((current) => new Set([...current].filter((id) => !risen.includes(id)))), TOOL_FRESH_MS)
-        );
-    }, [tools]);
+        const timer = setTimeout(() => {
+            freshTimers.current.delete(timer);
+            setFreshTools((current) => new Set([...current].filter((id) => !risen.includes(id))));
+        }, TOOL_FRESH_MS);
+        freshTimers.current.add(timer);
+    }, [tools, run.runSeed]);
     useEffect(() => () => freshTimers.current.forEach(clearTimeout), []);
 
     /*

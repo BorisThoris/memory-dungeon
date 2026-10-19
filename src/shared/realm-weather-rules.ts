@@ -1081,13 +1081,18 @@ export interface CalledWeather {
 }
 
 /**
- * The realm's weather, called now at its peak and on top of its own clock (the Storm Glass,
+ * The realm's weather, called now - at its peak unless asked otherwise - and on top of its own clock (the Storm Glass,
  * `storm-glass-rules.ts`). The same strike the clock brings (`strikeWeather`), on the floor's own
  * realm, with the holds reconciled after it and a turnable pair always left. The clock's count is
  * not touched, so the realm's next weather comes when it would have. Null off a realm floor, or
  * when the weather found nothing to touch.
  */
-export const callRealmWeather = (run: RunState, salt: string): CalledWeather | null => {
+export const callRealmWeather = (
+    run: RunState,
+    salt: string,
+    // `lightMoved`: the Storm Glass shows where its storm carried the cards; the Still Bell's answer does not.
+    { peak = true, lightMoved = true }: { peak?: boolean; lightMoved?: boolean } = {}
+): CalledWeather | null => {
     const realmId = runRealmId(run);
     const board = run.board;
     if (!realmId || !board) return null;
@@ -1110,7 +1115,7 @@ export const callRealmWeather = (run: RunState, salt: string): CalledWeather | n
         alchemy = createAlchemyLog();
         strike = strikeWeather({
             weatherRealm: realmId,
-            peak: true,
+            peak,
             tiles,
             board,
             pinned,
@@ -1128,7 +1133,11 @@ export const callRealmWeather = (run: RunState, salt: string): CalledWeather | n
     reconcileRealmHolds(tiles, board.columns, board.tiles, new Set([...pinnedTileIds, ...recipeGuard, ...tiles.filter((tile) => tile.rime).map((tile) => tile.id)]));
     releaseRealmHoldsIfStuck(tiles);
     const hidden = new Set(tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id));
-    const lit = [...new Set([...strike.lit, ...(MOVING_WEATHER.has(strike.kind) ? strike.touched : [])])].filter((id) => hidden.has(id));
+    // Only what a moving storm actually carried is lit: a card that drank the current stayed where it was.
+    const cellBefore = new Map(board.tiles.map((tile, cell) => [tile.id, cell]));
+    const cellAfter = new Map(tiles.map((tile, cell) => [tile.id, cell]));
+    const moved = lightMoved && MOVING_WEATHER.has(strike.kind) ? strike.touched.filter((id) => cellAfter.get(id) !== cellBefore.get(id)) : [];
+    const lit = [...new Set([...strike.lit, ...moved])].filter((id) => hidden.has(id));
     return {
         board: { ...board, tiles },
         event: { key: eventKey(run, level, turns, `glass-${salt}-${strike.kind}`), kind: strike.kind, tileIds: strike.touched },

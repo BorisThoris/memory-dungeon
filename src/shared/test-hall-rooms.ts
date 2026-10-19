@@ -1,3 +1,4 @@
+import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
@@ -73,6 +74,8 @@ export type TestHallRoomId =
     | 'storm-glass-dark'
     | 'misers-purse'
     | 'misers-purse-offer'
+    | 'still-bell'
+    | 'still-bell-quiet'
     | 'store-stop'
     | 'camp-survive'
     | 'camp-study'
@@ -176,6 +179,7 @@ export type TestHallStep =
     | { readonly do: 'crucible' }
     | { readonly do: 'stormGlass' }
     | { readonly do: 'takePurse' }
+    | { readonly do: 'stillBell' }
     | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
@@ -818,6 +822,41 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(['a:e b:t', 'b:t a:e'], { run: { stormGlassCharges: 1 } }),
         script: [
             { step: { do: 'flip', tileId: 'a-1' }, says: 'no realm, a card up: the glass is dark', expect: (r) => (canBreakStormGlass(r) || canBreakStormGlass({ ...r, board: { ...r.board!, flippedTileIds: [] } }) ? 'the glass would break off a realm' : null) }
+        ]
+    },
+    {
+        id: 'still-bell',
+        title: 'The still bell',
+        mechanic: 'Ring the still bell on a realm floor where cards are held: every frozen and vined card is let go, and the realm answers with one strike of its everyday weather, its clock untouched.',
+        graphMechanicIds: ['inventory.still_bell_charge', 'board.realm_weather'],
+        tryThis: 'A frost floor with a frozen pair and a vined one. Press Bell: both go free, and a blizzard answers.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t a:e b:t', 'c:m d:b e:e f:t'], {
+                run: realmRun('frost', 'calm', { stillBellCharges: 1 }),
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, frost: 2 } : t.pairKey === 'b' ? { ...t, vined: true } : t))
+            }),
+        script: [
+            {
+                step: { do: 'stillBell' },
+                says: 'pairs a and b go free, the blizzard answers, and the clock keeps its count',
+                expect: expectAll(realmEventIs('blizzard'), (r) => {
+                    const tiles = r.board?.tiles ?? [];
+                    if (tiles.some((t) => (t.pairKey === 'a' && (t.frost ?? 0) > 0) || (t.pairKey === 'b' && t.vined))) return 'a held card stayed held';
+                    if ((r.realmWeatherThisFloor ?? 0) !== 0) return `the clock moved to ${r.realmWeatherThisFloor}`;
+                    return r.stillBellCharges === 0 ? null : `bells ${r.stillBellCharges}`;
+                })
+            }
+        ]
+    },
+    {
+        id: 'still-bell-quiet',
+        title: 'The still bell with nothing held',
+        mechanic: 'The still bell only rings when the realm is holding cards: on a free board, or off a realm floor, it stays silent.',
+        graphMechanicIds: ['inventory.still_bell_charge'],
+        tryThis: 'A frost floor with nothing frozen: the Bell will not ring.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { run: realmRun('frost', 'calm', { stillBellCharges: 1 }) }),
+        script: [
+            { step: { do: 'flip', tileId: 'a-1' }, says: 'nothing held: the bell is silent, with or without a card up', expect: (r) => (canRingStillBell(r) || canRingStillBell({ ...r, board: { ...r.board!, flippedTileIds: [] } }) ? 'the bell would ring over a free board' : null) }
         ]
     },
     {
@@ -2465,6 +2504,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             const target = bombTargetTileId(run);
             return target ? applyBomb(run, target) : null;
         }
+        case 'stillBell':
+            return applyStillBell(run)?.run ?? null;
         case 'takePurse':
             return takeMisersPurse(run);
         case 'stormGlass':

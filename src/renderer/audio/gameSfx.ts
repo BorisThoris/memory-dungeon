@@ -1224,6 +1224,13 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
             playTone({ frequency: 110, frequencyEnd: 32, durationSec: 0.55, gain: gain * 0.7, type: 'sine', category: 'realm' });
             playNoise({ durationSec: 0.9, gain: gain * 0.75, filter: 'lowpass', from: 2200, to: 90, attackSec: 0.004, delaySec: 0.02 });
             return;
+        case 'still_bell':
+            // A hand bell on A with its octave and fifth ringing long, then the realm's low answer.
+            playTone({ frequency: 880, durationSec: 1.8, gain: gain * 0.22, type: 'sine', category: 'realm' });
+            playTone({ frequency: 1760, durationSec: 1.2, gain: gain * 0.08, type: 'sine', category: 'realm' });
+            playTone({ frequency: 1318.5, durationSec: 1.4, gain: gain * 0.06, type: 'triangle', category: 'realm' });
+            scheduleCue(() => playNoise({ durationSec: 0.9, gain: gain * 0.35, filter: 'lowpass', from: 700, to: 80, attackSec: 0.2 }), 420);
+            return;
         case 'misers_purse':
             // The drawstring pulls and coins spill: a soft thud, then bright clinks on A and E.
             playNoise({ durationSec: 0.12, gain: gain * 0.25, filter: 'lowpass', from: 900, to: 300, attackSec: 0.004 });

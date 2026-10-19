@@ -24,6 +24,7 @@ export type RunShellToolId =
     | 'crucible'
     | 'storm_glass'
     | 'misers_purse'
+    | 'still_bell'
     | 'ignite'
     | 'flash'
     | 'undo'
@@ -40,6 +41,7 @@ export type RunPowerChargeField = Extract<
     | 'crucibleCharges'
     | 'stormGlassCharges'
     | 'misersPurseOffers'
+    | 'stillBellCharges'
     | 'flashPairCharges'
 >;
 
@@ -66,6 +68,7 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'crucible', label: 'Crucible', spends: 'crucibleCharges' },
     // One word, like every label on the dock: two would wrap the button taller than its neighbours.
     { conditional: false, id: 'storm_glass', label: 'Storm', spends: 'stormGlassCharges' },
+    { conditional: false, id: 'still_bell', label: 'Bell', spends: 'stillBellCharges' },
     // The Miser's Purse on offer: pressed, it is taken up for the rest of the run.
     { conditional: false, id: 'misers_purse', label: 'Purse', spends: 'misersPurseOffers' },
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone

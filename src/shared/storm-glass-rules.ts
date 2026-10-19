@@ -26,7 +26,9 @@ export const canBreakStormGlass = (run: RunState): boolean =>
     runRealmId(run) != null &&
     runNonNegativeInteger(run.stormGlassCharges) > 0 &&
     runFilteredStringArray(run.board.flippedTileIds).length === 0 &&
-    run.board.tiles.some((tile) => tile.state === 'hidden');
+    run.board.tiles.some((tile) => tile.state === 'hidden') &&
+    // A storm with nothing to touch (fire over a board of water) is not offered: the glass would do nothing.
+    callRealmWeather(run, `${runNonNegativeInteger(run.stormGlassUsesThisRun)}`) !== null;
 
 export interface StormGlassResult {
     readonly run: RunState;
@@ -59,5 +61,6 @@ export const applyStormGlass = (run: RunState): StormGlassResult | null => {
 export const stormGlassFeedbackLine = (kind: string, touched: number, lit: number, left: number): string => {
     const spent = `${left} storm ${left === 1 ? 'glass' : 'glasses'} left`;
     const shown = lit > 0 ? `; ${lit} ${lit === 1 ? 'card it moved is' : 'cards it moved are'} lit until your next flip` : '';
-    return `The storm glass broke: ${kind} on ${touched} ${touched === 1 ? 'card' : 'cards'}${shown}; ${spent}.`;
+    const what = kind === 'empowered' ? 'the fire fed its own cards' : kind;
+    return `The storm glass broke: ${what} on ${touched} ${touched === 1 ? 'card' : 'cards'}${shown}; ${spent}.`;
 };

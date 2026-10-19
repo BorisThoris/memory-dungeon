@@ -38,6 +38,18 @@ export interface VoidSpew {
 const isGoneTile = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
 /**
+ * Faces the board does not show, the floor's own set first, then the gallery: what new pairs
+ * wear (the void here, the Crucible's recast too). Past the gallery, `fallback(n)` names the n-th
+ * extra; the caller makes it unique.
+ */
+export const freshBoardFaces = (tiles: readonly Tile[], level: number): { symbol: string; label: string }[] => {
+    const shown = new Set(tiles.map((tile) => tile.symbol));
+    return [...getSymbolSetForLevel(level), ...ALL_TILE_SYMBOLS_FOR_GALLERY].filter(
+        (entry, index, list) => !shown.has(entry.symbol) && list.findIndex((other) => other.symbol === entry.symbol) === index
+    );
+};
+
+/**
  * What the void does to the board a miss left, or null when the miss did not open it. Seeded by the
  * run, the floor and the miss count, so a replay spits the same cards into the same cells.
  */
@@ -69,10 +81,7 @@ export const resolveVoidSpew = ({
     const reuse = pool.slice(0, want);
     if (reuse.length === 0) return null;
     // New faces: the floor's own symbol set first, then any face the board does not show.
-    const shown = new Set(board.tiles.map((tile) => tile.symbol));
-    const fresh = [...getSymbolSetForLevel(board.level), ...ALL_TILE_SYMBOLS_FOR_GALLERY].filter(
-        (entry, index, list) => !shown.has(entry.symbol) && list.findIndex((other) => other.symbol === entry.symbol) === index
-    );
+    const fresh = freshBoardFaces(board.tiles, board.level);
     const tiles = [...board.tiles];
     const newPairKeys: string[] = [];
     reuse.forEach((oldKey, slot) => {

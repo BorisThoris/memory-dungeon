@@ -61,8 +61,10 @@ export const CHAIN_RUNG_PAIRS: Readonly<Record<ChainTier, number>> = {
     none: 0,
     clean: 1,
     sharp: 1,
-    // Rules 51's scheduled-floor sample measures 2.63 popped pairs at Fever.
-    fever: 3
+    // Rules 51's scheduled-floor sample measured 2.63 popped pairs at Fever. Rules 69 (2026-10-19)
+    // measures 2.39 over the test's eight seeds and 2.37 over thirty-two (rules 68: 2.46 / 2.43): the
+    // deal settled a fifth of a pair under the old three, 0.6 out, so the promise reads two.
+    fever: 2
 };
 
 /**

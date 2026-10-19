@@ -50,6 +50,12 @@ const GLYPH_PATHS: Readonly<Record<ItemDropGlyph, ReactElement>> = {
             <path d="M35 20l-7 13h8l-6 12" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" />
         </>
     ),
+    bell: (
+        <>
+            <path d="M32 10c-10 0-15 8-15 17v9l-5 9h40l-5-9v-9c0-9-5-17-15-17z" />
+            <path d="M26 52a6 6 0 0012 0M32 4v6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="4" />
+        </>
+    ),
     purse: (
         <>
             <path d="M22 20c-11 8-14 20-10 29 3 7 11 11 20 11s17-4 20-11c4-9 1-21-10-29z" />

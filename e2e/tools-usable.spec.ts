@@ -237,6 +237,19 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-storm_glass')).toBeDisabled();
     });
 
+    test('bell: press it where the realm holds cards, and they go free', async ({ page }) => {
+        await openRoom(page, 'still-bell');
+        await expect(page.getByTestId('tool-still_bell')).toBeEnabled();
+        await page.getByTestId('tool-still_bell').click();
+        await expect.poll(async () => page.evaluate(async () => {
+            const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+            const run = useAppStore.getState().run!;
+            return { bells: run.stillBellCharges, frozen: run.board!.tiles.some((tile) => tile.pairKey === 'a' && (tile.frost ?? 0) > 0) };
+        })).toEqual({ bells: 0, frozen: false });
+        await openRoom(page, 'still-bell-quiet');
+        await expect(page.getByTestId('tool-still_bell')).toBeDisabled();
+    });
+
     test("purse: press it and the Miser's Purse is taken up, the bank down to three", async ({ page }) => {
         await openRoom(page, 'misers-purse-offer');
         await expect(page.getByTestId('tool-misers_purse')).toBeEnabled();

@@ -31,6 +31,7 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
     { id:'meteor_charge',label:'Meteors' },
     { id: 'crucible_charge', label: 'Crucibles' },
     { id: 'storm_glass_charge', label: 'Storm Glasses' },
+    { id: 'still_bell_charge', label: 'Still Bells' },
     { id: 'shuffle_charge', label: 'Full shuffle' },
     { id: 'region_shuffle_charge', label: 'Row / swap' },
     { id: 'peek_charge', label: 'Peek' },

@@ -62,6 +62,28 @@ export const gameOverScreenCopy = {
         largestBreak: 'Largest Break',
         bestScore: 'Best Score'
     },
+    /**
+     * The curio items the run found and what became of them (`curio-rules.ts`): the run's stranger
+     * story, told as chips under its details. Empty when no Curio was opened.
+     */
+    curioChips: (run: {
+        curiosClaimedThisRun?: number;
+        crucibleUsesThisRun?: number;
+        stormGlassUsesThisRun?: number;
+        stillBellUsesThisRun?: number;
+        relics?: readonly string[];
+    }): string[] => {
+        const found = run.curiosClaimedThisRun ?? 0;
+        if (found <= 0) return [];
+        const used = (name: string, times: number | undefined): string | null => ((times ?? 0) > 0 ? `${name} \u00d7${times}` : null);
+        return [
+            found === 1 ? '1 curio found' : `${found} curios found`,
+            used('Crucible', run.crucibleUsesThisRun),
+            used('Storm Glass', run.stormGlassUsesThisRun),
+            used('Still Bell', run.stillBellUsesThisRun),
+            (run.relics ?? []).includes('misers_purse') ? "Miser's Purse carried" : null
+        ].filter((chip): chip is string => chip !== null);
+    },
     /** The largest break's tile value: pairs, because that is the number a screenshot shows. */
     largestBreakValue: (pairs: number): string =>
         pairs <= 0 ? 'None yet' : pairs === 1 ? '1 pair' : `${pairs} pairs`,

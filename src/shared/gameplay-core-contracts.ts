@@ -322,6 +322,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z.object({ ...commandBase, type: z.literal('board.meteor'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.crucible'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.storm_glass') }).strict(),
+    z.object({ ...commandBase, type: z.literal('board.still_bell') }).strict(),
     z.object({ ...commandBase, type: z.literal('run.take_relic'), relicId: z.literal('misers_purse') }).strict(),
     z
         .object({
@@ -635,6 +636,18 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('realm.stilled'),
+            realmId: z.string().min(1).max(40),
+            freedTileIds: z.array(z.string().min(1).max(160)).max(4096),
+            answerKind: z.string().min(1).max(40).nullable(),
+            answerTileIds: z.array(z.string().min(1).max(160)).max(4096),
+            stillBellChargesBefore: z.number().int().nonnegative(),
+            stillBellChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('realm.weather_called'),
             realmId: z.string().min(1).max(40),
             weatherKind: z.string().min(1).max(40),
@@ -797,6 +810,9 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
 
 export const createGameplayTakeRelicCommand = (commandId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'run.take_relic', relicId: 'misers_purse' });
+
+export const createGameplayStillBellCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.still_bell' });
 
 export const createGameplayStormGlassCommand = (commandId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.storm_glass' });

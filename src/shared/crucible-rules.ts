@@ -6,7 +6,7 @@ import { releaseRealmHoldsIfStuck } from './realm-weather-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
-import { ALL_TILE_SYMBOLS_FOR_GALLERY, getSymbolSetForLevel } from './tile-symbol-catalog';
+import { freshBoardFaces } from './void-spew-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 /**
@@ -93,13 +93,11 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
     }
 
     // New faces: the floor's own symbol set first, then any face the board does not show.
-    const shown = new Set(tiles.map((tile) => tile.symbol));
-    const fresh = [...getSymbolSetForLevel(board.level), ...ALL_TILE_SYMBOLS_FOR_GALLERY].filter(
-        (entry, index, list) => !shown.has(entry.symbol) && list.findIndex((other) => other.symbol === entry.symbol) === index
-    );
+    const fresh = freshBoardFaces(tiles, board.level);
     const recastCells: number[] = [];
     [...cellsByPair.values()].forEach((cells, slot) => {
-        const face = fresh[slot] ?? { symbol: `C${slot + 1}`, label: `Recast ${slot + 1}` };
+        // Past the gallery, a name no earlier crucible used: this one's use and slot.
+        const face = fresh[slot] ?? { symbol: `C${uses + 1}.${slot + 1}`, label: `Recast ${uses + 1}.${slot + 1}` };
         const pairKey = `${board.level}-crucible-${uses}-${slot}`;
         const atomicVariant = atomicVariantForPairKey(pairKey);
         cells.forEach((cell) => {

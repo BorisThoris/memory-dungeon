@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3243,
-    "codeFileCount": 1219,
-    "exportedSymbolCount": 3871,
-    "contentItemCount": 15,
-    "mechanicCount": 69,
-    "stateFieldCount": 136,
-    "relationshipCount": 10413
+    "trackedFileCount": 3207,
+    "codeFileCount": 1221,
+    "exportedSymbolCount": 3883,
+    "contentItemCount": 16,
+    "mechanicCount": 70,
+    "stateFieldCount": 137,
+    "relationshipCount": 10470
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 528966,
-      "sha256": "d18d3ca385bec0746d8ad53890bc5c7abc68d8d0c74d67f007c94b41c9d89ab7"
+      "bytes": 529998,
+      "sha256": "9082840e49638805763126f2304f6b417f7673b5ff0fbdd1c5b4f9058bc508f2"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 71160,
-      "sha256": "d51637c7c0b73ecc4bc2af88a91d5d3edf0e841c20da71de7167965550b9540e"
+      "bytes": 72803,
+      "sha256": "774482f2dc6b87154f81f23223ad8823f74a396d28e194aaa25d7ef2960d7de3"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2422,13 +2422,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "8b2c4d6e86f9d824921aaec8a79b01bb98bd686cf21e269a61f858d1f7c314ae"
+      "sha256": "3835655b5c0a78790122ff5cafe49db88d0507e39a41ffc556f797fa2d5fea35"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d7dc86b976c44b539bc911b98a6a9eec5e01d68cda85bea32d1d9db40ef1c624"
+      "sha256": "0b26f4b3dc099bf007ea51dde954b99769ed14ce71e86952099f3c98d8bdf826"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -2733,44 +2733,50 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 334349,
-      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 326270,
-      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 351103,
-      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
+      "bytes": 395039,
+      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 262999,
-      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
+      "bytes": 74007,
+      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 160622,
-      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
+      "bytes": 47216,
+      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 263076,
-      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
+      "bytes": 89413,
+      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 241706,
-      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
+      "bytes": 58618,
+      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
+    },
+    {
+      "path": "docs/ui-design-reference/390x844/01f-profile.png",
+      "category": "documentation",
+      "bytes": 84953,
+      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -4149,8 +4155,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 21124,
-      "sha256": "7b8394a33111361e1aadbe69d24727963e26bd6f86b8187b036e6799d6615489"
+      "bytes": 21925,
+      "sha256": "e452c2ffb53ff34684abbd5bf068ca873a807dd03eb489928698d592146914b7"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -4539,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71990,
-      "sha256": "3ad35a1c32d4108d30c9146e46a90bf597bac03ae14e6fe8f3e434e66a8edc35"
+      "bytes": 71930,
+      "sha256": "a71cfb0efcca4195578b194e519346ac1bd83b5aa98e316c1923420800704d92"
     },
     {
       "path": "public/site.webmanifest",
@@ -5313,8 +5319,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 22783,
-      "sha256": "0e678617b9cb361d80ab339f2cacf0b47029b610fa340efc0f10d45579abcc36"
+      "bytes": 23179,
+      "sha256": "e28d3a76f8d0485a93f2ede8663ebd2b897e5921a17a8f192255f7d5aee9bbf8"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5751,14 +5757,14 @@
     {
       "path": "scripts/sim-survival.ts",
       "category": "script",
-      "bytes": 7966,
-      "sha256": "adce888063ef04d95a327696be9044d2b022f9bf10874bedca09e89248dfb340"
+      "bytes": 9895,
+      "sha256": "bde382d7b55b8371a09fe2754d8c82a13cb9983281665daa12741861079935ec"
     },
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 4037,
-      "sha256": "2dc1fbdaded1c5c4a4e69f2637383506e8faca22783f4c6940fa3dddc9faef0c"
+      "bytes": 4078,
+      "sha256": "f1d50c18cfd1ac1dc909d4b550c13291b9916ead726e30f51af243524995612b"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -9237,8 +9243,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 1931,
-      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
+      "bytes": 2024,
+      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9279,8 +9285,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 842,
-      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
+      "bytes": 887,
+      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9297,8 +9303,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 333,
-      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
+      "bytes": 354,
+      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9327,8 +9333,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 589,
-      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
+      "bytes": 622,
+      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9357,8 +9363,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 596,
-      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
+      "bytes": 629,
+      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9747,8 +9753,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 248,
-      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
+      "bytes": 267,
+      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -9891,8 +9897,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 55269,
-      "sha256": "c2f2afcd3f2fda3d3a2d3b1947440922756462f1f96418071136f71917edfba9"
+      "bytes": 55903,
+      "sha256": "6a4b132e8ff82a8574c67f571d63c634391b3c7565dabcd04081c55f16b259c7"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -10863,14 +10869,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 16663,
-      "sha256": "bb95a85ba37f7fb744bb3c1a8aeabe78b88acffedc3fd645555d9429d0f441f1"
+      "bytes": 17572,
+      "sha256": "2ac72b7b7a3bc79923f73cb6dbe68ece5e25aa13166b3af169af915d4b2f6d80"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 23300,
-      "sha256": "197b0ca3596d355d13fbd736ca82293255b5564342ad04bfca8258db0cff7e38"
+      "bytes": 23887,
+      "sha256": "2d276e7c2379353741395b2bb416f3cf0fdd613aa9356f00a7e77e27f32bbcc7"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -10941,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 125536,
-      "sha256": "3a45c577e9839ead950e070da2b2eefa381b6ac300fffecb341ddf6e02aad544"
+      "bytes": 126389,
+      "sha256": "3a6bc28d11de508a88bcbfb5852ef119423ebd99212bcd69fcecb971a6e50303"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11037,8 +11043,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 13458,
-      "sha256": "63aef2ecd0f506761e689a5531ac501e1ccb4a92cb4703822f1d4692b1f7321f"
+      "bytes": 13513,
+      "sha256": "fd49be0702ee07a0cb2a6688f67a0b0d68e4a050c22e1350b440a2fa199f52f9"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -11067,26 +11073,26 @@
     {
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "category": "source",
-      "bytes": 7480,
-      "sha256": "5d0ec05fecd24fdd5f93bbc8f1bf412c9ce065e85109f9c9999e4f52798f03d7"
+      "bytes": 7729,
+      "sha256": "49a0356dcdee9491a6488b59749bde58ae8d663a7d4faacffbb0d5c58e1da4fc"
     },
     {
       "path": "src/renderer/components/itemDrops.ts",
       "category": "source",
-      "bytes": 4390,
-      "sha256": "236db7179a645491b193a1efbee42b1412e1a305aa6c355ce959d2baf7f02561"
+      "bytes": 4476,
+      "sha256": "43c08ad5a618cfc57320af40c26f40f3e04a9847f268b47d149ac5196ede00a9"
     },
     {
       "path": "src/renderer/components/itemEffects.test.ts",
       "category": "test",
-      "bytes": 8502,
-      "sha256": "1223288c41be4a5023be2753ce052436e79cc194b68a268580e816a19071980b"
+      "bytes": 9280,
+      "sha256": "d5f19c23241fb3944a6d8b0dcdbcb4bd6609d4e8d4f584ce56b73af6e361891e"
     },
     {
       "path": "src/renderer/components/itemEffects.ts",
       "category": "source",
-      "bytes": 16115,
-      "sha256": "7e6ef4a6acb99e0d24c6ee304c79ed9912c601a915fa8d361f813cbde14fada8"
+      "bytes": 17740,
+      "sha256": "1880fdf970fe5771905ab936b8a1986841288ab31c3720b4e24e6fb5fe59e449"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -11541,14 +11547,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 38911,
-      "sha256": "24723cdd8bd1aef04c7ebac6e3fba9e5323abd6c372a7d1fffe0d7e49c48cdd8"
+      "bytes": 39900,
+      "sha256": "56ad2a8c3d785748e16a6a5899c9e9779176ec67a262633b8627dd744647f230"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 52731,
-      "sha256": "8f9bb1cb70b47df68c29c26ad00f6a36c61619c1da56cd32a402d3d0434a178b"
+      "bytes": 53069,
+      "sha256": "4c2199079bbbfd97b128583d9b65c6f472582361a7d8d8e8bc67d150f7b3eb5d"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11559,14 +11565,14 @@
     {
       "path": "src/renderer/components/runShellFreshTools.ts",
       "category": "source",
-      "bytes": 1311,
-      "sha256": "79ffda8d8fff73d4f54ab224666b093dd8e589d2d6dd331a28ca5964b5f45dea"
+      "bytes": 2116,
+      "sha256": "13fbe709fae5157e618da1b2bd19820c4a450beef1d5b475e2db8a67b1ea56e5"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "category": "source",
-      "bytes": 846,
-      "sha256": "586d23cdf7ab6c99e180bb269c259fa1eb102d800f7f8da81535d6dae1896e1d"
+      "bytes": 906,
+      "sha256": "399614a0199f315c65adb030303f1c27aaca59a617073ba852789e9329f2a4ba"
     },
     {
       "path": "src/renderer/components/RunShellItemTray.test.tsx",
@@ -11583,8 +11589,8 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 4368,
-      "sha256": "5f95aa5831912df75286473efd6d850b06fab38995f74fa2ebff0812538301e0"
+      "bytes": 4501,
+      "sha256": "7a758ca9c8584775de39e2957c56ee68391ac6782947c7f89903d29a40c7ab6f"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -12765,8 +12771,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 5684,
-      "sha256": "7d6be3d19360b53d17a237ba8554f65c1bbc988411dccefe457cfafd44f2c29c"
+      "bytes": 6636,
+      "sha256": "ae50bb8fa142dca4c62ddbd4b66955debb027d85af4ef8e122cd74cc9d08031d"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -12897,8 +12903,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 7344,
-      "sha256": "4832d262b9be8b3a148a5e8f0ee1dafb76b00fa0bf9df07ea5fa190acb296649"
+      "bytes": 8414,
+      "sha256": "1e9d4104404961a310deac59d8ea9b4811f25ea6d57626ceb27252df11f23839"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -13713,8 +13719,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 5554,
-      "sha256": "20569b1921c1768b980a0d6e9b83a70669bf3f37fee8c76ce278a024e0eb3b96"
+      "bytes": 5684,
+      "sha256": "77b4f78a32f8037a2b9ac3c5975fe4bee243d71f6d613626c945a08481fff24e"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14061,8 +14067,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 30619,
-      "sha256": "06c58a6b4a0801f2a75190fb0f25e17ce4d0b802317ace9d98f58a9e1b750749"
+      "bytes": 31238,
+      "sha256": "23c1d898d474775d13c9e8efadf1eeef0d479bb10b3bab41949fb833d7e2b0cb"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -14169,8 +14175,8 @@
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "category": "source",
-      "bytes": 6936,
-      "sha256": "4484ee48497ddb3cb837575da29404f53d9358aeb2a1cbda1061e2b56f60f7d4"
+      "bytes": 7347,
+      "sha256": "afb4395314fe0cd3db17eb46f6b5caf673868c430fd7a97d43614b17707560fe"
     },
     {
       "path": "src/renderer/ui/index.ts",
@@ -14313,8 +14319,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 71492,
-      "sha256": "d6df34e13ecb8ae26e07215bf9e155f7e4cacc7800d7b4fe6d66e5aff9d226bd"
+      "bytes": 73137,
+      "sha256": "a1ba8d32388e01791bf280ae6d1c088a72e4f86d3726179ee32d3cddf0935832"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14655,8 +14661,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 4686,
-      "sha256": "686494e808a9520f3c952b2fa1202bac15f936fcc4723f2a1b8e227a936c3fa9"
+      "bytes": 4905,
+      "sha256": "b242a1d21c243321753ca55f7a38dfc93a5b8a5f3b5720a9394241cc8910b4dc"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -14823,8 +14829,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 54661,
-      "sha256": "28ef35a566ad6daebe6c83ebee0987fa906be2c5b3e47592ec25d960b9b7b337"
+      "bytes": 54847,
+      "sha256": "9745bc3571262592bdcec5cbdea68288e97ccde4d1b09c1eecf98d62163e31d5"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -14889,8 +14895,8 @@
     {
       "path": "src/shared/crucible-rules.ts",
       "category": "source",
-      "bytes": 9236,
-      "sha256": "eaf3fae21dfc8eb730240b4d9a650a043cdb407173a36cfce5cefcc090fb51c0"
+      "bytes": 9070,
+      "sha256": "52099b123b58d6f7b8ee5f7680011727ed9226ea77108da385ab0570125e2cc7"
     },
     {
       "path": "src/shared/css-custom-properties.test.ts",
@@ -14913,8 +14919,8 @@
     {
       "path": "src/shared/curio-rules.ts",
       "category": "source",
-      "bytes": 4307,
-      "sha256": "7a4579f611ae8bc712048e822156b5db67b64756c5bcafa8bf7e076e75009b71"
+      "bytes": 4603,
+      "sha256": "90e82bc575f9c5c305f09c2a37ca71deea5cd7575df38801e82acf41bebf8792"
     },
     {
       "path": "src/shared/daily-music-composer.test.ts",
@@ -15291,8 +15297,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 36225,
-      "sha256": "741ed3ef4d23ec686295a0068b680d3db0770c82a7c2b73a4008279af848e6bc"
+      "bytes": 37028,
+      "sha256": "793235296a7978b27774e1d98a5a78e4b1306afc24b08babf5922e3fc779cad0"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -15333,8 +15339,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 50370,
-      "sha256": "4c9d34702dbc749c4b96ca04e6e64ff2a81e5cc06d851ad9fd30fefc1fe27bf3"
+      "bytes": 51900,
+      "sha256": "0f6d0827480553881daf1921127d01a20f0a418d2e37608d1fee3d8c8741cbdb"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -15369,8 +15375,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 130369,
-      "sha256": "b628cebbb56a286652748315ac4db267530d4caf3d0c7b88098290233168856d"
+      "bytes": 132323,
+      "sha256": "26b7c62cb4daf6b2df9c5ab2e521bac5bf760cd4de9610fa127bdc877f0ad0dd"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -15640,7 +15646,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
       "bytes": 5803,
-      "sha256": "b27c07cdf6c0ac560c68ac46ea1822e4380669164894bf2b8b8607fb83cfee02"
+      "sha256": "38bc054295ec5e4fb7cc77a405f816fe576456cb9fce475bd33a996b6201ef03"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -15675,8 +15681,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 58264,
-      "sha256": "cbb2b0423fcef50b716edcc259583b2d356e7b034b154d4e58a2e52c385f2a39"
+      "bytes": 58572,
+      "sha256": "d066a27e3d64e5d2cfaba7360b709c5961da5c2a8554688aa49314a6d396c456"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16155,8 +16161,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 55518,
-      "sha256": "fd0f0e6ddc525965c9b39346167a02a3f874b8bf91101190ed6027690601dc78"
+      "bytes": 56107,
+      "sha256": "ffb3e6e85c293493be1522bb71bc61f397bf9565f7a6e902abce943ea3e4d0d0"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -16251,8 +16257,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 10345,
-      "sha256": "250db8e8e5a2c3174b05131b923825ddf47ee726ab5561805a6f3831cabaf0ba"
+      "bytes": 10374,
+      "sha256": "24fb6be421643ab4c7a9e6bf02443401979ce3300270cf79276ef5955c05b558"
     },
     {
       "path": "src/shared/run-from-share-key.test.ts",
@@ -16293,8 +16299,8 @@
     {
       "path": "src/shared/run-inventory-contracts.ts",
       "category": "source",
-      "bytes": 688,
-      "sha256": "845851ef118370df4b6b606eda2fbd6221e8513e21ae93e5e783926d795dcdd3"
+      "bytes": 739,
+      "sha256": "614819ebe9a9f9430fa5272638b41e2c023c52d8ac2194c689deeaca64d00f25"
     },
     {
       "path": "src/shared/run-inventory.test.ts",
@@ -16305,8 +16311,8 @@
     {
       "path": "src/shared/run-inventory.ts",
       "category": "source",
-      "bytes": 19719,
-      "sha256": "e5855928689a56d7ee3460b599a006963741c284892c38632bcd3e3fdc2065e8"
+      "bytes": 20541,
+      "sha256": "54ad58b80c36e761700c14201e928f987a81de61cef7efc6e632ae817941fcee"
     },
     {
       "path": "src/shared/run-lifecycle-machine.test.ts",
@@ -16365,8 +16371,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 7220,
-      "sha256": "8e648c1a5559e0dfeddacbcb788d00fa30ca6b8ff745ea4936987206851d6802"
+      "bytes": 7410,
+      "sha256": "c9369f72e2831d9ec935860674a85efb084b265cd59a1c56d0e7de7444b0e6f6"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -16431,14 +16437,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 10030,
-      "sha256": "ba4b0bc2d53dd1517c401b129fbefaabf6274c8c5c6ca0194bdfb6c747a47840"
+      "bytes": 10143,
+      "sha256": "df074220286f2025b5f9c6faac645784e65f5a202ad0691ba421ff3114104840"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 49192,
-      "sha256": "edbed5e0b99b34b77da8635e61468cc5334c370ac72c0d14cf986529f15a5cbc"
+      "bytes": 50670,
+      "sha256": "a76d53d3f9826efda9059a0abcf87b27d1f18fe626b6cdc3071d07fb0fa18ac4"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -16675,6 +16681,18 @@
       "sha256": "7f68e4a596ae1508c7a788d41aaea5c79c467a99ed96c85f14c27c14f31c79be"
     },
     {
+      "path": "src/shared/still-bell-rules.test.ts",
+      "category": "test",
+      "bytes": 4983,
+      "sha256": "e3c6e9b34e6d89e07b53c02e2f1ad19cc03e982b17dd522d698d75d2b0ae73c0"
+    },
+    {
+      "path": "src/shared/still-bell-rules.ts",
+      "category": "source",
+      "bytes": 3992,
+      "sha256": "4247fe4f6e4daf0fe043b6468db639c1eed2ae7fff8c33f6518ebc691d2e8a88"
+    },
+    {
       "path": "src/shared/store-stock.test.ts",
       "category": "test",
       "bytes": 3458,
@@ -16683,14 +16701,14 @@
     {
       "path": "src/shared/storm-glass-rules.test.ts",
       "category": "test",
-      "bytes": 5084,
-      "sha256": "29ea1e0b74b865dc7562dc75744ec3d2be2ffbe9d0c98946e33213342393687b"
+      "bytes": 6215,
+      "sha256": "bae3ba124d650022f71a7775fac8f8977740317a1dd3c0dae7972504a3f1a17b"
     },
     {
       "path": "src/shared/storm-glass-rules.ts",
       "category": "source",
-      "bytes": 3123,
-      "sha256": "fce8e8bc5e9ab08eb23cb4eb9dad638c75ea0c57c5b35129f5bf6a9e0d43d125"
+      "bytes": 3403,
+      "sha256": "1b2e222061ffe1e8089f08c6ee3fc5eb9c51c4f78c4695509282527ec6d4f6b0"
     },
     {
       "path": "src/shared/system-diagrams.test.ts",
@@ -16719,8 +16737,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 90325,
-      "sha256": "4c0205e3ae81fbcab0a53e0e4878cb0ba67fa51599248bd09cf9c8be60dbe038"
+      "bytes": 92141,
+      "sha256": "cfb8f15751e98363f2ea65c615d988f391e277f8be792bf94606ad3ad36f719c"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16743,8 +16761,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 171294,
-      "sha256": "42e6cf288d769fdfb802cceaf309da648fc734ef1c1a827b33094459bb7fdfec"
+      "bytes": 173828,
+      "sha256": "ab2a6e313de8f1e654d2f5dc9254599f44901e6a56daa2ba044b235a1ec53fd4"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17002,7 +17020,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "39c0775651accd3558388e7b1882835b24886501c1f252283aeb9c189cba691b"
+      "sha256": "f4bcfc922d741b6de10cf36258cc09166309e35095b42b70ba7cb616cd69dd50"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17019,8 +17037,8 @@
     {
       "path": "src/shared/void-spew-rules.ts",
       "category": "source",
-      "bytes": 5459,
-      "sha256": "fa75064ff8b45a19b1aeac3cc447d675708f6f04f5528a6f52c7f04597b950d0"
+      "bytes": 5857,
+      "sha256": "ba4980c368a5f85ec84abf5963307683cf11a9bca4912c0eed6e26cb3af7a5d4"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -17051,240 +17069,6 @@
       "category": "other",
       "bytes": 4,
       "sha256": "66c342932aa7c18f7bf1fa212aa011069fc2e50e0c7e9e4c73fcaa6851854c47"
-    },
-    {
-      "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
-      "category": "other",
-      "bytes": 2795,
-      "sha256": "69add6d1961ec61253b6732e79a208f711f8e2c6b02ae55566dfae6261b7366a"
-    },
-    {
-      "path": "tasks/deep-game-epic/01-research-findings.md",
-      "category": "other",
-      "bytes": 6276,
-      "sha256": "7e52c2d12cf4efe595b02a10dd4a3852e0b36e2902c7039cb044fe93f771ccce"
-    },
-    {
-      "path": "tasks/deep-game-epic/02-deep-game-plan.md",
-      "category": "other",
-      "bytes": 19588,
-      "sha256": "f4656a4f0df53f8be50b2e4095c57ec50351f7b9582ae359fca3f296ca36b698"
-    },
-    {
-      "path": "tasks/deep-game-epic/03-execution-ledger.md",
-      "category": "other",
-      "bytes": 1086,
-      "sha256": "5f4e9cd187079ed69644bc2343edb2c993eade48814301277020565561fa4316"
-    },
-    {
-      "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
-      "category": "other",
-      "bytes": 5597,
-      "sha256": "856872190ac99398e4c653a0cb31da89bb2bcd11dded48eb4964e8f3317ba8ca"
-    },
-    {
-      "path": "tasks/deep-game-epic/README.md",
-      "category": "documentation",
-      "bytes": 8083,
-      "sha256": "ba969768c1b1f1d4de12605be278a6bb10f9f9db47c7e1c5cd93ad0c22dedbfe"
-    },
-    {
-      "path": "tasks/deep-game-epic/TICKET_TEMPLATE.md",
-      "category": "other",
-      "bytes": 1443,
-      "sha256": "57c08115ea97bd0e3f84117f4df0c611b5083af371a969024f24adef305d7b86"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-001-north-star-scope-and-plateau.md",
-      "category": "other",
-      "bytes": 2389,
-      "sha256": "0099b872b380f1ee82775d421c965a438b2ab8a64f247cdcfaf7881d0a9fc1f2"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-002-descent-act-schedule.md",
-      "category": "other",
-      "bytes": 3615,
-      "sha256": "0acf2305ae1a3162ae24b31303cbc28859de3a2309129e16efd726a321ed6809"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-003-dread-coefficient-and-tiers.md",
-      "category": "other",
-      "bytes": 3490,
-      "sha256": "d925b14ac12ac63c08b26d676349f6a4de632620cb77e02f955b3aa74b040f5f"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-004-milestones-and-clear-beat.md",
-      "category": "other",
-      "bytes": 2847,
-      "sha256": "2ddf37643216283c91b9e309365bbd89280a91574ae8a4d75f9f5ba4866213ed"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-005-warden-floor-v1.md",
-      "category": "other",
-      "bytes": 2709,
-      "sha256": "e789abee1dd560bf4df9c59f7aca28023a3d7276401b62b339780db21d24733f"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-006-endless-gated-mode.md",
-      "category": "other",
-      "bytes": 2984,
-      "sha256": "0721e617959145e8b6a0288c5d2a318ce4b5ce89ae5366c7e95cce4c8e2e70d6"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-007-results-and-run-summary.md",
-      "category": "other",
-      "bytes": 2038,
-      "sha256": "bb1ff4ac2e388c5ec9992833234ec68d87a3c4826fc9e5448d9a7d0bb12a0017"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-008-hold-verb.md",
-      "category": "other",
-      "bytes": 3791,
-      "sha256": "f117427c25aeb6f86a5fa22ceeefd8ad6b09f760613072fa5680bcfc346445eb"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-009-wanderers-card-family.md",
-      "category": "other",
-      "bytes": 3010,
-      "sha256": "d6aa9253ee1f3b7d337fd19a6a587b710f514d8373c0d48a49038e0aac2ff25e"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-010-the-fold-board.md",
-      "category": "other",
-      "bytes": 2415,
-      "sha256": "34735cbfaea6028ba37e073cd4a53524e5509151c2ccbe66ee9d4fac00bbf414"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-011-keeper-of-halls-boss.md",
-      "category": "other",
-      "bytes": 1740,
-      "sha256": "c014ac7f4bbe0605f164d61369cf3308090f59071a65ba13c2c8387c13d7d4c2"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-012-pop-hill-repair-measurement.md",
-      "category": "other",
-      "bytes": 1829,
-      "sha256": "f8cfe633f6358173ecb960a15b28337982609da0ccfb7f2e74925a172a1a4b21"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-013-relic-slot-cap.md",
-      "category": "other",
-      "bytes": 1614,
-      "sha256": "15c1a41885c05cd20f5fdf24a7a490fb1e7fc9c164678c2897cd28555d9722d5"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
-      "category": "other",
-      "bytes": 2271,
-      "sha256": "c9732a978bd8eef0a75c969ba69d492b0c2e7e1937f813b0e14f41415af21ad2"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
-      "category": "other",
-      "bytes": 1716,
-      "sha256": "6d54c242f7d797be7ec5c9e55979b7f9aa9c91385b49e3f1b958bb8c562c3891"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-016-masks-card-family.md",
-      "category": "other",
-      "bytes": 1776,
-      "sha256": "e7961dddf583d7d6e4a24c16afed4c3595834d391a30672dbe2df8ba23022dd4"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
-      "category": "other",
-      "bytes": 2122,
-      "sha256": "a9f7e07ae473eb5868d1c492af0e5520aa43563647e66f3655e411a27c6e506f"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
-      "category": "other",
-      "bytes": 1426,
-      "sha256": "dfa4bacb95f5e6958a082dbfaf71247492cc23b1168d8ff3e265335fb0ff8d13"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-019-echo-verb.md",
-      "category": "other",
-      "bytes": 1643,
-      "sha256": "78636567a6e452950ea56e59e4e9032af6868bd31fff1ac5a86d7c3eb5752a21"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-020-sleepers-card-family.md",
-      "category": "other",
-      "bytes": 1616,
-      "sha256": "218d38f9fff78552b039b9373c305ceacc4459ed37e6eb220ea9cf8a98e22d15"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-021-the-spiral-board.md",
-      "category": "other",
-      "bytes": 1787,
-      "sha256": "af60b9e4e06079b562156e5ff35ea69733b5050bc9460c7d019d02b18caa3af7"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-022-dungeon-learns-you.md",
-      "category": "other",
-      "bytes": 2028,
-      "sha256": "daf46ff561a754aaad6457a63bf86ab1d8391db863b6b51d77081d4426bb471a"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-023-warden-complete.md",
-      "category": "other",
-      "bytes": 1812,
-      "sha256": "f944b528ec50de2fe0d4f49df456528c49c043c1977b40322ad6e7a0e136b9ed"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-024-feat-unlock-tree.md",
-      "category": "other",
-      "bytes": 1956,
-      "sha256": "0d6854de80569329005854c81299c4aafa592654d53b214d115ed61a67b82cdb"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
-      "category": "other",
-      "bytes": 1944,
-      "sha256": "fe2fa305aaa5a9bbfe188a6064d736817d30f5495d936ce96a10281e84fb1b73"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-026-boss-reward-tier-gating.md",
-      "category": "other",
-      "bytes": 1612,
-      "sha256": "5642754617b03522ee4aba659c6727b85b6cc1f3c216848cb30f951fcd1cbbf9"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-027-hall-soak-and-accountability.md",
-      "category": "other",
-      "bytes": 1933,
-      "sha256": "bec3f092e668ac4f74fd51dc4ebc70ba4ac2cbfebb0562efa5f857bb25972c5f"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
-      "category": "other",
-      "bytes": 1873,
-      "sha256": "af0b0860c5a1c26e26af868ce983bca3175162ce3d0953faa6a8d197f8a49ffc"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
-      "category": "other",
-      "bytes": 1916,
-      "sha256": "f3bd1749f6607d0fb117042699e8ef05eb5a6609cbb01ad040d061c807996c19"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
-      "category": "other",
-      "bytes": 2204,
-      "sha256": "c3b12f6a7b3f30fe293ab5533205ef06c56ab9036cb15eb27b793a3e492132c1"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-031-save-schema-and-migration.md",
-      "category": "other",
-      "bytes": 1713,
-      "sha256": "efabdc1ddfa9cf14ea259086bd65cbb5d040be6afc96d168424b37bf18164f80"
-    },
-    {
-      "path": "tasks/deep-game-epic/tickets/DGE-032-balance-bars-and-sims.md",
-      "category": "other",
-      "bytes": 2242,
-      "sha256": "39661ed4f1a6d8b42091fb4746991e9c334277e3106ecfe7c9931807e15cd5ec"
     },
     {
       "path": "tasks/dungeon-epic/00-current-system-map.md",
@@ -20891,7 +20675,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1320,
+      "lineCount": 1327,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -23623,7 +23407,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 351,
+      "lineCount": 369,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -23639,7 +23423,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 455,
+      "lineCount": 466,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -23899,7 +23683,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2456,
+      "lineCount": 2470,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -23998,6 +23782,7 @@
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
+        "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/zone-rules.ts"
       ],
@@ -24217,7 +24002,7 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 271,
+      "lineCount": 272,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
@@ -24293,7 +24078,7 @@
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 149,
+      "lineCount": 155,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/copy/itemDropCopy.ts",
@@ -24314,7 +24099,7 @@
       "path": "src/renderer/components/itemDrops.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 116,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/shared/contracts.ts",
@@ -24342,7 +24127,7 @@
       "path": "src/renderer/components/itemEffects.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 131,
+      "lineCount": 139,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/itemEffects.ts",
@@ -24357,7 +24142,7 @@
       "path": "src/renderer/components/itemEffects.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 332,
+      "lineCount": 360,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
@@ -25517,7 +25302,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 711,
+      "lineCount": 729,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -25536,7 +25321,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 924,
+      "lineCount": 928,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25606,11 +25391,13 @@
       "path": "src/renderer/components/runShellFreshTools.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 47,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
         "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
-        "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS"
+        "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+        "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline"
       ],
       "testedBy": [
         "file:src/renderer/components/RunShell.test.tsx"
@@ -25621,7 +25408,7 @@
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 33,
       "imports": [
         "file:src/renderer/ui/gameplayIcons.tsx"
       ],
@@ -25661,7 +25448,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 89,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -29241,7 +29028,7 @@
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 112,
+      "lineCount": 125,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -29256,6 +29043,7 @@
         "symbol:src/renderer/copy/boardPowerCopy.ts#MISERS_PURSE_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#STILL_BELL_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY"
       ],
@@ -29615,7 +29403,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 166,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -31640,7 +31428,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 126,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -32734,7 +32522,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 842,
+      "lineCount": 852,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -32780,6 +32568,7 @@
         "file:src/shared/run-share-key.ts",
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/save-data.ts",
+        "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/telemetry.ts",
         "file:src/shared/zone-rules.ts"
@@ -32958,9 +32747,10 @@
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 199,
+      "lineCount": 209,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBellIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBombIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayCrucibleIcon",
         "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayExitIcon",
@@ -34352,7 +34142,7 @@
       "path": "src/shared/chain-rung-value-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts"
@@ -34991,7 +34781,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1196,
+      "lineCount": 1199,
       "imports": [
         "file:src/shared/elemental-loot-rules.ts"
       ],
@@ -35281,6 +35071,7 @@
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/softlock-generator-contract.test.ts",
         "file:src/shared/steam-partner-config.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts",
         "file:src/shared/tile-state-rules.test.ts",
@@ -35469,7 +35260,7 @@
       "path": "src/shared/crucible-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 169,
+      "lineCount": 167,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35480,7 +35271,7 @@
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/tile-identity.ts",
-        "file:src/shared/tile-symbol-catalog.ts"
+        "file:src/shared/void-spew-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/crucible-rules.ts#applyCrucible",
@@ -35535,7 +35326,7 @@
       "path": "src/shared/curio-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 80,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -35551,11 +35342,13 @@
         "symbol:src/shared/curio-rules.ts#curioItemsForRules",
         "symbol:src/shared/curio-rules.ts#curioReplacesGlint",
         "symbol:src/shared/curio-rules.ts#MISERS_PURSE_RULES_VERSION",
+        "symbol:src/shared/curio-rules.ts#STILL_BELL_RULES_VERSION",
         "symbol:src/shared/curio-rules.ts#STORM_GLASS_RULES_VERSION"
       ],
       "testedBy": [
         "file:src/shared/curio-rules.test.ts",
         "file:src/shared/misers-purse.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts"
       ]
     },
@@ -36755,6 +36548,7 @@
         "file:src/shared/secondary-objective-rules.test.ts",
         "file:src/shared/secondary-objectives.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/store-stock.test.ts",
         "file:src/shared/storm-glass-rules.test.ts"
       ]
@@ -36952,6 +36746,7 @@
         "file:src/shared/run-relic-rules.test.ts",
         "file:src/shared/run-soak.test.ts",
         "file:src/shared/run-store-rules.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts",
         "file:src/shared/zone-rules.test.ts"
@@ -37034,7 +36829,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 974,
+      "lineCount": 990,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/memorize-skip-reward-rules.ts",
@@ -37062,6 +36857,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStillBellCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStormGlassCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTakeRelicCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
@@ -37109,6 +36905,7 @@
         "file:src/shared/meteor-rules.test.ts",
         "file:src/shared/misers-purse.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts"
       ]
     },
@@ -37236,7 +37033,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1191,
+      "lineCount": 1225,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/board-inspection.ts",
@@ -37267,6 +37064,7 @@
         "file:src/shared/run-timer-rules.ts",
         "file:src/shared/scoring-rules.ts",
         "file:src/shared/session-stats-rules.ts",
+        "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/tile-identity.ts",
         "file:src/shared/tile-trait-rules.ts"
@@ -37289,6 +37087,7 @@
         "file:src/shared/meteor-rules.test.ts",
         "file:src/shared/misers-purse.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts"
       ]
     },
@@ -37393,7 +37192,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3797,
+      "lineCount": 3852,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -39866,7 +39665,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1138,
+      "lineCount": 1147,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -39925,6 +39724,7 @@
         "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/realm-weather-rules.test.ts",
+        "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts"
       ]
     },
@@ -40213,7 +40013,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 246,
+      "lineCount": 247,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -40386,7 +40186,7 @@
       "path": "src/shared/run-inventory-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 29,
+      "lineCount": 31,
       "imports": [],
       "exports": [
         "symbol:src/shared/run-inventory-contracts.ts#RUN_INVENTORY_ITEM_IDS",
@@ -40414,7 +40214,7 @@
       "path": "src/shared/run-inventory.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 498,
+      "lineCount": 510,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-array-guards.ts",
@@ -40625,7 +40425,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 129,
+      "lineCount": 131,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -40826,7 +40626,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 121,
+      "lineCount": 122,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -40839,7 +40639,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 826,
+      "lineCount": 849,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -40860,6 +40660,7 @@
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts",
+        "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/tile-identity.ts",
         "file:src/shared/tile-suit-rules.ts",
@@ -41724,6 +41525,50 @@
       ]
     },
     {
+      "id": "file:src/shared/still-bell-rules.test.ts",
+      "path": "src/shared/still-bell-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 78,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/curio-rules.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
+        "file:src/shared/realm-weather-rules.ts",
+        "file:src/shared/still-bell-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/still-bell-rules.ts",
+      "path": "src/shared/still-bell-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 79,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/odd-card-rules.ts",
+        "file:src/shared/realm-rules.ts",
+        "file:src/shared/realm-weather-rules.ts",
+        "file:src/shared/run-array-guards.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/still-bell-rules.ts#applyStillBell",
+        "symbol:src/shared/still-bell-rules.ts#canRingStillBell",
+        "symbol:src/shared/still-bell-rules.ts#STILL_BELL_SOURCE_ID",
+        "symbol:src/shared/still-bell-rules.ts#stillBellFeedbackLine",
+        "symbol:src/shared/still-bell-rules.ts#StillBellResult"
+      ],
+      "testedBy": [
+        "file:src/shared/still-bell-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/store-stock.test.ts",
       "path": "src/shared/store-stock.test.ts",
       "layer": "shared",
@@ -41742,7 +41587,7 @@
       "path": "src/shared/storm-glass-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 78,
+      "lineCount": 99,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/curio-rules.ts",
@@ -41761,7 +41606,7 @@
       "path": "src/shared/storm-glass-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-rules.ts",
@@ -41875,7 +41720,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 691,
+      "lineCount": 698,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -41947,7 +41792,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2629,
+      "lineCount": 2670,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -41972,6 +41817,7 @@
         "file:src/shared/run-store-rules.ts",
         "file:src/shared/scoring-rules.ts",
         "file:src/shared/skittish-cards-rules.ts",
+        "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/tile-identity.ts",
         "file:src/shared/zone-rules.ts"
@@ -42974,7 +42820,7 @@
       "path": "src/shared/void-spew-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 111,
+      "lineCount": 120,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -42985,6 +42831,7 @@
         "file:src/shared/tile-symbol-catalog.ts"
       ],
       "exports": [
+        "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
         "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
         "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
         "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
@@ -44591,8 +44438,8 @@
       "name": "playItemDropSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1305,
-      "endLine": 1306
+      "line": 1312,
+      "endLine": 1313
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playItemEffectSfx",
@@ -47647,8 +47494,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 454,
-      "endLine": 454
+      "line": 465,
+      "endLine": 465
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -47847,40 +47694,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2455,
-      "endLine": 2455
+      "line": 2469,
+      "endLine": 2469
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 268,
-      "endLine": 268
+      "line": 269,
+      "endLine": 269
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 266,
-      "endLine": 266
+      "line": 267,
+      "endLine": 267
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 270,
-      "endLine": 270
+      "line": 271,
+      "endLine": 271
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 260,
-      "endLine": 260
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -48207,8 +48054,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 270,
-      "endLine": 270
+      "line": 271,
+      "endLine": 271
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -48231,32 +48078,32 @@
       "name": "ITEM_DROP_LEAVE_MS",
       "kind": "value",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 80,
-      "endLine": 80
+      "line": 86,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_TICK_MS",
       "name": "ITEM_DROP_TICK_MS",
       "kind": "value",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 78,
-      "endLine": 78
+      "line": 84,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopup",
       "name": "ItemDropPopup",
       "kind": "function",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 94,
-      "endLine": 148
+      "line": 100,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopupProps",
       "name": "ItemDropPopupProps",
       "kind": "interface",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 82,
-      "endLine": 86
+      "line": 88,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_HOLD_MS",
@@ -48287,16 +48134,16 @@
       "name": "ItemDrop",
       "kind": "interface",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 91,
-      "endLine": 100
+      "line": 93,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropFromCallout",
       "name": "itemDropFromCallout",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 103,
-      "endLine": 115
+      "line": 105,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropGlyph",
@@ -48304,7 +48151,7 @@
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
       "line": 60,
-      "endLine": 89
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropGlyph",
@@ -48343,32 +48190,32 @@
       "name": "ITEM_EFFECT_MAX_CARDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 162,
-      "endLine": 162
+      "line": 172,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_TRAUMA",
       "name": "ITEM_EFFECT_TRAUMA",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 58,
-      "endLine": 73
+      "line": 64,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffect",
       "name": "ItemEffect",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 43,
-      "endLine": 55
+      "line": 44,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectAnchor",
       "name": "ItemEffectAnchor",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 153,
-      "endLine": 157
+      "line": 163,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectKind",
@@ -48376,47 +48223,47 @@
       "kind": "type",
       "file": "src/renderer/components/itemEffects.ts",
       "line": 27,
-      "endLine": 41
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectRecipe",
       "name": "itemEffectRecipe",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 168,
-      "endLine": 319
+      "line": 178,
+      "endLine": 347
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
       "name": "itemEffectsFromEvents",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 85,
-      "endLine": 151
+      "line": 92,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#METEOR_IMPACT_DELAY_SECONDS",
       "name": "METEOR_IMPACT_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 160,
-      "endLine": 160
+      "line": 170,
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#publishItemEffects",
       "name": "publishItemEffects",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 328,
-      "endLine": 331
+      "line": 356,
+      "endLine": 359
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
       "name": "useItemEffectChannel",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 326,
-      "endLine": 326
+      "line": 354,
+      "endLine": 354
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -49663,8 +49510,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 923,
-      "endLine": 923
+      "line": 927,
+      "endLine": 927
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -49683,6 +49530,14 @@
       "endLine": 82
     },
     {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "name": "rememberToolCharges",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 44,
+      "endLine": 46
+    },
+    {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
       "name": "risenToolCharges",
       "kind": "value",
@@ -49699,36 +49554,44 @@
       "endLine": 12
     },
     {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
+      "name": "toolChargeBaseline",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 41,
+      "endLine": 42
+    },
+    {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
       "name": "RUN_SHELL_GLYPHS",
       "kind": "value",
       "file": "src/renderer/components/runShellGlyphs.tsx",
-      "line": 17,
-      "endLine": 30
+      "line": 18,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 86,
-      "endLine": 88
+      "line": 89,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
       "name": "RUN_SHELL_TOOL_CATALOG",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 55,
-      "endLine": 81
+      "line": 57,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
       "name": "RunPowerChargeField",
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 33,
-      "endLine": 44
+      "line": 34,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
@@ -49736,23 +49599,23 @@
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 16,
-      "endLine": 30
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 83,
-      "endLine": 83
+      "line": 86,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "name": "RunShellToolSpec",
       "kind": "interface",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 46,
-      "endLine": 53
+      "line": 48,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
@@ -54263,8 +54126,8 @@
       "name": "CRUCIBLE_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 98,
-      "endLine": 105
+      "line": 111,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
@@ -54272,23 +54135,23 @@
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
       "line": 57,
-      "endLine": 61
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_HINT_COPY",
       "name": "CURIO_HINT_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 68,
-      "endLine": 72
+      "line": 69,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#curioItemHint",
       "name": "curioItemHint",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 75,
-      "endLine": 81
+      "line": 77,
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
@@ -54303,16 +54166,16 @@
       "name": "METEOR_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 107,
-      "endLine": 111
+      "line": 120,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#MISERS_PURSE_TOOL_COPY",
       "name": "MISERS_PURSE_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 84,
-      "endLine": 87
+      "line": 87,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
@@ -54331,12 +54194,20 @@
       "endLine": 17
     },
     {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#STILL_BELL_TOOL_COPY",
+      "name": "STILL_BELL_TOOL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 93,
+      "endLine": 99
+    },
+    {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
       "name": "STORM_GLASS_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 90,
-      "endLine": 95
+      "line": 102,
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
@@ -54711,8 +54582,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 124,
-      "endLine": 143
+      "line": 146,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -54720,15 +54591,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 110
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 116,
-      "endLine": 117
+      "line": 138,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -56664,7 +56535,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 14,
-      "endLine": 123
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -57807,8 +57678,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 244,
-      "endLine": 829
+      "line": 245,
+      "endLine": 839
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -57947,6 +57818,14 @@
       "endLine": 85
     },
     {
+      "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBellIcon",
+      "name": "GameplayBellIcon",
+      "kind": "function",
+      "file": "src/renderer/ui/gameplayIcons.tsx",
+      "line": 179,
+      "endLine": 186
+    },
+    {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBombIcon",
       "name": "GameplayBombIcon",
       "kind": "function",
@@ -58015,8 +57894,8 @@
       "name": "GameplayItemsIcon",
       "kind": "function",
       "file": "src/renderer/ui/gameplayIcons.tsx",
-      "line": 190,
-      "endLine": 198
+      "line": 200,
+      "endLine": 208
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayMenuIcon",
@@ -58063,8 +57942,8 @@
       "name": "GameplayPurseIcon",
       "kind": "function",
       "file": "src/renderer/ui/gameplayIcons.tsx",
-      "line": 179,
-      "endLine": 187
+      "line": 189,
+      "endLine": 197
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplaySettingsIcon",
@@ -59856,15 +59735,15 @@
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
       "line": 60,
-      "endLine": 66
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
       "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 73,
-      "endLine": 73
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_SCORE_MULTIPLIER",
@@ -59879,16 +59758,16 @@
       "name": "chainRungPairs",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier",
       "name": "chainRungScoreMultiplier",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 76,
-      "endLine": 76
+      "line": 78,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -61295,16 +61174,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1068,
-      "endLine": 1068
+      "line": 1071,
+      "endLine": 1071
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1143,
-      "endLine": 1145
+      "line": 1146,
+      "endLine": 1148
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -61383,8 +61262,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1151,
-      "endLine": 1156
+      "line": 1154,
+      "endLine": 1159
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -61415,8 +61294,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1169,
-      "endLine": 1195
+      "line": 1172,
+      "endLine": 1198
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -61735,8 +61614,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1070,
-      "endLine": 1083
+      "line": 1073,
+      "endLine": 1086
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -61847,16 +61726,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1159,
-      "endLine": 1159
+      "line": 1162,
+      "endLine": 1162
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1162,
-      "endLine": 1167
+      "line": 1165,
+      "endLine": 1170
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -61879,16 +61758,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1136,
-      "endLine": 1140
+      "line": 1139,
+      "endLine": 1143
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1134,
-      "endLine": 1134
+      "line": 1137,
+      "endLine": 1137
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -61903,8 +61782,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1090,
-      "endLine": 1107
+      "line": 1093,
+      "endLine": 1110
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -61912,7 +61791,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 754,
-      "endLine": 1066
+      "endLine": 1069
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -61951,8 +61830,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1109,
-      "endLine": 1128
+      "line": 1112,
+      "endLine": 1131
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -62320,7 +62199,7 @@
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
       "line": 66,
-      "endLine": 161
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
@@ -62335,8 +62214,8 @@
       "name": "crucibleFeedbackLine",
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
-      "line": 164,
-      "endLine": 168
+      "line": 162,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
@@ -62367,40 +62246,40 @@
       "name": "claimCurio",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 67,
-      "endLine": 73
+      "line": 73,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_FROM_FLOOR",
       "name": "CURIO_FROM_FLOOR",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_GLINT_SHARE",
       "name": "CURIO_GLINT_SHARE",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CURIO_RULES_VERSION",
       "name": "CURIO_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#curioItemFor",
       "name": "curioItemFor",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 58,
-      "endLine": 64
+      "line": 64,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#CurioItemId",
@@ -62415,16 +62294,16 @@
       "name": "curioItemsForRules",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 28,
-      "endLine": 33
+      "line": 31,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#curioReplacesGlint",
       "name": "curioReplacesGlint",
       "kind": "value",
       "file": "src/shared/curio-rules.ts",
-      "line": 45,
-      "endLine": 48
+      "line": 50,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#MISERS_PURSE_RULES_VERSION",
@@ -62433,6 +62312,14 @@
       "file": "src/shared/curio-rules.ts",
       "line": 25,
       "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/curio-rules.ts#STILL_BELL_RULES_VERSION",
+      "name": "STILL_BELL_RULES_VERSION",
+      "kind": "value",
+      "file": "src/shared/curio-rules.ts",
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/curio-rules.ts#STORM_GLASS_RULES_VERSION",
@@ -64959,208 +64846,216 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 882,
-      "endLine": 891
+      "line": 898,
+      "endLine": 907
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBombCommand",
       "name": "createGameplayBombCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 790,
-      "endLine": 796
+      "line": 803,
+      "endLine": 809
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayCrucibleCommand",
       "name": "createGameplayCrucibleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 804,
-      "endLine": 805
+      "line": 820,
+      "endLine": 821
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 946,
-      "endLine": 955
+      "line": 962,
+      "endLine": 971
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 957,
-      "endLine": 966
+      "line": 973,
+      "endLine": 982
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 763,
-      "endLine": 780
+      "line": 776,
+      "endLine": 793
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFinalPairRevealCommand",
       "name": "createGameplayFinalPairRevealCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 972,
-      "endLine": 973
+      "line": 988,
+      "endLine": 989
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 854,
-      "endLine": 859
+      "line": 870,
+      "endLine": 875
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 875,
-      "endLine": 880
+      "line": 891,
+      "endLine": 896
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 818,
-      "endLine": 824
+      "line": 834,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGreetCurioCommand",
       "name": "createGameplayGreetCurioCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 861,
-      "endLine": 866
+      "line": 877,
+      "endLine": 882
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 914,
-      "endLine": 923
+      "line": 930,
+      "endLine": 939
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMeteorCommand",
       "name": "createGameplayMeteorCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 807,
-      "endLine": 808
+      "line": 823,
+      "endLine": 824
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 925,
-      "endLine": 936
+      "line": 941,
+      "endLine": 952
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 782,
-      "endLine": 788
+      "line": 795,
+      "endLine": 801
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 810,
-      "endLine": 816
+      "line": 826,
+      "endLine": 832
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayReflowCommand",
       "name": "createGameplayReflowCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 969,
-      "endLine": 970
+      "line": 985,
+      "endLine": 986
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 833,
-      "endLine": 839
+      "line": 849,
+      "endLine": 855
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 938,
-      "endLine": 944
+      "line": 954,
+      "endLine": 960
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 826,
-      "endLine": 831
+      "line": 842,
+      "endLine": 847
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStillBellCommand",
+      "name": "createGameplayStillBellCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 814,
+      "endLine": 815
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStormGlassCommand",
       "name": "createGameplayStormGlassCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 801,
-      "endLine": 802
+      "line": 817,
+      "endLine": 818
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTakeRelicCommand",
       "name": "createGameplayTakeRelicCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 798,
-      "endLine": 799
+      "line": 811,
+      "endLine": 812
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 906,
-      "endLine": 912
+      "line": 922,
+      "endLine": 928
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 841,
-      "endLine": 852
+      "line": 857,
+      "endLine": 868
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 868,
-      "endLine": 873
+      "line": 884,
+      "endLine": 889
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 893,
-      "endLine": 904
+      "line": 909,
+      "endLine": 920
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
@@ -65207,8 +65102,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 755,
-      "endLine": 755
+      "line": 768,
+      "endLine": 768
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -65216,7 +65111,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 284,
-      "endLine": 445
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -65271,16 +65166,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 756,
-      "endLine": 756
+      "line": 769,
+      "endLine": 769
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 455,
-      "endLine": 753
+      "line": 456,
+      "endLine": 766
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -65335,8 +65230,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 760,
-      "endLine": 761
+      "line": 773,
+      "endLine": 774
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreBoundedMemoryPolicy",
@@ -65455,32 +65350,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 69,
-      "endLine": 74
+      "line": 70,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 76,
-      "endLine": 81
+      "line": 77,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1061,
-      "endLine": 1175
+      "line": 1092,
+      "endLine": 1209
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1177,
-      "endLine": 1190
+      "line": 1211,
+      "endLine": 1224
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -69224,7 +69119,7 @@
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
       "line": 1090,
-      "endLine": 1137
+      "endLine": 1146
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#DOUSE_GOLD",
@@ -69704,7 +69599,7 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 58,
-      "endLine": 237
+      "endLine": 238
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -69719,8 +69614,8 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 239,
-      "endLine": 245
+      "line": 240,
+      "endLine": 246
     },
     {
       "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
@@ -69887,8 +69782,8 @@
       "name": "RUN_INVENTORY_ITEM_IDS",
       "kind": "value",
       "file": "src/shared/run-inventory-contracts.ts",
-      "line": 15,
-      "endLine": 28
+      "line": 16,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/run-inventory-contracts.ts#RunInventoryItemId",
@@ -69896,95 +69791,95 @@
       "kind": "type",
       "file": "src/shared/run-inventory-contracts.ts",
       "line": 1,
-      "endLine": 13
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#buildRunInventory",
       "name": "buildRunInventory",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 277,
-      "endLine": 281
+      "line": 284,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#gainRunInventoryItem",
       "name": "gainRunInventoryItem",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 418,
-      "endLine": 451
+      "line": 426,
+      "endLine": 461
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunConsumableRows",
       "name": "getRunConsumableRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 248,
-      "endLine": 251
+      "line": 255,
+      "endLine": 258
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryGainFeedback",
       "name": "getRunInventoryGainFeedback",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 381,
-      "endLine": 416
+      "line": 389,
+      "endLine": 424
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryItemPayoutRows",
       "name": "getRunInventoryItemPayoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 155,
-      "endLine": 161
+      "line": 160,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryItemQuantity",
       "name": "getRunInventoryItemQuantity",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 163,
-      "endLine": 192
+      "line": 168,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryLoadoutRows",
       "name": "getRunInventoryLoadoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 258,
-      "endLine": 275
+      "line": 265,
+      "endLine": 282
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunInventoryRows",
       "name": "getRunInventoryRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 225,
-      "endLine": 246
+      "line": 232,
+      "endLine": 253
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunLoadoutRows",
       "name": "getRunLoadoutRows",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 253,
-      "endLine": 254
+      "line": 260,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#getRunLoadoutSummary",
       "name": "getRunLoadoutSummary",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 484,
-      "endLine": 497
+      "line": 496,
+      "endLine": 509
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#previewRunInventoryItemGain",
       "name": "previewRunInventoryItemGain",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 306,
-      "endLine": 348
+      "line": 313,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RUN_INVENTORY_CATALOG",
@@ -69992,7 +69887,7 @@
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
       "line": 51,
-      "endLine": 148
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RUN_INVENTORY_ITEM_IDS",
@@ -70007,16 +69902,16 @@
       "name": "RUN_LOADOUT_SLOT_LIMIT",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 256,
-      "endLine": 256
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryActionResult",
       "name": "RunInventoryActionResult",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 283,
-      "endLine": 288
+      "line": 290,
+      "endLine": 295
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryDefinition",
@@ -70031,16 +69926,16 @@
       "name": "RunInventoryGainFeedback",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 300,
-      "endLine": 304
+      "line": 307,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryGainPreview",
       "name": "RunInventoryGainPreview",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 290,
-      "endLine": 298
+      "line": 297,
+      "endLine": 305
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryItemId",
@@ -70063,8 +69958,8 @@
       "name": "RunInventoryItemPayoutRow",
       "kind": "interface",
       "file": "src/shared/run-inventory.ts",
-      "line": 150,
-      "endLine": 153
+      "line": 155,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/run-inventory.ts#RunInventoryMutability",
@@ -70103,8 +69998,8 @@
       "name": "useRunInventoryItem",
       "kind": "value",
       "file": "src/shared/run-inventory.ts",
-      "line": 453,
-      "endLine": 482
+      "line": 463,
+      "endLine": 494
     },
     {
       "id": "symbol:src/shared/run-lifecycle-machine.ts#isResumableLifecycleState",
@@ -70663,48 +70558,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 167,
-      "endLine": 501
+      "line": 170,
+      "endLine": 513
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 60,
-      "endLine": 65
+      "line": 61,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 39,
-      "endLine": 58
+      "line": 40,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 513,
-      "endLine": 825
+      "line": 525,
+      "endLine": 848
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 76,
-      "endLine": 150
+      "line": 77,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 67,
-      "endLine": 74
+      "line": 68,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -71971,12 +71866,52 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/shared/still-bell-rules.ts#applyStillBell",
+      "name": "applyStillBell",
+      "kind": "value",
+      "file": "src/shared/still-bell-rules.ts",
+      "line": 43,
+      "endLine": 71
+    },
+    {
+      "id": "symbol:src/shared/still-bell-rules.ts#canRingStillBell",
+      "name": "canRingStillBell",
+      "kind": "value",
+      "file": "src/shared/still-bell-rules.ts",
+      "line": 26,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/still-bell-rules.ts#STILL_BELL_SOURCE_ID",
+      "name": "STILL_BELL_SOURCE_ID",
+      "kind": "value",
+      "file": "src/shared/still-bell-rules.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/still-bell-rules.ts#stillBellFeedbackLine",
+      "name": "stillBellFeedbackLine",
+      "kind": "value",
+      "file": "src/shared/still-bell-rules.ts",
+      "line": 74,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/still-bell-rules.ts#StillBellResult",
+      "name": "StillBellResult",
+      "kind": "interface",
+      "file": "src/shared/still-bell-rules.ts",
+      "line": 34,
+      "endLine": 40
+    },
+    {
       "id": "symbol:src/shared/storm-glass-rules.ts#applyStormGlass",
       "name": "applyStormGlass",
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 38,
-      "endLine": 56
+      "line": 40,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#canBreakStormGlass",
@@ -71984,7 +71919,7 @@
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
       "line": 23,
-      "endLine": 29
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#STORM_GLASS_SOURCE_ID",
@@ -71999,16 +71934,16 @@
       "name": "stormGlassFeedbackLine",
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 59,
-      "endLine": 63
+      "line": 61,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#StormGlassResult",
       "name": "StormGlassResult",
       "kind": "interface",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 31,
-      "endLine": 35
+      "line": 33,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
@@ -72167,16 +72102,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 687,
-      "endLine": 690
+      "line": 694,
+      "endLine": 697
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 667,
-      "endLine": 672
+      "line": 674,
+      "endLine": 679
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -72184,7 +72119,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 655
+      "endLine": 662
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -72207,8 +72142,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 657,
-      "endLine": 658
+      "line": 664,
+      "endLine": 665
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -72223,16 +72158,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 681,
-      "endLine": 684
+      "line": 688,
+      "endLine": 691
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 661,
-      "endLine": 664
+      "line": 668,
+      "endLine": 671
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -72319,112 +72254,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2588,
-      "endLine": 2588
+      "line": 2629,
+      "endLine": 2629
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2449,
-      "endLine": 2565
+      "line": 2488,
+      "endLine": 2606
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2594,
-      "endLine": 2599
+      "line": 2635,
+      "endLine": 2640
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2578,
-      "endLine": 2578
+      "line": 2619,
+      "endLine": 2619
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 454,
-      "endLine": 2436
+      "line": 458,
+      "endLine": 2475
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2602,
-      "endLine": 2608
+      "line": 2643,
+      "endLine": 2649
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2628,
-      "endLine": 2628
+      "line": 2669,
+      "endLine": 2669
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 215,
-      "endLine": 232
+      "line": 219,
+      "endLine": 236
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 55,
-      "endLine": 168
+      "line": 56,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2567,
-      "endLine": 2570
+      "line": 2608,
+      "endLine": 2611
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 208,
-      "endLine": 213
+      "line": 212,
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 170,
-      "endLine": 206
+      "line": 173,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2581,
-      "endLine": 2585
+      "line": 2622,
+      "endLine": 2626
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2610,
-      "endLine": 2626
+      "line": 2651,
+      "endLine": 2667
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -73867,12 +73802,20 @@
       "endLine": 26
     },
     {
+      "id": "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "name": "freshBoardFaces",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 45,
+      "endLine": 50
+    },
+    {
       "id": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
       "name": "resolveVoidSpew",
       "kind": "value",
       "file": "src/shared/void-spew-rules.ts",
-      "line": 44,
-      "endLine": 110
+      "line": 56,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
@@ -74077,7 +74020,7 @@
       "expectedMechanicId": "inventory.contract_loadout",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74088,7 +74031,7 @@
       "expectedMechanicId": "inventory.crucible_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74099,7 +74042,7 @@
       "expectedMechanicId": "inventory.flash_pair_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74110,7 +74053,7 @@
       "expectedMechanicId": "inventory.gambit_token",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74121,7 +74064,7 @@
       "expectedMechanicId": "inventory.meteor_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74132,7 +74075,7 @@
       "expectedMechanicId": "inventory.mutator_loadout",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74143,7 +74086,7 @@
       "expectedMechanicId": "inventory.peek_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74154,7 +74097,7 @@
       "expectedMechanicId": "inventory.region_shuffle_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74165,7 +74108,18 @@
       "expectedMechanicId": "inventory.shuffle_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
+      }
+    },
+    {
+      "id": "content:inventory_item.still_bell_charge",
+      "contentId": "still_bell_charge",
+      "kind": "inventory_item",
+      "registry": "RUN_INVENTORY_ITEM_IDS",
+      "expectedMechanicId": "inventory.still_bell_charge",
+      "source": {
+        "path": "src/shared/run-inventory-contracts.ts",
+        "line": 16
       }
     },
     {
@@ -74176,7 +74130,7 @@
       "expectedMechanicId": "inventory.storm_glass_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74187,7 +74141,7 @@
       "expectedMechanicId": "inventory.undo_charge",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     },
     {
@@ -74198,7 +74152,7 @@
       "expectedMechanicId": "inventory.wild_match_token",
       "source": {
         "path": "src/shared/run-inventory-contracts.ts",
-        "line": 15
+        "line": 16
       }
     }
   ],
@@ -74369,7 +74323,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 58
+          "line": 59
         }
       ],
       "enables": [
@@ -74417,7 +74371,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 45
+          "line": 46
         }
       ],
       "enables": [
@@ -74464,7 +74418,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 45
+          "line": 46
         }
       ],
       "enables": [
@@ -74511,7 +74465,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 45
+          "line": 46
         }
       ],
       "enables": [
@@ -74634,7 +74588,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 64
         }
       ],
       "enables": [
@@ -74685,7 +74639,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 64
         }
       ],
       "enables": [
@@ -74747,7 +74701,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 46
+          "line": 47
         }
       ],
       "enables": [
@@ -74835,7 +74789,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -74888,7 +74842,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -74963,7 +74917,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 42
+          "line": 43
         }
       ],
       "enables": [
@@ -74989,7 +74943,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 10
+          "line": 11
         }
       ],
       "tests": [
@@ -74999,7 +74953,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 43
+          "line": 44
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -75041,7 +74995,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 64
         }
       ],
       "enables": [
@@ -75235,7 +75189,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 46
+          "line": 47
         }
       ],
       "enables": [],
@@ -75456,7 +75410,7 @@
         },
         {
           "path": "src/shared/run-occupancy-simulation.test.ts",
-          "line": 70
+          "line": 72
         }
       ],
       "enables": [],
@@ -75668,7 +75622,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -75716,7 +75670,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -75751,11 +75705,11 @@
       "evidence": [
         {
           "path": "src/shared/run-inventory.ts",
-          "line": 112
+          "line": 117
         },
         {
           "path": "src/shared/run-creation-rules.ts",
-          "line": 146
+          "line": 147
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -75905,7 +75859,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/power-verbs.ts",
@@ -75948,7 +75902,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -76020,7 +75974,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 12
+          "line": 13
         }
       ],
       "tests": [
@@ -76048,6 +76002,54 @@
       ]
     },
     {
+      "id": "mechanic:inventory.still_bell_charge",
+      "mechanicId": "inventory.still_bell_charge",
+      "label": "Still Bell Charge Inventory",
+      "kind": "inventory",
+      "role": "free_the_realm_holds_and_take_its_answer",
+      "evidence": [
+        {
+          "path": "src/shared/still-bell-rules.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/realm-weather-rules.ts",
+          "line": 16
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/components/itemEffects.ts",
+          "line": 33
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/still-bell-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 40
+        }
+      ],
+      "enables": [
+        "board.realm_weather"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "turnable-pair-always-left",
+        "weather-clock-keeps-its-count",
+        "tile-ids-kept"
+      ]
+    },
+    {
       "id": "mechanic:inventory.storm_glass_charge",
       "mechanicId": "inventory.storm_glass_charge",
       "label": "Storm Glass Charge Inventory",
@@ -76064,7 +76066,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/components/itemEffects.ts",
@@ -76104,11 +76106,11 @@
       "evidence": [
         {
           "path": "src/shared/run-inventory.ts",
-          "line": 103
+          "line": 108
         },
         {
           "path": "src/shared/run-creation-rules.ts",
-          "line": 145
+          "line": 146
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -76155,7 +76157,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 46
+          "line": 47
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -76422,7 +76424,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
@@ -76462,7 +76464,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76503,7 +76505,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 20
+          "line": 21
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -76572,7 +76574,7 @@
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
-          "line": 71
+          "line": 74
         },
         {
           "path": "src/renderer/copy/zoneToolCopy.ts",
@@ -76594,7 +76596,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 60
+          "line": 61
         }
       ],
       "enables": [
@@ -76621,7 +76623,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76675,7 +76677,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -76717,7 +76719,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 12
+          "line": 13
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76767,7 +76769,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76812,7 +76814,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 14
+          "line": 15
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76863,7 +76865,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -76912,7 +76914,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 46
+          "line": 47
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -76971,7 +76973,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -77154,7 +77156,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 896
+          "line": 927
         }
       ],
       "tests": [
@@ -77184,7 +77186,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -77275,7 +77277,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77314,7 +77316,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77348,7 +77350,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77382,7 +77384,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77880,6 +77882,7 @@
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:inventory.crucible_charge",
+        "mechanic:inventory.still_bell_charge",
         "mechanic:inventory.storm_glass_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:power.bomb",
@@ -77911,6 +77914,7 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.crucible_charge",
+        "mechanic:inventory.still_bell_charge",
         "mechanic:inventory.storm_glass_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:power.bomb",
@@ -78623,6 +78627,7 @@
       "readBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:inventory.crucible_charge",
+        "mechanic:inventory.still_bell_charge",
         "mechanic:inventory.storm_glass_charge",
         "mechanic:power.bomb",
         "mechanic:power.ignition_zone",
@@ -78736,6 +78741,16 @@
       ]
     },
     {
+      "id": "state:stillBellCharges",
+      "name": "stillBellCharges",
+      "readBy": [
+        "mechanic:inventory.still_bell_charge"
+      ],
+      "writtenBy": [
+        "mechanic:inventory.still_bell_charge"
+      ]
+    },
+    {
       "id": "state:storePurchases",
       "name": "storePurchases",
       "readBy": [
@@ -78794,6 +78809,7 @@
         "mechanic:hazard.void_spew",
         "mechanic:inventory.crucible_charge",
         "mechanic:inventory.meteor_charge",
+        "mechanic:inventory.still_bell_charge",
         "mechanic:inventory.storm_glass_charge",
         "mechanic:inventory.wild_match_token",
         "mechanic:objective.floor_clear",
@@ -78827,6 +78843,7 @@
         "mechanic:hazard.void_spew",
         "mechanic:inventory.crucible_charge",
         "mechanic:inventory.meteor_charge",
+        "mechanic:inventory.still_bell_charge",
         "mechanic:inventory.storm_glass_charge",
         "mechanic:power.bomb",
         "mechanic:power.ignition_zone",
@@ -79252,6 +79269,12 @@
       "kind": "declared_by"
     },
     {
+      "id": "declared_by:content:inventory_item.still_bell_charge->file:src/shared/run-inventory-contracts.ts",
+      "source": "content:inventory_item.still_bell_charge",
+      "target": "file:src/shared/run-inventory-contracts.ts",
+      "kind": "declared_by"
+    },
+    {
       "id": "declared_by:content:inventory_item.storm_glass_charge->file:src/shared/run-inventory-contracts.ts",
       "source": "content:inventory_item.storm_glass_charge",
       "target": "file:src/shared/run-inventory-contracts.ts",
@@ -79512,6 +79535,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows remaining global control"
+    },
+    {
+      "id": "displays:mechanic:inventory.still_bell_charge->mechanic:feedback.gameplay_hud:the bell tool and count, the ring over the freed cards, the answer, and the bell",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the bell tool and count, the ring over the freed cards, the answer, and the bell"
     },
     {
       "id": "displays:mechanic:inventory.storm_glass_charge->mechanic:feedback.gameplay_hud:the storm glass tool and count, the shattered glass, the storm, the lit cards, shake and sound",
@@ -84755,6 +84785,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
       "source": "file:src/renderer/components/runShellFreshTools.ts",
       "target": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
@@ -84764,6 +84800,12 @@
       "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
       "source": "file:src/renderer/components/runShellFreshTools.ts",
       "target": "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
       "kind": "exports"
     },
     {
@@ -88241,6 +88283,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#STILL_BELL_TOOL_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#STILL_BELL_TOOL_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
       "source": "file:src/renderer/copy/boardPowerCopy.ts",
       "target": "symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
@@ -90950,6 +90998,12 @@
       "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
       "source": "file:src/renderer/ui/fittedGridFit.ts",
       "target": "symbol:src/renderer/ui/fittedGridFit.ts#readFrameBox",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBellIcon",
+      "source": "file:src/renderer/ui/gameplayIcons.tsx",
+      "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayBellIcon",
       "kind": "exports"
     },
     {
@@ -94319,6 +94373,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#STILL_BELL_RULES_VERSION",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "symbol:src/shared/curio-rules.ts#STILL_BELL_RULES_VERSION",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/curio-rules.ts->symbol:src/shared/curio-rules.ts#STORM_GLASS_RULES_VERSION",
       "source": "file:src/shared/curio-rules.ts",
       "target": "symbol:src/shared/curio-rules.ts#STORM_GLASS_RULES_VERSION",
@@ -96326,6 +96386,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayStillBellCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStillBellCommand",
       "kind": "exports"
     },
     {
@@ -101471,6 +101537,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/still-bell-rules.ts->symbol:src/shared/still-bell-rules.ts#applyStillBell",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "symbol:src/shared/still-bell-rules.ts#applyStillBell",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/still-bell-rules.ts->symbol:src/shared/still-bell-rules.ts#canRingStillBell",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "symbol:src/shared/still-bell-rules.ts#canRingStillBell",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/still-bell-rules.ts->symbol:src/shared/still-bell-rules.ts#STILL_BELL_SOURCE_ID",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "symbol:src/shared/still-bell-rules.ts#STILL_BELL_SOURCE_ID",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/still-bell-rules.ts->symbol:src/shared/still-bell-rules.ts#stillBellFeedbackLine",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "symbol:src/shared/still-bell-rules.ts#stillBellFeedbackLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/still-bell-rules.ts->symbol:src/shared/still-bell-rules.ts#StillBellResult",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "symbol:src/shared/still-bell-rules.ts#StillBellResult",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/storm-glass-rules.ts->symbol:src/shared/storm-glass-rules.ts#applyStormGlass",
       "source": "file:src/shared/storm-glass-rules.ts",
       "target": "symbol:src/shared/storm-glass-rules.ts#applyStormGlass",
@@ -102893,6 +102989,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
       "source": "file:src/shared/void-spew-rules.ts",
       "target": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
@@ -103094,6 +103196,13 @@
       "target": "mechanic:inventory.relics",
       "kind": "grants",
       "label": "from rules 68 a matched Curio may hold the Miser's Purse"
+    },
+    {
+      "id": "grants:mechanic:findable.curio->mechanic:inventory.still_bell_charge:from rules 69 a matched Curio may hold a still bell",
+      "source": "mechanic:findable.curio",
+      "target": "mechanic:inventory.still_bell_charge",
+      "kind": "grants",
+      "label": "from rules 69 a matched Curio may hold a still bell"
     },
     {
       "id": "grants:mechanic:findable.curio->mechanic:inventory.storm_glass_charge:from rules 67 a matched Curio may hold a storm glass",
@@ -104163,6 +104272,30 @@
       "id": "implemented_by:mechanic:inventory.shuffle_charge->file:src/shared/run-inventory.ts",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.still_bell_charge->file:src/renderer/components/itemEffects.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.still_bell_charge->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.still_bell_charge->file:src/shared/realm-weather-rules.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.still_bell_charge->file:src/shared/still-bell-rules.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/still-bell-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -109719,6 +109852,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/run-store-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/run-store-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/still-bell-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/still-bell-rules.ts",
       "kind": "imports"
     },
     {
@@ -118290,6 +118429,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/still-bell-rules.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/still-bell-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/storm-glass-rules.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/storm-glass-rules.ts",
@@ -120564,9 +120709,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/crucible-rules.ts->src/shared/tile-symbol-catalog.ts",
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/void-spew-rules.ts",
       "source": "file:src/shared/crucible-rules.ts",
-      "target": "file:src/shared/tile-symbol-catalog.ts",
+      "target": "file:src/shared/void-spew-rules.ts",
       "kind": "imports"
     },
     {
@@ -122487,6 +122632,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/still-bell-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/still-bell-rules.ts",
       "kind": "imports"
     },
     {
@@ -125814,6 +125965,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/still-bell-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/still-bell-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/storm-glass-rules.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/storm-glass-rules.ts",
@@ -126648,6 +126805,90 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/curio-rules.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.test.ts->src/shared/still-bell-rules.ts",
+      "source": "file:src/shared/still-bell-rules.test.ts",
+      "target": "file:src/shared/still-bell-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/odd-card-rules.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/odd-card-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/realm-rules.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/realm-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/run-array-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/store-stock.test.ts->src/shared/floor-clear-transition.ts",
       "source": "file:src/shared/store-stock.test.ts",
       "target": "file:src/shared/floor-clear-transition.ts",
@@ -127035,6 +127276,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/skittish-cards-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/skittish-cards-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/still-bell-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/still-bell-rules.ts",
       "kind": "imports"
     },
     {
@@ -129563,6 +129810,24 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.still_bell_charge->state:runStatus",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:runStatus",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.still_bell_charge->state:stillBellCharges",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:stillBellCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.still_bell_charge->state:tileStates",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.storm_glass_charge->state:runStatus",
       "source": "mechanic:inventory.storm_glass_charge",
       "target": "state:runStatus",
@@ -130908,6 +131173,24 @@
       "id": "tested_by:mechanic:inventory.shuffle_charge->file:src/shared/run-inventory.test.ts",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.still_bell_charge->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.still_bell_charge->file:src/shared/still-bell-rules.test.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.still_bell_charge->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -136140,6 +136423,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/storm-glass-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/storm-glass-rules.test.ts",
@@ -136275,6 +136564,12 @@
       "id": "tested_by:src/shared/curio-rules.ts->file:src/shared/misers-purse.test.ts",
       "source": "file:src/shared/curio-rules.ts",
       "target": "file:src/shared/misers-purse.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/curio-rules.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/curio-rules.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -137046,6 +137341,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/store-stock.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/store-stock.test.ts",
@@ -137292,6 +137593,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/storm-glass-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/storm-glass-rules.test.ts",
@@ -137436,6 +137743,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/storm-glass-rules.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/storm-glass-rules.test.ts",
@@ -137517,6 +137830,12 @@
       "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/run-summary-rules.test.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/run-summary-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138345,6 +138664,12 @@
       "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/realm-weather-rules.test.ts",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "file:src/shared/realm-weather-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -139314,6 +139639,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/still-bell-rules.ts->file:src/shared/still-bell-rules.test.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/still-bell-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/storm-glass-rules.ts->file:src/shared/storm-glass-rules.test.ts",
       "source": "file:src/shared/storm-glass-rules.ts",
       "target": "file:src/shared/storm-glass-rules.test.ts",
@@ -140204,6 +140535,13 @@
       "label": "matched Score Glint command"
     },
     {
+      "id": "triggers:mechanic:inventory.still_bell_charge->mechanic:board.realm_weather:the held cards go free, and the realm answers with one strike",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "mechanic:board.realm_weather",
+      "kind": "triggers",
+      "label": "the held cards go free, and the realm answers with one strike"
+    },
+    {
       "id": "triggers:mechanic:inventory.storm_glass_charge->mechanic:board.realm_weather:the realm’s peak strikes now, on top of its clock",
       "source": "mechanic:inventory.storm_glass_charge",
       "target": "mechanic:board.realm_weather",
@@ -140991,6 +141329,30 @@
       "id": "writes:mechanic:inventory.shuffle_charge->state:shuffleCharges",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.still_bell_charge->state:gameplayCommands",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:gameplayCommands",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.still_bell_charge->state:gameplayEvents",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.still_bell_charge->state:stillBellCharges",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:stillBellCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.still_bell_charge->state:tileStates",
+      "source": "mechanic:inventory.still_bell_charge",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {

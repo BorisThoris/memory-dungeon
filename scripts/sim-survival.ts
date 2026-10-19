@@ -10,6 +10,11 @@
  *
  * The script used to live in a session scratchpad and was rebuilt twice; it is a repo script now
  * so the next tuning starts from the same measurement as the last one.
+ *
+ * `--items` (2026-10-19) lets the player use the curio items a run finds (`curio-rules.ts`): take
+ * the Miser's Purse, ring the Still Bell and break the Storm Glass at the top of a turn whenever
+ * they would act, and melt the first card turned with the Crucible when it can. It answers what the
+ * items do to a run's length; without it the table is the one the miss bank was tuned against.
  */
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
@@ -23,6 +28,19 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
 import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
+import { applyCrucible, crucibleTargetTileId } from '../src/shared/crucible-rules';
+import { canTakeMisersPurse, takeMisersPurse } from '../src/shared/misers-purse-rules';
+import { applyStillBell, canRingStillBell } from '../src/shared/still-bell-rules';
+import { applyStormGlass, canBreakStormGlass } from '../src/shared/storm-glass-rules';
+
+/** The curio items a player who uses them would use before turning a card, or the run unchanged. */
+const useItemsAtTurnStart = (run: RunState): RunState => {
+    let next = run;
+    if (canTakeMisersPurse(next)) next = takeMisersPurse(next) ?? next;
+    if (canRingStillBell(next)) next = applyStillBell(next)?.run ?? next;
+    if (canBreakStormGlass(next)) next = applyStormGlass(next)?.run ?? next;
+    return next;
+};
 
 /** Both cards of the turn, the locked one second (`orderAroundLock`). */
 const flipLockedLast = (run: RunState, first: { id: string }, second: { id: string }): RunState => {
@@ -41,7 +59,7 @@ export interface SurvivalRun {
     expired: number;
 }
 
-export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = SURVIVAL_FLOOR_CAP): SurvivalRun => {
+export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = SURVIVAL_FLOOR_CAP, useItems = false): SurvivalRun => {
     const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
     const mutators = filterMutatorsByContentLock(entry.mutators);
     const board = buildBoard(1, {
@@ -67,6 +85,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         const rng = createMulberry32(hashStringToSeed(`survival:${seed}:${floor}:${missRate}`));
         let turns = 0;
         while (run.status === 'playing' && turns < 120) {
+            if (useItems) run = useItemsAtTurnStart(run);
             const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
                 group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
             );
@@ -85,6 +104,16 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
                 [first, second] = [group[0]!, group[1]!];
             }
             const before = run;
+            if (useItems && (run.crucibleCharges ?? 0) > 0) {
+                // Turn the first card; if the crucible can melt it, it does, and the turn ends there.
+                const opened = flipTile(run, first.id);
+                const melted = crucibleTargetTileId(opened) === first.id ? applyCrucible(opened, first.id) : null;
+                if (melted) {
+                    run = melted.run;
+                    turns += 1;
+                    continue;
+                }
+            }
             run = resolveBoardTurn(flipLockedLast(run, first, second));
             tally.comboEarned += comboMissesEarned(before.stats.currentStreak, run.stats.currentStreak);
             turns += 1;
@@ -123,10 +152,11 @@ export interface SurvivalRow {
 export const simulateSurvival = ({
     rates = SURVIVAL_RATES,
     seeds = SURVIVAL_SEEDS,
-    floorCap = SURVIVAL_FLOOR_CAP
-}: { rates?: readonly number[]; seeds?: readonly number[]; floorCap?: number } = {}): SurvivalRow[] =>
+    floorCap = SURVIVAL_FLOOR_CAP,
+    useItems = false
+}: { rates?: readonly number[]; seeds?: readonly number[]; floorCap?: number; useItems?: boolean } = {}): SurvivalRow[] =>
     rates.map((missRate) => {
-        const runs = seeds.map((seed) => simulateSurvivalRun(seed, missRate, floorCap));
+        const runs = seeds.map((seed) => simulateSurvivalRun(seed, missRate, floorCap, useItems));
         const floors = runs.map((run) => run.floorReached);
         return {
             missRate,
@@ -146,7 +176,9 @@ if (isMain) {
     };
     const rates = arg('rates')?.split(',').map(Number) ?? SURVIVAL_RATES;
     const seedCount = Number(arg('seeds') ?? SURVIVAL_SEEDS.length);
-    const rows = simulateSurvival({ rates, seeds: SURVIVAL_SEEDS.slice(0, seedCount) });
+    const useItems = process.argv.includes('--items');
+    const rows = simulateSurvival({ rates, seeds: SURVIVAL_SEEDS.slice(0, seedCount), useItems });
+    console.log(useItems ? 'with the curio items used' : 'without items');
     console.log('miss   median  mean   min   combo/floor  expired/floor');
     for (const row of rows) {
         console.log(

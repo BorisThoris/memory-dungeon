@@ -683,9 +683,11 @@ describe('a tool that just came into the hand', () => {
         vi.useFakeTimers();
         try {
             const tool = (charges: number): RunShellTool => ({ id: 'crucible', label: 'Crucible', glyph: <span />, charges, onClick: vi.fn() });
-            const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(1)]} />);
+            // A run of its own: the baseline is kept per run, across the screen's remounts.
+            const fresh: RunState = { ...playingRun(), runSeed: 4_242_001 };
+            const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={fresh} tools={[tool(1)]} />);
             expect(screen.getByTestId('tool-crucible')).not.toHaveAttribute('data-fresh');
-            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(2)]} />);
+            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={fresh} tools={[tool(2)]} />);
             expect(screen.getByTestId('tool-crucible')).toHaveAttribute('data-fresh', 'true');
             act(() => {
                 vi.advanceTimersByTime(TOOL_FRESH_MS + 50);
@@ -706,5 +708,21 @@ describe('a curio item not yet tried', () => {
         render(<RunShell hintLine={held} personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[]} />);
         expect(screen.getByText(CURIO_HINT_COPY.crucible)).toBeInTheDocument();
         expect(screen.getByText('New item')).toBeInTheDocument();
+    });
+});
+
+describe('a tool gained on the match that clears a floor', () => {
+    it('still glows when the screen comes back for the next floor', () => {
+        vi.useFakeTimers();
+        try {
+            const tool = (charges: number): RunShellTool => ({ id: 'storm_glass', label: 'Storm', glyph: <span />, charges, onClick: vi.fn() });
+            const run: RunState = { ...playingRun(), runSeed: 4_242_002 };
+            const first = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[tool(0)]} />);
+            first.unmount();
+            render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={run} tools={[tool(1)]} />);
+            expect(screen.getByTestId('tool-storm_glass')).toHaveAttribute('data-fresh', 'true');
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });

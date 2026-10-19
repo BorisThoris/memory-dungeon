@@ -1,3 +1,4 @@
+import { applyStillBell, STILL_BELL_SOURCE_ID, stillBellFeedbackLine } from './still-bell-rules';
 import { missBankCap as purseBankCap, missesLeft as purseMissesLeft } from './miss-bank';
 import { MISERS_PURSE_SOURCE_ID, takeMisersPurse } from './misers-purse-rules';
 import { runRealmId } from './realm-rules';
@@ -85,6 +86,7 @@ const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const BOMB_SOURCE: GameplaySource = { kind: 'power', id: 'bomb' };
 const CRUCIBLE_SOURCE: GameplaySource = { kind: 'power', id: CRUCIBLE_SOURCE_ID };
 const STORM_GLASS_SOURCE: GameplaySource = { kind: 'power', id: STORM_GLASS_SOURCE_ID };
+const STILL_BELL_SOURCE: GameplaySource = { kind: 'power', id: STILL_BELL_SOURCE_ID };
 const MISERS_PURSE_SOURCE: GameplaySource = { kind: 'power', id: MISERS_PURSE_SOURCE_ID };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
@@ -271,6 +273,35 @@ const applyTakeRelicCommand = (
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
+};
+
+const applyStillBellCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.still_bell' }>
+): GameplayCommandResult => {
+    const result = applyStillBell(run);
+    if (!result) {
+        return rejectedResult(run, command.commandId, 'A still bell needs a realm floor in play, nothing face up, and a card the realm is holding.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, STILL_BELL_SOURCE, events);
+    const after = runNonNegativeInteger(result.run.stillBellCharges);
+    writeEvent({
+        type: 'realm.stilled',
+        realmId: runRealmId(run) ?? 'none',
+        freedTileIds: [...result.freedTileIds],
+        answerKind: result.answer?.kind ?? null,
+        answerTileIds: [...(result.answer?.tileIds ?? [])],
+        stillBellChargesBefore: runNonNegativeInteger(run.stillBellCharges),
+        stillBellChargesAfter: after
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.still_bell.used',
+        message: stillBellFeedbackLine(result.freedTileIds.length, result.answer?.kind ?? null, after),
+        tone: 'information'
+    });
+    return { run: result.run, command, events, accepted: true };
 };
 
 const applyStormGlassCommand = (
@@ -1098,6 +1129,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'run.take_relic') {
         return applyTakeRelicCommand(run, command);
+    }
+    if (command.type === 'board.still_bell') {
+        return applyStillBellCommand(run, command);
     }
     if (command.type === 'board.storm_glass') {
         return applyStormGlassCommand(run, command);

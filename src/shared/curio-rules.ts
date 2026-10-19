@@ -16,7 +16,7 @@ import { runNonNegativeInteger } from './run-number-guards';
  * (`board-tile-generation-rules.ts`), so the meteor shards and every other draw land where they
  * always did.
  */
-export type CurioItemId = 'crucible' | 'storm_glass' | 'misers_purse';
+export type CurioItemId = 'crucible' | 'storm_glass' | 'misers_purse' | 'still_bell';
 
 /** Rules 67 add the Storm Glass to what a Curio may hold (`storm-glass-rules.ts`). */
 export const STORM_GLASS_RULES_VERSION = 67;
@@ -24,9 +24,14 @@ export const STORM_GLASS_RULES_VERSION = 67;
 /** Rules 68 add the Miser's Purse, a relic, to what a Curio may hold (`run-relic-rules.ts`). */
 export const MISERS_PURSE_RULES_VERSION = 68;
 
+/** Rules 69 add the Still Bell (`still-bell-rules.ts`). */
+export const STILL_BELL_RULES_VERSION = 69;
+
 /** What a Curio may hold under a run's rules: an older key draws what it always drew. */
 export const curioItemsForRules = (rulesVersion: number): readonly CurioItemId[] =>
-    rulesVersion >= MISERS_PURSE_RULES_VERSION
+    rulesVersion >= STILL_BELL_RULES_VERSION
+        ? ['crucible', 'storm_glass', 'misers_purse', 'still_bell']
+        : rulesVersion >= MISERS_PURSE_RULES_VERSION
         ? ['crucible', 'storm_glass', 'misers_purse']
         : rulesVersion >= STORM_GLASS_RULES_VERSION
           ? ['crucible', 'storm_glass']
@@ -47,9 +52,10 @@ export const curioReplacesGlint = (runSeed: number, rulesVersion: number, level:
     level >= CURIO_FROM_FLOOR &&
     createMulberry32(hashStringToSeed(`curio:${rulesVersion}:${runSeed}:${level}:${pairKey}`))() < CURIO_GLINT_SHARE;
 
-const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges' | 'stormGlassCharges' | 'misersPurseOffers'>> = {
+const CHARGE_FIELD: Readonly<Record<CurioItemId, 'crucibleCharges' | 'stormGlassCharges' | 'misersPurseOffers' | 'stillBellCharges'>> = {
     crucible: 'crucibleCharges',
     storm_glass: 'stormGlassCharges',
+    still_bell: 'stillBellCharges',
     // A relic is offered, not forced: it waits in the dock until the player takes it up (`misers-purse-rules.ts`).
     misers_purse: 'misersPurseOffers'
 };
