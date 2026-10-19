@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3253,
     "codeFileCount": 1224,
-    "exportedSymbolCount": 3902,
+    "exportedSymbolCount": 3901,
     "contentItemCount": 16,
     "mechanicCount": 71,
     "stateFieldCount": 139,
-    "relationshipCount": 10527
+    "relationshipCount": 10526
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 73902,
-      "sha256": "c163c1892297867e98c683eefa078c34e9bf1d32f714c6c426362532a344a3bd"
+      "bytes": 73892,
+      "sha256": "a6dd1befc3f58ae6449341483620e9a01c89947f492e1774f3f8e3206cf70bc2"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -14325,8 +14325,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 74238,
-      "sha256": "93283329e01e48ebf8b875b7f7696395b63d8abc64f7eb1012a7fc261b7bd52a"
+      "bytes": 74228,
+      "sha256": "2d802ac71cc36cb4f2cd96add5af9153c64c7cfd22859b06eff72cf731c1a6fa"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14979,14 +14979,14 @@
     {
       "path": "src/shared/dread-rules.test.ts",
       "category": "test",
-      "bytes": 4032,
-      "sha256": "83b2677a536d700fc09ec901e1945b2b1c720302080f8fdabdfae2bf553fd0d8"
+      "bytes": 3733,
+      "sha256": "b28363c8690964adab3eada96bc13aa5defc7498707dac6dea1a7186c9b2c4ff"
     },
     {
       "path": "src/shared/dread-rules.ts",
       "category": "source",
-      "bytes": 5107,
-      "sha256": "ab4454720774b0f8caa0fc802768b7e610488affbf50aca2f04af447a148f5e8"
+      "bytes": 4662,
+      "sha256": "7987af26593efa1e963a1be0a62445349d0f29d2b9faae2a7fa90f8d4f09a90e"
     },
     {
       "path": "src/shared/e2e-locator-audit.test.ts",
@@ -16761,8 +16761,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 93415,
-      "sha256": "d15281344ae66f1a0da6db3990fd0ef1b9aef52c688f3d4749a5273e12b078bd"
+      "bytes": 93405,
+      "sha256": "990ab0c9b58152a85349cb64d8cac629dfbde125c6b6728a58809b73fd5c4c8f"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17115,8 +17115,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 3320,
-      "sha256": "fa8d60a769414eacb2f7d3e40b81331bc1f8bbb57f776677a9cc9dc9042a0675"
+      "bytes": 3329,
+      "sha256": "ef5c6fb79ea774c18338719accbab14b09deddaef9c6f83e4b48871fa9ebdd30"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17163,8 +17163,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-003-dread-coefficient-and-tiers.md",
       "category": "other",
-      "bytes": 5682,
-      "sha256": "be23e14a3c6efbf2373def08b9b4a8ee4e63bbd781e0326dfbdfa59c87a6340f"
+      "bytes": 5868,
+      "sha256": "30f30e6362e8d4f1fbd41acd1a97a127674dda7a0b93ba085e5b851cd904007d"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-004-milestones-and-clear-beat.md",
@@ -35779,7 +35779,7 @@
       "path": "src/shared/dread-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 86,
+      "lineCount": 80,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dread-rules.ts",
@@ -35794,7 +35794,7 @@
       "path": "src/shared/dread-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 113,
+      "lineCount": 99,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -35802,7 +35802,6 @@
       "exports": [
         "symbol:src/shared/dread-rules.ts#countDreadFloor",
         "symbol:src/shared/dread-rules.ts#DREAD_PER_FLOOR",
-        "symbol:src/shared/dread-rules.ts#DREAD_PRICES",
         "symbol:src/shared/dread-rules.ts#DREAD_RAGING_MULTIPLIER",
         "symbol:src/shared/dread-rules.ts#DREAD_TIERS",
         "symbol:src/shared/dread-rules.ts#DREAD_WILD_MULTIPLIER",
@@ -62894,8 +62893,8 @@
       "name": "countDreadFloor",
       "kind": "value",
       "file": "src/shared/dread-rules.ts",
-      "line": 65,
-      "endLine": 74
+      "line": 51,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#DREAD_PER_FLOOR",
@@ -62904,14 +62903,6 @@
       "file": "src/shared/dread-rules.ts",
       "line": 19,
       "endLine": 19
-    },
-    {
-      "id": "symbol:src/shared/dread-rules.ts#DREAD_PRICES",
-      "name": "DREAD_PRICES",
-      "kind": "value",
-      "file": "src/shared/dread-rules.ts",
-      "line": 49,
-      "endLine": 56
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#DREAD_RAGING_MULTIPLIER",
@@ -62942,40 +62933,40 @@
       "name": "dreadAt",
       "kind": "value",
       "file": "src/shared/dread-rules.ts",
-      "line": 76,
-      "endLine": 80
+      "line": 62,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#dreadFloorCounts",
       "name": "dreadFloorCounts",
       "kind": "value",
       "file": "src/shared/dread-rules.ts",
-      "line": 59,
-      "endLine": 62
+      "line": 45,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#dreadForRun",
       "name": "dreadForRun",
       "kind": "value",
       "file": "src/shared/dread-rules.ts",
-      "line": 83,
-      "endLine": 86
+      "line": 69,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#DreadReading",
       "name": "DreadReading",
       "kind": "interface",
       "file": "src/shared/dread-rules.ts",
-      "line": 88,
-      "endLine": 97
+      "line": 74,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#dreadTier",
       "name": "dreadTier",
       "kind": "value",
       "file": "src/shared/dread-rules.ts",
-      "line": 100,
-      "endLine": 112
+      "line": 86,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/dread-rules.ts#DreadTierDefinition",
@@ -95138,12 +95129,6 @@
       "id": "exports:src/shared/dread-rules.ts->symbol:src/shared/dread-rules.ts#DREAD_PER_FLOOR",
       "source": "file:src/shared/dread-rules.ts",
       "target": "symbol:src/shared/dread-rules.ts#DREAD_PER_FLOOR",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/dread-rules.ts->symbol:src/shared/dread-rules.ts#DREAD_PRICES",
-      "source": "file:src/shared/dread-rules.ts",
-      "target": "symbol:src/shared/dread-rules.ts#DREAD_PRICES",
       "kind": "exports"
     },
     {
