@@ -18,7 +18,14 @@ import { runNonNegativeIntegerWithFallback } from './run-number-guards';
  *    [SOURCE_MAP.md](../../docs/internal-wiki/SOURCE_MAP.md) if schedule behavior is summarized there.
  * 4. Player-facing changelog: mention whether endless uses the scripted floor schedule (`usesEndlessFloorSchedule`).
  */
-export const FLOOR_SCHEDULE_RULES_VERSION = 4;
+/*
+ * 5 (2026-10-19, DGE-002): the sixty-floor Descent. Floors resolve through `DESCENT_ACTS`: Act I is
+ * the shipped cycle unchanged, Acts II to IV keep the cycle's entries on their own floors and
+ * reserve their last floor (24, 40, 60) for the act's boss, and past 60 the Abyss repeats until
+ * Endless has its own rule (DGE-006). Schedule-only: `GAME_RULES_VERSION` is not bumped (CLAUDE.md),
+ * so a seed already shared meets the new boss floors - that trade is the owner's.
+ */
+export const FLOOR_SCHEDULE_RULES_VERSION = 5;
 
 export interface FloorArchetypeDefinition {
     title: string;
@@ -422,6 +429,73 @@ const POSITION_NINE_ROTATION: readonly FloorScheduleEntry[] = [
 
 const BOSS_ROTATION_CYCLE_POSITION = 9;
 
+/** The Descent's four acts (`tasks/deep-game-epic/02-deep-game-plan.md`). */
+export type DescentActId = 'gate' | 'living_dungeon' | 'deep' | 'abyss';
+
+export interface DescentActDefinition {
+    readonly id: DescentActId;
+    readonly title: string;
+    readonly firstFloor: number;
+    readonly lastFloor: number;
+    /** The act's boss floor, its last; null for the Gate, whose bosses are the cycle's own (7 and 9). */
+    readonly bossFloor: number | null;
+    /** The entry the boss floor resolves to. Until DGE-011, DGE-018 and DGE-005 give each act its boss, a stacked room. */
+    readonly boss: FloorScheduleEntry | null;
+}
+
+/**
+ * The Descent: four acts to floor 60, replacing a twelve-floor cycle that repeated until floor 40
+ * played like floor 4 (DGE-002). Each act's body keeps the cycle's entries on the floors they always
+ * had, so nothing a run already met moves; what is new is each act's boss floor, a room whose
+ * mutators stack the way no earlier floor does - the "something new every act" bar - carrying the
+ * Keystone Warden identity every boss floor reads (`boss-encounters.ts`) until the act bosses land.
+ */
+export const DESCENT_ACTS: readonly DescentActDefinition[] = [
+    { id: 'gate', title: 'The Gate', firstFloor: 1, lastFloor: 12, bossFloor: null, boss: null },
+    {
+        id: 'living_dungeon',
+        title: 'The Living Dungeon',
+        firstFloor: 13,
+        lastFloor: 24,
+        bossFloor: 24,
+        boss: makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight', 'restless_floor'], 'boss')
+    },
+    {
+        id: 'deep',
+        title: 'The Deep',
+        firstFloor: 25,
+        lastFloor: 40,
+        bossFloor: 40,
+        boss: makeEntry(4, 'mirror_hall', 'flip_par', ['looking_glass', 'skittish_cards'], 'boss')
+    },
+    {
+        id: 'abyss',
+        title: 'The Abyss',
+        firstFloor: 41,
+        lastFloor: 60,
+        bossFloor: 60,
+        boss: makeEntry(12, 'trap_hall', 'scholar_style', ['sticky_fingers', 'restless_floor', 'looking_glass'], 'boss')
+    }
+];
+
+/** The Descent's last floor: the Warden's (DGE-005). */
+export const DESCENT_FLOOR_COUNT = 60;
+
+const ABYSS = DESCENT_ACTS[DESCENT_ACTS.length - 1]!;
+
+/** The Descent floor a level plays as: itself to 60, then the Abyss again, until Endless has its own rule. */
+const descentFloorOf = (level: number): number => {
+    if (level <= DESCENT_FLOOR_COUNT) return level;
+    const abyssLength = ABYSS.lastFloor - ABYSS.firstFloor + 1;
+    return ABYSS.firstFloor + ((level - DESCENT_FLOOR_COUNT - 1) % abyssLength);
+};
+
+/** The act a floor belongs to. Past floor 60 it is the Abyss, repeating. */
+export const descentActForFloor = (level: number): DescentActDefinition => {
+    const floor = descentFloorOf(Math.max(1, Math.floor(Number.isFinite(level) ? level : 1)));
+    return DESCENT_ACTS.find((act) => floor >= act.firstFloor && floor <= act.lastFloor) ?? ABYSS;
+};
+
 const DEFAULT_ENDLESS_FLOOR_ENTRY = ENDLESS_FLOOR_CYCLE[0] ?? EMPTY_FLOOR_SCHEDULE_ENTRY;
 
 const FLOOR_ARCHETYPE_FREQUENCY_BANDS: readonly FloorArchetypeFrequencyBand[] = [
@@ -632,13 +706,18 @@ export const pickFloorScheduleEntry = (
         return EMPTY_FLOOR_SCHEDULE_ENTRY;
     }
     const safeLevel = runNonNegativeIntegerWithFallback(level, 1);
-    const idx = Math.max(0, safeLevel - 1) % ENDLESS_FLOOR_CYCLE.length;
-    const cycleIndex = Math.floor(Math.max(0, safeLevel - 1) / ENDLESS_FLOOR_CYCLE.length);
+    // The Descent (DGE-002): an act's boss floor is its own room; every other floor keeps the
+    // cycle's arithmetic on the Descent floor it plays as, so floors 1-60 resolve as they always did.
+    const descentFloor = descentFloorOf(Math.max(1, safeLevel));
+    const act = descentActForFloor(descentFloor);
+    const idx = Math.max(0, descentFloor - 1) % ENDLESS_FLOOR_CYCLE.length;
+    const cycleIndex = Math.floor(Math.max(0, descentFloor - 1) / ENDLESS_FLOOR_CYCLE.length);
     const rotated =
         idx + 1 === BOSS_ROTATION_CYCLE_POSITION
             ? POSITION_NINE_ROTATION[cycleIndex % POSITION_NINE_ROTATION.length]
             : undefined;
-    const legacyBase = rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    const actBoss = act.bossFloor === descentFloor ? act.boss : null;
+    const legacyBase = actBoss ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
         : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;
     const base: FloorScheduleEntry = goal ? { ...legacyBase, featuredObjectiveId: goal } : legacyBase;

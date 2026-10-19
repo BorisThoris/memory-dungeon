@@ -1,7 +1,7 @@
 # DGE-002: Replace the twelve-floor cycle with the sixty-floor Descent schedule
 
 ## Status
-Not started
+Done (2026-10-19)
 
 ## Priority
 P0
@@ -56,4 +56,12 @@ The run has four named acts (The Gate 1-12, The Living Dungeon 13-24, The Deep 2
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-19:
+- `DESCENT_ACTS` (four acts: The Gate 1-12, The Living Dungeon 13-24, The Deep 25-40, The Abyss 41-60), `DESCENT_FLOOR_COUNT = 60` and `descentActForFloor` live in `floor-mutator-schedule.ts`; `pickFloorScheduleEntry` resolves the act first. Each act's body keeps the cycle's entries on their own floors (golden snapshot `descent-schedule-golden.test.ts` pins floors 1-12 and 13/19/21/23/33/45/57/59 for twelve seeds on both branches of the seeded distraction channel); only the act boss floors changed.
+- Reserved boss slots, stacked rooms carrying the Keystone Warden identity until their tickets land: floor 24 spotlight hunt with shifting spotlight + restless floor (DGE-011), floor 40 mirror hall with looking glass + skittish cards (DGE-018), floor 60 trap hall with sticky fingers + restless floor + looking glass (DGE-005). Boss floors raise a Colossus, so these are real fights already.
+- Past floor 60 the Abyss repeats (floors 41-60 again, the Warden every twenty) until DGE-006 gives Endless its own rule.
+- The "something new every act" bar is a test over mutator sets (an act after the first has a set the act before never had); tighten it as the act mechanics land.
+- Corrections to this ticket's text: `FLOOR_SCHEDULE_RULES_VERSION` is compared with the run's *game* rules version, so the 4 -> 5 bump gates nothing; a rules-69 seed already shared meets the new boss floors. That is the schedule-only trade CLAUDE.md asks for (no `GAME_RULES_VERSION` bump). The Codex does not read `progressionRowForEntry`; the four acts reach it as a "The Descent" topic built from `DESCENT_ACTS` (encyclopedia 93).
+- For DGE-003: the travel doors are retired (`RealmTravel` is test-only since 2026-10-07; `nextFloorRealmDoor` picks the realm). Dread's raging and wild multipliers have to come from the run's realm severity at each advance, not from a door choice.
+- Checklist rows: schedule tests and golden test, the ledger requoted for floor 24 (the census plays 24 floors), appendix and Codex version, curve and run-census gates rerun. No new mechanic, so no graph node, census counter, hall room or soak invariant.
+- Next: DGE-003 (Dread) and DGE-004 (milestone fractions), which can now read `descentActForFloor`.

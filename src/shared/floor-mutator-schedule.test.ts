@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+    DESCENT_ACTS,
+    DESCENT_FLOOR_COUNT,
+    descentActForFloor,
     CHAPTER_ACT_BIOME_STRUCTURE,
     ENDLESS_CYCLE_FLOOR_COUNT,
     FLOOR_SCHEDULE_RULES_VERSION,
@@ -376,8 +379,9 @@ describe('warden rotation', () => {
             .map((level) => ({ level, entry: scheduleFor(level) }))
             .filter(({ entry }) => entry.floorTag === 'boss');
 
-        // The boss floors do not move: positions 7 and 9 of every cycle, as before.
-        expect(bossFloors.map(({ level }) => level)).toEqual([7, 9, 19, 21, 31, 33]);
+        // The cycle's boss floors do not move - positions 7 and 9 of every twelve - and the
+        // Descent adds its act boss on floor 24, the Living Dungeon's last (DGE-002).
+        expect(bossFloors.map(({ level }) => level)).toEqual([7, 9, 19, 21, 24, 31, 33]);
 
         // Position 7 keeps its trap hall - the balance profile leans on that floor's trap
         // budget - while position 9 rotates, so a run that reaches floor 33 has faced every
@@ -387,19 +391,62 @@ describe('warden rotation', () => {
             'mirror_hall',
             'trap_hall',
             'rush_recall',
+            'spotlight_hunt',
             'trap_hall',
             'treasure_gallery'
         ]);
     });
 
-    it('keeps two boss floors per cycle however far a run goes', () => {
-        for (let cycle = 0; cycle < 6; cycle += 1) {
-            const levels = Array.from(
-                { length: ENDLESS_CYCLE_FLOOR_COUNT },
-                (_, index) => cycle * ENDLESS_CYCLE_FLOOR_COUNT + index + 1
-            );
+    it('keeps the cycle\u2019s two boss floors in every twelve to floor 60, and adds each act\u2019s boss on its last floor', () => {
+        const actBosses = DESCENT_ACTS.map((act) => act.bossFloor).filter((floor): floor is number => floor != null);
+        expect(actBosses).toEqual([24, 40, 60]);
+        for (let cycle = 0; cycle < DESCENT_FLOOR_COUNT / ENDLESS_CYCLE_FLOOR_COUNT; cycle += 1) {
+            const levels = Array.from({ length: ENDLESS_CYCLE_FLOOR_COUNT }, (_, index) => cycle * ENDLESS_CYCLE_FLOOR_COUNT + index + 1);
             const bosses = levels.filter((level) => scheduleFor(level).floorTag === 'boss');
-            expect(bosses, `cycle ${cycle} boss count`).toHaveLength(2);
+            const expected = 2 + levels.filter((level) => actBosses.includes(level)).length;
+            expect(bosses, `floors ${levels[0]}-${levels.at(-1)}`).toHaveLength(expected);
+        }
+        for (const floor of actBosses) expect(scheduleFor(floor).floorTag, `floor ${floor}`).toBe('boss');
+    });
+
+    it('repeats the Abyss past the Warden, its rooms and its boss, until Endless has its own rule', () => {
+        for (let level = 61; level <= 100; level += 1) {
+            const played = 41 + ((level - 61) % 20);
+            const [here, there] = [scheduleFor(level), scheduleFor(played)];
+            expect([here.floorArchetypeId, here.floorTag], `floor ${level} plays as ${played}`).toEqual([there.floorArchetypeId, there.floorTag]);
+            expect(descentActForFloor(level).id).toBe('abyss');
+        }
+    });
+});
+
+describe('the Descent (DGE-002)', () => {
+    const scheduleFor = (level: number) =>
+        pickFloorScheduleEntry(42001, GAME_RULES_VERSION, level, 'endless');
+
+    it('runs four named acts over floors 1 to 60, with no gap and no overlap', () => {
+        expect(DESCENT_ACTS.map((act) => [act.id, act.title, act.firstFloor, act.lastFloor])).toEqual([
+            ['gate', 'The Gate', 1, 12],
+            ['living_dungeon', 'The Living Dungeon', 13, 24],
+            ['deep', 'The Deep', 25, 40],
+            ['abyss', 'The Abyss', 41, 60]
+        ]);
+        for (let level = 1; level <= DESCENT_FLOOR_COUNT; level += 1) {
+            const act = descentActForFloor(level);
+            expect(level >= act.firstFloor && level <= act.lastFloor, `floor ${level}`).toBe(true);
+        }
+    });
+
+    it('brings something new every act: a mutator set the act before it never had', () => {
+        const setsOf = (act: (typeof DESCENT_ACTS)[number]): Set<string> =>
+            new Set(
+                Array.from({ length: act.lastFloor - act.firstFloor + 1 }, (_, index) =>
+                    [...scheduleFor(act.firstFloor + index).mutators].filter((id) => id !== 'distraction_channel').sort().join('+')
+                )
+            );
+        for (let index = 1; index < DESCENT_ACTS.length; index += 1) {
+            const before = setsOf(DESCENT_ACTS[index - 1]!);
+            const fresh = [...setsOf(DESCENT_ACTS[index]!)].filter((set) => !before.has(set));
+            expect(fresh.length, `${DESCENT_ACTS[index]!.title} brings nothing the act before did not`).toBeGreaterThan(0);
         }
     });
 });
