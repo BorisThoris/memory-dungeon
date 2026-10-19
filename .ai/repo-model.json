@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3246,
+    "trackedFileCount": 3248,
     "codeFileCount": 1221,
     "exportedSymbolCount": 3883,
     "contentItemCount": 16,
@@ -17101,10 +17101,22 @@
       "sha256": "856872190ac99398e4c653a0cb31da89bb2bcd11dded48eb4964e8f3317ba8ca"
     },
     {
+      "path": "tasks/deep-game-epic/05-research-report-engineering-addiction.md",
+      "category": "other",
+      "bytes": 12374,
+      "sha256": "2019a7414ad0c868d1b423f67f8fd195e823a76c388da6f5af8e8da43cf84950"
+    },
+    {
+      "path": "tasks/deep-game-epic/06-research-report-late-game-escalation.md",
+      "category": "other",
+      "bytes": 24798,
+      "sha256": "689c6b29d49f15219ba78ccb9f7324628df31899361d4735626a4486c3f8c5ba"
+    },
+    {
       "path": "tasks/deep-game-epic/README.md",
       "category": "documentation",
-      "bytes": 8098,
-      "sha256": "262b4c26ee5016f0ee0328f60d70498bd27bab6d2641db024f51c52dd41d1c06"
+      "bytes": 8437,
+      "sha256": "9e37a45f057afa99b7cd8c320a0f7680084b8679dc7f68d4ab1ca333f63cd5fa"
     },
     {
       "path": "tasks/deep-game-epic/TICKET_TEMPLATE.md",

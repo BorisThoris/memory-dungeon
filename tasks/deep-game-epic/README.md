@@ -14,6 +14,7 @@ Read in this order:
 4. [`04-mechanic-checklist.md`](04-mechanic-checklist.md): everything a new mechanic in this repo must ship with, with the real file names. Every ticket's acceptance criteria point here.
 5. [`03-execution-ledger.md`](03-execution-ledger.md): what has been done, what is next.
 6. `tickets/`: `DGE-001` to `DGE-032`.
+7. The full research reports behind `01`: [`05-research-report-engineering-addiction.md`](05-research-report-engineering-addiction.md) (retention mechanisms, benchmarks, regulation) and [`06-research-report-late-game-escalation.md`](06-research-report-late-game-escalation.md) (escalation structures, with evidence and votes per finding).
 
 ## North Star
 A run has a shape: four acts to floor 60, each act adding one verb, one card family, one board transformation, one boss with its own rule and one named Dread tier. The run ends at the Warden unless the player built for it. Endless and the Depths ladder open when the Warden falls. Every clear beat shows the next named milestone as a fraction. Nothing is hidden, nothing is a stat the deep game requires, and nothing is a dark pattern.
