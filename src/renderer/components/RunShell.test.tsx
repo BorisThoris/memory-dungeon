@@ -681,7 +681,7 @@ describe('a tool that just came into the hand', () => {
     it('glows when its count rises, not for what the run opened with, and goes quiet after', () => {
         vi.useFakeTimers();
         try {
-            const tool = (charges: number): RunShellTool => ({ id: 'crucible', label: 'Crucible', glyph: null, charges, onClick: vi.fn() });
+            const tool = (charges: number): RunShellTool => ({ id: 'crucible', label: 'Crucible', glyph: <span />, charges, onClick: vi.fn() });
             const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(1)]} />);
             expect(screen.getByTestId('tool-crucible')).not.toHaveAttribute('data-fresh');
             rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(2)]} />);
