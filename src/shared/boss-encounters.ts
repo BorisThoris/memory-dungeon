@@ -217,6 +217,21 @@ export const getFloorIdentityContract = ({
     mutators: readonly MutatorId[];
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
+    // The Warden (`warden-rules.ts`, DGE-005): the Descent's end states both its rules before the first flip.
+    if (floorArchetypeId === 'warden_hall') {
+        return {
+            id: 'warden',
+            label: 'The Warden',
+            teachingSentence: `Every turn past par takes a miss from your bank, matched or not, and every fifth turn the face-down cards are dealt again.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Spend the study window and the first turns on the board you can see; pin the card you cannot afford to lose to a re-deal.',
+            floorClearSentence: 'The Warden falls. The Descent is won.',
+            atmosphericFeedback: 'The hall lets go of the cards, and of you.',
+            activeReminder: 'Warden: a miss for every turn past par; re-deal every fifth turn.',
+            warningLevel: 'danger',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
     // The looking glass is a boss floor with its own lesson: ahead of the keystone's, which teaches the palette.
     if (floorArchetypeId === 'mirror_hall') {
         return {

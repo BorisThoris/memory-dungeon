@@ -117,7 +117,11 @@ export const RUN_SHELL_LINE_COPY = {
         `${pairs} ${pairs === 1 ? 'pair' : 'pairs'}. Every face shows for ${seconds} ${
             seconds === 1 ? 'second' : 'seconds'
         }; then the floor begins.`,
-    studyKicker: 'Study the board'
+    studyKicker: 'Study the board',
+    /** The Warden's floor (`warden-rules.ts`): both rules, said before the first flip, in the study window. */
+    wardenStudy: (redealEvery: number): string =>
+        `The Warden: every turn past par takes a miss, and every ${redealEvery}th turn the face-down cards are dealt again.`,
+    wardenKicker: 'The Warden'
 } as const;
 
 /**

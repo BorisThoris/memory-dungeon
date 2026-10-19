@@ -1,3 +1,4 @@
+import { endRunAfterWardenClear } from '../../shared/warden-rules';
 import type {
     RunState,
     ViewState
@@ -67,6 +68,13 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
      * only thing multiplayer changes is when the run stops.
      */
     if (routePassAndPlayFinalFloorToGameOver(run, deps.applyResolvedRun)) {
+        return;
+    }
+
+    // The Warden cleared (`warden-rules.ts`): the Descent is won, and the run ends here the same way.
+    const won = endRunAfterWardenClear(run);
+    if (won !== run) {
+        deps.applyResolvedRun(won);
         return;
     }
 

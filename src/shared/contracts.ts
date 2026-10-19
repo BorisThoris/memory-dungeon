@@ -77,7 +77,7 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * `turn_ceiling` is kept for summaries written while the ceiling existed (Gen 183 to 2026-09-23);
  * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
  */
-export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor';
+export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor' | 'warden_cleared';
 /**
  * The realms (`realm-rules.ts`): the environment a floor is played in. Each has weather that
  * changes the board while it is played, on a clock the player winds, and the player picks the next
@@ -451,7 +451,8 @@ export const FLOOR_ARCHETYPE_IDS = [
     'lantern_hall',
     'mirror_hall',
     'spotlight_hunt',
-    'breather'
+    'breather',
+    'warden_hall'
 ] as const;
 export type FloorArchetypeId = (typeof FLOOR_ARCHETYPE_IDS)[number];
 
@@ -977,6 +978,10 @@ export interface RunState {
     voidSpewsThisFloor?: number;
     /** `restless_floor`: drifts the floor has made this floor; the next one moves one more pair of cards, to a cap. */
     restlessDriftsThisFloor: number;
+    /** The Warden (`warden-rules.ts`): its re-deals this floor, one every fifth turn. */
+    wardenRedealsThisFloor?: number;
+    /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
+    wardenOutcome?: 'cleared' | 'fell' | null;
     /** `skittish_cards`: misses this floor on which the missed cards flinched into a neighbouring cell. */
     skittishFlinchesThisFloor: number;
     /** `lantern_light`: the face-down cards the last match lit; they show their faces until the next flip. */

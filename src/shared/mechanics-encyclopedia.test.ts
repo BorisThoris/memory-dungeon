@@ -70,7 +70,9 @@ describe('mechanics-encyclopedia', () => {
         // from the rules, so no reference copy may still describe them as if a player could meet
         // them. Relics themselves came back on 2026-09-24, bought in the store rather than drafted
         // (`run-relic-rules.ts`), so the guard names the draft and not the word.
-        const removed = /relic draft|relic offer|relic pick|draft a relic|shop gold|route card|side room|wager|warden|dungeon key|locked exit/i;
+        // The Warden came back on 2026-10-20 as the Descent's last boss (DGE-005), one of it: the guard
+        // keeps the dungeon layer's wardens, plural, and their rooms out.
+        const removed = /relic draft|relic offer|relic pick|draft a relic|shop gold|route card|side room|wager|wardens\b|warden room|dungeon key|locked exit/i;
         for (const term of MECHANICS_GLOSSARY) {
             expect(term.shortDefinition, term.id).not.toMatch(removed);
             expect(term.preferredLabel, term.id).not.toMatch(removed);

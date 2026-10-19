@@ -440,6 +440,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second.'
     },
     {
+        id: 'hazard.warden',
+        verdict: 'changed',
+        generation: 274,
+        present: ['applyWardenTurn', 'wardenRedeal', 'endRunAfterWardenClear', 'warden_hall', 'warden_cleared'],
+        note: 'The Warden (2026-10-20, DGE-005), floor 60 and the Descent\u2019s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did.'
+    },
+    {
         id: 'progression.dread',
         verdict: 'changed',
         generation: 273,

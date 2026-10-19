@@ -57,6 +57,8 @@ export interface SurvivalRun {
     comboEarned: number;
     clearEarned: number;
     expired: number;
+    /** How the run met the Warden on floor 60 (`warden-rules.ts`), or null if it never got there. */
+    warden: 'cleared' | 'fell' | null;
 }
 
 export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = SURVIVAL_FLOOR_CAP, useItems = false): SurvivalRun => {
@@ -79,7 +81,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles)
     };
-    const tally: SurvivalRun = { floorReached: 1, comboEarned: 0, clearEarned: 0, expired: 0 };
+    const tally: SurvivalRun = { floorReached: 1, comboEarned: 0, clearEarned: 0, expired: 0, warden: null };
     for (let floor = 1; floor <= floorCap; floor += 1) {
         tally.floorReached = floor;
         const rng = createMulberry32(hashStringToSeed(`survival:${seed}:${floor}:${missRate}`));
@@ -118,6 +120,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
             tally.comboEarned += comboMissesEarned(before.stats.currentStreak, run.stats.currentStreak);
             turns += 1;
         }
+        tally.warden = run.wardenOutcome ?? tally.warden;
         if (run.status === 'gameOver') break;
         if (run.status !== 'levelComplete' && run.status !== 'playing') break;
         const leftBefore = missesLeft(run) ?? 0;
@@ -147,6 +150,9 @@ export interface SurvivalRow {
     minFloor: number;
     comboEarnedPerFloor: number;
     expiredPerFloor: number;
+    /** Runs that cleared the Warden, and runs that fell on its floor. */
+    wardenCleared: number;
+    wardenFell: number;
 }
 
 export const simulateSurvival = ({
@@ -164,7 +170,9 @@ export const simulateSurvival = ({
             meanFloor: mean(floors),
             minFloor: Math.min(...floors),
             comboEarnedPerFloor: mean(runs.map((run) => run.comboEarned / run.floorReached)),
-            expiredPerFloor: mean(runs.map((run) => run.expired / run.floorReached))
+            expiredPerFloor: mean(runs.map((run) => run.expired / run.floorReached)),
+            wardenCleared: runs.filter((run) => run.warden === 'cleared').length,
+            wardenFell: runs.filter((run) => run.warden === 'fell').length
         };
     });
 
@@ -179,14 +187,14 @@ if (isMain) {
     const useItems = process.argv.includes('--items');
     const rows = simulateSurvival({ rates, seeds: SURVIVAL_SEEDS.slice(0, seedCount), useItems });
     console.log(useItems ? 'with the curio items used' : 'without items');
-    console.log('miss   median  mean   min   combo/floor  expired/floor');
+    console.log('miss   median  mean   min   combo/floor  expired/floor  warden cleared/fell');
     for (const row of rows) {
         console.log(
             `${(row.missRate * 100).toFixed(0).padStart(3)}%   ${String(row.medianFloor).padStart(5)}  ${row.meanFloor
                 .toFixed(1)
                 .padStart(5)}  ${String(row.minFloor).padStart(4)}   ${row.comboEarnedPerFloor.toFixed(2).padStart(9)}    ${row.expiredPerFloor
                 .toFixed(2)
-                .padStart(10)}`
+                .padStart(10)}     ${row.wardenCleared}/${row.wardenFell}`
         );
     }
 }

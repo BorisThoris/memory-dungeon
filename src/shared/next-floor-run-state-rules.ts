@@ -73,6 +73,7 @@ export const createNextFloorRunState = (
         magpieTheftsThisFloor: 0,
         voidSpewsThisFloor: 0,
         restlessDriftsThisFloor: 0,
+        wardenRedealsThisFloor: 0,
         skittishFlinchesThisFloor: 0,
         turncoatTurnsThisFloor: 0,
         hourglassesSpentThisFloor: 0,

@@ -448,6 +448,20 @@ describe('RunShell — The Margin', () => {
         }
     });
 
+    it('states both of the Warden’s rules in the study window, before the first flip (DGE-005)', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
+        const run: RunState = {
+            ...base,
+            board: { ...base.board!, level: 60, floorArchetypeId: 'warden_hall' },
+            timerState: { ...base.timerState, memorizeRemainingMs: 4000 }
+        };
+        render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
+        const line = screen.getByTestId('run-shell-line');
+        expect(line).toHaveTextContent('every turn past par takes a miss');
+        expect(line).toHaveTextContent('every 5th turn the face-down cards are dealt again');
+        expect(screen.getByTestId('game-action-dock')).toHaveTextContent('The Warden');
+    });
+
     it('lets the study clock run out louder than it started', () => {
         // The bar always carried the fact that the window was nearly gone. A fact in an unchanged
         // colour is one the player stopped rereading nine seconds ago, so the last seconds now read

@@ -1,4 +1,5 @@
 import { claimCurio } from './curio-rules';
+import { applyWardenTurn } from './warden-rules';
 import {
     type BoardState,
     type FindableKind,
@@ -506,12 +507,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution));
+            return applyWardenTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution));
+        return applyWardenTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)));
     };
     return resolveBoardTurn;
 };

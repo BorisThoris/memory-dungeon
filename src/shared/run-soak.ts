@@ -1,5 +1,7 @@
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
+import { isWardenFloor } from './warden-rules';
+import { parTurnsForRun } from './floor-par';
 import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -379,7 +381,9 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (!before || action !== 'resolve' || run.stats.mismatches <= before.stats.mismatches) return null;
         const had = missesLeft(before) ?? 0;
         if (had === 0) return run.status === 'gameOver' ? null : 'a miss on an empty bank did not end the run';
-        const owed = Math.min(had, Math.max(1, run.stats.tries - before.stats.tries));
+        // On the Warden's floor a turn past par costs one more (`warden-rules.ts`).
+        const warden = isWardenFloor(run.board) && run.turnsThisFloor > parTurnsForRun(run) ? 1 : 0;
+        const owed = Math.min(had, Math.max(1, run.stats.tries - before.stats.tries) + warden);
         const paid = had - (missesLeft(run) ?? 0);
         return paid === owed ? null : `paid ${paid} of ${owed} (tries ${before.stats.tries} -> ${run.stats.tries})`;
     },

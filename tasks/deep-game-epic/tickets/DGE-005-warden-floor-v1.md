@@ -1,7 +1,7 @@
 # DGE-005: The Warden at floor 60, rule-only first version
 
 ## Status
-Not started
+Done (2026-10-20), rule-only first version. The difficulty target is unmeasured: see notes.
 
 ## Priority
 P0
@@ -52,4 +52,13 @@ Floor 60 is the Warden. Its rules, stated on the HUD before the floor: every tur
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-20:
+- `src/shared/warden-rules.ts`: `applyWardenTurn(before, after)` runs after `applyMissBudget` at both `resolveBoardTurn` sites (the Gambit and the two-card turn). It does three things:
+  - A turn past par takes one miss, matched or not. When the bank is already empty it ends the run (`miss_budget`). The turn that clears the floor is the win and is not charged.
+  - Every fifth turn it re-deals the face-down, unpinned cards among their own cells. The cards keep their ids, it uses `shuffleWithRng`, and the seed is `warden:seed:rules:level:turns`. Each re-deal is counted in `wardenRedealsThisFloor`.
+  - It marks `wardenOutcome: 'fell'` on any run that ends on the Warden's floor.
+- `finalizeLevel` marks `wardenOutcome: 'cleared'`. The store's level-complete continuation (`levelCompleteContinuationExecutor.ts`, beside the pass-and-play final floor) ends the run with `runEndReason: 'warden_cleared'`; the results stamp reads "THE WARDEN FALLS". `advanceToNextLevel` is untouched, so the sims, the soak and `sim:endless` still play past 60 (where the Abyss and the Warden repeat) until DGE-006 decides Endless.
+- Floor 60 is the `warden_hall` archetype, the abyss act's boss entry with no mutators: the rules live on the hall, so no mutator moves a card in the same turn. The study window’s caption states both rules before the first flip (`wardenStudy`, kicker "The Warden"), its identity contract carries them into the next-floor preview, and the Codex has a Warden topic; the Descent topic no longer says the Abyss goes on (encyclopedia 95). `FLOOR_SCHEDULE_RULES_VERSION` 6, schedule-only, no `GAME_RULES_VERSION` bump.
+- Graph node `hazard.warden`, not `boss.warden`: the `boss.` prefix belongs to the deleted dungeon layer and the graph test bans it. The Codex guard against the old layer's "wardens" now names the plural, since the Warden is back as one boss. Ledger entry, census exemption (the census and the soak never reach 60), mechanic count 72, two hall rooms (`warden-past-par`, `warden-redeal`), unit tests, and a soak miss invariant that counts the Warden's extra miss.
+- **Acceptance not met, and why.** `yarn sim:survival` now reports Warden clears and falls. At 5, 8 and 10% misses, 19, 18 and 14 of 20 runs reach floor 60 and every one clears it (0 falls). At 15%, runs end around floor 20 and none reach it. Both sim players (survival and soak) are omniscient: they match any pair they choose except their deliberate misses, so they never pay to explore a 24-pair board and never go past par. The "half of average runs end at the Warden" target cannot be measured until a player with limited memory exists. The DGE-001 numbers also say the 15% player dies around floor 20, long before 60. The soak run 61 floors deep (40 careful seeds) passes every invariant through the Warden's floor and its re-deals.
+- Next: a memory-model sim player before any Warden tuning (DGE-012 measures the pop and could carry it); DGE-006 for what clearing the Warden unlocks; DGE-007 for the results screen's win.

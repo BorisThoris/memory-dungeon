@@ -2610,6 +2610,46 @@
             ]
         },
         {
+            "id": "hazard.warden",
+            "label": "The Warden",
+            "kind": "hazard",
+            "role": "floor_sixty_takes_a_miss_for_every_turn_past_par_and_re_deals_every_fifth_turn_clearing_it_wins_the_run",
+            "evidence": [
+                "src/shared/warden-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/renderer/store/levelCompleteContinuationExecutor.ts",
+                "src/shared/boss-encounters.ts"
+            ],
+            "reads": [
+                "turnsThisFloor",
+                "parTurns",
+                "missBank",
+                "pinnedTileIds",
+                "wardenRedealsThisFloor",
+                "wardenOutcome"
+            ],
+            "writes": [
+                "missBank",
+                "tileStates",
+                "wardenRedealsThisFloor",
+                "wardenOutcome",
+                "runStatus"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "turnable-pair-always-left",
+                "tile-ids-kept",
+                "pinned-cards-stay"
+            ],
+            "tests": [
+                "src/shared/warden-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/floor-mutator-schedule.test.ts"
+            ]
+        },
+        {
             "id": "inventory.still_bell_charge",
             "label": "Still Bell Charge Inventory",
             "kind": "inventory",
@@ -3865,6 +3905,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the tier beside the floor, a bar toward the next tier named before it arrives, and the tier reached on the results"
+        },
+        {
+            "source": "hazard.warden",
+            "target": "economy.miss_bank",
+            "kind": "consumes",
+            "label": "every turn past par on the Warden floor takes a miss, matched or not"
+        },
+        {
+            "source": "hazard.warden",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "both rules stated before the first flip, the re-deal, and the win on the results stamp"
         },
         {
             "source": "inventory.still_bell_charge",

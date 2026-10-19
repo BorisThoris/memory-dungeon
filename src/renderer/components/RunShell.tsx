@@ -20,6 +20,7 @@ import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, MILESTONE_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
 import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { nextMilestone } from '../../shared/milestone-rules';
+import { WARDEN_REDEAL_EVERY_TURNS, isWardenFloor } from '../../shared/warden-rules';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
@@ -375,12 +376,16 @@ const RunShell = ({
     const objective = getSecondaryObjectiveProgress(run);
     const elementalGoal = objective?.id === 'amplified_reaction' || objective?.id === 'calm_reaction' ? objective : null;
     const said = feedback || null;
+    // The Warden states its rules in the study window, before the first flip (DGE-005).
+    const warden = isWardenFloor(run.board);
     const line = memorize
-        ? said ?? RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds)
+        ? said ?? (warden ? RUN_SHELL_LINE_COPY.wardenStudy(WARDEN_REDEAL_EVERY_TURNS) : RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds))
         : said ?? onboardingLine ?? hintLine ?? null;
     const lineTone = said ? feedbackPriority : 'info';
     const kicker = memorize
-        ? RUN_SHELL_LINE_COPY.studyKicker
+        ? warden
+            ? RUN_SHELL_LINE_COPY.wardenKicker
+            : RUN_SHELL_LINE_COPY.studyKicker
         : lineTone === 'error'
           ? RUN_SHELL_LINE_COPY.missKicker
           : !said && onboardingLine

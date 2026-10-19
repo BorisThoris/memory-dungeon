@@ -1,4 +1,5 @@
 import { hasRelic, misersPurseGold } from './run-relic-rules';
+import { isWardenFloor } from './warden-rules';
 import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
@@ -118,6 +119,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         ...run,
         clearedTurnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + turnsTaken - parTurns,
         status: 'levelComplete',
+        // The Warden cleared (`warden-rules.ts`): the store ends the run as a win when it continues.
+        ...(isWardenFloor(board) ? { wardenOutcome: 'cleared' as const } : {}),
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
         board,
         pinnedTileIds: [],

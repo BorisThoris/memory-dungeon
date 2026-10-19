@@ -458,7 +458,8 @@ export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, S
     lantern_hall: 'clumped',
     mirror_hall: 'clumped',
     spotlight_hunt: 'two_suit',
-    breather: 'two_suit'
+    breather: 'two_suit',
+    warden_hall: 'clumped'
 };
 
 export const getSuitDealProfile = (floorArchetypeId: FloorArchetypeId | null | undefined): SuitDealProfile =>

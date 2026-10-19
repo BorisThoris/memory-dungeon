@@ -21,9 +21,10 @@ import {
 } from './contracts';
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
+import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 94 as const;
+export const ENCYCLOPEDIA_VERSION = 95 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -481,7 +482,14 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             `The run is a **Descent** of ${DESCENT_ACTS.length} acts to floor ${DESCENT_FLOOR_COUNT}: ` +
             DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
             `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
-            `a room whose mutators stack as no floor before it does. Past floor ${DESCENT_FLOOR_COUNT} the Abyss goes on.`
+            `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won.`
+    },
+    {
+        id: 'sys_warden',
+        title: 'The Warden',
+        description:
+            `Floor ${DESCENT_FLOOR_COUNT} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
+            `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run.`
     },
     {
         id: 'sys_dread',

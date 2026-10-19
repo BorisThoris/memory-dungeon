@@ -79,6 +79,8 @@ export type TestHallRoomId =
     | 'still-bell-quiet'
     | 'store-stop'
     | 'dread-stirs'
+    | 'warden-past-par'
+    | 'warden-redeal'
     | 'camp-survive'
     | 'camp-study'
     | 'camp-score'
@@ -893,6 +895,43 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (gold <= 0 || gold % 2 !== 0) return `a doubled clear paid ${gold}`;
                     if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
                     return missBankCap(r) === 3 ? null : `the bank holds ${missBankCap(r)}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'warden-past-par',
+        title: 'The Warden takes a miss past par',
+        mechanic: "On the Warden's floor every turn past par takes a miss from the bank, a match as much as a miss; the turn that clears the floor is the win and costs nothing.",
+        graphMechanicIds: ['hazard.warden', 'economy.miss_bank'],
+        tryThis: 'Twenty turns in, far past par: match a pair and watch the bank lose one anyway, then clear the hall and win the run.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 60, misses: 4, board: { floorArchetypeId: 'warden_hall', floorTag: 'boss' }, run: { turnsThisFloor: 20 } }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'a match past par still takes a miss', expect: missesAre(3) },
+            {
+                step: { do: 'clear' },
+                says: 'the clearing turn is the win: no miss, and the run is marked',
+                expect: (r) => (r.status === 'levelComplete' && r.wardenOutcome === 'cleared' && missesLeft(r) === 3 ? null : `status ${r.status}, outcome ${String(r.wardenOutcome)}, misses ${missesLeft(r)}`)
+            }
+        ]
+    },
+    {
+        id: 'warden-redeal',
+        title: 'The Warden re-deals on turn five',
+        mechanic: "On the Warden's floor every fifth turn deals the face-down cards again among their cells; a pinned card stays where it is.",
+        graphMechanicIds: ['hazard.warden'],
+        tryThis: 'Pin a-1 and miss once on the fifth turn: the face-down cards are dealt again, the pin holds a-1 in place.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'c:m d:b a:e b:t'], { level: 60, misses: 4, board: { floorArchetypeId: 'warden_hall', floorTag: 'boss' }, run: { turnsThisFloor: 4 } }),
+        script: [
+            { step: { do: 'pin', tileId: 'a-1' }, says: 'a-1 carries a pin', expect: (r) => (r.pinnedTileIds.includes('a-1') ? null : 'a-1 is not pinned') },
+            {
+                step: { do: 'missAny' },
+                says: 'the fifth turn re-deals the face-down cards, and the pinned card stays',
+                expect: (r, b) => {
+                    if (r.wardenRedealsThisFloor !== 1) return `re-deals ${String(r.wardenRedealsThisFloor)}`;
+                    const at = (run: RunState) => run.board?.tiles.findIndex((t) => t.id === 'a-1');
+                    return at(r) === at(b) ? null : `a-1 moved from ${at(b)} to ${at(r)}`;
                 }
             }
         ]

@@ -11,7 +11,9 @@ export const RUN_END_VERDICT: Record<RunEndReason, string> = {
     turn_ceiling: "TIME'S UP",
     quit: 'UNTIL NEXT TIME',
     contract: 'CONTRACT SEALED',
-    pass_and_play_final_floor: 'TABLE SETTLED'
+    pass_and_play_final_floor: 'TABLE SETTLED',
+    // The Warden cleared (DGE-005): the Descent's one win, never read as a death.
+    warden_cleared: 'THE WARDEN FALLS'
 };
 
 /** A summary from before the reason was recorded gets the old title, as a stamp. */

@@ -25,7 +25,11 @@ import { runNonNegativeIntegerWithFallback } from './run-number-guards';
  * Endless has its own rule (DGE-006). Schedule-only: `GAME_RULES_VERSION` is not bumped (CLAUDE.md),
  * so a seed already shared meets the new boss floors - that trade is the owner's.
  */
-export const FLOOR_SCHEDULE_RULES_VERSION = 5;
+/*
+ * 6 (2026-10-20, DGE-005): floor 60 is the Warden's hall, the Descent's end. Schedule-only like 5:
+ * no generation before floor 60 changes, so `GAME_RULES_VERSION` stays.
+ */
+export const FLOOR_SCHEDULE_RULES_VERSION = 6;
 
 export interface FloorArchetypeDefinition {
     title: string;
@@ -88,6 +92,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         theme: 'Rush',
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
+    },
+    warden_hall: {
+        title: "The Warden's Hall",
+        hint: 'Every turn past par takes a miss from your bank, and every fifth turn the face-down cards are dealt again. Clear it and the run is won.',
+        theme: 'Warden',
+        riskProfile: 'The Descent\u2019s last floor and its designed end: a race against par with the board you learned shuffled under you.'
     },
     mirror_hall: {
         title: 'Looking-Glass Hall',
@@ -474,7 +484,8 @@ export const DESCENT_ACTS: readonly DescentActDefinition[] = [
         firstFloor: 41,
         lastFloor: 60,
         bossFloor: 60,
-        boss: makeEntry(12, 'trap_hall', 'scholar_style', ['sticky_fingers', 'restless_floor', 'looking_glass'], 'boss')
+        // The Warden (DGE-005): its rules are its hall's, so no mutator moves a card in the same turn.
+        boss: makeEntry(12, 'warden_hall', 'scholar_style', [], 'boss')
     }
 ];
 

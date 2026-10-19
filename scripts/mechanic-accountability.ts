@@ -262,6 +262,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'hazard.warden': {
+        generation: 274,
+        reason: 'The Warden stands on floor 60, and the census plays twenty-four floors and the soak thirty, so neither ever meets it. Its rules are unit tested, two hall rooms walk a match past par that still costs a miss and a fifth-turn re-deal that leaves the pinned card, and sim:endless plays its hall on every twentieth floor past 60.'
+    },
     'progression.dread': {
         generation: 273,
         reason: 'Dread is read off the floor and the realm severities a run has entered; it acts on nothing inside a floor, so the floor census has nothing to count. The whole-run soak checks after every action that it never falls, and a hall room walks it from Quiet into Stirring across a clear.'
