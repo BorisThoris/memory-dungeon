@@ -1,7 +1,7 @@
 # DGE-001: North star, scope, and the measured plateau
 
 ## Status
-Not started
+Done (2026-10-19)
 
 ## Priority
 P0
@@ -51,4 +51,4 @@ A future session opens this pack, re-measures the four plateau facts in under an
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-19: re-measured on main at rules 69; today's numbers and commands are in `00-the-plateau-measured.md` ("Re-measured"). Fact 4 changed: the miss bank now ends runs (15% misses, median floor 20), so DGE-005 and DGE-032 should be re-read against it. The three open decisions carry stated defaults in the ledger (Warden at 60, four relic slots, Endless boards grow). REG-018, REG-019 and REG-020 link here. Checklist rows: none apply (no runtime code); the CLAUDE.md pre-commit list ran. Next: DGE-002 and DGE-003.

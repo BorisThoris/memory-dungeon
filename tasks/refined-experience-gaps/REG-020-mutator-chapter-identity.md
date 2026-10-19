@@ -1,7 +1,7 @@
 # REG-020: Mutator Chapter Identity
 
 ## Status
-Done
+Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for chapter identity as acts with their own verb, family, board and boss: [DGE-002](../deep-game-epic/tickets/DGE-002-descent-act-schedule.md) and [the plan](../deep-game-epic/02-deep-game-plan.md).
 
 ## Priority
 P1

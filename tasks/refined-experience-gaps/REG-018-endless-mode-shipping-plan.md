@@ -1,7 +1,7 @@
 # REG-018: Endless Mode Shipping Plan
 
 ## Status
-Done
+Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for Endless as an unlocked mode with its own scaling: [DGE-006](../deep-game-epic/tickets/DGE-006-endless-gated-mode.md), and the Depths ladder in [DGE-025](../deep-game-epic/tickets/DGE-025-depths-ladder.md).
 
 ## Priority
 P1

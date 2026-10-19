@@ -1,7 +1,7 @@
 # REG-019: Relic Build Archetypes
 
 ## Status
-Done
+Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for relic slots and evolutions: [DGE-013](../deep-game-epic/tickets/DGE-013-relic-slot-cap.md) and [DGE-014](../deep-game-epic/tickets/DGE-014-relic-evolutions.md).
 
 ## Priority
 P1
