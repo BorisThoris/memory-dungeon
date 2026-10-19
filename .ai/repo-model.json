@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3205,
     "codeFileCount": 1219,
-    "exportedSymbolCount": 3869,
+    "exportedSymbolCount": 3871,
     "contentItemCount": 15,
     "mechanicCount": 69,
     "stateFieldCount": 136,
-    "relationshipCount": 10408
+    "relationshipCount": 10413
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d6d13bfcda74e05bd0ec675ce5447726f9c162477c913b13e1138f54061854a5"
+      "sha256": "d7dc86b976c44b539bc911b98a6a9eec5e01d68cda85bea32d1d9db40ef1c624"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 125425,
-      "sha256": "732d6c51dc9959fafd93b4ced3bea7002fa77c259b7614bc68639c6b26999c6d"
+      "bytes": 125536,
+      "sha256": "3a45c577e9839ead950e070da2b2eefa381b6ac300fffecb341ddf6e02aad544"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11547,14 +11547,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 38047,
-      "sha256": "6c9f9b54bf00e490e1b4fed47fa43a9b9c8e3c96a33fcdf73f47d296c805dd6d"
+      "bytes": 38911,
+      "sha256": "24723cdd8bd1aef04c7ebac6e3fba9e5323abd6c372a7d1fffe0d7e49c48cdd8"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 52450,
-      "sha256": "7901479acd49ccc01db106da1305ee2e399be72646a08b761fc1f3b69023e777"
+      "bytes": 52731,
+      "sha256": "8f9bb1cb70b47df68c29c26ad00f6a36c61619c1da56cd32a402d3d0434a178b"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12771,8 +12771,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 4321,
-      "sha256": "86db4783d94795b56752dfdb978131ff8753cbebb4e1952d7bb25e10280b8915"
+      "bytes": 5684,
+      "sha256": "7d6be3d19360b53d17a237ba8554f65c1bbc988411dccefe457cfafd44f2c29c"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -13041,8 +13041,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 7295,
-      "sha256": "8a3c176513b75edd210f41c2c327fdc9a9ce8a13072384e89b0eaff442c86c1d"
+      "bytes": 7326,
+      "sha256": "972e032c863a822cc61b0b78e84d17db577ae36448a600964087c0f9ba21db4d"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -23671,7 +23671,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2455,
+      "lineCount": 2456,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25289,10 +25289,11 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 698,
+      "lineCount": 711,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
+        "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/store/memorizeClock.ts",
         "file:src/shared/contracts.ts",
@@ -25307,7 +25308,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 919,
+      "lineCount": 924,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -29012,12 +29013,16 @@
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
-      "imports": [],
+      "lineCount": 112,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
       "exports": [
         "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_HINT_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#curioItemHint",
         "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#MISERS_PURSE_TOOL_COPY",
@@ -29026,7 +29031,9 @@
         "symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
         "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/boardRouteCoaching.ts",
@@ -29751,7 +29758,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 154,
+      "lineCount": 155,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -47612,8 +47619,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2454,
-      "endLine": 2454
+      "line": 2455,
+      "endLine": 2455
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -49428,8 +49435,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 918,
-      "endLine": 918
+      "line": 923,
+      "endLine": 923
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -49437,7 +49444,7 @@
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
       "line": 84,
-      "endLine": 117
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
@@ -54020,80 +54027,96 @@
       "name": "BOARD_SHUFFLE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 47,
-      "endLine": 53
+      "line": 48,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CRUCIBLE_TOOL_COPY",
       "name": "CRUCIBLE_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 77,
-      "endLine": 84
+      "line": 98,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
       "name": "CURIO_DROP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 56,
-      "endLine": 60
+      "line": 57,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_HINT_COPY",
+      "name": "CURIO_HINT_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 68,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#curioItemHint",
+      "name": "curioItemHint",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 75,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
       "name": "FLASH_PAIR_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 40,
-      "endLine": 44
+      "line": 41,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#METEOR_TOOL_COPY",
       "name": "METEOR_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 86,
-      "endLine": 90
+      "line": 107,
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#MISERS_PURSE_TOOL_COPY",
       "name": "MISERS_PURSE_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 63,
-      "endLine": 66
+      "line": 84,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#PEEK_COPY",
       "name": "PEEK_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 18,
-      "endLine": 25
+      "line": 19,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
       "name": "ROW_SHUFFLE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 8,
-      "endLine": 16
+      "line": 9,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#STORM_GLASS_TOOL_COPY",
       "name": "STORM_GLASS_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 69,
-      "endLine": 74
+      "line": 90,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
       "name": "TILE_SWAP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 28,
-      "endLine": 37
+      "line": 29,
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
@@ -54860,8 +54883,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 147,
-      "endLine": 153
+      "line": 148,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -54876,16 +54899,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 130,
-      "endLine": 133
+      "line": 131,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 147,
+      "endLine": 147
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -54900,8 +54923,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 139,
-      "endLine": 143
+      "line": 140,
+      "endLine": 144
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -54925,7 +54948,7 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 109,
-      "endLine": 120
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -73993,7 +74016,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 122
+          "line": 124
         }
       ],
       "tests": [
@@ -74019,7 +74042,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 112
+          "line": 113
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -74867,7 +74890,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 28
+          "line": 29
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -77024,7 +77047,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 405
+          "line": 410
         }
       ],
       "tests": [
@@ -77063,7 +77086,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 405
+          "line": 410
         }
       ],
       "tests": [
@@ -77097,7 +77120,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 405
+          "line": 410
         }
       ],
       "tests": [
@@ -77131,7 +77154,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 405
+          "line": 410
         }
       ],
       "tests": [
@@ -87945,6 +87968,18 @@
       "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
       "source": "file:src/renderer/copy/boardPowerCopy.ts",
       "target": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_HINT_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_HINT_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#curioItemHint",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#curioItemHint",
       "kind": "exports"
     },
     {
@@ -110965,6 +111000,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/copy/boardPowerCopy.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/renderer/copy/boardPowerCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/copy/realmCopy.ts",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/renderer/copy/realmCopy.ts",
@@ -115102,6 +115143,12 @@
       "id": "imports:src/renderer/copy/anchorBeat.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/copy/anchorBeat.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/boardPowerCopy.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -133216,6 +133263,12 @@
       "id": "tested_by:src/renderer/copy/appErrorBoundary.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/renderer/copy/appErrorBoundary.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/boardPowerCopy.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
