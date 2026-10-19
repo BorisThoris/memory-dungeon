@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
+import { risenToolCharges, TOOL_FRESH_MS } from './runShellFreshTools';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
@@ -379,6 +380,21 @@ const RunShell = ({
     const kickerTier = memorize || lineTone === 'error' || (!said && onboardingLine) ? 'none' : tier;
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
 
+    // A tool that just came into the hand glows for a moment (`runShellFreshTools.ts`).
+    const previousCharges = useRef<Map<string, number> | null>(null);
+    const freshTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const [freshTools, setFreshTools] = useState<ReadonlySet<string>>(() => new Set());
+    useEffect(() => {
+        const { counts, risen } = risenToolCharges(previousCharges.current, tools);
+        previousCharges.current = counts;
+        if (risen.length === 0) return;
+        setFreshTools((current) => new Set([...current, ...risen]));
+        freshTimers.current.push(
+            setTimeout(() => setFreshTools((current) => new Set([...current].filter((id) => !risen.includes(id)))), TOOL_FRESH_MS)
+        );
+    }, [tools]);
+    useEffect(() => () => freshTimers.current.forEach(clearTimeout), []);
+
     /*
      * A phone folds the dock into one Items button beside Pause. Ten tools in two rows took a
      * quarter of an upright phone and left the board a strip in the middle; the board is the game,
@@ -418,6 +434,7 @@ const RunShell = ({
             aria-label={tool.name ?? tool.title ?? tool.label}
             aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
             className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
+            data-fresh={freshTools.has(tool.id) ? 'true' : undefined}
             data-testid={`tool-${tool.id}`}
             disabled={tool.disabled}
             key={tool.id}
@@ -850,6 +867,7 @@ const RunShell = ({
                                 aria-expanded={trayOpen}
                                 aria-label={armedTool ? `${armedTool.name ?? armedTool.title ?? armedTool.label} is armed. Items` : 'Items'}
                                 className={`${styles.tool} ${styles.toolTray} ${armedTool ? styles.toolArmed : ''}`.trim()}
+                                data-fresh={trayTools.some((tool) => freshTools.has(tool.id)) ? 'true' : undefined}
                                 data-testid="tool-tray-toggle"
                                 onClick={() => setTrayOpenOnFloor(trayOpen ? null : floorLevel)}
                                 type="button"

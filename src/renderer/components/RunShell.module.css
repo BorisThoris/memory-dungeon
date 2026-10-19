@@ -975,6 +975,41 @@
     background: color-mix(in srgb, var(--gold) 14%, transparent);
 }
 
+/* Just came into the hand (`runShellFreshTools.ts`): three gold pulses, then quiet. */
+.tool[data-fresh='true'] {
+    border-color: var(--gold);
+    animation: toolFresh 800ms ease-out 3;
+}
+
+/* A tool that arrived while it cannot be used yet still reads as new. */
+.tool[data-fresh='true']:disabled {
+    opacity: 0.85;
+}
+
+@keyframes toolFresh {
+    0% {
+        background: color-mix(in srgb, var(--gold) 26%, transparent);
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 70%, transparent);
+    }
+
+    100% {
+        background: transparent;
+        box-shadow: 0 0 0 0.6rem transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tool[data-fresh='true'] {
+        animation: none;
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 60%, transparent);
+    }
+}
+
+:global([data-reduce-motion='true']) .tool[data-fresh='true'] {
+    animation: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+
 .toolGlyph {
     display: inline-flex;
     width: 1.25rem;

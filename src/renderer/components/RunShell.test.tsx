@@ -5,6 +5,7 @@ import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
 import RunShell, { type RunShellTool } from './RunShell';
+import { TOOL_FRESH_MS } from './runShellFreshTools';
 import { DAILY_MUSIC_COPY } from '../copy/realmCopy';
 import { setMemorizeClock } from '../store/memorizeClock';
 
@@ -673,5 +674,24 @@ describe('RunShell — The Margin', () => {
         expect(atFever.fever.next).toBeNull();
         expect(atFever.fever.imminent).toBeNull();
         expect(atFever.sharp.next).toBeNull();
+    });
+});
+
+describe('a tool that just came into the hand', () => {
+    it('glows when its count rises, not for what the run opened with, and goes quiet after', () => {
+        vi.useFakeTimers();
+        try {
+            const tool = (charges: number): RunShellTool => ({ id: 'crucible', label: 'Crucible', glyph: null, charges, onClick: vi.fn() });
+            const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(1)]} />);
+            expect(screen.getByTestId('tool-crucible')).not.toHaveAttribute('data-fresh');
+            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[tool(2)]} />);
+            expect(screen.getByTestId('tool-crucible')).toHaveAttribute('data-fresh', 'true');
+            act(() => {
+                vi.advanceTimersByTime(TOOL_FRESH_MS + 50);
+            });
+            expect(screen.getByTestId('tool-crucible')).not.toHaveAttribute('data-fresh');
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });
