@@ -14,7 +14,7 @@ import {
 } from '../src/shared/contracts';
 import { BALANCE_SIMULATION_TILE_TRAIT_KINDS } from '../src/shared/balance-simulation';
 import { getFindableSpawnWeightRows } from '../src/shared/findables';
-import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
+import { DESCENT_FLOOR_COUNT, pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { inspectBoardFairness } from '../src/shared/board-inspection';
 import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
@@ -318,7 +318,8 @@ export const buildEndlessSimulationCsv = ({
     for (const key of Object.keys(mechanicPlays)) {
         for (let offset = 1; offset <= COVERAGE_TOP_UP_SEEDS && (mechanicPlays[key] ?? 0) < MIN_PLAYS_PER_MECHANIC; offset++) {
             const seed = safeRunSeed + offset;
-            for (let level = 1; level <= COVERAGE_TOP_UP_FLOORS; level++) {
+            // The first floors of each seed, and the Descent's last: the Warden's hall stands on floor 60 only (DGE-005).
+            for (const level of [...Array.from({ length: COVERAGE_TOP_UP_FLOORS }, (_, index) => index + 1), DESCENT_FLOOR_COUNT]) {
                 const entry = pickFloorScheduleEntry(seed, rulesVersion, level, 'endless');
                 const scheduleKeys = [...entry.mutators.map((id) => `mutator:${id}`), `archetype:${entry.floorArchetypeId}`, `floorTag:${entry.floorTag}`];
                 if (!key.startsWith('trait:') && !key.startsWith('findable:') && !scheduleKeys.includes(key)) continue;
