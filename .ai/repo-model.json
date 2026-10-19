@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3205,
+    "trackedFileCount": 3243,
     "codeFileCount": 1219,
     "exportedSymbolCount": 3871,
     "contentItemCount": 15,
@@ -2733,50 +2733,44 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 334349,
+      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 326270,
+      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 395039,
-      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
+      "bytes": 351103,
+      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 74007,
-      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
+      "bytes": 262999,
+      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 47216,
-      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
+      "bytes": 160622,
+      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 89413,
-      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
+      "bytes": 263076,
+      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 58618,
-      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
-    },
-    {
-      "path": "docs/ui-design-reference/390x844/01f-profile.png",
-      "category": "documentation",
-      "bytes": 84953,
-      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
+      "bytes": 241706,
+      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -4545,8 +4539,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71933,
-      "sha256": "856557adb1e28770f54a979f2f2f5d516c6d8e568c29df5f4d20d7a8dcdba0ff"
+      "bytes": 71990,
+      "sha256": "3ad35a1c32d4108d30c9146e46a90bf597bac03ae14e6fe8f3e434e66a8edc35"
     },
     {
       "path": "public/site.webmanifest",
@@ -9243,8 +9237,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 2024,
-      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
+      "bytes": 1931,
+      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9285,8 +9279,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 887,
-      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
+      "bytes": 842,
+      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9303,8 +9297,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 354,
-      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
+      "bytes": 333,
+      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9333,8 +9327,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 622,
-      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
+      "bytes": 589,
+      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9363,8 +9357,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 629,
-      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+      "bytes": 596,
+      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9753,8 +9747,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 267,
-      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+      "bytes": 248,
+      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -17057,6 +17051,240 @@
       "category": "other",
       "bytes": 4,
       "sha256": "66c342932aa7c18f7bf1fa212aa011069fc2e50e0c7e9e4c73fcaa6851854c47"
+    },
+    {
+      "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
+      "category": "other",
+      "bytes": 2795,
+      "sha256": "69add6d1961ec61253b6732e79a208f711f8e2c6b02ae55566dfae6261b7366a"
+    },
+    {
+      "path": "tasks/deep-game-epic/01-research-findings.md",
+      "category": "other",
+      "bytes": 6276,
+      "sha256": "7e52c2d12cf4efe595b02a10dd4a3852e0b36e2902c7039cb044fe93f771ccce"
+    },
+    {
+      "path": "tasks/deep-game-epic/02-deep-game-plan.md",
+      "category": "other",
+      "bytes": 19588,
+      "sha256": "f4656a4f0df53f8be50b2e4095c57ec50351f7b9582ae359fca3f296ca36b698"
+    },
+    {
+      "path": "tasks/deep-game-epic/03-execution-ledger.md",
+      "category": "other",
+      "bytes": 1086,
+      "sha256": "5f4e9cd187079ed69644bc2343edb2c993eade48814301277020565561fa4316"
+    },
+    {
+      "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
+      "category": "other",
+      "bytes": 5597,
+      "sha256": "856872190ac99398e4c653a0cb31da89bb2bcd11dded48eb4964e8f3317ba8ca"
+    },
+    {
+      "path": "tasks/deep-game-epic/README.md",
+      "category": "documentation",
+      "bytes": 8083,
+      "sha256": "ba969768c1b1f1d4de12605be278a6bb10f9f9db47c7e1c5cd93ad0c22dedbfe"
+    },
+    {
+      "path": "tasks/deep-game-epic/TICKET_TEMPLATE.md",
+      "category": "other",
+      "bytes": 1443,
+      "sha256": "57c08115ea97bd0e3f84117f4df0c611b5083af371a969024f24adef305d7b86"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-001-north-star-scope-and-plateau.md",
+      "category": "other",
+      "bytes": 2389,
+      "sha256": "0099b872b380f1ee82775d421c965a438b2ab8a64f247cdcfaf7881d0a9fc1f2"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-002-descent-act-schedule.md",
+      "category": "other",
+      "bytes": 3615,
+      "sha256": "0acf2305ae1a3162ae24b31303cbc28859de3a2309129e16efd726a321ed6809"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-003-dread-coefficient-and-tiers.md",
+      "category": "other",
+      "bytes": 3490,
+      "sha256": "d925b14ac12ac63c08b26d676349f6a4de632620cb77e02f955b3aa74b040f5f"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-004-milestones-and-clear-beat.md",
+      "category": "other",
+      "bytes": 2847,
+      "sha256": "2ddf37643216283c91b9e309365bbd89280a91574ae8a4d75f9f5ba4866213ed"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-005-warden-floor-v1.md",
+      "category": "other",
+      "bytes": 2709,
+      "sha256": "e789abee1dd560bf4df9c59f7aca28023a3d7276401b62b339780db21d24733f"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-006-endless-gated-mode.md",
+      "category": "other",
+      "bytes": 2984,
+      "sha256": "0721e617959145e8b6a0288c5d2a318ce4b5ce89ae5366c7e95cce4c8e2e70d6"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-007-results-and-run-summary.md",
+      "category": "other",
+      "bytes": 2038,
+      "sha256": "bb1ff4ac2e388c5ec9992833234ec68d87a3c4826fc9e5448d9a7d0bb12a0017"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-008-hold-verb.md",
+      "category": "other",
+      "bytes": 3791,
+      "sha256": "f117427c25aeb6f86a5fa22ceeefd8ad6b09f760613072fa5680bcfc346445eb"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-009-wanderers-card-family.md",
+      "category": "other",
+      "bytes": 3010,
+      "sha256": "d6aa9253ee1f3b7d337fd19a6a587b710f514d8373c0d48a49038e0aac2ff25e"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-010-the-fold-board.md",
+      "category": "other",
+      "bytes": 2415,
+      "sha256": "34735cbfaea6028ba37e073cd4a53524e5509151c2ccbe66ee9d4fac00bbf414"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-011-keeper-of-halls-boss.md",
+      "category": "other",
+      "bytes": 1740,
+      "sha256": "c014ac7f4bbe0605f164d61369cf3308090f59071a65ba13c2c8387c13d7d4c2"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-012-pop-hill-repair-measurement.md",
+      "category": "other",
+      "bytes": 1829,
+      "sha256": "f8cfe633f6358173ecb960a15b28337982609da0ccfb7f2e74925a172a1a4b21"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-013-relic-slot-cap.md",
+      "category": "other",
+      "bytes": 1614,
+      "sha256": "15c1a41885c05cd20f5fdf24a7a490fb1e7fc9c164678c2897cd28555d9722d5"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
+      "category": "other",
+      "bytes": 2271,
+      "sha256": "c9732a978bd8eef0a75c969ba69d492b0c2e7e1937f813b0e14f41415af21ad2"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
+      "category": "other",
+      "bytes": 1716,
+      "sha256": "6d54c242f7d797be7ec5c9e55979b7f9aa9c91385b49e3f1b958bb8c562c3891"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-016-masks-card-family.md",
+      "category": "other",
+      "bytes": 1776,
+      "sha256": "e7961dddf583d7d6e4a24c16afed4c3595834d391a30672dbe2df8ba23022dd4"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
+      "category": "other",
+      "bytes": 2122,
+      "sha256": "a9f7e07ae473eb5868d1c492af0e5520aa43563647e66f3655e411a27c6e506f"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
+      "category": "other",
+      "bytes": 1426,
+      "sha256": "dfa4bacb95f5e6958a082dbfaf71247492cc23b1168d8ff3e265335fb0ff8d13"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-019-echo-verb.md",
+      "category": "other",
+      "bytes": 1643,
+      "sha256": "78636567a6e452950ea56e59e4e9032af6868bd31fff1ac5a86d7c3eb5752a21"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-020-sleepers-card-family.md",
+      "category": "other",
+      "bytes": 1616,
+      "sha256": "218d38f9fff78552b039b9373c305ceacc4459ed37e6eb220ea9cf8a98e22d15"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-021-the-spiral-board.md",
+      "category": "other",
+      "bytes": 1787,
+      "sha256": "af60b9e4e06079b562156e5ff35ea69733b5050bc9460c7d019d02b18caa3af7"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-022-dungeon-learns-you.md",
+      "category": "other",
+      "bytes": 2028,
+      "sha256": "daf46ff561a754aaad6457a63bf86ab1d8391db863b6b51d77081d4426bb471a"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-023-warden-complete.md",
+      "category": "other",
+      "bytes": 1812,
+      "sha256": "f944b528ec50de2fe0d4f49df456528c49c043c1977b40322ad6e7a0e136b9ed"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-024-feat-unlock-tree.md",
+      "category": "other",
+      "bytes": 1956,
+      "sha256": "0d6854de80569329005854c81299c4aafa592654d53b214d115ed61a67b82cdb"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
+      "category": "other",
+      "bytes": 1944,
+      "sha256": "fe2fa305aaa5a9bbfe188a6064d736817d30f5495d936ce96a10281e84fb1b73"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-026-boss-reward-tier-gating.md",
+      "category": "other",
+      "bytes": 1612,
+      "sha256": "5642754617b03522ee4aba659c6727b85b6cc1f3c216848cb30f951fcd1cbbf9"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-027-hall-soak-and-accountability.md",
+      "category": "other",
+      "bytes": 1933,
+      "sha256": "bec3f092e668ac4f74fd51dc4ebc70ba4ac2cbfebb0562efa5f857bb25972c5f"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
+      "category": "other",
+      "bytes": 1873,
+      "sha256": "af0b0860c5a1c26e26af868ce983bca3175162ce3d0953faa6a8d197f8a49ffc"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
+      "category": "other",
+      "bytes": 1916,
+      "sha256": "f3bd1749f6607d0fb117042699e8ef05eb5a6609cbb01ad040d061c807996c19"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
+      "category": "other",
+      "bytes": 2204,
+      "sha256": "c3b12f6a7b3f30fe293ab5533205ef06c56ab9036cb15eb27b793a3e492132c1"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-031-save-schema-and-migration.md",
+      "category": "other",
+      "bytes": 1713,
+      "sha256": "efabdc1ddfa9cf14ea259086bd65cbb5d040be6afc96d168424b37bf18164f80"
+    },
+    {
+      "path": "tasks/deep-game-epic/tickets/DGE-032-balance-bars-and-sims.md",
+      "category": "other",
+      "bytes": 2242,
+      "sha256": "39661ed4f1a6d8b42091fb4746991e9c334277e3106ecfe7c9931807e15cd5ec"
     },
     {
       "path": "tasks/dungeon-epic/00-current-system-map.md",
