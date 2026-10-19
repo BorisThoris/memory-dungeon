@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72029,
-      "sha256": "5d61fd2545581eebb79f7a2b7861d44b10118278e0db437aa3368e8cc693d7a5"
+      "bytes": 71976,
+      "sha256": "c800cd2150ea0f7ad3ff9eedf9886ff06c679c0dcce02923f90b829783ae663e"
     },
     {
       "path": "public/site.webmanifest",
@@ -16371,8 +16371,8 @@
     {
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 7220,
-      "sha256": "8e648c1a5559e0dfeddacbcb788d00fa30ca6b8ff745ea4936987206851d6802"
+      "bytes": 7410,
+      "sha256": "c9369f72e2831d9ec935860674a85efb084b265cd59a1c56d0e7de7444b0e6f6"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -40425,7 +40425,7 @@
       "path": "src/shared/run-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 129,
+      "lineCount": 131,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -75410,7 +75410,7 @@
         },
         {
           "path": "src/shared/run-occupancy-simulation.test.ts",
-          "line": 70
+          "line": 72
         }
       ],
       "enables": [],
