@@ -16,7 +16,7 @@ Spine
 - None
 
 ## Current repo context
-- `../00-the-plateau-measured.md`, `../02-deep-game-plan.md`, `docs/BALANCE_NOTES.md` Gen 207 and 211, `src/shared/floor-mutator-schedule.ts`, `src/shared/pair-curve.ts`.
+- `tasks/deep-game-epic/00-the-plateau-measured.md`, `tasks/deep-game-epic/02-deep-game-plan.md`, `docs/BALANCE_NOTES.md` Gen 207 and 211, `src/shared/floor-mutator-schedule.ts`, `src/shared/pair-curve.ts`.
 - Overlapping earlier tickets: `tasks/refined-experience-gaps/REG-018` (endless shipping plan), `REG-019` (relic archetypes), `REG-020` (mutator chapter identity).
 
 ## Problem

@@ -85,6 +85,6 @@ Phase 0 ships first and alone. It is mostly schedule and HUD, and it answers "no
 ## Cross-links
 - `../../CLAUDE.md` and `../../AGENTS.md`: the rules every ticket obeys.
 - `../../docs/THESIS_THE_ADDICTIVE_LOOP.md` §25: the line.
-- `../../docs/BALANCE_NOTES.md` Gen 207 and Gen 211: the measurements in `00-the-plateau-measured.md`.
+- `docs/BALANCE_NOTES.md` Gen 207 and Gen 211: the measurements in `tasks/deep-game-epic/00-the-plateau-measured.md`.
 - `../../docs/MARKET_SURVEY.md`: the reach targets.
 - `../refined-experience-gaps/REG-018-endless-mode-shipping-plan.md`, `REG-019-relic-build-archetypes.md`, `REG-020-mutator-chapter-identity.md`: earlier tickets this pack supersedes where they overlap.
