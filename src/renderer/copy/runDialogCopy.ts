@@ -71,7 +71,10 @@ export const RUN_SHELL_LABELS = {
     goldTitle: 'Gold funds automatic upgrades every 3 floors.',
     /** The tag on the Floor stat once this run is the deepest the profile has seen. */
     personalBest: 'Best',
-    personalBestAria: 'Deepest floor yet'
+    personalBestAria: 'Deepest floor yet',
+    /** The test pace (`descent-pace-rules.ts`): this run jumps down the Descent and counts toward no record. */
+    testPace: 'Test',
+    testPaceAria: 'Test pace: this run jumps down the Descent and counts toward no record'
 } as const;
 
 /**
@@ -121,7 +124,9 @@ export const RUN_SHELL_LINE_COPY = {
     /** The Warden's floor (`warden-rules.ts`): both rules, said before the first flip, in the study window. */
     wardenStudy: (redealEvery: number): string =>
         `The Warden: every turn past par takes a miss, and every ${redealEvery}th turn the face-down cards are dealt again.`,
-    wardenKicker: 'The Warden'
+    wardenKicker: 'The Warden',
+    wardenRules: (redealEvery: number): string =>
+        `Every turn past par takes a miss. Every ${redealEvery}th turn the face-down cards are dealt again.`
 } as const;
 
 /**

@@ -40,6 +40,10 @@ export type RunShareRefusal = 'This run cannot be reproduced from a seed.';
 
 const variantOf = (run: RunState): RunShareVariant | RunShareRefusal => {
     // Same precedence as `createRestartRun`, so a key and a retry never disagree.
+    // A seed replays at the normal pace: a test-pace run (`descent-pace-rules.ts`) cannot be shared.
+    if (run.descentPace === 'fast') {
+        return 'This run cannot be reproduced from a seed.';
+    }
     if (run.activeContract?.maxPinsTotalRun != null) {
         return 'pin_vow';
     }

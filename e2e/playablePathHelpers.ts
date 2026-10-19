@@ -226,8 +226,9 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
     await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
 }
 
-export async function startClassicFromMenu(page: Page): Promise<void> {
-    await openMainMenuFromSave(page, true);
+/** `query` opens the menu at `/?{query}`, for a switch the address carries (`?pace=fast`, the test pace). */
+export async function startClassicFromMenu(page: Page, query = ''): Promise<void> {
+    await openMainMenuFromSave(page, true, query);
     await mainMenuPlayButton(page).click({ force: true });
     await page.getByRole('button', { name: 'Start run', exact: true }).click();
 

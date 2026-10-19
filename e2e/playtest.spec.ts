@@ -65,7 +65,10 @@ const expectDrawCallsWithinBudget = async (page: Page, level: number): Promise<v
     expect(calls, `floor ${level}: ${calls} draw calls for ${cards} cards`).toBeLessThanOrEqual(boardDrawCallBudget(cards));
 };
 
-const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: number; maxFloor: number; label: string }) => {
+const playRun = async (
+    page: Page,
+    { missRate, maxFloor, label, query = '', maxSteps = 600 }: { missRate: number; maxFloor: number; label: string; query?: string; maxSteps?: number }
+) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
     page.on('console', (message) => {
@@ -76,13 +79,13 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
     let shots = 0;
     const shot = (name: string) => page.screenshot({ path: `${dir}/${String(++shots).padStart(2, '0')}-${name}.png` });
 
-    await startClassicFromMenu(page);
+    await startClassicFromMenu(page, query);
     await shot('floor-1');
     let seed = label.length * 7919 + 17;
     const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
     let level = 1;
     let stepsOnFloor = 0;
-    for (let step = 0; step < 600; step += 1) {
+    for (let step = 0; step < maxSteps; step += 1) {
         const s = await snapshot(page);
         if (s.view === 'gameOver' || s.status === 'gameOver') {
             // The run ends on its cinematic (`RunEndCinematic`); the results screen is one press on, as a player takes it.
@@ -158,7 +161,7 @@ const playRun = async (page: Page, { missRate, maxFloor, label }: { missRate: nu
         await press([first.id, second.id]);
         await page.waitForTimeout(600);
     }
-    throw new Error(`${label}: the run neither ended nor reached floor ${maxFloor + 1} in 600 steps`);
+    throw new Error(`${label}: the run neither ended nor reached floor ${maxFloor + 1} in ${maxSteps} steps`);
 };
 
 test.describe('Playtest', () => {
@@ -175,5 +178,19 @@ test.describe('Playtest', () => {
         expect(result.errors).toEqual([]);
         expect(result.ended).toBe('gameOver');
         await expect(page.getByTestId('game-over-end-reason')).toHaveText(/ran out of misses/);
+    });
+
+    /*
+     * The test pace (`descent-pace-rules.ts`, `?pace=fast`): a careful tester jumps the Descent's ladder from
+     * the main menu - every act, the Keeper, the Cartographer - to the Warden, and wins. A screenshot of every
+     * floor shows the act bosses, Dread climbing its tiers, the milestones and the Warden's rules.
+     */
+    test('a tester at the test pace descends every act to the Warden and wins', async ({ page }) => {
+        test.setTimeout(2_400_000);
+        const result = await playRun(page, { missRate: 0.02, maxFloor: 99, label: 'test-pace', query: 'pace=fast', maxSteps: 2400 });
+        expect(result.errors).toEqual([]);
+        expect(result.ended).toBe('gameOver');
+        expect(result.level).toBe(60);
+        await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
     });
 });

@@ -20,13 +20,15 @@ import { applyRealmChill } from './realm-carryover-rules';
 import { automaticCampReward } from './automatic-camp-rules';
 import { raiseColossus } from './colossus-rules';
 import { dealOddCards } from './odd-card-rules';
+import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
         return run;
     }
 
-    const nextLevelNum = run.board.level + 1;
+    // The next floor, or the next rung of the test pace's ladder (`descent-pace-rules.ts`).
+    const nextLevelNum = nextDescentLevel(run);
     let nextActiveMutators = runArray<MutatorId>(run.activeMutators);
     let nextFloorTag: FloorTag = 'normal';
     let nextFloorArchetypeId: FloorArchetypeId | null = null;
@@ -66,7 +68,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
     const freshRecipe = run.runRulesVersion >= 64 && (nextFeaturedObjectiveId === 'amplified_reaction' || nextFeaturedObjectiveId === 'calm_reaction');
-    return createNextFloorRunState({ ...transitionRun, ...realmEntry.fields,
+    const next = createNextFloorRunState({ ...transitionRun, ...realmEntry.fields,
         // These rooms open with an empty elemental hand, so an incoming amplified burst
         // cannot consume the recipe before the player has a chance to attempt it.
         ...(freshRecipe ? { elementStreak: null } : {}),
@@ -75,4 +77,6 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         board: nextBoard,
         memorizeRemainingMs: baseMemorizeMs
     });
+    // A jump keeps the miss bank's shelf and Dread's counts in floors played, not floor numbers.
+    return settleDescentJump(run, next);
 };

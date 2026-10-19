@@ -1664,3 +1664,25 @@ where that rule
         animation: none;
     }
 }
+
+/* The Warden's rules in the board's crown (DGE-005): one line, read before the first flip and all floor. */
+.wardenRules {
+    align-self: center;
+    max-width: min(100%, 36rem);
+    margin: 0 0 0.35rem;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid color-mix(in srgb, #c84432 55%, transparent);
+    border-radius: 6px;
+    background: #140d10e6;
+    color: #f2dccb;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    text-align: center;
+}
+
+.wardenRulesName {
+    color: #f2b2a4;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}

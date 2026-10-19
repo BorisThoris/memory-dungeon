@@ -571,6 +571,17 @@ const RunShell = ({
                                     {compactHud ? '✦' : RUN_SHELL_LABELS.personalBest}
                                 </span>
                             ) : null}
+                            {run.descentPace === 'fast' ? (
+                                <span
+                                    aria-label={RUN_SHELL_LABELS.testPaceAria}
+                                    className={styles.personalBest}
+                                    data-testid="hud-test-pace"
+                                    role="img"
+                                    title={RUN_SHELL_LABELS.testPaceAria}
+                                >
+                                    {RUN_SHELL_LABELS.testPace}
+                                </span>
+                            ) : null}
                             {dread ? (
                                 <span
                                     aria-label={DREAD_HUD_COPY.aria(dread.tier.name, dread.next.name, dread.fraction, dread.beyond)}

@@ -299,6 +299,14 @@ describe('RunShell', () => {
         expect(screen.getByTestId('hud-floor')).toHaveTextContent(/(^|\D)3(\D|$)/);
     });
 
+    it('marks a test-pace run beside the floor, and nothing else', () => {
+        const base = playingRun();
+        const { rerender } = render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, descentPace: 'fast' }} tools={[]} />);
+        expect(within(screen.getByTestId('hud-floor')).getByTestId('hud-test-pace')).toHaveTextContent('Test');
+        rerender(<RunShell onPause={vi.fn()} personalBestDepth={false} run={base} tools={[]} />);
+        expect(screen.queryByTestId('hud-test-pace')).toBeNull();
+    });
+
     it('shows the next milestone as a fraction of the act, outside the floor reading (DGE-004)', () => {
         const base = playingRun();
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, board: { ...base.board!, level: 7 } }} tools={[]} />);

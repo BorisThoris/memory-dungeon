@@ -30,6 +30,7 @@ export const gameOverScreenCopy = {
     achievementsNoteOff: 'Achievements were off (debug tools used).',
     achievementsNoteOffShared: 'Achievements are off in a shared game.',
     achievementsNoteOffPractice: 'Achievements are off in practice.',
+    achievementsNoteOffTestPace: 'Achievements are off at the test pace.',
     actionKicker: 'Next move',
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
@@ -147,11 +148,13 @@ export const runEndReasonLine = (summary: Pick<RunSummary, 'highestLevel' | 'run
 export const achievementsNote = ({
     achievementsEnabled,
     practiceMode,
-    sharedTable
+    sharedTable,
+    testPace
 }: {
     achievementsEnabled: boolean;
     practiceMode?: boolean;
     sharedTable?: boolean;
+    testPace?: boolean;
 }): string => {
     if (achievementsEnabled) {
         return gameOverScreenCopy.achievementsNoteOn;
@@ -161,6 +164,9 @@ export const achievementsNote = ({
     }
     if (practiceMode === true) {
         return gameOverScreenCopy.achievementsNoteOffPractice;
+    }
+    if (testPace === true) {
+        return gameOverScreenCopy.achievementsNoteOffTestPace;
     }
     return gameOverScreenCopy.achievementsNoteOff;
 };

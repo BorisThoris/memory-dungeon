@@ -980,6 +980,8 @@ export interface RunState {
     restlessDriftsThisFloor: number;
     /** The Warden (`warden-rules.ts`): its re-deals this floor, one every fifth turn. */
     wardenRedealsThisFloor?: number;
+    /** The test pace (`descent-pace-rules.ts`): the run jumps down the Descent's ladder and counts toward no record. */
+    descentPace?: 'fast' | null;
     /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
     wardenOutcome?: 'cleared' | 'fell' | null;
     /** `skittish_cards`: misses this floor on which the missed cards flinched into a neighbouring cell. */

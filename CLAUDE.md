@@ -52,6 +52,12 @@ weather strikes in the background, and gold lies where it fell.
   errors allowed, screenshots of every transition in `test-results/playtest/`. Run it and **look at
   the screenshots** after any change a player sees; its first run found three results-screen bugs
   and the store sheet clipping its own descriptions.
+- **Test pace** (`src/shared/descent-pace-rules.ts`, `src/renderer/testPace.ts`): on the test deployment
+  (`memory-dungeon-test`) and anywhere with `?pace=fast`, a run jumps the Descent's ladder (1, 2, 4, 7, 9, 12,
+  13, 18, 24, 25, 32, 40, 41, 50, 60). That reaches every act, the act bosses and the Warden in 15 floors.
+  Dread and the miss bank's shelf are kept seed-honest across the jumps; the run counts no records, has no
+  share key and wears a TEST tag. Its playtest walks from the menu to the Warden's win
+  (`e2e/playtest.spec.ts`, `test-results/playtest/test-pace/`). Use it to look at anything deep.
 - **Every tool is usable** (`e2e/tools-usable.spec.ts`): each dock tool pressed and its target picked
   through the board's own pick handler. A tool that acts on a miss (Gambit, Undo) needs the miss to
   wait: `MISS_DECISION_HOLD_MS` holds it while one is in hand, and tapping a missed card goes on.

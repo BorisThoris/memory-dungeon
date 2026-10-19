@@ -503,8 +503,9 @@ export async function gotoWithSaveExpectStartupIntroVisible(page: Page, saveJson
     await intro.waitFor({ state: 'visible', timeout: 90_000 });
 }
 
-export async function openMainMenuFromSave(page: Page, onboardingDismissed: boolean): Promise<void> {
-    await gotoWithSave(page, buildVisualSaveJson(onboardingDismissed));
+export async function openMainMenuFromSave(page: Page, onboardingDismissed: boolean, query = ''): Promise<void> {
+    if (query) await gotoWithSaveAndQuery(page, buildVisualSaveJson(onboardingDismissed), query);
+    else await gotoWithSave(page, buildVisualSaveJson(onboardingDismissed));
     await dismissStartupIntro(page);
     await expect(mainMenuPlayButton(page)).toBeVisible();
 }

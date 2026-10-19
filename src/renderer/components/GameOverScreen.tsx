@@ -390,7 +390,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 {achievementsNote({
                                     achievementsEnabled: summary.achievementsEnabled,
                                     practiceMode: summary.practiceMode,
-                                    sharedTable: passAndPlayOutcome !== null
+                                    sharedTable: passAndPlayOutcome !== null,
+                                    testPace: run.descentPace === 'fast'
                                 })}
                             </p>
                             <div className={styles.actionButtons}>

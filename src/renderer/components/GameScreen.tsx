@@ -1,3 +1,5 @@
+import { WARDEN_REDEAL_EVERY_TURNS, isWardenFloor } from '../../shared/warden-rules';
+import { RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
 import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
 import { useItemEffectPublisher } from '../hooks/useItemEffectPublisher';
@@ -1557,7 +1559,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         queuePoliteAnnouncement(hourglassAnnouncement(hourglassEvent), { dedupeKey: hourglassEventKey });
     }, [hourglassEventKey, hourglassEvent, queuePoliteAnnouncement]);
 
-    const boardCrownShown = !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0);
+    // The Warden's two rules hang in the crown for the whole floor (DGE-005): the caption that also says
+    // them is for screen readers only, so this is where a player sees them before the first flip.
+    const wardenRulesShown = isWardenFloor(run.board);
+    const boardCrownShown =
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2073,6 +2079,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {wardenRulesShown ? (
+                                    <p className={styles.wardenRules} data-testid="warden-rules">
+                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
+                                        {RUN_SHELL_LINE_COPY.wardenRules(WARDEN_REDEAL_EVERY_TURNS)}
+                                    </p>
+                                ) : null}
                                 {colossus ? <ColossusCard colossus={colossus} event={colossusEvent} reduceMotion={reduceMotion} /> : null}
                                 <OddCardLegend entries={oddCardEntries} />
                             </div>
