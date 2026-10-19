@@ -14661,8 +14661,8 @@
     {
       "path": "src/shared/chain-rung-value-rules.ts",
       "category": "source",
-      "bytes": 4686,
-      "sha256": "686494e808a9520f3c952b2fa1202bac15f936fcc4723f2a1b8e227a936c3fa9"
+      "bytes": 4905,
+      "sha256": "b242a1d21c243321753ca55f7a38dfc93a5b8a5f3b5720a9394241cc8910b4dc"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -34140,7 +34140,7 @@
       "path": "src/shared/chain-rung-value-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts"
@@ -59715,15 +59715,15 @@
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
       "line": 60,
-      "endLine": 66
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_PAIRS_TOLERANCE",
       "name": "CHAIN_RUNG_PAIRS_TOLERANCE",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 73,
-      "endLine": 73
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#CHAIN_RUNG_SCORE_MULTIPLIER",
@@ -59738,16 +59738,16 @@
       "name": "chainRungPairs",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 81,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/chain-rung-value-rules.ts#chainRungScoreMultiplier",
       "name": "chainRungScoreMultiplier",
       "kind": "value",
       "file": "src/shared/chain-rung-value-rules.ts",
-      "line": 76,
-      "endLine": 76
+      "line": 78,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
