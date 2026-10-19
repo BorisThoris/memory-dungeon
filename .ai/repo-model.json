@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3248,
-    "codeFileCount": 1221,
-    "exportedSymbolCount": 3883,
+    "trackedFileCount": 3250,
+    "codeFileCount": 1222,
+    "exportedSymbolCount": 3888,
     "contentItemCount": 16,
     "mechanicCount": 70,
     "stateFieldCount": 137,
-    "relationshipCount": 10470
+    "relationshipCount": 10480
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 72803,
-      "sha256": "774482f2dc6b87154f81f23223ad8823f74a396d28e194aaa25d7ef2960d7de3"
+      "sha256": "8614f4c541d3a502ce79f285487cf55d043656d52dbed9b654a194caadefb265"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "0b26f4b3dc099bf007ea51dde954b99769ed14ce71e86952099f3c98d8bdf826"
+      "sha256": "4d9aa1889476a43c9c8c7d62ec7133a67167600bf6960f7316c5d2dedd38b341"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14317,10 +14317,16 @@
       "sha256": "aca66e9927623850e264e5bfccc0ecfd798c3fab4987df186ff2e7034709a006"
     },
     {
+      "path": "src/shared/__snapshots__/descent-schedule-golden.test.ts.snap",
+      "category": "source",
+      "bytes": 215590,
+      "sha256": "5e54f1b9de278ef705c885a51768589be42f6833f1eeaacf531e04d718255e88"
+    },
+    {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 73137,
-      "sha256": "a1ba8d32388e01791bf280ae6d1c088a72e4f86d3726179ee32d3cddf0935832"
+      "sha256": "e646a81c7092bb26ca2b708e776855420e254c911080f76b00d8381e7235d078"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14935,6 +14941,12 @@
       "sha256": "39a55ac424f47eb181fdceea43ab29a8784ec5284a9897898a6728883ba8da09"
     },
     {
+      "path": "src/shared/descent-schedule-golden.test.ts",
+      "category": "test",
+      "bytes": 1651,
+      "sha256": "b19a3f1a0323fd32b508325a80dc24907ad753e02fd2c9afeb8ca6fb28979aa5"
+    },
+    {
       "path": "src/shared/desktop-api-boundary.test.ts",
       "category": "test",
       "bytes": 1388,
@@ -15183,14 +15195,14 @@
     {
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "category": "test",
-      "bytes": 17797,
-      "sha256": "87ab7872b19819f470e99d9f8d3fdf9fd8bab304bba7adb8d58c70481a841ba3"
+      "bytes": 20577,
+      "sha256": "763ca51fc58ac1b791acff7c371f747a25fe3b8cd38699ffa74e492e980a8996"
     },
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 27967,
-      "sha256": "17607d6a0be4b84bae557bc0f827c47caf41ea23be5512af138e99c64d7b8d51"
+      "bytes": 31765,
+      "sha256": "f1b99b19aa7a1cd863cf99204267fd8862479777a5a74115b005db11ecb583ea"
     },
     {
       "path": "src/shared/floor-par.test.ts",
@@ -15681,8 +15693,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 58572,
-      "sha256": "d066a27e3d64e5d2cfaba7360b709c5961da5c2a8554688aa49314a6d396c456"
+      "bytes": 59356,
+      "sha256": "a19a3a1bf65f13f5fd1ecfaa6b26735d5fa2e04855366de05136bd4a08ed4bf2"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16737,8 +16749,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 92141,
-      "sha256": "cfb8f15751e98363f2ea65c615d988f391e277f8be792bf94606ad3ad36f719c"
+      "bytes": 92684,
+      "sha256": "c24fb38d87299731a747cc2a35b351c339f1ef07b7774eccd19acaa8c42711f1"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17091,8 +17103,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 2267,
-      "sha256": "ae22fae971ab31e62c9e67e6d8aabf1bbefab52b83efbfddf6f4e0612482aec0"
+      "bytes": 2801,
+      "sha256": "4ea00a7df4cbaf3ace03cbe6a7bb7db61ecd5a6c0a8c89fe25da210749a2a2f9"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17133,8 +17145,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-002-descent-act-schedule.md",
       "category": "other",
-      "bytes": 3615,
-      "sha256": "0acf2305ae1a3162ae24b31303cbc28859de3a2309129e16efd726a321ed6809"
+      "bytes": 5766,
+      "sha256": "6f997d4a85f3a3888548af315caa3ebac5e980da241f0828671cd87781a0c9bb"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-003-dread-coefficient-and-tiers.md",
@@ -35239,6 +35251,7 @@
         "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/curio-rules.test.ts",
         "file:src/shared/daily-music-composer.test.ts",
+        "file:src/shared/descent-schedule-golden.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-chemistry.test.ts",
@@ -35637,6 +35650,19 @@
         "file:src/renderer/audio/dailyMusicRender.test.ts",
         "file:src/shared/daily-music-composer.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/descent-schedule-golden.test.ts",
+      "path": "src/shared/descent-schedule-golden.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 30,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/desktop-api-boundary.test.ts",
@@ -36465,7 +36491,7 @@
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 420,
+      "lineCount": 467,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -36479,7 +36505,7 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 678,
+      "lineCount": 757,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -36492,6 +36518,11 @@
         "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomePresentation",
         "symbol:src/shared/floor-mutator-schedule.ts#ChapterActId",
         "symbol:src/shared/floor-mutator-schedule.ts#ChapterBiomeId",
+        "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_ACTS",
+        "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_FLOOR_COUNT",
+        "symbol:src/shared/floor-mutator-schedule.ts#DescentActDefinition",
+        "symbol:src/shared/floor-mutator-schedule.ts#descentActForFloor",
+        "symbol:src/shared/floor-mutator-schedule.ts#DescentActId",
         "symbol:src/shared/floor-mutator-schedule.ts#ENDLESS_CYCLE_FLOOR_COUNT",
         "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_HUD_TOOLTIPS",
         "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_LABELS",
@@ -36526,6 +36557,7 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/descent-schedule-golden.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/floor-schedule-reachability.test.ts",
@@ -38302,9 +38334,10 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 777,
+      "lineCount": 788,
       "imports": [
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts"
       ],
       "exports": [
         "symbol:src/shared/mechanics-encyclopedia.ts#ACHIEVEMENT_CATALOG",
@@ -63740,248 +63773,288 @@
       "name": "CHAOS_MUTATORS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 660,
-      "endLine": 660
+      "line": 739,
+      "endLine": 739
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
       "name": "CHAPTER_ACT_BIOME_STRUCTURE",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 190,
-      "endLine": 220
+      "line": 197,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomeDefinition",
       "name": "ChapterActBiomeDefinition",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 160,
-      "endLine": 173
+      "line": 167,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomePresentation",
       "name": "ChapterActBiomePresentation",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 273,
-      "endLine": 285
+      "line": 280,
+      "endLine": 292
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActId",
       "name": "ChapterActId",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 157,
-      "endLine": 157
+      "line": 164,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterBiomeId",
       "name": "ChapterBiomeId",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 158,
-      "endLine": 158
+      "line": 165,
+      "endLine": 165
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_ACTS",
+      "name": "DESCENT_ACTS",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 453,
+      "endLine": 479
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_FLOOR_COUNT",
+      "name": "DESCENT_FLOOR_COUNT",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 482,
+      "endLine": 482
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#DescentActDefinition",
+      "name": "DescentActDefinition",
+      "kind": "interface",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 435,
+      "endLine": 444
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#descentActForFloor",
+      "name": "descentActForFloor",
+      "kind": "value",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 494,
+      "endLine": 497
+    },
+    {
+      "id": "symbol:src/shared/floor-mutator-schedule.ts#DescentActId",
+      "name": "DescentActId",
+      "kind": "type",
+      "file": "src/shared/floor-mutator-schedule.ts",
+      "line": 433,
+      "endLine": 433
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ENDLESS_CYCLE_FLOOR_COUNT",
       "name": "ENDLESS_CYCLE_FLOOR_COUNT",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 225,
-      "endLine": 225
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_HUD_TOOLTIPS",
       "name": "FEATURED_OBJECTIVE_HUD_TOOLTIPS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 126,
-      "endLine": 133
+      "line": 133,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_LABELS",
       "name": "FEATURED_OBJECTIVE_LABELS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 117,
-      "endLine": 123
+      "line": 124,
+      "endLine": 130
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FLOOR_ARCHETYPE_CATALOG",
       "name": "FLOOR_ARCHETYPE_CATALOG",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 34,
-      "endLine": 115
+      "line": 41,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FLOOR_SCHEDULE_RULES_VERSION",
       "name": "FLOOR_SCHEDULE_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeDefinition",
       "name": "FloorArchetypeDefinition",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 23,
-      "endLine": 32
+      "line": 30,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeFrequencyBand",
       "name": "FloorArchetypeFrequencyBand",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 251,
-      "endLine": 255
+      "line": 258,
+      "endLine": 262
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypePressureRole",
       "name": "FloorArchetypePressureRole",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 227,
-      "endLine": 233
+      "line": 234,
+      "endLine": 240
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeProgressionReport",
       "name": "FloorArchetypeProgressionReport",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 257,
-      "endLine": 271
+      "line": 264,
+      "endLine": 278
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeProgressionRow",
       "name": "FloorArchetypeProgressionRow",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 235,
-      "endLine": 249
+      "line": 242,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorScheduleEntry",
       "name": "FloorScheduleEntry",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 138,
-      "endLine": 155
+      "line": 145,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getChapterActBiomeForCycleFloor",
       "name": "getChapterActBiomeForCycleFloor",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 287,
-      "endLine": 300
+      "line": 294,
+      "endLine": 307
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getChapterActBiomePresentation",
       "name": "getChapterActBiomePresentation",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 302,
-      "endLine": 317
+      "line": 309,
+      "endLine": 324
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFeaturedObjectiveHudTooltip",
       "name": "getFeaturedObjectiveHudTooltip",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 135,
-      "endLine": 136
+      "line": 142,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFeaturedObjectiveLabel",
       "name": "getFeaturedObjectiveLabel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 583,
-      "endLine": 584
+      "line": 657,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeDefinition",
       "name": "getFloorArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 579,
-      "endLine": 581
+      "line": 653,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionReport",
       "name": "getFloorArchetypeProgressionReport",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 535,
-      "endLine": 577
+      "line": 609,
+      "endLine": 651
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
       "name": "getFloorArchetypeProgressionRows",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 530,
-      "endLine": 533
+      "line": 604,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
       "name": "getFloorChapterIdentity",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 586,
-      "endLine": 619
+      "line": 660,
+      "endLine": 693
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "name": "pickFloorScheduleEntry",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 625,
-      "endLine": 654
+      "line": 699,
+      "endLine": 733
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
       "name": "pressureRoleForArchetype",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 458,
-      "endLine": 476
+      "line": 532,
+      "endLine": 550
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
       "name": "runFollowsFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 672,
-      "endLine": 673
+      "line": 751,
+      "endLine": 752
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
       "name": "scheduledFloorMutators",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 676,
-      "endLine": 677
+      "line": 755,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 656,
-      "endLine": 657
+      "line": 735,
+      "endLine": 736
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION",
       "name": "WILD_SCHEDULE_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 669,
-      "endLine": 669
+      "line": 748,
+      "endLine": 748
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_FLAT_RATE_PAIRS",
@@ -66724,160 +66797,160 @@
       "name": "ACHIEVEMENT_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 137,
-      "endLine": 262
+      "line": 138,
+      "endLine": 263
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
       "name": "AchievementCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 33,
-      "endLine": 37
+      "line": 34,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CODEX_CORE_TOPICS",
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 356,
-      "endLine": 404
+      "line": 357,
+      "endLine": 405
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
       "name": "CodexCoreTopic",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 45,
-      "endLine": 49
+      "line": 46,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_CONTRACT_TOPICS",
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 737,
-      "endLine": 755
+      "line": 748,
+      "endLine": 766
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 758,
-      "endLine": 776
+      "line": 769,
+      "endLine": 787
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 599,
-      "endLine": 734
+      "line": 610,
+      "endLine": 745
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 407,
-      "endLine": 468
+      "line": 408,
+      "endLine": 469
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 473,
-      "endLine": 547
+      "line": 474,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 552,
-      "endLine": 596
+      "line": 563,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
       "name": "ENCYCLOPEDIA_VERSION",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#EncyclopediaTopic",
       "name": "EncyclopediaTopic",
       "kind": "type",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 52,
-      "endLine": 52
+      "line": 53,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GAME_MODE_CODEX",
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 346,
-      "endLine": 353
+      "line": 347,
+      "endLine": 354
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
       "name": "GameModeCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 39,
-      "endLine": 43
+      "line": 40,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#glossaryTermById",
       "name": "glossaryTermById",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 129,
-      "endLine": 130
+      "line": 130,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY",
       "name": "MECHANICS_GLOSSARY",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 132,
-      "endLine": 132
+      "line": 133,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY_TERMS",
       "name": "MECHANICS_GLOSSARY_TERMS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 69,
-      "endLine": 119
+      "line": 70,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MechanicsGlossaryTerm",
       "name": "MechanicsGlossaryTerm",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 54,
-      "endLine": 67
+      "line": 55,
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MUTATOR_CATALOG",
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 267,
-      "endLine": 344
+      "line": 268,
+      "endLine": 345
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
       "name": "MutatorDefinition",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 26,
-      "endLine": 30
+      "line": 27,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/memorize-phase-rules.ts#finishMemorizePhase",
@@ -75642,7 +75715,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
-          "line": 378
+          "line": 385
         },
         {
           "path": "src/shared/board-turn-event-facts.ts",
@@ -76073,7 +76146,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.test.ts",
-          "line": 11
+          "line": 14
         },
         {
           "path": "src/shared/game.test.ts",
@@ -95534,6 +95607,36 @@
       "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#ChapterBiomeId",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "symbol:src/shared/floor-mutator-schedule.ts#ChapterBiomeId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#DESCENT_ACTS",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_ACTS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#DESCENT_FLOOR_COUNT",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_FLOOR_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#DescentActDefinition",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#DescentActDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#descentActForFloor",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#descentActForFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-mutator-schedule.ts->symbol:src/shared/floor-mutator-schedule.ts#DescentActId",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "symbol:src/shared/floor-mutator-schedule.ts#DescentActId",
       "kind": "exports"
     },
     {
@@ -121033,6 +121136,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/descent-schedule-golden.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/descent-schedule-golden.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-schedule-golden.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/descent-schedule-golden.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/desktop-api-boundary.test.ts->src/shared/desktop-api-boundary.ts",
       "source": "file:src/shared/desktop-api-boundary.test.ts",
       "target": "file:src/shared/desktop-api-boundary.ts",
@@ -123736,6 +123851,12 @@
       "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/contracts.ts",
       "source": "file:src/shared/mechanics-encyclopedia.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
@@ -136201,6 +136322,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/descent-schedule-golden.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/descent-schedule-golden.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/difficulty-profile.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/difficulty-profile.test.ts",
@@ -137170,6 +137297,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/content-lock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/descent-schedule-golden.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/descent-schedule-golden.test.ts",
       "kind": "tested_by"
     },
     {
