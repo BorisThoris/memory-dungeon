@@ -50,7 +50,8 @@ export const applyStillBell = (run: RunState): StillBellResult | null => {
     });
     const uses = runNonNegativeInteger(run.stillBellUsesThisRun);
     const stilled: RunState = { ...run, board: { ...run.board, tiles } };
-    const called = callRealmWeather(stilled, `bell:${uses}`, { peak: false });
+    // The answer is the realm's, not the player's: nothing it moves is lit for them.
+    const called = callRealmWeather(stilled, `bell:${uses}`, { peak: false, lightMoved: false });
     const after = called ? called.board : stilled.board!;
     const event: RealmEvent = called?.event ?? { key: `${run.runSeed}:${run.board.level}:bell:${uses}`, kind: 'thaw', tileIds: freedTileIds };
     return {

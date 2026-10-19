@@ -66,3 +66,12 @@ describe('the Still Bell', () => {
         expect(curioItemsForRules(69)).toContain('still_bell');
     });
 });
+
+describe("the realm's answer to the bell", () => {
+    it('lights nothing it moved: the answer is a cost, not a look', () => {
+        const run = heldFloorIn('frost');
+        const result = applyStillBell(run)!;
+        expect(result.answer?.kind).toBe('blizzard');
+        expect(result.run.realmLitTileIds ?? []).toEqual(run.realmLitTileIds ?? []);
+    });
+});

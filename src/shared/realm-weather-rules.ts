@@ -1087,7 +1087,12 @@ export interface CalledWeather {
  * not touched, so the realm's next weather comes when it would have. Null off a realm floor, or
  * when the weather found nothing to touch.
  */
-export const callRealmWeather = (run: RunState, salt: string, { peak = true }: { peak?: boolean } = {}): CalledWeather | null => {
+export const callRealmWeather = (
+    run: RunState,
+    salt: string,
+    // `lightMoved`: the Storm Glass shows where its storm carried the cards; the Still Bell's answer does not.
+    { peak = true, lightMoved = true }: { peak?: boolean; lightMoved?: boolean } = {}
+): CalledWeather | null => {
     const realmId = runRealmId(run);
     const board = run.board;
     if (!realmId || !board) return null;
@@ -1130,7 +1135,7 @@ export const callRealmWeather = (run: RunState, salt: string, { peak = true }: {
     const hidden = new Set(tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id));
     // Only what a moving storm actually carried is lit: a card that drank the current stayed where it was.
     const cellBefore = new Map(board.tiles.map((tile, cell) => [tile.id, cell]));
-    const moved = MOVING_WEATHER.has(strike.kind) ? strike.touched.filter((id) => tiles.findIndex((tile) => tile.id === id) !== cellBefore.get(id)) : [];
+    const moved = lightMoved && MOVING_WEATHER.has(strike.kind) ? strike.touched.filter((id) => tiles.findIndex((tile) => tile.id === id) !== cellBefore.get(id)) : [];
     const lit = [...new Set([...strike.lit, ...moved])].filter((id) => hidden.has(id));
     return {
         board: { ...board, tiles },
