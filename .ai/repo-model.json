@@ -10869,14 +10869,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 16663,
-      "sha256": "bb95a85ba37f7fb744bb3c1a8aeabe78b88acffedc3fd645555d9429d0f441f1"
+      "bytes": 17572,
+      "sha256": "2ac72b7b7a3bc79923f73cb6dbe68ece5e25aa13166b3af169af915d4b2f6d80"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 23300,
-      "sha256": "197b0ca3596d355d13fbd736ca82293255b5564342ad04bfca8258db0cff7e38"
+      "bytes": 23887,
+      "sha256": "2d276e7c2379353741395b2bb416f3cf0fdd613aa9356f00a7e77e27f32bbcc7"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -12903,8 +12903,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 7344,
-      "sha256": "4832d262b9be8b3a148a5e8f0ee1dafb76b00fa0bf9df07ea5fa190acb296649"
+      "bytes": 8414,
+      "sha256": "1e9d4104404961a310deac59d8ea9b4811f25ea6d57626ceb27252df11f23839"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -23407,7 +23407,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 351,
+      "lineCount": 369,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -23423,7 +23423,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 455,
+      "lineCount": 466,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -29403,7 +29403,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 166,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -47494,8 +47494,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 454,
-      "endLine": 454
+      "line": 465,
+      "endLine": 465
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -54582,8 +54582,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 124,
-      "endLine": 143
+      "line": 146,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -54591,15 +54591,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 110
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 116,
-      "endLine": 117
+      "line": 138,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
