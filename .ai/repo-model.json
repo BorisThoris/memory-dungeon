@@ -16383,8 +16383,8 @@
     {
       "path": "src/shared/run-relic-rules.test.ts",
       "category": "test",
-      "bytes": 3853,
-      "sha256": "372d29a8e23502bda599798f71bc1f67ff91b29acb6ae71dac9047720b519132"
+      "bytes": 4080,
+      "sha256": "a3ef2ab4565e0aa7303544708f39cc2660896649b341be5941eaa5fc63dc8e21"
     },
     {
       "path": "src/shared/run-relic-rules.ts",
@@ -16611,8 +16611,8 @@
     {
       "path": "src/shared/sim-endless-output.test.ts",
       "category": "test",
-      "bytes": 11646,
-      "sha256": "30efc8b5fdb0c1bdc18895c3521fc533d9e258a91801720909978601eb27fd67"
+      "bytes": 11725,
+      "sha256": "499bbbe17aa8ebde76fd0a16f756a0691adc1ac357e643c9616885e09f501b08"
     },
     {
       "path": "src/shared/skittish-cards-rules.test.ts",
@@ -40406,7 +40406,7 @@
       "path": "src/shared/run-relic-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 80,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -41258,7 +41258,7 @@
       "path": "src/shared/sim-endless-output.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 222,
+      "lineCount": 223,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts"
