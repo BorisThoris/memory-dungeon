@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 529343,
-      "sha256": "b63f28759a46f50ba8b9d7d1bbf4d5296330f744fd7645cba20745682e7ba44c"
+      "bytes": 529998,
+      "sha256": "9082840e49638805763126f2304f6b417f7673b5ff0fbdd1c5b4f9058bc508f2"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -5757,8 +5757,8 @@
     {
       "path": "scripts/sim-survival.ts",
       "category": "script",
-      "bytes": 7966,
-      "sha256": "adce888063ef04d95a327696be9044d2b022f9bf10874bedca09e89248dfb340"
+      "bytes": 9895,
+      "sha256": "bde382d7b55b8371a09fe2754d8c82a13cb9983281665daa12741861079935ec"
     },
     {
       "path": "scripts/soak-runs.ts",
