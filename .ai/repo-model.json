@@ -11547,8 +11547,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 38043,
-      "sha256": "e184dee11d83cc7ae493f7c28060b8cd401550e55414595b8b4a0847a899d732"
+      "bytes": 38047,
+      "sha256": "6c9f9b54bf00e490e1b4fed47fa43a9b9c8e3c96a33fcdf73f47d296c805dd6d"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
