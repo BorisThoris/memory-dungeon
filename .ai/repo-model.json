@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3207,
     "codeFileCount": 1221,
-    "exportedSymbolCount": 3880,
+    "exportedSymbolCount": 3883,
     "contentItemCount": 16,
     "mechanicCount": 70,
     "stateFieldCount": 137,
-    "relationshipCount": 10466
+    "relationshipCount": 10470
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "4d262f3bbc9b14cf8bb9fdc81f2a0d32811578c56dd7ceb10a5163442b860be9"
+      "sha256": "0b26f4b3dc099bf007ea51dde954b99769ed14ce71e86952099f3c98d8bdf826"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 126292,
-      "sha256": "62136702069624da71cc7b1972920c1a850ccfb398c27e1bf62ead251686ed95"
+      "bytes": 126389,
+      "sha256": "3a6bc28d11de508a88bcbfb5852ef119423ebd99212bcd69fcecb971a6e50303"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11091,8 +11091,8 @@
     {
       "path": "src/renderer/components/itemEffects.ts",
       "category": "source",
-      "bytes": 17576,
-      "sha256": "3e053ef26aed9ee0ef45ee6f4b9926680ab4f88ec15e5483bdac5cbe35179e5d"
+      "bytes": 17740,
+      "sha256": "1880fdf970fe5771905ab936b8a1986841288ab31c3720b4e24e6fb5fe59e449"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -11547,14 +11547,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 38911,
-      "sha256": "24723cdd8bd1aef04c7ebac6e3fba9e5323abd6c372a7d1fffe0d7e49c48cdd8"
+      "bytes": 39900,
+      "sha256": "56ad2a8c3d785748e16a6a5899c9e9779176ec67a262633b8627dd744647f230"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 52731,
-      "sha256": "8f9bb1cb70b47df68c29c26ad00f6a36c61619c1da56cd32a402d3d0434a178b"
+      "bytes": 53069,
+      "sha256": "4c2199079bbbfd97b128583d9b65c6f472582361a7d8d8e8bc67d150f7b3eb5d"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11565,8 +11565,8 @@
     {
       "path": "src/renderer/components/runShellFreshTools.ts",
       "category": "source",
-      "bytes": 1311,
-      "sha256": "79ffda8d8fff73d4f54ab224666b093dd8e589d2d6dd331a28ca5964b5f45dea"
+      "bytes": 2116,
+      "sha256": "13fbe709fae5157e618da1b2bd19820c4a450beef1d5b475e2db8a67b1ea56e5"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -12771,8 +12771,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 6548,
-      "sha256": "ba6ecbcb30f4ab9263bc413f73e84d8caaab9472e5b5ccdb35883ea2bbdbbe35"
+      "bytes": 6636,
+      "sha256": "ae50bb8fa142dca4c62ddbd4b66955debb027d85af4ef8e122cd74cc9d08031d"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -14895,8 +14895,8 @@
     {
       "path": "src/shared/crucible-rules.ts",
       "category": "source",
-      "bytes": 9236,
-      "sha256": "eaf3fae21dfc8eb730240b4d9a650a043cdb407173a36cfce5cefcc090fb51c0"
+      "bytes": 9070,
+      "sha256": "52099b123b58d6f7b8ee5f7680011727ed9226ea77108da385ab0570125e2cc7"
     },
     {
       "path": "src/shared/css-custom-properties.test.ts",
@@ -16161,8 +16161,8 @@
     {
       "path": "src/shared/realm-weather-rules.ts",
       "category": "source",
-      "bytes": 56056,
-      "sha256": "35748cb66feceb1170a0c17da0d4ff537cb8701eab8c75eee753551d6ef59077"
+      "bytes": 56107,
+      "sha256": "ffb3e6e85c293493be1522bb71bc61f397bf9565f7a6e902abce943ea3e4d0d0"
     },
     {
       "path": "src/shared/recall-rules.test.ts",
@@ -16689,8 +16689,8 @@
     {
       "path": "src/shared/still-bell-rules.ts",
       "category": "source",
-      "bytes": 3947,
-      "sha256": "363ad9fa11384077aefb0672d1c5b3a617c3048393135267aba2e25f4a431957"
+      "bytes": 3992,
+      "sha256": "4247fe4f6e4daf0fe043b6468db639c1eed2ae7fff8c33f6518ebc691d2e8a88"
     },
     {
       "path": "src/shared/store-stock.test.ts",
@@ -16701,14 +16701,14 @@
     {
       "path": "src/shared/storm-glass-rules.test.ts",
       "category": "test",
-      "bytes": 5687,
-      "sha256": "6d70c1ee97a82da8a11cc02def34acc60c1d5d56f02b54b19f99bbb4caac2a67"
+      "bytes": 6215,
+      "sha256": "bae3ba124d650022f71a7775fac8f8977740317a1dd3c0dae7972504a3f1a17b"
     },
     {
       "path": "src/shared/storm-glass-rules.ts",
       "category": "source",
-      "bytes": 3123,
-      "sha256": "fce8e8bc5e9ab08eb23cb4eb9dad638c75ea0c57c5b35129f5bf6a9e0d43d125"
+      "bytes": 3403,
+      "sha256": "1b2e222061ffe1e8089f08c6ee3fc5eb9c51c4f78c4695509282527ec6d4f6b0"
     },
     {
       "path": "src/shared/system-diagrams.test.ts",
@@ -17037,8 +17037,8 @@
     {
       "path": "src/shared/void-spew-rules.ts",
       "category": "source",
-      "bytes": 5459,
-      "sha256": "fa75064ff8b45a19b1aeac3cc447d675708f6f04f5528a6f52c7f04597b950d0"
+      "bytes": 5857,
+      "sha256": "ba4980c368a5f85ec84abf5963307683cf11a9bca4912c0eed6e26cb3af7a5d4"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -23683,7 +23683,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2469,
+      "lineCount": 2470,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24142,7 +24142,7 @@
       "path": "src/renderer/components/itemEffects.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 357,
+      "lineCount": 360,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
@@ -25302,7 +25302,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 711,
+      "lineCount": 729,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -25321,7 +25321,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 924,
+      "lineCount": 928,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25391,11 +25391,13 @@
       "path": "src/renderer/components/runShellFreshTools.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 47,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
         "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
-        "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS"
+        "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+        "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline"
       ],
       "testedBy": [
         "file:src/renderer/components/RunShell.test.tsx"
@@ -29026,7 +29028,7 @@
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 125,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -35258,7 +35260,7 @@
       "path": "src/shared/crucible-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 169,
+      "lineCount": 167,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35269,7 +35271,7 @@
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/tile-identity.ts",
-        "file:src/shared/tile-symbol-catalog.ts"
+        "file:src/shared/void-spew-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/crucible-rules.ts#applyCrucible",
@@ -39663,7 +39665,7 @@
       "path": "src/shared/realm-weather-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1146,
+      "lineCount": 1147,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -41546,9 +41548,10 @@
       "path": "src/shared/still-bell-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 79,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/odd-card-rules.ts",
         "file:src/shared/realm-rules.ts",
         "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/run-array-guards.ts",
@@ -41584,7 +41587,7 @@
       "path": "src/shared/storm-glass-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 89,
+      "lineCount": 99,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/curio-rules.ts",
@@ -41603,7 +41606,7 @@
       "path": "src/shared/storm-glass-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-rules.ts",
@@ -42817,7 +42820,7 @@
       "path": "src/shared/void-spew-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 111,
+      "lineCount": 120,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
@@ -42828,6 +42831,7 @@
         "file:src/shared/tile-symbol-catalog.ts"
       ],
       "exports": [
+        "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
         "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
         "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
         "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_MAX_PAIRS",
@@ -47690,8 +47694,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2468,
-      "endLine": 2468
+      "line": 2469,
+      "endLine": 2469
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -48186,16 +48190,16 @@
       "name": "ITEM_EFFECT_MAX_CARDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 169,
-      "endLine": 169
+      "line": 172,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_TRAUMA",
       "name": "ITEM_EFFECT_TRAUMA",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 61,
-      "endLine": 77
+      "line": 64,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffect",
@@ -48210,8 +48214,8 @@
       "name": "ItemEffectAnchor",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 160,
-      "endLine": 164
+      "line": 163,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectKind",
@@ -48226,40 +48230,40 @@
       "name": "itemEffectRecipe",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 175,
-      "endLine": 344
+      "line": 178,
+      "endLine": 347
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
       "name": "itemEffectsFromEvents",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 89,
-      "endLine": 158
+      "line": 92,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#METEOR_IMPACT_DELAY_SECONDS",
       "name": "METEOR_IMPACT_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 167,
-      "endLine": 167
+      "line": 170,
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#publishItemEffects",
       "name": "publishItemEffects",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 353,
-      "endLine": 356
+      "line": 356,
+      "endLine": 359
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
       "name": "useItemEffectChannel",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 351,
-      "endLine": 351
+      "line": 354,
+      "endLine": 354
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -49506,8 +49510,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 923,
-      "endLine": 923
+      "line": 927,
+      "endLine": 927
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -49526,6 +49530,14 @@
       "endLine": 82
     },
     {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "name": "rememberToolCharges",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 44,
+      "endLine": 46
+    },
+    {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
       "name": "risenToolCharges",
       "kind": "value",
@@ -49540,6 +49552,14 @@
       "file": "src/renderer/components/runShellFreshTools.ts",
       "line": 12,
       "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
+      "name": "toolChargeBaseline",
+      "kind": "value",
+      "file": "src/renderer/components/runShellFreshTools.ts",
+      "line": 41,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -54106,8 +54126,8 @@
       "name": "CRUCIBLE_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 110,
-      "endLine": 117
+      "line": 111,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#CURIO_DROP_COPY",
@@ -54146,8 +54166,8 @@
       "name": "METEOR_TOOL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
-      "line": 119,
-      "endLine": 123
+      "line": 120,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#MISERS_PURSE_TOOL_COPY",
@@ -54187,7 +54207,7 @@
       "kind": "value",
       "file": "src/renderer/copy/boardPowerCopy.ts",
       "line": 102,
-      "endLine": 107
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
@@ -62179,7 +62199,7 @@
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
       "line": 66,
-      "endLine": 161
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#CRUCIBLE_SOURCE_ID",
@@ -62194,8 +62214,8 @@
       "name": "crucibleFeedbackLine",
       "kind": "value",
       "file": "src/shared/crucible-rules.ts",
-      "line": 164,
-      "endLine": 168
+      "line": 162,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#crucibleRecastSuit",
@@ -69099,7 +69119,7 @@
       "kind": "value",
       "file": "src/shared/realm-weather-rules.ts",
       "line": 1090,
-      "endLine": 1145
+      "endLine": 1146
     },
     {
       "id": "symbol:src/shared/realm-weather-rules.ts#DOUSE_GOLD",
@@ -71850,48 +71870,48 @@
       "name": "applyStillBell",
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 42,
-      "endLine": 70
+      "line": 43,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#canRingStillBell",
       "name": "canRingStillBell",
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 25,
-      "endLine": 31
+      "line": 26,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#STILL_BELL_SOURCE_ID",
       "name": "STILL_BELL_SOURCE_ID",
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#stillBellFeedbackLine",
       "name": "stillBellFeedbackLine",
       "kind": "value",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 73,
-      "endLine": 77
+      "line": 74,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/still-bell-rules.ts#StillBellResult",
       "name": "StillBellResult",
       "kind": "interface",
       "file": "src/shared/still-bell-rules.ts",
-      "line": 33,
-      "endLine": 39
+      "line": 34,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#applyStormGlass",
       "name": "applyStormGlass",
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 38,
-      "endLine": 56
+      "line": 40,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#canBreakStormGlass",
@@ -71899,7 +71919,7 @@
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
       "line": 23,
-      "endLine": 29
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#STORM_GLASS_SOURCE_ID",
@@ -71914,16 +71934,16 @@
       "name": "stormGlassFeedbackLine",
       "kind": "value",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 59,
-      "endLine": 63
+      "line": 61,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/storm-glass-rules.ts#StormGlassResult",
       "name": "StormGlassResult",
       "kind": "interface",
       "file": "src/shared/storm-glass-rules.ts",
-      "line": 31,
-      "endLine": 35
+      "line": 33,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
@@ -73782,12 +73802,20 @@
       "endLine": 26
     },
     {
+      "id": "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "name": "freshBoardFaces",
+      "kind": "value",
+      "file": "src/shared/void-spew-rules.ts",
+      "line": 45,
+      "endLine": 50
+    },
+    {
       "id": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
       "name": "resolveVoidSpew",
       "kind": "value",
       "file": "src/shared/void-spew-rules.ts",
-      "line": 44,
-      "endLine": 110
+      "line": 56,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/void-spew-rules.ts#VOID_SPEW_FROM",
@@ -75982,7 +76010,7 @@
       "evidence": [
         {
           "path": "src/shared/still-bell-rules.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/shared/realm-weather-rules.ts",
@@ -77249,7 +77277,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77288,7 +77316,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77322,7 +77350,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -77356,7 +77384,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 410
+          "line": 414
         }
       ],
       "tests": [
@@ -84757,6 +84785,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
       "source": "file:src/renderer/components/runShellFreshTools.ts",
       "target": "symbol:src/renderer/components/runShellFreshTools.ts#risenToolCharges",
@@ -84766,6 +84800,12 @@
       "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
       "source": "file:src/renderer/components/runShellFreshTools.ts",
       "target": "symbol:src/renderer/components/runShellFreshTools.ts#TOOL_FRESH_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellFreshTools.ts->symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
+      "source": "file:src/renderer/components/runShellFreshTools.ts",
+      "target": "symbol:src/renderer/components/runShellFreshTools.ts#toolChargeBaseline",
       "kind": "exports"
     },
     {
@@ -102949,6 +102989,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "source": "file:src/shared/void-spew-rules.ts",
+      "target": "symbol:src/shared/void-spew-rules.ts#freshBoardFaces",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/void-spew-rules.ts->symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
       "source": "file:src/shared/void-spew-rules.ts",
       "target": "symbol:src/shared/void-spew-rules.ts#resolveVoidSpew",
@@ -120663,9 +120709,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/crucible-rules.ts->src/shared/tile-symbol-catalog.ts",
+      "id": "imports:src/shared/crucible-rules.ts->src/shared/void-spew-rules.ts",
       "source": "file:src/shared/crucible-rules.ts",
-      "target": "file:src/shared/tile-symbol-catalog.ts",
+      "target": "file:src/shared/void-spew-rules.ts",
       "kind": "imports"
     },
     {
@@ -126810,6 +126856,12 @@
       "id": "imports:src/shared/still-bell-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/still-bell-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/still-bell-rules.ts->src/shared/odd-card-rules.ts",
+      "source": "file:src/shared/still-bell-rules.ts",
+      "target": "file:src/shared/odd-card-rules.ts",
       "kind": "imports"
     },
     {
