@@ -17073,8 +17073,8 @@
     {
       "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
       "category": "other",
-      "bytes": 2795,
-      "sha256": "69add6d1961ec61253b6732e79a208f711f8e2c6b02ae55566dfae6261b7366a"
+      "bytes": 4839,
+      "sha256": "4b6a0dfbcbfd6d3874a533ddfcc67b19e631380e1cf755e5eadd7abd2d529eec"
     },
     {
       "path": "tasks/deep-game-epic/01-research-findings.md",
@@ -17091,8 +17091,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 1086,
-      "sha256": "5f4e9cd187079ed69644bc2343edb2c993eade48814301277020565561fa4316"
+      "bytes": 2267,
+      "sha256": "ae22fae971ab31e62c9e67e6d8aabf1bbefab52b83efbfddf6f4e0612482aec0"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17115,8 +17115,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-001-north-star-scope-and-plateau.md",
       "category": "other",
-      "bytes": 2425,
-      "sha256": "116edc4b1ddb189ef9d8a9263c97c90f3dc19d02b4e367f1842f5fb6bcc46eea"
+      "bytes": 2863,
+      "sha256": "f3759834222183337c474299c61c97df2bf701762cf6388b6badf68cd6b4e945"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-002-descent-act-schedule.md",
@@ -18537,20 +18537,20 @@
     {
       "path": "tasks/refined-experience-gaps/REG-018-endless-mode-shipping-plan.md",
       "category": "other",
-      "bytes": 1975,
-      "sha256": "240dfb89dc297bd6233a1b2df934a0abee183e53767b1adc21c8e85513f7b2bb"
+      "bytes": 2271,
+      "sha256": "86aeaf0917d4b3dc93000de6f5b90dca9b876e8e672688739c941351b1d519eb"
     },
     {
       "path": "tasks/refined-experience-gaps/REG-019-relic-build-archetypes.md",
       "category": "other",
-      "bytes": 1720,
-      "sha256": "4d123ef3a9660e244b043b3719a4e69789c9b2f82c5c5314d08d9174fc3adf69"
+      "bytes": 1971,
+      "sha256": "85b422096cff6baf3dbca94c80e706bcf3a82e45d015a2e40abb8b9fa22e0a18"
     },
     {
       "path": "tasks/refined-experience-gaps/REG-020-mutator-chapter-identity.md",
       "category": "other",
-      "bytes": 1734,
-      "sha256": "a3ae03a12437ea2b353e311c8f1677ac72c4a88ea43d8d8c0662d943c2ea1dbe"
+      "bytes": 2019,
+      "sha256": "93e1f59d2d3a712994129a734f370a4a2ae73caacb91f26edaf77b00e999fc14"
     },
     {
       "path": "tasks/refined-experience-gaps/REG-021-quests-contracts-objective-board.md",
