@@ -11589,8 +11589,8 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 4273,
-      "sha256": "b0ad8ae92ace3009d7a55843285d1afaaeddf3413ff0ae06f506f5f61dea465b"
+      "bytes": 4368,
+      "sha256": "5f95aa5831912df75286473efd6d850b06fab38995f74fa2ebff0812538301e0"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -25433,7 +25433,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 89,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -49483,8 +49483,8 @@
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 85,
-      "endLine": 87
+      "line": 86,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
@@ -49492,7 +49492,7 @@
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 55,
-      "endLine": 80
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
@@ -49515,8 +49515,8 @@
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 83,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
@@ -76344,7 +76344,7 @@
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
-          "line": 70
+          "line": 71
         },
         {
           "path": "src/renderer/copy/zoneToolCopy.ts",
