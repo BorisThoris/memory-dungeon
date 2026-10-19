@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 71707,
-      "sha256": "c11f816024df712113d1704e4330c78847d03d5d5d91ce3228d15bef56684fd9"
+      "bytes": 72803,
+      "sha256": "774482f2dc6b87154f81f23223ad8823f74a396d28e194aaa25d7ef2960d7de3"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -14319,8 +14319,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 72041,
-      "sha256": "5c81c4347db8a2c64d517d6db7cbdee5d4a56e1c290ef740847b6c92affe6d65"
+      "bytes": 73137,
+      "sha256": "a1ba8d32388e01791bf280ae6d1c088a72e4f86d3726179ee32d3cddf0935832"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
