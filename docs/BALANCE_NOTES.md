@@ -3444,3 +3444,22 @@ rules 69, median floor without → with: 10% misses 60 → 60 (the cap; mean 51.
 19.5, 20% 11 → 11.5, 25% 6.5 → 6.5, 35% 4 → 4. The items change how a run plays, not how long it
 lasts: a free pair from the Crucible is paid back by the Purse's smaller bank, and the Bell and the
 Glass trade board state rather than misses. Runs stay as punishing as the bank was tuned to be.
+
+## Pop share by act (DGE-012, 2026-10-20)
+
+`yarn sim:pop-share --floors=60 --by-act` (gate `gate:pop-by-act`, in `gate:systems`): the perfect-memory player of
+`sim-pop-share.ts`, eight seeds, floors 1-60 of the Descent, the matched share (pairs matched by hand over all
+pairs cleared) grouped by `DESCENT_ACTS`. The before numbers, with no Hold:
+
+| Act | Floors | Matched share |
+| --- | --- | --- |
+| The Gate (1-12) | 96 | 0.33 |
+| The Living Dungeon (13-24) | 96 | 0.35 |
+| The Deep (25-40) | 128 | 0.40 |
+| The Abyss (41-60) | 160 | 0.44 |
+
+Overall 0.40 over sixty floors; floors 1-24 alone still read 0.34, as DGE-001 measured. By act the share rises
+rather than forming a hill: the pop takes most of the Gate (a third matched by hand) and less of each act after it,
+because deeper boards are bigger and a pop's reach is capped by rung. The plan's bar is 0.6 for Acts II to IV once
+the Hold (DGE-008) exists; the gate's floor (`POP_BY_ACT_MIN`) is zero until then, so today it holds the report to
+running and to real shares, and DGE-008 raises it.

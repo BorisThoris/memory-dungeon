@@ -1,6 +1,11 @@
 /**
  * Pop share: how much of a floor the player matches by hand against what the pop takes. Run:
- * yarn sim:pop-share [--off]  (--off switches the heat perks off for a baseline).
+ * yarn sim:pop-share [--off] [--floors=60] [--by-act] [--check]  (--off switches the heat perks off for a baseline).
+ *
+ * `--by-act` (DGE-012, 2026-10-20) groups the shares by the Descent's acts (`DESCENT_ACTS`), and
+ * `--check` is `gate:pop-by-act`: every act's matched share must be a real share and at least
+ * `POP_BY_ACT_MIN`. That floor is zero until the Hold (DGE-008) gives the player a way to keep a pop
+ * for later; DGE-008 raises it to 0.6 for every act after the first, the plan's bar.
  *
  * A perfect-memory player plays the scheduled floors, eight seeds, floors 1-24; per turn the pairs
  * the break took are bucketed by the heat carried into the turn. The measurement the owner asks
@@ -10,7 +15,7 @@ import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
 import { filterMutatorsByContentLock } from '../src/shared/content-lock-state';
-import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
+import { descentActForFloor, pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '../src/shared/game';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solver-rules';
@@ -21,7 +26,11 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/
 import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
 
 const seeds = [11, 202, 3003, 40404, 555, 6006, 77, 8888];
-const floors = 24;
+const arg = (name: string): string | undefined => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
+const floors = Number(arg('floors') ?? 24);
+/** The least matched share an act may show (`--check`); DGE-008 raises it to 0.6 for Acts II to IV. */
+export const POP_BY_ACT_MIN = 0;
+const byAct: Record<string, { matched: number; popped: number; floors: number }> = {};
 const byStage: Record<string, { matched: number; popped: number; turns: number; biggest: number[] }> = {};
 let matchedAll = 0;
 let poppedAll = 0;
@@ -59,6 +68,10 @@ for (const seed of seeds) {
         }
         matchedAll += matched;
         poppedAll += popped;
+        const actRow = (byAct[descentActForFloor(floor).title] ??= { matched: 0, popped: 0, floors: 0 });
+        actRow.matched += matched;
+        actRow.popped += popped;
+        actRow.floors += 1;
         biggestShare.push(biggest / Math.max(1, pairs));
         if (run.status !== 'levelComplete') break;
         const next = advanceToNextLevel({ ...run, status: 'levelComplete' });
@@ -69,3 +82,19 @@ for (const seed of seeds) {
 const share = (m: number, p: number) => (m / Math.max(1, m + p)).toFixed(2);
 console.log(`overall matched share ${share(matchedAll, poppedAll)} (matched ${matchedAll}, popped ${poppedAll}); biggest break mean ${(biggestShare.reduce((s, v) => s + v, 0) / biggestShare.length).toFixed(2)} of a floor, max ${Math.max(...biggestShare).toFixed(2)}`);
 for (const [stage, row] of Object.entries(byStage)) console.log(`${stage.padEnd(10)} turns ${String(row.turns).padStart(4)}  pops/turn ${(row.popped / row.turns).toFixed(2)}  matched share ${share(row.matched, row.popped)}`);
+
+if (process.argv.includes('--by-act') || process.argv.includes('--check')) {
+    console.log('by act (matched share = pairs matched by hand / all pairs cleared):');
+    for (const [act, row] of Object.entries(byAct)) console.log(`  ${act.padEnd(20)} floors ${String(row.floors).padStart(3)}  matched share ${share(row.matched, row.popped)}`);
+}
+if (process.argv.includes('--check')) {
+    const failures = Object.entries(byAct).filter(([, row]) => {
+        const value = row.matched / Math.max(1, row.matched + row.popped);
+        return !Number.isFinite(value) || value < POP_BY_ACT_MIN || value > 1 || row.floors === 0;
+    });
+    if (failures.length > 0 || Object.keys(byAct).length === 0) {
+        console.error(`pop by act failed: ${failures.map(([act]) => act).join(', ') || 'no act measured'}`);
+        process.exit(1);
+    }
+    console.log('Pop by act check passed');
+}
