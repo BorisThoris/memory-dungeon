@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3263,
-    "codeFileCount": 1234,
-    "exportedSymbolCount": 3931,
+    "trackedFileCount": 3265,
+    "codeFileCount": 1236,
+    "exportedSymbolCount": 3936,
     "contentItemCount": 16,
-    "mechanicCount": 72,
-    "stateFieldCount": 142,
-    "relationshipCount": 10669
+    "mechanicCount": 73,
+    "stateFieldCount": 145,
+    "relationshipCount": 10702
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 74383,
-      "sha256": "32cf3f5812b358fa55d1a70c25f6710785f330cfc09cb4925684b87075f2507d"
+      "bytes": 75005,
+      "sha256": "e46667258c4e73909a227428580ecca2f382fc17ed808c5716942d6c1e5bf5f0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "50657fff03f0514ce193c60146bf4502a75a07dfab7e2338f9d70c7c708559b0"
+      "sha256": "71898ef25ea04f89d5b935a006bc82eecf85b043cf04ce390a2f8528d17d4bb1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71883,
-      "sha256": "9c9ece74b5eccc6c3f7f31c1c26cb380a84f1afb9ed9d77c84db207c7c43d3a9"
+      "bytes": 71750,
+      "sha256": "fe078b509a6908a80ce7b61e1ab8fb6882fede45daf18a38f3da0be0654baf26"
     },
     {
       "path": "public/site.webmanifest",
@@ -5319,8 +5319,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 23935,
-      "sha256": "985db99e5825f61f11e3f4560f51288868a4f181160fdeca030f4a9a62f45fbc"
+      "bytes": 24309,
+      "sha256": "c4766abf5b760e301ec689b8d331fa5ca1289b71464dc23952b0459d68e1fd13"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -11541,8 +11541,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 65667,
-      "sha256": "c55df01da416013033815c25bda63e394144257b5da2a373d009b9a12ac6e6f0"
+      "bytes": 65774,
+      "sha256": "7b04d2f047b87a49d2e162cea8da5ce224e3aa7aca159eb1934e5f66f8188013"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11553,8 +11553,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 56937,
-      "sha256": "ad136c2ac72143d5da683774f45f93c4ab310a8b83e0f8a8f983843e81c9f677"
+      "bytes": 57789,
+      "sha256": "ec818e9d262d2e0396e5477d4ac00cd030f0041fdf15f909116d7ac03dc62280"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12903,8 +12903,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 8740,
-      "sha256": "fd34d3271aba61752e61393ae95fa9447666cb4caf96edf2a8bd2769d2aee3c6"
+      "bytes": 8840,
+      "sha256": "4373d3f363d333e912aa777b7b115a0276d2e670a62b33d19c7d93c3d29d82a2"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -13023,8 +13023,8 @@
     {
       "path": "src/renderer/copy/realmCopy.ts",
       "category": "source",
-      "bytes": 8699,
-      "sha256": "29f606d1a2f6413b5c70d2b684e6a9fee7c1df120842b4f05864db4152f9bcf0"
+      "bytes": 9286,
+      "sha256": "f4847d2611a53726bb9a4ad1d5b5579a495cc6518b20a2d3d794863b708ec551"
     },
     {
       "path": "src/renderer/copy/restlessFloorBeat.test.ts",
@@ -13047,8 +13047,8 @@
     {
       "path": "src/renderer/copy/runEndStamp.ts",
       "category": "source",
-      "bytes": 2376,
-      "sha256": "d1ea6d631e8c9c38e1e16a81a4576120a8d4ff07747c689df752328e7d259990"
+      "bytes": 2482,
+      "sha256": "2e13eb4c9632cfeda6b22868a9f714fb6ca243bf7e5ee2477c212d1fe8c46c03"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -14337,8 +14337,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 74721,
-      "sha256": "314d0fc00c7f246a92d1e2ac5624d0adedadebe8f8abaa0a68c9eaf360627aa9"
+      "bytes": 75345,
+      "sha256": "68445e91731163d14c9888d2761028cdcfe80e707ed3d4552d13cffa4d0571e0"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14847,8 +14847,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 56445,
-      "sha256": "07fec0ad315459bcb3d156cd9fe404774c69d9618cf67f482811734b4a9866eb"
+      "bytes": 56461,
+      "sha256": "f02a8d4a92c17417d8b09536801e698a30669244e65ca9e5426f684b0bd68190"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15139,6 +15139,18 @@
       "sha256": "8b4d06c60b158bbd5a4e854bbad7ede5a2dc3a175d95466159f938beba9044ca"
     },
     {
+      "path": "src/shared/endless-rent-rules.test.ts",
+      "category": "test",
+      "bytes": 2572,
+      "sha256": "a8e3a48525e2536bf297d2e583c79bbaeac05c19a51e63737da3c464a920b671"
+    },
+    {
+      "path": "src/shared/endless-rent-rules.ts",
+      "category": "source",
+      "bytes": 2905,
+      "sha256": "8c826a9a6d873ea6a49fa4d3523bae1bb28d958f817150911e9cf4761450d1af"
+    },
+    {
       "path": "src/shared/exploit-surface.test.ts",
       "category": "test",
       "bytes": 2495,
@@ -15213,8 +15225,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 9386,
-      "sha256": "d83e58690e231751c8a8f189d88ef4add50efdb4528a0ebcbe5849f9590ceda9"
+      "bytes": 9580,
+      "sha256": "6848e7362be989bb55ca5b5e4519133576dd4f162f18ef20253b7e0cf2261e6d"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -15435,8 +15447,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 135891,
-      "sha256": "f21a4bbc14b9ed8e1760be826ee63b5f10dfa42a471987dac9a1499de8fbf2ac"
+      "bytes": 137339,
+      "sha256": "f2485ad1370c78cebe494352efa2d9863e1f1563fb9ea8e92b27790978df1c84"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -15706,7 +15718,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
       "bytes": 5803,
-      "sha256": "3c3b002b70ac7e016476607e2b27a454db396c0b61b7633223a0e84937d85552"
+      "sha256": "ebe15717a9c823158250dde7a3b7de71a16cfd295581c094caee5e835cc6b5a3"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -15741,8 +15753,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 60903,
-      "sha256": "369b9f3378357d723414282da2092784a165eccf764ec8ca46c37c041cdf3399"
+      "bytes": 61048,
+      "sha256": "215264e84b5de3046c30197a3ef3a7dd0f5a0e0ea8361bf4e4d1d896be445e39"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16515,8 +16527,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 51622,
-      "sha256": "b46541925d4a377d8cbfcb285e3c9b16ff495bf8c72cbe8bf4fbf9df2cfd4ef9"
+      "bytes": 52657,
+      "sha256": "04b5d7b4364dc0cded4ac167ec1fb53c9b0d241c693e63308bd84b1711ac039d"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -16563,8 +16575,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 28852,
-      "sha256": "8465ff2a216935aad4e5438d9efac4277ecd780b5f5d6ed10a2134138933a11d"
+      "bytes": 28867,
+      "sha256": "2cf81324c465eae0a14e218d1d2865989b4b07e13eb4489db0e66098609a392a"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -16809,8 +16821,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 94085,
-      "sha256": "02455575d9547b46d8f70f8f222b513076e4a9f3f559e4bad79b7cccc927e1a9"
+      "bytes": 94907,
+      "sha256": "5967a2c67adfcd818bed220d2d5c0eea95b50ef0026820ac1e3570be98d6a2b0"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16833,8 +16845,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 177870,
-      "sha256": "105a00cddf248008c536aba65a3b756fa31b145737a1a4688d43731d73eb84bd"
+      "bytes": 180145,
+      "sha256": "73342ededad0f441e23d10d3d6fc4dceeec6b1bb4303ce7cd947fbdb8656351b"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17175,8 +17187,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 4858,
-      "sha256": "afe644c6a401e3e36a05c99daec763ee893a1f25a2f678dfe96eeb8fe1fc00f1"
+      "bytes": 5440,
+      "sha256": "ed556cf18a13968ea0083113feb45f3287c653412b966d097106b58c9d1ee433"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17241,8 +17253,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-006-endless-gated-mode.md",
       "category": "other",
-      "bytes": 5295,
-      "sha256": "3af0427bd6c9ce42b89b8e53e00d50d43ff3bdd12ecf7f121c46122dcf79f5cb"
+      "bytes": 6801,
+      "sha256": "ae93f825f2907cb3a48130e1d998dd2b2f5e1b7184da6f9185fd1719d65cd15f"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-007-results-and-run-summary.md",
@@ -25661,7 +25673,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 983,
+      "lineCount": 995,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -25687,6 +25699,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/dread-rules.ts",
         "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/endless-rent-rules.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -29746,7 +29759,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 173,
+      "lineCount": 174,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30068,7 +30081,7 @@
       "path": "src/renderer/copy/realmCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 148,
+      "lineCount": 154,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/daily-music-composer.ts",
@@ -30144,7 +30157,7 @@
       "path": "src/renderer/copy/runEndStamp.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 52,
+      "lineCount": 54,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
@@ -35394,6 +35407,7 @@
         "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/elemental-loot-rules.test.ts",
+        "file:src/shared/endless-rent-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/findables.test.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.test.ts",
@@ -36429,6 +36443,45 @@
       ]
     },
     {
+      "id": "file:src/shared/endless-rent-rules.test.ts",
+      "path": "src/shared/endless-rent-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 45,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/endless-rent-rules.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/game.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/endless-rent-rules.ts",
+      "path": "src/shared/endless-rent-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 50,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/pair-curve.ts",
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/scoring-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_GROWTH",
+        "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_SHARE",
+        "symbol:src/shared/endless-rent-rules.ts#endlessRentDue",
+        "symbol:src/shared/endless-rent-rules.ts#endlessRentForFloor",
+        "symbol:src/shared/endless-rent-rules.ts#settleEndlessRent"
+      ],
+      "testedBy": [
+        "file:src/shared/endless-rent-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/exploit-surface.test.ts",
       "path": "src/shared/exploit-surface.test.ts",
       "layer": "shared",
@@ -36630,11 +36683,12 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 181,
+      "lineCount": 183,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/elemental-loot-rules.ts",
+        "file:src/shared/endless-rent-rules.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/level-clear-rules.ts",
@@ -36827,6 +36881,7 @@
         "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/descent-schedule-golden.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
+        "file:src/shared/endless-rent-rules.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/game.test.ts",
@@ -37280,6 +37335,7 @@
         "file:src/shared/element-ground-rules.test.ts",
         "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
+        "file:src/shared/endless-rent-rules.test.ts",
         "file:src/shared/flip-tile-transition.test.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.test.ts",
         "file:src/shared/gameplay-core-release-rejected.test.ts",
@@ -37746,7 +37802,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3949,
+      "lineCount": 3989,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -41238,7 +41294,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 863,
+      "lineCount": 875,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -41250,6 +41306,7 @@
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/elemental-loot-rules.ts",
+        "file:src/shared/endless-rent-rules.ts",
         "file:src/shared/floor-par.ts",
         "file:src/shared/game.ts",
         "file:src/shared/misers-purse-rules.ts",
@@ -42325,7 +42382,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 712,
+      "lineCount": 719,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -42397,7 +42454,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2738,
+      "lineCount": 2780,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -42409,6 +42466,7 @@
         "file:src/shared/crucible-rules.ts",
         "file:src/shared/dread-rules.ts",
         "file:src/shared/element-alchemy-rules.ts",
+        "file:src/shared/endless-rent-rules.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -50162,24 +50220,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 982,
-      "endLine": 982
+      "line": 994,
+      "endLine": 994
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 87,
-      "endLine": 122
+      "line": 88,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 74,
-      "endLine": 85
+      "line": 75,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -55234,8 +55292,8 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 148,
-      "endLine": 172
+      "line": 149,
+      "endLine": 173
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -55243,15 +55301,15 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 6,
-      "endLine": 134
+      "endLine": 135
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 140,
-      "endLine": 141
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -55603,7 +55661,7 @@
       "kind": "value",
       "file": "src/renderer/copy/realmCopy.ts",
       "line": 142,
-      "endLine": 147
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/copy/realmCopy.ts#REALM_HUD_COPY",
@@ -55754,8 +55812,8 @@
       "name": "RUN_END_STAMP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 44,
-      "endLine": 51
+      "line": 46,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
@@ -55763,39 +55821,39 @@
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
       "line": 9,
-      "endLine": 17
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
       "name": "RUN_END_VERDICT_UNKNOWN",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
       "name": "runEndFlourish",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 33,
-      "endLine": 42
+      "line": 35,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
       "name": "runEndScoreLine",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 26,
-      "endLine": 27
+      "line": 28,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict",
       "name": "runEndVerdict",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 22,
-      "endLine": 23
+      "line": 24,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
@@ -64046,6 +64104,46 @@
       "endLine": 11
     },
     {
+      "id": "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_GROWTH",
+      "name": "ENDLESS_RENT_GROWTH",
+      "kind": "value",
+      "file": "src/shared/endless-rent-rules.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_SHARE",
+      "name": "ENDLESS_RENT_SHARE",
+      "kind": "value",
+      "file": "src/shared/endless-rent-rules.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/endless-rent-rules.ts#endlessRentDue",
+      "name": "endlessRentDue",
+      "kind": "value",
+      "file": "src/shared/endless-rent-rules.ts",
+      "line": 38,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/endless-rent-rules.ts#endlessRentForFloor",
+      "name": "endlessRentForFloor",
+      "kind": "value",
+      "file": "src/shared/endless-rent-rules.ts",
+      "line": 31,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/shared/endless-rent-rules.ts#settleEndlessRent",
+      "name": "settleEndlessRent",
+      "kind": "value",
+      "file": "src/shared/endless-rent-rules.ts",
+      "line": 45,
+      "endLine": 49
+    },
+    {
       "id": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
       "name": "FEATURE_CARD_OPENTYPE_GLYPHS",
       "kind": "value",
@@ -64226,8 +64324,8 @@
       "name": "finalizeLevel",
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
-      "line": 24,
-      "endLine": 180
+      "line": 25,
+      "endLine": 182
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -71530,48 +71628,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 175,
-      "endLine": 526
+      "line": 176,
+      "endLine": 536
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 64,
-      "endLine": 69
+      "line": 65,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 43,
-      "endLine": 62
+      "line": 44,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 538,
-      "endLine": 862
+      "line": 548,
+      "endLine": 874
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 80,
-      "endLine": 158
+      "line": 81,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 71,
-      "endLine": 78
+      "line": 72,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -73074,16 +73172,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 708,
-      "endLine": 711
+      "line": 715,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 688,
-      "endLine": 693
+      "line": 695,
+      "endLine": 700
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -73091,7 +73189,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 676
+      "endLine": 683
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -73114,8 +73212,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 678,
-      "endLine": 679
+      "line": 685,
+      "endLine": 686
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -73130,16 +73228,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 702,
-      "endLine": 705
+      "line": 709,
+      "endLine": 712
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 682,
-      "endLine": 685
+      "line": 689,
+      "endLine": 692
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -73226,112 +73324,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2697,
-      "endLine": 2697
+      "line": 2739,
+      "endLine": 2739
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2556,
-      "endLine": 2674
+      "line": 2598,
+      "endLine": 2716
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2703,
-      "endLine": 2708
+      "line": 2745,
+      "endLine": 2750
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2687,
-      "endLine": 2687
+      "line": 2729,
+      "endLine": 2729
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 462,
-      "endLine": 2543
+      "line": 465,
+      "endLine": 2585
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2711,
-      "endLine": 2717
+      "line": 2753,
+      "endLine": 2759
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2737,
-      "endLine": 2737
+      "line": 2779,
+      "endLine": 2779
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 223,
-      "endLine": 240
+      "line": 226,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 57,
-      "endLine": 175
+      "line": 58,
+      "endLine": 178
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2676,
-      "endLine": 2679
+      "line": 2718,
+      "endLine": 2721
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 216,
-      "endLine": 221
+      "line": 219,
+      "endLine": 224
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 177,
-      "endLine": 214
+      "line": 180,
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2690,
-      "endLine": 2694
+      "line": 2732,
+      "endLine": 2736
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2719,
-      "endLine": 2735
+      "line": 2761,
+      "endLine": 2777
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -75234,7 +75332,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 127
+          "line": 128
         }
       ],
       "tests": [
@@ -75813,7 +75911,7 @@
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/shared/gameplay-effect-transition.ts",
@@ -75979,7 +76077,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -76013,7 +76111,7 @@
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
-          "line": 19
+          "line": 20
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -76378,6 +76476,42 @@
       ]
     },
     {
+      "id": "mechanic:hazard.endless_rent",
+      "mechanicId": "hazard.endless_rent",
+      "label": "Endless Rent",
+      "kind": "hazard",
+      "role": "past_the_warden_every_floor_owes_a_score_rising_each_cycle_a_clear_that_pays_less_ends_the_run",
+      "evidence": [
+        {
+          "path": "src/shared/endless-rent-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/floor-clear-transition.ts",
+          "line": 2
+        },
+        {
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 23
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/endless-rent-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": [
+        "rent-is-a-score-never-a-clock"
+      ]
+    },
+    {
       "id": "mechanic:hazard.looking_glass",
       "mechanicId": "hazard.looking_glass",
       "label": "Looking Glass",
@@ -76605,7 +76739,7 @@
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.ts",
@@ -78411,7 +78545,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 425
+          "line": 428
         }
       ],
       "tests": [
@@ -78450,7 +78584,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 425
+          "line": 428
         }
       ],
       "tests": [
@@ -78484,7 +78618,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 425
+          "line": 428
         }
       ],
       "tests": [
@@ -78518,7 +78652,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 425
+          "line": 428
         }
       ],
       "tests": [
@@ -78629,6 +78763,14 @@
       "writtenBy": [
         "mechanic:board.chain_chunk_fever"
       ]
+    },
+    {
+      "id": "state:boardLevel",
+      "name": "boardLevel",
+      "readBy": [
+        "mechanic:hazard.endless_rent"
+      ],
+      "writtenBy": []
     },
     {
       "id": "state:boardRows",
@@ -78846,6 +78988,14 @@
       "writtenBy": []
     },
     {
+      "id": "state:endless",
+      "name": "endless",
+      "readBy": [
+        "mechanic:hazard.endless_rent"
+      ],
+      "writtenBy": []
+    },
+    {
       "id": "state:fairnessReport",
       "name": "fairnessReport",
       "readBy": [],
@@ -78943,6 +79093,14 @@
       "writtenBy": [
         "mechanic:board.cleanup"
       ]
+    },
+    {
+      "id": "state:floorScore",
+      "name": "floorScore",
+      "readBy": [
+        "mechanic:hazard.endless_rent"
+      ],
+      "writtenBy": []
     },
     {
       "id": "state:floorTag",
@@ -79801,6 +79959,7 @@
         "mechanic:power.undo_resolve"
       ],
       "writtenBy": [
+        "mechanic:hazard.endless_rent",
         "mechanic:hazard.warden",
         "mechanic:phase.memorize",
         "mechanic:power.undo_resolve"
@@ -80643,6 +80802,13 @@
       "label": "the great card shows its element, the next, its hits and its turns, and every hit, chip, fall and split is announced"
     },
     {
+      "id": "displays:mechanic:hazard.endless_rent->mechanic:feedback.gameplay_hud:the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+    },
+    {
       "id": "displays:mechanic:hazard.looking_glass->mechanic:feedback.gameplay_hud:every turn of the glass is announced",
       "source": "mechanic:hazard.looking_glass",
       "target": "mechanic:feedback.gameplay_hud",
@@ -80906,6 +81072,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "reward copy"
+    },
+    {
+      "id": "enables:mechanic:hazard.warden->mechanic:hazard.endless_rent:a cleared Warden the player descends past opens Endless, where every floor owes rent",
+      "source": "mechanic:hazard.warden",
+      "target": "mechanic:hazard.endless_rent",
+      "kind": "enables",
+      "label": "a cleared Warden the player descends past opens Endless, where every floor owes rent"
     },
     {
       "id": "enables:mechanic:inventory.crucible_charge->mechanic:objective.floor_clear:melts a pair, never the last one",
@@ -96401,6 +96574,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/endless-rent-rules.ts->symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_GROWTH",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_GROWTH",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/endless-rent-rules.ts->symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_SHARE",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "symbol:src/shared/endless-rent-rules.ts#ENDLESS_RENT_SHARE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/endless-rent-rules.ts->symbol:src/shared/endless-rent-rules.ts#endlessRentDue",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "symbol:src/shared/endless-rent-rules.ts#endlessRentDue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/endless-rent-rules.ts->symbol:src/shared/endless-rent-rules.ts#endlessRentForFloor",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "symbol:src/shared/endless-rent-rules.ts#endlessRentForFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/endless-rent-rules.ts->symbol:src/shared/endless-rent-rules.ts#settleEndlessRent",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "symbol:src/shared/endless-rent-rules.ts#settleEndlessRent",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/feature-flags.ts->symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
       "source": "file:src/shared/feature-flags.ts",
       "target": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
@@ -105457,6 +105660,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:hazard.endless_rent->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.endless_rent->file:src/shared/endless-rent-rules.ts",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "file:src/shared/endless-rent-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.endless_rent->file:src/shared/floor-clear-transition.ts",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "file:src/shared/floor-clear-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:hazard.looking_glass->file:src/renderer/copy/lookingGlassBeat.ts",
       "source": "mechanic:hazard.looking_glass",
       "target": "file:src/renderer/copy/lookingGlassBeat.ts",
@@ -113128,6 +113349,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/element-alchemy-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/endless-rent-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/endless-rent-rules.ts",
       "kind": "imports"
     },
     {
@@ -123247,6 +123474,60 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/endless-rent-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/endless-rent-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.test.ts->src/shared/endless-rent-rules.ts",
+      "source": "file:src/shared/endless-rent-rules.test.ts",
+      "target": "file:src/shared/endless-rent-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/endless-rent-rules.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/endless-rent-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.ts->src/shared/pair-curve.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/pair-curve.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/endless-rent-rules.ts->src/shared/scoring-rules.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/exploit-surface.test.ts->src/shared/board-generation.ts",
       "source": "file:src/shared/exploit-surface.test.ts",
       "target": "file:src/shared/board-generation.ts",
@@ -123412,6 +123693,12 @@
       "id": "imports:src/shared/floor-clear-transition.ts->src/shared/elemental-loot-rules.ts",
       "source": "file:src/shared/floor-clear-transition.ts",
       "target": "file:src/shared/elemental-loot-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-clear-transition.ts->src/shared/endless-rent-rules.ts",
+      "source": "file:src/shared/floor-clear-transition.ts",
+      "target": "file:src/shared/endless-rent-rules.ts",
       "kind": "imports"
     },
     {
@@ -127843,6 +128130,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/endless-rent-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/endless-rent-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/floor-par.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/floor-par.ts",
@@ -129154,6 +129447,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/element-alchemy-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/element-alchemy-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/endless-rent-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/endless-rent-rules.ts",
       "kind": "imports"
     },
     {
@@ -131568,6 +131867,24 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:hazard.endless_rent->state:boardLevel",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "state:boardLevel",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.endless_rent->state:endless",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "state:endless",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.endless_rent->state:floorScore",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "state:floorScore",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:hazard.looking_glass->state:activeMutators",
       "source": "mechanic:hazard.looking_glass",
       "target": "state:activeMutators",
@@ -133038,6 +133355,18 @@
     {
       "id": "tested_by:mechanic:hazard.colossus->file:src/shared/test-hall-rooms.test.ts",
       "source": "mechanic:hazard.colossus",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.endless_rent->file:src/shared/endless-rent-rules.test.ts",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "file:src/shared/endless-rent-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.endless_rent->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:hazard.endless_rent",
       "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
@@ -138205,6 +138534,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/endless-rent-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/endless-rent-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/exploit-surface.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/exploit-surface.test.ts",
@@ -138979,6 +139314,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/endless-rent-rules.ts->file:src/shared/endless-rent-rules.test.ts",
+      "source": "file:src/shared/endless-rent-rules.ts",
+      "target": "file:src/shared/endless-rent-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/feature-flags.ts->file:src/shared/profile-summary.test.ts",
       "source": "file:src/shared/feature-flags.ts",
       "target": "file:src/shared/profile-summary.test.ts",
@@ -139168,6 +139509,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/elemental-encounter-goals.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/elemental-encounter-goals.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/endless-rent-rules.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/endless-rent-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -139756,6 +140103,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/elemental-encounter-goals.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/elemental-encounter-goals.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/endless-rent-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/endless-rent-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -143531,6 +143884,12 @@
       "id": "writes:mechanic:hazard.colossus->state:tileStates",
       "source": "mechanic:hazard.colossus",
       "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.endless_rent->state:runStatus",
+      "source": "mechanic:hazard.endless_rent",
+      "target": "state:runStatus",
       "kind": "writes"
     },
     {
