@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3265,
+    "trackedFileCount": 3266,
     "codeFileCount": 1236,
     "exportedSymbolCount": 3936,
     "contentItemCount": 16,
@@ -197,6 +197,12 @@
       "category": "asset",
       "bytes": 61963,
       "sha256": "6797a7e752e9dd26785e47ce6c0ef8172490846c8cfb9d95bedcd6df2c5c3af1"
+    },
+    {
+      "path": "bash.exe.stackdump",
+      "category": "other",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "path": "build/.gitkeep",
@@ -4545,8 +4551,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71750,
-      "sha256": "fe078b509a6908a80ce7b61e1ab8fb6882fede45daf18a38f3da0be0654baf26"
+      "bytes": 71925,
+      "sha256": "f62feeb242f028aa4323d46e50e519e733c447c1873014ee9cf1956b067592f3"
     },
     {
       "path": "public/site.webmanifest",
