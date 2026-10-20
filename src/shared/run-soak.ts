@@ -1,4 +1,6 @@
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
+import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
+import { tileCanBreakInChunk } from './chunk-break-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { awaitsWardenChoice, descendIntoEndless, isWardenFloor } from './warden-rules';
@@ -120,6 +122,8 @@ export interface SoakRunReport {
     turncoatFloors: number;
     /** The Wanderers (`wanderer-rules.ts`): floors dealt with them, and the steps they took. */
     wandererFloors: number;
+    /** The Fold (`board-fold-rules.ts`): floors dealt as two rooms. */
+    foldFloors: number;
     wandererSteps: number;
     turncoatTurns: number;
     hourglassFloors: number;
@@ -395,6 +399,24 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         }
         return null;
     },
+    'on the Fold a turn takes nothing through the wall, and through the door only from a match in the doorway': (before, run, action) => {
+        if (action !== 'resolve' || !before?.board?.fold || !run.board || before.board.level !== run.board.level) return null;
+        const flipped = before.board.flippedTileIds;
+        if (flipped.length < 2) return null;
+        const at = (id: string) => before.board!.tiles.findIndex((tile) => tile.id === id);
+        const seeds = flipped.map(at).filter((index) => index >= 0);
+        if (foldDoorOpenFor(before.board, seeds)) return null;
+        const rooms = new Set(seeds.map((index) => foldRoomOf(before.board!, index)));
+        for (const [index, tile] of before.board.tiles.entries()) {
+            if (tile.state !== 'hidden' || flipped.includes(tile.id)) continue;
+            const now = run.board.tiles.find((candidate) => candidate.id === tile.id);
+            if (now?.state !== 'removed' || rooms.has(foldRoomOf(before.board, index))) continue;
+            // The drop takes a suit left with no pair to pop from anywhere: that is mercy, not a cascade.
+            const suitLeft = run.board.tiles.some((other) => other.state === 'hidden' && other.suit === tile.suit && tileCanBreakInChunk(other));
+            if (suitLeft) return `${tile.id} was taken through the wall at cell ${index}`;
+        }
+        return null;
+    },
     'nothing is held into a cleared floor, and a held pair is a matched one': (_before, run) => {
         if (run.status === 'levelComplete' && (run.holding || (run.heldSeedIds ?? []).length > 0)) return 'the floor cleared with a hold held';
         const unmatched = (run.heldSeedIds ?? []).filter((id) => run.board?.tiles.find((tile) => tile.id === id)?.state !== 'matched');
@@ -626,6 +648,7 @@ export const soakRun = ({
     let colossusSplits = 0;
     let turncoatFloors = 0;
     let wandererFloors = 0;
+    let foldFloors = 0;
     let wandererSteps = 0;
     let turncoatTurns = 0;
     let hourglassFloors = 0;
@@ -678,6 +701,7 @@ export const soakRun = ({
         if (next.board && next.board.level !== run.board?.level) {
             if (next.board.tiles.some((tile) => tile.turncoat != null)) turncoatFloors += 1;
             if (next.board.tiles.some((tile) => tile.wanderer)) wandererFloors += 1;
+            if (next.board.fold) foldFloors += 1;
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
@@ -898,6 +922,7 @@ export const soakRun = ({
         colossusSplits,
         turncoatFloors,
         wandererFloors,
+        foldFloors,
         wandererSteps,
         turncoatTurns,
         hourglassFloors,

@@ -1,3 +1,4 @@
+import { foldCutsEdge, type BoardFold } from './board-fold-rules';
 import type { BoardState } from './contracts';
 import { applyRestlessDrift, type RestlessSwap } from './restless-floor-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -25,8 +26,8 @@ export interface SkittishFlinch {
     readonly swaps: readonly RestlessSwap[];
 }
 
-/** Orthogonal neighbours of a board index on a `columns`-wide grid. */
-export const orthogonalNeighbourIndices = (index: number, columns: number, tileCount: number): number[] => {
+/** Orthogonal neighbours of a board index on a `columns`-wide grid, up, down, left, right; the Fold's wall cuts them. */
+export const orthogonalNeighbourIndices = (index: number, columns: number, tileCount: number, fold?: BoardFold | null): number[] => {
     const cols = Math.max(1, Math.floor(columns));
     const row = Math.floor(index / cols);
     const col = index % cols;
@@ -35,7 +36,7 @@ export const orthogonalNeighbourIndices = (index: number, columns: number, tileC
     if (index + cols < tileCount) out.push(index + cols);
     if (col > 0) out.push(index - 1);
     if (col < cols - 1 && index + 1 < tileCount) out.push(index + 1);
-    return out;
+    return fold ? out.filter((cell) => !foldCutsEdge(index, cell, cols, fold)) : out;
 };
 
 /**
@@ -69,7 +70,7 @@ export const resolveSkittishFlinch = ({
         const a = board.tiles.findIndex((tile) => tile.id === tileId);
         if (a < 0 || moved.has(a) || !movable(a)) continue;
         const pairKey = board.tiles[a]!.pairKey;
-        const neighbours = orthogonalNeighbourIndices(a, board.columns, board.tiles.length).filter(
+        const neighbours = orthogonalNeighbourIndices(a, board.columns, board.tiles.length, board.fold).filter(
             (index) => movable(index) && !moved.has(index) && board.tiles[index]!.pairKey !== pairKey
         );
         if (neighbours.length === 0) continue;

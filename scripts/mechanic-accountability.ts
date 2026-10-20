@@ -263,6 +263,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'board.fold': {
+        generation: 278,
+        reason: 'The Fold is a shape, not an event: every break on its floors meets the wall, so a counter would read the floor share it is dealt on. The soak checks on every turn that nothing is taken through the wall and through the door only from a match in the doorway, the unit tests pin the cut and the gate, and two hall rooms walk the door shut and open.'
+    },
     'power.hold': {
         generation: 276,
         reason: 'The Hold is pressed by the player from floor 13, and the census players never press it. The whole-run soak holds whenever the meter arms and releases at three held pairs, with invariants that a held match takes only its pair and nothing is held into a cleared floor, and three hall rooms walk a release, a halving miss and a held last pair.'

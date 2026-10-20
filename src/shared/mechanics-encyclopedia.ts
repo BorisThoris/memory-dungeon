@@ -24,9 +24,10 @@ import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './d
 import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
+import { FOLD_FROM_FLOOR } from './board-fold-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 99 as const;
+export const ENCYCLOPEDIA_VERSION = 100 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -502,6 +503,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_fold',
+        title: 'The Fold',
+        description:
+            `From floor ${FOLD_FROM_FLOOR}, some floors are two rooms with a wall between them and a **doorway** through it. Nothing reaches through the wall: not a pop, not the realm, not a card that moves. A match made in the doorway, on a card either side of it, sends its pop through into the other room; a match anywhere else keeps it on its own side. Each room leans to two elements, so the crossing is worth planning.`
     },
     {
         id: 'sys_wanderers',

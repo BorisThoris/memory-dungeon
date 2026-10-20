@@ -1,3 +1,4 @@
+import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -77,16 +78,6 @@ export interface WandererStep {
     readonly to: number;
 }
 
-const neighbours = (index: number, columns: number, size: number): number[] => {
-    const cells: number[] = [];
-    const column = index % columns;
-    if (index - columns >= 0) cells.push(index - columns);
-    if (index + columns < size) cells.push(index + columns);
-    if (column > 0) cells.push(index - 1);
-    if (column < columns - 1 && index + 1 < size) cells.push(index + 1);
-    return cells;
-};
-
 /** True on the turns the Wanderers step (`turnsThisFloor` counted after the turn). */
 export const isWandererStepTurn = (turnsThisFloor: number): boolean =>
     Number.isFinite(turnsThisFloor) && turnsThisFloor > 0 && turnsThisFloor % WANDERER_STEP_EVERY_TURNS === 0;
@@ -122,7 +113,7 @@ export const resolveWandererSteps = ({
     while (order.length > 0) {
         const [walker] = order.splice(pickRngIndex(rng, order.length), 1);
         if (!walker || spent.has(walker.index)) continue;
-        const cells = neighbours(walker.index, Math.max(1, board.columns), board.tiles.length).filter((cell) => {
+        const cells = orthogonalNeighbourIndices(walker.index, Math.max(1, board.columns), board.tiles.length, board.fold).filter((cell) => {
             const there = board.tiles[cell];
             return cell !== lockedIndex && !spent.has(cell) && free(there) && !there.wanderer && there.pairKey !== walker.tile.pairKey;
         });

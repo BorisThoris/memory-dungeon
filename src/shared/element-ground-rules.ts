@@ -1,3 +1,4 @@
+import type { BoardFold } from './board-fold-rules';
 import type { BoardState, ElementReactionImpact, RealmId, Tile, TileSuit } from './contracts';
 import { ELEMENT_NAMES, type AlchemyLog } from './element-alchemy-rules';
 import { elementReactionOf, resolveElementReaction, elementReactionSummary } from './element-resonance-rules';
@@ -59,10 +60,12 @@ export interface GroundCastResult {
  * No random targeting, pair changes, new holds or extra turns. Effects share the alchemy ledger.
  */
 export const castElementalGround = ({
-    tiles, columns, ground: previous, groupTileIds, reactionTileIds = groupTileIds, suit, realmId, secondaryId, alchemy
+    tiles, columns, ground: previous, groupTileIds, reactionTileIds = groupTileIds, suit, realmId, secondaryId, alchemy, fold = null
 }: {
     tiles: Tile[];
     columns: number;
+    /** The Fold's wall (`board-fold-rules.ts`): the ground spreads through the doorway, never the wall. */
+    fold?: BoardFold | null;
     ground: readonly (TileSuit | null)[];
     groupTileIds: readonly string[];
     /** The player-selected pair chooses chemistry; extra burst pairs only extend the paint. */
@@ -74,7 +77,7 @@ export const castElementalGround = ({
 }): GroundCastResult => {
     const ground = tiles.map((_tile, index) => previous[index] ?? null);
     const sources = groupTileIds.map((id) => tiles.findIndex((tile) => tile.id === id)).filter((i) => i >= 0).sort((a, b) => a - b);
-    const footprint = [...new Set([...sources, ...sources.flatMap((index) => orthogonalNeighbourIndices(index, Math.max(1, columns), tiles.length))])];
+    const footprint = [...new Set([...sources, ...sources.flatMap((index) => orthogonalNeighbourIndices(index, Math.max(1, columns), tiles.length, fold))])];
     const neighbours = footprint.filter((i) => tiles[i]?.state === 'hidden' && real(tiles[i]!));
     const touched = new Set<string>();
     const lit = new Set<string>();

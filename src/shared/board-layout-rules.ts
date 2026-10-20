@@ -1,8 +1,10 @@
 import type { RunState } from './contracts';
 
+/** A Fold board is its shape (`board-fold-rules.ts`): re-wrapped, its wall would run through the middle of a room. */
 export const canReflowRunBoard = (run: RunState): boolean =>
-    run.status === 'playing' || run.status === 'memorize' ||
-    (run.status === 'paused' && run.timerState.pausedFromStatus !== 'resolving');
+    !run.board?.fold &&
+    (run.status === 'playing' || run.status === 'memorize' ||
+    (run.status === 'paused' && run.timerState.pausedFromStatus !== 'resolving'));
 
 /** Grid cells keep their indices, cards, ground, and selection; all adjacency reads the new width. */
 export const reflowRunBoard = (run: RunState, columns: number): RunState => {

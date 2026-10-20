@@ -1,3 +1,4 @@
+import { foldCutsEdge, foldDoorOpenFor, foldRoomOf, type BoardFold } from './board-fold-rules';
 import type { BoardState, FindableKind, RunState, Tile } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { getChainTier, type ChainTier } from './chain-tier-rules';
@@ -279,7 +280,8 @@ export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
 export const tileCanBreakInChunk = (tile: Tile): boolean =>
     tileIsPlainApartFromFindable(tile) && tile.findableKind == null;
 
-export const orthogonalNeighbours = (index: number, columns: number, total: number): number[] => {
+/** Orthogonal neighbours, left, right, up, down; the Fold's wall cuts them (`board-fold-rules.ts`), its door only when `crossDoors`. */
+export const orthogonalNeighbours = (index: number, columns: number, total: number, fold?: BoardFold | null, crossDoors = true): number[] => {
     const row = Math.floor(index / columns);
     const col = index % columns;
     const out: number[] = [];
@@ -287,10 +289,10 @@ export const orthogonalNeighbours = (index: number, columns: number, total: numb
     if (col < columns - 1 && index + 1 < total) out.push(index + 1);
     if (row > 0) out.push(index - columns);
     if (index + columns < total) out.push(index + columns);
-    return out;
+    return fold ? out.filter((cell) => !foldCutsEdge(index, cell, columns, fold, crossDoors)) : out;
 };
 
-export const diagonalNeighbours = (index: number, columns: number, total: number): number[] => {
+export const diagonalNeighbours = (index: number, columns: number, total: number, fold?: BoardFold | null): number[] => {
     const row = Math.floor(index / columns);
     const col = index % columns;
     const out: number[] = [];
@@ -298,7 +300,7 @@ export const diagonalNeighbours = (index: number, columns: number, total: number
         const r = row + dr;
         const c = col + dc;
         const cell = r * columns + c;
-        if (r >= 0 && c >= 0 && c < columns && cell < total) out.push(cell);
+        if (r >= 0 && c >= 0 && c < columns && cell < total && !foldCutsEdge(index, cell, columns, fold)) out.push(cell);
     }
     return out;
 };
@@ -308,6 +310,8 @@ export interface SuitRegionOptions {
     diagonal?: boolean;
     /** Tiles the walk never enters or crosses: the matched pair, once a later wave starts elsewhere. */
     exclude?: readonly string[];
+    /** The Fold's doorway (`board-fold-rules.ts`): open to this walk, or shut. Open unless said. */
+    crossDoors?: boolean;
 }
 
 /**
@@ -316,7 +320,7 @@ export interface SuitRegionOptions {
  * whole region.
  */
 export const findSuitRegion = (
-    board: Pick<BoardState, 'columns' | 'tiles'>,
+    board: Pick<BoardState, 'columns' | 'tiles' | 'fold'>,
     seedTileIds: readonly string[],
     depth: number,
     options: SuitRegionOptions = {}
@@ -332,8 +336,8 @@ export const findSuitRegion = (
     }
     const neighboursOf = (cell: number): number[] =>
         options.diagonal
-            ? [...orthogonalNeighbours(cell, columns, total), ...diagonalNeighbours(cell, columns, total)]
-            : orthogonalNeighbours(cell, columns, total);
+            ? [...orthogonalNeighbours(cell, columns, total, board.fold, options.crossDoors ?? true), ...diagonalNeighbours(cell, columns, total, board.fold)]
+            : orthogonalNeighbours(cell, columns, total, board.fold, options.crossDoors ?? true);
     const seen = new Set<number>(seeds);
     for (const id of options.exclude ?? []) {
         const index = board.tiles.findIndex((tile) => tile.id === id);
@@ -460,6 +464,9 @@ const resolveReactionBurst = ({
     const origins = board.tiles.map((tile, index) => (matched.has(tile.id) ? index : -1)).filter((index) => index >= 0);
     const steps = (index: number): number =>
         Math.min(...origins.map((origin) => Math.abs((index % columns) - (origin % columns)) + Math.abs(Math.floor(index / columns) - Math.floor(origin / columns))));
+    // On the Fold a burst keeps to the rooms the match stood in, unless it stood in the doorway (`board-fold-rules.ts`).
+    const rooms = new Set(origins.map((origin) => foldRoomOf(board, origin)));
+    const reachable = (index: number): boolean => !board.fold || foldDoorOpenFor(board, origins) || rooms.has(foldRoomOf(board, index));
     const halves = new Map<string, number[]>();
     board.tiles.forEach((tile, index) => {
         if (!matched.has(tile.id)) halves.set(tile.pairKey, [...(halves.get(tile.pairKey) ?? []), index]);
@@ -471,7 +478,7 @@ const resolveReactionBurst = ({
             .filter(([pairKey, indexes]) =>
                 indexes.length === 2 &&
                 pairKey !== board.cursedPairKey &&
-                indexes.every((index) => board.tiles[index]!.suit === suit && tileCanBreakInChunk(board.tiles[index]!))
+                indexes.every((index) => board.tiles[index]!.suit === suit && tileCanBreakInChunk(board.tiles[index]!) && reachable(index))
             )
             .map(([pairKey, indexes]) => ({ pairKey, near: Math.min(...indexes.map(steps)), first: Math.min(...indexes) }))
             .sort((a, b) => a.near - b.near || a.first - b.first);
@@ -557,13 +564,15 @@ export const resolveChunkBreak = ({
     const columns = getSafeBoardColumns(board);
     const indexById = new Map(board.tiles.map((tile, index) => [tile.id, index]));
     const matchedSeedSet = new Set(matchedTileIds);
+    // The Fold's doorway is open to this break only when the match stood beside it (`board-fold-rules.ts`).
+    const doorOpen = foldDoorOpenFor(board, matchedTileIds.map((id) => indexById.get(id) ?? -1));
     const neighboursOfIndex = (index: number): number[] =>
         diagonal
             ? [
-                  ...orthogonalNeighbours(index, columns, board.tiles.length),
-                  ...diagonalNeighbours(index, columns, board.tiles.length)
+                  ...orthogonalNeighbours(index, columns, board.tiles.length, board.fold, doorOpen),
+                  ...diagonalNeighbours(index, columns, board.tiles.length, board.fold)
               ]
-            : orthogonalNeighbours(index, columns, board.tiles.length);
+            : orthogonalNeighbours(index, columns, board.tiles.length, board.fold, doorOpen);
     for (let wave = 0; wave < wavesAllowed && seeds.length > 0; wave += 1) {
         // A bridged seed is a card the last wave was touching: it is the head of the next clump,
         // so it is part of this wave's region, not merely the place it starts from.
@@ -571,7 +580,7 @@ export const resolveChunkBreak = ({
             .filter((id) => !matchedSeedSet.has(id))
             .map((id) => indexById.get(id))
             .filter((index): index is number => index != null && board.tiles[index]!.state === 'hidden');
-        const region = [...new Set([...seedIndexes, ...findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds })])];
+        const region = [...new Set([...seedIndexes, ...findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds, crossDoors: doorOpen })])];
         const regionSet = new Set(region.map((index) => board.tiles[index]!.id));
         const taken: string[] = [];
         for (const index of region) {

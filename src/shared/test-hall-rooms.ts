@@ -38,6 +38,7 @@ import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
+import type { BoardFold } from './board-fold-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -86,6 +87,8 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'fold-cross'
+    | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
     | 'hold-miss-halves'
@@ -378,6 +381,19 @@ const wanderersStepped = (ids: readonly string[]) => (run: RunState, before: Run
 };
 const wanderersStill = (ids: readonly string[]) => (run: RunState, before: RunState) =>
     ids.find((id) => cellOfTile(run, id) !== cellOfTile(before, id)) ? 'a Wanderer moved before its turn' : null;
+/** The Fold's two rooms (`board-fold-rules.ts`): what a turn took, by room. */
+const takenFrom = (pairKeys: readonly string[]) => (run: RunState, before: RunState) => {
+    const was = new Set((before.board?.tiles ?? []).filter((t) => t.state === 'hidden').map((t) => t.id));
+    const taken = new Set((run.board?.tiles ?? []).filter((t) => was.has(t.id) && t.state !== 'hidden').map((t) => t.pairKey));
+    const missing = pairKeys.filter((pairKey) => !taken.has(pairKey));
+    return missing.length === 0 ? null : `the pop did not take ${missing.join(', ')} (took ${[...taken].join(', ') || 'nothing'})`;
+};
+const leftStanding = (pairKeys: readonly string[]) => (run: RunState) => {
+    const gone = pairKeys.filter((pairKey) => (run.board?.tiles ?? []).some((t) => t.pairKey === pairKey && t.state !== 'hidden'));
+    return gone.length === 0 ? null : `the pop reached through the wall to ${gone.join(', ')}`;
+};
+const FOLD_HALL: BoardFold = { afterColumn: 2, doorRows: [1] };
+
 const noFootprints = (run: RunState): string | null => (wandererFootprintCells(run.board).length === 0 ? null : `footprints left on ${wandererFootprintCells(run.board).join(', ')}`);
 
 // ---- Expectations ----------------------------------------------------------------------------
@@ -1005,6 +1021,36 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 }
             }
         ]
+    },
+    {
+        id: 'fold-cross',
+        title: 'Cross the doorway',
+        mechanic: 'On the Fold a wall splits the board into two rooms. A match made in the doorway sends its pop through into the other room.',
+        graphMechanicIds: ['board.fold', 'board.chain_chunk_fever'],
+        tryThis: 'Match the fire pair a: one half stands in the doorway, so the fire beside it in the far room (d) goes too.',
+        build: () =>
+            room(['x:t z:m z:m c:e c:e y:t', 'k:e a:e a:e d:e d:e v:t', 'g:e g:e w:m h:e h:e v:t', 'x:t q:b q:b w:m k:e y:t'], {
+                level: 16,
+                misses: 4,
+                streak: 30,
+                board: { fold: FOLD_HALL }
+            }),
+        script: [{ step: { do: 'match', pairKey: 'a' }, says: 'the pop goes through the doorway into the far room', expect: expectAll(takenFrom(['d']), finishable) }]
+    },
+    {
+        id: 'fold-blocked',
+        title: 'Blocked at the doorway',
+        mechanic: 'A match anywhere but the doorway keeps its pop on its own side of the wall, even when the pop reaches the doorway itself.',
+        graphMechanicIds: ['board.fold'],
+        tryThis: 'Match the fire pair a on the top row: the fire beside it goes, right up to the doorway, and stops. Nothing in the far room moves.',
+        build: () =>
+            room(['x:t a:e a:e c:e c:e y:t', 'k:e k:e k2:e d:e d:e v:t', 'g:e g:e k2:e h:e h:e v:t', 'x:t q:b q:b z:m z:m y:t'], {
+                level: 16,
+                misses: 4,
+                streak: 30,
+                board: { fold: FOLD_HALL }
+            }),
+        script: [{ step: { do: 'match', pairKey: 'a' }, says: 'the pop reaches the doorway and stops at the wall', expect: expectAll(takenFrom(['k2']), leftStanding(['c', 'd', 'h']), finishable) }]
     },
     {
         id: 'wanderers-step',

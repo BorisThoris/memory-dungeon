@@ -150,7 +150,7 @@ import { COLOSSUS_COPY, colossusBeatLine, colossusCalloutSub } from '../copy/col
 import { colossusElement } from '../../shared/colossus-rules';
 import { ColossusCard } from './ColossusCard';
 import { OddCardLegend } from './OddCardLegend';
-import { hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
+import { FOLD_LEGEND_ENTRY, hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, isHoldUnlocked } from '../../shared/hold-rules';
 import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
@@ -1553,9 +1553,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardTilesForLegend = run.board?.tiles;
     // The looking glass keeps its clock in the same key: the board cannot show when it will turn.
     const glassClock = run.activeMutators.includes('looking_glass') ? lookingGlassMatchesUntilTurn(runNonNegativeInteger(run.matchResolutionsThisFloor)) : null;
+    // The Fold heads the key while the floor is two rooms (`board-fold-rules.ts`).
+    const boardFolded = run.board?.fold != null;
     const oddCardEntries = useMemo(
-        () => [...oddCardLegend(boardTilesForLegend ?? []), ...(glassClock === null ? [] : [lookingGlassLegendEntry(glassClock)])],
-        [boardTilesForLegend, glassClock]
+        () => [
+            ...(boardFolded ? [FOLD_LEGEND_ENTRY] : []),
+            ...oddCardLegend(boardTilesForLegend ?? []),
+            ...(glassClock === null ? [] : [lookingGlassLegendEntry(glassClock)])
+        ],
+        [boardFolded, boardTilesForLegend, glassClock]
     );
     const hourglassEvent = run.lastHourglassEvent?.key.startsWith(`hourglass:${run.board?.level}:`) ? run.lastHourglassEvent : null;
     const hourglassEventKey = hourglassEvent?.key ?? null;

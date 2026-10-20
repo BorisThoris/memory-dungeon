@@ -21,6 +21,7 @@ import { automaticCampReward } from './automatic-camp-rules';
 import { raiseColossus } from './colossus-rules';
 import { dealOddCards } from './odd-card-rules';
 import { dealWanderers } from './wanderer-rules';
+import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
@@ -58,7 +59,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         gameMode: run.gameMode
     });
     // The next floor is in the realm the player walked into at the clear (`realm-rules.ts`).
-    const realmEntry = enterRealmFloor(run, builtBoard, nextFloorRealmDoor(run));
+    // The Fold (`board-fold-rules.ts`): on its floors the board is two rooms, a wall and a doorway, before anything is dealt onto it.
+    const foldedBoard = foldBoard(builtBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
+    const realmEntry = enterRealmFloor(run, foldedBoard, nextFloorRealmDoor(run));
     // The cold a frozen floor sent on: cards that start this one frozen (`realm-carryover-rules.ts`).
     const chilledBoard = applyRealmChill(realmEntry.board, run.realmChill, run.runSeed, run.runRulesVersion);
     // A boss floor's Colossus stands once the deck's elements are final: its cycle is those elements (`colossus-rules.ts`).

@@ -59,7 +59,7 @@ export const selectStickyFingersBlockIndex = (
     if (from < 0) {
         return null;
     }
-    const neighbours = orthogonalNeighbourIndices(from, board.columns, board.tiles.length)
+    const neighbours = orthogonalNeighbourIndices(from, board.columns, board.tiles.length, board.fold)
         .filter((index) => board.tiles[index]?.state === 'hidden')
         .sort((a, b) => a - b);
     return neighbours[0] ?? null;

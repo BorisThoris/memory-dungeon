@@ -248,7 +248,7 @@ const spreadEveryFire = (tiles: Tile[], board: BoardState, rng: () => number, al
     const burning = tiles.map((tile, index) => ({ tile, index })).filter(({ tile }) => tile.state === 'hidden' && tile.fuse != null);
     for (const { index } of burning) {
         if (tiles.filter((tile) => tile.state === 'hidden' && tile.fuse != null).length >= FIRESTORM_MAX_BURNING) break;
-        const near = orthogonalNeighbourIndices(index, board.columns, tiles.length).filter((n) => {
+        const near = orthogonalNeighbourIndices(index, board.columns, tiles.length, board.fold).filter((n) => {
             const tile = tiles[n];
             return tile != null && tile.state === 'hidden' && tile.fuse == null && isRealCard(tile);
         });
@@ -294,7 +294,7 @@ const overgrowth = (
         if (open.length === 0) break;
         // Vines creep: a card touching vines already is taken first, so they spread in a patch.
         const creeping = open.filter(({ index }) =>
-            orthogonalNeighbourIndices(index, board.columns, tiles.length).some((near) => tiles[near]?.vined === true)
+            orthogonalNeighbourIndices(index, board.columns, tiles.length, board.fold).some((near) => tiles[near]?.vined === true)
         );
         const pool = creeping.length > 0 ? creeping : open;
         const { index } = pool[pickRngIndex(rng, pool.length)]!;
@@ -710,7 +710,7 @@ export const resolveRealmTurn = ({
         for (const id of tileIds) {
             const at = indexOf.get(id);
             if (at == null) continue;
-            for (const near of orthogonalNeighbourIndices(at, board.columns, tiles.length)) {
+            for (const near of orthogonalNeighbourIndices(at, board.columns, tiles.length, board.fold)) {
                 const tile = tiles[near];
                 if (!tile || tile.state !== 'hidden') continue;
                 if (tile.vined === true) {
@@ -771,7 +771,7 @@ export const resolveRealmTurn = ({
         const castGroup = groupTileIds.filter((id) => tiles[indexOf.get(id) ?? -1]?.suit === castSuit);
         const field = castSuit ? castElementalGround({
             tiles, columns: board.columns, ground, groupTileIds: castGroup, reactionTileIds: tileIds, suit: castSuit,
-            realmId, secondaryId, alchemy
+            realmId, secondaryId, alchemy, fold: board.fold
         }) : null;
         if (field) {
             ground = field.ground;
@@ -788,7 +788,7 @@ export const resolveRealmTurn = ({
             pinned.clear();
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
         }
-        const cast = castElement({ tiles, columns: board.columns, groupTileIds: castGroup, realmId, secondaryId, pinned: new Set([...pinnedTileIds, ...recipeGuard]), anchored: pinned, alchemy, tier, still,
+        const cast = castElement({ tiles, columns: board.columns, fold: board.fold, groupTileIds: castGroup, realmId, secondaryId, pinned: new Set([...pinnedTileIds, ...recipeGuard]), anchored: pinned, alchemy, tier, still,
             combo: run.stats.currentStreak, quenchFire: field?.quenchFire || ['steam', 'melt'].includes(resonanceTurn.reaction?.definition.kind ?? ''), multiplier: CHAIN_MULT[runChainTier(run)] });
         if (cast) {
             const forged = applyForgedCast(tiles, cast.touchedTileIds, cast.suit, focusOf(run, cast.suit));
@@ -892,7 +892,7 @@ export const resolveRealmTurn = ({
         const spreadRng = rngFor('spread', run, level, turns);
         const spread: string[] = [];
         for (const index of burntOut) {
-            const near = orthogonalNeighbourIndices(index, board.columns, tiles.length).filter((n) => {
+            const near = orthogonalNeighbourIndices(index, board.columns, tiles.length, board.fold).filter((n) => {
                 const tile = tiles[n];
                 return tile != null && tile.state === 'hidden' && tile.fuse == null && isRealCard(tile);
             });

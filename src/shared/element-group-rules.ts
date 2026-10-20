@@ -1,3 +1,4 @@
+import type { BoardFold } from './board-fold-rules';
 import type { ElementCastImpact, RealmEvent, RealmId, Tile, TileSuit } from './contracts';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
@@ -47,14 +48,14 @@ export const ELEMENT_MATCH_RULES: Readonly<Record<TileSuit, string>> = {
 const isReal = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
 
 /** Face-down real cards within `reach` steps of any of `from`, nearest first, never one of `from`. */
-export const cardsWithinReach = (tiles: readonly Tile[], columns: number, from: readonly number[], reach: number): number[] => {
+export const cardsWithinReach = (tiles: readonly Tile[], columns: number, from: readonly number[], reach: number, fold?: BoardFold | null): number[] => {
     const seen = new Map<number, number>();
     for (const index of from) seen.set(index, 0);
     let frontier = [...from];
     for (let step = 1; step <= reach; step += 1) {
         const next: number[] = [];
         for (const index of frontier) {
-            for (const near of orthogonalNeighbourIndices(index, columns, tiles.length)) {
+            for (const near of orthogonalNeighbourIndices(index, columns, tiles.length, fold)) {
                 if (seen.has(near)) continue;
                 seen.set(near, step);
                 next.push(near);
@@ -83,14 +84,14 @@ export interface ElementCast {
 }
 
 /** A cast travels through touching cards of one element before jumping to the next block. */
-export const elementalContactGroups = (tiles: readonly Tile[], columns: number, reached: readonly number[]): number[][] => {
+export const elementalContactGroups = (tiles: readonly Tile[], columns: number, reached: readonly number[], fold?: BoardFold | null): number[][] => {
     const remaining = new Set(tiles.flatMap((tile, index) => tile.state === 'hidden' && isReal(tile) ? [index] : []));
     const groups: number[][] = [];
     for (const start of reached) {
         if (!remaining.delete(start)) continue;
         const group = [start];
         for (let at = 0; at < group.length; at += 1) {
-            for (const next of orthogonalNeighbourIndices(group[at]!, columns, tiles.length)) {
+            for (const next of orthogonalNeighbourIndices(group[at]!, columns, tiles.length, fold)) {
                 if (remaining.has(next) && tiles[next]?.suit === tiles[start]?.suit) {
                     remaining.delete(next);
                     group.push(next);
@@ -129,10 +130,13 @@ export const castElement = ({
     tier = 0,
     combo = 0,
     quenchFire = false,
-    multiplier = 1
+    multiplier = 1,
+    fold = null
 }: {
     tiles: Tile[];
     columns: number;
+    /** The Fold's wall (`board-fold-rules.ts`): a cast reaches through the doorway, never the wall. */
+    fold?: BoardFold | null;
     groupTileIds: readonly string[];
     realmId: RealmId | null;
     secondaryId?: RealmId | null;
@@ -156,7 +160,7 @@ export const castElement = ({
     const groupPairs = new Set(group.map((index) => tiles[index]!.pairKey)).size;
     const power = elementCastPower(combo, steps, groupPairs, multiplier);
     const reach = (SUIT_REALM[suit] === realmId || SUIT_REALM[suit] === secondaryId ? ELEMENT_REACH_IN_OWN_REALM : ELEMENT_REACH) + power.extraReach;
-    const groups = elementalContactGroups(tiles, Math.max(1, columns), cardsWithinReach(tiles, Math.max(1, columns), group, Math.min(tiles.length, reach)));
+    const groups = elementalContactGroups(tiles, Math.max(1, columns), cardsWithinReach(tiles, Math.max(1, columns), group, Math.min(tiles.length, reach), fold), fold);
     const reached = groups.flat();
     const before = [...tiles];
     // The visible wave meets counter-elements too. Their response must survive into the impact

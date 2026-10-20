@@ -25,6 +25,15 @@ export const WANDERER_COPY = {
     wandererLabel: `, a Wanderer: every ${WANDERER_STEP_EVERY_TURNS}rd turn it steps a cell`
 } as const;
 
+/** The Fold (`board-fold-rules.ts`): its line in the key while the floor is two rooms. */
+export const FOLD_LEGEND_ENTRY: OddCardLegendEntry = {
+    id: 'fold',
+    name: 'The Fold',
+    line: 'Two rooms and a wall. Match in the doorway and the pop goes through; anywhere else it stays on its side.',
+    suit: null,
+    sand: null
+};
+
 const turns = (n: number): string => `${n} ${n === 1 ? 'turn' : 'turns'}`;
 
 /** The Turncoat's line in the legend: what it is now and next. */
@@ -41,7 +50,7 @@ export const hourglassAnnouncement = (event: HourglassEvent): string =>
 
 export interface OddCardLegendEntry {
     /** The odd cards, and the looking glass's clock, which shares their key above the board. */
-    readonly id: 'turncoat' | 'hourglass' | 'looking_glass' | 'wanderer';
+    readonly id: 'turncoat' | 'hourglass' | 'looking_glass' | 'wanderer' | 'fold';
     readonly name: string;
     readonly line: string;
     /** The element whose colour the entry wears: a Turncoat's current one. */

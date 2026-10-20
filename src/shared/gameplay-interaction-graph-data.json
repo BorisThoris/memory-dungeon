@@ -2678,6 +2678,41 @@
             ]
         },
         {
+            "id": "board.fold",
+            "label": "The Fold",
+            "kind": "board",
+            "role": "some_floors_from_13_are_two_rooms_with_a_wall_and_a_doorway_every_neighbour_walk_stops_at_the_wall_and_a_cascade_crosses_the_door_only_from_a_match_in_it",
+            "evidence": [
+                "src/shared/board-fold-rules.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/shared/skittish-cards-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/board-layout-rules.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pairCount",
+                "runSeed",
+                "boardFold"
+            ],
+            "writes": [
+                "tileStates",
+                "boardFold"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-grid-stays-whole-so-every-pair-is-two-cards",
+                "the-wall-is-a-cut-in-adjacency-never-a-missing-cell",
+                "a-fold-board-is-never-reflowed"
+            ],
+            "tests": [
+                "src/shared/board-fold-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.wanderers",
             "label": "Wanderers",
             "kind": "board",
@@ -4029,6 +4064,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "board.fold",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "the pop walks no contact through the wall, and through the doorway only when the match stood in it"
+        },
+        {
+            "source": "board.fold",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the wall drawn between the rooms with the doorway open, and the key beside the board"
         },
         {
             "source": "board.wanderers",

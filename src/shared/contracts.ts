@@ -6,6 +6,7 @@
  * (`.github/pull_request_template.md`). See docs/refinement-tasks REF-066. For optional payloads, consider aligning
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
+import type { BoardFold } from './board-fold-rules';
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
 
 /** 10 (2026-10-20, DGE-031): `playerStats.descent` and the `descent:endless` unlock, the deep-game pack's one migration. */
@@ -16,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). */
-export const GAME_RULES_VERSION = 70;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). */
+export const GAME_RULES_VERSION = 71;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -527,6 +528,8 @@ export interface BoardState {
     biomeTone?: string | null;
     /** The boss over a boss floor (`colossus-rules.ts`); absent on every other floor. Not on the grid. */
     colossus?: ColossusState;
+    /** The Fold (`board-fold-rules.ts`): a wall through the grid with a doorway; absent on a one-room board. */
+    fold?: BoardFold;
 }
 
 /**

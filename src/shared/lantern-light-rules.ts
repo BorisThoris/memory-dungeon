@@ -45,7 +45,7 @@ export const resolveLanternLight = ({
     for (const id of matchedTileIds) {
         const index = board.tiles.findIndex((tile) => tile.id === id);
         if (index < 0) continue;
-        for (const neighbour of orthogonalNeighbourIndices(index, board.columns, board.tiles.length)) {
+        for (const neighbour of orthogonalNeighbourIndices(index, board.columns, board.tiles.length, board.fold)) {
             if (board.tiles[neighbour]?.state === 'hidden') touching.add(neighbour);
         }
     }
