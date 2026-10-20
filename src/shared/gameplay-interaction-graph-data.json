@@ -2678,6 +2678,42 @@
             ]
         },
         {
+            "id": "board.wanderers",
+            "label": "Wanderers",
+            "kind": "board",
+            "role": "two_pairs_from_floor_13_three_from_25_that_step_one_cell_every_third_turn_trading_with_a_face_down_neighbour_and_leave_a_footprint_for_one_turn",
+            "evidence": [
+                "src/shared/wanderer-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/player-visible-board.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "pairCount",
+                "runSeed",
+                "turnsThisFloor",
+                "pinnedTileIds",
+                "wandererFootprints"
+            ],
+            "writes": [
+                "tileStates",
+                "wandererFootprints"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "steps-only-between-face-down-unpinned-cards",
+                "never-onto-its-partner-or-another-wanderer",
+                "never-into-or-out-of-the-sticky-lock"
+            ],
+            "tests": [
+                "src/shared/wanderer-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "power.hold",
             "label": "The Hold",
             "kind": "power",
@@ -3993,6 +4029,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "board.wanderers",
+            "target": "hazard.restless_floor",
+            "kind": "synergy",
+            "label": "on a restless floor the drift moves first and the Wanderers step after it, from the same seed"
+        },
+        {
+            "source": "board.wanderers",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the footprint on the cell a Wanderer left, and the Wanderer on its face"
         },
         {
             "source": "power.hold",

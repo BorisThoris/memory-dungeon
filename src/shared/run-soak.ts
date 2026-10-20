@@ -1,3 +1,4 @@
+import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { awaitsWardenChoice, descendIntoEndless, isWardenFloor } from './warden-rules';
@@ -117,6 +118,9 @@ export interface SoakRunReport {
     colossusSplits: number;
     /** The odd cards (`odd-card-rules.ts`): floors dealt a Turncoat, times one turned, floors dealt an Hourglass, prizes caught, and Hourglasses that ran out. */
     turncoatFloors: number;
+    /** The Wanderers (`wanderer-rules.ts`): floors dealt with them, and the steps they took. */
+    wandererFloors: number;
+    wandererSteps: number;
     turncoatTurns: number;
     hourglassFloors: number;
     hourglassesCaught: number;
@@ -373,6 +377,24 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const taken = run.board.matchedPairs - before.board.matchedPairs;
         return taken <= 1 ? null : `a held match took ${taken} pairs`;
     },
+    'a footprint lies one step from the Wanderer that left it, on its own turn, and lasts that turn': (before, run, action) => {
+        const prints = wandererFootprintCells(run.board);
+        if (prints.length === 0 || !run.board) return null;
+        if (run.status === 'levelComplete' || run.status === 'gameOver') return `footprints on a floor that is over (${run.status})`;
+        // Checked on the turn that left them: a bomb, a shuffle or a release between turns may take or move the
+        // Wanderer, and its footprint stays until the next turn resolves.
+        if (action !== 'resolve' || !before || run.turnsThisFloor <= before.turnsThisFloor) return null;
+        if (!isWandererStepTurn(run.turnsThisFloor)) return `footprints on turn ${run.turnsThisFloor}, not a Wanderer's`;
+        // The Warden re-deals after the step (`warden-rules.ts`), which may carry a Wanderer off.
+        if (isWardenFloor(run.board)) return null;
+        const { columns, tiles } = run.board;
+        for (const cell of prints) {
+            if (tiles[cell]?.wanderer) return `a Wanderer stands on its own footprint at ${cell}`;
+            const near = [cell - columns, cell + columns, cell % columns > 0 ? cell - 1 : -1, cell % columns < columns - 1 ? cell + 1 : -1];
+            if (!near.some((index) => index >= 0 && tiles[index]?.wanderer)) return `no Wanderer beside the footprint at ${cell}`;
+        }
+        return null;
+    },
     'nothing is held into a cleared floor, and a held pair is a matched one': (_before, run) => {
         if (run.status === 'levelComplete' && (run.holding || (run.heldSeedIds ?? []).length > 0)) return 'the floor cleared with a hold held';
         const unmatched = (run.heldSeedIds ?? []).filter((id) => run.board?.tiles.find((tile) => tile.id === id)?.state !== 'matched');
@@ -603,6 +625,8 @@ export const soakRun = ({
     let colossiFelled = 0;
     let colossusSplits = 0;
     let turncoatFloors = 0;
+    let wandererFloors = 0;
+    let wandererSteps = 0;
     let turncoatTurns = 0;
     let hourglassFloors = 0;
     let hourglassesCaught = 0;
@@ -653,9 +677,11 @@ export const soakRun = ({
         colossusSplits += Math.max(0, (next.colossusSplitsThisFloor ?? 0) - (run.colossusSplitsThisFloor ?? 0));
         if (next.board && next.board.level !== run.board?.level) {
             if (next.board.tiles.some((tile) => tile.turncoat != null)) turncoatFloors += 1;
+            if (next.board.tiles.some((tile) => tile.wanderer)) wandererFloors += 1;
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        if (next.board?.level === run.board?.level) wandererSteps += Math.max(0, (next.wandererStepsThisFloor ?? 0) - (run.wandererStepsThisFloor ?? 0));
         hourglassesCaught += Math.max(0, (next.hourglassesCaughtThisRun ?? 0) - (run.hourglassesCaughtThisRun ?? 0));
         hourglassesSpent += Math.max(0, (next.hourglassesSpentThisFloor ?? 0) - (run.hourglassesSpentThisFloor ?? 0));
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
@@ -871,6 +897,8 @@ export const soakRun = ({
         colossiFelled,
         colossusSplits,
         turncoatFloors,
+        wandererFloors,
+        wandererSteps,
         turncoatTurns,
         hourglassFloors,
         hourglassesCaught,

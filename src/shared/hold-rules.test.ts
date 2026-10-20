@@ -13,12 +13,16 @@ const floor13 = (holdLinks: number): RunState => {
     return { ...base, status: 'playing', activeMutators: [], board, holdLinks, missBank: [{ floor: 13, misses: 9 }] };
 };
 
-/** Match any pair still face down; null when none is left. */
+/** Match any pair still face down whose two cards both turn (a trait can refuse a flip); null when none is left. */
 const matchOne = (run: RunState): RunState | null => {
     const hidden = run.board!.tiles.filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__'));
-    const first = hidden[0];
-    const second = first && hidden.find((tile) => tile.pairKey === first.pairKey && tile.id !== first.id);
-    return first && second ? resolveBoardTurn(flipTile(flipTile(run, first.id), second.id)) : null;
+    for (const first of hidden) {
+        const second = hidden.find((tile) => tile.pairKey === first.pairKey && tile.id !== first.id);
+        if (!second) continue;
+        const flipped = flipTile(flipTile(run, first.id), second.id);
+        if (flipped.board!.flippedTileIds.length === 2) return resolveBoardTurn(flipped);
+    }
+    return null;
 };
 
 const missOne = (run: RunState): RunState => {

@@ -1,6 +1,7 @@
 import type { HourglassEvent, Tile, TileSuit } from '../../shared/contracts';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
 import { HOURGLASS_GOLD } from '../../shared/odd-card-rules';
+import { WANDERER_STEP_EVERY_TURNS } from '../../shared/wanderer-rules';
 
 /**
  * What the odd cards say (`odd-card-rules.ts`).
@@ -14,6 +15,14 @@ export const ODD_CARD_COPY = {
     hourglassName: 'Hourglass',
     caughtTitle: 'HOURGLASS CAUGHT',
     spentAnnouncement: 'The hourglass ran out. Its pair is a plain pair now.'
+} as const;
+
+/** The Wanderers (`wanderer-rules.ts`): the key's line, and what a screen reader hears on a card. */
+export const WANDERER_COPY = {
+    name: 'Wanderers',
+    line: `Some cards step one cell every ${WANDERER_STEP_EVERY_TURNS}rd turn, trading places, and leave a footprint where they stood.`,
+    footprintLabel: ', footprint: a Wanderer stepped out of this cell last turn',
+    wandererLabel: `, a Wanderer: every ${WANDERER_STEP_EVERY_TURNS}rd turn it steps a cell`
 } as const;
 
 const turns = (n: number): string => `${n} ${n === 1 ? 'turn' : 'turns'}`;
@@ -32,7 +41,7 @@ export const hourglassAnnouncement = (event: HourglassEvent): string =>
 
 export interface OddCardLegendEntry {
     /** The odd cards, and the looking glass's clock, which shares their key above the board. */
-    readonly id: 'turncoat' | 'hourglass' | 'looking_glass';
+    readonly id: 'turncoat' | 'hourglass' | 'looking_glass' | 'wanderer';
     readonly name: string;
     readonly line: string;
     /** The element whose colour the entry wears: a Turncoat's current one. */
@@ -45,8 +54,11 @@ export const oddCardLegend = (tiles: readonly Tile[]): OddCardLegendEntry[] => {
     const standing = tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed');
     const turncoat = standing.find((tile) => tile.turncoat != null && tile.suit);
     const hourglass = standing.find((tile) => tile.hourglass != null);
+    // Said while any Wanderer stands, never which: the key is read off the whole board, the cards keep the secret.
+    const wandering = standing.some((tile) => tile.wanderer);
     return [
         ...(turncoat ? [{ id: 'turncoat' as const, name: ODD_CARD_COPY.turncoatName, line: turncoatLegend(turncoat.suit!, turncoat.turncoat!), suit: turncoat.suit!, sand: null }] : []),
-        ...(hourglass ? [{ id: 'hourglass' as const, name: ODD_CARD_COPY.hourglassName, line: hourglassLegend(hourglass.hourglass!), suit: null, sand: hourglass.hourglass! }] : [])
+        ...(hourglass ? [{ id: 'hourglass' as const, name: ODD_CARD_COPY.hourglassName, line: hourglassLegend(hourglass.hourglass!), suit: null, sand: hourglass.hourglass! }] : []),
+        ...(wandering ? [{ id: 'wanderer' as const, name: WANDERER_COPY.name, line: WANDERER_COPY.line, suit: null, sand: null }] : [])
     ];
 };

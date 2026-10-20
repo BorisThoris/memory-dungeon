@@ -152,6 +152,19 @@ export const paintCardStatus = (
         ctx.beginPath(); ctx.moveTo(148, 40); ctx.lineTo(168, 72); ctx.lineTo(130, 72); ctx.closePath();
         outlined(ctx, PAPER, 6);
     }
+    if (mark.footprint) {
+        // The Wanderers' trail: two soles stepping across the card, the left one lower. A shape, not a colour.
+        const sole = (x: number, y: number, tilt: number): void => {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(tilt);
+            ctx.beginPath(); ctx.ellipse(0, 0, 21, 36, 0, 0, Math.PI * 2); outlined(ctx, PAPER, 8);
+            for (const [tx, ty, r] of [[-12, -46, 7], [0, -50, 7], [12, -46, 7]] as const) {
+                ctx.beginPath(); ctx.arc(tx, ty, r, 0, Math.PI * 2); outlined(ctx, PAPER, 6);
+            }
+            ctx.restore();
+        };
+        sole(W / 2 - 34, H / 2 + 46, -0.18);
+        sole(W / 2 + 34, H / 2 - 20, 0.18);
+    }
     if (mark.hourglass) {
         // The Hourglass: two gold triangles tip to tip and the turns of sand left, low on the left.
         const x = 54; const y = H - 62;

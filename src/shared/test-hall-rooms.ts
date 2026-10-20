@@ -37,6 +37,7 @@ import { tileCharge } from './element-alchemy-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
+import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -85,6 +86,7 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'wanderers-step'
     | 'hold-release'
     | 'hold-miss-halves'
     | 'hold-last-pair'
@@ -358,6 +360,25 @@ const sandIs = (pairKey: string, sand: number | undefined) => (run: RunState) =>
     const halves = (run.board?.tiles ?? []).filter((t) => t.pairKey === pairKey);
     return halves.every((t) => t.hourglass === sand) ? null : `pair ${pairKey} holds ${halves.map((t) => t.hourglass).join('/')} turns of sand, expected ${sand}`;
 };
+
+/** Where a card sits on the board, by id. */
+const cellOfTile = (run: RunState, id: string): number => (run.board?.tiles ?? []).findIndex((t) => t.id === id);
+/** The Wanderers' step (`wanderer-rules.ts`): each one moved a single orthogonal cell and left a footprint there. */
+const wanderersStepped = (ids: readonly string[]) => (run: RunState, before: RunState) => {
+    const columns = run.board!.columns;
+    for (const id of ids) {
+        const from = cellOfTile(before, id);
+        const to = cellOfTile(run, id);
+        if (from === to) return `${id} did not move from cell ${from}`;
+        const orthogonal = Math.abs(from - to) === columns || (Math.abs(from - to) === 1 && Math.floor(from / columns) === Math.floor(to / columns));
+        if (!orthogonal) return `${id} jumped from cell ${from} to ${to}`;
+        if (!wandererFootprintCells(run.board).includes(from)) return `no footprint on cell ${from}, which ${id} left`;
+    }
+    return null;
+};
+const wanderersStill = (ids: readonly string[]) => (run: RunState, before: RunState) =>
+    ids.find((id) => cellOfTile(run, id) !== cellOfTile(before, id)) ? 'a Wanderer moved before its turn' : null;
+const noFootprints = (run: RunState): string | null => (wandererFootprintCells(run.board).length === 0 ? null : `footprints left on ${wandererFootprintCells(run.board).join(', ')}`);
 
 // ---- Expectations ----------------------------------------------------------------------------
 
@@ -983,6 +1004,29 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
             }
+        ]
+    },
+    {
+        id: 'wanderers-step',
+        title: 'Wanderers step on turn three',
+        mechanic: `From the Living Dungeon some pairs are Wanderers: every ${WANDERER_STEP_EVERY_TURNS}rd turn each one face down steps a cell into a face-down neighbour and leaves a footprint for one turn.`,
+        graphMechanicIds: ['board.wanderers'],
+        tryThis: 'Miss three times with the corner cards: on the third, both halves of the fire pair a step one cell and leave a footprint where they stood. Play one more turn and the footprints are gone.',
+        build: () =>
+            room(['b:t c:m d:b e:e', 'f:t a:e g:m h:b', 'b:t c:m a:e e:e', 'f:t d:b g:m h:b'], {
+                level: 13,
+                misses: 6,
+                tiles: (tiles) => tiles.map((t) => (t.pairKey === 'a' ? { ...t, wanderer: true } : t))
+            }),
+        script: [
+            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'one turn: the Wanderers wait', expect: expectAll(wanderersStill(['a-1', 'a-2']), noFootprints) },
+            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'two turns: still waiting', expect: expectAll(wanderersStill(['a-1', 'a-2']), noFootprints) },
+            {
+                step: { do: 'miss', a: 'b-1', b: 'c-1' },
+                says: 'the third turn: each Wanderer steps one cell and leaves a footprint',
+                expect: expectAll(wanderersStepped(['a-1', 'a-2']), finishable)
+            },
+            { step: { do: 'match', pairKey: 'h' }, says: 'one turn later the footprints are gone', expect: expectAll(noFootprints, wanderersStill(['a-1', 'a-2']), finishable) }
         ]
     },
     {

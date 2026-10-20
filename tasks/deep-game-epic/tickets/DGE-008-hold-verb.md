@@ -1,7 +1,7 @@
 # DGE-008: Hold: stack matches, release one cascade
 
 ## Status
-Not started
+Done (2026-10-20), as specified. The pop-share acceptance is unmet by design, and the feedback pass waits: see notes.
 
 ## Priority
 P0

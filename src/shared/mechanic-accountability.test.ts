@@ -76,11 +76,12 @@ describe('every mechanic answers for itself', () => {
         const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
         // 34 in Gen 263: skittish cards joined with their own census row.
         // 37 on 2026-09-30: the heat perks joined with their own census row.
-        expect(censused).toBe(38);
+        // 39 on 2026-10-20: the Wanderers joined with a run-census row.
+        expect(censused).toBe(39);
         // 43 to 48 in Gen 262: the miss bank, gold, the store stop, bombs and relics joined the graph,
         // each exempt with the soak as its proof rather than counted, because no census player shops.
         // 53 to 56 on 2026-09-30: realm weather, omens and realm travel, exempt with the soak as proof.
-        expect(gameplayInteractionGraph.mechanics.length).toBe(74);
+        expect(gameplayInteractionGraph.mechanics.length).toBe(75);
         /*
          * Nothing is blind by family any more: every remaining mechanic carries its own argued
          * exemption. Ten of them.

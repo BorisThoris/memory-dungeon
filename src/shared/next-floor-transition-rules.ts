@@ -20,6 +20,7 @@ import { applyRealmChill } from './realm-carryover-rules';
 import { automaticCampReward } from './automatic-camp-rules';
 import { raiseColossus } from './colossus-rules';
 import { dealOddCards } from './odd-card-rules';
+import { dealWanderers } from './wanderer-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
@@ -63,7 +64,11 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // A boss floor's Colossus stands once the deck's elements are final: its cycle is those elements (`colossus-rules.ts`).
     const bossBoard = raiseColossus(chilledBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
     // The floor's odd cards, a Turncoat and an Hourglass, on pairs nothing else has marked (`odd-card-rules.ts`).
-    const nextBoard = dealOddCards(bossBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
+    // Then the Wanderers, on pairs the odd cards left plain (`wanderer-rules.ts`).
+    const nextBoard = dealWanderers(dealOddCards(bossBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion }), {
+        runSeed: run.runSeed,
+        rulesVersion: run.runRulesVersion
+    });
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 

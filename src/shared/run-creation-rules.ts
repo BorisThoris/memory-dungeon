@@ -201,6 +201,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         voidSpewsThisFloor: 0,
         restlessDriftsThisFloor: 0,
         skittishFlinchesThisFloor: 0,
+        wandererStepsThisFloor: 0,
         turncoatTurnsThisFloor: 0,
         hourglassesCaughtThisRun: 0,
         hourglassesSpentThisFloor: 0,

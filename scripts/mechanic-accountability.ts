@@ -61,6 +61,7 @@ export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'hazard.magpie_thief': ['magpieThefts'],
     'hazard.restless_floor': ['restlessDrifts'],
     'hazard.skittish_cards': ['skittishFlinches'],
+    'board.wanderers': ['wandererSteps'],
     'board.lantern_light': ['lanternLights'],
     'hazard.looking_glass': ['lookingGlassTurns'],
     'board.combo_heat_perks': ['heatPerkTurns'],

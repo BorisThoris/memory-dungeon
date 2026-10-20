@@ -1,7 +1,7 @@
 # DGE-009: Wanderers: cards that drift and leave a trail
 
 ## Status
-Not started
+Done (2026-10-20), rules 70. No back mark (the owner’s rule wins) and the Dread price waits for the priced table: see notes.
 
 ## Priority
 P0
@@ -55,3 +55,13 @@ From Act II two or three pairs per floor are Wanderers. Every third resolved tur
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-20, built (rules 70):
+- `src/shared/wanderer-rules.ts`: the deal (`dealWanderers`, from the floor transition after the odd cards), the step (`resolveWandererSteps`, `applyWandererSteps`), the turn hook (`applyWandererTurn`, after the Hold and before the Warden in `board-turn-transition.ts`), `wandererFootprintCells`.
+- The footprint is a flag on the card traded into the vacated cell (`Tile.footprint`), wiped by the next resolved turn, not a list of cells on the run: every renderer path that paints a card's status reads it without an index. A card shuffled between turns carries its footprint with it until the next turn.
+- **Deviation:** the plan put a wanderer mark on the backs. The owner's rule (`player-visible-board.ts`, 2026-10-08) is that nothing face down may set one pair apart, so `wanderer` is stripped face down like the Turncoat's fields. The key beside the board (`OddCardLegend`) says Wanderers walk the floor; the focused card's label says "a Wanderer" face up and "footprint" on a trail card.
+- The deal is by act (two from 13, three from 25), not bought from the Dread table: the priced table is still to be built.
+- The rules bump reseeded the seeded tests: the Crucible's fixture now leaves the odd cards out of "the rest of the element" (the rule always did), the Hold test's helper skips a pair whose flip a trait refuses, the schedule golden is pinned at the rules it was recorded at (69), and twelve ledger notes were requoted.
+- Soak: 200 seeds x 4 players, 8,461 Wanderer floors, 21,664 steps, 0 violations with the invariant that a footprint lies one step from a Wanderer on the turn it is left and none outlasts a floor. The first soak caught a release that cleared a floor showing last turn's footprints (fixed: every turn and every floor end wipes them).
+- Checklist rows ticked: rules module, generation gate (`WANDERER_RULES_FROM`), hall room `wanderers-step` (three seeds), soak invariant and counters, run census counter `wandererSteps`, graph node `board.wanderers` with `displays` and `synergy` edges, ledger entry, Codex `sys_wanderers` (encyclopedia 99), `docs/MUTATORS.md` order note, a look in the browser.
+- Not done: the slide animation and its reduced-motion variant (cards glide as any permutation does), `yarn sim:endless` coverage, the DGE-032 cap on movers per floor.

@@ -15,6 +15,8 @@ const floorFive = (): RunState => {
 
 const live = (run: RunState): Tile[] => run.board!.tiles.filter((tile) => tile.state === 'hidden' || tile.state === 'flipped');
 const hiddenOf = (run: RunState, suit: TileSuit): Tile[] => run.board!.tiles.filter((tile) => tile.state === 'hidden' && tile.suit === suit);
+/** The element's cards the Crucible recasts: the odd cards keep their element (`crucible-rules.ts`). */
+const plainOf = (run: RunState, suit: TileSuit): Tile[] => hiddenOf(run, suit).filter((tile) => tile.turncoat == null && tile.hourglass == null);
 
 describe('the Crucible', () => {
     it('waits for one card face up whose twin is still down', () => {
@@ -31,7 +33,7 @@ describe('the Crucible', () => {
         const from = first.suit!;
         const to = crucibleRecastSuit(from);
         const flipped = flipTile(run, first.id);
-        const otherOfElement = hiddenOf(flipped, from).filter((tile) => tile.pairKey !== first.pairKey);
+        const otherOfElement = plainOf(flipped, from).filter((tile) => tile.pairKey !== first.pairKey);
         const result = applyCrucible(flipped, first.id)!;
 
         expect(result.fromSuit).toBe(from);
@@ -39,7 +41,7 @@ describe('the Crucible', () => {
         expect(result.meltedTileIds).toHaveLength(2);
         expect(result.run.board!.tiles.filter((tile) => result.meltedTileIds.includes(tile.id)).every((tile) => tile.state === 'removed')).toBe(true);
         expect(result.recastTileIds).toHaveLength(otherOfElement.length);
-        expect(hiddenOf(result.run, from)).toHaveLength(0);
+        expect(plainOf(result.run, from)).toHaveLength(0);
         const recast = result.run.board!.tiles.filter((tile) => result.recastTileIds.includes(tile.id));
         expect(recast.every((tile) => tile.suit === to && tile.state === 'hidden')).toBe(true);
         // New faces: none the element wore before.
@@ -73,7 +75,7 @@ describe('the Crucible', () => {
         const run = floorFive();
         const first = run.board!.tiles.find((tile) => tile.state === 'hidden')!;
         const flipped = flipTile(run, first.id);
-        const element = hiddenOf(flipped, first.suit!).filter((tile) => tile.pairKey !== first.pairKey).map((tile) => tile.id);
+        const element = plainOf(flipped, first.suit!).filter((tile) => tile.pairKey !== first.pairKey).map((tile) => tile.id);
         const result = applyCrucible({ ...flipped, peekRevealedTileIds: [element[0]!], lanternLitTileIds: [element[1]!] }, first.id)!;
         expect(new Set(result.recastTileIds)).toEqual(new Set(element));
         expect(result.run.board!.tiles.map((tile) => tile.id).sort()).toEqual(run.board!.tiles.map((tile) => tile.id).sort());

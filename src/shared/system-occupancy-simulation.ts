@@ -154,6 +154,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'lookingGlassTurns', key: 'lookingGlassTurnsThisFloor', label: 'The board turned over in the mirror', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /* Heat perks (2026-09-30): matches resolved with the combo's afterglow, wider pop or longer reach on. Floor-scoped tally; the combo itself crosses floors. */
     { id: 'heatPerkTurns', key: 'heatPerkTurnsThisFloor', label: 'A match was played with a heat perk on', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference' },
+    /* The Wanderers (DGE-009): steps they took. Run-scoped: they are dealt by the floor transition from floor 13, which the floor census never steps. */
+    { id: 'wandererSteps', key: 'wandererStepsThisFloor', label: 'The Wanderers stepped a cell', family: 'memory', cadence: 'common', kind: 'tally', player: 'reference', scope: 'run' },
     { id: 'skittishFlinches', key: 'skittishFlinchesThisFloor', label: 'Skittish cards flinched after a miss', family: 'memory', cadence: 'rare', kind: 'tally', player: 'reference' },
     /*
      * The featured objective, uncounted since the census existed (Gen 216).

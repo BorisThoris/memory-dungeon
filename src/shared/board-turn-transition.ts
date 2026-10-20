@@ -40,6 +40,7 @@ import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards
 import { runNonNegativeInteger } from './run-number-guards';
 import { applyColossusTurnToRun, resolveColossusTurn } from './colossus-rules';
 import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
+import { applyWandererTurn } from './wanderer-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 
@@ -508,12 +509,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applyWardenTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))));
+            return applyWardenTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)))));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyWardenTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))));
+        return applyWardenTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)))));
     };
     return resolveBoardTurn;
 };

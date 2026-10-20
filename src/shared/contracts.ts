@@ -16,8 +16,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. */
-export const GAME_RULES_VERSION = 69;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). */
+export const GAME_RULES_VERSION = 70;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -408,6 +408,13 @@ export interface Tile {
     turncoatDealt?: TileSuit;
     /** An Hourglass (`odd-card-rules.ts`): turns of sand left; matched before it runs out, the pair pays a prize. */
     hourglass?: number;
+    /** A Wanderer (`wanderer-rules.ts`): every third turn it steps a cell. On its face only (`player-visible-board.ts`). */
+    wanderer?: boolean;
+    /**
+     * The Wanderers' trail: this card was traded into the cell a Wanderer stepped out of, on the last turn
+     * (`wanderer-rules.ts`). Something that happened to this card's cell, not its pair, so it shows face down.
+     */
+    footprint?: boolean;
     /** Frost realm: turns this card stays frozen. A frozen card cannot be turned. */
     frost?: number;
     /** Frost realm: a blizzard snowed over this card's back, so its suit cannot be read until it is turned. */
@@ -1080,6 +1087,8 @@ export interface RunState {
     colossiFelledThisRun?: number;
     /** The odd cards (`odd-card-rules.ts`): times a Turncoat turned this floor, Hourglass prizes caught this run, and Hourglasses that ran out this floor. */
     turncoatTurnsThisFloor?: number;
+    /** The Wanderers (`wanderer-rules.ts`): steps they took this floor. */
+    wandererStepsThisFloor?: number;
     hourglassesCaughtThisRun?: number;
     hourglassesSpentThisFloor?: number;
     /** What an Hourglass last did, for the HUD to say once. */

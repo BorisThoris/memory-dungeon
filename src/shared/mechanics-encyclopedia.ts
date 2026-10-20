@@ -23,9 +23,10 @@ import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
 import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
+import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 98 as const;
+export const ENCYCLOPEDIA_VERSION = 99 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -501,6 +502,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_wanderers',
+        title: 'Wanderers',
+        description:
+            `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
     },
     {
         id: 'sys_hold',
