@@ -3458,8 +3458,16 @@ pairs cleared) grouped by `DESCENT_ACTS`. The before numbers, with no Hold:
 | The Deep (25-40) | 128 | 0.40 |
 | The Abyss (41-60) | 160 | 0.44 |
 
-Overall 0.40 over sixty floors; floors 1-24 alone still read 0.34, as DGE-001 measured. By act the share rises
-rather than forming a hill: the pop takes most of the Gate (a third matched by hand) and less of each act after it,
-because deeper boards are bigger and a pop's reach is capped by rung. The plan's bar is 0.6 for Acts II to IV once
-the Hold (DGE-008) exists; the gate's floor (`POP_BY_ACT_MIN`) is zero until then, so today it holds the report to
-running and to real shares, and DGE-008 raises it.
+Overall 0.40 matched over sixty floors; floors 1-24 alone still read 0.34, as DGE-001 measured. Read as the pop's
+share (the plan's measure), it falls by act - 0.67, 0.65, 0.60, 0.56 - which is the plan's thesis: deeper boards are
+bigger and a pop's reach and cap are set by rung, so the pop takes less of each act. (The first version of this note
+and of the gate's check read the bar as a matched share; the gate now checks the pop share of Acts II to IV.)
+
+**The Hold probe (2026-10-20).** The plan's fix was the Hold (DGE-008): keep matched pairs' pops, release them as one
+cascade. A scratch probe played the same perfect player with a Hold, the release one `resolveChunkBreak` per suit over
+every held seed. Holding whenever the chain stood at six or more, the pop share *fell* with the stack (release at 3:
+0.58/0.57/0.55/0.53; at 9: 0.29/0.41/0.43/0.43), because every pair matched by hand while holding is one the release
+can no longer take, and one release gets one pair cap where separate pops got several. With the ticket's meter (six new
+links before each hold) the Hold barely moves it (0.65/0.64/0.56/0.51 at a stack of six), and a release that bursts up
+to three extra pairs per held pair recovers only the baseline. Deferring a pop cannot make more pop. The owner's call
+(2026-10-20): build the Hold as the plan specifies all the same; its pop-share acceptance is recorded as unmet.

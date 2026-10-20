@@ -56,4 +56,12 @@ From Act II the dock has Hold. A meter fills one segment per chain link (six to 
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-20, before any code: a probe (BALANCE_NOTES, "The Hold probe") played the perfect player with a Hold. The release was one `resolveChunkBreak` per suit over the held seeds.
+- Held at every chance, the pop share fell as the stack grew.
+- With the ticket's six-link meter it ties the no-Hold baseline at best, even with release bursts of up to three extra pairs per held pair.
+- The acceptance "pop share by act >= 0.6 in Acts II to IV with Hold used" cannot be met by deferring pops: every pair matched by hand while holding is one the release can no longer take.
+Shown this, the owner chose (2026-10-20) to build the Hold as this ticket specifies. Its pop-share acceptance is recorded as unmet rather than tuned around. A pop that scales with the board was offered as the fix for the share itself.
+Design notes kept for the build:
+- Held pairs are `matched` with only the pop deferred, as seed ids on the run, so the board inspector and the flip-state tools are untouched.
+- Release breaks once per suit, so seeds of different suits do not walk into each other.
+- No `GAME_RULES_VERSION` bump: it is a new input, and a run that never presses it replays as before.

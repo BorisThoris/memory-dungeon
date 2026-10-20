@@ -49,6 +49,6 @@ The pop hill is measured by pair count. The plan needs it measured by act, with 
 ## Future handoff notes
 2026-10-20:
 - `scripts/sim-pop-share.ts` takes `--floors=N`, `--by-act` (grouped by `DESCENT_ACTS`) and `--check`. `gate:pop-by-act` (`--floors=60 --by-act --check`, about three seconds) runs in `gate:systems`.
-- Before numbers (BALANCE_NOTES, "Pop share by act"): the Gate 0.33, the Living Dungeon 0.35, the Deep 0.40, the Abyss 0.44, and 0.40 overall. Floors 1-24 alone reproduce DGE-001's 0.34. By act this is a rising curve, not a hill: the hill DGE-001 saw is within the Gate (floors 4-12).
-- The bar: `POP_BY_ACT_MIN` is 0 until the Hold exists. DGE-008 raises it to 0.6 for Acts II to IV and adds the Hold-using player profile, which this ticket could not add without the verb.
+- Before numbers (BALANCE_NOTES, "Pop share by act"), as matched shares: the Gate 0.33, the Living Dungeon 0.35, the Deep 0.40, the Abyss 0.44, and 0.40 overall. Floors 1-24 alone reproduce DGE-001's 0.34. The plan's bar is the **pop** share: 0.67, 0.65, 0.60, 0.56, falling by act. The first commit's check read it as the matched share; the follow-up checks the pop share of Acts II-IV.
+- The bar: `POP_BY_ACT_MIN` stays 0. The Hold probe (BALANCE_NOTES) showed that deferring pops cannot raise the share, so the Hold will not reach 0.6. Raise the bar when a change does, for example a pop that scales with the board (offered to the owner 2026-10-20; they chose to build the Hold as planned first).
 - The player is the perfect-memory one. DGE-032's Goldilocks probe needs a player with limited memory; build it there and reuse it here.

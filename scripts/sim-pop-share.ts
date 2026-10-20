@@ -3,9 +3,9 @@
  * yarn sim:pop-share [--off] [--floors=60] [--by-act] [--check]  (--off switches the heat perks off for a baseline).
  *
  * `--by-act` (DGE-012, 2026-10-20) groups the shares by the Descent's acts (`DESCENT_ACTS`), and
- * `--check` is `gate:pop-by-act`: every act's matched share must be a real share and at least
- * `POP_BY_ACT_MIN`. That floor is zero until the Hold (DGE-008) gives the player a way to keep a pop
- * for later; DGE-008 raises it to 0.6 for every act after the first, the plan's bar.
+ * `--check` is `gate:pop-by-act`: every act after the first must show a pop share (pairs the pop
+ * took over all pairs cleared) of at least `POP_BY_ACT_MIN`, the plan's bar. It stays zero until a
+ * change makes the late pop share reach it: the Hold probe (BALANCE_NOTES) found the Hold cannot.
  *
  * A perfect-memory player plays the scheduled floors, eight seeds, floors 1-24; per turn the pairs
  * the break took are bucketed by the heat carried into the turn. The measurement the owner asks
@@ -28,7 +28,7 @@ import { orderAroundLock } from '../src/shared/turn-match-board-cleanup-rules';
 const seeds = [11, 202, 3003, 40404, 555, 6006, 77, 8888];
 const arg = (name: string): string | undefined => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
 const floors = Number(arg('floors') ?? 24);
-/** The least matched share an act may show (`--check`); DGE-008 raises it to 0.6 for Acts II to IV. */
+/** The least pop share Acts II to IV may show (`--check`); 0.6, the plan's bar, once something reaches it. */
 export const POP_BY_ACT_MIN = 0;
 const byAct: Record<string, { matched: number; popped: number; floors: number }> = {};
 const byStage: Record<string, { matched: number; popped: number; turns: number; biggest: number[] }> = {};
@@ -84,13 +84,14 @@ console.log(`overall matched share ${share(matchedAll, poppedAll)} (matched ${ma
 for (const [stage, row] of Object.entries(byStage)) console.log(`${stage.padEnd(10)} turns ${String(row.turns).padStart(4)}  pops/turn ${(row.popped / row.turns).toFixed(2)}  matched share ${share(row.matched, row.popped)}`);
 
 if (process.argv.includes('--by-act') || process.argv.includes('--check')) {
-    console.log('by act (matched share = pairs matched by hand / all pairs cleared):');
-    for (const [act, row] of Object.entries(byAct)) console.log(`  ${act.padEnd(20)} floors ${String(row.floors).padStart(3)}  matched share ${share(row.matched, row.popped)}`);
+    console.log('by act (matched = by hand, pop = taken by the pop, each over all pairs cleared):');
+    for (const [act, row] of Object.entries(byAct)) console.log(`  ${act.padEnd(20)} floors ${String(row.floors).padStart(3)}  matched ${share(row.matched, row.popped)}  pop ${share(row.popped, row.matched)}`);
 }
 if (process.argv.includes('--check')) {
-    const failures = Object.entries(byAct).filter(([, row]) => {
-        const value = row.matched / Math.max(1, row.matched + row.popped);
-        return !Number.isFinite(value) || value < POP_BY_ACT_MIN || value > 1 || row.floors === 0;
+    // The bar is the pop's share, and it is the plan's for every act after the Gate.
+    const failures = Object.entries(byAct).filter(([, row], index) => {
+        const pop = row.popped / Math.max(1, row.matched + row.popped);
+        return !Number.isFinite(pop) || pop > 1 || row.floors === 0 || (index > 0 && pop < POP_BY_ACT_MIN);
     });
     if (failures.length > 0 || Object.keys(byAct).length === 0) {
         console.error(`pop by act failed: ${failures.map(([act]) => act).join(', ') || 'no act measured'}`);
