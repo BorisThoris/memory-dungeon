@@ -129,7 +129,8 @@ export const gameOverScreenCopy = {
         quit: (floor: number) => `You stopped on floor ${floor}.`,
         contract: (floor: number) => `The contract's mismatch limit ended the run on floor ${floor}.`,
         pass_and_play_final_floor: (floor: number) => `The table played its last floor, floor ${floor}.`,
-        warden_cleared: (floor: number) => `You cleared the Warden's hall on floor ${floor}. The Descent is won.`
+        warden_cleared: (floor: number) => `You cleared the Warden's hall on floor ${floor}. The Descent is won.`,
+        rent_unpaid: (floor: number) => `Floor ${floor} paid less than its rent, deep in Endless.`
     } satisfies Record<RunEndReason, (floor: number) => string>
 } as const;
 

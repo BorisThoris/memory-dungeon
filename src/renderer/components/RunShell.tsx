@@ -20,6 +20,7 @@ import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, MILESTONE_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
 import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { nextMilestone } from '../../shared/milestone-rules';
+import { endlessRentDue } from '../../shared/endless-rent-rules';
 import { WARDEN_REDEAL_EVERY_TURNS, isWardenFloor } from '../../shared/warden-rules';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
@@ -370,6 +371,8 @@ const RunShell = ({
     const dread = isPassAndPlayRun(run.passAndPlay) ? null : dreadTier(dreadForRun(run));
     // The milestone ahead (`milestone-rules.ts`), as a share of the act: effort follows the fraction left.
     const milestone = isPassAndPlayRun(run.passAndPlay) ? null : nextMilestone(run.board?.level ?? 1);
+    // Endless's rent (`endless-rent-rules.ts`): what this floor owes, shown in the milestone's place.
+    const rent = endlessRentDue(run);
 
     // The caption under the board: a kicker naming the moment, then the one sentence about it. The
     // announcer clears its line to an empty string between beats, which is no line at all.
@@ -604,15 +607,24 @@ const RunShell = ({
                         </span>
                         {milestone ? (
                             <span
-                                aria-label={MILESTONE_HUD_COPY.aria(milestone.name, milestone.floorsDone, milestone.floorsTotal)}
+                                aria-label={
+                                    rent
+                                        ? MILESTONE_HUD_COPY.rentAria(rent.paid, rent.rent)
+                                        : MILESTONE_HUD_COPY.aria(milestone.name, milestone.floorsDone, milestone.floorsTotal)
+                                }
                                 className={styles.milestone}
+                                data-rent-paid={rent ? (rent.paid >= rent.rent ? 'true' : 'false') : undefined}
                                 data-testid="hud-milestone"
                                 role="img"
-                                style={{ '--milestone-fill': milestone.fraction } as CSSProperties}
-                                title={MILESTONE_HUD_COPY.title}
+                                style={{ '--milestone-fill': rent ? Math.min(1, rent.paid / rent.rent) : milestone.fraction } as CSSProperties}
+                                title={rent ? MILESTONE_HUD_COPY.rentTitle : MILESTONE_HUD_COPY.title}
                             >
-                                {compactHud ? null : <span className={styles.milestoneName}>{MILESTONE_HUD_COPY.name(milestone.name)}</span>}
-                                <span className={styles.milestoneFraction}>{MILESTONE_HUD_COPY.fraction(milestone.floorsDone, milestone.floorsTotal)}</span>
+                                {compactHud ? null : (
+                                    <span className={styles.milestoneName}>{rent ? MILESTONE_HUD_COPY.rentName : MILESTONE_HUD_COPY.name(milestone.name)}</span>
+                                )}
+                                <span className={styles.milestoneFraction}>
+                                    {rent ? MILESTONE_HUD_COPY.rentFraction(rent.paid, rent.rent) : MILESTONE_HUD_COPY.fraction(milestone.floorsDone, milestone.floorsTotal)}
+                                </span>
                                 <span aria-hidden="true" className={styles.milestoneBar} />
                             </span>
                         ) : null}

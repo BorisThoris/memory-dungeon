@@ -2650,6 +2650,34 @@
             ]
         },
         {
+            "id": "hazard.endless_rent",
+            "label": "Endless Rent",
+            "kind": "hazard",
+            "role": "past_the_warden_every_floor_owes_a_score_rising_each_cycle_a_clear_that_pays_less_ends_the_run",
+            "evidence": [
+                "src/shared/endless-rent-rules.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/renderer/components/RunShell.tsx"
+            ],
+            "reads": [
+                "endless",
+                "floorScore",
+                "boardLevel"
+            ],
+            "writes": [
+                "runStatus"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "rent-is-a-score-never-a-clock"
+            ],
+            "tests": [
+                "src/shared/endless-rent-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts"
+            ]
+        },
+        {
             "id": "inventory.still_bell_charge",
             "label": "Still Bell Charge Inventory",
             "kind": "inventory",
@@ -3917,6 +3945,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "both rules stated before the first flip, the re-deal, and the win on the results stamp"
+        },
+        {
+            "source": "hazard.warden",
+            "target": "hazard.endless_rent",
+            "kind": "enables",
+            "label": "a cleared Warden the player descends past opens Endless, where every floor owes rent"
+        },
+        {
+            "source": "hazard.endless_rent",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
         },
         {
             "source": "inventory.still_bell_charge",

@@ -1,6 +1,7 @@
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
-import { isWardenFloor } from './warden-rules';
+import { awaitsWardenChoice, descendIntoEndless, isWardenFloor } from './warden-rules';
+import { endlessRentForFloor } from './endless-rent-rules';
 import { parTurnsForRun } from './floor-par';
 import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
@@ -363,6 +364,15 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
         return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
     },
+    'an Endless clear paid its rent, or the run ended there': (before, run) => {
+        if (!before || !run.endless || before.status === 'levelComplete' || (run.status !== 'levelComplete' && run.status !== 'gameOver')) return null;
+        const level = run.board?.level ?? 0;
+        const rent = endlessRentForFloor(level, run.runRulesVersion);
+        if (rent === 0 || !run.lastLevelResult || run.lastLevelResult.level !== level) return null;
+        const paid = run.lastLevelResult.scoreGained;
+        if (paid >= rent) return run.status === 'levelComplete' ? null : `paid ${paid} of ${rent} and still ended`;
+        return run.runEndReason === 'rent_unpaid' ? null : `paid ${paid} of ${rent}, ended ${String(run.runEndReason)}`;
+    },
     'Dread never falls, and every descent raises it': (before, run, action) => {
         if (!before) return null;
         const [was, now] = [dreadForRun(before), dreadForRun(run)];
@@ -693,6 +703,8 @@ export const soakRun = ({
                 realmDoors += 1;
                 act('travel', chooseRealmDoor(run, pickRngIndex(rng, run.realmDoors.length)));
             }
+            // A soak that runs past the Warden goes on into Endless (DGE-006), where the rent is charged.
+            if (awaitsWardenChoice(run)) act('endless', descendIntoEndless(run));
             act('descend', advanceToNextLevel(run));
             if ((run as RunState).status === 'memorize') act('study', finishMemorizePhase(run));
             continue;

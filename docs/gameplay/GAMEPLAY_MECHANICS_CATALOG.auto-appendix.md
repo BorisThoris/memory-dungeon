@@ -1,20 +1,20 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-10-20T12:50:46.999Z
+**Generated:** 2026-10-20T13:20:16.783Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
 | Constant / count | Value |
 | --- | --- |
 | `GAME_RULES_VERSION` | 69 |
-| `ENCYCLOPEDIA_VERSION` | 96 |
+| `ENCYCLOPEDIA_VERSION` | 97 |
 | Mutator entries (`MUTATOR_CATALOG`) | 13 |
 | Achievement entries (`ACHIEVEMENT_CATALOG`) | 22 |
 | `GameMode` codex ids | endless |
 
 ## System refinement ledger
 
-Every system in the game, with the last generation that passed over it. 55 changed, 22 confirmed already in their refined state, 1 removed outright.
+Every system in the game, with the last generation that passed over it. 56 changed, 22 confirmed already in their refined state, 1 removed outright.
 
 | System | Verdict | Gen | What was found |
 | --- | --- | --- | --- |
@@ -65,6 +65,7 @@ Every system in the game, with the last generation that passed over it. 55 chang
 | `safety.softlock_fairness` | confirmed | 261 | A guarantee rather than an occurrence, so its gate is the softlock seed sweep - 0 issue floors across the endless health check - not an occupancy row. Re-run at Gen 261 against the par Gens 220 and 259 set and the palette Gen 260 dealt: 430 of 430 playable floors and 0 fairness issues on every seed in the sweep, which is the first time this has been checked since par stopped being one rate for every palette. |
 | `findable.score_glint` | changed | 261 | Its reward row carried a field saying Destroy forfeits the score. Replaced with the rule that is true: a break which takes the carrier spills the glint and pays it. Gen 213 found the same dead promise a second time in the economy row for findable pickups and repointed it; Gen 214 found that row had no reader at all and removed it, so the rule now lives in one place rather than two. |
 | `findable.meteor_shard` | changed | 268 | The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second. |
+| `hazard.endless_rent` | changed | 275 | Endless’s rent (2026-10-20, DGE-006): past the Warden every floor owes a score, half of what its pairs pay cleared at the Clean rung from a standing start, the share rising 1.25x a cycle; a clear that pays less ends the run (THE DEPTHS COLLECT). A score bar, never a clock: the run bar shows the rent and what the floor has paid in the milestone’s place. Measured on 80 soak runs to floor 100, the slowest tenth of floors pay 4.2 to 6.1 references at every depth, so a clean floor pays the rent to cycle 4 and the soak’s careful player starts falling short near cycle 11. |
 | `hazard.warden` | changed | 274 | The Warden (2026-10-20, DGE-005), floor 60 and the Descent’s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did. |
 | `progression.dread` | changed | 273 | Dread (2026-10-19, DGE-003): one number, three per floor multiplied by 1.15 for every raging floor and 1.05 for every wild floor entered, read as eight named tiers from Quiet to It is coming, the next always named on the run bar before it arrives. Realm severities are seeded at each clear and a sway tip keeps the severity, so play never moves it; it never falls, and past the last tier it counts doublings. The priced composition arrives with DGE-009, whose board builder spends it, in one rules bump. |
 | `inventory.still_bell_charge` | changed | 272 | The Still Bell (2026-10-19), the fourth curio item and the owner’s neutralizer: on a realm floor with nothing face up and cards held, every frozen, snowed, vined or burning card is let go at once, and the realm answers with one strike of its everyday weather on top of its clock, which keeps its count. A freed fire or vine pays nothing. Its effect is a still white ring and a breath of vapour on each card let go, then the answer sparking in the realm’s colour, over a long hand bell on A. |

@@ -440,6 +440,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second.'
     },
     {
+        id: 'hazard.endless_rent',
+        verdict: 'changed',
+        generation: 275,
+        present: ['endlessRentForFloor', 'settleEndlessRent', 'endlessRentDue', 'rent_unpaid', 'ENDLESS_RENT_SHARE'],
+        note: 'Endless\u2019s rent (2026-10-20, DGE-006): past the Warden every floor owes a score, half of what its pairs pay cleared at the Clean rung from a standing start, the share rising 1.25x a cycle; a clear that pays less ends the run (THE DEPTHS COLLECT). A score bar, never a clock: the run bar shows the rent and what the floor has paid in the milestone\u2019s place. Measured on 80 soak runs to floor 100, the slowest tenth of floors pay 4.2 to 6.1 references at every depth, so a clean floor pays the rent to cycle 4 and the soak\u2019s careful player starts falling short near cycle 11.'
+    },
+    {
         id: 'hazard.warden',
         verdict: 'changed',
         generation: 274,

@@ -78,7 +78,7 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * `turn_ceiling` is kept for summaries written while the ceiling existed (Gen 183 to 2026-09-23);
  * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
  */
-export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor' | 'warden_cleared';
+export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor' | 'warden_cleared' | 'rent_unpaid';
 /**
  * The realms (`realm-rules.ts`): the environment a floor is played in. Each has weather that
  * changes the board while it is played, on a clock the player winds, and the player picks the next

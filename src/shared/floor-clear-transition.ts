@@ -1,4 +1,5 @@
 import { hasRelic, misersPurseGold } from './run-relic-rules';
+import { settleEndlessRent } from './endless-rent-rules';
 import { isWardenFloor } from './warden-rules';
 import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
@@ -115,7 +116,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         turnsTaken
     });
 
-    return {
+    // Endless's rent (`endless-rent-rules.ts`): a clear that paid less than it owed ends the run here.
+    return settleEndlessRent({
         ...run,
         clearedTurnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + turnsTaken - parTurns,
         status: 'levelComplete',
@@ -176,5 +178,5 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                   }
                 : {})
         }
-    };
+    }, scoreGained);
 };

@@ -35,6 +35,7 @@ import { isTileFlipBlocked } from './realm-weather-rules';
 import { lookingGlassSwaps } from './looking-glass-rules';
 import { tileCharge } from './element-alchemy-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
+import { endlessRentForFloor } from './endless-rent-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -81,6 +82,8 @@ export type TestHallRoomId =
     | 'dread-stirs'
     | 'warden-past-par'
     | 'warden-redeal'
+    | 'endless-rent-unpaid'
+    | 'endless-rent-paid'
     | 'camp-survive'
     | 'camp-study'
     | 'camp-score'
@@ -932,6 +935,45 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (r.wardenRedealsThisFloor !== 1) return `re-deals ${String(r.wardenRedealsThisFloor)}`;
                     const at = (run: RunState) => run.board?.tiles.findIndex((t) => t.id === 'a-1');
                     return at(r) === at(b) ? null : `a-1 moved from ${at(b)} to ${at(r)}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'endless-rent-unpaid',
+        title: 'Endless: a floor that does not pay its rent',
+        mechanic: "Past the Warden every floor owes a score; a clear that pays less than the floor's rent ends the run there.",
+        graphMechanicIds: ['hazard.endless_rent'],
+        tryThis: 'Clear this two-pair Endless floor with no chain behind you: it cannot pay floor 61\u2019s rent, and the run ends.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 61, run: { endless: true, wardenOutcome: 'cleared' } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the clear pays less than the rent, and the depths collect',
+                expect: (r) => {
+                    const paid = r.lastLevelResult?.scoreGained ?? 0;
+                    const rent = endlessRentForFloor(61, r.runRulesVersion);
+                    if (paid >= rent) return `the floor paid ${paid} of a ${rent} rent`;
+                    return r.status === 'gameOver' && r.runEndReason === 'rent_unpaid' ? null : `status ${r.status}, reason ${String(r.runEndReason)}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'endless-rent-paid',
+        title: 'Endless: a long chain pays the rent',
+        mechanic: 'A floor whose clear pays its rent lets the Endless run go on.',
+        graphMechanicIds: ['hazard.endless_rent', 'board.chain_chunk_fever'],
+        tryThis: 'Carry a two-hundred-link chain into floor 61 and clear it: the rent is paid and the run descends.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 61, streak: 200, run: { endless: true, wardenOutcome: 'cleared' } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the clear pays the rent, and the floor is complete',
+                expect: (r) => {
+                    const paid = r.lastLevelResult?.scoreGained ?? 0;
+                    const rent = endlessRentForFloor(61, r.runRulesVersion);
+                    return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
             }
         ]

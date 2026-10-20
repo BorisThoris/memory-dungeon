@@ -143,5 +143,11 @@ export const MILESTONE_HUD_COPY = {
     title: 'The next milestone: the end of this act of the Descent, and how much of the act is behind you.',
     name: (name: string): string => `Next: ${name}`,
     fraction: (done: number, total: number): string => `${done} of ${total}`,
-    aria: (name: string, done: number, total: number): string => `Next milestone: ${name}, floor ${done} of ${total}`
+    aria: (name: string, done: number, total: number): string => `Next milestone: ${name}, floor ${done} of ${total}`,
+    // Endless's rent (`endless-rent-rules.ts`): a score bar, never a clock.
+    rentName: 'Rent',
+    rentTitle: 'Endless rent: the score this floor must pay by its clear, the clear bonus included. A floor that pays less ends the run.',
+    rentFraction: (paid: number, rent: number): string => `${Math.min(paid, rent).toLocaleString('en-US')} of ${rent.toLocaleString('en-US')}`,
+    rentAria: (paid: number, rent: number): string =>
+        paid >= rent ? `Rent paid: ${rent.toLocaleString('en-US')}` : `Rent: ${paid.toLocaleString('en-US')} of ${rent.toLocaleString('en-US')} paid`
 } as const;

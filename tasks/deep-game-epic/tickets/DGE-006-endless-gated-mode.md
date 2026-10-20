@@ -1,7 +1,7 @@
 # DGE-006: Endless as an unlocked mode with its own scaling
 
 ## Status
-In progress (2026-10-20): the choice, the cycles and the milestones are done; the rent is next.
+Done (2026-10-20). Tuning waits for a player with limited memory (see part 2).
 
 ## Priority
 P1
@@ -66,4 +66,15 @@ Beating the Warden offers Continue into Endless. Endless repeats the four acts w
 - The milestones (`nextMilestone`) follow the cycle's acts. The test pace runs on past 60 through each Endless act's start and boss for two cycles (`FAST_ENDLESS_RUNGS`).
 - The board already grows past 60 (`pairsForFloor`, 24 pairs doubling every 30 floors). Gating that growth on `run.endless` is moot: a run that takes the win never builds floor 61. The fit at 390x844 with 25-48 pairs is what the Endless playtest's screenshots are for: `test-results/playtest/test-pace-endless/` walks the menu to floor 90, 48 pairs at the last, at 1280x720. The phone at those sizes is unmeasured.
 - Codex: the Warden topic now ends on the choice and Endless (encyclopedia 96).
-- Next (part 2): the rent. A score each Endless floor must reach, rising 1.25x per cycle, shown as the milestone fraction; falling short ends the run with `rent_unpaid`. Measure the median floor score at depth before choosing the base, as with DGE-003's tiers. Also: a soak invariant (rent paid or the run ended), and a hall room at floor 61.
+2026-10-20, part 2 (the rent):
+- `src/shared/endless-rent-rules.ts`: every Endless floor owes `0.5 x 1.25^(cycle - 1) x` the floor's pairs cleared at the Clean rung from a standing start (`calculateMatchScore`). That reference was chosen because no player's form moves it.
+  - Measured on 80 soak runs (careful and average) to floor 100: the slowest tenth of floors pay 4.2 to 6.1 references at every depth, while raw floor scores roughly triple per cycle. That is why a flat rent x1.25 per cycle (the ticket's first sketch) would only get easier.
+  - On this curve a clean floor pays the rent until cycle 4, and the soak's careful player starts falling short near cycle 11.
+- `finalizeLevel` ends a clear that paid less with `runEndReason: 'rent_unpaid'` (stamp THE DEPTHS COLLECT). The run bar's milestone cell becomes "Rent 0 of 11,000" on an Endless floor, filling as the floor pays. It is a score bar, never a clock.
+- Checklist:
+  - graph node `hazard.endless_rent`, enabled by the Warden and `displays` to the HUD; ledger; census exemption; mechanic count 73
+  - hall rooms `endless-rent-unpaid` and `endless-rent-paid` (probed)
+  - soak invariant "an Endless clear paid its rent, or the run ended there"; the soak now descends into Endless when it runs past the Warden (12 careful runs to floor 100: 0 violations)
+  - Codex (encyclopedia 97)
+- The soak and survival players are omniscient, so the curve's real bite on a human is unmeasured. Retune `ENDLESS_RENT_SHARE` once DGE-032's memory-limited player exists.
+- Original plan for part 2: a score each Endless floor must reach, rising 1.25x per cycle, shown as the milestone fraction; falling short ends the run with `rent_unpaid`. Measure the median floor score at depth before choosing the base, as with DGE-003's tiers. Also: a soak invariant (rent paid or the run ended), and a hall room at floor 61.
