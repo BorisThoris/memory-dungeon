@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 529998,
-      "sha256": "9082840e49638805763126f2304f6b417f7673b5ff0fbdd1c5b4f9058bc508f2"
+      "bytes": 531052,
+      "sha256": "3289fee1e55042bcf9d6715520b2c7e8b4a3b8c1dc3cdc06279631e88cf7557e"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -4371,8 +4371,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33639,
-      "sha256": "a8b34fccc1bdf776d68fc2830897b879d507061d075a2ad8435219fcb2ba767d"
+      "bytes": 33747,
+      "sha256": "d2310e204a60874cdbe123f7ff56ce0cbfe5e7979def3858d05d7057a27fb61d"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5739,8 +5739,8 @@
     {
       "path": "scripts/sim-pop-share.ts",
       "category": "script",
-      "bytes": 4835,
-      "sha256": "d7ef11e053819ca48186c94d20bacc10dcd970fddd14b91040a4e63e8af96df9"
+      "bytes": 6738,
+      "sha256": "75b85ccab660fe6a4be9da0a110f236aa7a3b2104b335e11393480781e25b280"
     },
     {
       "path": "scripts/sim-pop.ts",
@@ -17187,8 +17187,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 5440,
-      "sha256": "ed556cf18a13968ea0083113feb45f3287c653412b966d097106b58c9d1ee433"
+      "bytes": 5810,
+      "sha256": "37996bb29eccb5ff29eb291cfe3922d1027a5f1a8fca930bf7b83e4248c822fd"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17289,8 +17289,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-012-pop-hill-repair-measurement.md",
       "category": "other",
-      "bytes": 1829,
-      "sha256": "f8cfe633f6358173ecb960a15b28337982609da0ccfb7f2e74925a172a1a4b21"
+      "bytes": 2622,
+      "sha256": "35368024185689d3c98e2e108c4e8692a54d7bae0c01fe9ff738c73388d4c2e3"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-013-relic-slot-cap.md",
