@@ -1,3 +1,6 @@
+import { isEndlessUnlocked, normalizeDescentRecord } from './descent-record';
+import { DESCENT_ACTS } from './floor-mutator-schedule';
+import { DREAD_TIERS } from './dread-rules';
 import { COSMETIC_CATALOG, getEquippedCosmeticId } from './cosmetics';
 import { FEATURE_CLOUD_SAVE } from './feature-flags';
 import { countEligibleHonors } from './honorUnlocks';
@@ -34,7 +37,7 @@ export interface ProfileSaveShellSummary {
 }
 
 export interface ProfileSummaryRow {
-    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'runs_finished' | 'sharp_floors';
+    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'runs_finished' | 'descent';
     label: string;
     value: string;
     source: string;
@@ -87,6 +90,24 @@ const equippedCosmeticLabel = (save: SaveData, slot: 'title' | 'crest'): string 
     return id === null ? null : COSMETIC_CATALOG[id].label;
 };
 
+/** How deep this profile has been, and whether the Warden has fallen to it. */
+const descentSummaryRow = (save: SaveData): ProfileSummaryRow => {
+    const record = normalizeDescentRecord(save.playerStats?.descent);
+    const act = DESCENT_ACTS.find((entry) => entry.id === record.deepestActId);
+    const dread = DREAD_TIERS.find((tier) => tier.id === record.deepestDreadTierId);
+    const warden = record.wardenClears > 0
+        ? `The Warden fell ${record.wardenClears === 1 ? 'once' : `${record.wardenClears} times`}${isEndlessUnlocked(save) ? ' · Endless open' : ''}`
+        : 'The Warden still stands';
+    return {
+        id: 'descent',
+        label: 'Deepest floor',
+        // A cell holds a short value (the landscape phone grid wraps on anything longer); the act, the
+        // Warden and the Dread are the source line, which Settings shows under it.
+        value: act ? String(record.deepestFloor) : 'None',
+        source: act ? `${act.title} · ${warden}${dread ? ` · Dread ${dread.name}` : ''}` : warden
+    };
+};
+
 export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
     const summary = buildProfileSaveShellSummary(save);
     // Cosmetics used to be a bare count here, which meant earning the Ascendant V title showed a
@@ -119,7 +140,11 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
             value: String(summary.runHistoryEntries),
             source: `of ${summary.runsFinished} runs finished`
         },
-        { id: 'sharp_floors', label: 'Sharp floors', value: String(summary.sharpFloors), source: 'Floors cleared with the chain at Sharp or above' }
+        /*
+         * The Descent (DGE-031) takes the sixth cell: the Sharp-floor count it held is the screen's subtitle
+         * already, and a seventh row does not fit a phone (above).
+         */
+        descentSummaryRow(save)
     ];
 };
 

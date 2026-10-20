@@ -1,3 +1,4 @@
+import { ENDLESS_UNLOCK_TAG, normalizeDescentRecord } from './descent-record';
 import {
     MUTATOR_IDS,
     RESOLVE_DELAY_MULTIPLIER_MIN,
@@ -147,7 +148,8 @@ const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless']);
 const VALID_UNLOCK_TAG_SET: ReadonlySet<string> = new Set([
     ...ACHIEVEMENT_IDS.map((id) => `achievement:${id}`),
     ...COSMETIC_IDS.map((id) => `cosmetic:${id}`),
-    ...HONOR_UNLOCK_IDS.map((id) => `honor:${id}`)
+    ...HONOR_UNLOCK_IDS.map((id) => `honor:${id}`),
+    ENDLESS_UNLOCK_TAG
 ]);
 
 const PERSISTED_COLLECTION_LIMITS = {
@@ -605,7 +607,9 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
             runsFinished: finiteNonNegativeInteger(
                 psIn.runsFinished,
                 Array.isArray(input.runHistory) ? Math.min(input.runHistory.length, RUN_HISTORY_SEED_CAP) : 0
-            )
+            ),
+            // The Descent (DGE-031): kept only when the save carries one, read back whole.
+            ...(psIn.descent !== undefined ? { descent: normalizeDescentRecord(psIn.descent) } : {})
         },
         unlocks: normalizeUnlocks(input.unlocks),
         powersFtueSeen: typeof input.powersFtueSeen === 'boolean' ? input.powersFtueSeen : defaults.powersFtueSeen ?? false

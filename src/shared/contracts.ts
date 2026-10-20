@@ -8,7 +8,8 @@
  */
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
 
-export const SAVE_SCHEMA_VERSION = 9;
+/** 10 (2026-10-20, DGE-031): `playerStats.descent` and the `descent:endless` unlock, the deep-game pack's one migration. */
+export const SAVE_SCHEMA_VERSION = 10;
 
 /** One deposit in the miss bank (`miss-bank.ts`): how many misses, and the floor they were earned on. */
 export interface MissBankGrant {
@@ -1080,6 +1081,18 @@ export interface RunState {
 
 export type AchievementState = Record<AchievementId, boolean>;
 
+/** The Descent's record on a profile (`descent-record.ts`, DGE-031). */
+export interface DescentRecordPersisted {
+    /** Runs that cleared the Warden; the first opens Endless. */
+    wardenClears: number;
+    deepestFloor: number;
+    deepestActId: 'gate' | 'living_dungeon' | 'deep' | 'abyss' | null;
+    /** A `DREAD_TIERS` id (`dread-rules.ts`). */
+    deepestDreadTierId: 'quiet' | 'stirring' | 'restless' | 'hungry' | 'awake' | 'watching' | 'knows' | 'coming' | null;
+    /** The deepest Depth (DGE-025); zero until Depths exist. */
+    bestDepth: number;
+}
+
 export interface PlayerStatsPersisted {
     bestFloorNoPowers: number;
     /** Spaced encore: pairKeys seen on previous completed run (no PII). */
@@ -1093,6 +1106,8 @@ export interface PlayerStatsPersisted {
      * past that, which is why this is a counter of its own rather than a length.
      */
     runsFinished?: number;
+    /** The Descent's record (DGE-031); absent on an older profile and read as empty. */
+    descent?: DescentRecordPersisted;
 }
 
 /**

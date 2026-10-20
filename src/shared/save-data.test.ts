@@ -529,6 +529,7 @@ describe('save normalization', () => {
             'playerStats.encorePairKeysLastRun',
             'playerStats.dailyStreakGraceAvailable',
             'playerStats.runsFinished',
+            'playerStats.descent',
             'playerStats.sharpFloors',
             'playerStats.feverFloors',
             'settings.cameraViewportModePreference',

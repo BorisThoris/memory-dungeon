@@ -1,3 +1,4 @@
+import { recordDescent } from '../../shared/descent-record';
 import { evaluateAchievementUnlocks } from '../../shared/achievements';
 import type {
     AchievementId,
@@ -121,9 +122,11 @@ export const createRunResolutionController = ({
          * already off (the run is created with them disabled, like practice); this is the rest of it.
          */
         const sharedTable = isPassAndPlayRun(nextRun.passAndPlay);
+        // A test-pace run (`descent-pace-rules.ts`) jumped its depth: like a shared table, it writes no record.
+        const unrecorded = sharedTable || nextRun.descentPace === 'fast';
         let nextSave = normalizeSaveData({
             ...state.saveData,
-            bestScore: sharedTable
+            bestScore: unrecorded
                 ? state.saveData.bestScore
                 : Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
         });
@@ -137,7 +140,7 @@ export const createRunResolutionController = ({
 
         // The cleared floor's chain record, once per clear and never from a shared table: a Sharp
         // or Fever floor is the profile's, and the chain quest counts them.
-        if (nextRun.status === 'levelComplete' && prevStatus !== 'levelComplete' && !sharedTable) {
+        if (nextRun.status === 'levelComplete' && prevStatus !== 'levelComplete' && !unrecorded) {
             nextSave = mergeChainFloorStats(
                 nextSave,
                 // The rung the floor clear recorded, the same one the run's Sharp-floor count took.
@@ -162,10 +165,12 @@ export const createRunResolutionController = ({
             // The summary is built either way: the results screen reads it, and a shared game still
             // has to show the table what happened. Only the writes to the save are skipped.
             nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
-            if (!sharedTable) {
+            if (!unrecorded) {
                 // Counted before the unlocks are evaluated, so the run that reaches a rung is the
                 // run that unlocks it. The history cannot do this job: it is capped at twenty.
                 nextSave = mergeRunsFinished(nextSave);
+                // The Descent's record (DGE-031): depth, Dread, Warden clears and the Endless unlock.
+                nextSave = normalizeSaveData(recordDescent(nextSave, nextRun));
                 nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
                 if (!nextRun.powersUsedThisRun) {
                     nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);

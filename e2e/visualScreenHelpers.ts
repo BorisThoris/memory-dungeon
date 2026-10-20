@@ -215,7 +215,14 @@ export const buildPopulatedProfileSaveJson = (reduceMotion = true): string => {
         onboardingDismissed: true,
         lastRunSummary: null,
         powersFtueSeen: true,
-        runHistory
+        runHistory,
+        // The longest Descent row the Profile can show (DGE-031): many Warden clears, Endless open, the worst Dread.
+        playerStats: {
+            bestFloorNoPowers: 0,
+            encorePairKeysLastRun: [],
+            descent: { wardenClears: 12, deepestFloor: 60, deepestActId: 'abyss', deepestDreadTierId: 'coming', bestDepth: 0 }
+        },
+        unlocks: ['descent:endless']
     });
 };
 

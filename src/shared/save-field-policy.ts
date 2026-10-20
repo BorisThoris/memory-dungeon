@@ -88,6 +88,14 @@ const SAVE_FIELD_POLICIES: readonly SaveFieldPolicy[] = [
             'A profile without the counter seeds it from its run history, capped at the history limit - a floor on how many runs it has finished, never the count, because the history holds twenty. An unreadable value reads as that same floor rather than as zero, and the counter only ever climbs.'
     },
     {
+        field: 'playerStats.descent',
+        scope: 'persisted_save',
+        owner: 'PlayerStatsPersisted',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy:
+            'A profile from before save schema 10 has no Descent record and reads as none walked yet; an unknown act or Dread tier reads as none, and the counts as whole numbers. The record only ever grows.'
+    },
+    {
         field: 'playerStats.sharpFloors',
         scope: 'persisted_save',
         owner: 'PlayerStatsPersisted',

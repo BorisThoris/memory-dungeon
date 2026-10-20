@@ -1,7 +1,7 @@
 # DGE-031: Save schema: unlocks, Endless, Depths, evolutions
 
 ## Status
-Not started
+Done (2026-10-20): save schema 10.
 
 ## Priority
 P0
@@ -46,4 +46,16 @@ A single schema bump adds: `unlocks.endless`, `unlocks.depths` (highest), `unloc
 - `../03-execution-ledger.md`
 
 ## Future handoff notes
-Leave next steps, checklist rows ticked, and known blockers here after implementation.
+2026-10-20:
+- Save schema 9 -> 10, one bump for the pack. `playerStats.descent` (`DescentRecordPersisted`, `src/shared/descent-record.ts`) holds:
+  - `wardenClears`
+  - `deepestFloor`, and `deepestActId` (the act of that floor)
+  - `deepestDreadTierId`
+  - `bestDepth`, zero until DGE-025
+- The first Warden clear adds the `descent:endless` unlock tag (`ENDLESS_UNLOCK_TAG`, `isEndlessUnlocked`), which DGE-006 gates Endless on.
+- Feats and blueprints need no field: they are unlock tags (`feat:<id>`, `blueprint:<id>`), added to `VALID_UNLOCK_TAG_SET` by their own tickets.
+- `normalizeDescentRecord` reads a missing or damaged record as none walked: unknown act or tier is none, and counts become whole numbers. A schema-9 save loads, plays and persists the record (tested through a JSON round trip). The save-field policy has a `playerStats.descent` row.
+- `recordDescent` runs at the end of every counted run in `runResolutionController`. The record only grows.
+- A test-pace run now joins a shared table in writing nothing to the save: no best score, history, finished-run count, chain stats or Descent. That makes the test pace's "counts toward no record" true; before this, it only switched achievements off.
+- Profile: the sixth summary cell reads "Deepest floor" with the floor number. The act, the Warden's clears with "Endless open", and the deepest Dread tier make up its source line, which Settings shows. It replaced the Sharp-floor cell, which the Profile subtitle already shows. A longer value overflowed the 122px column in landscape (ui-fit, measured). The populated-profile fixture carries the longest record.
+- Cloud config unchanged: the record lives in the same save file. Next: DGE-006 reads `isEndlessUnlocked`; DGE-025 writes `bestDepth`.
