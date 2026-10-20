@@ -1,7 +1,7 @@
 # DGE-017: Layers: a second deck beneath the first
 
 ## Status
-Not started
+Done (2026-10-20), rules 72. Two decks under two cells in five, not every cell; no rise animation yet: see notes.
 
 ## Priority
 P0
@@ -52,3 +52,15 @@ Act III floors are dealt two decks deep. Clearing a pair reveals the two cards b
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-20, built (rules 72):
+- `src/shared/board-layers-rules.ts`: `BoardState.beneath` (the card under each cell, or null), `layerKey`, `spent`; `dealLayers` (last in the floor transition), `promoteBeneath`, `promoteRunBeneath`, `applyLayerTurn` (after the Wanderers, before the Warden), `cardsBeneath`. `allBoardCards` and `isBoardComplete` in `board-inspection.ts` read both decks.
+- Not a `layers: Tile[][]`: the grid stays one array, and a rise moves the dealt card (its id unchanged) from `beneath[i]` into `tiles[i]`; the cleared card it rose over goes to `spent`, so its pair is still two cards to the inspector, the soak and the magpie (which now takes only pairs wholly on the grid). The renderer keys the floor on `layerKey`, every id both decks were dealt: a rise is not a new deal (verified, no veil).
+- Where cards rise: after every resolved turn, and after the bomb, the meteor, the Crucible, the Hold's release and the three shuffles - every place a cell can clear or a card can move between turns. A held cell keeps its card until the release.
+- **The lock**, found by the soak: cards move after the deal, so a card can come to sit over its own partner, or two over each other's, or the Hold can keep the cell over the last one's partner. Every lock has one shape - no whole pair face down on the grid while cards wait beneath - and then a waiting card whose partner is on the grid steps into the nearest cleared, uncovered cell (there always is one). Pinned by a unit test; the soak's invariants no longer excuse the Hold.
+- Realm holds: what rises runs `releaseRealmHoldsIfStuck`, as any break does.
+- **Two in five, not every cell**: `LAYERS_COVER` 0.5 took floors 37-39 to 24.3-24.8 turns, past the curve's 24 (`sim-difficulty-curve.ts`); 0.4 holds it. Floors are longer by design, by about a third.
+- Renderer: `LayerEdges.tsx` (the edge of a card under every covered cell, ink and a paper rim, the same for every card - it says only that something waits), `Layers` in the key. `playerVisibleBoard` strips the lower deck to ids. No rise animation: the matched card leaves at once and the risen card is there.
+- Rules 72 reseed: the Still Bell test accepts `empowered` (weather that meets only its own element), the version gate, fifteen ledger notes requoted.
+- Checklist rows ticked: rules module, generation gate (`LAYERS_RULES_FROM`), hall rooms `layers-rise` / `layers-pop-risen` (three seeds), soak invariants (no cleared cell over a waiting card; a floor ends only when both decks are cleared) and counters, graph node `board.layers`, ledger entry, census exemption (the censuses stop at 24), Codex `sys_layers` (encyclopedia 101), a look in the browser.
+- Not done: the rise animation and its reduced-motion swap; `yarn sim:endless --deep-floors` coverage; per-archetype lower-deck profiles (the lower deck is two seeded elements on every Layers floor).

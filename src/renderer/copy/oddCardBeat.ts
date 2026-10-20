@@ -34,6 +34,15 @@ export const FOLD_LEGEND_ENTRY: OddCardLegendEntry = {
     sand: null
 };
 
+/** Layers (`board-layers-rules.ts`): its line in the key while anything waits beneath. */
+export const LAYERS_LEGEND_ENTRY: OddCardLegendEntry = {
+    id: 'layers',
+    name: 'Layers',
+    line: 'Some cells hide a second card. When the card on top leaves, the one beneath rises face down.',
+    suit: null,
+    sand: null
+};
+
 const turns = (n: number): string => `${n} ${n === 1 ? 'turn' : 'turns'}`;
 
 /** The Turncoat's line in the legend: what it is now and next. */
@@ -50,7 +59,7 @@ export const hourglassAnnouncement = (event: HourglassEvent): string =>
 
 export interface OddCardLegendEntry {
     /** The odd cards, and the looking glass's clock, which shares their key above the board. */
-    readonly id: 'turncoat' | 'hourglass' | 'looking_glass' | 'wanderer' | 'fold';
+    readonly id: 'turncoat' | 'hourglass' | 'looking_glass' | 'wanderer' | 'fold' | 'layers';
     readonly name: string;
     readonly line: string;
     /** The element whose colour the entry wears: a Turncoat's current one. */

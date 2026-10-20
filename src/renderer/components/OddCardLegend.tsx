@@ -20,7 +20,7 @@ export function OddCardLegend({ entries }: { entries: readonly OddCardLegendEntr
                     style={entry.suit ? ({ '--odd-hue': TILE_SUIT_CATALOG[entry.suit].hue } as CSSProperties) : undefined}
                 >
                     <span aria-hidden="true" className={styles.mark}>
-                        {entry.id === 'turncoat' && entry.suit ? TILE_SUIT_CATALOG[entry.suit].rune : entry.id === 'wanderer' ? '\u21c4' : entry.id === 'fold' ? '\u2293' : entry.sand}
+                        {entry.id === 'turncoat' && entry.suit ? TILE_SUIT_CATALOG[entry.suit].rune : entry.id === 'wanderer' ? '\u21c4' : entry.id === 'fold' ? '\u2293' : entry.id === 'layers' ? '\u2261' : entry.sand}
                     </span>
                     <span className={styles.name}>{entry.name}</span>
                     <span className={styles.line}>{entry.line}</span>

@@ -44,17 +44,20 @@ export const isMagpieVisitTurn = (mismatchCount: number): boolean =>
  * were given before what you earned — funnier, and fairer. A defeated enemy is also `removed`,
  * so the chunk marks its casualties and the bird only picks up those.
  */
+/** A pair still wholly on the grid: on a two-deck floor a card that rose into a cleared cell took one half's place (`board-layers-rules.ts`). */
+const wholeOnGrid = (board: BoardState, pairKey: string): boolean => board.tiles.filter((tile) => tile.pairKey === pairKey).length === 2;
+
 const chunkBrokenPairKeys = (board: BoardState): string[] => [
     ...new Set(
         board.tiles.filter((tile) => tile.state === 'removed' && tile.brokenByChunk === true).map((tile) => tile.pairKey)
     )
-];
+].filter((pairKey) => wholeOnGrid(board, pairKey));
 
 const matchedPairKeys = (board: BoardState): string[] => {
     const cascaded = chunkBrokenPairKeys(board);
     return cascaded.length > 0
         ? cascaded
-        : [...new Set(board.tiles.filter((tile) => tile.state === 'matched').map((tile) => tile.pairKey))];
+        : [...new Set(board.tiles.filter((tile) => tile.state === 'matched').map((tile) => tile.pairKey))].filter((pairKey) => wholeOnGrid(board, pairKey));
 };
 
 /**

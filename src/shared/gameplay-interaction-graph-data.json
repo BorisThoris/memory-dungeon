@@ -2678,6 +2678,44 @@
             ]
         },
         {
+            "id": "board.layers",
+            "label": "Layers",
+            "kind": "board",
+            "role": "the_deeps_floors_are_dealt_two_decks_deep_a_card_under_two_cells_in_five_rises_face_down_when_the_card_above_leaves_its_cell",
+            "evidence": [
+                "src/shared/board-layers-rules.ts",
+                "src/shared/board-inspection.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/board-power-actions.ts",
+                "src/renderer/components/TileBoard.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "pairCount",
+                "runSeed",
+                "boardBeneath",
+                "heldSeedIds"
+            ],
+            "writes": [
+                "tileStates",
+                "boardBeneath"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-floor-is-complete-only-when-nothing-waits-beneath",
+                "a-locked-floor-lifts-a-waiting-card-into-an-open-cell",
+                "a-held-cell-keeps-its-card-until-the-release",
+                "the-inspector-counts-both-decks"
+            ],
+            "tests": [
+                "src/shared/board-layers-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.fold",
             "label": "The Fold",
             "kind": "board",
@@ -4064,6 +4102,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "board.layers",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "a card that rose is face down and unknown, and the pop takes it like any other: the deepest chains are dug out from under the board"
+        },
+        {
+            "source": "board.layers",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the edge of the card beneath under every covered cell, and the line in the key"
         },
         {
             "source": "board.fold",

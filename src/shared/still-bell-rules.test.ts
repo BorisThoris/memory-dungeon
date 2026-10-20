@@ -23,6 +23,7 @@ const heldIds = (run: RunState): string[] =>
 
 describe('the Still Bell', () => {
     it('lets every held card go in every realm, and the realm answers with its everyday weather', () => {
+        // Weather that meets only its own element feeds it instead (`empowered`); which a floor gets is the deal's (rules 72 deals it to the grove).
         const answers: Record<RealmId, string> = { frost: 'blizzard', ember: 'wildfire', tide: 'current', storm: 'lightning', grove: 'overgrowth' };
         for (const realm of Object.keys(answers) as RealmId[]) {
             const run = heldFloorIn(realm);
@@ -30,7 +31,7 @@ describe('the Still Bell', () => {
             expect(canRingStillBell(run), realm).toBe(true);
             const result = applyStillBell(run)!;
             expect(new Set(result.freedTileIds), realm).toEqual(new Set(held));
-            expect(result.answer?.kind, realm).toBe(answers[realm]);
+            expect([answers[realm], 'empowered'], realm).toContain(result.answer?.kind);
             expect(result.run.lastRealmEvent).toEqual(result.answer);
             expect(result.run.stillBellCharges).toBe(0);
             expect(result.run.realmWeatherThisFloor).toBe(run.realmWeatherThisFloor);

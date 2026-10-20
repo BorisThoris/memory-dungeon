@@ -29,7 +29,16 @@ export const countFullyHiddenPairs = (board: BoardState): number => {
 const tileIsCleared = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
 /** Floor completion ignores singleton utility tiles: only real pairs must be cleared. */
+/** Every card the floor was dealt (`board-layers-rules.ts`): the grid, what waits beneath it, and what a rising card took the cell of. */
+export const allBoardCards = (board: Pick<BoardState, 'tiles' | 'beneath' | 'spent'>): Tile[] => [
+    ...board.tiles,
+    ...(board.beneath ?? []).filter((card): card is Tile => card != null),
+    ...(board.spent ?? [])
+];
+
+/** Every card cleared, and nothing waiting beneath a cell (`board-layers-rules.ts`). */
 export const isBoardComplete = (board: BoardState): boolean =>
+    !(board.beneath ?? []).some(Boolean) &&
     board.tiles.every((tile) => {
         if (isSingletonUtilityPairKey(tile.pairKey)) {
             return true;
@@ -82,7 +91,8 @@ const pairIsCleared = (tiles: readonly Tile[]): boolean => tiles.every(tileIsCle
 export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => {
     const issues: BoardFairnessIssue[] = [];
     const groups = new Map<string, Tile[]>();
-    for (const tile of board.tiles) {
+    // Both decks (`board-layers-rules.ts`): a lower pair half risen is still a pair.
+    for (const tile of allBoardCards(board)) {
         const group = groups.get(tile.pairKey) ?? [];
         group.push(tile);
         groups.set(tile.pairKey, group);
@@ -134,7 +144,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         }
     }
 
-    const nonUtilityTileCount = board.tiles.filter((tile) => !isSingletonUtilityPairKey(tile.pairKey)).length;
+    const nonUtilityTileCount = allBoardCards(board).filter((tile) => !isSingletonUtilityPairKey(tile.pairKey)).length;
     const expectedNonUtilityTileCount = board.pairCount * 2;
     if (nonUtilityTileCount !== expectedNonUtilityTileCount) {
         structurallyClearable = false;

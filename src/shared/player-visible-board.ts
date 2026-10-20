@@ -40,5 +40,9 @@ export const playerVisibleBoard = (board: BoardState): BoardState => {
         if (visible !== tile) changed = true;
         return visible;
     });
+    // Layers (`board-layers-rules.ts`): of the lower deck the screen learns only where a card waits, never
+    // its face, its element or its pair; the rules keep the whole card.
+    const beneath = board.beneath?.map((card) => (card ? { id: card.id, pairKey: '', symbol: '', label: '', state: 'hidden' as const } : null));
+    if (beneath) return { ...board, tiles, beneath };
     return changed ? { ...board, tiles } : board;
 };

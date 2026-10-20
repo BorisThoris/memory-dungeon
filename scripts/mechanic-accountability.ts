@@ -263,6 +263,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'board.layers': {
+        generation: 279,
+        reason: 'Layers are dealt on the Deep, floors 25 to 39, and both censuses stop at floor 24, so a counter would read zero by construction. The whole-run soak counts the floors dealt two decks deep and every card that rose, and checks on every action that no cleared cell sits over a waiting card and that no floor ends with one; two hall rooms walk a rise and a pop of a risen pair.'
+    },
     'board.fold': {
         generation: 278,
         reason: 'The Fold is a shape, not an event: every break on its floors meets the wall, so a counter would read the floor share it is dealt on. The soak checks on every turn that nothing is taken through the wall and through the door only from a match in the doorway, the unit tests pin the cut and the gate, and two hall rooms walk the door shut and open.'

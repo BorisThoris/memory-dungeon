@@ -150,7 +150,7 @@ import { COLOSSUS_COPY, colossusBeatLine, colossusCalloutSub } from '../copy/col
 import { colossusElement } from '../../shared/colossus-rules';
 import { ColossusCard } from './ColossusCard';
 import { OddCardLegend } from './OddCardLegend';
-import { FOLD_LEGEND_ENTRY, hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
+import { FOLD_LEGEND_ENTRY, LAYERS_LEGEND_ENTRY, hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, isHoldUnlocked } from '../../shared/hold-rules';
 import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
@@ -1555,13 +1555,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const glassClock = run.activeMutators.includes('looking_glass') ? lookingGlassMatchesUntilTurn(runNonNegativeInteger(run.matchResolutionsThisFloor)) : null;
     // The Fold heads the key while the floor is two rooms (`board-fold-rules.ts`).
     const boardFolded = run.board?.fold != null;
+    // Layers too, while anything waits beneath (`board-layers-rules.ts`).
+    const boardLayered = run.board?.beneath?.some(Boolean) === true;
     const oddCardEntries = useMemo(
         () => [
             ...(boardFolded ? [FOLD_LEGEND_ENTRY] : []),
+            ...(boardLayered ? [LAYERS_LEGEND_ENTRY] : []),
             ...oddCardLegend(boardTilesForLegend ?? []),
             ...(glassClock === null ? [] : [lookingGlassLegendEntry(glassClock)])
         ],
-        [boardFolded, boardTilesForLegend, glassClock]
+        [boardFolded, boardLayered, boardTilesForLegend, glassClock]
     );
     const hourglassEvent = run.lastHourglassEvent?.key.startsWith(`hourglass:${run.board?.level}:`) ? run.lastHourglassEvent : null;
     const hourglassEventKey = hourglassEvent?.key ?? null;

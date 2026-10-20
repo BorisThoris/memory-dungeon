@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). */
-export const GAME_RULES_VERSION = 71;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). */
+export const GAME_RULES_VERSION = 72;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -530,6 +530,12 @@ export interface BoardState {
     colossus?: ColossusState;
     /** The Fold (`board-fold-rules.ts`): a wall through the grid with a doorway; absent on a one-room board. */
     fold?: BoardFold;
+    /** Layers (`board-layers-rules.ts`): the card under each cell, or null; absent on a one-deck board. */
+    beneath?: (Tile | null)[];
+    /** Layers: every id both decks were dealt with, the renderer's key for the floor. */
+    layerKey?: string;
+    /** Layers: the cleared cards a rising card took the cell of, kept so their pairs still count as two. */
+    spent?: Tile[];
 }
 
 /**
@@ -1092,6 +1098,8 @@ export interface RunState {
     turncoatTurnsThisFloor?: number;
     /** The Wanderers (`wanderer-rules.ts`): steps they took this floor. */
     wandererStepsThisFloor?: number;
+    /** Layers (`board-layers-rules.ts`): cards that rose into a cleared cell this floor. */
+    layerCardsRisenThisFloor?: number;
     hourglassesCaughtThisRun?: number;
     hourglassesSpentThisFloor?: number;
     /** What an Hourglass last did, for the HUD to say once. */

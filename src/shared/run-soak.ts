@@ -14,7 +14,7 @@ import { applyCrucible, crucibleTargetTileId } from './crucible-rules';
 import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-power-actions';
 import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
-import { inspectBoardFairness } from './board-inspection';
+import { inspectBoardFairness, allBoardCards } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';
@@ -124,6 +124,9 @@ export interface SoakRunReport {
     wandererFloors: number;
     /** The Fold (`board-fold-rules.ts`): floors dealt as two rooms. */
     foldFloors: number;
+    /** Layers (`board-layers-rules.ts`): floors dealt two decks deep, and cards that rose into a cleared cell. */
+    layerFloors: number;
+    layerCardsRisen: number;
     wandererSteps: number;
     turncoatTurns: number;
     hourglassFloors: number;
@@ -172,11 +175,11 @@ export interface SoakRunReport {
 
 type Check = (before: RunState | null, after: RunState, action: string) => string | null;
 
-const realTiles = (board: BoardState): Tile[] => board.tiles.filter((tile) => !isSingletonUtilityPairKey(tile.pairKey));
 
+/** Pairs over every card the floor was dealt: a second deck’s and the cards a rising one took the cell of count too (`board-layers-rules.ts`). */
 const pairsOf = (board: BoardState): Map<string, Tile[]> => {
     const byPair = new Map<string, Tile[]>();
-    for (const tile of realTiles(board)) byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile]);
+    for (const tile of allBoardCards(board).filter((card) => !isSingletonUtilityPairKey(card.pairKey))) byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile]);
     return byPair;
 };
 
@@ -417,6 +420,18 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         }
         return null;
     },
+    'no cleared cell sits over a waiting card, unless the Hold keeps it': (_before, run) => {
+        const under = run.board?.beneath;
+        if (!under || run.status === 'levelComplete' || run.status === 'gameOver') return null;
+        const held = new Set(run.heldSeedIds ?? []);
+        const stuck = under.flatMap((card, index) => {
+            const top = run.board!.tiles[index];
+            return card && (top?.state === 'matched' || top?.state === 'removed') && !held.has(top.id) ? [index] : [];
+        });
+        return stuck.length === 0 ? null : `cleared cells over a waiting card: ${stuck.join(', ')}`;
+    },
+    'a floor ends only when both decks are cleared': (_before, run) =>
+        run.status === 'levelComplete' && run.board?.beneath?.some(Boolean) ? 'the floor cleared with cards still beneath it' : null,
     'nothing is held into a cleared floor, and a held pair is a matched one': (_before, run) => {
         if (run.status === 'levelComplete' && (run.holding || (run.heldSeedIds ?? []).length > 0)) return 'the floor cleared with a hold held';
         const unmatched = (run.heldSeedIds ?? []).filter((id) => run.board?.tiles.find((tile) => tile.id === id)?.state !== 'matched');
@@ -649,6 +664,8 @@ export const soakRun = ({
     let turncoatFloors = 0;
     let wandererFloors = 0;
     let foldFloors = 0;
+    let layerFloors = 0;
+    let layerCardsRisen = 0;
     let wandererSteps = 0;
     let turncoatTurns = 0;
     let hourglassFloors = 0;
@@ -702,9 +719,11 @@ export const soakRun = ({
             if (next.board.tiles.some((tile) => tile.turncoat != null)) turncoatFloors += 1;
             if (next.board.tiles.some((tile) => tile.wanderer)) wandererFloors += 1;
             if (next.board.fold) foldFloors += 1;
+            if (next.board.beneath?.some(Boolean)) layerFloors += 1;
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        if (next.board?.level === run.board?.level) layerCardsRisen += Math.max(0, (next.layerCardsRisenThisFloor ?? 0) - (run.layerCardsRisenThisFloor ?? 0));
         if (next.board?.level === run.board?.level) wandererSteps += Math.max(0, (next.wandererStepsThisFloor ?? 0) - (run.wandererStepsThisFloor ?? 0));
         hourglassesCaught += Math.max(0, (next.hourglassesCaughtThisRun ?? 0) - (run.hourglassesCaughtThisRun ?? 0));
         hourglassesSpent += Math.max(0, (next.hourglassesSpentThisFloor ?? 0) - (run.hourglassesSpentThisFloor ?? 0));
@@ -923,6 +942,8 @@ export const soakRun = ({
         turncoatFloors,
         wandererFloors,
         foldFloors,
+        layerFloors,
+        layerCardsRisen,
         wandererSteps,
         turncoatTurns,
         hourglassFloors,

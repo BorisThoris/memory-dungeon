@@ -1,3 +1,4 @@
+import { promoteRunBeneath } from './board-layers-rules';
 import type {
     BoardState,
     RunState
@@ -49,7 +50,7 @@ const shufflePowerTiles = (tiles: BoardState['tiles'], rng: () => number, rulesV
     return shuffled;
 };
 
-export const applyShuffle = (run: RunState): RunState => {
+const shuffleRunBoard = (run: RunState): RunState => {
     const board = run.board;
     if (!canShuffleBoard(run) || !board) {
         return run;
@@ -122,7 +123,7 @@ export const applyShuffle = (run: RunState): RunState => {
     };
 };
 
-export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState => {
+const shuffleRunRegion = (run: RunState, rowIndex: number): RunState => {
     const board = run.board;
     if (!canRegionShuffleRow(run, rowIndex) || !board) {
         return run;
@@ -176,7 +177,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
     };
 };
 
-export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: string): RunState => {
+const swapRunTiles = (run: RunState, firstTileId: string, secondTileId: string): RunState => {
     if (!canSwapHiddenTiles(run, firstTileId, secondTileId) || !run.board) {
         return run;
     }
@@ -220,6 +221,14 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         }
     };
 };
+
+/*
+ * The tools that move face-down cards between turns. On a two-deck floor a moved card can land over its own
+ * partner, so the same pass that runs after a turn runs after them (`board-layers-rules.ts`).
+ */
+export const applyShuffle = (run: RunState): RunState => promoteRunBeneath(shuffleRunBoard(run));
+export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState => promoteRunBeneath(shuffleRunRegion(run, rowIndex));
+export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: string): RunState => promoteRunBeneath(swapRunTiles(run, firstTileId, secondTileId));
 
 export const applyFlashPair = (run: RunState): RunState => {
     const flashPairCharges = runNonNegativeInteger(run.flashPairCharges);
@@ -348,7 +357,8 @@ export const applyBomb = (run: RunState, tileId: string): RunState => {
     );
     // What the bomb leaves must still hold a pair the player can turn (`realm-weather-rules.ts`).
     releaseRealmHoldsIfStuck(tiles);
-    return {
+    // The cells it cleared take what lay beneath them (`board-layers-rules.ts`).
+    return promoteRunBeneath({
         ...run,
         bombCharges: decrementRunCounter(run.bombCharges),
         powersUsedThisRun: true,
@@ -359,7 +369,7 @@ export const applyBomb = (run: RunState, tileId: string): RunState => {
             matchedPairs: runNonNegativeInteger(run.board.matchedPairs) + 1,
             tiles
         }
-    };
+    });
 };
 
 export const cancelResolvingWithUndo = (run: RunState): RunState => {

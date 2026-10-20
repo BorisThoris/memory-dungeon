@@ -1,3 +1,4 @@
+import { promoteRunBeneath } from './board-layers-rules';
 import type { RunState, TileSuit } from './contracts';
 import { isBoardComplete } from './board-inspection';
 import { chainMomentum, runChainMomentumPairs, runLadderChain } from './chain-tier-rules';
@@ -146,5 +147,7 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
             currentLevelScore: runNonNegativeInteger(run.stats.currentLevelScore) + score
         }
     };
-    return { run: isBoardComplete(board) ? finalizeLevel(released, board) : released, pairs, score, held };
+    // The released cells, and every cell the break cleared, take what lay beneath them (`board-layers-rules.ts`).
+    const risen = promoteRunBeneath(released);
+    return { run: isBoardComplete(risen.board!) ? finalizeLevel(risen, risen.board!) : risen, pairs, score, held };
 };

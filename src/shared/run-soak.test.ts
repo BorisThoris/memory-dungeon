@@ -42,6 +42,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.holdsReleased > 0), 'no run ever released a hold').toBe(true);
         expect(reports.some((report) => report.wandererFloors > 0 && report.wandererSteps > 0), 'no Wanderer was ever dealt and stepped').toBe(true);
         expect(reports.some((report) => report.foldFloors > 0), 'no run ever reached the Fold').toBe(true);
+        expect(reports.some((report) => report.layerFloors > 0 && report.layerCardsRisen > 0), 'no card ever rose from a second deck').toBe(true);
         /* The five run-economy mechanics have no row in the floor census (the reference player never
            shops), so this is where `scripts/mechanic-accountability.ts` points for proof they happen. */
         expect(reports.some((report) => report.goldEarned > 0), 'no run ever earned gold').toBe(true);

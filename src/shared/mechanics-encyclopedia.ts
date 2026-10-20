@@ -27,7 +27,7 @@ import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 100 as const;
+export const ENCYCLOPEDIA_VERSION = 101 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -503,6 +503,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_layers',
+        title: 'Layers',
+        description:
+            'In the Deep, some cells hide a second card underneath. When the card on top leaves its cell - matched, popped, bombed or melted - the card beneath **rises** into it, face down. You never see the lower deck at the start of a floor, and its pairs come in just two elements, so the longest chains of a run are dug out from under the board you learned. A floor is cleared only when nothing is left beneath.'
     },
     {
         id: 'sys_fold',

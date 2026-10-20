@@ -5,6 +5,7 @@ import { TileBoardParticles } from './TileBoardParticles';
 import { MeteorStrike } from './MeteorStrike';
 import { ColossusStone } from './ColossusStone';
 import { FoldWall } from './FoldWall';
+import { LayerEdges } from './LayerEdges';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -104,6 +105,8 @@ export const TileBoardSceneBoardGroup = ({
         {/* The rules-63 Colossus, two cells by two at the head of the grid (`ColossusStone.tsx`). */}
         {/* The Fold's wall between its two rooms, open on the doorway (`FoldWall.tsx`). */}
         {board.fold && <FoldWall board={board} compact={compact} />}
+        {/* Layers: the edge of the card waiting under each covered cell (`LayerEdges.tsx`). */}
+        {board.beneath && <LayerEdges board={board} compact={compact} reduceMotion={reduceMotion} />}
         {board.colossus?.form === 'fixed' && <ColossusStone key={board.level} board={board} compact={compact} reduceMotion={reduceMotion} rows={boardRows} time={visualTime} />}
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}

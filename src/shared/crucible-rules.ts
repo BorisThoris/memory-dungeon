@@ -1,3 +1,4 @@
+import { promoteRunBeneath } from './board-layers-rules';
 import type { RunState, Tile, TileSuit } from './contracts';
 import { atomicVariantForPairKey } from './board-tile-generation-rules';
 import { ELEMENT_NAMES, ELEMENT_NEUTRALIZES } from './element-alchemy-rules';
@@ -134,7 +135,8 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
     const changed = new Set([...meltedTileIds, ...recastCells.map((cell) => tiles[cell]!.id)]);
     const keep = (ids: unknown): string[] => runFilteredStringArray(ids).filter((id) => !changed.has(id));
     return {
-        run: {
+        // The melted pair's cells take what lay beneath them (`board-layers-rules.ts`).
+        run: promoteRunBeneath({
             ...run,
             crucibleCharges: decrementRunCounter(run.crucibleCharges),
             crucibleUsesThisRun: uses + 1,
@@ -150,7 +152,7 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
                 matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
                 tiles
             }
-        },
+        }),
         meltedTileIds,
         recastTileIds: recastCells.map((cell) => tiles[cell]!.id),
         fromSuit,

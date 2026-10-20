@@ -1,3 +1,4 @@
+import { dealLayers } from './board-layers-rules';
 import {
     type FeaturedObjectiveId,
     type FloorArchetypeId,
@@ -68,10 +69,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     const bossBoard = raiseColossus(chilledBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion });
     // The floor's odd cards, a Turncoat and an Hourglass, on pairs nothing else has marked (`odd-card-rules.ts`).
     // Then the Wanderers, on pairs the odd cards left plain (`wanderer-rules.ts`).
-    const nextBoard = dealWanderers(dealOddCards(bossBoard, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion }), {
-        runSeed: run.runSeed,
-        rulesVersion: run.runRulesVersion
-    });
+    // Then, on the Deep's floors, the second deck under half the cells (`board-layers-rules.ts`).
+    const seeded = { runSeed: run.runSeed, rulesVersion: run.runRulesVersion };
+    const nextBoard = dealLayers(dealWanderers(dealOddCards(bossBoard, seeded), seeded), seeded);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 

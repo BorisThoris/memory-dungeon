@@ -890,8 +890,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     const boardEntranceKey = useMemo(
         () =>
-            `${board.level}|${board.columns}x${board.rows}|${[...board.tiles].map((t) => t.id).sort().join('|')}`,
-        [board.columns, board.level, board.rows, board.tiles]
+            // A two-deck floor keys on every id it was dealt (`board-layers-rules.ts`): a card rising into a cleared cell is not a new deal.
+            `${board.level}|${board.columns}x${board.rows}|${board.layerKey ?? [...board.tiles].map((t) => t.id).sort().join('|')}`,
+        [board.columns, board.layerKey, board.level, board.rows, board.tiles]
     );
     const prevBoardEntranceKeyRef = useRef<string | null>(null);
     const notifiedBoardReadyKeyRef = useRef<string | null>(null);

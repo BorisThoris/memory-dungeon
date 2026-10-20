@@ -1,3 +1,4 @@
+import { applyLayerTurn } from './board-layers-rules';
 import { claimCurio } from './curio-rules';
 import { applyWardenTurn } from './warden-rules';
 import { applyHoldTurn } from './hold-rules';
@@ -509,12 +510,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applyWardenTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)))));
+            return applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))))));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyWardenTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)))));
+        return applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))));
     };
     return resolveBoardTurn;
 };

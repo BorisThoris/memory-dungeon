@@ -1,3 +1,4 @@
+import { promoteRunBeneath } from './board-layers-rules';
 import type { RunState } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -37,5 +38,7 @@ export const callMeteor = (run: RunState, tileId: string): RunState => {
         pinnedTileIds:run.pinnedTileIds.filter(id=>!board.tiles.some(tile=>tile.id===id&&pairs.has(tile.pairKey))),
         board:{...board,tiles,flippedTileIds:[],matchedPairs:board.matchedPairs+pairs.size,
             meteorImpact:{key,cell,radius,cards}} };
-    return next.board!.matchedPairs >= board.pairCount ? finalizeLevel(next,next.board!) : next;
+    // The cells it cleared take what lay beneath them (`board-layers-rules.ts`).
+    const risen = promoteRunBeneath(next);
+    return risen.board!.matchedPairs >= board.pairCount ? finalizeLevel(risen,risen.board!) : risen;
 };

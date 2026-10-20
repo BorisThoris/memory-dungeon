@@ -39,6 +39,7 @@ import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
 import type { BoardFold } from './board-fold-rules';
+import { layerKeyOf } from './board-layers-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -87,6 +88,8 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'layers-rise'
+    | 'layers-pop-risen'
     | 'fold-cross'
     | 'fold-blocked'
     | 'wanderers-step'
@@ -393,6 +396,29 @@ const leftStanding = (pairKeys: readonly string[]) => (run: RunState) => {
     return gone.length === 0 ? null : `the pop reached through the wall to ${gone.join(', ')}`;
 };
 const FOLD_HALL: BoardFold = { afterColumn: 2, doorRows: [1] };
+
+/**
+ * A two-deck room (`board-layers-rules.ts`): `under` has the top rows' shape, `.` for a cell with nothing
+ * beneath. The pairs of both decks count, and the room keys on every id both decks were dealt.
+ */
+const layeredRoom = (rows: readonly string[], under: readonly string[], options: Parameters<typeof room>[1] = {}): RunState => {
+    const seen = new Map<string, number>();
+    const beneath: (Tile | null)[] = under.flatMap((row) =>
+        row.trim().split(/\s+/).map((cell) => {
+            if (cell === '.') return null;
+            const [pairKey, suitCode] = cell.split(':') as [string, string];
+            const half = (seen.get(pairKey) ?? 0) + 1;
+            seen.set(pairKey, half);
+            return tile(`${pairKey}-${half}`, pairKey, ({ e: 'ember', t: 'tide', m: 'moss', b: 'bone' } as const)[suitCode as 'e' | 't' | 'm' | 'b'] ?? 'ember');
+        })
+    );
+    const built = room(rows, options);
+    return { ...built, board: { ...built.board!, beneath, pairCount: built.board!.pairCount + seen.size, layerKey: layerKeyOf(built.board!.tiles, beneath) } };
+};
+const risenAt = (cell: number, id: string) => (run: RunState) => {
+    const there = run.board?.tiles[cell];
+    return there?.id === id && there.state === 'hidden' ? null : `cell ${cell} holds ${there?.id ?? 'nothing'} (${there?.state ?? '-'}), not ${id} face down`;
+};
 
 const noFootprints = (run: RunState): string | null => (wandererFootprintCells(run.board).length === 0 ? null : `footprints left on ${wandererFootprintCells(run.board).join(', ')}`);
 
@@ -1020,6 +1046,32 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
             }
+        ]
+    },
+    {
+        id: 'layers-rise',
+        title: 'A pair reveals two beneath',
+        mechanic: 'In the Deep some cells hide a second card. When the card on top leaves, the card beneath rises into its cell, face down, and the floor is not done until nothing is left beneath.',
+        graphMechanicIds: ['board.layers'],
+        tryThis: 'Match the fire pair a: the two bone cards x rise into its cells, face down. Match them, then the rest, and the floor clears.',
+        build: () => layeredRoom(['a:e b:t c:m', 'a:e b:t c:m'], ['x:b . .', 'x:b . .'], { level: 25, misses: 4 }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the cards beneath rise into the cells a left', expect: expectAll(risenAt(0, 'x-1'), risenAt(3, 'x-2'), finishable) },
+            { step: { do: 'match', pairKey: 'x' }, says: 'the risen pair is a pair like any other', expect: expectAll(isGone('x'), finishable) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'one more pair', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'c' }, says: 'nothing waits beneath, so the floor clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'layers-pop-risen',
+        title: 'A risen card pops like any other',
+        mechanic: 'A card that rose is face down and unknown, and the pop takes it like any card: the lower deck is where the long chains wait.',
+        graphMechanicIds: ['board.layers', 'board.chain_chunk_fever'],
+        tryThis: 'Match the moss pair c: the fire pair y rises under the fire pair a. Match a, and the pop takes y beside it.',
+        build: () => layeredRoom(['a:e a:e b:t b:t', 'c:m c:m d:b d:b'], ['. . . .', 'y:e y:e . .'], { level: 25, misses: 4 }),
+        script: [
+            { step: { do: 'match', pairKey: 'c' }, says: 'the fire pair y rises into the cells c left', expect: expectAll(risenAt(4, 'y-1'), risenAt(5, 'y-2')) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the pop takes the risen fire pair beside the match', expect: expectAll(isGone('y'), finishable) }
         ]
     },
     {
