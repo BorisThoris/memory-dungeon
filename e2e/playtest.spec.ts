@@ -67,7 +67,14 @@ const expectDrawCallsWithinBudget = async (page: Page, level: number): Promise<v
 
 const playRun = async (
     page: Page,
-    { missRate, maxFloor, label, query = '', maxSteps = 600 }: { missRate: number; maxFloor: number; label: string; query?: string; maxSteps?: number }
+    {
+        missRate,
+        maxFloor,
+        label,
+        query = '',
+        maxSteps = 600,
+        wardenChoice = 'win'
+    }: { missRate: number; maxFloor: number; label: string; query?: string; maxSteps?: number; wardenChoice?: 'win' | 'endless' }
 ) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
@@ -107,6 +114,16 @@ const playRun = async (
         stepsOnFloor += 1;
         expect(stepsOnFloor, `floor ${level} stalled in ${s.status}`).toBeLessThan(250);
         if (s.status === 'levelComplete') {
+            // The Warden's clear asks (DGE-006): the player takes the win, or descends into Endless.
+            const choice = page
+                .getByTestId('warden-choice')
+                .getByRole('button', { name: wardenChoice === 'win' ? 'Take the win' : 'Descend into Endless' });
+            if (await choice.isVisible().catch(() => false)) {
+                await shot(`warden-choice-after-${level}`);
+                await choice.click();
+                await page.waitForTimeout(600);
+                continue;
+            }
             const descend = page.getByRole('button', { name: /descend/i }).first();
             if (await descend.isVisible().catch(() => false)) {
                 await shot(`store-after-${level}`);
@@ -192,5 +209,17 @@ test.describe('Playtest', () => {
         expect(result.ended).toBe('gameOver');
         expect(result.level).toBe(60);
         await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
+    });
+
+    /*
+     * Endless (DGE-006): the same tester descends past the Warden instead, and plays the first Endless cycle's
+     * act starts and bosses to its own Warden on floor 90 - bigger boards, the acts again, shorter.
+     */
+    test('a tester at the test pace goes on into Endless and plays its first cycle', async ({ page }) => {
+        test.setTimeout(3_000_000);
+        const result = await playRun(page, { missRate: 0.02, maxFloor: 89, label: 'test-pace-endless', query: 'pace=fast', maxSteps: 4000, wardenChoice: 'endless' });
+        expect(result.errors).toEqual([]);
+        expect(result.ended).toBe('depth');
+        expect(result.level).toBe(90);
     });
 });

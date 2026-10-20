@@ -25,9 +25,10 @@ describe('milestones (DGE-004)', () => {
             expect(milestone.fraction).toBeGreaterThan(0);
             expect(milestone.fraction).toBeLessThanOrEqual(1);
         }
-        // Past 60 the Warden stands every twenty floors.
-        expect(nextMilestone(61)).toMatchObject({ name: 'The Warden', floor: 80, floorsDone: 1, floorsTotal: 20 });
-        expect(nextMilestone(100)).toMatchObject({ floor: 100, fraction: 1 });
+        // Past 60, Endless: each cycle's acts, shorter each time, the Warden ending every cycle.
+        expect(nextMilestone(61)).toMatchObject({ name: 'The Living Dungeon', floor: 66, floorsDone: 1, floorsTotal: 6 });
+        expect(nextMilestone(85)).toMatchObject({ name: 'The Warden', floor: 90, floorsDone: 5, floorsTotal: 10, fraction: 0.5 });
+        expect(nextMilestone(107)).toMatchObject({ name: 'The Warden', floor: 107, fraction: 1 });
     });
 
     it('stands each milestone on its act\u2019s last floor', () => {

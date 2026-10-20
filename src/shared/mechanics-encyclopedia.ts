@@ -24,7 +24,7 @@ import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './d
 import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 95 as const;
+export const ENCYCLOPEDIA_VERSION = 96 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -489,7 +489,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'The Warden',
         description:
             `Floor ${DESCENT_FLOOR_COUNT} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
-            `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run.`
+            `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run. Then you choose: take the win, or go on into **Endless**, where the four acts come round again, each cycle half as long, every cycle ending on its Warden.`
     },
     {
         id: 'sys_dread',

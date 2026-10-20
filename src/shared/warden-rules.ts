@@ -15,8 +15,9 @@ import { clearResolveState } from './run-timer-rules';
  *   where they are, and so does everything face up. The cards keep their ids and their pairs, so the
  *   board can always be finished.
  *
- * Clearing the floor wins the run (`wardenOutcome: 'cleared'`, and the store ends it with
- * `runEndReason: 'warden_cleared'`); falling on it is the run's designed death
+ * Clearing the floor wins the run (`wardenOutcome: 'cleared'`): the player chooses at the clear to
+ * take the win (the store ends it with `runEndReason: 'warden_cleared'`) or to descend into Endless
+ * (`descendIntoEndless`, DGE-006), where each cycle's Warden is just a boss; falling on it is the run's designed death
  * (`wardenOutcome: 'fell'`). The rules live on the floor's archetype, `warden_hall`, so the Warden
  * moves no card with a mutator in the same turn. The full Warden, with the Hold, is DGE-023.
  */
@@ -80,4 +81,11 @@ export const applyWardenTurn = (before: RunState, after: RunState): RunState => 
 
 /** A cleared Warden ends the run as a win: the store calls this where a shared game's last floor ends it. */
 export const endRunAfterWardenClear = (run: RunState): RunState =>
-    run.status === 'levelComplete' && run.wardenOutcome === 'cleared' ? { ...run, status: 'gameOver', runEndReason: 'warden_cleared' } : run;
+    run.status === 'levelComplete' && run.wardenOutcome === 'cleared' && !run.endless ? { ...run, status: 'gameOver', runEndReason: 'warden_cleared' } : run;
+
+/** Whether the cleared floor is the Warden's and the player still has to choose: take the win, or go on into Endless. */
+export const awaitsWardenChoice = (run: Pick<RunState, 'status' | 'wardenOutcome' | 'endless'>): boolean =>
+    run.status === 'levelComplete' && run.wardenOutcome === 'cleared' && !run.endless;
+
+/** The player goes on: the same run descends into Endless (DGE-006) and is recorded when it ends. */
+export const descendIntoEndless = (run: RunState): RunState => (awaitsWardenChoice(run) ? { ...run, endless: true } : run);

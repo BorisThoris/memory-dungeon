@@ -49,6 +49,9 @@ describe('the test pace (fast Descent)', () => {
             visited.push(current.board!.level);
         }
         expect(visited).toEqual([...FAST_DESCENT_LADDER]);
+        // On into Endless: the first two cycles' act starts and bosses.
+        expect(nextDescentLevel(current)).toBe(61);
+        expect(nextDescentLevel({ ...current, board: { ...current.board!, level: 61 } })).toBe(66);
         expect(current.board?.floorArchetypeId).toBe('warden_hall');
     });
 

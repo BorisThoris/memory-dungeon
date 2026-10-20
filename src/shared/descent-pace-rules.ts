@@ -1,6 +1,6 @@
 import type { RealmDoor, RunState } from './contracts';
 import { countDreadFloor } from './dread-rules';
-import { DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
+import { DESCENT_FLOOR_COUNT, endlessPlaceForLevel } from './floor-mutator-schedule';
 import { carryMissBank } from './miss-bank';
 import { rollRealmDoors, runRealmId } from './realm-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -23,13 +23,25 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export const FAST_DESCENT_LADDER: readonly number[] = [1, 2, 4, 7, 9, 12, 13, 18, 24, 25, 32, 40, 41, 50, DESCENT_FLOOR_COUNT];
 
+/** Past the Warden (DGE-006): each Endless act's first floor and its boss, for the first two cycles; then one floor at a time. */
+export const FAST_ENDLESS_RUNGS: readonly number[] = (() => {
+    const rungs = new Set<number>();
+    for (let level = DESCENT_FLOOR_COUNT + 1; ; level += 1) {
+        const place = endlessPlaceForLevel(level);
+        if (!place || place.cycle > 2) break;
+        rungs.add(place.firstLevel);
+        rungs.add(place.lastLevel);
+    }
+    return [...rungs].sort((a, b) => a - b);
+})();
+
 export const isFastDescent = (run: Pick<RunState, 'descentPace'>): boolean => run.descentPace === 'fast';
 
 /** The floor a cleared run descends to: the next one, or the next rung of the ladder at the test pace. */
 export const nextDescentLevel = (run: Pick<RunState, 'descentPace' | 'board'>): number => {
     const level = Math.max(1, runNonNegativeInteger(run.board?.level ?? 1));
     if (!isFastDescent(run)) return level + 1;
-    return FAST_DESCENT_LADDER.find((floor) => floor > level) ?? level + 1;
+    return FAST_DESCENT_LADDER.find((floor) => floor > level) ?? FAST_ENDLESS_RUNGS.find((floor) => floor > level) ?? level + 1;
 };
 
 /** A run at the test pace: it jumps, and it counts nothing toward records. */

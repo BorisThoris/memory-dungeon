@@ -29,7 +29,11 @@ import { runNonNegativeIntegerWithFallback } from './run-number-guards';
  * 6 (2026-10-20, DGE-005): floor 60 is the Warden's hall, the Descent's end. Schedule-only like 5:
  * no generation before floor 60 changes, so `GAME_RULES_VERSION` stays.
  */
-export const FLOOR_SCHEDULE_RULES_VERSION = 6;
+/*
+ * 7 (2026-10-20, DGE-006): past floor 60 the acts repeat in Endless cycles, each half as long as the
+ * last, instead of the Abyss repeating. Schedule-only: nothing to floor 60 changes.
+ */
+export const FLOOR_SCHEDULE_RULES_VERSION = 7;
 
 export interface FloorArchetypeDefinition {
     title: string;
@@ -494,14 +498,55 @@ export const DESCENT_FLOOR_COUNT = 60;
 
 const ABYSS = DESCENT_ACTS[DESCENT_ACTS.length - 1]!;
 
-/** The Descent floor a level plays as: itself to 60, then the Abyss again, until Endless has its own rule. */
-const descentFloorOf = (level: number): number => {
-    if (level <= DESCENT_FLOOR_COUNT) return level;
-    const abyssLength = ABYSS.lastFloor - ABYSS.firstFloor + 1;
-    return ABYSS.firstFloor + ((level - DESCENT_FLOOR_COUNT - 1) % abyssLength);
+/**
+ * Endless (DGE-006, 2026-10-20): past the Warden the four acts come round again, each cycle every act
+ * half as long as the cycle before (never under `ENDLESS_ACT_MIN_FLOORS`), and each still ends on its
+ * boss. Cycle 1 is 6 + 6 + 8 + 10 floors (61-90), cycle 2 is 4 + 4 + 4 + 5, and from cycle 3 every act
+ * is four floors. A floor plays as the Descent floor at the same share of its act, so the act's first
+ * floor plays as the act's first and its last as the act's boss.
+ */
+export const ENDLESS_ACT_MIN_FLOORS = 4;
+
+export interface EndlessPlace {
+    /** 1 for floors 61-90, then 2, 3, ... */
+    readonly cycle: number;
+    readonly act: DescentActDefinition;
+    /** The first and last floor of this act in this cycle. */
+    readonly firstLevel: number;
+    readonly lastLevel: number;
+    /** The Descent floor this floor plays as. */
+    readonly descentFloor: number;
+}
+
+const actLength = (act: DescentActDefinition): number => act.lastFloor - act.firstFloor + 1;
+
+/** How long an act runs in an Endless cycle. */
+export const endlessActLength = (act: DescentActDefinition, cycle: number): number =>
+    Math.max(ENDLESS_ACT_MIN_FLOORS, Math.round(actLength(act) / 2 ** Math.max(1, Math.floor(cycle))));
+
+/** Where a floor past 60 stands in Endless; null on the Descent itself. */
+export const endlessPlaceForLevel = (level: number): EndlessPlace | null => {
+    const floor = Math.floor(Number.isFinite(level) ? level : 1);
+    if (floor <= DESCENT_FLOOR_COUNT) return null;
+    let start = DESCENT_FLOOR_COUNT + 1;
+    for (let cycle = 1; ; cycle += 1) {
+        for (const act of DESCENT_ACTS) {
+            const length = endlessActLength(act, cycle);
+            if (floor < start + length) {
+                const position = floor - start;
+                const span = actLength(act) - 1;
+                const descentFloor = act.firstFloor + (length === 1 ? span : Math.round((position * span) / (length - 1)));
+                return { cycle, act, firstLevel: start, lastLevel: start + length - 1, descentFloor };
+            }
+            start += length;
+        }
+    }
 };
 
-/** The act a floor belongs to. Past floor 60 it is the Abyss, repeating. */
+/** The Descent floor a level plays as: itself to 60, then its place in an Endless cycle. */
+const descentFloorOf = (level: number): number => endlessPlaceForLevel(level)?.descentFloor ?? level;
+
+/** The act a floor belongs to; past floor 60, the act of its Endless cycle. */
 export const descentActForFloor = (level: number): DescentActDefinition => {
     const floor = descentFloorOf(Math.max(1, Math.floor(Number.isFinite(level) ? level : 1)));
     return DESCENT_ACTS.find((act) => floor >= act.firstFloor && floor <= act.lastFloor) ?? ABYSS;

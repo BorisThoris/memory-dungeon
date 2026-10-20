@@ -1,4 +1,4 @@
-import { DESCENT_FLOOR_COUNT, descentActForFloor, type DescentActId } from './floor-mutator-schedule';
+import { descentActForFloor, endlessPlaceForLevel, type DescentActId } from './floor-mutator-schedule';
 
 /**
  * Milestones (DGE-004, 2026-10-19): what the run is walking toward, read as a fraction.
@@ -7,8 +7,8 @@ import { DESCENT_FLOOR_COUNT, descentActForFloor, type DescentActId } from './fl
  * is in view (`tasks/deep-game-epic/01-research-findings.md`). So the run bar, and the floor-clear
  * beat that is the reward, always name the next milestone and how far it is. A milestone is the end
  * of a Descent act: reaching the Living Dungeon, then each act's boss. Every track has an end
- * (thesis 25.11): past floor 60 the Abyss repeats until Endless has its own rule (DGE-006), and so
- * does the Warden at its end.
+ * (thesis 25.11): past floor 60 each Endless cycle's acts end on their bosses, the Warden every
+ * cycle (`endlessPlaceForLevel`).
  */
 const DESCENT_MILESTONE_NAMES: Readonly<Record<DescentActId, string>> = {
     gate: 'The Living Dungeon',
@@ -28,18 +28,17 @@ export interface Milestone {
     readonly fraction: number;
 }
 
-const ABYSS_LENGTH = 20;
-
 /** The milestone a floor is walking toward. */
 export const nextMilestone = (level: number): Milestone => {
     const floor = Math.max(1, Math.floor(Number.isFinite(level) ? level : 1));
-    const act = descentActForFloor(floor);
-    // Past the Descent the Abyss repeats, so its floors are counted from the repeat they are in.
-    const offset = floor <= DESCENT_FLOOR_COUNT ? 0 : DESCENT_FLOOR_COUNT + Math.floor((floor - DESCENT_FLOOR_COUNT - 1) / ABYSS_LENGTH) * ABYSS_LENGTH - (act.firstFloor - 1);
-    const firstFloor = act.firstFloor + offset;
-    const floorsTotal = act.lastFloor - act.firstFloor + 1;
+    // Past the Warden, Endless (DGE-006): the act of this cycle, as long as the cycle makes it.
+    const endless = endlessPlaceForLevel(floor);
+    const act = endless?.act ?? descentActForFloor(floor);
+    const firstFloor = endless?.firstLevel ?? act.firstFloor;
+    const lastFloor = endless?.lastLevel ?? act.lastFloor;
+    const floorsTotal = lastFloor - firstFloor + 1;
     const floorsDone = floor - firstFloor + 1;
-    return { name: DESCENT_MILESTONE_NAMES[act.id], floor: firstFloor + floorsTotal - 1, floorsDone, floorsTotal, fraction: floorsDone / floorsTotal };
+    return { name: DESCENT_MILESTONE_NAMES[act.id], floor: lastFloor, floorsDone, floorsTotal, fraction: floorsDone / floorsTotal };
 };
 
 /** After a clear: the milestone ahead of the next floor, and the floors still to clear to reach it. */

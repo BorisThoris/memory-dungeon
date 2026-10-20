@@ -78,6 +78,8 @@ export interface AppState {
     buyStoreItem: (id: StoreItemId) => void;
     /** Walks through a travel door at a floor clear (`realm-rules.ts`) and builds the next floor there. */
     travelThroughRealmDoor: (index: number) => void;
+    /** The Warden's clear (DGE-006): the same run goes on into Endless instead of ending as the win. */
+    descendIntoEndless: () => void;
     /** Spends a bomb on the one card face up (`applyBomb`), or does nothing when it cannot. */
     useBomb: () => void;
     /** Melt the face-up card's pair and recast its element (`crucible-rules.ts`). */

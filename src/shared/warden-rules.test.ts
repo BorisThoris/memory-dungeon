@@ -5,7 +5,7 @@ import { inspectBoardFairness } from './board-inspection';
 import { parTurnsForRun } from './floor-par';
 import { missesLeft } from './miss-bank';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { applyWardenTurn, endRunAfterWardenClear, isWardenRedealTurn, wardenRedeal } from './warden-rules';
+import { applyWardenTurn, awaitsWardenChoice, descendIntoEndless, endRunAfterWardenClear, isWardenRedealTurn, wardenRedeal } from './warden-rules';
 
 const wardenRun = (extra: Partial<RunState> = {}): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 6060 }));
@@ -84,6 +84,17 @@ describe('the Warden (DGE-005)', () => {
         const before = { ...base, turnsThisFloor: 40 };
         const after = turned(before);
         expect(applyWardenTurn(before, after)).toBe(after);
+    });
+
+    it('asks at the clear: the win ends the run, Endless carries the same run on (DGE-006)', () => {
+        const cleared = wardenRun({ status: 'levelComplete', wardenOutcome: 'cleared' });
+        expect(awaitsWardenChoice(cleared)).toBe(true);
+        const endless = descendIntoEndless(cleared);
+        expect(endless.endless).toBe(true);
+        expect(awaitsWardenChoice(endless)).toBe(false);
+        // An Endless run's Warden is a boss like any other: clearing it does not end the run.
+        expect(endRunAfterWardenClear(endless)).toBe(endless);
+        expect(descendIntoEndless(wardenRun())).toEqual(wardenRun());
     });
 
     it('wins the run once the cleared Warden is continued from, and nothing else does', () => {

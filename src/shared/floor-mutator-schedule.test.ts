@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+    endlessActLength,
+    endlessPlaceForLevel,
     DESCENT_ACTS,
     DESCENT_FLOOR_COUNT,
     descentActForFloor,
@@ -409,13 +411,25 @@ describe('warden rotation', () => {
         for (const floor of actBosses) expect(scheduleFor(floor).floorTag, `floor ${floor}`).toBe('boss');
     });
 
-    it('repeats the Abyss past the Warden, its rooms and its boss, until Endless has its own rule', () => {
-        for (let level = 61; level <= 100; level += 1) {
-            const played = 41 + ((level - 61) % 20);
-            const [here, there] = [scheduleFor(level), scheduleFor(played)];
-            expect([here.floorArchetypeId, here.floorTag], `floor ${level} plays as ${played}`).toEqual([there.floorArchetypeId, there.floorTag]);
-            expect(descentActForFloor(level).id).toBe('abyss');
+    it('repeats the four acts past the Warden in Endless cycles, each half as long, each ending on its boss (DGE-006)', () => {
+        const lengths = (cycle: number) => DESCENT_ACTS.map((act) => endlessActLength(act, cycle));
+        expect(lengths(1)).toEqual([6, 6, 8, 10]);
+        expect(lengths(2)).toEqual([4, 4, 4, 5]);
+        expect(lengths(5)).toEqual([4, 4, 4, 4]);
+        expect(endlessPlaceForLevel(60)).toBeNull();
+        expect(endlessPlaceForLevel(61)?.cycle).toBe(1);
+        expect(endlessPlaceForLevel(91)?.cycle).toBe(2);
+        for (let level = 61; level <= 400; level += 1) {
+            const place = endlessPlaceForLevel(level)!;
+            expect(descentActForFloor(level).id, `floor ${level}`).toBe(place.act.id);
+            if (level === place.firstLevel) expect(place.descentFloor).toBe(place.act.firstFloor);
+            if (level === place.lastLevel) {
+                expect(place.descentFloor).toBe(place.act.lastFloor);
+                if (place.act.bossFloor) expect(scheduleFor(level).floorTag, `floor ${level} is ${place.act.title}'s boss`).toBe('boss');
+            }
         }
+        // The Warden ends every cycle: floor 90, 107 and every sixteen floors after.
+        expect([90, 107, 123, 139].map((level) => scheduleFor(level).floorArchetypeId)).toEqual(['warden_hall', 'warden_hall', 'warden_hall', 'warden_hall']);
     });
 });
 

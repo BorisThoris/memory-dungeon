@@ -1,4 +1,5 @@
-import { WARDEN_REDEAL_EVERY_TURNS, isWardenFloor } from '../../shared/warden-rules';
+import { WARDEN_REDEAL_EVERY_TURNS, awaitsWardenChoice, isWardenFloor } from '../../shared/warden-rules';
+import { WARDEN_CHOICE_COPY } from '../copy/runDialogCopy';
 import { RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
 import { useFinalPairAutoMatch } from '../hooks/useFinalPairAutoMatch';
@@ -493,6 +494,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
             continueToNextLevel: state.continueToNextLevel,
+            descendIntoEndlessAction: state.descendIntoEndless,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
             openCodexFromPlaying: state.openCodexFromPlaying,
@@ -802,6 +804,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         applyFlashPairPower,
         greetFloorResident,
         continueToNextLevel,
+        descendIntoEndlessAction,
         dismissPowersFtue,
         goToMenu,
         useBomb: spendBomb,
@@ -1297,8 +1300,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * keeps its own guard - a run that is no longer at levelComplete ignores it - so a beat that
      * was cut short by anything else is harmless.
      */
+    // The Warden's clear asks before it goes on (DGE-006): take the win, or descend into Endless.
+    const wardenChoiceOpen = run ? awaitsWardenChoice(run) : false;
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || wardenChoiceOpen) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1353,7 +1358,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, wardenChoiceOpen]);
 
     /*
      * The stamp's exit. The beat used to vanish in one frame as the next board arrived (recorded
@@ -2122,7 +2127,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
                                     countUp={!reduceMotion}
-                                    milestone={isPassAndPlayRun(run.passAndPlay) ? null : milestoneAfterClear(run.lastLevelResult.level)}
+                                    milestone={isPassAndPlayRun(run.passAndPlay) || wardenChoiceOpen ? null : milestoneAfterClear(run.lastLevelResult.level)}
                                     nextPlace={nextRoomDoor && nextRoomDoor.realmId !== runRealmId(run) ? REALMS[nextRoomDoor.realmId].place : null}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
@@ -2442,6 +2447,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </ul>
                         <p className={styles.shortcutsHelpTip}>{GAMBIT_KEYBOARD_HELP_TIP}</p>
                     </OverlayModal>
+                ) : null}
+
+                {/* The Warden's clear asks (DGE-006): the win ends the run, Endless carries the same run on. */}
+                {!suppressStatusOverlays && wardenChoiceOpen ? (
+                    <OverlayModal
+                        actions={[
+                            { label: WARDEN_CHOICE_COPY.takeWin, onClick: continueToNextLevel, variant: 'primary' },
+                            { label: WARDEN_CHOICE_COPY.descend, onClick: descendIntoEndlessAction, variant: 'secondary' }
+                        ]}
+                        headerPlateTone="success"
+                        ornamentalHeaderPlate
+                        subtitle={WARDEN_CHOICE_COPY.body}
+                        testId="warden-choice"
+                        title={WARDEN_CHOICE_COPY.title}
+                    />
                 ) : null}
 
                 {!suppressStatusOverlays && abandonRunConfirmOpen ? (

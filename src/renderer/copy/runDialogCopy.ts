@@ -109,6 +109,14 @@ export const RUN_TOOL_REASONS = {
  * kicker is the standing the sentence is read from — which chain, which rung — so a line about a
  * pickup or a miss still says where the run is.
  */
+/** The Warden's clear (DGE-006): take the win, or go on into Endless. */
+export const WARDEN_CHOICE_COPY = {
+    title: 'The Warden falls',
+    body: 'The Descent is won. End the run here, or go on into Endless: the acts come round again, shorter each time, and the run is recorded when it ends.',
+    takeWin: 'Take the win',
+    descend: 'Descend into Endless'
+} as const;
+
 export const RUN_SHELL_LINE_COPY = {
     chainKicker: (chain: number, tierLabel: string): string =>
         chain <= 0 ? 'No chain' : tierLabel ? `Chain ${chain} · ${tierLabel}` : `Chain ${chain}`,
