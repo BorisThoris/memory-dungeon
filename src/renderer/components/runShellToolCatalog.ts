@@ -26,6 +26,7 @@ export type RunShellToolId =
     | 'misers_purse'
     | 'still_bell'
     | 'ignite'
+    | 'hold'
     | 'flash'
     | 'undo'
     | 'fit';
@@ -75,6 +76,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
     // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
     { conditional: true, id: 'ignite', label: 'Ignite', spends: null },
+    // The Hold (`hold-rules.ts`): on the dock from floor 13; reads Release while held. Its meter is the chain.
+    { conditional: true, id: 'hold', label: 'Hold', spends: null },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },

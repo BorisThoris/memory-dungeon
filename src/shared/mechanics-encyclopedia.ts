@@ -22,9 +22,10 @@ import {
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
 import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
+import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 97 as const;
+export const ENCYCLOPEDIA_VERSION = 98 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -500,6 +501,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_hold',
+        title: 'The Hold',
+        description:
+            `From floor ${HOLD_FIRST_FLOOR}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. A miss while holding drops the oldest half of what you hold, but never all of it.`
     },
     {
         id: 'sys_void_spew',

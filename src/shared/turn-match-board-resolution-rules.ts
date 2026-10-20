@@ -46,7 +46,8 @@ export const resolveTurnMatchBoardResolution = ({
         run,
         matchedTileIds: [firstTileId, secondTileId],
         chain: chainMomentum(runLadderChain({ ...run, stats: normalizeSessionStats(run.stats) }) + 1, runChainMomentumPairs(run)),
-        spec: elementPopSpec(run, matchedSuit)
+        // The Hold (`hold-rules.ts`): a held match keeps its pop for the release.
+        spec: run.holding ? null : elementPopSpec(run, matchedSuit)
     });
 
     /*

@@ -94,6 +94,9 @@ export interface AppState {
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */
     igniteZone: () => void;
+    /** The Hold (`hold-rules.ts`): start holding, or release every held pair's break at once. */
+    startHold: () => void;
+    releaseHold: () => void;
     /** Ends an open Zone early (`resolveZone`): everything face up plays at once. */
     resolveZone: () => void;
     openCodexFromPlaying: () => void;

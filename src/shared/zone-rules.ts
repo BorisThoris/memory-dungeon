@@ -72,7 +72,8 @@ export const zonePairsAvailable = (run: Pick<RunState, 'status' | 'board' | 'sta
     return pairs >= 2 ? pairs : 0;
 };
 
-export const canIgniteZone = (run: Pick<RunState, 'status' | 'board' | 'stats' | 'zone'>): boolean => zonePairsAvailable(run) > 0;
+// The Zone waits while the Hold is held (`hold-rules.ts`): its replayed turns would lose the held pairs.
+export const canIgniteZone = (run: Pick<RunState, 'status' | 'board' | 'stats' | 'zone' | 'holding'>): boolean => !run.holding && zonePairsAvailable(run) > 0;
 
 /** Open the Zone: the combo burns, time stops. Unchanged when it cannot open. */
 export const igniteZone = (run: RunState): RunState => {

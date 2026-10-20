@@ -984,6 +984,13 @@ export interface RunState {
     /** The test pace (`descent-pace-rules.ts`): the run jumps down the Descent's ladder and counts toward no record. */
     descentPace?: 'fast' | null;
     /** Endless (DGE-006): the run chose to go on past the Warden, and its clears no longer end it. */
+    /** The Hold (`hold-rules.ts`, DGE-008): links toward arming it, whether it is held, and the held pairs' tile ids. */
+    holdLinks?: number;
+    holding?: boolean;
+    heldSeedIds?: string[];
+    /** Releases this floor, and the most pairs one release has taken this run. */
+    holdsReleasedThisFloor?: number;
+    largestHoldThisRun?: number;
     endless?: boolean;
     /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
     wardenOutcome?: 'cleared' | 'fell' | null;

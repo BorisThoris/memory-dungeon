@@ -152,6 +152,8 @@ import { ColossusCard } from './ColossusCard';
 import { OddCardLegend } from './OddCardLegend';
 import { hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
+import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, isHoldUnlocked } from '../../shared/hold-rules';
+import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
@@ -500,6 +502,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openCodexFromPlaying: state.openCodexFromPlaying,
             useBomb: state.useBomb,
             igniteZone: state.igniteZone,
+            startHold: state.startHold,
+            releaseHold: state.releaseHold,
             resolveZone: state.resolveZone,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
             openSettings: state.openSettings,
@@ -809,6 +813,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         goToMenu,
         useBomb: spendBomb,
         igniteZone,
+        startHold,
+        releaseHold,
         resolveZone,
         openCodexFromPlaying,
         openInventoryFromPlaying,
@@ -1893,6 +1899,29 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                           onClick: () => {
                               if (isZoneActive(run)) resolveZone();
                               else igniteZone();
+                          }
+                      }
+                  ]
+                : []),
+            // The Hold (`hold-rules.ts`): from the Living Dungeon on. Its badge is the meter, then the pairs held.
+            ...(isHoldUnlocked(run)
+                ? [
+                      {
+                          ...toolSpec('hold'),
+                          label: run.holding ? HOLD_TOOL_COPY.releaseLabel : HOLD_TOOL_COPY.holdLabel,
+                          glyph: RUN_SHELL_GLYPHS.hold,
+                          // The dock hides a tool at zero charges: an empty meter shows the Hold without a badge.
+                          charges: run.holding ? heldPairCount(run) : holdMeter(run).segments || undefined,
+                          armed: run.holding === true,
+                          disabled: run.holding ? !canReleaseHold(run) : !canStartHold(run),
+                          title: run.holding
+                              ? HOLD_TOOL_COPY.held(heldPairCount(run))
+                              : canStartHold(run) ? HOLD_TOOL_COPY.ready
+                              : holdMeter(run).armed && run.board.flippedTileIds.length > 0 ? HOLD_TOOL_COPY.pendingFlip
+                              : HOLD_TOOL_COPY.filling(holdMeter(run).segments, HOLD_METER_SEGMENTS),
+                          onClick: () => {
+                              if (run.holding) releaseHold();
+                              else startHold();
                           }
                       }
                   ]

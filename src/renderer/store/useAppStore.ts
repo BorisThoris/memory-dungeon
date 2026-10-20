@@ -8,6 +8,7 @@ import { createGameplayMeteorCommand } from '../../shared/gameplay-core-contract
 import { chooseRealmDoor } from '../../shared/realm-rules';
 import { awaitsWardenChoice, descendIntoEndless } from '../../shared/warden-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
+import { canStartHold, releaseHold as releaseHoldRule, startHold as startHoldRule } from '../../shared/hold-rules';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
 import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStillBellCommand, createGameplayStormGlassCommand, createGameplayTakeRelicCommand } from '../../shared/gameplay-core-contracts';
 import { canTakeMisersPurse } from '../../shared/misers-purse-rules';
@@ -722,6 +723,21 @@ export const useAppStore = create<AppState>((set, get) => ({
         void resumeAudioContext();
         playPowerArmSfx(sfxGainFromStore());
         set({ run: igniteZoneRule(run) });
+    },
+
+    startHold: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canStartHold(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        set({ run: startHoldRule(run) });
+    },
+
+    releaseHold: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing') return;
+        const released = releaseHoldRule(run);
+        if (released) applyResolvedRun(released.run);
     },
 
     resolveZone: () => {

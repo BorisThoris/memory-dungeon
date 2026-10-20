@@ -2678,6 +2678,42 @@
             ]
         },
         {
+            "id": "power.hold",
+            "label": "The Hold",
+            "kind": "power",
+            "role": "six_chain_links_arm_it_held_matches_keep_their_pops_and_the_release_fires_them_as_one_break_per_suit",
+            "evidence": [
+                "src/shared/hold-rules.ts",
+                "src/shared/turn-match-board-resolution-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "holdLinks",
+                "holding",
+                "heldSeedIds",
+                "tileStates"
+            ],
+            "writes": [
+                "holdLinks",
+                "holding",
+                "heldSeedIds",
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "held-pairs-are-matched",
+                "nothing-held-into-a-cleared-floor",
+                "realm-holds-reconciled-after-release"
+            ],
+            "tests": [
+                "src/shared/hold-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "inventory.still_bell_charge",
             "label": "Still Bell Charge Inventory",
             "kind": "inventory",
@@ -3957,6 +3993,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "power.hold",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "held matches keep their pops; the release breaks them together at the chain the run holds"
+        },
+        {
+            "source": "power.hold",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Hold tool with its six-link meter, Release with the pairs held"
         },
         {
             "source": "inventory.still_bell_charge",

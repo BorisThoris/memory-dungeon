@@ -39,6 +39,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.carriedMisersPurse), "no run ever found the Miser's Purse").toBe(true);
         expect(reports.some((report) => report.stillBellsRung > 0), 'no run ever rang a still bell').toBe(true);
         expect(reports.some((report) => report.dreadTierPeak >= 3), 'no run ever reached Hungry Dread').toBe(true);
+        expect(reports.some((report) => report.holdsReleased > 0), 'no run ever released a hold').toBe(true);
         /* The five run-economy mechanics have no row in the floor census (the reference player never
            shops), so this is where `scripts/mechanic-accountability.ts` points for proof they happen. */
         expect(reports.some((report) => report.goldEarned > 0), 'no run ever earned gold').toBe(true);

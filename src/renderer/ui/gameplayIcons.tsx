@@ -143,6 +143,17 @@ export function GameplayIgniteIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** The Hold (`hold-rules.ts`): a spark kept between two cupped hands. */
+export function GameplayHoldIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M4 11c0 5 3.5 8 8 8s8-3 8-8" />
+            <path d="M4 11l2.5 1.5M20 11l-2.5 1.5" />
+            <path d="M12 5.5l1.2 2.6 2.8.4-2 2 .5 2.8-2.5-1.4-2.5 1.4.5-2.8-2-2 2.8-.4Z" />
+        </svg>
+    );
+}
+
 export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
     return (
         <svg {...base} className={className} {...rest}>

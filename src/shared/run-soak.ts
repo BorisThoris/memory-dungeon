@@ -2,6 +2,7 @@ import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { awaitsWardenChoice, descendIntoEndless, isWardenFloor } from './warden-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
+import { canReleaseHold, canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { parTurnsForRun } from './floor-par';
 import { canTakeMisersPurse, takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
@@ -95,6 +96,9 @@ export interface SoakRunReport {
     carriedMisersPurse: boolean;
     /** Still bells rung (`still-bell-rules.ts`), whenever the realm held cards. */
     stillBellsRung: number;
+    /** The Hold (`hold-rules.ts`): releases made, and pairs the releases popped. */
+    holdsReleased: number;
+    holdPairsPopped: number;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
@@ -364,6 +368,16 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if ((run.realmWeatherThisFloor ?? 0) !== (before.realmWeatherThisFloor ?? 0)) return `the clock moved ${before.realmWeatherThisFloor} -> ${run.realmWeatherThisFloor}`;
         return run.board.tiles.length === before.board.tiles.length ? null : `${before.board.tiles.length} cards -> ${run.board.tiles.length}`;
     },
+    'a held match takes its own pair and nothing else': (before, run, action) => {
+        if (!before?.board || !run.board || !before.holding || action !== 'resolve') return null;
+        const taken = run.board.matchedPairs - before.board.matchedPairs;
+        return taken <= 1 ? null : `a held match took ${taken} pairs`;
+    },
+    'nothing is held into a cleared floor, and a held pair is a matched one': (_before, run) => {
+        if (run.status === 'levelComplete' && (run.holding || (run.heldSeedIds ?? []).length > 0)) return 'the floor cleared with a hold held';
+        const unmatched = (run.heldSeedIds ?? []).filter((id) => run.board?.tiles.find((tile) => tile.id === id)?.state !== 'matched');
+        return unmatched.length === 0 ? null : `held seeds not matched: ${unmatched.join(',')}`;
+    },
     'an Endless clear paid its rent, or the run ended there': (before, run) => {
         if (!before || !run.endless || before.status === 'levelComplete' || (run.status !== 'levelComplete' && run.status !== 'gameOver')) return null;
         const level = run.board?.level ?? 0;
@@ -576,6 +590,8 @@ export const soakRun = ({
     let cruciblesUsed = 0;
     let stormGlassesBroken = 0;
     let stillBellsRung = 0;
+    let holdsReleased = 0;
+    let holdPairsPopped = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -765,6 +781,20 @@ export const soakRun = ({
                 continue;
             }
         }
+        // The Hold: held as soon as it arms, released at three held pairs (`hold-rules.ts`).
+        if (canStartHold(run)) {
+            act('hold', startHold(run));
+            continue;
+        }
+        if (canReleaseHold(run) && heldPairCount(run) >= 3) {
+            const released = releaseHold(run);
+            if (released) {
+                holdsReleased += 1;
+                holdPairsPopped += released.pairs;
+                act('release', released.run);
+                continue;
+            }
+        }
         // A still bell rings as soon as the realm holds a card.
         if (canRingStillBell(run)) {
             const rung = applyStillBell(run);
@@ -827,6 +857,8 @@ export const soakRun = ({
         stormGlassesBroken,
         carriedMisersPurse: (run.relics ?? []).includes('misers_purse'),
         stillBellsRung,
+        holdsReleased,
+        holdPairsPopped,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

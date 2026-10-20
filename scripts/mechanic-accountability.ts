@@ -262,6 +262,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'power.hold': {
+        generation: 276,
+        reason: 'The Hold is pressed by the player from floor 13, and the census players never press it. The whole-run soak holds whenever the meter arms and releases at three held pairs, with invariants that a held match takes only its pair and nothing is held into a cleared floor, and three hall rooms walk a release, a halving miss and a held last pair.'
+    },
     'hazard.endless_rent': {
         generation: 275,
         reason: 'The rent is charged only past the Warden in an Endless run, and the census plays twenty-four floors and the soak thirty, so neither meets it. Its rules are unit tested, two hall rooms walk a floor that cannot pay and one that does, and its share was set from 80 soak runs measured to floor 100.'

@@ -65,3 +65,10 @@ Design notes kept for the build:
 - Held pairs are `matched` with only the pop deferred, as seed ids on the run, so the board inspector and the flip-state tools are untouched.
 - Release breaks once per suit, so seeds of different suits do not walk into each other.
 - No `GAME_RULES_VERSION` bump: it is a new input, and a run that never presses it replays as before.
+
+2026-10-20, built: `src/shared/hold-rules.ts` with the seams in `board-turn-transition.ts` (`applyHoldTurn` before the Warden's), `turn-match-board-resolution-rules.ts` (no pop spec while holding) and `next-floor-run-state-rules.ts` (the hold resets per floor).
+- The dock tool `hold`: Hold with the meter as its badge, Release with the pairs held. An empty meter shows it without a badge, since the dock hides a tool at zero charges.
+- A release strips odd cards it broke (a Turncoat's promise goes, an Hourglass with sand is caught) and reconciles the realm's holds as any break does; both were soak violations before.
+- The Zone and the Hold exclude each other: the Zone replays turns a hold cannot keep seeds through.
+- Checklist rows ticked: rules module, hall rooms (`hold-release`, `hold-miss-halves`, `hold-last-pair`), soak invariants and counters, graph node `power.hold` with its `displays` edge, ledger entry, census exemption, Codex `sys_hold` (encyclopedia 98), a look in the browser.
+- Not yet: the held-pair glow, the release pitch run, `holdBeat.ts` words, a controller binding and the `tools-usable` e2e press. Acceptance "pop share >= 0.6" is recorded as unmet (see above).

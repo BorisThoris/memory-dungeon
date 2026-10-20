@@ -440,6 +440,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'The meteor shard (2026-10-08): a pickup pair that grants a meteor. Its face-down carrier no longer wears a corner diamond or an orange ring (player-visible-board.ts strips pickup identity off face-down cards: the owner, the dots on the bottom right gave pairs away), and claiming it is an item drop, rare, rather than a stamp gone in under a second.'
     },
     {
+        id: 'power.hold',
+        verdict: 'changed',
+        generation: 276,
+        present: ['startHold', 'releaseHold', 'applyHoldTurn', 'heldSeedIds', 'HOLD_METER_SEGMENTS'],
+        note: 'The Hold (2026-10-20, DGE-008): from floor 13, six links of the chain arm it; held matches score and cast as ever but keep their pops, and the release fires every held pair\u2019s break at once, one per suit, at the chain the run holds then, the multiplier applied once per break. A miss halves the stack (the oldest half), never empties it. The probe before it (BALANCE_NOTES) found it cannot raise the late pop share - deferring a pop takes targets from it - and the owner chose to build it as planned, a verb of timing and score.'
+    },
+    {
         id: 'hazard.endless_rent',
         verdict: 'changed',
         generation: 275,

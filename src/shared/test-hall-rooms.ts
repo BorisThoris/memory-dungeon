@@ -36,6 +36,7 @@ import { lookingGlassSwaps } from './looking-glass-rules';
 import { tileCharge } from './element-alchemy-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
+import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -84,6 +85,9 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'hold-release'
+    | 'hold-miss-halves'
+    | 'hold-last-pair'
     | 'camp-survive'
     | 'camp-study'
     | 'camp-score'
@@ -214,7 +218,10 @@ export type TestHallStep =
     /** Match the pair of the card that is burning (an ember realm's wildfire). */
     | { readonly do: 'matchBurning' }
     /** End the study window and start play. */
-    | { readonly do: 'study' };
+    | { readonly do: 'study' }
+    /** The Hold (`hold-rules.ts`): start holding, and release what is held. */
+    | { readonly do: 'hold' }
+    | { readonly do: 'release' };
 
 export interface TestHallScriptLine {
     readonly step: TestHallStep;
@@ -975,6 +982,70 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     const rent = endlessRentForFloor(61, r.runRulesVersion);
                     return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'hold-release',
+        title: 'Hold six and release',
+        mechanic: 'From the Living Dungeon, six links of the chain arm the Hold: held matches keep their pops, and the release fires them together, one break per suit.',
+        graphMechanicIds: ['power.hold', 'board.chain_chunk_fever'],
+        tryThis: 'Hold, match the fire pair a and the tide pair d: nothing pops. Release: the fire beside a goes in one break.',
+        build: () => room(['a:e b:e c:e d:t', 'a:e b:e c:e d:t', 'e:m f:b g:m h:b', 'e:m f:b g:m h:b'], { level: 13, misses: 4, streak: 6, run: { holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'six links arm the Hold, and it holds', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'a held match takes its pair and nothing else',
+                expect: (r, b) => (r.board!.matchedPairs - b.board!.matchedPairs === 1 && heldPairCount(r) === 1 ? null : `matched ${r.board!.matchedPairs - b.board!.matchedPairs}, held ${heldPairCount(r)}`)
+            },
+            { step: { do: 'match', pairKey: 'd' }, says: 'a second held match', expect: (r) => (heldPairCount(r) === 2 ? null : `held ${heldPairCount(r)}`) },
+            {
+                step: { do: 'release' },
+                says: 'the release breaks what the held pairs reach, and the hold is spent',
+                expect: (r, b) => {
+                    const popped = r.board!.matchedPairs - b.board!.matchedPairs;
+                    if (popped < 1) return `the release popped ${popped}`;
+                    if (r.holding || (r.heldSeedIds ?? []).length > 0) return 'the hold is still held';
+                    return r.holdsReleasedThisFloor === 1 && r.stats.totalScore > b.stats.totalScore ? null : `releases ${String(r.holdsReleasedThisFloor)}, score ${b.stats.totalScore} -> ${r.stats.totalScore}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'hold-miss-halves',
+        title: 'A miss halves the hold',
+        mechanic: 'A miss while holding drops the oldest half of the held pairs; the stack never empties.',
+        graphMechanicIds: ['power.hold'],
+        tryThis: 'Hold, match a and d, then miss: one held pair is left, the newest.',
+        build: () => room(['a:e b:e c:e d:t', 'a:e b:e c:e d:t', 'e:m f:b g:m h:b', 'e:m f:b g:m h:b'], { level: 13, misses: 4, streak: 6, run: { holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'the Hold starts', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            { step: { do: 'match', pairKey: 'a' }, says: 'one held', expect: (r) => (heldPairCount(r) === 1 ? null : `held ${heldPairCount(r)}`) },
+            { step: { do: 'match', pairKey: 'd' }, says: 'two held', expect: (r) => (heldPairCount(r) === 2 ? null : `held ${heldPairCount(r)}`) },
+            {
+                step: { do: 'missAny' },
+                says: 'the miss drops the oldest half: d is left, still held',
+                expect: (r) => {
+                    const left = r.heldSeedIds ?? [];
+                    return r.holding && left.length === 2 && left.every((id) => id.startsWith('d-')) ? null : `held ${left.join(',')}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'hold-last-pair',
+        title: 'Hold the last pair',
+        mechanic: "The floor's last pair can be matched while holding: the floor clears and nothing is held into the next.",
+        graphMechanicIds: ['power.hold', 'objective.floor_clear'],
+        tryThis: 'Hold and clear the floor: it clears as ever, and the next floor starts with nothing held.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 13, misses: 4, streak: 6, run: { holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'the Hold starts', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            {
+                step: { do: 'clear' },
+                says: 'the floor clears with the Hold held, and lets it go',
+                expect: (r) => (r.status === 'levelComplete' && !r.holding && (r.heldSeedIds ?? []).length === 0 ? null : `status ${r.status}, holding ${String(r.holding)}`)
             }
         ]
     },
@@ -2698,6 +2769,10 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             }
             return next;
         }
+        case 'hold':
+            return canStartHold(run) ? startHold(run) : null;
+        case 'release':
+            return releaseHold(run)?.run ?? null;
         case 'advance':
             return run.status === 'levelComplete' ? advanceToNextLevel(run) : null;
         case 'travel': {
