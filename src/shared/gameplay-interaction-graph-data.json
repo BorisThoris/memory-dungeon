@@ -2577,6 +2577,38 @@
             ]
         },
         {
+            "id": "progression.boss_reward",
+            "label": "Boss rewards by the door",
+            "kind": "progression",
+            "role": "the_clear_before_an_act_boss_offers_calm_wild_and_raging_doors_and_the_boss_pays_by_the_door_the_clear_gold_or_the_next_blueprint_in_order",
+            "evidence": [
+                "src/shared/boss-reward-rules.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/renderer/components/RealmTravel.tsx",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "realmSeverity",
+                "runSeed",
+                "blueprints"
+            ],
+            "writes": [
+                "blueprints",
+                "gold"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "blueprints-drop-in-order-and-never-twice",
+                "every-blueprint-held-pays-gold-instead"
+            ],
+            "tests": [
+                "src/shared/boss-reward-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "progression.dread",
             "label": "Dread",
             "kind": "progression",
@@ -4102,6 +4134,12 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "progression.boss_reward",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "each door before the boss names its reward, and the clear says what the boss gave"
         },
         {
             "source": "board.layers",

@@ -1,3 +1,4 @@
+import { applyBossReward, offersBossDoors } from './boss-reward-rules';
 import { hasRelic, misersPurseGold } from './run-relic-rules';
 import { settleEndlessRent } from './endless-rent-rules';
 import { isWardenFloor } from './warden-rules';
@@ -116,8 +117,10 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         turnsTaken
     });
 
+    const bossDoors = offersBossDoors(run);
     // Endless's rent (`endless-rent-rules.ts`): a clear that paid less than it owed ends the run here.
-    return settleEndlessRent({
+    // An act boss's reward first, for the severity it was met at (`boss-reward-rules.ts`).
+    return settleEndlessRent(applyBossReward({
         ...run,
         clearedTurnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + turnsTaken - parTurns,
         status: 'levelComplete',
@@ -148,11 +151,12 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         peakChainTierThisRun: higherChainTier(run.peakChainTierThisRun, floorChainTier),
         gold: runGold(run) + goldEarned,
         ...(usesElementalLoot(run) ? { elementalEssence: addEssence(run.elementalEssence, elementalDrops) } : {}),
-        // Select the destination once at clear; legacy rules retain their door choices.
+        // Select the destination once at clear; legacy rules retain their door choices, and from rules 75 the
+        // clear before an act boss offers its doors again: the door taken is what the boss pays (`boss-reward-rules.ts`).
         ...(realmId
             ? {
-                  realmDoors: usesCampUpgrades(run) ? null : rollRealmDoors(run.runSeed, board.level, realmId),
-                  nextRealm: usesCampUpgrades(run) ? rollRealmDoors(run.runSeed, board.level, realmId)[0]! : null,
+                  realmDoors: usesCampUpgrades(run) && !bossDoors ? null : rollRealmDoors(run.runSeed, board.level, realmId),
+                  nextRealm: usesCampUpgrades(run) && !bossDoors ? rollRealmDoors(run.runSeed, board.level, realmId)[0]! : null,
                   realmFloorsThisRun: { ...(run.realmFloorsThisRun ?? {}), [realmId]: runNonNegativeInteger(run.realmFloorsThisRun?.[realmId] ?? 0) + 1 },
                   realmSmoke: carryover.realmSmoke,
                   realmChill: carryover.realmChill,
@@ -178,5 +182,5 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                   }
                 : {})
         }
-    }, scoreGained);
+    }, board.level, realmId ? runRealmSeverity(run) : null), scoreGained);
 };

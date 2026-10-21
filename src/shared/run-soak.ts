@@ -1,4 +1,5 @@
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
+import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
 import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
 import { tileCanBreakInChunk } from './chunk-break-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
@@ -113,6 +114,9 @@ export interface SoakRunReport {
     holdPairsPopped: number;
     /** The most pairs one release held (the planned player waits for five). */
     largestRelease: number;
+    /** Boss rewards (`boss-reward-rules.ts`): blueprints held at the end, and boss doors walked through. */
+    blueprints: number;
+    bossDoorsTaken: number;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
@@ -443,6 +447,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     },
     'a floor ends only when both decks are cleared': (_before, run) =>
         run.status === 'levelComplete' && run.board?.beneath?.some(Boolean) ? 'the floor cleared with cards still beneath it' : null,
+    'blueprints drop in order and never twice': (_before, run) => {
+        const held = run.blueprints ?? [];
+        return held.every((id, index) => id === BLUEPRINT_ORDER[index]) ? null : `blueprints out of order: ${held.join(',')}`;
+    },
     'nothing is held into a cleared floor, and a held pair is a matched one': (_before, run) => {
         if (run.status === 'levelComplete' && (run.holding || (run.heldSeedIds ?? []).length > 0)) return 'the floor cleared with a hold held';
         const unmatched = (run.heldSeedIds ?? []).filter((id) => run.board?.tiles.find((tile) => tile.id === id)?.state !== 'matched');
@@ -541,9 +549,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
-    'a floor clear selects the next arena; historical runs offer doors': (before, run) => {
+    'a floor clear selects the next arena; historical runs, and the clear before an act boss, offer doors': (before, run) => {
         if (run.status !== 'levelComplete' || before?.status === 'levelComplete' || !run.realmId) return null;
-        if (usesCampUpgrades(run)) return run.nextRealm && !run.realmDoors?.length ? null : 'next arena missing or choices still offered';
+        // From rules 75 the clear before an act boss offers its three doors again (`boss-reward-rules.ts`).
+        if (usesCampUpgrades(run) && !(before && offersBossDoors(before))) return run.nextRealm && !run.realmDoors?.length ? null : 'next arena missing or choices still offered';
         const doors = run.realmDoors ?? [];
         if (doors.length !== REALM_DOOR_COUNT) return `${doors.length} doors`;
         return doors.some((door) => door.realmId === run.realmId) ? null : `doors ${doors.map((door) => door.realmId).join(',')} miss ${run.realmId}`;
@@ -663,6 +672,7 @@ export const soakRun = ({
     let holdsReleased = 0;
     let holdPairsPopped = 0;
     let largestRelease = 0;
+    let bossDoorsTaken = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -798,6 +808,7 @@ export const soakRun = ({
             if (usesCampUpgrades(run) && run.nextRealm) realmDoors += 1;
             if (Array.isArray(run.realmDoors) && run.realmDoors.length > 0) {
                 realmDoors += 1;
+                if (offersBossDoors(run)) bossDoorsTaken += 1;
                 act('travel', chooseRealmDoor(run, pickRngIndex(rng, run.realmDoors.length)));
             }
             // A soak that runs past the Warden goes on into Endless (DGE-006), where the rent is charged.
@@ -942,6 +953,8 @@ export const soakRun = ({
         holdsReleased,
         holdPairsPopped,
         largestRelease,
+        blueprints: runBlueprints(run).length,
+        bossDoorsTaken,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

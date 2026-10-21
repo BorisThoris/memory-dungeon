@@ -40,6 +40,7 @@ import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rule
 import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
+import { BLUEPRINT_ORDER, BOSS_WILD_GOLD } from './boss-reward-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -88,6 +89,9 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'boss-doors'
+    | 'boss-raging-blueprint'
+    | 'boss-wild-gold'
     | 'layers-rise'
     | 'layers-pop-risen'
     | 'fold-cross'
@@ -1051,6 +1055,56 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     const rent = endlessRentForFloor(61, r.runRulesVersion);
                     return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'boss-doors',
+        title: 'Doors before the boss',
+        mechanic: 'The clear before an act boss offers three doors again - calm, wild, raging - and the one you take is how hard the boss fights and what it gives.',
+        graphMechanicIds: ['progression.boss_reward'],
+        tryThis: 'Clear floor 23: three doors, each naming the boss reward behind it, and no realm picked for you.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 23, run: realmRun('storm', 'calm') }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the clear before the boss offers three doors, one of each severity',
+                expect: (r) => {
+                    const doors = r.realmDoors ?? [];
+                    if (r.status !== 'levelComplete') return `status ${r.status}`;
+                    if (doors.length !== 3 || new Set(doors.map((door) => door.severity)).size !== 3) return `doors ${doors.map((door) => door.severity).join(',')}`;
+                    return r.nextRealm ? 'a realm was picked for the player' : null;
+                }
+            }
+        ]
+    },
+    {
+        id: 'boss-raging-blueprint',
+        title: 'A raging boss drops a blueprint',
+        mechanic: 'An act boss met behind the raging door drops the next blueprint, in order, whichever boss it is.',
+        graphMechanicIds: ['progression.boss_reward'],
+        tryThis: 'Clear the Deep\u2019s boss on raging with no blueprints yet: it drops the first, the Lantern of Recall.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 40, board: { floorTag: 'boss' }, run: { ...realmRun('storm', 'raging'), blueprints: [] } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the boss drops the first blueprint',
+                expect: (r) => (r.blueprints?.length === 1 && r.blueprints[0] === BLUEPRINT_ORDER[0] && r.lastBossReward?.kind === 'blueprint' ? null : `blueprints ${String(r.blueprints)}`)
+            }
+        ]
+    },
+    {
+        id: 'boss-wild-gold',
+        title: 'A wild boss pays gold',
+        mechanic: 'An act boss met behind the wild door pays gold on top of the clear; behind the calm door it pays the clear alone.',
+        graphMechanicIds: ['progression.boss_reward', 'economy.gold'],
+        tryThis: 'Clear the Living Dungeon\u2019s boss on wild: the clear pays its gold, and the boss twelve more.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 24, board: { floorTag: 'boss' }, run: { ...realmRun('storm', 'wild'), gold: 0, blueprints: [] } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'the boss pays gold, and no blueprint',
+                expect: (r) => (r.lastBossReward?.kind === 'gold' && (r.blueprints ?? []).length === 0 && runGold(r) >= BOSS_WILD_GOLD ? null : `reward ${JSON.stringify(r.lastBossReward)}, gold ${runGold(r)}`)
             }
         ]
     },

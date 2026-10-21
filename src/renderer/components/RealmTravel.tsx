@@ -18,6 +18,9 @@ interface RealmTravelProps {
     /** Attunement each realm has earned with clean clears (`realm-carryover-rules.ts`). */
     attunement: Partial<Record<RealmId, number>>;
     onChoose: (index: number) => void;
+    /** Before an act boss (`boss-reward-rules.ts`): what the boss gives behind each door, and the heading that says so. */
+    bossReward?: (door: RealmDoor) => string;
+    heading?: { title: string; subtitle: string };
 }
 
 const SIGILS: Readonly<Record<RealmId, string>> = {
@@ -38,7 +41,7 @@ const SIGILS: Readonly<Record<RealmId, string>> = {
  * Escape: a floor has to be somewhere, and Escape picking a door for the player would be a door
  * they did not choose.
  */
-const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, reduceMotion = false }: RealmTravelProps): ReactElement => {
+const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, reduceMotion = false, bossReward, heading }: RealmTravelProps): ReactElement => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const firstRef = useRef<HTMLButtonElement | null>(null);
     const titleId = useId();
@@ -61,10 +64,10 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, 
             {summary}
             <div className={styles.head}>
                 <h2 className={styles.title} id={titleId}>
-                    {REALM_TRAVEL_COPY.title}
+                    {heading?.title ?? REALM_TRAVEL_COPY.title}
                 </h2>
                 <p className={styles.subtitle} id={subtitleId}>
-                    {REALM_TRAVEL_COPY.subtitle}
+                    {heading?.subtitle ?? REALM_TRAVEL_COPY.subtitle}
                 </p>
             </div>
             <div className={styles.doors}>
@@ -111,6 +114,14 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, 
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>
+                            {bossReward ? (
+                                <>
+                                    <span className={styles.sectionLabel}>Boss reward</span>
+                                    <span className={styles.severity} data-severity={door.severity} data-testid={`realm-door-${index}-boss-reward`}>
+                                        {bossReward(door)}
+                                    </span>
+                                </>
+                            ) : null}
                             <span className={styles.sectionLabel}>Weather</span>
                             <span className={styles.weather}>{REALM_TRAVEL_COPY.weatherLine(door)}</span>
                             <span className={styles.rules} id={`realm-choice-${index}`}>

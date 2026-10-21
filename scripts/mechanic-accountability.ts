@@ -263,6 +263,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
     },
+    'progression.boss_reward': {
+        generation: 280,
+        reason: 'Boss rewards are paid at the act bosses, floors 24, 40 and 60, and both censuses stop at floor 24 with no door to choose, so a counter would read nothing. The whole-run soak walks the doors before every act boss and counts the boss doors taken and the blueprints held, with the invariant that blueprints drop in order and never twice; three hall rooms walk the doors, a raging blueprint and a wild purse.'
+    },
     'board.layers': {
         generation: 279,
         reason: 'Layers are dealt on the Deep, floors 25 to 39, and both censuses stop at floor 24, so a counter would read zero by construction. The whole-run soak counts the floors dealt two decks deep and every card that rose, and checks on every action that no cleared cell sits over a waiting card and that no floor ends with one; two hall rooms walk a rise and a pop of a risen pair.'

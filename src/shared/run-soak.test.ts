@@ -27,6 +27,8 @@ describe('the run soak', () => {
             soakRun({ seed: 11_003 + index * 7_919, player: SOAK_PLAYERS.planned, playerName: 'planned' })
         );
         expect(reports.some((report) => report.largestRelease >= 5), 'the planned player never released a stack of five').toBe(true);
+        expect(reports.some((report) => report.bossDoorsTaken > 0), 'no run ever met a boss door').toBe(true);
+        expect(reports.some((report) => report.blueprints > 0), 'no boss ever dropped a blueprint').toBe(true);
     });
 
     it('exercises the systems it exists to watch', () => {

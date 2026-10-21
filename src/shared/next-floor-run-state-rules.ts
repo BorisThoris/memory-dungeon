@@ -80,6 +80,7 @@ export const createNextFloorRunState = (
         skittishFlinchesThisFloor: 0,
         wandererStepsThisFloor: 0,
         layerCardsRisenThisFloor: 0,
+        lastBossReward: null,
         turncoatTurnsThisFloor: 0,
         hourglassesSpentThisFloor: 0,
         colossusHitsThisFloor: 0,

@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers thinner and off the restless hall (`board-layers-rules.ts`). */
-export const GAME_RULES_VERSION = 74;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). */
+export const GAME_RULES_VERSION = 75;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -90,6 +90,9 @@ export type RealmId = (typeof REALM_IDS)[number];
 /** How hard a travel door's weather blows: sooner weather pays more gold at the clear. */
 export type RealmSeverity = 'calm' | 'wild' | 'raging';
 /** One door on the travel screen: where the next floor is, and how hard its weather blows. */
+/** What an act boss gave at its clear (`boss-reward-rules.ts`): by the severity it was met at. */
+export type BossReward = { kind: 'clear' } | { kind: 'gold'; gold: number } | { kind: 'blueprint'; blueprint: string };
+
 export interface RealmDoor {
     realmId: RealmId;
     severity: RealmSeverity;
@@ -1043,6 +1046,9 @@ export interface RunState {
     realmSmoke?: number;
     realmChill?: number;
     realmAttunement?: Partial<Record<RealmId, number>>;
+    /** Blueprints the act bosses dropped this run, in order (`boss-reward-rules.ts`), and what the last boss gave. */
+    blueprints?: string[];
+    lastBossReward?: BossReward | null;
     /** The travel doors offered at this floor's clear, and the one the player walked through. */
     realmDoors?: RealmDoor[] | null;
     nextRealm?: RealmDoor | null;

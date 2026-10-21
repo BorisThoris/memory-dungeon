@@ -25,9 +25,10 @@ import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
+import { BOSS_WILD_GOLD } from './boss-reward-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 101 as const;
+export const ENCYCLOPEDIA_VERSION = 102 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -503,6 +504,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_boss_rewards',
+        title: 'Doors before the boss',
+        description:
+            `When the next floor is an act boss - the Keeper, the Deep's boss, the Warden - the clear offers **three doors** again: calm, wild and raging. The door you take is how hard the boss floor's weather blows, and what the boss gives when it falls: **calm** the clear and nothing more, **wild** ${BOSS_WILD_GOLD} gold, **raging** the next **blueprint**. Blueprints come in a fixed order, whichever boss gives them.`
     },
     {
         id: 'sys_layers',

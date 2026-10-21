@@ -1,3 +1,6 @@
+import RealmTravel from './RealmTravel';
+import { BOSS_DOOR_COPY, bossDoorRewardLine, bossRewardNote } from '../copy/bossRewardCopy';
+import { runBlueprints } from '../../shared/boss-reward-rules';
 import { WARDEN_REDEAL_EVERY_TURNS, awaitsWardenChoice, isWardenFloor } from '../../shared/warden-rules';
 import { WARDEN_CHOICE_COPY } from '../copy/runDialogCopy';
 import { RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
@@ -496,6 +499,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
             continueToNextLevel: state.continueToNextLevel,
+            travelThroughRealmDoor: state.travelThroughRealmDoor,
             descendIntoEndlessAction: state.descendIntoEndless,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
@@ -808,6 +812,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         applyFlashPairPower,
         greetFloorResident,
         continueToNextLevel,
+        travelThroughRealmDoor,
         descendIntoEndlessAction,
         dismissPowersFtue,
         goToMenu,
@@ -1286,6 +1291,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
+    const [travelKey, setTravelKey] = useState<string | null>(null);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1308,8 +1314,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     // The Warden's clear asks before it goes on (DGE-006): take the win, or descend into Endless.
     const wardenChoiceOpen = run ? awaitsWardenChoice(run) : false;
+    // The doors before an act boss (DGE-026): after the beat the player picks the way in, and the boss pays by it.
+    const travelDue = run.status === 'levelComplete' && (run.realmDoors?.length ?? 0) > 0 && !run.nextRealm && !isPassAndPlayRun(run.passAndPlay);
+    const travelOpen = travelDue && travelKey === floorClearKey;
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen || wardenChoiceOpen) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || wardenChoiceOpen || travelKey === floorClearKey) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1320,7 +1329,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         let elapsed = 0;
         let last: number | null = null;
         let frame = 0;
-        const afterBeat = continueToNextLevel;
+        const afterBeat = travelDue ? () => setTravelKey(floorClearKey) : continueToNextLevel;
         // Dev only: the fit contract holds the beat to measure it, rather than racing its 1.6s.
         const held = (): boolean =>
             import.meta.env.DEV && (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat === true;
@@ -1364,7 +1373,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, wardenChoiceOpen]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, wardenChoiceOpen, travelDue, travelKey]);
 
     /*
      * The stamp's exit. The beat used to vanish in one frame as the next board arrived (recorded
@@ -2169,6 +2178,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     nextPlace={nextRoomDoor && nextRoomDoor.realmId !== runRealmId(run) ? REALMS[nextRoomDoor.realmId].place : null}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}
+                                    bossNote={bossRewardNote(run.lastBossReward)}
                                 />
                             ) : leavingFloorClear ? (
                                 <FloorClearBeat leaving personalBest={leavingFloorClear.personalBest} result={leavingFloorClear.result} />
@@ -2485,6 +2495,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </ul>
                         <p className={styles.shortcutsHelpTip}>{GAMBIT_KEYBOARD_HELP_TIP}</p>
                     </OverlayModal>
+                ) : null}
+
+                {/* The doors before an act boss (DGE-026): the way in is the boss's reward. */}
+                {!suppressStatusOverlays && travelOpen && run.realmDoors ? (
+                    <RealmTravel
+                        attunement={run.realmAttunement ?? {}}
+                        bossReward={(door) => bossDoorRewardLine(door, runBlueprints(run))}
+                        doors={run.realmDoors}
+                        endedIn={runRealmId(run)}
+                        floorsIn={run.realmFloorsThisRun ?? {}}
+                        heading={BOSS_DOOR_COPY}
+                        onChoose={(index) => {
+                            playMenuOpen();
+                            travelThroughRealmDoor(index);
+                        }}
+                        reduceMotion={reduceMotion}
+                    />
                 ) : null}
 
                 {/* The Warden's clear asks (DGE-006): the win ends the run, Endless carries the same run on. */}

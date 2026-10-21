@@ -14,6 +14,8 @@ export interface FloorClearBeatProps {
     nextPlace?: string | null;
     /** The next milestone and the floors to it (`milestone-rules.ts`), so the reward is never the end of the view. */
     milestone?: { readonly name: string; readonly floorsToGo: number } | null;
+    /** What a fallen act boss gave (`boss-reward-rules.ts`): gold, or a blueprint. */
+    bossNote?: string | null;
 }
 
 /** The payout counts up over this, after the stamp has landed (`floorClearBeatIn`, 320ms). */
@@ -46,7 +48,7 @@ const useCountUp = (target: number, enabled: boolean): number => {
 export const FLOOR_CLEAR_BEAT_EXIT_MS = 320;
 
 /** A brief, unframed payout over the board while the next floor prepares. */
-const FloorClearBeat = ({ countUp = false, leaving = false, milestone = null, nextPlace = null, personalBest, result }: FloorClearBeatProps) => {
+const FloorClearBeat = ({ bossNote = null, countUp = false, leaving = false, milestone = null, nextPlace = null, personalBest, result }: FloorClearBeatProps) => {
     const shownScore = useCountUp(result.scoreGained, countUp && !leaving);
     return (
     <div
@@ -76,6 +78,11 @@ const FloorClearBeat = ({ countUp = false, leaving = false, milestone = null, ne
             {nextPlace ? (
                 <p className={styles.onward} data-testid="floor-clear-onward">
                     {FLOOR_CLEAR_COPY.onwardLine(nextPlace)}
+                </p>
+            ) : null}
+            {bossNote ? (
+                <p className={styles.milestone} data-testid="floor-clear-boss-reward">
+                    {bossNote}
                 </p>
             ) : null}
             {milestone ? (

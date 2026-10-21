@@ -546,6 +546,12 @@ export const endlessPlaceForLevel = (level: number): EndlessPlace | null => {
 /** The Descent floor a level plays as: itself to 60, then its place in an Endless cycle. */
 const descentFloorOf = (level: number): number => endlessPlaceForLevel(level)?.descentFloor ?? level;
 
+/** Whether a level is an act's boss floor: 24, 40, 60, and each Endless act's last (`boss-reward-rules.ts`). */
+export const isActBossFloor = (level: number): boolean => {
+    const floor = descentFloorOf(Math.max(1, Math.floor(Number.isFinite(level) ? level : 1)));
+    return descentActForFloor(level).bossFloor === floor;
+};
+
 /** The act a floor belongs to; past floor 60, the act of its Endless cycle. */
 export const descentActForFloor = (level: number): DescentActDefinition => {
     const floor = descentFloorOf(Math.max(1, Math.floor(Number.isFinite(level) ? level : 1)));
