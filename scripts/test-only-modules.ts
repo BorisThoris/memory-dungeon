@@ -40,7 +40,6 @@ export const TEST_ONLY_EXEMPTIONS: Record<string, string> = {
  */
 export const TEST_ONLY_BASELINE: Record<string, string> = {
     'FloorJourney.tsx': 'The floor journey strip lost its screen when the floor clear went straight on (main, 2026-10-07).',
-    'RealmTravel.tsx': 'The travel doors lost their screen when the next floor began starting on its own (main, 2026-10-07).',
     'first-run-help-center.ts': 'The first-run help centre lost its menu entry in the main-menu rebuild (main, 2026-10-07).',
     'settings-control-model.ts': 'The settings reference matrix lost its renderer reader when the settings screen was rebuilt (main, 2026-10-07).'
 };
