@@ -1,3 +1,5 @@
+import { canCarve, carve } from './carve-rules';
+import type { CarveDirection } from './contracts';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
@@ -104,6 +106,9 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'carve-right'
+    | 'carve-no-target'
+    | 'carve-through-hold'
     | 'hold-miss-halves'
     | 'hold-last-pair'
     | 'camp-survive'
@@ -239,7 +244,9 @@ export type TestHallStep =
     | { readonly do: 'study' }
     /** The Hold (`hold-rules.ts`): start holding, and release what is held. */
     | { readonly do: 'hold' }
-    | { readonly do: 'release' };
+    | { readonly do: 'release' }
+    /** Carve (`carve-rules.ts`): set the direction the next pop walks first. */
+    | { readonly do: 'carve'; readonly direction: CarveDirection };
 
 export interface TestHallScriptLine {
     readonly step: TestHallStep;
@@ -489,6 +496,9 @@ const scheduled = (run: RunState) => pickFloorScheduleEntry(run.runSeed, run.run
 // ---- The rooms --------------------------------------------------------------------------------
 
 // ---- Realms -----------------------------------------------------------------------------------
+
+/** Whether a pair is off the board (matched or popped). */
+const carvedGone = (r: RunState, key: string) => (r.board?.tiles ?? []).filter((t) => t.pairKey === key).every((t) => t.state !== 'hidden');
 
 const tileById = (run: RunState, id: string): Tile | undefined => (run.board?.tiles ?? []).find((t) => t.id === id);
 const realmRun = (realmId: NonNullable<RunState['realmId']>, realmSeverity: NonNullable<RunState['realmSeverity']>, extra: Partial<RunState> = {}): Partial<RunState> => ({
@@ -1272,6 +1282,56 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: expectAll(wanderersStepped(['a-1', 'a-2']), finishable)
             },
             { step: { do: 'match', pairKey: 'h' }, says: 'one turn later the footprints are gone', expect: expectAll(noFootprints, wanderersStill(['a-1', 'a-2']), finishable) }
+        ]
+    },
+    {
+        id: 'carve-right',
+        title: 'Carve right',
+        mechanic: 'From the Deep, Carve spends two links of the chain to aim the next pop: it takes the cards on the carved side first and walks one further along it.',
+        graphMechanicIds: ['power.carve'],
+        tryThis: 'Carve right and match m: the pop takes b, to the right, where it would have taken a.',
+        build: () => room(['a:e a:e m:e m:e b:e b:e', 'c:t d:m c:t d:m e:b e:b', 'x:e y:e x:e y:e z:t z:t'], { level: 25, misses: 4, streak: 3, run: { holdLinks: 4 } }),
+        script: [
+            { step: { do: 'carve', direction: 'right' }, says: 'two links aim the pop right', expect: (r) => (r.carveDirection === 'right' && r.holdLinks === 2 && r.turnsThisFloor === 0 ? null : `carve ${String(r.carveDirection)}, links ${String(r.holdLinks)}, turns ${r.turnsThisFloor}`) },
+            {
+                step: { do: 'match', pairKey: 'm' },
+                says: 'the pop takes the pair to the right, and the carve is spent',
+                expect: (r) => (carvedGone(r, 'b') && !carvedGone(r, 'a') && r.carveDirection == null ? null : `a gone ${carvedGone(r, 'a')}, b gone ${carvedGone(r, 'b')}, carve ${String(r.carveDirection)}`)
+            }
+        ]
+    },
+    {
+        id: 'carve-no-target',
+        title: 'Carve has no target',
+        mechanic: 'A carve with nothing on its side still spends its links: the pop falls back to its plain order, and the carve is gone.',
+        graphMechanicIds: ['power.carve'],
+        tryThis: 'Carve up from the top row and match m: the pop takes a as it always would.',
+        build: () => room(['a:e a:e m:e m:e b:e b:e', 'c:t d:m c:t d:m e:b e:b', 'x:e y:e x:e y:e z:t z:t'], { level: 25, misses: 4, streak: 3, run: { holdLinks: 4 } }),
+        script: [
+            { step: { do: 'carve', direction: 'up' }, says: 'the carve points off the board', expect: (r) => (r.carveDirection === 'up' ? null : `carve ${String(r.carveDirection)}`) },
+            {
+                step: { do: 'match', pairKey: 'm' },
+                says: 'the plain pop takes a, and the carve is spent all the same',
+                expect: (r) => (carvedGone(r, 'a') && !carvedGone(r, 'b') && r.carveDirection == null && r.carvesSpentThisFloor === 1 ? null : `a gone ${carvedGone(r, 'a')}, b gone ${carvedGone(r, 'b')}, carve ${String(r.carveDirection)}`)
+            }
+        ]
+    },
+    {
+        id: 'carve-through-hold',
+        title: 'A carve waits through the Hold',
+        mechanic: 'A held match pops nothing, so a carve set while holding waits, and shapes the release.',
+        graphMechanicIds: ['power.carve', 'power.hold'],
+        tryThis: 'Hold, carve right, match m: nothing pops and the carve stands. Release: the pop takes b.',
+        build: () => room(['a:e a:e m:e m:e b:e b:e', 'c:t d:m c:t d:m e:b e:b', 'x:e y:e x:e y:e z:t z:t'], { level: 25, misses: 4, streak: 6, run: { holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'the Hold holds', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            { step: { do: 'carve', direction: 'right' }, says: 'two links carve right', expect: (r) => (r.carveDirection === 'right' ? null : `carve ${String(r.carveDirection)}`) },
+            { step: { do: 'match', pairKey: 'm' }, says: 'a held match pops nothing, and the carve waits', expect: (r) => (r.carveDirection === 'right' && !carvedGone(r, 'a') && !carvedGone(r, 'b') ? null : `carve ${String(r.carveDirection)}`) },
+            {
+                step: { do: 'release' },
+                says: 'the release walks right first, and spends the carve',
+                expect: (r) => (carvedGone(r, 'b') && r.carveDirection == null ? null : `a gone ${carvedGone(r, 'a')}, b gone ${carvedGone(r, 'b')}, carve ${String(r.carveDirection)}`)
+            }
         ]
     },
     {
@@ -3063,6 +3123,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return canStartHold(run) ? startHold(run) : null;
         case 'release':
             return releaseHold(run)?.run ?? null;
+        case 'carve':
+            return canCarve(run) ? carve(run, step.direction) : null;
         case 'advance':
             return run.status === 'levelComplete' ? advanceToNextLevel(run) : null;
         case 'travel': {

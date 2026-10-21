@@ -237,6 +237,22 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-storm_glass')).toBeDisabled();
     });
 
+    test('carve: press it, pick a way with an arrow key, and the next pop walks that way', async ({ page }) => {
+        await openRoom(page, 'carve-right');
+        await openItemsIfFolded(page);
+        await expect(page.getByTestId('tool-carve')).toBeEnabled();
+        await page.getByTestId('tool-carve').click();
+        await expect(page.getByTestId('carve-picker')).toBeVisible();
+        await page.keyboard.press('ArrowRight');
+        await expect(page.getByTestId('carve-arrow')).toBeVisible();
+        await expect(page.getByTestId('carve-arrow')).toHaveAttribute('data-direction', 'right');
+        await pick(page, 'm-1');
+        await pick(page, 'm-2');
+        await expect.poll(async () => (await read(page)).states['b-1'], { timeout: 30_000 }).toBe('removed');
+        expect((await read(page)).states['a-1']).toBe('hidden');
+        await expect(page.getByTestId('carve-arrow')).toHaveCount(0);
+    });
+
     test('bell: press it where the realm holds cards, and they go free', async ({ page }) => {
         await openRoom(page, 'still-bell');
         await expect(page.getByTestId('tool-still_bell')).toBeEnabled();

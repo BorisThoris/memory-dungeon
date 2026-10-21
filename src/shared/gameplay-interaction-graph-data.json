@@ -2856,6 +2856,41 @@
             ]
         },
         {
+            "id": "power.carve",
+            "label": "Carve",
+            "kind": "power",
+            "role": "two_chain_links_aim_the_next_pop_it_takes_the_carved_side_first_and_reaches_one_further_along_it",
+            "evidence": [
+                "src/shared/carve-rules.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/hold-rules.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "holdLinks",
+                "carveDirection",
+                "tileStates"
+            ],
+            "writes": [
+                "holdLinks",
+                "carveDirection",
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "a-carve-is-set-between-turns",
+                "a-carve-never-outlives-its-floor",
+                "a-carve-with-no-target-falls-back-to-the-plain-pop"
+            ],
+            "tests": [
+                "src/shared/carve-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "power.hold",
             "label": "The Hold",
             "kind": "power",
@@ -4219,6 +4254,18 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the footprint on the cell a Wanderer left, and the Wanderer on its face"
+        },
+        {
+            "source": "power.carve",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "the next pop walks the carved way first and one card further along it"
+        },
+        {
+            "source": "power.carve",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Carve tool, its direction picker, and the arrow drawn on the board until a pop spends it"
         },
         {
             "source": "power.hold",

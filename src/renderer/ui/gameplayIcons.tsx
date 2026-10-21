@@ -154,6 +154,17 @@ export function GameplayHoldIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** Carve (`carve-rules.ts`): a chisel's line, and the way it points. */
+export function GameplayCarveIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M4 18 14 8" />
+            <path d="M11 6.5 15.5 6l-.5 4.5" />
+            <path d="M15 14h5M17.5 11.5 20 14l-2.5 2.5" />
+        </svg>
+    );
+}
+
 export function GameplayBombIcon({ className, ...rest }: GameplayIconProps) {
     return (
         <svg {...base} className={className} {...rest}>

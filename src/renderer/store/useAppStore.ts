@@ -1,3 +1,4 @@
+import { canCarve, carve as carveRule } from '../../shared/carve-rules';
 import { reflowRunBoard } from '../../shared/board-layout-rules';
 import { createGameplayFinalPairRevealCommand } from '../../shared/gameplay-core-contracts';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
@@ -731,6 +732,14 @@ export const useAppStore = create<AppState>((set, get) => ({
         void resumeAudioContext();
         playPowerArmSfx(sfxGainFromStore());
         set({ run: startHoldRule(run) });
+    },
+
+    carve: (direction) => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canCarve(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        set({ run: carveRule(run, direction) });
     },
 
     releaseHold: () => {

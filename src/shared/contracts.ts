@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). */
-export const GAME_RULES_VERSION = 78;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). */
+export const GAME_RULES_VERSION = 79;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -89,6 +89,8 @@ export const REALM_IDS = ['frost', 'ember', 'tide', 'storm', 'grove'] as const;
 export type RealmId = (typeof REALM_IDS)[number];
 /** How hard a travel door's weather blows: sooner weather pays more gold at the clear. */
 export type RealmSeverity = 'calm' | 'wild' | 'raging';
+/** Carve (`carve-rules.ts`): the way the next pop walks first. */
+export type CarveDirection = 'up' | 'right' | 'down' | 'left';
 /** One door on the travel screen: where the next floor is, and how hard its weather blows. */
 /** What an act boss gave at its clear (`boss-reward-rules.ts`): by the severity it was met at. */
 export type BossReward = { kind: 'clear' } | { kind: 'gold'; gold: number } | { kind: 'blueprint'; blueprint: string };
@@ -1010,6 +1012,10 @@ export interface RunState {
     /** Releases this floor, and the most pairs one release has taken this run. */
     holdsReleasedThisFloor?: number;
     largestHoldThisRun?: number;
+    /** Carve (`carve-rules.ts`, DGE-015): the direction set for the next pop, carves set this floor, and carves a pop spent. */
+    carveDirection?: CarveDirection | null;
+    carvesThisFloor?: number;
+    carvesSpentThisFloor?: number;
     endless?: boolean;
     /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
     wardenOutcome?: 'cleared' | 'fell' | null;

@@ -1666,6 +1666,24 @@ where that rule
 }
 
 /* The Warden's rules in the board's crown (DGE-005): one line, read before the first flip and all floor. */
+.carveArrow {
+    align-self: center;
+    margin: 0 0 0.35rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid color-mix(in srgb, #e0a85a 60%, transparent);
+    border-radius: 6px;
+    background: #140d10e6;
+    color: #f6e2c4;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+}
+
+.carveArrowGlyph {
+    color: #f0b864;
+    font-size: 1.15em;
+    font-weight: 700;
+}
+
 .wardenRules {
     align-self: center;
     max-width: min(100%, 36rem);

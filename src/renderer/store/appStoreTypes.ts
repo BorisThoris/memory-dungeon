@@ -1,3 +1,4 @@
+import type { CarveDirection } from '../../shared/contracts';
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
 import type {
@@ -97,6 +98,8 @@ export interface AppState {
     igniteZone: () => void;
     /** The Hold (`hold-rules.ts`): start holding, or release every held pair's break at once. */
     startHold: () => void;
+    /** Carve (`carve-rules.ts`): aim the next pop. */
+    carve: (direction: CarveDirection) => void;
     releaseHold: () => void;
     /** Ends an open Zone early (`resolveZone`): everything face up plays at once. */
     resolveZone: () => void;

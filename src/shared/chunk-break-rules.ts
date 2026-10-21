@@ -1,3 +1,5 @@
+import type { CarveDirection } from './contracts';
+import { CARVE_BURST_EXTRA_PAIRS, carveStep, liveCarve, onCarvedSide } from './carve-rules';
 import { foldCutsEdge, foldDoorOpenFor, foldRoomOf, type BoardFold } from './board-fold-rules';
 import type { BoardState, FindableKind, RunState, Tile } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
@@ -312,6 +314,8 @@ export interface SuitRegionOptions {
     exclude?: readonly string[];
     /** The Fold's doorway (`board-fold-rules.ts`): open to this walk, or shut. Open unless said. */
     crossDoors?: boolean;
+    /** Carve (`carve-rules.ts`): the walk reaches one step further along this direction. */
+    carve?: CarveDirection | null;
 }
 
 /**
@@ -358,6 +362,19 @@ export const findSuitRegion = (
             }
         }
         frontier = next;
+    }
+    // A carved walk reaches one further along its axis: every card it reached, the seeds too, reaches
+    // the card one step that way, when it is face down and of the suit.
+    if (options.carve) {
+        for (const from of [...seeds, ...region]) {
+            const cell = carveStep(from, columns, total, options.carve);
+            if (cell == null || seen.has(cell)) continue;
+            const tile = board.tiles[cell];
+            if (!tile || tile.state !== 'hidden' || !tile.suit || !suits.has(tile.suit)) continue;
+            if (board.fold && !orthogonalNeighbours(from, columns, total, board.fold, options.crossDoors ?? true).includes(cell)) continue;
+            seen.add(cell);
+            region.push(cell);
+        }
     }
     return region;
 };
@@ -451,13 +468,15 @@ const resolveReactionBurst = ({
     tier,
     matchedTileIds,
     spec,
-    bonusPairs
+    bonusPairs,
+    carve = null
 }: {
     board: BoardState;
     tier: ChainTier;
     matchedTileIds: readonly string[];
     spec: { suits: readonly NonNullable<Tile['suit']>[]; pairsPerSuit: number };
     bonusPairs: number;
+    carve?: CarveDirection | null;
 }): ChunkBreakResult | null => {
     const columns = getSafeBoardColumns(board);
     const matched = new Set(matchedTileIds);
@@ -473,15 +492,21 @@ const resolveReactionBurst = ({
     });
     const brokenPairKeys: string[] = [];
     for (const suit of spec.suits) {
-        const cap = runNonNegativeInteger(spec.pairsPerSuit) + runNonNegativeInteger(bonusPairs);
+        // Carve (`carve-rules.ts`): the pairs on the carved side go first, and one more of each element.
+        const cap = runNonNegativeInteger(spec.pairsPerSuit) + runNonNegativeInteger(bonusPairs) + (carve ? CARVE_BURST_EXTRA_PAIRS : 0);
         const pairs = [...halves.entries()]
             .filter(([pairKey, indexes]) =>
                 indexes.length === 2 &&
                 pairKey !== board.cursedPairKey &&
                 indexes.every((index) => board.tiles[index]!.suit === suit && tileCanBreakInChunk(board.tiles[index]!) && reachable(index))
             )
-            .map(([pairKey, indexes]) => ({ pairKey, near: Math.min(...indexes.map(steps)), first: Math.min(...indexes) }))
-            .sort((a, b) => a.near - b.near || a.first - b.first);
+            .map(([pairKey, indexes]) => ({
+                pairKey,
+                near: Math.min(...indexes.map(steps)),
+                first: Math.min(...indexes),
+                carved: carve != null && indexes.every((index) => onCarvedSide(index, origins, columns, carve)) ? 0 : 1
+            }))
+            .sort((a, b) => a.carved - b.carved || a.near - b.near || a.first - b.first);
         brokenPairKeys.push(...pairs.slice(0, cap).map((pair) => pair.pairKey));
     }
     if (origins.length === 0 || brokenPairKeys.length === 0) return null;
@@ -515,7 +540,7 @@ export const resolveChunkBreak = ({
     spec
 }: {
     board: BoardState;
-    run: Pick<RunState, 'floorCurioId'> & Partial<Pick<RunState, 'stats'>>;
+    run: Pick<RunState, 'floorCurioId'> & Partial<Pick<RunState, 'stats' | 'carveDirection'>>;
     matchedTileIds: readonly string[];
     chain: number;
     /**
@@ -540,7 +565,8 @@ export const resolveChunkBreak = ({
         wavePairKeys: []
     };
     if (spec === null) return nothing;
-    if (spec) return resolveReactionBurst({ board, tier, matchedTileIds, spec, bonusPairs: perks.breakPairBonus }) ?? nothing;
+    const carve = liveCarve(run);
+    if (spec) return resolveReactionBurst({ board, tier, matchedTileIds, spec, bonusPairs: perks.breakPairBonus, carve }) ?? nothing;
     const wavesAllowed = rippleWaves(tier);
     const diagonal = run.floorCurioId === 'sticky_toffee' || breakWalksDiagonals(tier);
     const byPairKey = new Map<string, Tile[]>();
@@ -580,7 +606,13 @@ export const resolveChunkBreak = ({
             .filter((id) => !matchedSeedSet.has(id))
             .map((id) => indexById.get(id))
             .filter((index): index is number => index != null && board.tiles[index]!.state === 'hidden');
-        const region = [...new Set([...seedIndexes, ...findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds, crossDoors: doorOpen })])];
+        const walked = [...new Set([...seedIndexes, ...findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds, crossDoors: doorOpen, carve: wave === 0 ? carve : null })])];
+        // The first wave of a carved pop takes the carved side first (`carve-rules.ts`).
+        const origins = matchedTileIds.map((id) => indexById.get(id) ?? -1).filter((index) => index >= 0);
+        const region =
+            wave === 0 && carve
+                ? [...walked.filter((index) => onCarvedSide(index, origins, columns, carve)), ...walked.filter((index) => !onCarvedSide(index, origins, columns, carve))]
+                : walked;
         const regionSet = new Set(region.map((index) => board.tiles[index]!.id));
         const taken: string[] = [];
         for (const index of region) {

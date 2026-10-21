@@ -1,3 +1,4 @@
+import { spendCarveOnPop } from './carve-rules';
 import { hasEvolution } from './relic-evolution-rules';
 import { applyLayerTurn } from './board-layers-rules';
 import { claimCurio } from './curio-rules';
@@ -516,12 +517,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))))));
+            return spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)))))));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))));
+        return spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)))))));
     };
     return resolveBoardTurn;
 };

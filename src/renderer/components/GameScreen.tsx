@@ -1,3 +1,4 @@
+import type { CarveDirection } from '../../shared/contracts';
 import { heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS } from '../../shared/run-relic-rules';
 import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import RealmTravel from './RealmTravel';
@@ -159,6 +160,8 @@ import { FOLD_LEGEND_ENTRY, LAYERS_LEGEND_ENTRY, hourglassAnnouncement, hourglas
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
 import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, isHoldUnlocked } from '../../shared/hold-rules';
 import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
+import { CARVE_ARROW, CARVE_TOOL_COPY } from '../copy/carveToolCopy';
+import { CARVE_DIRECTIONS, CARVE_LINKS, canCarve, isCarveUnlocked, liveCarve } from '../../shared/carve-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
@@ -509,6 +512,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             useBomb: state.useBomb,
             igniteZone: state.igniteZone,
             startHold: state.startHold,
+            carve: state.carve,
             releaseHold: state.releaseHold,
             resolveZone: state.resolveZone,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
@@ -821,6 +825,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         useBomb: spendBomb,
         igniteZone,
         startHold,
+        carve: carveAction,
         releaseHold,
         resolveZone,
         openCodexFromPlaying,
@@ -1295,6 +1300,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const [travelKey, setTravelKey] = useState<string | null>(null);
     const [purseReplaceOpen, setPurseReplaceOpen] = useState(false);
+    // Carve's direction picker (`carve-rules.ts`): open from the dock, the arrow keys pick a way.
+    const [carvePickerOpen, setCarvePickerOpen] = useState(false);
+    useEffect(() => {
+        if (!carvePickerOpen) return;
+        const ways: Record<string, CarveDirection> = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left' };
+        const onKey = (event: KeyboardEvent): void => {
+            const way = ways[event.key];
+            if (!way) return;
+            event.preventDefault();
+            setCarvePickerOpen(false);
+            useAppStore.getState().carve(way);
+        };
+        window.addEventListener('keydown', onKey, true);
+        return () => window.removeEventListener('keydown', onKey, true);
+    }, [carvePickerOpen]);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1595,7 +1615,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // them is for screen readers only, so this is where a player sees them before the first flip.
     const wardenRulesShown = isWardenFloor(run.board);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -1925,6 +1945,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                       }
                   ]
                 : []),
+            // Carve (`carve-rules.ts`): from the Deep on. It spends two of the Hold's links; armed while a carve is set.
+            ...(isCarveUnlocked(run)
+                ? [
+                      {
+                          ...toolSpec('carve'),
+                          glyph: RUN_SHELL_GLYPHS.carve,
+                          armed: liveCarve(run) != null,
+                          disabled: !canCarve(run),
+                          title: liveCarve(run)
+                              ? CARVE_TOOL_COPY.set(liveCarve(run)!)
+                              : canCarve(run) ? CARVE_TOOL_COPY.ready(CARVE_LINKS)
+                              : run.board.flippedTileIds.length > 0 ? CARVE_TOOL_COPY.pendingFlip
+                              : CARVE_TOOL_COPY.filling(Math.min(CARVE_LINKS, holdMeter(run).segments), CARVE_LINKS),
+                          onClick: () => setCarvePickerOpen(true)
+                      }
+                  ]
+                : []),
             // The Hold (`hold-rules.ts`): from the Living Dungeon on. Its badge is the meter, then the pairs held.
             ...(isHoldUnlocked(run)
                 ? [
@@ -2140,6 +2177,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
                                         {RUN_SHELL_LINE_COPY.wardenRules(WARDEN_REDEAL_EVERY_TURNS)}
                                         {wardenTestHolds(run) ? <> {RUN_SHELL_LINE_COPY.wardenTest(WARDEN_FELL_PAIRS, run.wardenDealsAgainThisFloor ?? 0)}</> : null}
+                                    </p>
+                                ) : null}
+                                {liveCarve(run) ? (
+                                    <p className={styles.carveArrow} data-direction={liveCarve(run)!} data-testid="carve-arrow">
+                                        <span aria-hidden="true" className={styles.carveArrowGlyph}>{CARVE_ARROW[liveCarve(run)!]}</span> {CARVE_TOOL_COPY.arrow(liveCarve(run)!)}
                                     </p>
                                 ) : null}
                                 {colossus ? <ColossusCard colossus={colossus} event={colossusEvent} reduceMotion={reduceMotion} /> : null}
@@ -2521,6 +2563,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         subtitle={RELIC_SLOT_COPY.body(RELIC_SLOTS)}
                         testId="relic-replace"
                         title={RELIC_SLOT_COPY.title}
+                    />
+                ) : null}
+
+                {/* Carve's picker (DGE-015): four ways, or keep the links. */}
+                {!suppressStatusOverlays && carvePickerOpen && canCarve(run) ? (
+                    <OverlayModal
+                        actions={[
+                            ...CARVE_DIRECTIONS.map((direction) => ({
+                                label: `${CARVE_ARROW[direction]} ${CARVE_TOOL_COPY.direction[direction]}`,
+                                onClick: () => {
+                                    setCarvePickerOpen(false);
+                                    carveAction(direction);
+                                },
+                                variant: 'secondary' as const
+                            })),
+                            { label: CARVE_TOOL_COPY.cancel, onClick: () => setCarvePickerOpen(false), variant: 'primary' as const }
+                        ]}
+                        subtitle={CARVE_TOOL_COPY.pickerBody(CARVE_LINKS)}
+                        testId="carve-picker"
+                        title={CARVE_TOOL_COPY.pickerTitle}
                     />
                 ) : null}
 

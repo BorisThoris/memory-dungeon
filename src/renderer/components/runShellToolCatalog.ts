@@ -27,6 +27,7 @@ export type RunShellToolId =
     | 'still_bell'
     | 'ignite'
     | 'hold'
+    | 'carve'
     | 'flash'
     | 'undo'
     | 'fit';
@@ -78,6 +79,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: true, id: 'ignite', label: 'Ignite', spends: null },
     // The Hold (`hold-rules.ts`): on the dock from floor 13; reads Release while held. Its meter is the chain.
     { conditional: true, id: 'hold', label: 'Hold', spends: null },
+    // Carve (`carve-rules.ts`): on the dock from floor 25; it spends two links of the Hold's meter, not a charge.
+    { conditional: true, id: 'carve', label: 'Carve', spends: null },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },

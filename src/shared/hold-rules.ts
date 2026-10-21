@@ -1,3 +1,4 @@
+import { spendCarve } from './carve-rules';
 import { wardenFellsTo } from './warden-rules';
 import { wipeFootprints } from './wanderer-rules';
 import { grantMisses, missBankCap } from './miss-bank';
@@ -156,7 +157,8 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
     const refilled = hasEvolution(run, 'keystone_heart') && held >= KEYSTONE_HEART_PAIRS && released.missBank
         ? { ...released, missBank: grantMisses(released.missBank, run.board.level, 1, missBankCap(released)) }
         : released;
-    const risen = promoteRunBeneath(refilled);
+    // A carve set before the release shaped its pops (`carve-rules.ts`), and a release that took pairs spends it.
+    const risen = promoteRunBeneath(pairs > 0 ? spendCarve(refilled) : refilled);
     // The complete Warden falls to a release of twelve or more (`warden-rules.ts`): that release is the win, pairs left or not.
     if (wardenFellsTo(run, held)) {
         const felled = { ...risen, board: wipeFootprints(risen.board!), wardenFelled: true };

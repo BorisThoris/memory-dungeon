@@ -1,3 +1,4 @@
+import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
 import { EVOLUTIONS, hasEvolution } from './relic-evolution-rules';
@@ -68,6 +69,8 @@ export interface SoakPlayer {
     elementRate: number;
     /** Pairs held before a release (`hold-rules.ts`); three when unset. */
     readonly holdRelease?: number;
+    /** Share of turns the player carves when it can (`carve-rules.ts`); never when unset. */
+    readonly carveRate?: number;
 }
 
 export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild' | 'planned', SoakPlayer>> = {
@@ -81,7 +84,7 @@ export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'w
      * stacks a player who waits would build. The plan also had it take raging doors; current runs
      * travel to a seeded realm with no door to choose, so there is nothing for it to take.
      */
-    planned: { missRate: 0.1, bombRate: 0.4, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.8, holdRelease: 5 }
+    planned: { missRate: 0.1, bombRate: 0.4, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.8, holdRelease: 5, carveRate: 0.15 }
 };
 
 export interface SoakViolation {
@@ -122,6 +125,9 @@ export interface SoakRunReport {
     wardenTests: number;
     wardensFelled: number;
     wardenDealsAgain: number;
+    /** Carve (`carve-rules.ts`): carves set, and carves a pop spent. */
+    carves: number;
+    carvesSpent: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -573,6 +579,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
+    'a carve is set between turns for two links and no turn, and never outlives its floor': (before, run, action) => {
+        if (action === 'carve') {
+            if (!before?.board || before.board.flippedTileIds.length > 0) return 'carved with a card face up';
+            if ((before.holdLinks ?? 0) - (run.holdLinks ?? 0) !== CARVE_LINKS) return `links ${String(before.holdLinks)} -> ${String(run.holdLinks)}`;
+            return run.turnsThisFloor === before.turnsThisFloor && run.stats.tries === before.stats.tries ? null : 'a carve cost a turn';
+        }
+        return action === 'descend' && run.carveDirection != null ? 'a carve outlived its floor' : null;
+    },
     'the test Warden falls only to a release of twelve, and an empty board is dealt again': (before, run) => {
         if (!before || !run.board || !wardenTestHolds(run)) return null;
         if (run.status === 'levelComplete' && before.status === 'playing') return run.wardenFelled ? null : 'the test Warden cleared without a release of twelve';
@@ -706,6 +720,8 @@ export const soakRun = ({
     let wardenTests = 0;
     let wardensFelled = 0;
     let wardenDealsAgain = 0;
+    let carves = 0;
+    let carvesSpent = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -757,6 +773,7 @@ export const soakRun = ({
 
     const act = (action: string, next: RunState): void => {
         step += 1;
+        if (runNonNegativeInteger(next.carvesSpentThisFloor) > runNonNegativeInteger(run.carvesSpentThisFloor) && next.board?.level === run.board?.level) carvesSpent += 1;
         observe?.(run, next, action);
         for (const invariant of checkAll(run, next, action)) {
             violations.push({ seed, player: playerName, floor: run.board?.level ?? 0, step, action, invariant });
@@ -921,6 +938,12 @@ export const soakRun = ({
                 continue;
             }
         }
+        // Carve (`carve-rules.ts`): a player who carves aims the next pop, a direction at random.
+        if (player.carveRate && canCarve(run) && rng() < player.carveRate) {
+            carves += 1;
+            act('carve', carve(run, pick(CARVE_DIRECTIONS)));
+            continue;
+        }
         // The Hold: held as soon as it arms, released at three held pairs (`hold-rules.ts`).
         if (canStartHold(run)) {
             act('hold', startHold(run));
@@ -1009,6 +1032,8 @@ export const soakRun = ({
         wardenTests,
         wardensFelled,
         wardenDealsAgain,
+        carves,
+        carvesSpent,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,
