@@ -24,8 +24,6 @@ export interface RelicDefinition {
     curio?: true;
 }
 
-/** The miss bank's cap with Deep Pockets. */
-export const DEEP_POCKETS_CAP = 5;
 /** Gold Gilded Chain pays on every rung of the chain that earns a miss. */
 export const GILDED_CHAIN_GOLD = 2;
 /** Milliseconds Long Look adds to every floor's study window. */

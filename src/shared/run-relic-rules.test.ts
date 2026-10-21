@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { createNewRun, flipTile, resolveBoardTurn } from './game';
 import { MISS_BANK_CAP, MISS_BANK_COMBO_RUNG, missBankCap, missesLeft } from './miss-bank';
-import { DEEP_POCKETS_CAP, GILDED_CHAIN_GOLD, LONG_LOOK_MS, RELICS } from './run-relic-rules';
+import { GILDED_CHAIN_GOLD, LONG_LOOK_MS, RELICS } from './run-relic-rules';
 import { buyStoreItem, runGold, storeOffer } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { makeRun, makeTile } from './test/game-fixtures';
@@ -41,14 +41,15 @@ describe('relics in the store', () => {
 });
 
 describe('what each relic does', () => {
-    it('Deep Pockets: the bank holds five, and the store sells a miss up to it', () => {
+    it('Deep Pockets: the bank holds one more, and the store sells a miss up to it', () => {
         const run = rich({ missBank: [{ floor: 1, misses: MISS_BANK_CAP }] });
-        expect(missBankCap(run)).toBe(MISS_BANK_CAP);
-        expect(storeOffer(run).find((row) => row.id === 'miss')?.blocked).toBe('full');
-        const pockets = buyStoreItem(run, 'deep_pockets')!;
-        expect(missBankCap(pockets)).toBe(DEEP_POCKETS_CAP);
+        const cap = missBankCap(run);
+        const full = { ...run, missBank: [{ floor: 1, misses: cap }] };
+        expect(storeOffer(full).find((row) => row.id === 'miss')?.blocked).toBe('full');
+        const pockets = buyStoreItem(full, 'deep_pockets')!;
+        expect(missBankCap(pockets)).toBe(cap + 1);
         const topped = buyStoreItem(pockets, 'miss')!;
-        expect(missesLeft(topped)).toBe(DEEP_POCKETS_CAP);
+        expect(missesLeft(topped)).toBe(cap + 1);
     });
 
     it('Gilded Chain: the fifth match in a row pays gold beside the miss it earns', () => {

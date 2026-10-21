@@ -690,7 +690,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         id: 'inventory.relics',
         verdict: 'changed',
         generation: 261,
-        present: ['RELICS', 'hasRelic', 'DEEP_POCKETS_CAP', 'LONG_LOOK_MS', 'tallow_candle', 'misers_purse', 'misersPurseGold', 'RELIC_SLOTS', 'giveUpRelic'],
+        present: ['RELICS', 'hasRelic', 'LONG_LOOK_MS', 'tallow_candle', 'misers_purse', 'misersPurseGold', 'RELIC_SLOTS', 'giveUpRelic'],
         note: 'Rules 76 (2026-10-21, DGE-013): four relic slots (RELIC_SLOTS); the camp never buys a fifth, and the Purse on a full set names the relic it replaces, its ranks gone with it. Today the camp sells three ranked relics and a Curio the Purse, so the ceiling is met but not passed; it is the ground DGE-014\u2019s evolutions stand on. Rules 58 camps sell three ranks of Long Look, Deep Pockets and Gilded Chain. Ranks add study time, miss capacity or gold on every fifth consecutive match. Gold and ranks persist across floors and reset with a new run. Historical relics remain effective under their original rules.'
     },
     {
