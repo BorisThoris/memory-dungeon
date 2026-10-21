@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3286,
     "codeFileCount": 1256,
-    "exportedSymbolCount": 4041,
+    "exportedSymbolCount": 4042,
     "contentItemCount": 16,
     "mechanicCount": 79,
     "stateFieldCount": 153,
-    "relationshipCount": 11093
+    "relationshipCount": 11098
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "0b009f60abdc1beab75077b8a67876986392af40d811b9a4da7631dcae4876cf"
+      "sha256": "2cacc5ed81a0d8efd5ae4b36ec61530753f3e2f472e2ee476aa9d50840fb4a1e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4041,8 +4041,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 11306,
-      "sha256": "1decf5e46fa9db9323a90f038973372942b37f8d4adf6d39420ff12b8813d5be"
+      "bytes": 12342,
+      "sha256": "10a3f0ca6e1aef29031a2b5afe0c0c73fe539f9f6e83ca70145a09de43dd347a"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -11883,8 +11883,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148267,
-      "sha256": "7281a4e0d17aac8091b996a6782ca3067d4a78c020ba41a01c81f74d366dc8a6"
+      "bytes": 148231,
+      "sha256": "32d4ba7cac09a2297cb14c7c3d43e95580fbc14b52842402e3de01059954762b"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -14025,14 +14025,14 @@
     {
       "path": "src/renderer/store/runTimerController.test.ts",
       "category": "test",
-      "bytes": 11910,
-      "sha256": "bac9e9c2cd531d267630407764f235c419c16b371aa19f20f8f0cda672e89aa2"
+      "bytes": 12627,
+      "sha256": "4d3244dfc040f87c46416844b1b92868c9f0113c1f9434cdfa37c45db815890f"
     },
     {
       "path": "src/renderer/store/runTimerController.ts",
       "category": "source",
-      "bytes": 11560,
-      "sha256": "bef7eb2990f456ea3ed75330a81a0fc52840ebbc5f2c55e8a9fec13344f098af"
+      "bytes": 11536,
+      "sha256": "1f60ea5cc3dccd6c458b179b445d13ef5734e4f68743c4cc6bd20f39145232ea"
     },
     {
       "path": "src/renderer/store/runTimerResumeConditions.test.ts",
@@ -14559,8 +14559,8 @@
     {
       "path": "src/shared/board-layers-rules.ts",
       "category": "source",
-      "bytes": 9237,
-      "sha256": "e512073ab1c6789d6702c7a76fd789c85284d9149b0497bc383941767f976006"
+      "bytes": 9799,
+      "sha256": "830418528b2c54e2dc09daeb05420c91beb88ae9d75910b31d75fefedb166958"
     },
     {
       "path": "src/shared/board-layout-rules.test.ts",
@@ -17445,8 +17445,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
       "category": "other",
-      "bytes": 5109,
-      "sha256": "8130dd569aec4a77bf2c4f99282c203136374e242ee710a775f42b68c647d297"
+      "bytes": 5565,
+      "sha256": "3ae0eacce3f1e3b95b52eb0c54a42180a3747bc0c6ae939e66480e1539251db6"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
@@ -26780,7 +26780,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3333,
+      "lineCount": 3334,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -26814,6 +26814,7 @@
         "file:src/renderer/hooks/useCoarsePointer.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
+        "file:src/shared/board-layers-rules.ts",
         "file:src/shared/chain-targets.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/clump-read-rules.ts",
@@ -32877,9 +32878,10 @@
       "path": "src/renderer/store/runTimerController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 274,
+      "lineCount": 286,
       "imports": [
         "file:src/renderer/store/runTimerController.ts",
+        "file:src/shared/board-layers-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/run-timer-rules.ts"
@@ -32892,11 +32894,12 @@
       "path": "src/renderer/store/runTimerController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 329,
+      "lineCount": 325,
       "imports": [
         "file:src/renderer/store/activeTimer.ts",
         "file:src/renderer/store/memorizeClock.ts",
         "file:src/renderer/store/runTimerResumeConditions.ts",
+        "file:src/shared/board-layers-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -34245,7 +34248,7 @@
       "path": "src/shared/board-layers-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 153,
+      "lineCount": 161,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -34259,6 +34262,7 @@
       ],
       "exports": [
         "symbol:src/shared/board-layers-rules.ts#applyLayerTurn",
+        "symbol:src/shared/board-layers-rules.ts#boardDealKey",
         "symbol:src/shared/board-layers-rules.ts#cardsBeneath",
         "symbol:src/shared/board-layers-rules.ts#dealLayers",
         "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
@@ -34270,6 +34274,7 @@
         "symbol:src/shared/board-layers-rules.ts#promoteRunBeneath"
       ],
       "testedBy": [
+        "file:src/renderer/store/runTimerController.test.ts",
         "file:src/shared/board-layers-rules.test.ts"
       ]
     },
@@ -52131,24 +52136,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3332,
-      "endLine": 3332
+      "line": 3333,
+      "endLine": 3333
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 303,
-      "endLine": 310
+      "line": 304,
+      "endLine": 311
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 312,
-      "endLine": 316
+      "line": 313,
+      "endLine": 317
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -59043,8 +59048,8 @@
       "name": "createRunTimerController",
       "kind": "value",
       "file": "src/renderer/store/runTimerController.ts",
-      "line": 50,
-      "endLine": 328
+      "line": 51,
+      "endLine": 324
     },
     {
       "id": "symbol:src/renderer/store/runTimerResumeConditions.ts#shouldScheduleDebugRevealTimerOnResume",
@@ -60723,24 +60728,32 @@
       "name": "applyLayerTurn",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 151,
-      "endLine": 152
+      "line": 159,
+      "endLine": 160
+    },
+    {
+      "id": "symbol:src/shared/board-layers-rules.ts#boardDealKey",
+      "name": "boardDealKey",
+      "kind": "value",
+      "file": "src/shared/board-layers-rules.ts",
+      "line": 52,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#cardsBeneath",
       "name": "cardsBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#dealLayers",
       "name": "dealLayers",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 52,
-      "endLine": 77
+      "line": 60,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
@@ -60755,8 +60768,8 @@
       "name": "layerKeyOf",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 48,
-      "endLine": 49
+      "line": 56,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
@@ -60787,16 +60800,16 @@
       "name": "promoteBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 88,
-      "endLine": 139
+      "line": 96,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#promoteRunBeneath",
       "name": "promoteRunBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 142,
-      "endLine": 148
+      "line": 150,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/board-layout-rules.ts#canReflowRunBoard",
@@ -77224,7 +77237,7 @@
         },
         {
           "path": "src/renderer/components/TileBoard.tsx",
-          "line": 58
+          "line": 1
         }
       ],
       "tests": [
@@ -79308,7 +79321,7 @@
         },
         {
           "path": "src/renderer/store/runTimerController.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/shared/run-timer-rules.ts",
@@ -79322,7 +79335,7 @@
         },
         {
           "path": "src/renderer/store/runTimerController.test.ts",
-          "line": 3
+          "line": 4
         }
       ],
       "enables": [
@@ -95488,6 +95501,12 @@
       "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#applyLayerTurn",
       "source": "file:src/shared/board-layers-rules.ts",
       "target": "symbol:src/shared/board-layers-rules.ts#applyLayerTurn",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#boardDealKey",
+      "source": "file:src/shared/board-layers-rules.ts",
+      "target": "symbol:src/shared/board-layers-rules.ts#boardDealKey",
       "kind": "exports"
     },
     {
@@ -117429,6 +117448,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/board-layers-rules.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/shared/board-layers-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/chain-targets.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/shared/chain-targets.ts",
@@ -122589,6 +122614,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runTimerController.test.ts->src/shared/board-layers-rules.ts",
+      "source": "file:src/renderer/store/runTimerController.test.ts",
+      "target": "file:src/shared/board-layers-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runTimerController.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/runTimerController.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -122622,6 +122653,12 @@
       "id": "imports:src/renderer/store/runTimerController.ts->src/renderer/store/runTimerResumeConditions.ts",
       "source": "file:src/renderer/store/runTimerController.ts",
       "target": "file:src/renderer/store/runTimerResumeConditions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runTimerController.ts->src/shared/board-layers-rules.ts",
+      "source": "file:src/renderer/store/runTimerController.ts",
+      "target": "file:src/shared/board-layers-rules.ts",
       "kind": "imports"
     },
     {
@@ -141358,6 +141395,12 @@
       "id": "tested_by:src/shared/board-inspection.ts->file:src/shared/warden-rules.test.ts",
       "source": "file:src/shared/board-inspection.ts",
       "target": "file:src/shared/warden-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/board-layers-rules.ts->file:src/renderer/store/runTimerController.test.ts",
+      "source": "file:src/shared/board-layers-rules.ts",
+      "target": "file:src/renderer/store/runTimerController.test.ts",
       "kind": "tested_by"
     },
     {
