@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3276,
+    "trackedFileCount": 3277,
     "codeFileCount": 1247,
-    "exportedSymbolCount": 3992,
+    "exportedSymbolCount": 3993,
     "contentItemCount": 16,
     "mechanicCount": 77,
     "stateFieldCount": 151,
-    "relationshipCount": 10934
+    "relationshipCount": 10935
   },
   "inventory": [
     {
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 534120,
-      "sha256": "f7e83a3b90a0ec30309eed09735e47bab8e580a3acf82ba71bd630176ac3b0dc"
+      "bytes": 536745,
+      "sha256": "25eda4abb8f8f753d4640e20bfc6e6bebcd9fcb1dae6efbd598057e4432e3726"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 81110,
-      "sha256": "5322da8b8d48ffe64ebe5ee92392fbb427e7be47d438b938bb7d3ecea7fe8ab4"
+      "bytes": 82065,
+      "sha256": "d68fa4819a1f3e54aab8c09a862fc25811a2fb7a679549d29ccd851bbf865d3a"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2422,13 +2422,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "8a11713a8a786b2a0da46a070bf4ff11285f404f5a35aaf6518eac0a5c3ee3d2"
+      "sha256": "aa4045ac8d5b74baf55fd5ea4bbd81d35c94f76a92f47d2de64addda8970fe8c"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "4634bc408361110f4b3107138673e021e22c9e215159b2a0237be760d9b2a814"
+      "sha256": "367eb29bdea5b969644706fbd9c15b943dd0169c52c1481495495e5e80fd29b1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4371,8 +4371,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33866,
-      "sha256": "85a9dfdabef8ea15b598306ccaaae112f65d5b1d2410c2414fc1918bcf97006d"
+      "bytes": 34009,
+      "sha256": "5bcfd28a488b5115882afb3eda62477212ccd619f36396d79f73389ab9c4773b"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5729,6 +5729,12 @@
       "category": "script",
       "bytes": 2402,
       "sha256": "30af94a4957587590b6e1521a6e44740ceeb876a6413a9606530566c34838776"
+    },
+    {
+      "path": "scripts/sim-goldilocks.ts",
+      "category": "script",
+      "bytes": 13869,
+      "sha256": "2d89073c8ab441739083cf64503fd7f28c98ec19724679d95287a6b688f76346"
     },
     {
       "path": "scripts/sim-occupancy.ts",
@@ -14355,8 +14361,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 81458,
-      "sha256": "cf551f39c42fdf1f889030a9ec53d13276d4de2ee0bde7e283b24a7f344da98a"
+      "bytes": 82413,
+      "sha256": "123ef3d4fc26920131bb8eb0860db3ef5d450d50d6e5da19b571a90731b798be"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14529,8 +14535,8 @@
     {
       "path": "src/shared/board-layers-rules.ts",
       "category": "source",
-      "bytes": 8808,
-      "sha256": "6c0a4465198ea4d02ba1aa791e94bc80a43196e30759be5caab4465881c9a494"
+      "bytes": 9237,
+      "sha256": "e512073ab1c6789d6702c7a76fd789c85284d9149b0497bc383941767f976006"
     },
     {
       "path": "src/shared/board-layout-rules.test.ts",
@@ -14889,8 +14895,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 58233,
-      "sha256": "e136868318e30e0fea9c6344768f50a066e0664f042b7c1e35f01f961bb6072c"
+      "bytes": 58305,
+      "sha256": "109726c0fc5f9a99375f80a64885b89de93963299aeed404420cc29f4e402ccc"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16875,8 +16881,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 101759,
-      "sha256": "de6ec37a9b83f2d428cc89a78c62c4c77d3fec96cbd658bee8dd3d07da0f0126"
+      "bytes": 102714,
+      "sha256": "6442a5d947f0d0331d7c43f66a39f53c449f8b89eeeed660df8795a023e4398b"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17158,7 +17164,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "742d979633b36ab7c27d7a3c68414e465f7edc09c4036c2546e0ea523b6dbf6c"
+      "sha256": "dc9f15175c5fb9c353c85f8f2a697d31009ca43a26ef7c71a9ffe22010879912"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17253,8 +17259,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 11403,
-      "sha256": "1ddbb4383fb02314f051b6f3a1083090169d129153582e6e73b2b165ab8b4d15"
+      "bytes": 12087,
+      "sha256": "4c473548b2c3196a24f85b37cf5041ac8a56414c2cb3cd4401936a02a34caf69"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17475,8 +17481,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-032-balance-bars-and-sims.md",
       "category": "other",
-      "bytes": 3775,
-      "sha256": "f24445693d774de935925f31999d3cd9b42c0f971d742f879698fd491ba2b3d3"
+      "bytes": 4853,
+      "sha256": "8a79682d2e0b844911afd5d665282163bcb073bd10f880a1b2b758ba66d7170b"
     },
     {
       "path": "tasks/dungeon-epic/00-current-system-map.md",
@@ -34112,7 +34118,7 @@
       "path": "src/shared/board-layers-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 146,
+      "lineCount": 153,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -34130,6 +34136,7 @@
         "symbol:src/shared/board-layers-rules.ts#dealLayers",
         "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
         "symbol:src/shared/board-layers-rules.ts#layerKeyOf",
+        "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
         "symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
         "symbol:src/shared/board-layers-rules.ts#LAYERS_RULES_FROM",
         "symbol:src/shared/board-layers-rules.ts#promoteBeneath",
@@ -60365,48 +60372,56 @@
       "name": "applyLayerTurn",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 144,
-      "endLine": 145
+      "line": 151,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#cardsBeneath",
       "name": "cardsBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 75,
-      "endLine": 75
+      "line": 82,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#dealLayers",
       "name": "dealLayers",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 45,
-      "endLine": 70
+      "line": 52,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
       "name": "isLayersFloor",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 33,
-      "endLine": 38
+      "line": 39,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#layerKeyOf",
       "name": "layerKeyOf",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 41,
-      "endLine": 42
+      "line": 48,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
+      "name": "LAYERS_APART_FROM",
+      "kind": "value",
+      "file": "src/shared/board-layers-rules.ts",
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
       "name": "LAYERS_COVER",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_RULES_FROM",
@@ -60421,16 +60436,16 @@
       "name": "promoteBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 81,
-      "endLine": 132
+      "line": 88,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#promoteRunBeneath",
       "name": "promoteRunBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 135,
-      "endLine": 141
+      "line": 142,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/board-layout-rules.ts#canReflowRunBoard",
@@ -94634,6 +94649,12 @@
       "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#layerKeyOf",
       "source": "file:src/shared/board-layers-rules.ts",
       "target": "symbol:src/shared/board-layers-rules.ts#layerKeyOf",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
+      "source": "file:src/shared/board-layers-rules.ts",
+      "target": "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
       "kind": "exports"
     },
     {
