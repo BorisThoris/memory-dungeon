@@ -3503,3 +3503,37 @@ Gate (floors 1-12) exactly as tight - counting only pairs beyond twelve - topped
 **The other bars.** The curve gate now runs to floor 60: a clean player stays under par on every floor (floor 60: 20.4
 turns against 24). Pop share by act stays below 0.6 (the owner's call on the Hold, above). The Goldilocks probe (bar 3)
 needs a model of what the player remembers, which no sim has yet; it is DGE-032's next step.
+
+
+## The Goldilocks probe (DGE-032 bar 3, rules 74, 2026-10-21)
+
+**The instrument.** `yarn sim:goldilocks` (`scripts/sim-goldilocks.ts`) plays a player who forgets: a working memory of
+twelve cards, the most recently seen kept; it learns twelve of the cards it is shown at the study window (never the lower
+deck), remembers every card it turns, forgets a card that jumps (the restless floor's swaps, the void, the shuffles, the
+Warden's re-deal) but keeps one it watched slide a cell (skittish cards, the Wanderers) or that the looking glass
+mirrored, and never knows a card that rose from beneath. At every turn start it reads the share of the floor's face-down
+cards it is sure of, cards still beneath counted as unknown; a floor's share is the mean over its turns, thirty seeds,
+floors reached through the real transition. The other sims play with perfect memory, so none could say this.
+
+**What it measured.** Ordinary floors past 24: 0.32-0.36. The memory size moves this less than expected - 12, 16 and 20
+cards put the same floors at about 0.25, 0.27 and 0.29 under the first (harsher) forgetting rule - because a player that
+matches what it knows the moment it knows it never banks much. The first rule forgot any card that moved, and read the
+skittish halls and the Deep's boss (looking glass and skittish) at 0.04-0.11 over 75-226 turns: a flinch moves exactly the
+two cards just learned. A player sees a one-cell slide and reasons through a mirror, so the rule now keeps those, and
+those floors read 0.32-0.34. A floor's mean moves about 0.004 between thirty-seed samples (sd 0.02-0.03 per seed).
+
+| floor kind | share |
+|---|---|
+| ordinary (Wanderers on every floor from 13) | 0.32-0.36 |
+| the Fold | 0.32-0.37 (two smaller rooms raise it) |
+| Layers + Wanderers | 0.28-0.30 |
+| Layers + the restless hall (floor 32, rules 73) | 0.23 |
+| the restless hall | 0.25-0.28 |
+| the Warden | 0.14 |
+
+**What it decided** (the acceptance: which mechanics may share a floor). Layers and the Wanderers coexist. Layers keep
+off the restless hall from rules 74: hiding a deck *and* swapping cards was the least certain floor of the Deep (0.23).
+The band's lower edge is 0.25, not the plan's guessed 0.3: Layers read 0.28-0.30 because the unseen deck is unknown by
+design, and the owner chose the edge over a thinner deck (2026-10-21). The restless hall and the Warden are exempt by
+name: both are designed to take back what the player knew. `yarn gate:goldilocks` (in `gate:systems`) holds the band;
+with a two-card memory it reads 0.06 and fails. Rules 74 left survival in the band (`gate:warden-reach`: 59 of 100 at 15%).

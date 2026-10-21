@@ -26,15 +26,22 @@ import { releaseRealmHoldsIfStuck } from './realm-weather-rules';
  * inspector counts both decks.
  */
 export const LAYERS_RULES_FROM = 72;
+/** From rules 74 Layers keep off the restless hall (DGE-032's third bar). */
+export const LAYERS_APART_FROM = 74;
 /** Of the cells, the share that hold a card beneath, rounded down to whole pairs: two in five keeps the Deep's longest floors under the curve's 24 turns (`sim-difficulty-curve.ts`). */
 export const LAYERS_COVER = 0.4;
 
-/** Whether a floor is dealt two decks deep: the Deep's own floors, not its boss and not a Fold. */
-export const isLayersFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'fold' | 'tiles'>, rulesVersion: number): boolean =>
+/**
+ * Whether a floor is dealt two decks deep: the Deep's own floors, not its boss, not a Fold, and from rules 74 not
+ * the restless hall - the Goldilocks probe (`sim-goldilocks.ts`) read a floor that hides a deck *and* swaps its
+ * cards at 0.23 of it known, the least certain floor of the Deep.
+ */
+export const isLayersFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'fold' | 'tiles' | 'floorArchetypeId'>, rulesVersion: number): boolean =>
     rulesVersion >= LAYERS_RULES_FROM &&
     descentActForFloor(board.level).id === 'deep' &&
     board.floorTag !== 'boss' &&
     !board.fold &&
+    !(rulesVersion >= LAYERS_APART_FROM && board.floorArchetypeId === 'restless_hall') &&
     board.tiles.length >= 8;
 
 /** Every id the floor's two decks were dealt with: the renderer's key for the floor, which promotion never changes. */

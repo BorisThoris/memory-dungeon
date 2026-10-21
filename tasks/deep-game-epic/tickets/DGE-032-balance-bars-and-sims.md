@@ -1,7 +1,7 @@
 # DGE-032: Balance bars: run-ending, Goldilocks, curve to floor 60
 
 ## Status
-In progress: bars 1, 2 and 4 are gates (2026-10-21); bar 3, the Goldilocks probe, is next.
+Done (2026-10-21): bars 1, 3 and 4 are green gates; bar 2 is the owner-accepted pop-share shortfall. Endless to 120 is not gated yet.
 
 ## Priority
 P0
@@ -56,3 +56,9 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - **Bar 4**: `CURVE_FLOORS` 60; `gate:difficulty-curve` is green to the Warden's floor (floor 60: 20.4 turns, par 24). Endless to 120 not yet gated.
 - Rules 73 reseed: version gate, fifteen ledger quotes; hall rooms and the camp test that hard-coded a cap of four or a grant of one now ask `missBankCap` / `missBankFloorGrant`; the Purse-on-offer room moved to floor 1, where the bank still holds four. Soak 5 x 200: 0 violations.
 - **Bar 3, next**: a Goldilocks probe needs a player who forgets - which cards' positions the simulated player is confident of at the study window. The sims are omniscient with a miss rate. That model, and its use to decide which of Layers, Wanderers and the Spiral may share a floor, is the remaining work.
+
+2026-10-21, bar 3:
+- `scripts/sim-goldilocks.ts` (`yarn sim:goldilocks`, `gate:goldilocks` in `gate:systems`): a player with a twelve-card memory that forgets what jumps, keeps what slides a cell or mirrors, never knows a risen card; the share of face-down cards it is sure of, mean over its turns, thirty seeds, floors 25-60 through the real transition. Measured instead of "at the study window", which reads a quarter on every floor before a flip.
+- Decided: Layers and the Wanderers share floors; **Layers keep off the restless hall from rules 74** (0.23 together); the band's lower edge is **0.25** (the owner, over a thinner deck: Layers read 0.28-0.30 by design); the restless hall and the Warden exempt by name (designed to take back what you knew). Mutation-tested: a two-card memory reads 0.06 and fails.
+- The Spiral (DGE-021) does not exist yet; when it lands, run the probe on its floors before letting it share one with Layers.
+- Rules 74: version gate, ledger requoted; `gate:warden-reach` 59/100, the curve gate green.
