@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import { summarizeDescent } from './descent-run-summary';
 import { describeRunModeIdentity } from './run-mode-identity';
 import { describeRunShareKey, encodeRunShareKey } from './run-share-key';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -41,7 +42,11 @@ export const buildRunShareText = (run: RunState): RunShareText => {
         // A ripple of one wave is every match ever made; only a reaction that carried is news.
         runNonNegativeInteger(bestRipple) >= 2 ? `, ripple ×${runNonNegativeInteger(bestRipple)}` : ''
     ].join('');
-    const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}, ${score} points${chain}`;
+    // Where in the Descent (DGE-007): the act and the Dread, so a friend handed the key knows what is ahead.
+    // They ride the sentence, not the key: the key is a replay recipe, and old keys parse as they did.
+    const descent = run.passAndPlay ? null : summarizeDescent(run, null);
+    const place = descent ? ` (${descent.actTitle}, Dread ${descent.tierName})` : '';
+    const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}${place}, ${score} points${chain}`;
 
     const recipe = describeRunShareKey(run);
     if ('refusal' in recipe) {

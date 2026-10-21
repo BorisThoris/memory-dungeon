@@ -1,4 +1,5 @@
 import type { RunEndReason, RunState, RunSummary } from '../../shared/contracts';
+import type { DescentRunSummary } from '../../shared/descent-run-summary';
 import { DESCENT_FLOOR_COUNT } from '../../shared/floor-mutator-schedule';
 import { WARDEN_FELL_PAIRS } from '../../shared/warden-rules';
 
@@ -154,6 +155,18 @@ export const wardenEndLine = (
     const ask = `Behind the wild or raging door it falls only to a Hold released at ${WARDEN_FELL_PAIRS} pairs.`;
     return short > 0 ? `${short} ${short === 1 ? 'floor' : 'floors'} short of the Warden. ${ask}` : `The Warden stood. ${ask}`;
 };
+
+/** Where the run ended in the Descent (DGE-007): the act, and how far it fell short of the next boss. */
+export const descentEndLine = (descent: DescentRunSummary): string => {
+    const where = `Floor ${descent.floor} · ${descent.actTitle}`;
+    if (!descent.next) return where;
+    const { name, floorsShort } = descent.next;
+    return floorsShort === 0 ? `${where} · fell at ${name}` : `${where} · ${floorsShort} ${floorsShort === 1 ? 'floor' : 'floors'} from ${name}`;
+};
+
+/** What was new this run against the profile's record when it began, or nothing. */
+export const descentFirstsLine = (descent: DescentRunSummary): string | null =>
+    descent.firsts.length > 0 ? `New this run: ${descent.firsts.join(', ')}.` : null;
 
 export const runEndReasonLine = (summary: Pick<RunSummary, 'highestLevel' | 'runEndReason'>): string | null =>
     summary.runEndReason ? gameOverScreenCopy.endReason[summary.runEndReason](summary.highestLevel) : null;

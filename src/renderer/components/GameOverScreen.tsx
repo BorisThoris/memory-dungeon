@@ -1,3 +1,5 @@
+import { summarizeDescent } from '../../shared/descent-run-summary';
+import { normalizeDescentRecord } from '../../shared/descent-record';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { chainMeter } from '../../shared/chain-tier-rules';
@@ -8,7 +10,7 @@ import type { MutatorId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
-import { achievementsNote, gameOverScreenCopy, runEndReasonLine, wardenEndLine } from '../copy/gameOverScreen';
+import { achievementsNote, gameOverScreenCopy, runEndReasonLine, wardenEndLine, descentEndLine, descentFirstsLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
 import { describeRematchComparison } from '../../shared/run-history-log';
 import { buildRunShareText } from '../../shared/run-share-text';
@@ -194,6 +196,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     ];
     const endReasonLine = runEndReasonLine(summary);
     const wardenLine = wardenEndLine(summary, run);
+    // The Descent's place (DGE-007): the act, the distance to the next boss, and the firsts against the record at the start.
+    const descent = isPassAndPlayRun(run.passAndPlay)
+        ? null
+        : summarizeDescent(run, runStartSaveData?.playerStats?.descent ? normalizeDescentRecord(runStartSaveData.playerStats.descent) : null);
+    const firstsLine = descent ? descentFirstsLine(descent) : null;
     // The nave the run ends in burns at the best chain the run actually reached, measured on the
     // meter's own scale rather than a second one invented here: the board is gone, so the streak
     // goes against the standard Fever rung. A run that never chained ends on guttering candles.
@@ -308,6 +315,16 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {endReasonLine ? (
                             <p className={styles.copy} data-testid="game-over-end-reason">
                                 {endReasonLine}
+                            </p>
+                        ) : null}
+                        {descent ? (
+                            <p className={styles.copy} data-testid="game-over-descent">
+                                {descentEndLine(descent)}
+                            </p>
+                        ) : null}
+                        {firstsLine ? (
+                            <p className={styles.copy} data-testid="game-over-firsts">
+                                {firstsLine}
                             </p>
                         ) : null}
                         {wardenLine ? (
