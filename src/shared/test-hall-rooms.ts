@@ -88,6 +88,8 @@ export type TestHallRoomId =
     | 'still-bell-quiet'
     | 'store-stop'
     | 'dread-stirs'
+    | 'keeper-swap'
+    | 'keeper-pin'
     | 'warden-past-par'
     | 'warden-redeal'
     | 'warden-deals-again'
@@ -995,6 +997,44 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (gold <= 0 || gold % 2 !== 0) return `a doubled clear paid ${gold}`;
                     if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
                     return missBankCap(r) === missBankCap({ ...r, relics: [] }) - 1 ? null : `the bank holds ${missBankCap(r)}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'keeper-swap',
+        title: 'Rooms swap on turn four',
+        mechanic: 'The Keeper of Halls, the Living Dungeon\u2019s boss, is a Fold whose rooms swap sides every fourth resolved turn; each card keeps its place inside its room.',
+        graphMechanicIds: ['hazard.keeper', 'board.fold'],
+        tryThis: 'Three turns in: miss once, and the left room and the right room trade sides. a-1 is two columns over, in the same place in its room.',
+        build: () => room(['a:e b:t c:m d:b', 'c:m d:b a:e b:t', 'e:e f:t e:e f:t'], { level: 24, misses: 4, board: { floorArchetypeId: 'keeper_hall', floorTag: 'boss', fold: { afterColumn: 1, doorRows: [1] } }, run: { turnsThisFloor: 3 } }),
+        script: [
+            {
+                step: { do: 'missAny' },
+                says: 'the fourth turn swaps the rooms',
+                expect: (r, b) => {
+                    const at = (run: RunState) => run.board?.tiles.findIndex((t) => t.id === 'a-1') ?? -1;
+                    return r.keeperSwapsThisFloor === 1 && at(r) === at(b) + 2 ? null : `swaps ${String(r.keeperSwapsThisFloor)}, a-1 ${at(b)} -> ${at(r)}`;
+                }
+            },
+            { step: { do: 'clear' }, says: 'the floor still clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'keeper-pin',
+        title: 'A pin holds through the swap',
+        mechanic: 'A pinned card holds its cell when the Keeper\u2019s rooms swap, and so does the card across from it.',
+        graphMechanicIds: ['hazard.keeper', 'power.pin'],
+        tryThis: 'Pin a-1 and miss on the fourth turn: the rooms swap round it.',
+        build: () => room(['a:e b:t c:m d:b', 'c:m d:b a:e b:t', 'e:e f:t e:e f:t'], { level: 24, misses: 4, board: { floorArchetypeId: 'keeper_hall', floorTag: 'boss', fold: { afterColumn: 1, doorRows: [1] } }, run: { turnsThisFloor: 3 } }),
+        script: [
+            { step: { do: 'pin', tileId: 'a-1' }, says: 'a-1 carries a pin', expect: (r) => (r.pinnedTileIds.includes('a-1') ? null : 'a-1 is not pinned') },
+            {
+                step: { do: 'missAny' },
+                says: 'the rooms swap, and a-1 stays where it was',
+                expect: (r, b) => {
+                    const at = (run: RunState) => run.board?.tiles.findIndex((t) => t.id === 'a-1') ?? -1;
+                    return r.keeperSwapsThisFloor === 1 && at(r) === at(b) ? null : `swaps ${String(r.keeperSwapsThisFloor)}, a-1 ${at(b)} -> ${at(r)}`;
                 }
             }
         ]

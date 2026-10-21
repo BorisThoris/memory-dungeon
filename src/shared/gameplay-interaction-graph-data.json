@@ -2679,6 +2679,40 @@
             ]
         },
         {
+            "id": "hazard.keeper",
+            "label": "The Keeper of Halls",
+            "kind": "hazard",
+            "role": "the_living_dungeons_boss_a_fold_whose_rooms_swap_sides_every_fourth_turn_pins_hold_their_cells",
+            "evidence": [
+                "src/shared/keeper-rules.ts",
+                "src/shared/floor-mutator-schedule.ts",
+                "src/shared/board-fold-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/boss-encounters.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "keeperSwapsThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "keeperSwapsThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-swap-keeps-every-pair",
+                "pinned-cards-hold-their-cells",
+                "the-swap-comes-before-the-wanderers"
+            ],
+            "tests": [
+                "src/shared/keeper-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "hazard.warden",
             "label": "The Warden",
             "kind": "hazard",
@@ -2998,6 +3032,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "hazard.keeper",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Keeper’s rule on the board, with the turns to the next swap"
+        },
         {
             "source": "board.masks",
             "target": "feedback.gameplay_hud",

@@ -66,14 +66,16 @@ export const FOLD_CYCLE_FLOORS: readonly number[] = [4, 11];
 export const FOLD_SUIT_LEAN = 0.7;
 
 /** Whether a floor is dealt as the Fold: from floor 13, on its cycle floors, never on a boss floor. */
-export const isFoldFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'cycleFloor' | 'columns' | 'rows'>, rulesVersion: number): boolean =>
-    rulesVersion >= FOLD_RULES_FROM &&
+export const isFoldFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'cycleFloor' | 'columns' | 'rows' | 'floorArchetypeId'>, rulesVersion: number): boolean =>
+    // The Keeper of Halls (`keeper-rules.ts`) is a Fold on its boss floor (rules 81).
+    (rulesVersion >= 81 && board.floorArchetypeId === 'keeper_hall' && board.columns >= 4 && board.rows >= 2) ||
+    (rulesVersion >= FOLD_RULES_FROM &&
     board.level >= FOLD_FROM_FLOOR &&
     board.floorTag !== 'boss' &&
     board.cycleFloor != null &&
     FOLD_CYCLE_FLOORS.includes(board.cycleFloor) &&
     board.columns >= 4 &&
-    board.rows >= 2;
+    board.rows >= 2);
 
 /** The wall down the middle, the doorway on the middle rows: two rows of it on a board three rows tall or more. */
 export const foldFor = (columns: number, rows: number): BoardFold => {

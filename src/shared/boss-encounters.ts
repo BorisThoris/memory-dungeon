@@ -217,6 +217,21 @@ export const getFloorIdentityContract = ({
     mutators: readonly MutatorId[];
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
+    // The Keeper of Halls (`keeper-rules.ts`, DGE-011): the Living Dungeon's boss states its rule before the first flip.
+    if (floorArchetypeId === 'keeper_hall') {
+        return {
+            id: 'keeper',
+            label: 'The Keeper of Halls',
+            teachingSentence: `Two rooms and a doorway, and every fourth turn the rooms swap sides: each card keeps its place inside its room.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Learn each room as a room, not as a side; a pinned card stays where it is, and so does the card across from it.',
+            floorClearSentence: 'The Keeper of Halls falls. The Living Dungeon is behind you.',
+            atmosphericFeedback: 'The halls settle where they are, and stay.',
+            activeReminder: 'Keeper: every fourth turn the rooms swap sides.',
+            warningLevel: 'danger',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
     // The Warden (`warden-rules.ts`, DGE-005): the Descent's end states both its rules before the first flip.
     if (floorArchetypeId === 'warden_hall') {
         return {

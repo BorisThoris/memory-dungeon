@@ -1,3 +1,4 @@
+import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
@@ -131,6 +132,9 @@ export interface SoakRunReport {
     /** Masks (`mask-rules.ts`): masks dealt onto floors, and dropped by a first flip. */
     masksDealt: number;
     masksDropped: number;
+    /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
+    keeperFloors: number;
+    keeperSwaps: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -582,6 +586,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
+    'the Keeper\u2019s swap keeps every card and holds every pinned cell': (before, run) => {
+        if (!before?.board || !run.board || runNonNegativeInteger(run.keeperSwapsThisFloor) <= runNonNegativeInteger(before.keeperSwapsThisFloor)) return null;
+        if (run.board.level !== before.board.level) return null;
+        // The same action may also deal (a void's spew into cleared cells), so the swap is judged by count and pins.
+        if (run.board.tiles.length !== before.board.tiles.length) return 'the swap changed the size of the board';
+        const moved = (run.pinnedTileIds ?? []).find((id) => run.board!.tiles.findIndex((tile) => tile.id === id) !== before.board!.tiles.findIndex((tile) => tile.id === id));
+        return moved ? `pinned ${moved} moved in the swap` : null;
+    },
     'a mask is never on both cards of a pair, and no face-up card wears one': (_before, run) => {
         const tiles = run.board?.tiles ?? [];
         const up = tiles.find((tile) => tile.mask != null && (tile.state === 'flipped' || tile.state === 'matched'));
@@ -736,6 +748,8 @@ export const soakRun = ({
     let carvesSpent = 0;
     let masksDealt = 0;
     let masksDropped = 0;
+    let keeperFloors = 0;
+    let keeperSwaps = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -788,6 +802,8 @@ export const soakRun = ({
     const act = (action: string, next: RunState): void => {
         step += 1;
         if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
+        if (action === 'descend' && isKeeperFloor(next.board)) keeperFloors += 1;
+        if (next.board?.level === run.board?.level && runNonNegativeInteger(next.keeperSwapsThisFloor) > runNonNegativeInteger(run.keeperSwapsThisFloor)) keeperSwaps += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.masksDroppedThisFloor) > runNonNegativeInteger(run.masksDroppedThisFloor)) masksDropped += 1;
         if (runNonNegativeInteger(next.carvesSpentThisFloor) > runNonNegativeInteger(run.carvesSpentThisFloor) && next.board?.level === run.board?.level) carvesSpent += 1;
         observe?.(run, next, action);
@@ -1052,6 +1068,8 @@ export const soakRun = ({
         carvesSpent,
         masksDealt,
         masksDropped,
+        keeperFloors,
+        keeperSwaps,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

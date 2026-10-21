@@ -393,7 +393,7 @@ describe('warden rotation', () => {
             'mirror_hall',
             'trap_hall',
             'rush_recall',
-            'spotlight_hunt',
+            'keeper_hall',
             'trap_hall',
             'treasure_gallery'
         ]);

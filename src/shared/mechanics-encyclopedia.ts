@@ -25,13 +25,14 @@ import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS }
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
+import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 107 as const;
+export const ENCYCLOPEDIA_VERSION = 108 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -491,6 +492,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
             `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
             `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won.`
+    },
+    {
+        id: 'sys_keeper',
+        title: 'The Keeper of Halls',
+        description:
+            `Floor 24, the end of the Living Dungeon, is the **Keeper of Halls**: a Fold, two rooms and a doorway, whose rooms **swap sides every ${KEEPER_SWAP_EVERY_TURNS}th turn**. Each card keeps its place inside its room, so what you know stays true, a room's width over. A **pinned** card stays where it is, and so does the card across from it. The swap comes before the Wanderers step. What the Keeper gives when it falls is the door you took before it.`
     },
     {
         id: 'sys_warden',

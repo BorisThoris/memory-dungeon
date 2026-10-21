@@ -1,3 +1,4 @@
+import { KEEPER_RULES_FROM } from './keeper-rules';
 import type {
     FeaturedObjectiveId,
     FloorArchetypeId,
@@ -96,6 +97,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         theme: 'Rush',
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
+    },
+    keeper_hall: {
+        title: 'The Keeper of Halls',
+        hint: 'Two rooms and a doorway, and every fourth turn the rooms swap sides. Each card keeps its place inside its room; a pinned card stays where it is.',
+        theme: 'Keeper',
+        riskProfile: 'The Living Dungeon\u2019s boss: the Fold, with rooms that will not stay put. What you know stays true, a room\u2019s width over.'
     },
     warden_hall: {
         title: "The Warden's Hall",
@@ -493,6 +500,9 @@ export const DESCENT_ACTS: readonly DescentActDefinition[] = [
     }
 ];
 
+/** The Keeper of Halls (DGE-011): a Fold whose rooms swap; the spotlight stays, the restless drift goes (one board-mover is the rule). */
+const KEEPER_BOSS_ENTRY = makeEntry(12, 'keeper_hall', 'cursed_last', ['shifting_spotlight'], 'boss');
+
 /** The Descent's last floor: the Warden's (DGE-005). */
 export const DESCENT_FLOOR_COUNT = 60;
 
@@ -778,7 +788,8 @@ export const pickFloorScheduleEntry = (
         idx + 1 === BOSS_ROTATION_CYCLE_POSITION
             ? POSITION_NINE_ROTATION[cycleIndex % POSITION_NINE_ROTATION.length]
             : undefined;
-    const actBoss = act.bossFloor === descentFloor ? act.boss : null;
+    // The Keeper of Halls (DGE-011, `keeper-rules.ts`): from rules 81 the Living Dungeon's boss is its own hall.
+    const actBoss = act.bossFloor === descentFloor ? (act.id === 'living_dungeon' && rulesVersion >= KEEPER_RULES_FROM ? KEEPER_BOSS_ENTRY : act.boss) : null;
     const legacyBase = actBoss ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
         : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;

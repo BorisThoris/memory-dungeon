@@ -1,3 +1,4 @@
+import { KEEPER_RULES_FROM, KEEPER_SWAP_EVERY_TURNS, isKeeperFloor } from '../../shared/keeper-rules';
 import type { CarveDirection } from '../../shared/contracts';
 import { heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS } from '../../shared/run-relic-rules';
 import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
@@ -1614,8 +1615,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // The Warden's two rules hang in the crown for the whole floor (DGE-005): the caption that also says
     // them is for screen readers only, so this is where a player sees them before the first flip.
     const wardenRulesShown = isWardenFloor(run.board);
+    const keeperRulesShown = isKeeperFloor(run.board) && (run.runRulesVersion ?? 0) >= KEEPER_RULES_FROM;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2172,6 +2174,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {keeperRulesShown ? (
+                                    <p className={styles.wardenRules} data-testid="keeper-rules">
+                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.keeperKicker}</span>{' '}
+                                        {RUN_SHELL_LINE_COPY.keeperRules(KEEPER_SWAP_EVERY_TURNS, KEEPER_SWAP_EVERY_TURNS - (run.turnsThisFloor % KEEPER_SWAP_EVERY_TURNS))}
+                                    </p>
+                                ) : null}
                                 {wardenRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="warden-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
