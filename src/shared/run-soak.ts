@@ -64,13 +64,22 @@ export interface SoakPlayer {
      * different one once it is, which is the reaction and, since 2026-10-02, the only pop.
      */
     elementRate: number;
+    /** Pairs held before a release (`hold-rules.ts`); three when unset. */
+    readonly holdRelease?: number;
 }
 
-export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild', SoakPlayer>> = {
+export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild' | 'planned', SoakPlayer>> = {
     careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.9 },
     average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 },
     sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08, zoneRate: 0.5, elementRate: 0.2 },
-    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 }
+    wild: { wild: true, missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 },
+    /*
+     * The player the Deep Game pack plays for (DGE-027): good but not perfect, who plans - holds for a
+     * stack of five before releasing, so the new verbs meet every invariant in whole runs with the
+     * stacks a player who waits would build. The plan also had it take raging doors; current runs
+     * travel to a seeded realm with no door to choose, so there is nothing for it to take.
+     */
+    planned: { missRate: 0.1, bombRate: 0.4, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.8, holdRelease: 5 }
 };
 
 export interface SoakViolation {
@@ -102,6 +111,8 @@ export interface SoakRunReport {
     /** The Hold (`hold-rules.ts`): releases made, and pairs the releases popped. */
     holdsReleased: number;
     holdPairsPopped: number;
+    /** The most pairs one release held (the planned player waits for five). */
+    largestRelease: number;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
@@ -651,6 +662,7 @@ export const soakRun = ({
     let stillBellsRung = 0;
     let holdsReleased = 0;
     let holdPairsPopped = 0;
+    let largestRelease = 0;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -855,11 +867,12 @@ export const soakRun = ({
             act('hold', startHold(run));
             continue;
         }
-        if (canReleaseHold(run) && heldPairCount(run) >= 3) {
+        if (canReleaseHold(run) && heldPairCount(run) >= (player.holdRelease ?? 3)) {
             const released = releaseHold(run);
             if (released) {
                 holdsReleased += 1;
                 holdPairsPopped += released.pairs;
+                largestRelease = Math.max(largestRelease, released.held);
                 act('release', released.run);
                 continue;
             }
@@ -928,6 +941,7 @@ export const soakRun = ({
         stillBellsRung,
         holdsReleased,
         holdPairsPopped,
+        largestRelease,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

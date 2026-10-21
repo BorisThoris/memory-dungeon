@@ -1,7 +1,7 @@
 # DGE-027: Hall rooms, soak invariants and the accountability checklist for every mechanic
 
 ## Status
-Not started
+In progress (standing ticket): the planned soak player and the coverage audit done 2026-10-21; it stays open while the pack adds mechanics.
 
 ## Priority
 P0
@@ -48,3 +48,10 @@ A standing ticket that each mechanic ticket points at, plus the shared work: a h
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21:
+- **The planned player** (`SOAK_PLAYERS.planned`, `run-soak.ts`): misses one turn in ten, plays the elements, and holds for a stack of five before releasing (`holdRelease`); `run-soak.test.ts` requires a release of five. Taking raging doors was dropped: current runs travel to a seeded realm, there is no door to choose (doors retired with DGE-003). Carve and Echo join it when DGE-015 and DGE-019 land.
+- **It found a softlock at once**: on a Layers floor the Hold can keep both halves of a lower pair under held cells, and the unlock lifted one card only. `promoteBeneath` now lifts until a pair is face down. No rules bump: the old behaviour was a stuck board, so no finished run's replay depends on it. Soak, five players x 200 seeds: 0 violations (planned: 4,937 floors).
+- **Coverage**: every one of the graph's 77 mechanics is walked at least twice (`testHallChecksByMechanic`), the `/__hall` list of mechanics without a room is empty.
+- **Census**: of the pack's mechanics only the Wanderers have a counter (run census, 0.383). Dread, the Warden, Endless rent, the Hold, the Fold and Layers carry argued exemptions in `mechanic-accountability.ts`, each naming why the census cannot see it (floors past 24, a verb the census players never press, a shape rather than an event) and what checks it instead. A census that plays floors 25-60 would retire most of them; that is DGE-032's ground.
+- **Room helpers**: `layeredRoom` (two decks) is in `test-hall-rooms.ts`; a Fold room needs only `board: { fold }` on `room()`.

@@ -111,18 +111,19 @@ export const promoteBeneath = (board: BoardState, keepIds: ReadonlySet<string> =
         for (const tile of tiles) if (tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey)) counts.set(tile.pairKey, (counts.get(tile.pairKey) ?? 0) + 1);
         return counts;
     };
-    const onGrid = hiddenOnGrid();
-    if (beneath.some(Boolean) && ![...onGrid.values()].some((n) => n >= 2)) {
+    // Both halves can wait under held cells, so it lifts until a pair is face down or nothing is left to lift.
+    for (let guard = beneath.length; guard > 0; guard -= 1) {
+        const onGrid = hiddenOnGrid();
+        if (!beneath.some(Boolean) || [...onGrid.values()].some((n) => n >= 2)) break;
         const waiting = beneath.findIndex((card) => card != null && onGrid.has(card.pairKey));
         const from = waiting >= 0 ? waiting : beneath.findIndex(Boolean);
         const open = tiles
             .map((tile, cell) => ({ tile, cell }))
             .filter(({ tile, cell }) => isClearedCell(tile) && beneath[cell] == null && !keepIds.has(tile.id))
             .sort((x, y) => distance(from, x.cell) - distance(from, y.cell) || x.cell - y.cell)[0];
-        if (from >= 0 && open) {
-            rise(beneath[from]!, open.cell);
-            beneath[from] = null;
-        }
+        if (from < 0 || !open) break;
+        rise(beneath[from]!, open.cell);
+        beneath[from] = null;
     }
     if (!changed) return board;
     // What rose must still leave a pair that can be turned, as after any break (`realm-weather-rules.ts`).

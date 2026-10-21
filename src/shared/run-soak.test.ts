@@ -22,6 +22,13 @@ describe('the run soak', () => {
         });
     }
 
+    it('plays the planned player as planned: a stack of five held before the release', () => {
+        const reports = Array.from({ length: SOAK_SEEDS }, (_unused, index) =>
+            soakRun({ seed: 11_003 + index * 7_919, player: SOAK_PLAYERS.planned, playerName: 'planned' })
+        );
+        expect(reports.some((report) => report.largestRelease >= 5), 'the planned player never released a stack of five').toBe(true);
+    });
+
     it('exercises the systems it exists to watch', () => {
         const reports = Array.from({ length: SOAK_SEEDS }, (_unused, index) =>
             soakRun({ seed: 9_001 + index * 7_919, player: SOAK_PLAYERS.careful, playerName: 'careful' })
