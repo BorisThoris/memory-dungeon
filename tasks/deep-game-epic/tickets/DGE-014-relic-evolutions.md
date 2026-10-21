@@ -1,7 +1,7 @@
 # DGE-014: Six relic evolutions, blueprints as boss drops
 
 ## Status
-Not started
+Done (2026-10-21), rules 77. Four evolutions live; Unmasking Glass and Echo Chamber evolve and wait for Masks and Echo.
 
 ## Priority
 P0
@@ -51,3 +51,13 @@ A relic at rank 3 held beside its partner at rank 3 is offered its evolution onc
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21, built (rules 77):
+- `src/shared/relic-evolution-rules.ts`: `EVOLUTIONS` (six recipes), `availableEvolutions`, `applyEvolution`, `declineEvolution`, `misersVaultCatches`, `footprintTurns`; `RunState.evolutions`, `declinedEvolutions`, `misersVaultUsedThisFloor`. Kept import-light (types, the relic rules, number guards): the miss bank and the Wanderers import it.
+- **The Tallow Candle had no ranks** and was not sold under camp rules, so four of the six recipes could never be made. From rules 77 it is a fourth ranked camp upgrade (8/14/20 gold; rank N lights the cards beside a floor's first N matches) - which also makes DGE-013's four slots bind.
+- The camp spends on its own, so it buys an evolution on offer before anything else; one it cannot pay for is declined and gone for the run, as the ticket's "declining loses it" says. Price 30 gold.
+- An evolution takes its first ingredient's slot without removing it: every relic effect reads `relicRank`, which needs the relic held, so the ingredient keeps working, and it can be the first of no other evolution.
+- Effects: Lantern of Recall (the lantern's light survives flips and accumulates for the floor), Miser's Vault (once a floor, 10 gold instead of the run-ending miss), Cartographer's Thread (footprints are now turn counts; three), Keystone Heart (a release of ten held pairs or more refills a miss). Unmasking Glass and Echo Chamber evolve and do nothing yet.
+- Soak 5 x 200: 117 evolutions (24 by the average player), 0 violations, with invariants that each had its blueprint and that no two share a first ingredient. The afterglow invariant now judges only light an action newly lit (a Candle given up for the Purse, or Lantern of Recall, leave light that is not the afterglow's).
+- Rules 77 reseed: the wildfire hall room pinned to seed 90211 (its own note already said some seeds land both fires on vine-held cards).
+- Not done: a camp e2e (the camp is automatic; the inventory lists evolutions and blueprints); the six icons (DGE-030); the Warden's condition (DGE-023).

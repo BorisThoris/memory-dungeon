@@ -1,7 +1,7 @@
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
 import { grantMisses, missBankCap, missesLeft } from './miss-bank';
-import { hasRelic, isRelicId, RELICS, usesCampUpgrades, isCampUpgrade, relicRank, campUpgradeBenefit, CAMP_UPGRADE_MAX_RANK, relicSlotsFull, type RelicId } from './run-relic-rules';
+import { hasRelic, isRelicId, RELICS, usesCampUpgrades, isCampUpgrade, relicRank, campUpgradeBenefit, CAMP_UPGRADE_MAX_RANK, CANDLE_RANKS_FROM, relicSlotsFull, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_COST, isElementalStoreId, storeElement, usesElementalLoot, type ElementalStoreId } from './elemental-loot-rules';
@@ -105,6 +105,10 @@ export const CAMP_ITEMS: readonly StoreItemDefinition[] = [
     { id: 'gilded_chain', title: 'Gilded Chain', body: 'Earn extra gold as you keep matching without a miss.', basePrice: 6, priceStep: 5, kind: 'relic' },
     ...STORE_ITEMS.filter(item => ['miss', 'peek', 'bomb'].includes(item.id))
 ];
+/** From rules 77 the camp sells the Tallow Candle in ranks too (DGE-014). */
+const CANDLE_CAMP_ITEM: StoreItemDefinition = { id: 'tallow_candle', title: 'Tallow Candle', body: 'Lights the cards beside a floor\u2019s first matches.', basePrice: 8, priceStep: 6, kind: 'relic' };
+export const campItemsFor = (rulesVersion: number | undefined): readonly StoreItemDefinition[] =>
+    (rulesVersion ?? 0) >= CANDLE_RANKS_FROM ? [...CAMP_ITEMS.slice(0, 3), CANDLE_CAMP_ITEM, ...CAMP_ITEMS.slice(3)] : CAMP_ITEMS;
 const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
 
 export type StoreRun = Pick<
@@ -126,7 +130,7 @@ export type StoreRun = Pick<
  * Older rules retain their seeded stock; current camp rewards use the fixed upgrade stock.
  */
 export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[], rulesVersion = 54): StoreItemId[] => {
-    if (usesCampUpgrades({ runRulesVersion: rulesVersion })) return CAMP_ITEMS.map(item => item.id);
+    if (usesCampUpgrades({ runRulesVersion: rulesVersion })) return campItemsFor(rulesVersion).map(item => item.id);
     if (usesElementalLoot({ runRulesVersion: rulesVersion })) return ELEMENTAL_STORE_ITEMS.map(item => item.id);
     const rng = createMulberry32(hashStringToSeed(`store-stock:${Math.floor(runSeed)}:${Math.floor(floor)}`));
     const stock: StoreItemId[] = ['miss'];
@@ -148,7 +152,7 @@ export const storePurchaseCount = (run: Pick<RunState, 'storePurchases'>, id: St
     runNonNegativeInteger(run.storePurchases?.[id] ?? 0);
 
 export const storePrice = (run: Pick<RunState, 'storePurchases'> & Partial<Pick<RunState, 'runRulesVersion'>>, id: StoreItemId): number => {
-    const item = (usesCampUpgrades(run) ? CAMP_ITEMS : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
+    const item = (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
     return item.basePrice + item.priceStep * storePurchaseCount(run, id);
 };
 
@@ -168,7 +172,7 @@ export interface StoreOfferRow {
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    (usesCampUpgrades(run) ? CAMP_ITEMS : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
+    (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
         const price = storePrice(run, item.id);
         let blocked: StoreOfferRow['blocked'] = null;
         let essenceCost: number | undefined;
@@ -192,6 +196,7 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
             body = rank >= CAMP_UPGRADE_MAX_RANK ? `${campUpgradeBenefit(item.id, rank)}. Maximum rank.`
                 : item.id === 'long_look' ? `Study time: +${rank} → +${rank + 1} seconds on every floor.`
                 : item.id === 'deep_pockets' ? `Miss capacity: ${4 + rank} → ${5 + rank}. Restores 1 miss now, lasting three floors.`
+                : item.id === 'tallow_candle' ? `Lights the cards beside the first ${rank} → ${rank + 1} matches of every floor.`
                 : `Combo payout: ${rank ? rank + 1 : 0} → ${rank + 2} gold every 5 matches in a row.`;
             if (item.id === 'deep_pockets' && missesLeft(run) == null) blocked = 'no_bank';
             if (rank >= CAMP_UPGRADE_MAX_RANK) blocked = 'max_rank';

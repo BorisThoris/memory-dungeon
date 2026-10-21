@@ -1,3 +1,4 @@
+import { hasEvolution } from './relic-evolution-rules';
 import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
@@ -76,8 +77,9 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
                 ? { ...run, flashPairRevealedTileIds: [] }
                 : run;
         // What the lantern lit goes dark the moment the next card is turned, the same way a flash does.
+        // Lantern of Recall keeps its light for the floor (`relic-evolution-rules.ts`).
         const lanternCleared =
-            (runFilteredStringArrayOrNull(flashCleared.lanternLitTileIds)?.length ?? 0) > 0
+            (runFilteredStringArrayOrNull(flashCleared.lanternLitTileIds)?.length ?? 0) > 0 && !hasEvolution(flashCleared, 'lantern_of_recall')
                 ? { ...flashCleared, lanternLitTileIds: [] }
                 : flashCleared;
         // What lightning lit goes dark the same way (`realm-weather-rules.ts`).

@@ -1,3 +1,5 @@
+import { grantMisses, missBankCap } from './miss-bank';
+import { hasEvolution, KEYSTONE_HEART_PAIRS } from './relic-evolution-rules';
 import { promoteRunBeneath } from './board-layers-rules';
 import type { RunState, TileSuit } from './contracts';
 import { isBoardComplete } from './board-inspection';
@@ -148,6 +150,10 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
         }
     };
     // The released cells, and every cell the break cleared, take what lay beneath them (`board-layers-rules.ts`).
-    const risen = promoteRunBeneath(released);
+    // Keystone Heart (`relic-evolution-rules.ts`): a release of ten pairs or more refills a miss.
+    const refilled = hasEvolution(run, 'keystone_heart') && held >= KEYSTONE_HEART_PAIRS && released.missBank
+        ? { ...released, missBank: grantMisses(released.missBank, run.board.level, 1, missBankCap(released)) }
+        : released;
+    const risen = promoteRunBeneath(refilled);
     return { run: isBoardComplete(risen.board!) ? finalizeLevel(risen, risen.board!) : risen, pairs, score, held };
 };

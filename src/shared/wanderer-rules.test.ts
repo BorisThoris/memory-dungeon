@@ -81,7 +81,7 @@ describe('the Wanderers (DGE-009)', () => {
         }
         expect(run.wandererStepsThisFloor).toBe(wandererFootprintCells(run.board).length);
         // The footprint is on the card traded into the cell, face down, and the player can see it.
-        expect(playerVisibleTile(run.board!.tiles[wandererFootprintCells(run.board)[0]!]!).footprint).toBe(true);
+        expect(playerVisibleTile(run.board!.tiles[wandererFootprintCells(run.board)[0]!]!).footprint).toBe(1);
         expect(inspectBoardFairness(run.board!).issues ?? []).toEqual([]);
         // The next turn the footprints are gone.
         run = plainMiss(run);

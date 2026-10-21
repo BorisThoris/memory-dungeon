@@ -1,3 +1,6 @@
+import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
+import { runBlueprints } from '../../shared/boss-reward-rules';
+import { blueprintLine, EVOLUTION_LINES } from '../copy/relicEvolutionCopy';
 import { useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
@@ -12,7 +15,7 @@ import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
-import { CAMP_UPGRADE_IDS, CURIO_RELIC_IDS, hasRelic, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit, heldRelicIds, RELIC_SLOTS, RELIC_SLOTS_FROM } from '../../shared/run-relic-rules';
+import { campUpgradeIdsFor, CURIO_RELIC_IDS, hasRelic, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit, heldRelicIds, RELIC_SLOTS, RELIC_SLOTS_FROM } from '../../shared/run-relic-rules';
 import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import { runGold } from '../../shared/run-store-rules';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
@@ -143,9 +146,17 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 {run.runRulesVersion >= RELIC_SLOTS_FROM ? (
                     <p className={styles.upgradesNote} data-testid="inventory-relic-slots">{RELIC_SLOT_COPY.slotsLine(heldRelicIds(run).length, RELIC_SLOTS)}</p>
                 ) : null}
-                <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
+                <ul className={styles.chips}>{campUpgradeIdsFor(run).map(id => <li className={styles.chip} key={id}>
                     <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
                     <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
+                </li>)}
+                {(run.evolutions ?? []).map((id) => <li className={styles.chip} data-testid={`inventory-evolution-${id}`} key={id}>
+                    <strong>{EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id} · Evolved</strong>
+                    <span>{EVOLUTION_LINES[id as keyof typeof EVOLUTION_LINES] ?? ''}</span>
+                </li>)}
+                {runBlueprints(run).filter((id) => !(run.evolutions ?? []).includes(id)).map((id) => <li className={styles.chip} data-testid={`inventory-blueprint-${id}`} key={`blueprint-${id}`}>
+                    <strong>Blueprint: {EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id}</strong>
+                    <span>{blueprintLine(id)}</span>
                 </li>)}
                 {CURIO_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
                     <strong>{relicDefinition(id).title}</strong>

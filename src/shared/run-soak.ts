@@ -1,5 +1,6 @@
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
+import { EVOLUTIONS, hasEvolution } from './relic-evolution-rules';
 import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
 import { tileCanBreakInChunk } from './chunk-break-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
@@ -117,6 +118,9 @@ export interface SoakRunReport {
     /** Boss rewards (`boss-reward-rules.ts`): blueprints held at the end, and boss doors walked through. */
     blueprints: number;
     bossDoorsTaken: number;
+    /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
+    evolutions: number;
+    firstEvolutionFloor: number | null;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
@@ -329,10 +333,17 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         return bad.length === 0 ? null : bad.map(([name, value]) => `${name}=${String(value)}`).join(', ');
     },
     'the afterglow lights no more cards than the heat the run carried in allows': (before, run, action) => {
-        if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle')) return null;
+        // A Candle given up for the Purse (DGE-013) leaves what it lit lit until the next flip.
+        if (!before || hasMutator(run, 'lantern_light') || hasRelic(run, 'tallow_candle') || hasRelic(before, 'tallow_candle')) return null;
+        // Lantern of Recall keeps what it lit lit for the floor (`relic-evolution-rules.ts`).
+        if (hasEvolution(run, 'lantern_of_recall')) return null;
         // A Zone replays several turns in one action, and the combo its matches build lights the
         // later ones: the heat carried into the action is not the heat the last turn resolved on.
         if (action === 'zone-flip' || action === 'zone-resolve') return null;
+        // What this action lit: light carried over unchanged (a Candle since given up, a no-op flip) is not the afterglow's.
+        const wasLit = new Set(before.lanternLitTileIds ?? []);
+        const nowLit = run.lanternLitTileIds ?? [];
+        if (nowLit.length === wasLit.size && nowLit.every((id) => wasLit.has(id))) return null;
         const lit = Array.isArray(run.lanternLitTileIds) ? run.lanternLitTileIds.length : 0;
         const allowed = runComboHeatPerks(before).afterglow;
         return lit <= allowed ? null : `${lit} lit at a combo of ${before.stats.currentStreak}, which allows ${allowed}`;
@@ -449,6 +460,13 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         run.status === 'levelComplete' && run.board?.beneath?.some(Boolean) ? 'the floor cleared with cards still beneath it' : null,
     'a run never holds more relics than its slots': (_before, run) =>
         (run.runRulesVersion ?? 0) >= RELIC_SLOTS_FROM && heldRelicIds(run).length > RELIC_SLOTS ? `${heldRelicIds(run).length} relics: ${heldRelicIds(run).join(',')}` : null,
+    'an evolution is bought only with its blueprint, and two never share a first ingredient': (_before, run) => {
+        const evolved = run.evolutions ?? [];
+        const missing = evolved.filter((id) => !(run.blueprints ?? []).includes(id));
+        if (missing.length > 0) return `evolved without a blueprint: ${missing.join(',')}`;
+        const firsts = evolved.map((id) => EVOLUTIONS.find((recipe) => recipe.id === id)?.from[0]);
+        return new Set(firsts).size === firsts.length ? null : `two evolutions on one first ingredient: ${evolved.join(',')}`;
+    },
     'blueprints drop in order and never twice': (_before, run) => {
         const held = run.blueprints ?? [];
         return held.every((id, index) => id === BLUEPRINT_ORDER[index]) ? null : `blueprints out of order: ${held.join(',')}`;
@@ -675,6 +693,7 @@ export const soakRun = ({
     let holdPairsPopped = 0;
     let largestRelease = 0;
     let bossDoorsTaken = 0;
+    let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
     let relicsBought = 0;
@@ -747,6 +766,7 @@ export const soakRun = ({
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        if (firstEvolutionFloor === null && (next.evolutions ?? []).length > 0) firstEvolutionFloor = next.board?.level ?? null;
         if (next.board?.level === run.board?.level) layerCardsRisen += Math.max(0, (next.layerCardsRisenThisFloor ?? 0) - (run.layerCardsRisenThisFloor ?? 0));
         if (next.board?.level === run.board?.level) wandererSteps += Math.max(0, (next.wandererStepsThisFloor ?? 0) - (run.wandererStepsThisFloor ?? 0));
         hourglassesCaught += Math.max(0, (next.hourglassesCaughtThisRun ?? 0) - (run.hourglassesCaughtThisRun ?? 0));
@@ -958,6 +978,8 @@ export const soakRun = ({
         holdPairsPopped,
         largestRelease,
         blueprints: runBlueprints(run).length,
+        evolutions: (run.evolutions ?? []).length,
+        firstEvolutionFloor,
         bossDoorsTaken,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,

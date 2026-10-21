@@ -1,3 +1,4 @@
+import { footprintTurns } from './relic-evolution-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
@@ -127,14 +128,14 @@ export const resolveWandererSteps = ({
 };
 
 /** The steps applied: each Wanderer trades cells with the card it stepped onto, which wears the footprint. */
-export const applyWandererSteps = (board: BoardState, steps: readonly WandererStep[]): BoardState => {
+export const applyWandererSteps = (board: BoardState, steps: readonly WandererStep[], footprintTurns = 1): BoardState => {
     if (steps.length === 0) return board;
     const tiles = [...board.tiles];
     for (const { from, to } of steps) {
         const walker = tiles[from];
         const other = tiles[to];
         if (!walker || !other) continue;
-        tiles[from] = { ...other, footprint: true };
+        tiles[from] = { ...other, footprint: footprintTurns };
         tiles[to] = walker;
     }
     return { ...board, tiles };
@@ -144,9 +145,19 @@ export const applyWandererSteps = (board: BoardState, steps: readonly WandererSt
 export const wandererFootprintCells = (board: BoardState | null | undefined): number[] =>
     (board?.tiles ?? []).flatMap((tile, index) => (tile.footprint && tile.state === 'hidden' ? [index] : []));
 
+/** A turn's wear on the footprints: each lasts its turns (one, three with the Cartographer's Thread), then goes. */
 const withoutFootprints = (board: BoardState): BoardState =>
     board.tiles.some((tile) => tile.footprint)
-        ? { ...board, tiles: board.tiles.map((tile) => (tile.footprint ? (({ footprint: _footprint, ...rest }) => rest)(tile) : tile)) }
+        ? {
+              ...board,
+              tiles: board.tiles.map((tile) => {
+                  if (!tile.footprint) return tile;
+                  const left = (typeof tile.footprint === 'number' ? tile.footprint : 1) - 1;
+                  if (left > 0) return { ...tile, footprint: left };
+                  const { footprint: _footprint, ...rest } = tile;
+                  return rest;
+              })
+          }
         : board;
 
 /**
@@ -172,7 +183,7 @@ export const applyWandererTurn = (before: RunState, after: RunState): RunState =
     if (steps.length === 0) return cleared;
     return {
         ...cleared,
-        board: applyWandererSteps(board, steps),
+        board: applyWandererSteps(board, steps, footprintTurns(after)),
         wandererStepsThisFloor: runNonNegativeInteger(after.wandererStepsThisFloor) + steps.length
     };
 };

@@ -26,9 +26,10 @@ import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
+import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 103 as const;
+export const ENCYCLOPEDIA_VERSION = 104 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -380,7 +381,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
             'Choose automatic spending in Classic setup: **Survive** prioritizes misses, capacity and bombs; **Study** prioritizes study time and peeks; **Score** prioritizes combo gold. The default keeps the balanced policy. Each preference falls back to the balanced policy when its priority is unavailable. Shared keys and rematches retain the preference. ' +
             'Clear floors and build combos to earn **gold**. A clear pays two gold, plus one per chain rung and up to three for turns under par. Arena difficulty can increase the payout. ' +
             'After every third floor, **camp automatically spends gold** on one useful reward. It restores a miss first when only one remains; otherwise it chooses the lowest-rank affordable upgrade, then a missing supply. There is no shop screen. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
-            '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). Each upgrade has three ranks and lasts this run. ' +
+            '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). **Tallow Candle** lights the cards beside the first one, two or three matches of every floor (8, 14, 20 gold). Each upgrade has three ranks and lasts this run. ' +
             'When an upgrade is not affordable, camp can restore a miss for 4 gold, a missing peek for 3 or a missing bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
             'A run carries **four relics** at most: camp never buys a fifth, and a relic found beyond the four asks which one to give up, its ranks with it. ' +
             'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is chosen for you, except on the clear before an act boss, which offers three doors.'
@@ -505,6 +506,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             'It never falls in a run and nothing you play moves it. Its tiers, the next always named before it arrives: ' +
             DREAD_TIERS.map((tier) => `**${tier.name}**`).join(', ') +
             '. Past the last, it only deepens.'
+    },
+    {
+        id: 'sys_relic_evolutions',
+        title: 'Relic evolutions',
+        description:
+            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** and **Echo Chamber** wait for mechanics still to come.`
     },
     {
         id: 'sys_boss_rewards',

@@ -2577,6 +2577,43 @@
             ]
         },
         {
+            "id": "inventory.relic_evolutions",
+            "label": "Relic evolutions",
+            "kind": "inventory",
+            "role": "two_relics_at_rank_3_with_the_bosss_blueprint_evolve_at_camp_once_for_gold_into_one_of_six_evolutions",
+            "evidence": [
+                "src/shared/relic-evolution-rules.ts",
+                "src/shared/automatic-camp-rules.ts",
+                "src/shared/miss-bank.ts",
+                "src/shared/wanderer-rules.ts",
+                "src/shared/hold-rules.ts",
+                "src/shared/flip-tile-transition.ts",
+                "src/renderer/components/InventoryScreen.tsx"
+            ],
+            "reads": [
+                "blueprints",
+                "storePurchases",
+                "gold",
+                "evolutions"
+            ],
+            "writes": [
+                "evolutions",
+                "gold"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "an-evolution-needs-its-blueprint",
+                "two-evolutions-never-share-a-first-ingredient",
+                "the-vault-catches-once-a-floor"
+            ],
+            "tests": [
+                "src/shared/relic-evolution-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "progression.boss_reward",
             "label": "Boss rewards by the door",
             "kind": "progression",
@@ -4134,6 +4171,12 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the rent and what the floor has paid, in the milestone cell, and THE DEPTHS COLLECT on the results"
+        },
+        {
+            "source": "inventory.relic_evolutions",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the evolutions held and the blueprints waiting, in the inventory, and the camp line that evolved one"
         },
         {
             "source": "progression.boss_reward",

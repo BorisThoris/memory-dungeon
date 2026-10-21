@@ -117,12 +117,18 @@ export const relicDefinition = (id: RelicId): RelicDefinition => RELICS.find((re
 export const CAMP_RULES_VERSION = 58;
 export const CAMP_UPGRADE_MAX_RANK = 3;
 export const CAMP_UPGRADE_IDS = ['long_look', 'deep_pockets', 'gilded_chain'] as const;
-export type CampUpgradeId = typeof CAMP_UPGRADE_IDS[number];
+/** From rules 77 the Tallow Candle is a fourth camp upgrade with ranks: four of the six evolutions need it at rank 3 (DGE-014). */
+export const CANDLE_RANKS_FROM = 77;
+export const CAMP_UPGRADE_IDS_WITH_CANDLE = [...CAMP_UPGRADE_IDS, 'tallow_candle'] as const;
+export type CampUpgradeId = typeof CAMP_UPGRADE_IDS_WITH_CANDLE[number];
+/** The camp upgrades a run's rules sell. */
+export const campUpgradeIdsFor = (run: Partial<Pick<RunState, 'runRulesVersion'>>): readonly CampUpgradeId[] =>
+    (run.runRulesVersion ?? 0) >= CANDLE_RANKS_FROM ? CAMP_UPGRADE_IDS_WITH_CANDLE : CAMP_UPGRADE_IDS;
 type RelicRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion'>>;
 export const usesCampUpgrades = (run: Partial<Pick<RunState, 'runRulesVersion'>>): boolean =>
     (run.runRulesVersion ?? 0) >= CAMP_RULES_VERSION;
 export const isCampUpgrade = (id: string): id is CampUpgradeId =>
-    (CAMP_UPGRADE_IDS as readonly string[]).includes(id);
+    (CAMP_UPGRADE_IDS_WITH_CANDLE as readonly string[]).includes(id);
 export const relicRank = (run: RelicRun, id: RelicId): number => {
     if (!hasRelic(run, id)) return 0;
     const bought = run.storePurchases?.[id] ?? 1;
@@ -136,5 +142,6 @@ export const gildedChainGold = (run: RelicRun): number => {
 export const campUpgradeBenefit = (id: CampUpgradeId, rank: number): string => {
     if (id === 'long_look') return `+${rank} sec to study every floor`;
     if (id === 'deep_pockets') return `${4 + rank} miss capacity`;
+    if (id === 'tallow_candle') return `Lights the first ${rank} ${rank === 1 ? 'match' : 'matches'} of every floor`;
     return `${rank ? GILDED_CHAIN_GOLD + rank - 1 : 0} gold per 5 matches in a row`;
 };

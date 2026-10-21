@@ -1,3 +1,4 @@
+import { hasEvolution } from './relic-evolution-rules';
 import { applyLayerTurn } from './board-layers-rules';
 import { claimCurio } from './curio-rules';
 import { applyWardenTurn } from './warden-rules';
@@ -18,7 +19,7 @@ import { clearResolveState } from './run-timer-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { LANTERN_MAX_LIT, resolveLanternLight } from './lantern-light-rules';
 import { comboHeatPerksActive, runComboHeatPerks } from './combo-heat-perks';
-import { hasRelic } from './run-relic-rules';
+import { hasRelic, relicRank, CANDLE_RANKS_FROM } from './run-relic-rules';
 import { ANCHOR_BONUS_LINKS, resolveAnchorAfterMatch } from './n-back-anchor-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
 import { lookingGlassSwaps, lookingGlassTurnsOnMatch } from './looking-glass-rules';
@@ -261,7 +262,9 @@ export const createResolveBoardTurnTransition = ({
         // The lantern hall lights every match; the Tallow Candle relic lights a floor's first one;
         // the combo's afterglow lights one to three from Hot (`combo-heat-perks.ts`), on the heat
         // the run carried into the turn.
-        const candleLit = hasRelic(run, 'tallow_candle') && runNonNegativeInteger(sourceBoard.matchedPairs) === 0;
+        // From rules 77 the Candle has ranks: it lights the floor's first one, two or three matches (DGE-014).
+        const candleLit = hasRelic(run, 'tallow_candle') &&
+            runNonNegativeInteger(sourceBoard.matchedPairs) < ((run.runRulesVersion ?? 0) >= CANDLE_RANKS_FROM ? relicRank(run, 'tallow_candle') : 1);
         const heatPerks = runComboHeatPerks(run);
         const lanternLights = hasMutator(run, 'lantern_light') || candleLit;
         const lanternMax = lanternLights ? LANTERN_MAX_LIT : heatPerks.afterglow;
@@ -335,7 +338,10 @@ export const createResolveBoardTurnTransition = ({
             restlessDriftsThisFloor:
                 runNonNegativeInteger(run.restlessDriftsThisFloor) + (drift?.kind === 'drift' ? 1 : 0),
             lookingGlassTurnsThisFloor: runNonNegativeInteger(run.lookingGlassTurnsThisFloor) + (glassTurns ? 1 : 0),
-            lanternLitTileIds: lanternLit,
+            // Lantern of Recall (`relic-evolution-rules.ts`): what was lit stays lit for the floor, the new light added to it.
+            lanternLitTileIds: hasEvolution(run, 'lantern_of_recall')
+                ? [...new Set([...(run.lanternLitTileIds ?? []), ...lanternLit])].filter((id) => boardAfterRealm.tiles.some((tile) => tile.id === id && tile.state === 'hidden'))
+                : lanternLit,
             // The lantern's own count: the afterglow is counted by the heat perks, not here.
             lanternLightsThisFloor: runNonNegativeInteger(run.lanternLightsThisFloor) + (lanternLights && lanternLit.length > 0 ? 1 : 0),
             heatPerkTurnsThisFloor: runNonNegativeInteger(run.heatPerkTurnsThisFloor) + (comboHeatPerksActive(heatPerks) ? 1 : 0),

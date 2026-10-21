@@ -1,6 +1,7 @@
 import type { RunState } from './contracts';
 import { isPassAndPlayRun } from './pass-and-play-rules';
-import { CAMP_UPGRADE_IDS, relicRank } from './run-relic-rules';
+import { campUpgradeIdsFor, relicRank } from './run-relic-rules';
+import { applyEvolution, availableEvolutions, declineEvolution, EVOLUTION_PRICE } from './relic-evolution-rules';
 import { buyStoreItem, isStoreStopFloor, storeOffer, type StoreOfferRow } from './run-store-rules';
 import { missesLeft } from './miss-bank';
 
@@ -14,7 +15,8 @@ export interface CampReward {
  * Preview and application share this function; only floor advancement commits the result.
  * Earlier shared-run versions retain their original progression rules.
  */
-export function automaticCampReward(run: RunState): CampReward {
+export function automaticCampReward(start: RunState): CampReward {
+    let run = start;
     if (
         (run.runRulesVersion ?? 0) < AUTOMATIC_CAMP_RULES_VERSION ||
         run.status !== 'levelComplete' ||
@@ -24,9 +26,17 @@ export function automaticCampReward(run: RunState): CampReward {
     ) {
         return { run, receipt: null };
     }
+    // An evolution on offer comes first (`relic-evolution-rules.ts`): bought if the gold is there, lost for the run if not.
+    const offered = availableEvolutions(run);
+    if (offered.length > 0) {
+        const recipe = offered[0]!;
+        const evolved = applyEvolution(run, recipe.id);
+        if (evolved) return { run: evolved, receipt: `Camp: ${recipe.title} evolved · ${EVOLUTION_PRICE} gold used automatically.` };
+        run = declineEvolution(run, recipe.id);
+    }
     const available = storeOffer(run).filter((row) => row.blocked === null);
     const find = (id: string) => available.find((row) => row.id === id);
-    const upgrades = [...CAMP_UPGRADE_IDS].sort((a, b) => relicRank(run, a) - relicRank(run, b));
+    const upgrades = [...campUpgradeIdsFor(run)].sort((a, b) => relicRank(run, a) - relicRank(run, b));
     const preference = (run.runRulesVersion ?? 0) >= 64 ? run.campPreference : undefined;
     const preferred = preference === 'study' ? ['long_look', 'peek']
         : preference === 'score' ? ['gilded_chain']

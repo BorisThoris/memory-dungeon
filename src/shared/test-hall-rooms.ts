@@ -41,6 +41,7 @@ import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-ru
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
 import { BLUEPRINT_ORDER, BOSS_WILD_GOLD } from './boss-reward-rules';
+import { MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /**
  * The test hall: one small authored room per mechanic, the game-dev "flat" where every system can
@@ -89,6 +90,8 @@ export type TestHallRoomId =
     | 'warden-redeal'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
+    | 'evolution-at-camp'
+    | 'misers-vault'
     | 'boss-doors'
     | 'boss-raging-blueprint'
     | 'boss-wild-gold'
@@ -1056,6 +1059,39 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return r.status === 'levelComplete' && paid >= rent ? null : `status ${r.status}, paid ${paid} of ${rent}`;
                 }
             }
+        ]
+    },
+    {
+        id: 'evolution-at-camp',
+        title: 'An evolution at camp',
+        mechanic: 'Two relics at rank 3 and the boss\u2019s blueprint for them: the next camp evolves them, for gold, before buying anything else.',
+        graphMechanicIds: ['inventory.relic_evolutions', 'progression.store_stop'],
+        tryThis: 'Clear floor 27 holding Long Look and the Tallow Candle at rank 3 and the Lantern of Recall blueprint: the camp evolves them.',
+        build: () =>
+            room(['a:e b:t', 'b:t a:e'], {
+                level: 27,
+                run: {
+                    gold: 60,
+                    relics: ['long_look', 'tallow_candle'] as RunState['relics'],
+                    storePurchases: { long_look: 3, tallow_candle: 3 },
+                    blueprints: ['lantern_of_recall']
+                }
+            }),
+        script: [
+            { step: { do: 'clear' }, says: 'the camp floor clears', expect: statusIs('levelComplete') },
+            { step: { do: 'advance' }, says: 'the camp evolves the pair into the Lantern of Recall', expect: (r) => ((r.evolutions ?? []).includes('lantern_of_recall') ? null : `evolutions ${String(r.evolutions)}`) }
+        ]
+    },
+    {
+        id: 'misers-vault',
+        title: "Miser's Vault catches the last miss",
+        mechanic: "With the Miser's Vault, once a floor a miss on an empty bank costs gold instead of the run.",
+        graphMechanicIds: ['inventory.relic_evolutions', 'economy.miss_bank'],
+        tryThis: 'An empty bank and the Vault: miss once and pay ten gold; miss again and the run ends.',
+        build: () => room(['a:e b:t c:m', 'a:e b:t c:m'], { level: 27, misses: 0, run: { gold: 25, evolutions: ['misers_vault'] } }),
+        script: [
+            { step: { do: 'miss', a: 'a-1', b: 'b-1' }, says: 'the Vault pays the miss', expect: (r) => (r.status === 'playing' && runGold(r) === 25 - MISERS_VAULT_GOLD && r.misersVaultUsedThisFloor ? null : `status ${r.status}, gold ${runGold(r)}`) },
+            { step: { do: 'miss', a: 'a-1', b: 'c-1' }, says: 'once a floor: the second ends the run', expect: statusIs('gameOver') }
         ]
     },
     {
@@ -2166,7 +2202,8 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
         seedPinned: 'Wildfire lights cards drawn from the run seed, and at some seeds both land on vine-held cards no turn can douse.',
-        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0 }) }),
+        // Seed 90211 since rules 77: the reseed put the hall's own seed's two fires on vine-held cards.
+        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0, runSeed: 90_211 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
             { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },

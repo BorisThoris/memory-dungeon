@@ -1,3 +1,4 @@
+import { misersVaultCatches, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 import { pairsForFloor } from './pair-curve';
 import type { MissBankGrant, RunState } from './contracts';
 import { clearResolveState } from './run-timer-rules';
@@ -215,6 +216,10 @@ export const applyMissBudget = (before: RunState, after: RunState): RunState => 
     }
     if (after.status !== 'playing') {
         return after;
+    }
+    // Miser's Vault (`relic-evolution-rules.ts`): once a floor the miss that would end the run is paid in gold.
+    if (misersVaultCatches(after)) {
+        return { ...after, gold: runNonNegativeInteger(after.gold ?? 0) - MISERS_VAULT_GOLD, misersVaultUsedThisFloor: true };
     }
     return {
         ...after,
