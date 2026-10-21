@@ -1,3 +1,4 @@
+import { boardDealKey } from '../../shared/board-layers-rules';
 import type { RunState, ViewState } from '../../shared/contracts';
 import {
     completeMemorizePhaseThroughGameplayCore,
@@ -88,13 +89,8 @@ export const createRunTimerController = ({
         setMemorizeClock(null);
     };
 
-    const getMemorizeBoardKey = (run: RunState): string | null =>
-        run.board
-            ? `${run.board.level}|${run.board.columns}x${run.board.rows}|${[...run.board.tiles]
-                  .map((t) => t.id)
-                  .sort()
-                  .join('|')}`
-            : null;
+    // The board's own key for the deal (`boardDealKey`): a Layers floor keys on both decks.
+    const getMemorizeBoardKey = (run: RunState): string | null => (run.board ? boardDealKey(run.board) : null);
 
     const prepareMemorizeTimerForBoardReady = (run: RunState): void => {
         clearMemorizeTimer();

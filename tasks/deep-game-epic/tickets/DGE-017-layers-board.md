@@ -64,3 +64,8 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Rules 72 reseed: the Still Bell test accepts `empowered` (weather that meets only its own element), the version gate, fifteen ledger notes requoted.
 - Checklist rows ticked: rules module, generation gate (`LAYERS_RULES_FROM`), hall rooms `layers-rise` / `layers-pop-risen` (three seeds), soak invariants (no cleared cell over a waiting card; a floor ends only when both decks are cleared) and counters, graph node `board.layers`, ledger entry, census exemption (the censuses stop at 24), Codex `sys_layers` (encyclopedia 101), a look in the browser.
 - Not done: the rise animation and its reduced-motion swap; `yarn sim:endless --deep-floors` coverage; per-archetype lower-deck profiles (the lower deck is two seeded elements on every Layers floor).
+
+2026-10-21, fixed after DGE-023: every Layers floor's study never started. `TileBoard` keyed a two-deck floor on
+`layerKey` and the study timer (`runTimerController.ts`) on the tile ids, so the board-ready handshake never matched
+and memorize sat at its full count (the test-pace playtest stalled on floor 25). Both now use `boardDealKey`
+(`board-layers-rules.ts`); a unit test pins it. Hall rooms boot straight into play, which is why they never saw it.

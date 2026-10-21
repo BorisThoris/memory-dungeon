@@ -1,3 +1,4 @@
+import { boardDealKey } from '../../shared/board-layers-rules';
 import { boardFitFrame, boardGridWorldSize } from './tileBoardResponsiveLayout';
 import { colossusFitLift, colossusReservedRows } from './colossusStoneLayout';
 import { Canvas } from '@react-three/fiber';
@@ -891,7 +892,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardEntranceKey = useMemo(
         () =>
             // A two-deck floor keys on every id it was dealt (`board-layers-rules.ts`): a card rising into a cleared cell is not a new deal.
-            `${board.level}|${board.columns}x${board.rows}|${board.layerKey ?? [...board.tiles].map((t) => t.id).sort().join('|')}`,
+            boardDealKey(board),
         [board.columns, board.layerKey, board.level, board.rows, board.tiles]
     );
     const prevBoardEntranceKeyRef = useRef<string | null>(null);

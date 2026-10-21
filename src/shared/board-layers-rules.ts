@@ -44,6 +44,14 @@ export const isLayersFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'fo
     !(rulesVersion >= LAYERS_APART_FROM && board.floorArchetypeId === 'restless_hall') &&
     board.tiles.length >= 8;
 
+/**
+ * The key a dealt floor is known by, on both sides of the memorize handshake: the board's entrance
+ * (`TileBoard.tsx`) and the study timer that waits for it (`runTimerController.ts`). A two-deck floor
+ * keys on `layerKey`. The two once computed it apart, and every Layers floor's study never started.
+ */
+export const boardDealKey = (board: Pick<BoardState, 'level' | 'columns' | 'rows' | 'tiles' | 'layerKey'>): string =>
+    `${board.level}|${board.columns}x${board.rows}|${board.layerKey ?? [...board.tiles].map((tile) => tile.id).sort().join('|')}`;
+
 /** Every id the floor's two decks were dealt with: the renderer's key for the floor, which promotion never changes. */
 export const layerKeyOf = (tiles: readonly Tile[], beneath: readonly (Tile | null)[]): string =>
     [...tiles.map((tile) => tile.id), ...beneath.flatMap((tile) => (tile ? [tile.id] : []))].sort().join('|');

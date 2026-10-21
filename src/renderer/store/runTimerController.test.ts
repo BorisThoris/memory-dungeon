@@ -1,3 +1,4 @@
+import { boardDealKey } from '../../shared/board-layers-rules';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RunState, ViewState } from '../../shared/contracts';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
@@ -61,6 +62,17 @@ describe('runTimerController', () => {
         await vi.advanceTimersByTimeAsync(201);
         expect(harness.state.run?.status).toBe('playing');
         expect(harness.state.run?.board?.columns).toBe(1);
+    });
+
+    it('keys a two-deck floor the way the board does, so its study starts', async () => {
+        vi.useFakeTimers();
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
+        const run: RunState = { ...base, board: { ...base.board!, layerKey: 'both-decks' }, timerState: { ...base.timerState, memorizeRemainingMs: 500 } };
+        const harness = createHarnessWithCallbacks(run);
+        harness.timer.prepareMemorizeTimerForBoardReady(run);
+        harness.timer.notifyMemorizeBoardReady(boardDealKey(run.board!));
+        await vi.advanceTimersByTimeAsync(501);
+        expect(harness.state.run?.status).toBe('playing');
     });
 
     it('starts memorize countdown only after the matching board-ready key arrives', async () => {

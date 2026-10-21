@@ -129,8 +129,20 @@ const playRun = async (
                 await shot(`store-after-${level}`);
                 await descend.click();
             }
-            // The travel doors (`realm-rules.ts`): pick one, the way a player picks where to go.
-            const door = page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
+            // The travel doors (`realm-rules.ts`): pick one, the way a player picks where to go. Before the
+            // Warden this player takes the calm door: behind the others the Warden falls only to a Hold of
+            // twelve (DGE-023), which this player does not build.
+            const wardenNext = await page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const { nextDescentLevel } = await import('/src/shared/descent-pace-rules.ts');
+                const { DESCENT_FLOOR_COUNT, descentActForFloor, isActBossFloor } = await import('/src/shared/floor-mutator-schedule.ts');
+                const run = useAppStore.getState().run;
+                if (!run?.board) return false;
+                const next = nextDescentLevel(run);
+                return isActBossFloor(next) && descentActForFloor(next).bossFloor === DESCENT_FLOOR_COUNT;
+            });
+            const calmDoor = page.locator('[data-testid^="realm-door-"][data-severity="calm"]').first();
+            const door = wardenNext && (await calmDoor.isVisible().catch(() => false)) ? calmDoor : page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
             if (await door.isVisible().catch(() => false)) {
                 await shot(`travel-after-${level}`);
                 await door.click();
