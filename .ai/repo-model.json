@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3282,
     "codeFileCount": 1252,
-    "exportedSymbolCount": 4014,
+    "exportedSymbolCount": 4013,
     "contentItemCount": 16,
     "mechanicCount": 78,
     "stateFieldCount": 152,
-    "relationshipCount": 11002
+    "relationshipCount": 11001
   },
   "inventory": [
     {
@@ -16563,14 +16563,14 @@
     {
       "path": "src/shared/run-relic-rules.test.ts",
       "category": "test",
-      "bytes": 4080,
-      "sha256": "a3ef2ab4565e0aa7303544708f39cc2660896649b341be5941eaa5fc63dc8e21"
+      "bytes": 4106,
+      "sha256": "dea5116d76683f14b79a74767c45d327fafc33dd8cf8e603500fab7c1f17485f"
     },
     {
       "path": "src/shared/run-relic-rules.ts",
       "category": "source",
-      "bytes": 6614,
-      "sha256": "380dfa9a3926a69bcca8f6e232f9deb1cf96b2e21d17d6ba9c19aa8b20a953cb"
+      "bytes": 6533,
+      "sha256": "d28e26606465b6586b16746d008a005ebad2c2abeee10c7555827c05e2d80c28"
     },
     {
       "path": "src/shared/run-settings-rules.test.ts",
@@ -16911,8 +16911,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 105871,
-      "sha256": "11e12c95ffbb94392d12f74a941921bef53b0d124fe3f999312cddf2bcf026a6"
+      "bytes": 105851,
+      "sha256": "7fd08bc5c31e6c1ce3d5e44d1fbe685cc3efabf33e6c7053fe8de96ea06f78f4"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -41560,7 +41560,7 @@
       "path": "src/shared/run-relic-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 82,
+      "lineCount": 83,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -41578,7 +41578,7 @@
       "path": "src/shared/run-relic-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 143,
+      "lineCount": 141,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -41589,7 +41589,6 @@
         "symbol:src/shared/run-relic-rules.ts#campUpgradeBenefit",
         "symbol:src/shared/run-relic-rules.ts#CampUpgradeId",
         "symbol:src/shared/run-relic-rules.ts#CURIO_RELIC_IDS",
-        "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
         "symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
         "symbol:src/shared/run-relic-rules.ts#gildedChainGold",
         "symbol:src/shared/run-relic-rules.ts#giveUpRelic",
@@ -72362,168 +72361,160 @@
       "name": "CAMP_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 119,
-      "endLine": 119
+      "line": 117,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#CAMP_UPGRADE_IDS",
       "name": "CAMP_UPGRADE_IDS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 119,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#CAMP_UPGRADE_MAX_RANK",
       "name": "CAMP_UPGRADE_MAX_RANK",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 120,
-      "endLine": 120
+      "line": 118,
+      "endLine": 118
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#campUpgradeBenefit",
       "name": "campUpgradeBenefit",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 138,
-      "endLine": 142
+      "line": 136,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#CampUpgradeId",
       "name": "CampUpgradeId",
       "kind": "type",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 122,
-      "endLine": 122
+      "line": 120,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#CURIO_RELIC_IDS",
       "name": "CURIO_RELIC_IDS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 104,
-      "endLine": 104
-    },
-    {
-      "id": "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
-      "name": "DEEP_POCKETS_CAP",
-      "kind": "value",
-      "file": "src/shared/run-relic-rules.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#GILDED_CHAIN_GOLD",
       "name": "GILDED_CHAIN_GOLD",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#gildedChainGold",
       "name": "gildedChainGold",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 134,
-      "endLine": 137
+      "line": 132,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#giveUpRelic",
       "name": "giveUpRelic",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 98,
-      "endLine": 101
+      "line": 96,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#hasRelic",
       "name": "hasRelic",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 114,
-      "endLine": 114
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#heldRelicIds",
       "name": "heldRelicIds",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 91,
-      "endLine": 91
+      "line": 89,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#isCampUpgrade",
       "name": "isCampUpgrade",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 126,
-      "endLine": 127
+      "line": 124,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#isRelicId",
       "name": "isRelicId",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 112,
-      "endLine": 112
+      "line": 110,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#LONG_LOOK_MS",
       "name": "LONG_LOOK_MS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#MISERS_PURSE_GOLD_MULTIPLIER",
       "name": "MISERS_PURSE_GOLD_MULTIPLIER",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 77,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#misersPurseGold",
       "name": "misersPurseGold",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 107,
-      "endLine": 108
+      "line": 105,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RELIC_IDS",
       "name": "RELIC_IDS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 110,
-      "endLine": 110
+      "line": 108,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RELIC_SLOTS",
       "name": "RELIC_SLOTS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 87,
-      "endLine": 87
+      "line": 85,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RELIC_SLOTS_FROM",
       "name": "RELIC_SLOTS_FROM",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 88,
-      "endLine": 88
+      "line": 86,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#relicDefinition",
       "name": "relicDefinition",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 116,
-      "endLine": 116
+      "line": 114,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RelicDefinition",
@@ -72546,32 +72537,32 @@
       "name": "relicRank",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 128,
-      "endLine": 133
+      "line": 126,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#RELICS",
       "name": "RELICS",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 34,
-      "endLine": 76
+      "line": 32,
+      "endLine": 74
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#relicSlotsFull",
       "name": "relicSlotsFull",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 94,
-      "endLine": 95
+      "line": 92,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/run-relic-rules.ts#usesCampUpgrades",
       "name": "usesCampUpgrades",
       "kind": "value",
       "file": "src/shared/run-relic-rules.ts",
-      "line": 124,
-      "endLine": 125
+      "line": 122,
+      "endLine": 123
     },
     {
       "id": "symbol:src/shared/run-settings-rules.ts#applyRunSettings",
@@ -103916,12 +103907,6 @@
       "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#CURIO_RELIC_IDS",
       "source": "file:src/shared/run-relic-rules.ts",
       "target": "symbol:src/shared/run-relic-rules.ts#CURIO_RELIC_IDS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-relic-rules.ts->symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
-      "source": "file:src/shared/run-relic-rules.ts",
-      "target": "symbol:src/shared/run-relic-rules.ts#DEEP_POCKETS_CAP",
       "kind": "exports"
     },
     {
