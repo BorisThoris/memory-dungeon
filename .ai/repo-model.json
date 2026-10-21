@@ -4545,8 +4545,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71984,
-      "sha256": "155db5bcdca59e6e186252e5fd28ef357e49d49bd404c73cfc0fc617c3fef6b8"
+      "bytes": 71617,
+      "sha256": "c715ffb0d51d603fde8048df34be745dfeba5b6f9f2975f7cafc8e2fe5c506e7"
     },
     {
       "path": "public/site.webmanifest",
@@ -5763,8 +5763,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 4299,
-      "sha256": "0059c7a23cd125041970497f29e1551a68a2be0846130868065da9cde22b7aa5"
+      "bytes": 4372,
+      "sha256": "a68f0a8a941ba3d1e92186b9116fc49cba6886016e5eefda9ce7675e56e41b98"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -14529,8 +14529,8 @@
     {
       "path": "src/shared/board-layers-rules.ts",
       "category": "source",
-      "bytes": 8634,
-      "sha256": "7a3491453c3210205e46285fb0fd407561104606eabfa563d55b88b947a02c73"
+      "bytes": 8808,
+      "sha256": "6c0a4465198ea4d02ba1aa791e94bc80a43196e30759be5caab4465881c9a494"
     },
     {
       "path": "src/shared/board-layout-rules.test.ts",
@@ -16575,14 +16575,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 10774,
-      "sha256": "494281f5b4af11c2ce331cf3e333cf9c14a1308c2b47bfd326393764b36b81ea"
+      "bytes": 11209,
+      "sha256": "2bfc6c63ceb4c68afef8fd2be9b8091d2481aecf15f97a802d48661c09a4a9e0"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 59489,
-      "sha256": "4c9402b39dce0f4fa389049e81eba57896ad583f9269ce2be94836182f837f58"
+      "bytes": 60410,
+      "sha256": "1fd4976a737e643f868669d231cf82beab24037232d060d498f703fb4c599ab6"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -17253,8 +17253,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 10067,
-      "sha256": "f5bd0bd8c42a674df6013cb4cccf161e882d5e8b2988f4f251029e6f6e1d2168"
+      "bytes": 10664,
+      "sha256": "1afacb145ec5ad90611a4b9764b907db70935e3e11fd0af3d3e5bda0ce1ab9e9"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17445,8 +17445,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-027-hall-soak-and-accountability.md",
       "category": "other",
-      "bytes": 1933,
-      "sha256": "bec3f092e668ac4f74fd51dc4ebc70ba4ac2cbfebb0562efa5f857bb25972c5f"
+      "bytes": 3599,
+      "sha256": "2ee07a94f09c2fbfd3f17cbf8b3a8f823bf967cf85f7af7a11771fe2c33d209d"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
@@ -34112,7 +34112,7 @@
       "path": "src/shared/board-layers-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 145,
+      "lineCount": 146,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -41575,7 +41575,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 127,
+      "lineCount": 134,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -41588,7 +41588,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 981,
+      "lineCount": 995,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -60358,8 +60358,8 @@
       "name": "applyLayerTurn",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 143,
-      "endLine": 144
+      "line": 144,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#cardsBeneath",
@@ -60415,15 +60415,15 @@
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
       "line": 81,
-      "endLine": 131
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#promoteRunBeneath",
       "name": "promoteRunBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 134,
-      "endLine": 140
+      "line": 135,
+      "endLine": 141
     },
     {
       "id": "symbol:src/shared/board-layout-rules.ts#canReflowRunBoard",
@@ -72294,16 +72294,16 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 191,
-      "endLine": 609
+      "line": 202,
+      "endLine": 620
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 69,
-      "endLine": 74
+      "line": 71,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
@@ -72311,31 +72311,31 @@
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
       "line": 48,
-      "endLine": 67
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 621,
-      "endLine": 980
+      "line": 632,
+      "endLine": 994
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 85,
-      "endLine": 174
+      "line": 94,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 76,
-      "endLine": 83
+      "line": 85,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -76227,7 +76227,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 64
+          "line": 71
         }
       ],
       "enables": [
@@ -76275,7 +76275,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 51
+          "line": 58
         }
       ],
       "enables": [
@@ -76322,7 +76322,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 51
+          "line": 58
         }
       ],
       "enables": [
@@ -76369,7 +76369,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 51
+          "line": 58
         }
       ],
       "enables": [
@@ -76420,7 +76420,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 44
+          "line": 51
         }
       ],
       "enables": [],
@@ -76597,7 +76597,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 69
+          "line": 76
         }
       ],
       "enables": [
@@ -76648,7 +76648,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 69
+          "line": 76
         }
       ],
       "enables": [
@@ -76710,7 +76710,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 52
+          "line": 59
         }
       ],
       "enables": [
@@ -76758,7 +76758,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 43
+          "line": 50
         }
       ],
       "enables": [],
@@ -76972,7 +76972,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 48
+          "line": 55
         }
       ],
       "enables": [
@@ -77008,7 +77008,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 49
+          "line": 56
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -77050,7 +77050,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 69
+          "line": 76
         }
       ],
       "enables": [
@@ -77244,7 +77244,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 52
+          "line": 59
         }
       ],
       "enables": [],
@@ -77382,7 +77382,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 32
+          "line": 39
         }
       ],
       "enables": [
@@ -77631,7 +77631,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 29
+          "line": 36
         }
       ],
       "enables": [
@@ -77785,7 +77785,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 37
+          "line": 44
         }
       ],
       "enables": [
@@ -78177,7 +78177,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 40
+          "line": 47
         }
       ],
       "enables": [
@@ -78225,7 +78225,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 38
+          "line": 45
         }
       ],
       "enables": [
@@ -78733,7 +78733,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 29
+          "line": 36
         }
       ],
       "enables": [],
@@ -78783,7 +78783,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 66
+          "line": 73
         }
       ],
       "enables": [
@@ -79174,7 +79174,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 41
+          "line": 48
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
