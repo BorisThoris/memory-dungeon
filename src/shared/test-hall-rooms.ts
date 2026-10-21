@@ -22,7 +22,7 @@ import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { greetFloorCurio } from './floor-curio-greeting-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { canAimMeteor, callMeteor } from './meteor-rules';
-import { missBankCap, missesLeft } from './miss-bank';
+import { missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
@@ -542,9 +542,11 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { gold: 20, campPreference: preference } }),
         script: [
             { step: { do: 'clear' }, says: 'camp floor clears', expect: statusIs('levelComplete') },
-            { step: { do: 'advance' }, says: 'one preferred reward is funded', expect: r => {
-                const id = preference === 'survive' ? 'deep_pockets' : preference === 'study' ? 'long_look' : 'gilded_chain';
-                return r.board?.level === 4 && r.storePurchases?.[id] === 1 ? null : 'preferred reward missing';
+            { step: { do: 'advance' }, says: 'one preferred reward is funded', expect: (r, b) => {
+                // Survive buys a miss while the bank has room (rules 73 grow it with the floor), Deep Pockets once it is full.
+                const bankFull = (missesLeft(b) ?? 0) >= missBankCap(b);
+                const id = preference === 'survive' ? (bankFull ? 'deep_pockets' : 'miss') : preference === 'study' ? 'long_look' : 'gilded_chain';
+                return r.board?.level === 4 && r.storePurchases?.[id] === 1 ? null : `preferred reward ${id} missing`;
             } }
         ]
     })),
@@ -941,13 +943,17 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         title: "The Miser's Purse on offer",
         mechanic: "A Curio offers the Miser's Purse; it waits in the dock until you take it up. Taken, it is yours for the run, and a full bank gives up its soonest miss.",
         graphMechanicIds: ['inventory.relics', 'economy.miss_bank'],
-        tryThis: "Four misses in the bank and a purse on offer. Press Purse: it is yours, and the bank holds three.",
-        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, misses: 4, run: { misersPurseOffers: 1 } }),
+        tryThis: "A full bank of four and a purse on offer. Press Purse: it is yours, and the bank holds three.",
+        // Floor 1, where the bank holds four: from rules 73 the cap grows with the floor (`miss-bank.ts`).
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 1, misses: 4, run: { misersPurseOffers: 1 } }),
         script: [
             {
                 step: { do: 'takePurse' },
-                says: 'the purse is taken up, and the bank drops to three',
-                expect: (r) => ((r.relics ?? []).includes('misers_purse') && r.misersPurseOffers === 0 && missesLeft(r) === 3 && missBankCap(r) === 3 ? null : `relics ${String(r.relics)}, misses ${missesLeft(r)}, cap ${missBankCap(r)}`)
+                says: 'the purse is taken up, and the bank gives up a slot',
+                expect: (r) =>
+                    (r.relics ?? []).includes('misers_purse') && r.misersPurseOffers === 0 && missBankCap(r) === missBankCap({ ...r, relics: [] }) - 1 && missesLeft(r) === missBankCap(r)
+                        ? null
+                        : `relics ${String(r.relics)}, misses ${missesLeft(r)}, cap ${missBankCap(r)}`
             }
         ]
     },
@@ -961,13 +967,13 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         script: [
             {
                 step: { do: 'clear' },
-                says: 'the clear pays double gold into the purse, and the bank holds three',
+                says: 'the clear pays double gold into the purse, and the bank holds one fewer',
                 expect: (r) => {
                     const gold = r.lastLevelResult?.goldEarned ?? 0;
                     if (!r.lastLevelResult?.goldDoubled) return 'the clear did not say the purse doubled it';
                     if (gold <= 0 || gold % 2 !== 0) return `a doubled clear paid ${gold}`;
                     if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
-                    return missBankCap(r) === 3 ? null : `the bank holds ${missBankCap(r)}`;
+                    return missBankCap(r) === missBankCap({ ...r, relics: [] }) - 1 ? null : `the bank holds ${missBankCap(r)}`;
                 }
             }
         ]
@@ -1903,7 +1909,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             {
                 step: { do: 'advance' },
                 says: 'floor 5 opens face down on its study window, a miss richer, carrying the mutators its schedule names',
-                expect: expectAll(statusIs('memorize'), turnsAre(0), missesAre(3), (r) => {
+                expect: expectAll(statusIs('memorize'), turnsAre(0), (r, b) => (missesLeft(r) === Math.min(missBankCap(r), 2 + missBankFloorGrant(b)) ? null : `misses ${missesLeft(r)}, expected ${2 + missBankFloorGrant(b)}`), (r) => {
                     const board = r.board;
                     if (board?.level !== 5) return `level ${board?.level}`;
                     if (!board.tiles.every((t) => t.state === 'hidden')) return 'a card on the new floor is not face down';

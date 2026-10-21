@@ -1,7 +1,7 @@
 # DGE-032: Balance bars: run-ending, Goldilocks, curve to floor 60
 
 ## Status
-Not started
+In progress: bars 1, 2 and 4 are gates (2026-10-21); bar 3, the Goldilocks probe, is next.
 
 ## Priority
 P0
@@ -49,3 +49,10 @@ Four bars, each a gate: (1) at 15% misses at least half of average runs end at t
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21, bars 1, 2 and 4:
+- **Bar 1** (the owner chose to meet it as stated, 2026-10-21): rules 73 grow the miss bank with the floor - a clear pays one more per seven pairs, the cap holds one more per six, read off the pair curve (`miss-bank.ts`). 100 seeds: 61 of 100 runs at 15% reach the Warden, 97 at 10% clear it, 20% ends near floor 23, 25% near 12. `gate:warden-reach` (`sim-survival.ts --check`, 100 seeds, in `gate:systems`), mutation-tested: with the scaling off it reads 1% and fails. `SURVIVAL_GATE_SEEDS` adds eighty seeds to the twenty. BALANCE_NOTES has the sweep.
+- **Bar 2** stays the existing `gate:pop-by-act` with `POP_BY_ACT_MIN` 0: the 0.6 share is the owner-accepted shortfall (DGE-008).
+- **Bar 4**: `CURVE_FLOORS` 60; `gate:difficulty-curve` is green to the Warden's floor (floor 60: 20.4 turns, par 24). Endless to 120 not yet gated.
+- Rules 73 reseed: version gate, fifteen ledger quotes; hall rooms and the camp test that hard-coded a cap of four or a grant of one now ask `missBankCap` / `missBankFloorGrant`; the Purse-on-offer room moved to floor 1, where the bank still holds four. Soak 5 x 200: 0 violations.
+- **Bar 3, next**: a Goldilocks probe needs a player who forgets - which cards' positions the simulated player is confident of at the study window. The sims are omniscient with a miss rate. That model, and its use to decide which of Layers, Wanderers and the Spiral may share a floor, is the remaining work.

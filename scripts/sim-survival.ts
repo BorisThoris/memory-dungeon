@@ -49,6 +49,8 @@ const flipLockedLast = (run: RunState, first: { id: string }, second: { id: stri
 };
 
 export const SURVIVAL_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234, 13, 27, 314, 2718, 42, 99, 1001, 4096, 65_537, 7] as const;
+/** The Warden gate’s sample (DGE-032): the twenty above and eighty more, so a share of runs is not one seed’s luck. */
+export const SURVIVAL_GATE_SEEDS: readonly number[] = [...SURVIVAL_SEEDS, ...Array.from({ length: 80 }, (_, index) => 200_003 + index * 7919)];
 export const SURVIVAL_FLOOR_CAP = 60;
 export const SURVIVAL_RATES = [0.1, 0.15, 0.2, 0.25, 0.35] as const;
 
@@ -176,6 +178,26 @@ export const simulateSurvival = ({
         };
     });
 
+/**
+ * DGE-032's first bar, set by the owner on 2026-10-21: at 15% misses at least half of runs reach the
+ * Warden (floor 60), and a run at 10% clears it. `yarn gate:warden-reach` fails when either does not hold.
+ */
+export const WARDEN_REACH_MISS_RATE = 0.15;
+export const WARDEN_REACH_MIN_SHARE = 0.5;
+export const WARDEN_CLEAN_MISS_RATE = 0.1;
+
+export const judgeWardenReach = (rows: readonly { missRate: number; wardenCleared: number; wardenFell: number }[], seeds: number): string[] => {
+    const issues: string[] = [];
+    const at = (rate: number) => rows.find((row) => Math.abs(row.missRate - rate) < 1e-9);
+    const average = at(WARDEN_REACH_MISS_RATE);
+    const clean = at(WARDEN_CLEAN_MISS_RATE);
+    if (!average || !clean) return ['the survival sample is missing the 10% or the 15% player'];
+    const reached = (average.wardenCleared + average.wardenFell) / Math.max(1, seeds);
+    if (reached < WARDEN_REACH_MIN_SHARE) issues.push(`at 15% misses ${(reached * 100).toFixed(0)}% of runs reach the Warden, under ${WARDEN_REACH_MIN_SHARE * 100}%`);
+    if (clean.wardenCleared === 0) issues.push('no run at 10% misses clears the Warden');
+    return issues;
+};
+
 const isMain = process.argv[1]?.replace(/\\/g, '/').endsWith('scripts/sim-survival.ts');
 if (isMain) {
     const arg = (name: string): string | undefined => {
@@ -185,7 +207,12 @@ if (isMain) {
     const rates = arg('rates')?.split(',').map(Number) ?? SURVIVAL_RATES;
     const seedCount = Number(arg('seeds') ?? SURVIVAL_SEEDS.length);
     const useItems = process.argv.includes('--items');
-    const rows = simulateSurvival({ rates, seeds: SURVIVAL_SEEDS.slice(0, seedCount), useItems });
+    const rows = simulateSurvival({ rates, seeds: SURVIVAL_GATE_SEEDS.slice(0, seedCount), useItems });
+    if (process.argv.includes('--check')) {
+        const issues = judgeWardenReach(rows, Math.min(seedCount, SURVIVAL_GATE_SEEDS.length));
+        for (const issue of issues) console.error(issue);
+        if (issues.length > 0) process.exit(1);
+    }
     console.log(useItems ? 'with the curio items used' : 'without items');
     console.log('miss   median  mean   min   combo/floor  expired/floor  warden cleared/fell');
     for (const row of rows) {

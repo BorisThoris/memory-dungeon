@@ -1,3 +1,4 @@
+import { pairsForFloor } from './pair-curve';
 import type { MissBankGrant, RunState } from './contracts';
 import { clearResolveState } from './run-timer-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -56,10 +57,32 @@ export const MISS_BANK_COMBO_RUNG = 5;
 export const MISS_BANK_LIFETIME_FLOORS = 3;
 export const MISS_BANK_CAP = 4;
 
-/** The cap this run is held to: four plus the Deep Pockets rank (`run-relic-rules.ts`). */
-export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion'>>): number =>
+/**
+ * DGE-032, rules 73: the bank grows with the floor. The owner set the bar (2026-10-21): at 15% misses
+ * half of runs reach the Warden. A floor of twenty-four pairs costs a 15% player about four misses and
+ * paid one back, so the run starved in the Living Dungeon whatever it did. From rules 73 a clear pays
+ * one more miss for every `MISS_BANK_GRANT_PAIRS` (seven) pairs the floor held, and the bank holds one more for
+ * every `MISS_BANK_CAP_PAIRS` (six). It loosens the opening a little too - a run that dies before floor 13
+ * never meets the deep floors, and holding the Gate as tight as it was left the bar at 41% (measured) - while
+ * a sloppy player still runs dry (`yarn sim:survival`, BALANCE_NOTES).
+ */
+export const MISS_BANK_SCALES_FROM = 73;
+export const MISS_BANK_GRANT_PAIRS = 7;
+export const MISS_BANK_CAP_PAIRS = 6;
+
+// The floor's size on the pair curve, not the board in hand: the curve never falls, so the cap never shrinks
+// under a bank built on a bigger floor (a Layers floor, a breather after a boss).
+const boardPairs = (run: Partial<Pick<RunState, 'board' | 'runRulesVersion'>>): number =>
+    (run.runRulesVersion ?? 0) >= MISS_BANK_SCALES_FROM ? pairsForFloor(Math.max(1, runNonNegativeInteger(run.board?.level ?? 1)), run.runRulesVersion) : 0;
+
+/** What clearing the run's floor pays: one, and from rules 73 one more for every seven pairs the floor held. */
+export const missBankFloorGrant = (run: Partial<Pick<RunState, 'board' | 'runRulesVersion'>>): number =>
+    MISS_BANK_FLOOR_GRANT + Math.floor(boardPairs(run) / MISS_BANK_GRANT_PAIRS);
+
+/** The cap this run is held to: four, from rules 73 one more for every six pairs on the floor, plus the Deep Pockets rank (`run-relic-rules.ts`). */
+export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion' | 'board'>>): number =>
     // The Miser's Purse (`run-relic-rules.ts`) takes one slot back for the gold it doubles.
-    MISS_BANK_CAP + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0);
+    MISS_BANK_CAP + Math.floor(boardPairs(run) / MISS_BANK_CAP_PAIRS) + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0);
 
 export type { MissBankGrant };
 
@@ -137,11 +160,11 @@ export const missBankOnFloor = (grants: readonly MissBankGrant[], level: number)
  * What the next floor opens with: what the cleared floor left unspent and not yet expired, plus
  * the clear's own grant, stamped with the floor that earned it.
  */
-export const carryMissBank = (run: MissBankRun & Pick<RunState, 'relics'>, nextLevel: number): MissBankGrant[] | undefined => {
+export const carryMissBank = (run: MissBankRun & Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion'>>, nextLevel: number): MissBankGrant[] | undefined => {
     if (run.missBank == null) return undefined;
     const clearedFloor = Math.max(1, runNonNegativeInteger(run.board?.level ?? nextLevel - 1));
     const kept = missBankOnFloor(run.missBank, nextLevel);
-    return grantMisses(kept, clearedFloor, MISS_BANK_FLOOR_GRANT, missBankCap(run));
+    return grantMisses(kept, clearedFloor, missBankFloorGrant(run), missBankCap(run));
 };
 
 /** Misses a chain that climbed from `before` to `after` earns: one per rung crossed. */

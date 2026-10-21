@@ -57,13 +57,14 @@ import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
  */
 const ORIGINAL_CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
 export const CURVE_SEEDS: readonly number[] = [...ORIGINAL_CURVE_SEEDS, ...Array.from({ length: 90 }, (_, index) => 100_003 + index * 7919)];
-export const CURVE_FLOORS = 52;
+/** To the Warden's floor (DGE-032's fourth bar): the Descent's sixty, a clean player under par on every one. */
+export const CURVE_FLOORS = 60;
 
 /**
  * The floors the report prints. Every floor of the opening, then the deep game where the boards
  * stop growing - twenty-four pairs from floor 52 on, so the curve has nothing left to say after it.
  */
-export const CURVE_REPORT_FLOORS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 20, 25, 30, 40, 52];
+export const CURVE_REPORT_FLOORS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 20, 25, 30, 40, 52, 60];
 
 export interface CurveFloorRow {
     floor: number;

@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { pairsForFloor } from './pair-curve';
 import {
+    missBankFloorGrant,
+    MISS_BANK_GRANT_PAIRS,
     carryMissBank,
     comboMissesEarned,
     grantMisses,
@@ -98,7 +101,9 @@ describe('the miss bank', () => {
         // The opening three were earned on floor 1: good through floor 4, gone on floor 5. What
         // floor 4 carries to floor 5 is only what floors 2-4 earned.
         const onFive = { ...first, board: { ...first.board!, level: 4 }, missBank: [...onFloor(1, 3), ...onFloor(3, 1)] };
-        expect(carryMissBank(onFive, 5)).toEqual([{ floor: 3, misses: 1 }, { floor: 4, misses: MISS_BANK_FLOOR_GRANT }]);
+        // From rules 73 a clear pays one more for every seven pairs the floor held (DGE-032): floor 4’s seven pay two.
+        expect(carryMissBank(onFive, 5)).toEqual([{ floor: 3, misses: 1 }, { floor: 4, misses: missBankFloorGrant(onFive) }]);
+        expect(missBankFloorGrant(onFive)).toBe(MISS_BANK_FLOOR_GRANT + Math.floor(pairsForFloor(4, onFive.runRulesVersion) / MISS_BANK_GRANT_PAIRS));
     });
 
     it('never banks past the cap, and at the cap a new grant pushes the oldest out rather than being lost', () => {

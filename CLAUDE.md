@@ -100,10 +100,13 @@ weather strikes in the background, and gold lies where it fell.
 
 ## Game design decisions (the owner's, do not re-litigate)
 
-- **Runs are punishing.** The miss bank (`miss-bank.ts`): 3 to open, +1 per floor clear, +1 per
-  fifth link of a chain, each grant good for 3 floors, cap 4 (5 with Deep Pockets). A miss costs
-  what the turn charged in tries (two on a Heavy card); a miss on an empty bank ends the run. Do
-  not soften survival by appeal to an older "a bad floor is never punishing" thesis.
+- **Runs are punishing, and an average run reaches the Warden.** The miss bank (`miss-bank.ts`): 3 to
+  open, +1 per floor clear and, from rules 73, +1 more per 7 pairs the floor holds; +1 per fifth link
+  of a chain; each grant good for 3 floors; cap 4, +1 per 6 pairs on the floor (+1 with Deep
+  Pockets). A miss costs what the turn charged in tries (two on a Heavy card); a miss on an empty
+  bank ends the run. The owner's bar (2026-10-21, `gate:warden-reach`): at 15% misses half of runs
+  reach floor 60; 20% and worse still end early. Tune survival against that gate, not against an
+  older "a bad floor is never punishing" thesis or the earlier tighter bank.
 - **The store is a stop**, opened on the floor-clear beat every third floor
   (`STORE_STOP_EVERY_FLOORS`), continued with Descend. It sells misses, peeks, shuffles, bombs and
   four relics (Deep Pockets, Gilded Chain, Long Look, Tallow Candle). Not a pause-menu screen, not a door.

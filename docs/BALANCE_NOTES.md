@@ -3471,3 +3471,35 @@ can no longer take, and one release gets one pair cap where separate pops got se
 links before each hold) the Hold barely moves it (0.65/0.64/0.56/0.51 at a stack of six), and a release that bursts up
 to three extra pairs per held pair recovers only the baseline. Deferring a pop cannot make more pop. The owner's call
 (2026-10-20): build the Hold as the plan specifies all the same; its pop-share acceptance is recorded as unmet.
+
+
+## The miss bank grows with the floor (DGE-032, rules 73, 2026-10-21)
+
+**The bar.** DGE-032's first bar: at 15% misses at least half of runs reach the Warden (floor 60), and a 10% run clears
+it. The owner chose (2026-10-21) to meet it as the plan states, knowing it makes runs less punishing, over keeping the
+bank and moving the bar. `yarn gate:warden-reach` (in `gate:systems`) holds it on 100 seeds.
+
+**Before** (rules 72, `yarn sim:survival`, 20 seeds): 10% median floor 60 (13 Warden clears); 15% median 16.5, none
+reached floor 60; 20% 11.5; 25% 7; 35% 3.5. A floor of twenty-four pairs costs a 15% player about four misses, and a
+clear paid one, a chain about another: the run starved in the Living Dungeon whatever it did.
+
+**The change.** A clear pays one more miss for every seven pairs on the floor (`MISS_BANK_GRANT_PAIRS`), and the bank
+holds one more for every six (`MISS_BANK_CAP_PAIRS`), the floor's size read off the pair curve so the cap never shrinks
+under a bank built on a bigger floor (the first try read the board in hand, and a Layers floor's extra pairs let the bank
+outgrow the next floor's cap - the soak caught it). Sweep, 100 seeds, share of 15% runs reaching floor 60:
+
+| grant per / cap per | 15% reach | 20% median | 25% median |
+|---|---|---|---|
+| 7 / 8 | 0.52 | 15.5 | 11.5 |
+| 7 / 7 | 0.58 | 22 | 12 |
+| **7 / 6** | **0.61** | **23.5** | **12** |
+| 6 / 6 | 0.69 | 25 | 13 |
+
+7 / 6 meets the bar with eleven points of margin and leaves 20% and worse runs ending in the first two acts. Holding the
+Gate (floors 1-12) exactly as tight - counting only pairs beyond twelve - topped out at 0.41: a run that dies before floor
+13 never meets the deep floors, so the opening loosens a little too. **After** (100 seeds): 10% median 60 (97 clears);
+15% median 60, 61 of 100 reach the Warden; 20% 23.5; 25% 12; 35% 5.
+
+**The other bars.** The curve gate now runs to floor 60: a clean player stays under par on every floor (floor 60: 20.4
+turns against 24). Pop share by act stays below 0.6 (the owner's call on the Hold, above). The Goldilocks probe (bar 3)
+needs a model of what the player remembers, which no sim has yet; it is DGE-032's next step.

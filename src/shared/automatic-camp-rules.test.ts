@@ -1,3 +1,4 @@
+import { missBankCap } from './miss-bank';
 import { describe, expect, it } from 'vitest';
 import { createNewRun, advanceToNextLevel } from './game-core';
 import { finalizeLevel } from './floor-clear-transition';
@@ -18,7 +19,9 @@ const clearedCamp = (): RunState => {
 describe('automatic camp rewards',()=>{
     it('prioritizes the selected preference and ignores it on legacy rules', () => {
         const run = clearedCamp();
-        expect(automaticCampReward({ ...run, campPreference: 'survive' }).receipt).toContain('Deep Pockets');
+        // Survive buys a miss while the bank has room; on a full one it grows the bank (rules 73 size the cap by the floor).
+        expect(automaticCampReward({ ...run, campPreference: 'survive', missBank: [{ floor: 3, misses: missBankCap(run) }] }).receipt).toContain('Deep Pockets');
+        expect(automaticCampReward({ ...run, campPreference: 'survive', missBank: [{ floor: 3, misses: 1 }] }).receipt).toContain('miss');
         expect(automaticCampReward({ ...run, campPreference: 'study' }).receipt).toContain('Long Look');
         expect(automaticCampReward({ ...run, campPreference: 'score' }).receipt).toContain('Gilded Chain');
         const legacy = automaticCampReward({ ...run, runRulesVersion: 63, campPreference: 'score' });
