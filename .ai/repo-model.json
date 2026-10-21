@@ -5817,8 +5817,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 8457,
-      "sha256": "5c991b7ae9aaf4aa905e11eb3d0543f8835b56eb8c1689bed6d1d928bfe1c992"
+      "bytes": 8330,
+      "sha256": "7095350cb37a0f476e9fd245ce6421788b9f3d58e63b833df55da18777dce5a4"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
