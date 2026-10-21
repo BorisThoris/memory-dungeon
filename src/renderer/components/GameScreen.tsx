@@ -3,7 +3,7 @@ import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import RealmTravel from './RealmTravel';
 import { BOSS_DOOR_COPY, bossDoorRewardLine, bossRewardNote } from '../copy/bossRewardCopy';
 import { runBlueprints } from '../../shared/boss-reward-rules';
-import { WARDEN_REDEAL_EVERY_TURNS, awaitsWardenChoice, isWardenFloor } from '../../shared/warden-rules';
+import { WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS, awaitsWardenChoice, isWardenFloor, wardenTestHolds } from '../../shared/warden-rules';
 import { WARDEN_CHOICE_COPY } from '../copy/runDialogCopy';
 import { RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
@@ -2139,6 +2139,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     <p className={styles.wardenRules} data-testid="warden-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
                                         {RUN_SHELL_LINE_COPY.wardenRules(WARDEN_REDEAL_EVERY_TURNS)}
+                                        {wardenTestHolds(run) ? <> {RUN_SHELL_LINE_COPY.wardenTest(WARDEN_FELL_PAIRS, run.wardenDealsAgainThisFloor ?? 0)}</> : null}
                                     </p>
                                 ) : null}
                                 {colossus ? <ColossusCard colossus={colossus} event={colossusEvent} reduceMotion={reduceMotion} /> : null}

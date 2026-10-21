@@ -82,6 +82,8 @@ export const createNextFloorRunState = (
         layerCardsRisenThisFloor: 0,
         lastBossReward: null,
         misersVaultUsedThisFloor: false,
+        wardenFelled: false,
+        wardenDealsAgainThisFloor: 0,
         turncoatTurnsThisFloor: 0,
         hourglassesSpentThisFloor: 0,
         colossusHitsThisFloor: 0,

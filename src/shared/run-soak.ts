@@ -5,7 +5,7 @@ import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
 import { tileCanBreakInChunk } from './chunk-break-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
-import { awaitsWardenChoice, descendIntoEndless, isWardenFloor } from './warden-rules';
+import { awaitsWardenChoice, descendIntoEndless, isWardenFloor, WARDEN_FELL_PAIRS, wardenTestHolds } from './warden-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canReleaseHold, canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { parTurnsForRun } from './floor-par';
@@ -118,6 +118,10 @@ export interface SoakRunReport {
     /** Boss rewards (`boss-reward-rules.ts`): blueprints held at the end, and boss doors walked through. */
     blueprints: number;
     bossDoorsTaken: number;
+    /** The complete Warden (`warden-rules.ts`): met as the test, felled by a release of twelve, and the boards it dealt again. */
+    wardenTests: number;
+    wardensFelled: number;
+    wardenDealsAgain: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -569,6 +573,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
+    'the test Warden falls only to a release of twelve, and an empty board is dealt again': (before, run) => {
+        if (!before || !run.board || !wardenTestHolds(run)) return null;
+        if (run.status === 'levelComplete' && before.status === 'playing') return run.wardenFelled ? null : 'the test Warden cleared without a release of twelve';
+        if (run.status === 'playing' && run.board.tiles.every((tile) => tile.state !== 'hidden')) return 'the test Warden left an empty board in play';
+        return null;
+    },
     'a floor clear selects the next arena; historical runs, and the clear before an act boss, offer doors': (before, run) => {
         if (run.status !== 'levelComplete' || before?.status === 'levelComplete' || !run.realmId) return null;
         // From rules 75 the clear before an act boss offers its three doors again (`boss-reward-rules.ts`).
@@ -693,6 +703,9 @@ export const soakRun = ({
     let holdPairsPopped = 0;
     let largestRelease = 0;
     let bossDoorsTaken = 0;
+    let wardenTests = 0;
+    let wardensFelled = 0;
+    let wardenDealsAgain = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -810,9 +823,20 @@ export const soakRun = ({
 
     act('study', finishMemorizePhase(run));
     while (step < maxActions && violations.length === 0) {
-        if (run.status === 'gameOver') break;
+        if (run.status === 'gameOver') {
+            if (run.board && wardenTestHolds(run)) {
+                wardenTests += 1;
+                wardenDealsAgain += run.wardenDealsAgainThisFloor ?? 0;
+            }
+            break;
+        }
         if (run.status === 'levelComplete') {
             floorsCleared += 1;
+            if (run.board && wardenTestHolds(run)) {
+                wardenTests += 1;
+                if (run.wardenFelled) wardensFelled += 1;
+                wardenDealsAgain += run.wardenDealsAgainThisFloor ?? 0;
+            }
             if (floorsCleared >= maxFloors) break;
             if (isStoreStopFloor(run.lastLevelResult?.level)) {
                 // Shop like a player with a plan: buy what can be bought until the purse says no.
@@ -902,7 +926,8 @@ export const soakRun = ({
             act('hold', startHold(run));
             continue;
         }
-        if (canReleaseHold(run) && heldPairCount(run) >= (player.holdRelease ?? 3)) {
+        // The test Warden falls only to twelve held (`warden-rules.ts`): every player waits for them there.
+        if (canReleaseHold(run) && heldPairCount(run) >= (wardenTestHolds(run) ? WARDEN_FELL_PAIRS : (player.holdRelease ?? 3))) {
             const released = releaseHold(run);
             if (released) {
                 holdsReleased += 1;
@@ -981,6 +1006,9 @@ export const soakRun = ({
         evolutions: (run.evolutions ?? []).length,
         firstEvolutionFloor,
         bossDoorsTaken,
+        wardenTests,
+        wardensFelled,
+        wardenDealsAgain,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

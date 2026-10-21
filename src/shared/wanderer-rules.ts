@@ -160,6 +160,19 @@ const withoutFootprints = (board: BoardState): BoardState =>
           }
         : board;
 
+/** Every footprint gone: a floor that ends with cards still face down (the felled Warden) keeps none. */
+export const wipeFootprints = (board: BoardState): BoardState =>
+    board.tiles.some((tile) => tile.footprint)
+        ? {
+              ...board,
+              tiles: board.tiles.map((tile) => {
+                  if (!tile.footprint) return tile;
+                  const { footprint: _footprint, ...rest } = tile;
+                  return rest;
+              })
+          }
+        : board;
+
 /**
  * Applied after every resolved turn (`board-turn-transition.ts`): on the third turn the Wanderers
  * step; every turn wipes the last turn's footprints, so one lasts exactly one turn.

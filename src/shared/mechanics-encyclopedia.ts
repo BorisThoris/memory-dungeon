@@ -21,7 +21,7 @@ import {
 } from './contracts';
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
-import { WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
+import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
@@ -29,7 +29,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 104 as const;
+export const ENCYCLOPEDIA_VERSION = 105 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -495,7 +495,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'The Warden',
         description:
             `Floor ${DESCENT_FLOOR_COUNT} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
-            `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run. Then you choose: take the win, or go on into **Endless**, where the four acts come round again, each cycle half as long, every cycle ending on its Warden. In Endless every floor owes **rent**: a score its clear must pay, shown on the run bar, rising every cycle. A floor that pays less ends the run.`
+            `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run. **Met behind the wild or raging door, the Warden is complete**: it falls only to a **Hold released at ${WARDEN_FELL_PAIRS} pairs** or more, and that release wins with pairs left. An empty board does not beat it: it deals ${WARDEN_DEAL_AGAIN_PAIRS} fresh pairs into the cleared cells and the floor goes on, and while you hold, its re-deal waits. Then you choose: take the win, or go on into **Endless**, where the four acts come round again, each cycle half as long, every cycle ending on its Warden. In Endless every floor owes **rent**: a score its clear must pay, shown on the run bar, rising every cycle. A floor that pays less ends the run.`
     },
     {
         id: 'sys_dread',

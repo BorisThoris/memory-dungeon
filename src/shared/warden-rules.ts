@@ -1,7 +1,11 @@
 import type { BoardState, RunState } from './contracts';
 import { parTurnsForRun } from './floor-par';
 import { missesLeft, spendMiss } from './miss-bank';
-import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
+import { atomicVariantForPairKey } from './board-tile-generation-rules';
+import { isSingletonUtilityPairKey } from './tile-identity';
+import { TILE_SUITS } from './tile-suit-rules';
+import { freshBoardFaces } from './void-spew-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { clearResolveState } from './run-timer-rules';
 
@@ -22,6 +26,49 @@ import { clearResolveState } from './run-timer-rules';
  * moves no card with a mutator in the same turn. The full Warden, with the Hold, is DGE-023.
  */
 export const WARDEN_REDEAL_EVERY_TURNS = 5;
+
+/**
+ * The complete Warden (DGE-023, rules 78): a test of a planned build. Met behind the wild or raging door
+ * (`boss-reward-rules.ts`), it falls only to a Hold released at `WARDEN_FELL_PAIRS` pairs or more
+ * (`hold-rules.ts`): that release is the win, pairs left or not. While a Hold is held the re-deal waits.
+ * A board cleared without it does not end the floor: the Warden deals `WARDEN_DEAL_AGAIN_PAIRS` fresh pairs
+ * into the cleared cells, and the floor goes on until the Warden falls or the past-par drain ends the run.
+ * Behind the calm door it is the first Warden: clearing the board wins (the owner, 2026-10-21).
+ */
+export const WARDEN_TEST_FROM = 78;
+export const WARDEN_FELL_PAIRS = 12;
+export const WARDEN_DEAL_AGAIN_PAIRS = 6;
+
+/** Whether this Warden is the test: rules 78, its floor, met behind the wild or raging door. */
+export const wardenTestHolds = (run: Pick<RunState, 'runRulesVersion' | 'realmSeverity' | 'board'>): boolean =>
+    (run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM && isWardenFloor(run.board) && (run.realmSeverity === 'wild' || run.realmSeverity === 'raging');
+
+/** Whether a release of this many held pairs fells the Warden. */
+export const wardenFellsTo = (run: Pick<RunState, 'runRulesVersion' | 'realmSeverity' | 'board'>, heldPairs: number): boolean =>
+    wardenTestHolds(run) && heldPairs >= WARDEN_FELL_PAIRS;
+
+/** The Warden deals again: fresh pairs, faces the floor has not shown, into the cells of whole pairs cleared. */
+export const wardenDealsAgain = (board: BoardState, seed: string): BoardState => {
+    const rng = createMulberry32(hashStringToSeed(seed));
+    const goneByPair = new Map<string, number[]>();
+    board.tiles.forEach((tile, index) => {
+        if ((tile.state !== 'matched' && tile.state !== 'removed') || isSingletonUtilityPairKey(tile.pairKey)) return;
+        goneByPair.set(tile.pairKey, [...(goneByPair.get(tile.pairKey) ?? []), index]);
+    });
+    const cells = shuffleWithRng(rng, [...goneByPair.values()].filter((pair) => pair.length === 2)).slice(0, WARDEN_DEAL_AGAIN_PAIRS);
+    if (cells.length === 0) return board;
+    const faces = freshBoardFaces(board.tiles, board.level);
+    const tiles = [...board.tiles];
+    cells.forEach((pair, slot) => {
+        const face = faces[slot] ?? { symbol: `W${slot + 1}`, label: `Warden ${slot + 1}` };
+        const pairKey = `${board.level}-warden-${seed.length}-${slot}-${pickRngIndex(rng, 1_000_000)}`;
+        const suit = TILE_SUITS[pickRngIndex(rng, TILE_SUITS.length)]!;
+        pair.forEach((cell, half) => {
+            tiles[cell] = { id: `${pairKey}-${half === 0 ? 'A' : 'B'}`, pairKey, state: 'hidden', symbol: face.symbol, label: face.label, atomicVariant: atomicVariantForPairKey(pairKey), suit };
+        });
+    });
+    return { ...board, tiles, matchedPairs: Math.max(0, board.matchedPairs - cells.length) };
+};
 
 export const isWardenFloor = (board: Pick<BoardState, 'floorArchetypeId'> | null | undefined): boolean =>
     board?.floorArchetypeId === 'warden_hall';
@@ -68,7 +115,8 @@ export const applyWardenTurn = (before: RunState, after: RunState): RunState => 
                       timerState: clearResolveState(run)
                   };
     }
-    if (run.status === 'playing' && isWardenRedealTurn(turns)) {
+    // The complete Warden waits while a Hold is held (DGE-023): the stack is the planned build it tests.
+    if (run.status === 'playing' && isWardenRedealTurn(turns) && !((run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM && run.holding)) {
         const seed = `warden:${Math.floor(run.runSeed)}:${run.runRulesVersion}:${run.board!.level}:${turns}`;
         run = {
             ...run,

@@ -88,6 +88,9 @@ export type TestHallRoomId =
     | 'dread-stirs'
     | 'warden-past-par'
     | 'warden-redeal'
+    | 'warden-deals-again'
+    | 'warden-hold-waits'
+    | 'warden-felled'
     | 'endless-rent-unpaid'
     | 'endless-rent-paid'
     | 'evolution-at-camp'
@@ -1019,6 +1022,54 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     const at = (run: RunState) => run.board?.tiles.findIndex((t) => t.id === 'a-1');
                     return at(r) === at(b) ? null : `a-1 moved from ${at(b)} to ${at(r)}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'warden-deals-again',
+        title: 'Behind the wild door the Warden deals again',
+        mechanic: 'Met behind the wild or raging door, the Warden is not beaten by an empty board: it deals fresh pairs into the cleared cells, and the floor goes on.',
+        graphMechanicIds: ['hazard.warden'],
+        tryThis: 'Clear both pairs of this wild Warden: two fresh pairs are dealt into their cells, and the floor is still yours to finish.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 60, misses: 4, board: { floorArchetypeId: 'warden_hall', floorTag: 'boss' }, run: { realmSeverity: 'wild' } }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'one pair taken', expect: statusIs('playing') },
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'the board is empty, and the Warden deals again',
+                expect: (r) => {
+                    const hidden = (r.board?.tiles ?? []).filter((t) => t.state === 'hidden').length;
+                    return r.status === 'playing' && r.wardenDealsAgainThisFloor === 1 && hidden === 4 ? null : `status ${r.status}, dealt ${String(r.wardenDealsAgainThisFloor)}, hidden ${hidden}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'warden-hold-waits',
+        title: 'The Warden waits on a Hold',
+        mechanic: 'While a Hold is held, the complete Warden does not re-deal: the stack is the build it tests.',
+        graphMechanicIds: ['hazard.warden', 'power.hold'],
+        tryThis: 'Hold, then match on the fifth turn: no re-deal while the Hold is held.',
+        build: () => room(['a:e b:t c:m d:b e:e f:t g:m','h:b i:e j:t k:m l:b m:e m:e','l:b k:m j:t i:e h:b g:m f:t','e:e d:b c:m b:t a:e'], { level: 60, misses: 6, streak: 6, board: { floorArchetypeId: 'warden_hall', floorTag: 'boss' }, run: { realmSeverity: 'wild', holdLinks: 6, turnsThisFloor: 4 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'the Hold holds', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the fifth turn passes without a re-deal', expect: (r) => ((r.wardenRedealsThisFloor ?? 0) === 0 ? null : `re-deals ${String(r.wardenRedealsThisFloor)}`) }
+        ]
+    },
+    {
+        id: 'warden-felled',
+        title: 'Twelve held pairs fell the Warden',
+        mechanic: 'Behind the wild or raging door the Warden falls to a Hold released at twelve pairs or more: that release is the win, pairs left or not.',
+        graphMechanicIds: ['hazard.warden', 'power.hold'],
+        tryThis: 'Hold, match twelve pairs, and release: the Warden falls with a pair still on the board.',
+        build: () => room(['a:e b:t c:m d:b e:e f:t g:m','h:b i:e j:t k:m l:b m:e m:e','l:b k:m j:t i:e h:b g:m f:t','e:e d:b c:m b:t a:e'], { level: 60, misses: 6, streak: 6, board: { floorArchetypeId: 'warden_hall', floorTag: 'boss' }, run: { realmSeverity: 'wild', holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'the Hold holds', expect: (r) => (r.holding ? null : 'the Hold did not start') },
+            ...['a','b','c','d','e','f','g','h','i','j','k','l'].map((pairKey) => ({ step: { do: 'match' as const, pairKey }, says: `hold the ${pairKey} pair`, expect: statusIs('playing') })),
+            {
+                step: { do: 'release' },
+                says: 'a release of twelve fells the Warden',
+                expect: (r) => (r.status === 'levelComplete' && r.wardenFelled && r.wardenOutcome === 'cleared' ? null : `status ${r.status}, felled ${String(r.wardenFelled)}, outcome ${String(r.wardenOutcome)}`)
             }
         ]
     },

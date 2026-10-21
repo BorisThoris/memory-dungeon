@@ -134,7 +134,10 @@ export const RUN_SHELL_LINE_COPY = {
         `The Warden: every turn past par takes a miss, and every ${redealEvery}th turn the face-down cards are dealt again.`,
     wardenKicker: 'The Warden',
     wardenRules: (redealEvery: number): string =>
-        `Every turn past par takes a miss. Every ${redealEvery}th turn the face-down cards are dealt again.`
+        `Every turn past par takes a miss. Every ${redealEvery}th turn the face-down cards are dealt again.`,
+    /** The complete Warden, met behind the wild or raging door (`warden-rules.ts`). */
+    wardenTest: (fellPairs: number, dealtAgain: number): string =>
+        `It falls only to a Hold released at ${fellPairs} pairs. An empty board is dealt again${dealtAgain > 0 ? ` (dealt ${dealtAgain} ${dealtAgain === 1 ? 'time' : 'times'})` : ''}; the re-deal waits while you hold.`
 } as const;
 
 /**

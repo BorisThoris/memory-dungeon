@@ -1,7 +1,7 @@
 # DGE-023: The Warden complete: Hold condition and the evolved relic
 
 ## Status
-Not started
+Done (rules 78, 2026-10-21)
 
 ## Priority
 P0
@@ -49,3 +49,11 @@ The re-deal every five turns is suspended while a Hold is active. The Warden fal
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21, built (rules 78):
+- The owner's calm-path decision: behind the calm door clearing the board still wins (today's Warden). Behind the wild or raging door it is the test: `wardenTestHolds`, `wardenFellsTo`, `wardenDealsAgain` in `warden-rules.ts`; `finalizeLevel` deals again instead of ending a test floor not yet felled; `releaseHold` fells it at 12 held pairs, pairs left or not (and wipes Wanderer footprints, which the soak caught on a felled floor). `RunState.wardenFelled`, `wardenDealsAgainThisFloor`, reset per floor.
+- The re-deal waits while a Hold is held. The evolved relic is not required by the rule: a run without one can still hold twelve; Keystone Heart (DGE-014) refills a miss on such a release.
+- HUD: the Warden's board line states the 12 and counts the deals (looked at in the isolated browser). Results screen: "Felled by a Hold released at 12 pairs or more", and for a Descent ending on floors 58-60 the distance and the condition (`wardenEndLine`). Codex `sys_warden`, ENCYCLOPEDIA 105.
+- Hall rooms `warden-deals-again`, `warden-hold-waits` (the ticket's "Hold suspends the re-deal"), `warden-felled` ("Twelve fells the Warden"). Soak: an invariant that the test Warden never completes without the release of twelve and never leaves an empty board in play; counters `wardenTests`, `wardensFelled`, `wardenDealsAgain`.
+- Numbers in BALANCE_NOTES: careful 26/30 felled, planned 4/6; the average player never reaches it in the soak (shortfall recorded). warden-reach 61/100 at 15%.
+- Not done: a playtest run to 60 behind the raging door (the test-pace playtest walks the calm win); the "shorter Endless" for a calm-path win was not built (the owner chose that calm clears still win).

@@ -1,7 +1,7 @@
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
 import { hasRelic, misersPurseGold } from './run-relic-rules';
 import { settleEndlessRent } from './endless-rent-rules';
-import { isWardenFloor } from './warden-rules';
+import { isWardenFloor, wardenDealsAgain, wardenTestHolds } from './warden-rules';
 import type { BoardState, RunState } from './contracts';
 import { getFloorClearLevelResultTags } from './secondary-objectives';
 import { calculateRating } from './scoring-rules';
@@ -25,6 +25,17 @@ import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     if (run.status === 'levelComplete' && run.lastLevelResult?.level === clearedBoard.level) return run;
+    // The complete Warden (DGE-023): behind the wild or raging door, a board cleared without the release of
+    // twelve is dealt again, and the floor goes on (`warden-rules.ts`).
+    if (wardenTestHolds({ ...run, board: clearedBoard }) && !run.wardenFelled) {
+        const dealt = runNonNegativeInteger(run.wardenDealsAgainThisFloor);
+        return {
+            ...run,
+            status: 'playing',
+            board: { ...wardenDealsAgain(clearedBoard, `warden-deal:${Math.floor(run.runSeed)}:${run.runRulesVersion}:${clearedBoard.level}:${dealt}`), flippedTileIds: [] },
+            wardenDealsAgainThisFloor: dealt + 1
+        };
+    }
     const elementalDrops = floorElementalDrops(run, clearedBoard.level);
     const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
     const stats = normalizeSessionStats(run.stats);

@@ -8,7 +8,7 @@ import type { MutatorId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
-import { achievementsNote, gameOverScreenCopy, runEndReasonLine } from '../copy/gameOverScreen';
+import { achievementsNote, gameOverScreenCopy, runEndReasonLine, wardenEndLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
 import { describeRematchComparison } from '../../shared/run-history-log';
 import { buildRunShareText } from '../../shared/run-share-text';
@@ -193,6 +193,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         { id: 'main-menu', label: RUN_END_STAMP_COPY.mainMenu, ariaLabel: gameOverScreenCopy.mainMenuAriaLabel, onClick: leaveToMenu }
     ];
     const endReasonLine = runEndReasonLine(summary);
+    const wardenLine = wardenEndLine(summary, run);
     // The nave the run ends in burns at the best chain the run actually reached, measured on the
     // meter's own scale rather than a second one invented here: the board is gone, so the streak
     // goes against the standard Fever rung. A run that never chained ends on guttering candles.
@@ -307,6 +308,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {endReasonLine ? (
                             <p className={styles.copy} data-testid="game-over-end-reason">
                                 {endReasonLine}
+                            </p>
+                        ) : null}
+                        {wardenLine ? (
+                            <p className={styles.copy} data-testid="game-over-warden">
+                                {wardenLine}
                             </p>
                         ) : null}
                         {/* Old summaries may not include an ending reason. */}

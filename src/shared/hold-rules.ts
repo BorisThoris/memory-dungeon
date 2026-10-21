@@ -1,3 +1,5 @@
+import { wardenFellsTo } from './warden-rules';
+import { wipeFootprints } from './wanderer-rules';
 import { grantMisses, missBankCap } from './miss-bank';
 import { hasEvolution, KEYSTONE_HEART_PAIRS } from './relic-evolution-rules';
 import { promoteRunBeneath } from './board-layers-rules';
@@ -155,5 +157,10 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
         ? { ...released, missBank: grantMisses(released.missBank, run.board.level, 1, missBankCap(released)) }
         : released;
     const risen = promoteRunBeneath(refilled);
+    // The complete Warden falls to a release of twelve or more (`warden-rules.ts`): that release is the win, pairs left or not.
+    if (wardenFellsTo(run, held)) {
+        const felled = { ...risen, board: wipeFootprints(risen.board!), wardenFelled: true };
+        return { run: finalizeLevel(felled, felled.board!), pairs, score, held };
+    }
     return { run: isBoardComplete(risen.board!) ? finalizeLevel(risen, risen.board!) : risen, pairs, score, held };
 };

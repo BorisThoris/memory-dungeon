@@ -3537,3 +3537,27 @@ The band's lower edge is 0.25, not the plan's guessed 0.3: Layers read 0.28-0.30
 design, and the owner chose the edge over a thinner deck (2026-10-21). The restless hall and the Warden are exempt by
 name: both are designed to take back what the player knew. `yarn gate:goldilocks` (in `gate:systems`) holds the band;
 with a two-card memory it reads 0.06 and fails. Rules 74 left survival in the band (`gate:warden-reach`: 59 of 100 at 15%).
+
+## The complete Warden (DGE-023, rules 78, 2026-10-21)
+
+Behind the wild or raging door the Warden falls only to a Hold released at 12 pairs or more
+(`WARDEN_FELL_PAIRS`); a board cleared without it is dealt up to 6 fresh pairs (`WARDEN_DEAL_AGAIN_PAIRS`)
+into the cleared cells and the floor goes on; the re-deal every fifth turn waits while a Hold is held.
+Behind the calm door clearing still wins. The owner chose this ("the Warden deals again").
+
+Measured with the soak to floor 62 (`yarn soak --seeds=200 --floors=62`; every player waits for twelve on the
+test Warden; the default soak stops at floor 30 and never meets it):
+
+| player | test Wardens met | felled | boards dealt again |
+| --- | --- | --- | --- |
+| careful | 30 | 26 (87%) | 52 |
+| planned | 6 | 4 (67%) | 12 |
+| average | 0 | - | - |
+| sloppy | 0 | - | - |
+| wild | 0 | - | - |
+
+The planned and careful players clear it most of the time, as the ticket asked. **Shortfall:** the soak's
+average player never reaches a test Warden (199 of 200 end on the miss bank earlier), so "the average player
+sometimes" is not measured; the survival sim's 15% player reaches floor 60 in 61 of 100 runs
+(`gate:warden-reach`), but does not model the Hold. Twelve is reachable on the Warden's board without
+Layers (the hall room `warden-felled` does it on 13 pairs).

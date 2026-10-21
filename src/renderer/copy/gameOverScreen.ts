@@ -1,4 +1,6 @@
-import type { RunEndReason, RunSummary } from '../../shared/contracts';
+import type { RunEndReason, RunState, RunSummary } from '../../shared/contracts';
+import { DESCENT_FLOOR_COUNT } from '../../shared/floor-mutator-schedule';
+import { WARDEN_FELL_PAIRS } from '../../shared/warden-rules';
 
 /**
  * User-visible strings for the post-run summary (GameOverScreen). Centralized for a11y review and future i18n.
@@ -138,6 +140,21 @@ export const gameOverScreenCopy = {
  * The end-reason line for a summary, or nothing for one that predates the reason being recorded:
  * an older summary reads as unknown rather than as any one of the four.
  */
+/**
+ * The Warden's line (DGE-023): how the complete Warden fell, or, for a Descent that ended within
+ * three floors of it, how far short and what it would have asked.
+ */
+export const wardenEndLine = (
+    summary: Pick<RunSummary, 'highestLevel' | 'runEndReason'>,
+    run: Pick<RunState, 'wardenFelled' | 'endless'>
+): string | null => {
+    if (summary.runEndReason === 'warden_cleared') return run.wardenFelled ? `Felled by a Hold released at ${WARDEN_FELL_PAIRS} pairs or more.` : null;
+    if (run.endless || summary.runEndReason !== 'miss_budget' || summary.highestLevel < DESCENT_FLOOR_COUNT - 2) return null;
+    const short = DESCENT_FLOOR_COUNT - summary.highestLevel;
+    const ask = `Behind the wild or raging door it falls only to a Hold released at ${WARDEN_FELL_PAIRS} pairs.`;
+    return short > 0 ? `${short} ${short === 1 ? 'floor' : 'floors'} short of the Warden. ${ask}` : `The Warden stood. ${ask}`;
+};
+
 export const runEndReasonLine = (summary: Pick<RunSummary, 'highestLevel' | 'runEndReason'>): string | null =>
     summary.runEndReason ? gameOverScreenCopy.endReason[summary.runEndReason](summary.highestLevel) : null;
 
