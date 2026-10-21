@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3291,
-    "codeFileCount": 1261,
-    "exportedSymbolCount": 4070,
+    "trackedFileCount": 3293,
+    "codeFileCount": 1263,
+    "exportedSymbolCount": 4074,
     "contentItemCount": 16,
     "mechanicCount": 81,
     "stateFieldCount": 155,
-    "relationshipCount": 11196
+    "relationshipCount": 11219
   },
   "inventory": [
     {
@@ -2428,7 +2428,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "d661b78b44b247b7ba580e80354f5edae77175afb4c6fbc723ef58bd6e1f088f"
+      "sha256": "d65c0741f4a5ad72306f6497da405ebbaa536165c617cbe30edbd83ec4f7142b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10887,8 +10887,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 24954,
-      "sha256": "acffa1333cbfbe2770f808d35fe4c71113aa7e1758be2374040a1b66ce17eede"
+      "bytes": 26023,
+      "sha256": "49e9df8617d4e8f8c50b1c546f18b90e129277acc9d3b503087e72e11c086a12"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -12933,8 +12933,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 9916,
-      "sha256": "ebf2f1f717bf364e320cbf318ed3b8a8fc5789178d886ef46aef497a90390b22"
+      "bytes": 10725,
+      "sha256": "2d92b9981fd2d197b65922f1959d27977453277d7582d579abe6cd08db0a2b9c"
     },
     {
       "path": "src/renderer/copy/gameOverWardenLine.test.ts",
@@ -15079,6 +15079,18 @@
       "sha256": "b0229623dbaaed1aa003c01bd267389c2aaab88ad822395a2fcef1628fceff5e"
     },
     {
+      "path": "src/shared/descent-run-summary.test.ts",
+      "category": "test",
+      "bytes": 2266,
+      "sha256": "b22d5c1ed26b72dcfa290d3965ca1e49275fd8d6a6e1837e72bd5e669c58a839"
+    },
+    {
+      "path": "src/shared/descent-run-summary.ts",
+      "category": "source",
+      "bytes": 2781,
+      "sha256": "ef31a2352d6021efb21e1d8abb98085d20e56bd407c513d6115331455235603c"
+    },
+    {
       "path": "src/shared/descent-schedule-golden.test.ts",
       "category": "test",
       "bytes": 1856,
@@ -16659,8 +16671,8 @@
     {
       "path": "src/shared/run-share-text.ts",
       "category": "source",
-      "bytes": 2767,
-      "sha256": "8e8970e66dddf36225f9321a35b1f6bcaa8ecf887b6b371d879d7755e337e7d2"
+      "bytes": 3207,
+      "sha256": "4a274bfac83022adaa85fee677174f55774cd10d75309c98133f634f3a778e0f"
     },
     {
       "path": "src/shared/run-soak.test.ts",
@@ -17343,8 +17355,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 15625,
-      "sha256": "59f5b726e8cb589057380793e2fde996406c4099c092164871f610700799692a"
+      "bytes": 16060,
+      "sha256": "eba9d68021fa40bb6e36a7b0f64b1613456089c7f94a11e8b918974cfe4f31d8"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17415,8 +17427,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-007-results-and-run-summary.md",
       "category": "other",
-      "bytes": 2038,
-      "sha256": "bb1ff4ac2e388c5ec9992833234ec68d87a3c4826fc9e5448d9a7d0bb12a0017"
+      "bytes": 3266,
+      "sha256": "a6b5925c98c85cad3a6ac3fd2fe562edcfa15c4204d477bc388bcc94198a796a"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-008-hold-verb.md",
@@ -23943,7 +23955,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 483,
+      "lineCount": 500,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -23967,6 +23979,8 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/descent-record.ts",
+        "file:src/shared/descent-run-summary.ts",
         "file:src/shared/dread-rules.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/game-over-next-run.ts",
@@ -29997,14 +30011,17 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 191,
+      "lineCount": 204,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/descent-run-summary.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/warden-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
+        "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
+        "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
         "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
         "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
         "symbol:src/renderer/copy/gameOverScreen.ts#wardenEndLine"
@@ -36401,7 +36418,45 @@
         "symbol:src/shared/descent-record.ts#recordDescent"
       ],
       "testedBy": [
-        "file:src/shared/descent-record.test.ts"
+        "file:src/shared/descent-record.test.ts",
+        "file:src/shared/descent-run-summary.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/descent-run-summary.test.ts",
+      "path": "src/shared/descent-run-summary.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 39,
+      "imports": [
+        "file:src/shared/descent-record.ts",
+        "file:src/shared/descent-run-summary.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/run-share-key.ts",
+        "file:src/shared/run-share-text.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/descent-run-summary.ts",
+      "path": "src/shared/descent-run-summary.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 52,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/dread-rules.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/milestone-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/descent-run-summary.ts#DescentRunSummary",
+        "symbol:src/shared/descent-run-summary.ts#summarizeDescent"
+      ],
+      "testedBy": [
+        "file:src/shared/descent-run-summary.test.ts"
       ]
     },
     {
@@ -37860,6 +37915,7 @@
         "file:src/shared/curio-rules.test.ts",
         "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/descent-record.test.ts",
+        "file:src/shared/descent-run-summary.test.ts",
         "file:src/shared/dread-rules.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-coatings.test.ts",
@@ -41974,6 +42030,7 @@
       ],
       "testedBy": [
         "file:src/renderer/testPace.test.ts",
+        "file:src/shared/descent-run-summary.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-share-key.test.ts"
@@ -41997,9 +42054,10 @@
       "path": "src/shared/run-share-text.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 52,
+      "lineCount": 57,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/descent-run-summary.ts",
         "file:src/shared/run-mode-identity.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-share-key.ts"
@@ -42009,6 +42067,7 @@
         "symbol:src/shared/run-share-text.ts#RunShareText"
       ],
       "testedBy": [
+        "file:src/shared/descent-run-summary.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-share-text.test.ts"
       ]
@@ -49031,8 +49090,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 482,
-      "endLine": 482
+      "line": 499,
+      "endLine": 499
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -56175,32 +56234,48 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 166,
-      "endLine": 190
+      "line": 179,
+      "endLine": 203
+    },
+    {
+      "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
+      "name": "descentEndLine",
+      "kind": "value",
+      "file": "src/renderer/copy/gameOverScreen.ts",
+      "line": 160,
+      "endLine": 165
+    },
+    {
+      "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
+      "name": "descentFirstsLine",
+      "kind": "value",
+      "file": "src/renderer/copy/gameOverScreen.ts",
+      "line": 168,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "name": "gameOverScreenCopy",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 8,
-      "endLine": 137
+      "line": 9,
+      "endLine": 138
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 158,
-      "endLine": 159
+      "line": 171,
+      "endLine": 172
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#wardenEndLine",
       "name": "wardenEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 147,
-      "endLine": 156
+      "line": 148,
+      "endLine": 157
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -64609,6 +64684,22 @@
       "file": "src/shared/descent-record.ts",
       "line": 52,
       "endLine": 73
+    },
+    {
+      "id": "symbol:src/shared/descent-run-summary.ts#DescentRunSummary",
+      "name": "DescentRunSummary",
+      "kind": "interface",
+      "file": "src/shared/descent-run-summary.ts",
+      "line": 16,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/descent-run-summary.ts#summarizeDescent",
+      "name": "summarizeDescent",
+      "kind": "value",
+      "file": "src/shared/descent-run-summary.ts",
+      "line": 28,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
@@ -73335,16 +73426,16 @@
       "name": "buildRunShareText",
       "kind": "value",
       "file": "src/shared/run-share-text.ts",
-      "line": 27,
-      "endLine": 51
+      "line": 28,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/run-share-text.ts#RunShareText",
       "name": "RunShareText",
       "kind": "interface",
       "file": "src/shared/run-share-text.ts",
-      "line": 18,
-      "endLine": 23
+      "line": 19,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_INVARIANTS",
@@ -80484,7 +80575,7 @@
         },
         {
           "path": "src/renderer/components/GameOverScreen.tsx",
-          "line": 31
+          "line": 33
         }
       ],
       "tests": [
@@ -92493,6 +92584,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
+      "source": "file:src/renderer/copy/gameOverScreen.ts",
+      "target": "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
+      "source": "file:src/renderer/copy/gameOverScreen.ts",
+      "target": "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "source": "file:src/renderer/copy/gameOverScreen.ts",
       "target": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -98814,6 +98917,18 @@
       "id": "exports:src/shared/descent-record.ts->symbol:src/shared/descent-record.ts#recordDescent",
       "source": "file:src/shared/descent-record.ts",
       "target": "symbol:src/shared/descent-record.ts#recordDescent",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-run-summary.ts->symbol:src/shared/descent-run-summary.ts#DescentRunSummary",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "symbol:src/shared/descent-run-summary.ts#DescentRunSummary",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/descent-run-summary.ts->symbol:src/shared/descent-run-summary.ts#summarizeDescent",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "symbol:src/shared/descent-run-summary.ts#summarizeDescent",
       "kind": "exports"
     },
     {
@@ -114149,6 +114264,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/descent-record.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/descent-record.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/descent-run-summary.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/descent-run-summary.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/dread-rules.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/dread-rules.ts",
@@ -121265,6 +121392,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/gameOverScreen.ts->src/shared/descent-run-summary.ts",
+      "source": "file:src/renderer/copy/gameOverScreen.ts",
+      "target": "file:src/shared/descent-run-summary.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/gameOverScreen.ts->src/shared/floor-mutator-schedule.ts",
       "source": "file:src/renderer/copy/gameOverScreen.ts",
       "target": "file:src/shared/floor-mutator-schedule.ts",
@@ -126841,6 +126974,66 @@
     {
       "id": "imports:src/shared/descent-record.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/descent-record.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.test.ts->src/shared/descent-record.ts",
+      "source": "file:src/shared/descent-run-summary.test.ts",
+      "target": "file:src/shared/descent-record.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.test.ts->src/shared/descent-run-summary.ts",
+      "source": "file:src/shared/descent-run-summary.test.ts",
+      "target": "file:src/shared/descent-run-summary.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/descent-run-summary.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.test.ts->src/shared/run-share-key.ts",
+      "source": "file:src/shared/descent-run-summary.test.ts",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.test.ts->src/shared/run-share-text.ts",
+      "source": "file:src/shared/descent-run-summary.test.ts",
+      "target": "file:src/shared/run-share-text.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.ts->src/shared/dread-rules.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "file:src/shared/dread-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.ts->src/shared/milestone-rules.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "file:src/shared/milestone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/descent-run-summary.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
       "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
@@ -132464,6 +132657,12 @@
       "id": "imports:src/shared/run-share-text.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-share-text.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.ts->src/shared/descent-run-summary.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/descent-run-summary.ts",
       "kind": "imports"
     },
     {
@@ -144280,6 +144479,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/descent-record.ts->file:src/shared/descent-run-summary.test.ts",
+      "source": "file:src/shared/descent-record.ts",
+      "target": "file:src/shared/descent-run-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/descent-run-summary.ts->file:src/shared/descent-run-summary.test.ts",
+      "source": "file:src/shared/descent-run-summary.ts",
+      "target": "file:src/shared/descent-run-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/desktop-api-boundary.ts->file:src/shared/desktop-api-boundary.test.ts",
       "source": "file:src/shared/desktop-api-boundary.ts",
       "target": "file:src/shared/desktop-api-boundary.test.ts",
@@ -145231,6 +145442,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/descent-record.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/descent-record.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/descent-run-summary.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/descent-run-summary.test.ts",
       "kind": "tested_by"
     },
     {
@@ -146986,6 +147203,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/descent-run-summary.test.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/shared/descent-run-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/elemental-encounter-goals.test.ts",
       "source": "file:src/shared/run-share-key.ts",
       "target": "file:src/shared/elemental-encounter-goals.test.ts",
@@ -147001,6 +147224,12 @@
       "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/run-share-key.test.ts",
       "source": "file:src/shared/run-share-key.ts",
       "target": "file:src/shared/run-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-share-text.ts->file:src/shared/descent-run-summary.test.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/descent-run-summary.test.ts",
       "kind": "tested_by"
     },
     {
