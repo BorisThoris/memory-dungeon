@@ -1,7 +1,7 @@
 # DGE-013: Four relic slots and the replacement choice
 
 ## Status
-Not started
+Done (2026-10-21), rules 76. The ceiling is met but not passed until DGE-014 adds a fourth ranked relic: see notes.
 
 ## Priority
 P1
@@ -48,3 +48,11 @@ A run holds four relics. Buying a fifth asks which to replace, and the replaced 
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21, built (rules 76):
+- `RELIC_SLOTS` 4, `relicSlotsFull`, `heldRelicIds`, `giveUpRelic` (`run-relic-rules.ts`). The store blocks a relic not held as `slots` on a full set; ranks of a held relic are still sold.
+- The camp spends gold automatically (there is no store screen to choose in), so the choice the ticket describes is the Miser's Purse: taken on a full set it names the relic it replaces, its ranks going with it. The take-relic gameplay command carries `replaceRelicId` (journals replay it); `GameScreen` asks with an `OverlayModal` (`relic-replace`), "Keep them all" backs out. Not reversible until Descend: the Purse is taken mid-floor, not at a stop, and backing out of the choice is the undo.
+- Inventory: "Relics: n of 4 slots".
+- **Today the ceiling is never passed**: the camp sells three ranked relics (the Tallow Candle is not sold under camp rules) and a Curio holds the Purse, four in all. It becomes live when DGE-014 makes the Candle a fourth ranked upgrade, which its recipes need.
+- Codex: the camp topic states the four slots, and the stale lines found on the way were fixed - the camp's "no route choice is needed" (doors return before act bosses, rules 75) and the miss bank's flat grant and cap (rules 73). ENCYCLOPEDIA_VERSION 103.
+- Soak: the invariant that a run never holds more relics than its slots; a full set's Purse gives up the lowest-ranked relic. 5 x 200: 0 violations.

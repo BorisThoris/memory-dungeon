@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). */
-export const GAME_RULES_VERSION = 75;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). */
+export const GAME_RULES_VERSION = 76;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;

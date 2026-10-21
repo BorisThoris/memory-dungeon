@@ -1,6 +1,6 @@
 import type { RunState } from './contracts';
 import { grantMisses, missBankCap } from './miss-bank';
-import { hasRelic } from './run-relic-rules';
+import { hasRelic, giveUpRelic, relicSlotsFull, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -16,10 +16,16 @@ export const MISERS_PURSE_SOURCE_ID = 'misers_purse';
 export const canTakeMisersPurse = (run: RunState): boolean =>
     run.status === 'playing' && runNonNegativeInteger(run.misersPurseOffers) > 0 && !hasRelic(run, 'misers_purse');
 
-/** The run with the purse taken up, or null when there is none to take. */
-export const takeMisersPurse = (run: RunState): RunState | null => {
+/**
+ * The run with the purse taken up, or null when there is none to take. With every relic slot held
+ * (`relicSlotsFull`) it needs the relic it replaces, which goes with its ranks.
+ */
+export const takeMisersPurse = (run: RunState, replaceRelicId?: RelicId): RunState | null => {
     if (!canTakeMisersPurse(run)) return null;
-    const taken: RunState = { ...run, misersPurseOffers: 0, relics: [...(run.relics ?? []), 'misers_purse'], powersUsedThisRun: true };
+    const full = relicSlotsFull(run);
+    if (full && (!replaceRelicId || !hasRelic(run, replaceRelicId))) return null;
+    const room = full && replaceRelicId ? giveUpRelic(run, replaceRelicId) : run;
+    const taken: RunState = { ...room, misersPurseOffers: 0, relics: [...(room.relics ?? []), 'misers_purse'], powersUsedThisRun: true };
     // The purse takes a slot: what the bank held over its new cap goes, soonest to expire first.
     return taken.missBank ? { ...taken, missBank: grantMisses(taken.missBank, run.board?.level ?? 1, 0, missBankCap(taken)) } : taken;
 };

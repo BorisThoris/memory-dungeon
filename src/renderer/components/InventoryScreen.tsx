@@ -12,7 +12,8 @@ import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { createInventoryQuantityMap, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
-import { CAMP_UPGRADE_IDS, CURIO_RELIC_IDS, hasRelic, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit } from '../../shared/run-relic-rules';
+import { CAMP_UPGRADE_IDS, CURIO_RELIC_IDS, hasRelic, usesCampUpgrades, relicRank, relicDefinition, campUpgradeBenefit, heldRelicIds, RELIC_SLOTS, RELIC_SLOTS_FROM } from '../../shared/run-relic-rules';
+import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import { runGold } from '../../shared/run-store-rules';
 import { canAimMeteor, meteorCharges } from '../../shared/meteor-rules';
 
@@ -139,6 +140,9 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
             <section aria-label="Run upgrades" className={styles.section}>
                 <h2 className={styles.sectionTitle}>Run upgrades · {runGold(run)} gold</h2>
                 <p className={styles.upgradesNote}>Gold buys automatic upgrades every 3 floors.</p>
+                {run.runRulesVersion >= RELIC_SLOTS_FROM ? (
+                    <p className={styles.upgradesNote} data-testid="inventory-relic-slots">{RELIC_SLOT_COPY.slotsLine(heldRelicIds(run).length, RELIC_SLOTS)}</p>
+                ) : null}
                 <ul className={styles.chips}>{CAMP_UPGRADE_IDS.map(id => <li className={styles.chip} key={id}>
                     <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
                     <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>

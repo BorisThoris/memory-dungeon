@@ -1,3 +1,5 @@
+import { heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS } from '../../shared/run-relic-rules';
+import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import RealmTravel from './RealmTravel';
 import { BOSS_DOOR_COPY, bossDoorRewardLine, bossRewardNote } from '../copy/bossRewardCopy';
 import { runBlueprints } from '../../shared/boss-reward-rules';
@@ -1292,6 +1294,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const [travelKey, setTravelKey] = useState<string | null>(null);
+    const [purseReplaceOpen, setPurseReplaceOpen] = useState(false);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
     const floorClearBeatShown =
@@ -1873,7 +1876,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 charges: run.misersPurseOffers ?? 0,
                 disabled: !canTakeMisersPurse(run),
                 title: canTakeMisersPurse(run) ? MISERS_PURSE_TOOL_COPY.ready(missBankCap(run) - 1) : MISERS_PURSE_TOOL_COPY.unavailable,
-                onClick: () => useAppStore.getState().takeMisersPurse()
+                // Every relic slot held (DGE-013): the purse asks which relic it replaces.
+                onClick: () => (relicSlotsFull(run) ? setPurseReplaceOpen(true) : useAppStore.getState().takeMisersPurse())
             },
             {
                 ...toolSpec('bomb'),
@@ -2495,6 +2499,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         </ul>
                         <p className={styles.shortcutsHelpTip}>{GAMBIT_KEYBOARD_HELP_TIP}</p>
                     </OverlayModal>
+                ) : null}
+
+                {/* The relic slots (DGE-013): the purse on a full set gives one relic up, ranks and all. */}
+                {!suppressStatusOverlays && purseReplaceOpen && canTakeMisersPurse(run) ? (
+                    <OverlayModal
+                        actions={[
+                            ...heldRelicIds(run)
+                                .filter((id): id is 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle' => id !== 'misers_purse')
+                                .map((id) => ({
+                                    label: RELIC_SLOT_COPY.giveUp(relicDefinition(id).title, relicRank(run, id)),
+                                    onClick: () => {
+                                        setPurseReplaceOpen(false);
+                                        useAppStore.getState().takeMisersPurse(id);
+                                    },
+                                    variant: 'secondary' as const
+                                })),
+                            { label: RELIC_SLOT_COPY.keep, onClick: () => setPurseReplaceOpen(false), variant: 'primary' as const }
+                        ]}
+                        subtitle={RELIC_SLOT_COPY.body(RELIC_SLOTS)}
+                        testId="relic-replace"
+                        title={RELIC_SLOT_COPY.title}
+                    />
                 ) : null}
 
                 {/* The doors before an act boss (DGE-026): the way in is the boss's reward. */}

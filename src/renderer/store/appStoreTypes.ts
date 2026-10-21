@@ -89,7 +89,8 @@ export interface AppState {
     /** Ring a still bell: the realm lets go of its cards, then answers (`still-bell-rules.ts`). */
     useStillBell: () => void;
     /** Take up the Miser's Purse a Curio offered (`misers-purse-rules.ts`). */
-    takeMisersPurse: () => void;
+    /** Takes up the Miser's Purse; with every relic slot held it names the relic it replaces (DGE-013). */
+    takeMisersPurse: (replaceRelicId?: 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle') => void;
     armMeteor: () => void;
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */

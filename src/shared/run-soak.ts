@@ -20,7 +20,7 @@ import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, f
 import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';
 import { hasMutator } from './mutators';
-import { hasRelic, usesCampUpgrades } from './run-relic-rules';
+import { hasRelic, usesCampUpgrades, heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS, RELIC_SLOTS_FROM } from './run-relic-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
 import { essenceOf, focusOf, isElementalStoreId, storeElement } from './elemental-loot-rules';
@@ -447,6 +447,8 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     },
     'a floor ends only when both decks are cleared': (_before, run) =>
         run.status === 'levelComplete' && run.board?.beneath?.some(Boolean) ? 'the floor cleared with cards still beneath it' : null,
+    'a run never holds more relics than its slots': (_before, run) =>
+        (run.runRulesVersion ?? 0) >= RELIC_SLOTS_FROM && heldRelicIds(run).length > RELIC_SLOTS ? `${heldRelicIds(run).length} relics: ${heldRelicIds(run).join(',')}` : null,
     'blueprints drop in order and never twice': (_before, run) => {
         const held = run.blueprints ?? [];
         return held.every((id, index) => id === BLUEPRINT_ORDER[index]) ? null : `blueprints out of order: ${held.join(',')}`;
@@ -867,7 +869,9 @@ export const soakRun = ({
         const first = pick(wanted.length > 0 ? wanted : pool);
         // Every player takes up the Miser's Purse when a Curio offers it: the soak wants it carried.
         if (canTakeMisersPurse(run)) {
-            const taken = takeMisersPurse(run);
+            // With every slot held (DGE-013) it gives up its lowest-ranked relic for it.
+            const lowest = relicSlotsFull(run) ? [...heldRelicIds(run)].filter((id) => id !== 'misers_purse').sort((a, b) => relicRank(run, a) - relicRank(run, b))[0] : undefined;
+            const taken = takeMisersPurse(run, lowest);
             if (taken) {
                 act('take-purse', taken);
                 continue;

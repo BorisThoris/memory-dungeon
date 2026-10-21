@@ -323,7 +323,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z.object({ ...commandBase, type: z.literal('board.crucible'), targetTileId: z.string().min(1).max(160) }).strict(),
     z.object({ ...commandBase, type: z.literal('board.storm_glass') }).strict(),
     z.object({ ...commandBase, type: z.literal('board.still_bell') }).strict(),
-    z.object({ ...commandBase, type: z.literal('run.take_relic'), relicId: z.literal('misers_purse') }).strict(),
+    z.object({ ...commandBase, type: z.literal('run.take_relic'), relicId: z.literal('misers_purse'), replaceRelicId: z.enum(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle']).optional() }).strict(),
     z
         .object({
             ...commandBase,
@@ -808,8 +808,8 @@ export const createGameplayBombCommand = (commandId: string, targetTileId: strin
         targetTileId
     });
 
-export const createGameplayTakeRelicCommand = (commandId: string): GameplayCommand =>
-    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'run.take_relic', relicId: 'misers_purse' });
+export const createGameplayTakeRelicCommand = (commandId: string, replaceRelicId?: 'deep_pockets' | 'gilded_chain' | 'long_look' | 'tallow_candle'): GameplayCommand =>
+    gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'run.take_relic', relicId: 'misers_purse', ...(replaceRelicId ? { replaceRelicId } : {}) });
 
 export const createGameplayStillBellCommand = (commandId: string): GameplayCommand =>
     gameplayCommandSchema.parse({ schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION, commandId, type: 'board.still_bell' });

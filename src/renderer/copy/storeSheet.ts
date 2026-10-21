@@ -6,7 +6,7 @@ export const STORE_SHEET_COPY = {
     subtitle: (floor: number, gold: number): string =>
         `Floor ${floor} cleared. You have ${gold} gold to spend before you descend; prices climb with each thing you buy.`,
     /** The price on a row's own button; the row beside it already says what it is. */
-    priceLabel: (row: StoreOfferRow): string => (row.blocked === 'max_rank' ? 'Max rank' : row.blocked === 'owned' ? 'Owned' : `${row.price} gold${row.essenceCost ? ` + ${row.essenceCost} essence` : ''}`),
+    priceLabel: (row: StoreOfferRow): string => (row.blocked === 'max_rank' ? 'Max rank' : row.blocked === 'owned' ? 'Owned' : row.blocked === 'slots' ? 'No slot' : `${row.price} gold${row.essenceCost ? ` + ${row.essenceCost} essence` : ''}`),
     /** What a screen reader hears for that button, which cannot lean on the row it sits in. */
     buyAriaLabel: (row: StoreOfferRow): string =>
         row.blocked === 'max_rank' ? `${row.title}: max rank` : row.blocked === 'owned' ? `${row.title}: owned` : `Buy ${row.title.toLowerCase()} for ${row.price} gold${row.essenceCost ? ` and ${row.essenceCost} essence` : ''}`,

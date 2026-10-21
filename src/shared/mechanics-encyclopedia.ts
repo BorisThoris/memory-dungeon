@@ -28,7 +28,7 @@ import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 102 as const;
+export const ENCYCLOPEDIA_VERSION = 103 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -382,13 +382,14 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
             'After every third floor, **camp automatically spends gold** on one useful reward. It restores a miss first when only one remains; otherwise it chooses the lowest-rank affordable upgrade, then a missing supply. There is no shop screen. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
             '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). Each upgrade has three ranks and lasts this run. ' +
             'When an upgrade is not affordable, camp can restore a miss for 4 gold, a missing peek for 3 or a missing bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
-            'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is selected randomly; no route choice is needed.'
+            'A run carries **four relics** at most: camp never buys a fifth, and a relic found beyond the four asks which one to give up, its ranks with it. ' +
+            'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is chosen for you, except on the clear before an act boss, which offers three doors.'
     },
     {
         id: 'miss_budget',
         title: 'Misses',
         description:
-            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and so does every **fifth match in a row**. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most (**five** with Deep Pockets at rank 1, up to **seven** at rank 3). A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
+            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and **one more for every seven pairs** the floor held, and every **fifth match in a row** earns one too. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most, **one more for every six pairs** on the floor, and one more for each rank of Deep Pockets. A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
     },
     {
         id: 'scoring',

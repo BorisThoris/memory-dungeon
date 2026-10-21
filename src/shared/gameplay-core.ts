@@ -257,9 +257,9 @@ const applyTakeRelicCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'run.take_relic' }>
 ): GameplayCommandResult => {
-    const nextRun = takeMisersPurse(run);
+    const nextRun = takeMisersPurse(run, command.replaceRelicId);
     if (!nextRun) {
-        return rejectedResult(run, command.commandId, "There is no Miser's Purse on offer.", command);
+        return rejectedResult(run, command.commandId, "There is no Miser's Purse on offer, or no relic named to make room for it.", command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, MISERS_PURSE_SOURCE, events);

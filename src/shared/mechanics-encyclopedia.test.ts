@@ -15,9 +15,10 @@ import {
     MISS_BANK_COMBO_RUNG,
     MISS_BANK_FLOOR_GRANT,
     MISS_BANK_LIFETIME_FLOORS,
-    MISS_BANK_OPENING
+    MISS_BANK_OPENING,
+    MISS_BANK_CAP_PAIRS,
+    MISS_BANK_GRANT_PAIRS
 } from './miss-bank';
-import { DEEP_POCKETS_CAP } from './run-relic-rules';
 import { getFeaturedObjectiveBonusScore } from './secondary-objective-rules';
 import {
     ACHIEVEMENT_CATALOG,
@@ -152,14 +153,16 @@ describe('mechanics-encyclopedia', () => {
          * after the bank became earned grants with a shelf life (3 to open, +1 a floor clear, +1 a
          * fifth chain link, three floors each, cap 4). Found reading the Codex after a deep playtest.
          */
-        const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
+        const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
         const bank = CODEX_CORE_TOPICS.find((topic) => topic.id === 'miss_budget')!.description;
         expect(bank).toContain(`opens with **${words[MISS_BANK_OPENING]}**`);
         expect(bank).toContain(`clearing a floor earns **${words[MISS_BANK_FLOOR_GRANT]}**`);
         expect(bank).toContain(`every **fifth match in a row**`);
         expect(MISS_BANK_COMBO_RUNG).toBe(5);
         expect(bank).toContain(`lasts **${words[MISS_BANK_LIFETIME_FLOORS]} floors**`);
-        expect(bank).toContain(`holds **${words[MISS_BANK_CAP]}** at most (**${words[DEEP_POCKETS_CAP]}** with Deep Pockets at rank 1, up to **seven** at rank 3)`);
+        // Rules 73 (DGE-032): the grant and the cap grow with the floor.
+        expect(bank).toContain(`**one more for every ${words[MISS_BANK_GRANT_PAIRS]} pairs** the floor held`);
+        expect(bank).toContain(`holds **${words[MISS_BANK_CAP]}** at most, **one more for every ${words[MISS_BANK_CAP_PAIRS]} pairs** on the floor`);
         const profile = getDefaultDifficultyProfile().playerCopy;
         expect(profile).toContain(`opens with ${words[MISS_BANK_OPENING]}`);
         expect(profile).toContain(`never holds more than ${words[MISS_BANK_CAP]}`);

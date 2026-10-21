@@ -673,10 +673,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ run: appendGameplayJournal(result.run, [command], result.events) });
     },
 
-    takeMisersPurse: () => {
+    takeMisersPurse: (replaceRelicId) => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canTakeMisersPurse(run)) return;
-        const command = createGameplayTakeRelicCommand(`take-relic:${run.runSeed}:${run.board?.level ?? 0}:misers_purse`);
+        const command = createGameplayTakeRelicCommand(`take-relic:${run.runSeed}:${run.board?.level ?? 0}:misers_purse`, replaceRelicId);
         const result = reduceGameplayCommand(run, command);
         if (!result.accepted) return;
         void resumeAudioContext();

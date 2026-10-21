@@ -1,7 +1,7 @@
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
 import { grantMisses, missBankCap, missesLeft } from './miss-bank';
-import { hasRelic, isRelicId, RELICS, usesCampUpgrades, isCampUpgrade, relicRank, campUpgradeBenefit, CAMP_UPGRADE_MAX_RANK, type RelicId } from './run-relic-rules';
+import { hasRelic, isRelicId, RELICS, usesCampUpgrades, isCampUpgrade, relicRank, campUpgradeBenefit, CAMP_UPGRADE_MAX_RANK, relicSlotsFull, type RelicId } from './run-relic-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_COST, isElementalStoreId, storeElement, usesElementalLoot, type ElementalStoreId } from './elemental-loot-rules';
@@ -158,7 +158,7 @@ export interface StoreOfferRow {
     body: string;
     price: number;
     /** Why it cannot be bought right now, or `null` when it can. */
-    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | 'essence' | 'prepared' | 'max_rank' | null;
+    blocked: 'gold' | 'full' | 'no_bank' | 'owned' | 'essence' | 'prepared' | 'max_rank' | 'slots' | null;
     kind: StoreItemDefinition['kind'];
     rank?: number;
     goldShortfall?: number;
@@ -196,6 +196,8 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
             if (item.id === 'deep_pockets' && missesLeft(run) == null) blocked = 'no_bank';
             if (rank >= CAMP_UPGRADE_MAX_RANK) blocked = 'max_rank';
         } else if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';
+        // The relic slots (DGE-013): a relic not yet held needs a free slot; ranks of a held one do not.
+        if (blocked === null && isRelicId(item.id) && !hasRelic(run, item.id) && relicSlotsFull(run)) blocked = 'slots';
         if (blocked === null && runGold(run) < price) blocked = 'gold';
         return { id: item.id, title: item.title, body, price, blocked, kind: item.kind, rank, goldShortfall: Math.max(0, price - runGold(run)), ...(essenceCost === undefined ? {} : { essenceCost, essenceHeld }) };
     });

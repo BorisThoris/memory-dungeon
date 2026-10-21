@@ -78,6 +78,28 @@ export const RELICS: readonly RelicDefinition[] = [
 /** What a floor clear's gold is multiplied by while the Miser's Purse is held. */
 export const MISERS_PURSE_GOLD_MULTIPLIER = 2;
 
+/**
+ * The relic slots (DGE-013, rules 76): a run holds four relics. The camp never buys a fifth - it grows the
+ * ranks of what is held instead - and a relic offered beyond the four (the Miser's Purse, from a Curio)
+ * asks which to give up, ranks and all. A ceiling is what turns more relics into a decision: a build
+ * that has to be planned (the Vampire Survivors finding, `tasks/deep-game-epic/01-research-findings.md`).
+ */
+export const RELIC_SLOTS = 4;
+export const RELIC_SLOTS_FROM = 76;
+
+/** The relics a run holds, each once. */
+export const heldRelicIds = (run: Pick<RunState, 'relics'>): RelicId[] => [...new Set((run.relics ?? []).filter(isRelicId))];
+
+/** True when the run holds all the relics it may: a new one must replace one. */
+export const relicSlotsFull = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion'>>): boolean =>
+    (run.runRulesVersion ?? 0) >= RELIC_SLOTS_FROM && heldRelicIds(run).length >= RELIC_SLOTS;
+
+/** The run with a relic given up, its ranks gone with it. */
+export const giveUpRelic = <R extends Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases'>>>(run: R, id: RelicId): R => {
+    const { [id]: _ranks, ...storePurchases } = run.storePurchases ?? {};
+    return { ...run, relics: (run.relics ?? []).filter((held) => held !== id), storePurchases };
+};
+
 /** The relics only a Curio holds. */
 export const CURIO_RELIC_IDS: readonly RelicId[] = ['misers_purse'];
 
