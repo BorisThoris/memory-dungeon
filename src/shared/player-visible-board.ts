@@ -15,6 +15,7 @@ import type { BoardState, Tile } from './contracts';
  * - a pickup (`findableKind`), a trait (`tileTraitKind`) and an Hourglass are on the face only:
  *   they are found by turning the card, and announced when they are;
  * - a Wanderer (`wanderer-rules.ts`) is a Wanderer on its face only: its step and footprint show it;
+ * - a masked card (`mask-rules.ts`) face down wears its mask's element, until its first flip drops it;
  * - a Turncoat face down wears the element it was dealt (`turncoatDealt`) and shows no badge, so
  *   its turning cannot be watched from across the board; its face shows what it is now and what
  *   it turns to next.
@@ -28,6 +29,11 @@ const PAIR_IDENTITY_FIELDS = ['findableKind', 'tileTraitKind', 'hourglass', 'tur
 
 export const playerVisibleTile = (tile: Tile): Tile => {
     if (tile.state !== 'hidden') return tile;
+    // A mask (`mask-rules.ts`) is the element the back shows: the screen is told the lie, never the truth.
+    if (tile.mask != null) {
+        const { mask, ...honest } = tile;
+        return playerVisibleTile({ ...honest, suit: mask });
+    }
     if (!PAIR_IDENTITY_FIELDS.some((field) => tile[field] != null)) return tile;
     const { findableKind: _f, tileTraitKind: _t, hourglass: _h, turncoat: _c, wanderer: _w, turncoatDealt, ...rest } = tile;
     return turncoatDealt != null ? { ...rest, suit: turncoatDealt } : rest;

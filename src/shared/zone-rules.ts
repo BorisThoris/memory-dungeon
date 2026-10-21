@@ -1,3 +1,4 @@
+import { dropMask, unmaskOnFlip } from './mask-rules';
 import type { RunState, Tile, ZoneResult, ZoneState } from './contracts';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
 import { comboAscension, comboHeatStage } from './combo-heat-rules';
@@ -112,15 +113,16 @@ export const zoneFlipTile = (run: RunState, tileId: string): RunState => {
     if (flipped.length === 0 && run.stickyBlockIndex !== null && index === run.stickyBlockIndex) return run;
     // The realm's holds apply in the Zone too: a frozen or vined card cannot be turned.
     if (isTileFlipBlocked(tile)) return run;
+    // A Zone flip is a first flip too: a mask drops (`mask-rules.ts`).
     const next: RunState = {
-        ...run,
+        ...unmaskOnFlip(run, tile),
         peekRevealedTileIds: [],
         flashPairRevealedTileIds: [],
         lanternLitTileIds: [],
         realmLitTileIds: [],
         board: {
             ...board,
-            tiles: board.tiles.map((candidate) => (candidate.id === tileId ? { ...shedSnow(candidate), state: 'flipped' as const } : candidate)),
+            tiles: board.tiles.map((candidate) => (candidate.id === tileId ? { ...dropMask(shedSnow(candidate)), state: 'flipped' as const } : candidate)),
             flippedTileIds: [...flipped, tileId]
         },
         flipHistory: [...run.flipHistory, tileId]

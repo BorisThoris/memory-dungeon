@@ -24,13 +24,14 @@ import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './d
 import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
+import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 106 as const;
+export const ENCYCLOPEDIA_VERSION = 107 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -512,7 +513,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_relic_evolutions',
         title: 'Relic evolutions',
         description:
-            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** and **Echo Chamber** wait for mechanics still to come.`
+            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** waits for a mechanic still to come.`
     },
     {
         id: 'sys_boss_rewards',
@@ -537,6 +538,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Wanderers',
         description:
             `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+    },
+    {
+        id: 'sys_masks',
+        title: 'Masks',
+        description:
+            `From floor ${MASK_FROM_FLOOR} a few backs **lie**: a masked card shows an element that is not its own, ${masksForFloor(MASK_FROM_FLOOR)} a floor, ${masksForFloor(40)} from floor 33. The first time you turn it the mask drops, and its back tells the truth for the rest of the floor. Only one card of a pair is ever masked, so every pair keeps one honest back. A masked card is its true element to everything it does: what it casts, what it pops, how it reacts.`
     },
     {
         id: 'sys_carve',

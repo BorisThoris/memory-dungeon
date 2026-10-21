@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). */
-export const GAME_RULES_VERSION = 79;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). */
+export const GAME_RULES_VERSION = 80;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -425,6 +425,8 @@ export interface Tile {
     frost?: number;
     /** Frost realm: a blizzard snowed over this card's back, so its suit cannot be read until it is turned. */
     snowed?: boolean;
+    /** Masks (`mask-rules.ts`): the element this card's back shows instead of its own, until it is first turned. */
+    mask?: TileSuit;
     /** Ember realm: turns left on this card's fuse. Match it before it burns out. */
     fuse?: number;
     /** Grove realm: vines hold this card down; it cannot be turned until a match beside it cuts them. */
@@ -1016,6 +1018,8 @@ export interface RunState {
     carveDirection?: CarveDirection | null;
     carvesThisFloor?: number;
     carvesSpentThisFloor?: number;
+    /** Masks (`mask-rules.ts`, DGE-016): masks dropped by a first flip this floor. */
+    masksDroppedThisFloor?: number;
     endless?: boolean;
     /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
     wardenOutcome?: 'cleared' | 'fell' | null;

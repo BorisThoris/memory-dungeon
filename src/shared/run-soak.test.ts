@@ -30,6 +30,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.bossDoorsTaken > 0), 'no run ever met a boss door').toBe(true);
         expect(reports.some((report) => report.blueprints > 0), 'no boss ever dropped a blueprint').toBe(true);
         expect(reports.some((report) => report.carvesSpent > 0), 'the planned player never spent a carve').toBe(true);
+        expect(reports.some((report) => report.masksDropped > 0), 'no run ever dropped a mask').toBe(true);
     });
 
     it('exercises the systems it exists to watch', () => {

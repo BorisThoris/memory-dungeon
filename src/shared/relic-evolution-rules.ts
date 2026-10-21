@@ -41,7 +41,8 @@ export const EVOLUTIONS: readonly EvolutionRecipe[] = [
     { id: 'misers_vault', title: "Miser's Vault", from: ['deep_pockets', 'gilded_chain'], live: true },
     { id: 'cartographers_thread', title: "Cartographer's Thread", from: ['long_look', 'gilded_chain'], live: true },
     { id: 'keystone_heart', title: 'Keystone Heart', from: ['deep_pockets', 'tallow_candle'], live: true },
-    { id: 'unmasking_glass', title: 'Unmasking Glass', from: ['tallow_candle', 'gilded_chain'], live: false },
+    // Masks (`mask-rules.ts`): every mask drops as the floor is dealt.
+    { id: 'unmasking_glass', title: 'Unmasking Glass', from: ['tallow_candle', 'gilded_chain'], live: true },
     { id: 'echo_chamber', title: 'Echo Chamber', from: ['long_look', 'deep_pockets'], live: false }
 ];
 

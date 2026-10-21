@@ -1,3 +1,4 @@
+import { dropMask, unmaskOnFlip } from './mask-rules';
 import type { RunState, Tile } from './contracts';
 import { tilesArePairMatch } from './scoring-rules';
 
@@ -19,12 +20,14 @@ export const revealFinalPair = (run: RunState): RunState => {
     const pair = getFinalPair(run);
     if (!pair || !run.board) return run;
     const ids = pair.map(tile => tile.id);
+    // The last pair turned for the player is a first flip of any masked card in it (`mask-rules.ts`).
+    const unmasked = pair.reduce((next, tile) => unmaskOnFlip(next, tile), run);
     return {
-        ...run,
+        ...unmasked,
         status: 'resolving',
         board: {
             ...run.board,
-            tiles: run.board.tiles.map(tile => ids.includes(tile.id) ? { ...tile, state: 'flipped' } : tile),
+            tiles: run.board.tiles.map(tile => ids.includes(tile.id) ? { ...dropMask(tile), state: 'flipped' } : tile),
             flippedTileIds: ids
         },
         flipHistory: [...run.flipHistory, ...pair.filter(tile => tile.state === 'hidden').map(tile => tile.id)],

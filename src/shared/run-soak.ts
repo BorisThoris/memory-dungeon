@@ -128,6 +128,9 @@ export interface SoakRunReport {
     /** Carve (`carve-rules.ts`): carves set, and carves a pop spent. */
     carves: number;
     carvesSpent: number;
+    /** Masks (`mask-rules.ts`): masks dealt onto floors, and dropped by a first flip. */
+    masksDealt: number;
+    masksDropped: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -579,6 +582,15 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
+    'a mask is never on both cards of a pair, and no face-up card wears one': (_before, run) => {
+        const tiles = run.board?.tiles ?? [];
+        const up = tiles.find((tile) => tile.mask != null && (tile.state === 'flipped' || tile.state === 'matched'));
+        if (up) return `${up.id} is ${up.state} and masked`;
+        const both = tiles.find((tile) => tile.mask != null && tiles.some((other) => other.id !== tile.id && other.pairKey === tile.pairKey && other.mask != null));
+        if (both) return `pair ${both.pairKey} masked twice`;
+        const false_ = tiles.find((tile) => tile.mask != null && tile.mask === tile.suit);
+        return false_ ? `${false_.id} masked as its own element` : null;
+    },
     'a carve is set between turns for two links and no turn, and never outlives its floor': (before, run, action) => {
         if (action === 'carve') {
             if (!before?.board || before.board.flippedTileIds.length > 0) return 'carved with a card face up';
@@ -722,6 +734,8 @@ export const soakRun = ({
     let wardenDealsAgain = 0;
     let carves = 0;
     let carvesSpent = 0;
+    let masksDealt = 0;
+    let masksDropped = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -773,6 +787,8 @@ export const soakRun = ({
 
     const act = (action: string, next: RunState): void => {
         step += 1;
+        if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
+        if (next.board?.level === run.board?.level && runNonNegativeInteger(next.masksDroppedThisFloor) > runNonNegativeInteger(run.masksDroppedThisFloor)) masksDropped += 1;
         if (runNonNegativeInteger(next.carvesSpentThisFloor) > runNonNegativeInteger(run.carvesSpentThisFloor) && next.board?.level === run.board?.level) carvesSpent += 1;
         observe?.(run, next, action);
         for (const invariant of checkAll(run, next, action)) {
@@ -1034,6 +1050,8 @@ export const soakRun = ({
         wardenDealsAgain,
         carves,
         carvesSpent,
+        masksDealt,
+        masksDropped,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

@@ -1,7 +1,7 @@
 # DGE-016: Masks: backs that lie until first flipped
 
 ## Status
-Not started
+Done (rules 80, 2026-10-21)
 
 ## Priority
 P1
@@ -48,3 +48,12 @@ A few cards per Act III floor show a false element on their back. The first flip
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-21, built (rules 80):
+- `mask-rules.ts`: `dealMasks` (two masks a floor from 25, three from 33; one card of a pair, an element the floor holds that is not its own), `dropMask`, `unmaskOnFlip`, `unmaskBoard`. `Tile.mask` rather than board-level `maskedIds`, like `snowed` and `wanderer`; `RunState.masksDroppedThisFloor`.
+- **The lie lives only in `playerVisibleTile`**: a hidden masked card is handed to the screen with `suit` set to its mask, the way a Turncoat shows its dealt element, so every renderer path draws the lie and every rule (cast, pop, reaction) reads the true element. No mark on a masked back: a marked lie is no lie. Colour-vision: the false back is an ordinary element back, glyph and all.
+- Every path that turns a card face up drops it: `flipTile`, the Zone's flip, the auto-turned last pair (the soak found the Zone's: 36 violations before the fix). A pop can take a masked card unturned; its lie was never shown.
+- The Unmasking Glass evolution is live: masks drop as the floor is dealt. Codex `sys_masks` and the evolutions entry; ENCYCLOPEDIA 107.
+- The plan priced Masks at 6 on a Dread table that was never built; the price is a floor count here.
+- Hall room `mask-drops` (the mask drops on a miss, the match casts fire not water); unit tests; soak invariant (never both cards, never face up, never its own element) and counters; soak 5 x 200: 7478 masks, 3511 dropped, 0 violations. warden-reach 56/100. Looked at in the isolated browser.
+- Not done: the unmasking FX (`cardElementFx.ts` in miniature); the back simply turns to the truth.

@@ -106,6 +106,7 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'mask-drops'
     | 'carve-right'
     | 'carve-no-target'
     | 'carve-through-hold'
@@ -1282,6 +1283,28 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: expectAll(wanderersStepped(['a-1', 'a-2']), finishable)
             },
             { step: { do: 'match', pairKey: 'h' }, says: 'one turn later the footprints are gone', expect: expectAll(noFootprints, wanderersStill(['a-1', 'a-2']), finishable) }
+        ]
+    },
+    {
+        id: 'mask-drops',
+        title: 'A mask drops',
+        mechanic: 'From the Deep a few backs lie: a masked card shows an element not its own until it is first turned, and only one card of a pair is ever masked. To every rule it is its true element.',
+        graphMechanicIds: ['board.masks'],
+        tryThis: 'a-1 is fire under a water back. Turn it on a miss: the mask drops and its back is fire. Match a: fire stacks, not water.',
+        build: () => {
+            const run = room(SIX_ELEMENTS, { level: 25, misses: 4, run: realmRun('storm', 'calm') });
+            return { ...run, board: { ...run.board!, tiles: run.board!.tiles.map((tile) => (tile.id === 'a-1' ? { ...tile, mask: 'tide' as const } : tile)) } };
+        },
+        script: [
+            {
+                step: { do: 'miss', a: 'a-1', b: 'e-1' },
+                says: 'the first flip drops the mask, and the floor counts it',
+                expect: (r) => {
+                    const card = r.board?.tiles.find((tile) => tile.id === 'a-1');
+                    return card && card.mask == null && r.masksDroppedThisFloor === 1 ? null : `mask ${String(card?.mask)}, dropped ${String(r.masksDroppedThisFloor)}`;
+                }
+            },
+            { step: { do: 'match', pairKey: 'a' }, says: 'the match casts its true element, fire', expect: expectAll(resonanceIs('ember', 1), resonanceIs('tide', 0)) }
         ]
     },
     {

@@ -1,3 +1,4 @@
+import { dropMask, unmaskOnFlip } from './mask-rules';
 import { hasEvolution } from './relic-evolution-rules';
 import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
@@ -115,14 +116,16 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             resolveRemainingMs = MATCH_DELAY_MS * runAfterFlashClear.resolveDelayMultiplier;
         }
 
+        // The first flip of a masked card drops its mask (`mask-rules.ts`), and the floor counts it.
+        const turned = board.tiles.find((candidate) => candidate.id === tileId);
         return {
-            ...runAfterFlashClear,
+            ...(turned ? unmaskOnFlip(runAfterFlashClear, turned) : runAfterFlashClear),
             peekRevealedTileIds,
             status: flippedTileIds.length >= 2 ? 'resolving' : 'playing',
             board: {
                 ...board,
                 tiles: board.tiles.map((candidate) =>
-                    candidate.id === tileId ? { ...shedSnow(candidate), state: 'flipped' } : candidate
+                    candidate.id === tileId ? { ...dropMask(shedSnow(candidate)), state: 'flipped' } : candidate
                 ),
                 flippedTileIds
             },

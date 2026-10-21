@@ -2820,6 +2820,39 @@
             ]
         },
         {
+            "id": "board.masks",
+            "label": "Masks",
+            "kind": "board",
+            "role": "from_the_deep_a_few_backs_show_a_false_element_until_first_flipped_one_card_of_a_pair_at_most",
+            "evidence": [
+                "src/shared/mask-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/flip-tile-transition.ts",
+                "src/shared/player-visible-board.ts",
+                "src/renderer/components/TileBezel.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "masksDroppedThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "masksDroppedThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "never-both-cards-of-a-pair",
+                "a-mask-never-changes-the-true-element",
+                "a-face-up-card-wears-no-mask"
+            ],
+            "tests": [
+                "src/shared/mask-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.wanderers",
             "label": "Wanderers",
             "kind": "board",
@@ -2965,6 +2998,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "board.masks",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "a masked back shows its false element until the first flip drops it"
+        },
         {
             "source": "trait.echo",
             "target": "trait.conduit",

@@ -1,3 +1,5 @@
+import { hasEvolution } from './relic-evolution-rules';
+import { dealMasks, unmaskBoard } from './mask-rules';
 import { dealLayers } from './board-layers-rules';
 import {
     type FeaturedObjectiveId,
@@ -71,7 +73,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // Then the Wanderers, on pairs the odd cards left plain (`wanderer-rules.ts`).
     // Then, on the Deep's floors, the second deck under half the cells (`board-layers-rules.ts`).
     const seeded = { runSeed: run.runSeed, rulesVersion: run.runRulesVersion };
-    const nextBoard = dealLayers(dealWanderers(dealOddCards(bossBoard, seeded), seeded), seeded);
+    // Then, from the Deep, the masks on cards the others left plain (`mask-rules.ts`); the Unmasking Glass drops them at once.
+    const masked = dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), seeded), seeded);
+    const nextBoard = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
