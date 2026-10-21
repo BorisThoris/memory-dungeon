@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3276,
     "codeFileCount": 1247,
-    "exportedSymbolCount": 3988,
+    "exportedSymbolCount": 3992,
     "contentItemCount": 16,
     "mechanicCount": 77,
     "stateFieldCount": 151,
-    "relationshipCount": 10927
+    "relationshipCount": 10934
   },
   "inventory": [
     {
@@ -213,8 +213,8 @@
     {
       "path": "CLAUDE.md",
       "category": "other",
-      "bytes": 10439,
-      "sha256": "52b5d60b5f7a0eaa3a52155c24b2fd2832641d7483794d4848e029cd684feb8b"
+      "bytes": 10732,
+      "sha256": "04852b2b38ec361057bbadd26843f4aff0c0696dec74dd96f814b1a809798fc7"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -297,8 +297,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 531943,
-      "sha256": "e23c673200a459a0aa9122bc876c1423741ed067dd732e67dbedcd02ded9fecf"
+      "bytes": 534120,
+      "sha256": "f7e83a3b90a0ec30309eed09735e47bab8e580a3acf82ba71bd630176ac3b0dc"
     },
     {
       "path": "docs/balance/2026-09-25-balance-report.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 80265,
-      "sha256": "75b10f3085d5e51e23096ff42c28d0d7fec47dd49bad0006a1944d6f1e845bb4"
+      "bytes": 81110,
+      "sha256": "5322da8b8d48ffe64ebe5ee92392fbb427e7be47d438b938bb7d3ecea7fe8ab4"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2422,13 +2422,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "14bdd13ec371379218777d09bc0dfdb30d49f148c27d198eda287d3004385310"
+      "sha256": "8a11713a8a786b2a0da46a070bf4ff11285f404f5a35aaf6518eac0a5c3ee3d2"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "cc4c076041d6c9d7ef4fa37ac1b80ad718353900fc831a20ba75b4df091cdb21"
+      "sha256": "4634bc408361110f4b3107138673e021e22c9e215159b2a0237be760d9b2a814"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4371,8 +4371,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 33747,
-      "sha256": "d2310e204a60874cdbe123f7ff56ce0cbfe5e7979def3858d05d7057a27fb61d"
+      "bytes": 33866,
+      "sha256": "85a9dfdabef8ea15b598306ccaaae112f65d5b1d2410c2414fc1918bcf97006d"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5715,8 +5715,8 @@
     {
       "path": "scripts/sim-difficulty-curve.ts",
       "category": "script",
-      "bytes": 17151,
-      "sha256": "f667ee18ab8a98a86086d152be8c5ef6dbe0ef6e01bf95f6db13c2fb0da5df1b"
+      "bytes": 17268,
+      "sha256": "b468415e2694e4b78b4f792158028083d350262e422a6cf49aa5d3473dbfd1b2"
     },
     {
       "path": "scripts/sim-endless.ts",
@@ -5757,8 +5757,8 @@
     {
       "path": "scripts/sim-survival.ts",
       "category": "script",
-      "bytes": 10455,
-      "sha256": "63d43fa7a83b94da201f1da16064a96d255fba8d97ec8920340bb91e14b45ec9"
+      "bytes": 12157,
+      "sha256": "925baa26779fbb3e54a32b2520ae2b392ee4fe988a94adb5fb504e22273df449"
     },
     {
       "path": "scripts/soak-runs.ts",
@@ -14355,8 +14355,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 80613,
-      "sha256": "14dfd407b4a7fef109fa48da88dbe7dfc5bd9c0b382c3d3085f7a3ea723c9769"
+      "bytes": 81458,
+      "sha256": "cf551f39c42fdf1f889030a9ec53d13276d4de2ee0bde7e283b24a7f344da98a"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14415,8 +14415,8 @@
     {
       "path": "src/shared/automatic-camp-rules.test.ts",
       "category": "test",
-      "bytes": 4070,
-      "sha256": "2c2f6b2e7ca80b8847360442e872693eb54a934f4a0d4eaf2aa5e261aaee2b16"
+      "bytes": 4430,
+      "sha256": "7d85ce4d845761ddc18978856b2e0a9fc7520efbb75dc8c834493530bcff458f"
     },
     {
       "path": "src/shared/automatic-camp-rules.ts",
@@ -14889,8 +14889,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 58176,
-      "sha256": "b772e600a88e35510a501b3453b0b93affb0d671025d1e16dc09edd10eae3304"
+      "bytes": 58233,
+      "sha256": "e136868318e30e0fea9c6344768f50a066e0664f042b7c1e35f01f961bb6072c"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15903,14 +15903,14 @@
     {
       "path": "src/shared/miss-bank.test.ts",
       "category": "test",
-      "bytes": 7235,
-      "sha256": "1db33193476b8c15871def793e265eb38e82c2a2b8dda8150b487abcf0580a36"
+      "bytes": 7610,
+      "sha256": "2a220b05e9ab8012a8ff686abfcc70527f2e90beada56d5ee97ee8e3e8d0d866"
     },
     {
       "path": "src/shared/miss-bank.ts",
       "category": "source",
-      "bytes": 10467,
-      "sha256": "7617c3db4a6b2aa3aeb41bd1e8f9616825a0d687160082fe89d1dfdd640c74cb"
+      "bytes": 12263,
+      "sha256": "df44377ee8a56052b092300e12982260ddaa66593c149fa71c0a0797a760c906"
     },
     {
       "path": "src/shared/mode-records.test.ts",
@@ -16875,8 +16875,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 100914,
-      "sha256": "cc8cc117f414bc0f08ca341840579d1fe8c4e7d58d9548204d48d90dd4a38b66"
+      "bytes": 101759,
+      "sha256": "de6ec37a9b83f2d428cc89a78c62c4c77d3fec96cbd658bee8dd3d07da0f0126"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -16899,8 +16899,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 194380,
-      "sha256": "4dc68d3ec56ef6365dba281bd73686239abe848bf7743d049333339bd760208d"
+      "bytes": 195037,
+      "sha256": "21b05bf11997aef67ba1f6df049df1861370b60ea485c608d1c1d4e3d3994e8d"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17158,7 +17158,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "69378cc781f1210707ec331ae0749696c014bbf08fadac97a935286a70b5a0c2"
+      "sha256": "742d979633b36ab7c27d7a3c68414e465f7edc09c4036c2546e0ea523b6dbf6c"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17253,8 +17253,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 10664,
-      "sha256": "1afacb145ec5ad90611a4b9764b907db70935e3e11fd0af3d3e5bda0ce1ab9e9"
+      "bytes": 11403,
+      "sha256": "1ddbb4383fb02314f051b6f3a1083090169d129153582e6e73b2b165ab8b4d15"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17475,8 +17475,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-032-balance-bars-and-sims.md",
       "category": "other",
-      "bytes": 2242,
-      "sha256": "39661ed4f1a6d8b42091fb4746991e9c334277e3106ecfe7c9931807e15cd5ec"
+      "bytes": 3775,
+      "sha256": "f24445693d774de935925f31999d3cd9b42c0f971d742f879698fd491ba2b3d3"
     },
     {
       "path": "tasks/dungeon-epic/00-current-system-map.md",
@@ -33722,7 +33722,7 @@
       "path": "src/shared/automatic-camp-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 68,
+      "lineCount": 71,
       "imports": [
         "file:src/shared/automatic-camp-rules.ts",
         "file:src/shared/contracts.ts",
@@ -39289,12 +39289,13 @@
       "path": "src/shared/miss-bank.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 150,
+      "lineCount": 155,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/next-floor-transition-rules.ts",
+        "file:src/shared/pair-curve.ts",
         "file:src/shared/test/game-fixtures.ts"
       ],
       "exports": [],
@@ -39305,9 +39306,10 @@
       "path": "src/shared/miss-bank.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 204,
+      "lineCount": 227,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/pair-curve.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-timer-rules.ts"
@@ -39318,11 +39320,15 @@
         "symbol:src/shared/miss-bank.ts#comboMissesEarned",
         "symbol:src/shared/miss-bank.ts#grantMisses",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP",
+        "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP_PAIRS",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_COMBO_RUNG",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
+        "symbol:src/shared/miss-bank.ts#MISS_BANK_GRANT_PAIRS",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_LIFETIME_FLOORS",
         "symbol:src/shared/miss-bank.ts#MISS_BANK_OPENING",
+        "symbol:src/shared/miss-bank.ts#MISS_BANK_SCALES_FROM",
         "symbol:src/shared/miss-bank.ts#missBankCap",
+        "symbol:src/shared/miss-bank.ts#missBankFloorGrant",
         "symbol:src/shared/miss-bank.ts#MissBankGrant",
         "symbol:src/shared/miss-bank.ts#missBankGrantLastFloor",
         "symbol:src/shared/miss-bank.ts#missBankOnFloor",
@@ -39705,6 +39711,7 @@
         "file:src/shared/floor-par.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/late-board.test.ts",
+        "file:src/shared/miss-bank.test.ts",
         "file:src/shared/pair-curve.test.ts",
         "file:src/shared/scoring-rules.test.ts",
         "file:src/shared/tile-suit-rules.test.ts"
@@ -42754,7 +42761,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2997,
+      "lineCount": 3003,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -68806,152 +68813,184 @@
       "name": "applyMissBudget",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 160,
-      "endLine": 203
+      "line": 183,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#carryMissBank",
       "name": "carryMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 140,
-      "endLine": 145
+      "line": 163,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#comboMissesEarned",
       "name": "comboMissesEarned",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 148,
-      "endLine": 152
+      "line": 171,
+      "endLine": 175
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#grantMisses",
       "name": "grantMisses",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 108,
-      "endLine": 123
+      "line": 131,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP",
       "name": "MISS_BANK_CAP",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 57,
-      "endLine": 57
+      "line": 58,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP_PAIRS",
+      "name": "MISS_BANK_CAP_PAIRS",
+      "kind": "value",
+      "file": "src/shared/miss-bank.ts",
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_COMBO_RUNG",
       "name": "MISS_BANK_COMBO_RUNG",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
       "name": "MISS_BANK_FLOOR_GRANT",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 55,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_GRANT_PAIRS",
+      "name": "MISS_BANK_GRANT_PAIRS",
+      "kind": "value",
+      "file": "src/shared/miss-bank.ts",
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_LIFETIME_FLOORS",
       "name": "MISS_BANK_LIFETIME_FLOORS",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_OPENING",
       "name": "MISS_BANK_OPENING",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 54,
+      "endLine": 54
+    },
+    {
+      "id": "symbol:src/shared/miss-bank.ts#MISS_BANK_SCALES_FROM",
+      "name": "MISS_BANK_SCALES_FROM",
+      "kind": "value",
+      "file": "src/shared/miss-bank.ts",
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankCap",
       "name": "missBankCap",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 60,
-      "endLine": 62
+      "line": 83,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/shared/miss-bank.ts#missBankFloorGrant",
+      "name": "missBankFloorGrant",
+      "kind": "value",
+      "file": "src/shared/miss-bank.ts",
+      "line": 79,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MissBankGrant",
       "name": "MissBankGrant",
       "kind": "ExportSpecifier",
       "file": "src/shared/miss-bank.ts",
-      "line": 64,
-      "endLine": 64
+      "line": 87,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankGrantLastFloor",
       "name": "missBankGrantLastFloor",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 71,
-      "endLine": 72
+      "line": 94,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankOnFloor",
       "name": "missBankOnFloor",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 133,
-      "endLine": 134
+      "line": 156,
+      "endLine": 157
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#MissBankRun",
       "name": "MissBankRun",
       "kind": "type",
       "file": "src/shared/miss-bank.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 89,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missBankSoonestToGo",
       "name": "missBankSoonestToGo",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 94,
-      "endLine": 99
+      "line": 117,
+      "endLine": 122
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#missesLeft",
       "name": "missesLeft",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 90,
-      "endLine": 91
+      "line": 113,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#normalizeMissBank",
       "name": "normalizeMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 75,
-      "endLine": 84
+      "line": 98,
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#openingMissBank",
       "name": "openingMissBank",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 102,
-      "endLine": 102
+      "line": 125,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/miss-bank.ts#spendMiss",
       "name": "spendMiss",
       "kind": "value",
       "file": "src/shared/miss-bank.ts",
-      "line": 126,
-      "endLine": 130
+      "line": 149,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/mode-records.ts#getModeRecords",
@@ -73990,32 +74029,32 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2956,
-      "endLine": 2956
+      "line": 2962,
+      "endLine": 2962
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2811,
-      "endLine": 2933
+      "line": 2817,
+      "endLine": 2939
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2962,
-      "endLine": 2967
+      "line": 2968,
+      "endLine": 2973
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2946,
-      "endLine": 2946
+      "line": 2952,
+      "endLine": 2952
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
@@ -74023,23 +74062,23 @@
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 535,
-      "endLine": 2798
+      "endLine": 2804
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2970,
-      "endLine": 2976
+      "line": 2976,
+      "endLine": 2982
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2996,
-      "endLine": 2996
+      "line": 3002,
+      "endLine": 3002
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
@@ -74062,8 +74101,8 @@
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2935,
-      "endLine": 2938
+      "line": 2941,
+      "endLine": 2944
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
@@ -74086,16 +74125,16 @@
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2949,
-      "endLine": 2953
+      "line": 2955,
+      "endLine": 2959
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 2978,
-      "endLine": 2994
+      "line": 2984,
+      "endLine": 3000
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -76990,7 +77029,7 @@
       "evidence": [
         {
           "path": "src/shared/miss-bank.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -77004,7 +77043,7 @@
       "tests": [
         {
           "path": "src/shared/miss-bank.test.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/run-soak.test.ts",
@@ -100934,6 +100973,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MISS_BANK_CAP_PAIRS",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "symbol:src/shared/miss-bank.ts#MISS_BANK_CAP_PAIRS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MISS_BANK_COMBO_RUNG",
       "source": "file:src/shared/miss-bank.ts",
       "target": "symbol:src/shared/miss-bank.ts#MISS_BANK_COMBO_RUNG",
@@ -100943,6 +100988,12 @@
       "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
       "source": "file:src/shared/miss-bank.ts",
       "target": "symbol:src/shared/miss-bank.ts#MISS_BANK_FLOOR_GRANT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MISS_BANK_GRANT_PAIRS",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "symbol:src/shared/miss-bank.ts#MISS_BANK_GRANT_PAIRS",
       "kind": "exports"
     },
     {
@@ -100958,9 +101009,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#MISS_BANK_SCALES_FROM",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "symbol:src/shared/miss-bank.ts#MISS_BANK_SCALES_FROM",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#missBankCap",
       "source": "file:src/shared/miss-bank.ts",
       "target": "symbol:src/shared/miss-bank.ts#missBankCap",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/miss-bank.ts->symbol:src/shared/miss-bank.ts#missBankFloorGrant",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "symbol:src/shared/miss-bank.ts#missBankFloorGrant",
       "kind": "exports"
     },
     {
@@ -127852,6 +127915,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/miss-bank.test.ts->src/shared/pair-curve.ts",
+      "source": "file:src/shared/miss-bank.test.ts",
+      "target": "file:src/shared/pair-curve.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/miss-bank.test.ts->src/shared/test/game-fixtures.ts",
       "source": "file:src/shared/miss-bank.test.ts",
       "target": "file:src/shared/test/game-fixtures.ts",
@@ -127861,6 +127930,12 @@
       "id": "imports:src/shared/miss-bank.ts->src/shared/contracts.ts",
       "source": "file:src/shared/miss-bank.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/miss-bank.ts->src/shared/pair-curve.ts",
+      "source": "file:src/shared/miss-bank.ts",
+      "target": "file:src/shared/pair-curve.ts",
       "kind": "imports"
     },
     {
@@ -143279,6 +143354,12 @@
       "id": "tested_by:src/shared/pair-curve.ts->file:src/shared/late-board.test.ts",
       "source": "file:src/shared/pair-curve.ts",
       "target": "file:src/shared/late-board.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/pair-curve.ts->file:src/shared/miss-bank.test.ts",
+      "source": "file:src/shared/pair-curve.ts",
+      "target": "file:src/shared/miss-bank.test.ts",
       "kind": "tested_by"
     },
     {
