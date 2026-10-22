@@ -279,6 +279,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 278,
         reason: 'The Fold is a shape, not an event: every break on its floors meets the wall, so a counter would read the floor share it is dealt on. The soak checks on every turn that nothing is taken through the wall and through the door only from a match in the doorway, the unit tests pin the cut and the gate, and two hall rooms walk the door shut and open.'
     },
+    'board.spiral': {
+        generation: 288,
+        reason: 'The Spiral stands on floors 44 and 56 alone and the census stops at floor 24, so a counter would read nothing. The deep whole-run soak counts its floors and its sealed rings, with invariants that a Spiral never runs past par and never deals into a sealed cell; unit tests pin the seal, the deal, the empty board and the par end, and two hall rooms walk a ring falling and a floor survived.'
+    },
     'board.sleepers': {
         generation: 287,
         reason: 'Sleepers are dealt from floor 41 and the census stops at floor 24, so a counter would read nothing. The deep whole-run soak counts the Sleepers woken and kept down, with an invariant that a woken Sleeper is face down; unit tests pin the deal, the chain, the wake and the clear, and two hall rooms walk a wake and a chain that keeps one down.'

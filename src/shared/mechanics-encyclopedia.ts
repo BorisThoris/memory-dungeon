@@ -35,7 +35,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 111 as const;
+export const ENCYCLOPEDIA_VERSION = 112 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -554,6 +554,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Wanderers',
         description:
             `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+    },
+    {
+        id: 'sys_spiral',
+        title: 'The Spiral',
+        description:
+            '**Floors 44 and 56 are Spirals**: survived, not cleared. The board is rings. Clear the **outer ring** and it **seals** - those cells leave the board for the floor - and fresh pairs, faces you have not seen, are dealt into the cleared cells inside it. The floor ends when your turns reach **par**, whatever is left, or when the last ring seals. **Score**, not clearance, is the goal; the miss bank still charges your misses.'
     },
     {
         id: 'sys_sleepers',

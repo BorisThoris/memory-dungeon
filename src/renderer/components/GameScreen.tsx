@@ -1,3 +1,4 @@
+import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
 import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
 import { CARTOGRAPHER_RULES_FROM, CARTOGRAPHER_TURN_EVERY_MATCHES, isCartographerFloor } from '../../shared/cartographer-rules';
@@ -1624,8 +1625,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const wardenRulesShown = isWardenFloor(run.board);
     const keeperRulesShown = isKeeperFloor(run.board) && (run.runRulesVersion ?? 0) >= KEEPER_RULES_FROM;
     const cartographerRulesShown = isCartographerFloor(run.board) && (run.runRulesVersion ?? 0) >= CARTOGRAPHER_RULES_FROM;
+    const spiralRulesShown = spiralHolds(run, run.board);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2200,6 +2202,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {spiralRulesShown ? (
+                                    <p className={styles.wardenRules} data-testid="spiral-rules">
+                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.spiralKicker}</span>{' '}
+                                        {RUN_SHELL_LINE_COPY.spiralRules(parTurnsForRun(run), run.turnsThisFloor)}
+                                    </p>
+                                ) : null}
                                 {cartographerRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="cartographer-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.cartographerKicker}</span>{' '}

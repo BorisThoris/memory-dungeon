@@ -111,6 +111,8 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'spiral-ring'
+    | 'spiral-par'
     | 'sleeper-wakes'
     | 'sleeper-chain'
     | 'mask-drops'
@@ -1386,6 +1388,45 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'spiral-ring',
+        title: 'The outer ring falls',
+        mechanic: 'On a Spiral the board is rings: clear the outer ring and it seals, off the board for the floor, and fresh pairs are dealt into the cleared cells inside it.',
+        graphMechanicIds: ['board.spiral'],
+        tryThis: 'Match y inside, then the six pairs round the edge: the edge seals, and a fresh pair is dealt where y stood.',
+        build: () => room(['a:e b:t c:e d:t', 'e:m y:b z:m f:b', 'f:b z:m y:b e:m', 'd:t c:e b:t a:e'], { level: 44, misses: 6, board: { floorArchetypeId: 'spiral_hall', floorTag: 'normal' }, run: realmRun('storm', 'calm') }),
+        script: [
+            { step: { do: 'match', pairKey: 'y' }, says: 'an inner pair first', expect: statusIs('playing') },
+            // No element twice in a row: nothing primes a reaction, so nothing pops (a calm realm pops only on a reaction).
+            ...(['a', 'b', 'c', 'd', 'e'] as const).map((pairKey) => ({ step: { do: 'match' as const, pairKey }, says: `the edge: ${pairKey}`, expect: statusIs('playing') })),
+            {
+                step: { do: 'match', pairKey: 'f' },
+                says: 'the last of the edge seals it, and a fresh pair fills the cleared cells inside',
+                expect: (r) => {
+                    const sealed = (r.board?.tiles ?? []).filter((tile) => tile.sealed).length;
+                    const hidden = (r.board?.tiles ?? []).filter((tile) => tile.state === 'hidden');
+                    return r.status === 'playing' && r.board?.spiralRingsSealed === 1 && sealed === 12 && hidden.length === 4 && hidden.some((tile) => tile.pairKey.includes('spiral'))
+                        ? null
+                        : `status ${r.status}, rings ${String(r.board?.spiralRingsSealed)}, sealed ${sealed}, hidden ${hidden.map((tile) => tile.id).join(',')}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'spiral-par',
+        title: 'Survive to par',
+        mechanic: 'A Spiral ends when the turns reach par, whatever is left on the board: score, not clearance, is the goal.',
+        graphMechanicIds: ['board.spiral', 'objective.floor_clear'],
+        tryThis: 'Seven turns in on a board of eight pairs: one more match is the eighth turn, and the Spiral is survived with cards left.',
+        build: () => room(['a:e b:t c:e d:t', 'e:m y:b z:m f:b', 'f:b z:m y:b e:m', 'd:t c:e b:t a:e'], { level: 44, misses: 6, board: { floorArchetypeId: 'spiral_hall', floorTag: 'normal' }, run: realmRun('storm', 'calm', { turnsThisFloor: 7 }) }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the turn that reaches par ends the floor, cards and all',
+                expect: (r) => (r.status === 'levelComplete' && r.spiralSurvived && (r.board?.tiles ?? []).some((tile) => tile.state === 'hidden') ? null : `status ${r.status}, survived ${String(r.spiralSurvived)}`)
+            }
+        ]
+    },
+    {
         id: 'sleeper-wakes',
         title: 'Sleeper wakes',
         mechanic: 'From the Abyss some pairs are Sleepers: matched on a chain under three, they come back face down four turns later, in other cleared cells.',
@@ -2513,9 +2554,9 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         mechanic: 'Every second turn on a raging Cinder Deep, wildfire sets two face-down cards on a three-turn fuse; matched in time a fire is doused for two gold.',
         graphMechanicIds: ['board.realm_weather', 'economy.gold'],
         tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
-        seedPinned: 'Wildfire lights cards drawn from the run seed, and at some seeds both land on vine-held cards no turn can douse.',
+        seedPinned: 'Wildfire lights cards drawn from the run seed, and at some seeds both land on vine-held cards no turn can douse; the rules version is pinned too, since every rules bump reseeds the draw.',
         // Seed 90211 since rules 77: the reseed put the hall's own seed's two fires on vine-held cards.
-        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0, runSeed: 90_213 }) }),
+        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0, runSeed: 90_213, runRulesVersion: 84 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
             { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },

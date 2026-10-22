@@ -133,8 +133,8 @@ describe('REG-076 boss and elite encounter identity', () => {
         ).concat(
             getFloorIdentityContract({ floorTag: 'normal', floorArchetypeId: null, mutators: [], featuredObjectiveLabel: null })
         );
-        // Sixteen archetypes since the Cartographer's hall: 16 x 3 tags x 3 mutator sets, plus the fallback.
-        expect(everyFloor.length).toBe(145);
+        // Seventeen archetypes since the Spiral: 17 x 3 tags x 3 mutator sets, plus the fallback.
+        expect(everyFloor.length).toBe(154);
         for (const row of [...rows, ...everyFloor]) {
             for (const sentence of [row.teachingSentence, row.counterplaySentence, row.floorClearSentence, row.activeReminder]) {
                 expect(sentence, `${row.id} coaches a removed system: ${sentence}`).not.toMatch(removedNouns);

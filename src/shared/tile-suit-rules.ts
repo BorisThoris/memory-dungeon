@@ -463,7 +463,9 @@ export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, S
     // The Keeper's two rooms each lean to two elements (`board-fold-rules.ts`), as every Fold does.
     keeper_hall: 'clumped',
     // The Cartographer deals as the Deep's floors do; its lower deck is two elements (`board-layers-rules.ts`).
-    cartographer_hall: 'clumped'
+    cartographer_hall: 'clumped',
+    // The Spiral deals clumped like the floors around it; its inner rings are dealt fresh (`spiral-rules.ts`).
+    spiral_hall: 'clumped'
 };
 
 export const getSuitDealProfile = (floorArchetypeId: FloorArchetypeId | null | undefined): SuitDealProfile =>

@@ -38,6 +38,10 @@ const playMiss = (run: RunState): RunState => {
 };
 
 const playMatch = (run: RunState): RunState => {
+    // A turn left open (a trait refused the second card) is finished with the open card's twin.
+    const open = run.board!.tiles.find((tile) => tile.id === run.board!.flippedTileIds[0]);
+    const twin = open && run.board!.tiles.find((tile) => tile.id !== open.id && tile.pairKey === open.pairKey && tile.state === 'hidden');
+    if (open && twin) return resolveBoardTurn(flipTile(run, twin.id));
     // A pair the player can turn: a card the realm froze or vined is passed over, as at the table.
     const group = getUnresolvedPlayablePairGroups(run.board!).find((tiles) =>
         tiles.every((tile) => tile.state === 'hidden' && !isTileFlipBlocked(tile))

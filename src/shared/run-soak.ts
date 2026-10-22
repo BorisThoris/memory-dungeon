@@ -1,3 +1,4 @@
+import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
@@ -137,6 +138,9 @@ export interface SoakRunReport {
     /** Sleepers (`sleeper-rules.ts`): woken, and kept down by a chain. */
     sleepersWoken: number;
     sleepersKeptDown: number;
+    /** The Spiral (`spiral-rules.ts`): its floors survived, and its rings sealed. */
+    spiralFloors: number;
+    spiralRings: number;
     /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
     keeperFloors: number;
     keeperSwaps: number;
@@ -611,6 +615,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const moved = (run.pinnedTileIds ?? []).find((id) => run.board!.tiles.findIndex((tile) => tile.id === id) !== before.board!.tiles.findIndex((tile) => tile.id === id));
         return moved ? `pinned ${moved} moved in the swap` : null;
     },
+    'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {
+        if (!run.board || !spiralHolds(run, run.board)) return null;
+        if (run.status === 'playing' && runNonNegativeInteger(run.turnsThisFloor) > parTurnsForRun(run)) return `a Spiral at turn ${run.turnsThisFloor}, past par ${parTurnsForRun(run)}`;
+        const dealt = run.board.tiles.find((tile) => tile.sealed && tile.state !== 'removed');
+        return dealt ? `sealed cell holds ${dealt.id} (${dealt.state})` : null;
+    },
     'a woken Sleeper is face down, and none sleeps past a cleared floor': (before, run) => {
         if (!before || !run.board) return null;
         if (run.status === 'levelComplete' && (run.sleepingPairs ?? []).length > 0) return 'a floor cleared with a Sleeper asleep';
@@ -780,6 +790,8 @@ export const soakRun = ({
     let masksDropped = 0;
     let sleepersWoken = 0;
     let sleepersKeptDown = 0;
+    let spiralFloors = 0;
+    let spiralRings = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
     let cartographerFloors = 0;
@@ -837,6 +849,8 @@ export const soakRun = ({
     const act = (action: string, next: RunState): void => {
         step += 1;
         if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
+        if (next.status === 'levelComplete' && run.status !== 'levelComplete' && next.spiralSurvived) spiralFloors += 1;
+        if (next.board?.level === run.board?.level) spiralRings += Math.max(0, runNonNegativeInteger(next.spiralRingsSealedThisFloor) - runNonNegativeInteger(run.spiralRingsSealedThisFloor));
         if (next.board?.level === run.board?.level) {
             sleepersWoken += Math.max(0, runNonNegativeInteger(next.sleepersWokenThisFloor) - runNonNegativeInteger(run.sleepersWokenThisFloor));
             sleepersKeptDown += Math.max(0, runNonNegativeInteger(next.sleepersKeptDownThisFloor) - runNonNegativeInteger(run.sleepersKeptDownThisFloor));
@@ -1117,6 +1131,8 @@ export const soakRun = ({
         masksDropped,
         sleepersWoken,
         sleepersKeptDown,
+        spiralFloors,
+        spiralRings,
         keeperFloors,
         keeperSwaps,
         cartographerFloors,

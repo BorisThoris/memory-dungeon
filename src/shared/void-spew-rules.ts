@@ -35,7 +35,8 @@ export interface VoidSpew {
     readonly newPairKeys: readonly string[];
 }
 
-const isGoneTile = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
+// A sealed cell (`spiral-rules.ts`) is off the board: nothing is dealt into it.
+const isGoneTile = (tile: Tile): boolean => (tile.state === 'matched' || tile.state === 'removed') && !tile.sealed;
 
 /**
  * Faces the board does not show, the floor's own set first, then the gallery: what new pairs

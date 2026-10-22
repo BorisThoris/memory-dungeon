@@ -2,6 +2,7 @@
  * REF-098: Fast, deterministic endless schedule sampler (mutator / floor-tag counts).
  * Run: yarn sim:endless [--floors=10000] [--seed=42]
  */
+import { SPIRAL_DESCENT_FLOORS } from '../src/shared/spiral-rules';
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
@@ -16,7 +17,8 @@ import { BALANCE_SIMULATION_TILE_TRAIT_KINDS } from '../src/shared/balance-simul
 import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT, pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 
-const ACT_BOSS_FLOORS = DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : []));
+// And the Spiral's floors (DGE-021), which also stand past 36.
+const ACT_BOSS_FLOORS = [...DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])), ...SPIRAL_DESCENT_FLOORS];
 import { buildBoard } from '../src/shared/board-generation';
 import { inspectBoardFairness } from '../src/shared/board-inspection';
 import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';

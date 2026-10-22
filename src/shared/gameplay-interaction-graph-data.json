@@ -2888,6 +2888,42 @@
             ]
         },
         {
+            "id": "board.spiral",
+            "label": "The Spiral",
+            "kind": "board",
+            "role": "two_abyss_floors_survived_to_par_a_cleared_outer_ring_seals_and_fresh_pairs_are_dealt_inside",
+            "evidence": [
+                "src/shared/spiral-rules.ts",
+                "src/shared/floor-mutator-schedule.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "turnsThisFloor",
+                "spiralSurvived",
+                "spiralRingsSealedThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "spiralSurvived",
+                "spiralRingsSealedThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "a-spiral-ends-at-par",
+                "the-last-ring-ends-the-floor",
+                "nothing-is-dealt-into-a-sealed-cell"
+            ],
+            "tests": [
+                "src/shared/spiral-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.sleepers",
             "label": "Sleepers",
             "kind": "board",
@@ -3137,6 +3173,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "board.spiral",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "Survive N turns with the turns played, on the board crown"
+        },
         {
             "source": "board.sleepers",
             "target": "feedback.gameplay_hud",

@@ -217,6 +217,21 @@ export const getFloorIdentityContract = ({
     mutators: readonly MutatorId[];
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
+    // The Spiral (`spiral-rules.ts`, DGE-021): survived, not cleared, and it says so before the first flip.
+    if (floorArchetypeId === 'spiral_hall') {
+        return {
+            id: 'spiral',
+            label: 'The Spiral',
+            teachingSentence: `Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it; the floor ends at par, not when the board is empty.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Score is the goal: chain while the turns last, and clear the outside first to see what the inside deals.',
+            floorClearSentence: 'The Spiral is survived. The turns ran out before you did.',
+            atmosphericFeedback: 'The rings stop closing, and the floor lets you go.',
+            activeReminder: 'Spiral: survive to par; a cleared outer ring seals.',
+            warningLevel: 'danger',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
     // The Cartographer (`cartographer-rules.ts`, DGE-018): the Deep's boss states its rule before the first flip.
     if (floorArchetypeId === 'cartographer_hall') {
         return {

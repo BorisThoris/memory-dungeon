@@ -67,8 +67,10 @@ export const wakeSleeper = (board: BoardState, pairKey: string, seed: string, ke
     const rng = createMulberry32(hashStringToSeed(seed));
     const tiles = [...board.tiles];
     const own = tiles.flatMap((tile, index) => (tile.pairKey === pairKey ? [index] : []));
+    // A Sleeper whose card a Spiral's ring sealed (`spiral-rules.ts`) is off the board: it stays down.
+    if (own.length !== 2 || own.some((cell) => tiles[cell]!.sealed)) return board;
     const free = tiles.flatMap((tile, index) =>
-        tile.pairKey !== pairKey && (tile.state === 'matched' || tile.state === 'removed') && !keepIds.has(tile.id) ? [index] : []
+        tile.pairKey !== pairKey && (tile.state === 'matched' || tile.state === 'removed') && !tile.sealed && !keepIds.has(tile.id) ? [index] : []
     );
     for (const from of own) {
         const to = free.length >= own.length ? free.splice(pickRngIndex(rng, free.length), 1)[0]! : from;
@@ -83,11 +85,14 @@ export const wakeSleeper = (board: BoardState, pairKey: string, seed: string, ke
 export const wakeAllSleepers = (run: RunState, board: BoardState): { run: RunState; board: BoardState } => {
     const sleeping = run.sleepingPairs ?? [];
     let next = board;
+    let woken = 0;
     sleeping.forEach((pair, index) => {
-        next = wakeSleeper(next, pair.pairKey, `sleeper-wake:${run.runSeed}:${run.runRulesVersion}:${board.level}:${pair.pairKey}:${index}:clear`, new Set(run.heldSeedIds ?? []));
+        const waking = wakeSleeper(next, pair.pairKey, `sleeper-wake:${run.runSeed}:${run.runRulesVersion}:${board.level}:${pair.pairKey}:${index}:clear`, new Set(run.heldSeedIds ?? []));
+        if (waking !== next) woken += 1;
+        next = waking;
     });
     const heldSeedIds = withoutWokenSeeds(run.heldSeedIds, board, new Set(sleeping.map((pair) => pair.pairKey)));
-    return { run: { ...run, heldSeedIds, sleepingPairs: [], sleepersWokenThisFloor: runNonNegativeInteger(run.sleepersWokenThisFloor) + sleeping.length }, board: next };
+    return { run: { ...run, heldSeedIds, sleepingPairs: [], sleepersWokenThisFloor: runNonNegativeInteger(run.sleepersWokenThisFloor) + woken }, board: next };
 };
 
 /**
@@ -114,12 +119,17 @@ export const applySleeperTurn = (before: RunState, after: RunState): RunState =>
     const wokenKeys = new Set<string>();
     sleeping = sleeping.filter((pair, index) => {
         if (!awake(pair, turns)) return true;
-        wokenKeys.add(pair.pairKey);
-        board = wakeSleeper(board, pair.pairKey, `sleeper-wake:${after.runSeed}:${after.runRulesVersion}:${board.level}:${pair.pairKey}:${turns}:${index}`, keep);
-        woken += 1;
+        const next = wakeSleeper(board, pair.pairKey, `sleeper-wake:${after.runSeed}:${after.runRulesVersion}:${board.level}:${pair.pairKey}:${turns}:${index}`, keep);
+        // A Sleeper a Spiral sealed (`spiral-rules.ts`) does not come back: it is kept down.
+        if (next === board) keptDown += 1;
+        else {
+            wokenKeys.add(pair.pairKey);
+            woken += 1;
+        }
+        board = next;
         return false;
     });
-    if (newlyMatched.length === 0 && woken === runNonNegativeInteger(after.sleepersWokenThisFloor)) return after;
+    if (newlyMatched.length === 0 && woken === runNonNegativeInteger(after.sleepersWokenThisFloor) && keptDown === runNonNegativeInteger(after.sleepersKeptDownThisFloor) && sleeping.length === (after.sleepingPairs ?? []).length) return after;
     const heldSeedIds = wokenKeys.size > 0 ? withoutWokenSeeds(after.heldSeedIds, after.board, wokenKeys) : after.heldSeedIds;
     return { ...after, board, heldSeedIds, sleepingPairs: sleeping, sleepersWokenThisFloor: woken, sleepersKeptDownThisFloor: keptDown };
 };

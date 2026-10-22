@@ -99,6 +99,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
     },
+    spiral_hall: {
+        title: 'The Spiral',
+        hint: 'Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it. Score, not clearance, is the goal.',
+        theme: 'Spiral',
+        riskProfile: 'An Abyss floor that never empties: the rings close in, and the turns to par are all there is.'
+    },
     cartographer_hall: {
         title: 'The Cartographer',
         hint: 'Two decks deep, and the lower deck is charted for the study window. Every third match it turns a quarter, clockwise; a pinned card keeps what lies under it.',
@@ -513,6 +519,10 @@ const KEEPER_BOSS_ENTRY = makeEntry(12, 'keeper_hall', 'cursed_last', ['shifting
 /** The Cartographer (DGE-018): Layers on the boss floor, the lower deck turning; the looking glass and the flinch go (one board-mover is the rule). */
 const CARTOGRAPHER_BOSS_ENTRY = makeEntry(4, 'cartographer_hall', 'flip_par', [], 'boss');
 
+/** The Spiral's floors (`spiral-rules.ts` `SPIRAL_DESCENT_FLOORS`): its objective never asks for an empty board or a par flip count. */
+const SPIRAL_FLOORS: readonly number[] = [44, 56];
+const SPIRAL_ENTRY = (cycleFloor: number): FloorScheduleEntry => makeEntry(cycleFloor, 'spiral_hall', 'scholar_style', [], 'normal');
+
 /** The Descent's last floor: the Warden's (DGE-005). */
 export const DESCENT_FLOOR_COUNT = 60;
 
@@ -808,7 +818,9 @@ export const pickFloorScheduleEntry = (
                   ? CARTOGRAPHER_BOSS_ENTRY
                   : act.boss
             : null;
-    const legacyBase = actBoss ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    // The Spiral (DGE-021, `spiral-rules.ts`): from rules 85, two Abyss floors are survived, not cleared.
+    const spiral = !actBoss && rulesVersion >= 85 && SPIRAL_FLOORS.includes(descentFloor) ? SPIRAL_ENTRY(idx + 1) : null;
+    const legacyBase = actBoss ?? spiral ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
         : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;
     const base: FloorScheduleEntry = goal ? { ...legacyBase, featuredObjectiveId: goal } : legacyBase;

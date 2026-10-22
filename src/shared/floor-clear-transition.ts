@@ -1,3 +1,4 @@
+import { sealSpiralRings, spiralHolds } from './spiral-rules';
 import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
 import { hasRelic, misersPurseGold } from './run-relic-rules';
@@ -26,8 +27,22 @@ import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     if (run.status === 'levelComplete' && run.lastLevelResult?.level === clearedBoard.level) return run;
+    // The Spiral (`spiral-rules.ts`): a board emptied before par seals its live ring and is dealt inside it;
+    // the floor ends only at par or with the last ring.
+    const spiral = spiralHolds(run, clearedBoard);
+    if (spiral && !run.spiralSurvived) {
+        const sealed = sealSpiralRings(clearedBoard, { seed: `spiral-clear:${Math.floor(run.runSeed)}:${run.runRulesVersion}:${clearedBoard.level}:${run.turnsThisFloor}`, heldSeedIds: run.heldSeedIds });
+        if (sealed.ringsLeft) {
+            return {
+                ...run,
+                status: 'playing',
+                board: { ...sealed.board, flippedTileIds: [] },
+                spiralRingsSealedThisFloor: runNonNegativeInteger(run.spiralRingsSealedThisFloor) + sealed.sealed
+            };
+        }
+    }
     // Sleepers (`sleeper-rules.ts`): a board cleared with a pair asleep wakes it, and the floor goes on.
-    if ((run.runRulesVersion ?? 0) >= SLEEPER_RULES_FROM && (run.sleepingPairs ?? []).length > 0) {
+    if (!spiral && (run.runRulesVersion ?? 0) >= SLEEPER_RULES_FROM && (run.sleepingPairs ?? []).length > 0) {
         const woken = wakeAllSleepers(run, clearedBoard);
         return { ...woken.run, status: 'playing', board: { ...woken.board, flippedTileIds: [] } };
     }

@@ -93,6 +93,8 @@ export const createNextFloorRunState = (
         sleepingPairs: [],
         sleepersWokenThisFloor: 0,
         sleepersKeptDownThisFloor: 0,
+        spiralSurvived: false,
+        spiralRingsSealedThisFloor: 0,
         repriseUsedThisFloor: false,
         wardenDealsAgainThisFloor: 0,
         turncoatTurnsThisFloor: 0,

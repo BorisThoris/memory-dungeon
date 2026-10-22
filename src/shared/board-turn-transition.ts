@@ -1,3 +1,4 @@
+import { applySpiralTurn } from './spiral-rules';
 import { applySleeperTurn } from './sleeper-rules';
 import { recordRepriseTurn } from './reprise-rules';
 import { applyCartographerTurn } from './cartographer-rules';
@@ -521,12 +522,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)))))))))));
+            return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)))))))))));
+        return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
     };
     return resolveBoardTurn;
 };

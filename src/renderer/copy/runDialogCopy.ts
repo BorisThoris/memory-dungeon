@@ -134,6 +134,9 @@ export const RUN_SHELL_LINE_COPY = {
         `The Warden: every turn past par takes a miss, and every ${redealEvery}th turn the face-down cards are dealt again.`,
     wardenKicker: 'The Warden',
     /** The Keeper of Halls (`keeper-rules.ts`): its rule, and the turns to the next swap. */
+    spiralKicker: 'The Spiral',
+    spiralRules: (par: number, turns: number): string =>
+        `Survive ${par} turns: ${Math.min(turns, par)} of ${par}. Clear the outer ring and it seals; fresh pairs are dealt inside.`,
     cartographerKicker: 'The Cartographer',
     cartographerRules: (every: number, matchesLeft: number): string =>
         `Every ${every}rd match the deck beneath turns a quarter, clockwise. Next turn in ${matchesLeft} ${matchesLeft === 1 ? 'match' : 'matches'}.`,
