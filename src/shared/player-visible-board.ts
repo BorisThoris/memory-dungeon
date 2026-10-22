@@ -39,7 +39,11 @@ export const playerVisibleTile = (tile: Tile): Tile => {
     return turncoatDealt != null ? { ...rest, suit: turncoatDealt } : rest;
 };
 
-export const playerVisibleBoard = (board: BoardState): BoardState => {
+/**
+ * `chartBeneath`: the Cartographer's study window (`cartographer-rules.ts`) charts the lower deck, so each
+ * waiting card shows its element - never its face or its pair.
+ */
+export const playerVisibleBoard = (board: BoardState, { chartBeneath = false }: { chartBeneath?: boolean } = {}): BoardState => {
     let changed = false;
     const tiles = board.tiles.map((tile) => {
         const visible = playerVisibleTile(tile);
@@ -48,7 +52,9 @@ export const playerVisibleBoard = (board: BoardState): BoardState => {
     });
     // Layers (`board-layers-rules.ts`): of the lower deck the screen learns only where a card waits, never
     // its face, its element or its pair; the rules keep the whole card.
-    const beneath = board.beneath?.map((card) => (card ? { id: card.id, pairKey: '', symbol: '', label: '', state: 'hidden' as const } : null));
+    const beneath = board.beneath?.map((card) =>
+        card ? { id: card.id, pairKey: '', symbol: '', label: '', state: 'hidden' as const, ...(chartBeneath && card.suit ? { suit: card.suit } : {}) } : null
+    );
     if (beneath) return { ...board, tiles, beneath };
     return changed ? { ...board, tiles } : board;
 };

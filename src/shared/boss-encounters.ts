@@ -217,6 +217,21 @@ export const getFloorIdentityContract = ({
     mutators: readonly MutatorId[];
     featuredObjectiveLabel?: string | null;
 }): FloorIdentityContract => {
+    // The Cartographer (`cartographer-rules.ts`, DGE-018): the Deep's boss states its rule before the first flip.
+    if (floorArchetypeId === 'cartographer_hall') {
+        return {
+            id: 'cartographer',
+            label: 'The Cartographer',
+            teachingSentence: `Two decks deep, and the study window charts the lower deck's elements. Every third match it turns a quarter, clockwise.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: 'Read the deck beneath as a map while it is charted, and count your matches; a pinned card keeps what lies under it.',
+            floorClearSentence: 'The Cartographer falls. The Deep is behind you.',
+            atmosphericFeedback: 'The chart rolls up, and the floor lies still beneath you.',
+            activeReminder: 'Cartographer: every third match the deck beneath turns.',
+            warningLevel: 'danger',
+            tokens: ['hidden_known', 'risk', 'objective']
+        };
+    }
+
     // The Keeper of Halls (`keeper-rules.ts`, DGE-011): the Living Dungeon's boss states its rule before the first flip.
     if (floorArchetypeId === 'keeper_hall') {
         return {

@@ -1,3 +1,4 @@
+import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
@@ -135,6 +136,9 @@ export interface SoakRunReport {
     /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
     keeperFloors: number;
     keeperSwaps: number;
+    /** The Cartographer (`cartographer-rules.ts`): its floors met, and its turns. */
+    cartographerFloors: number;
+    cartographerTurns: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -586,6 +590,13 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         });
         return blocked.length === 0 ? null : `turned blocked ${blocked.map((tile) => tile.id).join(',')}`;
     },
+    'the Cartographer\u2019s turn keeps every card beneath, and a pinned cell keeps its own': (before, run) => {
+        if (!before?.board || !run.board || runNonNegativeInteger(run.cartographerTurnsThisFloor) <= runNonNegativeInteger(before.cartographerTurnsThisFloor)) return null;
+        if (run.board.level !== before.board.level) return null;
+        const pinnedCells = (run.pinnedTileIds ?? []).map((id) => before.board!.tiles.findIndex((tile) => tile.id === id)).filter((cell) => cell >= 0);
+        const held = pinnedCells.find((cell) => run.board!.tiles[cell]?.id === before.board!.tiles[cell]?.id && (run.board!.beneath?.[cell]?.id ?? null) !== (before.board!.beneath?.[cell]?.id ?? null));
+        return held != null ? `the card under pinned cell ${held} moved` : null;
+    },
     'the Keeper\u2019s swap keeps every card and holds every pinned cell': (before, run) => {
         if (!before?.board || !run.board || runNonNegativeInteger(run.keeperSwapsThisFloor) <= runNonNegativeInteger(before.keeperSwapsThisFloor)) return null;
         if (run.board.level !== before.board.level) return null;
@@ -750,6 +761,8 @@ export const soakRun = ({
     let masksDropped = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
+    let cartographerFloors = 0;
+    let cartographerTurns = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -803,6 +816,8 @@ export const soakRun = ({
         step += 1;
         if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
         if (action === 'descend' && isKeeperFloor(next.board)) keeperFloors += 1;
+        if (action === 'descend' && isCartographerFloor(next.board)) cartographerFloors += 1;
+        if (next.board?.level === run.board?.level && runNonNegativeInteger(next.cartographerTurnsThisFloor) > runNonNegativeInteger(run.cartographerTurnsThisFloor)) cartographerTurns += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.keeperSwapsThisFloor) > runNonNegativeInteger(run.keeperSwapsThisFloor)) keeperSwaps += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.masksDroppedThisFloor) > runNonNegativeInteger(run.masksDroppedThisFloor)) masksDropped += 1;
         if (runNonNegativeInteger(next.carvesSpentThisFloor) > runNonNegativeInteger(run.carvesSpentThisFloor) && next.board?.level === run.board?.level) carvesSpent += 1;
@@ -1070,6 +1085,8 @@ export const soakRun = ({
         masksDropped,
         keeperFloors,
         keeperSwaps,
+        cartographerFloors,
+        cartographerTurns,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

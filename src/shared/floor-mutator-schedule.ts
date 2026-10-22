@@ -1,3 +1,4 @@
+import { CARTOGRAPHER_RULES_FROM } from './cartographer-rules';
 import { KEEPER_RULES_FROM } from './keeper-rules';
 import type {
     FeaturedObjectiveId,
@@ -97,6 +98,12 @@ export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDef
         theme: 'Rush',
         riskProfile: 'Boss pressure with short study and wider recall.',
         encounterRole: 'boss'
+    },
+    cartographer_hall: {
+        title: 'The Cartographer',
+        hint: 'Two decks deep, and the lower deck is charted for the study window. Every third match it turns a quarter, clockwise; a pinned card keeps what lies under it.',
+        theme: 'Cartographer',
+        riskProfile: 'The Deep\u2019s boss: the map in your head, both layers of it, turned under you every third match.'
     },
     keeper_hall: {
         title: 'The Keeper of Halls',
@@ -503,6 +510,9 @@ export const DESCENT_ACTS: readonly DescentActDefinition[] = [
 /** The Keeper of Halls (DGE-011): a Fold whose rooms swap; the spotlight stays, the restless drift goes (one board-mover is the rule). */
 const KEEPER_BOSS_ENTRY = makeEntry(12, 'keeper_hall', 'cursed_last', ['shifting_spotlight'], 'boss');
 
+/** The Cartographer (DGE-018): Layers on the boss floor, the lower deck turning; the looking glass and the flinch go (one board-mover is the rule). */
+const CARTOGRAPHER_BOSS_ENTRY = makeEntry(4, 'cartographer_hall', 'flip_par', [], 'boss');
+
 /** The Descent's last floor: the Warden's (DGE-005). */
 export const DESCENT_FLOOR_COUNT = 60;
 
@@ -789,7 +799,15 @@ export const pickFloorScheduleEntry = (
             ? POSITION_NINE_ROTATION[cycleIndex % POSITION_NINE_ROTATION.length]
             : undefined;
     // The Keeper of Halls (DGE-011, `keeper-rules.ts`): from rules 81 the Living Dungeon's boss is its own hall.
-    const actBoss = act.bossFloor === descentFloor ? (act.id === 'living_dungeon' && rulesVersion >= KEEPER_RULES_FROM ? KEEPER_BOSS_ENTRY : act.boss) : null;
+    // The Cartographer (DGE-018, `cartographer-rules.ts`): from rules 82 the Deep's boss is its own hall.
+    const actBoss =
+        act.bossFloor === descentFloor
+            ? act.id === 'living_dungeon' && rulesVersion >= KEEPER_RULES_FROM
+                ? KEEPER_BOSS_ENTRY
+                : act.id === 'deep' && rulesVersion >= CARTOGRAPHER_RULES_FROM
+                  ? CARTOGRAPHER_BOSS_ENTRY
+                  : act.boss
+            : null;
     const legacyBase = actBoss ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
         : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;

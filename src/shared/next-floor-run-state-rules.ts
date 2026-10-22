@@ -88,6 +88,7 @@ export const createNextFloorRunState = (
         carvesSpentThisFloor: 0,
         masksDroppedThisFloor: 0,
         keeperSwapsThisFloor: 0,
+        cartographerTurnsThisFloor: 0,
         wardenDealsAgainThisFloor: 0,
         turncoatTurnsThisFloor: 0,
         hourglassesSpentThisFloor: 0,

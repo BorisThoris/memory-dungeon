@@ -88,6 +88,8 @@ export type TestHallRoomId =
     | 'still-bell-quiet'
     | 'store-stop'
     | 'dread-stirs'
+    | 'cartographer-turn'
+    | 'cartographer-pin'
     | 'keeper-swap'
     | 'keeper-pin'
     | 'warden-past-par'
@@ -998,6 +1000,57 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (runGold(r) !== gold) return `the purse holds ${runGold(r)} after a clear of ${gold}`;
                     return missBankCap(r) === missBankCap({ ...r, relics: [] }) - 1 ? null : `the bank holds ${missBankCap(r)}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'cartographer-turn',
+        title: 'The deck beneath turns',
+        mechanic: 'The Cartographer, the Deep\u2019s boss, is dealt two decks deep; every third match the lower deck turns a quarter, each ring of cells carrying its waiting cards a quarter of the way round, clockwise.',
+        graphMechanicIds: ['hazard.cartographer', 'board.layers'],
+        tryThis: 'x waits under the two top corners. Match a, b and c: the outer ring turns, and x-1 comes up two cells along, x-2 down the right side.',
+        build: () => {
+            const run = room(['p:e a:t a:t q:e', 'b:m b:m c:b c:b', 'p:e d:t d:t q:e'], { level: 40, misses: 6, board: { floorArchetypeId: 'cartographer_hall', floorTag: 'boss' } });
+            const board = run.board!;
+            const card = (half: 1 | 2): Tile => ({ ...board.tiles[0]!, id: `x-${half}`, pairKey: 'x', state: 'hidden', suit: 'moss' });
+            const beneath: (Tile | null)[] = board.tiles.map(() => null);
+            beneath[0] = card(1);
+            beneath[3] = card(2);
+            return { ...run, board: { ...board, beneath, pairCount: board.pairCount + 1, layerKey: 'cartographer-hall' } };
+        },
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'one match', expect: (r) => ((r.cartographerTurnsThisFloor ?? 0) === 0 ? null : 'turned early') },
+            { step: { do: 'match', pairKey: 'b' }, says: 'two', expect: (r) => ((r.cartographerTurnsThisFloor ?? 0) === 0 ? null : 'turned early') },
+            {
+                step: { do: 'match', pairKey: 'c' },
+                says: 'the third match turns the deck beneath',
+                expect: (r) => (r.cartographerTurnsThisFloor === 1 && (r.board?.tiles[2]?.id === 'x-1' || r.board?.beneath?.[2]?.id === 'x-1') && (r.board?.tiles[11]?.id === 'x-2' || r.board?.beneath?.[11]?.id === 'x-2') ? null : `turns ${String(r.cartographerTurnsThisFloor)}, under ${(r.board?.beneath ?? []).map((c, i) => (c ? `${i}:${c.id}` : '')).filter(Boolean).join(' ')}`)
+            }
+        ]
+    },
+    {
+        id: 'cartographer-pin',
+        title: 'A pin holds the deck beneath',
+        mechanic: 'A cell whose top card is pinned keeps what lies under it when the Cartographer\u2019s deck turns; the ring turns round it.',
+        graphMechanicIds: ['hazard.cartographer', 'power.pin'],
+        tryThis: 'Pin p-1 over x-1 and match three times: x-1 stays under the pin, and x-2 moves on round the ring.',
+        build: () => {
+            const run = room(['p:e a:t a:t q:e', 'b:m b:m c:b c:b', 'p:e d:t d:t q:e'], { level: 40, misses: 6, board: { floorArchetypeId: 'cartographer_hall', floorTag: 'boss' } });
+            const board = run.board!;
+            const card = (half: 1 | 2): Tile => ({ ...board.tiles[0]!, id: `x-${half}`, pairKey: 'x', state: 'hidden', suit: 'moss' });
+            const beneath: (Tile | null)[] = board.tiles.map(() => null);
+            beneath[0] = card(1);
+            beneath[3] = card(2);
+            return { ...run, board: { ...board, beneath, pairCount: board.pairCount + 1, layerKey: 'cartographer-hall' } };
+        },
+        script: [
+            { step: { do: 'pin', tileId: 'p-1' }, says: 'p-1 carries a pin', expect: (r) => (r.pinnedTileIds.includes('p-1') ? null : 'p-1 is not pinned') },
+            { step: { do: 'match', pairKey: 'a' }, says: 'one match', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'b' }, says: 'two', expect: statusIs('playing') },
+            {
+                step: { do: 'match', pairKey: 'c' },
+                says: 'the deck turns round the pinned cell',
+                expect: (r) => (r.cartographerTurnsThisFloor === 1 && r.board?.beneath?.[0]?.id === 'x-1' && (r.board?.tiles[11]?.id === 'x-2' || r.board?.beneath?.[11]?.id === 'x-2') ? null : `turns ${String(r.cartographerTurnsThisFloor)}, under ${(r.board?.beneath ?? []).map((c, i) => (c ? `${i}:${c.id}` : '')).filter(Boolean).join(' ')}`)
             }
         ]
     },

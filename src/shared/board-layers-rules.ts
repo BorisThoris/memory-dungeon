@@ -30,6 +30,8 @@ export const LAYERS_RULES_FROM = 72;
 export const LAYERS_APART_FROM = 74;
 /** Of the cells, the share that hold a card beneath, rounded down to whole pairs: two in five keeps the Deep's longest floors under the curve's 24 turns (`sim-difficulty-curve.ts`). */
 export const LAYERS_COVER = 0.4;
+/** The Cartographer's floor (`cartographer-rules.ts`): one cell in four, so the boss keeps under the curve. */
+export const LAYERS_CARTOGRAPHER_COVER = 0.25;
 
 /**
  * Whether a floor is dealt two decks deep: the Deep's own floors, not its boss, not a Fold, and from rules 74 not
@@ -39,7 +41,8 @@ export const LAYERS_COVER = 0.4;
 export const isLayersFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'fold' | 'tiles' | 'floorArchetypeId'>, rulesVersion: number): boolean =>
     rulesVersion >= LAYERS_RULES_FROM &&
     descentActForFloor(board.level).id === 'deep' &&
-    board.floorTag !== 'boss' &&
+    // The Cartographer (`cartographer-rules.ts`) is the one boss floor dealt two decks deep (rules 82).
+    (board.floorTag !== 'boss' || (rulesVersion >= 82 && board.floorArchetypeId === 'cartographer_hall')) &&
     !board.fold &&
     !(rulesVersion >= LAYERS_APART_FROM && board.floorArchetypeId === 'restless_hall') &&
     board.tiles.length >= 8;
@@ -61,7 +64,9 @@ export const dealLayers = (board: BoardState, { runSeed, rulesVersion }: { runSe
     if (!isLayersFloor(board, rulesVersion)) return board;
     const rng = createMulberry32(hashStringToSeed(`layers:${runSeed}:${rulesVersion}:${board.level}`));
     const cells = board.tiles.flatMap((tile, index) => (isSingletonUtilityPairKey(tile.pairKey) ? [] : [index]));
-    const pairs = Math.floor((cells.length * LAYERS_COVER) / 2);
+    // The Cartographer's 22 pairs under two cells in five ran 25 turns, past the curve's 24 (`sim-difficulty-curve.ts`): its deck is thinner.
+    const cover = board.floorArchetypeId === 'cartographer_hall' ? LAYERS_CARTOGRAPHER_COVER : LAYERS_COVER;
+    const pairs = Math.floor((cells.length * cover) / 2);
     if (pairs === 0) return board;
     // The cells that hold a card beneath, and the two elements the lower deck is dealt in.
     const pool = [...cells];

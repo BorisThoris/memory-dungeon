@@ -1,3 +1,4 @@
+import { CARTOGRAPHER_RULES_FROM, CARTOGRAPHER_TURN_EVERY_MATCHES, isCartographerFloor } from '../../shared/cartographer-rules';
 import { KEEPER_RULES_FROM, KEEPER_SWAP_EVERY_TURNS, isKeeperFloor } from '../../shared/keeper-rules';
 import type { CarveDirection } from '../../shared/contracts';
 import { heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS } from '../../shared/run-relic-rules';
@@ -1581,7 +1582,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     // The board as the player can see it (`player-visible-board.ts`): no face-down card shows what
     // marks its pair (a pickup, a trait, an odd card). Everything that draws or describes a card reads it.
-    const visibleBoard = useMemo(() => (run.board ? playerVisibleBoard(run.board) : null), [run.board]);
+    // The Cartographer's study window charts the lower deck's elements (`cartographer-rules.ts`).
+    const chartBeneath = run.status === 'memorize' && isCartographerFloor(run.board);
+    const visibleBoard = useMemo(() => (run.board ? playerVisibleBoard(run.board, { chartBeneath }) : null), [run.board, chartBeneath]);
     // The odd cards' key, and the Hourglass said once when it is caught or runs out (`oddCardBeat.ts`).
     const boardTilesForLegend = run.board?.tiles;
     // The looking glass keeps its clock in the same key: the board cannot show when it will turn.
@@ -1616,8 +1619,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // them is for screen readers only, so this is where a player sees them before the first flip.
     const wardenRulesShown = isWardenFloor(run.board);
     const keeperRulesShown = isKeeperFloor(run.board) && (run.runRulesVersion ?? 0) >= KEEPER_RULES_FROM;
+    const cartographerRulesShown = isCartographerFloor(run.board) && (run.runRulesVersion ?? 0) >= CARTOGRAPHER_RULES_FROM;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2174,6 +2178,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {cartographerRulesShown ? (
+                                    <p className={styles.wardenRules} data-testid="cartographer-rules">
+                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.cartographerKicker}</span>{' '}
+                                        {RUN_SHELL_LINE_COPY.cartographerRules(
+                                            CARTOGRAPHER_TURN_EVERY_MATCHES,
+                                            CARTOGRAPHER_TURN_EVERY_MATCHES - (run.matchResolutionsThisFloor % CARTOGRAPHER_TURN_EVERY_MATCHES)
+                                        )}
+                                    </p>
+                                ) : null}
                                 {keeperRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="keeper-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.keeperKicker}</span>{' '}

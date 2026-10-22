@@ -2679,6 +2679,40 @@
             ]
         },
         {
+            "id": "hazard.cartographer",
+            "label": "The Cartographer",
+            "kind": "hazard",
+            "role": "the_deeps_boss_two_decks_deep_the_lower_deck_charted_for_study_and_turned_a_quarter_every_third_match",
+            "evidence": [
+                "src/shared/cartographer-rules.ts",
+                "src/shared/floor-mutator-schedule.ts",
+                "src/shared/board-layers-rules.ts",
+                "src/shared/player-visible-board.ts",
+                "src/renderer/components/LayerEdges.tsx",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "tileStates",
+                "cartographerTurnsThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "cartographerTurnsThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-turn-keeps-every-card-beneath",
+                "a-pinned-cell-keeps-its-card-beneath",
+                "the-top-deck-never-moves"
+            ],
+            "tests": [
+                "src/shared/cartographer-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "hazard.keeper",
             "label": "The Keeper of Halls",
             "kind": "hazard",
@@ -3032,6 +3066,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "hazard.cartographer",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the chart of the deck beneath at the study window, and the Cartographer’s rule with the matches to the next turn"
+        },
         {
             "source": "hazard.keeper",
             "target": "feedback.gameplay_hud",

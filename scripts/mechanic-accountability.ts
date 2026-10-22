@@ -295,6 +295,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 275,
         reason: 'The rent is charged only past the Warden in an Endless run, and the census plays twenty-four floors and the soak thirty, so neither meets it. Its rules are unit tested, two hall rooms walk a floor that cannot pay and one that does, and its share was set from 80 soak runs measured to floor 100.'
     },
+    'hazard.cartographer': {
+        generation: 285,
+        reason: 'The Cartographer is the boss of floor 40 alone and the census stops before it. The whole-run soak counts its floors and its turns, with an invariant that a turn keeps every card beneath and every pinned cell; unit tests pin the schedule, the deal, the turn on square and odd boards and the chart, and two hall rooms walk a turn and a pin.'
+    },
     'hazard.keeper': {
         generation: 284,
         reason: 'The Keeper of Halls is the boss of floor 24 alone and the census stops before it. The whole-run soak counts the floors met and the swaps, with an invariant that a swap keeps every card and holds every pinned cell; unit tests pin the schedule, the fold, the swap and its turn, and two hall rooms walk a swap and a pin through one.'

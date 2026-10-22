@@ -26,13 +26,14 @@ import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
+import { CARTOGRAPHER_TURN_EVERY_MATCHES } from './cartographer-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 108 as const;
+export const ENCYCLOPEDIA_VERSION = 109 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -492,6 +493,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
             `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
             `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won.`
+    },
+    {
+        id: 'sys_cartographer',
+        title: 'The Cartographer',
+        description:
+            `Floor 40, the end of the Deep, is the **Cartographer**: the one boss floor dealt **two decks deep**, and for the study window the deck beneath is **charted** - each waiting card's edge shows its element. Then **every ${CARTOGRAPHER_TURN_EVERY_MATCHES}rd match** the deck beneath turns a **quarter, clockwise**: each ring of cells carries its waiting cards a quarter of the way round. The cards on top never move. A **pinned** card keeps what lies under it. What the Cartographer gives when it falls is the door you took before it.`
     },
     {
         id: 'sys_keeper',
