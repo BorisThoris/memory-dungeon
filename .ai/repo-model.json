@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3317,
-    "codeFileCount": 1277,
-    "exportedSymbolCount": 4130,
+    "trackedFileCount": 3319,
+    "codeFileCount": 1279,
+    "exportedSymbolCount": 4142,
     "contentItemCount": 16,
     "mechanicCount": 87,
     "stateFieldCount": 164,
-    "relationshipCount": 11499
+    "relationshipCount": 11533
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 99538,
-      "sha256": "3713c8cb3c20cf0654eb5bc588b9feb04973c5bfb9bff6bb142dd7d369ff8fa1"
+      "sha256": "860d6cf019e699233f9612dc89a5bb7044848568f578e2076a20185990624969"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "cc87151e19c6e3ec6611293a6607fdd2ac790bedc635d365c75e21f654630745"
+      "sha256": "55b4f9d225dc7a31a87b99a7b5bc54ef8577aab6999572a435410fcd64324ab7"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10641,8 +10641,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 34968,
-      "sha256": "ad5841ee4f47afaf143ad1982a04ae1177258a8b89dba2017b154b9ac35e3eb0"
+      "bytes": 35306,
+      "sha256": "d32ba2177ba724a8aa0863589c9d7a830dffe477fc453e28d9a11d6c7185dd03"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -10690,13 +10690,13 @@
       "path": "src/renderer/components/CollectionScreen.test.tsx",
       "category": "test",
       "bytes": 3261,
-      "sha256": "9f1c6a72bcf232985a7fff78311818a70f4f45e9b41fed3ca16d3ad1fcd08bc1"
+      "sha256": "81a7b3af7948f3b5c2e49aef33f7e940be410b0866b640b974cff03708649a3c"
     },
     {
       "path": "src/renderer/components/CollectionScreen.tsx",
       "category": "source",
-      "bytes": 7172,
-      "sha256": "1028aec5fd203d6f99f911bad542616098f1ca6b68d83e140e5b2338d899a92b"
+      "bytes": 7761,
+      "sha256": "0ea2c6e6fbf46c688ebc3aea7702712a356ab8a8316ed905cdc17b16fdf746a2"
     },
     {
       "path": "src/renderer/components/ColossusCard.module.css",
@@ -13191,8 +13191,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 4379,
-      "sha256": "31cdecf5502bf5120f917076411d3b82ccf7ecda8052295aa346f60108ec002f"
+      "bytes": 4443,
+      "sha256": "597fa1c377ae71d8ceb198a6fb9030b30c41b5d6aca192f63deb1032264491d1"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -14061,8 +14061,8 @@
     {
       "path": "src/renderer/store/runResolutionController.ts",
       "category": "source",
-      "bytes": 12125,
-      "sha256": "e955a65ec2c9155169ce05c528ce8d1fe146898ebbe03c16ba40d19539bf3976"
+      "bytes": 12368,
+      "sha256": "8b56c24365a02329daf39e42db07641db753fc60828f81d9ba4fd3873815b00f"
     },
     {
       "path": "src/renderer/store/runStartExecutor.test.ts",
@@ -14464,7 +14464,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 99908,
-      "sha256": "fd1e2b6e8a5920e706239cbd8dd54ecd3991874d40edf247c1f6b45828abce74"
+      "sha256": "ddee492496faeee596d50cb7f4e33f5a24c025b22dc08f49479151c33c739659"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14529,8 +14529,8 @@
     {
       "path": "src/shared/automatic-camp-rules.ts",
       "category": "source",
-      "bytes": 3064,
-      "sha256": "1ba73c2a3a21c3cd9cf66fec1677745780d6099f5b9e202335de3ff1a6efb000"
+      "bytes": 3383,
+      "sha256": "5ac728ad1589a694d6df4612bd0597f12c849726dbb66cf58d9cede74434110f"
     },
     {
       "path": "src/shared/bad-floor-is-quiet.test.ts",
@@ -15033,8 +15033,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 62414,
-      "sha256": "dcbedd5cf0cf3f0e1a0cf81a15ffe5aa241b8f3c93049671665999b0978895e5"
+      "bytes": 62668,
+      "sha256": "db4dacf5d732edff9ee920dbe3f3067e057a344f71fc3350f1a930eb85ca4d88"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15057,8 +15057,8 @@
     {
       "path": "src/shared/cosmetic-ids.ts",
       "category": "source",
-      "bytes": 216,
-      "sha256": "21414898800437d2a5d81420d00f4473720ac13afd5237824d00b09932120462"
+      "bytes": 506,
+      "sha256": "37a3a263ac4f6f8b60635c4e7909d061b44c9c654cc2385239c3142cd5c24143"
     },
     {
       "path": "src/shared/cosmetic-reachability.test.ts",
@@ -15075,8 +15075,8 @@
     {
       "path": "src/shared/cosmetics.ts",
       "category": "source",
-      "bytes": 7171,
-      "sha256": "270399fdd32c933ac7c0cf6e8e24f2c543236c594fbae53313a8f46d71c0f1d8"
+      "bytes": 10001,
+      "sha256": "c0abe77008ffb1b6b535da707cb5d4f4cca779c5ea9dd63908df4b1afd185bb9"
     },
     {
       "path": "src/shared/crash-report-summary.test.ts",
@@ -15353,6 +15353,18 @@
       "category": "test",
       "bytes": 2495,
       "sha256": "835ac3ae31d551ae8d3e6b7802ddb0b5c8a5b1fe1700b12cef8c98927b690c0b"
+    },
+    {
+      "path": "src/shared/feat-unlocks.test.ts",
+      "category": "test",
+      "bytes": 2392,
+      "sha256": "8eb657216be022d45f1a759fa98c0b99c1ee26297872b242c29fe8012c392671"
+    },
+    {
+      "path": "src/shared/feat-unlocks.ts",
+      "category": "source",
+      "bytes": 5794,
+      "sha256": "1414e0295ba1afc924f0959c05828326752ca48838d8e004456fd1ebfed05dda"
     },
     {
       "path": "src/shared/feature-flags.ts",
@@ -15783,8 +15795,8 @@
     {
       "path": "src/shared/hold-rules.ts",
       "category": "source",
-      "bytes": 9668,
-      "sha256": "3e82b98e05e943d32b466835d721aba7e65cfdf6e7f52a036cc538fc1b16f9d8"
+      "bytes": 9773,
+      "sha256": "8d37d16ab7f166582b64c0acc7d77ca4a88717b6cdd7ed70ef78785d1aa8f59c"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -15999,8 +16011,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 71037,
-      "sha256": "024231e6ae358c4dd42fc12b00884d3e8d113c9fd5cb61d69c5c9dec2a8bd567"
+      "bytes": 71522,
+      "sha256": "82402346a3f565a6085935351d993d624d187d4fcee8cbf81d7ec26475258c0b"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16779,8 +16791,8 @@
     {
       "path": "src/shared/run-share-key.ts",
       "category": "source",
-      "bytes": 4706,
-      "sha256": "174315c145cca9dedcf827b62ca6f9b546141b7adbf8e4924c7a4bb52e00e1e5"
+      "bytes": 4716,
+      "sha256": "0ce7d73297e7604a811527bf1314659e7947994ae2ff037f54d37e4f3d1dcc1d"
     },
     {
       "path": "src/shared/run-share-text.test.ts",
@@ -16851,8 +16863,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 28867,
-      "sha256": "2cf81324c465eae0a14e218d1d2865989b4b07e13eb4489db0e66098609a392a"
+      "bytes": 29102,
+      "sha256": "c2494a22d6d0eaeb8369511e5b61ff5609a3bf73b405a540eb82d24390e6a66d"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -17145,8 +17157,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 227449,
-      "sha256": "94163a08182b17355556a8622d6c88fe7cdefdbafc7865ce02b688be0310fb13"
+      "bytes": 231141,
+      "sha256": "6073b9af4160c6071ef511c180aec4989907fb789881e3e786b1569a2cb1f3fa"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17499,8 +17511,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 19092,
-      "sha256": "470ef73197a6fd8a089bbd69be62a16a602b76128d76f90e5efe77b40ad17a40"
+      "bytes": 19547,
+      "sha256": "22caf7937c44c197823b05646350b1cd299a93c7d61cc7fbfa377750ad80db50"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17673,8 +17685,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-024-feat-unlock-tree.md",
       "category": "other",
-      "bytes": 1956,
-      "sha256": "0d6854de80569329005854c81299c4aafa592654d53b214d115ed61a67b82cdb"
+      "bytes": 3494,
+      "sha256": "1feb7ae882f471413f845de511dcd865d3a69906c928d56dc423cc0a3ecdf2c0"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
@@ -23337,7 +23349,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 678,
+      "lineCount": 681,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -23350,6 +23362,7 @@
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/classic-run-setup.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/run-share-key.ts"
@@ -23475,7 +23488,7 @@
       "path": "src/renderer/components/CollectionScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 158,
+      "lineCount": 166,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/collectionStorageNote.ts",
@@ -23483,6 +23496,7 @@
         "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
         "file:src/shared/cosmetics.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/meta-progression.ts",
         "file:src/shared/save-data.ts"
@@ -30708,7 +30722,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 96,
+      "lineCount": 97,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -32948,7 +32962,7 @@
       "path": "src/renderer/store/runResolutionController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 278,
+      "lineCount": 282,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/store/achievementPersistence.ts",
@@ -32959,6 +32973,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/descent-record.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/honorUnlocks.ts",
@@ -34124,8 +34139,9 @@
       "path": "src/shared/automatic-camp-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 57,
+      "lineCount": 60,
       "imports": [
+        "file:src/shared/boss-reward-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/miss-bank.ts",
         "file:src/shared/pass-and-play-rules.ts",
@@ -35942,7 +35958,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1318,
+      "lineCount": 1321,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/elemental-loot-rules.ts"
@@ -36183,6 +36199,7 @@
         "file:src/shared/elemental-loot-rules.test.ts",
         "file:src/shared/endless-rent-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
+        "file:src/shared/feat-unlocks.test.ts",
         "file:src/shared/findables.test.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
@@ -36323,7 +36340,7 @@
       "path": "src/shared/cosmetic-ids.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 11,
+      "lineCount": 22,
       "imports": [],
       "exports": [
         "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -36363,7 +36380,7 @@
       "path": "src/shared/cosmetics.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 194,
+      "lineCount": 284,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -36395,7 +36412,8 @@
       ],
       "testedBy": [
         "file:src/shared/cosmetic-reachability.test.ts",
-        "file:src/shared/cosmetics.test.ts"
+        "file:src/shared/cosmetics.test.ts",
+        "file:src/shared/feat-unlocks.test.ts"
       ]
     },
     {
@@ -37320,6 +37338,53 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/feat-unlocks.test.ts",
+      "path": "src/shared/feat-unlocks.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 39,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/cosmetics.ts",
+        "file:src/shared/feat-unlocks.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/feat-unlocks.ts",
+      "path": "src/shared/feat-unlocks.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 84,
+      "imports": [
+        "file:src/shared/cartographer-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/cosmetic-ids.ts",
+        "file:src/shared/keeper-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/feat-unlocks.ts#earnedFeats",
+        "symbol:src/shared/feat-unlocks.ts#FEAT_IDS",
+        "symbol:src/shared/feat-unlocks.ts#FEAT_OPTION_IDS",
+        "symbol:src/shared/feat-unlocks.ts#FeatDefinition",
+        "symbol:src/shared/feat-unlocks.ts#FeatId",
+        "symbol:src/shared/feat-unlocks.ts#FeatOptionId",
+        "symbol:src/shared/feat-unlocks.ts#featOptionTag",
+        "symbol:src/shared/feat-unlocks.ts#FEATS",
+        "symbol:src/shared/feat-unlocks.ts#featTag",
+        "symbol:src/shared/feat-unlocks.ts#hasFeat",
+        "symbol:src/shared/feat-unlocks.ts#hasFeatOption",
+        "symbol:src/shared/feat-unlocks.ts#recordFeats"
+      ],
+      "testedBy": [
+        "file:src/shared/feat-unlocks.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/feature-flags.ts",
       "path": "src/shared/feature-flags.ts",
       "layer": "shared",
@@ -38182,6 +38247,7 @@
         "file:src/shared/element-resonance-rules.test.ts",
         "file:src/shared/elemental-encounter-goals.test.ts",
         "file:src/shared/endless-rent-rules.test.ts",
+        "file:src/shared/feat-unlocks.test.ts",
         "file:src/shared/flip-tile-transition.test.ts",
         "file:src/shared/floor-clear-momentum-bonus-rules.test.ts",
         "file:src/shared/gameplay-core-release-rejected.test.ts",
@@ -39012,7 +39078,7 @@
       "path": "src/shared/hold-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 169,
+      "lineCount": 170,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-layers-rules.ts",
@@ -39704,7 +39770,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 903,
+      "lineCount": 910,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -39712,6 +39778,7 @@
         "file:src/shared/carve-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dread-rules.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/hold-rules.ts",
         "file:src/shared/keeper-rules.ts",
@@ -42710,12 +42777,13 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 672,
+      "lineCount": 676,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
         "file:src/shared/descent-record.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/honor-unlock-ids.ts",
         "file:src/shared/run-array-guards.ts",
@@ -42779,6 +42847,7 @@
         "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/cosmetics.test.ts",
         "file:src/shared/descent-record.test.ts",
+        "file:src/shared/feat-unlocks.test.ts",
         "file:src/shared/first-run-help-center.test.ts",
         "file:src/shared/game-over-next-run.test.ts",
         "file:src/shared/honorUnlocks.test.ts",
@@ -43761,7 +43830,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3473,
+      "lineCount": 3528,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -43778,6 +43847,7 @@
         "file:src/shared/dread-rules.ts",
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/endless-rent-rules.ts",
+        "file:src/shared/feat-unlocks.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
         "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -49112,8 +49182,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 677,
-      "endLine": 677
+      "line": 680,
+      "endLine": 680
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -49208,8 +49278,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CollectionScreen.tsx",
-      "line": 157,
-      "endLine": 157
+      "line": 165,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/components/ColossusCard.tsx#ColossusCard",
@@ -57473,7 +57543,7 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 76,
-      "endLine": 95
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
@@ -59560,8 +59630,8 @@
       "name": "createRunResolutionController",
       "kind": "value",
       "file": "src/renderer/store/runResolutionController.ts",
-      "line": 84,
-      "endLine": 277
+      "line": 85,
+      "endLine": 281
     },
     {
       "id": "symbol:src/renderer/store/runStartExecutor.ts#executeRunStartRequest",
@@ -61064,24 +61134,24 @@
       "name": "AUTOMATIC_CAMP_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/automatic-camp-rules.ts",
-      "line": 8,
-      "endLine": 8
+      "line": 9,
+      "endLine": 9
     },
     {
       "id": "symbol:src/shared/automatic-camp-rules.ts#automaticCampReward",
       "name": "automaticCampReward",
       "kind": "function",
       "file": "src/shared/automatic-camp-rules.ts",
-      "line": 18,
-      "endLine": 56
+      "line": 19,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/automatic-camp-rules.ts#CampReward",
       "name": "CampReward",
       "kind": "interface",
       "file": "src/shared/automatic-camp-rules.ts",
-      "line": 9,
-      "endLine": 12
+      "line": 10,
+      "endLine": 13
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -63928,16 +63998,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1176,
-      "endLine": 1176
+      "line": 1179,
+      "endLine": 1179
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1265,
-      "endLine": 1267
+      "line": 1268,
+      "endLine": 1270
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -64032,8 +64102,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1273,
-      "endLine": 1278
+      "line": 1276,
+      "endLine": 1281
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -64064,16 +64134,16 @@
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1179,
-      "endLine": 1188
+      "line": 1182,
+      "endLine": 1191
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1291,
-      "endLine": 1317
+      "line": 1294,
+      "endLine": 1320
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -64408,8 +64478,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1190,
-      "endLine": 1205
+      "line": 1193,
+      "endLine": 1208
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -64520,16 +64590,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1281,
-      "endLine": 1281
+      "line": 1284,
+      "endLine": 1284
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1284,
-      "endLine": 1289
+      "line": 1287,
+      "endLine": 1292
     },
     {
       "id": "symbol:src/shared/contracts.ts#RepriseTurn",
@@ -64560,16 +64630,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1258,
-      "endLine": 1262
+      "line": 1261,
+      "endLine": 1265
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1256,
-      "endLine": 1256
+      "line": 1259,
+      "endLine": 1259
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -64584,8 +64654,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1212,
-      "endLine": 1229
+      "line": 1215,
+      "endLine": 1232
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -64593,7 +64663,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 804,
-      "endLine": 1174
+      "endLine": 1177
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -64632,8 +64702,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1231,
-      "endLine": 1250
+      "line": 1234,
+      "endLine": 1253
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -64801,23 +64871,23 @@
       "kind": "value",
       "file": "src/shared/cosmetic-ids.ts",
       "line": 1,
-      "endLine": 7
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/cosmetic-ids.ts#CosmeticId",
       "name": "CosmeticId",
       "kind": "type",
       "file": "src/shared/cosmetic-ids.ts",
-      "line": 9,
-      "endLine": 9
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CARD_THEME_CATALOG",
       "name": "CARD_THEME_CATALOG",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 97,
-      "endLine": 104
+      "line": 187,
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CardThemeId",
@@ -64841,7 +64911,7 @@
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
       "line": 42,
-      "endLine": 95
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#COSMETIC_IDS",
@@ -64880,8 +64950,8 @@
       "name": "cosmeticIsOwned",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 126,
-      "endLine": 132
+      "line": 216,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CosmeticSlot",
@@ -64912,80 +64982,80 @@
       "name": "cosmeticUnlockTag",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 124,
-      "endLine": 124
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#deriveCosmeticStates",
       "name": "deriveCosmeticStates",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 145,
-      "endLine": 166
+      "line": 235,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCardThemeRows",
       "name": "getCardThemeRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 183,
-      "endLine": 186
+      "line": 273,
+      "endLine": 276
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCatalogRows",
       "name": "getCosmeticCatalogRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 119,
-      "endLine": 120
+      "line": 209,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCollectionRows",
       "name": "getCosmeticCollectionRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 173,
-      "endLine": 173
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticProgressTrackRows",
       "name": "getCosmeticProgressTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 193,
-      "endLine": 193
+      "line": 283,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
       "name": "getCosmeticTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 193,
-      "endLine": 193
+      "line": 283,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCardTheme",
       "name": "getEquippedCardTheme",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 188,
-      "endLine": 189
+      "line": 278,
+      "endLine": 279
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCosmeticId",
       "name": "getEquippedCosmeticId",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 180,
-      "endLine": 181
+      "line": 270,
+      "endLine": 271
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
       "name": "getOwnedCosmeticIds",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 175,
-      "endLine": 178
+      "line": 265,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
@@ -66218,6 +66288,102 @@
       "file": "src/shared/endless-rent-rules.ts",
       "line": 45,
       "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#earnedFeats",
+      "name": "earnedFeats",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 67,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FEAT_IDS",
+      "name": "FEAT_IDS",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 60,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FEAT_OPTION_IDS",
+      "name": "FEAT_OPTION_IDS",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 61,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FeatDefinition",
+      "name": "FeatDefinition",
+      "kind": "interface",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 31,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FeatId",
+      "name": "FeatId",
+      "kind": "type",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 17,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FeatOptionId",
+      "name": "FeatOptionId",
+      "kind": "type",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#featOptionTag",
+      "name": "featOptionTag",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 64,
+      "endLine": 64
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#FEATS",
+      "name": "FEATS",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 47,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#featTag",
+      "name": "featTag",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 63,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#hasFeat",
+      "name": "hasFeat",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 70,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#hasFeatOption",
+      "name": "hasFeatOption",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 71,
+      "endLine": 71
+    },
+    {
+      "id": "symbol:src/shared/feat-unlocks.ts#recordFeats",
+      "name": "recordFeats",
+      "kind": "value",
+      "file": "src/shared/feat-unlocks.ts",
+      "line": 74,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
@@ -69001,7 +69167,7 @@
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
       "line": 98,
-      "endLine": 168
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#startHold",
@@ -69872,160 +70038,160 @@
       "name": "ACHIEVEMENT_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 151,
-      "endLine": 276
+      "line": 152,
+      "endLine": 277
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
       "name": "AchievementCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 47,
-      "endLine": 51
+      "line": 48,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CODEX_CORE_TOPICS",
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 370,
-      "endLine": 419
+      "line": 371,
+      "endLine": 420
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
       "name": "CodexCoreTopic",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 59,
-      "endLine": 63
+      "line": 60,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_CONTRACT_TOPICS",
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 863,
-      "endLine": 881
+      "line": 870,
+      "endLine": 888
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 884,
-      "endLine": 902
+      "line": 891,
+      "endLine": 909
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 725,
-      "endLine": 860
+      "line": 732,
+      "endLine": 867
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 422,
-      "endLine": 483
+      "line": 423,
+      "endLine": 484
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 488,
-      "endLine": 673
+      "line": 489,
+      "endLine": 680
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 678,
-      "endLine": 722
+      "line": 685,
+      "endLine": 729
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
       "name": "ENCYCLOPEDIA_VERSION",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#EncyclopediaTopic",
       "name": "EncyclopediaTopic",
       "kind": "type",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GAME_MODE_CODEX",
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 360,
-      "endLine": 367
+      "line": 361,
+      "endLine": 368
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
       "name": "GameModeCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 53,
-      "endLine": 57
+      "line": 54,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#glossaryTermById",
       "name": "glossaryTermById",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 143,
-      "endLine": 144
+      "line": 144,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY",
       "name": "MECHANICS_GLOSSARY",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 147,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY_TERMS",
       "name": "MECHANICS_GLOSSARY_TERMS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 83,
-      "endLine": 133
+      "line": 84,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MechanicsGlossaryTerm",
       "name": "MechanicsGlossaryTerm",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 68,
-      "endLine": 81
+      "line": 69,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MUTATOR_CATALOG",
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 281,
-      "endLine": 358
+      "line": 282,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
       "name": "MutatorDefinition",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 40,
-      "endLine": 44
+      "line": 41,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/memorize-phase-rules.ts#finishMemorizePhase",
@@ -74560,144 +74726,144 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 95,
-      "endLine": 118
+      "line": 96,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 120,
-      "endLine": 127
+      "line": 121,
+      "endLine": 128
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 360,
-      "endLine": 372
+      "line": 364,
+      "endLine": 376
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
       "name": "DEFAULT_SETTINGS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 28,
-      "endLine": 54
+      "line": 29,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 651,
-      "endLine": 662
+      "line": 655,
+      "endLine": 666
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 624,
-      "endLine": 637
+      "line": 628,
+      "endLine": 641
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 664,
-      "endLine": 671
+      "line": 668,
+      "endLine": 675
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 643,
-      "endLine": 649
+      "line": 647,
+      "endLine": 653
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 257,
-      "endLine": 358
+      "line": 261,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 564,
-      "endLine": 617
+      "line": 568,
+      "endLine": 621
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 532,
-      "endLine": 535
+      "line": 536,
+      "endLine": 539
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 537,
-      "endLine": 549
+      "line": 541,
+      "endLine": 553
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 551,
-      "endLine": 554
+      "line": 555,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 556,
-      "endLine": 562
+      "line": 560,
+      "endLine": 566
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
       "name": "RUN_HISTORY_SEED_CAP",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 143,
-      "endLine": 143
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 406,
-      "endLine": 421
+      "line": 410,
+      "endLine": 425
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 86,
-      "endLine": 93
+      "line": 87,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 380,
-      "endLine": 402
+      "line": 384,
+      "endLine": 406
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -76096,112 +76262,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3432,
-      "endLine": 3432
+      "line": 3487,
+      "endLine": 3487
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3283,
-      "endLine": 3409
+      "line": 3338,
+      "endLine": 3464
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3438,
-      "endLine": 3443
+      "line": 3493,
+      "endLine": 3498
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3422,
-      "endLine": 3422
+      "line": 3477,
+      "endLine": 3477
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 570,
-      "endLine": 3270
+      "line": 3326,
+      "endLine": 3326
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3446,
-      "endLine": 3452
+      "line": 3501,
+      "endLine": 3507
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3472,
-      "endLine": 3472
+      "line": 3527,
+      "endLine": 3527
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 273,
-      "endLine": 290
+      "line": 284,
+      "endLine": 301
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 67,
-      "endLine": 218
+      "line": 68,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3411,
-      "endLine": 3414
+      "line": 3466,
+      "endLine": 3469
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 266,
-      "endLine": 271
+      "line": 277,
+      "endLine": 282
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 220,
-      "endLine": 264
+      "line": 231,
+      "endLine": 275
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3425,
-      "endLine": 3429
+      "line": 3480,
+      "endLine": 3484
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3454,
-      "endLine": 3470
+      "line": 3509,
+      "endLine": 3525
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -80559,7 +80725,7 @@
         },
         {
           "path": "src/shared/automatic-camp-rules.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/shared/miss-bank.ts",
@@ -81009,7 +81175,7 @@
         },
         {
           "path": "src/shared/save-data.ts",
-          "line": 26
+          "line": 27
         },
         {
           "path": "src/main/persistence.ts",
@@ -101102,6 +101268,78 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#earnedFeats",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#earnedFeats",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FEAT_IDS",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FEAT_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FEAT_OPTION_IDS",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FEAT_OPTION_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FeatDefinition",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FeatDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FeatId",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FeatId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FeatOptionId",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FeatOptionId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#featOptionTag",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#featOptionTag",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#FEATS",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#FEATS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#featTag",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#featTag",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#hasFeat",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#hasFeat",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#hasFeatOption",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#hasFeatOption",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/feat-unlocks.ts->symbol:src/shared/feat-unlocks.ts#recordFeats",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "symbol:src/shared/feat-unlocks.ts#recordFeats",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/feature-flags.ts->symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
       "source": "file:src/shared/feature-flags.ts",
       "target": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
@@ -115090,6 +115328,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/feat-unlocks.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/feat-unlocks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/pass-and-play-rules.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/pass-and-play-rules.ts",
@@ -115273,6 +115517,12 @@
       "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/cosmetics.ts",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/shared/cosmetics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/feat-unlocks.ts",
+      "source": "file:src/renderer/components/CollectionScreen.tsx",
+      "target": "file:src/shared/feat-unlocks.ts",
       "kind": "imports"
     },
     {
@@ -125266,6 +125516,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/feat-unlocks.ts",
+      "source": "file:src/renderer/store/runResolutionController.ts",
+      "target": "file:src/shared/feat-unlocks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/gameplay-core-adapters.ts",
       "source": "file:src/renderer/store/runResolutionController.ts",
       "target": "file:src/shared/gameplay-core-adapters.ts",
@@ -126667,6 +126923,12 @@
       "id": "imports:src/shared/automatic-camp-rules.test.ts->src/shared/scoring-rules.ts",
       "source": "file:src/shared/automatic-camp-rules.test.ts",
       "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/automatic-camp-rules.ts->src/shared/boss-reward-rules.ts",
+      "source": "file:src/shared/automatic-camp-rules.ts",
+      "target": "file:src/shared/boss-reward-rules.ts",
       "kind": "imports"
     },
     {
@@ -129862,6 +130124,66 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/feat-unlocks.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/feat-unlocks.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.test.ts->src/shared/cosmetics.ts",
+      "source": "file:src/shared/feat-unlocks.test.ts",
+      "target": "file:src/shared/cosmetics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.test.ts->src/shared/feat-unlocks.ts",
+      "source": "file:src/shared/feat-unlocks.test.ts",
+      "target": "file:src/shared/feat-unlocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/feat-unlocks.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/feat-unlocks.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/cosmetic-ids.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/cosmetic-ids.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/keeper-rules.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/keeper-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/final-pair-rules.test.ts->src/shared/final-pair-rules.ts",
       "source": "file:src/shared/final-pair-rules.test.ts",
       "target": "file:src/shared/final-pair-rules.ts",
@@ -132325,6 +132647,12 @@
       "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/dread-rules.ts",
       "source": "file:src/shared/mechanics-encyclopedia.ts",
       "target": "file:src/shared/dread-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/feat-unlocks.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.ts",
+      "target": "file:src/shared/feat-unlocks.ts",
       "kind": "imports"
     },
     {
@@ -135490,6 +135818,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/save-data.ts->src/shared/feat-unlocks.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/feat-unlocks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/save-data.ts->src/shared/gameplay-journal.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/gameplay-journal.ts",
@@ -136669,6 +137003,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/endless-rent-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/endless-rent-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/feat-unlocks.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/feat-unlocks.ts",
       "kind": "imports"
     },
     {
@@ -146655,6 +146995,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/feat-unlocks.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/feat-unlocks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/findables.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/findables.test.ts",
@@ -147237,6 +147583,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/cosmetics.ts->file:src/shared/feat-unlocks.test.ts",
+      "source": "file:src/shared/cosmetics.ts",
+      "target": "file:src/shared/feat-unlocks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/crash-report-summary.ts->file:src/shared/crash-report-summary.test.ts",
       "source": "file:src/shared/crash-report-summary.ts",
       "target": "file:src/shared/crash-report-summary.test.ts",
@@ -147498,6 +147850,12 @@
       "id": "tested_by:src/shared/endless-rent-rules.ts->file:src/shared/endless-rent-rules.test.ts",
       "source": "file:src/shared/endless-rent-rules.ts",
       "target": "file:src/shared/endless-rent-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/feat-unlocks.ts->file:src/shared/feat-unlocks.test.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/feat-unlocks.test.ts",
       "kind": "tested_by"
     },
     {
@@ -148368,6 +148726,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/endless-rent-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/endless-rent-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/feat-unlocks.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/feat-unlocks.test.ts",
       "kind": "tested_by"
     },
     {
@@ -150462,6 +150826,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/descent-record.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/descent-record.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/feat-unlocks.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/feat-unlocks.test.ts",
       "kind": "tested_by"
     },
     {
