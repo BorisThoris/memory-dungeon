@@ -101,7 +101,8 @@ describe('mechanics-encyclopedia', () => {
         // the clear-life bonus and the score parasite are gone from the rules (docs/REMOVED_LIVES.md).
         // No reference copy may describe them as if a player could still meet them; the glossary
         // has no term for them and the sections have no entry for them.
-        const removed = /\blives\b|\blife\b|guard token|parasite|mismatch grace|chain heal|one heart/i;
+        // `\bone heart`: the Keystone Heart evolution ends in "one heart" without being the phrase.
+        const removed = /\blives\b|\blife\b|guard token|parasite|mismatch grace|chain heal|\bone heart/i;
         const glossaryIds = MECHANICS_GLOSSARY.map((term) => term.id);
         expect(glossaryIds).not.toContain('lives');
         expect(glossaryIds).not.toContain('guard_tokens');
@@ -289,5 +290,28 @@ describe('featured objectives and par, as the rules pay them', () => {
 
     it('describes sticky fingers as a face-down card that sticks', () => {
         expect(MUTATOR_CATALOG.sticky_fingers.description).toContain('face-down card touching');
+    });
+});
+
+describe('the deep game in the Codex (DGE-029)', () => {
+    it('names every act, act boss, Dread tier, evolution, feat and Depth rung', async () => {
+        const Codex = await import('./mechanics-encyclopedia');
+        const text = JSON.stringify(Codex).toLowerCase();
+        const { DESCENT_ACTS } = await import('./floor-mutator-schedule');
+        const { DREAD_TIERS } = await import('./dread-rules');
+        const { EVOLUTIONS } = await import('./relic-evolution-rules');
+        const { FEATS } = await import('./feat-unlocks');
+        const { DEPTH_RUNGS } = await import('./depth-rules');
+        const names = [
+            ...DESCENT_ACTS.map((act) => act.title),
+            'The Keeper of Halls',
+            'The Cartographer',
+            'The Warden',
+            ...DREAD_TIERS.map((tier) => tier.name),
+            ...EVOLUTIONS.map((recipe) => recipe.title),
+            ...FEATS.map((feat) => feat.name),
+            ...DEPTH_RUNGS.map((rung) => rung.name)
+        ];
+        expect(names.filter((name) => !text.includes(name.toLowerCase()))).toEqual([]);
     });
 });

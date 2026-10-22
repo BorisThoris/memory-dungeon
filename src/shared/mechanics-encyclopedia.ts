@@ -37,7 +37,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 116 as const;
+export const ENCYCLOPEDIA_VERSION = 117 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -577,7 +577,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_relic_evolutions',
         title: 'Relic evolutions',
         description:
-            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** (Long Look and Deep Pockets): **Reprise** replays five turns, not three.`
+            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** (Long Look and Deep Pockets): **Reprise** replays five turns, not three.`
     },
     {
         id: 'sys_boss_rewards',
