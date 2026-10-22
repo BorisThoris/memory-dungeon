@@ -3,10 +3,13 @@ import { GAME_RULES_VERSION, type AchievementId } from './contracts';
 import {
     CHAIN_REACTION_WAVES,
     CHUNK_SIX_PAIRS,
+    DEPTH_ACHIEVEMENTS,
     evaluateAchievementUnlocks,
+    REACH_FLOORS,
     RUNS_FINISHED_THRESHOLDS
 } from './achievements';
 import { resolveChunkBreak } from './chunk-break-rules';
+import { descendIntoEndless } from './warden-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { createNewRun } from './run-creation-rules';
@@ -46,8 +49,34 @@ describe('achievement thresholds against real content', () => {
         // reachable — and that removing what earns one means removing the id, which is why the
         // four mode-tied marks went with their modes (docs/REMOVED_MODES.md).
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(22);
+        expect(known).toHaveLength(31);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
+    });
+
+    it('the reach curve falls out of a Classic run: the boss floors, the Warden, Endless and every fifth Depth', () => {
+        const save = createDefaultSaveData();
+        const at = (floor: number, extra: Partial<ReturnType<typeof createNewRun>> = {}, depth = 0) => {
+            const run = { ...createNewRun(0, { gameMode: 'endless', runSeed: 7, depth }), achievementsEnabled: true };
+            return evaluateAchievementUnlocks({ ...run, stats: { ...run.stats, highestLevel: floor }, ...extra }, save);
+        };
+        expect(at(23)).not.toContain('ACH_REACH_KEEPER');
+        expect(at(24)).toContain('ACH_REACH_KEEPER');
+        expect(at(40)).toEqual(expect.arrayContaining(['ACH_REACH_KEEPER', 'ACH_REACH_CARTOGRAPHER']));
+        expect(at(60)).toContain('ACH_REACH_WARDEN');
+        expect(at(60)).not.toContain('ACH_WARDEN_FELLED');
+        // The Warden felled is the floor cleared (`wardenOutcome`); Endless is the descent after it.
+        const felled = { status: 'levelComplete' as const, wardenOutcome: 'cleared' as const };
+        expect(at(60, felled)).toContain('ACH_WARDEN_FELLED');
+        expect(at(60, felled)).not.toContain('ACH_ENDLESS_ENTERED');
+        const won = { ...createNewRun(0, { gameMode: 'endless', runSeed: 7 }), ...felled };
+        expect(at(60, descendIntoEndless(won))).toContain('ACH_ENDLESS_ENTERED');
+        expect(at(60, felled, 4)).not.toContain('ACH_DEPTH_FIVE');
+        expect(at(60, felled, 10)).toEqual(expect.arrayContaining(['ACH_DEPTH_FIVE', 'ACH_DEPTH_TEN']));
+        expect(at(60, felled, 10)).not.toContain('ACH_DEPTH_FIFTEEN');
+        expect(at(60, felled, 20)).toEqual(expect.arrayContaining(DEPTH_ACHIEVEMENTS.map(([id]) => id)));
+        expect(REACH_FLOORS.map(([, floor]) => floor)).toEqual([24, 40, 60]);
+        // A test-pace run counts nothing (`descent-pace-rules.ts`), so the curve is honest.
+        expect(evaluateAchievementUnlocks({ ...createNewRun(0, { gameMode: 'endless', runSeed: 7 }), achievementsEnabled: false, wardenOutcome: 'cleared' }, save)).toEqual([]);
     });
 
     it('lets a profile actually reach a hundred runs, which the run history could not count to', () => {

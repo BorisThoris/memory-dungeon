@@ -2,7 +2,8 @@ import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
 import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
+import { DESCENT_ACTS, ENDLESS_CYCLE_FLOOR_COUNT, type DescentActId } from './floor-mutator-schedule';
+import { MAX_DEPTH, runDepth } from './depth-rules';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { missesLeft } from './miss-bank';
 import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
@@ -38,6 +39,22 @@ export const RUNS_FINISHED_THRESHOLDS: ReadonlyArray<readonly [AchievementId, nu
     ['ACH_RUNS_FIFTY', 50],
     ['ACH_RUNS_HUNDRED', 100]
 ] as const;
+
+/** The act bosses' floors and the Warden's, from the Descent's own acts (`floor-mutator-schedule.ts`). */
+const actBossFloor = (id: DescentActId): number => DESCENT_ACTS.find((act) => act.id === id)!.bossFloor!;
+export const REACH_FLOORS: ReadonlyArray<readonly [AchievementId, number]> = [
+    ['ACH_REACH_KEEPER', actBossFloor('living_dungeon')],
+    ['ACH_REACH_CARTOGRAPHER', actBossFloor('deep')],
+    ['ACH_REACH_WARDEN', actBossFloor('abyss')]
+];
+
+/** The Warden felled at every fifth Depth (`depth-rules.ts`). */
+export const DEPTH_ACHIEVEMENTS: ReadonlyArray<readonly [AchievementId, number]> = [
+    ['ACH_DEPTH_FIVE', 5],
+    ['ACH_DEPTH_TEN', 10],
+    ['ACH_DEPTH_FIFTEEN', 15],
+    ['ACH_DEPTH_TWENTY', MAX_DEPTH]
+];
 
 /** Re-export encyclopedia copy (single source of truth). */
 export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = ACHIEVEMENT_CATALOG;
@@ -161,6 +178,18 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award('ACH_EXTREME_FEVER', run.lastLevelResult?.momentumBonusTier === 'fever');
     award('ACH_NOTHING_HELD_IT', runNonNegativeInteger(run.chunkDropsThisRun) >= 1);
     award('ACH_CHAIN_REACTION', runNonNegativeInteger(run.bestRippleThisRun) >= CHAIN_REACTION_WAVES);
+
+    // The reach curve (DGE-028): the boss floors stood on, the Warden felled, Endless entered, and the
+    // Warden felled at every fifth Depth. Each reads state a Classic run already carries.
+    for (const [id, floor] of REACH_FLOORS) {
+        award(id, stats.highestLevel >= floor);
+    }
+    const wardenFelled = run.wardenOutcome === 'cleared';
+    award('ACH_WARDEN_FELLED', wardenFelled);
+    award('ACH_ENDLESS_ENTERED', wardenFelled && run.endless === true);
+    for (const [id, depth] of DEPTH_ACHIEVEMENTS) {
+        award(id, wardenFelled && runDepth(run) >= depth);
+    }
 
     return unlocked;
 };

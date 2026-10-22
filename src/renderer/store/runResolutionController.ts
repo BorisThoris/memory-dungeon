@@ -1,3 +1,5 @@
+import { runDepth } from '../../shared/depth-rules';
+import { descentActForFloor } from '../../shared/floor-mutator-schedule';
 import { recordFeats } from '../../shared/feat-unlocks';
 import { recordDescent } from '../../shared/descent-record';
 import { evaluateAchievementUnlocks } from '../../shared/achievements';
@@ -196,7 +198,13 @@ export const createRunResolutionController = ({
                     practice: nextRun.practiceMode,
                     highestLevel: summary.highestLevel,
                     totalScore: summary.totalScore,
-                    mutatorCount: runArrayCount(summary.activeMutators)
+                    mutatorCount: runArrayCount(summary.activeMutators),
+                    // The reach curve (DGE-028): where the run got and how it ended, never who played it.
+                    act: descentActForFloor(Math.max(1, summary.highestLevel)).id,
+                    outcome: summary.runEndReason ?? 'unknown',
+                    wardenFelled: nextRun.wardenOutcome === 'cleared',
+                    endless: nextRun.endless === true,
+                    depth: runDepth(nextRun)
                 });
             }
 

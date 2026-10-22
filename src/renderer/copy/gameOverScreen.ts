@@ -22,6 +22,8 @@ export const gameOverScreenCopy = {
             ? `Run ended. ${endReason} Final score ${totalScore.toLocaleString()}.`
             : `Run ended. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
     achievementsNoteOn: 'Achievements counted for this run.',
+    /** A power used takes the perfect and power-free ones away; said, so a clean floor does not seem robbed. */
+    achievementsNotePowersUsed: 'Achievements counted for this run, except Perfect Clear and the no-powers record: a power was used.',
     /**
      * Why achievements did not count, in the run's own terms.
      *
@@ -180,15 +182,17 @@ export const achievementsNote = ({
     achievementsEnabled,
     practiceMode,
     sharedTable,
-    testPace
+    testPace,
+    powersUsed
 }: {
     achievementsEnabled: boolean;
+    powersUsed?: boolean;
     practiceMode?: boolean;
     sharedTable?: boolean;
     testPace?: boolean;
 }): string => {
     if (achievementsEnabled) {
-        return gameOverScreenCopy.achievementsNoteOn;
+        return powersUsed === true ? gameOverScreenCopy.achievementsNotePowersUsed : gameOverScreenCopy.achievementsNoteOn;
     }
     if (sharedTable === true) {
         return gameOverScreenCopy.achievementsNoteOffShared;

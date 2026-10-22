@@ -1,7 +1,7 @@
 # DGE-028: Reach-curve telemetry and Steam achievements
 
 ## Status
-Not started
+Done (2026-10-22)
 
 ## Priority
 P1
@@ -48,3 +48,10 @@ Achievements for reaching each act boss, beating the Warden, entering Endless, a
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-22 (no rules change).
+- Nine achievements (31 in all), API names equal to their ids (`steam-achievement-api-names.ts`), printed by `yarn steam:partner-config` for the Partner site: ACH_REACH_KEEPER, ACH_REACH_CARTOGRAPHER, ACH_REACH_WARDEN (standing on floors 24, 40, 60, read from `DESCENT_ACTS`), ACH_WARDEN_FELLED (`wardenOutcome` cleared), ACH_ENDLESS_ENTERED (felled and descended), ACH_DEPTH_FIVE/TEN/FIFTEEN/TWENTY (the Warden felled at that Depth or deeper). Each reads state a Classic run already carries; the demo flavour and a test-pace run count none (their existing switch).
+- Telemetry: `run_complete` now carries the act reached, the outcome, whether the Warden fell, Endless and the Depth. Counts only; the sink stays host-injected and the payload passes the existing PII filter.
+- Results: when a power was used the achievements line says Perfect Clear and the no-powers record did not count, and why (the REG lesson).
+- Tests: the reach curve played off a Classic run (`achievement-reachability.test.ts`, including that a run with achievements off earns none), the results line, the catalog and save round-trip suites; the Collection lists 31 in the isolated browser. Codex ENCYCLOPEDIA 116.
+- Not done: the Partner-site rows are entered by hand (out of the repository); icons for the nine.

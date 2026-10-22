@@ -414,7 +414,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     achievementsEnabled: summary.achievementsEnabled,
                                     practiceMode: summary.practiceMode,
                                     sharedTable: passAndPlayOutcome !== null,
-                                    testPace: run.descentPace === 'fast'
+                                    testPace: run.descentPace === 'fast',
+                                    powersUsed: run.powersUsedThisRun === true
                                 })}
                             </p>
                             <div className={styles.actionButtons}>

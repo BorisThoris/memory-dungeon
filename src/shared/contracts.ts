@@ -322,7 +322,20 @@ export type AchievementId =
     | 'ACH_RUNS_TWENTY_FIVE'
     | 'ACH_RUNS_FIFTY'
     | 'ACH_RUNS_HUNDRED'
-    | 'ACH_CHAIN_REACTION';
+    | 'ACH_CHAIN_REACTION'
+    /*
+     * The reach curve (DGE-028): the act bosses, the Warden, Endless and every fifth Depth, so the
+     * store's global stats publish how far players get in the same table as the comparables.
+     */
+    | 'ACH_REACH_KEEPER'
+    | 'ACH_REACH_CARTOGRAPHER'
+    | 'ACH_REACH_WARDEN'
+    | 'ACH_WARDEN_FELLED'
+    | 'ACH_ENDLESS_ENTERED'
+    | 'ACH_DEPTH_FIVE'
+    | 'ACH_DEPTH_TEN'
+    | 'ACH_DEPTH_FIFTEEN'
+    | 'ACH_DEPTH_TWENTY';
 
 export interface DebugFlags {
     showDebugTools: boolean;

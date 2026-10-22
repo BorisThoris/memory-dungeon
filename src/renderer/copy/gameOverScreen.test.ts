@@ -29,6 +29,11 @@ describe('achievementsNote', () => {
         expect(achievementsNote({ achievementsEnabled: true })).toBe(gameOverScreenCopy.achievementsNoteOn);
     });
 
+    it('says what a power used took away, so a clean floor does not seem robbed', () => {
+        expect(achievementsNote({ achievementsEnabled: true, powersUsed: true })).toMatch(/Perfect Clear and the no-powers record: a power was used/);
+        expect(achievementsNote({ achievementsEnabled: false, powersUsed: true })).toBe(gameOverScreenCopy.achievementsNoteOff);
+    });
+
     it('does not accuse a shared game of using debug tools', () => {
         // There were three ways to turn achievements off and one line explaining them, which
         // told a table that had never opened a debug tool that they had.

@@ -37,7 +37,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 115 as const;
+export const ENCYCLOPEDIA_VERSION = 116 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -274,6 +274,52 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_RUNS_HUNDRED',
         title: 'A Hundred Descents',
         description: 'Finish a hundred runs.'
+    },
+    /* The reach curve (DGE-028): each one falls out of playing a Classic run. */
+    ACH_REACH_KEEPER: {
+        id: 'ACH_REACH_KEEPER',
+        title: "The Keeper's Door",
+        description: "Reach floor 24, where the Keeper of Halls waits."
+    },
+    ACH_REACH_CARTOGRAPHER: {
+        id: 'ACH_REACH_CARTOGRAPHER',
+        title: "The Cartographer's Table",
+        description: "Reach floor 40, where the Cartographer waits."
+    },
+    ACH_REACH_WARDEN: {
+        id: 'ACH_REACH_WARDEN',
+        title: "Before the Warden",
+        description: "Reach floor 60, where the Warden waits."
+    },
+    ACH_WARDEN_FELLED: {
+        id: 'ACH_WARDEN_FELLED',
+        title: "Warden Felled",
+        description: "Clear floor 60 and fell the Warden."
+    },
+    ACH_ENDLESS_ENTERED: {
+        id: 'ACH_ENDLESS_ENTERED',
+        title: "Past the Warden",
+        description: "Fell the Warden and descend into Endless."
+    },
+    ACH_DEPTH_FIVE: {
+        id: 'ACH_DEPTH_FIVE',
+        title: "Depth 5",
+        description: "Fell the Warden at Depth 5 or deeper."
+    },
+    ACH_DEPTH_TEN: {
+        id: 'ACH_DEPTH_TEN',
+        title: "Depth 10",
+        description: "Fell the Warden at Depth 10 or deeper."
+    },
+    ACH_DEPTH_FIFTEEN: {
+        id: 'ACH_DEPTH_FIFTEEN',
+        title: "Depth 15",
+        description: "Fell the Warden at Depth 15 or deeper."
+    },
+    ACH_DEPTH_TWENTY: {
+        id: 'ACH_DEPTH_TWENTY',
+        title: "Depth 20",
+        description: "Fell the Warden at Depth 20, the deepest."
     }
 };
 
