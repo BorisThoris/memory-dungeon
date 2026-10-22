@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3303,
-    "codeFileCount": 1265,
-    "exportedSymbolCount": 4081,
+    "trackedFileCount": 3307,
+    "codeFileCount": 1267,
+    "exportedSymbolCount": 4088,
     "contentItemCount": 16,
-    "mechanicCount": 82,
-    "stateFieldCount": 156,
-    "relationshipCount": 11259
+    "mechanicCount": 83,
+    "stateFieldCount": 157,
+    "relationshipCount": 11302
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 92511,
-      "sha256": "97309026311cfbee9b3fb50109cd48a23d2664b73250e89f3fee5e6ff05ec5bb"
+      "bytes": 93933,
+      "sha256": "84485b7ead2843ccc495067ecbbbf1b59f8038acc71c0d88a96f56779e939bd9"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -909,8 +909,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 20275,
-      "sha256": "c880cdedd3b4e3126ddba04156b6e08af3e0cb80f5e1c093c3a3266bc9ee92e9"
+      "bytes": 19959,
+      "sha256": "8ac01b8216f4a12b965f74b14c2a86f905b336780f124f3d3f54730362b8e82a"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -1311,8 +1311,8 @@
     {
       "path": "docs/product/STEAM_AUDIT_VERIFICATION_2026-10-22.md",
       "category": "documentation",
-      "bytes": 4044,
-      "sha256": "6634546e6c371bc9de94f58683bb744c0caf3a33289a86bd197ed209baec11dc"
+      "bytes": 4018,
+      "sha256": "3dbaa7f9fcd06a8d69bd3799567d665ec08145122236054fafa612ddd4c8a966"
     },
     {
       "path": "docs/product/STEAM_GAME_PLAN_2026-10-22.md",
@@ -1329,44 +1329,44 @@
     {
       "path": "docs/product/steam-audit-2026-10-22/all-checkboxes.csv",
       "category": "documentation",
-      "bytes": 259756,
-      "sha256": "d5b940154412ec772262dc3979d623a6902b02769935e250336e6e6373ec7939"
+      "bytes": 257870,
+      "sha256": "180baca5a791adfa9ed9e91541687939729837d0d318fab78b5a77e08411e226"
     },
     {
       "path": "docs/product/steam-audit-2026-10-22/inventory-summary.json",
       "category": "documentation",
-      "bytes": 22617,
-      "sha256": "bdd17052dc2cf3f5c65c158585ab74c2f6a03be16b4338c530620c98d555a365"
+      "bytes": 21758,
+      "sha256": "e03ae0e5c5e50ffb78e37cd85d580f5620ce9ff127244f9673dd3e175d736e8c"
     },
     {
       "path": "docs/product/steam-audit-2026-10-22/source-file-inventory.csv",
       "category": "documentation",
-      "bytes": 71659,
-      "sha256": "324282ad92fed845dd7ec536f5a582046e3e3f0fa329f444868ea2ea695865bd"
+      "bytes": 70227,
+      "sha256": "d3a1c35aec35ed806962d5a691c5ddc3caf869d09bc35932d39ac690f2212dc0"
     },
     {
       "path": "docs/product/steam-audit-2026-10-22/task-code-reference-inventory.csv",
       "category": "documentation",
-      "bytes": 67026,
-      "sha256": "cf69677a7d06e0e8645eeb4acc0dea8b7a246c8e498863c901ed47b7f8705a16"
+      "bytes": 66429,
+      "sha256": "f5afba1e17828d5c299d75d4ff22febb71904f9c97033e7a96594e322f30c69e"
     },
     {
       "path": "docs/product/steam-audit-2026-10-22/task-heading-and-table-occurrences.csv",
       "category": "documentation",
-      "bytes": 267516,
-      "sha256": "2048252d47e4858f45412d07bd9690a5e887d0a11ae68fcd736f49e203c9048b"
+      "bytes": 265985,
+      "sha256": "aa1c79769d00992ced7977ae9b94131e35e48560ad9d23ef2d0b95bab0df3e8c"
     },
     {
       "path": "docs/product/steam-audit-2026-10-22/task-reconciliation.csv",
       "category": "documentation",
-      "bytes": 129245,
-      "sha256": "12d8a525fa2e1d82153a02466346e2d3a6a5d4fc9bd5b4eee35ccd4d91445a18"
+      "bytes": 128791,
+      "sha256": "8f3e1b18fa087dcc75d37b18d947b1043ba0d692b13c1b115f883b9c7af4806c"
     },
     {
       "path": "docs/product/TASK_RECONCILIATION_2026-10-22.md",
       "category": "documentation",
-      "bytes": 124800,
-      "sha256": "f67ed2fd4d84bdfdf033f9472da06eaf5e5b6669010e619c2104a20312f9e941"
+      "bytes": 124273,
+      "sha256": "b80e2759664844bf0c7e2ebbc045551ee1a9dc7494650c0789928f176b0c6c7c"
     },
     {
       "path": "docs/PUZZLE_CONTRIBUTING.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "9cf312cf60c4ff7505c8f803a886f897e8d8211f4920ab0b9f741c1566881133"
+      "sha256": "888db0702168e895f1963f56f857b82d30fabc66089709d4c263179db0814352"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "69723dde856f374631e57c277d6dd8b22586434071bcc88220c25537988c1390"
+      "sha256": "29370cbc0929e5d12a72b04abeb8aa5bc6ea5605565a6d8c96da7a9856d13373"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -2793,44 +2793,50 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 334349,
-      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 326270,
-      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
+      "bytes": 273780,
+      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 351103,
-      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
+      "bytes": 395039,
+      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 262999,
-      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
+      "bytes": 74007,
+      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 160622,
-      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
+      "bytes": 47216,
+      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 263076,
-      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
+      "bytes": 89413,
+      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 241706,
-      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
+      "bytes": 58618,
+      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
+    },
+    {
+      "path": "docs/ui-design-reference/390x844/01f-profile.png",
+      "category": "documentation",
+      "bytes": 84953,
+      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -5373,8 +5379,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 27914,
-      "sha256": "638cfbeba2da078fb199f0da3a0397a9ed08c89530f6b545bd10ee42cb8f88fd"
+      "bytes": 28332,
+      "sha256": "7ede53e71fbadd49c8e34bf68498aab4fd1c4ae5c8f9a3081ccbb4df166c1c96"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5775,8 +5781,8 @@
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 30527,
-      "sha256": "09abe596045fa38397027246d65312cde31b0deddc031d2f917e15acc9820edc"
+      "bytes": 30721,
+      "sha256": "bfa9c5c1e3862c240672f6ab897dd59234ba17151d717676ec92dd528450521c"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -5787,8 +5793,8 @@
     {
       "path": "scripts/sim-goldilocks.ts",
       "category": "script",
-      "bytes": 13989,
-      "sha256": "2e0b6df0884dc0380bcfc20170c3f872c5b3b5883b29545d856715e70ee329a6"
+      "bytes": 14126,
+      "sha256": "f358013a22ae4ee55d793da24e651835a072dc2f2dd5bfce818ff6d53d7c8734"
     },
     {
       "path": "scripts/sim-occupancy.ts",
@@ -5823,8 +5829,8 @@
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 4875,
-      "sha256": "02debb4c0719103cd691e75c31321727045a07133f8da814bee8f42d30350245"
+      "bytes": 4979,
+      "sha256": "45fcf705dab7f3732a16c2ee252d429f108c784fb3e7842d7229f099584f1885"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -9303,8 +9309,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 1931,
-      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
+      "bytes": 2024,
+      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9345,8 +9351,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 842,
-      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
+      "bytes": 887,
+      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9363,8 +9369,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 333,
-      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
+      "bytes": 354,
+      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9393,8 +9399,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 589,
-      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
+      "bytes": 622,
+      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9423,8 +9429,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 596,
-      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
+      "bytes": 629,
+      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9813,8 +9819,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 248,
-      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
+      "bytes": 267,
+      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -11013,8 +11019,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 139011,
-      "sha256": "ac0e8509e635425a3a0d2bbcb5b83c3ff5d4e53a12051ce77b5a7635795352c3"
+      "bytes": 140232,
+      "sha256": "0c49bd13789f95a2668d4865383636f8b13f4cf2a18143721cbc488715b51356"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11163,8 +11169,8 @@
     {
       "path": "src/renderer/components/LayerEdges.tsx",
       "category": "source",
-      "bytes": 2548,
-      "sha256": "a3442cc3a9ea3ecba472d6627e6d6d47f90b45584ac4d218c13023c2b50dd80b"
+      "bytes": 3602,
+      "sha256": "ee9ef315aacd7e3af0a35ced05f6dd6328651e7764cba91b52243adb296bb4fa"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -13149,8 +13155,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 9142,
-      "sha256": "b6e3758d420209ea842179617fd1025bc2e7ab64ef12a93d3e2997d8895fe9a7"
+      "bytes": 9408,
+      "sha256": "1c1675ddbcefb6b6129f1b95e044fafd36547166d8c7779c6224044deb016134"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -14445,8 +14451,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 92869,
-      "sha256": "2de01f33d99baf114e3e7ca4b058a72bf3d9b2c496d3f76220fc52325be32f51"
+      "bytes": 94293,
+      "sha256": "aba1f59cc3a6500b78e05651b4a97afeee65fafa4c5ae47cd53e7e1b2a437f88"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14619,8 +14625,8 @@
     {
       "path": "src/shared/board-layers-rules.ts",
       "category": "source",
-      "bytes": 9799,
-      "sha256": "830418528b2c54e2dc09daeb05420c91beb88ae9d75910b31d75fefedb166958"
+      "bytes": 10384,
+      "sha256": "ac497f9e82a7146b50129b0d2474e690309a731a844b2372d2e93ae5ca5a40a8"
     },
     {
       "path": "src/shared/board-layout-rules.test.ts",
@@ -14727,8 +14733,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 25320,
-      "sha256": "9d2aff49e9c296b360c9001266b4fe7d6abcf3cb625d3d602b723c08f5ba07cf"
+      "bytes": 25438,
+      "sha256": "72354ddacf85b6170e9cb9687fcaa9922a566df05ae86bd9ce97241ddb51c8b9"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -14739,14 +14745,14 @@
     {
       "path": "src/shared/boss-encounters.test.ts",
       "category": "test",
-      "bytes": 11584,
-      "sha256": "d26e9fbd0c395817707399c7181b0926932e0fc6ef95bbed84ccb3b6afa25bfb"
+      "bytes": 11590,
+      "sha256": "9052f47672d5b9c572420a028af4fc74177233bfe156f7b6342d598abb8c85f3"
     },
     {
       "path": "src/shared/boss-encounters.ts",
       "category": "source",
-      "bytes": 25506,
-      "sha256": "8a48a2ce6acdba23cff4eb633b8b32f876bf2ccec667eea93d0d2eb8b0a8a44f"
+      "bytes": 26484,
+      "sha256": "75689f84e72451388f5c0f502c52a0b4b5a74a5319e00cd1e153a777d12eb760"
     },
     {
       "path": "src/shared/boss-reward-rules.test.ts",
@@ -14783,6 +14789,18 @@
       "category": "test",
       "bytes": 5449,
       "sha256": "0a31af6525461ec7cf60a06c000cc9848bc2f306a1a7ad239ab68730249687ec"
+    },
+    {
+      "path": "src/shared/cartographer-rules.test.ts",
+      "category": "test",
+      "bytes": 4753,
+      "sha256": "067c92fede6d2b8d76512d039e86ffd3428dbd06e96d413596f7b02436262219"
+    },
+    {
+      "path": "src/shared/cartographer-rules.ts",
+      "category": "source",
+      "bytes": 3856,
+      "sha256": "bec1ce9176d45dc6214bc78c6c3fe957334418cfba098d2fb20ec56de5a092a3"
     },
     {
       "path": "src/shared/carve-rules.test.ts",
@@ -15003,8 +15021,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 60268,
-      "sha256": "dec8d765ab2357a9282eca4d346b7c79b4458a658b05741ad5bf07f03293eda8"
+      "bytes": 60490,
+      "sha256": "abb8e0952929950c6792d1160760e0aa00122e7eb6081e20f9265b04eee7e04c"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15429,8 +15447,8 @@
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 35746,
-      "sha256": "91f137a9289337b1ac0823a1708120a141efd68e875aa1f40470a378aa193d44"
+      "bytes": 36742,
+      "sha256": "be46524effe531066eeb5681c8f3e821a8900fb4f863e8cc799b13be2a53e1b7"
     },
     {
       "path": "src/shared/floor-par.test.ts",
@@ -15615,8 +15633,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 152489,
-      "sha256": "527730be71763076b01ab481cb22f6004709871f0c483b4533ad0e16222f167f"
+      "bytes": 154073,
+      "sha256": "b3557f88c60440cfc30c428e3ebbfdd3f4165631414542a99c80609eb08980e3"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -15922,7 +15940,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
       "bytes": 5876,
-      "sha256": "2931b60155879ed33738861772d158274c4414f11066fbf04334e1af3de328f1"
+      "sha256": "ca105318dd7531947e9af9eef0f69d8f6f4f5c6ba63b67fd9e29f8764abbf79e"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -15957,8 +15975,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 67781,
-      "sha256": "988977c19978c3bd5701c456f26ba2162750579557acd5127c0f31d0074f828d"
+      "bytes": 68499,
+      "sha256": "10f7b90583a423dd665ab81a771d12d8bf683d63ad6cfd2ac1f50fc223e4a486"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16113,8 +16131,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 5025,
-      "sha256": "71fd2532aeac96395b8d9664a1b1be5616d6566d9257d626c126f68eed03e823"
+      "bytes": 5064,
+      "sha256": "eacf0a03eca0f114de9b34a97bbf384bb51e7e5fe83c311d27af5e9d3d5fc09f"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -16257,8 +16275,8 @@
     {
       "path": "src/shared/player-visible-board.ts",
       "category": "source",
-      "bytes": 3191,
-      "sha256": "9beda182c0c5d6cff073c1d6b0532c36d94295aa89e16e0e06612e3c06effa7d"
+      "bytes": 3500,
+      "sha256": "e93d1750ead51b26b72b4c7028318370d45b088ea79005a97f1ffe9451883f44"
     },
     {
       "path": "src/shared/playthrough-solver-rules.ts",
@@ -16749,8 +16767,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 69196,
-      "sha256": "f308f8501bbab660bacb88dbd36b6a5ac7114f05527d9f0acd07ff865fcbcb92"
+      "bytes": 70600,
+      "sha256": "f0dd8a328f557c492393aac7b9863d8ee71556798e3c3188cf82cbd499f9de73"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -17043,8 +17061,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 114160,
-      "sha256": "9ccc59901b7d4544d169f74a39e5b25efa0b3cd705d058a01a2b8bbb8269d961"
+      "bytes": 115776,
+      "sha256": "e8dac659f2c5a9aadb03ab05096e1b8df6707ceea75d9e548d8469b1dcf3bf3e"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17067,8 +17085,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 212750,
-      "sha256": "e6c4c2865018de01851e832337acb6210d4b992e59b8e79d6fc8ed5f6bcfc4cb"
+      "bytes": 216791,
+      "sha256": "1c1c28302b0cf6b41e874ef86af3259229bd089b760b95495e6927419c979a33"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17127,14 +17145,14 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 21798,
-      "sha256": "33e8d4cf5b8976d0bb5c06be0f6f4b60182c748308b1fd794d64b0ac32bac6d4"
+      "bytes": 21819,
+      "sha256": "0b4c7de8b8fbe31f0ab05692409affc4a05f709922b91875106404da854671c1"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 31998,
-      "sha256": "7a7ae6defcafc944b3b24652662328ec8ec320cd43349599a5ac98cd6a9be820"
+      "bytes": 32145,
+      "sha256": "7d7c6cb475a61b6a4b0249bcbab799f75fde675857676249260167e46a9facfd"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -17326,7 +17344,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "331cdddd7f75ba39fe14de4371b9c0342486267da0da1724130777a8f402fa36"
+      "sha256": "d208a3408d633dd4f7da6111ee5aacb8dd75b625cd4661947bda962c54b89c1b"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17421,8 +17439,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 16511,
-      "sha256": "fbaca87f18e5aad50e8fad196d9a36c6cdc04c9f166d9574d3b64002fb0c58ac"
+      "bytes": 17085,
+      "sha256": "8825db6bde044798e4715282074069d2b0376a400c0ddaacc9584415631b6c3a"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17559,8 +17577,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
       "category": "other",
-      "bytes": 1426,
-      "sha256": "dfa4bacb95f5e6958a082dbfaf71247492cc23b1168d8ff3e265335fb0ff8d13"
+      "bytes": 3431,
+      "sha256": "3635fec840d02eacdfbcdb3c5c817cfc99dec1ef00236a96be3156bda2e7c97e"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-019-echo-verb.md",
@@ -19829,6 +19847,12 @@
       "category": "other",
       "bytes": 316232,
       "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
+    },
+    {
+      "path": "zz-pw.config.ts",
+      "category": "configuration",
+      "bytes": 460,
+      "sha256": "e603bed1738a1fdf95c16471e2c994d8d6316bea9e0d2069aa2ce41d2329a5bf"
     }
   ],
   "files": [
@@ -24279,7 +24303,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2666,
+      "lineCount": 2679,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24358,6 +24382,7 @@
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/boss-reward-rules.ts",
         "file:src/shared/cameraViewportMode.ts",
+        "file:src/shared/cartographer-rules.ts",
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/colossus-rules.ts",
@@ -24785,8 +24810,9 @@
       "path": "src/renderer/components/LayerEdges.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 45,
+      "lineCount": 57,
       "imports": [
+        "file:src/renderer/components/cardBackInk.ts",
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/renderer/components/tileShatter.ts",
@@ -30508,7 +30534,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 179,
+      "lineCount": 182,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -34263,6 +34289,7 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/board-layers-rules.test.ts",
         "file:src/shared/boss-encounters.test.ts",
+        "file:src/shared/cartographer-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/game.test.ts",
@@ -34378,7 +34405,7 @@
       "path": "src/shared/board-layers-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 161,
+      "lineCount": 166,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -34398,6 +34425,7 @@
         "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
         "symbol:src/shared/board-layers-rules.ts#layerKeyOf",
         "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
+        "symbol:src/shared/board-layers-rules.ts#LAYERS_CARTOGRAPHER_COVER",
         "symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
         "symbol:src/shared/board-layers-rules.ts#LAYERS_RULES_FROM",
         "symbol:src/shared/board-layers-rules.ts#promoteBeneath",
@@ -34405,7 +34433,8 @@
       ],
       "testedBy": [
         "file:src/renderer/store/runTimerController.test.ts",
-        "file:src/shared/board-layers-rules.test.ts"
+        "file:src/shared/board-layers-rules.test.ts",
+        "file:src/shared/cartographer-rules.test.ts"
       ]
     },
     {
@@ -34739,10 +34768,11 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 530,
+      "lineCount": 531,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-layers-rules.ts",
+        "file:src/shared/cartographer-rules.ts",
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -34832,7 +34862,7 @@
       "path": "src/shared/boss-encounters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 459,
+      "lineCount": 474,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -34963,6 +34993,46 @@
       ],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/cartographer-rules.test.ts",
+      "path": "src/shared/cartographer-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 74,
+      "imports": [
+        "file:src/shared/board-generation.ts",
+        "file:src/shared/board-layers-rules.ts",
+        "file:src/shared/cartographer-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/player-visible-board.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/cartographer-rules.ts",
+      "path": "src/shared/cartographer-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 71,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/cartographer-rules.ts#applyCartographerTurn",
+        "symbol:src/shared/cartographer-rules.ts#boardRings",
+        "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_RULES_FROM",
+        "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_TURN_EVERY_MATCHES",
+        "symbol:src/shared/cartographer-rules.ts#isCartographerFloor",
+        "symbol:src/shared/cartographer-rules.ts#rotateLowerLayer"
+      ],
+      "testedBy": [
+        "file:src/shared/cartographer-rules.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/carve-rules.test.ts",
@@ -35769,7 +35839,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1279,
+      "lineCount": 1282,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/elemental-loot-rules.ts"
@@ -35980,6 +36050,7 @@
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/boss-reward-rules.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
+        "file:src/shared/cartographer-rules.test.ts",
         "file:src/shared/carve-rules.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
@@ -37469,8 +37540,9 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 830,
+      "lineCount": 848,
       "imports": [
+        "file:src/shared/cartographer-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/keeper-rules.ts",
         "file:src/shared/rng.ts",
@@ -37527,6 +37599,7 @@
         "file:src/shared/bad-floor-is-quiet.test.ts",
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/boss-reward-rules.test.ts",
+        "file:src/shared/cartographer-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/descent-pace-rules.test.ts",
         "file:src/shared/descent-schedule-golden.test.ts",
@@ -37974,6 +38047,7 @@
         "file:src/shared/board-layers-rules.test.ts",
         "file:src/shared/bomb-power.test.ts",
         "file:src/shared/boss-reward-rules.test.ts",
+        "file:src/shared/cartographer-rules.test.ts",
         "file:src/shared/carve-rules.test.ts",
         "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
@@ -38463,7 +38537,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 4389,
+      "lineCount": 4429,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -39466,10 +39540,11 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 870,
+      "lineCount": 877,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
+        "file:src/shared/cartographer-rules.ts",
         "file:src/shared/carve-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dread-rules.ts",
@@ -40009,7 +40084,7 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 132,
+      "lineCount": 133,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/chain-carryover-rules.ts",
@@ -40492,7 +40567,7 @@
       "path": "src/shared/player-visible-board.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 55,
+      "lineCount": 61,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -40501,6 +40576,7 @@
         "symbol:src/shared/player-visible-board.ts#playerVisibleTile"
       ],
       "testedBy": [
+        "file:src/shared/cartographer-rules.test.ts",
         "file:src/shared/mask-rules.test.ts",
         "file:src/shared/player-visible-board.test.ts",
         "file:src/shared/wanderer-rules.test.ts"
@@ -42199,12 +42275,13 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1123,
+      "lineCount": 1140,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/boss-reward-rules.ts",
+        "file:src/shared/cartographer-rules.ts",
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/colossus-rules.ts",
@@ -43300,7 +43377,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 783,
+      "lineCount": 790,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -43372,7 +43449,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3270,
+      "lineCount": 3323,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -43659,7 +43736,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 655,
+      "lineCount": 657,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -49400,40 +49477,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2665,
-      "endLine": 2665
+      "line": 2678,
+      "endLine": 2678
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 284,
-      "endLine": 284
+      "line": 285,
+      "endLine": 285
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 282,
-      "endLine": 282
+      "line": 283,
+      "endLine": 283
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 286,
-      "endLine": 286
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 276,
-      "endLine": 276
+      "line": 277,
+      "endLine": 277
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -49976,8 +50053,8 @@
       "name": "LayerEdges",
       "kind": "function",
       "file": "src/renderer/components/LayerEdges.tsx",
-      "line": 18,
-      "endLine": 44
+      "line": 21,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -56840,8 +56917,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 172,
-      "endLine": 178
+      "line": 175,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -56856,16 +56933,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 155,
-      "endLine": 158
+      "line": 158,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 171,
-      "endLine": 171
+      "line": 174,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -56880,8 +56957,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 164,
-      "endLine": 168
+      "line": 167,
+      "endLine": 171
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -56905,7 +56982,7 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 120,
-      "endLine": 145
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -61096,48 +61173,48 @@
       "name": "applyLayerTurn",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 159,
-      "endLine": 160
+      "line": 164,
+      "endLine": 165
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#boardDealKey",
       "name": "boardDealKey",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 52,
-      "endLine": 53
+      "line": 55,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#cardsBeneath",
       "name": "cardsBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 90,
-      "endLine": 90
+      "line": 95,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#dealLayers",
       "name": "dealLayers",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 60,
-      "endLine": 85
+      "line": 63,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#isLayersFloor",
       "name": "isLayersFloor",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 39,
-      "endLine": 45
+      "line": 41,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#layerKeyOf",
       "name": "layerKeyOf",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 56,
-      "endLine": 57
+      "line": 59,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_APART_FROM",
@@ -61146,6 +61223,14 @@
       "file": "src/shared/board-layers-rules.ts",
       "line": 30,
       "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_CARTOGRAPHER_COVER",
+      "name": "LAYERS_CARTOGRAPHER_COVER",
+      "kind": "value",
+      "file": "src/shared/board-layers-rules.ts",
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
@@ -61168,16 +61253,16 @@
       "name": "promoteBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 96,
-      "endLine": 147
+      "line": 101,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/board-layers-rules.ts#promoteRunBeneath",
       "name": "promoteRunBeneath",
       "kind": "value",
       "file": "src/shared/board-layers-rules.ts",
-      "line": 150,
-      "endLine": 156
+      "line": 155,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/board-layout-rules.ts#canReflowRunBoard",
@@ -61536,40 +61621,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 87,
-      "endLine": 97
+      "line": 88,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 53,
-      "endLine": 58
+      "line": 54,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 66,
-      "endLine": 85
+      "line": 67,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 60,
-      "endLine": 64
+      "line": 61,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 119,
-      "endLine": 529
+      "line": 120,
+      "endLine": 530
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -61656,8 +61741,8 @@
       "name": "getEncounterIdentityForFloor",
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
-      "line": 453,
-      "endLine": 458
+      "line": 468,
+      "endLine": 473
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract",
@@ -61665,7 +61750,7 @@
       "kind": "value",
       "file": "src/shared/boss-encounters.ts",
       "line": 209,
-      "endLine": 442
+      "endLine": 457
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#paletteMechanicLine",
@@ -61778,6 +61863,54 @@
       "file": "src/shared/cameraViewportMode.ts",
       "line": 6,
       "endLine": 6
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#applyCartographerTurn",
+      "name": "applyCartographerTurn",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 61,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#boardRings",
+      "name": "boardRings",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 23,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_RULES_FROM",
+      "name": "CARTOGRAPHER_RULES_FROM",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_TURN_EVERY_MATCHES",
+      "name": "CARTOGRAPHER_TURN_EVERY_MATCHES",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#isCartographerFloor",
+      "name": "isCartographerFloor",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 19,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/cartographer-rules.ts#rotateLowerLayer",
+      "name": "rotateLowerLayer",
+      "kind": "value",
+      "file": "src/shared/cartographer-rules.ts",
+      "line": 44,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/carve-rules.ts#canCarve",
@@ -63448,16 +63581,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1137,
-      "endLine": 1137
+      "line": 1140,
+      "endLine": 1140
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1226,
-      "endLine": 1228
+      "line": 1229,
+      "endLine": 1231
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -63480,8 +63613,8 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 504,
-      "endLine": 547
+      "line": 505,
+      "endLine": 548
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -63528,16 +63661,16 @@
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 588,
-      "endLine": 599
+      "line": 589,
+      "endLine": 600
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 554,
-      "endLine": 576
+      "line": 555,
+      "endLine": 577
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
@@ -63552,8 +63685,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1234,
-      "endLine": 1239
+      "line": 1237,
+      "endLine": 1242
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -63584,16 +63717,16 @@
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1140,
-      "endLine": 1149
+      "line": 1143,
+      "endLine": 1152
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1252,
-      "endLine": 1278
+      "line": 1255,
+      "endLine": 1281
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -63608,16 +63741,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 490,
-      "endLine": 502
+      "line": 491,
+      "endLine": 503
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 477,
-      "endLine": 488
+      "line": 478,
+      "endLine": 489
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -63689,15 +63822,15 @@
       "kind": "value",
       "file": "src/shared/contracts.ts",
       "line": 457,
-      "endLine": 473
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 474,
-      "endLine": 474
+      "line": 475,
+      "endLine": 475
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
@@ -63728,16 +63861,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 722,
-      "endLine": 726
+      "line": 723,
+      "endLine": 727
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 728,
-      "endLine": 738
+      "line": 729,
+      "endLine": 739
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
@@ -63752,8 +63885,8 @@
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 580,
-      "endLine": 586
+      "line": 581,
+      "endLine": 587
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -63784,8 +63917,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 619,
-      "endLine": 666
+      "line": 620,
+      "endLine": 667
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -63896,24 +64029,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 751,
-      "endLine": 763
+      "line": 752,
+      "endLine": 764
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 765,
-      "endLine": 778
+      "line": 766,
+      "endLine": 779
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1151,
-      "endLine": 1166
+      "line": 1154,
+      "endLine": 1169
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -64024,16 +64157,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1242,
-      "endLine": 1242
+      "line": 1245,
+      "endLine": 1245
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1245,
-      "endLine": 1250
+      "line": 1248,
+      "endLine": 1253
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -64056,16 +64189,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1219,
-      "endLine": 1223
+      "line": 1222,
+      "endLine": 1226
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1217,
-      "endLine": 1217
+      "line": 1220,
+      "endLine": 1220
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -64080,16 +64213,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1173,
-      "endLine": 1190
+      "line": 1176,
+      "endLine": 1193
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 780,
-      "endLine": 1135
+      "line": 781,
+      "endLine": 1138
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -64104,16 +64237,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 683,
-      "endLine": 720
+      "line": 684,
+      "endLine": 721
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 740,
-      "endLine": 745
+      "line": 741,
+      "endLine": 746
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -64128,8 +64261,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1192,
-      "endLine": 1211
+      "line": 1195,
+      "endLine": 1214
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -64144,8 +64277,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 601,
-      "endLine": 617
+      "line": 602,
+      "endLine": 618
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -64208,8 +64341,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 682,
-      "endLine": 682
+      "line": 683,
+      "endLine": 683
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -64240,16 +64373,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 673,
-      "endLine": 680
+      "line": 674,
+      "endLine": 681
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 668,
-      "endLine": 671
+      "line": 669,
+      "endLine": 672
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -66032,328 +66165,328 @@
       "name": "CHAOS_MUTATORS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 812,
-      "endLine": 812
+      "line": 830,
+      "endLine": 830
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
       "name": "CHAPTER_ACT_BIOME_STRUCTURE",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 218,
-      "endLine": 248
+      "line": 225,
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomeDefinition",
       "name": "ChapterActBiomeDefinition",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 188,
-      "endLine": 201
+      "line": 195,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActBiomePresentation",
       "name": "ChapterActBiomePresentation",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 301,
-      "endLine": 313
+      "line": 308,
+      "endLine": 320
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterActId",
       "name": "ChapterActId",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 185,
-      "endLine": 185
+      "line": 192,
+      "endLine": 192
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ChapterBiomeId",
       "name": "ChapterBiomeId",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 186,
-      "endLine": 186
+      "line": 193,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_ACTS",
       "name": "DESCENT_ACTS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 474,
-      "endLine": 501
+      "line": 481,
+      "endLine": 508
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#DESCENT_FLOOR_COUNT",
       "name": "DESCENT_FLOOR_COUNT",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 507,
-      "endLine": 507
+      "line": 517,
+      "endLine": 517
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#DescentActDefinition",
       "name": "DescentActDefinition",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 456,
-      "endLine": 465
+      "line": 463,
+      "endLine": 472
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#descentActForFloor",
       "name": "descentActForFloor",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 566,
-      "endLine": 569
+      "line": 576,
+      "endLine": 579
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#DescentActId",
       "name": "DescentActId",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 454,
-      "endLine": 454
+      "line": 461,
+      "endLine": 461
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ENDLESS_ACT_MIN_FLOORS",
       "name": "ENDLESS_ACT_MIN_FLOORS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 518,
-      "endLine": 518
+      "line": 528,
+      "endLine": 528
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#ENDLESS_CYCLE_FLOOR_COUNT",
       "name": "ENDLESS_CYCLE_FLOOR_COUNT",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 253,
-      "endLine": 253
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#endlessActLength",
       "name": "endlessActLength",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 534,
-      "endLine": 535
+      "line": 544,
+      "endLine": 545
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#EndlessPlace",
       "name": "EndlessPlace",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 520,
-      "endLine": 529
+      "line": 530,
+      "endLine": 539
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#endlessPlaceForLevel",
       "name": "endlessPlaceForLevel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 538,
-      "endLine": 554
+      "line": 548,
+      "endLine": 564
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_HUD_TOOLTIPS",
       "name": "FEATURED_OBJECTIVE_HUD_TOOLTIPS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 154,
-      "endLine": 161
+      "line": 161,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FEATURED_OBJECTIVE_LABELS",
       "name": "FEATURED_OBJECTIVE_LABELS",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 145,
-      "endLine": 151
+      "line": 152,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FLOOR_ARCHETYPE_CATALOG",
       "name": "FLOOR_ARCHETYPE_CATALOG",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 50,
-      "endLine": 143
+      "line": 51,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FLOOR_SCHEDULE_RULES_VERSION",
       "name": "FLOOR_SCHEDULE_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeDefinition",
       "name": "FloorArchetypeDefinition",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 39,
-      "endLine": 48
+      "line": 40,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeFrequencyBand",
       "name": "FloorArchetypeFrequencyBand",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 279,
-      "endLine": 283
+      "line": 286,
+      "endLine": 290
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypePressureRole",
       "name": "FloorArchetypePressureRole",
       "kind": "type",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 255,
-      "endLine": 261
+      "line": 262,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeProgressionReport",
       "name": "FloorArchetypeProgressionReport",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 285,
-      "endLine": 299
+      "line": 292,
+      "endLine": 306
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorArchetypeProgressionRow",
       "name": "FloorArchetypeProgressionRow",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 263,
-      "endLine": 277
+      "line": 270,
+      "endLine": 284
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#FloorScheduleEntry",
       "name": "FloorScheduleEntry",
       "kind": "interface",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 166,
-      "endLine": 183
+      "line": 173,
+      "endLine": 190
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getChapterActBiomeForCycleFloor",
       "name": "getChapterActBiomeForCycleFloor",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 315,
-      "endLine": 328
+      "line": 322,
+      "endLine": 335
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getChapterActBiomePresentation",
       "name": "getChapterActBiomePresentation",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 330,
-      "endLine": 345
+      "line": 337,
+      "endLine": 352
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFeaturedObjectiveHudTooltip",
       "name": "getFeaturedObjectiveHudTooltip",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 163,
-      "endLine": 164
+      "line": 170,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFeaturedObjectiveLabel",
       "name": "getFeaturedObjectiveLabel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 729,
-      "endLine": 730
+      "line": 739,
+      "endLine": 740
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeDefinition",
       "name": "getFloorArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 725,
-      "endLine": 727
+      "line": 735,
+      "endLine": 737
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionReport",
       "name": "getFloorArchetypeProgressionReport",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 681,
-      "endLine": 723
+      "line": 691,
+      "endLine": 733
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
       "name": "getFloorArchetypeProgressionRows",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 676,
-      "endLine": 679
+      "line": 686,
+      "endLine": 689
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
       "name": "getFloorChapterIdentity",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 732,
-      "endLine": 765
+      "line": 742,
+      "endLine": 775
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#isActBossFloor",
       "name": "isActBossFloor",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 560,
-      "endLine": 563
+      "line": 570,
+      "endLine": 573
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "name": "pickFloorScheduleEntry",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 771,
-      "endLine": 806
+      "line": 781,
+      "endLine": 824
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pressureRoleForArchetype",
       "name": "pressureRoleForArchetype",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 604,
-      "endLine": 622
+      "line": 614,
+      "endLine": 632
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#runFollowsFloorSchedule",
       "name": "runFollowsFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 824,
-      "endLine": 825
+      "line": 842,
+      "endLine": 843
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#scheduledFloorMutators",
       "name": "scheduledFloorMutators",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 828,
-      "endLine": 829
+      "line": 846,
+      "endLine": 847
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 808,
-      "endLine": 809
+      "line": 826,
+      "endLine": 827
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#WILD_SCHEDULE_RULES_VERSION",
       "name": "WILD_SCHEDULE_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 821,
-      "endLine": 821
+      "line": 839,
+      "endLine": 839
     },
     {
       "id": "symbol:src/shared/floor-par.ts#PAR_FLAT_RATE_PAIRS",
@@ -69304,160 +69437,160 @@
       "name": "ACHIEVEMENT_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 148,
-      "endLine": 273
+      "line": 149,
+      "endLine": 274
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
       "name": "AchievementCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 44,
-      "endLine": 48
+      "line": 45,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CODEX_CORE_TOPICS",
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 367,
-      "endLine": 416
+      "line": 368,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
       "name": "CodexCoreTopic",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 56,
-      "endLine": 60
+      "line": 57,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_CONTRACT_TOPICS",
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 830,
-      "endLine": 848
+      "line": 837,
+      "endLine": 855
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 851,
-      "endLine": 869
+      "line": 858,
+      "endLine": 876
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 692,
-      "endLine": 827
+      "line": 699,
+      "endLine": 834
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 419,
-      "endLine": 480
+      "line": 420,
+      "endLine": 481
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 485,
-      "endLine": 640
+      "line": 486,
+      "endLine": 647
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 645,
-      "endLine": 689
+      "line": 652,
+      "endLine": 696
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
       "name": "ENCYCLOPEDIA_VERSION",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#EncyclopediaTopic",
       "name": "EncyclopediaTopic",
       "kind": "type",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GAME_MODE_CODEX",
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 357,
-      "endLine": 364
+      "line": 358,
+      "endLine": 365
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
       "name": "GameModeCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 50,
-      "endLine": 54
+      "line": 51,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#glossaryTermById",
       "name": "glossaryTermById",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 140,
-      "endLine": 141
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY",
       "name": "MECHANICS_GLOSSARY",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 143,
-      "endLine": 143
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY_TERMS",
       "name": "MECHANICS_GLOSSARY_TERMS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 80,
-      "endLine": 130
+      "line": 81,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MechanicsGlossaryTerm",
       "name": "MechanicsGlossaryTerm",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 65,
-      "endLine": 78
+      "line": 66,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MUTATOR_CATALOG",
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 278,
-      "endLine": 355
+      "line": 279,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
       "name": "MutatorDefinition",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 37,
-      "endLine": 41
+      "line": 38,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/memorize-phase-rules.ts#finishMemorizePhase",
@@ -70185,7 +70318,7 @@
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
       "line": 22,
-      "endLine": 131
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
@@ -70768,8 +70901,8 @@
       "name": "playerVisibleBoard",
       "kind": "value",
       "file": "src/shared/player-visible-board.ts",
-      "line": 42,
-      "endLine": 54
+      "line": 46,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/player-visible-board.ts#playerVisibleTile",
@@ -73608,48 +73741,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 227,
-      "endLine": 697
+      "line": 231,
+      "endLine": 708
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 77,
-      "endLine": 89
+      "line": 78,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 52,
-      "endLine": 75
+      "line": 53,
+      "endLine": 76
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 709,
-      "endLine": 1122
+      "line": 720,
+      "endLine": 1139
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 100,
-      "endLine": 210
+      "line": 101,
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 91,
-      "endLine": 98
+      "line": 92,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -75160,16 +75293,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 779,
-      "endLine": 782
+      "line": 786,
+      "endLine": 789
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 759,
-      "endLine": 764
+      "line": 766,
+      "endLine": 771
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -75177,7 +75310,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 747
+      "endLine": 754
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -75200,8 +75333,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 749,
-      "endLine": 750
+      "line": 756,
+      "endLine": 757
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -75216,16 +75349,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 773,
-      "endLine": 776
+      "line": 780,
+      "endLine": 783
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 753,
-      "endLine": 756
+      "line": 760,
+      "endLine": 763
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -75312,64 +75445,64 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3229,
-      "endLine": 3229
+      "line": 3282,
+      "endLine": 3282
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3082,
-      "endLine": 3206
+      "line": 3135,
+      "endLine": 3259
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3235,
-      "endLine": 3240
+      "line": 3288,
+      "endLine": 3293
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3219,
-      "endLine": 3219
+      "line": 3272,
+      "endLine": 3272
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 558,
-      "endLine": 3069
+      "line": 560,
+      "endLine": 3122
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3243,
-      "endLine": 3249
+      "line": 3296,
+      "endLine": 3302
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3269,
-      "endLine": 3269
+      "line": 3322,
+      "endLine": 3322
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 261,
-      "endLine": 278
+      "line": 263,
+      "endLine": 280
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -75377,47 +75510,47 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 66,
-      "endLine": 208
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3208,
-      "endLine": 3211
+      "line": 3261,
+      "endLine": 3264
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 254,
-      "endLine": 259
+      "line": 256,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 210,
-      "endLine": 252
+      "line": 212,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3222,
-      "endLine": 3226
+      "line": 3275,
+      "endLine": 3279
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3251,
-      "endLine": 3267
+      "line": 3304,
+      "endLine": 3320
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -75568,16 +75701,16 @@
       "name": "boardPaletteWidth",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 595,
-      "endLine": 602
+      "line": 597,
+      "endLine": 604
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealBoardSuits",
       "name": "dealBoardSuits",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 554,
-      "endLine": 586
+      "line": 556,
+      "endLine": 588
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
@@ -75592,8 +75725,8 @@
       "name": "getSuitDealProfile",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 467,
-      "endLine": 468
+      "line": 469,
+      "endLine": 470
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#getTileSuit",
@@ -75616,16 +75749,16 @@
       "name": "largestHiddenSuitClump",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 628,
-      "endLine": 654
+      "line": 630,
+      "endLine": 656
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIN_PAIRS_FOR_TWO_SUITS",
       "name": "MIN_PAIRS_FOR_TWO_SUITS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 525,
-      "endLine": 525
+      "line": 527,
+      "endLine": 527
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#MIX_MAX_RUN",
@@ -75664,16 +75797,16 @@
       "name": "sameSuitNeighbourRate",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 608,
-      "endLine": 622
+      "line": 610,
+      "endLine": 624
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SCATTERED_SUIT_CEILING",
       "name": "SCATTERED_SUIT_CEILING",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 546,
-      "endLine": 546
+      "line": 548,
+      "endLine": 548
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_DEAL_PROFILE_BY_ARCHETYPE",
@@ -75681,31 +75814,31 @@
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
       "line": 448,
-      "endLine": 465
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SUIT_TARGET_PAIRS",
       "name": "SUIT_TARGET_PAIRS",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 524,
-      "endLine": 524
+      "line": 526,
+      "endLine": 526
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
       "name": "suitCountForDeal",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 548,
-      "endLine": 552
+      "line": 550,
+      "endLine": 554
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
       "name": "suitCountForPairs",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 527,
-      "endLine": 531
+      "line": 529,
+      "endLine": 533
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
@@ -77460,7 +77593,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/renderer/copy/chainBeat.ts",
@@ -77583,7 +77716,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/renderer/copy/comboHeatPerksCopy.ts",
@@ -77822,7 +77955,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 21
+          "line": 22
         },
         {
           "path": "src/renderer/copy/lanternLightBeat.ts",
@@ -77865,7 +77998,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -77966,7 +78099,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 25
+          "line": 26
         },
         {
           "path": "src/renderer/components/tileBoardPresentationState.ts",
@@ -78007,7 +78140,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 48
+          "line": 49
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
@@ -78050,7 +78183,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 29
+          "line": 30
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -78104,7 +78237,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -78390,7 +78523,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 52
+          "line": 53
         }
       ],
       "tests": [
@@ -78426,7 +78559,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 23
+          "line": 24
         }
       ],
       "tests": [
@@ -78591,7 +78724,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/renderer/store/itemDropFeed.ts",
@@ -78634,7 +78767,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 15
+          "line": 16
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -78695,7 +78828,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/renderer/store/itemDropFeed.ts",
@@ -78768,6 +78901,60 @@
       ]
     },
     {
+      "id": "mechanic:hazard.cartographer",
+      "mechanicId": "hazard.cartographer",
+      "label": "The Cartographer",
+      "kind": "hazard",
+      "role": "the_deeps_boss_two_decks_deep_the_lower_deck_charted_for_study_and_turned_a_quarter_every_third_match",
+      "evidence": [
+        {
+          "path": "src/shared/cartographer-rules.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/floor-mutator-schedule.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/board-layers-rules.ts",
+          "line": 33
+        },
+        {
+          "path": "src/shared/player-visible-board.ts",
+          "line": 43
+        },
+        {
+          "path": "src/renderer/components/LayerEdges.tsx",
+          "line": 35
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/cartographer-rules.test.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": [
+        "the-turn-keeps-every-card-beneath",
+        "a-pinned-cell-keeps-its-card-beneath",
+        "the-top-deck-never-moves"
+      ]
+    },
+    {
       "id": "mechanic:hazard.colossus",
       "mechanicId": "hazard.colossus",
       "label": "The Colossus",
@@ -78780,7 +78967,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 45
+          "line": 46
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -78873,7 +79060,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/board-fold-rules.ts",
@@ -78881,15 +79068,15 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/boss-encounters.ts",
-          "line": 220
+          "line": 235
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1
+          "line": 2
         }
       ],
       "tests": [
@@ -78927,7 +79114,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/renderer/copy/lookingGlassBeat.ts",
@@ -78969,7 +79156,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
-          "line": 406
+          "line": 413
         },
         {
           "path": "src/shared/board-turn-event-facts.ts",
@@ -79007,7 +79194,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 26
+          "line": 27
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -79015,7 +79202,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/shared/board-turn-event-facts.ts",
@@ -79138,7 +79325,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
@@ -79428,7 +79615,7 @@
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -80149,7 +80336,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/shared/hold-rules.ts",
@@ -80157,7 +80344,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2
+          "line": 3
         }
       ],
       "tests": [
@@ -80305,11 +80492,11 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -80750,7 +80937,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 6
+          "line": 7
         }
       ],
       "tests": [
@@ -80953,7 +81140,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 52
+          "line": 53
         }
       ],
       "tests": [
@@ -81422,6 +81609,16 @@
       "writtenBy": [
         "mechanic:power.bomb",
         "mechanic:progression.store_stop"
+      ]
+    },
+    {
+      "id": "state:cartographerTurnsThisFloor",
+      "name": "cartographerTurnsThisFloor",
+      "readBy": [
+        "mechanic:hazard.cartographer"
+      ],
+      "writtenBy": [
+        "mechanic:hazard.cartographer"
       ]
     },
     {
@@ -82851,6 +83048,7 @@
         "mechanic:findable.hourglass_pair",
         "mechanic:findable.meteor_shard",
         "mechanic:findable.score_glint",
+        "mechanic:hazard.cartographer",
         "mechanic:hazard.colossus",
         "mechanic:hazard.keeper",
         "mechanic:hazard.looking_glass",
@@ -82892,6 +83090,7 @@
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
         "mechanic:findable.hourglass_pair",
+        "mechanic:hazard.cartographer",
         "mechanic:hazard.colossus",
         "mechanic:hazard.keeper",
         "mechanic:hazard.looking_glass",
@@ -83565,6 +83764,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows score source"
+    },
+    {
+      "id": "displays:mechanic:hazard.cartographer->mechanic:feedback.gameplay_hud:the chart of the deck beneath at the study window, and the Cartographer’s rule with the matches to the next turn",
+      "source": "mechanic:hazard.cartographer",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the chart of the deck beneath at the study window, and the Cartographer’s rule with the matches to the next turn"
     },
     {
       "id": "displays:mechanic:hazard.colossus->mechanic:feedback.gameplay_hud:the great card shows its element, the next, its hits and its turns, and every hit, chip, fall and split is announced",
@@ -96423,6 +96629,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#LAYERS_CARTOGRAPHER_COVER",
+      "source": "file:src/shared/board-layers-rules.ts",
+      "target": "symbol:src/shared/board-layers-rules.ts#LAYERS_CARTOGRAPHER_COVER",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/board-layers-rules.ts->symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
       "source": "file:src/shared/board-layers-rules.ts",
       "target": "symbol:src/shared/board-layers-rules.ts#LAYERS_COVER",
@@ -96894,6 +97106,42 @@
       "id": "exports:src/shared/cameraViewportMode.ts->symbol:src/shared/cameraViewportMode.ts#MOBILE_CAMERA_WIDTH_HYSTERESIS_PX",
       "source": "file:src/shared/cameraViewportMode.ts",
       "target": "symbol:src/shared/cameraViewportMode.ts#MOBILE_CAMERA_WIDTH_HYSTERESIS_PX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#applyCartographerTurn",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#applyCartographerTurn",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#boardRings",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#boardRings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_RULES_FROM",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_RULES_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_TURN_EVERY_MATCHES",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#CARTOGRAPHER_TURN_EVERY_MATCHES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#isCartographerFloor",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#isCartographerFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/cartographer-rules.ts->symbol:src/shared/cartographer-rules.ts#rotateLowerLayer",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "symbol:src/shared/cartographer-rules.ts#rotateLowerLayer",
       "kind": "exports"
     },
     {
@@ -109421,6 +109669,42 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/renderer/components/GameScreen.tsx",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/renderer/components/GameScreen.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/renderer/components/LayerEdges.tsx",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/renderer/components/LayerEdges.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/shared/board-layers-rules.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/board-layers-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/shared/cartographer-rules.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/shared/floor-mutator-schedule.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.cartographer->file:src/shared/player-visible-board.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/player-visible-board.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:hazard.colossus->file:src/renderer/components/ColossusCard.tsx",
       "source": "mechanic:hazard.colossus",
       "target": "file:src/renderer/components/ColossusCard.tsx",
@@ -115511,6 +115795,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/cartographer-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/carve-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/carve-rules.ts",
@@ -116066,6 +116356,12 @@
       "id": "imports:src/renderer/components/itemEffects.ts->src/shared/rng.ts",
       "source": "file:src/renderer/components/itemEffects.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/LayerEdges.tsx->src/renderer/components/cardBackInk.ts",
+      "source": "file:src/renderer/components/LayerEdges.tsx",
+      "target": "file:src/renderer/components/cardBackInk.ts",
       "kind": "imports"
     },
     {
@@ -125795,6 +126091,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/carve-rules.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/carve-rules.ts",
@@ -126254,6 +126556,60 @@
       "id": "imports:src/shared/camp-upgrades.test.ts->src/shared/scoring-rules.ts",
       "source": "file:src/shared/camp-upgrades.test.ts",
       "target": "file:src/shared/scoring-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/board-generation.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/board-generation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/board-layers-rules.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/board-layers-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.test.ts->src/shared/player-visible-board.ts",
+      "source": "file:src/shared/cartographer-rules.test.ts",
+      "target": "file:src/shared/player-visible-board.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cartographer-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -128459,6 +128815,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-mutator-schedule.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/floor-mutator-schedule.ts->src/shared/contracts.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/contracts.ts",
@@ -130448,6 +130810,12 @@
       "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/boss-reward-rules.ts",
       "source": "file:src/shared/mechanics-encyclopedia.ts",
       "target": "file:src/shared/boss-reward-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
       "kind": "imports"
     },
     {
@@ -133106,6 +133474,12 @@
       "id": "imports:src/shared/run-soak.ts->src/shared/boss-reward-rules.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/boss-reward-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-soak.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
       "kind": "imports"
     },
     {
@@ -137192,6 +137566,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:hazard.cartographer->state:cartographerTurnsThisFloor",
+      "source": "mechanic:hazard.cartographer",
+      "target": "state:cartographerTurnsThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:hazard.cartographer->state:tileStates",
+      "source": "mechanic:hazard.cartographer",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:hazard.colossus->state:floorTag",
       "source": "mechanic:hazard.colossus",
       "target": "state:floorTag",
@@ -138862,6 +139248,24 @@
       "id": "tested_by:mechanic:findable.score_glint->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:findable.score_glint",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.cartographer->file:src/shared/cartographer-rules.test.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/cartographer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.cartographer->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:hazard.cartographer->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:hazard.cartographer",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
     {
@@ -142918,6 +143322,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-generation.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/board-generation.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-generation.ts->file:src/shared/exploit-surface.test.ts",
       "source": "file:src/shared/board-generation.ts",
       "target": "file:src/shared/exploit-surface.test.ts",
@@ -143068,6 +143478,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-layers-rules.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/board-layers-rules.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-layout-rules.ts->file:src/shared/board-layout-rules.test.ts",
       "source": "file:src/shared/board-layout-rules.ts",
       "target": "file:src/shared/board-layout-rules.test.ts",
@@ -143203,6 +143619,12 @@
       "id": "tested_by:src/shared/cameraViewportMode.ts->file:src/shared/cameraViewportMode.test.ts",
       "source": "file:src/shared/cameraViewportMode.ts",
       "target": "file:src/shared/cameraViewportMode.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/cartographer-rules.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/cartographer-rules.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -144139,6 +144561,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/camp-upgrades.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/camp-upgrades.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -145294,6 +145722,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/content-lock.test.ts",
@@ -145843,6 +146277,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/boss-reward-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/boss-reward-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -146995,6 +147435,12 @@
       "id": "tested_by:src/shared/playable-path-fixtures.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/playable-path-fixtures.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/player-visible-board.ts->file:src/shared/cartographer-rules.test.ts",
+      "source": "file:src/shared/player-visible-board.ts",
+      "target": "file:src/shared/cartographer-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -149864,6 +150310,18 @@
       "id": "writes:mechanic:findable.score_glint->state:scoreRequests",
       "source": "mechanic:findable.score_glint",
       "target": "state:scoreRequests",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.cartographer->state:cartographerTurnsThisFloor",
+      "source": "mechanic:hazard.cartographer",
+      "target": "state:cartographerTurnsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.cartographer->state:tileStates",
+      "source": "mechanic:hazard.cartographer",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
