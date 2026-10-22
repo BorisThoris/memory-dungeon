@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 100049,
-      "sha256": "b904716b3d5eea2b10d913a08c0bd9171bf95eaa96e6ad5bbdd8b63a8cddcfd1"
+      "sha256": "68a63ab6123ccd81bc10875cc1d2d2b2a65a8ccfbf44a014f82ee3d3650f8ea0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -14464,7 +14464,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 100421,
-      "sha256": "04884e15cb15dc81226504919c2a39ee857f7a3128458a5878bea486d6c3ea8b"
+      "sha256": "6d267660ae3a7497b4deb7590ac8f7599b04b3f709f313959b93ab9561a25701"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -16017,14 +16017,14 @@
     {
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "category": "test",
-      "bytes": 14437,
-      "sha256": "9614732dbca0b77e7545ef405d749a8dccd688edabd603da3840e5721990961f"
+      "bytes": 15635,
+      "sha256": "d3232f9bdf2ccbb3bde6ba8f8e22affd5820e13378e3d57db5b0ca16e80c2cf4"
     },
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 73596,
-      "sha256": "b18c0a373bdd53d2c788a088c515b9b64a1066251621a80f0ca5fca1768272f4"
+      "bytes": 73592,
+      "sha256": "c1e4774bcc75beee82d2371b34e7d4203fe47f15af881db9a7087288d6d23f20"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17523,8 +17523,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 20691,
-      "sha256": "abc5c41e770e0e5a879b583baee990a882b73958128fa67774e198c0584ce2b3"
+      "bytes": 21045,
+      "sha256": "5bacabf5720c930a99ae8c825b5a537ac45147c9ffb9bb24a671b38ab1710dbc"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17727,8 +17727,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
       "category": "other",
-      "bytes": 1916,
-      "sha256": "f3bd1749f6607d0fb117042699e8ef05eb5a6609cbb01ad040d061c807996c19"
+      "bytes": 2922,
+      "sha256": "7cdb321deb2b1f8af9af609c04223140c4a6826c46be80469a89dc1ca8e2f5c6"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
@@ -39866,7 +39866,7 @@
       "path": "src/shared/mechanics-encyclopedia.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 294,
+      "lineCount": 318,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/difficulty-profile.ts",
