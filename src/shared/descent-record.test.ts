@@ -36,7 +36,8 @@ describe('the Descent record (DGE-031)', () => {
             deepestFloor: 60,
             deepestActId: 'abyss',
             deepestDreadTierId: 'coming',
-            bestDepth: 0
+            // The Warden felled at Depth 0 opens Depth 1 (DGE-025).
+            bestDepth: 1
         });
         expect(reloaded.unlocks).toContain(ENDLESS_UNLOCK_TAG);
         expect(isEndlessUnlocked(reloaded)).toBe(true);
@@ -75,7 +76,7 @@ describe('the Descent record (DGE-031)', () => {
         expect(fresh).toMatchObject({ label: 'Deepest floor', value: 'None', source: 'The Warden still stands' });
         const won = recordDescent(createDefaultSaveData(), finished(60, 'warden_cleared', { dreadRagingFloors: 20, dreadWildFloors: 20 }));
         const row = getProfileSummaryRows(normalizeUnknownSaveData(won)).find((entry) => entry.id === 'descent');
-        expect(row).toMatchObject({ value: '60', source: 'The Abyss · The Warden fell once · Endless open · Dread It is coming' });
+        expect(row).toMatchObject({ value: '60', source: 'The Abyss · The Warden fell once · Endless open · Depth 1 open · Dread It is coming' });
         expect(getProfileSummaryRows(createDefaultSaveData())).toHaveLength(6);
     });
 });
