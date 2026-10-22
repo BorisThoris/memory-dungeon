@@ -68,7 +68,8 @@ export const wakeSleeper = (board: BoardState, pairKey: string, seed: string, ke
     const tiles = [...board.tiles];
     const own = tiles.flatMap((tile, index) => (tile.pairKey === pairKey ? [index] : []));
     // A Sleeper whose card a Spiral's ring sealed (`spiral-rules.ts`) is off the board: it stays down.
-    if (own.length !== 2 || own.some((cell) => tiles[cell]!.sealed)) return board;
+    // Nothing to wake when its cards are not gone (a Zone settled them face down) or are off the board.
+    if (own.length !== 2 || own.some((cell) => tiles[cell]!.sealed || (tiles[cell]!.state !== 'matched' && tiles[cell]!.state !== 'removed'))) return board;
     const free = tiles.flatMap((tile, index) =>
         tile.pairKey !== pairKey && (tile.state === 'matched' || tile.state === 'removed') && !tile.sealed && !keepIds.has(tile.id) ? [index] : []
     );

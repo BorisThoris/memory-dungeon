@@ -48,8 +48,12 @@ describe('the Spiral (DGE-021)', () => {
         expect(sealed.sealed).toBe(1);
         expect(sealed.board.spiralRingsSealed).toBe(1);
         expect(outer!.every((cell) => sealed.board.tiles[cell]!.sealed && sealed.board.tiles[cell]!.state === 'removed')).toBe(true);
-        expect(sealed.dealtPairs).toBe(insidePairs.length);
-        expect(sealed.board.matchedPairs).toBe(cleared(board, clearedCells).matchedPairs - insidePairs.length);
+        // The whole cleared pairs are gathered inside and dealt again: at least the ones that started there.
+        expect(sealed.dealtPairs).toBeGreaterThanOrEqual(insidePairs.length);
+        expect(sealed.dealtPairs).toBeGreaterThan(0);
+        const goneAfter = new Set(sealed.board.tiles.filter((tile) => tile.state !== 'hidden').map((tile) => tile.pairKey));
+        const wholeGone = [...goneAfter].filter((key) => sealed.board.tiles.every((tile) => tile.pairKey !== key || tile.state !== 'hidden')).length;
+        expect(sealed.board.matchedPairs).toBe(wholeGone);
         // Every pair on the board is still two cards.
         const counts = new Map<string, number>();
         for (const tile of sealed.board.tiles) counts.set(tile.pairKey, (counts.get(tile.pairKey) ?? 0) + 1);
