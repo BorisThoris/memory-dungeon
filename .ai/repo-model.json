@@ -15165,8 +15165,8 @@
     {
       "path": "src/shared/descent-record.test.ts",
       "category": "test",
-      "bytes": 4687,
-      "sha256": "42eba56a2d9d42e24ce04fb1c4797e8f0669c46ace3767731d5a1e048d2ed8c0"
+      "bytes": 4772,
+      "sha256": "d59e0b30b7664bd869c6f2ee45dffeaada7aecf36cedfdee70d8de21dcf9fd6d"
     },
     {
       "path": "src/shared/descent-record.ts",
@@ -36743,7 +36743,7 @@
       "path": "src/shared/descent-record.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 82,
+      "lineCount": 83,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/descent-pace-rules.ts",
