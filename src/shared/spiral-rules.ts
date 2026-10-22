@@ -21,7 +21,7 @@ import { freshBoardFaces } from './void-spew-rules';
  * The ticket's "deals a new inner ring" on a fixed grid: the cleared cells inside the sealed ring take
  * the fresh pairs (the Warden's deal-again pattern), whole pairs only, never a held seed's cell; the
  * pair count, and so the par, stays the floor's. A Hold held when the turns reach par lets its stack
- * go with the floor. The collapse animation waits for DGE-030.
+ * go with the floor. A sealed ring is drawn as stone (`SpiralSeals.tsx`, DGE-030).
  */
 export const SPIRAL_RULES_FROM = 85;
 /** The Descent floors dealt as Spirals: the curve's samples (40, 52, 60) never land on them. */
