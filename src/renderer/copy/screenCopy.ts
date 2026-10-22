@@ -80,6 +80,7 @@ export const CLASSIC_SETUP_COPY = {
     campSurvive: 'Survive · misses, capacity, bombs',
     campStudy: 'Study · study time, peeks',
     campScore: 'Score · combo gold',
+    campEvolve: 'Evolve · the relics your blueprints ask for',
     title: 'Set up your run',
     subtitle: 'Optional challenges and pacing.',
     vowsLabel: 'Vows',

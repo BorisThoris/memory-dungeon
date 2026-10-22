@@ -1,3 +1,4 @@
+import { FEAT_IDS, FEAT_OPTION_IDS, featOptionTag, featTag } from './feat-unlocks';
 import { ENDLESS_UNLOCK_TAG, normalizeDescentRecord } from './descent-record';
 import {
     MUTATOR_IDS,
@@ -149,7 +150,10 @@ const VALID_UNLOCK_TAG_SET: ReadonlySet<string> = new Set([
     ...ACHIEVEMENT_IDS.map((id) => `achievement:${id}`),
     ...COSMETIC_IDS.map((id) => `cosmetic:${id}`),
     ...HONOR_UNLOCK_IDS.map((id) => `honor:${id}`),
-    ENDLESS_UNLOCK_TAG
+    ENDLESS_UNLOCK_TAG,
+    // Feats (`feat-unlocks.ts`, DGE-024): the feat, and the option it opens.
+    ...FEAT_IDS.map(featTag),
+    ...FEAT_OPTION_IDS.map(featOptionTag)
 ]);
 
 const PERSISTED_COLLECTION_LIMITS = {

@@ -1,7 +1,7 @@
 # DGE-024: Thirty sideways feat unlocks
 
 ## Status
-Not started
+First ten done (2026-10-22); twenty to come with their mechanics
 
 ## Priority
 P1
@@ -51,3 +51,11 @@ Thirty feats, each in an under-used mechanic, each unlocking content for that me
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-22, the first ten (no rules change), as the owner chose: ten feats on existing options.
+- `feat-unlocks.ts`: the table (id, name, condition, title, option, unlock text, `earned(run)`), read off the run as it plays and recorded beside the achievements (`runResolutionController.ts`, never from a shared table or a test-pace run) as `feat:<id>`, `cosmetic:<title>`, `option:<id>`, all accepted by the save's tag list (round-trip tested).
+- The ten: Twelve Held (a released Hold of twelve - a new `largestHeldReleaseThisRun`, since `largestHoldThisRun` counts the pairs popped), Warden-Feller, Alchemist, Mason, Encore, Ring-Walker, Night Watch, Hallbreaker, Map-Burner, Unmasker.
+- Unlocks: a title each (ten new `title_*` cosmetics, `gameplayAffecting: false`); Alchemist also opens the **Evolve** camp preference (the camp ranks the relics the run's blueprints ask for first), shown in the run setup only once unlocked and carried by the share key. A test holds every unlock to a title or a title and an option.
+- Collection: a Feats section, every feat's condition and unlock shown earned or not (no progress bars); looked at in the isolated browser. Codex `sys_feats` (ENCYCLOPEDIA 114).
+- Every feat has a hall room that performs it, built from the room that already plays the deed (started one short where the feat counts), so a feat and its mechanic cannot drift apart.
+- Not done: Steam achievements for them (DGE-028); the other twenty, with their mechanics' variants.

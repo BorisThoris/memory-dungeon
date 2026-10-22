@@ -1,7 +1,8 @@
+import { runBlueprints } from './boss-reward-rules';
 import type { RunState } from './contracts';
 import { isPassAndPlayRun } from './pass-and-play-rules';
 import { campUpgradeIdsFor, relicRank } from './run-relic-rules';
-import { applyEvolution, availableEvolutions, declineEvolution, EVOLUTION_PRICE } from './relic-evolution-rules';
+import { applyEvolution, availableEvolutions, declineEvolution, EVOLUTION_PRICE, EVOLUTIONS } from './relic-evolution-rules';
 import { buyStoreItem, isStoreStopFloor, storeOffer, type StoreOfferRow } from './run-store-rules';
 import { missesLeft } from './miss-bank';
 
@@ -40,7 +41,9 @@ export function automaticCampReward(start: RunState): CampReward {
     const preference = (run.runRulesVersion ?? 0) >= 64 ? run.campPreference : undefined;
     const preferred = preference === 'study' ? ['long_look', 'peek']
         : preference === 'score' ? ['gilded_chain']
-        : preference === 'survive' ? ['miss', 'deep_pockets', 'bomb'] : [];
+        : preference === 'survive' ? ['miss', 'deep_pockets', 'bomb']
+        // Evolve (`feat-unlocks.ts`): the relics the run's blueprints ask for, toward an evolution.
+        : preference === 'evolve' ? [...new Set(EVOLUTIONS.filter((recipe) => runBlueprints(run).includes(recipe.id)).flatMap((recipe) => recipe.from))] : [];
     // Rescue a nearly empty bank first, otherwise grow the least developed affordable upgrade.
     let reward: StoreOfferRow | undefined = preferred.map(find).find(Boolean);
     reward ??= (missesLeft(run) ?? Infinity) <= 1 ? find('miss') : undefined;

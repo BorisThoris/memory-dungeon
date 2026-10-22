@@ -28,6 +28,7 @@ import { ECHO_CHAMBER_TURNS, REPRISE_FIRST_FLOOR, REPRISE_TURNS } from './repris
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
 import { SLEEPER_CHAIN_HOLDS, SLEEPER_FROM_FLOOR, SLEEPER_WAKE_TURNS, sleepersForFloor } from './sleeper-rules';
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
+import { FEATS } from './feat-unlocks';
 import { CARTOGRAPHER_TURN_EVERY_MATCHES } from './cartographer-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
@@ -35,7 +36,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 113 as const;
+export const ENCYCLOPEDIA_VERSION = 114 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -554,6 +555,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Wanderers',
         description:
             `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+    },
+    {
+        id: 'sys_feats',
+        title: 'Feats',
+        description:
+            `**Feats** are things done in the deep game, each said before you do it, in the Collection. Each unlocks a **title**, and some an option; none unlocks a number the game asks of you. ${FEATS.map((feat) => `**${feat.name}**: ${feat.condition} ${feat.unlocks}`).join(' ')} The **Evolve** camp preference ranks the relics your blueprints ask for first.`
     },
     {
         id: 'sys_learned_rule',

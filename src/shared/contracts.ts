@@ -999,7 +999,8 @@ export interface RunState {
      * run has bought, which prices climb on and which stores camp upgrade ranks.
      */
     gold?: number;
-    campPreference?: 'survive' | 'study' | 'score';
+    /** `evolve` is a feat's option (`feat-unlocks.ts`): the relics the run's blueprints ask for, first. */
+    campPreference?: 'survive' | 'study' | 'score' | 'evolve';
     amplifiedGoalThisFloor?: boolean;
     calmGoalThisFloor?: boolean;
     strongestReactionThisRun?: number;
@@ -1039,6 +1040,8 @@ export interface RunState {
     /** Releases this floor, and the most pairs one release has taken this run. */
     holdsReleasedThisFloor?: number;
     largestHoldThisRun?: number;
+    /** The most pairs one release held this run (the feat Twelve Held, `feat-unlocks.ts`). */
+    largestHeldReleaseThisRun?: number;
     /** Carve (`carve-rules.ts`, DGE-015): the direction set for the next pop, carves set this floor, and carves a pop spent. */
     carveDirection?: CarveDirection | null;
     carvesThisFloor?: number;

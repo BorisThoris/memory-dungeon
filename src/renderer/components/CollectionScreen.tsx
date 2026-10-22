@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
+import { FEATS, hasFeat } from '../../shared/feat-unlocks';
 import { getCosmeticCollectionRows } from '../../shared/cosmetics';
 import { HONOR_UNLOCK_CATALOG, HONOR_UNLOCK_ORDER, hasHonorUnlock } from '../../shared/honorUnlocks';
 import { getMetaHonorMarks, getPermanentUpgradeRows } from '../../shared/meta-progression';
@@ -12,12 +13,12 @@ import { useAppStore } from '../store/useAppStore';
 import styles from './CollectionScreen.module.css';
 
 /**
- * Collection. One section rail over one fitted grid: achievements, honors, cosmetics,
+ * Collection. One section rail over one fitted grid: achievements, feats, honors, cosmetics,
  * upgrades. Each card states what it is, whether it is earned, and what earns it. The reward
  * signal, gallery, payoff burst, lane-map and impact strips restated the same rows and are gone.
  */
 
-type CollectionSectionId = 'achievements' | 'honors' | 'cosmetics' | 'upgrades';
+type CollectionSectionId = 'achievements' | 'feats' | 'honors' | 'cosmetics' | 'upgrades';
 
 interface CollectionEntry {
     id: string;
@@ -62,6 +63,12 @@ const CollectionScreen = () => {
             };
         });
 
+        // Feats (`feat-unlocks.ts`, DGE-024): each says what it asks and what it opens, earned or not.
+        const feats: CollectionEntry[] = FEATS.map((feat) => {
+            const earned = hasFeat(saveData, feat.id);
+            return { id: feat.id, title: feat.name, detail: `${feat.condition} ${feat.unlocks}`, status: earned ? 'Earned' : 'Locked', earned };
+        });
+
         const honors: CollectionEntry[] = HONOR_UNLOCK_ORDER.map((id) => {
             const def = HONOR_UNLOCK_CATALOG[id];
             const earned = hasHonorUnlock(saveData, id);
@@ -89,6 +96,7 @@ const CollectionScreen = () => {
 
         return [
             { id: 'achievements', label: 'Achievements', kicker: 'Achievement', entries: achievements, earnedCount: achievements.filter((row) => row.earned).length },
+            { id: 'feats', label: 'Feats', kicker: 'Feat', entries: feats, earnedCount: feats.filter((row) => row.earned).length },
             { id: 'honors', label: 'Honors', kicker: 'Honor', entries: honors, earnedCount: honors.filter((row) => row.earned).length },
             { id: 'cosmetics', label: 'Cosmetics', kicker: 'Cosmetic', entries: cosmetics, earnedCount: cosmetics.filter((row) => row.earned).length },
             { id: 'upgrades', label: 'Upgrades', kicker: 'Permanent upgrade', entries: upgrades, earnedCount: upgrades.filter((row) => row.earned).length }

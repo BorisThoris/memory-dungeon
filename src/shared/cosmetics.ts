@@ -92,6 +92,96 @@ export const COSMETIC_CATALOG: Record<CosmeticId, CosmeticDefinition> = {
         fallback: 'Seeker title',
         gameplayAffecting: false
     },
+    title_twelve_held: {
+        id: 'title_twelve_held',
+        slot: 'title',
+        label: 'Twelve Held',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Twelve Held',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_warden_feller: {
+        id: 'title_warden_feller',
+        slot: 'title',
+        label: 'Warden-Feller',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Warden-Feller',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_alchemist: {
+        id: 'title_alchemist',
+        slot: 'title',
+        label: 'Alchemist',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Alchemist',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_mason: {
+        id: 'title_mason',
+        slot: 'title',
+        label: 'Mason',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Mason',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_encore: {
+        id: 'title_encore',
+        slot: 'title',
+        label: 'Encore',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Encore',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_ring_walker: {
+        id: 'title_ring_walker',
+        slot: 'title',
+        label: 'Ring-Walker',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Ring-Walker',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_night_watch: {
+        id: 'title_night_watch',
+        slot: 'title',
+        label: 'Night Watch',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Night Watch',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_hallbreaker: {
+        id: 'title_hallbreaker',
+        slot: 'title',
+        label: 'Hallbreaker',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Hallbreaker',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_map_burner: {
+        id: 'title_map_burner',
+        slot: 'title',
+        label: 'Map-Burner',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Map-Burner',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_unmasker: {
+        id: 'title_unmasker',
+        slot: 'title',
+        label: 'Unmasker',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Unmasker',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
 };
 
 export const CARD_THEME_CATALOG = {

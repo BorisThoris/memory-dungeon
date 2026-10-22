@@ -96,7 +96,7 @@ export const parseRunShareKey = (input: string): RunShareKey | null => {
     if (!Number.isSafeInteger(rulesVersion) || !Number.isSafeInteger(seed)) {
         return null;
     }
-    if (match[4] && !['survive', 'study', 'score'].includes(match[4].toLowerCase())) return null;
+    if (match[4] && !['survive', 'study', 'score', 'evolve'].includes(match[4].toLowerCase())) return null;
     return { rulesVersion, seed, variant: variant as RunShareVariant,
         ...(rulesVersion >= 64 && match[4] ? { campPreference: match[4].toLowerCase() as RunState['campPreference'] } : {}) };
 };

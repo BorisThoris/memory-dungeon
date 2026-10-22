@@ -1,3 +1,4 @@
+import { recordFeats } from '../../shared/feat-unlocks';
 import { recordDescent } from '../../shared/descent-record';
 import { evaluateAchievementUnlocks } from '../../shared/achievements';
 import type {
@@ -160,6 +161,9 @@ export const createRunResolutionController = ({
                 unlocks: [...new Set([...(nextSave.unlocks ?? []), ...unlockTags])]
             });
         }
+
+        // Feats (`feat-unlocks.ts`, DGE-024): read off the run as it plays, kept on the profile.
+        if (!unrecorded) nextSave = normalizeSaveData(recordFeats(nextSave, nextRun));
 
         if (nextRun.status === 'gameOver') {
             // The summary is built either way: the results screen reads it, and a shared game still

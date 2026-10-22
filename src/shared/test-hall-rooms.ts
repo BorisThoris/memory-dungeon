@@ -1,3 +1,4 @@
+import { earnedFeats, FEATS, type FeatId } from './feat-unlocks';
 import { canCarve, carve } from './carve-rules';
 import type { CarveDirection } from './contracts';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
@@ -112,6 +113,16 @@ export type TestHallRoomId =
     | 'wanderers-step'
     | 'hold-release'
     | 'learned-rule'
+    | 'feat-held-twelve'
+    | 'feat-warden-felled'
+    | 'feat-first-evolution'
+    | 'feat-three-carves'
+    | 'feat-five-reprises'
+    | 'feat-spiral-survived'
+    | 'feat-sleepers-kept'
+    | 'feat-keeper-raging'
+    | 'feat-cartographer-raging'
+    | 'feat-three-unmasked'
     | 'spiral-ring'
     | 'spiral-par'
     | 'sleeper-wakes'
@@ -567,7 +578,7 @@ const reactedOnce = (kind: NonNullable<RunState['lastRealmEvent']>['kind'], pote
         (r) => ((r.elementReactionsThisFloor ?? 0) === 1 ? null : `reactions ${r.elementReactionsThisFloor}`)
     );
 
-export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
+const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     ...(['survive', 'study', 'score'] as const).map((preference): TestHallRoom => ({
         id: `camp-${preference}`,
         title: `Camp: ${preference}`,
@@ -3269,6 +3280,50 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     }
 ];
 
+
+/**
+ * The feats (`feat-unlocks.ts`, DGE-024): every feat has a room that performs it. Each is the room
+ * that already plays the deed, started where the feat's count stands one short when it asks for
+ * several, with the feat checked at its end - so a feat and its mechanic cannot drift apart.
+ */
+const FEAT_ROOM_PLAN: readonly { id: TestHallRoomId; feat: FeatId; from: TestHallRoomId; preset: Partial<RunState>; clearAfter: boolean }[] = [
+    { id: 'feat-held-twelve', feat: 'held_twelve', from: 'warden-felled', preset: {}, clearAfter: false },
+    { id: 'feat-warden-felled', feat: 'warden_felled', from: 'warden-felled', preset: {}, clearAfter: false },
+    { id: 'feat-first-evolution', feat: 'first_evolution', from: 'evolution-at-camp', preset: {}, clearAfter: false },
+    { id: 'feat-three-carves', feat: 'three_carves', from: 'carve-right', preset: { carvesSpentThisFloor: 2 }, clearAfter: false },
+    { id: 'feat-five-reprises', feat: 'five_reprises', from: 'reprise-pays', preset: { reprisesThisRun: 4 }, clearAfter: false },
+    { id: 'feat-spiral-survived', feat: 'spiral_survived', from: 'spiral-par', preset: {}, clearAfter: false },
+    { id: 'feat-sleepers-kept', feat: 'sleepers_kept', from: 'sleeper-chain', preset: { sleepersKeptDownThisFloor: 2 }, clearAfter: false },
+    { id: 'feat-keeper-raging', feat: 'keeper_raging', from: 'keeper-swap', preset: { realmSeverity: 'raging' as const }, clearAfter: false },
+    { id: 'feat-cartographer-raging', feat: 'cartographer_raging', from: 'cartographer-turn', preset: { realmSeverity: 'raging' as const }, clearAfter: true },
+    { id: 'feat-three-unmasked', feat: 'three_unmasked', from: 'mask-drops', preset: { masksDroppedThisFloor: 2 }, clearAfter: false }
+];
+
+const featRoom = ({ id, feat, from, preset, clearAfter }: (typeof FEAT_ROOM_PLAN)[number]): TestHallRoom => {
+    const base = BASE_TEST_HALL_ROOMS.find((hallRoom) => hallRoom.id === from)!;
+    const definition = FEATS.find((entry) => entry.id === feat)!;
+    const earned = (r: RunState) => (earnedFeats(r).includes(feat) ? null : `feat ${feat} not earned (${earnedFeats(r).join(',') || 'none'})`);
+    const last = base.script[base.script.length - 1]!;
+    // Started one short (a preset), the base room's own counts no longer hold: it has shown the mechanic, and
+    // here its steps play as written and only the feat is checked.
+    const preset_ = Object.keys(preset).length > 0;
+    const steps = preset_ ? base.script.map((line) => ({ ...line, expect: () => null })) : base.script;
+    const lastStep = steps[steps.length - 1]!;
+    const script: TestHallScriptLine[] = clearAfter
+        ? [...steps, { step: { do: 'clear' }, says: `the floor clears, and the feat ${definition.name} is earned`, expect: earned }]
+        : [...steps.slice(0, -1), { ...lastStep, says: `${last.says}; the feat ${definition.name} is earned`, expect: (r, b) => lastStep.expect(r, b) ?? earned(r) }];
+    return {
+        ...base,
+        id,
+        title: `Feat: ${definition.name}`,
+        mechanic: `${definition.condition} ${definition.unlocks}`,
+        tryThis: `${base.tryThis} That is the feat ${definition.name}.`,
+        build: () => ({ ...base.build(), ...preset }),
+        script
+    };
+};
+
+export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [...BASE_TEST_HALL_ROOMS, ...FEAT_ROOM_PLAN.map(featRoom)];
 // ---- Playing a room ---------------------------------------------------------------------------
 
 const halvesOf = (run: RunState, pairKey: string): Tile[] =>

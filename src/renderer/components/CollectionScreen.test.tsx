@@ -41,7 +41,7 @@ describe('CollectionScreen', () => {
         render(<CollectionScreen />);
 
         const rail = screen.getByRole('tablist', { name: /collection sections/i });
-        expect(within(rail).getAllByRole('tab')).toHaveLength(4);
+        expect(within(rail).getAllByRole('tab')).toHaveLength(5);
         expect(screen.getByTestId('collection-tab-achievements')).toHaveAttribute('aria-selected', 'true');
         expect(screen.getByTestId('collection-tab-achievements')).toHaveTextContent(/\d+\/\d+/);
 

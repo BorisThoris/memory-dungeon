@@ -1,3 +1,4 @@
+import { hasFeatOption } from '../../shared/feat-unlocks';
 import { useCallback, useMemo, useState, type ReactElement } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { getChallengeModeGateRows } from '../../shared/challenge-progression';
@@ -595,11 +596,13 @@ const ChooseYourPathScreen = (): ReactElement => {
                             <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.campLabel}</legend>
                             <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.campHint}</p>
                             <select aria-label={CLASSIC_SETUP_COPY.campLabel} value={setup.campPreference ?? 'default'}
-                                onChange={event => setSetup({ ...setup, campPreference: event.target.value === 'default' ? undefined : event.target.value as 'survive' | 'study' | 'score' })}>
+                                onChange={event => setSetup({ ...setup, campPreference: event.target.value === 'default' ? undefined : event.target.value as 'survive' | 'study' | 'score' | 'evolve' })}>
                                 <option value="default">{CLASSIC_SETUP_COPY.campDefault}</option>
                                 <option value="survive">{CLASSIC_SETUP_COPY.campSurvive}</option>
                                 <option value="study">{CLASSIC_SETUP_COPY.campStudy}</option>
                                 <option value="score">{CLASSIC_SETUP_COPY.campScore}</option>
+                                {/* A feat's option (`feat-unlocks.ts`): shown once the Alchemist feat has opened it. */}
+                                {hasFeatOption(saveData, 'camp_evolve') ? <option value="evolve">{CLASSIC_SETUP_COPY.campEvolve}</option> : null}
                             </select>
                         </fieldset>
                         <fieldset className={styles.setupGroup}>
