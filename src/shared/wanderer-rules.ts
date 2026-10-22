@@ -1,6 +1,7 @@
+import { preferredDrawIndex } from './learned-rule-rules';
 import { footprintTurns } from './relic-evolution-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
-import type { BoardState, RunState, Tile } from './contracts';
+import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -53,7 +54,10 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     );
 
 /** Deals the floor's Wanderers onto plain pairs, from the run's seed, when the floor is dealt. */
-export const dealWanderers = (board: BoardState, { runSeed, rulesVersion }: { runSeed: number; rulesVersion: number }): BoardState => {
+export const dealWanderers = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+): BoardState => {
     const wanted = wandererPairsForFloor(board.level);
     if (rulesVersion < WANDERER_RULES_FROM || wanted === 0 || board.pairCount < WANDERER_MIN_PAIRS) return board;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
@@ -66,7 +70,8 @@ export const dealWanderers = (board: BoardState, { runSeed, rulesVersion }: { ru
     const rng = createMulberry32(hashStringToSeed(`wanderers:${runSeed}:${rulesVersion}:${board.level}`));
     const chosen = new Set<string>();
     while (chosen.size < wanted && pool.length > 0) {
-        const [pairKey] = pool.splice(pickRngIndex(rng, pool.length), 1);
+        // A learned rule (`learned-rule-rules.ts`) draws from its element's pairs first.
+        const [pairKey] = pool.splice(preferredDrawIndex(pool, rng, preferSuit ? (key) => halves.get(key)?.[0]?.suit === preferSuit : null), 1);
         if (pairKey) chosen.add(pairKey);
     }
     if (chosen.size === 0) return board;

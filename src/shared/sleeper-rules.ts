@@ -1,4 +1,5 @@
-import type { BoardState, RunState, SleepingPair, Tile } from './contracts';
+import { preferredDrawIndex } from './learned-rule-rules';
+import type { BoardState, RunState, SleepingPair, Tile, TileSuit } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -32,7 +33,10 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.length === 2 && pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && !tile.wanderer && !tile.sleeper && !isRealmHeld(tile));
 
 /** Deals the floor's Sleepers onto plain pairs, from the run's seed. */
-export const dealSleepers = (board: BoardState, { runSeed, rulesVersion }: { runSeed: number; rulesVersion: number }): BoardState => {
+export const dealSleepers = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+): BoardState => {
     const wanted = sleepersForFloor(board.level);
     if (rulesVersion < SLEEPER_RULES_FROM || wanted === 0 || board.pairCount < SLEEPER_MIN_PAIRS) return board;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
@@ -45,7 +49,8 @@ export const dealSleepers = (board: BoardState, { runSeed, rulesVersion }: { run
     const rng = createMulberry32(hashStringToSeed(`sleepers:${runSeed}:${rulesVersion}:${board.level}`));
     const chosen = new Set<string>();
     while (chosen.size < wanted && pool.length > 0) {
-        const [pairKey] = pool.splice(pickRngIndex(rng, pool.length), 1);
+        // A learned rule (`learned-rule-rules.ts`) draws from its element's pairs first.
+        const [pairKey] = pool.splice(preferredDrawIndex(pool, rng, preferSuit ? (key) => halves.get(key)?.[0]?.suit === preferSuit : null), 1);
         if (pairKey) chosen.add(pairKey);
     }
     if (chosen.size === 0) return board;

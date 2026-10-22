@@ -1,3 +1,4 @@
+import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
 import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
@@ -5,7 +6,7 @@ import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
-import { EVOLUTIONS, hasEvolution } from './relic-evolution-rules';
+import { EVOLUTIONS, footprintTurns, hasEvolution } from './relic-evolution-rules';
 import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
 import { tileCanBreakInChunk } from './chunk-break-rules';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
@@ -141,6 +142,8 @@ export interface SoakRunReport {
     /** The Spiral (`spiral-rules.ts`): its floors survived, and its rings sealed. */
     spiralFloors: number;
     spiralRings: number;
+    /** The dungeon learns you (`learned-rule-rules.ts`): floors told a rule. */
+    learnedRules: number;
     /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
     keeperFloors: number;
     keeperSwaps: number;
@@ -442,7 +445,9 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         return taken <= 1 ? null : `a held match took ${taken} pairs`;
     },
     'a footprint lies one step from the Wanderer that left it, on its own turn, and lasts that turn': (before, run, action) => {
-        const prints = wandererFootprintCells(run.board);
+        // The Cartographer's Thread (`relic-evolution-rules.ts`) keeps a footprint for three turns: only a fresh one
+        // is judged by its turn and its Wanderer; an older one is the Thread's, worn down a turn at a time.
+        const prints = wandererFootprintCells(run.board).filter((cell) => runNonNegativeInteger(run.board!.tiles[cell]!.footprint) >= footprintTurns(run));
         if (prints.length === 0 || !run.board) return null;
         if (run.status === 'levelComplete' || run.status === 'gameOver') return `footprints on a floor that is over (${run.status})`;
         // Checked on the turn that left them: a bomb, a shuffle or a release between turns may take or move the
@@ -614,6 +619,15 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (run.board.tiles.length !== before.board.tiles.length) return 'the swap changed the size of the board';
         const moved = (run.pinnedTileIds ?? []).find((id) => run.board!.tiles.findIndex((tile) => tile.id === id) !== before.board!.tiles.findIndex((tile) => tile.id === id));
         return moved ? `pinned ${moved} moved in the swap` : null;
+    },
+    // Which pairs a dealer may take (plain, unmarked, not held by the realm) is the dealer's own and is pinned by
+    // `learned-rule-rules.test.ts`; the soak checks what it can see whole: the rule told is the one the run earned.
+    'a told rule names the element the run matched most, from the table': (before, run, action) => {
+        const rule = run.learnedRule;
+        if (action !== 'descend' || !rule || !before) return null;
+        if (!LEARNED_RULE_TABLE.includes(rule.id)) return `${rule.id} is not in the table`;
+        const learned = mostMatchedSuit(before);
+        return rule.suit === learned ? null : `told ${rule.suit}, but the run matched ${String(learned)} most`;
     },
     'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {
         if (!run.board || !spiralHolds(run, run.board)) return null;
@@ -792,6 +806,7 @@ export const soakRun = ({
     let sleepersKeptDown = 0;
     let spiralFloors = 0;
     let spiralRings = 0;
+    let learnedRules = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
     let cartographerFloors = 0;
@@ -856,6 +871,7 @@ export const soakRun = ({
             sleepersKeptDown += Math.max(0, runNonNegativeInteger(next.sleepersKeptDownThisFloor) - runNonNegativeInteger(run.sleepersKeptDownThisFloor));
         }
         if (action === 'descend' && isKeeperFloor(next.board)) keeperFloors += 1;
+        if (action === 'descend' && next.learnedRule) learnedRules += 1;
         if (action === 'descend' && isCartographerFloor(next.board)) cartographerFloors += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.cartographerTurnsThisFloor) > runNonNegativeInteger(run.cartographerTurnsThisFloor)) cartographerTurns += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.keeperSwapsThisFloor) > runNonNegativeInteger(run.keeperSwapsThisFloor)) keeperSwaps += 1;
@@ -1133,6 +1149,7 @@ export const soakRun = ({
         sleepersKeptDown,
         spiralFloors,
         spiralRings,
+        learnedRules,
         keeperFloors,
         keeperSwaps,
         cartographerFloors,

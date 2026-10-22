@@ -2888,6 +2888,40 @@
             ]
         },
         {
+            "id": "board.learned_rule",
+            "label": "The dungeon learns you",
+            "kind": "board",
+            "role": "from_floor_41_each_floor_tells_one_rule_from_a_fixed_table_about_the_element_matched_most_choosing_which_pairs_a_dealer_lands_on",
+            "evidence": [
+                "src/shared/learned-rule-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/mask-rules.ts",
+                "src/shared/wanderer-rules.ts",
+                "src/shared/sleeper-rules.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "elementResonance",
+                "learnedRule"
+            ],
+            "writes": [
+                "learnedRule",
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-rule-is-told-before-the-first-flip",
+                "never-how-many-only-which",
+                "same-run-same-rule"
+            ],
+            "tests": [
+                "src/shared/learned-rule-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.spiral",
             "label": "The Spiral",
             "kind": "board",
@@ -3173,6 +3207,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "board.learned_rule",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the told rule on the board crown, from the study window on"
+        },
         {
             "source": "board.spiral",
             "target": "feedback.gameplay_hud",

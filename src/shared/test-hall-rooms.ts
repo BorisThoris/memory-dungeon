@@ -111,6 +111,7 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'learned-rule'
     | 'spiral-ring'
     | 'spiral-par'
     | 'sleeper-wakes'
@@ -1385,6 +1386,27 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 expect: expectAll(wanderersStepped(['a-1', 'a-2']), finishable)
             },
             { step: { do: 'match', pairKey: 'h' }, says: 'one turn later the footprints are gone', expect: expectAll(noFootprints, wanderersStill(['a-1', 'a-2']), finishable) }
+        ]
+    },
+    {
+        id: 'learned-rule',
+        title: 'It learned you',
+        mechanic: 'From floor 41 every floor tells one rule from a fixed table about the element the run matched most - masks, Wanderers or Sleepers land on it; a rule only chooses which pairs a dealer lands on, never how many.',
+        graphMechanicIds: ['board.learned_rule'],
+        tryThis: 'You have matched Water most. Clear floor 40: floor 41 says what it learned, and the masks, the Wanderers or the Sleepers it names are Water.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 40, misses: 4, run: { elementResonance: { tide: 12 } } }),
+        script: [
+            { step: { do: 'clear' }, says: 'floor 40 clears', expect: statusIs('levelComplete') },
+            {
+                step: { do: 'advance' },
+                says: 'floor 41 is told a rule of the table, and the dealer it names lands on Water',
+                expect: (r) => {
+                    const rule = r.learnedRule;
+                    if (!rule || rule.suit !== 'tide') return `rule ${JSON.stringify(rule)}`;
+                    const named = (r.board?.tiles ?? []).filter((tile) => (rule.id === 'masked_suit' ? tile.mask != null : rule.id === 'wandering_suit' ? tile.wanderer === true : tile.sleeper === true));
+                    return named.some((tile) => tile.suit === 'tide') ? null : `${rule.id} landed on ${named.map((tile) => tile.suit).join(',')}`;
+                }
+            }
         ]
     },
     {

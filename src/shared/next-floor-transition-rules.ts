@@ -1,3 +1,5 @@
+import type { LearnedRuleId } from './contracts';
+import { pickLearnedRule, preferredSuitFor } from './learned-rule-rules';
 import { dealSleepers } from './sleeper-rules';
 import { hasEvolution } from './relic-evolution-rules';
 import { dealMasks, unmaskBoard } from './mask-rules';
@@ -75,14 +77,17 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // Then, on the Deep's floors, the second deck under half the cells (`board-layers-rules.ts`).
     const seeded = { runSeed: run.runSeed, rulesVersion: run.runRulesVersion };
     // Then, from the Deep, the masks on cards the others left plain (`mask-rules.ts`); the Unmasking Glass drops them at once.
-    // From the Abyss, the Sleepers (`sleeper-rules.ts`), on pairs the others left plain.
-    const masked = dealSleepers(dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), seeded), seeded), seeded);
+    // From the Abyss, the Sleepers (`sleeper-rules.ts`), on pairs the others left plain. A learned rule
+    // (`learned-rule-rules.ts`) chooses which element one of the three dealers lands on, never how many.
+    const learnedRule = pickLearnedRule(run, bossBoard.level);
+    const prefer = (id: LearnedRuleId) => ({ ...seeded, preferSuit: preferredSuitFor(learnedRule, id) });
+    const masked = dealSleepers(dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), prefer('wandering_suit')), prefer('masked_suit')), prefer('sleeping_suit'));
     const nextBoard = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
     const freshRecipe = run.runRulesVersion >= 64 && (nextFeaturedObjectiveId === 'amplified_reaction' || nextFeaturedObjectiveId === 'calm_reaction');
-    const next = createNextFloorRunState({ ...transitionRun, ...realmEntry.fields,
+    const next = createNextFloorRunState({ ...transitionRun, ...realmEntry.fields, learnedRule,
         // These rooms open with an empty elemental hand, so an incoming amplified burst
         // cannot consume the recipe before the player has a chance to attempt it.
         ...(freshRecipe ? { elementStreak: null } : {}),

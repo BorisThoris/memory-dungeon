@@ -35,7 +35,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 112 as const;
+export const ENCYCLOPEDIA_VERSION = 113 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -554,6 +554,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Wanderers',
         description:
             `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+    },
+    {
+        id: 'sys_learned_rule',
+        title: 'It learned you',
+        description:
+            'From floor 41 every floor **tells you one thing it learned** about how you play, before your first flip: the **element you have matched most** this run is the one it uses. The table has three rules, and the floor names its own: that element **hides behind the masks**, or **the Wanderers** are that element, or **the Sleepers** are. A rule only chooses **which** cards the masks, the Wanderers or the Sleepers land on - **never how many**, and never anything the floor would not deal anyway. Nothing is adjusted in secret: the same run, playing the same way, is told the same rule.'
     },
     {
         id: 'sys_spiral',

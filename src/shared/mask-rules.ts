@@ -1,3 +1,4 @@
+import { preferredDrawIndex } from './learned-rule-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -32,7 +33,10 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && tile.mask == null && !isRealmHeld(tile));
 
 /** Deals the floor's masks: one card of each chosen pair wears an element the floor holds that is not its own. */
-export const dealMasks = (board: BoardState, { runSeed, rulesVersion }: { runSeed: number; rulesVersion: number }): BoardState => {
+export const dealMasks = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+): BoardState => {
     const wanted = masksForFloor(board.level);
     if (rulesVersion < MASK_RULES_FROM || wanted === 0 || board.pairCount < MASK_MIN_PAIRS) return board;
     const halves = new Map<string, Tile[]>();
@@ -46,7 +50,8 @@ export const dealMasks = (board: BoardState, { runSeed, rulesVersion }: { runSee
     const rng = createMulberry32(hashStringToSeed(`masks:${runSeed}:${rulesVersion}:${board.level}`));
     const masks = new Map<string, TileSuit>();
     while (masks.size < wanted && pool.length > 0) {
-        const [pairKey] = pool.splice(pickRngIndex(rng, pool.length), 1);
+        // A learned rule (`learned-rule-rules.ts`) draws from its element's pairs first.
+        const [pairKey] = pool.splice(preferredDrawIndex(pool, rng, preferSuit ? (key) => halves.get(key)?.[0]?.suit === preferSuit : null), 1);
         const pair = pairKey ? halves.get(pairKey) : undefined;
         if (!pair) continue;
         const card = pair[pickRngIndex(rng, 2)]!;

@@ -1,3 +1,4 @@
+import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
 import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
@@ -1626,8 +1627,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const keeperRulesShown = isKeeperFloor(run.board) && (run.runRulesVersion ?? 0) >= KEEPER_RULES_FROM;
     const cartographerRulesShown = isCartographerFloor(run.board) && (run.runRulesVersion ?? 0) >= CARTOGRAPHER_RULES_FROM;
     const spiralRulesShown = spiralHolds(run, run.board);
+    // The dungeon learns you (`learned-rule-rules.ts`): the floor's told rule, from the study window on.
+    const learnedRule = run.learnedRule ?? null;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2202,6 +2205,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {learnedRule ? (
+                                    <p className={styles.wardenRules} data-rule={learnedRule.id} data-testid="learned-rule">
+                                        <span className={styles.wardenRulesName}>{LEARNED_RULE_COPY.kicker}</span> {LEARNED_RULE_COPY.line(learnedRule)}
+                                    </p>
+                                ) : null}
                                 {spiralRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="spiral-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.spiralKicker}</span>{' '}
