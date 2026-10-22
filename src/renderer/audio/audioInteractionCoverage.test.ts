@@ -38,6 +38,7 @@ describe('REG-037 audio interaction coverage', () => {
             'trait_mismatch_surge',
             'mismatch_recovery_crescendo',
             'realm_weather_strike',
+            'deep_game_cues',
             'realm_ambient_bed',
             'board_power'
         ]);

@@ -342,6 +342,18 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
+        id: 'deep_game_cues',
+        domain: 'gameplay',
+        interaction: 'The deep game acts on its own: a Hold released, the Warden deals again, the Keeper swaps, the Cartographer turns, a Spiral ring seals, a Sleeper wakes, a mask drops, a Wanderer steps, the Dread climbs a tier',
+        cue: 'none',
+        callsite: 'applyResolvedRun -> playDeepGameSfx (deepGameCues diffs the run counters)',
+        semanticMoment: 'pressure',
+        decision: 'procedural_only',
+        cooldownPolicy: 'once per counter that grew on the change, staggered 180ms apart; the Dread only on a new floor whose tier moved',
+        mixRole: 'bosses low (gong, stone, page, thud), families mid (breath and bell, glass, footfall), the Hold bright (bells up the cascade scale, one per doubling held); nothing to preload',
+        reducedMotionSafe: true
+    },
+    {
         id: 'realm_ambient_bed',
         domain: 'gameplay',
         interaction: 'A realm holds the board in play: its weather is heard between strikes',

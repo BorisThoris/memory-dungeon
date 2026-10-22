@@ -29,7 +29,7 @@ import {
 } from '../../shared/gameplay-core-adapters';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { trackEvent } from '../../shared/telemetry';
-import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
+import { playDeepGameSfx, playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
 import { ACHIEVEMENT_SYNC_FAILURE_NOTICE } from './achievementPersistence';
 import { runPersistenceInBackground } from './backgroundPersistence';
 import {
@@ -99,6 +99,8 @@ export const createRunResolutionController = ({
             void resumeAudioContext();
             playFloorClearSfx(getSfxGain());
         }
+        // The deep game's cues (DGE-030): what the bosses, the families, the Hold and the Dread did.
+        playDeepGameSfx(state.run, resolvedRun, getSfxGain());
         let nextRun =
             resolvedRun.status === 'playing' || !resolvedRun.debugPeekActive
                 ? resolvedRun

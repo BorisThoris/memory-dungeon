@@ -1,3 +1,4 @@
+import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import type { RealmEvent, RunState } from '../../shared/contracts';
 import { runArray } from '../../shared/run-array-guards';
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
@@ -1323,4 +1324,116 @@ const playItemDropSfxUnguarded = (rawGain: number, rarity: ItemDropRarity): void
     if (rarity === 'epic' || rarity === 'legendary') {
         scheduleCue(() => playNoise({ durationSec: 0.7, gain: gain * 0.18, filter: 'highpass', from: 6000, to: 3500, attackSec: 0.05 }), steps.length * 70);
     }
+};
+
+/**
+ * The deep game's cues (DGE-030): one short procedural voice per thing the pack's mechanics do
+ * on their own, so a board that changed without the player's hand says so in the ear. All are
+ * synthesised, so none has a file to preload, and all are told apart by register: the bosses low
+ * (the Warden's gong, the Keeper's stone, the Cartographer's page), the families mid (a Sleeper's
+ * breath, a mask's glass, a Wanderer's step), the player's own deeds bright (the Hold's release).
+ */
+export type DeepGameCue =
+    | 'hold_release'
+    | 'warden_redeal'
+    | 'keeper_swap'
+    | 'cartographer_turn'
+    | 'sleeper_wake'
+    | 'mask_drop'
+    | 'wanderer_step'
+    | 'spiral_seal'
+    | 'dread_tier';
+
+const grew = (after: number | undefined, before: number | undefined): number =>
+    Math.max(0, runNonNegativeInteger(after) - runNonNegativeInteger(before));
+
+/** What the pack's mechanics did between two run states, in the order the cues play. */
+export const deepGameCues = (before: RunState | null | undefined, after: RunState): DeepGameCue[] => {
+    if (!before || before.board?.level !== after.board?.level) {
+        // A new floor: only the Dread can have moved (its tier is set as the floor is reached).
+        return before && dreadTier(dreadForRun(after)).tier.id !== dreadTier(dreadForRun(before)).tier.id ? ['dread_tier'] : [];
+    }
+    const cues: DeepGameCue[] = [];
+    if (grew(after.holdsReleasedThisFloor, before.holdsReleasedThisFloor) > 0) cues.push('hold_release');
+    if (grew(after.wardenRedealsThisFloor, before.wardenRedealsThisFloor) > 0) cues.push('warden_redeal');
+    if (grew(after.keeperSwapsThisFloor, before.keeperSwapsThisFloor) > 0) cues.push('keeper_swap');
+    if (grew(after.cartographerTurnsThisFloor, before.cartographerTurnsThisFloor) > 0) cues.push('cartographer_turn');
+    if (grew(after.spiralRingsSealedThisFloor, before.spiralRingsSealedThisFloor) > 0) cues.push('spiral_seal');
+    if (grew(after.sleepersWokenThisFloor, before.sleepersWokenThisFloor) > 0) cues.push('sleeper_wake');
+    if (grew(after.masksDroppedThisFloor, before.masksDroppedThisFloor) > 0) cues.push('mask_drop');
+    if (grew(after.wandererStepsThisFloor, before.wandererStepsThisFloor) > 0) cues.push('wanderer_step');
+    return cues;
+};
+
+/** The Hold's release: a swell, then a run of bells up the cascade's own scale, one per doubling held. */
+const playHoldReleaseSfx = (gain: number, held: number): void => {
+    const notes = Math.min(CHUNK_BREAK_MAX_NOTES, 2 + Math.floor(Math.log2(Math.max(1, held))));
+    playNoise({ durationSec: 0.5, gain: gain * 0.35, filter: 'lowpass', from: 200, peak: 2600, to: 900, attackSec: 0.35 });
+    playTone({ frequency: 110, frequencyEnd: 220, durationSec: 0.5, gain: gain * 0.3, type: 'triangle', category: 'power' });
+    for (let index = 0; index < notes; index += 1) {
+        scheduleCue(
+            () => playTone({ frequency: chunkBreakNoteHz(index), durationSec: 0.32, gain: gain * 0.24, type: 'sine', category: 'match' }),
+            380 + index * 70
+        );
+    }
+};
+
+const DEEP_GAME_CUE_SOUNDS: Readonly<Record<Exclude<DeepGameCue, 'hold_release'>, (gain: number) => void>> = {
+    // The Warden deals again: a low gong under a riffle of cards.
+    warden_redeal: (gain) => {
+        playTone({ frequency: 73.4, frequencyEnd: 69.3, durationSec: 1.4, gain: gain * 0.42, type: 'sine', category: 'realm' });
+        playTone({ frequency: 146.8, frequencyEnd: 138.6, durationSec: 0.9, gain: gain * 0.16, type: 'triangle', category: 'realm' });
+        playNoise({ durationSec: 0.45, gain: gain * 0.3, filter: 'bandpass', from: 1800, peak: 4200, to: 2600, attackSec: 0.01, delaySec: 0.12 });
+    },
+    // The Keeper swaps its rooms: stone dragged over stone.
+    keeper_swap: (gain) => {
+        playNoise({ durationSec: 0.7, gain: gain * 0.45, filter: 'lowpass', from: 180, peak: 700, to: 220, attackSec: 0.08 });
+        playTone({ frequency: 55, frequencyEnd: 49, durationSec: 0.7, gain: gain * 0.25, type: 'triangle', category: 'realm' });
+    },
+    // The Cartographer turns its lower deck: a heavy page.
+    cartographer_turn: (gain) => {
+        playNoise({ durationSec: 0.35, gain: gain * 0.4, filter: 'bandpass', from: 900, peak: 3200, to: 1400, attackSec: 0.02 });
+        scheduleCue(() => playTone({ frequency: 220, frequencyEnd: 165, durationSec: 0.25, gain: gain * 0.18, type: 'triangle', category: 'realm' }), 200);
+    },
+    // A ring of the Spiral seals: a falling thud.
+    spiral_seal: (gain) => {
+        playTone({ frequency: 196, frequencyEnd: 41, durationSec: 0.6, gain: gain * 0.4, type: 'sine', category: 'realm' });
+        playNoise({ durationSec: 0.4, gain: gain * 0.3, filter: 'lowpass', from: 1600, to: 90, attackSec: 0.01 });
+    },
+    // A Sleeper wakes: a breath drawn in, and one low bell.
+    sleeper_wake: (gain) => {
+        playNoise({ durationSec: 0.6, gain: gain * 0.28, filter: 'bandpass', from: 400, peak: 1300, to: 700, attackSec: 0.45 });
+        scheduleCue(() => playTone({ frequency: 440, durationSec: 0.5, gain: gain * 0.2, type: 'sine', category: 'realm' }), 480);
+    },
+    // A mask drops: a small glass tick.
+    mask_drop: (gain) => {
+        playTone({ frequency: 2637, frequencyEnd: 1976, durationSec: 0.12, gain: gain * 0.16, type: 'sine', category: 'realm' });
+    },
+    // A Wanderer steps: one soft footfall, quiet, since it comes every third turn.
+    wanderer_step: (gain) => {
+        playNoise({ durationSec: 0.12, gain: gain * 0.2, filter: 'lowpass', from: 600, to: 120, attackSec: 0.005 });
+    },
+    // The Dread climbs a tier: a low fifth that swells and holds.
+    dread_tier: (gain) => {
+        playTone({ frequency: 55, durationSec: 1.6, gain: gain * 0.3, type: 'sine', category: 'realm' });
+        playTone({ frequency: 82.4, durationSec: 1.6, gain: gain * 0.22, type: 'sine', category: 'realm' });
+        playNoise({ durationSec: 1.4, gain: gain * 0.2, filter: 'lowpass', from: 120, peak: 600, to: 160, attackSec: 0.9 });
+    }
+};
+
+/** Plays the deep game's cues for a change of run state (`applyResolvedRun`). */
+export const playDeepGameSfx = (before: RunState | null | undefined, after: RunState, rawGain: number): void =>
+    audioNeverThrows(() => playDeepGameSfxUnguarded(before, after, rawGain));
+
+const playDeepGameSfxUnguarded = (before: RunState | null | undefined, after: RunState, rawGain: number): void => {
+    if (rawGain <= 0.001) return;
+    const gain = rawGain * 0.7;
+    deepGameCues(before, after).forEach((cue, index) => {
+        const play = (): void =>
+            cue === 'hold_release'
+                ? playHoldReleaseSfx(gain, Math.floor(runArray(before?.heldSeedIds).length / 2))
+                : DEEP_GAME_CUE_SOUNDS[cue](gain);
+        if (index === 0) play();
+        else scheduleCue(play, index * 180);
+    });
 };

@@ -1,7 +1,7 @@
 # DGE-030: Art, audio and the preload for every new surface
 
 ## Status
-Not started
+In progress (2026-10-22): the cue pass done; the board marks next
 
 ## Priority
 P1
@@ -50,3 +50,9 @@ Card-back marks for Wanderers, Masks and Sleepers; footprint and promotion decal
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-22, the cue pass (no rules change).
+- Nine procedural cues, `playDeepGameSfx` in `gameSfx.ts`, played from `applyResolvedRun` (turns, Hold releases, Reprises and floor changes all pass there): the Hold's release (a swell, then bells up the cascade's own A-minor scale, one per doubling held, capped at `CHUNK_BREAK_MAX_NOTES`), the Warden dealing again (a low gong under a riffle), the Keeper's swap (stone on stone), the Cartographer's turn (a heavy page), a Spiral ring sealing (a falling thud), a Sleeper waking (a breath and a low bell), a mask dropping (a glass tick), a Wanderer's step (one soft footfall), the Dread climbing a tier (a low fifth that swells). `deepGameCues` diffs the run's own counters, so nothing new is stored.
+- Synthesised, not ACE-Step: short event cues in this game are procedural (the looking glass, the void spew), and a synthesised cue has no file to preload, so `asset-streaming.spec.ts` is untouched. Levels sit inside the existing realm cues' range (sum of voice gains 0.16 to 0.88 at 0.7 of the SFX gain, against the void spew's 1.9 and the looking glass's 0.8); not measured in LUFS, since there is no file.
+- Registered in `audioInteractionCoverage.ts` (`deep_game_cues`), covered by the hostile-AudioContext sweep, and unit-tested (`deepGameCues.test.ts`: one cue per counter that grew, the Dread only on a new floor whose tier moved).
+- Not done yet: the board marks (a sealed Spiral ring, the Hold's glow on held pairs), the boss rooms' one moving thing, the Dread chip art. Card-back marks for Wanderers, Masks and Sleepers stay out: the owner's rule that nothing face down sets a pair apart.

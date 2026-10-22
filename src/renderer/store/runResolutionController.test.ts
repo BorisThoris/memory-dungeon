@@ -8,6 +8,7 @@ import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 import { createRunResolutionController } from './runResolutionController';
 
 const gameSfxMocks = vi.hoisted(() => ({
+    playDeepGameSfx: vi.fn(),
     playFloorClearSfx: vi.fn(),
     playMatchPayoffSfx: vi.fn(),
     playResolveSfx: vi.fn(),

@@ -15,6 +15,7 @@ import { MEMORIZE_SKIP_MOMENTUM_MAX } from '../../shared/memorize-skip-reward-ru
 import { runChainMomentumPairs, runChainTier } from '../../shared/chain-tier-rules';
 
 const gameSfxMocks = vi.hoisted(() => ({
+    playDeepGameSfx: vi.fn(),
     playFlipSfx: vi.fn(),
     playFloorClearSfx: vi.fn(),
     playGambitCommitSfx: vi.fn(),
