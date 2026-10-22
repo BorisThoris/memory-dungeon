@@ -237,6 +237,22 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-storm_glass')).toBeDisabled();
     });
 
+    test('reprise: after three matches press it, and they pay again', async ({ page }) => {
+        await openRoom(page, 'reprise-pays');
+        for (const key of ['a', 'b', 'c']) {
+            await pick(page, `${key}-1`);
+            await pick(page, `${key}-2`);
+            await expect.poll(async () => (await read(page)).states[`${key}-2`], { timeout: 30_000 }).toBe('matched');
+            await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
+        }
+        await openItemsIfFolded(page);
+        await expect(page.getByTestId('tool-reprise')).toBeEnabled();
+        const before = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore);
+        await page.getByTestId('tool-reprise').click();
+        await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore)).toBeGreaterThan(before);
+        await expect(page.getByTestId('tool-reprise')).toBeDisabled();
+    });
+
     test('carve: press it, pick a way with an arrow key, and the next pop walks that way', async ({ page }) => {
         await openRoom(page, 'carve-right');
         await openItemsIfFolded(page);

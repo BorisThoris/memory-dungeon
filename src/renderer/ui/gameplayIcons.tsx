@@ -154,6 +154,18 @@ export function GameplayHoldIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** Reprise (`reprise-rules.ts`): three rings going out, the turns said again. */
+export function GameplayRepriseIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <circle cx="6" cy="12" r="1.6" />
+            <path d="M9.5 8.5a5 5 0 0 1 0 7" />
+            <path d="M12.5 6a8.5 8.5 0 0 1 0 12" />
+            <path d="M15.5 3.8a11.6 11.6 0 0 1 0 16.4" />
+        </svg>
+    );
+}
+
 /** Carve (`carve-rules.ts`): a chisel's line, and the way it points. */
 export function GameplayCarveIcon({ className, ...rest }: GameplayIconProps) {
     return (

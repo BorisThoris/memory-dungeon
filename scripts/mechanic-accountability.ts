@@ -283,6 +283,10 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 283,
         reason: 'Masks are dealt from floor 25 and the census stops at floor 24, so a counter would read nothing. The whole-run soak counts the masks dealt and dropped, with invariants that no pair is masked on both cards and no face-up card wears one; unit tests pin the deal, the drop and the true element, and a hall room walks a mask dropping and its card casting true.'
     },
+    'power.reprise': {
+        generation: 286,
+        reason: 'Reprise is pressed by the player from floor 41, and the census players never press it. The whole-run soak reprises when the planned player\u2019s last three turns were matches, with an invariant that a Reprise costs no turn and comes once a floor; unit tests pin the replay order, the miss and the Echo Chamber, and two hall rooms walk three matches paid again and a miss paid again.'
+    },
     'power.carve': {
         generation: 282,
         reason: 'Carve is pressed by the player from floor 25, and the census players never press it. The whole-run soak carves whenever the planned player has the links, with invariants that a carve is set between turns for two links and no turn, and never outlives its floor; unit tests pin the biased burst and walk, and three hall rooms carve right, carve at nothing, and carve through a Hold.'

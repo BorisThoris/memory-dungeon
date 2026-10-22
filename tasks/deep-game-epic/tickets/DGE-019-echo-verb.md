@@ -1,7 +1,7 @@
 # DGE-019: Echo: replay your last three flips free
 
 ## Status
-Not started
+Done as Reprise (rules 83, 2026-10-22)
 
 ## Priority
 P1
@@ -47,3 +47,11 @@ Once per floor, Echo replays the last three flips in order as free turns (no tur
 
 ## Future handoff notes
 Leave next steps, checklist rows ticked, and known blockers here after implementation.
+
+2026-10-22, built as **Reprise** (rules 83):
+- **Named Reprise, not Echo** (the owner): the Echo tile trait and the Echo feedback setting already use the word. The evolution keeps its shipped name, Echo Chamber.
+- **What replays** (the owner chose among outcomes, cells and cards): the outcomes. `reprise-rules.ts`: `recordRepriseTurn` keeps what each of the floor's last five turns paid (outermost turn hook); `reprise(run, applyMissBudget)` pays the last three again in order - a match its score and a chain link, a miss its miss (through the bank, which may end the run) and the chain. No card moves, no turn counts; once a floor, from floor 41; `repriseTurnsFor` is five with the Echo Chamber, which is now live.
+- The acceptance's "same outcomes as the originals" is met by construction: the replay is the recorded outcome, not a re-run of cards.
+- Dock tool (conditional, from 41; badge the matches it would pay), hall rooms `reprise-pays`, `reprise-miss`; `tools-usable` case; soak: every player presses it after three matches, invariant (no turn, once a floor); deep soak to 62: 1055 Reprises, 0 violations (the default soak stops at 30, before it).
+- The rules-83 reseed put the run census's peek at 0.900 over 160 runs, a hair over the common line; the census now plays 200 runs (0.895), the remedy rules 68 used.
+- Codex `sys_reprise` and the evolutions entry; ENCYCLOPEDIA 110. warden-reach 51/100.

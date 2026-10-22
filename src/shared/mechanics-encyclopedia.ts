@@ -24,6 +24,7 @@ import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './d
 import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
+import { ECHO_CHAMBER_TURNS, REPRISE_FIRST_FLOOR, REPRISE_TURNS } from './reprise-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
 import { CARTOGRAPHER_TURN_EVERY_MATCHES } from './cartographer-rules';
@@ -33,7 +34,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 109 as const;
+export const ENCYCLOPEDIA_VERSION = 110 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -527,7 +528,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_relic_evolutions',
         title: 'Relic evolutions',
         description:
-            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** waits for a mechanic still to come.`
+            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone** **Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** (Long Look and Deep Pockets): **Reprise** replays five turns, not three.`
     },
     {
         id: 'sys_boss_rewards',
@@ -558,6 +559,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Masks',
         description:
             `From floor ${MASK_FROM_FLOOR} a few backs **lie**: a masked card shows an element that is not its own, ${masksForFloor(MASK_FROM_FLOOR)} a floor, ${masksForFloor(40)} from floor 33. The first time you turn it the mask drops, and its back tells the truth for the rest of the floor. Only one card of a pair is ever masked, so every pair keeps one honest back. A masked card is its true element to everything it does: what it casts, what it pops, how it reacts.`
+    },
+    {
+        id: 'sys_reprise',
+        title: 'Reprise',
+        description:
+            `From floor ${REPRISE_FIRST_FLOOR}, once a floor, **Reprise** pays your last **${REPRISE_TURNS} turns** again, in order: each **match** scores what it scored and adds a link to your chain; each **miss** costs its miss again and breaks the chain. No card moves and no turn is counted, so press it after good turns. The **Echo Chamber** evolution makes it ${ECHO_CHAMBER_TURNS}.`
     },
     {
         id: 'sys_carve',

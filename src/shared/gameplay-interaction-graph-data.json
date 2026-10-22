@@ -2957,6 +2957,41 @@
             ]
         },
         {
+            "id": "power.reprise",
+            "label": "Reprise",
+            "kind": "power",
+            "role": "once_a_floor_from_the_abyss_the_last_three_turns_pay_again_matches_score_and_link_misses_cost",
+            "evidence": [
+                "src/shared/reprise-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/miss-bank.ts",
+                "src/renderer/store/useAppStore.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "repriseTurns",
+                "repriseUsedThisFloor",
+                "totalScore"
+            ],
+            "writes": [
+                "repriseTurns",
+                "repriseUsedThisFloor",
+                "totalScore"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "reprise-costs-no-turn",
+                "reprise-once-a-floor",
+                "a-replayed-miss-charges-the-bank"
+            ],
+            "tests": [
+                "src/shared/reprise-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "power.carve",
             "label": "Carve",
             "kind": "power",
@@ -3066,6 +3101,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "power.reprise",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Reprise tool, its badge the matches it would pay again, and why it waits"
+        },
         {
             "source": "hazard.cartographer",
             "target": "feedback.gameplay_hud",

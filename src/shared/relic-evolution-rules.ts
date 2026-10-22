@@ -43,7 +43,8 @@ export const EVOLUTIONS: readonly EvolutionRecipe[] = [
     { id: 'keystone_heart', title: 'Keystone Heart', from: ['deep_pockets', 'tallow_candle'], live: true },
     // Masks (`mask-rules.ts`): every mask drops as the floor is dealt.
     { id: 'unmasking_glass', title: 'Unmasking Glass', from: ['tallow_candle', 'gilded_chain'], live: true },
-    { id: 'echo_chamber', title: 'Echo Chamber', from: ['long_look', 'deep_pockets'], live: false }
+    // Reprise (`reprise-rules.ts`): a Reprise replays five turns.
+    { id: 'echo_chamber', title: 'Echo Chamber', from: ['long_look', 'deep_pockets'], live: true }
 ];
 
 export const evolutionRecipe = (id: BlueprintId): EvolutionRecipe => EVOLUTIONS.find((recipe) => recipe.id === id)!;

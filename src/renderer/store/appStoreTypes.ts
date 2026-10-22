@@ -100,6 +100,8 @@ export interface AppState {
     startHold: () => void;
     /** Carve (`carve-rules.ts`): aim the next pop. */
     carve: (direction: CarveDirection) => void;
+    /** Reprise (`reprise-rules.ts`): pay the floor's last turns again. */
+    reprise: () => void;
     releaseHold: () => void;
     /** Ends an open Zone early (`resolveZone`): everything face up plays at once. */
     resolveZone: () => void;

@@ -1,3 +1,5 @@
+import { applyMissBudget } from '../../shared/miss-bank';
+import { canReprise, reprise as repriseRule } from '../../shared/reprise-rules';
 import { canCarve, carve as carveRule } from '../../shared/carve-rules';
 import { reflowRunBoard } from '../../shared/board-layout-rules';
 import { createGameplayFinalPairRevealCommand } from '../../shared/gameplay-core-contracts';
@@ -740,6 +742,14 @@ export const useAppStore = create<AppState>((set, get) => ({
         void resumeAudioContext();
         playPowerArmSfx(sfxGainFromStore());
         set({ run: carveRule(run, direction) });
+    },
+
+    reprise: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canReprise(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        applyResolvedRun(repriseRule(run, applyMissBudget));
     },
 
     releaseHold: () => {

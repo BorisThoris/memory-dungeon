@@ -1,3 +1,4 @@
+import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
@@ -21,7 +22,7 @@ import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS 
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness, allBoardCards } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
-import { missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
+import { applyMissBudget, missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';
 import { hasMutator } from './mutators';
 import { hasRelic, usesCampUpgrades, heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS, RELIC_SLOTS_FROM } from './run-relic-rules';
@@ -139,6 +140,8 @@ export interface SoakRunReport {
     /** The Cartographer (`cartographer-rules.ts`): its floors met, and its turns. */
     cartographerFloors: number;
     cartographerTurns: number;
+    /** Reprise (`reprise-rules.ts`): Reprises pressed. */
+    reprises: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
     firstEvolutionFloor: number | null;
@@ -614,6 +617,11 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const false_ = tiles.find((tile) => tile.mask != null && tile.mask === tile.suit);
         return false_ ? `${false_.id} masked as its own element` : null;
     },
+    'a Reprise costs no turn and comes once a floor': (before, run, action) => {
+        if (action !== 'reprise') return null;
+        if (!before || before.repriseUsedThisFloor) return 'a second Reprise on one floor';
+        return run.turnsThisFloor === before.turnsThisFloor && run.repriseUsedThisFloor ? null : 'a Reprise cost a turn';
+    },
     'a carve is set between turns for two links and no turn, and never outlives its floor': (before, run, action) => {
         if (action === 'carve') {
             if (!before?.board || before.board.flippedTileIds.length > 0) return 'carved with a card face up';
@@ -763,6 +771,7 @@ export const soakRun = ({
     let keeperSwaps = 0;
     let cartographerFloors = 0;
     let cartographerTurns = 0;
+    let reprises = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
     let missesGranted = 0;
@@ -985,6 +994,12 @@ export const soakRun = ({
                 continue;
             }
         }
+        // Reprise (`reprise-rules.ts`): every player presses it once its last turns were all matches.
+        if (canReprise(run) && (run.repriseTurns ?? []).slice(-repriseTurnsFor(run)).every((turn) => turn.matched)) {
+            reprises += 1;
+            act('reprise', reprise(run, applyMissBudget));
+            continue;
+        }
         // Carve (`carve-rules.ts`): a player who carves aims the next pop, a direction at random.
         if (player.carveRate && canCarve(run) && rng() < player.carveRate) {
             carves += 1;
@@ -1087,6 +1102,7 @@ export const soakRun = ({
         keeperSwaps,
         cartographerFloors,
         cartographerTurns,
+        reprises,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
         missesGranted,

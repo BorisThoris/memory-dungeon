@@ -1,3 +1,5 @@
+import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
+import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
 import { CARTOGRAPHER_RULES_FROM, CARTOGRAPHER_TURN_EVERY_MATCHES, isCartographerFloor } from '../../shared/cartographer-rules';
 import { KEEPER_RULES_FROM, KEEPER_SWAP_EVERY_TURNS, isKeeperFloor } from '../../shared/keeper-rules';
 import type { CarveDirection } from '../../shared/contracts';
@@ -515,6 +517,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             igniteZone: state.igniteZone,
             startHold: state.startHold,
             carve: state.carve,
+            reprise: state.reprise,
             releaseHold: state.releaseHold,
             resolveZone: state.resolveZone,
             openInventoryFromPlaying: state.openInventoryFromPlaying,
@@ -828,6 +831,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         igniteZone,
         startHold,
         carve: carveAction,
+        reprise: repriseAction,
         releaseHold,
         resolveZone,
         openCodexFromPlaying,
@@ -1948,6 +1952,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                               if (isZoneActive(run)) resolveZone();
                               else igniteZone();
                           }
+                      }
+                  ]
+                : []),
+            // Reprise (`reprise-rules.ts`): from the Abyss on, once a floor. Its badge is the matches it would pay again.
+            ...(isRepriseUnlocked(run)
+                ? [
+                      {
+                          ...toolSpec('reprise'),
+                          glyph: RUN_SHELL_GLYPHS.reprise,
+                          charges: canReprise(run) ? (run.repriseTurns ?? []).slice(-repriseTurnsFor(run)).filter((turn) => turn.matched).length || undefined : undefined,
+                          disabled: !canReprise(run),
+                          title: run.repriseUsedThisFloor
+                              ? REPRISE_TOOL_COPY.used
+                              : canReprise(run)
+                                ? REPRISE_TOOL_COPY.ready(repriseTurnsFor(run), (run.repriseTurns ?? []).slice(-repriseTurnsFor(run)).filter((turn) => turn.matched).length)
+                                : run.board.flippedTileIds.length > 0 ? REPRISE_TOOL_COPY.pendingFlip
+                                : REPRISE_TOOL_COPY.filling(Math.min((run.repriseTurns ?? []).length, repriseTurnsFor(run)), repriseTurnsFor(run)),
+                          onClick: () => repriseAction()
                       }
                   ]
                 : []),

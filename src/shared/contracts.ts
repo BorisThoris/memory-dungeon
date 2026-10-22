@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). */
-export const GAME_RULES_VERSION = 82;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). */
+export const GAME_RULES_VERSION = 83;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -89,6 +89,11 @@ export const REALM_IDS = ['frost', 'ember', 'tide', 'storm', 'grove'] as const;
 export type RealmId = (typeof REALM_IDS)[number];
 /** How hard a travel door's weather blows: sooner weather pays more gold at the clear. */
 export type RealmSeverity = 'calm' | 'wild' | 'raging';
+/** Reprise (`reprise-rules.ts`): what one turn of the floor paid, kept for a Reprise. */
+export interface RepriseTurn {
+    matched: boolean;
+    score: number;
+}
 /** Carve (`carve-rules.ts`): the way the next pop walks first. */
 export type CarveDirection = 'up' | 'right' | 'down' | 'left';
 /** One door on the travel screen: where the next floor is, and how hard its weather blows. */
@@ -1026,6 +1031,10 @@ export interface RunState {
     keeperSwapsThisFloor?: number;
     /** The Cartographer (`cartographer-rules.ts`, DGE-018): the times its lower deck turned this floor. */
     cartographerTurnsThisFloor?: number;
+    /** Reprise (`reprise-rules.ts`, DGE-019): the floor's last turns, whether Reprise was used this floor, and Reprises this run. */
+    repriseTurns?: RepriseTurn[];
+    repriseUsedThisFloor?: boolean;
+    reprisesThisRun?: number;
     endless?: boolean;
     /** How the run met the Warden: cleared it (a win) or fell on its floor (the designed end). */
     wardenOutcome?: 'cleared' | 'fell' | null;

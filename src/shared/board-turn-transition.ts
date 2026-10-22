@@ -1,3 +1,4 @@
+import { recordRepriseTurn } from './reprise-rules';
 import { applyCartographerTurn } from './cartographer-rules';
 import { applyKeeperTurn } from './keeper-rules';
 import { spendCarveOnPop } from './carve-rules';
@@ -519,12 +520,12 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution)))))))));
+            return recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))))))))));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution)))))))));
+        return recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))))))));
     };
     return resolveBoardTurn;
 };

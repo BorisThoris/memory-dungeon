@@ -24,7 +24,8 @@ import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { greetFloorCurio } from './floor-curio-greeting-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { canAimMeteor, callMeteor } from './meteor-rules';
-import { missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
+import { applyMissBudget, missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
+import { canReprise, reprise } from './reprise-rules';
 import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
@@ -111,6 +112,8 @@ export type TestHallRoomId =
     | 'wanderers-step'
     | 'hold-release'
     | 'mask-drops'
+    | 'reprise-pays'
+    | 'reprise-miss'
     | 'carve-right'
     | 'carve-no-target'
     | 'carve-through-hold'
@@ -251,7 +254,9 @@ export type TestHallStep =
     | { readonly do: 'hold' }
     | { readonly do: 'release' }
     /** Carve (`carve-rules.ts`): set the direction the next pop walks first. */
-    | { readonly do: 'carve'; readonly direction: CarveDirection };
+    | { readonly do: 'carve'; readonly direction: CarveDirection }
+    /** Reprise (`reprise-rules.ts`): pay the floor's last turns again. */
+    | { readonly do: 'reprise' };
 
 export interface TestHallScriptLine {
     readonly step: TestHallStep;
@@ -1398,6 +1403,43 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 }
             },
             { step: { do: 'match', pairKey: 'a' }, says: 'the match casts its true element, fire', expect: expectAll(resonanceIs('ember', 1), resonanceIs('tide', 0)) }
+        ]
+    },
+    {
+        id: 'reprise-pays',
+        title: 'Reprise pays three matches again',
+        mechanic: 'From the Abyss, once a floor, Reprise pays the last three turns again: each match its score and a link of the chain. No card moves, and no turn is counted.',
+        graphMechanicIds: ['power.reprise'],
+        tryThis: 'Match three pairs, then press Reprise: the three matches score again, and the chain climbs three more.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'i:m j:b k:e l:t', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'i:m j:b k:e l:t'], { level: 41, misses: 4 }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'one', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'b' }, says: 'two', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'c' }, says: 'three', expect: statusIs('playing') },
+            {
+                step: { do: 'reprise' },
+                says: 'Reprise pays the three again, for no turn',
+                expect: (r, b) => {
+                    const owed = (b.repriseTurns ?? []).slice(-3).reduce((sum, turn) => sum + turn.score, 0);
+                    return r.stats.totalScore - b.stats.totalScore === owed && owed > 0 && r.stats.currentStreak === b.stats.currentStreak + 3 && r.turnsThisFloor === b.turnsThisFloor && r.repriseUsedThisFloor
+                        ? null
+                        : `paid ${r.stats.totalScore - b.stats.totalScore} of ${owed}, chain ${b.stats.currentStreak} -> ${r.stats.currentStreak}, turns ${b.turnsThisFloor} -> ${r.turnsThisFloor}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'reprise-miss',
+        title: 'Reprise pays a miss again too',
+        mechanic: 'A miss in the turns Reprise replays costs its miss again and breaks the chain: Reprise is worth pressing only after good turns.',
+        graphMechanicIds: ['power.reprise', 'economy.miss_bank'],
+        tryThis: 'Match, miss, match, then Reprise: one more miss leaves the bank.',
+        build: () => room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 41, misses: 4, streak: 2 }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'a match', expect: statusIs('playing') },
+            { step: { do: 'miss', a: 'b-1', b: 'c-1' }, says: 'a miss', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'd' }, says: 'a match', expect: statusIs('playing') },
+            { step: { do: 'reprise' }, says: 'the replayed miss takes one more from the bank', expect: (r, b) => (missesLeft(r) === (missesLeft(b) ?? 0) - 1 && r.repriseUsedThisFloor ? null : `misses ${missesLeft(b)} -> ${missesLeft(r)}`) }
         ]
     },
     {
@@ -3241,6 +3283,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return releaseHold(run)?.run ?? null;
         case 'carve':
             return canCarve(run) ? carve(run, step.direction) : null;
+        case 'reprise':
+            return canReprise(run) ? reprise(run, applyMissBudget) : null;
         case 'advance':
             return run.status === 'levelComplete' ? advanceToNextLevel(run) : null;
         case 'travel': {

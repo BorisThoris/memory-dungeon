@@ -28,6 +28,7 @@ export type RunShellToolId =
     | 'ignite'
     | 'hold'
     | 'carve'
+    | 'reprise'
     | 'flash'
     | 'undo'
     | 'fit';
@@ -81,6 +82,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: true, id: 'hold', label: 'Hold', spends: null },
     // Carve (`carve-rules.ts`): on the dock from floor 25; it spends two links of the Hold's meter, not a charge.
     { conditional: true, id: 'carve', label: 'Carve', spends: null },
+    // Reprise (`reprise-rules.ts`): on the dock from floor 41, once a floor.
+    { conditional: true, id: 'reprise', label: 'Reprise', spends: null },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'undo', label: 'Undo', spends: null },

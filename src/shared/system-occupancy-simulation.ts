@@ -187,6 +187,8 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     // without Curios dealt - common again under the unchanged 0.9 line; no grant or player changed.
     // Rules 67 (the Storm Glass reseed): 0.876. Rules 68: 0.890 over the 160-run census, which
     // forty runs had read as 0.902 - common is where it lives; the sample was the flap.
+    // Rules 83 (the Reprise reseed, 2026-10-22): 0.900 over 160 runs, a hair over the line, and 0.895 over
+    // the 200-run census it now plays (`RUN_OCCUPANCY_SEEDS`); 200 keeps one floor above the rare band's floor.
     { id: 'peek', key: 'peekCharges', label: 'A peek was spent on a hidden tile', family: 'tools', cadence: 'common', kind: 'spend', player: 'tooled', scope: 'run' },
     // Was `core` on the floor census's 1.000. A run starts with one shuffle charge and one curio
     // grants another, so it lands on 0.196 of a run's floors: a tool you keep for when you need it.
@@ -685,7 +687,7 @@ export interface RunOccupancyReport {
  * near reads either side of its bar with the seeds: the peek read 0.904 at rules 64 and 0.875 at
  * 65 on the same ten, and 0.876 / 0.901 over forty. Forty runs (960 floors) resolve it.
  */
-export const RUN_OCCUPANCY_SEEDS: readonly number[] = Array.from({ length: 160 }, (_unused, index) => 1_000 + index * 7_919);
+export const RUN_OCCUPANCY_SEEDS: readonly number[] = Array.from({ length: 200 }, (_unused, index) => 1_000 + index * 7_919);
 
 export const simulateRunOccupancy = ({
     floors = 24,
