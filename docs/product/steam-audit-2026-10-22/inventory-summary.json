@@ -1,0 +1,860 @@
+{
+  "commit": "4bbbb057e350dad025efbfcaa6e06ef5ed30c431",
+  "tracked_files": 3307,
+  "markdown_files": 784,
+  "task_files": 453,
+  "checkboxes": 1885,
+  "checked": 188,
+  "unchecked": 1697,
+  "groups": {
+    ".ai/GAMEPLAY_MIGRATION.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    ".ai/README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    ".github/pull_request_template.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 3,
+      "statuses": {}
+    },
+    "AGENTS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "CLAUDE.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "CONTRIBUTING.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "assets/audio": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/AUDIO_ASSET_INVENTORY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/AUDIO_INTEGRATION.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/AUDIO_INTERACTION_MATRIX.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/AUDIO_PHRASE_SIZING.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/BALANCE_NOTES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/BLUEPRINT_FRAMEWORK.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/BREAK_TOUCHES_ONLY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/CAMP_ECONOMY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/CARD_STREAMING_AND_METEORS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/CHAIN_CHUNK_FEVER_DESIGN.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/COLLECTIBLE_SYSTEM.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/DOC_CHECKBOX_INVENTORY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/ELEMENTAL_FORGE.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/FINDABLES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAMEPLAY_SYSTEMS_ANALYSIS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAME_FORGIVENESS_CODE_AUDIT.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAME_FORGIVENESS_DEEP_DIVE.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAME_MECHANICS_IDEAS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAME_MECHANICS_IDEAS_TASKS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 48,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/GAME_MECHANICS_PLAN.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 5,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/HOOK_AND_DEPTH_TASKS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 45,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/IDEAS_AUDITS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/LEADERBOARDS_DEFERRAL.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/MARKET_SIMILAR_GAMES_RESEARCH.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/MARKET_SURVEY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/MEMORY_DUNGEON_PROJECT_REPORT.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/MUTATORS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/PICTURE_SUPERIORITY_CHECKLIST.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 5,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/PORTFOLIO_DEMO.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/PUZZLE_CONTRIBUTING.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REALMS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/RELEASE_CHECKLIST.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_DECOY.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_DUNGEON_LAYER.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_LIVES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_MODES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_POWERS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_READ_MODELS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/REMOVED_SETTLE.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/RESEARCH_NOTES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/RESEARCH_NOTES_2.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/RESEARCH_PLAN.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/STEAM_DEMO_CYCLE.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/STEAM_READINESS.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/SYMBOL_GUIDELINES.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/THESIS_THE_ADDICTIVE_LOOP.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 54,
+      "statuses": {}
+    },
+    "docs/UI_RETHINK_PLAN.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/UI_TASKS": {
+      "files": 6,
+      "tickets": 5,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Completed": 5
+      }
+    },
+    "docs/VIEWPORT_FIT_UI.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/WRAPUP_REMAINING_WORK.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/agent": {
+      "files": 6,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/balance": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/design": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/epics": {
+      "files": 18,
+      "tickets": 8,
+      "checked": 0,
+      "unchecked": 8,
+      "statuses": {
+        "(no Status section)": 8
+      }
+    },
+    "docs/gameplay-depth": {
+      "files": 6,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/gameplay-tasks": {
+      "files": 22,
+      "tickets": 10,
+      "checked": 32,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 10
+      }
+    },
+    "docs/gameplay-theory": {
+      "files": 4,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/gameplay": {
+      "files": 25,
+      "tickets": 0,
+      "checked": 45,
+      "unchecked": 1,
+      "statuses": {}
+    },
+    "docs/internal-wiki": {
+      "files": 12,
+      "tickets": 0,
+      "checked": 4,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/new_design": {
+      "files": 23,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/new_design/TASKS": {
+      "files": 28,
+      "tickets": 3,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Deferred — asset blocked. Exit criteria: populate [`DROP_IN_ASSET_CHECKLIST.md`](../DROP_IN_ASSET_CHECKLIST.md) rows + visual sign-off vs reference stills.": 1,
+        "Deferred — asset blocked (brand logo/emblem). Exit: drop-in paths in [`DROP_IN_ASSET_CHECKLIST.md`](../DROP_IN_ASSET_CHECKLIST.md) + approval.": 1,
+        "Deferred — optional per-mode poster rasters (card chrome + Daily border landed). Re-open when poster assets exist under [`src/renderer/assets/ui/`](../../../src/renderer/assets/ui/) or product prioritizes parity stills.": 1
+      }
+    },
+    "docs/performance": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/product": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/qa": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/reference-comparison": {
+      "files": 3,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/refinement-tasks": {
+      "files": 105,
+      "tickets": 100,
+      "checked": 4,
+      "unchecked": 0,
+      "statuses": {
+        "(no Status section)": 90,
+        "**Done** — bounded post-flip stabilization in [`e2e/tile-card-face-webgl.spec.ts`](../../e2e/tile-card-face-webgl.spec.ts); [COMPLETION.md](./COMPLETION.md) (**001–010**).": 1,
+        "Done — [`src/main/ipc.ts`](../../src/main/ipc.ts), [`persistence.ts`](../../src/main/persistence.ts), [`steam.ts`](../../src/main/steam.ts); [`preload/index.ts`](../../src/preload/index.ts); [COMPLETION.md](./COMPLETION.md) (**001–010**).": 1,
+        "addressed": 1,
+        "Implemented.": 1,
+        "Done — [`GameplayHudBar.tsx`](../../src/renderer/components/GameplayHudBar.tsx), [`GameLeftToolbar.tsx`](../../src/renderer/components/GameLeftToolbar.tsx); [COMPLETION.md](./COMPLETION.md) (**011–020**).": 1,
+        "Baseline shipped — evidence in [COMPLETION.md](./COMPLETION.md) (≈ **031–040** / meta UI). Remaining items below are **optional polish**, not release gates.": 1,
+        "Done — [`gameSfx.ts`](../../src/renderer/audio/gameSfx.ts), [`useAppStore.ts`](../../src/renderer/store/useAppStore.ts); [COMPLETION.md](./COMPLETION.md) (**011–020**). “Candidate refinements” below are optional polish.": 1,
+        "Documented (this file + `App.tsx` OVR-008 block).": 1,
+        "**Done** — `PersistenceService` wraps `electron-store` writes with `PersistenceWriteError`; renderer uses `persistBridge` + `persistenceWriteNotice` on **Main menu**, **GameScreen**, and **Settings** (see [COMPLETION.md](./COMPLETION.md)).": 1,
+        "**Done** — acceptance below satisfied (2026-04-17). [INDEX.md](./INDEX.md) is a single scannable table; cross-links live in [README.md](./README.md), [COMPLETION.md](./COMPLETION.md), and [TOOLING.md](../internal-wiki/TOOLING.md). Optional re-triage of INDEX on a calendar cadence is **team process**, not open REF debt.": 1
+      }
+    },
+    "docs/research": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/system-diagrams": {
+      "files": 2,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/visual-capture": {
+      "files": 28,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 1604,
+      "statuses": {}
+    },
+    "docs/visualization-work": {
+      "files": 12,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "docs/wip-assets": {
+      "files": 3,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "e2e/README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "leaderboard/README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "legacy/README.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "scripts/README-card-motifs.md": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "scripts/audio-pipeline": {
+      "files": 7,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "scripts/card-pipeline": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "scripts/reel-pipeline": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "scripts/scene-pipeline": {
+      "files": 1,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "src/renderer": {
+      "files": 6,
+      "tickets": 0,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {}
+    },
+    "tasks/deep-game-epic": {
+      "files": 41,
+      "tickets": 32,
+      "checked": 0,
+      "unchecked": 27,
+      "statuses": {
+        "Done (2026-10-19)": 2,
+        "Done in part (2026-10-19): Dread, its tiers and every reading of them. The priced composition waits for DGE-009.": 1,
+        "Done (2026-10-20) for the run bar and the clear beat; the camp parts are moot (see notes).": 1,
+        "Done (2026-10-20), rule-only first version. The difficulty target is unmeasured: see notes.": 1,
+        "Done (2026-10-20). Tuning waits for a player with limited memory (see part 2).": 1,
+        "Done (2026-10-21)": 1,
+        "Done (2026-10-20), as specified. The pop-share acceptance is unmet by design, and the feedback pass waits: see notes.": 1,
+        "Done (2026-10-20), rules 70. No back mark (the owner’s rule wins) and the Dread price waits for the priced table: see notes.": 1,
+        "Done (2026-10-20), rules 71. Per-room weather and the phone’s stacked fold are left: see notes.": 1,
+        "Done (rules 81, 2026-10-22)": 1,
+        "Done for the measurement (2026-10-20); the 0.6 bar waits for DGE-008.": 1,
+        "Done (2026-10-21), rules 76. The ceiling is met but not passed until DGE-014 adds a fourth ranked relic: see notes.": 1,
+        "Done (2026-10-21), rules 77. Four evolutions live; Unmasking Glass and Echo Chamber evolve and wait for Masks and Echo.": 1,
+        "Done (rules 79, 2026-10-21)": 1,
+        "Done (rules 80, 2026-10-21)": 1,
+        "Done (2026-10-20), rules 72. Two decks under two cells in five, not every cell; no rise animation yet: see notes.": 1,
+        "Not started": 10,
+        "Done (rules 78, 2026-10-21)": 1,
+        "Done (2026-10-21), rules 75: doors return before act bosses only (doors were retired between floors).": 1,
+        "In progress (standing ticket): the planned soak player and the coverage audit done 2026-10-21; it stays open while the pack adds mechanics.": 1,
+        "Done (2026-10-20): save schema 10.": 1,
+        "Done (2026-10-21): bars 1, 3 and 4 are green gates; bar 2 is the owner-accepted pop-share shortfall. Endless to 120 is not gated yet.": 1
+      }
+    },
+    "tasks/dungeon-epic": {
+      "files": 60,
+      "tickets": 48,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 48
+      }
+    },
+    "tasks/gameplay-logic-ultra-deep-dive": {
+      "files": 58,
+      "tickets": 36,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 36
+      }
+    },
+    "tasks/gameplay-theorycrafting-epic": {
+      "files": 49,
+      "tickets": 27,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 27
+      }
+    },
+    "tasks/next-gameplay-epics": {
+      "files": 8,
+      "tickets": 7,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "(no Status section)": 7
+      }
+    },
+    "tasks/playable-path-improvement-epics": {
+      "files": 11,
+      "tickets": 10,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 10
+      }
+    },
+    "tasks/refined-experience-gaps": {
+      "files": 163,
+      "tickets": 161,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Done": 155,
+        "Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for Endless as an unlocked mode with its own scaling: [DGE-006](../deep-game-epic/tickets/DGE-006-endless-gated-mode.md), and the Depths ladder in [DGE-025](../deep-game-epic/tickets/DGE-025-depths-ladder.md).": 1,
+        "Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for relic slots and evolutions: [DGE-013](../deep-game-epic/tickets/DGE-013-relic-slot-cap.md) and [DGE-014](../deep-game-epic/tickets/DGE-014-relic-evolutions.md).": 1,
+        "Done. Superseded in part (2026-10-19) by the [Deep Game Epic](../deep-game-epic/README.md) for chapter identity as acts with their own verb, family, board and boss: [DGE-002](../deep-game-epic/tickets/DGE-002-descent-act-schedule.md) and [the plan](../deep-game-epic/02-deep-game-plan.md).": 1,
+        "Deferred": 2,
+        "Blocked": 1
+      }
+    },
+    "tasks/user-critis": {
+      "files": 7,
+      "tickets": 6,
+      "checked": 0,
+      "unchecked": 0,
+      "statuses": {
+        "Open": 1,
+        "Done": 5
+      }
+    }
+  },
+  "source_files": 1431,
+  "source_lines": 212961,
+  "test_files": 640,
+  "largest_production": [
+    {
+      "path": "src/renderer/components/TileBoard.tsx",
+      "lines": 3333,
+      "test": false
+    },
+    {
+      "path": "src/shared/test-hall-rooms.ts",
+      "lines": 3269,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/GameScreen.tsx",
+      "lines": 2665,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/tileTextures.ts",
+      "lines": 1790,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
+      "lines": 1446,
+      "test": false
+    },
+    {
+      "path": "src/renderer/audio/gameSfx.ts",
+      "lines": 1326,
+      "test": false
+    },
+    {
+      "path": "src/shared/contracts.ts",
+      "lines": 1278,
+      "test": false
+    },
+    {
+      "path": "src/shared/gameplay-core.ts",
+      "lines": 1224,
+      "test": false
+    },
+    {
+      "path": "src/shared/realm-weather-rules.ts",
+      "lines": 1146,
+      "test": false
+    },
+    {
+      "path": "src/shared/system-occupancy-simulation.ts",
+      "lines": 1132,
+      "test": false
+    },
+    {
+      "path": "src/shared/run-soak.ts",
+      "lines": 1122,
+      "test": false
+    },
+    {
+      "path": "scripts/system-diagrams.mjs",
+      "lines": 1015,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/RunShell.tsx",
+      "lines": 994,
+      "test": false
+    },
+    {
+      "path": "src/shared/gameplay-core-contracts.ts",
+      "lines": 989,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/StartupIntro.tsx",
+      "lines": 981,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/TileBezel.tsx",
+      "lines": 939,
+      "test": false
+    },
+    {
+      "path": "e2e/visualScreenHelpers.ts",
+      "lines": 891,
+      "test": false
+    },
+    {
+      "path": "src/renderer/store/useAppStore.ts",
+      "lines": 886,
+      "test": false
+    },
+    {
+      "path": "src/shared/mechanics-encyclopedia.ts",
+      "lines": 869,
+      "test": false
+    },
+    {
+      "path": "src/renderer/components/tileBoardCardBend.ts",
+      "lines": 854,
+      "test": false
+    }
+  ]
+}

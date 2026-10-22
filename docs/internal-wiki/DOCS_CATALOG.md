@@ -304,3 +304,13 @@
 | File | Summary |
 |------|---------|
 | [ASSET_SOURCES.md](../../src/renderer/assets/ASSET_SOURCES.md) | Authored vs generated assets |
+
+
+## October 2026 Steam product audit
+
+| File | Summary |
+| --- | --- |
+| [product/STEAM_PRODUCT_AUDIT_2026-10-22.md](../product/STEAM_PRODUCT_AUDIT_2026-10-22.md) | Current-code findings, backlog reconciliation and Steam product risks |
+| [product/STEAM_GAME_PLAN_2026-10-22.md](../product/STEAM_GAME_PLAN_2026-10-22.md) | Outcome-gated plan for hook, builds, replay and Steam launch |
+| [product/TASK_RECONCILIATION_2026-10-22.md](../product/TASK_RECONCILIATION_2026-10-22.md) | Every numbered task/epic file with recorded status and current treatment |
+| [product/STEAM_AUDIT_VERIFICATION_2026-10-22.md](../product/STEAM_AUDIT_VERIFICATION_2026-10-22.md) | Checks actually run, limits and retained evidence |
