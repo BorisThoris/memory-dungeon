@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3321,
     "codeFileCount": 1281,
-    "exportedSymbolCount": 4167,
+    "exportedSymbolCount": 4169,
     "contentItemCount": 16,
     "mechanicCount": 88,
     "stateFieldCount": 165,
-    "relationshipCount": 11635
+    "relationshipCount": 11642
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 100049,
-      "sha256": "60422b09831e13321bb799e7e973f876f9b0f4af1d7bad8169eeaf2779e9338b"
+      "sha256": "b904716b3d5eea2b10d913a08c0bd9171bf95eaa96e6ad5bbdd8b63a8cddcfd1"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "1b8db1408552429bee947dfa8d64ce917db6165e31617a14da9f4b70f14cecb6"
+      "sha256": "2baa4299e9d19f30699c22f50fba0a57379b233b382fbb5bcf9d24512a786338"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 26023,
-      "sha256": "49e9df8617d4e8f8c50b1c546f18b90e129277acc9d3b503087e72e11c086a12"
+      "bytes": 26103,
+      "sha256": "6a28f768c780632f0a5e83c6bc1ac89304df00ba663edb6a6b78db1073d942bb"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -12987,14 +12987,14 @@
     {
       "path": "src/renderer/copy/gameOverScreen.test.ts",
       "category": "test",
-      "bytes": 2729,
-      "sha256": "151369b2dbda0f7fd5f8fa3f96e5f4c1c42a0694da8bde4df5e2aaa156b89d32"
+      "bytes": 3108,
+      "sha256": "beaf30285f024fabd762f79424e0cb6ca5f2e48f580bf1ee8965bb5a65aa24a9"
     },
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 10781,
-      "sha256": "000f66063ed42927ad425145592c67482190c0f85804e459490b21153b5fba92"
+      "bytes": 11141,
+      "sha256": "1edf589b3d5cf384982cc6167e0396d4750cc892b68fdd508e017d4a1e03c32e"
     },
     {
       "path": "src/renderer/copy/gameOverWardenLine.test.ts",
@@ -14061,8 +14061,8 @@
     {
       "path": "src/renderer/store/runResolutionController.ts",
       "category": "source",
-      "bytes": 12368,
-      "sha256": "8b56c24365a02329daf39e42db07641db753fc60828f81d9ba4fd3873815b00f"
+      "bytes": 12921,
+      "sha256": "da404b15ed81345f3a0eeaf793a04373471077706aae04c651bcd7948335c128"
     },
     {
       "path": "src/renderer/store/runStartExecutor.test.ts",
@@ -14344,7 +14344,7 @@
       "path": "src/renderer/ui/MetaShell.module.css",
       "category": "source",
       "bytes": 5006,
-      "sha256": "9f98ada9d7b5b02902575afe8a688246290f59b05e8da2b9300c559142421a89"
+      "sha256": "30231cf4dd6cedb12094d303372e57491f668ba4ce8786cc87e341a97b6046b8"
     },
     {
       "path": "src/renderer/ui/MetaShell.tsx",
@@ -14464,7 +14464,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 100421,
-      "sha256": "5303f3df09c28f24658d906a92f374351746f115eb936587d7dbaec13a1a5001"
+      "sha256": "04884e15cb15dc81226504919c2a39ee857f7a3128458a5878bea486d6c3ea8b"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14475,8 +14475,8 @@
     {
       "path": "src/shared/achievement-reachability.test.ts",
       "category": "test",
-      "bytes": 7076,
-      "sha256": "3f46286d955a5203349131d8a738ff32438d3f7ac1c492ca674bf9cc800d0453"
+      "bytes": 9233,
+      "sha256": "db62e5635bd5e0b6f24d24372f2d9e192be723329f8516bd238a43c4b1349b39"
     },
     {
       "path": "src/shared/achievements.test.ts",
@@ -14487,8 +14487,8 @@
     {
       "path": "src/shared/achievements.ts",
       "category": "source",
-      "bytes": 7248,
-      "sha256": "b164f2f6cb8776900c3636dcf026ac5830a189e2d4b98c01020db9906d48472d"
+      "bytes": 8655,
+      "sha256": "2d53464dc7a928d6e15481d3d2d828e3909649c6bda53f0eb53b2629699021ed"
     },
     {
       "path": "src/shared/ai-repo-model.test.ts",
@@ -15033,8 +15033,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 62866,
-      "sha256": "c220495d989616e718aadcb54db0d2faf3a07ccdb8e4216f7c172b264c8100b5"
+      "bytes": 63306,
+      "sha256": "1d9512cd5ee4cd4f46c4a86444579472ed5b12554bba9bd5ed4103ac8745627a"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16023,8 +16023,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 72069,
-      "sha256": "16c0fb4c37a89d61a310e4d0877c9074440e2f31b93dd971cc9a1c832748c16a"
+      "bytes": 73596,
+      "sha256": "b18c0a373bdd53d2c788a088c515b9b64a1066251621a80f0ca5fca1768272f4"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16875,8 +16875,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 29102,
-      "sha256": "c2494a22d6d0eaeb8369511e5b61ff5609a3bf73b405a540eb82d24390e6a66d"
+      "bytes": 29324,
+      "sha256": "df37ed24c6dfa2f510ac947920874bb2ac69a81cca795ce728f67bef79aef526"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -17073,8 +17073,8 @@
     {
       "path": "src/shared/steam-achievement-api-names.ts",
       "category": "source",
-      "bytes": 1659,
-      "sha256": "e87687d1f724fc9e8f3bf64332f4e2fa7b6a032e0adc96365a4d2cdf512ef714"
+      "bytes": 2049,
+      "sha256": "b22856455a3f1e8fe2456b85bd2682c77416e344f5e6ddc233397439b10f0dab"
     },
     {
       "path": "src/shared/steam-partner-config.test.ts",
@@ -17523,8 +17523,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 20185,
-      "sha256": "277afa30cc705566866aa2e138ffa66405e25bab58a74ca680b6a2b7f3ee883a"
+      "bytes": 20691,
+      "sha256": "abc5c41e770e0e5a879b583baee990a882b73958128fa67774e198c0584ce2b3"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17721,8 +17721,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
       "category": "other",
-      "bytes": 1873,
-      "sha256": "af0b0860c5a1c26e26af868ce983bca3175162ce3d0953faa6a8d197f8a49ffc"
+      "bytes": 3197,
+      "sha256": "5d23479999838d9069816c54c253247fbbadd218bd7047042de212017f1b7126"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
@@ -24127,7 +24127,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 500,
+      "lineCount": 501,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
@@ -30179,7 +30179,7 @@
       "path": "src/renderer/copy/gameOverScreen.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 56,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/copy/gameOverScreen.ts"
       ],
@@ -30191,7 +30191,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 204,
+      "lineCount": 208,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/descent-run-summary.ts",
@@ -32977,7 +32977,7 @@
       "path": "src/renderer/store/runResolutionController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 282,
+      "lineCount": 290,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/store/achievementPersistence.ts",
@@ -32987,8 +32987,10 @@
         "file:src/shared/achievements.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/depth-rules.ts",
         "file:src/shared/descent-record.ts",
         "file:src/shared/feat-unlocks.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/honorUnlocks.ts",
@@ -33982,7 +33984,7 @@
       "path": "src/shared/achievement-reachability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 127,
+      "lineCount": 156,
       "imports": [
         "file:src/shared/achievements.ts",
         "file:src/shared/chunk-break-rules.ts",
@@ -33991,7 +33993,8 @@
         "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/run-creation-rules.ts",
         "file:src/shared/save-data.ts",
-        "file:src/shared/test/game-fixtures.ts"
+        "file:src/shared/test/game-fixtures.ts",
+        "file:src/shared/warden-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -34017,9 +34020,10 @@
       "path": "src/shared/achievements.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 167,
+      "lineCount": 196,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/depth-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/miss-bank.ts",
@@ -34036,9 +34040,11 @@
         "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
         "symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
         "symbol:src/shared/achievements.ts#CHUNK_SIX_PAIRS",
+        "symbol:src/shared/achievements.ts#DEPTH_ACHIEVEMENTS",
         "symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
         "symbol:src/shared/achievements.ts#getAchievementProgressRows",
         "symbol:src/shared/achievements.ts#getAchievementProgressSummary",
+        "symbol:src/shared/achievements.ts#REACH_FLOORS",
         "symbol:src/shared/achievements.ts#RUNS_FINISHED_THRESHOLDS",
         "symbol:src/shared/achievements.ts#SCORE_MILESTONE_FIRST",
         "symbol:src/shared/achievements.ts#SCORE_MILESTONE_SECOND"
@@ -35980,7 +35986,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1323,
+      "lineCount": 1336,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/elemental-loot-rules.ts"
@@ -39878,7 +39884,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 917,
+      "lineCount": 963,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -42894,7 +42900,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 676,
+      "lineCount": 685,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -43639,7 +43645,7 @@
       "path": "src/shared/steam-achievement-api-names.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 45,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -45124,6 +45130,7 @@
         "symbol:src/shared/warden-rules.ts#wardenTestHolds"
       ],
       "testedBy": [
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/depth-rules.test.ts",
         "file:src/shared/warden-rules.test.ts"
       ]
@@ -49789,8 +49796,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 499,
-      "endLine": 499
+      "line": 500,
+      "endLine": 500
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -56933,24 +56940,24 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 179,
-      "endLine": 203
+      "line": 181,
+      "endLine": 207
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
       "name": "descentEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 160,
-      "endLine": 165
+      "line": 162,
+      "endLine": 167
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
       "name": "descentFirstsLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 168,
-      "endLine": 169
+      "line": 170,
+      "endLine": 171
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -56958,23 +56965,23 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 9,
-      "endLine": 138
+      "endLine": 140
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 171,
-      "endLine": 172
+      "line": 173,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#wardenEndLine",
       "name": "wardenEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 148,
-      "endLine": 157
+      "line": 150,
+      "endLine": 159
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -59757,8 +59764,8 @@
       "name": "createRunResolutionController",
       "kind": "value",
       "file": "src/renderer/store/runResolutionController.ts",
-      "line": 85,
-      "endLine": 281
+      "line": 87,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/store/runStartExecutor.ts#executeRunStartRequest",
@@ -61101,104 +61108,120 @@
       "name": "ACHIEVEMENT_BY_ID",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 60,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementDefinition",
       "name": "AchievementDefinition",
       "kind": "type",
       "file": "src/shared/achievements.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementProgressRow",
       "name": "AchievementProgressRow",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 47,
-      "endLine": 50
+      "line": 64,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementProgressSummary",
       "name": "AchievementProgressSummary",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 52,
-      "endLine": 55
+      "line": 69,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
       "name": "ACHIEVEMENTS",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 62,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
       "name": "CHAIN_REACTION_WAVES",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/achievements.ts#CHUNK_SIX_PAIRS",
       "name": "CHUNK_SIX_PAIRS",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/shared/achievements.ts#DEPTH_ACHIEVEMENTS",
+      "name": "DEPTH_ACHIEVEMENTS",
+      "kind": "value",
+      "file": "src/shared/achievements.ts",
+      "line": 52,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
       "name": "evaluateAchievementUnlocks",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 70,
-      "endLine": 166
+      "line": 87,
+      "endLine": 195
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressRows",
       "name": "getAchievementProgressRows",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 57,
-      "endLine": 60
+      "line": 74,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressSummary",
       "name": "getAchievementProgressSummary",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 62,
-      "endLine": 68
+      "line": 79,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/shared/achievements.ts#REACH_FLOORS",
+      "name": "REACH_FLOORS",
+      "kind": "value",
+      "file": "src/shared/achievements.ts",
+      "line": 45,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/achievements.ts#RUNS_FINISHED_THRESHOLDS",
       "name": "RUNS_FINISHED_THRESHOLDS",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 34,
-      "endLine": 40
+      "line": 35,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/achievements.ts#SCORE_MILESTONE_FIRST",
       "name": "SCORE_MILESTONE_FIRST",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 11,
-      "endLine": 11
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/shared/achievements.ts#SCORE_MILESTONE_SECOND",
       "name": "SCORE_MILESTONE_SECOND",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 12,
-      "endLine": 12
+      "line": 13,
+      "endLine": 13
     },
     {
       "id": "symbol:src/shared/authored-floors.ts#AUTHORED_FLOOR_LAST_LEVEL",
@@ -64134,47 +64157,47 @@
       "kind": "type",
       "file": "src/shared/contracts.ts",
       "line": 293,
-      "endLine": 325
+      "endLine": 338
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1181,
-      "endLine": 1181
+      "line": 1194,
+      "endLine": 1194
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1270,
-      "endLine": 1272
+      "line": 1283,
+      "endLine": 1285
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 334,
-      "endLine": 334
+      "line": 347,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 348,
-      "endLine": 348
+      "line": 361,
+      "endLine": 361
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 526,
-      "endLine": 571
+      "line": 539,
+      "endLine": 584
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -64205,8 +64228,8 @@
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 341,
-      "endLine": 341
+      "line": 354,
+      "endLine": 354
     },
     {
       "id": "symbol:src/shared/contracts.ts#CarveDirection",
@@ -64221,16 +64244,16 @@
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 612,
-      "endLine": 623
+      "line": 625,
+      "endLine": 636
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 578,
-      "endLine": 600
+      "line": 591,
+      "endLine": 613
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
@@ -64245,8 +64268,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1278,
-      "endLine": 1283
+      "line": 1291,
+      "endLine": 1296
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -64269,24 +64292,24 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 327,
-      "endLine": 331
+      "line": 340,
+      "endLine": 344
     },
     {
       "id": "symbol:src/shared/contracts.ts#DescentRecordPersisted",
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1184,
-      "endLine": 1193
+      "line": 1197,
+      "endLine": 1206
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1296,
-      "endLine": 1322
+      "line": 1309,
+      "endLine": 1335
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -64301,16 +64324,16 @@
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 512,
-      "endLine": 524
+      "line": 525,
+      "endLine": 537
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 499,
-      "endLine": 510
+      "line": 512,
+      "endLine": 523
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -64381,24 +64404,24 @@
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 477,
-      "endLine": 495
+      "line": 490,
+      "endLine": 508
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 496,
-      "endLine": 496
+      "line": 509,
+      "endLine": 509
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 468,
-      "endLine": 468
+      "line": 481,
+      "endLine": 481
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
@@ -64421,32 +64444,32 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 746,
-      "endLine": 750
+      "line": 759,
+      "endLine": 763
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 752,
-      "endLine": 762
+      "line": 765,
+      "endLine": 775
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 351,
-      "endLine": 351
+      "line": 364,
+      "endLine": 364
     },
     {
       "id": "symbol:src/shared/contracts.ts#HourglassEvent",
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 604,
-      "endLine": 610
+      "line": 617,
+      "endLine": 623
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
@@ -64493,8 +64516,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 643,
-      "endLine": 690
+      "line": 656,
+      "endLine": 703
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
@@ -64605,24 +64628,24 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 775,
-      "endLine": 787
+      "line": 788,
+      "endLine": 800
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 789,
-      "endLine": 802
+      "line": 802,
+      "endLine": 815
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1195,
-      "endLine": 1210
+      "line": 1208,
+      "endLine": 1223
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -64733,16 +64756,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1286,
-      "endLine": 1286
+      "line": 1299,
+      "endLine": 1299
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1289,
-      "endLine": 1294
+      "line": 1302,
+      "endLine": 1307
     },
     {
       "id": "symbol:src/shared/contracts.ts#RepriseTurn",
@@ -64773,16 +64796,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1263,
-      "endLine": 1267
+      "line": 1276,
+      "endLine": 1280
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1261,
-      "endLine": 1261
+      "line": 1274,
+      "endLine": 1274
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -64797,16 +64820,16 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1217,
-      "endLine": 1234
+      "line": 1230,
+      "endLine": 1247
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 804,
-      "endLine": 1179
+      "line": 817,
+      "endLine": 1192
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -64821,16 +64844,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 707,
-      "endLine": 744
+      "line": 720,
+      "endLine": 757
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 764,
-      "endLine": 769
+      "line": 777,
+      "endLine": 782
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -64845,8 +64868,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1236,
-      "endLine": 1255
+      "line": 1249,
+      "endLine": 1268
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -64861,16 +64884,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 625,
-      "endLine": 641
+      "line": 638,
+      "endLine": 654
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 353,
-      "endLine": 398
+      "line": 366,
+      "endLine": 411
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -64909,8 +64932,8 @@
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 400,
-      "endLine": 466
+      "line": 413,
+      "endLine": 479
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -64933,8 +64956,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 706,
-      "endLine": 706
+      "line": 719,
+      "endLine": 719
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
@@ -64965,16 +64988,16 @@
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 697,
-      "endLine": 704
+      "line": 710,
+      "endLine": 717
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 692,
-      "endLine": 695
+      "line": 705,
+      "endLine": 708
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -70358,7 +70381,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 153,
-      "endLine": 278
+      "endLine": 324
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
@@ -70373,8 +70396,8 @@
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 372,
-      "endLine": 421
+      "line": 418,
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
@@ -70389,48 +70412,48 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 877,
-      "endLine": 895
+      "line": 923,
+      "endLine": 941
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 898,
-      "endLine": 916
+      "line": 944,
+      "endLine": 962
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 739,
-      "endLine": 874
+      "line": 785,
+      "endLine": 920
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 424,
-      "endLine": 485
+      "line": 470,
+      "endLine": 531
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 490,
-      "endLine": 687
+      "line": 536,
+      "endLine": 733
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 692,
-      "endLine": 736
+      "line": 738,
+      "endLine": 782
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -70453,8 +70476,8 @@
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 362,
-      "endLine": 369
+      "line": 408,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
@@ -70501,8 +70524,8 @@
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 283,
-      "endLine": 360
+      "line": 329,
+      "endLine": 406
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
@@ -75046,23 +75069,23 @@
       "kind": "value",
       "file": "src/shared/save-data.ts",
       "line": 96,
-      "endLine": 119
+      "endLine": 128
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 121,
-      "endLine": 128
+      "line": 130,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 364,
-      "endLine": 376
+      "line": 373,
+      "endLine": 385
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
@@ -75077,96 +75100,96 @@
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 655,
-      "endLine": 666
+      "line": 664,
+      "endLine": 675
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 628,
-      "endLine": 641
+      "line": 637,
+      "endLine": 650
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 668,
-      "endLine": 675
+      "line": 677,
+      "endLine": 684
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 647,
-      "endLine": 653
+      "line": 656,
+      "endLine": 662
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 261,
-      "endLine": 362
+      "line": 270,
+      "endLine": 371
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 568,
-      "endLine": 621
+      "line": 577,
+      "endLine": 630
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 536,
-      "endLine": 539
+      "line": 545,
+      "endLine": 548
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 541,
-      "endLine": 553
+      "line": 550,
+      "endLine": 562
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 555,
-      "endLine": 558
+      "line": 564,
+      "endLine": 567
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 560,
-      "endLine": 566
+      "line": 569,
+      "endLine": 575
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
       "name": "RUN_HISTORY_SEED_CAP",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 144,
-      "endLine": 144
+      "line": 153,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 410,
-      "endLine": 425
+      "line": 419,
+      "endLine": 434
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
@@ -75181,8 +75204,8 @@
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 384,
-      "endLine": 406
+      "line": 393,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -76182,7 +76205,7 @@
       "kind": "value",
       "file": "src/shared/steam-achievement-api-names.ts",
       "line": 12,
-      "endLine": 35
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
@@ -97714,6 +97737,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#DEPTH_ACHIEVEMENTS",
+      "source": "file:src/shared/achievements.ts",
+      "target": "symbol:src/shared/achievements.ts#DEPTH_ACHIEVEMENTS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
       "source": "file:src/shared/achievements.ts",
       "target": "symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
@@ -97729,6 +97758,12 @@
       "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#getAchievementProgressSummary",
       "source": "file:src/shared/achievements.ts",
       "target": "symbol:src/shared/achievements.ts#getAchievementProgressSummary",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#REACH_FLOORS",
+      "source": "file:src/shared/achievements.ts",
+      "target": "symbol:src/shared/achievements.ts#REACH_FLOORS",
       "kind": "exports"
     },
     {
@@ -126108,6 +126143,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/depth-rules.ts",
+      "source": "file:src/renderer/store/runResolutionController.ts",
+      "target": "file:src/shared/depth-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/descent-record.ts",
       "source": "file:src/renderer/store/runResolutionController.ts",
       "target": "file:src/shared/descent-record.ts",
@@ -126117,6 +126158,12 @@
       "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/feat-unlocks.ts",
       "source": "file:src/renderer/store/runResolutionController.ts",
       "target": "file:src/shared/feat-unlocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runResolutionController.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/renderer/store/runResolutionController.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {
@@ -127308,6 +127355,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/warden-rules.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/warden-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/achievements.test.ts->src/shared/achievements.ts",
       "source": "file:src/shared/achievements.test.ts",
       "target": "file:src/shared/achievements.ts",
@@ -127341,6 +127394,12 @@
       "id": "imports:src/shared/achievements.ts->src/shared/contracts.ts",
       "source": "file:src/shared/achievements.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievements.ts->src/shared/depth-rules.ts",
+      "source": "file:src/shared/achievements.ts",
+      "target": "file:src/shared/depth-rules.ts",
       "kind": "imports"
     },
     {
@@ -152894,6 +152953,12 @@
       "id": "tested_by:src/shared/wanderer-rules.ts->file:src/shared/wanderer-rules.test.ts",
       "source": "file:src/shared/wanderer-rules.ts",
       "target": "file:src/shared/wanderer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/warden-rules.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/warden-rules.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {
