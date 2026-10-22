@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3322,
-    "codeFileCount": 1282,
-    "exportedSymbolCount": 4172,
+    "trackedFileCount": 3326,
+    "codeFileCount": 1286,
+    "exportedSymbolCount": 4179,
     "contentItemCount": 16,
     "mechanicCount": 88,
     "stateFieldCount": 165,
-    "relationshipCount": 11650
+    "relationshipCount": 11673
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 100049,
-      "sha256": "68a63ab6123ccd81bc10875cc1d2d2b2a65a8ccfbf44a014f82ee3d3650f8ea0"
+      "bytes": 100076,
+      "sha256": "817af3c16306ce49319258f3a2640cc28d0df13457aeec92d412cc06a65d9ee9"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "7890e6651efc3ae41136b40645cdeee550f8ca54cf450e72a2c6391d11ffe7cb"
+      "sha256": "8d85f11399b79141523e9286a5a876f716b7298799894cae69391ae0b3834ff1"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11083,6 +11083,12 @@
       "sha256": "6d1ad0df92874bfdc4777a0f3f83662d5fc4559a2c7636404ac51287e9b09658"
     },
     {
+      "path": "src/renderer/components/HoldSeeds.tsx",
+      "category": "source",
+      "bytes": 2971,
+      "sha256": "7a9af68c256b7c52c87efbc1cff4b15abd29690a51144dca9a4aababb1bcbcfc"
+    },
+    {
       "path": "src/renderer/components/iceSheet.test.ts",
       "category": "test",
       "bytes": 1096,
@@ -11869,6 +11875,24 @@
       "sha256": "7f6034239717b192018df47229fc31839fc35636161ef5244830aada5fd2b4ab"
     },
     {
+      "path": "src/renderer/components/spiralSealLayout.test.ts",
+      "category": "test",
+      "bytes": 2209,
+      "sha256": "9923b8a4e91a148a0077d252c9e9be345646cd192c6a86bf56d8b501764e8fd6"
+    },
+    {
+      "path": "src/renderer/components/spiralSealLayout.ts",
+      "category": "source",
+      "bytes": 2451,
+      "sha256": "0d96c8b75164cd59750878a92cc90c9f219fb44c4a7b7d5f6db7113cd6559673"
+    },
+    {
+      "path": "src/renderer/components/SpiralSeals.tsx",
+      "category": "source",
+      "bytes": 3588,
+      "sha256": "423de0d48efd2fd700f74d1e6c18691e6dd69b033caa8ae249cbfb821aac88ce"
+    },
+    {
       "path": "src/renderer/components/StartupIntro.module.css",
       "category": "source",
       "bytes": 11965,
@@ -12459,14 +12483,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 34803,
-      "sha256": "6793879c0edb29d6da9195faa3c31d43d2d5f3f370840b5872c9e0da644dd1ab"
+      "bytes": 35029,
+      "sha256": "d8b43069f0f78a183d00af9fe8c234351abd17f31412f11e512477392d722003"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 9418,
-      "sha256": "29613ffe08d68a9cf1bb9790f863f324671510fb4e37cbbca84fa75b15800fc3"
+      "bytes": 10145,
+      "sha256": "e57f3accbe92364b732653e5182274ac3a5775b9b4792ec124853778c6004711"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -14469,8 +14493,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 100421,
-      "sha256": "6d267660ae3a7497b4deb7590ac8f7599b04b3f709f313959b93ab9561a25701"
+      "bytes": 100448,
+      "sha256": "5a0018c4a17969a6a0993bbc4a244c1d7a351cb83ba0a1bca049af2eecb7b3a4"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -17073,8 +17097,8 @@
     {
       "path": "src/shared/spiral-rules.ts",
       "category": "source",
-      "bytes": 8247,
-      "sha256": "0b215389f774b1014204bca8b74c2fbce05abd685511977b030e4fbd3e0caca2"
+      "bytes": 8267,
+      "sha256": "9bc06442d36b76102791ca29ead1886e1c72a66434ed07ef15681c7a865a3809"
     },
     {
       "path": "src/shared/steam-achievement-api-names.ts",
@@ -17151,8 +17175,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 122782,
-      "sha256": "4db863e380c4c2eaf5a438aec6662b5377f995836f5aef5c4a8fd9c504dc64c2"
+      "bytes": 122809,
+      "sha256": "ceccd4391cc62a48a6818f8f58b02d51b0db478467bd3e0e638c5729df3ad977"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17529,8 +17553,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 21506,
-      "sha256": "5a98942cfb934e47255a6111e604c054446d8faea0f83cbe927773b92d7a30f9"
+      "bytes": 21925,
+      "sha256": "a26c072542f1d2062a8ff182ea5b068856987bbc53edc32398b4aae4436ea4ea"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17739,8 +17763,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
       "category": "other",
-      "bytes": 3903,
-      "sha256": "98796ff2c2b231b885abc29ec8bc5e20cfc0eb4194dd6d786c469afe37285a58"
+      "bytes": 4621,
+      "sha256": "406f0227eb7a3344315085bde84b6b4584fde74e7ede3ff92c82d76ece2caf23"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-031-save-schema-and-migration.md",
@@ -24687,6 +24711,23 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/HoldSeeds.tsx",
+      "path": "src/renderer/components/HoldSeeds.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 54,
+      "imports": [
+        "file:src/renderer/components/spiralSealLayout.ts",
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/HoldSeeds.tsx#HoldSeeds"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/iceSheet.test.ts",
       "path": "src/renderer/components/iceSheet.test.ts",
       "layer": "renderer",
@@ -26803,6 +26844,57 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/spiralSealLayout.test.ts",
+      "path": "src/renderer/components/spiralSealLayout.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 41,
+      "imports": [
+        "file:src/renderer/components/spiralSealLayout.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/spiralSealLayout.ts",
+      "path": "src/renderer/components/spiralSealLayout.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 53,
+      "imports": [
+        "file:src/renderer/components/tileBoardTransform.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/spiralSealLayout.ts#heldSeedCells",
+        "symbol:src/renderer/components/spiralSealLayout.ts#holdSeedGlow",
+        "symbol:src/renderer/components/spiralSealLayout.ts#SEAL_SETTLE_SECONDS",
+        "symbol:src/renderer/components/spiralSealLayout.ts#sealedSlabCells",
+        "symbol:src/renderer/components/spiralSealLayout.ts#sealSettleScale"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/spiralSealLayout.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/SpiralSeals.tsx",
+      "path": "src/renderer/components/SpiralSeals.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 60,
+      "imports": [
+        "file:src/renderer/components/spiralSealLayout.ts",
+        "file:src/renderer/components/tileBoardPick.ts",
+        "file:src/renderer/components/tileShatter.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/SpiralSeals.tsx#SpiralSeals"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/startupIntro.test.ts",
       "path": "src/renderer/components/startupIntro.test.ts",
       "layer": "renderer",
@@ -28628,7 +28720,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 734,
+      "lineCount": 737,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -28689,12 +28781,14 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 216,
+      "lineCount": 225,
       "imports": [
         "file:src/renderer/components/ColossusStone.tsx",
         "file:src/renderer/components/FoldWall.tsx",
+        "file:src/renderer/components/HoldSeeds.tsx",
         "file:src/renderer/components/LayerEdges.tsx",
         "file:src/renderer/components/MeteorStrike.tsx",
+        "file:src/renderer/components/SpiralSeals.tsx",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/TileBoardParticles.tsx",
@@ -44086,6 +44180,7 @@
         "file:src/renderer/components/elementScene.test.ts",
         "file:src/renderer/components/ElementSceneLayers.test.tsx",
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
+        "file:src/renderer/components/spiralSealLayout.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
@@ -50345,6 +50440,14 @@
       "endLine": 86
     },
     {
+      "id": "symbol:src/renderer/components/HoldSeeds.tsx#HoldSeeds",
+      "name": "HoldSeeds",
+      "kind": "function",
+      "file": "src/renderer/components/HoldSeeds.tsx",
+      "line": 24,
+      "endLine": 53
+    },
+    {
       "id": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
       "name": "buildIceCracks",
       "kind": "value",
@@ -52945,6 +53048,54 @@
       "endLine": 8
     },
     {
+      "id": "symbol:src/renderer/components/spiralSealLayout.ts#heldSeedCells",
+      "name": "heldSeedCells",
+      "kind": "value",
+      "file": "src/renderer/components/spiralSealLayout.ts",
+      "line": 29,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/spiralSealLayout.ts#holdSeedGlow",
+      "name": "holdSeedGlow",
+      "kind": "value",
+      "file": "src/renderer/components/spiralSealLayout.ts",
+      "line": 48,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/renderer/components/spiralSealLayout.ts#SEAL_SETTLE_SECONDS",
+      "name": "SEAL_SETTLE_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/spiralSealLayout.ts",
+      "line": 7,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/renderer/components/spiralSealLayout.ts#sealedSlabCells",
+      "name": "sealedSlabCells",
+      "kind": "value",
+      "file": "src/renderer/components/spiralSealLayout.ts",
+      "line": 10,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/components/spiralSealLayout.ts#sealSettleScale",
+      "name": "sealSettleScale",
+      "kind": "value",
+      "file": "src/renderer/components/spiralSealLayout.ts",
+      "line": 22,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/components/SpiralSeals.tsx#SpiralSeals",
+      "name": "SpiralSeals",
+      "kind": "function",
+      "file": "src/renderer/components/SpiralSeals.tsx",
+      "line": 18,
+      "endLine": 59
+    },
+    {
       "id": "symbol:src/renderer/components/StartupIntro.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -55053,8 +55204,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 733,
-      "endLine": 733
+      "line": 736,
+      "endLine": 736
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
@@ -55077,8 +55228,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 61,
-      "endLine": 215
+      "line": 65,
+      "endLine": 224
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -89656,6 +89807,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/HoldSeeds.tsx->symbol:src/renderer/components/HoldSeeds.tsx#HoldSeeds",
+      "source": "file:src/renderer/components/HoldSeeds.tsx",
+      "target": "symbol:src/renderer/components/HoldSeeds.tsx#HoldSeeds",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/iceSheet.ts->symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
       "source": "file:src/renderer/components/iceSheet.ts",
       "target": "symbol:src/renderer/components/iceSheet.ts#buildIceCracks",
@@ -91603,6 +91760,42 @@
       "id": "exports:src/renderer/components/shuffleFlipAnimation.ts->symbol:src/renderer/components/shuffleFlipAnimation.ts#STAGGER_MS",
       "source": "file:src/renderer/components/shuffleFlipAnimation.ts",
       "target": "symbol:src/renderer/components/shuffleFlipAnimation.ts#STAGGER_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/spiralSealLayout.ts->symbol:src/renderer/components/spiralSealLayout.ts#heldSeedCells",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "symbol:src/renderer/components/spiralSealLayout.ts#heldSeedCells",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/spiralSealLayout.ts->symbol:src/renderer/components/spiralSealLayout.ts#holdSeedGlow",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "symbol:src/renderer/components/spiralSealLayout.ts#holdSeedGlow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/spiralSealLayout.ts->symbol:src/renderer/components/spiralSealLayout.ts#SEAL_SETTLE_SECONDS",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "symbol:src/renderer/components/spiralSealLayout.ts#SEAL_SETTLE_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/spiralSealLayout.ts->symbol:src/renderer/components/spiralSealLayout.ts#sealedSlabCells",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "symbol:src/renderer/components/spiralSealLayout.ts#sealedSlabCells",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/spiralSealLayout.ts->symbol:src/renderer/components/spiralSealLayout.ts#sealSettleScale",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "symbol:src/renderer/components/spiralSealLayout.ts#sealSettleScale",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/SpiralSeals.tsx->symbol:src/renderer/components/SpiralSeals.tsx#SpiralSeals",
+      "source": "file:src/renderer/components/SpiralSeals.tsx",
+      "target": "symbol:src/renderer/components/SpiralSeals.tsx#SpiralSeals",
       "kind": "exports"
     },
     {
@@ -118392,6 +118585,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/HoldSeeds.tsx->src/renderer/components/spiralSealLayout.ts",
+      "source": "file:src/renderer/components/HoldSeeds.tsx",
+      "target": "file:src/renderer/components/spiralSealLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/HoldSeeds.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/HoldSeeds.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/HoldSeeds.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/HoldSeeds.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/HoldSeeds.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/HoldSeeds.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/iceSheet.test.ts->src/renderer/components/iceSheet.ts",
       "source": "file:src/renderer/components/iceSheet.test.ts",
       "target": "file:src/renderer/components/iceSheet.ts",
@@ -120687,6 +120904,54 @@
       "id": "imports:src/renderer/components/shuffleFlipAnimation.ts->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/shuffleFlipAnimation.ts",
       "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/spiralSealLayout.test.ts->src/renderer/components/spiralSealLayout.ts",
+      "source": "file:src/renderer/components/spiralSealLayout.test.ts",
+      "target": "file:src/renderer/components/spiralSealLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/spiralSealLayout.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/spiralSealLayout.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/spiralSealLayout.ts->src/renderer/components/tileBoardTransform.ts",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "file:src/renderer/components/tileBoardTransform.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/spiralSealLayout.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SpiralSeals.tsx->src/renderer/components/spiralSealLayout.ts",
+      "source": "file:src/renderer/components/SpiralSeals.tsx",
+      "target": "file:src/renderer/components/spiralSealLayout.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SpiralSeals.tsx->src/renderer/components/tileBoardPick.ts",
+      "source": "file:src/renderer/components/SpiralSeals.tsx",
+      "target": "file:src/renderer/components/tileBoardPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SpiralSeals.tsx->src/renderer/components/tileShatter.ts",
+      "source": "file:src/renderer/components/SpiralSeals.tsx",
+      "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SpiralSeals.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/SpiralSeals.tsx",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -123174,6 +123439,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/HoldSeeds.tsx",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/renderer/components/HoldSeeds.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/LayerEdges.tsx",
       "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "target": "file:src/renderer/components/LayerEdges.tsx",
@@ -123183,6 +123454,12 @@
       "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/MeteorStrike.tsx",
       "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "target": "file:src/renderer/components/MeteorStrike.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardSceneBoardGroup.tsx->src/renderer/components/SpiralSeals.tsx",
+      "source": "file:src/renderer/components/TileBoardSceneBoardGroup.tsx",
+      "target": "file:src/renderer/components/SpiralSeals.tsx",
       "kind": "imports"
     },
     {
@@ -144989,6 +145266,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/spiralSealLayout.ts->file:src/renderer/components/spiralSealLayout.test.ts",
+      "source": "file:src/renderer/components/spiralSealLayout.ts",
+      "target": "file:src/renderer/components/spiralSealLayout.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/StartupIntro.tsx->file:src/renderer/components/startupIntroComponent.test.tsx",
       "source": "file:src/renderer/components/StartupIntro.tsx",
       "target": "file:src/renderer/components/startupIntroComponent.test.tsx",
@@ -152414,6 +152697,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/gameplaySceneFrame.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/gameplaySceneFrame.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/spiralSealLayout.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/spiralSealLayout.test.ts",
       "kind": "tested_by"
     },
     {
