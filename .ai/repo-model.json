@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3295,
+    "trackedFileCount": 3303,
     "codeFileCount": 1265,
     "exportedSymbolCount": 4081,
     "contentItemCount": 16,
@@ -909,8 +909,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 19247,
-      "sha256": "956004b103373b44fe546f8ba0e3d6f1e5cc6249179bf3268e078addb7b15adf"
+      "bytes": 20275,
+      "sha256": "c880cdedd3b4e3126ddba04156b6e08af3e0cb80f5e1c093c3a3266bc9ee92e9"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -1307,6 +1307,66 @@
       "category": "documentation",
       "bytes": 6576,
       "sha256": "5c47a7382fa4e928d347a376367f54c094f2aea4f216fa3e33eef78b806f79d5"
+    },
+    {
+      "path": "docs/product/STEAM_AUDIT_VERIFICATION_2026-10-22.md",
+      "category": "documentation",
+      "bytes": 4044,
+      "sha256": "6634546e6c371bc9de94f58683bb744c0caf3a33289a86bd197ed209baec11dc"
+    },
+    {
+      "path": "docs/product/STEAM_GAME_PLAN_2026-10-22.md",
+      "category": "documentation",
+      "bytes": 24421,
+      "sha256": "0141fda67132179e9d4c1403e017ed8ee719da524a9f84f3f0c716906a428ef4"
+    },
+    {
+      "path": "docs/product/STEAM_PRODUCT_AUDIT_2026-10-22.md",
+      "category": "documentation",
+      "bytes": 19209,
+      "sha256": "27db6c389f647704f99fd10c83ad83a7c3a849c726d114fe37b2abe17693781c"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/all-checkboxes.csv",
+      "category": "documentation",
+      "bytes": 259756,
+      "sha256": "d5b940154412ec772262dc3979d623a6902b02769935e250336e6e6373ec7939"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/inventory-summary.json",
+      "category": "documentation",
+      "bytes": 22617,
+      "sha256": "bdd17052dc2cf3f5c65c158585ab74c2f6a03be16b4338c530620c98d555a365"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/source-file-inventory.csv",
+      "category": "documentation",
+      "bytes": 71659,
+      "sha256": "324282ad92fed845dd7ec536f5a582046e3e3f0fa329f444868ea2ea695865bd"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/task-code-reference-inventory.csv",
+      "category": "documentation",
+      "bytes": 67026,
+      "sha256": "cf69677a7d06e0e8645eeb4acc0dea8b7a246c8e498863c901ed47b7f8705a16"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/task-heading-and-table-occurrences.csv",
+      "category": "documentation",
+      "bytes": 267516,
+      "sha256": "2048252d47e4858f45412d07bd9690a5e887d0a11ae68fcd736f49e203c9048b"
+    },
+    {
+      "path": "docs/product/steam-audit-2026-10-22/task-reconciliation.csv",
+      "category": "documentation",
+      "bytes": 129245,
+      "sha256": "12d8a525fa2e1d82153a02466346e2d3a6a5d4fc9bd5b4eee35ccd4d91445a18"
+    },
+    {
+      "path": "docs/product/TASK_RECONCILIATION_2026-10-22.md",
+      "category": "documentation",
+      "bytes": 124800,
+      "sha256": "f67ed2fd4d84bdfdf033f9472da06eaf5e5b6669010e619c2104a20312f9e941"
     },
     {
       "path": "docs/PUZZLE_CONTRIBUTING.md",
@@ -2733,50 +2793,44 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 334349,
+      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 326270,
+      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 395039,
-      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
+      "bytes": 351103,
+      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 74007,
-      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
+      "bytes": 262999,
+      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 47216,
-      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
+      "bytes": 160622,
+      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 89413,
-      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
+      "bytes": 263076,
+      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 58618,
-      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
-    },
-    {
-      "path": "docs/ui-design-reference/390x844/01f-profile.png",
-      "category": "documentation",
-      "bytes": 84953,
-      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
+      "bytes": 241706,
+      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -9249,8 +9303,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 2024,
-      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
+      "bytes": 1931,
+      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9291,8 +9345,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 887,
-      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
+      "bytes": 842,
+      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9309,8 +9363,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 354,
-      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
+      "bytes": 333,
+      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9339,8 +9393,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 622,
-      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
+      "bytes": 589,
+      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9369,8 +9423,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 629,
-      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+      "bytes": 596,
+      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9759,8 +9813,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 267,
-      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+      "bytes": 248,
+      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -19775,12 +19829,6 @@
       "category": "other",
       "bytes": 316232,
       "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
-    },
-    {
-      "path": "zz-pw.config.ts",
-      "category": "configuration",
-      "bytes": 460,
-      "sha256": "e603bed1738a1fdf95c16471e2c994d8d6316bea9e0d2069aa2ce41d2329a5bf"
     }
   ],
   "files": [
