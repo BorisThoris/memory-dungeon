@@ -494,7 +494,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 288,
         present: ['sealSpiralRings', 'applySpiralTurn', 'spiralHolds', 'spiral_hall', 'SPIRAL_DESCENT_FLOORS'],
-        note: 'The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. The ring-collapse animation waits for DGE-030.'
+        note: 'The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. A sealed ring is a slab of stone on the board (SpiralSeals.tsx, DGE-030).'
     },
     {
         id: 'board.sleepers',

@@ -1,7 +1,7 @@
 # DGE-030: Art, audio and the preload for every new surface
 
 ## Status
-In progress (2026-10-22): the cue pass done; the board marks next
+In progress (2026-10-22): cues and board marks done; the boss rooms’ one moving thing and the Dread chip art remain
 
 ## Priority
 P1
@@ -55,4 +55,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Nine procedural cues, `playDeepGameSfx` in `gameSfx.ts`, played from `applyResolvedRun` (turns, Hold releases, Reprises and floor changes all pass there): the Hold's release (a swell, then bells up the cascade's own A-minor scale, one per doubling held, capped at `CHUNK_BREAK_MAX_NOTES`), the Warden dealing again (a low gong under a riffle), the Keeper's swap (stone on stone), the Cartographer's turn (a heavy page), a Spiral ring sealing (a falling thud), a Sleeper waking (a breath and a low bell), a mask dropping (a glass tick), a Wanderer's step (one soft footfall), the Dread climbing a tier (a low fifth that swells). `deepGameCues` diffs the run's own counters, so nothing new is stored.
 - Synthesised, not ACE-Step: short event cues in this game are procedural (the looking glass, the void spew), and a synthesised cue has no file to preload, so `asset-streaming.spec.ts` is untouched. Levels sit inside the existing realm cues' range (sum of voice gains 0.16 to 0.88 at 0.7 of the SFX gain, against the void spew's 1.9 and the looking glass's 0.8); not measured in LUFS, since there is no file.
 - Registered in `audioInteractionCoverage.ts` (`deep_game_cues`), covered by the hostile-AudioContext sweep, and unit-tested (`deepGameCues.test.ts`: one cue per counter that grew, the Dread only on a new floor whose tier moved).
-- Not done yet: the board marks (a sealed Spiral ring, the Hold's glow on held pairs), the boss rooms' one moving thing, the Dread chip art. Card-back marks for Wanderers, Masks and Sleepers stay out: the owner's rule that nothing face down sets a pair apart.
+- Board marks (no files, three.js planes like `LayerEdges` and `FoldWall`, behind the cards, never picked): **`SpiralSeals.tsx`**, a slab of dark stone with a pale rim and two seams on every sealed cell, settling from 1.18x into place over half a second when its ring seals (still with reduced motion), so a fallen ring reads as stone and not as an empty cell; **`HoldSeeds.tsx`**, a gold ember outline and a gold diamond on each cell a held pair left, breathing, brighter with every pair held and never past full (`holdSeedGlow`, tested out to 4096 pairs), still with reduced motion. Layout and glow in `spiralSealLayout.ts`, unit-tested; both looked at in the isolated browser on a hall room at desk and phone size, no console errors.
+- Not done yet: the boss rooms' one moving thing, the Dread chip art. Card-back marks for Wanderers, Masks and Sleepers stay out: the owner's rule that nothing face down sets a pair apart.

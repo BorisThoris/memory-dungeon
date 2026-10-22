@@ -308,6 +308,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * texture at a time under a frame budget while the beat plays, rather than all in the frame that
      * mounts it - an 830ms stall at the top of every floor (`createBoardTextureWarmupQueue`).
      */
+    // The Hold's seeds (`HoldSeeds.tsx`): the cells a held pair left, read off the run like the warm-up below.
+    const heldSeedIds = useAppStore((state) => state.run?.heldSeedIds);
     const nextFloorWarmupRef = useRef<((budgetMs: number) => boolean) | null>(null);
     useEffect(() => {
         if (runStatus !== 'levelComplete') return undefined;
@@ -685,6 +687,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                     textureRevision={textureRevision} />}
                 board={board}
                 compact={compact}
+                heldSeedIds={heldSeedIds}
                 runStatus={runStatus}
                 particleFrames={tileFrameBagsRef}
                 visualTime={visualTime}

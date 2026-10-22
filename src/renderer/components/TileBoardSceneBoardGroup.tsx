@@ -6,6 +6,8 @@ import { MeteorStrike } from './MeteorStrike';
 import { ColossusStone } from './ColossusStone';
 import { FoldWall } from './FoldWall';
 import { LayerEdges } from './LayerEdges';
+import { SpiralSeals } from './SpiralSeals';
+import { HoldSeeds } from './HoldSeeds';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
@@ -18,6 +20,8 @@ interface TileBoardSceneBoardGroupProps {
     distantCards?: ReactNode;
     board: BoardState;
     compact: boolean;
+    /** The Hold's held pairs' tile ids (`hold-rules.ts`), marked where they left the board. */
+    heldSeedIds?: readonly string[];
     runStatus: RunStatus;
     particleFrames: RefObject<Map<string, TileBezelFrameBag>>;
     visualTime: MutableRefObject<number>;
@@ -62,6 +66,7 @@ export const TileBoardSceneBoardGroup = ({
     distantCards,
     board,
     compact,
+    heldSeedIds,
     runStatus,
     particleFrames,
     visualTime,
@@ -107,6 +112,10 @@ export const TileBoardSceneBoardGroup = ({
         {board.fold && <FoldWall board={board} compact={compact} />}
         {/* Layers: the edge of the card waiting under each covered cell (`LayerEdges.tsx`). */}
         {board.beneath && <LayerEdges board={board} compact={compact} reduceMotion={reduceMotion} />}
+        {/* The Spiral: a slab of stone on every sealed cell (`SpiralSeals.tsx`). */}
+        {board.spiralRingsSealed ? <SpiralSeals board={board} compact={compact} reduceMotion={reduceMotion} time={visualTime} /> : null}
+        {/* The Hold: a gold seed where each held pair left the board (`HoldSeeds.tsx`). */}
+        {heldSeedIds && heldSeedIds.length > 0 ? <HoldSeeds board={board} heldSeedIds={heldSeedIds} compact={compact} reduceMotion={reduceMotion} time={visualTime} /> : null}
         {board.colossus?.form === 'fixed' && <ColossusStone key={board.level} board={board} compact={compact} reduceMotion={reduceMotion} rows={boardRows} time={visualTime} />}
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
             reduceMotion={reduceMotion} runStatus={runStatus} frames={particleFrames} cardHeat={cardHeat} combo={combo} comboTheme={comboTheme} time={visualTime}
