@@ -16983,8 +16983,8 @@
     {
       "path": "src/shared/sleeper-rules.ts",
       "category": "source",
-      "bytes": 8445,
-      "sha256": "c38b286bc490d04e6fd545dab9fa291e893321563cfb83c2f1a9e52d61d3d38f"
+      "bytes": 8624,
+      "sha256": "7f4d1d78cd11ebf46af1236cadab5e306c09c7aef80fee1bf8d73812ef74c4c5"
     },
     {
       "path": "src/shared/social-play-scope.test.ts",
@@ -17019,14 +17019,14 @@
     {
       "path": "src/shared/spiral-rules.test.ts",
       "category": "test",
-      "bytes": 6596,
-      "sha256": "7d04057f8ef6ed81a1e06de2f3c122bae2f794dec3dd135e973df196507aa461"
+      "bytes": 7000,
+      "sha256": "d05793788baaebc7470ffd75fc99fd913e164483f52b93c13513865040745c3b"
     },
     {
       "path": "src/shared/spiral-rules.ts",
       "category": "source",
-      "bytes": 7168,
-      "sha256": "47cdc2c2793758cd208e49f652297f17a3c22fc85a27d4d186807d752b4b3db8"
+      "bytes": 8247,
+      "sha256": "0b215389f774b1014204bca8b74c2fbce05abd685511977b030e4fbd3e0caca2"
     },
     {
       "path": "src/shared/steam-achievement-api-names.ts",
@@ -17637,8 +17637,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-021-the-spiral-board.md",
       "category": "other",
-      "bytes": 3788,
-      "sha256": "0b25c69ddf3f348f5dee72308947ea73f52db05f97c3a94f4aa398905eb775ae"
+      "bytes": 4509,
+      "sha256": "ee1cd7792b57b0e53bfcf897512f8eb0d707a42e7d686a57ae3b2a3dfe7a7270"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-022-dungeon-learns-you.md",
@@ -43170,7 +43170,7 @@
       "path": "src/shared/sleeper-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 136,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/odd-card-rules.ts",
@@ -43314,7 +43314,7 @@
       "path": "src/shared/spiral-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 109,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/cartographer-rules.ts",
@@ -43333,7 +43333,7 @@
       "path": "src/shared/spiral-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 132,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/cartographer-rules.ts",
@@ -75184,8 +75184,8 @@
       "name": "applySleeperTurn",
       "kind": "value",
       "file": "src/shared/sleeper-rules.ts",
-      "line": 102,
-      "endLine": 135
+      "line": 103,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/sleeper-rules.ts#dealSleepers",
@@ -75256,8 +75256,8 @@
       "name": "wakeAllSleepers",
       "kind": "value",
       "file": "src/shared/sleeper-rules.ts",
-      "line": 85,
-      "endLine": 96
+      "line": 86,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/sleeper-rules.ts#wakeSleeper",
@@ -75265,7 +75265,7 @@
       "kind": "value",
       "file": "src/shared/sleeper-rules.ts",
       "line": 66,
-      "endLine": 82
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/social-play-scope.ts#buildSocialScopeNote",
@@ -75480,8 +75480,8 @@
       "name": "applySpiralTurn",
       "kind": "value",
       "file": "src/shared/spiral-rules.ts",
-      "line": 104,
-      "endLine": 117
+      "line": 118,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/spiral-rules.ts#isSpiralFloor",
@@ -75497,7 +75497,7 @@
       "kind": "value",
       "file": "src/shared/spiral-rules.ts",
       "line": 45,
-      "endLine": 93
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/spiral-rules.ts#SPIRAL_DESCENT_FLOORS",
