@@ -111,6 +111,8 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'sleeper-wakes'
+    | 'sleeper-chain'
     | 'mask-drops'
     | 'reprise-pays'
     | 'reprise-miss'
@@ -1384,6 +1386,47 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'sleeper-wakes',
+        title: 'Sleeper wakes',
+        mechanic: 'From the Abyss some pairs are Sleepers: matched on a chain under three, they come back face down four turns later, in other cleared cells.',
+        graphMechanicIds: ['board.sleepers'],
+        tryThis: 'Match s with no chain behind you, then play four turns: s comes back, face down, somewhere else.',
+        build: () => {
+            const run = room(['s:e a:t b:m c:b', 'd:e e:t f:m g:b', 's:e a:t b:m c:b', 'd:e e:t f:m g:b'], { level: 41, misses: 6, streak: 0 });
+            return { ...run, board: { ...run.board!, tiles: run.board!.tiles.map((tile) => (tile.pairKey === 's' ? { ...tile, sleeper: true } : tile)) } };
+        },
+        script: [
+            { step: { do: 'match', pairKey: 's' }, says: 'a match under the chain of three: the Sleeper sleeps', expect: (r) => ((r.sleepingPairs ?? []).length === 1 ? null : `asleep ${(r.sleepingPairs ?? []).length}`) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'one turn', expect: statusIs('playing') },
+            { step: { do: 'match', pairKey: 'b' }, says: 'two', expect: statusIs('playing') },
+            { step: { do: 'missAny' }, says: 'three', expect: statusIs('playing') },
+            {
+                step: { do: 'missAny' },
+                says: 'the fourth turn wakes it, face down, in other cells',
+                expect: (r) => {
+                    const cards = (r.board?.tiles ?? []).map((tile, index) => ({ tile, index })).filter(({ tile }) => tile.pairKey === 's');
+                    return r.sleepersWokenThisFloor === 1 && cards.every(({ tile }) => tile.state === 'hidden') && cards.every(({ index }) => index !== 0 && index !== 8)
+                        ? null
+                        : `woken ${String(r.sleepersWokenThisFloor)}, s at ${cards.map(({ index, tile }) => `${index}:${tile.state}`).join(' ')}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'sleeper-chain',
+        title: 'Chain keeps it down',
+        mechanic: 'A Sleeper matched on a chain of three or more stays down for good.',
+        graphMechanicIds: ['board.sleepers', 'board.chain_chunk_fever'],
+        tryThis: 'Two links in hand: match s and it is the third, and s is gone for good.',
+        build: () => {
+            const run = room(['s:e a:t b:m c:b', 'd:e e:t f:m g:b', 's:e a:t b:m c:b', 'd:e e:t f:m g:b'], { level: 41, misses: 6, streak: 2 });
+            return { ...run, board: { ...run.board!, tiles: run.board!.tiles.map((tile) => (tile.pairKey === 's' ? { ...tile, sleeper: true } : tile)) } };
+        },
+        script: [
+            { step: { do: 'match', pairKey: 's' }, says: 'the third link keeps the Sleeper down', expect: (r) => ((r.sleepingPairs ?? []).length === 0 && r.sleepersKeptDownThisFloor === 1 ? null : `asleep ${(r.sleepingPairs ?? []).length}, kept ${String(r.sleepersKeptDownThisFloor)}`) }
+        ]
+    },
+    {
         id: 'mask-drops',
         title: 'A mask drops',
         mechanic: 'From the Deep a few backs lie: a masked card shows an element not its own until it is first turned, and only one card of a pair is ever masked. To every rule it is its true element.',
@@ -2472,7 +2515,7 @@ export const TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         tryThis: 'Take two turns on a raging floor: the second lights two cards. Match one before its fuse runs out.',
         seedPinned: 'Wildfire lights cards drawn from the run seed, and at some seeds both land on vine-held cards no turn can douse.',
         // Seed 90211 since rules 77: the reseed put the hall's own seed's two fires on vine-held cards.
-        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0, runSeed: 90_211 }) }),
+        build: () => room(EIGHT_PAIRS_GROWN, { level: 6, run: realmRun('ember', 'raging', { gold: 0, runSeed: 90_213 }) }),
         script: [
             { step: { do: 'match', pairKey: 'a' }, says: 'turn one', expect: (r) => ((r.board?.tiles ?? []).some((t) => t.fuse != null) ? 'fire on turn one' : null) },
             { step: { do: 'match', pairKey: 'h' }, says: 'turn two lights two cards on a three-turn fuse', expect: expectAll(realmEventIs('wildfire'), (r) => ((r.board?.tiles ?? []).filter((t) => t.fuse === 3).length === 2 ? null : 'not two cards on a fresh fuse')) },

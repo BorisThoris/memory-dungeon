@@ -134,6 +134,9 @@ export interface SoakRunReport {
     /** Masks (`mask-rules.ts`): masks dealt onto floors, and dropped by a first flip. */
     masksDealt: number;
     masksDropped: number;
+    /** Sleepers (`sleeper-rules.ts`): woken, and kept down by a chain. */
+    sleepersWoken: number;
+    sleepersKeptDown: number;
     /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
     keeperFloors: number;
     keeperSwaps: number;
@@ -608,6 +611,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const moved = (run.pinnedTileIds ?? []).find((id) => run.board!.tiles.findIndex((tile) => tile.id === id) !== before.board!.tiles.findIndex((tile) => tile.id === id));
         return moved ? `pinned ${moved} moved in the swap` : null;
     },
+    'a woken Sleeper is face down, and none sleeps past a cleared floor': (before, run) => {
+        if (!before || !run.board) return null;
+        if (run.status === 'levelComplete' && (run.sleepingPairs ?? []).length > 0) return 'a floor cleared with a Sleeper asleep';
+        if (run.board.level !== before.board?.level || runNonNegativeInteger(run.sleepersWokenThisFloor) <= runNonNegativeInteger(before.sleepersWokenThisFloor)) return null;
+        const woken = new Set((before.sleepingPairs ?? []).map((pair) => pair.pairKey).filter((key) => !(run.sleepingPairs ?? []).some((pair) => pair.pairKey === key)));
+        const up = run.board.tiles.find((tile) => woken.has(tile.pairKey) && tile.state !== 'hidden' && tile.state !== 'flipped' && tile.state !== 'matched');
+        return up ? `woken ${up.id} came back ${up.state}` : null;
+    },
     'a mask is never on both cards of a pair, and no face-up card wears one': (_before, run) => {
         const tiles = run.board?.tiles ?? [];
         const up = tiles.find((tile) => tile.mask != null && (tile.state === 'flipped' || tile.state === 'matched'));
@@ -767,6 +778,8 @@ export const soakRun = ({
     let carvesSpent = 0;
     let masksDealt = 0;
     let masksDropped = 0;
+    let sleepersWoken = 0;
+    let sleepersKeptDown = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
     let cartographerFloors = 0;
@@ -824,6 +837,10 @@ export const soakRun = ({
     const act = (action: string, next: RunState): void => {
         step += 1;
         if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
+        if (next.board?.level === run.board?.level) {
+            sleepersWoken += Math.max(0, runNonNegativeInteger(next.sleepersWokenThisFloor) - runNonNegativeInteger(run.sleepersWokenThisFloor));
+            sleepersKeptDown += Math.max(0, runNonNegativeInteger(next.sleepersKeptDownThisFloor) - runNonNegativeInteger(run.sleepersKeptDownThisFloor));
+        }
         if (action === 'descend' && isKeeperFloor(next.board)) keeperFloors += 1;
         if (action === 'descend' && isCartographerFloor(next.board)) cartographerFloors += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.cartographerTurnsThisFloor) > runNonNegativeInteger(run.cartographerTurnsThisFloor)) cartographerTurns += 1;
@@ -1098,6 +1115,8 @@ export const soakRun = ({
         carvesSpent,
         masksDealt,
         masksDropped,
+        sleepersWoken,
+        sleepersKeptDown,
         keeperFloors,
         keeperSwaps,
         cartographerFloors,

@@ -1,4 +1,4 @@
-import { WANDERER_COPY } from '../copy/oddCardBeat';
+import { WANDERER_COPY, SLEEPER_COPY } from '../copy/oddCardBeat';
 import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
 import { getFindableRewardText } from '../../shared/findables';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
@@ -408,6 +408,7 @@ export const getFocusedTileLiveLabel = ({
     // The Wanderers (`wanderer-rules.ts`): the trail on any card, and the Wanderer on its face.
     if (tile.footprint && tile.state === 'hidden') label += WANDERER_COPY.footprintLabel;
     if (tile.wanderer && faceUp) label += WANDERER_COPY.wandererLabel;
+    if (tile.sleeper && faceUp) label += SLEEPER_COPY.sleeperLabel;
     label += getPowerTargetAriaText(
         tile,
         peekPowerVisualActive,

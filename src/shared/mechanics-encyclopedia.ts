@@ -26,6 +26,7 @@ import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
 import { ECHO_CHAMBER_TURNS, REPRISE_FIRST_FLOOR, REPRISE_TURNS } from './reprise-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
+import { SLEEPER_CHAIN_HOLDS, SLEEPER_FROM_FLOOR, SLEEPER_WAKE_TURNS, sleepersForFloor } from './sleeper-rules';
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
 import { CARTOGRAPHER_TURN_EVERY_MATCHES } from './cartographer-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
@@ -34,7 +35,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 110 as const;
+export const ENCYCLOPEDIA_VERSION = 111 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -553,6 +554,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Wanderers',
         description:
             `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+    },
+    {
+        id: 'sys_sleepers',
+        title: 'Sleepers',
+        description:
+            `From floor ${SLEEPER_FROM_FLOOR} some pairs are **Sleepers**: ${sleepersForFloor(SLEEPER_FROM_FLOOR)} a floor, ${sleepersForFloor(55)} from floor 51. Match one on a **chain of ${SLEEPER_CHAIN_HOLDS} or more** and it stays down. Match it on less and it **sleeps**: ${SLEEPER_WAKE_TURNS} turns later it comes back, face down, in other cleared cells, to be found again. A Sleeper shows on its face, never on its back. If you clear the board while one sleeps, it wakes at once and the floor goes on.`
     },
     {
         id: 'sys_masks',

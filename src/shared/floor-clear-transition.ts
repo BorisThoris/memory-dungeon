@@ -1,3 +1,4 @@
+import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
 import { hasRelic, misersPurseGold } from './run-relic-rules';
 import { settleEndlessRent } from './endless-rent-rules';
@@ -25,6 +26,11 @@ import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     if (run.status === 'levelComplete' && run.lastLevelResult?.level === clearedBoard.level) return run;
+    // Sleepers (`sleeper-rules.ts`): a board cleared with a pair asleep wakes it, and the floor goes on.
+    if ((run.runRulesVersion ?? 0) >= SLEEPER_RULES_FROM && (run.sleepingPairs ?? []).length > 0) {
+        const woken = wakeAllSleepers(run, clearedBoard);
+        return { ...woken.run, status: 'playing', board: { ...woken.board, flippedTileIds: [] } };
+    }
     // The complete Warden (DGE-023): behind the wild or raging door, a board cleared without the release of
     // twelve is dealt again, and the floor goes on (`warden-rules.ts`).
     if (wardenTestHolds({ ...run, board: clearedBoard }) && !run.wardenFelled) {

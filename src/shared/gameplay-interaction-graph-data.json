@@ -2888,6 +2888,42 @@
             ]
         },
         {
+            "id": "board.sleepers",
+            "label": "Sleepers",
+            "kind": "board",
+            "role": "from_the_abyss_some_pairs_come_back_four_turns_after_a_match_unless_a_chain_of_three_kept_them_down",
+            "evidence": [
+                "src/shared/sleeper-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/shared/floor-clear-transition.ts",
+                "src/renderer/copy/oddCardBeat.ts"
+            ],
+            "reads": [
+                "tileStates",
+                "sleepingPairs",
+                "currentStreak",
+                "sleepersWokenThisFloor"
+            ],
+            "writes": [
+                "tileStates",
+                "sleepingPairs",
+                "sleepersWokenThisFloor"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "a-cleared-board-wakes-its-sleepers",
+                "a-sleeper-wakes-face-down",
+                "the-screen-never-sees-which-pair-sleeps"
+            ],
+            "tests": [
+                "src/shared/sleeper-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.masks",
             "label": "Masks",
             "kind": "board",
@@ -3101,6 +3137,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "board.sleepers",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Sleepers line in the key while any stands or sleeps, and a Sleeper named on its face"
+        },
         {
             "source": "power.reprise",
             "target": "feedback.gameplay_hud",
