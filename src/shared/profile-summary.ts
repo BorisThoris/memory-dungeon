@@ -98,13 +98,15 @@ const descentSummaryRow = (save: SaveData): ProfileSummaryRow => {
     const warden = record.wardenClears > 0
         ? `The Warden fell ${record.wardenClears === 1 ? 'once' : `${record.wardenClears} times`}${isEndlessUnlocked(save) ? ' · Endless open' : ''}`
         : 'The Warden still stands';
+    // The Depths (DGE-025): the deepest one opened rides the Warden's words.
+    const depths = record.bestDepth > 0 ? ` · Depth ${record.bestDepth} open` : '';
     return {
         id: 'descent',
         label: 'Deepest floor',
         // A cell holds a short value (the landscape phone grid wraps on anything longer); the act, the
         // Warden and the Dread are the source line, which Settings shows under it.
         value: act ? String(record.deepestFloor) : 'None',
-        source: act ? `${act.title} · ${warden}${dread ? ` · Dread ${dread.name}` : ''}` : warden
+        source: act ? `${act.title} · ${warden}${depths}${dread ? ` · Dread ${dread.name}` : ''}` : `${warden}${depths}`
     };
 };
 

@@ -466,7 +466,7 @@ describe('RunShell — The Margin', () => {
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={run} tools={[]} />);
         const line = screen.getByTestId('run-shell-line');
         expect(line).toHaveTextContent('every turn past par takes a miss');
-        expect(line).toHaveTextContent('every 5th turn the face-down cards are dealt again');
+        expect(line).toHaveTextContent('every fifth turn the face-down cards are dealt again');
         expect(screen.getByTestId('game-action-dock')).toHaveTextContent('The Warden');
     });
 

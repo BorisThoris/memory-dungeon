@@ -1,3 +1,5 @@
+import { normalizeDescentRecord } from '../../shared/descent-record';
+import { DEPTH_RUNGS } from '../../shared/depth-rules';
 import { hasFeatOption } from '../../shared/feat-unlocks';
 import { useCallback, useMemo, useState, type ReactElement } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -159,6 +161,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         );
     }, [browseModes, group, query]);
     const gateRows = useMemo(() => getChallengeModeGateRows(saveData), [saveData]);
+    const bestDepthOpened = normalizeDescentRecord(saveData.playerStats?.descent).bestDepth;
     const hasLibrary = browseModes.length > 1;
 
     const runModeAction = useCallback(
@@ -605,6 +608,20 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 {hasFeatOption(saveData, 'camp_evolve') ? <option value="evolve">{CLASSIC_SETUP_COPY.campEvolve}</option> : null}
                             </select>
                         </fieldset>
+                        {/* The Depths (`depth-rules.ts`, DGE-025): shown once the Warden has fallen. */}
+                        {bestDepthOpened > 0 ? (
+                            <fieldset className={styles.setupGroup}>
+                                <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.depthLabel}</legend>
+                                <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.depthHint}</p>
+                                <select aria-label={CLASSIC_SETUP_COPY.depthLabel} data-testid="setup-depth" value={setup.depth ?? 0}
+                                    onChange={event => setSetup({ ...setup, depth: Number(event.target.value) || undefined })}>
+                                    <option value={0}>{CLASSIC_SETUP_COPY.depthNone}</option>
+                                    {DEPTH_RUNGS.filter((rung) => rung.depth <= bestDepthOpened).map((rung) => (
+                                        <option key={rung.id} value={rung.depth}>{CLASSIC_SETUP_COPY.depthOption(rung.depth, rung.name)}</option>
+                                    ))}
+                                </select>
+                            </fieldset>
+                        ) : null}
                         <fieldset className={styles.setupGroup}>
                             <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.vowsLabel}</legend>
                             <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.vowsHint}</p>

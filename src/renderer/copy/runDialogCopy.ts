@@ -4,6 +4,9 @@
  * Abandon copy in particular is worth having in one place: it is the only screen in the game that
  * destroys progress, so the sentence explaining that has to stay blunt through translation.
  */
+/** A clock's step in words (the Depths wind clocks to two, three and four: `depth-rules.ts`). */
+const everyOrdinal = (every: number): string => ['', '', 'second', 'third', 'fourth', 'fifth', 'sixth'][every] ?? `${every}th`;
+
 export const PAUSE_DIALOG_COPY = {
     subtitle: 'Press P to resume.',
     /** A finger has no P key; the shell picks this line when its input is touch. */
@@ -131,20 +134,21 @@ export const RUN_SHELL_LINE_COPY = {
     studyKicker: 'Study the board',
     /** The Warden's floor (`warden-rules.ts`): both rules, said before the first flip, in the study window. */
     wardenStudy: (redealEvery: number): string =>
-        `The Warden: every turn past par takes a miss, and every ${redealEvery}th turn the face-down cards are dealt again.`,
+        `The Warden: every turn past par takes a miss, and every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
     wardenKicker: 'The Warden',
     /** The Keeper of Halls (`keeper-rules.ts`): its rule, and the turns to the next swap. */
+    depthKicker: (depth: number): string => `Depth ${depth}`,
     spiralKicker: 'The Spiral',
     spiralRules: (par: number, turns: number): string =>
         `Survive ${par} turns: ${Math.min(turns, par)} of ${par}. Clear the outer ring and it seals; fresh pairs are dealt inside.`,
     cartographerKicker: 'The Cartographer',
     cartographerRules: (every: number, matchesLeft: number): string =>
-        `Every ${every}rd match the deck beneath turns a quarter, clockwise. Next turn in ${matchesLeft} ${matchesLeft === 1 ? 'match' : 'matches'}.`,
+        `Every ${everyOrdinal(every)} match the deck beneath turns a quarter, clockwise. Next turn in ${matchesLeft} ${matchesLeft === 1 ? 'match' : 'matches'}.`,
     keeperKicker: 'The Keeper of Halls',
     keeperRules: (every: number, turnsLeft: number): string =>
-        `Every ${every}th turn the rooms swap sides; each card keeps its place in its room. Next swap in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`,
+        `Every ${everyOrdinal(every)} turn the rooms swap sides; each card keeps its place in its room. Next swap in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`,
     wardenRules: (redealEvery: number): string =>
-        `Every turn past par takes a miss. Every ${redealEvery}th turn the face-down cards are dealt again.`,
+        `Every turn past par takes a miss. Every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
     /** The complete Warden, met behind the wild or raging door (`warden-rules.ts`). */
     wardenTest: (fellPairs: number, dealtAgain: number): string =>
         `It falls only to a Hold released at ${fellPairs} pairs. An empty board is dealt again${dealtAgain > 0 ? ` (dealt ${dealtAgain} ${dealtAgain === 1 ? 'time' : 'times'})` : ''}; the re-deal waits while you hold.`

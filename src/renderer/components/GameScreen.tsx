@@ -1,16 +1,17 @@
+import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
 import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
-import { CARTOGRAPHER_RULES_FROM, CARTOGRAPHER_TURN_EVERY_MATCHES, isCartographerFloor } from '../../shared/cartographer-rules';
-import { KEEPER_RULES_FROM, KEEPER_SWAP_EVERY_TURNS, isKeeperFloor } from '../../shared/keeper-rules';
+import { CARTOGRAPHER_RULES_FROM, cartographerTurnEvery, isCartographerFloor } from '../../shared/cartographer-rules';
+import { KEEPER_RULES_FROM, isKeeperFloor, keeperSwapEvery } from '../../shared/keeper-rules';
 import type { CarveDirection } from '../../shared/contracts';
 import { heldRelicIds, relicRank, relicSlotsFull, RELIC_SLOTS } from '../../shared/run-relic-rules';
 import { RELIC_SLOT_COPY } from '../copy/relicSlotCopy';
 import RealmTravel from './RealmTravel';
 import { BOSS_DOOR_COPY, bossDoorRewardLine, bossRewardNote } from '../copy/bossRewardCopy';
 import { runBlueprints } from '../../shared/boss-reward-rules';
-import { WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS, awaitsWardenChoice, isWardenFloor, wardenTestHolds } from '../../shared/warden-rules';
+import { WARDEN_FELL_PAIRS, awaitsWardenChoice, isWardenFloor, wardenRedealEvery, wardenTestHolds } from '../../shared/warden-rules';
 import { WARDEN_CHOICE_COPY } from '../copy/runDialogCopy';
 import { RUN_SHELL_LINE_COPY } from '../copy/runDialogCopy';
 import { useResponsiveBoardLayout } from '../hooks/useResponsiveBoardLayout';
@@ -164,10 +165,10 @@ import { ColossusCard } from './ColossusCard';
 import { OddCardLegend } from './OddCardLegend';
 import { FOLD_LEGEND_ENTRY, LAYERS_LEGEND_ENTRY, hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
-import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, isHoldUnlocked } from '../../shared/hold-rules';
+import { canReleaseHold, canStartHold, heldPairCount, holdMeter, holdSegmentsFor, isHoldUnlocked } from '../../shared/hold-rules';
 import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
 import { CARVE_ARROW, CARVE_TOOL_COPY } from '../copy/carveToolCopy';
-import { CARVE_DIRECTIONS, CARVE_LINKS, canCarve, isCarveUnlocked, liveCarve } from '../../shared/carve-rules';
+import { CARVE_DIRECTIONS, canCarve, carveLinksFor, isCarveUnlocked, liveCarve } from '../../shared/carve-rules';
 import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
@@ -1629,8 +1630,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const spiralRulesShown = spiralHolds(run, run.board);
     // The dungeon learns you (`learned-rule-rules.ts`): the floor's told rule, from the study window on.
     const learnedRule = run.learnedRule ?? null;
+    // The Depths (`depth-rules.ts`): the run's Depth and the rung it adds, named before the first flip.
+    const depthShown = depthRung(run);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -1988,9 +1991,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                           disabled: !canCarve(run),
                           title: liveCarve(run)
                               ? CARVE_TOOL_COPY.set(liveCarve(run)!)
-                              : canCarve(run) ? CARVE_TOOL_COPY.ready(CARVE_LINKS)
+                              : canCarve(run) ? CARVE_TOOL_COPY.ready(carveLinksFor(run))
                               : run.board.flippedTileIds.length > 0 ? CARVE_TOOL_COPY.pendingFlip
-                              : CARVE_TOOL_COPY.filling(Math.min(CARVE_LINKS, holdMeter(run).segments), CARVE_LINKS),
+                              : CARVE_TOOL_COPY.filling(Math.min(carveLinksFor(run), holdMeter(run).segments), carveLinksFor(run)),
                           onClick: () => setCarvePickerOpen(true)
                       }
                   ]
@@ -2010,7 +2013,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                               ? HOLD_TOOL_COPY.held(heldPairCount(run))
                               : canStartHold(run) ? HOLD_TOOL_COPY.ready
                               : holdMeter(run).armed && run.board.flippedTileIds.length > 0 ? HOLD_TOOL_COPY.pendingFlip
-                              : HOLD_TOOL_COPY.filling(holdMeter(run).segments, HOLD_METER_SEGMENTS),
+                              : HOLD_TOOL_COPY.filling(holdMeter(run).segments, holdSegmentsFor(run)),
                           onClick: () => {
                               if (run.holding) releaseHold();
                               else startHold();
@@ -2205,6 +2208,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
                             <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                {depthShown ? (
+                                    <p className={styles.wardenRules} data-testid="depth-rule">
+                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.depthKicker(depthShown.depth)}</span> {depthShown.line}
+                                    </p>
+                                ) : null}
                                 {learnedRule ? (
                                     <p className={styles.wardenRules} data-rule={learnedRule.id} data-testid="learned-rule">
                                         <span className={styles.wardenRulesName}>{LEARNED_RULE_COPY.kicker}</span> {LEARNED_RULE_COPY.line(learnedRule)}
@@ -2220,21 +2228,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     <p className={styles.wardenRules} data-testid="cartographer-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.cartographerKicker}</span>{' '}
                                         {RUN_SHELL_LINE_COPY.cartographerRules(
-                                            CARTOGRAPHER_TURN_EVERY_MATCHES,
-                                            CARTOGRAPHER_TURN_EVERY_MATCHES - (run.matchResolutionsThisFloor % CARTOGRAPHER_TURN_EVERY_MATCHES)
+                                            cartographerTurnEvery(run),
+                                            cartographerTurnEvery(run) - (run.matchResolutionsThisFloor % cartographerTurnEvery(run))
                                         )}
                                     </p>
                                 ) : null}
                                 {keeperRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="keeper-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.keeperKicker}</span>{' '}
-                                        {RUN_SHELL_LINE_COPY.keeperRules(KEEPER_SWAP_EVERY_TURNS, KEEPER_SWAP_EVERY_TURNS - (run.turnsThisFloor % KEEPER_SWAP_EVERY_TURNS))}
+                                        {RUN_SHELL_LINE_COPY.keeperRules(keeperSwapEvery(run), keeperSwapEvery(run) - (run.turnsThisFloor % keeperSwapEvery(run)))}
                                     </p>
                                 ) : null}
                                 {wardenRulesShown ? (
                                     <p className={styles.wardenRules} data-testid="warden-rules">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
-                                        {RUN_SHELL_LINE_COPY.wardenRules(WARDEN_REDEAL_EVERY_TURNS)}
+                                        {RUN_SHELL_LINE_COPY.wardenRules(wardenRedealEvery(run))}
                                         {wardenTestHolds(run) ? <> {RUN_SHELL_LINE_COPY.wardenTest(WARDEN_FELL_PAIRS, run.wardenDealsAgainThisFloor ?? 0)}</> : null}
                                     </p>
                                 ) : null}
@@ -2639,7 +2647,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             })),
                             { label: CARVE_TOOL_COPY.cancel, onClick: () => setCarvePickerOpen(false), variant: 'primary' as const }
                         ]}
-                        subtitle={CARVE_TOOL_COPY.pickerBody(CARVE_LINKS)}
+                        subtitle={CARVE_TOOL_COPY.pickerBody(carveLinksFor(run))}
                         testId="carve-picker"
                         title={CARVE_TOOL_COPY.pickerTitle}
                     />

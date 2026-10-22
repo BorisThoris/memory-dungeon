@@ -3,6 +3,7 @@ import { DESCENT_ACTS, descentActForFloor } from './floor-mutator-schedule';
 import { DREAD_TIERS, dreadForRun, dreadTier } from './dread-rules';
 import { nextMilestone } from './milestone-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { MAX_DEPTH, runDepth } from './depth-rules';
 
 /**
  * Where a run ended, in the Descent's words (DGE-007): the act, the Dread tier, the next milestone
@@ -20,13 +21,15 @@ export interface DescentRunSummary {
     /** The boss the run was walking toward and the floors it fell short; null for a won run. */
     readonly next: { readonly name: string; readonly floorsShort: number } | null;
     readonly firsts: readonly string[];
+    /** The run's Depth (`depth-rules.ts`), 0 for the game as it was. */
+    readonly depth: number;
 }
 
 const actIndex = (id: string | null | undefined): number => DESCENT_ACTS.findIndex((act) => act.id === id);
 const tierIndex = (id: string | null | undefined): number => DREAD_TIERS.findIndex((tier) => tier.id === id);
 
 export const summarizeDescent = (
-    run: Pick<RunState, 'board' | 'stats' | 'runEndReason' | 'dreadRagingFloors' | 'dreadWildFloors'>,
+    run: Pick<RunState, 'board' | 'stats' | 'runEndReason' | 'dreadRagingFloors' | 'dreadWildFloors'> & Partial<Pick<RunState, 'depth'>>,
     recordAtStart: DescentRecordPersisted | null
 ): DescentRunSummary => {
     const floor = Math.max(1, runNonNegativeInteger(run.stats.highestLevel), runNonNegativeInteger(run.board?.level));
@@ -40,12 +43,14 @@ export const summarizeDescent = (
         if (won && recordAtStart.wardenClears === 0) firsts.push('the first Warden felled');
         if (tierIndex(tier.id) > 0 && tierIndex(tier.id) > tierIndex(recordAtStart.deepestDreadTierId)) firsts.push(`first time at ${tier.name}`);
         if (floor > recordAtStart.deepestFloor && recordAtStart.deepestFloor > 0) firsts.push(`deepest yet, past floor ${recordAtStart.deepestFloor}`);
+        if (won && runDepth(run) < MAX_DEPTH && runDepth(run) + 1 > recordAtStart.bestDepth) firsts.push(`Depth ${runDepth(run) + 1} opened`);
     }
     return {
         floor,
         actTitle: act.title,
         tierName: tier.name,
         next: won ? null : { name: ahead.name, floorsShort: Math.max(0, ahead.floor - floor) },
-        firsts
+        firsts,
+        depth: runDepth(run)
     };
 };

@@ -476,6 +476,13 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         note: 'Rules 85 census (2026-10-22): 0.379 after the Spiral reseed. Rules 82 census (2026-10-22): 0.384 after the Cartographer reseed. Rules 80 census (2026-10-21): 0.377 after the Masks reseed. Rules 76 census (2026-10-21): 0.380 after the relic-slots reseed. Rules 75 census (2026-10-21): 0.385 after the boss-doors reseed. Rules 74 census (2026-10-21): 0.386 after the Layers-apart reseed. Rules 73 census (2026-10-21): 0.382 after the miss bank reseed. Rules 72 census (2026-10-20): 0.383 after the Layers reseed. Rules 71 census (2026-10-20): 0.376 after the Fold reseed. The Wanderers (2026-10-20, DGE-009, rules 70): two pairs a floor from 13, three from 25, step one cell every third turn into a face-down unpinned neighbour and leave a footprint for one turn. The back mark the plan asked for was left off: nothing face down may set a pair apart (player-visible-board.ts). Run census: the Wanderers step on 0.388 of a run’s floors, which bands them common, from the floor-13 deal on.'
     },
     {
+        id: 'progression.depths',
+        verdict: 'changed',
+        generation: 290,
+        present: ['DEPTH_RUNGS', 'depthHas', 'depthRung', 'runDepth', 'bestDepth'],
+        note: 'The Depths (2026-10-22, DGE-025): felling the Warden at Depth n opens n + 1, up to twenty. Each rung is one existing constant made a step harder (a shorter study, no misses sold, two to open, no calm boss door, a smaller bank, a dearer camp, the boss clocks wound, the families earlier and larger, a dearer Hold and Carve, no opening shuffle, the Warden complete behind every door), named on the board crown. Depth 0 is the game as it was, so no rules-version reseed.'
+    },
+    {
         id: 'board.learned_rule',
         verdict: 'changed',
         generation: 289,

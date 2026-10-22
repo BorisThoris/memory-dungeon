@@ -1,3 +1,4 @@
+import { DEPTH_OPENING_MISSES, depthHas } from './depth-rules';
 import { misersVaultCatches, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 import { pairsForFloor } from './pair-curve';
 import type { MissBankGrant, RunState } from './contracts';
@@ -81,9 +82,9 @@ export const missBankFloorGrant = (run: Partial<Pick<RunState, 'board' | 'runRul
     MISS_BANK_FLOOR_GRANT + Math.floor(boardPairs(run) / MISS_BANK_GRANT_PAIRS);
 
 /** The cap this run is held to: four, from rules 73 one more for every six pairs on the floor, plus the Deep Pockets rank (`run-relic-rules.ts`). */
-export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion' | 'board'>>): number =>
-    // The Miser's Purse (`run-relic-rules.ts`) takes one slot back for the gold it doubles.
-    MISS_BANK_CAP + Math.floor(boardPairs(run) / MISS_BANK_CAP_PAIRS) + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0);
+export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion' | 'board' | 'depth'>>): number =>
+    // The Miser's Purse (`run-relic-rules.ts`) takes one slot back for the gold it doubles; Depth 5 (`depth-rules.ts`) one more.
+    MISS_BANK_CAP + Math.floor(boardPairs(run) / MISS_BANK_CAP_PAIRS) + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0) - (depthHas(run, 'bank_cap_down') ? 1 : 0);
 
 export type { MissBankGrant };
 
@@ -123,7 +124,8 @@ export const missBankSoonestToGo = (
 };
 
 /** What a run carries onto its first floor. */
-export const openingMissBank = (): MissBankGrant[] => [{ floor: 1, misses: MISS_BANK_OPENING }];
+/** Depth 3 (`depth-rules.ts`) opens the bank with two. */
+export const openingMissBank = (depth = 0): MissBankGrant[] => [{ floor: 1, misses: depthHas({ depth }, 'two_to_open') ? DEPTH_OPENING_MISSES : MISS_BANK_OPENING }];
 
 /**
  * A deposit, under the cap. Over it, the grants that would expire first make room: a chain held

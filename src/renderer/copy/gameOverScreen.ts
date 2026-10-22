@@ -158,7 +158,7 @@ export const wardenEndLine = (
 
 /** Where the run ended in the Descent (DGE-007): the act, and how far it fell short of the next boss. */
 export const descentEndLine = (descent: DescentRunSummary): string => {
-    const where = `Floor ${descent.floor} · ${descent.actTitle}`;
+    const where = `Floor ${descent.floor} · ${descent.actTitle}${descent.depth > 0 ? ` · Depth ${descent.depth}` : ''}`;
     if (!descent.next) return where;
     const { name, floorsShort } = descent.next;
     return floorsShort === 0 ? `${where} · fell at ${name}` : `${where} · ${floorsShort} ${floorsShort === 1 ? 'floor' : 'floors'} from ${name}`;

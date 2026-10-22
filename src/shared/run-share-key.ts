@@ -23,6 +23,8 @@ export type RunShareVariant = 'classic' | 'wild' | 'practice' | 'scholar' | 'pin
 
 export interface RunShareKey {
     readonly campPreference?: RunState['campPreference'];
+    /** The Depths (`depth-rules.ts`): only above 0, so older keys read as they always did. */
+    readonly depth?: number;
     readonly variant: RunShareVariant;
     readonly rulesVersion: number;
     readonly seed: number;
@@ -68,11 +70,19 @@ export const describeRunShareKey = (run: RunState): { key: RunShareKey } | { ref
     }
     const seed = run.lastRunSummary?.runSeed ?? run.runSeed;
     const rulesVersion = run.lastRunSummary?.runRulesVersion ?? run.runRulesVersion;
-    return { key: { rulesVersion, seed, variant, ...(rulesVersion >= 64 && run.campPreference ? { campPreference: run.campPreference } : {}) } };
+    return {
+        key: {
+            rulesVersion,
+            seed,
+            variant,
+            ...(rulesVersion >= 64 && run.campPreference ? { campPreference: run.campPreference } : {}),
+            ...(run.depth ? { depth: run.depth } : {})
+        }
+    };
 };
 
 export const encodeRunShareKey = (key: RunShareKey): string =>
-    `${RUN_SHARE_KEY_PREFIX}:${key.variant}:${key.rulesVersion}:${key.seed}${key.rulesVersion >= 64 && key.campPreference ? `:${key.campPreference}` : ''}`;
+    `${RUN_SHARE_KEY_PREFIX}:${key.variant}:${key.rulesVersion}:${key.seed}${key.rulesVersion >= 64 && key.campPreference ? `:${key.campPreference}` : ''}${key.depth ? `:d${key.depth}` : ''}`;
 
 const VARIANTS: ReadonlySet<string> = new Set<RunShareVariant>(['classic', 'pin_vow', 'practice', 'scholar', 'wild']);
 
@@ -82,7 +92,8 @@ const VARIANTS: ReadonlySet<string> = new Set<RunShareVariant>(['classic', 'pin_
  * required to be the whole of it.
  */
 export const parseRunShareKey = (input: string): RunShareKey | null => {
-    const match = /md1:([a-z_]+):(\d+):(\d+)(?::([a-z_]+))?/iu.exec(input.trim());
+    // The camp segment is one of its words, so a Depth segment (`:d5`) is never read as a camp.
+    const match = /md1:([a-z_]+):(\d+):(\d+)(?::(survive|study|score|evolve))?(?::d(\d+))?/iu.exec(input.trim());
     if (!match) {
         return null;
     }
@@ -97,6 +108,8 @@ export const parseRunShareKey = (input: string): RunShareKey | null => {
         return null;
     }
     if (match[4] && !['survive', 'study', 'score', 'evolve'].includes(match[4].toLowerCase())) return null;
+    const depth = match[5] ? Number.parseInt(match[5], 10) : 0;
     return { rulesVersion, seed, variant: variant as RunShareVariant,
-        ...(rulesVersion >= 64 && match[4] ? { campPreference: match[4].toLowerCase() as RunState['campPreference'] } : {}) };
+        ...(rulesVersion >= 64 && match[4] ? { campPreference: match[4].toLowerCase() as RunState['campPreference'] } : {}),
+        ...(Number.isSafeInteger(depth) && depth > 0 ? { depth } : {}) };
 };

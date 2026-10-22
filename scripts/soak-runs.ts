@@ -7,6 +7,7 @@
  * stop, bombs, relics. A violation prints its seed, floor, step, action and invariant, which is
  * enough to replay it exactly.
  */
+import { MAX_DEPTH } from '../src/shared/depth-rules';
 import { SOAK_PLAYERS, soakRun } from '../src/shared/run-soak';
 
 const argv = process.argv.slice(2);
@@ -17,11 +18,13 @@ const numberArg = (name: string, fallback: number): number => {
 };
 const seeds = numberArg('seeds', 200);
 const floors = numberArg('floors', 40);
+// The Depths (`depth-rules.ts`): `--depths` plays seed i at Depth i mod (MAX_DEPTH + 1), every rung many times over.
+const rotateDepths = argv.includes('--depths');
 
 let violations = 0;
 for (const [name, player] of Object.entries(SOAK_PLAYERS)) {
     const reports = Array.from({ length: seeds }, (_unused, index) =>
-        soakRun({ seed: 31_337 + index * 7_919, player, playerName: name, maxFloors: floors })
+        soakRun({ seed: 31_337 + index * 7_919, player, playerName: name, maxFloors: floors, depth: rotateDepths ? index % (MAX_DEPTH + 1) : 0 })
     );
     const found = reports.flatMap((report) => report.violations);
     violations += found.length;
@@ -37,6 +40,17 @@ for (const [name, player] of Object.entries(SOAK_PLAYERS)) {
             `realms: ${total((r) => r.realmDoors)} doors, ${total((r) => r.realmWeather)} weather, ${total((r) => r.realmReactions)} reactions, ${total((r) => r.realmDoused)} doused, ${total((r) => r.realmBurnouts)} burnouts, ${total((r) => r.realmVinesCut)} vines cut, ${total((r) => r.realmFrozen)} frozen, ${total((r) => r.realmPeaks)} peaks, ${total((r) => r.realmConfluences)} confluences, ${total((r) => r.realmAttunements)} attunements, ${total((r) => r.realmSmokeFloors)} smoke floors, ${total((r) => r.realmChillFloors)} chill floors, ${total((r) => r.elementCasts)} casts, ${total((r) => r.elementEmpowered)} charges, ${total((r) => r.elementReactions)} element reactions bursting ${total((r) => r.elementBurstPairs)} pairs, peak resonance ${Math.max(...reports.map((r) => r.elementResonancePeak))}, peak charge ${Math.max(...reports.map((r) => r.elementChargePeak))}, peak depth ${Math.max(...reports.map((r) => r.realmDepthPeak))}, ended ${JSON.stringify(ended)}, ` +
             `${found.length} violations\n`
     );
+    if (rotateDepths) {
+        const byDepth = Array.from({ length: MAX_DEPTH + 1 }, (_unused, depth) => {
+            const at = reports.filter((_report, index) => index % (MAX_DEPTH + 1) === depth);
+            // Where the players die at each Depth, read against the one-in-twelve Warden target.
+            // The soak never takes the win, so a run that cleared 59 floors stood before the Warden.
+            const reached = at.filter((report) => report.floorsCleared >= 59).length;
+            return `d${depth}: ${at.reduce((sum, report) => sum + report.floorsCleared, 0)} floors, ${reached}/${at.length} reached the Warden, ${at.reduce((sum, report) => sum + report.violations.length, 0)} violations`;
+        });
+        process.stdout.write(`  by depth: ${byDepth.join('; ')}
+`);
+    }
     for (const violation of found.slice(0, 10)) {
         process.stdout.write(`  ${JSON.stringify(violation)}\n`);
     }

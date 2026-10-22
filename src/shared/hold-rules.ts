@@ -1,3 +1,4 @@
+import { DEPTH_HOLD_SEGMENTS, depthHas } from './depth-rules';
 import { spendCarve } from './carve-rules';
 import { wardenFellsTo } from './warden-rules';
 import { wipeFootprints } from './wanderer-rules';
@@ -36,14 +37,17 @@ export const HOLD_METER_SEGMENTS = 6;
 /** The first floor the Hold is in the dock: the Living Dungeon's. */
 export const HOLD_FIRST_FLOOR = 13;
 
-const linksOf = (run: Pick<RunState, 'holdLinks'>): number => Math.min(HOLD_METER_SEGMENTS, runNonNegativeInteger(run.holdLinks));
+/** The Hold's meter for this run: Depth 13 (`depth-rules.ts`) asks seven links. */
+export const holdSegmentsFor = (run: Partial<Pick<RunState, 'depth'>> | null | undefined): number => (depthHas(run, 'hold_seven') ? DEPTH_HOLD_SEGMENTS : HOLD_METER_SEGMENTS);
+
+const linksOf = (run: Pick<RunState, 'holdLinks'> & Partial<Pick<RunState, 'depth'>>): number => Math.min(holdSegmentsFor(run), runNonNegativeInteger(run.holdLinks));
 
 export const isHoldUnlocked = (run: Pick<RunState, 'board'>): boolean => runNonNegativeInteger(run.board?.level) >= HOLD_FIRST_FLOOR;
 
 /** How full the meter is, 0..1, and whether it is armed. */
-export const holdMeter = (run: Pick<RunState, 'holdLinks'>): { segments: number; armed: boolean } => ({
+export const holdMeter = (run: Pick<RunState, 'holdLinks'> & Partial<Pick<RunState, 'depth'>>): { segments: number; armed: boolean } => ({
     segments: linksOf(run),
-    armed: linksOf(run) >= HOLD_METER_SEGMENTS
+    armed: linksOf(run) >= holdSegmentsFor(run)
 });
 
 /** Pairs held, waiting for the release. */
@@ -88,7 +92,7 @@ export const applyHoldTurn = (before: RunState, after: RunState): RunState => {
         return kept.length === (before.heldSeedIds ?? []).length ? after : { ...after, heldSeedIds: kept };
     }
     if (missed) return linksOf(before) > 0 ? { ...after, holdLinks: 0 } : after;
-    return matched ? { ...after, holdLinks: Math.min(HOLD_METER_SEGMENTS, linksOf(before) + 1) } : after;
+    return matched ? { ...after, holdLinks: Math.min(holdSegmentsFor(before), linksOf(before) + 1) } : after;
 };
 
 /**

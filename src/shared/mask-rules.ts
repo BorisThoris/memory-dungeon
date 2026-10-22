@@ -1,3 +1,4 @@
+import { DEPTH_MASKS_FROM, DEPTH_FAMILY_COUNT, depthHas } from './depth-rules';
 import { preferredDrawIndex } from './learned-rule-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
@@ -35,10 +36,14 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
 /** Deals the floor's masks: one card of each chosen pair wears an element the floor holds that is not its own. */
 export const dealMasks = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
 ): BoardState => {
-    const wanted = masksForFloor(board.level);
-    if (rulesVersion < MASK_RULES_FROM || wanted === 0 || board.pairCount < MASK_MIN_PAIRS) return board;
+    // Depth (`depth-rules.ts`): two from an earlier floor.
+    const wanted = masksForFloor(board.level)
+        || (depthHas({ depth }, 'masks_early') && board.level >= DEPTH_MASKS_FROM ? 2 : 0);
+    // Depth 17: three wherever there are any.
+    const dealt = wanted > 0 && depthHas({ depth }, 'masks_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
+    if (rulesVersion < MASK_RULES_FROM || dealt === 0 || board.pairCount < MASK_MIN_PAIRS) return board;
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         if (isSingletonUtilityPairKey(tile.pairKey)) continue;
@@ -49,7 +54,7 @@ export const dealMasks = (
     const pool = [...halves.entries()].filter(([, pair]) => isPlainPair(pair)).map(([pairKey]) => pairKey);
     const rng = createMulberry32(hashStringToSeed(`masks:${runSeed}:${rulesVersion}:${board.level}`));
     const masks = new Map<string, TileSuit>();
-    while (masks.size < wanted && pool.length > 0) {
+    while (masks.size < dealt && pool.length > 0) {
         // A learned rule (`learned-rule-rules.ts`) draws from its element's pairs first.
         const [pairKey] = pool.splice(preferredDrawIndex(pool, rng, preferSuit ? (key) => halves.get(key)?.[0]?.suit === preferSuit : null), 1);
         const pair = pairKey ? halves.get(pairKey) : undefined;

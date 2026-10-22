@@ -3,7 +3,7 @@ import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
-import { canCarve, carve, CARVE_DIRECTIONS, CARVE_LINKS } from './carve-rules';
+import { canCarve, carve, CARVE_DIRECTIONS, carveLinksFor } from './carve-rules';
 import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
 import { EVOLUTIONS, footprintTurns, hasEvolution } from './relic-evolution-rules';
@@ -660,7 +660,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     'a carve is set between turns for two links and no turn, and never outlives its floor': (before, run, action) => {
         if (action === 'carve') {
             if (!before?.board || before.board.flippedTileIds.length > 0) return 'carved with a card face up';
-            if ((before.holdLinks ?? 0) - (run.holdLinks ?? 0) !== CARVE_LINKS) return `links ${String(before.holdLinks)} -> ${String(run.holdLinks)}`;
+            if ((before.holdLinks ?? 0) - (run.holdLinks ?? 0) !== carveLinksFor(before)) return `links ${String(before.holdLinks)} -> ${String(run.holdLinks)}`;
             return run.turnsThisFloor === before.turnsThisFloor && run.stats.tries === before.stats.tries ? null : 'a carve cost a turn';
         }
         return action === 'descend' && run.carveDirection != null ? 'a carve outlived its floor' : null;
@@ -767,6 +767,7 @@ export const soakRun = ({
     maxFloors = 30,
     maxActions = 4000,
     campPreference,
+    depth = 0,
     observe
 }: {
     seed: number;
@@ -775,6 +776,8 @@ export const soakRun = ({
     maxFloors?: number;
     maxActions?: number;
     campPreference?: RunState['campPreference'];
+    /** The Depths (`depth-rules.ts`): every rung up to this one in play. */
+    depth?: number;
     /** Sees every action as it is taken, for an instrument measuring something the report does not count. */
     observe?: (before: RunState, next: RunState, action: string) => void;
 }): SoakRunReport => {
@@ -782,8 +785,8 @@ export const soakRun = ({
     const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
     const violations: SoakViolation[] = [];
     let run: RunState = player.wild
-        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference })
-        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference });
+        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth })
+        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth });
     let step = 0;
     let turns = 0;
     let purchases = 0;

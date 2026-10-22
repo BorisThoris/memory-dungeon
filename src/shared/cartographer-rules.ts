@@ -1,3 +1,4 @@
+import { DEPTH_CARTOGRAPHER_TURN_EVERY, depthHas } from './depth-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -15,6 +16,9 @@ import { runNonNegativeInteger } from './run-number-guards';
  */
 export const CARTOGRAPHER_RULES_FROM = 82;
 export const CARTOGRAPHER_TURN_EVERY_MATCHES = 3;
+/** The Cartographer's clock for this run: Depth 9 (`depth-rules.ts`) winds it to two. */
+export const cartographerTurnEvery = (run: Pick<RunState, 'depth'> | null | undefined): number =>
+    depthHas(run, 'cartographer_fast') ? DEPTH_CARTOGRAPHER_TURN_EVERY : CARTOGRAPHER_TURN_EVERY_MATCHES;
 
 export const isCartographerFloor = (board: Pick<BoardState, 'floorArchetypeId'> | null | undefined): boolean =>
     board?.floorArchetypeId === 'cartographer_hall';
@@ -61,7 +65,7 @@ export const rotateLowerLayer = (board: BoardState, pinnedTileIds: readonly stri
 export const applyCartographerTurn = (before: RunState, after: RunState): RunState => {
     if ((after.runRulesVersion ?? 0) < CARTOGRAPHER_RULES_FROM || after.status !== 'playing' || !after.board || !isCartographerFloor(after.board)) return after;
     const matches = runNonNegativeInteger(after.matchResolutionsThisFloor);
-    if (matches === runNonNegativeInteger(before.matchResolutionsThisFloor) || matches % CARTOGRAPHER_TURN_EVERY_MATCHES !== 0) return after;
+    if (matches === runNonNegativeInteger(before.matchResolutionsThisFloor) || matches % cartographerTurnEvery(after) !== 0) return after;
     return {
         ...after,
         board: rotateLowerLayer(after.board, after.pinnedTileIds ?? []),

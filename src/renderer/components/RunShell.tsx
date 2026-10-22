@@ -21,7 +21,7 @@ import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, MILESTONE_HUD_COPY, REALM_HUD_COPY } 
 import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { nextMilestone } from '../../shared/milestone-rules';
 import { endlessRentDue } from '../../shared/endless-rent-rules';
-import { WARDEN_REDEAL_EVERY_TURNS, isWardenFloor } from '../../shared/warden-rules';
+import { isWardenFloor, wardenRedealEvery } from '../../shared/warden-rules';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import ElementResonanceStrip from './ElementResonanceStrip';
 import FloorResident from './FloorResident';
@@ -382,7 +382,7 @@ const RunShell = ({
     // The Warden states its rules in the study window, before the first flip (DGE-005).
     const warden = isWardenFloor(run.board);
     const line = memorize
-        ? said ?? (warden ? RUN_SHELL_LINE_COPY.wardenStudy(WARDEN_REDEAL_EVERY_TURNS) : RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds))
+        ? said ?? (warden ? RUN_SHELL_LINE_COPY.wardenStudy(wardenRedealEvery(run)) : RUN_SHELL_LINE_COPY.study(pairCount, memorize.windowSeconds))
         : said ?? onboardingLine ?? hintLine ?? null;
     const lineTone = said ? feedbackPriority : 'info';
     const kicker = memorize

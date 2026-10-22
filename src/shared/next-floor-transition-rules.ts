@@ -81,7 +81,11 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // (`learned-rule-rules.ts`) chooses which element one of the three dealers lands on, never how many.
     const learnedRule = pickLearnedRule(run, bossBoard.level);
     const prefer = (id: LearnedRuleId) => ({ ...seeded, preferSuit: preferredSuitFor(learnedRule, id) });
-    const masked = dealSleepers(dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), prefer('wandering_suit')), prefer('masked_suit')), prefer('sleeping_suit'));
+    const depth = run.depth ?? 0;
+    const masked = dealSleepers(
+        dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), { ...prefer('wandering_suit'), depth }), { ...prefer('masked_suit'), depth }),
+        { ...prefer('sleeping_suit'), depth }
+    );
     const nextBoard = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);

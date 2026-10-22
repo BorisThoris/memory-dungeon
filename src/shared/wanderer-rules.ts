@@ -1,3 +1,4 @@
+import { DEPTH_FAMILY_COUNT, DEPTH_WANDERERS_FROM, depthHas } from './depth-rules';
 import { preferredDrawIndex } from './learned-rule-rules';
 import { footprintTurns } from './relic-evolution-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -56,9 +57,12 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
 /** Deals the floor's Wanderers onto plain pairs, from the run's seed, when the floor is dealt. */
 export const dealWanderers = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
 ): BoardState => {
-    const wanted = wandererPairsForFloor(board.level);
+    // Depth 7 (`depth-rules.ts`): two Wanderers from floor 7.
+    const early = depthHas({ depth }, 'wanderers_early') && board.level >= DEPTH_WANDERERS_FROM ? Math.max(2, wandererPairsForFloor(board.level)) : wandererPairsForFloor(board.level);
+    // Depth 19: three wherever there are any.
+    const wanted = early > 0 && depthHas({ depth }, 'wanderers_three') ? Math.max(early, DEPTH_FAMILY_COUNT) : early;
     if (rulesVersion < WANDERER_RULES_FROM || wanted === 0 || board.pairCount < WANDERER_MIN_PAIRS) return board;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
     const halves = new Map<string, Tile[]>();

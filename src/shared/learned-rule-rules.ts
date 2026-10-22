@@ -1,3 +1,4 @@
+import { DEPTH_LEARNED_FROM, depthHas } from './depth-rules';
 import type { LearnedRule, LearnedRuleId, RunState, TileSuit } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -31,8 +32,10 @@ export const mostMatchedSuit = (run: Pick<RunState, 'elementResonance'>): TileSu
 };
 
 /** The rule this floor is told: one of the table, about the element matched most. */
-export const pickLearnedRule = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'elementResonance'>, level: number): LearnedRule | null => {
-    if ((run.runRulesVersion ?? 0) < LEARNED_RULES_FROM || level < LEARNED_RULES_FIRST_FLOOR) return null;
+export const pickLearnedRule = (run: Pick<RunState, 'runSeed' | 'runRulesVersion' | 'elementResonance'> & Partial<Pick<RunState, 'depth'>>, level: number): LearnedRule | null => {
+    // Depth 18 (`depth-rules.ts`): from floor 25.
+    const first = depthHas(run, 'learned_early') ? DEPTH_LEARNED_FROM : LEARNED_RULES_FIRST_FLOOR;
+    if ((run.runRulesVersion ?? 0) < LEARNED_RULES_FROM || level < first) return null;
     const suit = mostMatchedSuit(run);
     if (!suit) return null;
     const rng = createMulberry32(hashStringToSeed(`learned:${run.runSeed}:${run.runRulesVersion}:${level}`));

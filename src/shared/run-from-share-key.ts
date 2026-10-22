@@ -27,7 +27,8 @@ export const createRunFromShareKey = (
         ...meta,
         runRulesVersionOverride: key.rulesVersion,
         runSeed: key.seed,
-        campPreference: key.campPreference
+        campPreference: key.campPreference,
+        ...(key.depth ? { depth: key.depth } : {})
     };
 
     switch (key.variant) {

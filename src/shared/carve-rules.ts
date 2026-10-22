@@ -1,3 +1,4 @@
+import { DEPTH_CARVE_LINKS, depthHas } from './depth-rules';
 import type { CarveDirection, RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -23,6 +24,9 @@ export const CARVE_DIRECTIONS: readonly CarveDirection[] = ['up', 'right', 'down
 // The Hold's meter (`hold-rules.ts` caps it); read here without importing the Hold, which imports the pop.
 const linksOf = (run: Pick<RunState, 'holdLinks'>): number => runNonNegativeInteger(run.holdLinks);
 
+/** A carve's price for this run: Depth 14 (`depth-rules.ts`) asks three links. */
+export const carveLinksFor = (run: Partial<Pick<RunState, 'depth'>> | null | undefined): number => (depthHas(run, 'carve_three') ? DEPTH_CARVE_LINKS : CARVE_LINKS);
+
 export const isCarveUnlocked = (run: Pick<RunState, 'board' | 'runRulesVersion'>): boolean =>
     (run.runRulesVersion ?? 0) >= CARVE_FROM && runNonNegativeInteger(run.board?.level) >= CARVE_FIRST_FLOOR;
 
@@ -35,12 +39,12 @@ export const canCarve = (run: RunState): boolean =>
     run.board.flippedTileIds.length === 0 &&
     isCarveUnlocked(run) &&
     !isCarveDirection(run.carveDirection) &&
-    linksOf(run) >= CARVE_LINKS;
+    linksOf(run) >= carveLinksFor(run);
 
 /** Set the carve: two links spent, the direction on the board until a pop uses it. */
 export const carve = (run: RunState, direction: CarveDirection): RunState =>
     canCarve(run) && isCarveDirection(direction)
-        ? { ...run, carveDirection: direction, holdLinks: linksOf(run) - CARVE_LINKS, carvesThisFloor: runNonNegativeInteger(run.carvesThisFloor) + 1 }
+        ? { ...run, carveDirection: direction, holdLinks: linksOf(run) - carveLinksFor(run), carvesThisFloor: runNonNegativeInteger(run.carvesThisFloor) + 1 }
         : run;
 
 /** The carve a pop reads, or null. */

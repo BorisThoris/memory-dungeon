@@ -1,3 +1,4 @@
+import { DEPTH_STORE_PRICE_SHARE, depthHas } from './depth-rules';
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
 import { grantMisses, missBankCap, missesLeft } from './miss-bank';
@@ -115,7 +116,7 @@ export type StoreRun = Pick<
     RunState,
     'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics' | 'storeStock'
     | 'runRulesVersion' | 'elementalEssence' | 'elementalFocus' | 'elementStreak' | 'elementalPrimeFloor'
->;
+> & Partial<Pick<RunState, 'depth'>>;
 
 /**
  * What a stop has on its shelves. Rolled once from the seed and the floor, so a shared run
@@ -151,9 +152,11 @@ export const runGold = (run: Pick<RunState, 'gold'>): number => runNonNegativeIn
 export const storePurchaseCount = (run: Pick<RunState, 'storePurchases'>, id: StoreItemId): number =>
     runNonNegativeInteger(run.storePurchases?.[id] ?? 0);
 
-export const storePrice = (run: Pick<RunState, 'storePurchases'> & Partial<Pick<RunState, 'runRulesVersion'>>, id: StoreItemId): number => {
+export const storePrice = (run: Pick<RunState, 'storePurchases'> & Partial<Pick<RunState, 'runRulesVersion' | 'depth'>>, id: StoreItemId): number => {
     const item = (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
-    return item.basePrice + item.priceStep * storePurchaseCount(run, id);
+    const price = item.basePrice + item.priceStep * storePurchaseCount(run, id);
+    // Depth 6 (`depth-rules.ts`): a quarter more, rounded up.
+    return depthHas(run, 'dearer_store') ? Math.ceil(price * DEPTH_STORE_PRICE_SHARE) : price;
 };
 
 export interface StoreOfferRow {
@@ -172,7 +175,11 @@ export interface StoreOfferRow {
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS).filter((item) => isStocked(run, item.id)).map((item) => {
+    (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS)
+        .filter((item) => isStocked(run, item.id))
+        // Depth 2 (`depth-rules.ts`): the store sells no misses.
+        .filter((item) => !(item.id === 'miss' && depthHas(run, 'no_misses_sold')))
+        .map((item) => {
         const price = storePrice(run, item.id);
         let blocked: StoreOfferRow['blocked'] = null;
         let essenceCost: number | undefined;

@@ -3493,6 +3493,7 @@ export const MIN_TEST_HALL_CHECKS = 2;
 export const TEST_HALL_CHECKED_ELSEWHERE: Readonly<Record<string, string>> = {
     'progression.run_setup': 'Run setup happens before any board: the soak plays whole runs from it at every setup, and the playtest starts runs from the main menu.',
     'persistence.run_summary': 'The run summary is written when a run ends: the soak finishes runs to it, and the playtest reads it on the results screen.',
+    'progression.depths': 'A Depth is chosen before any board: the soak plays every rung with --depths, and the unit tests walk each rung against the constant it names.',
     'simulation.gameplay_replay': 'Replay re-runs a recorded journal: the endless sim verifies a replay on every floor it plays, at every seed it tops up.',
     'simulation.build_evaluation': 'Build evaluation scores whole runs, not a board: the balance simulation and the seed sweep gate drive it over many seeds.'
 };

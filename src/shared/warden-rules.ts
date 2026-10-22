@@ -1,3 +1,4 @@
+import { DEPTH_WARDEN_REDEAL_EVERY, depthHas } from './depth-rules';
 import type { BoardState, RunState } from './contracts';
 import { parTurnsForRun } from './floor-par';
 import { missesLeft, spendMiss } from './miss-bank';
@@ -40,8 +41,11 @@ export const WARDEN_FELL_PAIRS = 12;
 export const WARDEN_DEAL_AGAIN_PAIRS = 6;
 
 /** Whether this Warden is the test: rules 78, its floor, met behind the wild or raging door. */
-export const wardenTestHolds = (run: Pick<RunState, 'runRulesVersion' | 'realmSeverity' | 'board'>): boolean =>
-    (run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM && isWardenFloor(run.board) && (run.realmSeverity === 'wild' || run.realmSeverity === 'raging');
+export const wardenTestHolds = (run: Pick<RunState, 'runRulesVersion' | 'realmSeverity' | 'board'> & Partial<Pick<RunState, 'depth'>>): boolean =>
+    (run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM &&
+    isWardenFloor(run.board) &&
+    // Depth 20 (`depth-rules.ts`): the calm door too.
+    (run.realmSeverity === 'wild' || run.realmSeverity === 'raging' || depthHas(run, 'warden_always'));
 
 /** Whether a release of this many held pairs fells the Warden. */
 export const wardenFellsTo = (run: Pick<RunState, 'runRulesVersion' | 'realmSeverity' | 'board'>, heldPairs: number): boolean =>
@@ -74,9 +78,12 @@ export const isWardenFloor = (board: Pick<BoardState, 'floorArchetypeId'> | null
     board?.floorArchetypeId === 'warden_hall';
 
 /** Whether this many turns into the floor is a re-deal turn. */
-export const isWardenRedealTurn = (turnsThisFloor: number): boolean => {
+/** The Warden's re-deal clock for this run: Depth 10 (`depth-rules.ts`) winds it to four. */
+export const wardenRedealEvery = (run: Pick<RunState, 'depth'> | null | undefined): number => (depthHas(run, 'warden_fast') ? DEPTH_WARDEN_REDEAL_EVERY : WARDEN_REDEAL_EVERY_TURNS);
+
+export const isWardenRedealTurn = (turnsThisFloor: number, every = WARDEN_REDEAL_EVERY_TURNS): boolean => {
     const turns = runNonNegativeInteger(turnsThisFloor);
-    return turns > 0 && turns % WARDEN_REDEAL_EVERY_TURNS === 0;
+    return turns > 0 && turns % every === 0;
 };
 
 /** The face-down, unpinned cards dealt again among their own cells. Ids, pairs and every other card stay. */
@@ -116,7 +123,7 @@ export const applyWardenTurn = (before: RunState, after: RunState): RunState => 
                   };
     }
     // The complete Warden waits while a Hold is held (DGE-023): the stack is the planned build it tests.
-    if (run.status === 'playing' && isWardenRedealTurn(turns) && !((run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM && run.holding)) {
+    if (run.status === 'playing' && isWardenRedealTurn(turns, wardenRedealEvery(run)) && !((run.runRulesVersion ?? 0) >= WARDEN_TEST_FROM && run.holding)) {
         const seed = `warden:${Math.floor(run.runSeed)}:${run.runRulesVersion}:${run.board!.level}:${turns}`;
         run = {
             ...run,

@@ -2888,6 +2888,37 @@
             ]
         },
         {
+            "id": "progression.depths",
+            "label": "The Depths",
+            "kind": "progression",
+            "role": "felling_the_warden_opens_the_next_of_twenty_depths_each_adding_one_named_rule_to_every_run_played_there",
+            "evidence": [
+                "src/shared/depth-rules.ts",
+                "src/shared/run-creation-rules.ts",
+                "src/shared/descent-record.ts",
+                "src/shared/run-share-key.ts",
+                "src/renderer/components/ChooseYourPathScreen.tsx",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "depth"
+            ],
+            "writes": [
+                "depth"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "depth-zero-is-the-game-as-it-was",
+                "one-named-rule-a-rung",
+                "the-crown-names-the-deepest-rung"
+            ],
+            "tests": [
+                "src/shared/depth-rules.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.learned_rule",
             "label": "The dungeon learns you",
             "kind": "board",
@@ -3207,6 +3238,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "progression.depths",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the Depth and its rung's rule on the board crown, the picker at run setup"
+        },
         {
             "source": "board.learned_rule",
             "target": "feedback.gameplay_hud",

@@ -1,3 +1,4 @@
+import { MAX_DEPTH, depthHas } from './depth-rules';
 import {
     GAME_RULES_VERSION,
     INITIAL_RECALL_FOCUS,
@@ -23,6 +24,8 @@ import { enterRealmFloor, openingRealmDoor } from './realm-rules';
 
 export interface CreateRunOptions {
     campPreference?: RunState['campPreference'];
+    /** The Depths (`depth-rules.ts`): every rung up to this one in play. */
+    depth?: number;
     runSeed?: number;
     gameMode?: RunState['gameMode'];
     activeMutators?: MutatorId[];
@@ -113,7 +116,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         achievementsEnabled: !options.practiceMode && options.passAndPlaySeats == null,
         debugUsed: false,
         debugPeekActive: false,
-        shuffleCharges: INITIAL_SHUFFLE_CHARGES,
+        // Depth 15 (`depth-rules.ts`): no shuffle charge to start.
+        shuffleCharges: depthHas({ depth: options.passAndPlaySeats == null ? options.depth ?? 0 : 0 }, 'no_shuffle_start') ? 0 : INITIAL_SHUFFLE_CHARGES,
         pinnedTileIds: [],
         powersUsedThisRun: false,
         timerState: createTimerState({ memorizeRemainingMs: null }),
@@ -122,6 +126,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         runSeed,
         runRulesVersion: rulesVersion,
         ...(rulesVersion >= 64 && options.campPreference ? { campPreference: options.campPreference } : {}),
+        // A shared table plays the game as it is: no Depth.
+        ...(options.depth && options.passAndPlaySeats == null ? { depth: Math.min(MAX_DEPTH, Math.max(0, Math.floor(options.depth))) } : {}),
         gameMode,
         shuffleNonce: 0,
         activeMutators,
@@ -191,7 +197,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         chunkDropsThisRun: 0,
         bestRippleThisFloor: 0,
         turnsThisFloor: 0,
-        missBank: openingMissBank(),
+        missBank: openingMissBank(options.passAndPlaySeats == null ? options.depth ?? 0 : 0),
         gold: 0,
         storePurchases: {},
         relics: [],

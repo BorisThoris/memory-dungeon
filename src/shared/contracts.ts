@@ -1063,6 +1063,8 @@ export interface RunState {
     spiralRingsSealedThisFloor?: number;
     /** The dungeon learns you (`learned-rule-rules.ts`, DGE-022): the rule this floor was told, or none. */
     learnedRule?: LearnedRule | null;
+    /** The Depths (`depth-rules.ts`, DGE-025): the run's Depth, every rung up to it in play; 0 is the game as it was. */
+    depth?: number;
     repriseUsedThisFloor?: boolean;
     reprisesThisRun?: number;
     endless?: boolean;
@@ -1186,7 +1188,7 @@ export interface DescentRecordPersisted {
     deepestActId: 'gate' | 'living_dungeon' | 'deep' | 'abyss' | null;
     /** A `DREAD_TIERS` id (`dread-rules.ts`). */
     deepestDreadTierId: 'quiet' | 'stirring' | 'restless' | 'hungry' | 'awake' | 'watching' | 'knows' | 'coming' | null;
-    /** The deepest Depth (DGE-025); zero until Depths exist. */
+    /** The Depths (`depth-rules.ts`, DGE-025): the deepest Depth opened - each Warden felled at Depth n opens n + 1. */
     bestDepth: number;
 }
 

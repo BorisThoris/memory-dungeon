@@ -1,3 +1,4 @@
+import { DEPTH_SLEEPERS_FROM, DEPTH_FAMILY_COUNT, depthHas } from './depth-rules';
 import { preferredDrawIndex } from './learned-rule-rules';
 import type { BoardState, RunState, SleepingPair, Tile, TileSuit } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
@@ -35,10 +36,14 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
 /** Deals the floor's Sleepers onto plain pairs, from the run's seed. */
 export const dealSleepers = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
 ): BoardState => {
-    const wanted = sleepersForFloor(board.level);
-    if (rulesVersion < SLEEPER_RULES_FROM || wanted === 0 || board.pairCount < SLEEPER_MIN_PAIRS) return board;
+    // Depth (`depth-rules.ts`): two from an earlier floor.
+    const wanted = sleepersForFloor(board.level)
+        || (depthHas({ depth }, 'sleepers_early') && board.level >= DEPTH_SLEEPERS_FROM ? 2 : 0);
+    // Depth 16: three wherever there are any.
+    const dealt = wanted > 0 && depthHas({ depth }, 'sleepers_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
+    if (rulesVersion < SLEEPER_RULES_FROM || dealt === 0 || board.pairCount < SLEEPER_MIN_PAIRS) return board;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
@@ -48,7 +53,7 @@ export const dealSleepers = (
     const pool = [...halves.entries()].filter(([pairKey, pair]) => !marked.has(pairKey) && isPlainPair(pair)).map(([pairKey]) => pairKey);
     const rng = createMulberry32(hashStringToSeed(`sleepers:${runSeed}:${rulesVersion}:${board.level}`));
     const chosen = new Set<string>();
-    while (chosen.size < wanted && pool.length > 0) {
+    while (chosen.size < dealt && pool.length > 0) {
         // A learned rule (`learned-rule-rules.ts`) draws from its element's pairs first.
         const [pairKey] = pool.splice(preferredDrawIndex(pool, rng, preferSuit ? (key) => halves.get(key)?.[0]?.suit === preferSuit : null), 1);
         if (pairKey) chosen.add(pairKey);

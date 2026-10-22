@@ -1,3 +1,4 @@
+import { DEPTH_STUDY_SHARE, depthHas } from './depth-rules';
 import {
     MATCH_DELAY_MS,
     MEMORIZE_BASE_MS,
@@ -75,6 +76,10 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     let ms = getMemorizeDuration(level, run.board?.tiles.length);
     if (hasMutator(run, 'short_memorize')) {
         ms = Math.max(MEMORIZE_MIN_MS, ms - 350);
+    }
+    // Depth 1 (`depth-rules.ts`): the study window a quarter shorter.
+    if (depthHas(run, 'short_study')) {
+        ms = Math.max(MEMORIZE_MIN_MS, Math.round(ms * DEPTH_STUDY_SHARE));
     }
     /*
      * Calm pacing, the setup sheet's replacement for the Meditation card. `resolveDelayMultiplier`

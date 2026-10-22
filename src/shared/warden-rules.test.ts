@@ -51,7 +51,7 @@ describe('the Warden (DGE-005)', () => {
     });
 
     it('re-deals the face-down cards on every fifth turn, keeping ids, pairs, pinned and face-up cards', () => {
-        expect([1, 2, 3, 4, 5, 6, 10].map(isWardenRedealTurn)).toEqual([false, false, false, false, true, false, true]);
+        expect([1, 2, 3, 4, 5, 6, 10].map((turn) => isWardenRedealTurn(turn))).toEqual([false, false, false, false, true, false, true]);
         const run = wardenRun();
         const tiles = run.board!.tiles;
         // A matched pair stays put: its two cards, with the counter that says so.

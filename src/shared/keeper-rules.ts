@@ -1,3 +1,4 @@
+import { DEPTH_KEEPER_SWAP_EVERY, depthHas } from './depth-rules';
 import type { BoardState, RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -45,14 +46,17 @@ export const swapRooms = (board: BoardState, pinnedTileIds: readonly string[]): 
 };
 
 /** Whether this many turns into the floor is a swap turn. */
-export const isKeeperSwapTurn = (turnsThisFloor: number): boolean =>
-    turnsThisFloor > 0 && turnsThisFloor % KEEPER_SWAP_EVERY_TURNS === 0;
+/** The Keeper's clock for this run: Depth 8 (`depth-rules.ts`) winds it to three. */
+export const keeperSwapEvery = (run: Pick<RunState, 'depth'> | null | undefined): number => (depthHas(run, 'keeper_fast') ? DEPTH_KEEPER_SWAP_EVERY : KEEPER_SWAP_EVERY_TURNS);
+
+export const isKeeperSwapTurn = (turnsThisFloor: number, every = KEEPER_SWAP_EVERY_TURNS): boolean =>
+    turnsThisFloor > 0 && turnsThisFloor % every === 0;
 
 /** Applied after every resolved turn, before the Wanderers: on the fourth, the rooms swap. */
 export const applyKeeperTurn = (before: RunState, after: RunState): RunState => {
     if ((after.runRulesVersion ?? 0) < KEEPER_RULES_FROM || after.status !== 'playing' || !after.board || !isKeeperFloor(after.board)) return after;
     const turns = runNonNegativeInteger(after.turnsThisFloor);
-    if (turns === runNonNegativeInteger(before.turnsThisFloor) || !isKeeperSwapTurn(turns)) return after;
+    if (turns === runNonNegativeInteger(before.turnsThisFloor) || !isKeeperSwapTurn(turns, keeperSwapEvery(after))) return after;
     return {
         ...after,
         board: swapRooms(after.board, after.pinnedTileIds ?? []),

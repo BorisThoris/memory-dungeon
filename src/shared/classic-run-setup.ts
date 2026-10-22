@@ -27,6 +27,8 @@ export type ClassicRunPacingId = 'standard' | 'calm';
 
 export interface ClassicRunSetup {
     readonly campPreference?: RunState['campPreference'];
+    /** The Depths (`depth-rules.ts`): up to the deepest opened. */
+    readonly depth?: number;
     readonly vows: readonly ClassicRunVowId[];
     readonly pacing: ClassicRunPacingId;
     /** The old Wild run: a joker tile, a stray-remove charge and a chaotic mutator set. */
@@ -73,6 +75,7 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
     const activeMutators = [...new Set([...chaosMutators, ...setup.focusMutators])];
     return {
         ...(setup.campPreference ? { campPreference: setup.campPreference } : {}),
+        ...(setup.depth ? { depth: setup.depth } : {}),
         ...(contract ? { activeContract: contract } : {}),
         ...(activeMutators.length > 0 ? { activeMutators } : {}),
         // `wildMenuRun` is the flag the HUD identity and the restart precedence read for a wild run;
@@ -94,7 +97,7 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
  * recoverable from a run (the floor schedule writes the same field) and come back empty.
  */
 export const classicRunSetupFromRun = (
-    run: Pick<RunState, 'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'resolveDelayMultiplier' | 'campPreference'>
+    run: Pick<RunState, 'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'resolveDelayMultiplier' | 'campPreference' | 'depth'>
 ): ClassicRunSetup | null => {
     if (run.gameMode !== 'endless') {
         return null;
@@ -106,6 +109,7 @@ export const classicRunSetupFromRun = (
     return {
         chaos: run.wildMenuRun === true,
         ...(run.campPreference ? { campPreference: run.campPreference } : {}),
+        ...(run.depth ? { depth: run.depth } : {}),
         focusMutators: [],
         pacing: Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1 ? 'calm' : 'standard',
         unrecorded: run.practiceMode === true,
@@ -120,7 +124,8 @@ export const isDefaultClassicRunSetup = (setup: ClassicRunSetup): boolean =>
     setup.pacing === 'standard' &&
     !setup.chaos &&
     !setup.unrecorded &&
-    !setup.campPreference;
+    !setup.campPreference &&
+    !setup.depth;
 
 /** A short line naming what the player asked for, for the HUD and the results screen. */
 export const describeClassicRunSetup = (setup: ClassicRunSetup): string[] => {
@@ -139,6 +144,9 @@ export const describeClassicRunSetup = (setup: ClassicRunSetup): string[] => {
     }
     if (setup.unrecorded) {
         parts.push('Unrecorded');
+    }
+    if (setup.depth) {
+        parts.push(`Depth ${setup.depth}`);
     }
     return parts;
 };

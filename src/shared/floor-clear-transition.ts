@@ -1,3 +1,4 @@
+import { depthHas } from './depth-rules';
 import { sealSpiralRings, spiralHolds } from './spiral-rules';
 import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
@@ -187,7 +188,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         // clear before an act boss offers its doors again: the door taken is what the boss pays (`boss-reward-rules.ts`).
         ...(realmId
             ? {
-                  realmDoors: usesCampUpgrades(run) && !bossDoors ? null : rollRealmDoors(run.runSeed, board.level, realmId),
+                  // Depth 4 (`depth-rules.ts`): before an act boss, the calm door is wild.
+                  realmDoors: usesCampUpgrades(run) && !bossDoors ? null : rollRealmDoors(run.runSeed, board.level, realmId).map((door) => (bossDoors && door.severity === 'calm' && depthHas(run, 'no_calm_door') ? { ...door, severity: 'wild' as const } : door)),
                   nextRealm: usesCampUpgrades(run) && !bossDoors ? rollRealmDoors(run.runSeed, board.level, realmId)[0]! : null,
                   realmFloorsThisRun: { ...(run.realmFloorsThisRun ?? {}), [realmId]: runNonNegativeInteger(run.realmFloorsThisRun?.[realmId] ?? 0) + 1 },
                   realmSmoke: carryover.realmSmoke,

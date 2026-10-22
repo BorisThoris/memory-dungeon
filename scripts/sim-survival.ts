@@ -63,7 +63,7 @@ export interface SurvivalRun {
     warden: 'cleared' | 'fell' | null;
 }
 
-export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = SURVIVAL_FLOOR_CAP, useItems = false): SurvivalRun => {
+export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = SURVIVAL_FLOOR_CAP, useItems = false, depth = 0): SurvivalRun => {
     const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
     const mutators = filterMutatorsByContentLock(entry.mutators);
     const board = buildBoard(1, {
@@ -77,7 +77,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         cycleFloor: entry.cycleFloor
     });
     let run: RunState = {
-        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })),
+        ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null, depth })),
         activeMutators: mutators,
         board,
         status: 'playing',
@@ -161,10 +161,11 @@ export const simulateSurvival = ({
     rates = SURVIVAL_RATES,
     seeds = SURVIVAL_SEEDS,
     floorCap = SURVIVAL_FLOOR_CAP,
-    useItems = false
-}: { rates?: readonly number[]; seeds?: readonly number[]; floorCap?: number; useItems?: boolean } = {}): SurvivalRow[] =>
+    useItems = false,
+    depth = 0
+}: { rates?: readonly number[]; seeds?: readonly number[]; floorCap?: number; useItems?: boolean; depth?: number } = {}): SurvivalRow[] =>
     rates.map((missRate) => {
-        const runs = seeds.map((seed) => simulateSurvivalRun(seed, missRate, floorCap, useItems));
+        const runs = seeds.map((seed) => simulateSurvivalRun(seed, missRate, floorCap, useItems, depth));
         const floors = runs.map((run) => run.floorReached);
         return {
             missRate,
@@ -207,13 +208,15 @@ if (isMain) {
     const rates = arg('rates')?.split(',').map(Number) ?? SURVIVAL_RATES;
     const seedCount = Number(arg('seeds') ?? SURVIVAL_SEEDS.length);
     const useItems = process.argv.includes('--items');
-    const rows = simulateSurvival({ rates, seeds: SURVIVAL_GATE_SEEDS.slice(0, seedCount), useItems });
+    // The Depths (`depth-rules.ts`): `--depth n` plays every run at Depth n; the gate plays Depth 0.
+    const depth = Number(arg('depth') ?? 0);
+    const rows = simulateSurvival({ rates, seeds: SURVIVAL_GATE_SEEDS.slice(0, seedCount), useItems, depth });
     if (process.argv.includes('--check')) {
         const issues = judgeWardenReach(rows, Math.min(seedCount, SURVIVAL_GATE_SEEDS.length));
         for (const issue of issues) console.error(issue);
         if (issues.length > 0) process.exit(1);
     }
-    console.log(useItems ? 'with the curio items used' : 'without items');
+    console.log(`${useItems ? 'with the curio items used' : 'without items'}${depth > 0 ? `, at Depth ${depth}` : ''}`);
     console.log('miss   median  mean   min   combo/floor  expired/floor  warden cleared/fell');
     for (const row of rows) {
         console.log(
