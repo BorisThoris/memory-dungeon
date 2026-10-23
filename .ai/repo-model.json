@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11795
+    "relationshipCount": 11799
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 103727,
-      "sha256": "bac6f5f1d09737bc9ed5c09fc304753dd09896ac3dde78fc71a7e850446958c7"
+      "bytes": 103908,
+      "sha256": "492f211291745b8788821a420b60ef9a58bec5400d8b2e4aaa3b09caeb322349"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "628f5af6f252a7c22966d1f9e4ce84654d138eadf0bb9c4b31e47a765cc181ee"
+      "sha256": "5d8c024f6f127078e14294ee7f6bb80cb3192a2ecfe586d40c4555e09ab554a8"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10839,8 +10839,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 23443,
-      "sha256": "6806dbaf506867d7030c66b37d35ab54621fe2817ba54a45ccf4ecd171634408"
+      "bytes": 24079,
+      "sha256": "6d1ff1d4e7127a51b273adff0cc30ae20c34444e5d710de616054cffe99f4010"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -10851,8 +10851,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 36731,
-      "sha256": "796c6fe0141091eb8f9936515cd28a00d7e1fab4b9f5feff805d24b590527c33"
+      "bytes": 37272,
+      "sha256": "0818ca60dc04a845b43315c90614555098c4b668928e6320382873ab71c3bbfb"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -13467,8 +13467,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 4705,
-      "sha256": "6f45f2496178bb7e101310c5318d316ebab67c09b209b25ef1a5534a4d971bb7"
+      "bytes": 4945,
+      "sha256": "a9f0b4ad1c36031a09f4bdec8bcf30f1320ecc67b88af3707a96a25d71fddffd"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -14751,8 +14751,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 104115,
-      "sha256": "cd6eb7bcf9c9319ff70c56486b696e76d7f38c099ccd2599925b706b33783b01"
+      "bytes": 104296,
+      "sha256": "1c6b57b33424fcec3bc5a862b23ceae82575b73b3f6aed4127d0c45682ddf101"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15513,14 +15513,14 @@
     {
       "path": "src/shared/difficulty-profile.test.ts",
       "category": "test",
-      "bytes": 2095,
-      "sha256": "c0f053b5285a89411d2d7293c2036481ff959ea4aca0027586b749047bf62274"
+      "bytes": 2416,
+      "sha256": "63d8ad060336f9070d1a9c74f49b12c1b5e272b5a18b0bf48222e19e4a4a1758"
     },
     {
       "path": "src/shared/difficulty-profile.ts",
       "category": "source",
-      "bytes": 3189,
-      "sha256": "3906286b9741223c7f44e1a1b4d60aae2e9981f10617fdbe6ae37860fb0ebb6e"
+      "bytes": 3791,
+      "sha256": "dbf9d003c19568b400f5d56e2e644b7aa68db28bfd877ce86e93e92ba3b623b3"
     },
     {
       "path": "src/shared/dread-composition-rules.test.ts",
@@ -16113,8 +16113,8 @@
     {
       "path": "src/shared/hold-rules.test.ts",
       "category": "test",
-      "bytes": 5122,
-      "sha256": "10c7bc6fc3c4c3eba9381b0ee3be0017828fe9fc63727d97ea1f5c78bea64c19"
+      "bytes": 5438,
+      "sha256": "9fac1e57f43fd3f965e4ed2bad023f578de84b5267453610331913ff7057a540"
     },
     {
       "path": "src/shared/hold-rules.ts",
@@ -17421,8 +17421,8 @@
     {
       "path": "src/shared/storm-glass-rules.test.ts",
       "category": "test",
-      "bytes": 6357,
-      "sha256": "1027d36ce225c95cbda36529419415a62567fd3b348213c38d82906757f4369d"
+      "bytes": 6356,
+      "sha256": "a811d5cc7741a71b7bef5c2574fc7666c3fa226a6c3da5341dd5756163a8b5fd"
     },
     {
       "path": "src/shared/storm-glass-rules.ts",
@@ -17835,8 +17835,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 25106,
-      "sha256": "219bc51bc5e9ae4fa477cc276241d629ef627597f3dd6bac3fe78c90052ce9ff"
+      "bytes": 25473,
+      "sha256": "ab7985dafd8bb21c0021d470b4aaef4da22af0a8ecb5fea94ddf646bfa2877f8"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -18015,8 +18015,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
       "category": "other",
-      "bytes": 4540,
-      "sha256": "70753f52fe2002fdc6d44bd1b4c787e12acb802d5409382e4e468b6e757eee82"
+      "bytes": 5126,
+      "sha256": "aa070588a78b5d6b0d196b39047bd6079881ede2b0a63f623f77d44641e8001a"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-026-boss-reward-tier-gating.md",
@@ -23736,7 +23736,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 698,
+      "lineCount": 702,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -31316,7 +31316,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 101,
+      "lineCount": 103,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -37339,7 +37339,8 @@
         "symbol:src/shared/depth-rules.ts#runDepth"
       ],
       "testedBy": [
-        "file:src/shared/depth-rules.test.ts"
+        "file:src/shared/depth-rules.test.ts",
+        "file:src/shared/difficulty-profile.test.ts"
       ]
     },
     {
@@ -37535,9 +37536,10 @@
       "path": "src/shared/difficulty-profile.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 41,
+      "lineCount": 45,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/depth-rules.ts",
         "file:src/shared/difficulty-profile.ts"
       ],
       "exports": [],
@@ -37548,9 +37550,11 @@
       "path": "src/shared/difficulty-profile.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 97,
+      "lineCount": 100,
       "imports": [
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/depth-rules.ts",
+        "file:src/shared/miss-bank.ts"
       ],
       "exports": [
         "symbol:src/shared/difficulty-profile.ts#DifficultyProfileAvailability",
@@ -39857,7 +39861,7 @@
       "path": "src/shared/hold-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 98,
+      "lineCount": 104,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-inspection.ts",
@@ -50048,8 +50052,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 697,
-      "endLine": 697
+      "line": 701,
+      "endLine": 701
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -58633,7 +58637,7 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 76,
-      "endLine": 100
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#CODEX_SCREEN_COPY",
@@ -66776,80 +66780,80 @@
       "name": "DifficultyProfileAvailability",
       "kind": "type",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 9,
-      "endLine": 9
+      "line": 11,
+      "endLine": 11
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#DifficultyProfileId",
       "name": "DifficultyProfileId",
       "kind": "type",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 8,
-      "endLine": 8
+      "line": 10,
+      "endLine": 10
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#DifficultyProfileRow",
       "name": "DifficultyProfileRow",
       "kind": "interface",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 49,
-      "endLine": 60
+      "line": 51,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#DifficultyProfileRowStatus",
       "name": "DifficultyProfileRowStatus",
       "kind": "type",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 10,
-      "endLine": 10
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#DifficultyProfileRuleSummary",
       "name": "DifficultyProfileRuleSummary",
       "kind": "interface",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 12,
-      "endLine": 25
+      "line": 14,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#getCurrentDifficultyProfile",
       "name": "getCurrentDifficultyProfile",
       "kind": "value",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 68,
-      "endLine": 75
+      "line": 70,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#getDefaultDifficultyProfile",
       "name": "getDefaultDifficultyProfile",
       "kind": "value",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#getDifficultyProfileRows",
       "name": "getDifficultyProfileRows",
       "kind": "value",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 77,
-      "endLine": 95
+      "line": 79,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#listDifficultyProfiles",
       "name": "listDifficultyProfiles",
       "kind": "value",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 43,
-      "endLine": 45
+      "line": 45,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#SHIPPED_FAIR_DIFFICULTY_PROFILE",
       "name": "SHIPPED_FAIR_DIFFICULTY_PROFILE",
       "kind": "value",
       "file": "src/shared/difficulty-profile.ts",
-      "line": 27,
-      "endLine": 41
+      "line": 29,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/dread-composition-rules.ts#DREAD_BUYS_FROM",
@@ -132149,6 +132153,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/difficulty-profile.test.ts->src/shared/depth-rules.ts",
+      "source": "file:src/shared/difficulty-profile.test.ts",
+      "target": "file:src/shared/depth-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/difficulty-profile.test.ts->src/shared/difficulty-profile.ts",
       "source": "file:src/shared/difficulty-profile.test.ts",
       "target": "file:src/shared/difficulty-profile.ts",
@@ -132158,6 +132168,18 @@
       "id": "imports:src/shared/difficulty-profile.ts->src/shared/contracts.ts",
       "source": "file:src/shared/difficulty-profile.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/difficulty-profile.ts->src/shared/depth-rules.ts",
+      "source": "file:src/shared/difficulty-profile.ts",
+      "target": "file:src/shared/depth-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/difficulty-profile.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/difficulty-profile.ts",
+      "target": "file:src/shared/miss-bank.ts",
       "kind": "imports"
     },
     {
@@ -150661,6 +150683,12 @@
       "id": "tested_by:src/shared/depth-rules.ts->file:src/shared/depth-rules.test.ts",
       "source": "file:src/shared/depth-rules.ts",
       "target": "file:src/shared/depth-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/depth-rules.ts->file:src/shared/difficulty-profile.test.ts",
+      "source": "file:src/shared/depth-rules.ts",
+      "target": "file:src/shared/difficulty-profile.test.ts",
       "kind": "tested_by"
     },
     {
