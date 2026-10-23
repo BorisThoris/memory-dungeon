@@ -55,3 +55,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Results: when a power was used the achievements line says Perfect Clear and the no-powers record did not count, and why (the REG lesson).
 - Tests: the reach curve played off a Classic run (`achievement-reachability.test.ts`, including that a run with achievements off earns none), the results line, the catalog and save round-trip suites; the Collection lists 31 in the isolated browser. Codex ENCYCLOPEDIA 116.
 - Not done: the Partner-site rows are entered by hand (out of the repository); icons for the nine.
+
+2026-10-23, the icons: Steam's achievement icons are uploaded on the Partner site with the rows (none of the first twenty-two has an icon file in the repository either), so the nine join the hand-entered Partner work rather than the repository.

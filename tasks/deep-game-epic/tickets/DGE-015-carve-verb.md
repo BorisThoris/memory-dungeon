@@ -57,3 +57,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Hall rooms `carve-right`, `carve-no-target`, `carve-through-hold`; `tools-usable.spec.ts` case (press, ArrowRight, match, b pops not a); soak: the planned player carves at 0.15, an invariant (between turns, two links, no turn, never past its floor), counters required by `run-soak.test.ts`. Soak 5 x 200: 1181 carves, 821 spent, 0 violations. warden-reach 59/100.
 - Graph `power.carve` (modifies the pop, displays on the HUD), ledger, census exemption, mechanic count 80, Codex `sys_carve`, ENCYCLOPEDIA 106.
 - Not done: a swipe gesture for the picker (the d-pad reaches its buttons by focus).
+
+2026-10-23: the swipe. With the picker open, a press that travels 40px or more (`carveSwipe.ts`, the longer axis) picks that way, so a touch screen carves with one stroke; a tap still lands on the picker's buttons. Unit-tested; `e2e/tools-usable.spec.ts` swipes right across the picker and the arrow points right (passes in the isolated station with the arrow-key test).

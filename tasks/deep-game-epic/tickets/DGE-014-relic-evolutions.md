@@ -61,3 +61,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Soak 5 x 200: 117 evolutions (24 by the average player), 0 violations, with invariants that each had its blueprint and that no two share a first ingredient. The afterglow invariant now judges only light an action newly lit (a Candle given up for the Purse, or Lantern of Recall, leave light that is not the afterglow's).
 - Rules 77 reseed: the wildfire hall room pinned to seed 90211 (its own note already said some seeds land both fires on vine-held cards).
 - Not done: a camp e2e (the camp is automatic; the inventory lists evolutions and blueprints); the six icons (DGE-030); the Warden's condition (DGE-023).
+
+2026-10-23, the six icons: not built, by decision. Relics and evolutions are named chips on the inventory, an ink-and-paper screen that carries no relic art at all (the art rules keep those screens bare), so six icons for the evolutions alone would be the only ones there. The camp e2e stays a gap: the camp is automatic, and the inventory, the soak and the hall room `evolution-at-camp` cover what it does.

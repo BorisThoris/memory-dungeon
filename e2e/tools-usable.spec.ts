@@ -286,6 +286,19 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('carve-arrow')).toHaveCount(0);
     });
 
+    test('carve: a swipe across the picker picks the way', async ({ page }) => {
+        await openRoom(page, 'carve-right');
+        await openItemsIfFolded(page);
+        await page.getByTestId('tool-carve').click();
+        await expect(page.getByTestId('carve-picker')).toBeVisible();
+        const viewport = page.viewportSize() ?? { width: 1280, height: 720 };
+        await page.mouse.move(viewport.width / 2 - 60, viewport.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(viewport.width / 2 + 60, viewport.height / 2, { steps: 4 });
+        await page.mouse.up();
+        await expect(page.getByTestId('carve-arrow')).toHaveAttribute('data-direction', 'right');
+    });
+
     test('bell: press it where the realm holds cards, and they go free', async ({ page }) => {
         await openRoom(page, 'still-bell');
         await expect(page.getByTestId('tool-still_bell')).toBeEnabled();

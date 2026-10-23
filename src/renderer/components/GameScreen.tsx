@@ -1,6 +1,7 @@
 import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
+import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
@@ -1318,7 +1319,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const [travelKey, setTravelKey] = useState<string | null>(null);
     const [purseReplaceOpen, setPurseReplaceOpen] = useState(false);
-    // Carve's direction picker (`carve-rules.ts`): open from the dock, the arrow keys pick a way.
+    // Carve's direction picker (`carve-rules.ts`): open from the dock, the arrow keys or a swipe pick a way.
     const [carvePickerOpen, setCarvePickerOpen] = useState(false);
     useEffect(() => {
         if (!carvePickerOpen) return;
@@ -1330,8 +1331,27 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             setCarvePickerOpen(false);
             useAppStore.getState().carve(way);
         };
+        // A swipe picks a way too, for a touch screen (`carveSwipe.ts`); a tap still lands on the picker's buttons.
+        let start: { x: number; y: number } | null = null;
+        const onDown = (event: PointerEvent): void => {
+            start = { x: event.clientX, y: event.clientY };
+        };
+        const onUp = (event: PointerEvent): void => {
+            const way = start ? carveSwipeDirection(event.clientX - start.x, event.clientY - start.y) : null;
+            start = null;
+            if (!way) return;
+            event.preventDefault();
+            setCarvePickerOpen(false);
+            useAppStore.getState().carve(way);
+        };
         window.addEventListener('keydown', onKey, true);
-        return () => window.removeEventListener('keydown', onKey, true);
+        window.addEventListener('pointerdown', onDown, true);
+        window.addEventListener('pointerup', onUp, true);
+        return () => {
+            window.removeEventListener('keydown', onKey, true);
+            window.removeEventListener('pointerdown', onDown, true);
+            window.removeEventListener('pointerup', onUp, true);
+        };
     }, [carvePickerOpen]);
     const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
     const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
