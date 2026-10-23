@@ -1,5 +1,5 @@
 import type { RealmId, RelicId, RunState } from '../../shared/contracts';
-import { REALM_ROOM_ART, realmRoomFor, type RealmRoomArt } from './realmRoomArt';
+import { bossRoomFor, REALM_ROOM_ART, realmRoomFor, type RealmRoomArt, type SceneRoomId } from './realmRoomArt';
 import { COMBO_HEAT_STAGE_FROM, comboAscensionReached, comboHeat, comboStageReached, comboSurge, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { REALM_JOLT_FAMILY, type RealmJoltFamily } from './realmCardMotion';
@@ -29,8 +29,12 @@ export type SceneDriftTone = 'ember' | 'spore' | 'bubble';
 export interface SceneMood {
     elements: ElementSceneState;
     plate: ScenePlateId;
-    /** The realm whose own room this is, while its painting exists (`realmRoomArt.ts`); null on the dungeon ring. */
-    realmRoom: RealmId | null;
+    /** The room this is, while its painting exists (`realmRoomArt.ts`): an act boss's on its floor, else the realm's; null on the dungeon ring. */
+    realmRoom: SceneRoomId | null;
+    /** The realm whose weather and creatures live in the room - over a boss's room too; null on the dungeon ring. */
+    weatherRealm: RealmId | null;
+    /** The boss room's one event (DGE-030): the Keeper's swap, the Cartographer's turn, the Warden's deal, keyed per event. */
+    bossEventKey: string | null;
     /** Identity of the miss that opened the black hole, for the collapse animation; null when none. */
     blackHoleKey: string | null;
     /** How far the frost has grown in from the edges, 0..1; only a frost run's. */
@@ -128,7 +132,7 @@ export const deriveSceneMood = ({
     realmRoomArt = REALM_ROOM_ART
 }: {
     /** The realm rooms there is art for; the tests pass their own. */
-    realmRoomArt?: Readonly<Record<RealmId, RealmRoomArt>>;
+    realmRoomArt?: Readonly<Record<SceneRoomId, RealmRoomArt>>;
     combo: number;
     /** The latest miss on the journal, or null: the black hole reads it. */
     latestLoss: BoardTurnResolvedEvent | null;
@@ -138,7 +142,7 @@ export const deriveSceneMood = ({
     missesLeft?: number | null;
     /** A payout to rain gold on (a floor clear, a purchase), keyed by what paid it. */
     payout?: { key: string; gold: number } | null;
-    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor' | 'lastRealmEvent' | 'realmId' | 'realmSecondaryId' | 'realmSeverity' | 'realmSway' | 'elementResonance'>>;
+    run: Pick<RunState, 'board' | 'status' | 'relics'> & Partial<Pick<RunState, 'voidSpewsThisFloor' | 'lastRealmEvent' | 'realmId' | 'realmSecondaryId' | 'realmSeverity' | 'realmSway' | 'elementResonance' | 'keeperSwapsThisFloor' | 'cartographerTurnsThisFloor' | 'wardenRedealsThisFloor'>>;
     storeOpen: boolean;
     temper: ComboHeatTheme;
 }): SceneMood => {
@@ -163,7 +167,12 @@ export const deriveSceneMood = ({
           : null;
     const blackHoleKey = blackHoleKeyFor(run, latestLoss);
     // A realm with a room of its own opens in it; the store and a black hole still take the room over.
-    const realmRoom = realmRoomFor(run.realmId, realmRoomArt);
+    const weatherRealm = realmRoomFor(run.realmId, realmRoomArt);
+    // An act boss's floor opens in the boss's own room, with the realm's weather still over it (DGE-030).
+    const bossRoom = bossRoomFor(run.board, realmRoomArt);
+    const realmRoom: SceneRoomId | null = bossRoom ?? weatherRealm;
+    const bossEvents = bossRoom === 'keeper' ? run.keeperSwapsThisFloor : bossRoom === 'cartographer' ? run.cartographerTurnsThisFloor : bossRoom === 'warden' ? run.wardenRedealsThisFloor : 0;
+    const bossEventKey = bossRoom && (bossEvents ?? 0) > 0 ? `${bossRoom}:${run.board?.level ?? 0}:${bossEvents}` : null;
     const plate: ScenePlateId = storeOpen ? 'shop' : blackHoleKey ? 'void' : realmRoom ? 'realm' : 'dungeon';
     /*
      * Every run has weather from its first turn (`SCENE_WEATHER_FLOOR`): a frost run opens on a
@@ -194,6 +203,8 @@ export const deriveSceneMood = ({
         elements,
         plate,
         realmRoom,
+        weatherRealm,
+        bossEventKey,
         blackHoleKey,
         frost,
         snow,

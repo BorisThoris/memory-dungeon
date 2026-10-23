@@ -79,8 +79,10 @@ import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
 import {
+    descentActForFloor,
     getFeaturedObjectiveLabel,
     getFloorChapterIdentity,
+    isActBossFloor,
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
 } from '../../shared/floor-mutator-schedule';
@@ -153,7 +155,7 @@ import { IceSheetOverlay } from './IceSheetOverlay';
 import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { nextFloorRealmDoor, REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { dailyMusicCreditLine } from '../audio/dailyMusic';
-import { realmRoomPlateUrls } from './realmRoomArt';
+import { BOSS_ROOM_BY_ACT, realmRoomPlateUrls } from './realmRoomArt';
 import { REALM_AMBIENCE_STRENGTH, pulseRealmEvent, setRealmAmbience, setRealmSwayLean } from './realmAmbience';
 import { REALM_SWAY_TIP, leadingSway, runRealmSway } from '../../shared/realm-sway-rules';
 import { setRealmAmbientBed } from '../audio/realmAmbientBed';
@@ -1726,9 +1728,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     // The room the next floor opens in, decoded by the scene while this one's clear plays.
     const nextRoomDoor = run.status === 'levelComplete' ? nextFloorRealmDoor(run) : null;
-    const nextRoomPrimeKey = nextRoomDoor ? `${nextRoomDoor.realmId}:${nextRoomDoor.confluence ?? ''}` : '';
+    // An act boss's floor opens in the boss's room (DGE-030): decode it too when the next floor is one.
+    const nextLevel = (run.board?.level ?? 0) + 1;
+    const nextBossRoom = run.status === 'levelComplete' && isActBossFloor(nextLevel) ? BOSS_ROOM_BY_ACT[descentActForFloor(nextLevel).id] ?? null : null;
+    const nextRoomPrimeKey = `${nextRoomDoor ? `${nextRoomDoor.realmId}:${nextRoomDoor.confluence ?? ''}` : ''}:${nextBossRoom ?? ''}`;
     const nextRoomPrime = useMemo(
-        () => (nextRoomDoor ? [nextRoomDoor.realmId, ...(nextRoomDoor.confluence ? [nextRoomDoor.confluence] : [])].flatMap((realm) => realmRoomPlateUrls(realm)) : []),
+        () => [...(nextRoomDoor ? [nextRoomDoor.realmId, ...(nextRoomDoor.confluence ? [nextRoomDoor.confluence] : [])] : []), ...(nextBossRoom ? [nextBossRoom] : [])].flatMap((room) => realmRoomPlateUrls(room)),
         // Keyed by the door, which is all the list depends on.
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [nextRoomPrimeKey]

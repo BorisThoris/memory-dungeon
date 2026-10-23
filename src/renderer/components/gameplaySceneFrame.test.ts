@@ -10,7 +10,7 @@ import { createSceneClock, fixedSceneClock, sceneOccurrence } from './sceneClock
 import { deriveSceneMood, type SceneMood } from './sceneMood';
 import { findSceneDraw, sceneDrawIds, type SceneDraw, type SceneImageDraw } from './scenePaint';
 import { RING_MOTE_COUNT } from './sceneSpriteClocks';
-import type { RealmRoomArt } from './realmRoomArt';
+import { BOSS_ROOM_IDS, type RealmRoomArt, type SceneRoomId } from './realmRoomArt';
 
 const flames = SCENE_SPRITES.gameplayFlames;
 const rest: GameplayFrameInput = {
@@ -36,7 +36,7 @@ const flamesOf = (draws: readonly SceneDraw[]) => draws.filter((draw): draw is S
 const count = (draws: readonly SceneDraw[], prefix: string) => draws.filter((draw) => draw.id.startsWith(prefix) && draw.alpha > 0.004).length;
 
 const theme = (id: string) => COMBO_HEAT_THEMES.find((candidate) => candidate.id === id)!;
-const NO_REALM_ROOMS = Object.fromEntries(REALM_IDS.map((realm) => [realm, { base: '', glows: {}, sprites: [] }])) as unknown as Record<RealmId, RealmRoomArt>;
+const NO_REALM_ROOMS = Object.fromEntries([...REALM_IDS, ...BOSS_ROOM_IDS].map((realm) => [realm, { base: '', glows: {}, sprites: [] }])) as unknown as Record<SceneRoomId, RealmRoomArt>;
 const mood = (temper: string, over: Partial<Parameters<typeof deriveSceneMood>[0]> = {}): SceneMood =>
     deriveSceneMood({
         combo: 0,

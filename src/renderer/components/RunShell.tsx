@@ -18,7 +18,7 @@ import { useCountUp } from '../hooks/useCountUp';
 import { REALMS, realmWeatherClockRuns, runRealmId, runRealmSecondaryId, runRealmSeverity, turnsUntilRealmWeather } from '../../shared/realm-rules';
 import { nextRealmWeather } from '../../shared/realm-weather-rules';
 import { DAILY_MUSIC_COPY, DREAD_HUD_COPY, MILESTONE_HUD_COPY, REALM_HUD_COPY } from '../copy/realmCopy';
-import { dreadForRun, dreadTier } from '../../shared/dread-rules';
+import { DREAD_TIERS, dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { nextMilestone } from '../../shared/milestone-rules';
 import { endlessRentDue } from '../../shared/endless-rent-rules';
 import { isWardenFloor, wardenRedealEvery } from '../../shared/warden-rules';
@@ -46,6 +46,9 @@ import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
 import { lookingGlassHudTitle } from '../copy/lookingGlassBeat';
 import { lookingGlassMatchesUntilTurn } from '../../shared/looking-glass-rules';
 import type { TileSuit } from '../../shared/contracts';
+
+/** How open the Dread's eye is at a tier: 0 at the first, 1 at the last. */
+const dreadEyeOpen = (tierId: string): number => Math.max(0, DREAD_TIERS.findIndex((tier) => tier.id === tierId)) / Math.max(1, DREAD_TIERS.length - 1);
 
 /** An element's name in a goal's recipe, in that element's colour, as the board's own odd-card chips are. */
 const ELEMENT_BY_NAME = new Map<string, TileSuit>([
@@ -595,6 +598,12 @@ const RunShell = ({
                                     style={{ '--dread-fill': dread.fraction, ...(realm ? { '--dread-next': REALMS[realm].color } : {}) } as CSSProperties}
                                     title={DREAD_HUD_COPY.title}
                                 >
+                                    {/* The Dread's eye (DGE-030): shut at Quiet, opening a step a tier, wide and red at It is coming. */}
+                                    <svg aria-hidden="true" className={styles.dreadEye} data-dread-eye={dreadEyeOpen(dread.tier.id).toFixed(2)} viewBox="0 0 24 14">
+                                        <path d="M1 7Q12 -2 23 7Q12 16 1 7Z" fill="#140d0b" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+                                        <ellipse cx="12" cy="7" rx={2.2 + 2.6 * dreadEyeOpen(dread.tier.id)} ry={0.4 + 4.6 * dreadEyeOpen(dread.tier.id)} fill="var(--dread-iris, #c9a56f)" />
+                                        <ellipse cx="12" cy="7" rx="0.9" ry={0.2 + 2.8 * dreadEyeOpen(dread.tier.id)} fill="#0a0706" />
+                                    </svg>
                                     <span className={styles.dreadTier}>{dread.tier.name}{DREAD_HUD_COPY.beyond(dread.beyond)}</span>
                                     {compactHud ? null : (
                                         <span aria-hidden="true" className={styles.dreadNext}>

@@ -5,7 +5,7 @@ import { SCENE_SPRITES, type AmbientCellName } from '../assets/ui/sprites';
 import { ELEMENT_SCENE_SUITS, type ElementSceneState } from './elementScene';
 import { ELEMENT_SCENE_ART } from './elementSceneArt';
 import { REALM_ROOM_ART } from './realmRoomArt';
-import { REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws, realmRoomWarpDraws } from './realmRoomLife';
+import { bossEventDim, bossRoomLifeDraws, isBossRoom, REALM_FLOORS, realmLayerLevel, realmRoomLifeDraws, realmRoomSpriteDraws, realmRoomWarpDraws } from './realmRoomLife';
 import { roomSpillDraws, type RoomSpill } from './roomSpill';
 import { comboSoftCap } from '../../shared/combo-heat-rules';
 import { ELEMENT_SCENE_VISUALS } from './elementScene';
@@ -361,6 +361,8 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     const sinceCleared = clock.since('cleared', input.cleared);
     const sinceFever = clock.since('fever', input.feverKey);
     const sinceReturn = clock.since('void-return', mood?.voidReturnKey ?? null);
+    // A boss room's one event (DGE-030), asked every frame like the other beats.
+    const sinceBossEvent = clock.since('boss-event', mood?.bossEventKey ?? null);
     const frozen = sinceFreeze < 900;
     // The things in the room run on their own time: faster with the surge, stopped for a freeze.
     const roomT = still ? 0 : clock.phase('room', frozen ? 0 : tempo);
@@ -384,14 +386,14 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
         const leaving = realm !== mood?.realmRoom;
         const tag = <T extends SceneDraw>(draw: T): T => (leaving ? { ...draw, id: `${draw.id}@${realm}` } : draw);
         const roomDraws: SceneDraw[] = [];
-        roomDraws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * room * missDim });
+        roomDraws.push({ kind: 'image', id: 'realm', src: realmArt.base, alpha: input.base * room * missDim * bossEventDim(realm, sinceBossEvent) });
         // The painting's own moving parts, warped live from the base: water, cloud, vines (`realmRoomWarpDraws`).
         if (!still) roomDraws.push(...realmRoomWarpDraws(realm, realmArt.base, roomT, depth, input.base * room * missDim, lean));
         const parts = realmRoomSpriteDraws(realm, realmArt.sprites, roomT, depth, room, still);
         roomDraws.push(...parts.filter((part) => part.blend !== 'lighter'));
         const over = comboSoftCap(Math.max(0, depth - 2), 0.6);
         for (const [family, src] of Object.entries(realmArt.glows)) {
-            const level = still ? 0.35 + 0.65 * comboSoftCap(depth, 1) : realmLayerLevel(realm, family, roomT, depth);
+            const level = still ? 0.35 + 0.65 * comboSoftCap(depth, 1) : realmLayerLevel(realm, family, roomT, depth, sinceBossEvent);
             roomDraws.push({ kind: 'image', id: `realmGlow-${family}`, src, alpha: room * Math.min(1, level), blend: 'lighter' });
             if (over > 0.004) {
                 roomDraws.push({ kind: 'image', id: `realmGlowOver-${family}`, src, alpha: room * over * Math.min(1, level), blend: 'lighter', filter: { brightness: 1 + 0.25 * depth, blurPx: 4 } });
@@ -618,9 +620,13 @@ export const composeGameplayScene = (input: GameplayFrameInput, clock: SceneCloc
     }
 
     // A realm's own room is never still: its weather, its light and its creatures (`realmRoomLife.ts`).
-    if (!still && mood?.realmRoom) {
-        // The new realm's weather and creatures come in with its room, not ahead of it.
-        draws.push(...realmRoomLifeDraws({ realm: mood.realmRoom, t: roomT, depth, lean, alpha: realmRoom * enteredRealmWeight }));
+    if (!still && mood?.weatherRealm) {
+        // The new realm's weather and creatures come in with its room, not ahead of it - over a boss's room too.
+        draws.push(...realmRoomLifeDraws({ realm: mood.weatherRealm, t: roomT, depth, lean, alpha: realmRoom * enteredRealmWeight }));
+    }
+    // A boss room's own life and its one event (`bossRoomLifeDraws`).
+    if (!still && isBossRoom(mood?.realmRoom)) {
+        draws.push(...bossRoomLifeDraws({ room: mood.realmRoom, t: roomT, depth, lean, alpha: realmRoom * enteredRealmWeight, sinceEvent: sinceBossEvent }));
     }
 
     // A payout: coins fall through the room, in front of the stone and behind the cards. Asked every

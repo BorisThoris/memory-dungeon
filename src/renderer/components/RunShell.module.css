@@ -1909,6 +1909,8 @@
 .dreadBar { position: relative; width: 2.6rem; height: 3px; border-radius: 2px; background: #ffffff1f; overflow: hidden; }
 .dreadBar::after { content: ''; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--dread-fill, 0)); background: var(--dread-next, #b9a37f); transition: transform 600ms ease-out; }
 .dread[data-dread-tier='knows'] .dreadTier, .dread[data-dread-tier='coming'] .dreadTier { color: #f2b2a4; text-shadow: 0 0 8px #c8443280; }
+.dreadEye { width: 1.25rem; height: 0.75rem; margin-right: 0.3rem; vertical-align: -0.1em; color: #b9a37f; overflow: visible; }
+.dread[data-dread-tier='watching'] .dreadEye, .dread[data-dread-tier='knows'] .dreadEye, .dread[data-dread-tier='coming'] .dreadEye { --dread-iris: #d8553f; color: #f2b2a4; filter: drop-shadow(0 0 3px #c8443299); }
 @media (prefers-reduced-motion: reduce) { .dreadBar::after { transition: none; } }
 
 /* The next milestone (DGE-004): its name and the act's fraction, a hairline filling under them. */

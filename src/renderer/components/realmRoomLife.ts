@@ -5,6 +5,7 @@ import { sceneHash, sceneOccurrence, sceneSmoothstep } from './sceneClock';
 import { ambientSprite, crossingDraws, dripDraws, driftDraws, fogDraw, glintDraws, sceneKeyframes } from './sceneAmbient';
 import type { SceneBlend, SceneDraw } from './scenePaint';
 import type { GoldFloorBand } from './goldRain';
+import type { BossRoomId, SceneRoomId } from './realmRoomArt';
 
 /**
  * Each room's floor, as it is painted: where gold, rain, snow and leaves come down (its far edge
@@ -14,7 +15,11 @@ import type { GoldFloorBand } from './goldRain';
  *   frost: ring at 0.78, 0.12 tall for wide, horizon 0.45;  ember: 0.60, 0.084, 0.43;
  *   tide: the dais at 0.63, 0.093, 0.47;  storm: 0.66, 0.12, 0.45;  grove: 0.79, 0.093, 0.58.
  */
-export const REALM_FLOORS: Readonly<Record<RealmId, { band: GoldFloorBand; water: boolean }>> = {
+export const REALM_FLOORS: Readonly<Record<SceneRoomId, { band: GoldFloorBand; water: boolean }>> = {
+    // The boss rooms (DGE-030), measured on their paintings the same way.
+    keeper: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
+    cartographer: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
+    warden: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
     frost: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.75 }, water: false },
     ember: { band: { far: 0.6, near: 0.97, horizon: 0.43, focal: 2.0 }, water: false },
     tide: { band: { far: 0.7, near: 0.97, horizon: 0.47, focal: 1.7 }, water: true },
@@ -625,10 +630,11 @@ export const realmRoomLifeDraws = (input: RealmRoomLifeInput): SceneDraw[] =>
  * strikes, its sky and puddles light with them, the braziers flicker, the shaft breathes, the fungus
  * pulses, the lava swells.
  */
-export const realmLayerLevel = (realm: RealmId, family: string, t: number, depth: number): number => {
+export const realmLayerLevel = (realm: SceneRoomId, family: string, t: number, depth: number, sinceBossEvent = Number.POSITIVE_INFINITY): number => {
     const climb = comboSoftCap(depth, 1);
     const rest = 0.35 + 0.65 * climb;
     const breath = (period: number, offset = 0): number => 0.5 + 0.5 * Math.sin((2 * Math.PI * t) / period + offset);
+    if (isBossRoom(realm)) return bossLayerLevel(realm, family, t, rest, breath, sinceBossEvent);
     if (realm === 'storm') {
         const strike = stormStrikeLevel(t, depth);
         const sheet = stormSheetLevel(t, depth);
@@ -664,7 +670,7 @@ export const realmLayerLevel = (realm: RealmId, family: string, t: number, depth
  * clock, a little faster the deeper the chain; the ones moving the painting drawn over its base, the
  * ones moving a light added at that light's level.
  */
-export const realmRoomSpriteDraws = (realm: RealmId, sprites: readonly SceneSpriteDef[], t: number, depth: number, alpha: number, still: boolean): SceneDraw[] => {
+export const realmRoomSpriteDraws = (realm: SceneRoomId, sprites: readonly SceneSpriteDef[], t: number, depth: number, alpha: number, still: boolean): SceneDraw[] => {
     if (alpha <= 0.004) return [];
     const pace = still ? 0 : Math.sqrt(realmLifePace(depth));
     return sprites.map((sprite, index) => {
@@ -698,7 +704,11 @@ interface RealmWarp {
 }
 
 /** The parts of each painting that move as a whole: water, cloud, vines and ferns (no flipbook: the base itself, warped live). */
-export const REALM_WARPS: Readonly<Record<RealmId, readonly RealmWarp[]>> = {
+export const REALM_WARPS: Readonly<Record<SceneRoomId, readonly RealmWarp[]>> = {
+    keeper: [],
+    cartographer: [],
+    // The Warden's mist rolls across its floor.
+    warden: [{ id: 'mist', box: [0, 0.7, 1, 1], kind: 'billow' }],
     frost: [],
     ember: [],
     tide: [{ id: 'water', box: [0, 0.64, 1, 1], kind: 'ripple' }],
@@ -718,7 +728,7 @@ export const REALM_WARPS: Readonly<Record<RealmId, readonly RealmWarp[]>> = {
  * any screen (a baked flipbook of them was soft on a phone), at the cost of a few dozen draws.
  * The bands at a region's top and bottom fade, so its edge never shows.
  */
-export const realmRoomWarpDraws = (realm: RealmId, src: string, t: number, depth: number, alpha: number, lean: boolean): SceneDraw[] => {
+export const realmRoomWarpDraws = (realm: SceneRoomId, src: string, t: number, depth: number, alpha: number, lean: boolean): SceneDraw[] => {
     if (alpha <= 0.004 || !src) return [];
     const s = (t / 1000) * Math.sqrt(realmLifePace(depth));
     const out: SceneDraw[] = [];
@@ -757,4 +767,89 @@ export const realmRoomWarpDraws = (realm: RealmId, src: string, t: number, depth
         }
     }
     return out;
+};
+
+// ------------------------------------------------------------------ the act bosses' rooms (DGE-030)
+
+const BOSS_ROOMS: ReadonlySet<string> = new Set<BossRoomId>(['keeper', 'cartographer', 'warden']);
+export const isBossRoom = (room: SceneRoomId | null | undefined): room is BossRoomId => room != null && BOSS_ROOMS.has(room);
+
+/** How long a boss room's one event plays, ms. */
+export const BOSS_EVENT_MS = 1400;
+
+/** The event's envelope at a moment: up fast, down slow, 0 outside it. */
+export const bossEventEnvelope = (sinceEvent: number): number =>
+    sinceEvent >= 0 && sinceEvent < BOSS_EVENT_MS ? sceneKeyframes(sinceEvent / BOSS_EVENT_MS, [[0, 0], [0.12, 1], [0.45, 0.7], [1, 0]]) : 0;
+
+/**
+ * A boss room's lights (`realms.json`: keeper lanterns and runes; cartographer candles, orrery and
+ * moon; warden cracks and runes): each climbs with the combo like a realm's, breathes on its own
+ * clock, and the room's one event moves one of them - the Keeper's lanterns gutter and flare as the
+ * halls swap, the Cartographer's orrery blazes as the deck turns, the Warden's cracks flare as it
+ * deals again (and its room darkens round them, `bossEventDim`).
+ */
+const bossLayerLevel = (room: BossRoomId, family: string, t: number, rest: number, breath: (period: number, offset?: number) => number, sinceEvent: number): number => {
+    const event = bossEventEnvelope(sinceEvent);
+    if (room === 'keeper') {
+        if (family === 'lanterns') {
+            const gutter = sinceEvent < BOSS_EVENT_MS * 0.12 ? 0.4 : 1;
+            return (0.7 + 0.3 * rest) * (0.85 + 0.15 * Math.sin(t / 131) * Math.sin(t / 277)) * gutter + 0.6 * event;
+        }
+        return rest * (0.85 + 0.15 * breath(5200));
+    }
+    if (room === 'cartographer') {
+        if (family === 'orrery') return rest * (0.8 + 0.2 * breath(6400)) + 0.9 * event;
+        if (family === 'candles') return (0.65 + 0.3 * rest) * (0.85 + 0.15 * Math.sin(t / 113) * Math.sin(t / 251));
+        if (family === 'moon') return (0.5 + 0.4 * rest) * (0.85 + 0.15 * breath(8200));
+        return rest * (0.9 + 0.1 * breath(4800));
+    }
+    if (family === 'cracks') return rest * (0.75 + 0.25 * breath(3100)) + 1.1 * event;
+    return rest * (0.85 + 0.15 * breath(4600, 1));
+};
+
+/** How dark a boss room's base goes for its event: only the Warden's darkens, round its flaring cracks. */
+export const bossEventDim = (room: SceneRoomId | null | undefined, sinceEvent: number): number =>
+    room === 'warden' ? 1 - 0.5 * bossEventEnvelope(sinceEvent) : 1;
+
+export interface BossRoomLifeInput {
+    room: BossRoomId;
+    t: number;
+    depth: number;
+    lean: boolean;
+    alpha: number;
+    /** Ms since the room's one event (`SceneMood.bossEventKey`), infinity when none. */
+    sinceEvent: number;
+}
+
+/**
+ * The life of a boss room, over the realm's weather that still strikes in it: dust in the Keeper's
+ * lantern light and the dust shaken down from the arches when the halls swap; motes in the
+ * Cartographer's moonlight and a sweep of light across the room when the deck turns; the Warden's
+ * low mist and embers off its cracks, and ash falling when it deals again. Nothing under reduced
+ * motion (the caller's `still`); the lit room is the still equivalent.
+ */
+export const bossRoomLifeDraws = ({ room, t, depth, lean, alpha, sinceEvent }: BossRoomLifeInput): SceneDraw[] => {
+    if (alpha <= 0.004) return [];
+    const pace = realmLifePace(depth);
+    const event = bossEventEnvelope(sinceEvent);
+    if (room === 'keeper') {
+        return [
+            ...driftDraws({ idPrefix: 'keeper-dust', cell: 'dotGold', count: realmLifeCount(12, depth, lean), x: 0.1, y: 0.1, w: 0.8, h: 0.6, fall: 0.006 * pace, slide: 0.004, size: 0.008, alpha: 0.45 * alpha, seed: 211 }, t),
+            fogDraw({ id: 'keeper-mist', t, alpha: 0.22 * alpha, mask: { kind: 'band', top: 0.66, solidFrom: 0.82, solidTo: 0.96, bottom: 1 }, speed: 0.004 * pace, tileW: 0.9, seed: 21 }),
+            ...driftDraws({ idPrefix: 'keeper-shaken', cell: 'dotWhite', count: event > 0.02 ? realmLifeCount(18, depth, lean) : 0, x: 0.05, y: 0, w: 0.9, h: 0.55, fall: 0.18, slide: 0.01, size: 0.01, alpha: 0.7 * event * alpha, seed: 213 }, t)
+        ];
+    }
+    if (room === 'cartographer') {
+        const sweep = sinceEvent >= 0 && sinceEvent < BOSS_EVENT_MS ? sinceEvent / BOSS_EVENT_MS : null;
+        return [
+            ...driftDraws({ idPrefix: 'carto-motes', cell: 'dotWhite', count: realmLifeCount(10, depth, lean), x: 0.38, y: 0.02, w: 0.24, h: 0.7, fall: 0.008 * pace, slide: 0.002, size: 0.008, alpha: 0.5 * alpha, seed: 221 }, t),
+            fogDraw({ id: 'carto-mist', t, alpha: 0.16 * alpha, mask: { kind: 'band', top: 0.7, solidFrom: 0.85, solidTo: 0.97, bottom: 1 }, speed: 0.003 * pace, tileW: 0.9, seed: 22 }),
+            ...(sweep === null ? [] : [ambientSprite({ id: 'carto-sweep', cell: 'glint', x: 0.08 + 0.84 * sweep, y: 0.34, size: 0.3, alpha: 0.85 * event * alpha, blend: 'lighter' })])
+        ];
+    }
+    return [
+        fogDraw({ id: 'warden-mist', t, alpha: (0.38 + 0.2 * event) * alpha, mask: { kind: 'band', top: 0.6, solidFrom: 0.78, solidTo: 0.96, bottom: 1 }, speed: 0.006 * pace, tileW: 0.85, seed: 23 }),
+        ...driftDraws({ idPrefix: 'warden-embers', cell: 'dotEmber', count: realmLifeCount(10, depth, lean), x: 0.3, y: 0.1, w: 0.4, h: 0.5, fall: -0.03 * pace, slide: 0.003, size: 0.01, alpha: 0.7 * alpha, seed: 231 }, t),
+        ...driftDraws({ idPrefix: 'warden-ash', cell: 'dotCinder', count: event > 0.02 ? realmLifeCount(16, depth, lean) : 0, x: 0, y: 0, w: 1, h: 0.8, fall: 0.12, slide: -0.01, size: 0.01, alpha: 0.75 * event * alpha, seed: 233 }, t)
+    ];
 };

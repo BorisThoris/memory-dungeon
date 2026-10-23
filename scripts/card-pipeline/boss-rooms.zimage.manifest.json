@@ -1,0 +1,29 @@
+{
+  "$comment": "Z-Image-Turbo batch for the three boss rooms (2026-10-22, DGE-030; src/renderer/components/realmRoomArt.ts). One painted room per act boss - the Keeper of Halls (floor 24), the Cartographer (floor 40), the Warden (floor 60) - at the realm rooms' plate size and camera (wide, low, the floor open at the centre where the board sits), so they are cut and lit by the realm rooms' own pipeline: they live in the same room namespace (bg-gameplay-realm-<room>-v1) as keeper, cartographer and warden. Render: py -3.12 scripts/card-pipeline/batch_local_zimage.py --manifest scripts/card-pipeline/boss-rooms.zimage.manifest.json --cpu-offload --out <dir>; pick from the contact sheet, copy the take to `target`, then realm_layers.py with the room's realms.json entry and upscale_realms.py <room>. Prompts name places, never persons (a named keeper or warden paints a figure), and describe only what is there (Turbo has no negative prompt; the art rules ask for positive-only prompts). Picks are in boss-rooms.zimage.picks.json, candidate n at the entry's seed + n - 1.",
+  "defaults": {
+    "width": 1376,
+    "height": 768,
+    "steps": 8,
+    "candidates": 3
+  },
+  "entries": [
+    {
+      "id": "bg-gameplay-realm-keeper-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1.png",
+      "seed": 54010,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot from a low camera inside The Hall of Doors: a long vaulted stone gallery lined on both walls with tall identical arched doorways, heavy dark oak doors bound in black iron standing ajar, great iron rings and hinges, brass lanterns hanging on chains between the arches glowing warm amber, drifting dust in the lantern light, a ring of keyhole runes inlaid in the worn flagstone floor, the foreground floor open, clear and empty, deep umber and midnight shadows with honey amber highlights, thin brass veins in the old stone, a concept painting that fills the whole image edge to edge, painterly, symmetrical composition centred on the floor, clean unmarked surfaces."
+    },
+    {
+      "id": "bg-gameplay-realm-cartographer-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1.png",
+      "seed": 54020,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot from a low camera inside The Map Room: a round domed chamber whose walls are tall shelves of rolled parchment maps and hanging star charts, a great brass orrery of nested rings suspended beneath the dome, a thin shaft of pale moonlight falling through an oculus, candles burning low on the shelves, a compass rose of inlaid brass and stone set as a ring in the floor, the foreground floor open, clear and empty, deep ink blue and sepia shadows with brass and candle gold highlights, a concept painting that fills the whole image edge to edge, painterly, symmetrical composition centred on the floor, clean unmarked surfaces."
+    },
+    {
+      "id": "bg-gameplay-realm-warden-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1.png",
+      "seed": 54030,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot from a low camera at the bottom of the dungeon before The Sealed Gate: a colossal gate of black iron and pale bone-white stone filling the far wall, great chains rising from it into darkness, deep crimson light seeping from cracks around the gate's edges, low cold mist rolling across the floor, broken pillars along both walls, a ring of binding runes inlaid in the black stone floor, the foreground floor open, clear and empty, deep black and oxblood shadows with ember red and bone white highlights, a concept painting that fills the whole image edge to edge, painterly, symmetrical composition centred on the floor, clean unmarked surfaces."
+    }
+  ]
+}
