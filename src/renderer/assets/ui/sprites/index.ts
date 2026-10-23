@@ -6,6 +6,9 @@ import goldCoinTurn from './gold-coin-v1-sprites.json';
 import realmEmber from './bg-gameplay-realm-ember-v1-sprites.json';
 import realmFrost from './bg-gameplay-realm-frost-v1-sprites.json';
 import realmGrove from './bg-gameplay-realm-grove-v1-sprites.json';
+import realmKeeper from './bg-gameplay-realm-keeper-v1-sprites.json';
+import realmCartographer from './bg-gameplay-realm-cartographer-v1-sprites.json';
+import realmWarden from './bg-gameplay-realm-warden-v1-sprites.json';
 import realmStorm from './bg-gameplay-realm-storm-v1-sprites.json';
 import realmTide from './bg-gameplay-realm-tide-v1-sprites.json';
 
@@ -75,7 +78,11 @@ export const SCENE_SPRITES = {
     realmEmber: resolveSceneSpriteSet(realmEmber),
     realmTide: resolveSceneSpriteSet(realmTide),
     realmStorm: resolveSceneSpriteSet(realmStorm),
-    realmGrove: resolveSceneSpriteSet(realmGrove)
+    realmGrove: resolveSceneSpriteSet(realmGrove),
+    // The act bosses' rooms (DGE-030): no flipbooks yet, so the manifests are empty.
+    realmKeeper: resolveSceneSpriteSet(realmKeeper),
+    realmCartographer: resolveSceneSpriteSet(realmCartographer),
+    realmWarden: resolveSceneSpriteSet(realmWarden)
 } as const;
 
 export type SceneSpriteSetKey = keyof typeof SCENE_SPRITES;

@@ -51,11 +51,11 @@ const glowsOf = (realm: SceneRoomId): Record<string, string> =>
         })
     );
 
-// The boss rooms move by their lights, their live warps and their one event; no flipbooks.
+// The boss rooms move by their lights, their live warps and their one event; their flipbook manifests are empty.
 const REALM_SPRITES: Readonly<Record<SceneRoomId, readonly SceneSpriteDef[]>> = {
-    keeper: [],
-    cartographer: [],
-    warden: [],
+    keeper: SCENE_SPRITES.realmKeeper.sprites,
+    cartographer: SCENE_SPRITES.realmCartographer.sprites,
+    warden: SCENE_SPRITES.realmWarden.sprites,
     frost: SCENE_SPRITES.realmFrost.sprites,
     ember: SCENE_SPRITES.realmEmber.sprites,
     tide: SCENE_SPRITES.realmTide.sprites,

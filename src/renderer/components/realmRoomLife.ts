@@ -16,10 +16,11 @@ import type { BossRoomId, SceneRoomId } from './realmRoomArt';
  *   tide: the dais at 0.63, 0.093, 0.47;  storm: 0.66, 0.12, 0.45;  grove: 0.79, 0.093, 0.58.
  */
 export const REALM_FLOORS: Readonly<Record<SceneRoomId, { band: GoldFloorBand; water: boolean }>> = {
-    // The boss rooms (DGE-030), measured on their paintings the same way.
-    keeper: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
-    cartographer: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
-    warden: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.2 }, water: false },
+    // The boss rooms (DGE-030), measured on their paintings the same way: the keyhole ring at 0.87,
+    // 0.22 tall for wide, horizon 0.62; the compass rose at 0.83, 0.135, 0.6; the binding ring at 0.81, 0.169, 0.6.
+    keeper: { band: { far: 0.68, near: 0.97, horizon: 0.62, focal: 1.14 }, water: false },
+    cartographer: { band: { far: 0.75, near: 0.97, horizon: 0.6, focal: 1.7 }, water: false },
+    warden: { band: { far: 0.66, near: 0.97, horizon: 0.6, focal: 1.24 }, water: false },
     frost: { band: { far: 0.66, near: 0.97, horizon: 0.45, focal: 2.75 }, water: false },
     ember: { band: { far: 0.6, near: 0.97, horizon: 0.43, focal: 2.0 }, water: false },
     tide: { band: { far: 0.7, near: 0.97, horizon: 0.47, focal: 1.7 }, water: true },
