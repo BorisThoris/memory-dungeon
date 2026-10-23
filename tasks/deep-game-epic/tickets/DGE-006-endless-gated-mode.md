@@ -1,7 +1,7 @@
 # DGE-006: Endless as an unlocked mode with its own scaling
 
 ## Status
-Done (2026-10-20). Tuning waits for a player with limited memory (see part 2).
+Done (2026-10-20). The forgetful player never reaches Endless (2026-10-23), so the rent stays tuned on the soak: see notes.
 
 ## Priority
 P1
@@ -78,3 +78,5 @@ Beating the Warden offers Continue into Endless. Endless repeats the four acts w
   - Codex (encyclopedia 97)
 - The soak and survival players are omniscient, so the curve's real bite on a human is unmeasured. Retune `ENDLESS_RENT_SHARE` once DGE-032's memory-limited player exists.
 - Original plan for part 2: a score each Endless floor must reach, rising 1.25x per cycle, shown as the milestone fraction; falling short ends the run with `rent_unpaid`. Measure the median floor score at depth before choosing the base, as with DGE-003's tiers. Also: a soak invariant (rent paid or the run ended), and a hall room at floor 61.
+
+2026-10-23: the rent and the forgetful player: no forgetful run (memories of 8 to 24 cards, forty seeds each) fells the Warden, so none reaches Endless or its rent; the rent's bite is still measured only on the soak's careful player (it falls short near cycle 11). `ENDLESS_RENT_SHARE` stays; the owner kept the omniscient survival bar (2026-10-23).

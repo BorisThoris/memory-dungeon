@@ -113,6 +113,7 @@
     "sim:curve": "tsx scripts/sim-difficulty-curve.ts",
     "sim:survival": "tsx scripts/sim-survival.ts",
     "sim:goldilocks": "tsx scripts/sim-goldilocks.ts",
+    "sim:memory-survival": "tsx scripts/sim-memory-survival.ts",
     "sim:deep-census": "tsx scripts/sim-deep-census.ts",
     "sim:pop-share": "tsx scripts/sim-pop-share.ts",
     "gate:pop-by-act": "tsx scripts/sim-pop-share.ts --floors=60 --by-act --check",

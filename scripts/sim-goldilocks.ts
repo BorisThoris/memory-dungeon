@@ -71,17 +71,21 @@ export interface GoldilocksFloorRow {
 const real = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey);
 
 /** One floor played by a player who forgets: the mean share it was sure of at its turn starts. */
-const playFloor = (start: RunState, seed: number): { share: number; turns: number } => {
+/**
+ * One floor by the player who forgets, `memorySize` cards held; returns the run after it, so whole runs
+ * can be played with the real miss bank (`sim-memory-survival.ts`).
+ */
+export const playMemoryFloor = (start: RunState, seed: number, memorySize: number = GOLDILOCKS_MEMORY): { run: RunState; share: number; turns: number } => {
     const rng = createMulberry32(hashStringToSeed(`goldilocks:${seed}:${start.board!.level}`));
     let run = start;
     // The memory, most recent last; and where each card was when last seen.
     let memory: string[] = [];
     const remember = (id: string): void => {
-        memory = [...memory.filter((known) => known !== id), id].slice(-GOLDILOCKS_MEMORY);
+        memory = [...memory.filter((known) => known !== id), id].slice(-memorySize);
     };
     // The study window: the cards on the board, face up, never the lower deck.
     const shown = run.board!.tiles.filter((tile) => real(tile) && tile.state === 'hidden').map((tile) => tile.id);
-    for (let n = 0; n < GOLDILOCKS_MEMORY && shown.length > 0; n += 1) remember(shown.splice(pickRngIndex(rng, shown.length), 1)[0]!);
+    for (let n = 0; n < memorySize && shown.length > 0; n += 1) remember(shown.splice(pickRngIndex(rng, shown.length), 1)[0]!);
     const shares: number[] = [];
     let turns = 0;
     const cellOf = (r: RunState): Map<string, number> => new Map(r.board!.tiles.map((tile, index) => [tile.id, index]));
@@ -126,24 +130,42 @@ const playFloor = (start: RunState, seed: number): { share: number; turns: numbe
                 }
             }
         }
+        // A last resort: the tries above can miss every opening a lock leaves (sticky fingers holds one card shut,
+        // and the guesses may land on it each time), so any legal opening and close is played rather than
+        // ending the floor where a player would simply pick another card.
+        for (let one = 0; one < hidden.length && !flipped; one += 1) {
+            const opened = tryFlip(run, hidden[one]!.id);
+            if (!opened) continue;
+            for (let two = 0; two < hidden.length && !flipped; two += 1) {
+                if (two === one) continue;
+                const closed = tryFlip(opened, hidden[two]!.id);
+                if (closed) {
+                    remember(hidden[one]!.id);
+                    remember(hidden[two]!.id);
+                    flipped = closed;
+                }
+            }
+        }
         if (!flipped) break;
         const before = cellOf(flipped);
         run = resolveBoardTurn(flipped);
         turns += 1;
         if (!run.board) break;
         // A card it knew that moved is a card it no longer knows - unless it watched it go: a one-cell slide
-        // (skittish cards, the Wanderers) it follows, and the looking glass it reasons through.
+        // (skittish cards, the Wanderers) it follows, and the looking glass and the Keeper's swap it reasons through.
         const after = cellOf(run);
         const mirrored = (run.lookingGlassTurnsThisFloor ?? 0) > (flipped.lookingGlassTurnsThisFloor ?? 0);
+        // The Keeper's swap is said on the crown (each card keeps its place in its room), so it is followed like the mirror.
+        const roomsSwapped = (run.keeperSwapsThisFloor ?? 0) > (flipped.keeperSwapsThisFloor ?? 0);
         const columns = Math.max(1, run.board.columns);
         const oneStep = (a: number, b: number): boolean =>
             Math.abs(a - b) === columns || (Math.abs(a - b) === 1 && Math.floor(a / columns) === Math.floor(b / columns));
         memory = memory.filter((id) => {
             const [was, now] = [before.get(id), after.get(id)];
-            return was === now || mirrored || (was != null && now != null && oneStep(was, now));
+            return was === now || mirrored || roomsSwapped || (was != null && now != null && oneStep(was, now));
         });
     }
-    return { share: shares.length > 0 ? shares.reduce((sum, value) => sum + value, 0) / shares.length : 0, turns };
+    return { run, share: shares.length > 0 ? shares.reduce((sum, value) => sum + value, 0) / shares.length : 0, turns };
 };
 
 export const simulateGoldilocks = ({
@@ -175,7 +197,7 @@ export const simulateGoldilocks = ({
         };
         for (let floor = 1; floor <= to; floor += 1) {
             if (floor >= from) {
-                const played = playFloor(run, seed);
+                const played = playMemoryFloor(run, seed);
                 const row = gathered.get(floor) ?? { shares: [], turns: [], layers: 0, wanderers: 0, fold: 0, archetypes: [] };
                 row.archetypes.push(run.board!.floorArchetypeId ?? '');
                 row.shares.push(played.share);

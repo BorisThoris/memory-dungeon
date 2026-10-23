@@ -3561,3 +3561,27 @@ average player never reaches a test Warden (199 of 200 end on the miss bank earl
 sometimes" is not measured; the survival sim's 15% player reaches floor 60 in 61 of 100 runs
 (`gate:warden-reach`), but does not model the Hold. Twelve is reachable on the Warden's board without
 Layers (the hall room `warden-felled` does it on 13 pairs).
+
+## A player who forgets (2026-10-23, DGE-005/006)
+
+`yarn sim:memory-survival` plays the Goldilocks probe's player - a working memory of N cards, the study window
+seen, what jumps forgotten, what slides a cell, mirrors or swaps rooms with the Keeper followed - through whole
+runs with the real miss bank, to the Warden and on into Endless. Forty seeds per memory size:
+
+| memory | median floor | reach 12 | reach 24 | reach 40 | reach 60 | Warden felled |
+| --- | --- | --- | --- | --- | --- | --- |
+| 8 | 9 | 0.23 | 0.00 | 0.00 | 0.00 | 0 |
+| 12 | 20 | 0.75 | 0.03 | 0.00 | 0.00 | 0 |
+| 16 | 25 | 0.88 | 0.57 | 0.00 | 0.00 | 0 |
+| 24 | 29 | 0.97 | 0.82 | 0.25 | 0.13 | 0 |
+
+Every run ends on the miss bank. The 16-card player misses 17% of its turns overall, near the 15% the owner's bar
+plays (`gate:warden-reach`: half of runs reach the Warden), but its misses are not spread evenly: they pile up on
+the restless hall (floor 20, designed to take back what you knew) and on floors 25-27, where the Deep opens with
+masks, Layers, bigger boards and the Dread's first purchases. No forgetful run fells the Warden: it never holds,
+and floor 60's re-deals take what it knew. The plan's after-launch reach curve (floor 24 by ~40% of owners, 40 by
+~15%, the Warden by ~8%) sits between the 16- and 24-card players. **The owner kept the bar** (2026-10-23):
+this is recorded as a measurement and tunes nothing. Two model fixes came with it: a last-resort turn when the
+player's guesses all land on a card sticky fingers holds shut (it had stalled two floors in twelve), and the
+Keeper's swap followed like the mirror, since the crown states it.
+

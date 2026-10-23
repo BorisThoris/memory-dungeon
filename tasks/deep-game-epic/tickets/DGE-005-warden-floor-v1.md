@@ -1,7 +1,7 @@
 # DGE-005: The Warden at floor 60, rule-only first version
 
 ## Status
-Done (2026-10-20), rule-only first version. The difficulty target is unmeasured: see notes.
+Done (2026-10-20), rule-only first version; the difficulty target measured with a forgetful player 2026-10-23 (recorded, the owner kept the bar).
 
 ## Priority
 P0
@@ -62,3 +62,5 @@ Floor 60 is the Warden. Its rules, stated on the HUD before the floor: every tur
 - Graph node `hazard.warden`, not `boss.warden`: the `boss.` prefix belongs to the deleted dungeon layer and the graph test bans it. The Codex guard against the old layer's "wardens" now names the plural, since the Warden is back as one boss. Ledger entry, census exemption (the census and the soak never reach 60), mechanic count 72, two hall rooms (`warden-past-par`, `warden-redeal`), unit tests, and a soak miss invariant that counts the Warden's extra miss.
 - **Acceptance not met, and why.** `yarn sim:survival` now reports Warden clears and falls. At 5, 8 and 10% misses, 19, 18 and 14 of 20 runs reach floor 60 and every one clears it (0 falls). At 15%, runs end around floor 20 and none reach it. Both sim players (survival and soak) are omniscient: they match any pair they choose except their deliberate misses, so they never pay to explore a 24-pair board and never go past par. The "half of average runs end at the Warden" target cannot be measured until a player with limited memory exists. The DGE-001 numbers also say the 15% player dies around floor 20, long before 60. The soak run 61 floors deep (40 careful seeds) passes every invariant through the Warden's floor and its re-deals.
 - Next: a memory-model sim player before any Warden tuning (DGE-012 measures the pop and could carry it); DGE-006 for what clearing the Warden unlocks; DGE-007 for the results screen's win.
+
+2026-10-23: the difficulty target measured with a player who forgets (`sim:memory-survival`, BALANCE_NOTES "A player who forgets"): a 16-card memory reaches floor 24 in 57% of runs and floor 40 in none; a 24-card memory stands on the Warden's floor in 13% and fells it in none (it never holds, and the re-deals take what it knew). The owner kept the omniscient bar (`gate:warden-reach`, 57/100 at 15% misses), so this is recorded, not tuned.
