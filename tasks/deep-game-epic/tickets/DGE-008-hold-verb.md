@@ -79,4 +79,4 @@ Design notes kept for the build:
 - Words: `holdBeat.ts` says the Hold starting, a miss dropping part of the stack, and the release ("Released 4 held pairs: every one breaks at once."), each once, through the polite live region; unit-tested.
 - Controller: the dock's roving toolbar gives the pad every tool, the Hold among them (`gamepadNavigation.ts`); no tool has a keyboard shortcut of its own, so none was added.
 - `e2e/tools-usable.spec.ts`: Hold pressed, a pair matched and held, Release pressed and the stack broken; passes in the isolated station with Carve and Reprise.
-- Not done: the realm room's overdrive reading the release size (the room reads the combo, which the release already raises).
+- The room reads the release: a release is a break without a turn, so it never reached the scene's break pulse; `releaseHold` now leaves `lastHoldRelease` (pairs, floor, turn), and the scene flashes on it at the release's size (`holdReleasePulseTier`: Clean below four pairs, Sharp from four, Fever from eight), which is what drives the room's overdrive. Unit-tested.

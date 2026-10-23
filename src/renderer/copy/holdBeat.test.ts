@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { holdBeat } from './holdBeat';
+import { holdBeat, holdReleasePulseTier } from './holdBeat';
 
 const board = { level: 14 } as never;
 const at = (extra: Record<string, unknown>) => ({ board, ...extra });
@@ -17,5 +17,11 @@ describe('the Hold says what it did (DGE-008)', () => {
         expect(holdBeat(at({ holding: true, heldSeedIds: ['a', 'b'] }), at({ holding: true, heldSeedIds: ['a', 'b', 'c', 'd'] }))).toBeNull();
         expect(holdBeat(at({ holding: false }), { board: { level: 15 } as never, holding: true })).toBeNull();
         expect(holdBeat(null, at({ holding: true }))).toBeNull();
+    });
+});
+
+describe("the room flashes at the release's size (DGE-008)", () => {
+    it('Fever from eight pairs, Sharp from four, Clean below', () => {
+        expect([1, 3, 4, 7, 8, 40].map(holdReleasePulseTier)).toEqual(['clean', 'clean', 'sharp', 'sharp', 'fever', 'fever']);
     });
 });

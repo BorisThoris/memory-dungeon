@@ -29,3 +29,6 @@ export const holdBeat = (before: HoldFields | null | undefined, after: HoldField
     }
     return null;
 };
+
+/** How hard the room flashes for a release: by its size, Fever from eight pairs held (DGE-008). */
+export const holdReleasePulseTier = (pairs: number): 'fever' | 'sharp' | 'clean' => (pairs >= 8 ? 'fever' : pairs >= 4 ? 'sharp' : 'clean');

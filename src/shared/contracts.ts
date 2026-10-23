@@ -1055,6 +1055,8 @@ export interface RunState {
     largestHoldThisRun?: number;
     /** The most pairs one release held this run (the feat Twelve Held, `feat-unlocks.ts`). */
     largestHeldReleaseThisRun?: number;
+    /** The last release: its pairs, floor and turn - read by the scene to flash the room at its size (DGE-008). */
+    lastHoldRelease?: { readonly pairs: number; readonly level: number; readonly turn: number } | null;
     /** Carve (`carve-rules.ts`, DGE-015): the direction set for the next pop, carves set this floor, and carves a pop spent. */
     carveDirection?: CarveDirection | null;
     carvesThisFloor?: number;

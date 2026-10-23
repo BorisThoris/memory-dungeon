@@ -1,6 +1,6 @@
 import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
-import { holdBeat } from '../copy/holdBeat';
+import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
@@ -1165,12 +1165,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const pulseTier: ChainTier = latestTurnForPulse?.announcement.chainTierAfter ?? 'none';
     // A break with no chain behind it is the pop: it pulses too, softly, so a match never reads as
     // two tiles going grey while four more vanish for no reason.
-    const breakPulseTier: ChainTier | 'pop' | 'none' =
+    const turnPulseTier: ChainTier | 'pop' | 'none' =
         latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
             ? pulseTier === 'none'
                 ? 'pop'
                 : pulseTier
             : 'none';
+    // A Hold released this turn (DGE-008) is a break without a turn: the room flashes at its size.
+    const release = run.lastHoldRelease;
+    const releasedNow = release != null && release.level === run.board?.level && release.turn === runNonNegativeInteger(run.turnsThisFloor);
+    const breakPulseTier: ChainTier | 'pop' | 'none' = releasedNow ? holdReleasePulseTier(release.pairs) : turnPulseTier;
+    const breakPulseKey = releasedNow ? `release:${release.level}:${runNonNegativeInteger(run.holdsReleasedThisFloor)}` : pulseEventId;
     /*
      * The turn that carried the run into Fever, if the latest one did. The scene flashes on it, so
      * the top of the meter is an arrival rather than the end of a ramp; it clears as soon as a
@@ -2120,7 +2125,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     imminent={chainRungApproach(runChainMeter(run).momentum, run.board?.pairCount ?? null).imminent}
                     memorize={run.status === 'memorize'}
                     pulse={breakPulseTier}
-                    pulseKey={pulseEventId}
+                    pulseKey={breakPulseKey}
                     quality={settingsGraphicsQuality}
                     reduceMotion={reduceMotion}
                     tier={runChainTier(run)}

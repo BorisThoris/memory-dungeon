@@ -151,6 +151,7 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
         holdsReleasedThisFloor: runNonNegativeInteger(run.holdsReleasedThisFloor) + 1,
         largestHoldThisRun: Math.max(runNonNegativeInteger(run.largestHoldThisRun), pairs),
         largestHeldReleaseThisRun: Math.max(runNonNegativeInteger(run.largestHeldReleaseThisRun), held),
+        lastHoldRelease: { pairs: held, level: run.board.level, turn: runNonNegativeInteger(run.turnsThisFloor) },
         stats: {
             ...run.stats,
             totalScore: runNonNegativeInteger(run.stats.totalScore) + score,
