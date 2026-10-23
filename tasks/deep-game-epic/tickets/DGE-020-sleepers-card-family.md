@@ -55,3 +55,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - The deep soak found a Sleeper matched while holding woke as a held seed; waking now takes it out of the Hold (unit test).
 - Hall rooms `sleeper-wakes` ("Sleeper wakes"), `sleeper-chain` ("Chain keeps it down"); unit tests; soak invariants (woken face down; no floor cleared with one asleep). Deep soak to 62: 198 woken, 764 kept down, 0 violations. warden-reach 55/100. The wildfire hall room re-pinned to seed 90213 after the reseed.
 - Not done: a wake animation from the room's material (DGE-030).
+
+2026-10-23: the wake animation. A Sleeper that wakes keeps its id and comes back face down in another cell, so the rise registry (`tileRise.ts`) notes a card that was gone on the last board and is face down now, and it climbs into its cell the way a card from the deck beneath does (DGE-017's rise; still under reduced motion). The breath-and-bell cue is DGE-030's. Unit-tested.

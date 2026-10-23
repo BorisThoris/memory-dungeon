@@ -5,10 +5,16 @@ import { noteRisenCards, takeRisen } from './tileRise';
 
 describe('a card rises from the deck beneath (DGE-017)', () => {
     it('notes a card that was beneath and is on top now, once', () => {
-        noteRisenCards({ beneath: [makeTile('low-1', 'l', 'l'), null] }, { tiles: [makeTile('low-1', 'l', 'l'), makeTile('top-2', 't', 't')] });
+        noteRisenCards({ beneath: [makeTile('low-1', 'l', 'l'), null], tiles: [] }, { tiles: [makeTile('low-1', 'l', 'l'), makeTile('top-2', 't', 't')] });
         expect(takeRisen('top-2')).toBe(false);
         expect(takeRisen('low-1')).toBe(true);
         expect(takeRisen('low-1')).toBe(false);
+    });
+
+    it('notes a Sleeper that woke: gone on the last board, face down now', () => {
+        noteRisenCards({ tiles: [makeTile('s-1', 's', 's', { state: 'matched' }), makeTile('m-1', 'm', 'm', { state: 'matched' })] }, { tiles: [makeTile('s-1', 's', 's'), makeTile('m-1', 'm', 'm', { state: 'matched' })] });
+        expect(takeRisen('s-1')).toBe(true);
+        expect(takeRisen('m-1')).toBe(false);
     });
 
     it('climbs from the edge into its cell over the rise, then stops', () => {

@@ -16,6 +16,8 @@ import { collectElementCastParticles } from './elementCastParticles';
 import { cardDepartureBursts, cardDepartureSparkTint, CARD_DEPARTURE_PARTICLE_DELAY } from './cardDepartureParticles';
 import { createCardShardSystem } from './cardShardSystem';
 import { createCardElementFxSystem } from './cardElementFx';
+import { unmaskedCells } from './unmaskedCells';
+import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
 import { createCardDepartureWorld } from './cardDepartureWorld';
 import type { DepartureSource } from './cardDepartureGrouping';
 import { emitRoomSpill } from './roomSpill';
@@ -87,6 +89,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const castBursts = useRef(0);
     const reactionBursts = useRef(0);
     const departureBursts = useRef(0);
+    const unmaskBursts = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useEffect(() => () => shards.dispose(), [shards]);
     useEffect(() => () => departureWorld.dispose(), [departureWorld]);
@@ -201,9 +204,19 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
         for (const cue of collectElementReactionParticles(previous.current, board, graphicsQuality, compact, reduceMotion, time.current)) {
             if (system.emit(cue) > 0) reactionBursts.current += 1;
         }
+        // A mask dropped (`mask-rules.ts`, DGE-016): the card turned and showed an element its back did not, so its
+        // truth breaks out of it in that element's colour. Read off the visible board, which wore the lie.
+        for (const unmasked of unmaskedCells(previous.current, board)) {
+            const tile = board.tiles[unmasked]!;
+            const transform = getTileTransform(tile, unmasked, board.columns, board.rows, compact, true, reduceMotion);
+            if (system.emit({ kind: 'ember', x: transform.baseX + transform.layoutJitterX, y: transform.baseY + transform.layoutJitterY, z: 0.06,
+                time: time.current, seed: hashStringToSeed(`${tile.id}:unmask`), reduceMotion, quality: graphicsQuality, energy: 0.9,
+                tint: TILE_SUIT_CATALOG[tile.suit!].hue, emberMode: 'spark', sizeScale: 1.4, priority: 'event' }) > 0) unmaskBursts.current += 1;
+        }
         previous.current = board;
         const canvas = gl.domElement;
         canvas.setAttribute('data-particle-budget', String(boardParticleBudget(graphicsQuality)));
+        canvas.setAttribute('data-particle-unmask-bursts', String(unmaskBursts.current));
         canvas.setAttribute('data-particle-combo', String(Math.max(0, Math.floor(combo))));
         canvas.setAttribute('data-combo-pop-effects', String(comboPopEffects));
         canvas.setAttribute('data-particle-cast-bursts', String(castBursts.current));

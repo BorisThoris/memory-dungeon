@@ -57,3 +57,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - The plan priced Masks at 6 on a Dread table that was never built; the price is a floor count here.
 - Hall room `mask-drops` (the mask drops on a miss, the match casts fire not water); unit tests; soak invariant (never both cards, never face up, never its own element) and counters; soak 5 x 200: 7478 masks, 3511 dropped, 0 violations. warden-reach 56/100. Looked at in the isolated browser.
 - Not done: the unmasking FX (`cardElementFx.ts` in miniature); the back simply turns to the truth.
+
+2026-10-23: the unmasking FX. When a card turns to an element its back did not show (`unmaskedCells.ts`, read off two visible boards, which wear the mask as the suit), its truth breaks out of it as a spark burst in that element's colour (`TileBoardParticles`, counted as `data-particle-unmask-bursts`); the glass tick of DGE-030 plays with it. Unit-tested; seen in the isolated browser on the mask room (one burst on the flip, no console errors).
