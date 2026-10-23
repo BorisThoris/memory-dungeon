@@ -1,7 +1,7 @@
 # DGE-008: Hold: stack matches, release one cascade
 
 ## Status
-Done (2026-10-20), as specified. The pop-share acceptance is unmet by design, and the feedback pass waits: see notes.
+Done (2026-10-20), as specified; the feedback pass done 2026-10-23. The pop-share acceptance is unmet by design: see notes.
 
 ## Priority
 P0
@@ -72,3 +72,11 @@ Design notes kept for the build:
 - The Zone and the Hold exclude each other: the Zone replays turns a hold cannot keep seeds through.
 - Checklist rows ticked: rules module, hall rooms (`hold-release`, `hold-miss-halves`, `hold-last-pair`), soak invariants and counters, graph node `power.hold` with its `displays` edge, ledger entry, census exemption, Codex `sys_hold` (encyclopedia 98), a look in the browser.
 - Not yet: the held-pair glow, the release pitch run, `holdBeat.ts` words, a controller binding and the `tools-usable` e2e press. Acceptance "pop share >= 0.6" is recorded as unmet (see above).
+
+2026-10-23, the feedback pass:
+- Glow: `HoldSeeds.tsx` (DGE-030) - each cell a held pair left keeps a gold seed that breathes brighter with every pair held, never past full, still under reduced motion.
+- Pitch run: the release cue (`playDeepGameSfx`, DGE-030) runs bells up the cascade's own scale, one per doubling held.
+- Words: `holdBeat.ts` says the Hold starting, a miss dropping part of the stack, and the release ("Released 4 held pairs: every one breaks at once."), each once, through the polite live region; unit-tested.
+- Controller: the dock's roving toolbar gives the pad every tool, the Hold among them (`gamepadNavigation.ts`); no tool has a keyboard shortcut of its own, so none was added.
+- `e2e/tools-usable.spec.ts`: Hold pressed, a pair matched and held, Release pressed and the stack broken; passes in the isolated station with Carve and Reprise.
+- Not done: the realm room's overdrive reading the release size (the room reads the combo, which the release already raises).

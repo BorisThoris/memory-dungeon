@@ -95,3 +95,15 @@ export const sampleCellGlide = (
 
 /** Whether any card is mid-glide (for tests and the frame loop's "keep rendering" check). */
 export const isCardGliding = (card: object): boolean => memory.get(card)?.glide != null;
+
+/** Layers (`board-layers-rules.ts`, DGE-017): a card rising from the deck beneath - short, low, barely turning. */
+export const RISE_SHAPE: GlideShape = { ms: 520, arc: 0.35, tilt: 0.05 };
+
+/**
+ * Starts a card's rise: its glide begins where the edge of the card waiting beneath showed
+ * (`LayerEdges.tsx`), below and to the right of the cell, and climbs into it. Reduced motion skips it
+ * (the caller's choice), and the card is simply there, as before.
+ */
+export const primeCardRise = (card: object, from: { x: number; y: number }, target: { x: number; y: number }, now: number): void => {
+    memory.set(card, { lastX: target.x, lastY: target.y, glide: { fromX: from.x, fromY: from.y, fromZ: 0, start: now, tiltSign: 1, shape: RISE_SHAPE } });
+};

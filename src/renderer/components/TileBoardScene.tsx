@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { createBoardTextureWarmupQueue, uploadBoardTileTextures } from './tileTextureWarmup';
 import { advanceToNextLevel } from '../../shared/next-floor-transition-rules';
 import { useAppStore } from '../store/useAppStore';
+import { noteRisenCards } from './tileRise';
 import { prewarmPairProximityBadges } from './pairProximityBadges';
 import { prewarmCardBackShaders, prewarmElementCardTextures } from './ElementCardBack';
 import { prewarmCardElementFxShaders } from './cardElementFx';
@@ -310,6 +311,12 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      */
     // The Hold's seeds (`HoldSeeds.tsx`): the cells a held pair left, read off the run like the warm-up below.
     const heldSeedIds = useAppStore((state) => state.run?.heldSeedIds);
+    // Layers: the cards that rose since the last board climb into their cells (`tileRise.ts`).
+    const lastBoardForRise = useRef<BoardState | null>(null);
+    useEffect(() => {
+        noteRisenCards(lastBoardForRise.current, board);
+        lastBoardForRise.current = board;
+    }, [board]);
     const nextFloorWarmupRef = useRef<((budgetMs: number) => boolean) | null>(null);
     useEffect(() => {
         if (runStatus !== 'levelComplete') return undefined;

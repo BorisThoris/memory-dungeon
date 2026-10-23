@@ -1,7 +1,7 @@
 # DGE-014: Six relic evolutions, blueprints as boss drops
 
 ## Status
-Done (2026-10-21), rules 77. Four evolutions live; Unmasking Glass and Echo Chamber evolve and wait for Masks and Echo.
+Done (2026-10-21), rules 77; all six evolutions live since Masks (rules 80) and Reprise (rules 83).
 
 ## Priority
 P0

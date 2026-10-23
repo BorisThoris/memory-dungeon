@@ -1,7 +1,7 @@
 # DGE-017: Layers: a second deck beneath the first
 
 ## Status
-Done (2026-10-20), rules 72. Two decks under two cells in five, not every cell; no rise animation yet: see notes.
+Done (2026-10-20), rules 72; the rise animation landed 2026-10-23. Two decks under two cells in five, not every cell: see notes.
 
 ## Priority
 P0
@@ -69,3 +69,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 `layerKey` and the study timer (`runTimerController.ts`) on the tile ids, so the board-ready handshake never matched
 and memorize sat at its full count (the test-pace playtest stalled on floor 25). Both now use `boardDealKey`
 (`board-layers-rules.ts`); a unit test pins it. Hall rooms boot straight into play, which is why they never saw it.
+
+2026-10-23: the rise. A card that rose from the deck beneath (`tileRise.ts` notes it off two boards in a row) glides up from where its edge showed into its cell (`primeCardRise`, `RISE_SHAPE`: 520 ms, low, barely turning), the board's own glide; reduced motion skips it and the card is there. Unit-tested; looked at in the isolated browser as a frame burst on the Layers room. Still not done: `yarn sim:endless --deep-floors` coverage of Layers, per-archetype lower-deck profiles.

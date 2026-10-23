@@ -36,6 +36,8 @@ import {
 import { useRealmAmbience, useRealmEventPulse } from './realmAmbience';
 import { setCardDissolve } from './cardDissolveMaterial';
 import { putMeteorThrow, takeBackMeteorThrow } from './meteorImpactMotion';
+import { primeCardRise } from './tileCellGlide';
+import { RISE_FROM_OFFSET, takeRisen } from './tileRise';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -236,6 +238,12 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     const realmEvent = useRealmEventPulse.getState().event;
     const joltMs = realmEvent && realmEvent.tileIds.has(p.tile.id) ? now - realmEvent.at : -1;
     const jolting = realmEvent != null && joltMs >= 0 && joltMs < REALM_JOLT_MS;
+    // A card that just rose from the deck beneath climbs into its cell (`tileRise.ts`).
+    if (takeRisen(p.tile.id) && !p.reduceMotion) {
+        const x = p.transform.baseX + p.transform.layoutJitterX;
+        const y = p.transform.baseY + p.transform.layoutJitterY;
+        primeCardRise(group, { x: x + RISE_FROM_OFFSET, y: y - RISE_FROM_OFFSET }, { x, y }, now);
+    }
     applyTileBoardCardGroupMotionState(
         group,
         cardGroupMotionState,

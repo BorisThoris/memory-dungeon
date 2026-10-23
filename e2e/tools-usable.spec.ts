@@ -253,6 +253,23 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-reprise')).toBeDisabled();
     });
 
+    test('hold: press it, match a pair, and Release breaks what was held', async ({ page }) => {
+        await openRoom(page, 'hold-release');
+        await openItemsIfFolded(page);
+        await expect(page.getByTestId('tool-hold')).toBeEnabled();
+        await page.getByTestId('tool-hold').click();
+        await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.holding)).toBe(true);
+        await pick(page, 'a-1');
+        await pick(page, 'a-2');
+        await expect.poll(async () => (await read(page)).states['a-2'], { timeout: 30_000 }).toBe('matched');
+        await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
+        await page.getByTestId('tool-hold').click();
+        await expect.poll(async () => page.evaluate(async () => {
+            const run = (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!;
+            return { holding: run.holding === true, released: run.holdsReleasedThisFloor ?? 0 };
+        }), { timeout: 30_000 }).toEqual({ holding: false, released: 1 });
+    });
+
     test('carve: press it, pick a way with an arrow key, and the next pop walks that way', async ({ page }) => {
         await openRoom(page, 'carve-right');
         await openItemsIfFolded(page);

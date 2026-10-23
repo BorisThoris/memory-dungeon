@@ -1,5 +1,6 @@
 import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
+import { holdBeat } from '../copy/holdBeat';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
@@ -1624,6 +1625,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         saidHourglassKey.current = hourglassEventKey;
         queuePoliteAnnouncement(hourglassAnnouncement(hourglassEvent), { dedupeKey: hourglassEventKey });
     }, [hourglassEventKey, hourglassEvent, queuePoliteAnnouncement]);
+    // The Hold's words (`holdBeat.ts`): its start, a miss halving it, and the release, each said once.
+    const lastHoldFields = useRef<Parameters<typeof holdBeat>[1] | null>(null);
+    const { board: holdBoard, holding, heldSeedIds, holdsReleasedThisFloor } = run;
+    useEffect(() => {
+        const fields = { board: holdBoard, holding, heldSeedIds, holdsReleasedThisFloor };
+        const beat = holdBeat(lastHoldFields.current, fields);
+        lastHoldFields.current = fields;
+        if (beat) queuePoliteAnnouncement(beat.line, { dedupeKey: beat.key });
+    }, [holdBoard, holding, heldSeedIds, holdsReleasedThisFloor, queuePoliteAnnouncement]);
 
     // The Warden's two rules hang in the crown for the whole floor (DGE-005): the caption that also says
     // them is for screen readers only, so this is where a player sees them before the first flip.
