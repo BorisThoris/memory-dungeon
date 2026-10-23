@@ -4431,8 +4431,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 34009,
-      "sha256": "5bcfd28a488b5115882afb3eda62477212ccd619f36396d79f73389ab9c4773b"
+      "bytes": 34103,
+      "sha256": "fb741c673cebedfd99e7d512734aafc6ced87935edeb63d138efd769b16d022e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5313,8 +5313,8 @@
     {
       "path": "scripts/gate-reachability.ts",
       "category": "script",
-      "bytes": 6934,
-      "sha256": "b1aa43613ab3dc916193dbd2175504132625181a3c7e28014829edc4fd4dfee1"
+      "bytes": 7192,
+      "sha256": "de004dc3ec20b3f1e0853fdc44c6f0d99ecc66431ce9aae060769a0a7e605b1f"
     },
     {
       "path": "scripts/gate-softlock-seeds.ts",
@@ -5787,14 +5787,14 @@
     {
       "path": "scripts/sim-difficulty-curve.ts",
       "category": "script",
-      "bytes": 17268,
-      "sha256": "b468415e2694e4b78b4f792158028083d350262e422a6cf49aa5d3473dbfd1b2"
+      "bytes": 20142,
+      "sha256": "7388ea0ed89b70941a7afa2e5ec02faed9b56074428883439e7f36bcc4e22182"
     },
     {
       "path": "scripts/sim-endless.ts",
       "category": "script",
-      "bytes": 30884,
-      "sha256": "d6c67aa110cba703fdcde69a6754cde6db88f1d165dceec530efeb64a8831bdb"
+      "bytes": 31274,
+      "sha256": "99375ee1f6c5eaa7be106c0c656c2159ca5c8bad01c7f31a48fcbdc37e7f0c9b"
     },
     {
       "path": "scripts/sim-gameplay-core.ts",
@@ -5805,8 +5805,8 @@
     {
       "path": "scripts/sim-goldilocks.ts",
       "category": "script",
-      "bytes": 14240,
-      "sha256": "8e6bbee5f75b9196ea2fbba05129672ccc999d5a48397944779500ed62b7d334"
+      "bytes": 14343,
+      "sha256": "967c37389d4fa5742e08abdb3bd3e58f386b3778cb167d33fabf27ae424b29e5"
     },
     {
       "path": "scripts/sim-occupancy.ts",
@@ -15459,8 +15459,8 @@
     {
       "path": "src/shared/difficulty-curve-simulation.test.ts",
       "category": "test",
-      "bytes": 5630,
-      "sha256": "876543eb6e8ed6dabb9bedd77c26d754d22ecc6ae567476d2bdd3b8571e74511"
+      "bytes": 6475,
+      "sha256": "0c26f0d7e00dd44206427e0a3f062489db2f1096ed9004d434e5c0fcd2ab1fbc"
     },
     {
       "path": "src/shared/difficulty-profile.test.ts",
@@ -17265,8 +17265,8 @@
     {
       "path": "src/shared/sim-endless-output.test.ts",
       "category": "test",
-      "bytes": 11725,
-      "sha256": "499bbbe17aa8ebde76fd0a16f756a0691adc1ac357e643c9616885e09f501b08"
+      "bytes": 11736,
+      "sha256": "a08eb56d40aa5344cfdaafd0206a7004e5c6eed3a0d2e4a09bce277ae15fecf2"
     },
     {
       "path": "src/shared/skittish-cards-rules.test.ts",
@@ -17787,8 +17787,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 23470,
-      "sha256": "d757dd3d04a1d5b40de0c16ec913df313004c9aacd310a75750b8868cba76205"
+      "bytes": 23829,
+      "sha256": "cc5cee86acbbc07c79bee1ea54e431ba62a5c20d6ac08ce1c960788334ec7ef0"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17919,8 +17919,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
       "category": "other",
-      "bytes": 6062,
-      "sha256": "851a502dbcac2cd1dab2f867d98a934fa06a4a74edc9044509bfb0c0eb9529db"
+      "bytes": 6299,
+      "sha256": "fa06225bf8b1f98f92299e96dd14669b6aae78a0b3363bd939a46eb4b011f0c2"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
@@ -17943,8 +17943,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-021-the-spiral-board.md",
       "category": "other",
-      "bytes": 4509,
-      "sha256": "ee1cd7792b57b0e53bfcf897512f8eb0d707a42e7d686a57ae3b2a3dfe7a7270"
+      "bytes": 4778,
+      "sha256": "fff1613573c02517b733ba80bc82eb641cced7fc50adc2f8004b7ad26b423153"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-022-dungeon-learns-you.md",
@@ -18009,8 +18009,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-032-balance-bars-and-sims.md",
       "category": "other",
-      "bytes": 4853,
-      "sha256": "8a79682d2e0b844911afd5d665282163bcb073bd10f880a1b2b758ba66d7170b"
+      "bytes": 5752,
+      "sha256": "c35a1788e3ca4eb8e93dc374020043c112adf18fce4a346b53413b1e71193aa4"
     },
     {
       "path": "tasks/dungeon-epic/00-current-system-map.md",
@@ -37377,7 +37377,7 @@
       "path": "src/shared/difficulty-curve-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 111,
+      "lineCount": 123,
       "imports": [
         "file:src/shared/floor-par.ts",
         "file:src/shared/pair-curve.ts"
