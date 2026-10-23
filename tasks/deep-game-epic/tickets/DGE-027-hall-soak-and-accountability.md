@@ -1,7 +1,7 @@
 # DGE-027: Hall rooms, soak invariants and the accountability checklist for every mechanic
 
 ## Status
-In progress (standing ticket): the planned soak player and the coverage audit done 2026-10-21; it stays open while the pack adds mechanics.
+Standing ticket: the planned soak player, the coverage audit (2026-10-21) and the deep census (2026-10-23) done; it stays open while the game adds mechanics.
 
 ## Priority
 P0
@@ -60,3 +60,8 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - **Carve and Reprise joined the planned player** as the 2026-10-21 note promised: `carveRate: 0.15` aims the next pop at random, and every player presses Reprise once its last turns were all matches. Deep soak with every Depth (`--floors=62 --depths`, 210 seeds x 5 players): planned 1,043 carves (718 spent) and 81 Reprises, careful 373 Reprises, 0 violations at every Depth.
 - **Coverage**: the graph has 88 mechanics; every one is walked twice or named in `TEST_HALL_CHECKED_ELSEWHERE` (`progression.depths` joined it: a Depth is chosen before any board, so the soak's `--depths` and a unit test per rung check it). Each pack mechanic has a ledger entry and a census counter or an argued exemption; `gate:systems` green on every ship of the phase.
 - Still open (why this ticket stands): the census plays floors 1-24, so the Act III/IV mechanics keep exemptions that a deep census would retire (DGE-032's ground).
+
+2026-10-23, the deep census:
+- `deep-census.ts` plays the run census's reference player through the game's own floor transition to floor 60 (24 seeds, 1,440 floors, twenty seconds) and watches seven deep counters; `gate:deep-census` in `gate:systems` fails if one never fires. The run census takes a counter list for it, and a counter may be a `state` (what the floor was dealt, read at its end).
+- Seven exemptions retired for measured shares (`MECHANIC_DEEP_CENSUS_COUNTERS`), each quoted in the ledger and re-measured by its test: masks dropped 0.553 of a run's floors, Sleepers woken 0.124, the Dread's purchases 0.117, Spiral rings 0.031, the Keeper's swaps, the Cartographer's turns and the Warden's re-deals 0.017 each (one floor in sixty). Audit: 89 mechanics, 46 censused, 43 exempt, none unanswered.
+- Still exempt, with reasons rewritten where they said "the census stops at 24": the learned rule (it reads the element matched most, and the census plays without a realm), and the verbs (Hold, Carve, Reprise: the reference player presses no tool; the soak's planned player counts them).

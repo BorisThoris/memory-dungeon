@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
     MECHANIC_CENSUS_COUNTERS,
+    MECHANIC_DEEP_CENSUS_COUNTERS,
     MECHANIC_CENSUS_EXEMPTION_SWEEP_GENERATION,
     MECHANIC_CENSUS_EXEMPTIONS,
     auditMechanicAccountability
@@ -15,7 +16,7 @@ describe('every mechanic answers for itself', () => {
     });
 
     it('holds every mechanic in the graph to one of the two answers', () => {
-        const answered = new Set<string>([...Object.keys(MECHANIC_CENSUS_COUNTERS), ...Object.keys(MECHANIC_CENSUS_EXEMPTIONS)]);
+        const answered = new Set<string>([...Object.keys(MECHANIC_CENSUS_COUNTERS), ...Object.keys(MECHANIC_DEEP_CENSUS_COUNTERS), ...Object.keys(MECHANIC_CENSUS_EXEMPTIONS)]);
         const blind = /^(power|inventory|trait)\./u;
         for (const mechanic of gameplayInteractionGraph.mechanics) {
             expect(answered.has(mechanic.id) || blind.test(mechanic.id), mechanic.id).toBe(true);
@@ -78,6 +79,9 @@ describe('every mechanic answers for itself', () => {
         // 37 on 2026-09-30: the heat perks joined with their own census row.
         // 39 on 2026-10-20: the Wanderers joined with a run-census row.
         expect(censused).toBe(39);
+        // 2026-10-23: seven deep mechanics answer to the deep census (`deep-census.ts`) instead of an exemption.
+        const deepCensused = Object.keys(MECHANIC_DEEP_CENSUS_COUNTERS).length;
+        expect(deepCensused).toBe(7);
         // 43 to 48 in Gen 262: the miss bank, gold, the store stop, bombs and relics joined the graph,
         // each exempt with the soak as its proof rather than counted, because no census player shops.
         // 53 to 56 on 2026-09-30: realm weather, omens and realm travel, exempt with the soak as proof.
@@ -93,9 +97,9 @@ describe('every mechanic answers for itself', () => {
          */
         const stillBlind = gameplayInteractionGraph.mechanics.filter(
             (mechanic) =>
-                MECHANIC_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] == null
+                MECHANIC_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_DEEP_CENSUS_COUNTERS[mechanic.id] == null && MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] == null
         ).length;
         expect(stillBlind).toBe(0);
-        expect(censused + Object.keys(MECHANIC_CENSUS_EXEMPTIONS).length).toBe(gameplayInteractionGraph.mechanics.length);
+        expect(censused + deepCensused + Object.keys(MECHANIC_CENSUS_EXEMPTIONS).length).toBe(gameplayInteractionGraph.mechanics.length);
     });
 });

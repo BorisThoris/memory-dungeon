@@ -44,6 +44,7 @@ Append a row per session. Never mark a ticket complete unless its acceptance cri
 | 2026-10-23 | DGE-024 | Thirty feats: twenty more titles for deeds in the bosses, the Depths, the families, the Hold, the realms and Endless, each with a hall room. | All feat rooms at both seeds, feat and save tests, Collection look | Two first picks swapped for earnable ones | - |
 | 2026-10-23 | DGE-008/017 | The Hold's feedback pass (seeds, release bells, `holdBeat` words, the tools e2e) and the Layers rise (a risen card glides up into its cell). | Unit tests, tools-usable e2e (Hold, Carve, Reprise) in isolation, frame burst | Release-size overdrive and Layers deep-floor coverage left | DGE-032 |
 | 2026-10-23 | DGE-032/021/017 | Bar 4 to floor 120 (`gate:difficulty-curve-endless`, the 5% player: par is the pair count on Endless boards); the Spiral held to the Goldilocks band; Layers on a 3,413-pair deep sample. | Endless judge test, Goldilocks gate, sim:endless deep floors | 15% players run over par from floor 83 (par is clamped at the pairs) | - |
+| 2026-10-23 | DGE-027/010 | The deep census (the run census to floor 60, `gate:deep-census`) retires seven exemptions for measured shares; the real 6x6 Fold floor fits phone, landscape and desktop. | Census gate and tests, accountability audit, ledger re-measure, isolated look | The learned rule and the three verbs stay exempt, with reasons | - |
 
 ## Open decisions for the owner
 Defaults recorded 2026-10-19 (DGE-001); the owner has not answered yet, so each ticket takes the default until they do.

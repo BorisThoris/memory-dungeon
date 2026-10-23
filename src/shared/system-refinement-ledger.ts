@@ -480,7 +480,8 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 291,
         present: ['dreadPurchase', 'dreadBudget', 'DREAD_PRICES', 'wandererCountFor', 'maskCountFor', 'sleeperCountFor'],
-        note: 'The Dread spends (2026-10-23, DGE-003/009, rules 87; the owner chose it layered on the schedules): from Awake each floor has six points a doubling of its Dread, spent round the plan’s priced table dearest first (Sleeper pair 9, mask 6, Wanderer pair 4), up to two more of each family the floor already deals, skipping a family under an eighth of the budget. Told on the board crown. Rules 87 also keeps the realm’s row-wide weather inside one room of a Fold floor (DGE-010).'
+        counter: 'deep.dreadBuys',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.117 of a run’s floors. The Dread spends (2026-10-23, DGE-003/009, rules 87; the owner chose it layered on the schedules): from Awake each floor has six points a doubling of its Dread, spent round the plan’s priced table dearest first (Sleeper pair 9, mask 6, Wanderer pair 4), up to two more of each family the floor already deals, skipping a family under an eighth of the budget. Told on the board crown. Rules 87 also keeps the realm’s row-wide weather inside one room of a Fold floor (DGE-010).'
     },
     {
         id: 'progression.depths',
@@ -501,21 +502,24 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 288,
         present: ['sealSpiralRings', 'applySpiralTurn', 'spiralHolds', 'spiral_hall', 'SPIRAL_DESCENT_FLOORS'],
-        note: 'The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. A sealed ring is a slab of stone on the board (SpiralSeals.tsx, DGE-030).'
+        counter: 'deep.spiralRings',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.031 of a run’s floors. The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. A sealed ring is a slab of stone on the board (SpiralSeals.tsx, DGE-030).'
     },
     {
         id: 'board.sleepers',
         verdict: 'changed',
         generation: 287,
         present: ['dealSleepers', 'applySleeperTurn', 'wakeSleeper', 'wakeAllSleepers', 'SLEEPER_CHAIN_HOLDS'],
-        note: 'Sleepers (2026-10-22, DGE-020, rules 84): from the Abyss two pairs a floor (three from 51) come back face down in other cleared cells four turns after a match on a chain under three; a chain of three keeps them down. A board cleared with one asleep wakes it. Face only, never on the back (the owner\u2019s rule for face-down cards); the plan\u2019s Dread price became a floor count.'
+        counter: 'deep.sleepersWoken',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.124 of a run’s floors. Sleepers (2026-10-22, DGE-020, rules 84): from the Abyss two pairs a floor (three from 51) come back face down in other cleared cells four turns after a match on a chain under three; a chain of three keeps them down. A board cleared with one asleep wakes it. Face only, never on the back (the owner\u2019s rule for face-down cards); the plan\u2019s Dread price became a floor count.'
     },
     {
         id: 'board.masks',
         verdict: 'changed',
         generation: 283,
         present: ['dealMasks', 'dropMask', 'unmaskOnFlip', 'unmaskBoard', 'MASK_FROM_FLOOR'],
-        note: 'Masks (2026-10-21, DGE-016, rules 80): from the Deep two cards a floor (three from floor 33) wear a back of an element not their own until first turned; never both cards of a pair. The lie lives only in the player-visible board, as a Turncoat\u2019s dealt element does, so every rule reads the true element. The Unmasking Glass evolution drops them all as the floor is dealt. The plan\u2019s Dread price (6) became a floor count: no priced table was ever built.'
+        counter: 'deep.masksDropped',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.553 of a run’s floors. Masks (2026-10-21, DGE-016, rules 80): from the Deep two cards a floor (three from floor 33) wear a back of an element not their own until first turned; never both cards of a pair. The lie lives only in the player-visible board, as a Turncoat\u2019s dealt element does, so every rule reads the true element. The Unmasking Glass evolution drops them all as the floor is dealt. The plan\u2019s Dread price (6) became a floor count: no priced table was ever built.'
     },
     {
         id: 'power.reprise',
@@ -550,21 +554,24 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 285,
         present: ['rotateLowerLayer', 'applyCartographerTurn', 'boardRings', 'cartographer_hall', 'chartBeneath'],
-        note: 'The Cartographer (2026-10-22, DGE-018, rules 82): the Deep\u2019s boss on floor 40 became its own hall, the one boss floor dealt two decks deep. The study window charts the lower deck (each waiting edge in its element\u2019s ink); every third match the lower deck turns a quarter, ring by ring, clockwise, a bijection on any shape; pinned cells hold. The looking glass and the flinch left the floor: one board-mover is the rule.'
+        counter: 'deep.cartographerTurns',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Cartographer (2026-10-22, DGE-018, rules 82): the Deep\u2019s boss on floor 40 became its own hall, the one boss floor dealt two decks deep. The study window charts the lower deck (each waiting edge in its element\u2019s ink); every third match the lower deck turns a quarter, ring by ring, clockwise, a bijection on any shape; pinned cells hold. The looking glass and the flinch left the floor: one board-mover is the rule.'
     },
     {
         id: 'hazard.keeper',
         verdict: 'changed',
         generation: 284,
         present: ['swapRooms', 'applyKeeperTurn', 'keeper_hall', 'KEEPER_SWAP_EVERY_TURNS'],
-        note: 'The Keeper of Halls (2026-10-22, DGE-011, rules 81): the Living Dungeon\u2019s boss on floor 24 became its own hall, a Fold whose rooms swap sides every fourth resolved turn, each card keeping its place inside its room; pinned cards and the cells across from them hold. The swap runs before the Wanderers step. The boss keeps the spotlight and drops the restless drift. Its reward is the door taken before it (DGE-026).'
+        counter: 'deep.keeperSwaps',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Keeper of Halls (2026-10-22, DGE-011, rules 81): the Living Dungeon\u2019s boss on floor 24 became its own hall, a Fold whose rooms swap sides every fourth resolved turn, each card keeping its place inside its room; pinned cards and the cells across from them hold. The swap runs before the Wanderers step. The boss keeps the spotlight and drops the restless drift. Its reward is the door taken before it (DGE-026).'
     },
     {
         id: 'hazard.warden',
         verdict: 'changed',
         generation: 274,
         present: ['applyWardenTurn', 'wardenRedeal', 'endRunAfterWardenClear', 'warden_hall', 'warden_cleared', 'wardenTestHolds', 'wardenDealsAgain', 'WARDEN_FELL_PAIRS'],
-        note: 'The Warden (2026-10-20, DGE-005), floor 60 and the Descent\u2019s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did. The complete Warden (2026-10-21, DGE-023, rules 78): behind the wild or raging door it is a test of a planned build, falling only to a Hold released at twelve pairs; an empty board is dealt six fresh pairs and the floor goes on, and the re-deal waits while a Hold is held. Behind the calm door clearing still wins.'
+        counter: 'deep.wardenRedeals',
+        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Warden (2026-10-20, DGE-005), floor 60 and the Descent\u2019s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did. The complete Warden (2026-10-21, DGE-023, rules 78): behind the wild or raging door it is a test of a planned build, falling only to a Hold released at twelve pairs; an empty board is dealt six fresh pairs and the floor goes on, and the re-deal waits while a Hold is held. Behind the calm door clearing still wins.'
     },
     {
         id: 'progression.dread',

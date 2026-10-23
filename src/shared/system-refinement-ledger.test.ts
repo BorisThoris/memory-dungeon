@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { gameplayInteractionGraph } from './gameplay-interaction-graph';
+import { DEEP_OCCUPANCY_COUNTERS, simulateDeepCensus } from './deep-census';
 import {
     simulateRunOccupancy,
     simulateSystemOccupancy,
@@ -157,7 +158,13 @@ describe('the numbers the ledger quotes', () => {
     const runScoped = new Set(
         SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.scope === 'run').map((counter) => counter.id)
     );
+    // The deep census (`deep-census.ts`, DGE-027) answers for the mechanics dealt past floor 24.
+    const deepReport = simulateDeepCensus();
     const measured = (counterId: string): { share: number; perFloor: number } => {
+        if (counterId.startsWith('deep.')) {
+            const row = deepReport.rows.find((candidate) => candidate.key === counterId)!;
+            return { share: row.runFloorShare, perFloor: row.perFloor };
+        }
         if (runScoped.has(counterId)) {
             const row = runReport.rows.find((candidate) => candidate.key === counterId)!;
             return { share: row.runFloorShare, perFloor: row.perFloor };
@@ -174,7 +181,7 @@ describe('the numbers the ledger quotes', () => {
     });
 
     it('names a real counter, so a renamed one cannot go unnoticed', () => {
-        const ids = new Set(SYSTEM_OCCUPANCY_COUNTERS.map((counter) => counter.id));
+        const ids = new Set([...SYSTEM_OCCUPANCY_COUNTERS, ...DEEP_OCCUPANCY_COUNTERS].map((counter) => counter.id));
         for (const entry of SYSTEM_REFINEMENT_LEDGER) {
             if (!entry.counter) continue;
             expect(ids.has(entry.counter), `${entry.id} names ${entry.counter}`).toBe(true);

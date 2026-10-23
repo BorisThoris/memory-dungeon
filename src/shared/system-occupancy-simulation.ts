@@ -87,7 +87,9 @@ export interface SystemOccupancyCounter {
      * reported no peek spent on a floor where one was spent and another earned. A fall that
      * happened is still a fall.
      */
-    kind: 'tally' | 'spend';
+    // 'state' (the deep census, `deep-census.ts`): what the floor was dealt, read at its end - a rule
+    // set when the floor is built moves nothing a turn could count.
+    kind: 'tally' | 'spend' | 'state';
     /**
      * Which pass sees it. The `reference` player only ever flips pairs, which is why every power
      * and every charge was invisible until Gen 195; the `tooled` player spends what a plain endless
@@ -693,12 +695,15 @@ export const simulateRunOccupancy = ({
     floors = 24,
     seeds = RUN_OCCUPANCY_SEEDS,
     missRate = 0.15,
-    maxTurns = 240
+    maxTurns = 240,
+    counters: watched = SYSTEM_OCCUPANCY_COUNTERS
 }: {
     floors?: number;
     seeds?: readonly number[];
     missRate?: number;
     maxTurns?: number;
+    /** The counters to watch; the deep census (`deep-census.ts`) passes its own. */
+    counters?: readonly SystemOccupancyCounter[];
 } = {}): RunOccupancyReport => {
     const hits = new Map<string, { floors: number; total: number; lastFloor: number }>();
     const endReasons: Record<string, number> = {};
@@ -708,7 +713,7 @@ export const simulateRunOccupancy = ({
 
     for (const seed of seeds) {
         for (const pass of passes) {
-            const counters = SYSTEM_OCCUPANCY_COUNTERS.filter((counter) => counter.player === pass);
+            const counters = watched.filter((counter) => counter.player === pass);
             if (counters.length === 0) continue;
             const setup = pass === 'setup';
             const firstBoard = scheduledFloorBoard(seed, 1, setup);
@@ -755,7 +760,9 @@ export const simulateRunOccupancy = ({
                     const value =
                         counter.kind === 'spend'
                             ? result.spends.get(counter.id) ?? 0
-                            : Math.max(0, readCounter(counter, result.run) - (before.get(counter.id) ?? 0));
+                            : counter.kind === 'state'
+                              ? readCounter(counter, result.run)
+                              : Math.max(0, readCounter(counter, result.run) - (before.get(counter.id) ?? 0));
                     const row = hits.get(counter.id) ?? { floors: 0, total: 0, lastFloor: 0 };
                     if (value > 0) {
                         row.floors += 1;
@@ -790,7 +797,7 @@ export const simulateRunOccupancy = ({
         deepestFloor,
         meanFloorsPerRun: runs === 0 ? 0 : played / runs,
         endReasons,
-        rows: SYSTEM_OCCUPANCY_COUNTERS.map((counter) => {
+        rows: watched.map((counter) => {
             const row = hits.get(counter.id) ?? { floors: 0, total: 0, lastFloor: 0 };
             return {
                 key: counter.id,

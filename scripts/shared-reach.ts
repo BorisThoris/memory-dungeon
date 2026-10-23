@@ -26,6 +26,7 @@ const SHIPPING_ENTRY_POINTS = ['src/renderer/main.tsx', 'src/main/index.ts', 'sr
 export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     // Simulations and solvers: gate:sim-health, gate:balance-depth and friends run these.
     'balance-simulation.ts': 'Balance sweep run by the simulation gates, not by a run.',
+    'deep-census.ts': 'The deep census (DGE-027): the run census to floor 60, run by gate:deep-census and read by the mechanic accountability audit, not by a run.',
     'cascade-balance-simulation.ts':
         'The cascade balance sweep, run by `yarn sim:cascade` and the gameplay gate, never by a run; its bands are the proof the chain loop is tuned.',
     'board-generation.ts': 'Re-export barrel over board-build-rules, board-tile-generation-rules and board-inspection; the simulations import it, the game imports those three directly, and it is the same code either way.',

@@ -34,6 +34,7 @@ import { resolve } from 'node:path';
 
 import { gameplayInteractionGraph } from '../src/shared/gameplay-interaction-graph';
 import { SYSTEM_OCCUPANCY_COUNTERS } from '../src/shared/system-occupancy-simulation';
+import { DEEP_OCCUPANCY_COUNTERS } from '../src/shared/deep-census';
 
 const ROOT = resolve(import.meta.dirname, '..');
 
@@ -48,6 +49,21 @@ const ROOT = resolve(import.meta.dirname, '..');
  * player spends a row/swap charge on a row shuffle, the setup player spends the same charge on a
  * tile swap - so the field alone is not an identity.
  */
+/**
+ * The deep census (`deep-census.ts`, DGE-027): the mechanics the Descent deals past floor 24, each
+ * answered by a counter the reference player meets on the way to the Warden. Until 2026-10-23 every
+ * one of these carried an exemption saying the census stopped at floor 24.
+ */
+export const MECHANIC_DEEP_CENSUS_COUNTERS: Record<string, readonly string[]> = {
+    'hazard.keeper': ['deep.keeperSwaps'],
+    'hazard.cartographer': ['deep.cartographerTurns'],
+    'hazard.warden': ['deep.wardenRedeals'],
+    'board.masks': ['deep.masksDropped'],
+    'board.sleepers': ['deep.sleepersWoken'],
+    'board.spiral': ['deep.spiralRings'],
+    'board.dread_composition': ['deep.dreadBuys']
+};
+
 export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
     'board.chain_chunk_fever': ['chunkBreaks', 'chunkPairsDropped', 'feverBreaks'],
     'board.cleanup': ['matchResolutions'],
@@ -279,29 +295,13 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 278,
         reason: 'The Fold is a shape, not an event: every break on its floors meets the wall, so a counter would read the floor share it is dealt on. The soak checks on every turn that nothing is taken through the wall and through the door only from a match in the doorway, the unit tests pin the cut and the gate, and two hall rooms walk the door shut and open.'
     },
-    'board.dread_composition': {
-        generation: 291,
-        reason: 'The Dread buys from Awake, which the census players reach only past floor 20 of the 24 it plays, so a counter would read a sliver. The whole-run soak counts every purchase and checks on each descent that the floor was told what its Dread buys and holds no more of a family than its schedule and the purchase; unit tests pin the table.'
-    },
     'progression.depths': {
         generation: 290,
         reason: 'The Depths are a choice made before the run, and the census plays Depth 0, the game as it was. The soak plays every rung with --depths and reports each Depth apart; unit tests pin that each rung changes the one constant it names, that Depth 0 is unchanged and that the Warden felled at Depth n opens n + 1.'
     },
     'board.learned_rule': {
         generation: 289,
-        reason: 'The dungeon learns you from floor 41 and the census stops at floor 24, so a counter would read nothing. The deep whole-run soak counts the rules told, with an invariant that each names the element the run matched most and comes from the table; unit tests pin the table, the same rule for the same run, and that each dealer lands on the element first and never deals more.'
-    },
-    'board.spiral': {
-        generation: 288,
-        reason: 'The Spiral stands on floors 44 and 56 alone and the census stops at floor 24, so a counter would read nothing. The deep whole-run soak counts its floors and its sealed rings, with invariants that a Spiral never runs past par and never deals into a sealed cell; unit tests pin the seal, the deal, the empty board and the par end, and two hall rooms walk a ring falling and a floor survived.'
-    },
-    'board.sleepers': {
-        generation: 287,
-        reason: 'Sleepers are dealt from floor 41 and the census stops at floor 24, so a counter would read nothing. The deep whole-run soak counts the Sleepers woken and kept down, with an invariant that a woken Sleeper is face down; unit tests pin the deal, the chain, the wake and the clear, and two hall rooms walk a wake and a chain that keeps one down.'
-    },
-    'board.masks': {
-        generation: 283,
-        reason: 'Masks are dealt from floor 25 and the census stops at floor 24, so a counter would read nothing. The whole-run soak counts the masks dealt and dropped, with invariants that no pair is masked on both cards and no face-up card wears one; unit tests pin the deal, the drop and the true element, and a hall room walks a mask dropping and its card casting true.'
+        reason: 'The dungeon learns you from the element matched most, and the deep census plays without a realm, so no element is ever matched most there and a counter would read nothing. The deep whole-run soak counts the rules told, with an invariant that each names the element the run matched most and comes from the table; unit tests pin the table and the same rule for the same run.'
     },
     'power.reprise': {
         generation: 286,
@@ -318,18 +318,6 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
     'hazard.endless_rent': {
         generation: 275,
         reason: 'The rent is charged only past the Warden in an Endless run, and the census plays twenty-four floors and the soak thirty, so neither meets it. Its rules are unit tested, two hall rooms walk a floor that cannot pay and one that does, and its share was set from 80 soak runs measured to floor 100.'
-    },
-    'hazard.cartographer': {
-        generation: 285,
-        reason: 'The Cartographer is the boss of floor 40 alone and the census stops before it. The whole-run soak counts its floors and its turns, with an invariant that a turn keeps every card beneath and every pinned cell; unit tests pin the schedule, the deal, the turn on square and odd boards and the chart, and two hall rooms walk a turn and a pin.'
-    },
-    'hazard.keeper': {
-        generation: 284,
-        reason: 'The Keeper of Halls is the boss of floor 24 alone and the census stops before it. The whole-run soak counts the floors met and the swaps, with an invariant that a swap keeps every card and holds every pinned cell; unit tests pin the schedule, the fold, the swap and its turn, and two hall rooms walk a swap and a pin through one.'
-    },
-    'hazard.warden': {
-        generation: 274,
-        reason: 'The Warden stands on floor 60, and the census plays twenty-four floors and the soak thirty, so neither ever meets it. Its rules are unit tested, two hall rooms walk a match past par that still costs a miss and a fifth-turn re-deal that leaves the pinned card, and sim:endless plays its hall on every twentieth floor past 60.'
     },
     'progression.dread': {
         generation: 273,
@@ -380,11 +368,11 @@ export interface MechanicAccountabilityFinding {
 
 export const auditMechanicAccountability = (): MechanicAccountabilityFinding[] => {
     const findings: MechanicAccountabilityFinding[] = [];
-    const censusKeys = new Set<string>(SYSTEM_OCCUPANCY_COUNTERS.map((counter) => counter.id));
+    const censusKeys = new Set<string>([...SYSTEM_OCCUPANCY_COUNTERS, ...DEEP_OCCUPANCY_COUNTERS].map((counter) => counter.id));
     const claimed = new Set<string>();
 
     for (const mechanic of gameplayInteractionGraph.mechanics) {
-        const counters = MECHANIC_CENSUS_COUNTERS[mechanic.id];
+        const counters = MECHANIC_CENSUS_COUNTERS[mechanic.id] ?? MECHANIC_DEEP_CENSUS_COUNTERS[mechanic.id];
         const exemption = MECHANIC_CENSUS_EXEMPTIONS[mechanic.id]?.reason ?? blindReason(mechanic.id);
 
         if (counters && exemption) {
@@ -424,7 +412,7 @@ export const auditMechanicAccountability = (): MechanicAccountabilityFinding[] =
     }
 
     const declared = new Set(gameplayInteractionGraph.mechanics.map((mechanic) => mechanic.id));
-    for (const id of [...Object.keys(MECHANIC_CENSUS_COUNTERS), ...Object.keys(MECHANIC_CENSUS_EXEMPTIONS)]) {
+    for (const id of [...Object.keys(MECHANIC_CENSUS_COUNTERS), ...Object.keys(MECHANIC_DEEP_CENSUS_COUNTERS), ...Object.keys(MECHANIC_CENSUS_EXEMPTIONS)]) {
         if (!declared.has(id)) {
             findings.push({ id, problem: 'is listed here but is not a mechanic in the graph any more' });
         }
@@ -436,7 +424,7 @@ export const auditMechanicAccountability = (): MechanicAccountabilityFinding[] =
 const main = (): void => {
     const findings = auditMechanicAccountability();
     const total = gameplayInteractionGraph.mechanics.length;
-    const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length;
+    const censused = Object.keys(MECHANIC_CENSUS_COUNTERS).length + Object.keys(MECHANIC_DEEP_CENSUS_COUNTERS).length;
     const exempt = gameplayInteractionGraph.mechanics.filter(
         (mechanic) => MECHANIC_CENSUS_EXEMPTIONS[mechanic.id] != null || blindReason(mechanic.id) != null
     ).length;

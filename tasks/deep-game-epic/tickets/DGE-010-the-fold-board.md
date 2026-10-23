@@ -1,7 +1,7 @@
 # DGE-010: The Fold: two rooms joined by a doorway
 
 ## Status
-Done (2026-10-20), rules 71; per-room weather landed in rules 87 (2026-10-23). The phone’s stacked fold is left: see notes.
+Done (2026-10-20), rules 71; per-room weather landed in rules 87 (2026-10-23); the real Fold floors fit every viewport (no stacked layout needed).
 
 ## Priority
 P1
@@ -66,3 +66,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Not done: per-room weather (a blizzard row or a column sweep still crosses the wall), d-pad focus crossing the wall (it is navigation, not a rule), distances measured across the wall (proximity hints, the meteor's radius).
 
 2026-10-23 (rules 87): the Fold's rooms keep their weather. A blizzard slides one room's half of its row, a thunderclap lights one room's half, the springtide's second column stays in the first one's room; the spreading weathers already respected the wall (`orthogonalNeighbourIndices` takes the fold). Test: a blizzard on a folded board never touches both rooms. Still not done: d-pad focus across the wall and distances measured across it (proximity hints, the meteor's radius), which are presentation, not rules.
+
+2026-10-23, the fit on a real Fold floor: a 6x6 Fold floor (floor 16 of seed 4242, built through the game's own modules in the page) fits at 390x844, 844x390 and 1280x800 in the isolated browser, the wall and its doorway readable, no console errors. A portrait-stacked Fold is not needed and is not built.
