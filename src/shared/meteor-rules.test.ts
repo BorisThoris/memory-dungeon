@@ -70,3 +70,30 @@ describe('stored, player-called meteors on the original cards',()=>{
         expect(shards).toBeGreaterThan(0);
     });
 });
+
+describe('the meteor and the Fold (rules 88)', () => {
+    // Six wide, the wall after column 2. Pair 2 lies wholly in the right room, against the wall (cells 3-4).
+    //   row 0: 0a 0b 1a | 2a 2b 3a
+    //   row 1: 1b 4a 4b | 5a 5b 3b
+    //   row 2: 6a 6b 7a | 7b 8a 8b
+    const layout = ['0a', '0b', '1a', '2a', '2b', '3a', '1b', '4a', '4b', '5a', '5b', '3b', '6a', '6b', '7a', '7b', '8a', '8b'];
+    const folded = (rulesVersion: number) => {
+        const byId = new Map(Array.from({ length: 9 }, (_, i) => makePair(String(i), String(i))).flat().map((tile) => [tile.id.replace('-', ''), tile]));
+        const tiles = layout.map((id) => byId.get(id)!);
+        const run = makeRun(tiles, { meteorCharges: 1, runRulesVersion: rulesVersion });
+        return { ...run, board: { ...run.board!, columns: 6, rows: 3, fold: { afterColumn: 2, doorRows: [1] } } };
+    };
+    // Aimed at 1a, in the left room against the wall: within reach across it sits pair 2.
+    const struckPairs = (rulesVersion: number) => {
+        const run = folded(rulesVersion);
+        const after = callMeteor(run, run.board.tiles[2]!.id);
+        return new Set(after.board!.tiles.filter((tile) => tile.state === 'removed').map((tile) => tile.pairKey));
+    };
+    it('keeps the blast to the room it was aimed into', () => {
+        expect(struckPairs(88).has('2')).toBe(false);
+        expect(struckPairs(88).has('1')).toBe(true);
+    });
+    it('reached across the wall before rules 88, so older runs replay as they were played', () => {
+        expect(struckPairs(87).has('2')).toBe(true);
+    });
+});
