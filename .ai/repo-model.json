@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3361,
-    "codeFileCount": 1293,
-    "exportedSymbolCount": 4207,
+    "trackedFileCount": 3365,
+    "codeFileCount": 1297,
+    "exportedSymbolCount": 4214,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11744
+    "relationshipCount": 11766
   },
   "inventory": [
     {
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "2aef90678eaf6a69040ffb49180b8c9d3d60dd65561a96d78fbac72f301e244a"
+      "sha256": "a758da121233fdceb48f393b34656867a08dc795497f8a461f85df3b8c38e220"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4215,8 +4215,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 23942,
-      "sha256": "8e50b13232bb2ea4093ae9b68e4511b86c3abb00108bfbbfa367c9f1b82f2197"
+      "bytes": 25096,
+      "sha256": "b9719656ab22f83c0d844e2f2b95edb1b36d5f6010c592089f241c615aac1bb7"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -11217,8 +11217,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 144588,
-      "sha256": "6490ec111c5f4cec7266c10066555c1ae152f085f507d44b062eeda835053655"
+      "bytes": 145289,
+      "sha256": "55dae0a5a3b9c474bf7dfb95e1797ed6bc5f23b75ad5c8cdc9a5a273845f5ccb"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -12327,8 +12327,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 14573,
-      "sha256": "bc359a85a07f5c9bf42c9c07c4ef579ded19a17772551c56a6b0a290c5e3b64b"
+      "bytes": 15055,
+      "sha256": "bb0d50f7ba5b9cec20a6127501e7a461631312328b46bdaeaa2265e8a9c677b1"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -12675,8 +12675,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 35029,
-      "sha256": "d8b43069f0f78a183d00af9fe8c234351abd17f31412f11e512477392d722003"
+      "bytes": 35370,
+      "sha256": "e41b0df2af42c5da6f9f6f4c65a106f482f2a84ce85814b269a52714aef5419b"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -12891,8 +12891,8 @@
     {
       "path": "src/renderer/components/tileCellGlide.ts",
       "category": "source",
-      "bytes": 3856,
-      "sha256": "127e26be1b064ccef5cd9ddb3692c6098952632dc643182fc724d18246a3d626"
+      "bytes": 4610,
+      "sha256": "d58eeddcb4fad888fe8fd4cd69ab057ed7f28b13f14ec55624bcdeda68e359a3"
     },
     {
       "path": "src/renderer/components/tileFieldTilt.test.ts",
@@ -12929,6 +12929,18 @@
       "category": "source",
       "bytes": 3432,
       "sha256": "5ace0f6802cd4df89f104d301121455f73c9984b385f2d4807f338799626fd38"
+    },
+    {
+      "path": "src/renderer/components/tileRise.test.ts",
+      "category": "test",
+      "bytes": 1271,
+      "sha256": "46a01164c50c8869734626b1bf83e9ea9b73947f2b15f4cac6293d49d6de35eb"
+    },
+    {
+      "path": "src/renderer/components/tileRise.ts",
+      "category": "source",
+      "bytes": 1046,
+      "sha256": "f266952e5b195d798a43c08d0fe0ed51f6a496bd431e8f391732b10bd517f430"
     },
     {
       "path": "src/renderer/components/tileShatter.test.ts",
@@ -13247,6 +13259,18 @@
       "category": "source",
       "bytes": 440,
       "sha256": "ad25774bfe2176e98dc24085418b3f062290917f1b11d4969c8bd75a49f31d52"
+    },
+    {
+      "path": "src/renderer/copy/holdBeat.test.ts",
+      "category": "test",
+      "bytes": 1383,
+      "sha256": "6d7f475bfe9ceb1fcb068d63f7b241b7e83907c2ee8588447237cffcf2ac2d92"
+    },
+    {
+      "path": "src/renderer/copy/holdBeat.ts",
+      "category": "source",
+      "bytes": 1861,
+      "sha256": "05682c4891d7d39bb2d447987bb568982dd44a16646b8029584b6f10abfe2a4a"
     },
     {
       "path": "src/renderer/copy/holdToolCopy.ts",
@@ -17763,8 +17787,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 23147,
-      "sha256": "8bf025b0832e60c29b1d75c8a33e8e37976bf646c1218f474566045094873d07"
+      "bytes": 23470,
+      "sha256": "d757dd3d04a1d5b40de0c16ec913df313004c9aacd310a75750b8868cba76205"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17841,8 +17865,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-008-hold-verb.md",
       "category": "other",
-      "bytes": 6175,
-      "sha256": "024adab008ebd90785067e4ac325feae5210e3632821d27c4cada9bff9d81e51"
+      "bytes": 7175,
+      "sha256": "ccbe25466efe2d0dcb79da72e58f142aabc67786fd5537e39a82ee416a31764c"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-009-wanderers-card-family.md",
@@ -17877,8 +17901,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
       "category": "other",
-      "bytes": 4432,
-      "sha256": "8ca71edde85fd39eb1065f6532960c8e0417ffbf95ad6a285e4f37cc8402eac2"
+      "bytes": 4412,
+      "sha256": "f425c32b998f11b3e3f2dbfef025bb3778feca7261e422a62df70f6b3e1b3d20"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
@@ -17895,8 +17919,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
       "category": "other",
-      "bytes": 5565,
-      "sha256": "3ae0eacce3f1e3b95b52eb0c54a42180a3747bc0c6ae939e66480e1539251db6"
+      "bytes": 6062,
+      "sha256": "851a502dbcac2cd1dab2f867d98a934fa06a4a74edc9044509bfb0c0eb9529db"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
@@ -24694,7 +24718,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2738,
+      "lineCount": 2748,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24736,6 +24760,7 @@
         "file:src/renderer/copy/colossusBeat.ts",
         "file:src/renderer/copy/dreadBoughtCopy.ts",
         "file:src/renderer/copy/gameplayHints.ts",
+        "file:src/renderer/copy/holdBeat.ts",
         "file:src/renderer/copy/holdToolCopy.ts",
         "file:src/renderer/copy/learnedRuleCopy.ts",
         "file:src/renderer/copy/lookingGlassBeat.ts",
@@ -27945,7 +27970,7 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 355,
+      "lineCount": 363,
       "imports": [
         "file:src/renderer/components/boardMatchImpact.ts",
         "file:src/renderer/components/cardDissolveMaterial.ts",
@@ -27960,6 +27985,8 @@
         "file:src/renderer/components/tileBoardInteractionMotionState.ts",
         "file:src/renderer/components/tileBoardLayoutMotionState.ts",
         "file:src/renderer/components/tileBoardSurfaceVariant.ts",
+        "file:src/renderer/components/tileCellGlide.ts",
+        "file:src/renderer/components/tileRise.ts",
         "file:src/renderer/components/tileShatter.ts"
       ],
       "exports": [
@@ -28992,7 +29019,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 737,
+      "lineCount": 744,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -29025,6 +29052,7 @@
         "file:src/renderer/components/tileBoardViewportMotionState.ts",
         "file:src/renderer/components/tileFieldTilt.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
+        "file:src/renderer/components/tileRise.ts",
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
         "file:src/renderer/components/tileTextureWarmup.ts",
@@ -29643,7 +29671,7 @@
       "path": "src/renderer/components/tileCellGlide.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 98,
+      "lineCount": 110,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/tileCellGlide.ts#DEFAULT_GLIDE_SHAPE",
@@ -29655,9 +29683,13 @@
         "symbol:src/renderer/components/tileCellGlide.ts#GlideFrame",
         "symbol:src/renderer/components/tileCellGlide.ts#GlideShape",
         "symbol:src/renderer/components/tileCellGlide.ts#isCardGliding",
+        "symbol:src/renderer/components/tileCellGlide.ts#primeCardRise",
+        "symbol:src/renderer/components/tileCellGlide.ts#RISE_SHAPE",
         "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/tileRise.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/tileFieldTilt.test.ts",
@@ -29755,6 +29787,38 @@
       ],
       "testedBy": [
         "file:src/renderer/components/tileResolvingSelection.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/tileRise.test.ts",
+      "path": "src/renderer/components/tileRise.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 24,
+      "imports": [
+        "file:src/renderer/components/tileCellGlide.ts",
+        "file:src/renderer/components/tileRise.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/tileRise.ts",
+      "path": "src/renderer/components/tileRise.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 21,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/tileRise.ts#noteRisenCards",
+        "symbol:src/renderer/components/tileRise.ts#RISE_FROM_OFFSET",
+        "symbol:src/renderer/components/tileRise.ts#takeRisen"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileRise.test.ts"
       ]
     },
     {
@@ -30670,6 +30734,36 @@
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/copy/holdBeat.test.ts",
+      "path": "src/renderer/copy/holdBeat.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 22,
+      "imports": [
+        "file:src/renderer/copy/holdBeat.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/holdBeat.ts",
+      "path": "src/renderer/copy/holdBeat.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 32,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/holdBeat.ts#holdBeat",
+        "symbol:src/renderer/copy/holdBeat.ts#HoldBeat"
+      ],
+      "testedBy": [
+        "file:src/renderer/copy/holdBeat.test.ts"
       ]
     },
     {
@@ -44525,6 +44619,7 @@
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/spiralSealLayout.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
+        "file:src/renderer/components/tileRise.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
@@ -50484,40 +50579,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2737,
-      "endLine": 2737
+      "line": 2747,
+      "endLine": 2747
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 293,
-      "endLine": 293
+      "line": 294,
+      "endLine": 294
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 291,
-      "endLine": 291
+      "line": 292,
+      "endLine": 292
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 295,
-      "endLine": 295
+      "line": 296,
+      "endLine": 296
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 285,
-      "endLine": 285
+      "line": 286,
+      "endLine": 286
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -54540,8 +54635,8 @@
       "name": "advanceTileBezelFrame",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
-      "line": 46,
-      "endLine": 354
+      "line": 48,
+      "endLine": 362
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -55636,24 +55731,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 736,
-      "endLine": 736
+      "line": 743,
+      "endLine": 743
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 178,
-      "endLine": 178
+      "line": 179,
+      "endLine": 179
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 95,
-      "endLine": 95
+      "line": 96,
+      "endLine": 96
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -56312,6 +56407,22 @@
       "endLine": 97
     },
     {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#primeCardRise",
+      "name": "primeCardRise",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 107,
+      "endLine": 109
+    },
+    {
+      "id": "symbol:src/renderer/components/tileCellGlide.ts#RISE_SHAPE",
+      "name": "RISE_SHAPE",
+      "kind": "value",
+      "file": "src/renderer/components/tileCellGlide.ts",
+      "line": 100,
+      "endLine": 100
+    },
+    {
       "id": "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
       "name": "sampleCellGlide",
       "kind": "value",
@@ -56414,6 +56525,30 @@
       "file": "src/renderer/components/tileResolvingSelection.ts",
       "line": 4,
       "endLine": 4
+    },
+    {
+      "id": "symbol:src/renderer/components/tileRise.ts#noteRisenCards",
+      "name": "noteRisenCards",
+      "kind": "value",
+      "file": "src/renderer/components/tileRise.ts",
+      "line": 13,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/components/tileRise.ts#RISE_FROM_OFFSET",
+      "name": "RISE_FROM_OFFSET",
+      "kind": "value",
+      "file": "src/renderer/components/tileRise.ts",
+      "line": 11,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/components/tileRise.ts#takeRisen",
+      "name": "takeRisen",
+      "kind": "value",
+      "file": "src/renderer/components/tileRise.ts",
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_JITTER_XY",
@@ -57670,6 +57805,22 @@
       "file": "src/renderer/copy/gameplayHints.ts",
       "line": 2,
       "endLine": 3
+    },
+    {
+      "id": "symbol:src/renderer/copy/holdBeat.ts#holdBeat",
+      "name": "holdBeat",
+      "kind": "value",
+      "file": "src/renderer/copy/holdBeat.ts",
+      "line": 17,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
+      "name": "HoldBeat",
+      "kind": "type",
+      "file": "src/renderer/copy/holdBeat.ts",
+      "line": 9,
+      "endLine": 9
     },
     {
       "id": "symbol:src/renderer/copy/holdToolCopy.ts#HOLD_TOOL_COPY",
@@ -79715,7 +79866,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3
+          "line": 4
         }
       ],
       "tests": [
@@ -80050,7 +80201,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1634
+          "line": 1644
         }
       ],
       "tests": [
@@ -80338,7 +80489,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4
+          "line": 5
         }
       ],
       "tests": [
@@ -80662,7 +80813,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 59
+          "line": 60
         }
       ],
       "tests": [
@@ -81068,7 +81219,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 7
+          "line": 8
         }
       ],
       "tests": [
@@ -81215,7 +81366,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -82299,7 +82450,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 7
+          "line": 8
         }
       ],
       "tests": [
@@ -82483,7 +82634,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -82635,7 +82786,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4
+          "line": 3
         }
       ],
       "tests": [
@@ -82884,7 +83035,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 5
+          "line": 6
         }
       ],
       "tests": [
@@ -83126,7 +83277,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 13
+          "line": 14
         }
       ],
       "tests": [
@@ -83179,7 +83330,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1636
+          "line": 1646
         }
       ],
       "tests": [
@@ -83379,7 +83530,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 59
+          "line": 60
         }
       ],
       "tests": [
@@ -94591,6 +94742,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#primeCardRise",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#primeCardRise",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#RISE_SHAPE",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "symbol:src/renderer/components/tileCellGlide.ts#RISE_SHAPE",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileCellGlide.ts->symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
       "source": "file:src/renderer/components/tileCellGlide.ts",
       "target": "symbol:src/renderer/components/tileCellGlide.ts#sampleCellGlide",
@@ -94666,6 +94829,24 @@
       "id": "exports:src/renderer/components/tileResolvingSelection.ts->symbol:src/renderer/components/tileResolvingSelection.ts#ResolvingSelectionState",
       "source": "file:src/renderer/components/tileResolvingSelection.ts",
       "target": "symbol:src/renderer/components/tileResolvingSelection.ts#ResolvingSelectionState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileRise.ts->symbol:src/renderer/components/tileRise.ts#noteRisenCards",
+      "source": "file:src/renderer/components/tileRise.ts",
+      "target": "symbol:src/renderer/components/tileRise.ts#noteRisenCards",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileRise.ts->symbol:src/renderer/components/tileRise.ts#RISE_FROM_OFFSET",
+      "source": "file:src/renderer/components/tileRise.ts",
+      "target": "symbol:src/renderer/components/tileRise.ts#RISE_FROM_OFFSET",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileRise.ts->symbol:src/renderer/components/tileRise.ts#takeRisen",
+      "source": "file:src/renderer/components/tileRise.ts",
+      "target": "symbol:src/renderer/components/tileRise.ts#takeRisen",
       "kind": "exports"
     },
     {
@@ -95608,6 +95789,18 @@
       "id": "exports:src/renderer/copy/gameplayHints.ts->symbol:src/renderer/copy/gameplayHints.ts#GAMBIT_OPPORTUNITY_HINT_LINE",
       "source": "file:src/renderer/copy/gameplayHints.ts",
       "target": "symbol:src/renderer/copy/gameplayHints.ts#GAMBIT_OPPORTUNITY_HINT_LINE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/holdBeat.ts->symbol:src/renderer/copy/holdBeat.ts#holdBeat",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "symbol:src/renderer/copy/holdBeat.ts#holdBeat",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/holdBeat.ts->symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
       "kind": "exports"
     },
     {
@@ -118935,6 +119128,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/holdBeat.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/holdBeat.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/holdToolCopy.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/holdToolCopy.ts",
@@ -122997,6 +123196,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/tileCellGlide.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/tileCellGlide.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/tileRise.ts",
+      "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
+      "target": "file:src/renderer/components/tileRise.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardFrameAdvance.ts->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/tileBoardFrameAdvance.ts",
       "target": "file:src/renderer/components/tileShatter.ts",
@@ -124233,6 +124444,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileRise.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/tileRise.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/tileShatter.ts",
@@ -124866,6 +125083,30 @@
       "id": "imports:src/renderer/components/tileResolvingSelection.ts->src/shared/turn-resolution.ts",
       "source": "file:src/renderer/components/tileResolvingSelection.ts",
       "target": "file:src/shared/turn-resolution.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileRise.test.ts->src/renderer/components/tileCellGlide.ts",
+      "source": "file:src/renderer/components/tileRise.test.ts",
+      "target": "file:src/renderer/components/tileCellGlide.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileRise.test.ts->src/renderer/components/tileRise.ts",
+      "source": "file:src/renderer/components/tileRise.test.ts",
+      "target": "file:src/renderer/components/tileRise.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileRise.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/tileRise.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileRise.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/tileRise.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -125550,6 +125791,24 @@
       "id": "imports:src/renderer/copy/gameplayEventAnnouncement.test.ts->src/renderer/copy/gameplayEventAnnouncement.ts",
       "source": "file:src/renderer/copy/gameplayEventAnnouncement.test.ts",
       "target": "file:src/renderer/copy/gameplayEventAnnouncement.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/holdBeat.test.ts->src/renderer/copy/holdBeat.ts",
+      "source": "file:src/renderer/copy/holdBeat.test.ts",
+      "target": "file:src/renderer/copy/holdBeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/holdBeat.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/holdBeat.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -146714,6 +146973,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/tileCellGlide.ts->file:src/renderer/components/tileRise.test.ts",
+      "source": "file:src/renderer/components/tileCellGlide.ts",
+      "target": "file:src/renderer/components/tileRise.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/tileFieldTilt.ts->file:src/renderer/components/tileFieldTilt.test.ts",
       "source": "file:src/renderer/components/tileFieldTilt.ts",
       "target": "file:src/renderer/components/tileFieldTilt.test.ts",
@@ -146729,6 +146994,12 @@
       "id": "tested_by:src/renderer/components/tileResolvingSelection.ts->file:src/renderer/components/tileResolvingSelection.test.ts",
       "source": "file:src/renderer/components/tileResolvingSelection.ts",
       "target": "file:src/renderer/components/tileResolvingSelection.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileRise.ts->file:src/renderer/components/tileRise.test.ts",
+      "source": "file:src/renderer/components/tileRise.ts",
+      "target": "file:src/renderer/components/tileRise.test.ts",
       "kind": "tested_by"
     },
     {
@@ -146951,6 +147222,12 @@
       "id": "tested_by:src/renderer/copy/gameplayHints.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "source": "file:src/renderer/copy/gameplayHints.ts",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/holdBeat.ts->file:src/renderer/copy/holdBeat.test.ts",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "file:src/renderer/copy/holdBeat.test.ts",
       "kind": "tested_by"
     },
     {
@@ -153755,6 +154032,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/tileBoardCardWindow.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/tileBoardCardWindow.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/tileRise.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/tileRise.test.ts",
       "kind": "tested_by"
     },
     {
