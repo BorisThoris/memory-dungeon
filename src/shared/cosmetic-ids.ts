@@ -14,7 +14,27 @@ export const COSMETIC_IDS = [
     'title_night_watch',
     'title_hallbreaker',
     'title_map_burner',
-    'title_unmasker'
+    'title_unmasker',
+    'title_doorwarden',
+    'title_chartwright',
+    'title_deep_doorwarden',
+    'title_deep_chartwright',
+    'title_abyssal',
+    'title_lockkeeper',
+    'title_second_board',
+    'title_known',
+    'title_early_riser',
+    'title_spiral_breaker',
+    'title_hollow_stone',
+    'title_vault_keeper',
+    'title_draughtsman',
+    'title_second_take',
+    'title_tracker',
+    'title_giantsbane',
+    'title_sandcatcher',
+    'title_weathered',
+    'title_confluent',
+    'title_past_the_gate'
 ] as const;
 
 export type CosmeticId = (typeof COSMETIC_IDS)[number];

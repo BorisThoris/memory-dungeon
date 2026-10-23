@@ -1,10 +1,13 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
+import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
+import { maskCountFor } from './mask-rules';
+import { sleeperCountFor } from './sleeper-rules';
 import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, carveLinksFor } from './carve-rules';
-import { isWandererStepTurn, wandererFootprintCells } from './wanderer-rules';
+import { isWandererStepTurn, wandererCountFor, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
 import { EVOLUTIONS, footprintTurns, hasEvolution } from './relic-evolution-rules';
 import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
@@ -144,6 +147,8 @@ export interface SoakRunReport {
     spiralRings: number;
     /** The dungeon learns you (`learned-rule-rules.ts`): floors told a rule. */
     learnedRules: number;
+    /** The Dread spends (`dread-composition-rules.ts`): family pairs and masks it bought. */
+    dreadBuys: number;
     /** The Keeper of Halls (`keeper-rules.ts`): its floors met, and its swaps. */
     keeperFloors: number;
     keeperSwaps: number;
@@ -629,6 +634,23 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const learned = mostMatchedSuit(before);
         return rule.suit === learned ? null : `told ${rule.suit}, but the run matched ${String(learned)} most`;
     },
+    // The Dread spends (`dread-composition-rules.ts`): what a floor says it bought is what its Dread buys, and a floor
+    // never holds more of a family than its schedule and the purchase.
+    'the Dread buys what its tier pays for, and the floor holds no more': (before, run, action) => {
+        if (action !== 'descend' || !before || !run.board || !dreadComposes(run)) return null;
+        const board = run.board;
+        const depth = run.depth ?? 0;
+        const seeded = { rulesVersion: run.runRulesVersion, depth };
+        const scheduled = { sleeper: sleeperCountFor(board, seeded), mask: maskCountFor(board, seeded), wanderer: wandererCountFor(board, seeded) };
+        const expected = dreadPurchase(dreadForRun(run), scheduled);
+        const told = run.dreadBought ?? NO_DREAD_PURCHASE;
+        if (told.sleeper !== expected.sleeper || told.mask !== expected.mask || told.wanderer !== expected.wanderer) return `told ${JSON.stringify(told)}, the Dread buys ${JSON.stringify(expected)}`;
+        const pairs = (flag: 'wanderer' | 'sleeper') => new Set(board.tiles.filter((tile) => tile[flag]).map((tile) => tile.pairKey)).size;
+        const masks = board.tiles.filter((tile) => tile.mask != null).length;
+        if (pairs('wanderer') > scheduled.wanderer + told.wanderer) return `${pairs('wanderer')} Wanderer pairs, past ${scheduled.wanderer} + ${told.wanderer}`;
+        if (masks > scheduled.mask + told.mask && !hasEvolution(run, 'unmasking_glass')) return `${masks} masks, past ${scheduled.mask} + ${told.mask}`;
+        return null;
+    },
     'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {
         if (!run.board || !spiralHolds(run, run.board)) return null;
         if (run.status === 'playing' && runNonNegativeInteger(run.turnsThisFloor) > parTurnsForRun(run)) return `a Spiral at turn ${run.turnsThisFloor}, past par ${parTurnsForRun(run)}`;
@@ -810,6 +832,7 @@ export const soakRun = ({
     let spiralFloors = 0;
     let spiralRings = 0;
     let learnedRules = 0;
+    let dreadBuys = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
     let cartographerFloors = 0;
@@ -875,6 +898,7 @@ export const soakRun = ({
         }
         if (action === 'descend' && isKeeperFloor(next.board)) keeperFloors += 1;
         if (action === 'descend' && next.learnedRule) learnedRules += 1;
+        if (action === 'descend' && next.dreadBought) dreadBuys += next.dreadBought.sleeper + next.dreadBought.mask + next.dreadBought.wanderer;
         if (action === 'descend' && isCartographerFloor(next.board)) cartographerFloors += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.cartographerTurnsThisFloor) > runNonNegativeInteger(run.cartographerTurnsThisFloor)) cartographerTurns += 1;
         if (next.board?.level === run.board?.level && runNonNegativeInteger(next.keeperSwapsThisFloor) > runNonNegativeInteger(run.keeperSwapsThisFloor)) keeperSwaps += 1;
@@ -1153,6 +1177,7 @@ export const soakRun = ({
         spiralFloors,
         spiralRings,
         learnedRules,
+        dreadBuys,
         keeperFloors,
         keeperSwaps,
         cartographerFloors,

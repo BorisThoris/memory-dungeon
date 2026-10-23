@@ -123,6 +123,26 @@ export type TestHallRoomId =
     | 'feat-keeper-raging'
     | 'feat-cartographer-raging'
     | 'feat-three-unmasked'
+    | 'feat-keeper-felled'
+    | 'feat-cartographer-felled'
+    | 'feat-keeper-deep'
+    | 'feat-cartographer-deep'
+    | 'feat-warden-deepest'
+    | 'feat-keeper-pinned'
+    | 'feat-warden-dealt-again'
+    | 'feat-learned'
+    | 'feat-sleeper-woken'
+    | 'feat-spiral-two-rings'
+    | 'feat-carve-through-hold'
+    | 'feat-vault-saved'
+    | 'feat-raging-blueprint'
+    | 'feat-first-reprise'
+    | 'feat-wanderer-steps'
+    | 'feat-colossus-felled'
+    | 'feat-hourglass-three'
+    | 'feat-realm-peak'
+    | 'feat-confluence'
+    | 'feat-endless-floor'
     | 'spiral-ring'
     | 'spiral-par'
     | 'sleeper-wakes'
@@ -3296,7 +3316,27 @@ const FEAT_ROOM_PLAN: readonly { id: TestHallRoomId; feat: FeatId; from: TestHal
     { id: 'feat-sleepers-kept', feat: 'sleepers_kept', from: 'sleeper-chain', preset: { sleepersKeptDownThisFloor: 2 }, clearAfter: false },
     { id: 'feat-keeper-raging', feat: 'keeper_raging', from: 'keeper-swap', preset: { realmSeverity: 'raging' as const }, clearAfter: false },
     { id: 'feat-cartographer-raging', feat: 'cartographer_raging', from: 'cartographer-turn', preset: { realmSeverity: 'raging' as const }, clearAfter: true },
-    { id: 'feat-three-unmasked', feat: 'three_unmasked', from: 'mask-drops', preset: { masksDroppedThisFloor: 2 }, clearAfter: false }
+    { id: 'feat-three-unmasked', feat: 'three_unmasked', from: 'mask-drops', preset: { masksDroppedThisFloor: 2 }, clearAfter: false },
+    { id: 'feat-keeper-felled', feat: 'keeper_felled', from: 'keeper-swap', preset: {}, clearAfter: true },
+    { id: 'feat-cartographer-felled', feat: 'cartographer_felled', from: 'cartographer-turn', preset: {}, clearAfter: true },
+    { id: 'feat-keeper-deep', feat: 'keeper_deep', from: 'keeper-swap', preset: { depth: 10 }, clearAfter: true },
+    { id: 'feat-cartographer-deep', feat: 'cartographer_deep', from: 'cartographer-turn', preset: { depth: 15 }, clearAfter: true },
+    { id: 'feat-warden-deepest', feat: 'warden_deepest', from: 'warden-felled', preset: { depth: 20, holdLinks: 7 }, clearAfter: false },
+    { id: 'feat-keeper-pinned', feat: 'keeper_pinned', from: 'keeper-pin', preset: {}, clearAfter: false },
+    { id: 'feat-warden-dealt-again', feat: 'warden_dealt_again', from: 'warden-deals-again', preset: {}, clearAfter: false },
+    { id: 'feat-learned', feat: 'learned', from: 'learned-rule', preset: {}, clearAfter: false },
+    { id: 'feat-sleeper-woken', feat: 'sleeper_woken', from: 'sleeper-wakes', preset: {}, clearAfter: false },
+    { id: 'feat-spiral-two-rings', feat: 'spiral_two_rings', from: 'spiral-ring', preset: { spiralRingsSealedThisFloor: 1 }, clearAfter: false },
+    { id: 'feat-carve-through-hold', feat: 'carve_through_hold', from: 'carve-through-hold', preset: {}, clearAfter: false },
+    { id: 'feat-vault-saved', feat: 'vault_saved', from: 'misers-vault', preset: {}, clearAfter: false },
+    { id: 'feat-raging-blueprint', feat: 'raging_blueprint', from: 'boss-raging-blueprint', preset: {}, clearAfter: false },
+    { id: 'feat-first-reprise', feat: 'first_reprise', from: 'reprise-pays', preset: {}, clearAfter: false },
+    { id: 'feat-wanderer-steps', feat: 'wanderer_steps', from: 'wanderers-step', preset: { wandererStepsThisFloor: 2 }, clearAfter: false },
+    { id: 'feat-colossus-felled', feat: 'colossus_felled', from: 'colossus', preset: {}, clearAfter: false },
+    { id: 'feat-hourglass-three', feat: 'hourglass_three', from: 'hourglass', preset: { hourglassesCaughtThisRun: 2 }, clearAfter: false },
+    { id: 'feat-realm-peak', feat: 'realm_peak', from: 'realm-whiteout', preset: {}, clearAfter: false },
+    { id: 'feat-confluence', feat: 'confluence', from: 'realm-confluence', preset: {}, clearAfter: false },
+    { id: 'feat-endless-floor', feat: 'endless_floor', from: 'endless-rent-paid', preset: {}, clearAfter: true }
 ];
 
 const featRoom = ({ id, feat, from, preset, clearAfter }: (typeof FEAT_ROOM_PLAN)[number]): TestHallRoom => {
@@ -3493,6 +3533,7 @@ export const MIN_TEST_HALL_CHECKS = 2;
 export const TEST_HALL_CHECKED_ELSEWHERE: Readonly<Record<string, string>> = {
     'progression.run_setup': 'Run setup happens before any board: the soak plays whole runs from it at every setup, and the playtest starts runs from the main menu.',
     'persistence.run_summary': 'The run summary is written when a run ends: the soak finishes runs to it, and the playtest reads it on the results screen.',
+    'board.dread_composition': 'The Dread buys from Awake, past floor 20 in most runs: the soak checks every descent against its purchase, and the unit tests walk the table.',
     'progression.depths': 'A Depth is chosen before any board: the soak plays every rung with --depths, and the unit tests walk each rung against the constant it names.',
     'simulation.gameplay_replay': 'Replay re-runs a recorded journal: the endless sim verifies a replay on every floor it plays, at every seed it tops up.',
     'simulation.build_evaluation': 'Build evaluation scores whole runs, not a board: the balance simulation and the seed sweep gate drive it over many seeds.'

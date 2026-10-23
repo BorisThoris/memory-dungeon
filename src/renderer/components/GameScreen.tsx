@@ -1,5 +1,6 @@
 import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
+import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
 import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
@@ -1634,8 +1635,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const learnedRule = run.learnedRule ?? null;
     // The Depths (`depth-rules.ts`): the run's Depth and the rung it adds, named before the first flip.
     const depthShown = depthRung(run);
+    // The Dread spends (`dread-composition-rules.ts`): what it bought on this floor.
+    const dreadBought = run.dreadBought ?? null;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2216,6 +2219,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 {depthShown ? (
                                     <p className={styles.wardenRules} data-testid="depth-rule">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.depthKicker(depthShown.depth)}</span> {depthShown.line}
+                                    </p>
+                                ) : null}
+                                {dreadBought ? (
+                                    <p className={styles.wardenRules} data-testid="dread-bought">
+                                        <span className={styles.wardenRulesName}>{DREAD_BOUGHT_COPY.kicker}</span> {DREAD_BOUGHT_COPY.line(dreadBought)}
                                     </p>
                                 ) : null}
                                 {learnedRule ? (

@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). 84: Sleepers (`sleeper-rules.ts`). 85: the Spiral (`spiral-rules.ts`). 86: the dungeon learns you (`learned-rule-rules.ts`). */
-export const GAME_RULES_VERSION = 86;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). 84: Sleepers (`sleeper-rules.ts`). 85: the Spiral (`spiral-rules.ts`). 86: the dungeon learns you (`learned-rule-rules.ts`). 87: the Dread spends on the families (`dread-composition-rules.ts`) and the Fold's rooms keep their weather (`realm-weather-rules.ts`). */
+export const GAME_RULES_VERSION = 87;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -1076,6 +1076,8 @@ export interface RunState {
     spiralRingsSealedThisFloor?: number;
     /** The dungeon learns you (`learned-rule-rules.ts`, DGE-022): the rule this floor was told, or none. */
     learnedRule?: LearnedRule | null;
+    /** The Dread spends (`dread-composition-rules.ts`): the family pairs it bought on this floor over the schedule, or none. */
+    dreadBought?: Readonly<Record<'sleeper' | 'mask' | 'wanderer', number>> | null;
     /** The Depths (`depth-rules.ts`, DGE-025): the run's Depth, every rung up to it in play; 0 is the game as it was. */
     depth?: number;
     repriseUsedThisFloor?: boolean;

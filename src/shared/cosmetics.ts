@@ -182,6 +182,186 @@ export const COSMETIC_CATALOG: Record<CosmeticId, CosmeticDefinition> = {
         fallback: 'Seeker title',
         gameplayAffecting: false
     },
+    title_doorwarden: {
+        id: 'title_doorwarden',
+        slot: 'title',
+        label: 'Doorwarden',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Doorwarden',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_chartwright: {
+        id: 'title_chartwright',
+        slot: 'title',
+        label: 'Chartwright',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Chartwright',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_deep_doorwarden: {
+        id: 'title_deep_doorwarden',
+        slot: 'title',
+        label: 'Deep Doorwarden',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Deep Doorwarden',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_deep_chartwright: {
+        id: 'title_deep_chartwright',
+        slot: 'title',
+        label: 'Deep Chartwright',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Deep Chartwright',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_abyssal: {
+        id: 'title_abyssal',
+        slot: 'title',
+        label: 'Abyssal',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Abyssal',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_lockkeeper: {
+        id: 'title_lockkeeper',
+        slot: 'title',
+        label: 'Lockkeeper',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Lockkeeper',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_second_board: {
+        id: 'title_second_board',
+        slot: 'title',
+        label: 'Second Board',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Second Board',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_known: {
+        id: 'title_known',
+        slot: 'title',
+        label: 'Known',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Known',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_early_riser: {
+        id: 'title_early_riser',
+        slot: 'title',
+        label: 'Early Riser',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Early Riser',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_spiral_breaker: {
+        id: 'title_spiral_breaker',
+        slot: 'title',
+        label: 'Spiral-Breaker',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Spiral-Breaker',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_hollow_stone: {
+        id: 'title_hollow_stone',
+        slot: 'title',
+        label: 'Hollow Stone',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Hollow Stone',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_vault_keeper: {
+        id: 'title_vault_keeper',
+        slot: 'title',
+        label: 'Vault-Keeper',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Vault-Keeper',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_draughtsman: {
+        id: 'title_draughtsman',
+        slot: 'title',
+        label: 'Draughtsman',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Draughtsman',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_second_take: {
+        id: 'title_second_take',
+        slot: 'title',
+        label: 'Second Take',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Second Take',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_tracker: {
+        id: 'title_tracker',
+        slot: 'title',
+        label: 'Tracker',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Tracker',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_giantsbane: {
+        id: 'title_giantsbane',
+        slot: 'title',
+        label: 'Giantsbane',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Giantsbane',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_sandcatcher: {
+        id: 'title_sandcatcher',
+        slot: 'title',
+        label: 'Sandcatcher',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Sandcatcher',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_weathered: {
+        id: 'title_weathered',
+        slot: 'title',
+        label: 'Weathered',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Weathered',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_confluent: {
+        id: 'title_confluent',
+        slot: 'title',
+        label: 'Confluent',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Confluent',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
+    title_past_the_gate: {
+        id: 'title_past_the_gate',
+        slot: 'title',
+        label: 'Past the Gate',
+        description: 'A title for a feat of the deep game.',
+        unlockSource: 'Feat: Past the Gate',
+        fallback: 'Seeker title',
+        gameplayAffecting: false
+    },
 };
 
 export const CARD_THEME_CATALOG = {

@@ -2888,6 +2888,40 @@
             ]
         },
         {
+            "id": "board.dread_composition",
+            "label": "The Dread spends",
+            "kind": "board",
+            "role": "from_awake_the_dread_buys_more_of_the_families_a_floor_deals_from_a_priced_table_dearest_first_told_on_the_crown",
+            "evidence": [
+                "src/shared/dread-composition-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/wanderer-rules.ts",
+                "src/shared/mask-rules.ts",
+                "src/shared/sleeper-rules.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "dreadRagingFloors",
+                "dreadWildFloors",
+                "dreadBought"
+            ],
+            "writes": [
+                "dreadBought",
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "the-schedule-is-the-floor-minimum",
+                "only-families-the-floor-deals",
+                "told-before-the-first-flip"
+            ],
+            "tests": [
+                "src/shared/dread-composition-rules.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "progression.depths",
             "label": "The Depths",
             "kind": "progression",
@@ -3238,6 +3272,12 @@
         }
     ],
     "edges": [
+        {
+            "source": "board.dread_composition",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "what the Dread bought on the board crown, from the study window on"
+        },
         {
             "source": "progression.depths",
             "target": "feedback.gameplay_hud",

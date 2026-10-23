@@ -33,17 +33,25 @@ export const sleepersForFloor = (level: number): number => (level >= SLEEPER_THI
 const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.length === 2 && pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && !tile.wanderer && !tile.sleeper && !isRealmHeld(tile));
 
-/** Deals the floor's Sleepers onto plain pairs, from the run's seed. */
-export const dealSleepers = (
-    board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
-): BoardState => {
+/** The Sleepers a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
+export const sleeperCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+    if (rulesVersion < SLEEPER_RULES_FROM || board.pairCount < SLEEPER_MIN_PAIRS) return 0;
     // Depth (`depth-rules.ts`): two from an earlier floor.
     const wanted = sleepersForFloor(board.level)
         || (depthHas({ depth }, 'sleepers_early') && board.level >= DEPTH_SLEEPERS_FROM ? 2 : 0);
     // Depth 16: three wherever there are any.
-    const dealt = wanted > 0 && depthHas({ depth }, 'sleepers_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
-    if (rulesVersion < SLEEPER_RULES_FROM || dealt === 0 || board.pairCount < SLEEPER_MIN_PAIRS) return board;
+    return wanted > 0 && depthHas({ depth }, 'sleepers_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
+};
+
+/** Deals the floor's Sleepers onto plain pairs, from the run's seed. */
+export const dealSleepers = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+): BoardState => {
+    const scheduled = sleeperCountFor(board, { rulesVersion, depth });
+    if (scheduled === 0) return board;
+    // `extra`: what the Dread bought on top (`dread-composition-rules.ts`).
+    const dealt = scheduled + extra;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {

@@ -1,7 +1,7 @@
 # DGE-003: Dread: one coefficient, named tiers on the HUD
 
 ## Status
-Done in part (2026-10-19): Dread, its tiers and every reading of them. The priced composition waits for DGE-009.
+Done (2026-10-23): Dread, its tiers, and the priced composition (rules 87).
 
 ## Priority
 P0
@@ -62,3 +62,9 @@ A Dread bar on the run bar with eight named tiers (Quiet, Stirring, Restless, Hu
 - HUD: `hud-dread` inside `hud-floor` (tier, a thin bar in the realm's colour filling toward the next tier's name; tier only on phone layouts; past the last tier a Roman numeral, so the floor number stays the only digit in `hud-floor`). Results: `game-over-dread` ("Dread: Watching"). Codex: "Dread" topic built from `DREAD_TIERS` (encyclopedia 94). All three read the one table.
 - Not done, on purpose: the board builder spending a Dread budget (and its acceptance case "a floor at Dread 80 has nothing priced under 4") changes generation, a `GAME_RULES_VERSION` bump; the ticket's own risk note batches it with DGE-009, whose Wanderer, Mask and Sleeper are the only rows that make the budget matter. The prices are listed above for it. The door display in `RealmTravel.tsx` is dead code (test-only since 2026-10-07) and was dropped.
 - Checklist rows: graph node `progression.dread` (enabled by realm travel, `displays` to the HUD), ledger entry, census exemption (it acts on nothing in a floor), mechanic count 71, soak invariant "Dread never falls, and every descent raises it" plus a report that some run reaches Hungry, hall room, Codex. No rules bump, no reseed.
+
+2026-10-23, the priced composition (rules 87; the owner's choice: layered on the schedules).
+- `dread-composition-rules.ts`: the plan's table (pair 1, Wanderer 4, mask 6, Sleeper 9, stacked mutator 12, boss rule 20). The floor schedules stay the minimum, so the Depth rungs keep their meaning. From Awake the Dread is a budget of six points a doubling, spent round the families the floor already deals, dearest first, at most two more of each; a family under an eighth of the budget is too cheap and skipped. Measured on the table: at Awake one mask or one Wanderer; at the floor-60 median (Dread ~7,200) two more Sleeper pairs and two more masks and no Wanderers. Mutators and boss rules are not for sale (the schedule places them).
+- The dealers take an `extra` count over their schedule (`wandererCountFor`, `maskCountFor`, `sleeperCountFor`); `RunState.dreadBought` keeps the purchase, told on the board crown (`dread-bought`) before the first flip.
+- Checks: unit tests on the table; a soak invariant on every descent (the floor was told what its Dread buys, and holds no more of a family than schedule plus purchase); the deep soak to 62 bought 14,341 across five players with 0 violations once the Spiral fix below landed. `gate:warden-reach` after the reseed: 57 of 100 at 15% misses (bar 50). Graph `board.dread_composition`, ledger, census exemption, hall exemption, Codex "The Dread spends" (ENCYCLOPEDIA 118).
+- Found by the soak: a Spiral ended (last ring or par) with a Sleeper still asleep left it on the cleared floor; it now goes with the floor, as a held stack does. No play changes (the next floor starts with none).

@@ -107,8 +107,9 @@ export const sealSpiralRings = (
 };
 
 /** The floor survived: the Spiral ends, the Hold's stack going with it. */
+// A Hold's stack and a Sleeper still asleep go with the floor: a survived Spiral has no cell left to wake into.
 const survive = (run: RunState, finalize: (run: RunState) => RunState): RunState =>
-    finalize({ ...run, spiralSurvived: true, holding: false, heldSeedIds: [] });
+    finalize({ ...run, spiralSurvived: true, holding: false, heldSeedIds: [], sleepingPairs: [] });
 
 /**
  * Applied after every resolved turn on a Spiral: a cleared live ring seals and the inner ring is dealt;

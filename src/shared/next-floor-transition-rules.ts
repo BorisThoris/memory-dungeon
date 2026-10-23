@@ -1,8 +1,10 @@
 import type { LearnedRuleId } from './contracts';
 import { pickLearnedRule, preferredSuitFor } from './learned-rule-rules';
-import { dealSleepers } from './sleeper-rules';
+import { dealSleepers, sleeperCountFor } from './sleeper-rules';
+import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
+import { dreadForRun } from './dread-rules';
 import { hasEvolution } from './relic-evolution-rules';
-import { dealMasks, unmaskBoard } from './mask-rules';
+import { dealMasks, maskCountFor, unmaskBoard } from './mask-rules';
 import { dealLayers } from './board-layers-rules';
 import {
     type FeaturedObjectiveId,
@@ -26,7 +28,7 @@ import { applyRealmChill } from './realm-carryover-rules';
 import { automaticCampReward } from './automatic-camp-rules';
 import { raiseColossus } from './colossus-rules';
 import { dealOddCards } from './odd-card-rules';
-import { dealWanderers } from './wanderer-rules';
+import { dealWanderers, wandererCountFor } from './wanderer-rules';
 import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 
@@ -82,16 +84,25 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     const learnedRule = pickLearnedRule(run, bossBoard.level);
     const prefer = (id: LearnedRuleId) => ({ ...seeded, preferSuit: preferredSuitFor(learnedRule, id) });
     const depth = run.depth ?? 0;
+    // The Dread spends (`dread-composition-rules.ts`): from Awake it buys more of the families the schedule deals.
+    const dreadBought = dreadComposes(run)
+        ? dreadPurchase(dreadForRun({ ...run, ...realmEntry.fields, board: bossBoard }), {
+              sleeper: sleeperCountFor(bossBoard, { ...seeded, depth }),
+              mask: maskCountFor(bossBoard, { ...seeded, depth }),
+              wanderer: wandererCountFor(bossBoard, { ...seeded, depth })
+          })
+        : NO_DREAD_PURCHASE;
     const masked = dealSleepers(
-        dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), { ...prefer('wandering_suit'), depth }), { ...prefer('masked_suit'), depth }),
-        { ...prefer('sleeping_suit'), depth }
+        dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), { ...prefer('wandering_suit'), depth, extra: dreadBought.wanderer }), { ...prefer('masked_suit'), depth, extra: dreadBought.mask }),
+        { ...prefer('sleeping_suit'), depth, extra: dreadBought.sleeper }
     );
     const nextBoard = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
     const freshRecipe = run.runRulesVersion >= 64 && (nextFeaturedObjectiveId === 'amplified_reaction' || nextFeaturedObjectiveId === 'calm_reaction');
-    const next = createNextFloorRunState({ ...transitionRun, ...realmEntry.fields, learnedRule,
+    const bought = dreadBought.sleeper + dreadBought.mask + dreadBought.wanderer > 0 ? dreadBought : null;
+    const next = createNextFloorRunState({ ...transitionRun, ...realmEntry.fields, learnedRule, dreadBought: bought,
         // These rooms open with an empty elemental hand, so an incoming amplified burst
         // cannot consume the recipe before the player has a chance to attempt it.
         ...(freshRecipe ? { elementStreak: null } : {}),

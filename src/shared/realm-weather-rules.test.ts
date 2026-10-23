@@ -87,6 +87,20 @@ describe('realm weather', () => {
         expect(after2.board.tiles.find((t) => t.id === 'a1')!.frost).toBeUndefined();
     });
 
+    it('the Fold (rules 87): a blizzard takes one room\'s half of its row, never both sides of the wall', () => {
+        let blizzards = 0;
+        for (let seed = 1; seed <= 12; seed += 1) {
+            const b = { ...board(sixteen()), fold: { afterColumn: 1, doorRows: [1] } };
+            const result = turn(runIn('frost', 'raging'), b, 'match', [], seed);
+            const event = result.events.find((e) => e.kind === 'blizzard');
+            if (!event) continue;
+            blizzards += 1;
+            const rooms = new Set(event.tileIds.map((id) => (result.board.tiles.findIndex((t) => t.id === id) % 4 > 1 ? 1 : 0)));
+            expect(rooms.size, `seed ${seed}`).toBe(1);
+        }
+        expect(blizzards).toBeGreaterThan(0);
+    });
+
     it('frost: a blizzard slides one row with the wind and snows it over, moving nothing off the board', () => {
         const b = board(sixteen());
         const result = turn(runIn('frost', 'raging'), b, 'match', [], 3);

@@ -33,17 +33,25 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.length === 2 &&
     pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && tile.mask == null && !isRealmHeld(tile));
 
-/** Deals the floor's masks: one card of each chosen pair wears an element the floor holds that is not its own. */
-export const dealMasks = (
-    board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
-): BoardState => {
+/** The masks a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
+export const maskCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+    if (rulesVersion < MASK_RULES_FROM || board.pairCount < MASK_MIN_PAIRS) return 0;
     // Depth (`depth-rules.ts`): two from an earlier floor.
     const wanted = masksForFloor(board.level)
         || (depthHas({ depth }, 'masks_early') && board.level >= DEPTH_MASKS_FROM ? 2 : 0);
     // Depth 17: three wherever there are any.
-    const dealt = wanted > 0 && depthHas({ depth }, 'masks_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
-    if (rulesVersion < MASK_RULES_FROM || dealt === 0 || board.pairCount < MASK_MIN_PAIRS) return board;
+    return wanted > 0 && depthHas({ depth }, 'masks_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
+};
+
+/** Deals the floor's masks: one card of each chosen pair wears an element the floor holds that is not its own. */
+export const dealMasks = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+): BoardState => {
+    const scheduled = maskCountFor(board, { rulesVersion, depth });
+    if (scheduled === 0) return board;
+    // `extra`: what the Dread bought on top (`dread-composition-rules.ts`).
+    const dealt = scheduled + extra;
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         if (isSingletonUtilityPairKey(tile.pairKey)) continue;

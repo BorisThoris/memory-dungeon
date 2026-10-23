@@ -30,6 +30,7 @@ import { SLEEPER_CHAIN_HOLDS, SLEEPER_FROM_FLOOR, SLEEPER_WAKE_TURNS, sleepersFo
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
 import { FEATS } from './feat-unlocks';
 import { DEPTH_RUNGS, MAX_DEPTH } from './depth-rules';
+import { DREAD_EXTRA_CAP, DREAD_POINTS_PER_DOUBLING, DREAD_PRICES } from './dread-composition-rules';
 import { CARTOGRAPHER_TURN_EVERY_MATCHES } from './cartographer-rules';
 import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules';
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
@@ -37,7 +38,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 117 as const;
+export const ENCYCLOPEDIA_VERSION = 119 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -562,6 +563,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         description:
             `Floor ${DESCENT_FLOOR_COUNT} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
             `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run. **Met behind the wild or raging door, the Warden is complete**: it falls only to a **Hold released at ${WARDEN_FELL_PAIRS} pairs** or more, and that release wins with pairs left. An empty board does not beat it: it deals ${WARDEN_DEAL_AGAIN_PAIRS} fresh pairs into the cleared cells and the floor goes on, and while you hold, its re-deal waits. Then you choose: take the win, or go on into **Endless**, where the four acts come round again, each cycle half as long, every cycle ending on its Warden. In Endless every floor owes **rent**: a score its clear must pay, shown on the run bar, rising every cycle. A floor that pays less ends the run.`
+    },
+    {
+        id: 'sys_dread_spends',
+        title: 'The Dread spends',
+        description:
+            `From **Awake**, the Dread **buys** more of what a floor already holds: ${DREAD_POINTS_PER_DOUBLING} points, and ${DREAD_POINTS_PER_DOUBLING} more each time the Dread doubles, spent round its price table, dearest first - a **Sleeper pair ${DREAD_PRICES.sleeper}**, a **mask ${DREAD_PRICES.mask}**, a **Wanderer pair ${DREAD_PRICES.wanderer}** - up to ${DREAD_EXTRA_CAP} more of each. It buys only a family the floor already deals, and once the Dread is deep a Wanderer is too cheap to be worth it, so the deepest floors are Sleepers and masks. What it bought is said above the board before your first flip.`
     },
     {
         id: 'sys_dread',

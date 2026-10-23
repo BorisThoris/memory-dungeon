@@ -1,7 +1,7 @@
 # DGE-009: Wanderers: cards that drift and leave a trail
 
 ## Status
-Done (2026-10-20), rules 70. No back mark (the owner’s rule wins) and the Dread price waits for the priced table: see notes.
+Done (2026-10-20), rules 70; the Dread price landed with the priced table (rules 87, 2026-10-23). No back mark (the owner’s rule wins).
 
 ## Priority
 P0
@@ -65,3 +65,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Soak: 200 seeds x 4 players, 8,461 Wanderer floors, 21,664 steps, 0 violations with the invariant that a footprint lies one step from a Wanderer on the turn it is left and none outlasts a floor. The first soak caught a release that cleared a floor showing last turn's footprints (fixed: every turn and every floor end wipes them).
 - Checklist rows ticked: rules module, generation gate (`WANDERER_RULES_FROM`), hall room `wanderers-step` (three seeds), soak invariant and counters, run census counter `wandererSteps`, graph node `board.wanderers` with `displays` and `synergy` edges, ledger entry, Codex `sys_wanderers` (encyclopedia 99), `docs/MUTATORS.md` order note, a look in the browser.
 - Not done: the slide animation and its reduced-motion variant (cards glide as any permutation does), `yarn sim:endless` coverage, the DGE-032 cap on movers per floor.
+
+2026-10-23: the Dread now buys Wanderer pairs at 4 points on floors that deal them (DGE-003 notes); the Depth rungs still move the schedule underneath.

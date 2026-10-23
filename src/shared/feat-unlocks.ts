@@ -3,6 +3,7 @@ import type { CosmeticId } from './cosmetic-ids';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { runDepth } from './depth-rules';
 
 /**
  * Feats (DGE-024): unlocks as a guided tour of the deep game.
@@ -10,8 +11,7 @@ import { runNonNegativeInteger } from './run-number-guards';
  * Each feat is something done in a mechanic players under-use, said aloud in the Collection and the
  * Codex before it is done (no hidden progress bars), and each unlocks something sideways - a title,
  * or an option built from what the game already has - never a number the deep game asks for. The
- * owner chose ten feats on existing options for this batch (2026-10-22); the rest come with their
- * mechanics. A feat is read off the run as it plays (\`earnedFeats\`) and kept on the profile as an
+ * owner chose ten feats on existing options (2026-10-22) and twenty more the same way (2026-10-23). A feat is read off the run as it plays (\`earnedFeats\`) and kept on the profile as an
  * unlock tag (\`feat:<id>\`), its title as \`cosmetic:<id>\` and its option, if any, as \`option:<id>\`.
  */
 export type FeatId =
@@ -24,7 +24,27 @@ export type FeatId =
     | 'sleepers_kept'
     | 'keeper_raging'
     | 'cartographer_raging'
-    | 'three_unmasked';
+    | 'three_unmasked'
+    | 'keeper_felled'
+    | 'cartographer_felled'
+    | 'keeper_deep'
+    | 'cartographer_deep'
+    | 'warden_deepest'
+    | 'keeper_pinned'
+    | 'warden_dealt_again'
+    | 'learned'
+    | 'sleeper_woken'
+    | 'spiral_two_rings'
+    | 'carve_through_hold'
+    | 'vault_saved'
+    | 'raging_blueprint'
+    | 'first_reprise'
+    | 'wanderer_steps'
+    | 'colossus_felled'
+    | 'hourglass_three'
+    | 'realm_peak'
+    | 'confluence'
+    | 'endless_floor';
 
 export type FeatOptionId = 'camp_evolve';
 
@@ -54,7 +74,28 @@ export const FEATS: readonly FeatDefinition[] = [
     { id: 'sleepers_kept', name: 'Night Watch', condition: 'Keep three Sleepers down on one floor.', title: 'title_night_watch', option: null, unlocks: 'The title Night Watch.', earned: (run) => runNonNegativeInteger(run.sleepersKeptDownThisFloor) >= 3 },
     { id: 'keeper_raging', name: 'Hallbreaker', condition: 'Beat the Keeper of Halls behind the raging door.', title: 'title_hallbreaker', option: null, unlocks: 'The title Hallbreaker.', earned: (run) => won(run) && raging(run) && isKeeperFloor(run.board) },
     { id: 'cartographer_raging', name: 'Map-Burner', condition: 'Beat the Cartographer behind the raging door.', title: 'title_map_burner', option: null, unlocks: 'The title Map-Burner.', earned: (run) => won(run) && raging(run) && isCartographerFloor(run.board) },
-    { id: 'three_unmasked', name: 'Unmasker', condition: 'Drop three masks on one floor.', title: 'title_unmasker', option: null, unlocks: 'The title Unmasker.', earned: (run) => runNonNegativeInteger(run.masksDroppedThisFloor) >= 3 }
+    { id: 'three_unmasked', name: 'Unmasker', condition: 'Drop three masks on one floor.', title: 'title_unmasker', option: null, unlocks: 'The title Unmasker.', earned: (run) => runNonNegativeInteger(run.masksDroppedThisFloor) >= 3 },
+    // The second twenty (2026-10-23): titles for deeds in the bosses, the Depths, the families, the Hold, the realms and Endless.
+    { id: 'keeper_felled', name: 'Doorwarden', condition: 'Beat the Keeper of Halls.', title: 'title_doorwarden', option: null, unlocks: 'The title Doorwarden.', earned: (run) => won(run) && isKeeperFloor(run.board) },
+    { id: 'cartographer_felled', name: 'Chartwright', condition: 'Beat the Cartographer.', title: 'title_chartwright', option: null, unlocks: 'The title Chartwright.', earned: (run) => won(run) && isCartographerFloor(run.board) },
+    { id: 'keeper_deep', name: 'Deep Doorwarden', condition: 'Beat the Keeper of Halls at Depth 10 or deeper.', title: 'title_deep_doorwarden', option: null, unlocks: 'The title Deep Doorwarden.', earned: (run) => won(run) && isKeeperFloor(run.board) && runDepth(run) >= 10 },
+    { id: 'cartographer_deep', name: 'Deep Chartwright', condition: 'Beat the Cartographer at Depth 15 or deeper.', title: 'title_deep_chartwright', option: null, unlocks: 'The title Deep Chartwright.', earned: (run) => won(run) && isCartographerFloor(run.board) && runDepth(run) >= 15 },
+    { id: 'warden_deepest', name: 'Abyssal', condition: 'Fell the Warden at Depth 20.', title: 'title_abyssal', option: null, unlocks: 'The title Abyssal.', earned: (run) => won(run) && run.wardenOutcome === 'cleared' && runDepth(run) >= 20 },
+    { id: 'keeper_pinned', name: 'Lockkeeper', condition: 'Hold a pin through the Keeper of Halls’ swap.', title: 'title_lockkeeper', option: null, unlocks: 'The title Lockkeeper.', earned: (run) => isKeeperFloor(run.board) && runNonNegativeInteger(run.keeperSwapsThisFloor) >= 1 && (run.pinnedTileIds ?? []).length > 0 },
+    { id: 'warden_dealt_again', name: 'Second Board', condition: 'Clear the board before the complete Warden, and be dealt it again.', title: 'title_second_board', option: null, unlocks: 'The title Second Board.', earned: (run) => runNonNegativeInteger(run.wardenDealsAgainThisFloor) >= 1 },
+    { id: 'learned', name: 'Known', condition: 'Be told what the dungeon learned about you.', title: 'title_known', option: null, unlocks: 'The title Known.', earned: (run) => run.learnedRule != null },
+    { id: 'sleeper_woken', name: 'Early Riser', condition: 'Watch a Sleeper wake.', title: 'title_early_riser', option: null, unlocks: 'The title Early Riser.', earned: (run) => runNonNegativeInteger(run.sleepersWokenThisFloor) >= 1 },
+    { id: 'spiral_two_rings', name: 'Spiral-Breaker', condition: 'Seal two rings of a Spiral on one floor.', title: 'title_spiral_breaker', option: null, unlocks: 'The title Spiral-Breaker.', earned: (run) => runNonNegativeInteger(run.spiralRingsSealedThisFloor) >= 2 },
+    { id: 'carve_through_hold', name: 'Hollow Stone', condition: 'Spend a carve on the pop of a released Hold.', title: 'title_hollow_stone', option: null, unlocks: 'The title Hollow Stone.', earned: (run) => runNonNegativeInteger(run.carvesSpentThisFloor) >= 1 && runNonNegativeInteger(run.holdsReleasedThisFloor) >= 1 },
+    { id: 'vault_saved', name: 'Vault-Keeper', condition: 'Be saved by the Miser\u2019s Vault.', title: 'title_vault_keeper', option: null, unlocks: 'The title Vault-Keeper.', earned: (run) => run.misersVaultUsedThisFloor === true },
+    { id: 'raging_blueprint', name: 'Draughtsman', condition: 'Win a blueprint from a boss behind the raging door.', title: 'title_draughtsman', option: null, unlocks: 'The title Draughtsman.', earned: (run) => (run.blueprints ?? []).length > 0 },
+    { id: 'first_reprise', name: 'Second Take', condition: 'Reprise for the first time.', title: 'title_second_take', option: null, unlocks: 'The title Second Take.', earned: (run) => runNonNegativeInteger(run.reprisesThisRun) >= 1 },
+    { id: 'wanderer_steps', name: 'Tracker', condition: 'Watch the Wanderers step three times on one floor.', title: 'title_tracker', option: null, unlocks: 'The title Tracker.', earned: (run) => runNonNegativeInteger(run.wandererStepsThisFloor) >= 3 },
+    { id: 'colossus_felled', name: 'Giantsbane', condition: 'Fell a Colossus.', title: 'title_giantsbane', option: null, unlocks: 'The title Giantsbane.', earned: (run) => runNonNegativeInteger(run.colossiFelledThisRun) >= 1 },
+    { id: 'hourglass_three', name: 'Sandcatcher', condition: 'Catch three Hourglasses in one run.', title: 'title_sandcatcher', option: null, unlocks: 'The title Sandcatcher.', earned: (run) => runNonNegativeInteger(run.hourglassesCaughtThisRun) >= 3 },
+    { id: 'realm_peak', name: 'Weathered', condition: 'Weather a realm at its peak.', title: 'title_weathered', option: null, unlocks: 'The title Weathered.', earned: (run) => runNonNegativeInteger(run.realmPeaksThisFloor) >= 1 },
+    { id: 'confluence', name: 'Confluent', condition: 'Walk into a confluence of two realms.', title: 'title_confluent', option: null, unlocks: 'The title Confluent.', earned: (run) => run.realmSecondaryId != null },
+    { id: 'endless_floor', name: 'Past the Gate', condition: 'Clear a floor of Endless.', title: 'title_past_the_gate', option: null, unlocks: 'The title Past the Gate.', earned: (run) => won(run) && run.endless === true }
 ];
 
 export const FEAT_IDS: readonly FeatId[] = FEATS.map((feat) => feat.id);

@@ -54,16 +54,23 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
             !isRealmHeld(tile)
     );
 
-/** Deals the floor's Wanderers onto plain pairs, from the run's seed, when the floor is dealt. */
-export const dealWanderers = (
-    board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number }
-): BoardState => {
+/** The Wanderer pairs a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
+export const wandererCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+    if (rulesVersion < WANDERER_RULES_FROM || board.pairCount < WANDERER_MIN_PAIRS) return 0;
     // Depth 7 (`depth-rules.ts`): two Wanderers from floor 7.
     const early = depthHas({ depth }, 'wanderers_early') && board.level >= DEPTH_WANDERERS_FROM ? Math.max(2, wandererPairsForFloor(board.level)) : wandererPairsForFloor(board.level);
     // Depth 19: three wherever there are any.
-    const wanted = early > 0 && depthHas({ depth }, 'wanderers_three') ? Math.max(early, DEPTH_FAMILY_COUNT) : early;
-    if (rulesVersion < WANDERER_RULES_FROM || wanted === 0 || board.pairCount < WANDERER_MIN_PAIRS) return board;
+    return early > 0 && depthHas({ depth }, 'wanderers_three') ? Math.max(early, DEPTH_FAMILY_COUNT) : early;
+};
+
+/** Deals the floor's Wanderers onto plain pairs, from the run's seed, when the floor is dealt; `extra` is what the Dread bought. */
+export const dealWanderers = (
+    board: BoardState,
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+): BoardState => {
+    const scheduled = wandererCountFor(board, { rulesVersion, depth });
+    if (scheduled === 0) return board;
+    const wanted = scheduled + extra;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {

@@ -1,7 +1,7 @@
 # DGE-024: Thirty sideways feat unlocks
 
 ## Status
-First ten done (2026-10-22); twenty to come with their mechanics
+Done (2026-10-23): thirty feats
 
 ## Priority
 P1
@@ -59,3 +59,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Collection: a Feats section, every feat's condition and unlock shown earned or not (no progress bars); looked at in the isolated browser. Codex `sys_feats` (ENCYCLOPEDIA 114).
 - Every feat has a hall room that performs it, built from the room that already plays the deed (started one short where the feat counts), so a feat and its mechanic cannot drift apart.
 - Not done: Steam achievements for them (DGE-028); the other twenty, with their mechanics' variants.
+
+2026-10-23, the second twenty (the owner's choice: existing options, titles only). Doorwarden, Chartwright, Deep Doorwarden (Depth 10), Deep Chartwright (Depth 15), Abyssal (the Warden at Depth 20), Lockkeeper, Second Board, Known, Early Riser, Spiral-Breaker, Hollow Stone, Vault-Keeper, Draughtsman, Second Take, Tracker, Giantsbane, Sandcatcher, Weathered, Confluent, Past the Gate. Each read off a counter the run already keeps, each a title, each walked by a hall room built from its mechanic's own room (all thirty pass at both seeds). Two first picks were swapped when their rooms could not earn them (a Hold of six: no room holds six without also earning Twelve Held; the Patient Warden: no room fells it after a re-deal). The Depth 20 room starts with seven Hold links, since Depth 13 arms the Hold at seven. Collection pages them twelve at a time (looked at in the isolated browser); Codex ENCYCLOPEDIA 119.

@@ -1,7 +1,7 @@
 # DGE-010: The Fold: two rooms joined by a doorway
 
 ## Status
-Done (2026-10-20), rules 71. Per-room weather and the phone’s stacked fold are left: see notes.
+Done (2026-10-20), rules 71; per-room weather landed in rules 87 (2026-10-23). The phone’s stacked fold is left: see notes.
 
 ## Priority
 P1
@@ -64,3 +64,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Mutation test: with the door gate removed and then with the wall removed, the 40-seed soak still reported nothing. The soak's invariant is kept (it is correct) but it is not the proof; `board-fold-rules.test.ts` and the hall rooms `fold-cross` / `fold-blocked` are.
 - Checklist rows ticked: rules module, generation gate (`FOLD_RULES_FROM`), hall rooms (three seeds), soak invariant and counter, graph node `board.fold` (`modifies` the pop, `displays`), ledger entry, census exemption (argued), Codex `sys_fold` (encyclopedia 100), a look in the browser at two sizes.
 - Not done: per-room weather (a blizzard row or a column sweep still crosses the wall), d-pad focus crossing the wall (it is navigation, not a rule), distances measured across the wall (proximity hints, the meteor's radius).
+
+2026-10-23 (rules 87): the Fold's rooms keep their weather. A blizzard slides one room's half of its row, a thunderclap lights one room's half, the springtide's second column stays in the first one's room; the spreading weathers already respected the wall (`orthogonalNeighbourIndices` takes the fold). Test: a blizzard on a folded board never touches both rooms. Still not done: d-pad focus across the wall and distances measured across it (proximity hints, the meteor's radius), which are presentation, not rules.

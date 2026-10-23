@@ -9,6 +9,7 @@ import { reconcileRealmHolds } from './realm-hold-policy';
 import { castElementalGround, groundAnchoredTileIds, readElementalGround } from './element-ground-rules';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
+import { foldRoomOf } from './board-fold-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { REALMS, REALM_SEVERITIES, isRealmWeatherTurn, runRealmId, runRealmSecondaryId, runRealmSeverity } from './realm-rules';
@@ -178,13 +179,24 @@ const cycleTiles = (tiles: Tile[], indices: readonly number[]): void => {
     });
 };
 
+/**
+ * The Fold's rooms keep their own weather (DGE-010, rules 87): on a Fold floor a row-wide strike takes
+ * one room's half of the row, never both, so nothing the realm does reaches through the wall.
+ */
+export const FOLD_WEATHER_FROM = 87;
+
+/** A row's cells, split at the Fold's wall when the rooms keep their weather; one segment otherwise. */
+const rowSegments = (indices: readonly number[], board: BoardState, roomed: boolean): number[][] =>
+    roomed && board.fold ? [indices.filter((index) => foldRoomOf(board, index) === 0), indices.filter((index) => foldRoomOf(board, index) === 1)] : [[...indices]];
+
 const blizzard = (
     tiles: Tile[],
     board: BoardState,
     pinned: ReadonlySet<string>,
     rng: () => number,
     windEast: boolean,
-    alchemy: AlchemyLog
+    alchemy: AlchemyLog,
+    roomed = false
 ): string[] => {
     const cols = Math.max(1, board.columns);
     const rows: number[][] = [];
@@ -194,7 +206,7 @@ const blizzard = (
             const index = row * cols + col;
             if (index < tiles.length && movable(tiles, index, pinned)) indices.push(index);
         }
-        if (indices.length >= 2) rows.push(indices);
+        for (const segment of rowSegments(indices, board, roomed)) if (segment.length >= 2) rows.push(segment);
     }
     if (rows.length === 0) return [];
     const indices = rows[pickRngIndex(rng, rows.length)]!;
@@ -232,12 +244,15 @@ const current = (
 };
 
 /** Thunderclap: the row with the most face-down cards is lit, every card in it. Nothing moves. */
-const thunderclap = (tiles: Tile[], board: BoardState): string[] => {
+const thunderclap = (tiles: Tile[], board: BoardState, roomed = false): string[] => {
     const cols = Math.max(1, board.columns);
     let best: string[] = [];
     for (let row = 0; row * cols < tiles.length; row += 1) {
-        const ids = tiles.slice(row * cols, row * cols + cols).filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
-        if (ids.length > best.length) best = ids;
+        const cells = Array.from({ length: Math.min(cols, tiles.length - row * cols) }, (_unused, col) => row * cols + col);
+        for (const segment of rowSegments(cells, board, roomed)) {
+            const ids = segment.filter((index) => tiles[index]!.state === 'hidden').map((index) => tiles[index]!.id);
+            if (ids.length > best.length) best = ids;
+        }
     }
     return best;
 };
@@ -484,6 +499,7 @@ const strikeWeather = ({
     let touched: string[] = [];
     let kind: RealmEvent['kind'] = 'blizzard';
     let lit: string[] = [];
+    const roomed = (run.runRulesVersion ?? 0) >= FOLD_WEATHER_FROM && board.fold != null;
     switch (weatherRealm) {
         case 'frost': {
             if (peak) {
@@ -497,7 +513,7 @@ const strikeWeather = ({
             }
             // The wind holds its direction for a floor, so a player can learn which way it blows.
             const windEast = hashStringToSeed(`realm-wind:${run.runSeed}:${level}`) % 2 === 0;
-            touched = blizzard(tiles, board, pinned, rng, windEast, alchemy);
+            touched = blizzard(tiles, board, pinned, rng, windEast, alchemy, roomed);
             kind = 'blizzard';
             break;
         }
@@ -514,15 +530,17 @@ const strikeWeather = ({
             const first = current(tiles, board, pinned, count, alchemy);
             touched = first.ids;
             kind = 'current';
-            if (peak && first.col >= 0) {
-                touched = [...touched, ...current(tiles, board, pinned, first.col + 1, alchemy).ids.filter((id) => !first.ids.includes(id))];
+            // The springtide's second column stays in the first one's room on a Fold floor.
+            const nextCol = roomed && board.fold && first.col === board.fold.afterColumn ? first.col - 1 : first.col + 1;
+            if (peak && first.col >= 0 && nextCol >= 0) {
+                touched = [...touched, ...current(tiles, board, pinned, nextCol, alchemy).ids.filter((id) => !first.ids.includes(id))];
                 kind = 'springtide';
             }
             break;
         }
         case 'storm':
             if (peak) {
-                touched = thunderclap(tiles, board);
+                touched = thunderclap(tiles, board, roomed);
                 kind = 'thunderclap';
             } else {
                 touched = lightning(tiles, pinned, rng, weatherReach);

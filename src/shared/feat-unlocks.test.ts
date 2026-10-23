@@ -8,8 +8,9 @@ import { earnedFeats, FEAT_IDS, FEATS, hasFeat, hasFeatOption, recordFeats } fro
 const run = (extra: Partial<RunState> = {}): RunState => ({ ...finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' })), runRulesVersion: GAME_RULES_VERSION, ...extra });
 
 describe('feats (DGE-024)', () => {
-    it('ten feats, each unlocking a title or a title and an option, never a number', () => {
-        expect(FEATS).toHaveLength(10);
+    it('thirty feats, each unlocking a title or a title and an option, never a number', () => {
+        expect(FEATS).toHaveLength(30);
+        expect(new Set(FEATS.map((feat) => feat.title)).size).toBe(30);
         for (const feat of FEATS) {
             const kind = feat.option ? 'title_and_option' : 'title';
             expect(['title', 'title_and_option']).toContain(kind);
@@ -24,7 +25,7 @@ describe('feats (DGE-024)', () => {
         expect(earnedFeats(run({ largestHeldReleaseThisRun: 12 }))).toEqual(['held_twelve']);
         expect(earnedFeats(run({ evolutions: ['lantern_of_recall'] }))).toEqual(['first_evolution']);
         expect(earnedFeats(run({ status: 'levelComplete', spiralSurvived: true }))).toEqual(['spiral_survived']);
-        expect(earnedFeats(run({ masksDroppedThisFloor: 3, sleepersKeptDownThisFloor: 3, carvesSpentThisFloor: 3, reprisesThisRun: 5 })).sort()).toEqual(['five_reprises', 'sleepers_kept', 'three_carves', 'three_unmasked']);
+        expect(earnedFeats(run({ masksDroppedThisFloor: 3, sleepersKeptDownThisFloor: 3, carvesSpentThisFloor: 3, reprisesThisRun: 5 })).sort()).toEqual(['first_reprise', 'five_reprises', 'sleepers_kept', 'three_carves', 'three_unmasked']);
     });
 
     it('keeps the feat, its title and its option on the profile, through a save round-trip', () => {
