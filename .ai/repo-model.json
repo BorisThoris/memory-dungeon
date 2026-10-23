@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11743
+    "relationshipCount": 11744
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 101706,
-      "sha256": "927d71b6f05e73701923ed995d40989816a978ef84822f36aa5666db09c7afb9"
+      "sha256": "6001eae0bf9ec337bded2a3762c0ab909d480957866c694fcc918e0ddead5398"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "4306b03392584b3910006e2efbfc63adbd5ca241b11980b64cf54576cd9ba27a"
+      "sha256": "2aef90678eaf6a69040ffb49180b8c9d3d60dd65561a96d78fbac72f301e244a"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14692,7 +14692,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 102080,
-      "sha256": "8cf9b696c26910e9eb59ccb455d4ac04ea76a2e14ca2ab097277ebd94e2af120"
+      "sha256": "8369317258cf7b5facdec88df9686d3984a4fefd3465e870f6f3057925d9e874"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15285,8 +15285,8 @@
     {
       "path": "src/shared/cosmetic-ids.ts",
       "category": "source",
-      "bytes": 506,
-      "sha256": "37a3a263ac4f6f8b60635c4e7909d061b44c9c654cc2385239c3142cd5c24143"
+      "bytes": 1002,
+      "sha256": "d6b09c7a798febf49f8c118f4ce33c1175da739397ce87b4ee6b7a6aa4b14a6b"
     },
     {
       "path": "src/shared/cosmetic-reachability.test.ts",
@@ -15303,8 +15303,8 @@
     {
       "path": "src/shared/cosmetics.ts",
       "category": "source",
-      "bytes": 10001,
-      "sha256": "c0abe77008ffb1b6b535da707cb5d4f4cca779c5ea9dd63908df4b1afd185bb9"
+      "bytes": 15765,
+      "sha256": "c9f7e1cbe638f3eb803b76593eba22e33266fe71c3d6e7d76224aa33fd28cd85"
     },
     {
       "path": "src/shared/crash-report-summary.test.ts",
@@ -15609,14 +15609,14 @@
     {
       "path": "src/shared/feat-unlocks.test.ts",
       "category": "test",
-      "bytes": 2392,
-      "sha256": "8eb657216be022d45f1a759fa98c0b99c1ee26297872b242c29fe8012c392671"
+      "bytes": 2484,
+      "sha256": "703cd3a0cc4431691a18fc86566b2b81f84d4866a05ebcb00b17486315522203"
     },
     {
       "path": "src/shared/feat-unlocks.ts",
       "category": "source",
-      "bytes": 5794,
-      "sha256": "1414e0295ba1afc924f0959c05828326752ca48838d8e004456fd1ebfed05dda"
+      "bytes": 11446,
+      "sha256": "3897d7d2b45c39c3946fff2c2cc25ea3b35e108fe4de427c25b4d4d0bfae4a7d"
     },
     {
       "path": "src/shared/feature-flags.ts",
@@ -15687,8 +15687,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 12281,
-      "sha256": "58457288a2243a13764c8a8a8ac7064251e3471e8158aadf70d29e13b3247a19"
+      "bytes": 12489,
+      "sha256": "cc57042089c3b6ca98db2126e2f428252ccc15f53bb9755a8db14fdffd52c1d6"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -16264,7 +16264,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
       "bytes": 74415,
-      "sha256": "c2f570c0b60bb7bab916bcc8a8cb8974187b8b88a370040b910c7d782ef36592"
+      "sha256": "3d03ab97c0dbed4e8abb9599801f6caa76534ee846155539c9f4c41f6cf03c05"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17307,8 +17307,8 @@
     {
       "path": "src/shared/spiral-rules.ts",
       "category": "source",
-      "bytes": 8267,
-      "sha256": "9bc06442d36b76102791ca29ead1886e1c72a66434ed07ef15681c7a865a3809"
+      "bytes": 8399,
+      "sha256": "2fd002b0fcffb3aad473c1776b023b7b79b534a52a5f1bdd637e2fb99f09e926"
     },
     {
       "path": "src/shared/steam-achievement-api-names.ts",
@@ -17409,8 +17409,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 231488,
-      "sha256": "0676bc3f548b9353e23a556fffa20e5d48cea2e3585ec509f7f6962ecf0e2b72"
+      "bytes": 234439,
+      "sha256": "f174ff1fca4739149313950be3fe9b5150a89399ea611dce48ee8168664026cb"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17763,8 +17763,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 22413,
-      "sha256": "9ac2e60d222d6fafb77bfeef6a4f40743feb046b126e2463a77730f9d486d38a"
+      "bytes": 23147,
+      "sha256": "8bf025b0832e60c29b1d75c8a33e8e37976bf646c1218f474566045094873d07"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17811,8 +17811,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-003-dread-coefficient-and-tiers.md",
       "category": "other",
-      "bytes": 5868,
-      "sha256": "30f30e6362e8d4f1fbd41acd1a97a127674dda7a0b93ba085e5b851cd904007d"
+      "bytes": 7468,
+      "sha256": "631ea80f6edfdf387919e84dfe8fe555cc06897f3c4ecb3f32dd086e13932a45"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-004-milestones-and-clear-beat.md",
@@ -17847,14 +17847,14 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-009-wanderers-card-family.md",
       "category": "other",
-      "bytes": 5455,
-      "sha256": "c9ae30cbdfb2a3d98913fc2d3f80bf3e32b73e0cc43ef6c197283f5948257a16"
+      "bytes": 5619,
+      "sha256": "c7bc51e6731f240fbb8ceaa4a9844b62c25bd0255af5ead7793a5a5b523b6b69"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-010-the-fold-board.md",
       "category": "other",
-      "bytes": 5900,
-      "sha256": "b2692d536c9b76ce3e0922979ae898670d58a1864b2f3b93dbb13a02e647655d"
+      "bytes": 6445,
+      "sha256": "d507f7345507276a7fbccebfc0cdfd010e874a7ebe07cd662d4de528f794e2c0"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-011-keeper-of-halls-boss.md",
@@ -17937,8 +17937,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-024-feat-unlock-tree.md",
       "category": "other",
-      "bytes": 3494,
-      "sha256": "1feb7ae882f471413f845de511dcd865d3a69906c928d56dc423cc0a3ecdf2c0"
+      "bytes": 4380,
+      "sha256": "f55c2cf9c792ecedd82d0f88caad63a3374abf29cc6ccf7dff1196f505cb069b"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
@@ -36774,7 +36774,7 @@
       "path": "src/shared/cosmetic-ids.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 22,
+      "lineCount": 42,
       "imports": [],
       "exports": [
         "symbol:src/shared/cosmetic-ids.ts#COSMETIC_IDS",
@@ -36814,7 +36814,7 @@
       "path": "src/shared/cosmetics.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 284,
+      "lineCount": 464,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -37893,7 +37893,7 @@
       "path": "src/shared/feat-unlocks.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 39,
+      "lineCount": 40,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetics.ts",
@@ -37909,11 +37909,12 @@
       "path": "src/shared/feat-unlocks.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 125,
       "imports": [
         "file:src/shared/cartographer-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
+        "file:src/shared/depth-rules.ts",
         "file:src/shared/keeper-rules.ts",
         "file:src/shared/run-number-guards.ts"
       ],
@@ -38126,7 +38127,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 221,
+      "lineCount": 223,
       "imports": [
         "file:src/shared/boss-reward-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -44077,7 +44078,7 @@
       "path": "src/shared/spiral-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 132,
+      "lineCount": 133,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/cartographer-rules.ts",
@@ -44419,7 +44420,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3530,
+      "lineCount": 3570,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -65676,23 +65677,23 @@
       "kind": "value",
       "file": "src/shared/cosmetic-ids.ts",
       "line": 1,
-      "endLine": 18
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/cosmetic-ids.ts#CosmeticId",
       "name": "CosmeticId",
       "kind": "type",
       "file": "src/shared/cosmetic-ids.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CARD_THEME_CATALOG",
       "name": "CARD_THEME_CATALOG",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 187,
-      "endLine": 194
+      "line": 367,
+      "endLine": 374
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CardThemeId",
@@ -65716,7 +65717,7 @@
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
       "line": 42,
-      "endLine": 185
+      "endLine": 365
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#COSMETIC_IDS",
@@ -65755,8 +65756,8 @@
       "name": "cosmeticIsOwned",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 216,
-      "endLine": 222
+      "line": 396,
+      "endLine": 402
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#CosmeticSlot",
@@ -65787,80 +65788,80 @@
       "name": "cosmeticUnlockTag",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 214,
-      "endLine": 214
+      "line": 394,
+      "endLine": 394
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#deriveCosmeticStates",
       "name": "deriveCosmeticStates",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 235,
-      "endLine": 256
+      "line": 415,
+      "endLine": 436
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCardThemeRows",
       "name": "getCardThemeRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 273,
-      "endLine": 276
+      "line": 453,
+      "endLine": 456
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCatalogRows",
       "name": "getCosmeticCatalogRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 209,
-      "endLine": 210
+      "line": 389,
+      "endLine": 390
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCollectionRows",
       "name": "getCosmeticCollectionRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 263,
-      "endLine": 263
+      "line": 443,
+      "endLine": 443
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticProgressTrackRows",
       "name": "getCosmeticProgressTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 283,
-      "endLine": 283
+      "line": 463,
+      "endLine": 463
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
       "name": "getCosmeticTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 283,
-      "endLine": 283
+      "line": 463,
+      "endLine": 463
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCardTheme",
       "name": "getEquippedCardTheme",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 278,
-      "endLine": 279
+      "line": 458,
+      "endLine": 459
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCosmeticId",
       "name": "getEquippedCosmeticId",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 270,
-      "endLine": 271
+      "line": 450,
+      "endLine": 451
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
       "name": "getOwnedCosmeticIds",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 265,
-      "endLine": 268
+      "line": 445,
+      "endLine": 448
     },
     {
       "id": "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
@@ -67355,32 +67356,32 @@
       "name": "earnedFeats",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 67,
-      "endLine": 67
+      "line": 108,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FEAT_IDS",
       "name": "FEAT_IDS",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 101,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FEAT_OPTION_IDS",
       "name": "FEAT_OPTION_IDS",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 61,
-      "endLine": 61
+      "line": 102,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FeatDefinition",
       "name": "FeatDefinition",
       "kind": "interface",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 31,
-      "endLine": 42
+      "line": 51,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FeatId",
@@ -67388,63 +67389,63 @@
       "kind": "type",
       "file": "src/shared/feat-unlocks.ts",
       "line": 17,
-      "endLine": 27
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FeatOptionId",
       "name": "FeatOptionId",
       "kind": "type",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#featOptionTag",
       "name": "featOptionTag",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 64,
-      "endLine": 64
+      "line": 105,
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#FEATS",
       "name": "FEATS",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 47,
-      "endLine": 58
+      "line": 67,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#featTag",
       "name": "featTag",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 104,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#hasFeat",
       "name": "hasFeat",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 111,
+      "endLine": 111
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#hasFeatOption",
       "name": "hasFeatOption",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 71,
-      "endLine": 71
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/feat-unlocks.ts#recordFeats",
       "name": "recordFeats",
       "kind": "value",
       "file": "src/shared/feat-unlocks.ts",
-      "line": 74,
-      "endLine": 83
+      "line": 115,
+      "endLine": 124
     },
     {
       "id": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
@@ -67628,7 +67629,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 29,
-      "endLine": 220
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -76915,8 +76916,8 @@
       "name": "applySpiralTurn",
       "kind": "value",
       "file": "src/shared/spiral-rules.ts",
-      "line": 118,
-      "endLine": 131
+      "line": 119,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/spiral-rules.ts#isSpiralFloor",
@@ -77363,64 +77364,64 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3487,
-      "endLine": 3487
+      "line": 3527,
+      "endLine": 3527
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3338,
-      "endLine": 3464
+      "line": 3378,
+      "endLine": 3504
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3493,
-      "endLine": 3500
+      "line": 3533,
+      "endLine": 3540
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3477,
-      "endLine": 3477
+      "line": 3517,
+      "endLine": 3517
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3326,
-      "endLine": 3326
+      "line": 3366,
+      "endLine": 3366
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3503,
-      "endLine": 3509
+      "line": 3543,
+      "endLine": 3549
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3529,
-      "endLine": 3529
+      "line": 3569,
+      "endLine": 3569
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 284,
-      "endLine": 301
+      "line": 304,
+      "endLine": 321
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -77428,47 +77429,47 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 68,
-      "endLine": 229
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3466,
-      "endLine": 3469
+      "line": 3506,
+      "endLine": 3509
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 277,
-      "endLine": 282
+      "line": 297,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 231,
-      "endLine": 275
+      "line": 251,
+      "endLine": 295
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3480,
-      "endLine": 3484
+      "line": 3520,
+      "endLine": 3524
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3511,
-      "endLine": 3527
+      "line": 3551,
+      "endLine": 3567
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -132293,6 +132294,12 @@
       "id": "imports:src/shared/feat-unlocks.ts->src/shared/cosmetic-ids.ts",
       "source": "file:src/shared/feat-unlocks.ts",
       "target": "file:src/shared/cosmetic-ids.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/feat-unlocks.ts->src/shared/depth-rules.ts",
+      "source": "file:src/shared/feat-unlocks.ts",
+      "target": "file:src/shared/depth-rules.ts",
       "kind": "imports"
     },
     {
