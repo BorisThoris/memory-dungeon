@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3369,
-    "codeFileCount": 1299,
-    "exportedSymbolCount": 4220,
+    "trackedFileCount": 3371,
+    "codeFileCount": 1301,
+    "exportedSymbolCount": 4221,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11779
+    "relationshipCount": 11787
   },
   "inventory": [
     {
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "0be3f05808b1d63813700e819f2203d0ba73d71fe1d0757e34c7a24003897794"
+      "sha256": "65fbb5395e20977c7d1a2861bd6a516603b9b5f04431f21cf2598b737f8f88a9"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -12537,8 +12537,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 29432,
-      "sha256": "4d5b676c753c142f8dcae7503e66c666df93a983c4109c5720f11ae4d1d09830"
+      "bytes": 30576,
+      "sha256": "b44bc209f0a12ddfa12cbb396106863a2f01b3860c2c2d9a097f30f199e9302b"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -12945,14 +12945,14 @@
     {
       "path": "src/renderer/components/tileRise.test.ts",
       "category": "test",
-      "bytes": 1271,
-      "sha256": "46a01164c50c8869734626b1bf83e9ea9b73947f2b15f4cac6293d49d6de35eb"
+      "bytes": 1689,
+      "sha256": "3dfffcf66d96fc37862b3061d88cddb2324749d4fbd53d33436617d7e1998fbd"
     },
     {
       "path": "src/renderer/components/tileRise.ts",
       "category": "source",
-      "bytes": 1046,
-      "sha256": "f266952e5b195d798a43c08d0fe0ed51f6a496bd431e8f391732b10bd517f430"
+      "bytes": 1510,
+      "sha256": "69417f78a20fc363b31ea5a99ce0b08df1b42056c1d9b030f3298124f6c0b757"
     },
     {
       "path": "src/renderer/components/tileShatter.test.ts",
@@ -13019,6 +13019,18 @@
       "category": "source",
       "bytes": 3378,
       "sha256": "d48b8d76a13a69d64e78281c40c986afbc077beadf50e525b3f4e01f71ddd1c9"
+    },
+    {
+      "path": "src/renderer/components/unmaskedCells.test.ts",
+      "category": "test",
+      "bytes": 753,
+      "sha256": "bb2c4611bb38d058a05b047332e996b4b07711498e9fbf37b0a65985100ef6d6"
+    },
+    {
+      "path": "src/renderer/components/unmaskedCells.ts",
+      "category": "source",
+      "bytes": 875,
+      "sha256": "faf6640f427b0eb514087d6a7111e7a3d017f1be0966a102fdac833fdd4544e8"
     },
     {
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
@@ -17811,8 +17823,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 24566,
-      "sha256": "d314451670c7fe2bf506b5a60ac9bdf3ba21dee2398e10df23699e182a3ded60"
+      "bytes": 24766,
+      "sha256": "674c0c81cc6e568bf9cad40c87260968c7fb2c9482000154f29ec99246481c91"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17937,8 +17949,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-016-masks-card-family.md",
       "category": "other",
-      "bytes": 3369,
-      "sha256": "a2104f7908de64cb279b2af6f98a0c99b724c1f75d2a5b7f9e1c8990d8e553a7"
+      "bytes": 3817,
+      "sha256": "07e85d2ff92700b4aeff7e7ee97278e7167f90af93e164e8fe74e6160ad7aad6"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
@@ -17961,8 +17973,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-020-sleepers-card-family.md",
       "category": "other",
-      "bytes": 3144,
-      "sha256": "e411c7973f30cd0bfe256860e12d1928736f96c9184b03b3ebcb72bcd8ce4d39"
+      "bytes": 3524,
+      "sha256": "f47055932a05eebfdcda6b51a3f1e45e418607251c8763e6c1631efe23c8c725"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-021-the-spiral-board.md",
@@ -28560,7 +28572,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 413,
+      "lineCount": 426,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -28581,12 +28593,14 @@
         "file:src/renderer/components/tileBoardFrameBag.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
         "file:src/renderer/components/tileShatter.ts",
+        "file:src/renderer/components/unmaskedCells.ts",
         "file:src/renderer/dev/useDevOptions.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/element-ground-rules.ts",
         "file:src/shared/graphicsQuality.ts",
-        "file:src/shared/rng.ts"
+        "file:src/shared/rng.ts",
+        "file:src/shared/tile-suit-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/TileBoardParticles.tsx#TileBoardParticles"
@@ -29818,7 +29832,7 @@
       "path": "src/renderer/components/tileRise.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 24,
+      "lineCount": 30,
       "imports": [
         "file:src/renderer/components/tileCellGlide.ts",
         "file:src/renderer/components/tileRise.ts",
@@ -29832,7 +29846,7 @@
       "path": "src/renderer/components/tileRise.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 21,
+      "lineCount": 24,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30073,6 +30087,35 @@
         "symbol:src/renderer/components/UiInteractionParticles.tsx#UiInteractionParticles"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/unmaskedCells.test.ts",
+      "path": "src/renderer/components/unmaskedCells.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 14,
+      "imports": [
+        "file:src/renderer/components/unmaskedCells.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/unmaskedCells.ts",
+      "path": "src/renderer/components/unmaskedCells.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 16,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/unmaskedCells.ts#unmaskedCells"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/unmaskedCells.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
@@ -44681,6 +44724,7 @@
         "file:src/renderer/components/spiralSealLayout.test.ts",
         "file:src/renderer/components/tileBoardCardWindow.test.ts",
         "file:src/renderer/components/tileRise.test.ts",
+        "file:src/renderer/components/unmaskedCells.test.ts",
         "file:src/renderer/hooks/useFinalPairAutoMatch.test.tsx",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
@@ -55168,8 +55212,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 34,
-      "endLine": 412
+      "line": 36,
+      "endLine": 425
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -56593,7 +56637,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileRise.ts",
       "line": 13,
-      "endLine": 17
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/components/tileRise.ts#RISE_FROM_OFFSET",
@@ -56608,8 +56652,8 @@
       "name": "takeRisen",
       "kind": "value",
       "file": "src/renderer/components/tileRise.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/tileShatter.ts#BOARD_LAYOUT_JITTER_XY",
@@ -57154,6 +57198,14 @@
       "file": "src/renderer/components/UiInteractionParticles.tsx",
       "line": 7,
       "endLine": 39
+    },
+    {
+      "id": "symbol:src/renderer/components/unmaskedCells.ts#unmaskedCells",
+      "name": "unmaskedCells",
+      "kind": "value",
+      "file": "src/renderer/components/unmaskedCells.ts",
+      "line": 8,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
@@ -80443,7 +80495,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 27
+          "line": 29
         }
       ],
       "tests": [
@@ -95364,6 +95416,12 @@
       "id": "exports:src/renderer/components/UiInteractionParticles.tsx->symbol:src/renderer/components/UiInteractionParticles.tsx#UiInteractionParticles",
       "source": "file:src/renderer/components/UiInteractionParticles.tsx",
       "target": "symbol:src/renderer/components/UiInteractionParticles.tsx#UiInteractionParticles",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/unmaskedCells.ts->symbol:src/renderer/components/unmaskedCells.ts#unmaskedCells",
+      "source": "file:src/renderer/components/unmaskedCells.ts",
+      "target": "symbol:src/renderer/components/unmaskedCells.ts#unmaskedCells",
       "kind": "exports"
     },
     {
@@ -123953,6 +124011,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/unmaskedCells.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/unmaskedCells.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/dev/useDevOptions.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/dev/useDevOptions.ts",
@@ -123986,6 +124050,12 @@
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/rng.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/shared/tile-suit-rules.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/shared/tile-suit-rules.ts",
       "kind": "imports"
     },
     {
@@ -125510,6 +125580,24 @@
       "id": "imports:src/renderer/components/TutorialPairMarkerPlane.tsx->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/TutorialPairMarkerPlane.tsx",
       "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/unmaskedCells.test.ts->src/renderer/components/unmaskedCells.ts",
+      "source": "file:src/renderer/components/unmaskedCells.test.ts",
+      "target": "file:src/renderer/components/unmaskedCells.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/unmaskedCells.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/renderer/components/unmaskedCells.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/unmaskedCells.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/unmaskedCells.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -147244,6 +147332,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/unmaskedCells.ts->file:src/renderer/components/unmaskedCells.test.ts",
+      "source": "file:src/renderer/components/unmaskedCells.ts",
+      "target": "file:src/renderer/components/unmaskedCells.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/useSceneBeat.ts->file:src/renderer/components/useSceneBeat.test.tsx",
       "source": "file:src/renderer/components/useSceneBeat.ts",
       "target": "file:src/renderer/components/useSceneBeat.test.tsx",
@@ -154225,6 +154319,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/tileRise.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/components/tileRise.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/components/unmaskedCells.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/renderer/components/unmaskedCells.test.ts",
       "kind": "tested_by"
     },
     {
