@@ -1,7 +1,7 @@
 # DGE-032: Balance bars: run-ending, Goldilocks, curve to floor 60
 
 ## Status
-Done (2026-10-21): bars 1, 3 and 4 are green gates; bar 2 is the owner-accepted pop-share shortfall. Endless to 120 is not gated yet.
+Done (2026-10-23): all four bars are gates (bar 2 the owner-accepted pop-share shortfall); Endless to 120 is gated as a standalone.
 
 ## Priority
 P0
@@ -62,3 +62,8 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Decided: Layers and the Wanderers share floors; **Layers keep off the restless hall from rules 74** (0.23 together); the band's lower edge is **0.25** (the owner, over a thinner deck: Layers read 0.28-0.30 by design); the restless hall and the Warden exempt by name (designed to take back what you knew). Mutation-tested: a two-card memory reads 0.06 and fails.
 - The Spiral (DGE-021) does not exist yet; when it lands, run the probe on its floors before letting it share one with Layers.
 - Rules 74: version gate, ledger requoted; `gate:warden-reach` 59/100, the curve gate green.
+
+2026-10-23, the rest of bars 3 and 4:
+- **Bar 4 to 120**: `sim-difficulty-curve.ts --endless` plays twenty seeds to floor 120 with the run in Endless (past the Warden), its turn cap following par; `gate:difficulty-curve-endless` (a declared standalone: over a minute, run before an Endless change and at release; floors 1-60 stay in `gate:systems`). "Clean" there is a player missing one turn in twenty, because past ~25 pairs par is clamped at the pair count (`floor-par.ts`) and misses are turns over it. Measured on floors 61-120: 5% misses, no floor over par (worst 1.000); 10%, one floor by 0.2%; 15%, 27 floors up to 1.06 from floor 83. Unit-tested judge; it fails at 15%.
+- **Bar 3 on the Spiral**: floors 44 and 56 read 0.31 and 0.28 with their Wanderers (no Layers there), inside the band, so the Spiral's exemption was dropped and it is gated like any floor.
+- All four bars are gates now.

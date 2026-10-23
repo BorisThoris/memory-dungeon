@@ -4,6 +4,8 @@ import {
     CURVE_BANDS,
     CURVE_FLOORS,
     curveParRatio,
+    ENDLESS_CURVE_FLOORS,
+    judgeEndlessCurve,
     judgeDifficultyCurve,
     simulateDifficultyCurve
 } from '../../scripts/sim-difficulty-curve';
@@ -106,5 +108,15 @@ describe('the difficulty curve', () => {
             "floor 2 spends 0.900 of its par, over the opening's 0.85",
             'the opening is the tight end: floor 2 spends 0.900 of its par against floor 10\'s 0.857 deeper in'
         ]);
+    });
+});
+
+describe('the Endless curve (bar 4, DGE-032)', () => {
+    it('names every Endless floor over par, and a run that stops short of 120', () => {
+        const row = (floor: number, turns: number, par: number) => ({ floor, pairs: 40, suits: 4, turns, par, poppedPairs: 3 });
+        const deep = Array.from({ length: ENDLESS_CURVE_FLOORS - CURVE_FLOORS }, (_unused, index) => row(CURVE_FLOORS + 1 + index, 30, 40));
+        expect(judgeEndlessCurve(deep)).toEqual([]);
+        expect(judgeEndlessCurve(deep.map((entry) => (entry.floor === 90 ? row(90, 42, 40) : entry)))).toEqual(['Endless floor 90 takes 42.0 turns against a par of 40.0']);
+        expect(judgeEndlessCurve(deep.slice(0, 10))).toEqual([`Endless reached floor ${CURVE_FLOORS + 10}, short of ${ENDLESS_CURVE_FLOORS}`]);
     });
 });

@@ -230,6 +230,7 @@
     "package:win:demo": "cross-env MEMORY_DUNGEON_BUILD_FLAVOUR=demo VITE_BUILD_FLAVOUR=demo node scripts/write-steam-appid.mjs && cross-env VITE_BUILD_FLAVOUR=demo yarn build && electron-builder --win nsis",
     "postinstall": "node scripts/postinstall.cjs",
     "gate:difficulty-curve": "tsx scripts/sim-difficulty-curve.ts --check",
+    "gate:difficulty-curve-endless": "tsx scripts/sim-difficulty-curve.ts --endless --check",
     "gate:archetype-pressure": "tsx scripts/sim-archetype-pressure.ts --check",
     "gate:run-occupancy": "tsx scripts/sim-run-occupancy.ts --check",
     "gate:occupancy": "tsx scripts/sim-occupancy.ts --ratchet",

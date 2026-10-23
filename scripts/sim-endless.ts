@@ -20,6 +20,7 @@ import { DESCENT_ACTS, DESCENT_FLOOR_COUNT, pickFloorScheduleEntry } from '../sr
 // And the Spiral's floors (DGE-021), which also stand past 36.
 const ACT_BOSS_FLOORS = [...DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])), ...SPIRAL_DESCENT_FLOORS];
 import { buildBoard } from '../src/shared/board-generation';
+import { dealLayers } from '../src/shared/board-layers-rules';
 import { inspectBoardFairness } from '../src/shared/board-inspection';
 import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
 import { createGeneratedBoardSolverRun } from '../src/shared/softlock-generator-contract';
@@ -349,13 +350,16 @@ export const buildEndlessSimulationCsv = ({
 
     // Cherry-picked deep floors, one per late board size.
     for (const level of deepFloors) {
-        const { board } = buildScheduledBoard(safeRunSeed, rulesVersion, level);
+        const built = buildScheduledBoard(safeRunSeed, rulesVersion, level).board;
+        // The lower deck is dealt in the floor transition, not by the schedule: deal it here too, so a
+        // Deep floor among the samples (260) plays Layers on a late board (DGE-017).
+        const board = dealLayers(built, { runSeed: safeRunSeed, rulesVersion });
         const fairness = inspectBoardFairness(board).issues.map((issue) => issue.code);
         const capped = board.pairCount > DEEP_FULL_CLEAR_PAIRS;
         const played = playFloor(board, safeRunSeed, rulesVersion, capped ? DEEP_CAPPED_TURNS : board.pairCount * 3, capped);
         const ok = played.ok && fairness.length === 0;
         deepRows.push(
-            `deepFloor,floor=${level}|pairs=${board.pairCount}|mode=${capped ? `capped${DEEP_CAPPED_TURNS}` : 'clear'}|${played.detail}|fairness=${fairness.join('+') || 'ok'}|${ok ? 'ok' : 'FAIL'},1`
+            `deepFloor,floor=${level}|pairs=${board.pairCount}|layers=${board.beneath?.some(Boolean) ? 'yes' : 'no'}|mode=${capped ? `capped${DEEP_CAPPED_TURNS}` : 'clear'}|${played.detail}|fairness=${fairness.join('+') || 'ok'}|${ok ? 'ok' : 'FAIL'},1`
         );
     }
 

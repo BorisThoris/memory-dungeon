@@ -1,7 +1,7 @@
 # DGE-017: Layers: a second deck beneath the first
 
 ## Status
-Done (2026-10-20), rules 72; the rise animation landed 2026-10-23. Two decks under two cells in five, not every cell: see notes.
+Done (2026-10-20), rules 72; the rise and the deep-floor coverage landed 2026-10-23. Per-archetype lower-deck profiles are left: see notes.
 
 ## Priority
 P0
@@ -71,3 +71,5 @@ and memorize sat at its full count (the test-pace playtest stalled on floor 25).
 (`board-layers-rules.ts`); a unit test pins it. Hall rooms boot straight into play, which is why they never saw it.
 
 2026-10-23: the rise. A card that rose from the deck beneath (`tileRise.ts` notes it off two boards in a row) glides up from where its edge showed into its cell (`primeCardRise`, `RISE_SHAPE`: 520 ms, low, barely turning), the board's own glide; reduced motion skips it and the card is there. Unit-tested; looked at in the isolated browser as a frame burst on the Layers room. Still not done: `yarn sim:endless --deep-floors` coverage of Layers, per-archetype lower-deck profiles.
+
+2026-10-23: `sim:endless` deals the lower deck on its deep samples too (the schedule alone never did); floor 260, a Deep floor of 3,413 pairs with Layers, plays its capped 80 turns with replay, fairness and invariants clean.

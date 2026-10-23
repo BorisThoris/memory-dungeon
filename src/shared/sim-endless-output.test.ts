@@ -132,7 +132,7 @@ describe('sim-endless CSV output', () => {
         const lines = buildEndlessSimulationCsv({ floors: 1, runSeed: 42_001, rulesVersion: GAME_RULES_VERSION, deepFloors: [210] }).trim().split('\n');
         const deep = lines.filter((line) => line.startsWith('deepFloor,'));
         expect(deep).toHaveLength(1);
-        expect(deep[0]).toMatch(/^deepFloor,floor=210\|pairs=768\|mode=clear\|status=levelComplete\|.*\|replay=ok\|fairness=ok\|ok,1$/u);
+        expect(deep[0]).toMatch(/^deepFloor,floor=210\|pairs=768\|layers=no\|mode=clear\|status=levelComplete\|.*\|replay=ok\|fairness=ok\|ok,1$/u);
     }, 180_000);
 
     it('reports actionable failures when endless health metrics regress', () => {

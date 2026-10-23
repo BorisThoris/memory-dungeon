@@ -49,8 +49,9 @@ export const GOLDILOCKS_EXEMPT_ARCHETYPES: Readonly<Record<string, string>> = {
     restless_hall: 'the restless floor swaps face-down cards on a clock the player winds; it is meant to take back what you knew (0.25-0.28)',
     warden_hall: 'the Warden deals its face-down cards again every fifth turn; its floor is the run\u2019s designed end (0.14)',
     keeper_hall: 'the Keeper swaps its rooms every fourth turn; the act boss is designed to move what the player knew',
-    cartographer_hall: 'the Cartographer turns its lower deck every third match; the act boss is designed to move what the player knew',
-    spiral_hall: 'the Spiral deals fresh inner rings until par; its floor is survived, never cleared, by design'
+    cartographer_hall: 'the Cartographer turns its lower deck every third match; the act boss is designed to move what the player knew'
+    // The Spiral is held to the band (2026-10-23): with its Wanderers and no Layers it reads 0.31 on floor 44
+    // and 0.28 on 56, inside it, so the exemption it shipped with was not needed (DGE-032's note on it).
 };
 const TURN_CAP = 300;
 

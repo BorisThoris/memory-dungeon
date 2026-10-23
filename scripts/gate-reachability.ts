@@ -27,6 +27,8 @@ export const STANDALONE_GATES: Record<string, string> = {
     'gate:demo-readiness':
         'The whole first-run path from a clean browser, counting any console error as blocking. Repaired and its timeouts widened, and still about one run in ten fails here with a bare timeout naming no pending action. Gating on that would cost more than it catches; the one thing in it worth gating — that a click picks a tile — is asserted by gate:ui-reachability instead.',
     'gate:changed': 'Selects gates by what a branch touched; it is the selector, not a gate.',
+    'gate:difficulty-curve-endless':
+        'Plays twenty seeds to floor 120, a minute and more on its own: bar 4 past the Warden, run by hand before an Endless change and at release, since gate:difficulty-curve already holds floors 1-60 on every commit.',
     'gate:long-run':
         'Its 1000-floor sim is gate:sim-health and its balance bounds are gate:balance-depth, both of which fullcheck runs; this bundles them for a release candidate.',
     'gate:long-run-ui-feedback': 'Drives Playwright, so it needs a dev server and a browser rather than a plain checkout.',

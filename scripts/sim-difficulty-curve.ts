@@ -78,8 +78,9 @@ export interface CurveFloorRow {
 export const simulateDifficultyCurve = ({
     seeds = CURVE_SEEDS,
     floors = CURVE_FLOORS,
-    missRate = 0.15
-}: { seeds?: readonly number[]; floors?: number; missRate?: number } = {}): CurveFloorRow[] => {
+    missRate = 0.15,
+    endless = false
+}: { seeds?: readonly number[]; floors?: number; missRate?: number; endless?: boolean } = {}): CurveFloorRow[] => {
     const gathered = new Map<number, { turns: number[]; suits: number[]; popped: number[]; pars: number[] }>();
     for (const seed of seeds) {
         const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 1, 'endless');
@@ -103,7 +104,9 @@ export const simulateDifficultyCurve = ({
             activeMutators: mutators,
             board,
             status: 'playing',
-            findablesTotalThisFloor: countFindablePairs(board.tiles)
+            findablesTotalThisFloor: countFindablePairs(board.tiles),
+            // Endless (DGE-006): the run descends past the Warden instead of taking the win.
+            ...(endless ? { endless: true } : {})
         };
         for (let floor = 1; floor <= floors; floor += 1) {
             const rng = createMulberry32(hashStringToSeed(`opening:${seed}:${floor}:${missRate}`));
@@ -113,7 +116,8 @@ export const simulateDifficultyCurve = ({
             // different archetypes.
             const par = parTurnsForBoard(run.board);
             let turns = 0;
-            while (run.status === 'playing' && turns < 80) {
+            // Past 60 the boards double every 30 floors; the cap follows the par, not a fixed eighty.
+            while (run.status === 'playing' && turns < Math.max(80, par * 3)) {
                 const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
                     group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
                 );
@@ -282,7 +286,50 @@ export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] =
     return issues;
 };
 
+/**
+ * Endless (bar 4, DGE-032): past the Warden, a clean player stays under par on every floor to 120.
+ *
+ * "Clean" here is a player missing one turn in twenty. Past about twenty-five pairs par is clamped at
+ * the board's own pair count (`floor-par.ts`: a par a perfect memory could not miss measures nothing),
+ * so on Endless's big boards par is every pair by hand, and misses are turns over it. Measured
+ * (2026-10-23, twenty seeds, floors 61-120): at 5% misses no floor is over par (worst 1.000, floor 88);
+ * at 10% one floor of sixty is, by 0.2%; at 15%, the curve's own player for floors 1-60, 27 are, up to
+ * 1.06, from floor 83.
+ */
+export const ENDLESS_CURVE_MISS_RATE = 0.05;
+export const ENDLESS_CURVE_FLOORS = 120;
+export const ENDLESS_CURVE_SEEDS: readonly number[] = CURVE_SEEDS.slice(0, 20);
+export const ENDLESS_CURVE_REPORT_FLOORS: readonly number[] = [61, 65, 70, 75, 80, 90, 100, 110, 120];
+
+export const judgeEndlessCurve = (rows: readonly CurveFloorRow[]): string[] => {
+    const deep = rows.filter((row) => row.floor > CURVE_FLOORS);
+    if (deep.length < ENDLESS_CURVE_FLOORS - CURVE_FLOORS) return [`Endless reached floor ${CURVE_FLOORS + deep.length}, short of ${ENDLESS_CURVE_FLOORS}`];
+    return deep.filter((row) => row.turns > row.par + CURVE_BANDS.parHeadroom).map((row) => `Endless floor ${row.floor} takes ${row.turns.toFixed(1)} turns against a par of ${row.par.toFixed(1)}`);
+};
+
+const mainEndless = (): void => {
+    const measured = simulateDifficultyCurve({ seeds: ENDLESS_CURVE_SEEDS, floors: ENDLESS_CURVE_FLOORS, endless: true, missRate: ENDLESS_CURVE_MISS_RATE });
+    process.stdout.write('Endless: floor  pairs  turns   par  of par\n');
+    for (const row of measured.filter((entry) => ENDLESS_CURVE_REPORT_FLOORS.includes(entry.floor))) {
+        process.stdout.write(`         ${String(row.floor).padStart(3)}   ${String(row.pairs).padStart(4)}  ${row.turns.toFixed(1).padStart(5)} ${row.par.toFixed(1).padStart(5)}   ${curveParRatio(row).toFixed(3)}\n`);
+    }
+    const issues = judgeEndlessCurve(measured);
+    if (issues.length > 0) process.stdout.write(`\nThe Endless curve moved:\n${issues.map((issue) => `- ${issue}`).join('\n')}\n`);
+    if (process.argv.includes('--check')) {
+        if (issues.length > 0) {
+            process.stderr.write('Endless curve check failed\n');
+            process.exitCode = 1;
+            return;
+        }
+        process.stdout.write('\nEndless curve check passed\n');
+    }
+};
+
 const main = (): void => {
+    if (process.argv.includes('--endless')) {
+        mainEndless();
+        return;
+    }
     const measured = simulateDifficultyCurve();
     const rows = measured.filter((row) => CURVE_REPORT_FLOORS.includes(row.floor));
     process.stdout.write('floor  pairs  suits  turns   par  of par  pairs popped\n');
