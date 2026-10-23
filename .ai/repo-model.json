@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3368,
     "codeFileCount": 1299,
-    "exportedSymbolCount": 4219,
+    "exportedSymbolCount": 4220,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11778
+    "relationshipCount": 11779
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 101706,
-      "sha256": "6001eae0bf9ec337bded2a3762c0ab909d480957866c694fcc918e0ddead5398"
+      "bytes": 102441,
+      "sha256": "97c02e6330b6c268ab9ba2c66efd18a12000389134c913a5d414f6c9138a6fe6"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -11223,8 +11223,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 145289,
-      "sha256": "55dae0a5a3b9c474bf7dfb95e1797ed6bc5f23b75ad5c8cdc9a5a273845f5ccb"
+      "bytes": 145851,
+      "sha256": "e406e98f12b6d50bf3da797d9efac3a007d286734ff6ca553d1b5c6dfce349e3"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -13269,14 +13269,14 @@
     {
       "path": "src/renderer/copy/holdBeat.test.ts",
       "category": "test",
-      "bytes": 1383,
-      "sha256": "6d7f475bfe9ceb1fcb068d63f7b241b7e83907c2ee8588447237cffcf2ac2d92"
+      "bytes": 1685,
+      "sha256": "2284ce105d8d5b4aa90fc0f4952617efc81f94c8b0d38e422d3de417d7051f4c"
     },
     {
       "path": "src/renderer/copy/holdBeat.ts",
       "category": "source",
-      "bytes": 1861,
-      "sha256": "05682c4891d7d39bb2d447987bb568982dd44a16646b8029584b6f10abfe2a4a"
+      "bytes": 2103,
+      "sha256": "ef12864704c5d8586a5f9eff611ebd6ed3abb089c05fd5d2139f95ba417f4e7f"
     },
     {
       "path": "src/renderer/copy/holdToolCopy.ts",
@@ -14721,8 +14721,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 102080,
-      "sha256": "8369317258cf7b5facdec88df9686d3984a4fefd3465e870f6f3057925d9e874"
+      "bytes": 102829,
+      "sha256": "b15d447438de454978653d2d3c8184c244ee1244c10d22c2ddb84ba08c2e2e78"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15291,8 +15291,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 63655,
-      "sha256": "344b2a35983c4cdac1f3475987c375953359dc93640044f8a37edb0ab8ca8dbb"
+      "bytes": 63875,
+      "sha256": "31447204825f1cdbcecf6f89939f5fec1f614f7e81e541783787831f0a8d29b6"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16089,8 +16089,8 @@
     {
       "path": "src/shared/hold-rules.ts",
       "category": "source",
-      "bytes": 10173,
-      "sha256": "fb9e59a39724fabea87a8ae076931496f0206016c3d07a09e91be36306158c42"
+      "bytes": 10288,
+      "sha256": "c4f35a4fa75ace0a885a12068d0c3995e54c6d1c0b62c36868d5380b2076882f"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -17883,8 +17883,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-008-hold-verb.md",
       "category": "other",
-      "bytes": 7175,
-      "sha256": "ccbe25466efe2d0dcb79da72e58f142aabc67786fd5537e39a82ee416a31764c"
+      "bytes": 7417,
+      "sha256": "700606c9bb90309ec65f2ed6de8247dc5bdbc98ce0060cfb9998afcf7124bc87"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-009-wanderers-card-family.md",
@@ -17937,8 +17937,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-017-layers-board.md",
       "category": "other",
-      "bytes": 6299,
-      "sha256": "fa06225bf8b1f98f92299e96dd14669b6aae78a0b3363bd939a46eb4b011f0c2"
+      "bytes": 6626,
+      "sha256": "3d429e452c6e46e03892b9044f79acadd0151b9fccde31dfc8c09149d0886712"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-018-cartographer-boss.md",
@@ -24736,7 +24736,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2748,
+      "lineCount": 2753,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -30759,7 +30759,7 @@
       "path": "src/renderer/copy/holdBeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 22,
+      "lineCount": 28,
       "imports": [
         "file:src/renderer/copy/holdBeat.ts"
       ],
@@ -30771,14 +30771,15 @@
       "path": "src/renderer/copy/holdBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 32,
+      "lineCount": 35,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/holdBeat.ts#holdBeat",
-        "symbol:src/renderer/copy/holdBeat.ts#HoldBeat"
+        "symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
+        "symbol:src/renderer/copy/holdBeat.ts#holdReleasePulseTier"
       ],
       "testedBy": [
         "file:src/renderer/copy/holdBeat.test.ts"
@@ -36502,7 +36503,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1338,
+      "lineCount": 1340,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/elemental-loot-rules.ts"
@@ -39781,7 +39782,7 @@
       "path": "src/shared/hold-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 174,
+      "lineCount": 175,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-layers-rules.ts",
@@ -50633,8 +50634,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2747,
-      "endLine": 2747
+      "line": 2752,
+      "endLine": 2752
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -57877,6 +57878,14 @@
       "endLine": 9
     },
     {
+      "id": "symbol:src/renderer/copy/holdBeat.ts#holdReleasePulseTier",
+      "name": "holdReleasePulseTier",
+      "kind": "value",
+      "file": "src/renderer/copy/holdBeat.ts",
+      "line": 34,
+      "endLine": 34
+    },
+    {
       "id": "symbol:src/renderer/copy/holdToolCopy.ts#HOLD_TOOL_COPY",
       "name": "HOLD_TOOL_COPY",
       "kind": "value",
@@ -65009,16 +65018,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1196,
-      "endLine": 1196
+      "line": 1198,
+      "endLine": 1198
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1285,
-      "endLine": 1287
+      "line": 1287,
+      "endLine": 1289
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -65113,8 +65122,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1293,
-      "endLine": 1298
+      "line": 1295,
+      "endLine": 1300
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -65145,16 +65154,16 @@
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1199,
-      "endLine": 1208
+      "line": 1201,
+      "endLine": 1210
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1311,
-      "endLine": 1337
+      "line": 1313,
+      "endLine": 1339
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -65489,8 +65498,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1210,
-      "endLine": 1225
+      "line": 1212,
+      "endLine": 1227
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -65601,16 +65610,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1301,
-      "endLine": 1301
+      "line": 1303,
+      "endLine": 1303
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1304,
-      "endLine": 1309
+      "line": 1306,
+      "endLine": 1311
     },
     {
       "id": "symbol:src/shared/contracts.ts#RepriseTurn",
@@ -65641,16 +65650,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1278,
-      "endLine": 1282
+      "line": 1280,
+      "endLine": 1284
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1276,
-      "endLine": 1276
+      "line": 1278,
+      "endLine": 1278
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -65665,8 +65674,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1232,
-      "endLine": 1249
+      "line": 1234,
+      "endLine": 1251
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -65674,7 +65683,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 817,
-      "endLine": 1194
+      "endLine": 1196
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -65713,8 +65722,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1251,
-      "endLine": 1270
+      "line": 1253,
+      "endLine": 1272
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -70482,7 +70491,7 @@
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
       "line": 102,
-      "endLine": 173
+      "endLine": 174
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#startHold",
@@ -80295,7 +80304,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1644
+          "line": 1649
         }
       ],
       "tests": [
@@ -83424,7 +83433,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1646
+          "line": 1651
         }
       ],
       "tests": [
@@ -95895,6 +95904,12 @@
       "id": "exports:src/renderer/copy/holdBeat.ts->symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
       "source": "file:src/renderer/copy/holdBeat.ts",
       "target": "symbol:src/renderer/copy/holdBeat.ts#HoldBeat",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/holdBeat.ts->symbol:src/renderer/copy/holdBeat.ts#holdReleasePulseTier",
+      "source": "file:src/renderer/copy/holdBeat.ts",
+      "target": "symbol:src/renderer/copy/holdBeat.ts#holdReleasePulseTier",
       "kind": "exports"
     },
     {
