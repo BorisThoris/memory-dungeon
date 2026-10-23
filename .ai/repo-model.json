@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3371,
-    "codeFileCount": 1301,
-    "exportedSymbolCount": 4221,
+    "trackedFileCount": 3373,
+    "codeFileCount": 1303,
+    "exportedSymbolCount": 4224,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11787
+    "relationshipCount": 11795
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 102441,
-      "sha256": "97c02e6330b6c268ab9ba2c66efd18a12000389134c913a5d414f6c9138a6fe6"
+      "bytes": 103727,
+      "sha256": "bac6f5f1d09737bc9ed5c09fc304753dd09896ac3dde78fc71a7e850446958c7"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "2a1615c04bfc1fe4dfd46e0f80419f995ce793dacdcaa53520e3108a12b25c9e"
+      "sha256": "a9cd974d078748e856fbe9af50c68fe3e4f091af344ac40ba28812f2356c4f08"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "65fbb5395e20977c7d1a2861bd6a516603b9b5f04431f21cf2598b737f8f88a9"
+      "sha256": "628f5af6f252a7c22966d1f9e4ce84654d138eadf0bb9c4b31e47a765cc181ee"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4215,8 +4215,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 25096,
-      "sha256": "b9719656ab22f83c0d844e2f2b95edb1b36d5f6010c592089f241c615aac1bb7"
+      "bytes": 25802,
+      "sha256": "8f8c0429d73004b16bd8d18b7c5d0993ad8936d085769ab0020e0257cb1f442d"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -11229,8 +11229,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 145851,
-      "sha256": "e406e98f12b6d50bf3da797d9efac3a007d286734ff6ca553d1b5c6dfce349e3"
+      "bytes": 146856,
+      "sha256": "149bf835b09afae39e5cf077e709ee5918e6ac1e3c5e87a824b584c41c2a2222"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -13921,6 +13921,18 @@
       "sha256": "931b767858eaca5d9562fa202c1d04bdd9a4a30f35626af9c6b9f5b20140b03c"
     },
     {
+      "path": "src/renderer/input/carveSwipe.test.ts",
+      "category": "test",
+      "bytes": 572,
+      "sha256": "b8271a2e52c14a7c43dd456e0e68d43fdb05f508d91b2b655731dcde455ecc7c"
+    },
+    {
+      "path": "src/renderer/input/carveSwipe.ts",
+      "category": "source",
+      "bytes": 653,
+      "sha256": "5e4caa2f1fd3fe52fa880c35ce06dd56da5f4f99dae48ec6f5c685318784ae95"
+    },
+    {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
       "category": "test",
       "bytes": 7153,
@@ -14739,8 +14751,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 102829,
-      "sha256": "b15d447438de454978653d2d3c8184c244ee1244c10d22c2ddb84ba08c2e2e78"
+      "bytes": 104115,
+      "sha256": "cd6eb7bcf9c9319ff70c56486b696e76d7f38c099ccd2599925b706b33783b01"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15309,8 +15321,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 63875,
-      "sha256": "31447204825f1cdbcecf6f89939f5fec1f614f7e81e541783787831f0a8d29b6"
+      "bytes": 63943,
+      "sha256": "4e93c503db9d59a6e1edfcc7ef48531a2282fe6418fadcc8edcb89cfd7a2c931"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16377,14 +16389,14 @@
     {
       "path": "src/shared/meteor-rules.test.ts",
       "category": "test",
-      "bytes": 4471,
-      "sha256": "284396bb95f935cf48338b003a483e62be64afa1e8bb18394f7fd5a037f4fcef"
+      "bytes": 6057,
+      "sha256": "81b8f2404dc14882e5592b8d9e9f831183223aef1bd584fdf635578744b225cc"
     },
     {
       "path": "src/shared/meteor-rules.ts",
       "category": "source",
-      "bytes": 2794,
-      "sha256": "8b39855356d1d4636ce56ed3ca933bcb00f4ee43febeafe8dae79e5651e6414e"
+      "bytes": 3307,
+      "sha256": "cb8dc7ea38d7aa20e262cdc89c7e2784b8b72d128e00ff0e20c6feec685c846a"
     },
     {
       "path": "src/shared/milestone-rules.test.ts",
@@ -17445,8 +17457,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 125637,
-      "sha256": "03aaa130be946b3213db5fb44c3d96824720d65217a74832110f774a035a69f3"
+      "bytes": 127104,
+      "sha256": "ce979895c77c3408d2eb74bc18815ad243ca75712582863e33e8ec2ddfc8f647"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17728,7 +17740,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "99cb038edbf2d74bef9f02bced850ef0391453611c268cf01ecc89f2abf73fef"
+      "sha256": "c91e0d6e1a364a79a38490f5da61bf0f9da19e0839fbdfb2dd79c9ab6a82acc3"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17823,8 +17835,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 24766,
-      "sha256": "674c0c81cc6e568bf9cad40c87260968c7fb2c9482000154f29ec99246481c91"
+      "bytes": 25106,
+      "sha256": "219bc51bc5e9ae4fa477cc276241d629ef627597f3dd6bac3fe78c90052ce9ff"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17913,8 +17925,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-010-the-fold-board.md",
       "category": "other",
-      "bytes": 6773,
-      "sha256": "a0716540cac5a313b4e12afe756b00eaa7e5c771c83c2df2c5f49d9172e64bfb"
+      "bytes": 7198,
+      "sha256": "f363bf4d9abe4bc662c8e4d229c18fb5cd4e0bf0598d45cf0381f77f6c28251a"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-011-keeper-of-halls-boss.md",
@@ -17937,14 +17949,14 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
       "category": "other",
-      "bytes": 4412,
-      "sha256": "f425c32b998f11b3e3f2dbfef025bb3778feca7261e422a62df70f6b3e1b3d20"
+      "bytes": 4821,
+      "sha256": "b865796b6a8686b1fd916980a3127c90de5caad4efb4f7f872c4247ad358ae2f"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
       "category": "other",
-      "bytes": 3616,
-      "sha256": "3688c97576afa646239dcb1c68be59b33ccf2a055a2cd095601e8b12e1e92816"
+      "bytes": 3988,
+      "sha256": "761c772f4a8e88982ff704a17f44c426008f1f2e4a96acd937dab3a93abe4375"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-016-masks-card-family.md",
@@ -18021,8 +18033,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
       "category": "other",
-      "bytes": 3197,
-      "sha256": "5d23479999838d9069816c54c253247fbbadd218bd7047042de212017f1b7126"
+      "bytes": 3443,
+      "sha256": "c1f3ad0b42048b2de11acd6b7aa4338787b94699b2b9c9ca5f14fc5abd5d883f"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
@@ -24754,7 +24766,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2753,
+      "lineCount": 2773,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24825,6 +24837,7 @@
         "file:src/renderer/hooks/useLatestRef.ts",
         "file:src/renderer/hooks/useResponsiveBoardLayout.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
+        "file:src/renderer/input/carveSwipe.ts",
         "file:src/renderer/input/gamepadRumble.ts",
         "file:src/renderer/keyboard/gameplayShortcuts.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
@@ -32376,6 +32389,35 @@
         "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/input/carveSwipe.test.ts",
+      "path": "src/renderer/input/carveSwipe.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 13,
+      "imports": [
+        "file:src/renderer/input/carveSwipe.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/input/carveSwipe.ts",
+      "path": "src/renderer/input/carveSwipe.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 14,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
+        "symbol:src/renderer/input/carveSwipe.ts#carveSwipeDirection"
+      ],
+      "testedBy": [
+        "file:src/renderer/input/carveSwipe.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/input/gamepadNavigation.test.ts",
@@ -40758,7 +40800,7 @@
       "path": "src/shared/meteor-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 73,
+      "lineCount": 100,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -40776,8 +40818,9 @@
       "path": "src/shared/meteor-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 45,
+      "lineCount": 53,
       "imports": [
+        "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-layers-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -40788,6 +40831,7 @@
       "exports": [
         "symbol:src/shared/meteor-rules.ts#callMeteor",
         "symbol:src/shared/meteor-rules.ts#canAimMeteor",
+        "symbol:src/shared/meteor-rules.ts#METEOR_ROOMED_FROM",
         "symbol:src/shared/meteor-rules.ts#meteorCharges"
       ],
       "testedBy": [
@@ -50684,40 +50728,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2752,
-      "endLine": 2752
+      "line": 2772,
+      "endLine": 2772
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 294,
-      "endLine": 294
+      "line": 295,
+      "endLine": 295
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 292,
-      "endLine": 292
+      "line": 293,
+      "endLine": 293
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 296,
-      "endLine": 296
+      "line": 297,
+      "endLine": 297
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 286,
-      "endLine": 286
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -59422,6 +59466,22 @@
       "file": "src/renderer/initRendererShell.tsx",
       "line": 54,
       "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
+      "name": "CARVE_SWIPE_MIN_PX",
+      "kind": "value",
+      "file": "src/renderer/input/carveSwipe.ts",
+      "line": 4,
+      "endLine": 4
+    },
+    {
+      "id": "symbol:src/renderer/input/carveSwipe.ts#carveSwipeDirection",
+      "name": "carveSwipeDirection",
+      "kind": "value",
+      "file": "src/renderer/input/carveSwipe.ts",
+      "line": 10,
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
@@ -71980,24 +72040,32 @@
       "name": "callMeteor",
       "kind": "value",
       "file": "src/shared/meteor-rules.ts",
-      "line": 14,
-      "endLine": 44
+      "line": 18,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/meteor-rules.ts#canAimMeteor",
       "name": "canAimMeteor",
       "kind": "value",
       "file": "src/shared/meteor-rules.ts",
-      "line": 10,
-      "endLine": 11
+      "line": 11,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/shared/meteor-rules.ts#METEOR_ROOMED_FROM",
+      "name": "METEOR_ROOMED_FROM",
+      "kind": "value",
+      "file": "src/shared/meteor-rules.ts",
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/shared/meteor-rules.ts#meteorCharges",
       "name": "meteorCharges",
       "kind": "value",
       "file": "src/shared/meteor-rules.ts",
-      "line": 9,
-      "endLine": 9
+      "line": 10,
+      "endLine": 10
     },
     {
       "id": "symbol:src/shared/milestone-rules.ts#Milestone",
@@ -80027,7 +80095,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4
+          "line": 5
         }
       ],
       "tests": [
@@ -80362,7 +80430,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1649
+          "line": 1669
         }
       ],
       "tests": [
@@ -80650,7 +80718,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 5
+          "line": 6
         }
       ],
       "tests": [
@@ -80974,7 +81042,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 60
+          "line": 61
         }
       ],
       "tests": [
@@ -81380,7 +81448,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -81527,7 +81595,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 10
         }
       ],
       "tests": [
@@ -82018,7 +82086,7 @@
         },
         {
           "path": "src/shared/meteor-rules.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/renderer/components/MeteorStrike.tsx",
@@ -82611,7 +82679,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -82795,7 +82863,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 10
+          "line": 4
         }
       ],
       "tests": [
@@ -83196,7 +83264,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 6
+          "line": 7
         }
       ],
       "tests": [
@@ -83438,7 +83506,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -83491,7 +83559,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1651
+          "line": 1671
         }
       ],
       "tests": [
@@ -83691,7 +83759,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 60
+          "line": 61
         }
       ],
       "tests": [
@@ -97087,6 +97155,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/input/carveSwipe.ts->symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
+      "source": "file:src/renderer/input/carveSwipe.ts",
+      "target": "symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/carveSwipe.ts->symbol:src/renderer/input/carveSwipe.ts#carveSwipeDirection",
+      "source": "file:src/renderer/input/carveSwipe.ts",
+      "target": "symbol:src/renderer/input/carveSwipe.ts#carveSwipeDirection",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/input/gamepadNavigation.ts->symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
       "source": "file:src/renderer/input/gamepadNavigation.ts",
       "target": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
@@ -106510,6 +106590,12 @@
       "id": "exports:src/shared/meteor-rules.ts->symbol:src/shared/meteor-rules.ts#canAimMeteor",
       "source": "file:src/shared/meteor-rules.ts",
       "target": "symbol:src/shared/meteor-rules.ts#canAimMeteor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/meteor-rules.ts->symbol:src/shared/meteor-rules.ts#METEOR_ROOMED_FROM",
+      "source": "file:src/shared/meteor-rules.ts",
+      "target": "symbol:src/shared/meteor-rules.ts#METEOR_ROOMED_FROM",
       "kind": "exports"
     },
     {
@@ -119505,6 +119591,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/input/carveSwipe.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/input/carveSwipe.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/input/gamepadRumble.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/input/gamepadRumble.ts",
@@ -126894,6 +126986,18 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/carveSwipe.test.ts->src/renderer/input/carveSwipe.ts",
+      "source": "file:src/renderer/input/carveSwipe.test.ts",
+      "target": "file:src/renderer/input/carveSwipe.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/carveSwipe.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/input/carveSwipe.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -135564,6 +135668,12 @@
       "id": "imports:src/shared/meteor-rules.test.ts->src/shared/test/game-fixtures.ts",
       "source": "file:src/shared/meteor-rules.test.ts",
       "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/meteor-rules.ts->src/shared/board-fold-rules.ts",
+      "source": "file:src/shared/meteor-rules.ts",
+      "target": "file:src/shared/board-fold-rules.ts",
       "kind": "imports"
     },
     {
@@ -147773,6 +147883,12 @@
       "id": "tested_by:src/renderer/hooks/useViewportSize.ts->file:src/renderer/hooks/useViewportSize.test.tsx",
       "source": "file:src/renderer/hooks/useViewportSize.ts",
       "target": "file:src/renderer/hooks/useViewportSize.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/input/carveSwipe.ts->file:src/renderer/input/carveSwipe.test.ts",
+      "source": "file:src/renderer/input/carveSwipe.ts",
+      "target": "file:src/renderer/input/carveSwipe.test.ts",
       "kind": "tested_by"
     },
     {
