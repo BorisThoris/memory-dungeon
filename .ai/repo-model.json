@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3326,
-    "codeFileCount": 1286,
-    "exportedSymbolCount": 4179,
+    "trackedFileCount": 3358,
+    "codeFileCount": 1290,
+    "exportedSymbolCount": 4190,
     "contentItemCount": 16,
     "mechanicCount": 88,
     "stateFieldCount": 165,
-    "relationshipCount": 11673
+    "relationshipCount": 11693
   },
   "inventory": [
     {
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "8d85f11399b79141523e9286a5a876f716b7298799894cae69391ae0b3834ff1"
+      "sha256": "54f0db8fd4d14741b301497c23bd0ee31408d007823b3999ba8aecace5ea9ebf"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -5041,6 +5041,18 @@
       "sha256": "6d05e60796493a0395e3d4c1676295c5276c95273d21aab92da5fd2b9af35244"
     },
     {
+      "path": "scripts/card-pipeline/boss-rooms.zimage.manifest.json",
+      "category": "script",
+      "bytes": 3836,
+      "sha256": "2157e1871714935b4aa8f5a5de2e081c90e650a5b56a5acab6653700809d34ff"
+    },
+    {
+      "path": "scripts/card-pipeline/boss-rooms.zimage.picks.json",
+      "category": "script",
+      "bytes": 117,
+      "sha256": "0254110f9b79b5e9aadb064c262da624a718dd6a22a618a9473c28003cd5084e"
+    },
+    {
       "path": "scripts/card-pipeline/build-face-panels-zimage-manifest.py",
       "category": "script",
       "bytes": 7228,
@@ -5679,8 +5691,8 @@
     {
       "path": "scripts/scene-pipeline/realms.json",
       "category": "script",
-      "bytes": 12097,
-      "sha256": "6446a51c317e6c0d0b67a660f7d45c68fb46edea176d1f344f488352f4b2746e"
+      "bytes": 15043,
+      "sha256": "7fb6fc7fcc9bceca09bc2bd4d35bebc3ddf8691c324ebe37e5600f9c091931b8"
     },
     {
       "path": "scripts/scene-pipeline/scene.sh",
@@ -8329,6 +8341,66 @@
       "sha256": "93cd1490e32c4daeac1dc6b9614bae0dfddc8801045614db106ba0225a610df8"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-2x.png",
+      "category": "source",
+      "bytes": 4942436,
+      "sha256": "fe64f313a47c059e52dcfc1b3cf82da9a2fd1904ffae68b79bf2a2d2b773dc89"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-base.png",
+      "category": "source",
+      "bytes": 4701573,
+      "sha256": "4f94f44f0fe6b25250f81a07dfdc66c4a1c006e4fa6e8c3701d6311720f97f76"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-base.webp",
+      "category": "source",
+      "bytes": 240498,
+      "sha256": "361de9397cbbc87914e564d04be741e0f9f848061d6c1b6bb27d90e6b6303c07"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-candles.png",
+      "category": "source",
+      "bytes": 271488,
+      "sha256": "0f7ff8f39ada0111773ebe10c9193c0d081edb73a5d95e4521dfccd35e247fb4"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-candles.webp",
+      "category": "source",
+      "bytes": 87646,
+      "sha256": "b3b42518c51a9b443d917bb9573becb215d0bec796fb72e7410f98accce5d1a6"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-moon.png",
+      "category": "source",
+      "bytes": 89301,
+      "sha256": "a2345eb06a311fa9e6137d32d24f91518495ebd4e45a01cabb09a00833f30505"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-moon.webp",
+      "category": "source",
+      "bytes": 28040,
+      "sha256": "cd07eb830d22cb66acb8c0cab0b3577d64a16aefc5a86842cc8fed4282b0ccdb"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-orrery.png",
+      "category": "source",
+      "bytes": 115752,
+      "sha256": "d03977117e5839e82a871c64ba05d20abc5d414e5bc67e96ba581bd747cd8d68"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1-glow-orrery.webp",
+      "category": "source",
+      "bytes": 35362,
+      "sha256": "30155d27fe36620eaa48d56058c6f89a0516fb46b36814dcfb2577310ec4c73b"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-cartographer-v1.png",
+      "category": "source",
+      "bytes": 1385299,
+      "sha256": "c80fba549d5a6c636f477ea5be0b52ab3a00957616503ba4bbb1861f6d1eebff"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-ember-v1-2x.png",
       "category": "source",
       "bytes": 4424332,
@@ -8509,6 +8581,54 @@
       "sha256": "9d6107d542a75329f8ed2c055a0df978325b999e60e0216bc9ce70ec1491a421"
     },
     {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-2x.png",
+      "category": "source",
+      "bytes": 4836348,
+      "sha256": "791a5e6d834f1f424edb07869ee02726ed394ca6d11b797872ada01b18a4886e"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-base.png",
+      "category": "source",
+      "bytes": 4781703,
+      "sha256": "04ea4f58413847d565c5fd67527282232db38a5fb135eabe24bd40c6acdf0a4e"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-base.webp",
+      "category": "source",
+      "bytes": 213802,
+      "sha256": "3c753345c9916d968ab989604dd54ce2e40cf1b81c2c2ffdb8fa68806955f8c4"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-glow-lanterns.png",
+      "category": "source",
+      "bytes": 281529,
+      "sha256": "6aa6dac4602b4a753037ce87a53f9086004f38c22eafb9af8f359ffc0a8ea25e"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-glow-lanterns.webp",
+      "category": "source",
+      "bytes": 81164,
+      "sha256": "ed508a70b9eb42810ba3425170a5d4870340572fef6625241374cd0bf5a10c39"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-glow-runes.png",
+      "category": "source",
+      "bytes": 103380,
+      "sha256": "56f78390c6b32b08fb7f8b0c199a7ecf0a42ba94376b48f30fe9cd7e04eb6d2e"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1-glow-runes.webp",
+      "category": "source",
+      "bytes": 25366,
+      "sha256": "150f5b407a3bcf2c9c45734f59942f896e89d942f28882b39585762436434f41"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-keeper-v1.png",
+      "category": "source",
+      "bytes": 1361318,
+      "sha256": "a87ee1d0378058dbc1d3facc250d5f1c7fd910ee9cb055d288456fe6376bd5d7"
+    },
+    {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-storm-v1-2x.png",
       "category": "source",
       "bytes": 4928318,
@@ -8651,6 +8771,54 @@
       "category": "source",
       "bytes": 1209045,
       "sha256": "0df469f7a631311ac9e76fc423353c2e65612e9633fa69b9d6bb45b719f17ae5"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-2x.png",
+      "category": "source",
+      "bytes": 4600985,
+      "sha256": "8ef3303d30c623fe37dae3b3cabd03ba0732d178920ab0dbd35ac10751594c70"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-base.png",
+      "category": "source",
+      "bytes": 4551213,
+      "sha256": "dac01733e7462b6ed0b897f563652b2dbbbf35eaec49cfba6516c77f55265a88"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-base.webp",
+      "category": "source",
+      "bytes": 224770,
+      "sha256": "72da87db58ec5836752bae757b4762d4b8ebf2279c3c558623228ed36357abbd"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-glow-cracks.png",
+      "category": "source",
+      "bytes": 253614,
+      "sha256": "22e3514f485eda39669a07f336249bb8582b51971a8951b8b3b6ae81db1c67c8"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-glow-cracks.webp",
+      "category": "source",
+      "bytes": 75450,
+      "sha256": "8c1c1da936ffb18cd4ab7960efdf10d29d9e22f19bfaeb6a261f292e5fe17aa9"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-glow-runes.png",
+      "category": "source",
+      "bytes": 165768,
+      "sha256": "6281b67fb820da790f09b5a3ded55e4a7bdd7e5aab323e93758a7602692e4d81"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1-glow-runes.webp",
+      "category": "source",
+      "bytes": 51928,
+      "sha256": "a511023eab734da5f94fede5717e75ff3378acc50c1e2a28193e8e2cab5a10a2"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-realm-warden-v1.png",
+      "category": "source",
+      "bytes": 1362896,
+      "sha256": "d3cf1b78e53b789bb68ba4725b01ca4465c0476a8da5d7bff5dfbad31d81676e"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-gameplay-shop-v1.png",
@@ -9223,6 +9391,12 @@
       "sha256": "95f507b4b5f772495854ccf724350a07811e9f91abc0141012a17c4d4584373b"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
+      "category": "source",
+      "bytes": 84,
+      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-l.png",
       "category": "source",
       "bytes": 8835,
@@ -9373,6 +9547,12 @@
       "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
     },
     {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
+      "category": "source",
+      "bytes": 84,
+      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+    },
+    {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
       "category": "source",
       "bytes": 78921,
@@ -9431,6 +9611,12 @@
       "category": "source",
       "bytes": 629,
       "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+    },
+    {
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
+      "category": "source",
+      "bytes": 84,
+      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -9825,8 +10011,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "category": "source",
-      "bytes": 4959,
-      "sha256": "c608522828681ea9bafaab421c55adfe71ac1362aa2e565df5ba9bb815f8cac1"
+      "bytes": 5438,
+      "sha256": "e41e961b85e928c70c967179606f37fdb3a558b9c11f124407468d6ebe929844"
     },
     {
       "path": "src/renderer/assets/ui/stage-ring.svg",
@@ -10447,6 +10633,12 @@
       "sha256": "9bb1603e3a71d071a2a013c14ff8bccff5f3c992e82d3e8b52a291f086a314ce"
     },
     {
+      "path": "src/renderer/components/bossRoomLife.test.ts",
+      "category": "test",
+      "bytes": 2120,
+      "sha256": "bb9df67669f85a2dc3e99a7ab6d9ae72e14cabf8b91d19bb4fa9d877522aeeca"
+    },
+    {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "category": "test",
       "bytes": 2919,
@@ -10983,14 +11175,14 @@
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
       "category": "test",
-      "bytes": 38691,
-      "sha256": "7f8f8f99c136da81c72fe622e2aac3c3bd1fb7d9d71b51768a55d5de56e049b2"
+      "bytes": 38751,
+      "sha256": "17839b91e4e38303ca74b7c25bd92dd261725c36be006b4765089b9dab6c9e92"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "category": "source",
-      "bytes": 40059,
-      "sha256": "6ceb95ec19d20060a34e3a243cb794374a5a4a025d6b4883406d142daed61c58"
+      "bytes": 40637,
+      "sha256": "9f4dfe2d75e58fcf88cf727af4511c309e4b2b43c96ab52e45cbaa12dde7b12a"
     },
     {
       "path": "src/renderer/components/gameplaySceneLevels.ts",
@@ -11025,8 +11217,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 143543,
-      "sha256": "2d2c1bbf7cd3f2db75047f92f64a67f962e87e11d41a9580d4c21a011dd4e590"
+      "bytes": 143986,
+      "sha256": "08441da633ae571b789e0e690aaf4fcb35421b8325cbeaf400d7d7c30084045b"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11481,14 +11673,14 @@
     {
       "path": "src/renderer/components/realmRoomArt.test.ts",
       "category": "test",
-      "bytes": 2102,
-      "sha256": "824e57a129c4fd08342e482a1f40f2e95905d76a03b6d60ce46d90b5755cdde3"
+      "bytes": 3289,
+      "sha256": "5c98bc03b696bc796c34b4cb0a32575f52248331af59959e67627b29ee5fcbf4"
     },
     {
       "path": "src/renderer/components/realmRoomArt.ts",
       "category": "source",
-      "bytes": 3633,
-      "sha256": "e9ea68757cacefb2d0c7573d4e5626bb1cc8681a908d0038105db1e251c059c7"
+      "bytes": 5631,
+      "sha256": "219d9ac7bdc9180867f9eba1f9902f1547d32c2b5e31cd7e4439d364a15d5349"
     },
     {
       "path": "src/renderer/components/realmRoomLife.test.ts",
@@ -11499,8 +11691,8 @@
     {
       "path": "src/renderer/components/realmRoomLife.ts",
       "category": "source",
-      "bytes": 43079,
-      "sha256": "9c732075ad47c2bdd7590b805b0dc164addbc9bc3b257b2e8324ad4eabb9b388"
+      "bytes": 49607,
+      "sha256": "1547dc47ec9960b8b0591f37a044256b80f5aa003a78b2793ac50d11a570950f"
     },
     {
       "path": "src/renderer/components/RealmScreenOverlay.module.css",
@@ -11631,8 +11823,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 65774,
-      "sha256": "7b04d2f047b87a49d2e162cea8da5ce224e3aa7aca159eb1934e5f66f8188013"
+      "bytes": 66117,
+      "sha256": "408000f9a73bbd6136c0827769ff58f23a6a502ca3142f623dd0fe9663e96b0e"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11643,8 +11835,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 57778,
-      "sha256": "6d01fa154f425bfa56622b4fee71b0b87bdf39eeccdc9592ffa5f3714b7eb590"
+      "bytes": 58854,
+      "sha256": "64c265b4d8027e6a3e0f4451bb8a56f5f9aa2747ae8139ff165995e8bba7be73"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11751,8 +11943,8 @@
     {
       "path": "src/renderer/components/sceneMood.ts",
       "category": "source",
-      "bytes": 13285,
-      "sha256": "12146134891e898c83dbb4e3d2639be55c1eec27933510462da97798569fcb66"
+      "bytes": 14346,
+      "sha256": "e87ea52ff0e90a3ba5beab53b1d3f7439ecf3c457a44eb934455c00f08dc1c2f"
     },
     {
       "path": "src/renderer/components/scenePaint.test.ts",
@@ -17553,8 +17745,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 21925,
-      "sha256": "a26c072542f1d2062a8ff182ea5b068856987bbc53edc32398b4aae4436ea4ea"
+      "bytes": 22413,
+      "sha256": "9ac2e60d222d6fafb77bfeef6a4f40743feb046b126e2463a77730f9d486d38a"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17745,8 +17937,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-027-hall-soak-and-accountability.md",
       "category": "other",
-      "bytes": 3599,
-      "sha256": "2ee07a94f09c2fbfd3f17cbf8b3a8f823bf967cf85f7af7a11771fe2c33d209d"
+      "bytes": 4567,
+      "sha256": "f6f01d191601cc605978f98864f89c3365f3beb68a471b9d5ec908f4e136ce36"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
@@ -17763,8 +17955,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
       "category": "other",
-      "bytes": 4621,
-      "sha256": "406f0227eb7a3344315085bde84b6b4584fde74e7ede3ff92c82d76ece2caf23"
+      "bytes": 6949,
+      "sha256": "5c1b2455d000ca21e0dca67800faf1e3c3e471ae754308aacc1059477f53f571"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-031-save-schema-and-migration.md",
@@ -20916,6 +21108,16 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 9,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "layer": "renderer",
@@ -20946,6 +21148,16 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 9,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "layer": "renderer",
@@ -20961,6 +21173,16 @@
       "layer": "renderer",
       "role": "production",
       "lineCount": 34,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
+      "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 9,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -21000,15 +21222,18 @@
       "path": "src/renderer/assets/ui/sprites/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 121,
       "imports": [
         "file:src/renderer/assets/ui/sprites/ambient-v1.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-dungeon-ring-v2-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+        "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprites.json",
         "file:src/renderer/assets/ui/sprites/bg-mode-classic-v2-sprites.json",
         "file:src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json"
@@ -22815,6 +23040,18 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/bossRoomLife.test.ts",
+      "path": "src/renderer/components/bossRoomLife.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 32,
+      "imports": [
+        "file:src/renderer/components/realmRoomLife.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "layer": "renderer",
@@ -24312,7 +24549,7 @@
       "path": "src/renderer/components/gameplaySceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 679,
+      "lineCount": 685,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
@@ -24439,7 +24676,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2725,
+      "lineCount": 2730,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25747,7 +25984,7 @@
       "path": "src/renderer/components/realmRoomArt.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 30,
+      "lineCount": 42,
       "imports": [
         "file:src/renderer/components/realmRoomArt.ts",
         "file:src/renderer/components/sceneMood.ts",
@@ -25762,18 +25999,26 @@
       "path": "src/renderer/components/realmRoomArt.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 102,
       "imports": [
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/assets/ui/sprites/index.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/cartographer-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/keeper-rules.ts",
+        "file:src/shared/warden-rules.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_BY_ACT",
+        "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_IDS",
+        "symbol:src/renderer/components/realmRoomArt.ts#bossRoomFor",
+        "symbol:src/renderer/components/realmRoomArt.ts#BossRoomId",
         "symbol:src/renderer/components/realmRoomArt.ts#getRealmRoomArtUrls",
         "symbol:src/renderer/components/realmRoomArt.ts#REALM_ROOM_ART",
         "symbol:src/renderer/components/realmRoomArt.ts#RealmRoomArt",
         "symbol:src/renderer/components/realmRoomArt.ts#realmRoomFor",
-        "symbol:src/renderer/components/realmRoomArt.ts#realmRoomPlateUrls"
+        "symbol:src/renderer/components/realmRoomArt.ts#realmRoomPlateUrls",
+        "symbol:src/renderer/components/realmRoomArt.ts#SceneRoomId"
       ],
       "testedBy": [
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
@@ -25798,10 +26043,11 @@
       "path": "src/renderer/components/realmRoomLife.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 761,
+      "lineCount": 857,
       "imports": [
         "file:src/renderer/assets/ui/sprites/index.ts",
         "file:src/renderer/components/goldRain.ts",
+        "file:src/renderer/components/realmRoomArt.ts",
         "file:src/renderer/components/sceneAmbient.ts",
         "file:src/renderer/components/sceneClock.ts",
         "file:src/renderer/components/scenePaint.ts",
@@ -25809,6 +26055,12 @@
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/realmRoomLife.ts#BOSS_EVENT_MS",
+        "symbol:src/renderer/components/realmRoomLife.ts#bossEventDim",
+        "symbol:src/renderer/components/realmRoomLife.ts#bossEventEnvelope",
+        "symbol:src/renderer/components/realmRoomLife.ts#bossRoomLifeDraws",
+        "symbol:src/renderer/components/realmRoomLife.ts#BossRoomLifeInput",
+        "symbol:src/renderer/components/realmRoomLife.ts#isBossRoom",
         "symbol:src/renderer/components/realmRoomLife.ts#landingDraws",
         "symbol:src/renderer/components/realmRoomLife.ts#lightningPath",
         "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
@@ -25828,6 +26080,7 @@
         "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel"
       ],
       "testedBy": [
+        "file:src/renderer/components/bossRoomLife.test.ts",
         "file:src/renderer/components/realmRoomLife.test.ts"
       ]
     },
@@ -26133,7 +26386,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 995,
+      "lineCount": 1004,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -26489,7 +26742,7 @@
       "path": "src/renderer/components/sceneMood.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 235,
+      "lineCount": 246,
       "imports": [
         "file:src/renderer/components/elementScene.ts",
         "file:src/renderer/components/realmCardMotion.ts",
@@ -46308,80 +46561,80 @@
       "name": "AMBIENT_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 99,
-      "endLine": 105
+      "line": 106,
+      "endLine": 112
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCell",
       "name": "AmbientCell",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 88,
-      "endLine": 95
+      "line": 95,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#AmbientCellName",
       "name": "AmbientCellName",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 97,
-      "endLine": 97
+      "line": 104,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getAmbientSpriteUrls",
       "name": "getAmbientSpriteUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 107,
-      "endLine": 107
+      "line": 114,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#getSceneSpriteSheetUrls",
       "name": "getSceneSpriteSheetUrls",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 110,
-      "endLine": 113
+      "line": 117,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#resolveSceneSpriteSet",
       "name": "resolveSceneSpriteSet",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 55,
-      "endLine": 62
+      "line": 58,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SCENE_SPRITES",
       "name": "SCENE_SPRITES",
       "kind": "value",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 64,
-      "endLine": 79
+      "line": 67,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteDef",
       "name": "SceneSpriteDef",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 18,
-      "endLine": 33
+      "line": 21,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSet",
       "name": "SceneSpriteSet",
       "kind": "interface",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 38,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/assets/ui/sprites/index.ts#SceneSpriteSetKey",
       "name": "SceneSpriteSetKey",
       "kind": "type",
       "file": "src/renderer/assets/ui/sprites/index.ts",
-      "line": 81,
-      "endLine": 81
+      "line": 88,
+      "endLine": 88
     },
     {
       "id": "symbol:src/renderer/audio/audioGlobUrlMap.ts#buildAudioUrlMapByFilename",
@@ -49989,7 +50242,7 @@
       "kind": "value",
       "file": "src/renderer/components/gameplaySceneFrame.ts",
       "line": 328,
-      "endLine": 678
+      "endLine": 684
     },
     {
       "id": "symbol:src/renderer/components/gameplaySceneFrame.ts#GAMEPLAY_EYES_EVERY_MS",
@@ -50140,40 +50393,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2724,
-      "endLine": 2724
+      "line": 2729,
+      "endLine": 2729
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 290,
-      "endLine": 290
+      "line": 292,
+      "endLine": 292
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 288,
-      "endLine": 288
+      "line": 290,
+      "endLine": 290
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 292,
-      "endLine": 292
+      "line": 294,
+      "endLine": 294
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 282,
-      "endLine": 282
+      "line": 284,
+      "endLine": 284
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -51576,180 +51829,268 @@
       "endLine": 79
     },
     {
+      "id": "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_BY_ACT",
+      "name": "BOSS_ROOM_BY_ACT",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomArt.ts",
+      "line": 101,
+      "endLine": 101
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_IDS",
+      "name": "BOSS_ROOM_IDS",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomArt.ts",
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomArt.ts#bossRoomFor",
+      "name": "bossRoomFor",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomArt.ts",
+      "line": 92,
+      "endLine": 98
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomArt.ts#BossRoomId",
+      "name": "BossRoomId",
+      "kind": "type",
+      "file": "src/renderer/components/realmRoomArt.ts",
+      "line": 31,
+      "endLine": 31
+    },
+    {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#getRealmRoomArtUrls",
       "name": "getRealmRoomArtUrls",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 69,
-      "endLine": 70
+      "line": 88,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#REALM_ROOM_ART",
       "name": "REALM_ROOM_ART",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 47,
-      "endLine": 53
+      "line": 66,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#RealmRoomArt",
       "name": "RealmRoomArt",
       "kind": "interface",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 21,
-      "endLine": 27
+      "line": 36,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#realmRoomFor",
       "name": "realmRoomFor",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 56,
-      "endLine": 57
+      "line": 75,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/realmRoomArt.ts#realmRoomPlateUrls",
       "name": "realmRoomPlateUrls",
       "kind": "value",
       "file": "src/renderer/components/realmRoomArt.ts",
-      "line": 63,
-      "endLine": 66
+      "line": 82,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomArt.ts#SceneRoomId",
+      "name": "SceneRoomId",
+      "kind": "type",
+      "file": "src/renderer/components/realmRoomArt.ts",
+      "line": 33,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#BOSS_EVENT_MS",
+      "name": "BOSS_EVENT_MS",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 779,
+      "endLine": 779
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#bossEventDim",
+      "name": "bossEventDim",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 812,
+      "endLine": 813
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#bossEventEnvelope",
+      "name": "bossEventEnvelope",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 782,
+      "endLine": 783
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#bossRoomLifeDraws",
+      "name": "bossRoomLifeDraws",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 832,
+      "endLine": 856
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#BossRoomLifeInput",
+      "name": "BossRoomLifeInput",
+      "kind": "interface",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 815,
+      "endLine": 823
+    },
+    {
+      "id": "symbol:src/renderer/components/realmRoomLife.ts#isBossRoom",
+      "name": "isBossRoom",
+      "kind": "value",
+      "file": "src/renderer/components/realmRoomLife.ts",
+      "line": 776,
+      "endLine": 776
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#landingDraws",
       "name": "landingDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 116,
-      "endLine": 198
+      "line": 122,
+      "endLine": 204
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#lightningPath",
       "name": "lightningPath",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 327,
-      "endLine": 347
+      "line": 333,
+      "endLine": 353
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RAIN_WIND",
       "name": "RAIN_WIND",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 205,
-      "endLine": 205
+      "line": 211,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#rainDraws",
       "name": "rainDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 238,
-      "endLine": 318
+      "line": 244,
+      "endLine": 324
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#REALM_FLOORS",
       "name": "REALM_FLOORS",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 17,
-      "endLine": 23
+      "line": 18,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#REALM_WARPS",
       "name": "REALM_WARPS",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 701,
-      "endLine": 712
+      "line": 708,
+      "endLine": 723
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLayerLevel",
       "name": "realmLayerLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 628,
-      "endLine": 660
+      "line": 634,
+      "endLine": 667
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifeCount",
       "name": "realmLifeCount",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 61,
-      "endLine": 64
+      "line": 67,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmLifePace",
       "name": "realmLifePace",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 67,
-      "endLine": 67
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomLifeDraws",
       "name": "realmRoomLifeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 616,
-      "endLine": 617
+      "line": 622,
+      "endLine": 623
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#RealmRoomLifeInput",
       "name": "RealmRoomLifeInput",
       "kind": "interface",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 48,
-      "endLine": 58
+      "line": 54,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomSpriteDraws",
       "name": "realmRoomSpriteDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 667,
-      "endLine": 686
+      "line": 674,
+      "endLine": 693
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#realmRoomWarpDraws",
       "name": "realmRoomWarpDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 721,
-      "endLine": 760
+      "line": 732,
+      "endLine": 771
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormSheetLevel",
       "name": "stormSheetLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 376,
-      "endLine": 379
+      "line": 382,
+      "endLine": 385
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeChannels",
       "name": "stormStrikeChannels",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 70,
-      "endLine": 70
+      "line": 76,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeDraws",
       "name": "stormStrikeDraws",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 382,
-      "endLine": 461
+      "line": 388,
+      "endLine": 467
     },
     {
       "id": "symbol:src/renderer/components/realmRoomLife.ts#stormStrikeLevel",
       "name": "stormStrikeLevel",
       "kind": "value",
       "file": "src/renderer/components/realmRoomLife.ts",
-      "line": 365,
-      "endLine": 373
+      "line": 371,
+      "endLine": 379
     },
     {
       "id": "symbol:src/renderer/components/RealmScreenOverlay.tsx#RealmScreenOverlay",
@@ -51972,24 +52313,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 994,
-      "endLine": 994
+      "line": 1003,
+      "endLine": 1003
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 88,
-      "endLine": 123
+      "line": 91,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 75,
-      "endLine": 86
+      "line": 78,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -52412,24 +52753,24 @@
       "name": "blackHoleKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 97,
-      "endLine": 103
+      "line": 101,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#deriveSceneMood",
       "name": "deriveSceneMood",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 119,
-      "endLine": 225
+      "line": 123,
+      "endLine": 236
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#latestMissEvent",
       "name": "latestMissEvent",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 228,
-      "endLine": 234
+      "line": 239,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#SceneDriftTone",
@@ -52445,7 +52786,7 @@
       "kind": "interface",
       "file": "src/renderer/components/sceneMood.ts",
       "line": 29,
-      "endLine": 86
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#ScenePlateId",
@@ -52460,16 +52801,16 @@
       "name": "voidReturnKeyFor",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 109,
-      "endLine": 114
+      "line": 113,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/components/sceneMood.ts#WEATHER_FLOOR",
       "name": "WEATHER_FLOOR",
       "kind": "value",
       "file": "src/renderer/components/sceneMood.ts",
-      "line": 117,
-      "endLine": 117
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/components/scenePaint.ts#findSceneDraw",
@@ -78980,7 +79321,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 128
+          "line": 131
         }
       ],
       "tests": [
@@ -79432,7 +79773,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1631
+          "line": 1633
         }
       ],
       "tests": [
@@ -82561,7 +82902,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1633
+          "line": 1635
         }
       ],
       "tests": [
@@ -82955,7 +83296,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 428
+          "line": 431
         }
       ],
       "tests": [
@@ -82994,7 +83335,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 428
+          "line": 431
         }
       ],
       "tests": [
@@ -83028,7 +83369,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 428
+          "line": 431
         }
       ],
       "tests": [
@@ -83062,7 +83403,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 428
+          "line": 431
         }
       ],
       "tests": [
@@ -90659,6 +91000,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_BY_ACT",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_BY_ACT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_IDS",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "symbol:src/renderer/components/realmRoomArt.ts#BOSS_ROOM_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#bossRoomFor",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "symbol:src/renderer/components/realmRoomArt.ts#bossRoomFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#BossRoomId",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "symbol:src/renderer/components/realmRoomArt.ts#BossRoomId",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#getRealmRoomArtUrls",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "symbol:src/renderer/components/realmRoomArt.ts#getRealmRoomArtUrls",
@@ -90686,6 +91051,48 @@
       "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#realmRoomPlateUrls",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "symbol:src/renderer/components/realmRoomArt.ts#realmRoomPlateUrls",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomArt.ts->symbol:src/renderer/components/realmRoomArt.ts#SceneRoomId",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "symbol:src/renderer/components/realmRoomArt.ts#SceneRoomId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#BOSS_EVENT_MS",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#BOSS_EVENT_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#bossEventDim",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#bossEventDim",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#bossEventEnvelope",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#bossEventEnvelope",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#bossRoomLifeDraws",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#bossRoomLifeDraws",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#BossRoomLifeInput",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#BossRoomLifeInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/realmRoomLife.ts->symbol:src/renderer/components/realmRoomLife.ts#isBossRoom",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "symbol:src/renderer/components/realmRoomLife.ts#isBossRoom",
       "kind": "exports"
     },
     {
@@ -114211,6 +114618,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
@@ -114229,6 +114642,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
@@ -114238,6 +114657,12 @@
       "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "source": "file:src/renderer/assets/ui/sprites/index.ts",
       "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/assets/ui/sprites/index.ts->src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
+      "source": "file:src/renderer/assets/ui/sprites/index.ts",
+      "target": "file:src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
       "kind": "imports"
     },
     {
@@ -115552,6 +115977,12 @@
       "id": "imports:src/renderer/components/boardTrauma.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/boardTrauma.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/bossRoomLife.test.ts->src/renderer/components/realmRoomLife.ts",
+      "source": "file:src/renderer/components/bossRoomLife.test.ts",
+      "target": "file:src/renderer/components/realmRoomLife.ts",
       "kind": "imports"
     },
     {
@@ -119719,9 +120150,27 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/realmRoomArt.ts->src/shared/cartographer-rules.ts",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "file:src/shared/cartographer-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/realmRoomArt.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmRoomArt.ts->src/shared/keeper-rules.ts",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "file:src/shared/keeper-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmRoomArt.ts->src/shared/warden-rules.ts",
+      "source": "file:src/renderer/components/realmRoomArt.ts",
+      "target": "file:src/shared/warden-rules.ts",
       "kind": "imports"
     },
     {
@@ -119746,6 +120195,12 @@
       "id": "imports:src/renderer/components/realmRoomLife.ts->src/renderer/components/goldRain.ts",
       "source": "file:src/renderer/components/realmRoomLife.ts",
       "target": "file:src/renderer/components/goldRain.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/realmRoomLife.ts->src/renderer/components/realmRoomArt.ts",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "file:src/renderer/components/realmRoomArt.ts",
       "kind": "imports"
     },
     {
@@ -144999,6 +145454,12 @@
       "id": "tested_by:src/renderer/components/realmRoomArt.ts->file:src/renderer/components/realmRoomArt.test.ts",
       "source": "file:src/renderer/components/realmRoomArt.ts",
       "target": "file:src/renderer/components/realmRoomArt.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/realmRoomLife.ts->file:src/renderer/components/bossRoomLife.test.ts",
+      "source": "file:src/renderer/components/realmRoomLife.ts",
+      "target": "file:src/renderer/components/bossRoomLife.test.ts",
       "kind": "tested_by"
     },
     {
