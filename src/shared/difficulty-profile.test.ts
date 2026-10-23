@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MEMORIZE_BASE_MS, MEMORIZE_MIN_MS, MEMORIZE_STEP_MS } from './contracts';
+import { MAX_DEPTH } from './depth-rules';
 import {
     getCurrentDifficultyProfile,
     getDifficultyProfileRows,
@@ -19,8 +20,11 @@ describe('REG-046 difficulty profile contract', () => {
         expect(current.rules).toContain('a run-wide miss bank');
 
         const rows = getDifficultyProfileRows();
-        expect(rows.map((row) => row.id)).toEqual(['classic_fair', 'practice_soft', 'purist_hard']);
-        expect(rows.filter((row) => row.status === 'deferred')).toHaveLength(2);
+        expect(rows.map((row) => row.id)).toEqual(['classic_fair', 'practice_soft', 'depths']);
+        expect(rows.filter((row) => row.status === 'deferred')).toHaveLength(1);
+        // The challenge row is the Depths (DGE-025), shipped and named from its own table.
+        expect(rows.find((row) => row.id === 'depths')).toMatchObject({ status: 'shipped' });
+        expect(rows.find((row) => row.id === 'depths')!.rules).toContain(`${MAX_DEPTH} Depths`);
         expect(rows.every((row) => row.dailyComparable === (row.id === 'classic_fair'))).toBe(true);
     });
 

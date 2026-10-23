@@ -1,7 +1,7 @@
 import { normalizeDescentRecord } from '../../shared/descent-record';
-import { DEPTH_RUNGS } from '../../shared/depth-rules';
+import { DEPTH_RUNGS, MAX_DEPTH } from '../../shared/depth-rules';
 import { hasFeatOption } from '../../shared/feat-unlocks';
-import { useCallback, useMemo, useState, type ReactElement } from 'react';
+import { useCallback, useMemo, useState, type CSSProperties, type ReactElement } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { getChallengeModeGateRows } from '../../shared/challenge-progression';
 import {
@@ -613,6 +613,10 @@ const ChooseYourPathScreen = (): ReactElement => {
                             <fieldset className={styles.setupGroup}>
                                 <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.depthLabel}</legend>
                                 <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.depthHint}</p>
+                                <p aria-label={CLASSIC_SETUP_COPY.depthLadder(bestDepthOpened, MAX_DEPTH)} aria-valuemax={MAX_DEPTH} aria-valuemin={0} aria-valuenow={bestDepthOpened}
+                                    className={styles.depthLadder} data-testid="setup-depth-ladder" role="progressbar" style={{ '--depth-open': bestDepthOpened / MAX_DEPTH } as CSSProperties}>
+                                    {CLASSIC_SETUP_COPY.depthLadder(bestDepthOpened, MAX_DEPTH)}
+                                </p>
                                 <select aria-label={CLASSIC_SETUP_COPY.depthLabel} data-testid="setup-depth" value={setup.depth ?? 0}
                                     onChange={event => setSetup({ ...setup, depth: Number(event.target.value) || undefined })}>
                                     <option value={0}>{CLASSIC_SETUP_COPY.depthNone}</option>

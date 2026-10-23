@@ -17,9 +17,9 @@ const floorIn = (realm: RealmId | null): RunState => {
 
 describe('the Storm Glass', () => {
     it('calls every realm\'s peak on a calm floor, where the weather clock never runs', () => {
-        // Fire's peak is the deal's: a firestorm where it finds open cards, and on a board of only fire and water it
-        // charges them instead (`empowered`). Which one a floor gets moves with the seed (rules 71 deals the second).
-        const kinds: Record<RealmId, readonly string[]> = { frost: ['whiteout'], ember: ['firestorm', 'empowered'], tide: ['springtide'], storm: ['thunderclap'], grove: ['bloom'] };
+        // A peak is the deal's: a storm that meets only its own element feeds those cards instead (`empowered`).
+        // Which one a floor gets moves with the seed: rules 71 dealt it to fire, rules 88 to the grove too.
+        const kinds: Record<RealmId, readonly string[]> = { frost: ['whiteout'], ember: ['firestorm', 'empowered'], tide: ['springtide'], storm: ['thunderclap'], grove: ['bloom', 'empowered'] };
         for (const realm of Object.keys(kinds) as RealmId[]) {
             const run = floorIn(realm);
             expect(canBreakStormGlass(run), realm).toBe(true);

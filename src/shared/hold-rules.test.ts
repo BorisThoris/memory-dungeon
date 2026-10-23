@@ -25,11 +25,17 @@ const matchOne = (run: RunState): RunState | null => {
     return null;
 };
 
+/** Miss with two face-down cards of different pairs that both turn (a trait can refuse a flip, as in `matchOne`). */
 const missOne = (run: RunState): RunState => {
     const hidden = run.board!.tiles.filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__'));
-    const first = hidden[0]!;
-    const second = hidden.find((tile) => tile.pairKey !== first.pairKey)!;
-    return resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+    for (const first of hidden) {
+        for (const second of hidden) {
+            if (second.pairKey === first.pairKey) continue;
+            const flipped = flipTile(flipTile(run, first.id), second.id);
+            if (flipped.board!.flippedTileIds.length === 2) return resolveBoardTurn(flipped);
+        }
+    }
+    throw new Error('no two cards of different pairs turn');
 };
 
 describe('the Hold (DGE-008)', () => {

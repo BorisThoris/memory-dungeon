@@ -83,6 +83,8 @@ export const CLASSIC_SETUP_COPY = {
     campEvolve: 'Evolve · the relics your blueprints ask for',
     depthLabel: 'Depth',
     depthHint: 'Every rung up to the Depth you pick is in play. Fell the Warden to open the next.',
+    /** The ladder, opened already lit (DGE-004's banked progress): the Warden you felled opened the first rung. */
+    depthLadder: (open: number, of: number): string => `Depth ${open} of ${of} open: the Warden you felled lit the first.`,
     depthNone: 'Depth 0 · the Descent as it is',
     depthOption: (depth: number, name: string): string => `Depth ${depth} · ${name}`,
     title: 'Set up your run',

@@ -962,3 +962,9 @@
         animation: none;
     }
 }
+
+/* The Depths ladder (DGE-025), opened already lit to the Depth the felled Warden opened (DGE-004's banked progress). */
+.depthLadder { position: relative; margin: 0.25rem 0 0.5rem; padding-bottom: 0.4rem; font-size: 0.8rem; color: var(--gold, #e1ad66); font-variant-numeric: lining-nums tabular-nums; }
+.depthLadder::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 2px; background: #ffffff1a; }
+.depthLadder::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: calc(var(--depth-open, 0) * 100%); border-radius: 2px; background: var(--gold, #e1ad66); }
+

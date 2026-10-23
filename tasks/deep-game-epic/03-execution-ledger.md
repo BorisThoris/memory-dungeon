@@ -48,6 +48,7 @@ Append a row per session. Never mark a ticket complete unless its acceptance cri
 | 2026-10-23 | DGE-005/006 | A player who forgets, through whole runs (`sim:memory-survival`): 16 cards reach floor 24 in 57%, 40 in none; 24 cards stand on the Warden's floor in 13% and fell it in none. Deaths pile on the restless hall and the Deep's opening. | Forty seeds per size; Goldilocks gate unchanged by the model fixes | Recorded only: the owner kept the omniscient bar | - |
 | 2026-10-23 | DGE-016/020 | A dropped mask breaks out in its true element's sparks; a waking Sleeper climbs into its cell like a risen card. | Unit tests, isolated browser on the mask room | - | - |
 | 2026-10-24 | DGE-010/015 | Rules 88: a meteor on a Fold floor keeps its blast to its room. A swipe across Carve's picker picks the way. Icons for evolutions and achievements closed by decision (ink screens carry no relic art; Steam icons live on the Partner site). | Meteor wall test both ways, reseed drill, swipe unit and e2e | - | - |
+| 2026-10-24 | DGE-025 | The difficulty profile's challenge row is the Depths (shipped); the classic row's text reads the live bank; the Depth picker opens its ladder already lit. Rules 88's reseed fixed two seed-bound tests (a Hold miss that a trait refused, a grove peak that fed its own element). | Profile and Codex tests, picker look at desk and phone | - | - |
 
 ## Open decisions for the owner
 Defaults recorded 2026-10-19 (DGE-001); the owner has not answered yet, so each ticket takes the default until they do.
