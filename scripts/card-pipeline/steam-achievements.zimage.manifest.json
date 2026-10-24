@@ -1,0 +1,197 @@
+{
+  "$comment": "Z-Image-Turbo batch for the 31 Steam achievement icons (2026-10-24, DGE-028). Steam takes a 64x64 JPG per achievement, achieved and unachieved; scripts/card-pipeline/steam-achievement-icons.py cuts both from the picked take. Prompts positive-only, one object per achievement read from its condition.",
+  "defaults": {
+    "width": 768,
+    "height": 768,
+    "steps": 8,
+    "candidates": 1
+  },
+  "entries": [
+    {
+      "id": "ACH_FIRST_CLEAR",
+      "target": "project-media/steam/achievements/ACH_FIRST_CLEAR.png",
+      "seed": 55000,
+      "prompt": "Dark fantasy game achievement emblem: a small brass lantern with a warm flame, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_LEVEL_FIVE",
+      "target": "project-media/steam/achievements/ACH_LEVEL_FIVE.png",
+      "seed": 55010,
+      "prompt": "Dark fantasy game achievement emblem: a stone stairway spiralling down into amber light, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_SCORE_THOUSAND",
+      "target": "project-media/steam/achievements/ACH_SCORE_THOUSAND.png",
+      "seed": 55020,
+      "prompt": "Dark fantasy game achievement emblem: a heap of gold coins with a gleam, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_PERFECT_CLEAR",
+      "target": "project-media/steam/achievements/ACH_PERFECT_CLEAR.png",
+      "seed": 55030,
+      "prompt": "Dark fantasy game achievement emblem: a flawless clear crystal eye, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_LAST_LIFE",
+      "target": "project-media/steam/achievements/ACH_LAST_LIFE.png",
+      "seed": 55040,
+      "prompt": "Dark fantasy game achievement emblem: a single guttering candle flame, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_ENDLESS_TEN",
+      "target": "project-media/steam/achievements/ACH_ENDLESS_TEN.png",
+      "seed": 55050,
+      "prompt": "Dark fantasy game achievement emblem: a deep well of violet light ringed with ten runes, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_ENDLESS_CYCLE",
+      "target": "project-media/steam/achievements/ACH_ENDLESS_CYCLE.png",
+      "seed": 55060,
+      "prompt": "Dark fantasy game achievement emblem: a closed circle of linked iron chain, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_ENDLESS_TWENTY",
+      "target": "project-media/steam/achievements/ACH_ENDLESS_TWENTY.png",
+      "seed": 55070,
+      "prompt": "Dark fantasy game achievement emblem: a vertical shaft falling into deep blue darkness, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_SCORE_TEN_THOUSAND",
+      "target": "project-media/steam/achievements/ACH_SCORE_TEN_THOUSAND.png",
+      "seed": 55080,
+      "prompt": "Dark fantasy game achievement emblem: an ornate treasure vault door bound in gold, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_STREAK_TEN",
+      "target": "project-media/steam/achievements/ACH_STREAK_TEN.png",
+      "seed": 55090,
+      "prompt": "Dark fantasy game achievement emblem: an unbroken chain of ten glowing links, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_TRAIT_SCHOLAR",
+      "target": "project-media/steam/achievements/ACH_TRAIT_SCHOLAR.png",
+      "seed": 55100,
+      "prompt": "Dark fantasy game achievement emblem: an open book with four glowing sigils, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_NO_POWERS_TEN",
+      "target": "project-media/steam/achievements/ACH_NO_POWERS_TEN.png",
+      "seed": 55110,
+      "prompt": "Dark fantasy game achievement emblem: an open empty hand of carved stone, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_FIRST_FEVER",
+      "target": "project-media/steam/achievements/ACH_FIRST_FEVER.png",
+      "seed": 55120,
+      "prompt": "Dark fantasy game achievement emblem: a burst of crimson flame, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_CHUNK_SIX",
+      "target": "project-media/steam/achievements/ACH_CHUNK_SIX.png",
+      "seed": 55130,
+      "prompt": "Dark fantasy game achievement emblem: four stone tiles shattering apart, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_EXTREME_FEVER",
+      "target": "project-media/steam/achievements/ACH_EXTREME_FEVER.png",
+      "seed": 55140,
+      "prompt": "Dark fantasy game achievement emblem: a roaring pillar of white hot fire, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_NOTHING_HELD_IT",
+      "target": "project-media/steam/achievements/ACH_NOTHING_HELD_IT.png",
+      "seed": 55150,
+      "prompt": "Dark fantasy game achievement emblem: a broken iron shackle falling, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_CHAIN_REACTION",
+      "target": "project-media/steam/achievements/ACH_CHAIN_REACTION.png",
+      "seed": 55160,
+      "prompt": "Dark fantasy game achievement emblem: three rippling rings of golden light, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_RUNS_FIVE",
+      "target": "project-media/steam/achievements/ACH_RUNS_FIVE.png",
+      "seed": 55170,
+      "prompt": "Dark fantasy game achievement emblem: five small descending stone steps, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_RUNS_TEN",
+      "target": "project-media/steam/achievements/ACH_RUNS_TEN.png",
+      "seed": 55180,
+      "prompt": "Dark fantasy game achievement emblem: ten worn stone steps leading down, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_RUNS_TWENTY_FIVE",
+      "target": "project-media/steam/achievements/ACH_RUNS_TWENTY_FIVE.png",
+      "seed": 55190,
+      "prompt": "Dark fantasy game achievement emblem: a long stone staircase lit by torches, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_RUNS_FIFTY",
+      "target": "project-media/steam/achievements/ACH_RUNS_FIFTY.png",
+      "seed": 55200,
+      "prompt": "Dark fantasy game achievement emblem: a grand spiral staircase into a glowing depth, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_RUNS_HUNDRED",
+      "target": "project-media/steam/achievements/ACH_RUNS_HUNDRED.png",
+      "seed": 55210,
+      "prompt": "Dark fantasy game achievement emblem: an endless stair winding into starlight, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_REACH_KEEPER",
+      "target": "project-media/steam/achievements/ACH_REACH_KEEPER.png",
+      "seed": 55220,
+      "prompt": "Dark fantasy game achievement emblem: a heavy oak door with an iron keyhole and an amber lantern, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_REACH_CARTOGRAPHER",
+      "target": "project-media/steam/achievements/ACH_REACH_CARTOGRAPHER.png",
+      "seed": 55230,
+      "prompt": "Dark fantasy game achievement emblem: a brass orrery over a compass rose, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_REACH_WARDEN",
+      "target": "project-media/steam/achievements/ACH_REACH_WARDEN.png",
+      "seed": 55240,
+      "prompt": "Dark fantasy game achievement emblem: a colossal sealed iron gate with crimson cracks, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_WARDEN_FELLED",
+      "target": "project-media/steam/achievements/ACH_WARDEN_FELLED.png",
+      "seed": 55250,
+      "prompt": "Dark fantasy game achievement emblem: a broken iron crown on black stone, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_ENDLESS_ENTERED",
+      "target": "project-media/steam/achievements/ACH_ENDLESS_ENTERED.png",
+      "seed": 55260,
+      "prompt": "Dark fantasy game achievement emblem: an open gate onto an endless descending abyss, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_DEPTH_FIVE",
+      "target": "project-media/steam/achievements/ACH_DEPTH_FIVE.png",
+      "seed": 55270,
+      "prompt": "Dark fantasy game achievement emblem: a single glowing rung of a deep ladder, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_DEPTH_TEN",
+      "target": "project-media/steam/achievements/ACH_DEPTH_TEN.png",
+      "seed": 55280,
+      "prompt": "Dark fantasy game achievement emblem: a ladder of glowing rungs into darkness, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_DEPTH_FIFTEEN",
+      "target": "project-media/steam/achievements/ACH_DEPTH_FIFTEEN.png",
+      "seed": 55290,
+      "prompt": "Dark fantasy game achievement emblem: a deep ladder of crimson rungs, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    },
+    {
+      "id": "ACH_DEPTH_TWENTY",
+      "target": "project-media/steam/achievements/ACH_DEPTH_TWENTY.png",
+      "seed": 55300,
+      "prompt": "Dark fantasy game achievement emblem: the lowest rung of a ladder burning white at the bottom of the abyss, centred on a round dark stone medallion with a thin gold rim, warm rim light, deep shadows, painterly digital painting, a single clear emblem that fills the square image edge to edge, crisp silhouette readable at small size."
+    }
+  ]
+}

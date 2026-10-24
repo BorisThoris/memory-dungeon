@@ -1,6 +1,7 @@
 import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
 import { runBlueprints } from '../../shared/boss-reward-rules';
 import { blueprintLine, EVOLUTION_LINES } from '../copy/relicEvolutionCopy';
+import { EvolutionGlyph } from './EvolutionGlyph';
 import { useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { MUTATOR_CATALOG } from '../../shared/game-catalog';
@@ -151,11 +152,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
                 </li>)}
                 {(run.evolutions ?? []).map((id) => <li className={styles.chip} data-testid={`inventory-evolution-${id}`} key={id}>
-                    <strong>{EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id} · Evolved</strong>
+                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />{EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id} · Evolved</strong>
                     <span>{EVOLUTION_LINES[id as keyof typeof EVOLUTION_LINES] ?? ''}</span>
                 </li>)}
                 {runBlueprints(run).filter((id) => !(run.evolutions ?? []).includes(id)).map((id) => <li className={styles.chip} data-testid={`inventory-blueprint-${id}`} key={`blueprint-${id}`}>
-                    <strong>Blueprint: {EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id}</strong>
+                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />Blueprint: {EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id}</strong>
                     <span>{blueprintLine(id)}</span>
                 </li>)}
                 {CURIO_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>

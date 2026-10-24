@@ -135,6 +135,15 @@
     color: var(--margin-paper);
 }
 
+/* An evolution's mark, in the heading's ink. */
+.chipGlyph {
+    width: 1.05em;
+    height: 1.05em;
+    margin-right: 0.35em;
+    vertical-align: -0.15em;
+    color: var(--margin-gold, currentColor);
+}
+
 .chip span {
     font-size: 0.8rem;
     font-style: italic;

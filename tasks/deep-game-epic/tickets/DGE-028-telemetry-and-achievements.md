@@ -57,3 +57,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Not done: the Partner-site rows are entered by hand (out of the repository); icons for the nine.
 
 2026-10-23, the icons: Steam's achievement icons are uploaded on the Partner site with the rows (none of the first twenty-two has an icon file in the repository either), so the nine join the hand-entered Partner work rather than the repository.
+
+2026-10-24, the icons, made after all: the Partner site still takes them by hand, but they no longer have to be drawn by hand. `scripts/card-pipeline/steam-achievements.zimage.manifest.json` paints one emblem per achievement (Z-Image-Turbo, on this PC's 3090), and `scripts/card-pipeline/steam-achievement-icons.py` cuts each to Steam's two 64x64 JPGs (achieved, and a dimmed grey unachieved) in `project-media/steam/achievements/`, with the Partner rows printed beside them in `achievements.md`. What is left is the typing and the upload on the Partner site.

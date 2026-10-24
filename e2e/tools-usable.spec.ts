@@ -265,6 +265,9 @@ test.describe('Every tool can be used from the dock', () => {
         await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.evolutions ?? []), { timeout: 30_000 }).toContain('lantern_of_recall');
         await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openInventoryFromPlaying());
         await expect(page.getByTestId('inventory-evolution-lantern_of_recall')).toBeVisible({ timeout: 30_000 });
+        // The evolution wears its mark beside its name.
+        await expect(page.getByTestId('inventory-evolution-lantern_of_recall').locator('svg[data-evolution-glyph="lantern_of_recall"]')).toBeVisible();
+        await page.getByTestId('inventory-evolution-lantern_of_recall').screenshot({ path: 'test-results/tools-usable/evolution-chip.png' });
     });
 
     test('hold: press it, match a pair, and Release breaks what was held', async ({ page }) => {
