@@ -4101,8 +4101,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 12342,
-      "sha256": "10a3f0ca6e1aef29031a2b5afe0c0c73fe539f9f6e83ca70145a09de43dd347a"
+      "bytes": 15187,
+      "sha256": "71bbea65d974a998777f321f7b5139fe3a4ae0364942bf17469ee85b3fc8a2c7"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4215,8 +4215,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 25802,
-      "sha256": "8f8c0429d73004b16bd8d18b7c5d0993ad8936d085769ab0020e0257cb1f442d"
+      "bytes": 26959,
+      "sha256": "29988fc366511383d541b1bea9764544847adced6eb0d69dd59ef2abb41ab361"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -17835,8 +17835,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 25473,
-      "sha256": "ab7985dafd8bb21c0021d470b4aaef4da22af0a8ecb5fea94ddf646bfa2877f8"
+      "bytes": 26104,
+      "sha256": "13c644424f09b501f6b22651e1e0f7c4734fbcc9f7ac9352f56fa160c5220818"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17859,8 +17859,8 @@
     {
       "path": "tasks/deep-game-epic/README.md",
       "category": "documentation",
-      "bytes": 8437,
-      "sha256": "9e37a45f057afa99b7cd8c320a0f7680084b8679dc7f68d4ab1ca333f63cd5fa"
+      "bytes": 8572,
+      "sha256": "01654d973162fa586b4c276135ab4cbd7ecffca219599a0c9729058c107ad90b"
     },
     {
       "path": "tasks/deep-game-epic/TICKET_TEMPLATE.md",
@@ -17949,8 +17949,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
       "category": "other",
-      "bytes": 4821,
-      "sha256": "b865796b6a8686b1fd916980a3127c90de5caad4efb4f7f872c4247ad358ae2f"
+      "bytes": 5150,
+      "sha256": "2e303ab9513ff0c3b26874d1ce74f6f55aaee4061ece50f446b0ed0ae3bb5f10"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
@@ -18003,14 +18003,14 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-023-warden-complete.md",
       "category": "other",
-      "bytes": 3547,
-      "sha256": "a2bf49962f1be7c13f417ddded04f28dfb8fa928fa84ad518d29d5310da3e33c"
+      "bytes": 4157,
+      "sha256": "989ed19a5182a448db2081425d1e1a6707d8089c40cd9b0bdd9da9ee15ab61bd"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-024-feat-unlock-tree.md",
       "category": "other",
-      "bytes": 4380,
-      "sha256": "f55c2cf9c792ecedd82d0f88caad63a3374abf29cc6ccf7dff1196f505cb069b"
+      "bytes": 4660,
+      "sha256": "97b10897e25568dbd72ebdecdffa57b692351a311192227240e0dabf7ca15299"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-025-depths-ladder.md",
@@ -18021,8 +18021,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-026-boss-reward-tier-gating.md",
       "category": "other",
-      "bytes": 3259,
-      "sha256": "d6ccace0169505364618b8df3039a113bb180853807842daa70e87bf69f4607f"
+      "bytes": 3481,
+      "sha256": "4b9d9776682e8865ba0584beb37a7efffd57b216537c202b56143a3821361da7"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-027-hall-soak-and-accountability.md",
