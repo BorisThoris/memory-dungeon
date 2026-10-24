@@ -20,8 +20,9 @@ const readRun = (page: Page) =>
             status: run?.status ?? null,
             tiles: run?.board?.tiles.length ?? 0,
             /* A match that clears the floor moves the run on and resets the board's count, so
-               progress is floors first, then pairs. */
-            progress: (run?.board?.level ?? 0) * 1000 + (run?.board?.matchedPairs ?? 0)
+               progress is floors first, then pairs. The complete Warden deals an emptied board again
+               on the same floor, which resets the count too, so each deal counts as a floor's worth. */
+            progress: (run?.board?.level ?? 0) * 1000 + (run?.wardenDealsAgainThisFloor ?? 0) * 100 + (run?.board?.matchedPairs ?? 0)
         };
     });
 
