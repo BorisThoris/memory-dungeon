@@ -95,6 +95,7 @@ Commands are run from the repository root. `soak` means `yarn soak`; the deep so
 | DGE-030 | Asset streaming holds | Met | `e2e/asset-streaming.spec.ts` |
 | DGE-030 | Each boss room has drift, mist, light and one event | Met | Boss room and life tests |
 | DGE-030 | Reduced motion has a still for every new motion | Met | Reduced-motion tests (seals, seeds, rise, unmask) |
+| DGE-030 | The cues are heard and nothing clips | Met | `e2e/deep-cue-levels.spec.ts`: each cue rendered offline from the game's code and held to a band against a match (2026-10-24; four were raised to it) |
 | DGE-031 | A save from main loads and keeps the new fields | Met | Schema 10 migration round trip |
 | DGE-031 | Save-field policy; cloud config | Met | `audit:save-field-policy`; `steam:cloud-config` |
 | DGE-032 | All four bars are gates | Met | `gate:warden-reach`, `gate:pop-by-act`, `gate:goldilocks`, the curve gate (and `gate:difficulty-curve-endless`) |
@@ -108,7 +109,6 @@ The CLAUDE.md checklist and its gates hold any new mechanic to the same bar.
 
 ## Not in the repository
 
-- The Steam Partner-site entry: type the rows and upload the icons.
-- The owner's ears on the cues.
+- The Steam Partner-site entry: type the rows and upload the icons. It needs the owner's Steamworks sign-in; everything it takes is in `project-media/steam/achievements/`.
 
-Both are by hand.
+The cues' levels are measured and held by a test (DGE-030); whether they please the ear stays the owner's to judge.

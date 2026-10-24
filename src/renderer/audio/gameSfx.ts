@@ -1366,7 +1366,10 @@ export const deepGameCues = (before: RunState | null | undefined, after: RunStat
 };
 
 /** The Hold's release: a swell, then a run of bells up the cascade's own scale, one per doubling held. */
-const playHoldReleaseSfx = (gain: number, held: number): void => {
+const playHoldReleaseSfx = (rawGain: number, held: number): void => {
+    // Measured offline (2026-10-24): at unity it sat 8 dB under a plain match, the payoff quieter than
+    // the matches it was saved from. This lifts it level with a match.
+    const gain = rawGain * HOLD_RELEASE_LIFT;
     const notes = Math.min(CHUNK_BREAK_MAX_NOTES, 2 + Math.floor(Math.log2(Math.max(1, held))));
     playNoise({ durationSec: 0.5, gain: gain * 0.35, filter: 'lowpass', from: 200, peak: 2600, to: 900, attackSec: 0.35 });
     playTone({ frequency: 110, frequencyEnd: 220, durationSec: 0.5, gain: gain * 0.3, type: 'triangle', category: 'power' });
@@ -1378,6 +1381,13 @@ const playHoldReleaseSfx = (gain: number, held: number): void => {
     }
 };
 
+/**
+ * The deep cues' levels, set by measurement (2026-10-24): each rendered offline and its loudest 50 ms
+ * compared with a match, a flip and a shuffle (-22 to -24 dB at full volume). The boss cues sit in that
+ * band; the cues that come every few turns (a Sleeper, a mask, a Wanderer) sit 8 to 14 dB under it.
+ */
+const HOLD_RELEASE_LIFT = 2.4;
+
 const DEEP_GAME_CUE_SOUNDS: Readonly<Record<Exclude<DeepGameCue, 'hold_release'>, (gain: number) => void>> = {
     // The Warden deals again: a low gong under a riffle of cards.
     warden_redeal: (gain) => {
@@ -1387,13 +1397,13 @@ const DEEP_GAME_CUE_SOUNDS: Readonly<Record<Exclude<DeepGameCue, 'hold_release'>
     },
     // The Keeper swaps its rooms: stone dragged over stone.
     keeper_swap: (gain) => {
-        playNoise({ durationSec: 0.7, gain: gain * 0.45, filter: 'lowpass', from: 180, peak: 700, to: 220, attackSec: 0.08 });
-        playTone({ frequency: 55, frequencyEnd: 49, durationSec: 0.7, gain: gain * 0.25, type: 'triangle', category: 'realm' });
+        playNoise({ durationSec: 0.7, gain: gain * 0.8, filter: 'lowpass', from: 180, peak: 700, to: 220, attackSec: 0.08 });
+        playTone({ frequency: 55, frequencyEnd: 49, durationSec: 0.7, gain: gain * 0.45, type: 'triangle', category: 'realm' });
     },
     // The Cartographer turns its lower deck: a heavy page.
     cartographer_turn: (gain) => {
-        playNoise({ durationSec: 0.35, gain: gain * 0.4, filter: 'bandpass', from: 900, peak: 3200, to: 1400, attackSec: 0.02 });
-        scheduleCue(() => playTone({ frequency: 220, frequencyEnd: 165, durationSec: 0.25, gain: gain * 0.18, type: 'triangle', category: 'realm' }), 200);
+        playNoise({ durationSec: 0.35, gain: gain * 1.1, filter: 'bandpass', from: 900, peak: 3200, to: 1400, attackSec: 0.02 });
+        scheduleCue(() => playTone({ frequency: 220, frequencyEnd: 165, durationSec: 0.25, gain: gain * 0.5, type: 'triangle', category: 'realm' }), 200);
     },
     // A ring of the Spiral seals: a falling thud.
     spiral_seal: (gain) => {
@@ -1402,16 +1412,17 @@ const DEEP_GAME_CUE_SOUNDS: Readonly<Record<Exclude<DeepGameCue, 'hold_release'>
     },
     // A Sleeper wakes: a breath drawn in, and one low bell.
     sleeper_wake: (gain) => {
-        playNoise({ durationSec: 0.6, gain: gain * 0.28, filter: 'bandpass', from: 400, peak: 1300, to: 700, attackSec: 0.45 });
-        scheduleCue(() => playTone({ frequency: 440, durationSec: 0.5, gain: gain * 0.2, type: 'sine', category: 'realm' }), 480);
+        playNoise({ durationSec: 0.6, gain: gain * 0.42, filter: 'bandpass', from: 400, peak: 1300, to: 700, attackSec: 0.45 });
+        scheduleCue(() => playTone({ frequency: 440, durationSec: 0.5, gain: gain * 0.3, type: 'sine', category: 'realm' }), 480);
     },
     // A mask drops: a small glass tick.
     mask_drop: (gain) => {
-        playTone({ frequency: 2637, frequencyEnd: 1976, durationSec: 0.12, gain: gain * 0.16, type: 'sine', category: 'realm' });
+        playTone({ frequency: 2637, frequencyEnd: 1976, durationSec: 0.12, gain: gain * 0.26, type: 'sine', category: 'realm' });
     },
-    // A Wanderer steps: one soft footfall, quiet, since it comes every third turn.
+    // A Wanderer steps: one soft footfall, quiet, since it comes every third turn (a 120 Hz floor was
+    // under hearing at -52 dB: the step keeps some of its scuff now).
     wanderer_step: (gain) => {
-        playNoise({ durationSec: 0.12, gain: gain * 0.2, filter: 'lowpass', from: 600, to: 120, attackSec: 0.005 });
+        playNoise({ durationSec: 0.14, gain: gain * 0.6, filter: 'lowpass', from: 1400, to: 220, attackSec: 0.005 });
     },
     // The Dread climbs a tier: a low fifth that swells and holds.
     dread_tier: (gain) => {
