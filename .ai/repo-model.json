@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3378,
+    "trackedFileCount": 3379,
     "codeFileCount": 1305,
     "exportedSymbolCount": 4225,
     "contentItemCount": 16,
@@ -3949,6 +3949,12 @@
       "sha256": "b4442a32bba51ba43f1d0dfa3366aa6e58b0ff20c7146ccb7546635063d80cc9"
     },
     {
+      "path": "e2e/deep-cue-levels.spec.ts",
+      "category": "test",
+      "bytes": 6883,
+      "sha256": "7331a850c9c9ef913544ac87b346a597e2ecaf4a4b244f6787f8cd93843b394b"
+    },
+    {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
       "bytes": 6610,
@@ -4605,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71617,
-      "sha256": "c715ffb0d51d603fde8048df34be745dfeba5b6f9f2975f7cafc8e2fe5c506e7"
+      "bytes": 71750,
+      "sha256": "07b722b29fd9d253a1d07d1dfb918f79e252892aa162d014ea52d9d5ddc3f525"
     },
     {
       "path": "public/site.webmanifest",
@@ -5212,7 +5218,7 @@
       "path": "scripts/card-pipeline/steam-achievements.zimage.manifest.json",
       "category": "script",
       "bytes": 14732,
-      "sha256": "68b39516d7b10ac5c82d2f79e98b0c7687fd53d290c2b290349fbe6e2765bfef"
+      "sha256": "3cc498e6513ba58940124358ba0eb8aa8b26234814427414d4f72e684c3cd426"
     },
     {
       "path": "scripts/card-pipeline/trim-png-bounding-box.mjs",
@@ -10179,8 +10185,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 62793,
-      "sha256": "352c233fe2c956c5bfe67117f9336264c82339cfa72824c5f14d4aabab9c7ebf"
+      "bytes": 64906,
+      "sha256": "73e57a5442babc1be0bd331e4fed8d6a4844c37c0a8ac7ad1ea23328676d8777"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -17859,8 +17865,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 26907,
-      "sha256": "dff46db764e12442c881f66fc321dcb7701e636fb5b6c84b8d29458ce4024e2e"
+      "bytes": 27245,
+      "sha256": "a708740e9389387d6f4cbe1786b5ec1705fb9a7c4de43df8b3d0800a2d552444"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17883,8 +17889,8 @@
     {
       "path": "tasks/deep-game-epic/07-completion-check.md",
       "category": "other",
-      "bytes": 9999,
-      "sha256": "692fc7519b50a9f9424dc4b461040494eefc3cfe0e09a0bbeaba2664c3b0cbce"
+      "bytes": 10378,
+      "sha256": "3618d150eadcec05722be980c2a8c29c719e3f2d05425fbb26066a091373c334"
     },
     {
       "path": "tasks/deep-game-epic/README.md",
@@ -18075,8 +18081,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-030-art-audio-and-preload.md",
       "category": "other",
-      "bytes": 6949,
-      "sha256": "5c1b2455d000ca21e0dca67800faf1e3c3e471ae754308aacc1059477f53f571"
+      "bytes": 7657,
+      "sha256": "d5700742d44eaf51f103a5466d294a77bf80aaa12206dfec0558e55c57f411a6"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-031-save-schema-and-migration.md",
@@ -21747,7 +21753,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1440,
+      "lineCount": 1451,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -47505,8 +47511,8 @@
       "name": "playDeepGameSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1425,
-      "endLine": 1426
+      "line": 1436,
+      "endLine": 1437
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
