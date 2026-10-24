@@ -4173,8 +4173,8 @@
     {
       "path": "e2e/test-hall.spec.ts",
       "category": "test",
-      "bytes": 10563,
-      "sha256": "d3c8eaa14d2333de88ee7e57906feb0f945143ccceb771cd5a60a09818c610f4"
+      "bytes": 10760,
+      "sha256": "8ef0ce08e80e00495c0f4eff65104f3554db28c9a52274bfe59f428218f50343"
     },
     {
       "path": "e2e/tile-board-raycast.spec.ts",
