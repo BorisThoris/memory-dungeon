@@ -55,3 +55,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - UI: `RealmTravel` is mounted again, only for these doors: titled "Before the boss", each door with a Boss reward line (`bossRewardCopy.ts`); the clear beat says what the boss gave.
 - Soak: the door invariant allows the boss doors; counters for boss doors and blueprints (5 x 200: 722 boss doors, 230 blueprints, 0 violations), invariant that blueprints drop in order and never twice. Three hall rooms. `gate:warden-reach` still green (56/100).
 - Not done: the blueprints do nothing until DGE-014; save-level unlocks (Dead Cells keeps blueprints across runs) are not built - they stay on the run, as DGE-014's notes ask.
+
+2026-10-24: the blueprints work since DGE-014 (six evolutions, all live). Blueprints kept across runs (Dead Cells' save-level unlocks) stay out, as DGE-014's notes ask: a blueprint is the run's reward from its boss door.

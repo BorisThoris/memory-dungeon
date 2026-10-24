@@ -1,7 +1,7 @@
 # Deep Game Epic: the Descent
 
 ## Status
-Active planning pack. Task-writing pass only: no runtime code, schema or source API changed by this pack. Written 2026-10-19.
+Delivered (2026-10-24): every ticket from DGE-001 to DGE-032 is built, tested and on main, each with its handoff notes and a ledger row; DGE-027 stays open as the standing coverage ticket while the game adds mechanics. Written as a planning pack on 2026-10-19.
 
 ## Purpose
 This folder turns the deep game plan into tickets that future sessions can pick up one at a time. It answers the owner's finding that the late game does not change: floor 40 plays like floor 4 with more cards, and adding items has not created the pull to go deeper.
