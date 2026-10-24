@@ -4611,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71750,
-      "sha256": "07b722b29fd9d253a1d07d1dfb918f79e252892aa162d014ea52d9d5ddc3f525"
+      "bytes": 72009,
+      "sha256": "a1ece02681bc517319b93be85acef8cf04962e9f58348ca69e203534707108c5"
     },
     {
       "path": "public/site.webmanifest",
@@ -4623,14 +4623,14 @@
     {
       "path": "public/trailers/reel.jpg",
       "category": "asset",
-      "bytes": 84214,
-      "sha256": "45c179b38f0e54c4d8d5ff5573e20180c71718dff31f33fa322a9edf3e07cfa4"
+      "bytes": 79947,
+      "sha256": "2734fd02f45d3e3f24d538cf8078e3ea07658ef7af7d4a1013158e36025cbbe3"
     },
     {
       "path": "public/trailers/reel.mp4",
       "category": "other",
-      "bytes": 6540821,
-      "sha256": "ff8a70bdb39c4d9e31088f3ab9f4ea6b7b46089fbfe681d0be927aa7098823ef"
+      "bytes": 7433720,
+      "sha256": "aa226b2be3021854007f0bf9a8a9e87294d9c54eb4ac1ca556eb00ae9017868b"
     },
     {
       "path": "public/wip-assets/svg/board-a-card-states.svg",
@@ -5566,7 +5566,7 @@
       "path": "scripts/reel-pipeline/frozen.sha256",
       "category": "script",
       "bytes": 2033,
-      "sha256": "b7198968ecf6c2208f35351268ce737ea60b9838d46cb3148c157268e6b15813"
+      "sha256": "955e50c7d4992150f0daa82fa25f2b6cc5df59fe7f2d0ff868d73d4475616436"
     },
     {
       "path": "scripts/reel-pipeline/fx_stem60.py",
