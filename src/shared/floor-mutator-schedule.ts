@@ -9,6 +9,7 @@ import type {
 } from './contracts';
 import { createMulberry32, hashStringToSeed } from './rng';
 import { runNonNegativeIntegerWithFallback } from './run-number-guards';
+import { signatureCyclePosition } from './run-signature-rules';
 
 /**
  * Rules version that introduced authored endless chapters with featured objectives.
@@ -820,7 +821,13 @@ export const pickFloorScheduleEntry = (
             : null;
     // The Spiral (DGE-021, `spiral-rules.ts`): from rules 85, two Abyss floors are survived, not cleared.
     const spiral = !actBoss && rulesVersion >= 85 && SPIRAL_FLOORS.includes(descentFloor) ? SPIRAL_ENTRY(idx + 1) : null;
-    const legacyBase = actBoss ?? spiral ?? rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    // A run's own Gate (`run-signature-rules.ts`, rules 90): the cycle's rooms in the run's order, each
+    // keeping its own floor's place in the act.
+    const room = ENDLESS_FLOOR_CYCLE[signatureCyclePosition(runSeed, rulesVersion, cycleIndex, idx + 1) - 1];
+    const cycleEntry = ENDLESS_FLOOR_CYCLE[idx] && room
+        ? { ...ENDLESS_FLOOR_CYCLE[idx]!, floorArchetypeId: room.floorArchetypeId, featuredObjectiveId: room.featuredObjectiveId, mutators: room.mutators, floorTag: room.floorTag }
+        : ENDLESS_FLOOR_CYCLE[idx];
+    const legacyBase = actBoss ?? spiral ?? rotated ?? cycleEntry ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const goal = rulesVersion >= 64 && legacyBase.floorArchetypeId === 'anchor_chain' ? 'amplified_reaction'
         : rulesVersion >= 64 && legacyBase.floorArchetypeId === 'trap_hall' ? 'calm_reaction' : null;
     const base: FloorScheduleEntry = goal ? { ...legacyBase, featuredObjectiveId: goal } : legacyBase;

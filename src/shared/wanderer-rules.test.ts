@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type RunState } from './contracts';
 import { buildBoard } from './board-generation';
+import { gateOmen } from './run-signature-rules';
 import { inspectBoardFairness } from './board-inspection';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { playerVisibleTile } from './player-visible-board';
@@ -40,9 +41,12 @@ const orthogonal = (a: number, b: number, columns: number): boolean =>
     (Math.abs(a - b) === columns) || (Math.abs(a - b) === 1 && Math.floor(a / columns) === Math.floor(b / columns));
 
 describe('the Wanderers (DGE-009)', () => {
-    it('are two pairs from the Living Dungeon, three from the Deep, none before', () => {
+    it('are two pairs from the Living Dungeon, three from the Deep, none before but a run’s omen', () => {
         expect(wandererPairsForFloor(12)).toBe(0);
-        expect(wandererKeys(dealt(12))).toEqual([]);
+        // Seed 4242's omen is the Wanderer (`run-signature-rules.ts`): one pair walks its Gate from floor 6.
+        expect(gateOmen(SEED, GAME_RULES_VERSION)).toBe('wanderer');
+        expect(wandererKeys(dealt(5))).toEqual([]);
+        expect(wandererKeys(dealt(12))).toHaveLength(1);
         expect(wandererKeys(dealt(13))).toHaveLength(2);
         expect(wandererKeys(dealt(25))).toHaveLength(3);
         // Both halves of a Wanderer pair are Wanderers, and the deal is the seed's.

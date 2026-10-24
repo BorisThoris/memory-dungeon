@@ -5,6 +5,7 @@ import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { gateOmenCount } from './run-signature-rules';
 
 /**
  * Masks (DGE-016, rules 80): backs that lie until first flipped.
@@ -49,9 +50,11 @@ export const dealMasks = (
     { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
 ): BoardState => {
     const scheduled = maskCountFor(board, { rulesVersion, depth });
-    if (scheduled === 0) return board;
+    // The run's omen (`run-signature-rules.ts`): one mask on a Gate floor that deals none.
+    const omen = gateOmenCount('mask', board, { runSeed, rulesVersion, scheduled, minPairs: MASK_MIN_PAIRS });
+    if (scheduled === 0 && omen === 0) return board;
     // `extra`: what the Dread bought on top (`dread-composition-rules.ts`).
-    const dealt = scheduled + extra;
+    const dealt = scheduled + omen + extra;
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         if (isSingletonUtilityPairKey(tile.pairKey)) continue;

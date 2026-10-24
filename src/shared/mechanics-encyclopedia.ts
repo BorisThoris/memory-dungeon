@@ -24,6 +24,7 @@ import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './d
 import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_METER_SEGMENTS } from './hold-rules';
 import { VERB_STAIRCASE_FIRST_FLOORS } from './verb-staircase-rules';
+import { GATE_OMEN_FROM_FLOOR } from './run-signature-rules';
 import { CARVE_BURST_EXTRA_PAIRS, CARVE_LINKS } from './carve-rules';
 import { ECHO_CHAMBER_TURNS, REPRISE_TURNS } from './reprise-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
@@ -39,7 +40,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 120 as const;
+export const ENCYCLOPEDIA_VERSION = 121 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -544,7 +545,8 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
             `The run is a **Descent** of ${DESCENT_ACTS.length} acts to floor ${DESCENT_FLOOR_COUNT}: ` +
             DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
             `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
-            `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won.`
+            `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won. ` +
+            `No two runs walk it the same way: past each act's first three floors the rooms come in **the run's own order**, and every run has an **omen**, a Wanderer pair or a mask on its Gate floors from floor ${GATE_OMEN_FROM_FLOOR}, the deep met early.`
     },
     {
         id: 'sys_cartographer',

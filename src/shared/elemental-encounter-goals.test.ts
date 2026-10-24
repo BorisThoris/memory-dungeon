@@ -9,11 +9,14 @@ import { describeRunShareKey, encodeRunShareKey, parseRunShareKey } from './run-
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { featuredRecipePairKeys } from './secondary-objective-rules';
-import { REALM_IDS } from './contracts';
+import { GAME_RULES_VERSION, REALM_IDS } from './contracts';
 
 describe('current elemental encounters and seeded camp recipes', () => {
     it('plays the guaranteed recipe through generated encounters without a carried burst consuming it', () => {
-        for (const level of [5, 7]) for (const seed of [1, 17, 42001]) for (const realmId of REALM_IDS) {
+        // From rules 90 the amplified room's floor is the run's own (`run-signature-rules.ts`): find it.
+        const goalFloor = (seed: number, goal: string): number => [4, 5, 6, 7, 8, 10, 11, 12].find((level) => pickFloorScheduleEntry(seed, GAME_RULES_VERSION, level, 'endless').featuredObjectiveId === goal)!;
+        for (const goal of ['amplified_reaction', 'calm_reaction']) for (const seed of [1, 17, 42001]) for (const realmId of REALM_IDS) {
+            const level = goalFloor(seed, goal);
             const base = createNewRun(0, { runSeed: seed });
             let run = finishMemorizePhase(advanceToNextLevel({ ...base, status: 'levelComplete',
                 board: { ...base.board!, level: level - 1 },
@@ -30,7 +33,7 @@ describe('current elemental encounters and seeded camp recipes', () => {
                 const ordered = run.stickyBlockIndex != null && run.board!.tiles[run.stickyBlockIndex]?.id === pair[0]!.id ? [...pair].reverse() : pair;
                 run = resolveBoardTurn(flipTile(flipTile(run, ordered[0]!.id), ordered[1]!.id));
             }
-            expect(level === 5 ? run.amplifiedGoalThisFloor : run.calmGoalThisFloor).toBe(true);
+            expect(goal === 'amplified_reaction' ? run.amplifiedGoalThisFloor : run.calmGoalThisFloor).toBe(true);
         }
     });
     it('supplies every featured recipe across seeds and late cycles, even with deep attunement', () => {

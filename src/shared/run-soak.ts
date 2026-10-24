@@ -1,13 +1,14 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
-import { maskCountFor } from './mask-rules';
+import { MASK_MIN_PAIRS, maskCountFor } from './mask-rules';
+import { gateOmenCount } from './run-signature-rules';
 import { sleeperCountFor } from './sleeper-rules';
 import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
 import { isCartographerFloor } from './cartographer-rules';
 import { isKeeperFloor } from './keeper-rules';
 import { canCarve, carve, CARVE_DIRECTIONS, carveLinksFor } from './carve-rules';
-import { isWandererStepTurn, wandererCountFor, wandererFootprintCells } from './wanderer-rules';
+import { isWandererStepTurn, WANDERER_MIN_PAIRS, wandererCountFor, wandererFootprintCells } from './wanderer-rules';
 import { BLUEPRINT_ORDER, offersBossDoors, runBlueprints } from './boss-reward-rules';
 import { EVOLUTIONS, footprintTurns, hasEvolution } from './relic-evolution-rules';
 import { foldDoorOpenFor, foldRoomOf } from './board-fold-rules';
@@ -647,8 +648,11 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (told.sleeper !== expected.sleeper || told.mask !== expected.mask || told.wanderer !== expected.wanderer) return `told ${JSON.stringify(told)}, the Dread buys ${JSON.stringify(expected)}`;
         const pairs = (flag: 'wanderer' | 'sleeper') => new Set(board.tiles.filter((tile) => tile[flag]).map((tile) => tile.pairKey)).size;
         const masks = board.tiles.filter((tile) => tile.mask != null).length;
-        if (pairs('wanderer') > scheduled.wanderer + told.wanderer) return `${pairs('wanderer')} Wanderer pairs, past ${scheduled.wanderer} + ${told.wanderer}`;
-        if (masks > scheduled.mask + told.mask && !hasEvolution(run, 'unmasking_glass')) return `${masks} masks, past ${scheduled.mask} + ${told.mask}`;
+        // The run's omen (`run-signature-rules.ts`) adds one where the schedule deals none; the Dread never buys on it.
+        const omen = (family: 'wanderer' | 'mask', minPairs: number) => gateOmenCount(family, board, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion, scheduled: scheduled[family], minPairs });
+        const allowed = { wanderer: scheduled.wanderer + omen('wanderer', WANDERER_MIN_PAIRS), mask: scheduled.mask + omen('mask', MASK_MIN_PAIRS) };
+        if (pairs('wanderer') > allowed.wanderer + told.wanderer) return `${pairs('wanderer')} Wanderer pairs, past ${allowed.wanderer} + ${told.wanderer}`;
+        if (masks > allowed.mask + told.mask && !hasEvolution(run, 'unmasking_glass')) return `${masks} masks, past ${allowed.mask} + ${told.mask}`;
         return null;
     },
     'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {

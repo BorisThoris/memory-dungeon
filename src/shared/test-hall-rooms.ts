@@ -42,7 +42,8 @@ import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { verbArrivingOn } from './verb-staircase-rules';
-import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
+import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
+import { gateOmenToldOn } from './run-signature-rules';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
 import { BLUEPRINT_ORDER, BOSS_WILD_GOLD } from './boss-reward-rules';
@@ -114,6 +115,7 @@ export type TestHallRoomId =
     | 'wanderers-step'
     | 'hold-release'
     | 'verb-staircase-hold'
+    | 'gate-omen'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -1397,6 +1399,28 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 board: { fold: FOLD_HALL }
             }),
         script: [{ step: { do: 'match', pairKey: 'a' }, says: 'the pop reaches the doorway and stops at the wall', expect: expectAll(takenFrom(['k2']), leftStanding(['c', 'd', 'h']), finishable) }]
+    },
+    {
+        id: 'gate-omen',
+        title: 'The omen walks the Gate',
+        mechanic: 'From rules 90 every run has an omen: a Wanderer pair or a mask on each Gate floor from 6 that can hold one, the deep family met early. The hall’s seed draws the Wanderer.',
+        graphMechanicIds: ['board.wanderers'],
+        seedPinned: 'The omen is drawn from the run seed: the hall seed draws the Wanderer, and another seed may draw the mask.',
+        tryThis: 'Floor 6 of this run: one pair is a Wanderer, and the crown names the omen. Match a plain pair; the board keeps a way to finish.',
+        build: () => {
+            const run = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 6, misses: 4 });
+            return { ...run, board: dealWanderers(run.board!, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion }) };
+        },
+        script: [
+            {
+                step: { do: 'match', pairKey: 'h' },
+                says: 'one Wanderer pair on floor 6, and the crown tells the omen',
+                expect: (r) => {
+                    const wanderers = new Set(r.board!.tiles.filter((t) => t.wanderer).map((t) => t.pairKey)).size;
+                    return wanderers === 1 && gateOmenToldOn(r) === 'wanderer' && finishable(r) === null ? null : `wanderers ${wanderers}, told ${String(gateOmenToldOn(r))}`;
+                }
+            }
+        ]
     },
     {
         id: 'wanderers-step',

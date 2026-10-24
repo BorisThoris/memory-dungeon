@@ -42,8 +42,9 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
             };
         }
     }
-    // A Spiral ended by its last ring: a Sleeper still asleep goes with the floor, as at par (`spiral-rules.ts`).
-    if (spiral && (run.sleepingPairs ?? []).length > 0) run = { ...run, sleepingPairs: [] };
+    // A Spiral ended by its last ring is survived, as at par (`spiral-rules.ts`): a Hold's stack and a Sleeper
+    // still asleep go with the floor. A turn that emptied the board used to end it as a plain clear, unsurvived.
+    if (spiral) run = { ...run, spiralSurvived: true, holding: false, heldSeedIds: [], sleepingPairs: [] };
     // Sleepers (`sleeper-rules.ts`): a board cleared with a pair asleep wakes it, and the floor goes on.
     if (!spiral && (run.runRulesVersion ?? 0) >= SLEEPER_RULES_FROM && (run.sleepingPairs ?? []).length > 0) {
         const woken = wakeAllSleepers(run, clearedBoard);

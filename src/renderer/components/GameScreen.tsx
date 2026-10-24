@@ -3,7 +3,8 @@ import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
-import { VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { GATE_OMEN_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { gateOmenToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
@@ -1676,8 +1677,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const dreadBought = run.dreadBought ?? null;
     // The verb staircase (`verb-staircase-rules.ts`): the verb this floor brings, told until the floor ends.
     const verbArriving = verbArrivingOn(run);
+    // A run's omen (`run-signature-rules.ts`): the deep family that walks this run's Gate, told the floor it first shows.
+    const omenTold = gateOmenToldOn(run);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omenTold != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2263,6 +2266,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 {verbArriving ? (
                                     <p className={styles.wardenRules} data-testid="verb-arrival" data-verb={verbArriving}>
                                         <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
+                                    </p>
+                                ) : null}
+                                {omenTold ? (
+                                    <p className={styles.wardenRules} data-testid="gate-omen" data-omen={omenTold}>
+                                        <span className={styles.wardenRulesName}>{GATE_OMEN_COPY.kicker}</span> {GATE_OMEN_COPY.line(omenTold)}
                                     </p>
                                 ) : null}
                                 {dreadBought ? (

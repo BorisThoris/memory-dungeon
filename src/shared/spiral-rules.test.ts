@@ -81,7 +81,12 @@ describe('the Spiral (DGE-021)', () => {
     });
 
     it('a Spiral played through the real turns always ends, by par', () => {
-        let run = spiralRun();
+        for (const seed of Array.from({ length: 30 }, (_, i) => i + 1).concat(7777)) playsToTheEnd(spiralRun(spiralBoard(seed), { runSeed: seed }));
+    });
+
+    // A turn that empties the board ends the Spiral by its last ring at some seeds: survived all the same (2026-10-24).
+    const playsToTheEnd = (start: RunState): void => {
+        let run = start;
         const par = parTurnsForRun(run);
         for (let step = 0; step < 400 && run.status === 'playing'; step += 1) {
             // A turn left open (a trait refused its second card) is finished with the open card's twin.
@@ -101,8 +106,8 @@ describe('the Spiral (DGE-021)', () => {
             if (!next) break;
             run = next;
         }
-        expect(run.status).toBe('levelComplete');
+        expect(run.status, String(run.runSeed)).toBe('levelComplete');
         expect(run.turnsThisFloor).toBeLessThanOrEqual(par);
-        expect(run.spiralSurvived).toBe(true);
-    });
+        expect(run.spiralSurvived, String(run.runSeed)).toBe(true);
+    };
 });
