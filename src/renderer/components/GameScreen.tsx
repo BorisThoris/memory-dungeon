@@ -3,6 +3,8 @@ import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
+import { VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
 import { REPRISE_TOOL_COPY } from '../copy/repriseToolCopy';
@@ -1672,8 +1674,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const depthShown = depthRung(run);
     // The Dread spends (`dread-composition-rules.ts`): what it bought on this floor.
     const dreadBought = run.dreadBought ?? null;
+    // The verb staircase (`verb-staircase-rules.ts`): the verb this floor brings, told until the floor ends.
+    const verbArriving = verbArrivingOn(run);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2254,6 +2258,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 {depthShown ? (
                                     <p className={styles.wardenRules} data-testid="depth-rule">
                                         <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.depthKicker(depthShown.depth)}</span> {depthShown.line}
+                                    </p>
+                                ) : null}
+                                {verbArriving ? (
+                                    <p className={styles.wardenRules} data-testid="verb-arrival" data-verb={verbArriving}>
+                                        <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
                                     </p>
                                 ) : null}
                                 {dreadBought ? (

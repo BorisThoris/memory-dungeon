@@ -1,9 +1,10 @@
 import type { RepriseTurn, RunState } from './contracts';
 import { hasEvolution } from './relic-evolution-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { verbReached } from './verb-staircase-rules';
 
 /**
- * Reprise (DGE-019, rules 83): the Abyss's verb, a competence reward.
+ * Reprise (DGE-019, rules 83): a competence reward, from floor 11 since rules 89 (`verb-staircase-rules.ts`; the Abyss's before).
  *
  * From floor 41, once a floor and between turns, Reprise pays the floor's last three turns again, in
  * the order they were played: a match scores what it scored and adds its link to the chain; a miss
@@ -17,7 +18,6 @@ import { runNonNegativeInteger } from './run-number-guards';
  * import graph (the bank imports the evolutions, which this reads).
  */
 export const REPRISE_FROM = 83;
-export const REPRISE_FIRST_FLOOR = 41;
 export const REPRISE_TURNS = 3;
 export const ECHO_CHAMBER_TURNS = 5;
 /** How many turns the floor keeps for a Reprise: the longest one. */
@@ -26,7 +26,7 @@ export const REPRISE_MEMORY = ECHO_CHAMBER_TURNS;
 export const repriseTurnsFor = (run: Pick<RunState, 'evolutions'>): number => (hasEvolution(run, 'echo_chamber') ? ECHO_CHAMBER_TURNS : REPRISE_TURNS);
 
 export const isRepriseUnlocked = (run: Pick<RunState, 'board' | 'runRulesVersion'>): boolean =>
-    (run.runRulesVersion ?? 0) >= REPRISE_FROM && runNonNegativeInteger(run.board?.level) >= REPRISE_FIRST_FLOOR;
+    (run.runRulesVersion ?? 0) >= REPRISE_FROM && verbReached('reprise', run);
 
 /** Whether Reprise can be pressed: between turns, unlocked, unused this floor, with turns enough to replay. */
 export const canReprise = (run: RunState): boolean =>

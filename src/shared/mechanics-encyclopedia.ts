@@ -22,9 +22,10 @@ import {
 import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
 import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
-import { HOLD_FIRST_FLOOR, HOLD_METER_SEGMENTS } from './hold-rules';
-import { CARVE_BURST_EXTRA_PAIRS, CARVE_FIRST_FLOOR, CARVE_LINKS } from './carve-rules';
-import { ECHO_CHAMBER_TURNS, REPRISE_FIRST_FLOOR, REPRISE_TURNS } from './reprise-rules';
+import { HOLD_METER_SEGMENTS } from './hold-rules';
+import { VERB_STAIRCASE_FIRST_FLOORS } from './verb-staircase-rules';
+import { CARVE_BURST_EXTRA_PAIRS, CARVE_LINKS } from './carve-rules';
+import { ECHO_CHAMBER_TURNS, REPRISE_TURNS } from './reprise-rules';
 import { MASK_FROM_FLOOR, masksForFloor } from './mask-rules';
 import { SLEEPER_CHAIN_HOLDS, SLEEPER_FROM_FLOOR, SLEEPER_WAKE_TURNS, sleepersForFloor } from './sleeper-rules';
 import { KEEPER_SWAP_EVERY_TURNS } from './keeper-rules';
@@ -38,7 +39,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 119 as const;
+export const ENCYCLOPEDIA_VERSION = 120 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -650,19 +651,19 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_reprise',
         title: 'Reprise',
         description:
-            `From floor ${REPRISE_FIRST_FLOOR}, once a floor, **Reprise** pays your last **${REPRISE_TURNS} turns** again, in order: each **match** scores what it scored and adds a link to your chain; each **miss** costs its miss again and breaks the chain. No card moves and no turn is counted, so press it after good turns. The **Echo Chamber** evolution makes it ${ECHO_CHAMBER_TURNS}.`
+            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.reprise}, once a floor, **Reprise** pays your last **${REPRISE_TURNS} turns** again, in order: each **match** scores what it scored and adds a link to your chain; each **miss** costs its miss again and breaks the chain. No card moves and no turn is counted, so press it after good turns. The **Echo Chamber** evolution makes it ${ECHO_CHAMBER_TURNS}.`
     },
     {
         id: 'sys_carve',
         title: 'Carve',
         description:
-            `From floor ${CARVE_FIRST_FLOOR}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
+            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.carve}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
     },
     {
         id: 'sys_hold',
         title: 'The Hold',
         description:
-            `From floor ${HOLD_FIRST_FLOOR}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. A miss while holding drops the oldest half of what you hold, but never all of it.`
+            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.hold}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. A miss while holding drops the oldest half of what you hold, but never all of it.`
     },
     {
         id: 'sys_void_spew',

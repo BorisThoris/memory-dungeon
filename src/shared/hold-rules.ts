@@ -14,6 +14,7 @@ import { finalizeLevel } from './floor-clear-transition';
 import { HOURGLASS_GOLD, HOURGLASS_SCORE } from './odd-card-rules';
 import { reconcileRealmHolds } from './realm-hold-policy';
 import { runNonNegativeInteger } from './run-number-guards';
+import { verbReached } from './verb-staircase-rules';
 
 /**
  * The Hold (DGE-008, 2026-10-20): the verb that defers the payoff and releases it as one.
@@ -34,15 +35,14 @@ import { runNonNegativeInteger } from './run-number-guards';
  * untouched; only its tile ids are kept, in `heldSeedIds`, as the release's seeds.
  */
 export const HOLD_METER_SEGMENTS = 6;
-/** The first floor the Hold is in the dock: the Living Dungeon's. */
-export const HOLD_FIRST_FLOOR = 13;
 
 /** The Hold's meter for this run: Depth 13 (`depth-rules.ts`) asks seven links. */
 export const holdSegmentsFor = (run: Partial<Pick<RunState, 'depth'>> | null | undefined): number => (depthHas(run, 'hold_seven') ? DEPTH_HOLD_SEGMENTS : HOLD_METER_SEGMENTS);
 
 const linksOf = (run: Pick<RunState, 'holdLinks'> & Partial<Pick<RunState, 'depth'>>): number => Math.min(holdSegmentsFor(run), runNonNegativeInteger(run.holdLinks));
 
-export const isHoldUnlocked = (run: Pick<RunState, 'board'>): boolean => runNonNegativeInteger(run.board?.level) >= HOLD_FIRST_FLOOR;
+/** From floor 5 since rules 89, the Living Dungeon's 13 before (`verb-staircase-rules.ts`). */
+export const isHoldUnlocked = (run: Pick<RunState, 'board'> & Partial<Pick<RunState, 'runRulesVersion'>>): boolean => verbReached('hold', run);
 
 /** How full the meter is, 0..1, and whether it is armed. */
 export const holdMeter = (run: Pick<RunState, 'holdLinks'> & Partial<Pick<RunState, 'depth'>>): { segments: number; armed: boolean } => ({

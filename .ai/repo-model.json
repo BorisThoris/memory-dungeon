@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3379,
-    "codeFileCount": 1305,
-    "exportedSymbolCount": 4225,
+    "trackedFileCount": 3382,
+    "codeFileCount": 1308,
+    "exportedSymbolCount": 4230,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11814
+    "relationshipCount": 11848
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 106521,
-      "sha256": "41aa537dba24c0534667a0ec761c3ec04d767b0bc643dda90678e21d5ca26a40"
+      "bytes": 107721,
+      "sha256": "10b68a6ab032f484a050244fc12b9f82f981da0ea9be70894f5d84255b61815b"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "a9cd974d078748e856fbe9af50c68fe3e4f091af344ac40ba28812f2356c4f08"
+      "sha256": "ea0ef2ca00605fd991eac455e8b1199013188e1fa82c7647a63c4ae51f2c83d9"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "38778de82008541d003756758d5b48062990f0bfe496f8e64d79a78c1d349478"
+      "sha256": "8e0f02bd9b7ef9854bfcdccf12d60b38398d39308502332c450f8eb8a671e6c3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11259,8 +11259,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 146856,
-      "sha256": "149bf835b09afae39e5cf077e709ee5918e6ac1e3c5e87a824b584c41c2a2222"
+      "bytes": 147589,
+      "sha256": "9a18225caa4a019724a7e46014a042dbaf3da4152d72c9e2059d23511ad2416a"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -13543,6 +13543,12 @@
       "sha256": "c44b74ba312f42408afae35cee06e7adf2c34ad3179db83639e383ce5b7ed5bc"
     },
     {
+      "path": "src/renderer/copy/verbArrivalCopy.ts",
+      "category": "source",
+      "bytes": 1003,
+      "sha256": "6fcdf7d8f7b8f824e0455cb200be6e31f0d620116e74723ba93ca33b4455d11e"
+    },
+    {
       "path": "src/renderer/copy/voidSpewCopy.ts",
       "category": "source",
       "bytes": 236,
@@ -14781,8 +14787,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 106931,
-      "sha256": "f63b884cd4f4f588faed949afe1bbe151f8af39d3f80cab2381f13335f29b173"
+      "bytes": 108131,
+      "sha256": "2195dd1cd9d578b3a66cda35a2e48ba36f275136f38e28e9ad75106c9118a922"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15135,14 +15141,14 @@
     {
       "path": "src/shared/carve-rules.test.ts",
       "category": "test",
-      "bytes": 4416,
-      "sha256": "14e0a7a0e07af739a17fa82ee8ffc7b14193a72ec4f251202ce4d0f10d7c9210"
+      "bytes": 4522,
+      "sha256": "4a1636caf12e9ed8fa5a45db025acb223281e0ce915d953f83b3de52ba2e3ac7"
     },
     {
       "path": "src/shared/carve-rules.ts",
       "category": "source",
-      "bytes": 5057,
-      "sha256": "054b6c48fad3f6ea616b0fb69c17ad7ddf5688ac3795e4bde2e0f4aa323bb8be"
+      "bytes": 5082,
+      "sha256": "2fcc0434639efe7daa985617ab407a391990894d246ac55d39a77b4399ca9877"
     },
     {
       "path": "src/shared/cascade-balance-simulation.test.ts",
@@ -15351,8 +15357,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 63943,
-      "sha256": "4e93c503db9d59a6e1edfcc7ef48531a2282fe6418fadcc8edcb89cfd7a2c931"
+      "bytes": 64015,
+      "sha256": "0eb9bb1cbb10bc0bdddaeedc1408eaf9f8ddd6025aa7bdee33726f5507e9d5d5"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16143,14 +16149,14 @@
     {
       "path": "src/shared/hold-rules.test.ts",
       "category": "test",
-      "bytes": 5438,
-      "sha256": "9fac1e57f43fd3f965e4ed2bad023f578de84b5267453610331913ff7057a540"
+      "bytes": 5535,
+      "sha256": "707e5ed4e8f07f138eefb7f088b0e99d65cb34c128e2c3fa6329e545776372fa"
     },
     {
       "path": "src/shared/hold-rules.ts",
       "category": "source",
-      "bytes": 10288,
-      "sha256": "c4f35a4fa75ace0a885a12068d0c3995e54c6d1c0b62c36868d5380b2076882f"
+      "bytes": 10342,
+      "sha256": "aad34ad2610a48a6da6cad7d277d7efe353a18e090a65c5e51548e08086fd96c"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -16365,8 +16371,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 74415,
-      "sha256": "3d03ab97c0dbed4e8abb9599801f6caa76534ee846155539c9f4c41f6cf03c05"
+      "bytes": 74475,
+      "sha256": "9ee25478c7b10e7ba75c0f3524ea703d5207d5284bfbf26fb32cbd322cfeb443"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16917,14 +16923,14 @@
     {
       "path": "src/shared/reprise-rules.test.ts",
       "category": "test",
-      "bytes": 3629,
-      "sha256": "54b1845a8ce4a0619e0e1bd07a5fc028ac21926b50ca466d5de1a3948278aa66"
+      "bytes": 3701,
+      "sha256": "0737ceea040e82b255ef2f741aee8ade0ecd3b220b6c6aa6cf405f0be90b0376"
     },
     {
       "path": "src/shared/reprise-rules.ts",
       "category": "source",
-      "bytes": 4504,
-      "sha256": "dbb3111f41eeef612fd80144ae8f2b4e92b15505c84f50f7129a18c8d6f63667"
+      "bytes": 4544,
+      "sha256": "3f30b1fee89bd9c0d4209ec3388a2dbe4abfbbcd3bfe3deaac94c4d13a64887f"
     },
     {
       "path": "src/shared/restless-floor-rules.test.ts",
@@ -17487,8 +17493,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 130116,
-      "sha256": "7f5c024c65a7f0c4bd8548d98a1a51ab1139ee06ee31517c4935b511caf0f5e0"
+      "bytes": 131308,
+      "sha256": "2d482f9ef06f1cc3cf563f8cc71dd20742183f2fd7ba3182a21ed3a3151addcf"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17511,8 +17517,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 234439,
-      "sha256": "f174ff1fca4739149313950be3fe9b5150a89399ea611dce48ee8168664026cb"
+      "bytes": 235813,
+      "sha256": "f3e35652901f90ea7317c523a602b302ef199329124ae95917687c1ccfd0ae75"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17767,10 +17773,22 @@
       "sha256": "0561726e14e7b4e1108b927d4806bb3a71e1ea4505d85c725d5d388016739faa"
     },
     {
+      "path": "src/shared/verb-staircase-rules.test.ts",
+      "category": "test",
+      "bytes": 2291,
+      "sha256": "72e610308c96750645ff49355ef60383539a43856bc8e0983be5a8e4f3308db3"
+    },
+    {
+      "path": "src/shared/verb-staircase-rules.ts",
+      "category": "source",
+      "bytes": 2651,
+      "sha256": "c6f0d01cc6ccd45eb0725e0aa75f9777d07e81f40c214972f8a514df2035db89"
+    },
+    {
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "c91e0d6e1a364a79a38490f5da61bf0f9da19e0839fbdfb2dd79c9ab6a82acc3"
+      "sha256": "0c21b681b5b6d5b520f42809a465b578d8b6edc5ffa4dff54708ca5e3345ceb9"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17865,8 +17883,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 27245,
-      "sha256": "a708740e9389387d6f4cbe1786b5ec1705fb9a7c4de43df8b3d0800a2d552444"
+      "bytes": 27869,
+      "sha256": "ee243d3bdce402013eaa2c9804a8739361521847e38bf2aabf317f9ab43c700f"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -24831,7 +24849,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2773,
+      "lineCount": 2782,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -24886,6 +24904,7 @@
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/copy/skittishCardsBeat.ts",
         "file:src/renderer/copy/storeSheet.ts",
+        "file:src/renderer/copy/verbArrivalCopy.ts",
         "file:src/renderer/copy/voidSpewCopy.ts",
         "file:src/renderer/copy/zoneToolCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
@@ -24951,6 +24970,7 @@
         "file:src/shared/spiral-rules.ts",
         "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
+        "file:src/shared/verb-staircase-rules.ts",
         "file:src/shared/warden-rules.ts",
         "file:src/shared/zone-rules.ts"
       ],
@@ -31502,6 +31522,23 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "path": "src/renderer/copy/verbArrivalCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 16,
+      "imports": [
+        "file:src/shared/carve-rules.ts",
+        "file:src/shared/hold-rules.ts",
+        "file:src/shared/reprise-rules.ts",
+        "file:src/shared/verb-staircase-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/verbArrivalCopy.ts#VERB_ARRIVAL_COPY"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/voidSpewCopy.ts",
       "path": "src/renderer/copy/voidSpewCopy.ts",
       "layer": "renderer",
@@ -35857,12 +35894,13 @@
       "path": "src/shared/carve-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 73,
+      "lineCount": 74,
       "imports": [
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/game.ts"
+        "file:src/shared/game.ts",
+        "file:src/shared/verb-staircase-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -35876,14 +35914,14 @@
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/depth-rules.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/verb-staircase-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/carve-rules.ts#canCarve",
         "symbol:src/shared/carve-rules.ts#carve",
         "symbol:src/shared/carve-rules.ts#CARVE_BURST_EXTRA_PAIRS",
         "symbol:src/shared/carve-rules.ts#CARVE_DIRECTIONS",
-        "symbol:src/shared/carve-rules.ts#CARVE_FIRST_FLOOR",
         "symbol:src/shared/carve-rules.ts#CARVE_FROM",
         "symbol:src/shared/carve-rules.ts#CARVE_LINKS",
         "symbol:src/shared/carve-rules.ts#carveLinksFor",
@@ -35898,7 +35936,8 @@
       ],
       "testedBy": [
         "file:src/shared/carve-rules.test.ts",
-        "file:src/shared/depth-rules.test.ts"
+        "file:src/shared/depth-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts"
       ]
     },
     {
@@ -36993,6 +37032,7 @@
         "file:src/shared/turn-match-board-resolution-rules.test.ts",
         "file:src/shared/turn-match-scoring-summary-rules.test.ts",
         "file:src/shared/turn-mismatch-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts",
         "file:src/shared/version-gate.test.ts",
         "file:src/shared/void-spew-rules.test.ts",
         "file:src/shared/wanderer-rules.test.ts",
@@ -39147,6 +39187,7 @@
         "file:src/shared/still-bell-rules.test.ts",
         "file:src/shared/storm-glass-rules.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts",
         "file:src/shared/wanderer-rules.test.ts",
         "file:src/shared/warden-rules.test.ts",
         "file:src/shared/zone-rules.test.ts"
@@ -39931,7 +39972,7 @@
       "path": "src/shared/hold-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 104,
+      "lineCount": 105,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-inspection.ts",
@@ -39963,6 +40004,7 @@
         "file:src/shared/realm-hold-policy.ts",
         "file:src/shared/relic-evolution-rules.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/verb-staircase-rules.ts",
         "file:src/shared/wanderer-rules.ts",
         "file:src/shared/warden-rules.ts"
       ],
@@ -39971,7 +40013,6 @@
         "symbol:src/shared/hold-rules.ts#canReleaseHold",
         "symbol:src/shared/hold-rules.ts#canStartHold",
         "symbol:src/shared/hold-rules.ts#heldPairCount",
-        "symbol:src/shared/hold-rules.ts#HOLD_FIRST_FLOOR",
         "symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
         "symbol:src/shared/hold-rules.ts#holdMeter",
         "symbol:src/shared/hold-rules.ts#holdSegmentsFor",
@@ -39982,7 +40023,8 @@
       "testedBy": [
         "file:src/shared/depth-rules.test.ts",
         "file:src/shared/hold-rules.test.ts",
-        "file:src/shared/relic-evolution-rules.test.ts"
+        "file:src/shared/relic-evolution-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts"
       ]
     },
     {
@@ -40650,7 +40692,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 970,
+      "lineCount": 971,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -40668,6 +40710,7 @@
         "file:src/shared/relic-evolution-rules.ts",
         "file:src/shared/reprise-rules.ts",
         "file:src/shared/sleeper-rules.ts",
+        "file:src/shared/verb-staircase-rules.ts",
         "file:src/shared/wanderer-rules.ts",
         "file:src/shared/warden-rules.ts"
       ],
@@ -42611,12 +42654,13 @@
       "path": "src/shared/reprise-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 64,
+      "lineCount": 65,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
         "file:src/shared/miss-bank.ts",
-        "file:src/shared/reprise-rules.ts"
+        "file:src/shared/reprise-rules.ts",
+        "file:src/shared/verb-staircase-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -42630,7 +42674,8 @@
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/relic-evolution-rules.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/verb-staircase-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/reprise-rules.ts#canReprise",
@@ -42638,14 +42683,14 @@
         "symbol:src/shared/reprise-rules.ts#isRepriseUnlocked",
         "symbol:src/shared/reprise-rules.ts#recordRepriseTurn",
         "symbol:src/shared/reprise-rules.ts#reprise",
-        "symbol:src/shared/reprise-rules.ts#REPRISE_FIRST_FLOOR",
         "symbol:src/shared/reprise-rules.ts#REPRISE_FROM",
         "symbol:src/shared/reprise-rules.ts#REPRISE_MEMORY",
         "symbol:src/shared/reprise-rules.ts#REPRISE_TURNS",
         "symbol:src/shared/reprise-rules.ts#repriseTurnsFor"
       ],
       "testedBy": [
-        "file:src/shared/reprise-rules.test.ts"
+        "file:src/shared/reprise-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts"
       ]
     },
     {
@@ -44741,7 +44786,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3570,
+      "lineCount": 3589,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -44779,6 +44824,7 @@
         "file:src/shared/still-bell-rules.ts",
         "file:src/shared/storm-glass-rules.ts",
         "file:src/shared/tile-identity.ts",
+        "file:src/shared/verb-staircase-rules.ts",
         "file:src/shared/wanderer-rules.ts",
         "file:src/shared/zone-rules.ts"
       ],
@@ -45717,6 +45763,48 @@
       ],
       "testedBy": [
         "file:src/shared/ui-state-copy.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/verb-staircase-rules.test.ts",
+      "path": "src/shared/verb-staircase-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 44,
+      "imports": [
+        "file:src/shared/carve-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/hold-rules.ts",
+        "file:src/shared/reprise-rules.ts",
+        "file:src/shared/verb-staircase-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/verb-staircase-rules.ts",
+      "path": "src/shared/verb-staircase-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 42,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/verb-staircase-rules.ts#StaircaseVerb",
+        "symbol:src/shared/verb-staircase-rules.ts#VERB_LEGACY_FIRST_FLOORS",
+        "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FIRST_FLOORS",
+        "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FROM",
+        "symbol:src/shared/verb-staircase-rules.ts#verbArrivingOn",
+        "symbol:src/shared/verb-staircase-rules.ts#verbFirstFloor",
+        "symbol:src/shared/verb-staircase-rules.ts#verbReached"
+      ],
+      "testedBy": [
+        "file:src/shared/carve-rules.test.ts",
+        "file:src/shared/reprise-rules.test.ts",
+        "file:src/shared/verb-staircase-rules.test.ts"
       ]
     },
     {
@@ -50815,40 +50903,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2772,
-      "endLine": 2772
+      "line": 2781,
+      "endLine": 2781
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 295,
-      "endLine": 295
+      "line": 297,
+      "endLine": 297
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 293,
-      "endLine": 293
+      "line": 295,
+      "endLine": 295
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 297,
-      "endLine": 297
+      "line": 299,
+      "endLine": 299
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 287,
-      "endLine": 287
+      "line": 289,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -58867,6 +58955,14 @@
       "endLine": 11
     },
     {
+      "id": "symbol:src/renderer/copy/verbArrivalCopy.ts#VERB_ARRIVAL_COPY",
+      "name": "VERB_ARRIVAL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/verbArrivalCopy.ts",
+      "line": 7,
+      "endLine": 15
+    },
+    {
       "id": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
       "name": "VOID_SPEW_COPY",
       "kind": "value",
@@ -63579,20 +63675,12 @@
       "endLine": 22
     },
     {
-      "id": "symbol:src/shared/carve-rules.ts#CARVE_FIRST_FLOOR",
-      "name": "CARVE_FIRST_FLOOR",
-      "kind": "value",
-      "file": "src/shared/carve-rules.ts",
-      "line": 18,
-      "endLine": 18
-    },
-    {
       "id": "symbol:src/shared/carve-rules.ts#CARVE_FROM",
       "name": "CARVE_FROM",
       "kind": "value",
       "file": "src/shared/carve-rules.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/carve-rules.ts#CARVE_LINKS",
@@ -70651,20 +70739,12 @@
       "endLine": 54
     },
     {
-      "id": "symbol:src/shared/hold-rules.ts#HOLD_FIRST_FLOOR",
-      "name": "HOLD_FIRST_FLOOR",
-      "kind": "value",
-      "file": "src/shared/hold-rules.ts",
-      "line": 38,
-      "endLine": 38
-    },
-    {
       "id": "symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
       "name": "HOLD_METER_SEGMENTS",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#holdMeter",
@@ -70679,8 +70759,8 @@
       "name": "holdSegmentsFor",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#isHoldUnlocked",
@@ -71583,160 +71663,160 @@
       "name": "ACHIEVEMENT_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 154,
-      "endLine": 325
+      "line": 155,
+      "endLine": 326
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
       "name": "AchievementCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 50,
-      "endLine": 54
+      "line": 51,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CODEX_CORE_TOPICS",
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 419,
-      "endLine": 468
+      "line": 420,
+      "endLine": 469
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
       "name": "CodexCoreTopic",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 62,
-      "endLine": 66
+      "line": 63,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_CONTRACT_TOPICS",
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 930,
-      "endLine": 948
+      "line": 931,
+      "endLine": 949
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 951,
-      "endLine": 969
+      "line": 952,
+      "endLine": 970
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 792,
-      "endLine": 927
+      "line": 793,
+      "endLine": 928
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 471,
-      "endLine": 532
+      "line": 472,
+      "endLine": 533
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 537,
-      "endLine": 740
+      "line": 538,
+      "endLine": 741
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 745,
-      "endLine": 789
+      "line": 746,
+      "endLine": 790
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
       "name": "ENCYCLOPEDIA_VERSION",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#EncyclopediaTopic",
       "name": "EncyclopediaTopic",
       "kind": "type",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 69,
-      "endLine": 69
+      "line": 70,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GAME_MODE_CODEX",
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 409,
-      "endLine": 416
+      "line": 410,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
       "name": "GameModeCodexEntry",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 56,
-      "endLine": 60
+      "line": 57,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#glossaryTermById",
       "name": "glossaryTermById",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 146,
-      "endLine": 147
+      "line": 147,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY",
       "name": "MECHANICS_GLOSSARY",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 149,
-      "endLine": 149
+      "line": 150,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MECHANICS_GLOSSARY_TERMS",
       "name": "MECHANICS_GLOSSARY_TERMS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 86,
-      "endLine": 136
+      "line": 87,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MechanicsGlossaryTerm",
       "name": "MechanicsGlossaryTerm",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 71,
-      "endLine": 84
+      "line": 72,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MUTATOR_CATALOG",
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 330,
-      "endLine": 407
+      "line": 331,
+      "endLine": 408
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
       "name": "MutatorDefinition",
       "kind": "interface",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 43,
-      "endLine": 47
+      "line": 44,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/memorize-phase-rules.ts#finishMemorizePhase",
@@ -74707,20 +74787,12 @@
       "endLine": 79
     },
     {
-      "id": "symbol:src/shared/reprise-rules.ts#REPRISE_FIRST_FLOOR",
-      "name": "REPRISE_FIRST_FLOOR",
-      "kind": "value",
-      "file": "src/shared/reprise-rules.ts",
-      "line": 20,
-      "endLine": 20
-    },
-    {
       "id": "symbol:src/shared/reprise-rules.ts#REPRISE_FROM",
       "name": "REPRISE_FROM",
       "kind": "value",
       "file": "src/shared/reprise-rules.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/reprise-rules.ts#REPRISE_MEMORY",
@@ -77831,112 +77903,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3527,
-      "endLine": 3527
+      "line": 3546,
+      "endLine": 3546
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3378,
-      "endLine": 3504
+      "line": 3397,
+      "endLine": 3523
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3533,
-      "endLine": 3540
+      "line": 3552,
+      "endLine": 3559
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3517,
-      "endLine": 3517
+      "line": 3536,
+      "endLine": 3536
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3366,
-      "endLine": 3366
+      "line": 3385,
+      "endLine": 3385
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3543,
-      "endLine": 3549
+      "line": 3562,
+      "endLine": 3568
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3569,
-      "endLine": 3569
+      "line": 3588,
+      "endLine": 3588
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 304,
-      "endLine": 321
+      "line": 306,
+      "endLine": 323
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 68,
-      "endLine": 249
+      "line": 69,
+      "endLine": 251
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3506,
-      "endLine": 3509
+      "line": 3525,
+      "endLine": 3528
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 297,
-      "endLine": 302
+      "line": 299,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 251,
-      "endLine": 295
+      "line": 253,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3520,
-      "endLine": 3524
+      "line": 3539,
+      "endLine": 3543
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3551,
-      "endLine": 3567
+      "line": 3570,
+      "endLine": 3586
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -79259,6 +79331,62 @@
       "endLine": 1
     },
     {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#StaircaseVerb",
+      "name": "StaircaseVerb",
+      "kind": "type",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 17,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#VERB_LEGACY_FIRST_FLOORS",
+      "name": "VERB_LEGACY_FIRST_FLOORS",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FIRST_FLOORS",
+      "name": "VERB_STAIRCASE_FIRST_FLOORS",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FROM",
+      "name": "VERB_STAIRCASE_FROM",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#verbArrivingOn",
+      "name": "verbArrivingOn",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 37,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#verbFirstFloor",
+      "name": "verbFirstFloor",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 29,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/verb-staircase-rules.ts#verbReached",
+      "name": "verbReached",
+      "kind": "value",
+      "file": "src/shared/verb-staircase-rules.ts",
+      "line": 33,
+      "endLine": 34
+    },
+    {
       "id": "symbol:src/shared/version-gate.ts#assessVersionGate",
       "name": "assessVersionGate",
       "kind": "value",
@@ -80517,7 +80645,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1669
+          "line": 1671
         }
       ],
       "tests": [
@@ -80805,7 +80933,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 6
+          "line": 8
         }
       ],
       "tests": [
@@ -81129,7 +81257,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 61
+          "line": 63
         }
       ],
       "tests": [
@@ -81535,7 +81663,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 11
         }
       ],
       "tests": [
@@ -81682,7 +81810,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 10
+          "line": 12
         }
       ],
       "tests": [
@@ -82766,7 +82894,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 9
+          "line": 11
         }
       ],
       "tests": [
@@ -82956,7 +83084,7 @@
       "tests": [
         {
           "path": "src/shared/carve-rules.test.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -83351,13 +83479,13 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 7
+          "line": 9
         }
       ],
       "tests": [
         {
           "path": "src/shared/reprise-rules.test.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -83593,7 +83721,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 15
+          "line": 17
         }
       ],
       "tests": [
@@ -83646,7 +83774,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1671
+          "line": 1673
         }
       ],
       "tests": [
@@ -83846,7 +83974,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 61
+          "line": 63
         }
       ],
       "tests": [
@@ -96732,6 +96860,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/verbArrivalCopy.ts->symbol:src/renderer/copy/verbArrivalCopy.ts#VERB_ARRIVAL_COPY",
+      "source": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "target": "symbol:src/renderer/copy/verbArrivalCopy.ts#VERB_ARRIVAL_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/voidSpewCopy.ts->symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
       "source": "file:src/renderer/copy/voidSpewCopy.ts",
       "target": "symbol:src/renderer/copy/voidSpewCopy.ts#VOID_SPEW_COPY",
@@ -100263,12 +100397,6 @@
       "id": "exports:src/shared/carve-rules.ts->symbol:src/shared/carve-rules.ts#CARVE_DIRECTIONS",
       "source": "file:src/shared/carve-rules.ts",
       "target": "symbol:src/shared/carve-rules.ts#CARVE_DIRECTIONS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/carve-rules.ts->symbol:src/shared/carve-rules.ts#CARVE_FIRST_FLOOR",
-      "source": "file:src/shared/carve-rules.ts",
-      "target": "symbol:src/shared/carve-rules.ts#CARVE_FIRST_FLOOR",
       "kind": "exports"
     },
     {
@@ -105570,12 +105698,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/hold-rules.ts->symbol:src/shared/hold-rules.ts#HOLD_FIRST_FLOOR",
-      "source": "file:src/shared/hold-rules.ts",
-      "target": "symbol:src/shared/hold-rules.ts#HOLD_FIRST_FLOOR",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/hold-rules.ts->symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
       "source": "file:src/shared/hold-rules.ts",
       "target": "symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
@@ -108609,12 +108731,6 @@
       "id": "exports:src/shared/reprise-rules.ts->symbol:src/shared/reprise-rules.ts#reprise",
       "source": "file:src/shared/reprise-rules.ts",
       "target": "symbol:src/shared/reprise-rules.ts#reprise",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/reprise-rules.ts->symbol:src/shared/reprise-rules.ts#REPRISE_FIRST_FLOOR",
-      "source": "file:src/shared/reprise-rules.ts",
-      "target": "symbol:src/shared/reprise-rules.ts#REPRISE_FIRST_FLOOR",
       "kind": "exports"
     },
     {
@@ -112023,6 +112139,48 @@
       "id": "exports:src/shared/ui-state-copy.ts->symbol:src/shared/ui-state-copy.ts#UiStateKind",
       "source": "file:src/shared/ui-state-copy.ts",
       "target": "symbol:src/shared/ui-state-copy.ts#UiStateKind",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#StaircaseVerb",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#StaircaseVerb",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#VERB_LEGACY_FIRST_FLOORS",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#VERB_LEGACY_FIRST_FLOORS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FIRST_FLOORS",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FIRST_FLOORS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FROM",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#VERB_STAIRCASE_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#verbArrivingOn",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#verbArrivingOn",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#verbFirstFloor",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#verbFirstFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/verb-staircase-rules.ts->symbol:src/shared/verb-staircase-rules.ts#verbReached",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "symbol:src/shared/verb-staircase-rules.ts#verbReached",
       "kind": "exports"
     },
     {
@@ -119606,6 +119764,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/verbArrivalCopy.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/voidSpewCopy.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/voidSpewCopy.ts",
@@ -119993,6 +120157,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/storm-glass-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/storm-glass-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/verb-staircase-rules.ts",
       "kind": "imports"
     },
     {
@@ -126554,6 +126724,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/verbArrivalCopy.ts->src/shared/carve-rules.ts",
+      "source": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "target": "file:src/shared/carve-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/verbArrivalCopy.ts->src/shared/hold-rules.ts",
+      "source": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "target": "file:src/shared/hold-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/verbArrivalCopy.ts->src/shared/reprise-rules.ts",
+      "source": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "target": "file:src/shared/reprise-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/verbArrivalCopy.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/renderer/copy/verbArrivalCopy.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/desktop-client.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/desktop-client.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -130952,6 +131146,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/carve-rules.test.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/carve-rules.test.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/carve-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/carve-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -130967,6 +131167,12 @@
       "id": "imports:src/shared/carve-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/carve-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/carve-rules.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/carve-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
       "kind": "imports"
     },
     {
@@ -134876,6 +135082,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/hold-rules.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/hold-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/hold-rules.ts->src/shared/wanderer-rules.ts",
       "source": "file:src/shared/hold-rules.ts",
       "target": "file:src/shared/wanderer-rules.ts",
@@ -135647,6 +135859,12 @@
       "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/sleeper-rules.ts",
       "source": "file:src/shared/mechanics-encyclopedia.ts",
       "target": "file:src/shared/sleeper-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mechanics-encyclopedia.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/mechanics-encyclopedia.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
       "kind": "imports"
     },
     {
@@ -137720,6 +137938,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/reprise-rules.test.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/reprise-rules.test.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/reprise-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/reprise-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -137735,6 +137959,12 @@
       "id": "imports:src/shared/reprise-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/reprise-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/reprise-rules.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/reprise-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
       "kind": "imports"
     },
     {
@@ -140186,6 +140416,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/wanderer-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/wanderer-rules.ts",
@@ -141023,6 +141259,54 @@
       "id": "imports:src/shared/ui-state-copy.test.ts->src/shared/ui-state-copy.ts",
       "source": "file:src/shared/ui-state-copy.test.ts",
       "target": "file:src/shared/ui-state-copy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/carve-rules.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/carve-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/hold-rules.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/hold-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/reprise-rules.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/reprise-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.test.ts->src/shared/verb-staircase-rules.ts",
+      "source": "file:src/shared/verb-staircase-rules.test.ts",
+      "target": "file:src/shared/verb-staircase-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/verb-staircase-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -149095,6 +149379,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/carve-rules.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/carve-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/cascade-balance-simulation.ts->file:src/shared/cascade-balance-simulation.test.ts",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "file:src/shared/cascade-balance-simulation.test.ts",
@@ -150733,6 +151023,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/version-gate.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/version-gate.test.ts",
@@ -152179,6 +152475,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/wanderer-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/wanderer-rules.test.ts",
@@ -152542,6 +152844,12 @@
       "id": "tested_by:src/shared/hold-rules.ts->file:src/shared/relic-evolution-rules.test.ts",
       "source": "file:src/shared/hold-rules.ts",
       "target": "file:src/shared/relic-evolution-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/hold-rules.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/hold-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -153442,6 +153750,12 @@
       "id": "tested_by:src/shared/reprise-rules.ts->file:src/shared/reprise-rules.test.ts",
       "source": "file:src/shared/reprise-rules.ts",
       "target": "file:src/shared/reprise-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/reprise-rules.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/reprise-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -155236,6 +155550,24 @@
       "id": "tested_by:src/shared/ui-state-copy.ts->file:src/shared/ui-state-copy.test.ts",
       "source": "file:src/shared/ui-state-copy.ts",
       "target": "file:src/shared/ui-state-copy.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/verb-staircase-rules.ts->file:src/shared/carve-rules.test.ts",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "file:src/shared/carve-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/verb-staircase-rules.ts->file:src/shared/reprise-rules.test.ts",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "file:src/shared/reprise-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/verb-staircase-rules.ts->file:src/shared/verb-staircase-rules.test.ts",
+      "source": "file:src/shared/verb-staircase-rules.ts",
+      "target": "file:src/shared/verb-staircase-rules.test.ts",
       "kind": "tested_by"
     },
     {

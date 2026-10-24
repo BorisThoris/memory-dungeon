@@ -41,6 +41,7 @@ import { tileCharge } from './element-alchemy-rules';
 import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
+import { verbArrivingOn } from './verb-staircase-rules';
 import { WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
@@ -112,6 +113,7 @@ export type TestHallRoomId =
     | 'fold-blocked'
     | 'wanderers-step'
     | 'hold-release'
+    | 'verb-staircase-hold'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -1545,7 +1547,7 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'reprise-pays',
         title: 'Reprise pays three matches again',
-        mechanic: 'From the Abyss, once a floor, Reprise pays the last three turns again: each match its score and a link of the chain. No card moves, and no turn is counted.',
+        mechanic: 'From floor 11, once a floor, Reprise pays the last three turns again: each match its score and a link of the chain. No card moves, and no turn is counted.',
         graphMechanicIds: ['power.reprise'],
         tryThis: 'Match three pairs, then press Reprise: the three matches score again, and the chain climbs three more.',
         build: () => room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'i:m j:b k:e l:t', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'i:m j:b k:e l:t'], { level: 41, misses: 4 }),
@@ -1582,7 +1584,7 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'carve-right',
         title: 'Carve right',
-        mechanic: 'From the Deep, Carve spends two links of the chain to aim the next pop: it takes the cards on the carved side first and walks one further along it.',
+        mechanic: 'From floor 7, Carve spends two links of the chain to aim the next pop: it takes the cards on the carved side first and walks one further along it.',
         graphMechanicIds: ['power.carve'],
         tryThis: 'Carve right and match m: the pop takes b, to the right, where it would have taken a.',
         build: () => room(['a:e a:e m:e m:e b:e b:e', 'c:t d:m c:t d:m e:b e:b', 'x:e y:e x:e y:e z:t z:t'], { level: 25, misses: 4, streak: 3, run: { holdLinks: 4 } }),
@@ -1632,7 +1634,7 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     {
         id: 'hold-release',
         title: 'Hold six and release',
-        mechanic: 'From the Living Dungeon, six links of the chain arm the Hold: held matches keep their pops, and the release fires them together, one break per suit.',
+        mechanic: 'From floor 5, six links of the chain arm the Hold: held matches keep their pops, and the release fires them together, one break per suit.',
         graphMechanicIds: ['power.hold', 'board.chain_chunk_fever'],
         tryThis: 'Hold, match the fire pair a and the tide pair d: nothing pops. Release: the fire beside a goes in one break.',
         build: () => room(['a:e b:e c:e d:t', 'a:e b:e c:e d:t', 'e:m f:b g:m h:b', 'e:m f:b g:m h:b'], { level: 13, misses: 4, streak: 6, run: { holdLinks: 6 } }),
@@ -1653,6 +1655,23 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     if (r.holding || (r.heldSeedIds ?? []).length > 0) return 'the hold is still held';
                     return r.holdsReleasedThisFloor === 1 && r.stats.totalScore > b.stats.totalScore ? null : `releases ${String(r.holdsReleasedThisFloor)}, score ${b.stats.totalScore} -> ${r.stats.totalScore}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'verb-staircase-hold',
+        title: 'The Hold on floor 5',
+        mechanic: 'From rules 89 the Hold comes on floor 5, Carve on floor 7 and Reprise on floor 11: the deep verbs climb the Gate, and each is named on the floor it arrives.',
+        graphMechanicIds: ['power.hold'],
+        tryThis: 'On floor 5, with six links, Hold and match the fire pair a: Release breaks the fire beside it.',
+        build: () => room(['a:e b:e c:e d:t', 'a:e b:e c:e d:t', 'e:m f:b g:m h:b', 'e:m f:b g:m h:b'], { level: 5, misses: 4, streak: 6, run: { holdLinks: 6 } }),
+        script: [
+            { step: { do: 'hold' }, says: 'floor 5 has the Hold, and six links arm it', expect: (r) => (r.holding && verbArrivingOn(r) === 'hold' ? null : `holding ${String(r.holding)}, arriving ${String(verbArrivingOn(r))}`) },
+            { step: { do: 'match', pairKey: 'a' }, says: 'a held match', expect: (r) => (heldPairCount(r) === 1 ? null : `held ${heldPairCount(r)}`) },
+            {
+                step: { do: 'release' },
+                says: 'the release breaks what the held pair reaches',
+                expect: (r, b) => (r.board!.matchedPairs - b.board!.matchedPairs >= 1 && !r.holding ? null : `popped ${r.board!.matchedPairs - b.board!.matchedPairs}`)
             }
         ]
     },

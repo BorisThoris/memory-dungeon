@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type RunState, type Tile, type TileSuit } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game';
 import { findSuitRegion, resolveChunkBreak } from './chunk-break-rules';
-import { canCarve, carve, CARVE_FIRST_FLOOR, CARVE_FROM, CARVE_LINKS, spendCarveOnPop } from './carve-rules';
+import { VERB_LEGACY_FIRST_FLOORS, VERB_STAIRCASE_FIRST_FLOORS } from './verb-staircase-rules';
+import { canCarve, carve, CARVE_FROM, CARVE_LINKS, spendCarveOnPop } from './carve-rules';
 
 const deepRun = (extra: Partial<RunState> = {}): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' }));
-    return { ...base, status: 'playing', runRulesVersion: GAME_RULES_VERSION, board: { ...base.board!, level: CARVE_FIRST_FLOOR, flippedTileIds: [] }, holdLinks: 4, ...extra };
+    return { ...base, status: 'playing', runRulesVersion: GAME_RULES_VERSION, board: { ...base.board!, level: VERB_LEGACY_FIRST_FLOORS.carve, flippedTileIds: [] }, holdLinks: 4, ...extra };
 };
 
 /** One row of cards: `key:suit` per cell, `-` for a cleared one. */
@@ -34,7 +35,7 @@ describe('Carve (DGE-015)', () => {
         expect(canCarve(carved)).toBe(false);
         expect(canCarve(deepRun({ holdLinks: 1 }))).toBe(false);
         expect(canCarve(deepRun({ runRulesVersion: CARVE_FROM - 1 }))).toBe(false);
-        expect(canCarve(deepRun({ board: { ...deepRun().board!, level: CARVE_FIRST_FLOOR - 1 } }))).toBe(false);
+        expect(canCarve(deepRun({ board: { ...deepRun().board!, level: VERB_STAIRCASE_FIRST_FLOORS.carve - 1 } }))).toBe(false);
     });
 
     it('a carved reaction burst takes the carved side first, and one pair more', () => {

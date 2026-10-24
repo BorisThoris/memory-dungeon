@@ -43,7 +43,8 @@ describe('the Hold (DGE-008)', () => {
         expect(HOLD_METER_SEGMENTS).toBe(6);
         expect(canStartHold(floor13(5))).toBe(false);
         expect(canStartHold(floor13(6))).toBe(true);
-        expect(canStartHold({ ...floor13(6), board: { ...floor13(6).board!, level: 12 } })).toBe(false);
+        // From rules 89 the Hold comes on floor 5 (`verb-staircase-rules.ts`): floor 4 has none.
+        expect(canStartHold({ ...floor13(6), board: { ...floor13(6).board!, level: 4 } })).toBe(false);
         // An unheld match fills the meter; a miss empties it.
         const filled = matchOne(floor13(2))!;
         expect(holdMeter(filled).segments).toBe(3);

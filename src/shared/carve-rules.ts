@@ -1,11 +1,12 @@
 import { DEPTH_CARVE_LINKS, depthHas } from './depth-rules';
 import type { CarveDirection, RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
+import { verbReached } from './verb-staircase-rules';
 
 /**
  * Carve (DGE-015, rules 79): aim which way the cascade walks.
  *
- * From the Deep (floor 25), between turns, Carve spends two links of the chain - the Hold's meter,
+ * From floor 7 (rules 89, `verb-staircase-rules.ts`; floor 25 before), between turns, Carve spends two links of the chain - the Hold's meter,
  * so three carves are one Hold not armed - to set a direction on the board. The next pop walks that
  * way first and reaches one further along it: a contact pop (`chunk-break-rules.ts`) takes the cells
  * on the carved side first under its cap and walks one more step along the axis; a realm's reaction
@@ -15,7 +16,6 @@ import { runNonNegativeInteger } from './run-number-guards';
  * a turn or a miss, and the floor's end takes it.
  */
 export const CARVE_FROM = 79;
-export const CARVE_FIRST_FLOOR = 25;
 export const CARVE_LINKS = 2;
 /** How many more pairs of each element a carved reaction burst takes. */
 export const CARVE_BURST_EXTRA_PAIRS = 1;
@@ -28,7 +28,7 @@ const linksOf = (run: Pick<RunState, 'holdLinks'>): number => runNonNegativeInte
 export const carveLinksFor = (run: Partial<Pick<RunState, 'depth'>> | null | undefined): number => (depthHas(run, 'carve_three') ? DEPTH_CARVE_LINKS : CARVE_LINKS);
 
 export const isCarveUnlocked = (run: Pick<RunState, 'board' | 'runRulesVersion'>): boolean =>
-    (run.runRulesVersion ?? 0) >= CARVE_FROM && runNonNegativeInteger(run.board?.level) >= CARVE_FIRST_FLOOR;
+    (run.runRulesVersion ?? 0) >= CARVE_FROM && verbReached('carve', run);
 
 export const isCarveDirection = (value: unknown): value is CarveDirection => typeof value === 'string' && (CARVE_DIRECTIONS as readonly string[]).includes(value);
 

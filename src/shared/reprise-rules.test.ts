@@ -1,8 +1,9 @@
+import { VERB_LEGACY_FIRST_FLOORS } from './verb-staircase-rules';
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type RepriseTurn, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game';
 import { applyMissBudget, missesLeft } from './miss-bank';
-import { canReprise, reprise, REPRISE_FIRST_FLOOR, REPRISE_FROM, recordRepriseTurn } from './reprise-rules';
+import { canReprise, reprise, REPRISE_FROM, recordRepriseTurn } from './reprise-rules';
 
 const abyssRun = (repriseTurns: RepriseTurn[], extra: Partial<RunState> = {}): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' }));
@@ -10,8 +11,8 @@ const abyssRun = (repriseTurns: RepriseTurn[], extra: Partial<RunState> = {}): R
         ...base,
         status: 'playing',
         runRulesVersion: GAME_RULES_VERSION,
-        board: { ...base.board!, level: REPRISE_FIRST_FLOOR, flippedTileIds: [] },
-        missBank: [{ floor: REPRISE_FIRST_FLOOR, misses: 3 }],
+        board: { ...base.board!, level: VERB_LEGACY_FIRST_FLOORS.reprise, flippedTileIds: [] },
+        missBank: [{ floor: VERB_LEGACY_FIRST_FLOORS.reprise, misses: 3 }],
         stats: { ...base.stats, totalScore: 1000, currentLevelScore: 100, currentStreak: 3 },
         repriseTurns,
         ...extra
