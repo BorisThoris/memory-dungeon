@@ -1,7 +1,7 @@
 # DGE-027: Hall rooms, soak invariants and the accountability checklist for every mechanic
 
 ## Status
-Standing ticket: the planned soak player, the coverage audit (2026-10-21) and the deep census (2026-10-23) done; it stays open while the game adds mechanics.
+Done (2026-10-24): every mechanic the pack added answers to a census counter, walks twice in the hall, has its ledger entry and its writes read. New mechanics keep the same bar through CLAUDE.md's checklist and the gates that enforce it.
 
 ## Priority
 P0
@@ -65,3 +65,6 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - `deep-census.ts` plays the run census's reference player through the game's own floor transition to floor 60 (24 seeds, 1,440 floors, twenty seconds) and watches seven deep counters; `gate:deep-census` in `gate:systems` fails if one never fires. The run census takes a counter list for it, and a counter may be a `state` (what the floor was dealt, read at its end).
 - Seven exemptions retired for measured shares (`MECHANIC_DEEP_CENSUS_COUNTERS`), each quoted in the ledger and re-measured by its test: masks dropped 0.553 of a run's floors, Sleepers woken 0.124, the Dread's purchases 0.117, Spiral rings 0.031, the Keeper's swaps, the Cartographer's turns and the Warden's re-deals 0.017 each (one floor in sixty). Audit: 89 mechanics, 46 censused, 43 exempt, none unanswered.
 - Still exempt, with reasons rewritten where they said "the census stops at 24": the learned rule (it reads the element matched most, and the census plays without a realm), and the verbs (Hold, Carve, Reprise: the reference player presses no tool; the soak's planned player counts them).
+
+2026-10-24, the rest of the pack counted: the deep census now plays each seed in its own realm, at a Depth that walks the ladder (seed i at Depth i mod 21), past the Warden to floor 66 in Endless, and adds a planned player who holds and releases at four, carves now and then and reprises when it can (a census pass that runs only when a counter asks for it, so the 24-floor census is untouched). Eleven more exemptions retired for measured shares (12 seeds, 792 floors, 77 seconds; `gate:deep-census` in `gate:systems`): the Fold 0.121 of a run's floors, Layers 0.167, Dread at Awake 0.730, the learned rule 0.394, a Depth's rule 0.917, Endless rent owed 0.091, a boss door's reward in hand 0.032, an evolution in play 0.303, Hold releases 0.611, carves spent 0.485, Reprises 0.394; the first seven re-measured with the realm (masks 0.610, Sleepers 0.136, the Dread's purchases 0.730, Spiral rings 0.030, the Keeper, the Cartographer and the Warden 0.015 each). Audit: 89 mechanics, 57 censused, 32 exempt - all of them mechanics from before the pack - none unanswered.
+

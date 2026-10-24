@@ -444,28 +444,32 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         verdict: 'changed',
         generation: 281,
         present: ['availableEvolutions', 'applyEvolution', 'misersVaultCatches', 'footprintTurns', 'KEYSTONE_HEART_PAIRS', 'campUpgradeIdsFor'],
-        note: 'Relic evolutions (2026-10-21, DGE-014, rules 77): two relics at rank 3 plus the act boss\u2019s blueprint evolve at camp, once, for thirty gold; the camp buys one before anything else and one it cannot pay for is gone for the run. The Tallow Candle became a fourth ranked camp upgrade (four of the six recipes need it at rank 3), which makes the four relic slots bind. Live: Lantern of Recall, Miser\u2019s Vault, Cartographer\u2019s Thread, Keystone Heart; Unmasking Glass and Echo Chamber wait for Masks and Echo.'
+        counter: 'deep.evolutions',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.303 of a run’s floors. Relic evolutions (2026-10-21, DGE-014, rules 77): two relics at rank 3 plus the act boss\u2019s blueprint evolve at camp, once, for thirty gold; the camp buys one before anything else and one it cannot pay for is gone for the run. The Tallow Candle became a fourth ranked camp upgrade (four of the six recipes need it at rank 3), which makes the four relic slots bind. Live: Lantern of Recall, Miser\u2019s Vault, Cartographer\u2019s Thread, Keystone Heart; Unmasking Glass and Echo Chamber wait for Masks and Echo.'
     },
     {
         id: 'progression.boss_reward',
         verdict: 'changed',
         generation: 280,
         present: ['offersBossDoors', 'applyBossReward', 'BLUEPRINT_ORDER', 'bossDoorRewardLine'],
-        note: 'Boss rewards by the door (2026-10-21, DGE-026, rules 75): doors were retired between floors, so they return on one clear only, the one before an act boss: calm pays the clear, wild twelve gold, raging the next blueprint in order (a later boss beaten first still drops the first). The owner asked for what retention research favours; autonomy predicts replay most strongly, and Dead Cells throttles boss blueprints by the tier the player opts into. Blueprints are kept on the run for DGE-014.'
+        counter: 'deep.bossRewards',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.032 of a run’s floors. Boss rewards by the door (2026-10-21, DGE-026, rules 75): doors were retired between floors, so they return on one clear only, the one before an act boss: calm pays the clear, wild twelve gold, raging the next blueprint in order (a later boss beaten first still drops the first). The owner asked for what retention research favours; autonomy predicts replay most strongly, and Dead Cells throttles boss blueprints by the tier the player opts into. Blueprints are kept on the run for DGE-014.'
     },
     {
         id: 'board.layers',
         verdict: 'changed',
         generation: 279,
         present: ['dealLayers', 'promoteBeneath', 'promoteRunBeneath', 'allBoardCards', 'LAYERS_COVER'],
-        note: 'Layers (2026-10-20, DGE-017, rules 72): the Deep\u2019s floors (not its boss, not a Fold) hide a second deck under two cells in five, its own pairs in two elements, fresh faces, never shown at the study window. A card rises face down, with the id it was dealt, when the card above leaves its cell: after every turn and after the bomb, the meteor, the Crucible, the release and the shuffles. A held cell waits for the release. When no whole pair is face down on the grid while cards wait beneath (a card moved over its partner, two over each other\u2019s, a held cell over the last one\u2019s), a waiting card steps out into the nearest open cell. The floor completes only when nothing waits beneath, and the inspector and the soak count both decks and the cards risen over (spent). Two in five, not half: half took floors 37-39 past the curve\u2019s 24 turns.'
+        counter: 'deep.layerFloors',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.167 of a run’s floors. Layers (2026-10-20, DGE-017, rules 72): the Deep\u2019s floors (not its boss, not a Fold) hide a second deck under two cells in five, its own pairs in two elements, fresh faces, never shown at the study window. A card rises face down, with the id it was dealt, when the card above leaves its cell: after every turn and after the bomb, the meteor, the Crucible, the release and the shuffles. A held cell waits for the release. When no whole pair is face down on the grid while cards wait beneath (a card moved over its partner, two over each other\u2019s, a held cell over the last one\u2019s), a waiting card steps out into the nearest open cell. The floor completes only when nothing waits beneath, and the inspector and the soak count both decks and the cards risen over (spent). Two in five, not half: half took floors 37-39 past the curve\u2019s 24 turns.'
     },
     {
         id: 'board.fold',
         verdict: 'changed',
         generation: 278,
         present: ['foldCutsEdge', 'foldDoorOpenFor', 'foldBoard', 'FOLD_CYCLE_FLOORS'],
-        note: 'Rules 88 (2026-10-24): a meteor aimed into one room keeps its blast there; its struck pairs still go whole. Rules 87 (2026-10-23): the realm’s row-wide weather keeps to one room. The Fold (2026-10-20, DGE-010, rules 71): from floor 13 the fourth and eleventh floor of every twelve (never a boss) are two rooms with a wall down the middle and a two-row doorway; each room leans to two elements. The wall is a cut in adjacency on the whole grid, so every pair is still two cards and every index still row-major; every neighbour walk asks foldCutsEdge, and the pop crosses the doorway only when the match stood in it. A Fold board is never reflowed.'
+        counter: 'deep.foldFloors',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.121 of a run’s floors. Rules 88 (2026-10-24): a meteor aimed into one room keeps its blast there; its struck pairs still go whole. Rules 87 (2026-10-23): the realm’s row-wide weather keeps to one room. The Fold (2026-10-20, DGE-010, rules 71): from floor 13 the fourth and eleventh floor of every twelve (never a boss) are two rooms with a wall down the middle and a two-row doorway; each room leans to two elements. The wall is a cut in adjacency on the whole grid, so every pair is still two cards and every index still row-major; every neighbour walk asks foldCutsEdge, and the pop crosses the doorway only when the match stood in it. A Fold board is never reflowed.'
     },
     {
         id: 'board.wanderers',
@@ -481,21 +485,23 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 291,
         present: ['dreadPurchase', 'dreadBudget', 'DREAD_PRICES', 'wandererCountFor', 'maskCountFor', 'sleeperCountFor'],
         counter: 'deep.dreadBuys',
-        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.117 of a run’s floors. The Dread spends (2026-10-23, DGE-003/009, rules 87; the owner chose it layered on the schedules): from Awake each floor has six points a doubling of its Dread, spent round the plan’s priced table dearest first (Sleeper pair 9, mask 6, Wanderer pair 4), up to two more of each family the floor already deals, skipping a family under an eighth of the budget. Told on the board crown. Rules 87 also keeps the realm’s row-wide weather inside one room of a Fold floor (DGE-010).'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.730 of a run’s floors. The Dread spends (2026-10-23, DGE-003/009, rules 87; the owner chose it layered on the schedules): from Awake each floor has six points a doubling of its Dread, spent round the plan’s priced table dearest first (Sleeper pair 9, mask 6, Wanderer pair 4), up to two more of each family the floor already deals, skipping a family under an eighth of the budget. Told on the board crown. Rules 87 also keeps the realm’s row-wide weather inside one room of a Fold floor (DGE-010).'
     },
     {
         id: 'progression.depths',
         verdict: 'changed',
         generation: 290,
         present: ['DEPTH_RUNGS', 'depthHas', 'depthRung', 'runDepth', 'bestDepth'],
-        note: 'The Depths (2026-10-22, DGE-025): felling the Warden at Depth n opens n + 1, up to twenty. Each rung is one existing constant made a step harder (a shorter study, no misses sold, two to open, no calm boss door, a smaller bank, a dearer camp, the boss clocks wound, the families earlier and larger, a dearer Hold and Carve, no opening shuffle, the Warden complete behind every door), named on the board crown. Depth 0 is the game as it was, so no rules-version reseed.'
+        counter: 'deep.depthRules',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.917 of a run’s floors. The Depths (2026-10-22, DGE-025): felling the Warden at Depth n opens n + 1, up to twenty. Each rung is one existing constant made a step harder (a shorter study, no misses sold, two to open, no calm boss door, a smaller bank, a dearer camp, the boss clocks wound, the families earlier and larger, a dearer Hold and Carve, no opening shuffle, the Warden complete behind every door), named on the board crown. Depth 0 is the game as it was, so no rules-version reseed.'
     },
     {
         id: 'board.learned_rule',
         verdict: 'changed',
         generation: 289,
         present: ['pickLearnedRule', 'mostMatchedSuit', 'preferredDrawIndex', 'LEARNED_RULE_TABLE'],
-        note: 'The dungeon learns you (2026-10-22, DGE-022, rules 86): from floor 41 each floor tells one rule from a fixed table about the element the run matched most - it hides behind the masks, it wanders, or it sleeps. Each rule only chooses which pairs a dealer lands on, never how many; the rule is drawn from the run seed and the floor, so the same run gets the same rule. Told on the board crown before the first flip (thesis \u00a725.13: no hidden adjustment).'
+        counter: 'deep.learnedRules',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.394 of a run’s floors. The dungeon learns you (2026-10-22, DGE-022, rules 86): from floor 41 each floor tells one rule from a fixed table about the element the run matched most - it hides behind the masks, it wanders, or it sleeps. Each rule only chooses which pairs a dealer lands on, never how many; the rule is drawn from the run seed and the floor, so the same run gets the same rule. Told on the board crown before the first flip (thesis \u00a725.13: no hidden adjustment).'
     },
     {
         id: 'board.spiral',
@@ -503,7 +509,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 288,
         present: ['sealSpiralRings', 'applySpiralTurn', 'spiralHolds', 'spiral_hall', 'SPIRAL_DESCENT_FLOORS'],
         counter: 'deep.spiralRings',
-        note: 'Rules 88 census (2026-10-24): 0.032 after the meteor-wall reseed. Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.031 of a run’s floors. The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. A sealed ring is a slab of stone on the board (SpiralSeals.tsx, DGE-030).'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.030 of a run’s floors. Rules 88 census (2026-10-24): 0.032 after the meteor-wall reseed. The Spiral (2026-10-22, DGE-021, rules 85): floors 44 and 56 are survived, not cleared. A cleared live ring (outside in, \u0060boardRings\u0060) seals, and fresh pairs are dealt into the cleared cells inside it; the floor ends at par or with the last ring. Sealed cells take nothing: the void spew and the Sleepers skip them. A sealed ring is a slab of stone on the board (SpiralSeals.tsx, DGE-030).'
     },
     {
         id: 'board.sleepers',
@@ -511,7 +517,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 287,
         present: ['dealSleepers', 'applySleeperTurn', 'wakeSleeper', 'wakeAllSleepers', 'SLEEPER_CHAIN_HOLDS'],
         counter: 'deep.sleepersWoken',
-        note: 'Rules 88 census (2026-10-24): 0.131 after the meteor-wall reseed. Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.124 of a run’s floors. Sleepers (2026-10-22, DGE-020, rules 84): from the Abyss two pairs a floor (three from 51) come back face down in other cleared cells four turns after a match on a chain under three; a chain of three keeps them down. A board cleared with one asleep wakes it. Face only, never on the back (the owner\u2019s rule for face-down cards); the plan\u2019s Dread price became a floor count.'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.136 of a run’s floors. Rules 88 census (2026-10-24): 0.131 after the meteor-wall reseed. Sleepers (2026-10-22, DGE-020, rules 84): from the Abyss two pairs a floor (three from 51) come back face down in other cleared cells four turns after a match on a chain under three; a chain of three keeps them down. A board cleared with one asleep wakes it. Face only, never on the back (the owner\u2019s rule for face-down cards); the plan\u2019s Dread price became a floor count.'
     },
     {
         id: 'board.masks',
@@ -519,35 +525,39 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 283,
         present: ['dealMasks', 'dropMask', 'unmaskOnFlip', 'unmaskBoard', 'MASK_FROM_FLOOR'],
         counter: 'deep.masksDropped',
-        note: 'Rules 88 census (2026-10-24): 0.563 after the meteor-wall reseed. Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.553 of a run’s floors. Masks (2026-10-21, DGE-016, rules 80): from the Deep two cards a floor (three from floor 33) wear a back of an element not their own until first turned; never both cards of a pair. The lie lives only in the player-visible board, as a Turncoat\u2019s dealt element does, so every rule reads the true element. The Unmasking Glass evolution drops them all as the floor is dealt. The plan\u2019s Dread price (6) became a floor count: no priced table was ever built.'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.610 of a run’s floors. Rules 88 census (2026-10-24): 0.563 after the meteor-wall reseed. Masks (2026-10-21, DGE-016, rules 80): from the Deep two cards a floor (three from floor 33) wear a back of an element not their own until first turned; never both cards of a pair. The lie lives only in the player-visible board, as a Turncoat\u2019s dealt element does, so every rule reads the true element. The Unmasking Glass evolution drops them all as the floor is dealt. The plan\u2019s Dread price (6) became a floor count: no priced table was ever built.'
     },
     {
         id: 'power.reprise',
         verdict: 'changed',
         generation: 286,
         present: ['canReprise', 'recordRepriseTurn', 'repriseTurnsFor', 'REPRISE_FIRST_FLOOR'],
-        note: 'Reprise (2026-10-22, DGE-019, rules 83): from the Abyss, once a floor, the last three turns pay again in order - each match its score and a chain link, each miss its miss and the chain. No card moves, no turn counts. The owner chose replaying outcomes over cells or cards. The Echo Chamber evolution replays five and is live.'
+        counter: 'deep.reprises',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.394 of a run’s floors. Reprise (2026-10-22, DGE-019, rules 83): from the Abyss, once a floor, the last three turns pay again in order - each match its score and a chain link, each miss its miss and the chain. No card moves, no turn counts. The owner chose replaying outcomes over cells or cards. The Echo Chamber evolution replays five and is live.'
     },
     {
         id: 'power.carve',
         verdict: 'changed',
         generation: 282,
         present: ['canCarve', 'spendCarveOnPop', 'onCarvedSide', 'CARVE_LINKS', 'CARVE_BURST_EXTRA_PAIRS'],
-        note: 'Carve (2026-10-21, DGE-015, rules 79): from the Deep, two links of the Hold\u2019s meter aim the next pop. A realm\u2019s reaction burst takes the pairs on the carved side first and one pair more of each element; a contact pop takes the carved side first under its cap and walks one more step along the axis. A held match pops nothing, so a carve waits through the Hold and shapes the release. A carve with nothing on its side is spent by the plain pop. Never a turn or a miss.'
+        counter: 'deep.carvesSpent',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.485 of a run’s floors. Carve (2026-10-21, DGE-015, rules 79): from the Deep, two links of the Hold\u2019s meter aim the next pop. A realm\u2019s reaction burst takes the pairs on the carved side first and one pair more of each element; a contact pop takes the carved side first under its cap and walks one more step along the axis. A held match pops nothing, so a carve waits through the Hold and shapes the release. A carve with nothing on its side is spent by the plain pop. Never a turn or a miss.'
     },
     {
         id: 'power.hold',
         verdict: 'changed',
         generation: 276,
         present: ['startHold', 'releaseHold', 'applyHoldTurn', 'heldSeedIds', 'HOLD_METER_SEGMENTS'],
-        note: 'The Hold (2026-10-20, DGE-008): from floor 13, six links of the chain arm it; held matches score and cast as ever but keep their pops, and the release fires every held pair\u2019s break at once, one per suit, at the chain the run holds then, the multiplier applied once per break. A miss halves the stack (the oldest half), never empties it. The probe before it (BALANCE_NOTES) found it cannot raise the late pop share - deferring a pop takes targets from it - and the owner chose to build it as planned, a verb of timing and score.'
+        counter: 'deep.holdReleases',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.611 of a run’s floors. The Hold (2026-10-20, DGE-008): from floor 13, six links of the chain arm it; held matches score and cast as ever but keep their pops, and the release fires every held pair\u2019s break at once, one per suit, at the chain the run holds then, the multiplier applied once per break. A miss halves the stack (the oldest half), never empties it. The probe before it (BALANCE_NOTES) found it cannot raise the late pop share - deferring a pop takes targets from it - and the owner chose to build it as planned, a verb of timing and score.'
     },
     {
         id: 'hazard.endless_rent',
         verdict: 'changed',
         generation: 275,
         present: ['endlessRentForFloor', 'settleEndlessRent', 'endlessRentDue', 'rent_unpaid', 'ENDLESS_RENT_SHARE'],
-        note: 'Endless\u2019s rent (2026-10-20, DGE-006): past the Warden every floor owes a score, half of what its pairs pay cleared at the Clean rung from a standing start, the share rising 1.25x a cycle; a clear that pays less ends the run (THE DEPTHS COLLECT). A score bar, never a clock: the run bar shows the rent and what the floor has paid in the milestone\u2019s place. Measured on 80 soak runs to floor 100, the slowest tenth of floors pay 4.2 to 6.1 references at every depth, so a clean floor pays the rent to cycle 4 and the soak\u2019s careful player starts falling short near cycle 11.'
+        counter: 'deep.rentOwed',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.091 of a run’s floors. Endless\u2019s rent (2026-10-20, DGE-006): past the Warden every floor owes a score, half of what its pairs pay cleared at the Clean rung from a standing start, the share rising 1.25x a cycle; a clear that pays less ends the run (THE DEPTHS COLLECT). A score bar, never a clock: the run bar shows the rent and what the floor has paid in the milestone\u2019s place. Measured on 80 soak runs to floor 100, the slowest tenth of floors pay 4.2 to 6.1 references at every depth, so a clean floor pays the rent to cycle 4 and the soak\u2019s careful player starts falling short near cycle 11.'
     },
     {
         id: 'hazard.cartographer',
@@ -555,7 +565,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 285,
         present: ['rotateLowerLayer', 'applyCartographerTurn', 'boardRings', 'cartographer_hall', 'chartBeneath'],
         counter: 'deep.cartographerTurns',
-        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Cartographer (2026-10-22, DGE-018, rules 82): the Deep\u2019s boss on floor 40 became its own hall, the one boss floor dealt two decks deep. The study window charts the lower deck (each waiting edge in its element\u2019s ink); every third match the lower deck turns a quarter, ring by ring, clockwise, a bijection on any shape; pinned cells hold. The looking glass and the flinch left the floor: one board-mover is the rule.'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.015 of a run’s floors. The Cartographer (2026-10-22, DGE-018, rules 82): the Deep\u2019s boss on floor 40 became its own hall, the one boss floor dealt two decks deep. The study window charts the lower deck (each waiting edge in its element\u2019s ink); every third match the lower deck turns a quarter, ring by ring, clockwise, a bijection on any shape; pinned cells hold. The looking glass and the flinch left the floor: one board-mover is the rule.'
     },
     {
         id: 'hazard.keeper',
@@ -563,7 +573,7 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 284,
         present: ['swapRooms', 'applyKeeperTurn', 'keeper_hall', 'KEEPER_SWAP_EVERY_TURNS'],
         counter: 'deep.keeperSwaps',
-        note: 'Rules 88 census (2026-10-24): 0.016 after the meteor-wall reseed. Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Keeper of Halls (2026-10-22, DGE-011, rules 81): the Living Dungeon\u2019s boss on floor 24 became its own hall, a Fold whose rooms swap sides every fourth resolved turn, each card keeping its place inside its room; pinned cards and the cells across from them hold. The swap runs before the Wanderers step. The boss keeps the spotlight and drops the restless drift. Its reward is the door taken before it (DGE-026).'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.015 of a run’s floors. Rules 88 census (2026-10-24): 0.016 after the meteor-wall reseed. The Keeper of Halls (2026-10-22, DGE-011, rules 81): the Living Dungeon\u2019s boss on floor 24 became its own hall, a Fold whose rooms swap sides every fourth resolved turn, each card keeping its place inside its room; pinned cards and the cells across from them hold. The swap runs before the Wanderers step. The boss keeps the spotlight and drops the restless drift. Its reward is the door taken before it (DGE-026).'
     },
     {
         id: 'hazard.warden',
@@ -571,14 +581,15 @@ export const SYSTEM_REFINEMENT_LEDGER: readonly SystemRefinementEntry[] = [
         generation: 274,
         present: ['applyWardenTurn', 'wardenRedeal', 'endRunAfterWardenClear', 'warden_hall', 'warden_cleared', 'wardenTestHolds', 'wardenDealsAgain', 'WARDEN_FELL_PAIRS'],
         counter: 'deep.wardenRedeals',
-        note: 'Deep census (2026-10-23, `deep-census.ts`, the reference player to floor 60): 0.017 of a run’s floors. The Warden (2026-10-20, DGE-005), floor 60 and the Descent\u2019s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did. The complete Warden (2026-10-21, DGE-023, rules 78): behind the wild or raging door it is a test of a planned build, falling only to a Hold released at twelve pairs; an empty board is dealt six fresh pairs and the floor goes on, and the re-deal waits while a Hold is held. Behind the calm door clearing still wins.'
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.015 of a run’s floors. The Warden (2026-10-20, DGE-005), floor 60 and the Descent\u2019s designed end: every turn past par takes a miss from the bank, matched or not, and every fifth turn the face-down cards are dealt again among their cells, pinned cards staying. Clearing it wins the run (THE WARDEN FALLS on the results stamp); falling on it is marked. The rules live on its hall, so no mutator moves a card in the same turn. Schedule-only: floors before 60 deal as they did. The complete Warden (2026-10-21, DGE-023, rules 78): behind the wild or raging door it is a test of a planned build, falling only to a Hold released at twelve pairs; an empty board is dealt six fresh pairs and the floor goes on, and the re-deal waits while a Hold is held. Behind the calm door clearing still wins.'
     },
     {
         id: 'progression.dread',
         verdict: 'changed',
         generation: 273,
         present: ['dreadForRun', 'dreadTier', 'DREAD_TIERS', 'countDreadFloor', 'dreadRagingFloors'],
-        note: 'Dread (2026-10-19, DGE-003): one number, three per floor multiplied by 1.15 for every raging floor and 1.05 for every wild floor entered, read as eight named tiers from Quiet to It is coming, the next always named on the run bar before it arrives. Realm severities are seeded at each clear and a sway tip keeps the severity, so play never moves it; it never falls, and past the last tier it counts doublings. The priced composition arrives with DGE-009, whose board builder spends it, in one rules bump.'
+        counter: 'deep.dreadAwake',
+        note: 'Deep census (2026-10-24, `deep-census.ts`: the reference player in its realm, at a Depth that walks the ladder, to floor 66; the verbs by the planned player): 0.730 of a run’s floors. Dread (2026-10-19, DGE-003): one number, three per floor multiplied by 1.15 for every raging floor and 1.05 for every wild floor entered, read as eight named tiers from Quiet to It is coming, the next always named on the run bar before it arrives. Realm severities are seeded at each clear and a sway tip keeps the severity, so play never moves it; it never falls, and past the last tier it counts doublings. The priced composition arrives with DGE-009, whose board builder spends it, in one rules bump.'
     },
     {
         id: 'inventory.still_bell_charge',

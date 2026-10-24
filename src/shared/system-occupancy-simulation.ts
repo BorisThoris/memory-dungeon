@@ -19,6 +19,10 @@ import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '.
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { orthogonalNeighbours } from './chunk-break-rules';
+import { canReleaseHold, canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
+import { CARVE_DIRECTIONS, canCarve, carve } from './carve-rules';
+import { canReprise, reprise } from './reprise-rules';
+import { applyMissBudget } from './miss-bank';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -103,7 +107,8 @@ export interface SystemOccupancyCounter {
      * eighteen of the game's forty-five mechanics had no counter at all and sat on an exemption
      * list, which is a debt register rather than a census.
      */
-    player: 'reference' | 'tooled' | 'setup';
+    // 'planned' (the deep census, `deep-census.ts`): a player who presses the deep game's verbs - Hold, Carve, Reprise.
+    player: 'reference' | 'tooled' | 'setup' | 'planned';
 }
 
 /*
@@ -476,6 +481,7 @@ const playFloorFrom = (
 ): OccupancyFloorResult => {
     const tooled = pass === 'tooled';
     const setup = pass === 'setup';
+    const planned = pass === 'planned';
     const rulesVersion = GAME_RULES_VERSION;
     let run: RunState = startingRun;
     const rng = createMulberry32(hashStringToSeed(`occupancy:${seed}:${floor}:${missRate}:${rulesVersion}`));
@@ -503,6 +509,29 @@ const playFloorFrom = (
     }
     let wildSpent = false;
     while (run.status === 'playing' && turns < maxTurns) {
+        /*
+         * The planned player (the deep census): it holds once the Hold arms and releases a stack of four, carves a
+         * way now and then, and reprises when its last turns were all matches - the verbs a reference player never
+         * presses, so their mechanics answer to a count rather than to an exemption.
+         */
+        if (planned) {
+            if (run.holding && heldPairCount(run) >= 4 && canReleaseHold(run)) {
+                const released = releaseHold(run);
+                if (released) {
+                    step(released.run);
+                    continue;
+                }
+            }
+            if (!run.holding && canStartHold(run)) {
+                step(startHold(run));
+                continue;
+            }
+            if (canReprise(run)) {
+                step(reprise(run, applyMissBudget));
+                continue;
+            }
+            if (canCarve(run) && rng() < 0.15) step(carve(run, CARVE_DIRECTIONS[pickRngIndex(rng, CARVE_DIRECTIONS.length)]!));
+        }
         const groups = getUnresolvedPlayablePairGroups(run.board!).filter((group) =>
             group.every((tile) => tile.state === 'hidden' || tile.state === 'flipped')
         );
@@ -696,7 +725,10 @@ export const simulateRunOccupancy = ({
     seeds = RUN_OCCUPANCY_SEEDS,
     missRate = 0.15,
     maxTurns = 240,
-    counters: watched = SYSTEM_OCCUPANCY_COUNTERS
+    counters: watched = SYSTEM_OCCUPANCY_COUNTERS,
+    withRealm = false,
+    depthFor = () => 0,
+    endless = false
 }: {
     floors?: number;
     seeds?: readonly number[];
@@ -704,14 +736,18 @@ export const simulateRunOccupancy = ({
     maxTurns?: number;
     /** The counters to watch; the deep census (`deep-census.ts`) passes its own. */
     counters?: readonly SystemOccupancyCounter[];
+    /** The deep census plays each seed's own realm (the doors, the learned rule), its Depth, and on into Endless. */
+    withRealm?: boolean;
+    depthFor?: (seedIndex: number) => number;
+    endless?: boolean;
 } = {}): RunOccupancyReport => {
     const hits = new Map<string, { floors: number; total: number; lastFloor: number }>();
     const endReasons: Record<string, number> = {};
     let played = 0;
     let deepestFloor = 0;
-    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled', 'setup'];
+    const passes: Array<SystemOccupancyCounter['player']> = ['reference', 'tooled', 'setup', 'planned'];
 
-    for (const seed of seeds) {
+    for (const [seedIndex, seed] of seeds.entries()) {
         for (const pass of passes) {
             const counters = watched.filter((counter) => counter.player === pass);
             if (counters.length === 0) continue;
@@ -720,10 +756,11 @@ export const simulateRunOccupancy = ({
             let run: RunState = finishMemorizePhase(
                 setup
                     ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
-                    : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null })
+                    : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, ...(withRealm ? {} : { realm: null }), depth: depthFor(seedIndex) })
             );
             run = {
                 ...run,
+                ...(endless ? { endless: true } : {}),
                 /*
                  * The census holds the miss bank open: it measures what a run meets floor by floor,
                  * not how long one survives, and at the census's miss rate the bank (`miss-bank.ts`)

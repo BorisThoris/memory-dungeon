@@ -61,7 +61,20 @@ export const MECHANIC_DEEP_CENSUS_COUNTERS: Record<string, readonly string[]> = 
     'board.masks': ['deep.masksDropped'],
     'board.sleepers': ['deep.sleepersWoken'],
     'board.spiral': ['deep.spiralRings'],
-    'board.dread_composition': ['deep.dreadBuys']
+    'board.dread_composition': ['deep.dreadBuys'],
+    // 2026-10-24: with each seed's realm, a Depth that walks the ladder, Endless past the Warden and a player
+    // who presses the verbs, the deep census reaches the rest of the pack.
+    'board.fold': ['deep.foldFloors'],
+    'board.layers': ['deep.layerFloors'],
+    'progression.dread': ['deep.dreadAwake'],
+    'board.learned_rule': ['deep.learnedRules'],
+    'progression.depths': ['deep.depthRules'],
+    'hazard.endless_rent': ['deep.rentOwed'],
+    'progression.boss_reward': ['deep.bossRewards'],
+    'inventory.relic_evolutions': ['deep.evolutions'],
+    'power.hold': ['deep.holdReleases'],
+    'power.carve': ['deep.carvesSpent'],
+    'power.reprise': ['deep.reprises']
 };
 
 export const MECHANIC_CENSUS_COUNTERS: Record<string, readonly string[]> = {
@@ -278,50 +291,6 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
     'inventory.storm_glass_charge': {
         generation: 271,
         reason: 'Storm glasses come only from Curios and are broken by the player; the census players never spend one. The whole-run soak breaks every glass it is given and holds each to one charge with the weather clock untouched, and two hall rooms walk a called springtide and the glass dark off a realm.'
-    },
-    'inventory.relic_evolutions': {
-        generation: 281,
-        reason: 'Evolutions need a blueprint from an act boss, the first at floor 24, and two relics at rank 3, and both censuses stop at floor 24, so a counter would read nothing. The whole-run soak counts the evolutions bought and the floor of the first, with invariants that each had its blueprint and that no two share a first ingredient; unit tests pin every effect on the rule it changes, and two hall rooms walk a camp evolution and the Vault.'
-    },
-    'progression.boss_reward': {
-        generation: 280,
-        reason: 'Boss rewards are paid at the act bosses, floors 24, 40 and 60, and both censuses stop at floor 24 with no door to choose, so a counter would read nothing. The whole-run soak walks the doors before every act boss and counts the boss doors taken and the blueprints held, with the invariant that blueprints drop in order and never twice; three hall rooms walk the doors, a raging blueprint and a wild purse.'
-    },
-    'board.layers': {
-        generation: 279,
-        reason: 'Layers are dealt on the Deep, floors 25 to 39, and both censuses stop at floor 24, so a counter would read zero by construction. The whole-run soak counts the floors dealt two decks deep and every card that rose, and checks on every action that no cleared cell sits over a waiting card and that no floor ends with one; two hall rooms walk a rise and a pop of a risen pair.'
-    },
-    'board.fold': {
-        generation: 278,
-        reason: 'The Fold is a shape, not an event: every break on its floors meets the wall, so a counter would read the floor share it is dealt on. The soak checks on every turn that nothing is taken through the wall and through the door only from a match in the doorway, the unit tests pin the cut and the gate, and two hall rooms walk the door shut and open.'
-    },
-    'progression.depths': {
-        generation: 290,
-        reason: 'The Depths are a choice made before the run, and the census plays Depth 0, the game as it was. The soak plays every rung with --depths and reports each Depth apart; unit tests pin that each rung changes the one constant it names, that Depth 0 is unchanged and that the Warden felled at Depth n opens n + 1.'
-    },
-    'board.learned_rule': {
-        generation: 289,
-        reason: 'The dungeon learns you from the element matched most, and the deep census plays without a realm, so no element is ever matched most there and a counter would read nothing. The deep whole-run soak counts the rules told, with an invariant that each names the element the run matched most and comes from the table; unit tests pin the table and the same rule for the same run.'
-    },
-    'power.reprise': {
-        generation: 286,
-        reason: 'Reprise is pressed by the player from floor 41, and the census players never press it. The whole-run soak reprises when the planned player\u2019s last three turns were matches, with an invariant that a Reprise costs no turn and comes once a floor; unit tests pin the replay order, the miss and the Echo Chamber, and two hall rooms walk three matches paid again and a miss paid again.'
-    },
-    'power.carve': {
-        generation: 282,
-        reason: 'Carve is pressed by the player from floor 25, and the census players never press it. The whole-run soak carves whenever the planned player has the links, with invariants that a carve is set between turns for two links and no turn, and never outlives its floor; unit tests pin the biased burst and walk, and three hall rooms carve right, carve at nothing, and carve through a Hold.'
-    },
-    'power.hold': {
-        generation: 276,
-        reason: 'The Hold is pressed by the player from floor 13, and the census players never press it. The whole-run soak holds whenever the meter arms and releases at three held pairs, with invariants that a held match takes only its pair and nothing is held into a cleared floor, and three hall rooms walk a release, a halving miss and a held last pair.'
-    },
-    'hazard.endless_rent': {
-        generation: 275,
-        reason: 'The rent is charged only past the Warden in an Endless run, and the census plays twenty-four floors and the soak thirty, so neither meets it. Its rules are unit tested, two hall rooms walk a floor that cannot pay and one that does, and its share was set from 80 soak runs measured to floor 100.'
-    },
-    'progression.dread': {
-        generation: 273,
-        reason: 'Dread is read off the floor and the realm severities a run has entered; it acts on nothing inside a floor, so the floor census has nothing to count. The whole-run soak checks after every action that it never falls, and a hall room walks it from Quiet into Stirring across a clear.'
     },
     'inventory.still_bell_charge': {
         generation: 272,

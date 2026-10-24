@@ -79,9 +79,10 @@ describe('every mechanic answers for itself', () => {
         // 37 on 2026-09-30: the heat perks joined with their own census row.
         // 39 on 2026-10-20: the Wanderers joined with a run-census row.
         expect(censused).toBe(39);
-        // 2026-10-23: seven deep mechanics answer to the deep census (`deep-census.ts`) instead of an exemption.
+        // 2026-10-23: seven deep mechanics answer to the deep census (`deep-census.ts`) instead of an exemption;
+        // 2026-10-24: eleven more, with the realm, the Depths, Endless and the planned player.
         const deepCensused = Object.keys(MECHANIC_DEEP_CENSUS_COUNTERS).length;
-        expect(deepCensused).toBe(7);
+        expect(deepCensused).toBe(18);
         // 43 to 48 in Gen 262: the miss bank, gold, the store stop, bombs and relics joined the graph,
         // each exempt with the soak as its proof rather than counted, because no census player shops.
         // 53 to 56 on 2026-09-30: realm weather, omens and realm travel, exempt with the soak as proof.
