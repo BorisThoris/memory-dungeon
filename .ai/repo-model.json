@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3373,
-    "codeFileCount": 1303,
-    "exportedSymbolCount": 4224,
+    "trackedFileCount": 3378,
+    "codeFileCount": 1305,
+    "exportedSymbolCount": 4225,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11807
+    "relationshipCount": 11814
   },
   "inventory": [
     {
@@ -2488,7 +2488,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "da28e8304fa243c00b43dc21f6a4ef411a0cc29e0c05d177ad9f974ef3ac8eb1"
+      "sha256": "38778de82008541d003756758d5b48062990f0bfe496f8e64d79a78c1d349478"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4215,8 +4215,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 26959,
-      "sha256": "29988fc366511383d541b1bea9764544847adced6eb0d69dd59ef2abb41ab361"
+      "bytes": 27310,
+      "sha256": "8f6e3ea8ade63f7efa005fe8a2aacdbe7ce82caa592c6b722cab0c5150638ba1"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -5201,6 +5201,18 @@
       "category": "script",
       "bytes": 2927,
       "sha256": "cc3b41ed299ab992d5bee2f5d17fe49a61cc810630d56f745edf7d87c10bda58"
+    },
+    {
+      "path": "scripts/card-pipeline/steam-achievement-icons.py",
+      "category": "script",
+      "bytes": 3997,
+      "sha256": "ed6d600e81ba753fafcc30aa89a7a8d2be0b3dfda86b9c3e661bf600eb6fc78e"
+    },
+    {
+      "path": "scripts/card-pipeline/steam-achievements.zimage.manifest.json",
+      "category": "script",
+      "bytes": 14732,
+      "sha256": "68b39516d7b10ac5c82d2f79e98b0c7687fd53d290c2b290349fbe6e2765bfef"
     },
     {
       "path": "scripts/card-pipeline/trim-png-bounding-box.mjs",
@@ -11071,6 +11083,18 @@
       "sha256": "5d44c543bc5ce503774fd93a1e041754b91dac76a2ea6b66211219da2de6e5d1"
     },
     {
+      "path": "src/renderer/components/EvolutionGlyph.test.tsx",
+      "category": "test",
+      "bytes": 905,
+      "sha256": "55f54f54188d5e5d95df39313755d4c286d373a12616ec50ee1791b1a6df8d5d"
+    },
+    {
+      "path": "src/renderer/components/EvolutionGlyph.tsx",
+      "category": "source",
+      "bytes": 1809,
+      "sha256": "c40097a70501ba726d8bda1b0856907d2876a2c0caddf8f34b4c3c61abfd2fe2"
+    },
+    {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "category": "test",
       "bytes": 11900,
@@ -11319,8 +11343,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 9649,
-      "sha256": "998dada502822a27247412c08646b7030845a1a53a7b714e75dfd995fd6416c7"
+      "bytes": 9853,
+      "sha256": "d7f3888e714ab71128bb2fd6c7b48cea7f3b5a50ac3c4b9a559cd28aba85aff6"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -11331,8 +11355,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 14817,
-      "sha256": "2d209e228b8efb4f78e50f5d3b2d930fe70584c8fe6a701308779acdbc20350b"
+      "bytes": 14978,
+      "sha256": "32e0b71a319554107f7e3a423a4649b7e42b00fd83b644fbc160708dc989fa6b"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -17835,8 +17859,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 26490,
-      "sha256": "96a402e4e51a3f1d21574bca09c4d5c1007e34573ca76ea0c5014424037c42ff"
+      "bytes": 26907,
+      "sha256": "dff46db764e12442c881f66fc321dcb7701e636fb5b6c84b8d29458ce4024e2e"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -17857,10 +17881,16 @@
       "sha256": "689c6b29d49f15219ba78ccb9f7324628df31899361d4735626a4486c3f8c5ba"
     },
     {
+      "path": "tasks/deep-game-epic/07-completion-check.md",
+      "category": "other",
+      "bytes": 9999,
+      "sha256": "692fc7519b50a9f9424dc4b461040494eefc3cfe0e09a0bbeaba2664c3b0cbce"
+    },
+    {
       "path": "tasks/deep-game-epic/README.md",
       "category": "documentation",
-      "bytes": 8563,
-      "sha256": "5aee3d522a0cd3af9ac749f07d08b144a86836d9dd295c5a3d2c5cf62b340986"
+      "bytes": 8702,
+      "sha256": "bb1cfb916e808609878ef373bcf40dab42982bfed5ca911f7b64f58950cde617"
     },
     {
       "path": "tasks/deep-game-epic/TICKET_TEMPLATE.md",
@@ -17949,8 +17979,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-014-relic-evolutions.md",
       "category": "other",
-      "bytes": 5150,
-      "sha256": "2e303ab9513ff0c3b26874d1ce74f6f55aaee4061ece50f446b0ed0ae3bb5f10"
+      "bytes": 5668,
+      "sha256": "b627890baf0873db5d0ab7cde2a42e108437e9e9f0bd3814da06fdc885eb4f24"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-015-carve-verb.md",
@@ -18033,8 +18063,8 @@
     {
       "path": "tasks/deep-game-epic/tickets/DGE-028-telemetry-and-achievements.md",
       "category": "other",
-      "bytes": 3443,
-      "sha256": "c1f3ad0b42048b2de11acd6b7aa4338787b94699b2b9c9ca5f14fc5abd5d883f"
+      "bytes": 4004,
+      "sha256": "b10a4994958a333e79f7d9afda54430746ac5e5d865db35ba7ea8ae44319b3f7"
     },
     {
       "path": "tasks/deep-game-epic/tickets/DGE-029-codex-and-copy.md",
@@ -24339,6 +24369,35 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "path": "src/renderer/components/EvolutionGlyph.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 19,
+      "imports": [
+        "file:src/renderer/components/EvolutionGlyph.tsx",
+        "file:src/shared/relic-evolution-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/EvolutionGlyph.tsx",
+      "path": "src/renderer/components/EvolutionGlyph.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 31,
+      "imports": [
+        "file:src/shared/boss-reward-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/EvolutionGlyph.tsx#EvolutionGlyph"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/EvolutionGlyph.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "layer": "renderer",
@@ -25122,9 +25181,10 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 287,
+      "lineCount": 288,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/components/EvolutionGlyph.tsx",
         "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/components/metaStackedShellLayout.ts",
         "file:src/renderer/copy/relicEvolutionCopy.ts",
@@ -42498,6 +42558,7 @@
         "symbol:src/shared/relic-evolution-rules.ts#misersVaultCatches"
       ],
       "testedBy": [
+        "file:src/renderer/components/EvolutionGlyph.test.tsx",
         "file:src/shared/relic-evolution-rules.test.ts"
       ]
     },
@@ -50456,6 +50517,14 @@
       "endLine": 33
     },
     {
+      "id": "symbol:src/renderer/components/EvolutionGlyph.tsx#EvolutionGlyph",
+      "name": "EvolutionGlyph",
+      "kind": "value",
+      "file": "src/renderer/components/EvolutionGlyph.tsx",
+      "line": 22,
+      "endLine": 30
+    },
+    {
       "id": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
       "name": "FINDABLE_BACK_TINT",
       "kind": "value",
@@ -51108,8 +51177,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 286,
-      "endLine": 286
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -90399,6 +90468,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/EvolutionGlyph.tsx->symbol:src/renderer/components/EvolutionGlyph.tsx#EvolutionGlyph",
+      "source": "file:src/renderer/components/EvolutionGlyph.tsx",
+      "target": "symbol:src/renderer/components/EvolutionGlyph.tsx#EvolutionGlyph",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/findableMarkerColor.ts->symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
       "source": "file:src/renderer/components/findableMarkerColor.ts",
       "target": "symbol:src/renderer/components/findableMarkerColor.ts#FINDABLE_BACK_TINT",
@@ -118415,6 +118490,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/EvolutionGlyph.test.tsx->src/renderer/components/EvolutionGlyph.tsx",
+      "source": "file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "target": "file:src/renderer/components/EvolutionGlyph.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/EvolutionGlyph.test.tsx->src/shared/relic-evolution-rules.ts",
+      "source": "file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "target": "file:src/shared/relic-evolution-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/EvolutionGlyph.tsx->src/shared/boss-reward-rules.ts",
+      "source": "file:src/renderer/components/EvolutionGlyph.tsx",
+      "target": "file:src/shared/boss-reward-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/findableMarkerColor.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/findableMarkerColor.ts",
       "target": "file:src/shared/contracts.ts",
@@ -120020,6 +120113,12 @@
       "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/audio/uiSfx.ts",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "file:src/renderer/audio/uiSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/components/EvolutionGlyph.tsx",
+      "source": "file:src/renderer/components/InventoryScreen.tsx",
+      "target": "file:src/renderer/components/EvolutionGlyph.tsx",
       "kind": "imports"
     },
     {
@@ -146392,6 +146491,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/EvolutionGlyph.tsx->file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "source": "file:src/renderer/components/EvolutionGlyph.tsx",
+      "target": "file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/FloorClearBeat.tsx->file:src/renderer/components/FloorClearBeat.test.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.test.tsx",
@@ -153313,6 +153418,12 @@
       "id": "tested_by:src/shared/release-checklist.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/release-checklist.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/relic-evolution-rules.ts->file:src/renderer/components/EvolutionGlyph.test.tsx",
+      "source": "file:src/shared/relic-evolution-rules.ts",
+      "target": "file:src/renderer/components/EvolutionGlyph.test.tsx",
       "kind": "tested_by"
     },
     {
