@@ -253,6 +253,20 @@ test.describe('Every tool can be used from the dock', () => {
         await expect(page.getByTestId('tool-reprise')).toBeDisabled();
     });
 
+    test('camp: two relics at rank 3 and their blueprint evolve as the floor is left (DGE-014)', async ({ page }) => {
+        await openRoom(page, 'evolution-at-camp');
+        for (const key of ['a', 'b']) {
+            await pick(page, `${key}-1`);
+            await pick(page, `${key}-2`);
+            await expect.poll(async () => (await read(page)).states[`${key}-2`], { timeout: 30_000 }).toBe('matched');
+        }
+        await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('levelComplete');
+        await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().continueToNextLevel());
+        await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.evolutions ?? []), { timeout: 30_000 }).toContain('lantern_of_recall');
+        await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openInventoryFromPlaying());
+        await expect(page.getByTestId('inventory-evolution-lantern_of_recall')).toBeVisible({ timeout: 30_000 });
+    });
+
     test('hold: press it, match a pair, and Release breaks what was held', async ({ page }) => {
         await openRoom(page, 'hold-release');
         await openItemsIfFolded(page);

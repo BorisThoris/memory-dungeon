@@ -73,8 +73,9 @@ const playRun = async (
         label,
         query = '',
         maxSteps = 600,
-        wardenChoice = 'win'
-    }: { missRate: number; maxFloor: number; label: string; query?: string; maxSteps?: number; wardenChoice?: 'win' | 'endless' }
+        wardenChoice = 'win',
+        wardenDoor = 'calm'
+    }: { missRate: number; maxFloor: number; label: string; query?: string; maxSteps?: number; wardenChoice?: 'win' | 'endless'; wardenDoor?: 'calm' | 'raging' }
 ) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
@@ -141,8 +142,13 @@ const playRun = async (
                 const next = nextDescentLevel(run);
                 return isActBossFloor(next) && descentActForFloor(next).bossFloor === DESCENT_FLOOR_COUNT;
             });
-            const calmDoor = page.locator('[data-testid^="realm-door-"][data-severity="calm"]').first();
-            const door = wardenNext && (await calmDoor.isVisible().catch(() => false)) ? calmDoor : page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
+            // Or, asked to (DGE-023), it takes the raging door - the wild one when no door rages - and meets the complete Warden.
+            const wantedDoor = wardenDoor === 'calm'
+                ? page.locator('[data-testid^="realm-door-"][data-severity="calm"]').first()
+                : (await page.locator('[data-testid^="realm-door-"][data-severity="raging"]').first().isVisible().catch(() => false))
+                  ? page.locator('[data-testid^="realm-door-"][data-severity="raging"]').first()
+                  : page.locator('[data-testid^="realm-door-"][data-severity="wild"]').first();
+            const door = wardenNext && (await wantedDoor.isVisible().catch(() => false)) ? wantedDoor : page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
             if (await door.isVisible().catch(() => false)) {
                 await shot(`travel-after-${level}`);
                 await door.click();
@@ -175,6 +181,32 @@ const playRun = async (
         if (s.flipped.length > 0) {
             await page.waitForTimeout(300);
             continue;
+        }
+        // Behind the raging door the Warden falls only to a Hold of twelve (DGE-023): this player holds once the
+        // Hold arms, and releases at twelve, through the store's own actions, as the dock's button would.
+        if (wardenDoor === 'raging') {
+            const held = await page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const { wardenTestHolds, WARDEN_FELL_PAIRS } = await import('/src/shared/warden-rules.ts');
+                const { canStartHold, heldPairCount } = await import('/src/shared/hold-rules.ts');
+                const store = useAppStore.getState();
+                const run = store.run;
+                if (!run?.board || !wardenTestHolds(run)) return 'none';
+                if (run.holding && heldPairCount(run) >= WARDEN_FELL_PAIRS) {
+                    store.releaseHold();
+                    return 'released';
+                }
+                if (!run.holding && canStartHold(run)) {
+                    store.startHold();
+                    return 'started';
+                }
+                return 'none';
+            });
+            if (held !== 'none') {
+                await shot(`hold-${held}-${level}`);
+                await page.waitForTimeout(600);
+                continue;
+            }
         }
         // A Stasis lock keeps one tile from opening a turn; a player opens elsewhere.
         const openers = s.hidden.filter((tile) => tile.id !== s.blocked);
@@ -221,6 +253,21 @@ test.describe('Playtest', () => {
         expect(result.ended).toBe('gameOver');
         expect(result.level).toBe(60);
         await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
+    });
+
+    /*
+     * The complete Warden (DGE-023): the same tester takes the raging door before floor 60, where the Warden falls
+     * only to a Hold released at twelve pairs; it holds once the Hold arms and releases at twelve, and the results
+     * screen says how the Warden fell.
+     */
+    test('a tester at the test pace takes the raging door and fells the complete Warden with a Hold', async ({ page }) => {
+        test.setTimeout(2_400_000);
+        const result = await playRun(page, { missRate: 0.02, maxFloor: 99, label: 'test-pace-raging', query: 'pace=fast', maxSteps: 2400, wardenDoor: 'raging' });
+        expect(result.errors).toEqual([]);
+        expect(result.ended).toBe('gameOver');
+        expect(result.level).toBe(60);
+        await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
+        await expect(page.getByTestId('game-over-warden')).toHaveText(/Felled by a Hold/);
     });
 
     /*

@@ -63,3 +63,5 @@ Leave next steps, checklist rows ticked, and known blockers here after implement
 - Not done: a camp e2e (the camp is automatic; the inventory lists evolutions and blueprints); the six icons (DGE-030); the Warden's condition (DGE-023).
 
 2026-10-23, the six icons: not built, by decision. Relics and evolutions are named chips on the inventory, an ink-and-paper screen that carries no relic art at all (the art rules keep those screens bare), so six icons for the evolutions alone would be the only ones there. The camp e2e stays a gap: the camp is automatic, and the inventory, the soak and the hall room `evolution-at-camp` cover what it does.
+
+2026-10-24: the camp e2e. `e2e/tools-usable.spec.ts` plays the room `evolution-at-camp` through the board: the floor cleared with Long Look and the Tallow Candle at rank 3 and the blueprint, the camp evolves them into the Lantern of Recall as the floor is left, and the inventory shows its chip. Passes in the isolated station.
