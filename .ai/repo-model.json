@@ -3951,8 +3951,8 @@
     {
       "path": "e2e/deep-cue-levels.spec.ts",
       "category": "test",
-      "bytes": 7589,
-      "sha256": "a737c5ca2e8f7b76f38345b0ceab6f11ad5d9dac63e8c813b406b235b832b559"
+      "bytes": 7794,
+      "sha256": "bee13233417705bebe26a1741d0ab191c49dec9101a1dea326bdfdf29a0568d7"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -4611,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71843,
-      "sha256": "b9ca7c0a0ee5c1cbcec86d2b65d75cc9b8ea9d9d4bab6ffcb812737836f43c41"
+      "bytes": 71777,
+      "sha256": "ded4d6cc4a59db42acf321e0719c0f4b9e37759bf73c7a82eb1bc6728931efec"
     },
     {
       "path": "public/site.webmanifest",
