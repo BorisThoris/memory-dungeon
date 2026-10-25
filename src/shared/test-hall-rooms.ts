@@ -43,7 +43,9 @@ import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { verbArrivingOn } from './verb-staircase-rules';
 import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
-import { gateOmenToldOn } from './run-signature-rules';
+import { gateOmensToldOn } from './run-signature-rules';
+import { dealMasks } from './mask-rules';
+import { dealSleepers } from './sleeper-rules';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
 import { BLUEPRINT_ORDER, BOSS_WILD_GOLD } from './boss-reward-rules';
@@ -116,6 +118,7 @@ export type TestHallRoomId =
     | 'hold-release'
     | 'verb-staircase-hold'
     | 'gate-omen'
+    | 'gate-omens-remembered'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -1417,7 +1420,30 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 says: 'one Wanderer pair on floor 6, and the crown tells the omen',
                 expect: (r) => {
                     const wanderers = new Set(r.board!.tiles.filter((t) => t.wanderer).map((t) => t.pairKey)).size;
-                    return wanderers === 1 && gateOmenToldOn(r) === 'wanderer' && finishable(r) === null ? null : `wanderers ${wanderers}, told ${String(gateOmenToldOn(r))}`;
+                    return wanderers === 1 && gateOmensToldOn(r).join() === 'wanderer' && finishable(r) === null ? null : `wanderers ${wanderers}, told ${gateOmensToldOn(r).join()}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'gate-omens-remembered',
+        title: 'A seasoned Gate holds two omens',
+        mechanic: 'From rules 92 the omens grow with the runs a profile has finished: Sleepers join after three, and from the eighth a run walks with two. This run was made by a profile of twelve.',
+        graphMechanicIds: ['board.sleepers', 'board.masks'],
+        tryThis: 'Floor 6 of a seasoned run: one Sleeper pair and one mask, both named on the crown. Match a plain pair; the board keeps a way to finish.',
+        build: () => {
+            const base = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 6, misses: 4, run: { gateOmens: ['sleeper', 'mask'] } });
+            const dealt = dealMasks(dealSleepers(base.board!, { runSeed: base.runSeed, rulesVersion: base.runRulesVersion, omens: base.gateOmens }), { runSeed: base.runSeed, rulesVersion: base.runRulesVersion, omens: base.gateOmens });
+            return { ...base, board: dealt };
+        },
+        script: [
+            {
+                step: { do: 'match', pairKey: 'h' },
+                says: 'one Sleeper pair and one mask, and the crown names both omens',
+                expect: (r) => {
+                    const sleepers = new Set(r.board!.tiles.filter((t) => t.sleeper).map((t) => t.pairKey)).size;
+                    const masks = r.board!.tiles.filter((t) => t.mask != null).length;
+                    return sleepers === 1 && masks === 1 && gateOmensToldOn(r).join() === 'sleeper,mask' && finishable(r) === null ? null : `sleepers ${sleepers}, masks ${masks}, told ${gateOmensToldOn(r).join()}`;
                 }
             }
         ]

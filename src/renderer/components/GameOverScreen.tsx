@@ -33,6 +33,8 @@ import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { DREAD_HUD_COPY } from '../copy/realmCopy';
 import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { isPassAndPlayRun, resolvePassAndPlayOutcome } from '../../shared/pass-and-play-rules';
+import { discoveryAt } from '../../shared/run-signature-rules';
+import { GATE_OMEN_COPY } from '../copy/verbArrivalCopy';
 
 interface GameOverScreenProps {
     run: RunState;
@@ -201,6 +203,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         ? null
         : summarizeDescent(run, runStartSaveData?.playerStats?.descent ? normalizeDescentRecord(runStartSaveData.playerStats.descent) : null);
     const firstsLine = descent ? descentFirstsLine(descent) : null;
+    // The dungeon remembers (`run-signature-rules.ts`): the run that took the profile to a discovery says what the next one holds.
+    const runsFinished = saveData.playerStats?.runsFinished ?? 0;
+    const countedThisRun = runStartSaveData != null && runsFinished === (runStartSaveData.playerStats?.runsFinished ?? 0) + 1;
+    const discovery = countedThisRun ? discoveryAt(runsFinished) : null;
+    const discoveryLine = discovery ? GATE_OMEN_COPY.discovered(discovery.omen, discovery.secondOmen) : null;
     // The nave the run ends in burns at the best chain the run actually reached, measured on the
     // meter's own scale rather than a second one invented here: the board is gone, so the streak
     // goes against the standard Fever rung. A run that never chained ends on guttering candles.
@@ -325,6 +332,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {firstsLine ? (
                             <p className={styles.copy} data-testid="game-over-firsts">
                                 {firstsLine}
+                            </p>
+                        ) : null}
+                        {discoveryLine ? (
+                            <p className={styles.copy} data-testid="game-over-discovery">
+                                {discoveryLine}
                             </p>
                         ) : null}
                         {wardenLine ? (

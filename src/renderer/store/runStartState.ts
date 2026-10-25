@@ -47,7 +47,11 @@ export const createRunStartTelemetryPayload = (
  * The one meta option a save used to carry into a run was the relic shrine's extra pick; the
  * draft went in Gen 175, so a save carries nothing into run creation now.
  */
-const metaRelicOptionsForSave = (_saveData: SaveData): Record<string, never> => ({});
+/**
+ * What a solo run takes from the profile: the runs it has finished, which decide the omens its Gate can draw
+ * (`run-signature-rules.ts`, rules 92). A shared seed and a table play the first omens, the same for everyone.
+ */
+const metaRelicOptionsForSave = (saveData: SaveData): { runsFinished: number } => ({ runsFinished: Math.max(0, Math.floor(saveData.playerStats?.runsFinished ?? 0)) });
 
 export type RunStartRequest =
     | { kind: 'endless'; setup?: ClassicRunSetup }
@@ -101,11 +105,11 @@ export const createRunStartPlan = ({
              * The same endless ruleset every solo run uses; only the credit is split. It skips the
              * onboarding-safe first floor because a table sitting down together is not a first run.
              */
-            run = createNewRun(bestScore, { ...meta, passAndPlaySeats: request.seats });
+            run = createNewRun(bestScore, { passAndPlaySeats: request.seats });
             telemetryExtra = { passAndPlaySeats: request.seats };
             break;
         case 'shared': {
-            run = createRunFromShareKey(request.key, bestScore, meta);
+            run = createRunFromShareKey(request.key, bestScore);
             break;
         }
     }
@@ -136,7 +140,7 @@ const restartRunFor = (previousRun: RunState | null, saveData: SaveData): RunSta
      * player mid-evening.
      */
     if (previousRun?.passAndPlay) {
-        return createNewRun(bestScore, { ...meta, passAndPlaySeats: previousRun.passAndPlay.seats.length });
+        return createNewRun(bestScore, { passAndPlaySeats: previousRun.passAndPlay.seats.length });
     }
 
     /*

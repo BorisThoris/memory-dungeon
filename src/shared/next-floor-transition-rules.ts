@@ -31,6 +31,7 @@ import { dealOddCards } from './odd-card-rules';
 import { dealWanderers, wandererCountFor } from './wanderer-rules';
 import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
+import { runGateOmens } from './run-signature-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -78,11 +79,13 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     // Then the Wanderers, on pairs the odd cards left plain (`wanderer-rules.ts`).
     // Then, on the Deep's floors, the second deck under half the cells (`board-layers-rules.ts`).
     const seeded = { runSeed: run.runSeed, rulesVersion: run.runRulesVersion };
+    // The run's omens (`run-signature-rules.ts`): the families that walk its Gate early.
+    const omens = runGateOmens(run);
     // Then, from the Deep, the masks on cards the others left plain (`mask-rules.ts`); the Unmasking Glass drops them at once.
     // From the Abyss, the Sleepers (`sleeper-rules.ts`), on pairs the others left plain. A learned rule
     // (`learned-rule-rules.ts`) chooses which element one of the three dealers lands on, never how many.
     const learnedRule = pickLearnedRule(run, bossBoard.level);
-    const prefer = (id: LearnedRuleId) => ({ ...seeded, preferSuit: preferredSuitFor(learnedRule, id) });
+    const prefer = (id: LearnedRuleId) => ({ ...seeded, omens, preferSuit: preferredSuitFor(learnedRule, id) });
     const depth = run.depth ?? 0;
     // The Dread spends (`dread-composition-rules.ts`): from Awake it buys more of the families the schedule deals.
     const dreadBought = dreadComposes(run)

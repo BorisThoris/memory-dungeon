@@ -4,7 +4,7 @@ import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { GATE_OMEN_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
-import { gateOmenToldOn } from '../../shared/run-signature-rules';
+import { gateOmensToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
 import { canReprise, repriseTurnsFor, isRepriseUnlocked } from '../../shared/reprise-rules';
@@ -1678,9 +1678,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // The verb staircase (`verb-staircase-rules.ts`): the verb this floor brings, told until the floor ends.
     const verbArriving = verbArrivingOn(run);
     // A run's omen (`run-signature-rules.ts`): the deep family that walks this run's Gate, told the floor it first shows.
-    const omenTold = gateOmenToldOn(run);
+    const omensTold = gateOmensToldOn(run);
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omenTold != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2268,9 +2268,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
                                     </p>
                                 ) : null}
-                                {omenTold ? (
-                                    <p className={styles.wardenRules} data-testid="gate-omen" data-omen={omenTold}>
-                                        <span className={styles.wardenRulesName}>{GATE_OMEN_COPY.kicker}</span> {GATE_OMEN_COPY.line(omenTold)}
+                                {omensTold.length > 0 ? (
+                                    <p className={styles.wardenRules} data-testid="gate-omen" data-omen={omensTold.join(' ')}>
+                                        <span className={styles.wardenRulesName}>{GATE_OMEN_COPY.kicker(omensTold.length)}</span> {omensTold.map(GATE_OMEN_COPY.line).join(' ')}
                                     </p>
                                 ) : null}
                                 {dreadBought ? (

@@ -1,7 +1,7 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
 import { MASK_MIN_PAIRS, maskCountFor } from './mask-rules';
-import { gateOmenCount } from './run-signature-rules';
+import { gateOmenCount, runGateOmens } from './run-signature-rules';
 import { sleeperCountFor } from './sleeper-rules';
 import { spiralHolds } from './spiral-rules';
 import { canReprise, reprise, repriseTurnsFor } from './reprise-rules';
@@ -649,7 +649,7 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const pairs = (flag: 'wanderer' | 'sleeper') => new Set(board.tiles.filter((tile) => tile[flag]).map((tile) => tile.pairKey)).size;
         const masks = board.tiles.filter((tile) => tile.mask != null).length;
         // The run's omen (`run-signature-rules.ts`) adds one where the schedule deals none; the Dread never buys on it.
-        const omen = (family: 'wanderer' | 'mask', minPairs: number) => gateOmenCount(family, board, { runSeed: run.runSeed, rulesVersion: run.runRulesVersion, scheduled: scheduled[family], minPairs });
+        const omen = (family: 'wanderer' | 'mask', minPairs: number) => gateOmenCount(family, board, { omens: runGateOmens(run), scheduled: scheduled[family], minPairs });
         const allowed = { wanderer: scheduled.wanderer + omen('wanderer', WANDERER_MIN_PAIRS), mask: scheduled.mask + omen('mask', MASK_MIN_PAIRS) };
         if (pairs('wanderer') > allowed.wanderer + told.wanderer) return `${pairs('wanderer')} Wanderer pairs, past ${allowed.wanderer} + ${told.wanderer}`;
         if (masks > allowed.mask + told.mask && !hasEvolution(run, 'unmasking_glass')) return `${masks} masks, past ${allowed.mask} + ${told.mask}`;
@@ -810,9 +810,11 @@ export const soakRun = ({
     const rng = createMulberry32(hashStringToSeed(`soak:${seed}:${playerName}`));
     const pick = <T>(items: readonly T[]): T => items[pickRngIndex(rng, items.length)]!;
     const violations: SoakViolation[] = [];
+    // Profiles of every age (`run-signature-rules.ts`, rules 92): 0 to 11 finished runs, so the Gate deals every omen and both draws.
+    const runsFinished = seed % 12;
     let run: RunState = player.wild
-        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth })
-        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth });
+        ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished })
+        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished });
     let step = 0;
     let turns = 0;
     let purchases = 0;

@@ -1,4 +1,7 @@
+import type { GateOmen } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
+
+export type { GateOmen };
 
 /**
  * A run's own Gate (rules 90, 2026-10-24): no two runs open the same way.
@@ -18,7 +21,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
  */
 export const RUN_SIGNATURE_FROM = 90;
 
-export type GateOmen = 'wanderer' | 'mask';
+/** The first omens, before any run is finished. */
 export const GATE_OMENS: readonly GateOmen[] = ['wanderer', 'mask'];
 /** The first floor the omen shows: after the Hold (5), on the Gate's first breather. */
 export const GATE_OMEN_FROM_FLOOR = 6;
@@ -29,9 +32,51 @@ export const GATE_OMEN_COUNT = 1;
 
 const onSignature = (rulesVersion: number): boolean => rulesVersion >= RUN_SIGNATURE_FROM;
 
-/** The run's omen. */
-export const gateOmen = (runSeed: number, rulesVersion: number): GateOmen | null =>
-    onSignature(rulesVersion) ? GATE_OMENS[pickRngIndex(createMulberry32(hashStringToSeed(`gateOmen:${runSeed}`)), GATE_OMENS.length)]! : null;
+/**
+ * The dungeon remembers (rules 92, 2026-10-25): the more runs a profile finishes, the more the Gate can
+ * hold. The owner's word was that the game does not change the more you play; until rules 92 run 100 dealt
+ * from the same pool as run 1. A family joins the omens after the runs it names, and from
+ * `TWO_OMENS_AFTER_RUNS` a run walks with two. Each is a kind of floor, never a number: the miss bank,
+ * the scores and the bars are the same for the hundredth run as for the first (DGE-024's rule).
+ */
+export const OMEN_DISCOVERY_FROM = 92;
+export const OMEN_DISCOVERIES: readonly { omen: GateOmen; afterRuns: number }[] = [
+    { omen: 'wanderer', afterRuns: 0 },
+    { omen: 'mask', afterRuns: 0 },
+    { omen: 'sleeper', afterRuns: 3 }
+];
+export const TWO_OMENS_AFTER_RUNS = 8;
+
+/** The omens a profile that has finished this many runs has discovered. */
+export const omenPoolFor = (runsFinished: number): GateOmen[] =>
+    OMEN_DISCOVERIES.filter((discovery) => Math.max(0, Math.floor(runsFinished)) >= discovery.afterRuns).map((discovery) => discovery.omen);
+
+/** How many omens a run walks with. */
+export const omenDrawsFor = (runsFinished: number): number => (Math.max(0, Math.floor(runsFinished)) >= TWO_OMENS_AFTER_RUNS ? 2 : 1);
+
+/** A run's omens, drawn from its seed; before rules 92 one from the first two (rules 90's draw, unchanged). */
+export const gateOmensFor = (runSeed: number, rulesVersion: number, runsFinished: number): GateOmen[] => {
+    if (!onSignature(rulesVersion)) return [];
+    const rng = createMulberry32(hashStringToSeed(`gateOmen:${runSeed}`));
+    const pool = rulesVersion >= OMEN_DISCOVERY_FROM ? omenPoolFor(runsFinished) : [...GATE_OMENS];
+    const draws = rulesVersion >= OMEN_DISCOVERY_FROM ? omenDrawsFor(runsFinished) : 1;
+    const drawn: GateOmen[] = [];
+    while (drawn.length < draws && pool.length > 0) drawn.push(pool.splice(pickRngIndex(rng, pool.length), 1)[0]!);
+    return drawn;
+};
+
+/** The omens this run walks with: drawn when it was made, or from its seed for a run before rules 92. */
+export const runGateOmens = (run: { runSeed: number; runRulesVersion?: number; gateOmens?: readonly GateOmen[] }): readonly GateOmen[] =>
+    run.gateOmens ?? gateOmensFor(run.runSeed, run.runRulesVersion ?? 0, 0);
+
+/** The run's first omen (rules 90's one). */
+export const gateOmen = (runSeed: number, rulesVersion: number): GateOmen | null => gateOmensFor(runSeed, rulesVersion, 0)[0] ?? null;
+
+/** The family a profile discovers by finishing its `runsFinished`th run, if one joins then; and whether a second omen does. */
+export const discoveryAt = (runsFinished: number): { omen: GateOmen | null; secondOmen: boolean } => ({
+    omen: OMEN_DISCOVERIES.find((discovery) => discovery.afterRuns > 0 && discovery.afterRuns === runsFinished)?.omen ?? null,
+    secondOmen: runsFinished === TWO_OMENS_AFTER_RUNS
+});
 
 /** The cycle positions (1-based) that keep their rooms, and the groups whose rooms trade places. */
 const SHUFFLED_GROUPS: readonly (readonly number[])[] = [
@@ -60,12 +105,10 @@ export const signatureCyclePosition = (runSeed: number, rulesVersion: number, cy
 export const gateOmenCount = (
     family: GateOmen,
     board: { level: number; pairCount: number },
-    { runSeed, rulesVersion, scheduled, minPairs }: { runSeed: number; rulesVersion: number; scheduled: number; minPairs: number }
+    { omens, scheduled, minPairs }: { omens: readonly GateOmen[]; scheduled: number; minPairs: number }
 ): number =>
-    scheduled === 0 && board.level >= GATE_OMEN_FROM_FLOOR && board.level <= GATE_OMEN_TO_FLOOR && board.pairCount >= minPairs && gateOmen(runSeed, rulesVersion) === family ? GATE_OMEN_COUNT : 0;
+    scheduled === 0 && board.level >= GATE_OMEN_FROM_FLOOR && board.level <= GATE_OMEN_TO_FLOOR && board.pairCount >= minPairs && omens.includes(family) ? GATE_OMEN_COUNT : 0;
 
-/** The floor the omen is told on: the first it can show. */
-export const gateOmenToldOn = (run: { runSeed: number; runRulesVersion?: number; board?: { level: number } | null; endless?: boolean }): GateOmen | null => {
-    const omen = gateOmen(run.runSeed, run.runRulesVersion ?? 0);
-    return omen && run.endless !== true && run.board?.level === GATE_OMEN_FROM_FLOOR ? omen : null;
-};
+/** The omens told on the floor they first show, floor 6; none in Endless. */
+export const gateOmensToldOn = (run: { runSeed: number; runRulesVersion?: number; gateOmens?: readonly GateOmen[]; board?: { level: number } | null; endless?: boolean }): readonly GateOmen[] =>
+    run.endless !== true && run.board?.level === GATE_OMEN_FROM_FLOOR ? runGateOmens(run) : [];

@@ -21,6 +21,7 @@ import { createTimerState } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { createPassAndPlayState } from './pass-and-play-rules';
 import { enterRealmFloor, openingRealmDoor } from './realm-rules';
+import { gateOmensFor, OMEN_DISCOVERY_FROM } from './run-signature-rules';
 
 export interface CreateRunOptions {
     campPreference?: RunState['campPreference'];
@@ -54,6 +55,11 @@ export interface CreateRunOptions {
      * is what a fixed board gets unless it asks for one.
      */
     realm?: RealmDoor | null;
+    /**
+     * Runs the profile has finished (`playerStats.runsFinished`): from rules 92 they decide which omens the
+     * Gate may draw (`run-signature-rules.ts`). Omitted, as for a shared seed or a table: the first ones.
+     */
+    runsFinished?: number;
 }
 
 const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
@@ -125,6 +131,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         lastRunSummary: null,
         runSeed,
         runRulesVersion: rulesVersion,
+        ...(rulesVersion >= OMEN_DISCOVERY_FROM ? { gateOmens: gateOmensFor(runSeed, rulesVersion, options.runsFinished ?? 0) } : {}),
         ...(rulesVersion >= 64 && options.campPreference ? { campPreference: options.campPreference } : {}),
         // A shared table plays the game as it is: no Depth.
         ...(options.depth && options.passAndPlaySeats == null ? { depth: Math.min(MAX_DEPTH, Math.max(0, Math.floor(options.depth))) } : {}),

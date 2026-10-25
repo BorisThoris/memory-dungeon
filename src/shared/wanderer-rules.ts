@@ -7,7 +7,7 @@ import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
-import { gateOmenCount } from './run-signature-rules';
+import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
 
 /**
  * The Wanderers (DGE-009, 2026-10-20): cards that drift a cell at a time and leave a trail.
@@ -67,11 +67,11 @@ export const wandererCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>,
 /** Deals the floor's Wanderers onto plain pairs, from the run's seed, when the floor is dealt; `extra` is what the Dread bought. */
 export const dealWanderers = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0, omens = gateOmensFor(runSeed, rulesVersion, 0) }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number; omens?: readonly GateOmen[] }
 ): BoardState => {
     const scheduled = wandererCountFor(board, { rulesVersion, depth });
     // The run's omen (`run-signature-rules.ts`): one Wanderer pair on a Gate floor that deals none.
-    const omen = gateOmenCount('wanderer', board, { runSeed, rulesVersion, scheduled, minPairs: WANDERER_MIN_PAIRS });
+    const omen = gateOmenCount('wanderer', board, { omens, scheduled, minPairs: WANDERER_MIN_PAIRS });
     if (scheduled === 0 && omen === 0) return board;
     const wanted = scheduled + omen + extra;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);

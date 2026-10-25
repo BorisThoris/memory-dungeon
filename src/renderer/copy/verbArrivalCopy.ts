@@ -17,9 +17,18 @@ export const VERB_ARRIVAL_COPY = {
 
 /** A run's omen (`run-signature-rules.ts`): told on the board crown the floor it first shows. */
 export const GATE_OMEN_COPY = {
-    kicker: 'An omen',
+    kicker: (count: number): string => (count > 1 ? 'Two omens' : 'An omen'),
     line: (omen: GateOmen): string =>
         omen === 'wanderer'
             ? 'A Wanderer walks this run’s Gate: one pair a floor steps a cell every third turn, and leaves a footprint.'
-            : 'A mask is on this run’s Gate: one back a floor lies about its element, until you turn it.'
+            : omen === 'mask'
+              ? 'A mask is on this run’s Gate: one back a floor lies about its element, until you turn it.'
+              : 'A Sleeper lies in this run’s Gate: one pair a floor goes back down when you turn it, and wakes in another cell.',
+    /** The results screen, the run a family joins the omens (`discoveryAt`). */
+    discovered: (omen: GateOmen | null, secondOmen: boolean): string | null =>
+        omen
+            ? `The dungeon remembers you: from your next run, ${omen === 'sleeper' ? 'Sleepers' : omen === 'mask' ? 'masks' : 'Wanderers'} can walk the Gate.`
+            : secondOmen
+              ? 'The dungeon remembers you: from your next run, two omens walk the Gate.'
+              : null
 } as const;

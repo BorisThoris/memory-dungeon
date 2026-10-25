@@ -5,7 +5,7 @@ import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
-import { gateOmenCount } from './run-signature-rules';
+import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
 
 /**
  * Masks (DGE-016, rules 80): backs that lie until first flipped.
@@ -47,11 +47,11 @@ export const maskCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { r
 /** Deals the floor's masks: one card of each chosen pair wears an element the floor holds that is not its own. */
 export const dealMasks = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0, omens = gateOmensFor(runSeed, rulesVersion, 0) }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number; omens?: readonly GateOmen[] }
 ): BoardState => {
     const scheduled = maskCountFor(board, { rulesVersion, depth });
     // The run's omen (`run-signature-rules.ts`): one mask on a Gate floor that deals none.
-    const omen = gateOmenCount('mask', board, { runSeed, rulesVersion, scheduled, minPairs: MASK_MIN_PAIRS });
+    const omen = gateOmenCount('mask', board, { omens, scheduled, minPairs: MASK_MIN_PAIRS });
     if (scheduled === 0 && omen === 0) return board;
     // `extra`: what the Dread bought on top (`dread-composition-rules.ts`).
     const dealt = scheduled + omen + extra;

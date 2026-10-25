@@ -28,6 +28,8 @@ vi.mock('zustand/react/shallow', () => ({
 /** The best score as it stood when the run started; the personal-best line is read off this. */
 const gameOverStoreMocks = vi.hoisted(() => ({
     bestScoreAtRunStart: null as number | null,
+    /** Runs finished before and after this one (`run-signature-rules.ts` discoveries); null leaves the default save. */
+    runsFinished: null as { before: number; after: number } | null,
     startSharedRun: vi.fn()
 }));
 
@@ -38,10 +40,15 @@ vi.mock('../store/useAppStore', () => ({
             restartRun: vi.fn(),
             startSharedRun: gameOverStoreMocks.startSharedRun,
             runStartSaveData:
-                gameOverStoreMocks.bestScoreAtRunStart === null
-                    ? null
-                    : { ...createDefaultSaveData(), bestScore: gameOverStoreMocks.bestScoreAtRunStart },
-            saveData: createDefaultSaveData(),
+                gameOverStoreMocks.runsFinished !== null
+                    ? { ...createDefaultSaveData(), playerStats: { ...createDefaultSaveData().playerStats!, runsFinished: gameOverStoreMocks.runsFinished.before } }
+                    : gameOverStoreMocks.bestScoreAtRunStart === null
+                      ? null
+                      : { ...createDefaultSaveData(), bestScore: gameOverStoreMocks.bestScoreAtRunStart },
+            saveData:
+                gameOverStoreMocks.runsFinished !== null
+                    ? { ...createDefaultSaveData(), playerStats: { ...createDefaultSaveData().playerStats!, runsFinished: gameOverStoreMocks.runsFinished.after } }
+                    : createDefaultSaveData(),
             settings: {
                 reduceMotion: true,
                 graphicsQuality: 'high',
@@ -374,5 +381,25 @@ describe('the Dread a run reached (DGE-003)', () => {
         renderScreen(run);
         // 3 x 24 x 1.15^8 x 1.05^8 = 326: Watching.
         expect(screen.getByTestId('game-over-dread')).toHaveTextContent('Dread: Watching');
+    });
+});
+
+describe('the dungeon remembers (rules 92)', () => {
+    beforeEach(() => {
+        gameOverStoreMocks.runsFinished = null;
+    });
+
+    it('says what the next run holds on the run that discovers it, and nothing on the others', () => {
+        gameOverStoreMocks.runsFinished = { before: 2, after: 3 };
+        const { unmount } = renderScreen(gameOverRunFixture());
+        expect(screen.getByTestId('game-over-discovery')).toHaveTextContent(/Sleepers can walk the Gate/);
+        unmount();
+        gameOverStoreMocks.runsFinished = { before: 7, after: 8 };
+        const second = renderScreen(gameOverRunFixture());
+        expect(screen.getByTestId('game-over-discovery')).toHaveTextContent(/two omens walk the Gate/);
+        second.unmount();
+        gameOverStoreMocks.runsFinished = { before: 3, after: 4 };
+        renderScreen(gameOverRunFixture());
+        expect(screen.queryByTestId('game-over-discovery')).toBeNull();
     });
 });

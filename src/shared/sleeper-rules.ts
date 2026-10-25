@@ -5,6 +5,7 @@ import { isRealmHeld } from './odd-card-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
 
 /**
  * Sleepers (DGE-020, rules 84): the Abyss's card family, pairs that come back.
@@ -46,12 +47,14 @@ export const sleeperCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, 
 /** Deals the floor's Sleepers onto plain pairs, from the run's seed. */
 export const dealSleepers = (
     board: BoardState,
-    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0 }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number }
+    { runSeed, rulesVersion, preferSuit = null, depth = 0, extra = 0, omens = gateOmensFor(runSeed, rulesVersion, 0) }: { runSeed: number; rulesVersion: number; preferSuit?: TileSuit | null; depth?: number; extra?: number; omens?: readonly GateOmen[] }
 ): BoardState => {
     const scheduled = sleeperCountFor(board, { rulesVersion, depth });
-    if (scheduled === 0) return board;
+    // The run's omen (`run-signature-rules.ts`, rules 92): one Sleeper pair on a Gate floor that deals none.
+    const omen = gateOmenCount('sleeper', board, { omens, scheduled, minPairs: SLEEPER_MIN_PAIRS });
+    if (scheduled === 0 && omen === 0) return board;
     // `extra`: what the Dread bought on top (`dread-composition-rules.ts`).
-    const dealt = scheduled + extra;
+    const dealt = scheduled + omen + extra;
     const marked = new Set([board.cursedPairKey, board.wardPairKey, board.bountyPairKey]);
     const halves = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
