@@ -23,7 +23,13 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
         const game = await import('/src/shared/game.ts');
         // The match and the floor clear play decoded samples once they are loaded, and a quieter synth tone
         // until then: measure them as a run plays them, after the boot preload (a cold dev server lost the race).
-        await (await import('/src/renderer/audio/sampledSfx.ts')).preloadSampledSfx();
+        // A preload that fails resets and resolves empty, so retry until the match's own sample plays (near silent).
+        const sampled = await import('/src/renderer/audio/sampledSfx.ts');
+        for (let attempt = 0; attempt < 40; attempt += 1) {
+            await sampled.preloadSampledSfx();
+            if (sampled.tryPlaySampled(sampled.resolveMatchTierSampleKey(1), 0.0011)) break;
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        }
         const rate = 48_000;
         const realSetTimeout = globalThis.setTimeout;
         const realAudioContext = window.AudioContext;

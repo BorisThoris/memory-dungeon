@@ -136,11 +136,12 @@ const playRun = async (
             const wardenNext = await page.evaluate(async () => {
                 const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
                 const { nextDescentLevel } = await import('/src/shared/descent-pace-rules.ts');
-                const { DESCENT_FLOOR_COUNT, descentActForFloor, isActBossFloor } = await import('/src/shared/floor-mutator-schedule.ts');
+                const { descentActForLevel, isActBossLevel } = await import('/src/shared/floor-mutator-schedule.ts');
                 const run = useAppStore.getState().run;
                 if (!run?.board) return false;
                 const next = nextDescentLevel(run);
-                return isActBossFloor(next) && descentActForFloor(next).bossFloor === DESCENT_FLOOR_COUNT;
+                // The Warden's floor is 40 on the forty-floor Descent (`descent-length-rules.ts`): ask the run's own rules.
+                return isActBossLevel(next, run.runRulesVersion) && descentActForLevel(next, run.runRulesVersion).id === 'abyss';
             });
             // Or, asked to (DGE-023), it takes the raging door - the wild one when no door rages - and meets the complete Warden.
             const wantedDoor = wardenDoor === 'calm'
