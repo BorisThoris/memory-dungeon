@@ -3951,8 +3951,8 @@
     {
       "path": "e2e/deep-cue-levels.spec.ts",
       "category": "test",
-      "bytes": 7197,
-      "sha256": "51defbd38c1be5fb3433a51b0bd3951cbf4b9836ec29854d73642dc7e70b7cf9"
+      "bytes": 7589,
+      "sha256": "a737c5ca2e8f7b76f38345b0ceab6f11ad5d9dac63e8c813b406b235b832b559"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 15255,
-      "sha256": "64d60beee8ac5b5c109eaa1524fd401cd52f86ad1d5cdd457730cd9e50e82d76"
+      "bytes": 15382,
+      "sha256": "9cdcc17fdfe47a88e4a6fe405b3778719288e9a6f37e10eed982fa99774cce5a"
     },
     {
       "path": "e2e/pngDiff.ts",
