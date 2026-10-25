@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, MUTATOR_IDS, type MutatorId } from './contracts';
+import { MUTATOR_IDS, type MutatorId } from './contracts';
 import {
     ENDLESS_CYCLE_FLOOR_COUNT,
     FLOOR_ARCHETYPE_CATALOG,
     pickFloorScheduleEntry
 } from './floor-mutator-schedule';
 import type { FeaturedObjectiveId } from './contracts';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const FEATURED_OBJECTIVE_IDS: readonly FeaturedObjectiveId[] = [
     'scholar_style',
@@ -27,7 +29,7 @@ const FLOORS_TO_WALK = ENDLESS_CYCLE_FLOOR_COUNT * 10;
 
 const walkSchedule = (seed: number, floors = FLOORS_TO_WALK) =>
     Array.from({ length: floors }, (_unused, index) =>
-        pickFloorScheduleEntry(seed, GAME_RULES_VERSION, index + 1, 'endless')
+        pickFloorScheduleEntry(seed, CLASSIC_DESCENT_RULES, index + 1, 'endless')
     );
 
 const firstFloorFor = (seed: number): Map<MutatorId, number> => {

@@ -17,9 +17,11 @@ import { createNewRun, finishMemorizePhase } from '../src/shared/game';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import { descendIntoEndless } from '../src/shared/warden-rules';
 import { playMemoryFloor } from './sim-goldilocks';
+import { actLevelsFor, DESCENT_ACTS } from '../src/shared/floor-mutator-schedule';
 
 export const MEMORY_SURVIVAL_SIZES: readonly number[] = [8, 12, 16, 24];
-export const MEMORY_SURVIVAL_REACH_FLOORS: readonly number[] = [12, 24, 40, 60];
+/** Each act's last floor: 8, 16, 26 and the Warden's 40 on the forty-floor Descent (`descent-length-rules.ts`). */
+export const MEMORY_SURVIVAL_REACH_FLOORS: readonly number[] = DESCENT_ACTS.map((act) => actLevelsFor(act, GAME_RULES_VERSION).lastLevel);
 export const MEMORY_SURVIVAL_FLOOR_CAP = 120;
 
 export interface MemorySurvivalRow {

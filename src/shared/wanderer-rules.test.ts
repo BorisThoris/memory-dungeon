@@ -1,5 +1,7 @@
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type RunState } from './contracts';
+import { type BoardState, type RunState } from './contracts';
 import { buildBoard } from './board-generation';
 import { gateOmen } from './run-signature-rules';
 import { inspectBoardFairness } from './board-inspection';
@@ -16,9 +18,9 @@ import {
 
 const SEED = 4242;
 const dealt = (level: number): BoardState =>
-    dealWanderers(buildBoard(level, { runSeed: SEED, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] }), {
+    dealWanderers(buildBoard(level, { runSeed: SEED, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] }), {
         runSeed: SEED,
-        rulesVersion: GAME_RULES_VERSION
+        rulesVersion: CLASSIC_DESCENT_RULES
     });
 const wandererKeys = (board: BoardState): string[] => [...new Set(board.tiles.filter((tile) => tile.wanderer).map((tile) => tile.pairKey))];
 
@@ -44,7 +46,7 @@ describe('the Wanderers (DGE-009)', () => {
     it('are two pairs from the Living Dungeon, three from the Deep, none before but a run’s omen', () => {
         expect(wandererPairsForFloor(12)).toBe(0);
         // Seed 4242's omen is the Wanderer (`run-signature-rules.ts`): one pair walks its Gate from floor 6.
-        expect(gateOmen(SEED, GAME_RULES_VERSION)).toBe('wanderer');
+        expect(gateOmen(SEED, CLASSIC_DESCENT_RULES)).toBe('wanderer');
         expect(wandererKeys(dealt(5))).toEqual([]);
         expect(wandererKeys(dealt(12))).toHaveLength(1);
         expect(wandererKeys(dealt(13))).toHaveLength(2);
@@ -98,7 +100,7 @@ describe('the Wanderers (DGE-009)', () => {
             const pinned = board.tiles.filter((tile) => !tile.wanderer).slice(0, 3).map((tile) => tile.id);
             const faceUp = new Set(board.tiles.filter((tile) => !tile.wanderer).slice(3, 5).map((tile) => tile.id));
             const shown: BoardState = { ...board, tiles: board.tiles.map((tile) => (faceUp.has(tile.id) ? { ...tile, state: 'matched' as const } : tile)) };
-            const steps = resolveWandererSteps({ board: shown, turnsThisFloor: 3, pinnedTileIds: pinned, lockedIndex: 7, runSeed: level, rulesVersion: GAME_RULES_VERSION });
+            const steps = resolveWandererSteps({ board: shown, turnsThisFloor: 3, pinnedTileIds: pinned, lockedIndex: 7, runSeed: level, rulesVersion: CLASSIC_DESCENT_RULES });
             const touched = new Set<number>();
             for (const { from, to } of steps) {
                 const walker = shown.tiles[from]!;
@@ -123,6 +125,6 @@ describe('the Wanderers (DGE-009)', () => {
     it('a pinned Wanderer stays', () => {
         const board = dealt(13);
         const pinned = board.tiles.filter((tile) => tile.wanderer).map((tile) => tile.id);
-        expect(resolveWandererSteps({ board, turnsThisFloor: 3, pinnedTileIds: pinned, runSeed: SEED, rulesVersion: GAME_RULES_VERSION })).toEqual([]);
+        expect(resolveWandererSteps({ board, turnsThisFloor: 3, pinnedTileIds: pinned, runSeed: SEED, rulesVersion: CLASSIC_DESCENT_RULES })).toEqual([]);
     });
 });

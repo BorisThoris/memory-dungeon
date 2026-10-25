@@ -10,6 +10,7 @@ import type {
 import { createMulberry32, hashStringToSeed } from './rng';
 import { runNonNegativeIntegerWithFallback } from './run-number-guards';
 import { signatureCyclePosition } from './run-signature-rules';
+import { descentFloorFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /**
  * Rules version that introduced authored endless chapters with featured objectives.
@@ -589,6 +590,18 @@ export const descentActForFloor = (level: number): DescentActDefinition => {
     return DESCENT_ACTS.find((act) => floor >= act.firstFloor && floor <= act.lastFloor) ?? ABYSS;
 };
 
+/** The act a run's floor belongs to: on the shorter Descent (`descent-length-rules.ts`) through the content floor it deals as. */
+export const descentActForLevel = (level: number, rulesVersion: number | undefined): DescentActDefinition => descentActForFloor(descentFloorFor(level, rulesVersion));
+
+/** Whether a run's floor is an act's boss floor (16, 26 and 40 on the shorter Descent). */
+export const isActBossLevel = (level: number, rulesVersion: number | undefined): boolean => isActBossFloor(descentFloorFor(level, rulesVersion));
+
+/** An act's first and last floor as a run numbers them: 13-24 before rules 93, 9-16 from it. */
+export const actLevelsFor = (act: DescentActDefinition, rulesVersion: number | undefined): { firstLevel: number; lastLevel: number } => ({
+    firstLevel: levelForDescentFloor(act.firstFloor, rulesVersion),
+    lastLevel: lastLevelForDescentFloor(act.lastFloor, rulesVersion)
+});
+
 const DEFAULT_ENDLESS_FLOOR_ENTRY = ENDLESS_FLOOR_CYCLE[0] ?? EMPTY_FLOOR_SCHEDULE_ENTRY;
 
 const FLOOR_ARCHETYPE_FREQUENCY_BANDS: readonly FloorArchetypeFrequencyBand[] = [
@@ -801,7 +814,8 @@ export const pickFloorScheduleEntry = (
     const safeLevel = runNonNegativeIntegerWithFallback(level, 1);
     // The Descent (DGE-002): an act's boss floor is its own room; every other floor keeps the
     // cycle's arithmetic on the Descent floor it plays as, so floors 1-60 resolve as they always did.
-    const descentFloor = descentFloorOf(Math.max(1, safeLevel));
+    // The shorter Descent (`descent-length-rules.ts`, rules 93): the floor deals as one of the sixty.
+    const descentFloor = descentFloorOf(descentFloorFor(Math.max(1, safeLevel), rulesVersion));
     const act = descentActForFloor(descentFloor);
     const idx = Math.max(0, descentFloor - 1) % ENDLESS_FLOOR_CYCLE.length;
     const cycleIndex = Math.floor(Math.max(0, descentFloor - 1) / ENDLESS_FLOOR_CYCLE.length);

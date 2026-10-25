@@ -13,8 +13,8 @@ import { GAME_RULES_VERSION, REALM_IDS } from './contracts';
 
 describe('current elemental encounters and seeded camp recipes', () => {
     it('plays the guaranteed recipe through generated encounters without a carried burst consuming it', () => {
-        // From rules 90 the amplified room's floor is the run's own (`run-signature-rules.ts`): find it.
-        const goalFloor = (seed: number, goal: string): number => [4, 5, 6, 7, 8, 10, 11, 12].find((level) => pickFloorScheduleEntry(seed, GAME_RULES_VERSION, level, 'endless').featuredObjectiveId === goal)!;
+        // From rules 90 the amplified room's floor is the run's own (`run-signature-rules.ts`), and on the forty-floor Descent a run may thin it out of an act: find it.
+        const goalFloor = (seed: number, goal: string): number => Array.from({ length: 38 }, (_, i) => i + 2).find((level) => pickFloorScheduleEntry(seed, GAME_RULES_VERSION, level, 'endless').featuredObjectiveId === goal)!;
         for (const goal of ['amplified_reaction', 'calm_reaction']) for (const seed of [1, 17, 42001]) for (const realmId of REALM_IDS) {
             const level = goalFloor(seed, goal);
             const base = createNewRun(0, { runSeed: seed });

@@ -38,9 +38,14 @@ import { WANDERER_FROM_FLOOR, WANDERER_STEP_EVERY_TURNS } from './wanderer-rules
 import { FOLD_FROM_FLOOR } from './board-fold-rules';
 import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
+import { GAME_RULES_VERSION } from './contracts';
+import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 123 as const;
+export const ENCYCLOPEDIA_VERSION = 124 as const;
+
+/** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
+const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -282,22 +287,22 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_REACH_KEEPER: {
         id: 'ACH_REACH_KEEPER',
         title: "The Keeper's Door",
-        description: "Reach floor 24, where the Keeper of Halls waits."
+        description: `Reach floor ${floorOf(24)}, where the Keeper of Halls waits.`
     },
     ACH_REACH_CARTOGRAPHER: {
         id: 'ACH_REACH_CARTOGRAPHER',
         title: "The Cartographer's Table",
-        description: "Reach floor 40, where the Cartographer waits."
+        description: `Reach floor ${floorOf(40)}, where the Cartographer waits.`
     },
     ACH_REACH_WARDEN: {
         id: 'ACH_REACH_WARDEN',
         title: "Before the Warden",
-        description: "Reach floor 60, where the Warden waits."
+        description: `Reach floor ${floorOf(60)}, where the Warden waits.`
     },
     ACH_WARDEN_FELLED: {
         id: 'ACH_WARDEN_FELLED',
         title: "Warden Felled",
-        description: "Clear floor 60 and fell the Warden."
+        description: `Clear floor ${floorOf(60)} and fell the Warden.`
     },
     ACH_ENDLESS_ENTERED: {
         id: 'ACH_ENDLESS_ENTERED',
@@ -542,11 +547,11 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_descent',
         title: 'The Descent',
         description:
-            `The run is a **Descent** of ${DESCENT_ACTS.length} acts to floor ${DESCENT_FLOOR_COUNT}: ` +
-            DESCENT_ACTS.map((act) => `**${act.title}** (floors ${act.firstFloor}-${act.lastFloor})`).join(', ') +
-            `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [act.bossFloor] : [])).join(', ')}), ` +
-            `a room whose mutators stack as no floor before it does. The last, on floor ${DESCENT_FLOOR_COUNT}, is **the Warden**: clear its hall and the Descent is won. ` +
-            `No two runs walk it the same way: past each act's first three floors the rooms come in **the run's own order**, and every run has an **omen**, a Wanderer pair or a mask on its Gate floors from floor ${GATE_OMEN_FROM_FLOOR}, the deep met early. ` +
+            `The run is a **Descent** of ${DESCENT_ACTS.length} acts to floor ${descentLengthFor(GAME_RULES_VERSION)}: ` +
+            DESCENT_ACTS.map((act) => `**${act.title}** (floors ${floorOf(act.firstFloor)}-${lastLevelForDescentFloor(act.lastFloor, GAME_RULES_VERSION)})`).join(', ') +
+            `. Each act after the first ends on its own **boss floor** (${DESCENT_ACTS.flatMap((act) => (act.bossFloor ? [floorOf(act.bossFloor)] : [])).join(', ')}), ` +
+            `a room whose mutators stack as no floor before it does. The last, on floor ${descentLengthFor(GAME_RULES_VERSION)}, is **the Warden**: clear its hall and the Descent is won. ` +
+            `No two runs walk it the same way: past each act's first three floors the rooms come in **the run's own order**, and every run has an **omen**, a Wanderer pair or a mask on its Gate floors from floor ${floorOf(GATE_OMEN_FROM_FLOOR)}, the deep met early. ` +
             `**The dungeon remembers you**: after ${OMEN_DISCOVERIES.find((d) => d.omen === 'sleeper')!.afterRuns} finished runs **Sleepers** join the omens, and from your ${TWO_OMENS_AFTER_RUNS}th a run walks with **two**. What the Gate holds grows; the numbers do not.`
     },
     {
@@ -565,7 +570,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_warden',
         title: 'The Warden',
         description:
-            `Floor ${DESCENT_FLOOR_COUNT} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
+            `Floor ${descentLengthFor(GAME_RULES_VERSION)} is the Warden's hall, the end the Descent is built toward. **Every turn past par takes a miss from your bank**, a match as much as a miss, and a turn owed a miss with the bank empty ends the run. ` +
             `**Every ${WARDEN_REDEAL_EVERY_TURNS}th turn the face-down cards are dealt again** among their own cells; a pinned card stays where it is. The turn that clears the hall costs nothing: it wins the run. **Met behind the wild or raging door, the Warden is complete**: it falls only to a **Hold released at ${WARDEN_FELL_PAIRS} pairs** or more, and that release wins with pairs left. An empty board does not beat it: it deals ${WARDEN_DEAL_AGAIN_PAIRS} fresh pairs into the cleared cells and the floor goes on, and while you hold, its re-deal waits. Then you choose: take the win, or go on into **Endless**, where the four acts come round again, each cycle half as long, every cycle ending on its Warden. In Endless every floor owes **rent**: a score its clear must pay, shown on the run bar, rising every cycle. A floor that pays less ends the run.`
     },
     {
@@ -606,13 +611,13 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_fold',
         title: 'The Fold',
         description:
-            `From floor ${FOLD_FROM_FLOOR}, some floors are two rooms with a wall between them and a **doorway** through it. Nothing reaches through the wall: not a pop, not the realm, not a card that moves. A match made in the doorway, on a card either side of it, sends its pop through into the other room; a match anywhere else keeps it on its own side. Each room leans to two elements, so the crossing is worth planning.`
+            `From floor ${floorOf(FOLD_FROM_FLOOR)}, some floors are two rooms with a wall between them and a **doorway** through it. Nothing reaches through the wall: not a pop, not the realm, not a card that moves. A match made in the doorway, on a card either side of it, sends its pop through into the other room; a match anywhere else keeps it on its own side. Each room leans to two elements, so the crossing is worth planning.`
     },
     {
         id: 'sys_wanderers',
         title: 'Wanderers',
         description:
-            `From floor ${WANDERER_FROM_FLOOR}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
+            `From floor ${floorOf(WANDERER_FROM_FLOOR)}, some pairs are **Wanderers**. Every ${WANDERER_STEP_EVERY_TURNS}rd turn, match or miss, each one still face down steps one cell up, down, left or right, trading places with the face-down card there, and leaves a **footprint** on the cell it left for one turn. A pinned card never moves and is never moved. You only learn a card is a Wanderer by turning it, so watch the footprints.`
     },
     {
         id: 'sys_feats',
@@ -630,43 +635,43 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_learned_rule',
         title: 'It learned you',
         description:
-            'From floor 41 every floor **tells you one thing it learned** about how you play, before your first flip: the **element you have matched most** this run is the one it uses. The table has three rules, and the floor names its own: that element **hides behind the masks**, or **the Wanderers** are that element, or **the Sleepers** are. A rule only chooses **which** cards the masks, the Wanderers or the Sleepers land on - **never how many**, and never anything the floor would not deal anyway. Nothing is adjusted in secret: the same run, playing the same way, is told the same rule.'
+            `From floor ${floorOf(41)} every floor **tells you one thing it learned** about how you play, before your first flip: the **element you have matched most** this run is the one it uses. The table has three rules, and the floor names its own: that element **hides behind the masks**, or **the Wanderers** are that element, or **the Sleepers** are. A rule only chooses **which** cards the masks, the Wanderers or the Sleepers land on - **never how many**, and never anything the floor would not deal anyway. Nothing is adjusted in secret: the same run, playing the same way, is told the same rule.`
     },
     {
         id: 'sys_spiral',
         title: 'The Spiral',
         description:
-            '**Floors 44 and 56 are Spirals**: survived, not cleared. The board is rings. Clear the **outer ring** and it **seals** - those cells leave the board for the floor - and fresh pairs, faces you have not seen, are dealt into the cleared cells inside it. The floor ends when your turns reach **par**, whatever is left, or when the last ring seals. **Score**, not clearance, is the goal; the miss bank still charges your misses.'
+            `**Floors ${floorOf(44)} and ${floorOf(56)} are Spirals**: survived, not cleared. The board is rings. Clear the **outer ring** and it **seals** - those cells leave the board for the floor - and fresh pairs, faces you have not seen, are dealt into the cleared cells inside it. The floor ends when your turns reach **par**, whatever is left, or when the last ring seals. **Score**, not clearance, is the goal; the miss bank still charges your misses.`
     },
     {
         id: 'sys_sleepers',
         title: 'Sleepers',
         description:
-            `From floor ${SLEEPER_FROM_FLOOR} some pairs are **Sleepers**: ${sleepersForFloor(SLEEPER_FROM_FLOOR)} a floor, ${sleepersForFloor(55)} from floor 51. Match one on a **chain of ${SLEEPER_CHAIN_HOLDS} or more** and it stays down. Match it on less and it **sleeps**: ${SLEEPER_WAKE_TURNS} turns later it comes back, face down, in other cleared cells, to be found again. A Sleeper shows on its face, never on its back. If you clear the board while one sleeps, it wakes at once and the floor goes on.`
+            `From floor ${floorOf(SLEEPER_FROM_FLOOR)} some pairs are **Sleepers**: ${sleepersForFloor(SLEEPER_FROM_FLOOR)} a floor, ${sleepersForFloor(55)} from floor ${floorOf(51)}. Match one on a **chain of ${SLEEPER_CHAIN_HOLDS} or more** and it stays down. Match it on less and it **sleeps**: ${SLEEPER_WAKE_TURNS} turns later it comes back, face down, in other cleared cells, to be found again. A Sleeper shows on its face, never on its back. If you clear the board while one sleeps, it wakes at once and the floor goes on.`
     },
     {
         id: 'sys_masks',
         title: 'Masks',
         description:
-            `From floor ${MASK_FROM_FLOOR} a few backs **lie**: a masked card shows an element that is not its own, ${masksForFloor(MASK_FROM_FLOOR)} a floor, ${masksForFloor(40)} from floor 33. The first time you turn it the mask drops, and its back tells the truth for the rest of the floor. Only one card of a pair is ever masked, so every pair keeps one honest back. A masked card is its true element to everything it does: what it casts, what it pops, how it reacts.`
+            `From floor ${floorOf(MASK_FROM_FLOOR)} a few backs **lie**: a masked card shows an element that is not its own, ${masksForFloor(MASK_FROM_FLOOR)} a floor, ${masksForFloor(40)} from floor ${floorOf(33)}. The first time you turn it the mask drops, and its back tells the truth for the rest of the floor. Only one card of a pair is ever masked, so every pair keeps one honest back. A masked card is its true element to everything it does: what it casts, what it pops, how it reacts.`
     },
     {
         id: 'sys_reprise',
         title: 'Reprise',
         description:
-            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.reprise}, once a floor, **Reprise** pays your last **${REPRISE_TURNS} turns** again, in order: each **match** scores what it scored and adds a link to your chain; each **miss** costs its miss again and breaks the chain. No card moves and no turn is counted, so press it after good turns. The **Echo Chamber** evolution makes it ${ECHO_CHAMBER_TURNS}.`
+            `From floor ${floorOf(VERB_STAIRCASE_FIRST_FLOORS.reprise)}, once a floor, **Reprise** pays your last **${REPRISE_TURNS} turns** again, in order: each **match** scores what it scored and adds a link to your chain; each **miss** costs its miss again and breaks the chain. No card moves and no turn is counted, so press it after good turns. The **Echo Chamber** evolution makes it ${ECHO_CHAMBER_TURNS}.`
     },
     {
         id: 'sys_carve',
         title: 'Carve',
         description:
-            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.carve}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
+            `From floor ${floorOf(VERB_STAIRCASE_FIRST_FLOORS.carve)}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
     },
     {
         id: 'sys_hold',
         title: 'The Hold',
         description:
-            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.hold}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. On a realm floor an element that meets no other **bursts its own**: its nearest face-down pairs go, one for each pair of it you held. A miss while holding drops the oldest half of what you hold, but never all of it.`
+            `From floor ${floorOf(VERB_STAIRCASE_FIRST_FLOORS.hold)}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. On a realm floor an element that meets no other **bursts its own**: its nearest face-down pairs go, one for each pair of it you held. A miss while holding drops the oldest half of what you hold, but never all of it.`
     },
     {
         id: 'sys_void_spew',

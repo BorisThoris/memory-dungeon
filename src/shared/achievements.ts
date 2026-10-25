@@ -7,6 +7,7 @@ import { MAX_DEPTH, runDepth } from './depth-rules';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { missesLeft } from './miss-bank';
 import { normalizeSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
+import { descentFloorFor } from './descent-length-rules';
 
 /** Run-score milestones, in points. Named for the Codex copy and the tests; the ids they unlock are older than the numbers. */
 export const SCORE_MILESTONE_FIRST = 10_000;
@@ -182,7 +183,8 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     // The reach curve (DGE-028): the boss floors stood on, the Warden felled, Endless entered, and the
     // Warden felled at every fifth Depth. Each reads state a Classic run already carries.
     for (const [id, floor] of REACH_FLOORS) {
-        award(id, stats.highestLevel >= floor);
+        // The shorter Descent (`descent-length-rules.ts`): the boss floor stood on is the content floor reached.
+        award(id, descentFloorFor(stats.highestLevel, run.runRulesVersion) >= floor);
     }
     const wardenFelled = run.wardenOutcome === 'cleared';
     award('ACH_WARDEN_FELLED', wardenFelled);

@@ -1,3 +1,4 @@
+import { CLASSIC_DESCENT_RULES, descentFloorFor } from './descent-length-rules';
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game';
 import { GAME_RULES_VERSION, type RunState } from './contracts';
@@ -6,9 +7,11 @@ import { isCarveUnlocked } from './carve-rules';
 import { isRepriseUnlocked } from './reprise-rules';
 import { VERB_STAIRCASE_FROM, verbArrivingOn, verbFirstFloor } from './verb-staircase-rules';
 
-const at = (level: number, runRulesVersion = GAME_RULES_VERSION, extra: Partial<RunState> = {}): RunState => {
+// The sixty-floor numbering (`descent-length-rules.ts`) unless a test asks for the forty: the board deals as the floor it names.
+const at = (level: number, runRulesVersion = CLASSIC_DESCENT_RULES, extra: Partial<RunState> = {}): RunState => {
     const base = createNewRun(0);
-    return { ...base, status: 'playing', runRulesVersion, board: { ...base.board!, level, flippedTileIds: [] }, ...extra };
+    const descentFloor = descentFloorFor(level, runRulesVersion);
+    return { ...base, status: 'playing', runRulesVersion, board: { ...base.board!, level, ...(descentFloor !== level ? { descentFloor } : {}), flippedTileIds: [] }, ...extra };
 };
 
 describe('verb staircase (rules 89)', () => {
@@ -34,6 +37,8 @@ describe('verb staircase (rules 89)', () => {
     it('names the arriving verb on its floor only, and never in Endless', () => {
         expect([4, 5, 6, 7, 11, 12].map((level) => verbArrivingOn(at(level)))).toEqual([null, 'hold', null, 'carve', 'reprise', null]);
         expect(verbArrivingOn(at(5, GAME_RULES_VERSION, { endless: true }))).toBeNull();
+        // On the forty-floor Descent Reprise's floor 11 is thinned out of the Gate: it arrives on floor 9, the Living Dungeon's first.
+        expect([4, 5, 6, 7, 8, 9, 10].map((level) => verbArrivingOn(at(level, GAME_RULES_VERSION)))).toEqual([null, 'hold', null, 'carve', null, 'reprise', null]);
     });
 
     it('lets an armed meter press Hold on floor 5', () => {

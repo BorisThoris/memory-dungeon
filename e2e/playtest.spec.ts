@@ -251,12 +251,12 @@ test.describe('Playtest', () => {
         const result = await playRun(page, { missRate: 0.02, maxFloor: 99, label: 'test-pace', query: 'pace=fast', maxSteps: 2400 });
         expect(result.errors).toEqual([]);
         expect(result.ended).toBe('gameOver');
-        expect(result.level).toBe(60);
+        expect(result.level).toBe(40);
         await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
     });
 
     /*
-     * The complete Warden (DGE-023): the same tester takes the raging door before floor 60, where the Warden falls
+     * The complete Warden (DGE-023): the same tester takes the raging door before floor 40 (the forty-floor Descent, rules 93), where the Warden falls
      * only to a Hold released at twelve pairs; it holds once the Hold arms and releases at twelve, and the results
      * screen says how the Warden fell.
      */
@@ -265,20 +265,20 @@ test.describe('Playtest', () => {
         const result = await playRun(page, { missRate: 0.02, maxFloor: 99, label: 'test-pace-raging', query: 'pace=fast', maxSteps: 2400, wardenDoor: 'raging' });
         expect(result.errors).toEqual([]);
         expect(result.ended).toBe('gameOver');
-        expect(result.level).toBe(60);
+        expect(result.level).toBe(40);
         await expect(page.getByTestId('game-over-end-reason')).toHaveText(/The Descent is won/);
         await expect(page.getByTestId('game-over-warden')).toHaveText(/Felled by a Hold/);
     });
 
     /*
      * Endless (DGE-006): the same tester descends past the Warden instead, and plays the first Endless cycle's
-     * act starts and bosses to its own Warden on floor 90 - bigger boards, the acts again, shorter.
+     * act starts and bosses to its own Warden on floor 70 (90 on the sixty-floor Descent) - bigger boards, the acts again, shorter.
      */
     test('a tester at the test pace goes on into Endless and plays its first cycle', async ({ page }) => {
         test.setTimeout(3_000_000);
-        const result = await playRun(page, { missRate: 0.02, maxFloor: 89, label: 'test-pace-endless', query: 'pace=fast', maxSteps: 4000, wardenChoice: 'endless' });
+        const result = await playRun(page, { missRate: 0.02, maxFloor: 69, label: 'test-pace-endless', query: 'pace=fast', maxSteps: 4000, wardenChoice: 'endless' });
         expect(result.errors).toEqual([]);
         expect(result.ended).toBe('depth');
-        expect(result.level).toBe(90);
+        expect(result.level).toBe(70);
     });
 });

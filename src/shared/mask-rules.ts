@@ -6,6 +6,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
+import { contentFloor } from './descent-length-rules';
 
 /**
  * Masks (DGE-016, rules 80): backs that lie until first flipped.
@@ -35,11 +36,11 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && tile.mask == null && !isRealmHeld(tile));
 
 /** The masks a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
-export const maskCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+export const maskCountFor = (board: Pick<BoardState, 'level' | 'descentFloor' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
     if (rulesVersion < MASK_RULES_FROM || board.pairCount < MASK_MIN_PAIRS) return 0;
     // Depth (`depth-rules.ts`): two from an earlier floor.
-    const wanted = masksForFloor(board.level)
-        || (depthHas({ depth }, 'masks_early') && board.level >= DEPTH_MASKS_FROM ? 2 : 0);
+    const wanted = masksForFloor(contentFloor(board))
+        || (depthHas({ depth }, 'masks_early') && contentFloor(board) >= DEPTH_MASKS_FROM ? 2 : 0);
     // Depth 17: three wherever there are any.
     return wanted > 0 && depthHas({ depth }, 'masks_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
 };

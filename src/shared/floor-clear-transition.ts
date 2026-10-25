@@ -25,6 +25,7 @@ import { realmClearGold, rollRealmDoors, runRealmId, runRealmSecondaryId, runRea
 import { realmAttunementLevel, realmCarryoverAtClear } from './realm-carryover-rules';
 import { usesCampUpgrades } from './run-relic-rules';
 import { addEssence, floorElementalDrops, usesElementalLoot } from './elemental-loot-rules';
+import { wipeFootprints } from './wanderer-rules';
 
 export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState => {
     if (run.status === 'levelComplete' && run.lastLevelResult?.level === clearedBoard.level) return run;
@@ -62,7 +63,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         };
     }
     const elementalDrops = floorElementalDrops(run, clearedBoard.level);
-    const board: BoardState = { ...clearedBoard, flippedTileIds: [] };
+    // A Spiral ended by its last ring takes a Wanderer's footprint with it, as at par.
+    const board: BoardState = { ...(spiral ? wipeFootprints(clearedBoard) : clearedBoard), flippedTileIds: [] };
     const stats = normalizeSessionStats(run.stats);
     const tries = runNonNegativeInteger(stats.tries);
     const currentLevelScoreBeforeClear = runNonNegativeInteger(stats.currentLevelScore);

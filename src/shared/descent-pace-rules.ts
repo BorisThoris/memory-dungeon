@@ -4,6 +4,7 @@ import { DESCENT_FLOOR_COUNT, endlessPlaceForLevel } from './floor-mutator-sched
 import { carryMissBank } from './miss-bank';
 import { rollRealmDoors, runRealmId } from './realm-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { levelForDescentFloor } from './descent-length-rules';
 
 /**
  * The test pace (2026-10-20, the owner: "make the test environment ... see all effects sooner"):
@@ -38,10 +39,12 @@ export const FAST_ENDLESS_RUNGS: readonly number[] = (() => {
 export const isFastDescent = (run: Pick<RunState, 'descentPace'>): boolean => run.descentPace === 'fast';
 
 /** The floor a cleared run descends to: the next one, or the next rung of the ladder at the test pace. */
-export const nextDescentLevel = (run: Pick<RunState, 'descentPace' | 'board'>): number => {
+export const nextDescentLevel = (run: Pick<RunState, 'descentPace' | 'board'> & Partial<Pick<RunState, 'runRulesVersion'>>): number => {
     const level = Math.max(1, runNonNegativeInteger(run.board?.level ?? 1));
     if (!isFastDescent(run)) return level + 1;
-    return FAST_DESCENT_LADDER.find((floor) => floor > level) ?? FAST_ENDLESS_RUNGS.find((floor) => floor > level) ?? level + 1;
+    // The rungs name the floors they deal as; on the shorter Descent (`descent-length-rules.ts`) each is the run's first floor that does.
+    const rung = (floor: number): number => levelForDescentFloor(floor, run.runRulesVersion);
+    return [...FAST_DESCENT_LADDER, ...FAST_ENDLESS_RUNGS].map(rung).find((floor) => floor > level) ?? level + 1;
 };
 
 /** A run at the test pace: it jumps, and it counts nothing toward records. */

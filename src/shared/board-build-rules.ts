@@ -21,6 +21,7 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 import { dealBoardSuits, getSuitDealProfile } from './tile-suit-rules';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { descentFloorFor } from './descent-length-rules';
 
 /** Two seeded encounter deals. Pair halves retain their identity and are separated across
  * the two halves of the deck. The first circuit supplies two primers and a catalyst;
@@ -88,6 +89,9 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
     const floorArchetypeId = options.floorArchetypeId ?? null;
     const featuredObjectiveId = options.featuredObjectiveId ?? null;
     const cycleFloor = options.cycleFloor ?? null;
+    // The shorter Descent (`descent-length-rules.ts`): the floor this board deals as, where it is not its own.
+    const descentFloor = descentFloorFor(level, rulesVersion);
+    const strideFloor = descentFloor !== level ? { descentFloor } : {};
     const actBiome = cycleFloor != null ? getChapterActBiomeForCycleFloor(cycleFloor) : null;
     const floorTag = options.floorTag ?? 'normal';
 
@@ -107,6 +111,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
 
         return {
             level,
+            ...strideFloor,
             pairCount: realPairKeys.size,
             columns,
             rows,
@@ -196,6 +201,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
     const rows = Math.ceil(tileCount / columns);
     const baseBoard: BoardState = {
         level,
+        ...strideFloor,
         pairCount,
         columns,
         rows,

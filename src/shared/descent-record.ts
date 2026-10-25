@@ -1,6 +1,6 @@
 import { MAX_DEPTH, runDepth } from './depth-rules';
 import type { DescentRecordPersisted, RunState, SaveData } from './contracts';
-import { DESCENT_ACTS, descentActForFloor } from './floor-mutator-schedule';
+import { DESCENT_ACTS, descentActForLevel } from './floor-mutator-schedule';
 import { DREAD_TIERS, dreadForRun, dreadTier } from './dread-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -62,7 +62,7 @@ export const recordDescent = (save: SaveData, run: RunState): SaveData => {
         ...before,
         wardenClears: before.wardenClears + (won ? 1 : 0),
         deepestFloor: deeper ? floor : before.deepestFloor,
-        deepestActId: deeper && floor > 0 ? descentActForFloor(floor).id : before.deepestActId,
+        deepestActId: deeper && floor > 0 ? descentActForLevel(floor, run.runRulesVersion).id : before.deepestActId,
         deepestDreadTierId: worse ? (reached as DescentRecordPersisted['deepestDreadTierId']) : before.deepestDreadTierId,
         // The Depths (`depth-rules.ts`): the Warden felled at Depth n opens n + 1.
         bestDepth: won ? Math.max(before.bestDepth, Math.min(MAX_DEPTH, runDepth(run) + 1)) : before.bestDepth

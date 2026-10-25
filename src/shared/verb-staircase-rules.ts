@@ -1,5 +1,6 @@
 import type { RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
+import { contentFloor, descentFloorFor } from './descent-length-rules';
 
 /**
  * The verb staircase (rules 89, 2026-10-24): the deep game's verbs arrive in the Gate.
@@ -31,11 +32,14 @@ export const verbFirstFloor = (verb: StaircaseVerb, run: Partial<Pick<RunState, 
 
 /** Whether the run's floor has reached a verb's first floor. */
 export const verbReached = (verb: StaircaseVerb, run: Partial<Pick<RunState, 'board' | 'runRulesVersion'>>): boolean =>
-    runNonNegativeInteger(run.board?.level) >= verbFirstFloor(verb, run);
+    (run.board ? contentFloor(run.board) : 0) >= verbFirstFloor(verb, run);
 
 /** The verb that arrives on this floor of a staircase run, if one does: told on the board crown. Not in Endless, where every verb is old news. */
 export const verbArrivingOn = (run: Partial<Pick<RunState, 'board' | 'runRulesVersion' | 'endless'>>): StaircaseVerb | null => {
     if (!onStaircase(run) || run.endless === true) return null;
     const level = runNonNegativeInteger(run.board?.level);
-    return STAIRCASE_ORDER.find((verb) => VERB_STAIRCASE_FIRST_FLOORS[verb] === level) ?? null;
+    // On the shorter Descent a verb's floor may be one of those thinned out: it arrives on the first floor past it.
+    const floor = run.board ? contentFloor(run.board) : level;
+    const before = level > 1 ? descentFloorFor(level - 1, run.runRulesVersion) : 0;
+    return STAIRCASE_ORDER.find((verb) => floor >= VERB_STAIRCASE_FIRST_FLOORS[verb] && before < VERB_STAIRCASE_FIRST_FLOORS[verb]) ?? null;
 };

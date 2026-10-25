@@ -42,6 +42,7 @@ import { dreadForRun, dreadTier } from './dread-rules';
 import { endlessRentForFloor } from './endless-rent-rules';
 import { canStartHold, heldPairCount, releaseHold, startHold } from './hold-rules';
 import { verbArrivingOn } from './verb-staircase-rules';
+import { DESCENT_STRIDE_FROM } from './descent-length-rules';
 import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from './wanderer-rules';
 import { gateOmensToldOn } from './run-signature-rules';
 import { dealMasks } from './mask-rules';
@@ -389,6 +390,9 @@ const room = (
     };
     return {
         ...base,
+        // A room names the floor its content was written for (`descent-length-rules.ts`): it plays on the sixty-floor
+        // numbering, the last rules before the Descent was forty floors. The shorter Descent has its own room.
+        runRulesVersion: DESCENT_STRIDE_FROM - 1,
         board,
         status: 'playing',
         activeMutators: mutators,

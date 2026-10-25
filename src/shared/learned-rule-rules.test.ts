@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState } from './contracts';
+import { type BoardState } from './contracts';
 import { buildBoard } from './board-generation';
 import { dealMasks } from './mask-rules';
 import { dealSleepers } from './sleeper-rules';
 import { dealWanderers } from './wanderer-rules';
 import { LEARNED_RULE_TABLE, LEARNED_RULES_FROM, mostMatchedSuit, pickLearnedRule, preferredSuitFor } from './learned-rule-rules';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
-const abyss = (): BoardState => buildBoard(45, { runSeed: 7777, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] });
+const abyss = (): BoardState => buildBoard(45, { runSeed: 7777, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] });
 const suitsOf = (board: BoardState, flag: 'mask' | 'wanderer' | 'sleeper') =>
     new Set(board.tiles.filter((tile) => (flag === 'mask' ? tile.mask != null : tile[flag])).map((tile) => tile.suit));
 
@@ -14,7 +16,7 @@ describe('the dungeon learns you (DGE-022)', () => {
     it('learns the element matched most, and tells one rule of the table from floor 41', () => {
         expect(mostMatchedSuit({ elementResonance: { tide: 4, ember: 9, moss: 9 } })).toBe('ember');
         expect(mostMatchedSuit({ elementResonance: {} })).toBeNull();
-        const run = { runSeed: 7777, runRulesVersion: GAME_RULES_VERSION, elementResonance: { moss: 12, ember: 3 } };
+        const run = { runSeed: 7777, runRulesVersion: CLASSIC_DESCENT_RULES, elementResonance: { moss: 12, ember: 3 } };
         const rule = pickLearnedRule(run, 45)!;
         expect(LEARNED_RULE_TABLE).toContain(rule.id);
         expect(rule.suit).toBe('moss');
@@ -29,7 +31,7 @@ describe('the dungeon learns you (DGE-022)', () => {
 
     it('chooses which pairs a dealer lands on, never how many', () => {
         const board = abyss();
-        const seeded = { runSeed: 7777, rulesVersion: GAME_RULES_VERSION };
+        const seeded = { runSeed: 7777, rulesVersion: CLASSIC_DESCENT_RULES };
         for (const [deal, flag] of [[dealMasks, 'mask'], [dealWanderers, 'wanderer'], [dealSleepers, 'sleeper']] as const) {
             const plain = deal(board, seeded);
             const told = deal(board, { ...seeded, preferSuit: 'tide' });

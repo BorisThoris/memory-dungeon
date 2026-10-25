@@ -85,10 +85,10 @@ import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
 import {
-    descentActForFloor,
+    descentActForLevel,
     getFeaturedObjectiveLabel,
     getFloorChapterIdentity,
-    isActBossFloor,
+    isActBossLevel,
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
 } from '../../shared/floor-mutator-schedule';
@@ -1775,7 +1775,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const nextRoomDoor = run.status === 'levelComplete' ? nextFloorRealmDoor(run) : null;
     // An act boss's floor opens in the boss's room (DGE-030): decode it too when the next floor is one.
     const nextLevel = (run.board?.level ?? 0) + 1;
-    const nextBossRoom = run.status === 'levelComplete' && isActBossFloor(nextLevel) ? BOSS_ROOM_BY_ACT[descentActForFloor(nextLevel).id] ?? null : null;
+    const nextBossRoom = run.status === 'levelComplete' && isActBossLevel(nextLevel, run.runRulesVersion) ? BOSS_ROOM_BY_ACT[descentActForLevel(nextLevel, run.runRulesVersion).id] ?? null : null;
     const nextRoomPrimeKey = `${nextRoomDoor ? `${nextRoomDoor.realmId}:${nextRoomDoor.confluence ?? ''}` : ''}:${nextBossRoom ?? ''}`;
     const nextRoomPrime = useMemo(
         () => [...(nextRoomDoor ? [nextRoomDoor.realmId, ...(nextRoomDoor.confluence ? [nextRoomDoor.confluence] : [])] : []), ...(nextBossRoom ? [nextBossRoom] : [])].flatMap((room) => realmRoomPlateUrls(room)),
@@ -2353,7 +2353,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {floorClearBeatShown && run.lastLevelResult ? (
                                 <FloorClearBeat
                                     countUp={!reduceMotion}
-                                    milestone={isPassAndPlayRun(run.passAndPlay) || wardenChoiceOpen ? null : milestoneAfterClear(run.lastLevelResult.level)}
+                                    milestone={isPassAndPlayRun(run.passAndPlay) || wardenChoiceOpen ? null : milestoneAfterClear(run.lastLevelResult.level, run.runRulesVersion)}
                                     nextPlace={nextRoomDoor && nextRoomDoor.realmId !== runRealmId(run) ? REALMS[nextRoomDoor.realmId].place : null}
                                     personalBest={run.achievementsEnabled && run.lastLevelResult.level > profileDeepestFloor(saveData)}
                                     result={run.lastLevelResult}

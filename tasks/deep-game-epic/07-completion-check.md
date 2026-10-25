@@ -19,7 +19,7 @@ Commands are run from the repository root. `soak` means `yarn soak`; the deep so
 | DGE-001 | Plateau numbers with their commands; three decisions answered; REG tickets linked | Met | `00-the-plateau-measured.md`; "Open decisions" in the ledger (defaults stand as built); REG-018/019/020 superseded notes |
 | DGE-002 | Something new every act | Met | Schedule test over `DESCENT_ACTS` |
 | DGE-002 | Floors 1-12 byte-identical | Met | Golden snapshot test |
-| DGE-002 | Floors 1-60 reachable | Met | `floor-schedule-reachability.test.ts` |
+| DGE-002 | Floors 1-60 reachable | Superseded | Rules 93: the Descent is forty floors picked from the sixty (`descent-length-rules.test.ts`); the sixty stay reachable on the classic numbering (`floor-schedule-reachability.test.ts`) |
 | DGE-002 | Codex progression rows list four acts | Met | `progressionRowForEntry` test |
 | DGE-003 | Dread monotonic to floor 1000 | Met | `dread-rules.test.ts` |
 | DGE-003 | One tier table read by the HUD, the Codex and the results screen | Met | `DREAD_TIERS`; RunShell, Codex and GameOver tests |
@@ -29,7 +29,7 @@ Commands are run from the repository root. `soak` means `yarn soak`; the deep so
 | DGE-004 | Next milestone on every camp | Superseded | The camp is automatic, with no screen to show it on |
 | DGE-004 | Proportional fraction (0.5 at 6/12 and 32 of 24-40) | Met | `milestone-rules.test.ts` |
 | DGE-004 | Every track ends | Met | `milestone-rules.test.ts` |
-| DGE-005 | Half of 15%-miss runs end at the Warden | Met | `gate:warden-reach` (57/100, bar 50) |
+| DGE-005 | Half of 15%-miss runs end at the Warden | Met | `gate:warden-reach` (bar 50), the Warden on floor 40 from rules 93 |
 | DGE-005 | A careful run clears it | Met | Deep soak (careful player felled 26/30) |
 | DGE-005 | The re-deal keeps a way to finish | Met | Soak invariant `a way left to finish`, 0 violations |
 | DGE-005 | Both rules on the HUD and in the Codex | Met | Crown line test; Codex coverage test |

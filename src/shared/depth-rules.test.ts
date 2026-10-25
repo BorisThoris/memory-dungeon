@@ -8,7 +8,6 @@ import { storeOffer } from './run-store-rules';
 import { describeRunShareKey, encodeRunShareKey, parseRunShareKey } from './run-share-key';
 import { createRunFromShareKey } from './run-from-share-key';
 import { DEPTH_RUNGS, depthHas, depthRung, MAX_DEPTH, runDepth } from './depth-rules';
-import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { missBankCap } from './miss-bank';
 import { storePrice } from './run-store-rules';
@@ -24,6 +23,8 @@ import { pickLearnedRule } from './learned-rule-rules';
 import { normalizeDescentRecord } from './descent-record';
 import { summarizeDescent } from './descent-run-summary';
 import { getProfileSummaryRows } from './profile-summary';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const run = (depth: number) => createNewRun(0, { runSeed: 7777, gameMode: 'endless', depth });
 
@@ -51,8 +52,8 @@ describe('the Depths (DGE-025)', () => {
         const at = (depth: number) => ({ depth });
         expect(missBankCap({ ...run(5), relics: [] })).toBe(missBankCap({ ...run(4), relics: [] }) - 1);
         expect(storePrice(at(6), 'peek')).toBeGreaterThan(storePrice(at(5), 'peek'));
-        const board = (level: number) => buildBoard(level, { runSeed: 7777, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] });
-        const seeded = { runSeed: 7777, rulesVersion: GAME_RULES_VERSION };
+        const board = (level: number) => buildBoard(level, { runSeed: 7777, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] });
+        const seeded = { runSeed: 7777, rulesVersion: CLASSIC_DESCENT_RULES };
         const count = (b: ReturnType<typeof board>, flag: 'wanderer' | 'sleeper' | 'mask') => new Set(b.tiles.filter((t) => (flag === 'mask' ? t.mask != null : t[flag])).map((t) => (flag === 'mask' ? t.id : t.pairKey))).size;
         expect(count(dealWanderers(board(8), { ...seeded, depth: 6 }), 'wanderer')).toBe(0);
         expect(count(dealWanderers(board(8), { ...seeded, depth: 7 }), 'wanderer')).toBe(2);
@@ -71,11 +72,11 @@ describe('the Depths (DGE-025)', () => {
         expect(run(14).shuffleCharges).toBe(1);
         expect(count(dealSleepers(board(45), { ...seeded, depth: 16 }), 'sleeper')).toBe(3);
         expect(count(dealMasks(board(30), { ...seeded, depth: 17 }), 'mask')).toBe(3);
-        const resonant = { runSeed: 7777, runRulesVersion: GAME_RULES_VERSION, elementResonance: { tide: 5 } };
+        const resonant = { runSeed: 7777, runRulesVersion: CLASSIC_DESCENT_RULES, elementResonance: { tide: 5 } };
         expect(pickLearnedRule({ ...resonant, depth: 17 }, 30)).toBeNull();
         expect(pickLearnedRule({ ...resonant, depth: 18 }, 30)).not.toBeNull();
         expect(count(dealWanderers(board(15), { ...seeded, depth: 19 }), 'wanderer')).toBe(3);
-        const calmWarden = { runRulesVersion: GAME_RULES_VERSION, realmSeverity: 'calm' as const, board: { ...board(60), floorArchetypeId: 'warden_hall' as const } };
+        const calmWarden = { runRulesVersion: CLASSIC_DESCENT_RULES, realmSeverity: 'calm' as const, board: { ...board(60), floorArchetypeId: 'warden_hall' as const } };
         expect(wardenTestHolds({ ...calmWarden, depth: 19 })).toBe(false);
         expect(wardenTestHolds({ ...calmWarden, depth: 20 })).toBe(true);
         expect(MAX_DEPTH).toBe(20);

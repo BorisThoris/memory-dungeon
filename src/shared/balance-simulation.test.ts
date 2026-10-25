@@ -12,8 +12,10 @@ import {
     type BalanceSimulationFloorBand,
     type BalanceSimulationReport
 } from './balance-simulation';
-import { GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
+import { type FindableKind, type TileTraitKind } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
 
@@ -33,7 +35,7 @@ const assertFloorBandReportShape = (
 
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
-        const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
+        const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: CLASSIC_DESCENT_RULES });
 
         expect(result.offlineOnly).toBe(true);
         expect(result.samples).toHaveLength(12);
@@ -107,7 +109,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             const result = runBalanceSimulation({
                 seeds: [42_001, 42_777, 43_001, 44_001],
                 floors: 48,
-                rulesVersion: GAME_RULES_VERSION
+                rulesVersion: CLASSIC_DESCENT_RULES
             });
             const total = result.aggregate.findablePickupPairs;
 
@@ -135,7 +137,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     });
 
     it('guards the shipped balance baseline against large drift', () => {
-        const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
+        const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: CLASSIC_DESCENT_RULES });
         const drift = assertBalanceSimulationWithinBaseline(result, BALANCE_SIMULATION_BASELINE);
 
         expect(BALANCE_SIMULATION_BASELINE_KEYS).toEqual([
@@ -155,7 +157,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             const result = runBalanceSimulation({
                 seeds: [42_001, 42_777, 43_001, 44_001],
                 floors: 48,
-                rulesVersion: GAME_RULES_VERSION
+                rulesVersion: CLASSIC_DESCENT_RULES
             });
             const total = result.aggregate.tileTraitPairs;
 

@@ -2,6 +2,7 @@ import type { RunEndReason, RunState, RunSummary } from '../../shared/contracts'
 import type { DescentRunSummary } from '../../shared/descent-run-summary';
 import { DESCENT_FLOOR_COUNT } from '../../shared/floor-mutator-schedule';
 import { WARDEN_FELL_PAIRS } from '../../shared/warden-rules';
+import { descentLengthFor } from '../../shared/descent-length-rules';
 
 /**
  * User-visible strings for the post-run summary (GameOverScreen). Centralized for a11y review and future i18n.
@@ -149,11 +150,13 @@ export const gameOverScreenCopy = {
  */
 export const wardenEndLine = (
     summary: Pick<RunSummary, 'highestLevel' | 'runEndReason'>,
-    run: Pick<RunState, 'wardenFelled' | 'endless'>
+    run: Pick<RunState, 'wardenFelled' | 'endless'> & Partial<Pick<RunState, 'runRulesVersion'>>
 ): string | null => {
+    // The Warden's floor: 40 on the shorter Descent (`descent-length-rules.ts`), 60 before.
+    const wardenFloor = descentLengthFor(run.runRulesVersion);
     if (summary.runEndReason === 'warden_cleared') return run.wardenFelled ? `Felled by a Hold released at ${WARDEN_FELL_PAIRS} pairs or more.` : null;
-    if (run.endless || summary.runEndReason !== 'miss_budget' || summary.highestLevel < DESCENT_FLOOR_COUNT - 2) return null;
-    const short = DESCENT_FLOOR_COUNT - summary.highestLevel;
+    if (run.endless || summary.runEndReason !== 'miss_budget' || summary.highestLevel < wardenFloor - 2) return null;
+    const short = wardenFloor - summary.highestLevel;
     const ask = `Behind the wild or raging door it falls only to a Hold released at ${WARDEN_FELL_PAIRS} pairs.`;
     return short > 0 ? `${short} ${short === 1 ? 'floor' : 'floors'} short of the Warden. ${ask}` : `The Warden stood. ${ask}`;
 };

@@ -1,4 +1,5 @@
 import { descentActForFloor, endlessPlaceForLevel, type DescentActId } from './floor-mutator-schedule';
+import { descentFloorFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /**
  * Milestones (DGE-004, 2026-10-19): what the run is walking toward, read as a fraction.
@@ -29,20 +30,22 @@ export interface Milestone {
 }
 
 /** The milestone a floor is walking toward. */
-export const nextMilestone = (level: number): Milestone => {
+export const nextMilestone = (level: number, rulesVersion?: number): Milestone => {
     const floor = Math.max(1, Math.floor(Number.isFinite(level) ? level : 1));
+    // The shorter Descent (`descent-length-rules.ts`): the act is the content floor's, its floors the run's own.
+    const content = descentFloorFor(floor, rulesVersion);
     // Past the Warden, Endless (DGE-006): the act of this cycle, as long as the cycle makes it.
-    const endless = endlessPlaceForLevel(floor);
-    const act = endless?.act ?? descentActForFloor(floor);
-    const firstFloor = endless?.firstLevel ?? act.firstFloor;
-    const lastFloor = endless?.lastLevel ?? act.lastFloor;
+    const endless = endlessPlaceForLevel(content);
+    const act = endless?.act ?? descentActForFloor(content);
+    const firstFloor = levelForDescentFloor(endless?.firstLevel ?? act.firstFloor, rulesVersion);
+    const lastFloor = lastLevelForDescentFloor(endless?.lastLevel ?? act.lastFloor, rulesVersion);
     const floorsTotal = lastFloor - firstFloor + 1;
     const floorsDone = floor - firstFloor + 1;
     return { name: DESCENT_MILESTONE_NAMES[act.id], floor: lastFloor, floorsDone, floorsTotal, fraction: floorsDone / floorsTotal };
 };
 
 /** After a clear: the milestone ahead of the next floor, and the floors still to clear to reach it. */
-export const milestoneAfterClear = (clearedLevel: number): Milestone & { readonly floorsToGo: number } => {
-    const ahead = nextMilestone(Math.max(1, Math.floor(clearedLevel)) + 1);
+export const milestoneAfterClear = (clearedLevel: number, rulesVersion?: number): Milestone & { readonly floorsToGo: number } => {
+    const ahead = nextMilestone(Math.max(1, Math.floor(clearedLevel)) + 1, rulesVersion);
     return { ...ahead, floorsToGo: ahead.floor - Math.max(1, Math.floor(clearedLevel)) };
 };

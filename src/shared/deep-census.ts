@@ -5,6 +5,9 @@ import { dreadForRun } from './dread-rules';
 import { DREAD_BUYS_FROM } from './dread-composition-rules';
 import { depthRung, MAX_DEPTH } from './depth-rules';
 import { DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
+import { contentFloor } from './descent-length-rules';
+import { descentLengthFor } from './descent-length-rules';
+import { GAME_RULES_VERSION } from './contracts';
 
 /**
  * The deep census (DGE-027, 2026-10-23): the run census taken to the Warden's floor.
@@ -22,7 +25,7 @@ import { DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
  * tool, and the soak's planned player is where they are counted.
  */
 /** To the Warden and six floors on into Endless, where the rent is owed. */
-export const DEEP_CENSUS_FLOORS = 66;
+export const DEEP_CENSUS_FLOORS = descentLengthFor(GAME_RULES_VERSION) + 6;
 export const DEEP_CENSUS_SEEDS: readonly number[] = Array.from({ length: 12 }, (_, index) => 60_013 + index * 7919);
 
 const bought = (run: RunState): number =>
@@ -42,7 +45,7 @@ export const DEEP_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { id: 'deep.dreadAwake', key: 'dreadRagingFloors', read: (run) => (dreadForRun(run) >= DREAD_BUYS_FROM ? 1 : 0), label: 'The Dread stood at Awake or deeper', family: 'memory', cadence: 'common', kind: 'state', player: 'reference', scope: 'run' },
     { id: 'deep.learnedRules', key: 'learnedRule', read: (run) => (run.learnedRule ? 1 : 0), label: 'The floor was told what the dungeon learned', family: 'memory', cadence: 'common', kind: 'state', player: 'reference', scope: 'run' },
     { id: 'deep.depthRules', key: 'depth', read: (run) => (depthRung(run) ? 1 : 0), label: 'A Depth added its rule to the floor', family: 'memory', cadence: 'common', kind: 'state', player: 'reference', scope: 'run' },
-    { id: 'deep.rentOwed', key: 'endless', read: (run) => (run.endless && (run.board?.level ?? 0) > DESCENT_FLOOR_COUNT ? 1 : 0), label: 'An Endless floor owed its rent', family: 'reward', cadence: 'rare', kind: 'state', player: 'reference', scope: 'run' },
+    { id: 'deep.rentOwed', key: 'endless', read: (run) => (run.endless && run.board != null && contentFloor(run.board) > DESCENT_FLOOR_COUNT ? 1 : 0), label: 'An Endless floor owed its rent', family: 'reward', cadence: 'rare', kind: 'state', player: 'reference', scope: 'run' },
     { id: 'deep.bossRewards', key: 'lastBossReward', read: (run) => (run.lastBossReward ? 1 : 0), label: 'A boss door’s reward was in hand', family: 'reward', cadence: 'rare', kind: 'state', player: 'reference', scope: 'run' },
     { id: 'deep.evolutions', key: 'evolutions', read: (run) => (run.evolutions ?? []).length, label: 'An evolution was in play', family: 'reward', cadence: 'rare', kind: 'state', player: 'reference', scope: 'run' },
     // The verbs, pressed by the planned player.

@@ -49,6 +49,7 @@ import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solve
 import { createMulberry32, hashStringToSeed, pickRngIndex } from '../src/shared/rng';
 import { SCATTERED_SUIT_CEILING, boardPaletteWidth } from '../src/shared/tile-suit-rules';
 import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
+import { CLASSIC_DESCENT_LENGTH, descentLengthFor } from '../src/shared/descent-length-rules';
 
 /**
  * The curve's players: the original ten, then ninety more. Ten seeds read the narrow-palette gap
@@ -57,14 +58,16 @@ import { isSingletonUtilityPairKey } from '../src/shared/tile-identity';
  */
 const ORIGINAL_CURVE_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234] as const;
 export const CURVE_SEEDS: readonly number[] = [...ORIGINAL_CURVE_SEEDS, ...Array.from({ length: 90 }, (_, index) => 100_003 + index * 7919)];
-/** To the Warden's floor (DGE-032's fourth bar): the Descent's sixty, a clean player under par on every one. */
-export const CURVE_FLOORS = 60;
+/** To the Warden's floor (DGE-032's fourth bar): the Descent's forty from rules 93 (`descent-length-rules.ts`), a clean player under par on every one. */
+export const CURVE_FLOORS = descentLengthFor(GAME_RULES_VERSION);
+/** How many floors sooner Endless begins than it did on the sixty-floor Descent. */
+const ENDLESS_SHIFT = CLASSIC_DESCENT_LENGTH - CURVE_FLOORS;
 
 /**
  * The floors the report prints. Every floor of the opening, then the deep game where the boards
  * stop growing - twenty-four pairs from floor 52 on, so the curve has nothing left to say after it.
  */
-export const CURVE_REPORT_FLOORS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 20, 25, 30, 40, 52, 60];
+export const CURVE_REPORT_FLOORS: readonly number[] = [...new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 20, 25, 30, 40, 52, 60].filter((floor) => floor <= CURVE_FLOORS).concat(CURVE_FLOORS))];
 
 export interface CurveFloorRow {
     floor: number;
@@ -297,9 +300,9 @@ export const judgeDifficultyCurve = (rows: readonly CurveFloorRow[]): string[] =
  * 1.06, from floor 83.
  */
 export const ENDLESS_CURVE_MISS_RATE = 0.05;
-export const ENDLESS_CURVE_FLOORS = 120;
+export const ENDLESS_CURVE_FLOORS = 120 - ENDLESS_SHIFT;
 export const ENDLESS_CURVE_SEEDS: readonly number[] = CURVE_SEEDS.slice(0, 20);
-export const ENDLESS_CURVE_REPORT_FLOORS: readonly number[] = [61, 65, 70, 75, 80, 90, 100, 110, 120];
+export const ENDLESS_CURVE_REPORT_FLOORS: readonly number[] = [61, 65, 70, 75, 80, 90, 100, 110, 120].map((floor) => floor - ENDLESS_SHIFT);
 
 export const judgeEndlessCurve = (rows: readonly CurveFloorRow[]): string[] => {
     const deep = rows.filter((row) => row.floor > CURVE_FLOORS);

@@ -1,5 +1,6 @@
 import type { GateOmen } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
+import { contentFloor } from './descent-length-rules';
 
 export type { GateOmen };
 
@@ -104,11 +105,11 @@ export const signatureCyclePosition = (runSeed: number, rulesVersion: number, cy
  */
 export const gateOmenCount = (
     family: GateOmen,
-    board: { level: number; pairCount: number },
+    board: { level: number; descentFloor?: number; pairCount: number },
     { omens, scheduled, minPairs }: { omens: readonly GateOmen[]; scheduled: number; minPairs: number }
 ): number =>
-    scheduled === 0 && board.level >= GATE_OMEN_FROM_FLOOR && board.level <= GATE_OMEN_TO_FLOOR && board.pairCount >= minPairs && omens.includes(family) ? GATE_OMEN_COUNT : 0;
+    scheduled === 0 && contentFloor(board) >= GATE_OMEN_FROM_FLOOR && contentFloor(board) <= GATE_OMEN_TO_FLOOR && board.pairCount >= minPairs && omens.includes(family) ? GATE_OMEN_COUNT : 0;
 
 /** The omens told on the floor they first show, floor 6; none in Endless. */
-export const gateOmensToldOn = (run: { runSeed: number; runRulesVersion?: number; gateOmens?: readonly GateOmen[]; board?: { level: number } | null; endless?: boolean }): readonly GateOmen[] =>
-    run.endless !== true && run.board?.level === GATE_OMEN_FROM_FLOOR ? runGateOmens(run) : [];
+export const gateOmensToldOn = (run: { runSeed: number; runRulesVersion?: number; gateOmens?: readonly GateOmen[]; board?: { level: number; descentFloor?: number } | null; endless?: boolean }): readonly GateOmen[] =>
+    run.endless !== true && run.board != null && contentFloor(run.board) === GATE_OMEN_FROM_FLOOR ? runGateOmens(run) : [];

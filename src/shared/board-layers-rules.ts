@@ -7,6 +7,7 @@ import { atomicVariantForPairKey } from './board-tile-generation-rules';
 import { TILE_SUITS } from './tile-suit-rules';
 import { freshBoardFaces } from './void-spew-rules';
 import { releaseRealmHoldsIfStuck } from './realm-weather-rules';
+import { contentFloor } from './descent-length-rules';
 
 /**
  * Layers (DGE-017, 2026-10-20): the Deep's floors are dealt two decks deep.
@@ -38,9 +39,9 @@ export const LAYERS_CARTOGRAPHER_COVER = 0.25;
  * the restless hall - the Goldilocks probe (`sim-goldilocks.ts`) read a floor that hides a deck *and* swaps its
  * cards at 0.23 of it known, the least certain floor of the Deep.
  */
-export const isLayersFloor = (board: Pick<BoardState, 'level' | 'floorTag' | 'fold' | 'tiles' | 'floorArchetypeId'>, rulesVersion: number): boolean =>
+export const isLayersFloor = (board: Pick<BoardState, 'level' | 'descentFloor' | 'floorTag' | 'fold' | 'tiles' | 'floorArchetypeId'>, rulesVersion: number): boolean =>
     rulesVersion >= LAYERS_RULES_FROM &&
-    descentActForFloor(board.level).id === 'deep' &&
+    descentActForFloor(contentFloor(board)).id === 'deep' &&
     // The Cartographer (`cartographer-rules.ts`) is the one boss floor dealt two decks deep (rules 82).
     (board.floorTag !== 'boss' || (rulesVersion >= 82 && board.floorArchetypeId === 'cartographer_hall')) &&
     !board.fold &&

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type RunState, type Tile } from './contracts';
+import { type BoardState, type RunState, type Tile } from './contracts';
 import { buildBoard } from './board-generation';
 import { boardRings } from './cartographer-rules';
 import { finalizeLevel } from './floor-clear-transition';
@@ -7,15 +7,17 @@ import { parTurnsForRun } from './floor-par';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { applySpiralTurn, sealSpiralRings, SPIRAL_RULES_FROM } from './spiral-rules';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const spiralBoard = (seed = 7777): BoardState => {
-    const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 44, 'endless');
-    return buildBoard(44, { runSeed: seed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: entry.mutators, floorArchetypeId: entry.floorArchetypeId, floorTag: entry.floorTag });
+    const entry = pickFloorScheduleEntry(seed, CLASSIC_DESCENT_RULES, 44, 'endless');
+    return buildBoard(44, { runSeed: seed, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: entry.mutators, floorArchetypeId: entry.floorArchetypeId, floorTag: entry.floorTag });
 };
 
 const spiralRun = (board: BoardState = spiralBoard(), extra: Partial<RunState> = {}): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' }));
-    return { ...base, status: 'playing', runRulesVersion: GAME_RULES_VERSION, board: { ...board, flippedTileIds: [] }, turnsThisFloor: 0, ...extra };
+    return { ...base, status: 'playing', runRulesVersion: CLASSIC_DESCENT_RULES, board: { ...board, flippedTileIds: [] }, turnsThisFloor: 0, ...extra };
 };
 
 /** The board with these cells cleared. */
@@ -27,11 +29,21 @@ const cleared = (board: BoardState, cells: readonly number[]): BoardState => {
 };
 
 describe('the Spiral (DGE-021)', () => {
+    it('takes a Wanderer’s footprint with the floor when it is survived at par (the soak, 2026-10-25)', () => {
+        const before = spiralRun();
+        const par = parTurnsForRun(before);
+        const board = { ...before.board!, tiles: before.board!.tiles.map((tile, index) => (index === 0 ? { ...tile, footprint: true } : tile)) };
+        const after = { ...before, board, turnsThisFloor: par };
+        const survived = applySpiralTurn({ ...before, turnsThisFloor: par - 1 }, after, (run) => run);
+        expect(survived.spiralSurvived).toBe(true);
+        expect(survived.board!.tiles.some((tile) => tile.footprint)).toBe(false);
+    });
+
     it('stands on floors 44 and 56 from rules 85', () => {
-        expect(pickFloorScheduleEntry(7777, GAME_RULES_VERSION, 44, 'endless').floorArchetypeId).toBe('spiral_hall');
-        expect(pickFloorScheduleEntry(7777, GAME_RULES_VERSION, 56, 'endless').floorArchetypeId).toBe('spiral_hall');
+        expect(pickFloorScheduleEntry(7777, CLASSIC_DESCENT_RULES, 44, 'endless').floorArchetypeId).toBe('spiral_hall');
+        expect(pickFloorScheduleEntry(7777, CLASSIC_DESCENT_RULES, 56, 'endless').floorArchetypeId).toBe('spiral_hall');
         expect(pickFloorScheduleEntry(7777, SPIRAL_RULES_FROM - 1, 44, 'endless').floorArchetypeId).not.toBe('spiral_hall');
-        expect(['cursed_last', 'flip_par']).not.toContain(pickFloorScheduleEntry(7777, GAME_RULES_VERSION, 44, 'endless').featuredObjectiveId);
+        expect(['cursed_last', 'flip_par']).not.toContain(pickFloorScheduleEntry(7777, CLASSIC_DESCENT_RULES, 44, 'endless').featuredObjectiveId);
     });
 
     it('a cleared outer ring seals, and fresh pairs are dealt into the cleared cells inside it', () => {

@@ -1,3 +1,5 @@
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { advanceToNextLevel, createNewRun } from './game';
@@ -37,7 +39,7 @@ describe('the test pace (fast Descent)', () => {
     });
 
     it('walks one floor at a time unless the run asked for the test pace', () => {
-        const run = createNewRun(0, { runSeed: 8080 });
+        const run = { ...createNewRun(0, { runSeed: 8080 }), runRulesVersion: CLASSIC_DESCENT_RULES };
         expect(nextDescentLevel(run)).toBe(2);
         expect(descend(run).board?.level).toBe(2);
         const fast = withFastDescent(run);
@@ -57,8 +59,8 @@ describe('the test pace (fast Descent)', () => {
 
     it('carries the same Dread a walk to the same floor would, seed for seed', () => {
         for (const runSeed of [8080, 31337, 4242]) {
-            const walked = walkTo(createNewRun(0, { runSeed }), 24);
-            let fast = withFastDescent(createNewRun(0, { runSeed }));
+            const walked = walkTo({ ...createNewRun(0, { runSeed }), runRulesVersion: CLASSIC_DESCENT_RULES }, 24);
+            let fast = withFastDescent({ ...createNewRun(0, { runSeed }), runRulesVersion: CLASSIC_DESCENT_RULES });
             while ((fast.board?.level ?? 1) < 24) fast = descend(fast);
             expect(fast.board?.level).toBe(24);
             expect([fast.dreadRagingFloors, fast.dreadWildFloors], `seed ${runSeed}`).toEqual([walked.dreadRagingFloors, walked.dreadWildFloors]);
@@ -67,7 +69,7 @@ describe('the test pace (fast Descent)', () => {
     });
 
     it('keeps a miss bank grant on its shelf for the floors played, not the floor numbers jumped', () => {
-        const fast = withFastDescent(createNewRun(0, { runSeed: 8080 }));
+        const fast = withFastDescent({ ...createNewRun(0, { runSeed: 8080 }), runRulesVersion: CLASSIC_DESCENT_RULES });
         // From floor 12: three jumps (13, 18, 24) are three floors played, as walking 13, 14, 15 is.
         const at12 = { ...fast, board: { ...fast.board!, level: 12 }, missBank: [{ floor: 11, misses: 2 }] };
         const walked = [descend({ ...at12, descentPace: null })];

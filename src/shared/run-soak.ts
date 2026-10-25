@@ -544,7 +544,8 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     'a miss costs the tries it charged, as far as the bank covers them': (before, run, action) => {
         if (!before || action !== 'resolve' || run.stats.mismatches <= before.stats.mismatches) return null;
         const had = missesLeft(before) ?? 0;
-        if (had === 0) return run.status === 'gameOver' ? null : 'a miss on an empty bank did not end the run';
+        // The Miser's Vault (`relic-evolution-rules.ts`) buys the run off once a floor, for gold.
+        if (had === 0) return run.status === 'gameOver' || (run.misersVaultUsedThisFloor && !before.misersVaultUsedThisFloor) ? null : 'a miss on an empty bank did not end the run';
         // On the Warden's floor a turn past par costs one more (`warden-rules.ts`).
         const warden = isWardenFloor(run.board) && run.turnsThisFloor > parTurnsForRun(run) ? 1 : 0;
         const owed = Math.min(had, Math.max(1, run.stats.tries - before.stats.tries) + warden);

@@ -1,3 +1,5 @@
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game';
 import { emptyDescentRecord } from './descent-record';
@@ -6,7 +8,7 @@ import { parseRunShareKey } from './run-share-key';
 import { buildRunShareText } from './run-share-text';
 
 const runAt = (level: number, extra: Record<string, unknown> = {}) => {
-    const base = createNewRun(0, { runSeed: 4242 });
+    const base = { ...createNewRun(0, { runSeed: 4242 }), runRulesVersion: CLASSIC_DESCENT_RULES };
     return { ...base, board: { ...base.board!, level }, stats: { ...base.stats, highestLevel: level }, ...extra };
 };
 

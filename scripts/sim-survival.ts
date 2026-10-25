@@ -32,6 +32,7 @@ import { applyCrucible, crucibleTargetTileId } from '../src/shared/crucible-rule
 import { canTakeMisersPurse, takeMisersPurse } from '../src/shared/misers-purse-rules';
 import { applyStillBell, canRingStillBell } from '../src/shared/still-bell-rules';
 import { applyStormGlass, canBreakStormGlass } from '../src/shared/storm-glass-rules';
+import { descentLengthFor } from '../src/shared/descent-length-rules';
 
 /** The curio items a player who uses them would use before turning a card, or the run unchanged. */
 const useItemsAtTurnStart = (run: RunState): RunState => {
@@ -51,7 +52,8 @@ const flipLockedLast = (run: RunState, first: { id: string }, second: { id: stri
 export const SURVIVAL_SEEDS = [11, 202, 3003, 40404, 555, 6006, 77, 8888, 91_919, 1_234, 13, 27, 314, 2718, 42, 99, 1001, 4096, 65_537, 7] as const;
 /** The Warden gate’s sample (DGE-032): the twenty above and eighty more, so a share of runs is not one seed’s luck. */
 export const SURVIVAL_GATE_SEEDS: readonly number[] = [...SURVIVAL_SEEDS, ...Array.from({ length: 80 }, (_, index) => 200_003 + index * 7919)];
-export const SURVIVAL_FLOOR_CAP = 60;
+/** To the Warden: floor 40 from rules 93 (`descent-length-rules.ts`), 60 before. */
+export const SURVIVAL_FLOOR_CAP = descentLengthFor(GAME_RULES_VERSION);
 export const SURVIVAL_RATES = [0.1, 0.15, 0.2, 0.25, 0.35] as const;
 
 export interface SurvivalRun {

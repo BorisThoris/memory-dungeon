@@ -8,6 +8,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
+import { contentFloor } from './descent-length-rules';
 
 /**
  * The Wanderers (DGE-009, 2026-10-20): cards that drift a cell at a time and leave a trail.
@@ -56,10 +57,11 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     );
 
 /** The Wanderer pairs a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
-export const wandererCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+export const wandererCountFor = (board: Pick<BoardState, 'level' | 'descentFloor' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
     if (rulesVersion < WANDERER_RULES_FROM || board.pairCount < WANDERER_MIN_PAIRS) return 0;
     // Depth 7 (`depth-rules.ts`): two Wanderers from floor 7.
-    const early = depthHas({ depth }, 'wanderers_early') && board.level >= DEPTH_WANDERERS_FROM ? Math.max(2, wandererPairsForFloor(board.level)) : wandererPairsForFloor(board.level);
+    const floor = contentFloor(board);
+    const early = depthHas({ depth }, 'wanderers_early') && floor >= DEPTH_WANDERERS_FROM ? Math.max(2, wandererPairsForFloor(floor)) : wandererPairsForFloor(floor);
     // Depth 19: three wherever there are any.
     return early > 0 && depthHas({ depth }, 'wanderers_three') ? Math.max(early, DEPTH_FAMILY_COUNT) : early;
 };

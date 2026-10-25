@@ -7,6 +7,7 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { TILE_SUITS } from './tile-suit-rules';
 import { freshBoardFaces } from './void-spew-rules';
+import { wipeFootprints } from './wanderer-rules';
 
 /**
  * The Spiral (DGE-021, rules 85): an Abyss floor that is survived, not cleared.
@@ -108,8 +109,9 @@ export const sealSpiralRings = (
 
 /** The floor survived: the Spiral ends, the Hold's stack going with it. */
 // A Hold's stack and a Sleeper still asleep go with the floor: a survived Spiral has no cell left to wake into.
+// A Wanderer's footprint goes too: it lasts its turn, and the floor's turns are over (the soak found one left at par, 2026-10-25).
 const survive = (run: RunState, finalize: (run: RunState) => RunState): RunState =>
-    finalize({ ...run, spiralSurvived: true, holding: false, heldSeedIds: [], sleepingPairs: [] });
+    finalize({ ...run, ...(run.board ? { board: wipeFootprints(run.board) } : {}), spiralSurvived: true, holding: false, heldSeedIds: [], sleepingPairs: [] });
 
 /**
  * Applied after every resolved turn on a Spiral: a cleared live ring seals and the inner ring is dealt;

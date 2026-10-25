@@ -6,6 +6,7 @@ import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { gateOmenCount, gateOmensFor, type GateOmen } from './run-signature-rules';
+import { contentFloor } from './descent-length-rules';
 
 /**
  * Sleepers (DGE-020, rules 84): the Abyss's card family, pairs that come back.
@@ -35,11 +36,11 @@ const isPlainPair = (pair: readonly Tile[]): boolean =>
     pair.length === 2 && pair.every((tile) => tile.state === 'hidden' && tile.suit != null && tile.turncoat == null && !tile.wanderer && !tile.sleeper && !isRealmHeld(tile));
 
 /** The Sleepers a floor's schedule deals (its minimum; the Dread may buy more, `dread-composition-rules.ts`). */
-export const sleeperCountFor = (board: Pick<BoardState, 'level' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
+export const sleeperCountFor = (board: Pick<BoardState, 'level' | 'descentFloor' | 'pairCount'>, { rulesVersion, depth = 0 }: { rulesVersion: number; depth?: number }): number => {
     if (rulesVersion < SLEEPER_RULES_FROM || board.pairCount < SLEEPER_MIN_PAIRS) return 0;
     // Depth (`depth-rules.ts`): two from an earlier floor.
-    const wanted = sleepersForFloor(board.level)
-        || (depthHas({ depth }, 'sleepers_early') && board.level >= DEPTH_SLEEPERS_FROM ? 2 : 0);
+    const wanted = sleepersForFloor(contentFloor(board))
+        || (depthHas({ depth }, 'sleepers_early') && contentFloor(board) >= DEPTH_SLEEPERS_FROM ? 2 : 0);
     // Depth 16: three wherever there are any.
     return wanted > 0 && depthHas({ depth }, 'sleepers_three') ? Math.max(wanted, DEPTH_FAMILY_COUNT) : wanted;
 };

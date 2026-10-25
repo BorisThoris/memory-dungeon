@@ -373,7 +373,7 @@ const RunShell = ({
     // Dread (`dread-rules.ts`): where the run is, never how it plays. A shared game counts floors to an end instead.
     const dread = isPassAndPlayRun(run.passAndPlay) ? null : dreadTier(dreadForRun(run));
     // The milestone ahead (`milestone-rules.ts`), as a share of the act: effort follows the fraction left.
-    const milestone = isPassAndPlayRun(run.passAndPlay) ? null : nextMilestone(run.board?.level ?? 1);
+    const milestone = isPassAndPlayRun(run.passAndPlay) ? null : nextMilestone(run.board?.level ?? 1, run.runRulesVersion);
     // Endless's rent (`endless-rent-rules.ts`): what this floor owes, shown in the milestone's place.
     const rent = endlessRentDue(run);
 

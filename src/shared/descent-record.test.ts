@@ -1,3 +1,5 @@
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 import { describe, expect, it } from 'vitest';
 import { SAVE_SCHEMA_VERSION, type RunState } from './contracts';
 import { createNewRun } from './game';
@@ -8,7 +10,7 @@ import { getProfileSummaryRows } from './profile-summary';
 
 /** A finished run that reached `level`, ended for `reason`. */
 const finished = (level: number, reason: RunState['runEndReason'], extra: Partial<RunState> = {}): RunState => {
-    const base = createNewRun(0, { runSeed: 6161 });
+    const base = { ...createNewRun(0, { runSeed: 6161 }), runRulesVersion: CLASSIC_DESCENT_RULES };
     return {
         ...base,
         status: 'gameOver',

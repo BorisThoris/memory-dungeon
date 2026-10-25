@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type RunState, type Tile } from './contracts';
+import { type BoardState, type RunState, type Tile } from './contracts';
 import { buildBoard } from './board-generation';
 import { inspectBoardFairness, isBoardComplete } from './board-inspection';
 import { cardsBeneath, dealLayers, LAYERS_COVER, LAYERS_RULES_FROM, layerKeyOf, promoteBeneath } from './board-layers-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const SEED = 2525;
-const dealt = (level: number, rulesVersion = GAME_RULES_VERSION): BoardState =>
+const dealt = (level: number, rulesVersion = CLASSIC_DESCENT_RULES): BoardState =>
     dealLayers(buildBoard(level, { runSeed: SEED, runRulesVersion: rulesVersion, gameMode: 'endless', activeMutators: [] }), { runSeed: SEED, rulesVersion });
 const lower = (board: BoardState): Tile[] => (board.beneath ?? []).filter((card): card is Tile => card != null);
 
@@ -28,7 +30,7 @@ describe('Layers (DGE-017)', () => {
         expect(cards.some((card) => topFaces.has(card.symbol))).toBe(false);
         expect(cards.every((card) => card.state === 'hidden')).toBe(true);
         // Both decks count, and the floor's key names every id it was dealt.
-        const top = buildBoard(25, { runSeed: SEED, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] });
+        const top = buildBoard(25, { runSeed: SEED, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] });
         expect(board.pairCount).toBe(top.pairCount + byPair.size);
         expect(board.layerKey).toBe(layerKeyOf(board.tiles, board.beneath!));
         expect(inspectBoardFairness(board).issues ?? []).toEqual([]);

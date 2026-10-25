@@ -1,17 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION } from './contracts';
 import {
     getLongRunActBossRows,
     getLongRunFatigueRows,
     runLongRunSoak
 } from './long-run-depth';
 import { runBalanceSimulation } from './balance-simulation';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
 
 describe('GLD long-run depth contracts', () => {
     it('publishes a coherent scheduled act and boss read model', () => {
-        const rows = getLongRunActBossRows({ seed: 42_001, rulesVersion: GAME_RULES_VERSION, floors: 12 });
+        const rows = getLongRunActBossRows({ seed: 42_001, rulesVersion: CLASSIC_DESCENT_RULES, floors: 12 });
 
         expect(rows).toHaveLength(12);
         expect(rows.filter((row) => row.expectedBoss).map((row) => row.floor)).toEqual([7, 9]);
@@ -25,7 +26,7 @@ describe('GLD long-run depth contracts', () => {
 
 
     it('adds fatigue guardrails for long-run balance samples', () => {
-        const report = runBalanceSimulation({ seeds: [42_001, 42_077], floors: 48, rulesVersion: GAME_RULES_VERSION });
+        const report = runBalanceSimulation({ seeds: [42_001, 42_077], floors: 48, rulesVersion: CLASSIC_DESCENT_RULES });
         const rows = getLongRunFatigueRows(report);
 
         expect(rows.map((row) => row.key)).toEqual([
@@ -35,7 +36,7 @@ describe('GLD long-run depth contracts', () => {
     }, LONG_SIMULATION_TIMEOUT_MS);
 
     it('runs the deterministic multi-seed long-run soak gate', () => {
-        const report = runLongRunSoak({ seeds: [42_001, 42_077, 42_123], floors: 48, rulesVersion: GAME_RULES_VERSION });
+        const report = runLongRunSoak({ seeds: [42_001, 42_077, 42_123], floors: 48, rulesVersion: CLASSIC_DESCENT_RULES });
 
         expect(report.offlineOnly).toBe(true);
         expect(report.issues).toEqual([]);

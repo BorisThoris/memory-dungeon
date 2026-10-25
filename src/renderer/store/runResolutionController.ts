@@ -1,5 +1,5 @@
 import { runDepth } from '../../shared/depth-rules';
-import { descentActForFloor } from '../../shared/floor-mutator-schedule';
+import { descentActForLevel } from '../../shared/floor-mutator-schedule';
 import { recordFeats } from '../../shared/feat-unlocks';
 import { recordDescent } from '../../shared/descent-record';
 import { evaluateAchievementUnlocks } from '../../shared/achievements';
@@ -202,7 +202,7 @@ export const createRunResolutionController = ({
                     totalScore: summary.totalScore,
                     mutatorCount: runArrayCount(summary.activeMutators),
                     // The reach curve (DGE-028): where the run got and how it ended, never who played it.
-                    act: descentActForFloor(Math.max(1, summary.highestLevel)).id,
+                    act: descentActForLevel(Math.max(1, summary.highestLevel), nextRun.runRulesVersion).id,
                     outcome: summary.runEndReason ?? 'unknown',
                     wardenFelled: nextRun.wardenOutcome === 'cleared',
                     endless: nextRun.endless === true,

@@ -1,5 +1,5 @@
 import type { DescentRecordPersisted, RunState } from './contracts';
-import { DESCENT_ACTS, descentActForFloor } from './floor-mutator-schedule';
+import { DESCENT_ACTS, descentActForLevel } from './floor-mutator-schedule';
 import { DREAD_TIERS, dreadForRun, dreadTier } from './dread-rules';
 import { nextMilestone } from './milestone-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -29,14 +29,14 @@ const actIndex = (id: string | null | undefined): number => DESCENT_ACTS.findInd
 const tierIndex = (id: string | null | undefined): number => DREAD_TIERS.findIndex((tier) => tier.id === id);
 
 export const summarizeDescent = (
-    run: Pick<RunState, 'board' | 'stats' | 'runEndReason' | 'dreadRagingFloors' | 'dreadWildFloors'> & Partial<Pick<RunState, 'depth'>>,
+    run: Pick<RunState, 'board' | 'stats' | 'runEndReason' | 'dreadRagingFloors' | 'dreadWildFloors'> & Partial<Pick<RunState, 'depth' | 'runRulesVersion'>>,
     recordAtStart: DescentRecordPersisted | null
 ): DescentRunSummary => {
     const floor = Math.max(1, runNonNegativeInteger(run.stats.highestLevel), runNonNegativeInteger(run.board?.level));
-    const act = descentActForFloor(floor);
+    const act = descentActForLevel(floor, run.runRulesVersion);
     const tier = dreadTier(dreadForRun(run)).tier;
     const won = run.runEndReason === 'warden_cleared';
-    const ahead = nextMilestone(floor);
+    const ahead = nextMilestone(floor, run.runRulesVersion);
     const firsts: string[] = [];
     if (recordAtStart) {
         if (actIndex(act.id) > 0 && actIndex(act.id) > actIndex(recordAtStart.deepestActId)) firsts.push(`first time in ${act.title}`);

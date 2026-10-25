@@ -1,17 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type RunState } from './contracts';
+import { type RunState } from './contracts';
 import { buildBoard } from './board-generation';
 import { createNewRun, finishMemorizePhase } from './game';
 import { finalizeLevel } from './floor-clear-transition';
 import { playerVisibleBoard } from './player-visible-board';
 import { applySleeperTurn, dealSleepers, SLEEPER_FROM_FLOOR, SLEEPER_RULES_FROM, SLEEPER_WAKE_TURNS, sleepersForFloor, wakeSleeper } from './sleeper-rules';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
-const abyssBoard = (seed = 7777) => buildBoard(SLEEPER_FROM_FLOOR, { runSeed: seed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] });
+const abyssBoard = (seed = 7777) => buildBoard(SLEEPER_FROM_FLOOR, { runSeed: seed, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] });
 
 const abyssRun = (extra: Partial<RunState> = {}): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' }));
-    const board = dealSleepers(abyssBoard(), { runSeed: 7777, rulesVersion: GAME_RULES_VERSION });
-    return { ...base, status: 'playing', runRulesVersion: GAME_RULES_VERSION, board: { ...board, flippedTileIds: [] }, turnsThisFloor: 5, ...extra };
+    const board = dealSleepers(abyssBoard(), { runSeed: 7777, rulesVersion: CLASSIC_DESCENT_RULES });
+    return { ...base, status: 'playing', runRulesVersion: CLASSIC_DESCENT_RULES, board: { ...board, flippedTileIds: [] }, turnsThisFloor: 5, ...extra };
 };
 
 /** The run after a turn that matched the pair `pairKey`, at this chain. */
@@ -27,7 +29,7 @@ describe('Sleepers (DGE-020)', () => {
         expect(sleepersForFloor(SLEEPER_FROM_FLOOR - 1)).toBe(0);
         expect(sleepersForFloor(SLEEPER_FROM_FLOOR)).toBe(2);
         expect(sleepersForFloor(55)).toBe(3);
-        const board = dealSleepers(abyssBoard(), { runSeed: 7777, rulesVersion: GAME_RULES_VERSION });
+        const board = dealSleepers(abyssBoard(), { runSeed: 7777, rulesVersion: CLASSIC_DESCENT_RULES });
         expect(new Set(board.tiles.filter((tile) => tile.sleeper).map((tile) => tile.pairKey)).size).toBe(2);
         expect(playerVisibleBoard(board).tiles.some((tile) => tile.state === 'hidden' && tile.sleeper)).toBe(false);
         expect(dealSleepers(abyssBoard(), { runSeed: 7777, rulesVersion: SLEEPER_RULES_FROM - 1 }).tiles.some((tile) => tile.sleeper)).toBe(false);

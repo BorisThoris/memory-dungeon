@@ -3,6 +3,7 @@ import { endlessPlaceForLevel } from './floor-mutator-schedule';
 import { pairsForFloor } from './pair-curve';
 import { calculateMatchScore } from './scoring-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { descentFloorFor } from './descent-length-rules';
 
 /**
  * Endless's rent (DGE-006 part 2, 2026-10-20): each floor past the Warden must pay a score before
@@ -29,7 +30,8 @@ const cleanFloorReference = (level: number, rulesVersion: number): number => {
 
 /** The score an Endless floor owes; zero on the Descent. */
 export const endlessRentForFloor = (level: number, rulesVersion: number): number => {
-    const place = endlessPlaceForLevel(level);
+    // The shorter Descent (`descent-length-rules.ts`): Endless begins past floor 40, where 61 did.
+    const place = endlessPlaceForLevel(descentFloorFor(level, rulesVersion));
     if (!place) return 0;
     return Math.round(ENDLESS_RENT_SHARE * ENDLESS_RENT_GROWTH ** (place.cycle - 1) * cleanFloorReference(level, rulesVersion));
 };

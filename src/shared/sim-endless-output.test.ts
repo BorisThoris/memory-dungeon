@@ -9,8 +9,9 @@ import {
     parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
 import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
-import { GAME_RULES_VERSION } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 describe('sim-endless CSV output', () => {
     afterEach(() => {
@@ -41,7 +42,7 @@ describe('sim-endless CSV output', () => {
         const csv = buildEndlessSimulationCsv({
             floors: 24,
             runSeed: 42_001,
-            rulesVersion: GAME_RULES_VERSION
+            rulesVersion: CLASSIC_DESCENT_RULES
         });
         const lines = csv.trim().split('\n');
 
@@ -68,7 +69,7 @@ describe('sim-endless CSV output', () => {
         const summary = buildEndlessSimulationSummary({
             floors: 24,
             runSeed: 42_001,
-            rulesVersion: GAME_RULES_VERSION
+            rulesVersion: CLASSIC_DESCENT_RULES
         });
 
         expect(summary).toContain('# Endless Simulation Gate Summary');
@@ -91,7 +92,7 @@ describe('sim-endless CSV output', () => {
         const health = analyzeEndlessSimulationHealth({
             floors: 200,
             runSeed: 42_001,
-            rulesVersion: GAME_RULES_VERSION
+            rulesVersion: CLASSIC_DESCENT_RULES
         });
 
         expect(health.ok).toBe(true);
@@ -118,7 +119,7 @@ describe('sim-endless CSV output', () => {
 
 
     it('plays every mechanic at least twice, topping up from later seeds when one run deals it once', () => {
-        const lines = buildEndlessSimulationCsv({ floors: 24, runSeed: 42_001, rulesVersion: GAME_RULES_VERSION }).trim().split('\n');
+        const lines = buildEndlessSimulationCsv({ floors: 24, runSeed: 42_001, rulesVersion: CLASSIC_DESCENT_RULES }).trim().split('\n');
         const plays = lines.filter((line) => line.startsWith('mechanicPlayed,'));
         expect(plays).toHaveLength(endlessMechanicKeys().length);
         for (const line of plays) expect(Number(line.split(',')[2]), line).toBeGreaterThanOrEqual(MIN_PLAYS_PER_MECHANIC);
@@ -129,7 +130,7 @@ describe('sim-endless CSV output', () => {
     }, 120_000);
 
     it('cherry-picks a deep floor, builds it, inspects it and plays it to the clear', () => {
-        const lines = buildEndlessSimulationCsv({ floors: 1, runSeed: 42_001, rulesVersion: GAME_RULES_VERSION, deepFloors: [210] }).trim().split('\n');
+        const lines = buildEndlessSimulationCsv({ floors: 1, runSeed: 42_001, rulesVersion: CLASSIC_DESCENT_RULES, deepFloors: [210] }).trim().split('\n');
         const deep = lines.filter((line) => line.startsWith('deepFloor,'));
         expect(deep).toHaveLength(1);
         expect(deep[0]).toMatch(/^deepFloor,floor=210\|pairs=768\|layers=no\|mode=clear\|status=levelComplete\|.*\|replay=ok\|fairness=ok\|ok,1$/u);

@@ -312,8 +312,9 @@ describe('RunShell', () => {
         render(<RunShell onPause={vi.fn()} personalBestDepth={false} run={{ ...base, board: { ...base.board!, level: 7 } }} tools={[]} />);
         const milestone = screen.getByTestId('hud-milestone');
         expect(milestone).toHaveTextContent('Next: The Living Dungeon');
-        expect(milestone).toHaveTextContent('7 of 12');
-        expect(milestone).toHaveAttribute('aria-label', 'Next milestone: The Living Dungeon, floor 7 of 12');
+        // The Gate is eight floors on the forty-floor Descent (`descent-length-rules.ts`).
+        expect(milestone).toHaveTextContent('7 of 8');
+        expect(milestone).toHaveAttribute('aria-label', 'Next milestone: The Living Dungeon, floor 7 of 8');
         expect(within(screen.getByTestId('hud-floor')).queryByTestId('hud-milestone')).toBeNull();
     });
 

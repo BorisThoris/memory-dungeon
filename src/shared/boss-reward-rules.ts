@@ -1,6 +1,6 @@
 import type { BossReward, RealmSeverity, RunState } from './contracts';
 import { nextDescentLevel } from './descent-pace-rules';
-import { isActBossFloor } from './floor-mutator-schedule';
+import { isActBossLevel } from './floor-mutator-schedule';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -43,7 +43,7 @@ export const runBlueprints = (run: Pick<RunState, 'blueprints'>): BlueprintId[] 
 
 /** Whether this clear offers doors: the next floor (on the test pace too) is an act boss. */
 export const offersBossDoors = (run: Pick<RunState, 'runRulesVersion' | 'descentPace' | 'board'>): boolean =>
-    (run.runRulesVersion ?? 0) >= BOSS_REWARD_RULES_FROM && !!run.board && isActBossFloor(nextDescentLevel(run));
+    (run.runRulesVersion ?? 0) >= BOSS_REWARD_RULES_FROM && !!run.board && isActBossLevel(nextDescentLevel(run), run.runRulesVersion);
 
 /** What a boss gives at a severity, with the blueprints already held. */
 export const bossRewardFor = (severity: RealmSeverity, held: readonly BlueprintId[]): BossReward => {
@@ -57,7 +57,7 @@ export const bossRewardFor = (severity: RealmSeverity, held: readonly BlueprintI
 
 /** Applied at an act boss's clear (`finalizeLevel`): the reward for the severity the floor was met at. */
 export const applyBossReward = (run: RunState, level: number, severity: RealmSeverity | null): RunState => {
-    if ((run.runRulesVersion ?? 0) < BOSS_REWARD_RULES_FROM || !isActBossFloor(level) || severity == null) return run;
+    if ((run.runRulesVersion ?? 0) < BOSS_REWARD_RULES_FROM || !isActBossLevel(level, run.runRulesVersion) || severity == null) return run;
     const reward = bossRewardFor(severity, runBlueprints(run));
     if (reward.kind === 'clear') return { ...run, lastBossReward: reward };
     if (reward.kind === 'gold') return { ...run, gold: runNonNegativeInteger(run.gold ?? 0) + reward.gold, lastBossReward: reward };

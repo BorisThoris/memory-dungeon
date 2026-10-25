@@ -1,20 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type RunState } from './contracts';
+import { type RunState } from './contracts';
 import { buildBoard } from './board-generation';
 import { foldBoard } from './board-fold-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { createNewRun, finishMemorizePhase } from './game';
 import { applyKeeperTurn, KEEPER_RULES_FROM, keeperSwapCells, swapRooms } from './keeper-rules';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 const keeperBoard = (seed = 7777) => {
-    const entry = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, 24, 'endless');
-    const built = buildBoard(24, { runSeed: seed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: entry.mutators, floorArchetypeId: entry.floorArchetypeId, floorTag: entry.floorTag });
-    return foldBoard(built, { runSeed: seed, rulesVersion: GAME_RULES_VERSION });
+    const entry = pickFloorScheduleEntry(seed, CLASSIC_DESCENT_RULES, 24, 'endless');
+    const built = buildBoard(24, { runSeed: seed, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: entry.mutators, floorArchetypeId: entry.floorArchetypeId, floorTag: entry.floorTag });
+    return foldBoard(built, { runSeed: seed, rulesVersion: CLASSIC_DESCENT_RULES });
 };
 
 describe('the Keeper of Halls (DGE-011)', () => {
     it('is the Living Dungeon’s boss from rules 81, and its floor is a Fold', () => {
-        expect(pickFloorScheduleEntry(7777, GAME_RULES_VERSION, 24, 'endless').floorArchetypeId).toBe('keeper_hall');
+        expect(pickFloorScheduleEntry(7777, CLASSIC_DESCENT_RULES, 24, 'endless').floorArchetypeId).toBe('keeper_hall');
         expect(pickFloorScheduleEntry(7777, KEEPER_RULES_FROM - 1, 24, 'endless').floorArchetypeId).not.toBe('keeper_hall');
         const board = keeperBoard();
         expect(board.floorArchetypeId).toBe('keeper_hall');
@@ -44,7 +46,7 @@ describe('the Keeper of Halls (DGE-011)', () => {
 
     it('swaps on the fourth resolved turn, and only then', () => {
         const base = finishMemorizePhase(createNewRun(0, { runSeed: 7777, gameMode: 'endless' }));
-        const run: RunState = { ...base, status: 'playing', runRulesVersion: GAME_RULES_VERSION, board: keeperBoard(), turnsThisFloor: 3 };
+        const run: RunState = { ...base, status: 'playing', runRulesVersion: CLASSIC_DESCENT_RULES, board: keeperBoard(), turnsThisFloor: 3 };
         const fourth = applyKeeperTurn(run, { ...run, turnsThisFloor: 4 });
         expect(fourth.keeperSwapsThisFloor).toBe(1);
         expect(fourth.board!.tiles.map((tile) => tile.id)).not.toEqual(run.board!.tiles.map((tile) => tile.id));

@@ -20,8 +20,9 @@ import {
     usesEndlessFloorSchedule,
     WILD_SCHEDULE_RULES_VERSION
 } from './floor-mutator-schedule';
-import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard, inspectBoardFairness } from './board-generation';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 describe('usesEndlessFloorSchedule', () => {
     it('is false when rules version is below the floor schedule gate', () => {
@@ -357,7 +358,7 @@ describe('floor archetype progression contract', () => {
         for (const row of getFloorArchetypeProgressionRows()) {
             const board = buildBoard(row.cycleFloor, {
                 runSeed: 12_012,
-                runRulesVersion: GAME_RULES_VERSION,
+                runRulesVersion: CLASSIC_DESCENT_RULES,
                 activeMutators: [...row.mutators],
                 floorTag: row.floorTag,
                 floorArchetypeId: row.floorArchetypeId,
@@ -374,7 +375,7 @@ describe('floor archetype progression contract', () => {
 
 describe('warden rotation', () => {
     const scheduleFor = (level: number) =>
-        pickFloorScheduleEntry(42001, GAME_RULES_VERSION, level, 'endless');
+        pickFloorScheduleEntry(42001, CLASSIC_DESCENT_RULES, level, 'endless');
 
     it('meets all four wardens across three cycles', () => {
         const bossFloors = Array.from({ length: ENDLESS_CYCLE_FLOOR_COUNT * 3 }, (_, index) => index + 1)
@@ -435,7 +436,7 @@ describe('warden rotation', () => {
 
 describe('the Descent (DGE-002)', () => {
     const scheduleFor = (level: number) =>
-        pickFloorScheduleEntry(42001, GAME_RULES_VERSION, level, 'endless');
+        pickFloorScheduleEntry(42001, CLASSIC_DESCENT_RULES, level, 'endless');
 
     it('runs four named acts over floors 1 to 60, with no gap and no overlap', () => {
         expect(DESCENT_ACTS.map((act) => [act.id, act.title, act.firstFloor, act.lastFloor])).toEqual([

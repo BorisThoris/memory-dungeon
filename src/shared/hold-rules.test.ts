@@ -1,15 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type RunState } from './contracts';
+import { type RunState } from './contracts';
 import { buildBoard } from './board-generation';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { inspectBoardFairness } from './board-inspection';
 import { elementPopSpec } from './element-resonance-rules';
 import { HOLD_BURST_FROM, HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, releaseHold, startHold } from './hold-rules';
+// These tests name the floors the content was written for: the sixty-floor numbering (`descent-length-rules.ts`).
+import { CLASSIC_DESCENT_RULES } from './descent-length-rules';
 
 /** A floor-13 run between turns on a floor-13 board, the meter as given. */
 const floor13 = (holdLinks: number): RunState => {
     const base = finishMemorizePhase(createNewRun(0, { runSeed: 1313, realm: null }));
-    const board = buildBoard(13, { runSeed: 1313, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', activeMutators: [] });
+    const board = buildBoard(13, { runSeed: 1313, runRulesVersion: CLASSIC_DESCENT_RULES, gameMode: 'endless', activeMutators: [] });
     // A deep bank: a Heavy card’s miss costs two, and the halving test misses three times.
     return { ...base, status: 'playing', activeMutators: [], board, holdLinks, missBank: [{ floor: 13, misses: 9 }] };
 };
