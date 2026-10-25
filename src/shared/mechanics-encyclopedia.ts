@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 124 as const;
+export const ENCYCLOPEDIA_VERSION = 125 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -666,6 +666,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Carve',
         description:
             `From floor ${floorOf(VERB_STAIRCASE_FIRST_FLOORS.carve)}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
+    },
+    {
+        id: 'sys_match_rules',
+        title: 'Match rules',
+        description:
+            'One plain floor of every act changes **what makes a pair**, and the crown says so before your first flip. On **Opposites** every pair is one picture in two **opposite elements** - ember with tide, moss with bone: one card of each pair wears its opposite on its back and its face, so a card’s partner wears the other colour. Each card is still its true element to everything it does: what it casts, what it pops, how it reacts.'
     },
     {
         id: 'sys_hold',

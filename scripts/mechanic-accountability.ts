@@ -65,6 +65,7 @@ export const MECHANIC_DEEP_CENSUS_COUNTERS: Record<string, readonly string[]> = 
     // 2026-10-24: with each seed's realm, a Depth that walks the ladder, Endless past the Warden and a player
     // who presses the verbs, the deep census reaches the rest of the pack.
     'board.fold': ['deep.foldFloors'],
+    'board.match_rule': ['deep.matchRuleFloors'],
     'board.layers': ['deep.layerFloors'],
     'progression.dread': ['deep.dreadAwake'],
     'board.learned_rule': ['deep.learnedRules'],

@@ -32,6 +32,8 @@ import { dealWanderers, wandererCountFor } from './wanderer-rules';
 import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 import { runGateOmens } from './run-signature-rules';
+import { dealMatchRule, matchRuleFor } from './match-rule-rules';
+import { descentLengthFor } from './descent-length-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -99,7 +101,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         dealMasks(dealWanderers(dealOddCards(bossBoard, seeded), { ...prefer('wandering_suit'), depth, extra: dreadBought.wanderer }), { ...prefer('masked_suit'), depth, extra: dreadBought.mask }),
         { ...prefer('sleeping_suit'), depth, extra: dreadBought.sleeper }
     );
-    const nextBoard = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
+    const layered = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
+    // The floor's match rule (`match-rule-rules.ts`, rules 94): dealt last, on the pairs the others left plain.
+    const nextBoard = dealMatchRule(layered, matchRuleFor(run.runSeed, run.runRulesVersion, layered.level, layered.floorTag, descentLengthFor(run.runRulesVersion)), run.runSeed);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 

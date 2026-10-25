@@ -3,7 +3,7 @@ import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
-import { GATE_OMEN_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { GATE_OMEN_COPY, MATCH_RULE_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
 import { gateOmensToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
@@ -1679,8 +1679,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const verbArriving = verbArrivingOn(run);
     // A run's omen (`run-signature-rules.ts`): the deep family that walks this run's Gate, told the floor it first shows.
     const omensTold = gateOmensToldOn(run);
+    // A floor's match rule (`match-rule-rules.ts`): what makes a pair here, told the whole floor.
+    const matchRuleTold = run.board?.matchRule ?? null;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2266,6 +2268,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 {verbArriving ? (
                                     <p className={styles.wardenRules} data-testid="verb-arrival" data-verb={verbArriving}>
                                         <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
+                                    </p>
+                                ) : null}
+                                {matchRuleTold ? (
+                                    <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold}>
+                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker}</span> {MATCH_RULE_COPY.line}
                                     </p>
                                 ) : null}
                                 {omensTold.length > 0 ? (

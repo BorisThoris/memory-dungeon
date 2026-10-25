@@ -32,3 +32,9 @@ export const GATE_OMEN_COPY = {
               ? 'The dungeon remembers you: from your next run, two omens walk the Gate.'
               : null
 } as const;
+
+/** A floor's match rule (`match-rule-rules.ts`): told on the board crown for the whole floor. */
+export const MATCH_RULE_COPY = {
+    kicker: 'Opposites',
+    line: 'Every pair is one picture in two opposite elements: ember with tide, moss with bone. A card’s partner wears the other colour.'
+} as const;

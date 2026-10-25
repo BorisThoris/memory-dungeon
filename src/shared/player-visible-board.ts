@@ -29,6 +29,11 @@ import type { BoardState, Tile } from './contracts';
 const PAIR_IDENTITY_FIELDS = ['findableKind', 'tileTraitKind', 'hourglass', 'turncoat', 'turncoatDealt', 'wanderer', 'sleeper'] as const;
 
 export const playerVisibleTile = (tile: Tile): Tile => {
+    // Opposites (`match-rule-rules.ts`): the card shows its opposite element, face up as face down - the floor's told rule.
+    if (tile.shownSuit != null) {
+        const { shownSuit, ...rest } = tile;
+        return playerVisibleTile({ ...rest, suit: shownSuit });
+    }
     if (tile.state !== 'hidden') return tile;
     // A mask (`mask-rules.ts`) is the element the back shows: the screen is told the lie, never the truth.
     if (tile.mask != null) {

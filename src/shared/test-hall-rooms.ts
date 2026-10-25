@@ -47,6 +47,8 @@ import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from
 import { gateOmensToldOn } from './run-signature-rules';
 import { dealMasks } from './mask-rules';
 import { dealSleepers } from './sleeper-rules';
+import { dealOpposites } from './match-rule-rules';
+import { playerVisibleTile } from './player-visible-board';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
 import { BLUEPRINT_ORDER, BOSS_WILD_GOLD } from './boss-reward-rules';
@@ -120,6 +122,7 @@ export type TestHallRoomId =
     | 'verb-staircase-hold'
     | 'gate-omen'
     | 'gate-omens-remembered'
+    | 'match-rule-opposites'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -1448,6 +1451,31 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     const sleepers = new Set(r.board!.tiles.filter((t) => t.sleeper).map((t) => t.pairKey)).size;
                     const masks = r.board!.tiles.filter((t) => t.mask != null).length;
                     return sleepers === 1 && masks === 1 && gateOmensToldOn(r).join() === 'sleeper,mask' && finishable(r) === null ? null : `sleepers ${sleepers}, masks ${masks}, told ${gateOmensToldOn(r).join()}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'match-rule-opposites',
+        title: 'Opposites: one picture, two elements',
+        mechanic: 'From rules 94 one plain floor of every act changes what makes a pair. On Opposites every pair is one picture in two opposite elements: one card of each pair shows ember for tide, moss for bone, back and face; each is still its true element to every rule.',
+        graphMechanicIds: ['board.match_rule'],
+        tryThis: 'Every pair here has one card in its opposite colour: match a pair, and its two cards show two elements.',
+        build: () => {
+            const base = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 4, misses: 4 });
+            return { ...base, board: dealOpposites(base.board!, base.runSeed) };
+        },
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'a pair of one picture in two elements matches, and every pair shows one card in its opposite',
+                expect: (r) => {
+                    const shown = r.board!.tiles.filter((t) => t.shownSuit != null);
+                    const pairs = new Set(r.board!.tiles.map((t) => t.pairKey)).size;
+                    const a = r.board!.tiles.filter((t) => t.pairKey === 'a').map((t) => playerVisibleTile(t).suit);
+                    return r.board!.matchRule === 'opposites' && shown.length === pairs && a[0] !== a[1] && r.board!.tiles.filter((t) => t.pairKey === 'a').every((t) => t.state !== 'hidden') && finishable(r) === null
+                        ? null
+                        : `rule ${String(r.board!.matchRule)}, shown ${shown.length} of ${pairs}, a shows ${a.join('/')}`;
                 }
             }
         ]

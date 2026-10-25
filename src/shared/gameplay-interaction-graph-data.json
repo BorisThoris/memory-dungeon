@@ -3092,6 +3092,35 @@
             ]
         },
         {
+            "id": "board.match_rule",
+            "label": "Match rules",
+            "kind": "board",
+            "role": "one_plain_floor_of_every_act_changes_what_makes_a_pair_opposites_shows_one_card_of_each_pair_in_its_opposite_element",
+            "evidence": [
+                "src/shared/match-rule-rules.ts",
+                "src/shared/next-floor-transition-rules.ts",
+                "src/shared/player-visible-board.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "tileStates"
+            ],
+            "writes": [
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "a-shown-element-never-changes-the-true-element",
+                "one-card-of-a-pair-at-most"
+            ],
+            "tests": [
+                "src/shared/match-rule-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.wanderers",
             "label": "Wanderers",
             "kind": "board",
@@ -3325,6 +3354,12 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "a masked back shows its false element until the first flip drops it"
+        },
+        {
+            "source": "board.match_rule",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the crown tells the floor's match rule, and an Opposites card shows its opposite element"
         },
         {
             "source": "trait.echo",
