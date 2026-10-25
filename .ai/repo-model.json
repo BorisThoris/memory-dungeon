@@ -4611,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72009,
-      "sha256": "a1ece02681bc517319b93be85acef8cf04962e9f58348ca69e203534707108c5"
+      "bytes": 71816,
+      "sha256": "1746831f56514470fed910f4dd692baf628c2a7caf8bf03c47fd196bc7bc289e"
     },
     {
       "path": "public/site.webmanifest",
@@ -20313,8 +20313,8 @@
     {
       "path": "zz-pw.config.ts",
       "category": "configuration",
-      "bytes": 460,
-      "sha256": "e603bed1738a1fdf95c16471e2c994d8d6316bea9e0d2069aa2ce41d2329a5bf"
+      "bytes": 952,
+      "sha256": "de54841dc6d5bc1a85f9f47d6f25e0221a13dcb093d8d4ca588c054c9aa6c206"
     }
   ],
   "files": [
