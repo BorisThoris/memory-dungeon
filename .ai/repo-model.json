@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3384,
     "codeFileCount": 1310,
-    "exportedSymbolCount": 4241,
+    "exportedSymbolCount": 4242,
     "contentItemCount": 16,
     "mechanicCount": 89,
     "stateFieldCount": 166,
-    "relationshipCount": 11874
+    "relationshipCount": 11877
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 109366,
-      "sha256": "c4997312dbad6b39d3e80b90ef74b311301ccc6c561a5812b8729d1f36577939"
+      "bytes": 110997,
+      "sha256": "cfcb33f87ab8e9d962df0e6b977c73110a291d24f2ffb59cd202ceb65307ac0d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10619,
-      "sha256": "b0c5aac09006ef1672e8a1ffa7289b8734987e8ecc4e3cc0a939fcb5b33e5f23"
+      "sha256": "56ea09fcc1667a8b2f5e2207c8ff89f564cfa4df832b9257ad337b411c79cf6c"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33562,
-      "sha256": "33ca99073fa1959f30f73d11090be234a1c839b53557786c60ad4170358d327c"
+      "sha256": "696f8acde5dabf6adf054fe4792772e143e182705869d05313457c7d37416160"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -14787,8 +14787,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 109776,
-      "sha256": "d646f127df69b6e70f50bc29ff2e0be46d02725ccb1715c80500d6104834efc1"
+      "bytes": 111407,
+      "sha256": "d64175842068cd0fcd7771dbb5f3bf1f4b64e54df4c4c64367d72b71500a9fe2"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15357,8 +15357,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 64095,
-      "sha256": "f874e8aa5d8dd3c5fcbc90bccbe12335ca30bf9fd0986734d8475ef4b9fb4eae"
+      "bytes": 64147,
+      "sha256": "387ddcec0963d8fbe11e8541044dfad1f8a25910abb3c947ef300bba3ecefd3d"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16149,14 +16149,14 @@
     {
       "path": "src/shared/hold-rules.test.ts",
       "category": "test",
-      "bytes": 5535,
-      "sha256": "707e5ed4e8f07f138eefb7f088b0e99d65cb34c128e2c3fa6329e545776372fa"
+      "bytes": 6774,
+      "sha256": "75c55d1dfe35ede14627c6ed45861e6cdc9af0080e9bf3177c5aae21d0eca045"
     },
     {
       "path": "src/shared/hold-rules.ts",
       "category": "source",
-      "bytes": 10342,
-      "sha256": "aad34ad2610a48a6da6cad7d277d7efe353a18e090a65c5e51548e08086fd96c"
+      "bytes": 11010,
+      "sha256": "617159d56e409ec288f2110452ee6a582384c78ef3bc0a6f6bf5a59ae07b5469"
     },
     {
       "path": "src/shared/honor-unlock-ids.ts",
@@ -16371,8 +16371,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 74798,
-      "sha256": "ce3141615726710604bb03c7c96e8aac60dc60d3b3ea57f1b9ee9ea0870bcbe7"
+      "bytes": 74932,
+      "sha256": "aa4eed3f81bbb3d7e5150e8c115ccdd1f5c113252c8d98dd77f618984c021352"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17505,8 +17505,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 132953,
-      "sha256": "24ff96b989fffa882d1eef0fb671afdd349d7e4e07099f0dc380673d0ec3b836"
+      "bytes": 134584,
+      "sha256": "90bc540183242b13edf88fd3610c699780a94d2f0f993bbd1d1ba699ed081abb"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17800,7 +17800,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7363,
-      "sha256": "f173e74ae312aeb204ec163d49db7728c0ce96febba86c804fef312a7cd0b26c"
+      "sha256": "1451c77f7520ece9d181f60a354792531c6720dbb158581c4672baa5b29be848"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17895,8 +17895,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 28556,
-      "sha256": "4a85119aaf30ae4407a3724ba68c090818e86c492bcb06aab65b1311b35173ca"
+      "bytes": 29034,
+      "sha256": "12b3b52f64480dc268d122cb153677990a8f369145bbb6fdd623924647158c03"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -38124,7 +38124,8 @@
         "file:src/renderer/components/elementScene.test.ts",
         "file:src/shared/element-chemistry.test.ts",
         "file:src/shared/element-reaction-feedback.test.ts",
-        "file:src/shared/element-resonance-rules.test.ts"
+        "file:src/shared/element-resonance-rules.test.ts",
+        "file:src/shared/hold-rules.test.ts"
       ]
     },
     {
@@ -39989,11 +39990,12 @@
       "path": "src/shared/hold-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 124,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-inspection.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/element-resonance-rules.ts",
         "file:src/shared/game.ts",
         "file:src/shared/hold-rules.ts"
       ],
@@ -40005,7 +40007,7 @@
       "path": "src/shared/hold-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 175,
+      "lineCount": 184,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-layers-rules.ts",
@@ -40030,6 +40032,7 @@
         "symbol:src/shared/hold-rules.ts#canReleaseHold",
         "symbol:src/shared/hold-rules.ts#canStartHold",
         "symbol:src/shared/hold-rules.ts#heldPairCount",
+        "symbol:src/shared/hold-rules.ts#HOLD_BURST_FROM",
         "symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
         "symbol:src/shared/hold-rules.ts#holdMeter",
         "symbol:src/shared/hold-rules.ts#holdSegmentsFor",
@@ -70781,32 +70784,40 @@
       "name": "applyHoldTurn",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 71,
-      "endLine": 96
+      "line": 78,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#canReleaseHold",
       "name": "canReleaseHold",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 61,
-      "endLine": 61
+      "line": 68,
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#canStartHold",
       "name": "canStartHold",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 58,
-      "endLine": 59
+      "line": 65,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#heldPairCount",
       "name": "heldPairCount",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 61,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/hold-rules.ts#HOLD_BURST_FROM",
+      "name": "HOLD_BURST_FROM",
+      "kind": "value",
+      "file": "src/shared/hold-rules.ts",
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#HOLD_METER_SEGMENTS",
@@ -70821,40 +70832,40 @@
       "name": "holdMeter",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 48,
-      "endLine": 51
+      "line": 55,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#holdSegmentsFor",
       "name": "holdSegmentsFor",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#isHoldUnlocked",
       "name": "isHoldUnlocked",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 52,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#releaseHold",
       "name": "releaseHold",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 102,
-      "endLine": 174
+      "line": 109,
+      "endLine": 183
     },
     {
       "id": "symbol:src/shared/hold-rules.ts#startHold",
       "name": "startHold",
       "kind": "value",
       "file": "src/shared/hold-rules.ts",
-      "line": 64,
-      "endLine": 64
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/honor-unlock-ids.ts#HONOR_UNLOCK_IDS",
@@ -83386,7 +83397,7 @@
       "tests": [
         {
           "path": "src/shared/hold-rules.test.ts",
-          "line": 6
+          "line": 7
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -105851,6 +105862,12 @@
       "id": "exports:src/shared/hold-rules.ts->symbol:src/shared/hold-rules.ts#heldPairCount",
       "source": "file:src/shared/hold-rules.ts",
       "target": "symbol:src/shared/hold-rules.ts#heldPairCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/hold-rules.ts->symbol:src/shared/hold-rules.ts#HOLD_BURST_FROM",
+      "source": "file:src/shared/hold-rules.ts",
+      "target": "symbol:src/shared/hold-rules.ts#HOLD_BURST_FROM",
       "kind": "exports"
     },
     {
@@ -135220,6 +135237,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/hold-rules.test.ts->src/shared/element-resonance-rules.ts",
+      "source": "file:src/shared/hold-rules.test.ts",
+      "target": "file:src/shared/element-resonance-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/hold-rules.test.ts->src/shared/game.ts",
       "source": "file:src/shared/hold-rules.test.ts",
       "target": "file:src/shared/game.ts",
@@ -151662,6 +151685,12 @@
       "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/shared/element-resonance-rules.test.ts",
       "source": "file:src/shared/element-resonance-rules.ts",
       "target": "file:src/shared/element-resonance-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/element-resonance-rules.ts->file:src/shared/hold-rules.test.ts",
+      "source": "file:src/shared/element-resonance-rules.ts",
+      "target": "file:src/shared/hold-rules.test.ts",
       "kind": "tested_by"
     },
     {

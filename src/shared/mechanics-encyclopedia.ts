@@ -40,7 +40,7 @@ import { BOSS_WILD_GOLD } from './boss-reward-rules';
 import { EVOLUTION_PRICE, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 121 as const;
+export const ENCYCLOPEDIA_VERSION = 122 as const;
 
 export interface MutatorDefinition {
     id: MutatorId;
@@ -665,7 +665,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_hold',
         title: 'The Hold',
         description:
-            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.hold}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. A miss while holding drops the oldest half of what you hold, but never all of it.`
+            `From floor ${VERB_STAIRCASE_FIRST_FLOORS.hold}, every link of your chain fills the **Hold** meter, ${HOLD_METER_SEGMENTS} to arm it. Press **Hold** and every pair you match keeps its pop: it scores and counts, but nothing breaks around it. Press **Release** and every held pair breaks at once, at the chain you hold then - one break for each element. On a realm floor an element that meets no other **bursts its own**: its nearest face-down pairs go, one for each pair of it you held. A miss while holding drops the oldest half of what you hold, but never all of it.`
     },
     {
         id: 'sys_void_spew',

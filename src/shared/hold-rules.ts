@@ -35,6 +35,13 @@ import { verbReached } from './verb-staircase-rules';
  * untouched; only its tile ids are kept, in `heldSeedIds`, as the release's seeds.
  */
 export const HOLD_METER_SEGMENTS = 6;
+/**
+ * The release always breaks (rules 91, 2026-10-25). On a realm floor a pop is the reaction's, and a held
+ * element that meets no other used to break nothing: 68% of the Gate's releases (200 average soak runs)
+ * paid a score tick and moved no card. From rules 91 such an element bursts its own nearest face-down
+ * pairs, one for each pair of it held, so the stack the player built is the cascade they see.
+ */
+export const HOLD_BURST_FROM = 91;
 
 /** The Hold's meter for this run: Depth 13 (`depth-rules.ts`) asks seven links. */
 export const holdSegmentsFor = (run: Partial<Pick<RunState, 'depth'>> | null | undefined): number => (depthHas(run, 'hold_seven') ? DEPTH_HOLD_SEGMENTS : HOLD_METER_SEGMENTS);
@@ -112,7 +119,9 @@ export const releaseHold = (run: RunState): { run: RunState; pairs: number; scor
     let score = 0;
     let pairs = 0;
     for (const [suit, ids] of bySuit) {
-        const result = resolveChunkBreak({ board, run, matchedTileIds: ids, chain, spec: elementPopSpec(run, suit) });
+        const reacting = elementPopSpec(run, suit);
+        const spec = reacting === null && suit != null && (run.runRulesVersion ?? 0) >= HOLD_BURST_FROM ? { suits: [suit], pairsPerSuit: Math.max(1, Math.floor(ids.length / 2)) } : reacting;
+        const result = resolveChunkBreak({ board, run, matchedTileIds: ids, chain, spec });
         board = result.board;
         score += result.score;
         pairs += result.brokenPairKeys.length;

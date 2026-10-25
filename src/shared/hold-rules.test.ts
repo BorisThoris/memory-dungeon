@@ -3,7 +3,8 @@ import { GAME_RULES_VERSION, type RunState } from './contracts';
 import { buildBoard } from './board-generation';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { inspectBoardFairness } from './board-inspection';
-import { HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, releaseHold, startHold } from './hold-rules';
+import { elementPopSpec } from './element-resonance-rules';
+import { HOLD_BURST_FROM, HOLD_METER_SEGMENTS, canReleaseHold, canStartHold, heldPairCount, holdMeter, releaseHold, startHold } from './hold-rules';
 
 /** A floor-13 run between turns on a floor-13 board, the meter as given. */
 const floor13 = (holdLinks: number): RunState => {
@@ -49,6 +50,24 @@ describe('the Hold (DGE-008)', () => {
         const filled = matchOne(floor13(2))!;
         expect(holdMeter(filled).segments).toBe(3);
         expect(holdMeter(missOne(floor13(4))).segments).toBe(0);
+    });
+
+    it('bursts a held element that meets none on a realm floor, one nearest pair of it for each held (rules 91)', () => {
+        // A realm floor where the held matches set off no reaction: before rules 91 the release broke nothing.
+        const realm = (rules: number): RunState => ({ ...floor13(6), realmId: 'frost', realmSeverity: 'calm', elementStreak: null, runRulesVersion: rules });
+        const releaseAfterTwo = (rules: number) => {
+            let run = startHold(realm(rules));
+            for (let i = 0; i < 2; i += 1) run = matchOne(run)!;
+            const suit = run.board!.tiles.find((tile) => tile.id === run.heldSeedIds![0])?.suit ?? null;
+            return { spec: elementPopSpec(run, suit), released: releaseHold(run)! };
+        };
+        const before = releaseAfterTwo(HOLD_BURST_FROM - 1);
+        const now = releaseAfterTwo(HOLD_BURST_FROM);
+        expect(now.spec).toBeNull();
+        expect(before.released.pairs).toBe(0);
+        expect(now.released.pairs).toBeGreaterThan(0);
+        expect(now.released.pairs).toBeLessThanOrEqual(2);
+        expect(inspectBoardFairness(now.released.run.board!).issues).toEqual([]);
     });
 
     it('keeps a held match’s pop for the release, the pair matched and the board fair', () => {
