@@ -21,6 +21,9 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
         const sfx = await import('/src/renderer/audio/gameSfx.ts');
         const ctxMod = await import('/src/renderer/audio/webAudioContext.ts');
         const game = await import('/src/shared/game.ts');
+        // The match and the floor clear play decoded samples once they are loaded, and a quieter synth tone
+        // until then: measure them as a run plays them, after the boot preload (a cold dev server lost the race).
+        await (await import('/src/renderer/audio/sampledSfx.ts')).preloadSampledSfx();
         const rate = 48_000;
         const realSetTimeout = globalThis.setTimeout;
         const realAudioContext = window.AudioContext;
