@@ -1,3 +1,4 @@
+import { turnTripleThird } from './match-rule-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { flipTile, resolveBoardTurn } from './game';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -93,7 +94,7 @@ export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTur
                 lastTileIds: [first.id, second.id]
             };
         }
-        current = resolveBoardTurn(afterSecond);
+        current = resolveBoardTurn(turnTripleThird(afterSecond, flipTile));
     }
 
     return {

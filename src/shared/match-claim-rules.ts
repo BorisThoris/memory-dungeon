@@ -38,35 +38,42 @@ export const deriveMatchClaimContext = (firstTile: Tile, secondTile: Tile): Matc
  * pair it - the floor could never clear (the "Wild" option on the path screen softlocked on the
  * first joker played). `null` when neither card is the joker.
  */
-export const wildStandInPartnerId = (board: BoardState, firstTileId: string, secondTileId: string): string | null => {
+export const wildStandInPartnerId = (board: BoardState, firstTileId: string, secondTileId: string): string | null =>
+    wildStandInPartnerIds(board, firstTileId, secondTileId)[0] ?? null;
+
+/** Every card the joker stands in for: on a Triples floor's three (`match-rule-rules.ts`), both the real card's others. */
+const wildStandInPartnerIds = (board: BoardState, firstTileId: string, secondTileId: string): string[] => {
     const first = board.tiles.find((tile) => tile.id === firstTileId);
     const second = board.tiles.find((tile) => tile.id === secondTileId);
-    if (!first || !second || isWildPairKey(first.pairKey) === isWildPairKey(second.pairKey)) return null;
+    if (!first || !second || isWildPairKey(first.pairKey) === isWildPairKey(second.pairKey)) return [];
     const real = isWildPairKey(first.pairKey) ? second : first;
-    const partner = board.tiles.find(
-        (tile) => tile.pairKey === real.pairKey && tile.id !== real.id && tile.state !== 'matched' && tile.state !== 'removed'
-    );
-    return partner?.id ?? null;
+    return board.tiles
+        .filter((tile) => tile.pairKey === real.pairKey && tile.id !== real.id && tile.state !== 'matched' && tile.state !== 'removed')
+        .map((tile) => tile.id);
 };
 
 export const createMatchedPairClaimBoard = ({
     board,
     firstTileId,
     secondTileId,
-    thirdTileId
+    thirdTileId,
+    claimThird = false
 }: {
     board: BoardState;
     firstTileId: string;
     secondTileId: string;
     thirdTileId?: string;
+    /** Triples (`match-rule-rules.ts`): the third card is the three's third, claimed with the other two. */
+    claimThird?: boolean;
 }): BoardState => {
-    const standInFor = wildStandInPartnerId(board, firstTileId, secondTileId);
+    const standInFor = wildStandInPartnerIds(board, firstTileId, secondTileId);
+    const claimed = new Set([firstTileId, secondTileId, ...standInFor, ...(claimThird && thirdTileId != null ? [thirdTileId] : [])]);
     return {
         ...board,
         flippedTileIds: [],
         matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
         tiles: board.tiles.map((tile) => {
-            if (tile.id === firstTileId || tile.id === secondTileId || tile.id === standInFor) {
+            if (claimed.has(tile.id)) {
                 return {
                     ...tile,
                     state: 'matched' as const,

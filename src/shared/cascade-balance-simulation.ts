@@ -1,3 +1,4 @@
+import { turnTripleThird } from './match-rule-rules';
 import type { BoardState, Rating, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
@@ -209,7 +210,7 @@ export const playCascadeBalanceFloor = ({
             first = group[0]!;
             second = group[1]!;
         }
-        run = resolveBoardTurn(flipLockedLast(run, first, second));
+        run = resolveBoardTurn(turnTripleThird(flipLockedLast(run, first, second), flipTile));
         turns += 1;
         bestChain = Math.max(bestChain, runNonNegativeInteger(run.stats.currentStreak));
     }

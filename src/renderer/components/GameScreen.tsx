@@ -4,6 +4,7 @@ import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { GATE_OMEN_COPY, MATCH_RULE_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { pendingTripleKey } from '../../shared/match-rule-rules';
 import { gateOmensToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
@@ -1681,6 +1682,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const omensTold = gateOmensToldOn(run);
     // A floor's match rule (`match-rule-rules.ts`): what makes a pair here, told the whole floor.
     const matchRuleTold = run.board?.matchRule ?? null;
+    // Triples: while two of a three wait face up, the crown says what the turn wants.
+    const tripleWaiting = pendingTripleKey(run.board) != null;
     const boardCrownShown =
         !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
@@ -2271,8 +2274,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     </p>
                                 ) : null}
                                 {matchRuleTold ? (
-                                    <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold}>
-                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {MATCH_RULE_COPY.line(matchRuleTold)}
+                                    <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold} data-waiting={tripleWaiting ? 'third' : undefined}>
+                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {tripleWaiting ? MATCH_RULE_COPY.waiting : MATCH_RULE_COPY.line(matchRuleTold)}
                                     </p>
                                 ) : null}
                                 {omensTold.length > 0 ? (

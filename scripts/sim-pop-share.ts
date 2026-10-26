@@ -11,6 +11,7 @@
  * the break took are bucketed by the heat carried into the turn. The measurement the owner asks
  * for before any pop tuning (docs/BALANCE_NOTES.md, 2026-09-23): matched share, not ladder steps.
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
@@ -54,7 +55,7 @@ for (const seed of seeds) {
             const [a, b] = orderAroundLock(run, group[0]!, group[1]!);
             const stage = comboHeatStage(run.stats.currentStreak);
             const before = run.board!.matchedPairs;
-            run = resolveBoardTurn(flipTile(flipTile(run, a.id), b.id));
+            run = resolveBoardTurn(turnTripleThird(flipTile(flipTile(run, a.id), b.id), flipTile));
             const gained = run.board!.matchedPairs - before;
             const pops = Math.max(0, gained - 1);
             matched += 1;

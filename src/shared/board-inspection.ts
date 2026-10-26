@@ -113,11 +113,13 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         }
         realPairKeys.push(pairKey);
         const tileIds = tiles.map((tile) => tile.id);
-        if (tiles.length !== 2) {
+        // A Triples floor's threes are three cards (`match-rule-rules.ts`); every other pair is two.
+        const setSize = (board.tripleKeys ?? []).includes(pairKey) ? 3 : 2;
+        if (tiles.length !== setSize) {
             structurallyClearable = false;
             issues.push({
                 code: 'real_pair_incomplete',
-                message: `Real pair "${pairKey}" has ${tiles.length} tile(s); exactly 2 are required.`,
+                message: `Real pair "${pairKey}" has ${tiles.length} tile(s); exactly ${setSize} are required.`,
                 pairKey,
                 tileIds
             });
@@ -128,7 +130,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
             continue;
         }
         const actionableTiles = tiles.filter(tileIsActionableForCompletion);
-        if (actionableTiles.length !== 2) {
+        if (actionableTiles.length !== setSize) {
             structurallyClearable = false;
             issues.push({
                 code: 'real_pair_missing_actionable_tile',
@@ -145,7 +147,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     }
 
     const nonUtilityTileCount = allBoardCards(board).filter((tile) => !isSingletonUtilityPairKey(tile.pairKey)).length;
-    const expectedNonUtilityTileCount = board.pairCount * 2;
+    const expectedNonUtilityTileCount = board.pairCount * 2 + (board.tripleKeys ?? []).length;
     if (nonUtilityTileCount !== expectedNonUtilityTileCount) {
         structurallyClearable = false;
         issues.push({

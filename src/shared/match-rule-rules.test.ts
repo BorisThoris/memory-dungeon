@@ -3,7 +3,8 @@ import { buildBoard } from './board-generation';
 import { inspectBoardFairness } from './board-inspection';
 import { descentLengthFor } from './descent-length-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFor, OPPOSITE_SUIT, rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
+import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
+import { selectGambitMatchedPair } from './gambit-match-rules';
 import { tilesArePairMatch } from './scoring-rules';
 import { playerVisibleBoard } from './player-visible-board';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
@@ -96,5 +97,75 @@ describe('match rules (rules 94)', () => {
         expect(after.stats.mismatches).toBe(run.stats.mismatches);
         expect(after.board!.tiles.filter((tile) => tile.id === a.id || tile.id === b.id).every((tile) => tile.state !== 'hidden')).toBe(true);
         expect(after.elementPairsRekeyedThisFloor).toBe(1);
+    });
+});
+
+describe('Triples (rules 96)', () => {
+    const dealt = () => {
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 91 }));
+        const board = dealMatchRule({ ...run.board!, flippedTileIds: [] }, 'triples', 91);
+        return { run: { ...run, board, status: 'playing' as const }, board };
+    };
+
+    it('deals three plain pairs as two threes: the cards stay, the sets drop by one, the backs say three', () => {
+        const before = finishMemorizePhase(createNewRun(0, { runSeed: 91 })).board!;
+        const { board } = dealt();
+        expect(board.matchRule).toBe('triples');
+        expect(board.tiles).toHaveLength(before.tiles.length);
+        expect(board.tripleKeys!.length % 2).toBe(0);
+        expect(board.pairCount).toBe(before.pairCount - board.tripleKeys!.length / 2);
+        for (const key of board.tripleKeys!) {
+            const three = board.tiles.filter((tile) => tile.pairKey === key);
+            expect(three, key).toHaveLength(3);
+            expect(new Set(three.map((tile) => tile.symbol)).size).toBe(1);
+            expect(three.every((tile) => tile.three)).toBe(true);
+            expect(setSizeFor(board, key)).toBe(3);
+        }
+        expect(board.tiles.filter((tile) => tile.three)).toHaveLength(board.tripleKeys!.length * 3);
+        expect(inspectBoardFairness(board).issues).toEqual([]);
+    });
+
+    it('two of a three wait face up for the third; the third claims all three as one match', () => {
+        const { run, board } = dealt();
+        const three = board.tiles.filter((tile) => tile.pairKey === board.tripleKeys![0]);
+        const two = flipTile(flipTile(run, three[0]!.id), three[1]!.id);
+        expect(two.status).toBe('playing');
+        expect(pendingTripleKey(two.board)).toBe(three[0]!.pairKey);
+        const claimed = resolveBoardTurn(flipTile(two, three[2]!.id));
+        expect(claimed.board!.tiles.filter((tile) => tile.pairKey === three[0]!.pairKey).every((tile) => tile.state === 'matched')).toBe(true);
+        expect(claimed.board!.matchedPairs).toBe(1);
+        expect(claimed.stats.mismatches).toBe(0);
+        expect(claimed.triplesClaimedThisFloor).toBe(1);
+        expect(inspectBoardFairness(claimed.board!).issues).toEqual([]);
+    });
+
+    it('any other third card is a miss and all three turn back; a turn cut short at two is a miss too', () => {
+        const { run, board } = dealt();
+        const key = board.tripleKeys![0]!;
+        const three = board.tiles.filter((tile) => tile.pairKey === key);
+        const other = board.tiles.find((tile) => tile.pairKey !== key)!;
+        const missed = resolveBoardTurn(flipTile(flipTile(flipTile(run, three[0]!.id), three[1]!.id), other.id));
+        expect(missed.stats.mismatches).toBe(1);
+        expect(missed.board!.tiles.filter((tile) => tile.pairKey === key || tile.id === other.id).every((tile) => tile.state === 'hidden')).toBe(true);
+        const cut = resolveBoardTurn(flipTile(flipTile(run, three[0]!.id), three[1]!.id));
+        expect(cut.stats.mismatches).toBe(1);
+        expect(cut.board!.tiles.filter((tile) => tile.pairKey === key).every((tile) => tile.state === 'hidden')).toBe(true);
+    });
+
+    it('the Gambit never claims two of a three', () => {
+        const { board } = dealt();
+        const key = board.tripleKeys![0]!;
+        const three = board.tiles.filter((tile) => tile.pairKey === key);
+        const other = board.tiles.find((tile) => tile.pairKey !== key)!;
+        expect(selectGambitMatchedPair({ ...board, flippedTileIds: [three[0]!.id, other.id, three[1]!.id] })).toBeNull();
+    });
+
+    it('is in the pool from rules 96, and a layered floor takes Opposites instead', () => {
+        const seen = new Set<string>();
+        for (const seed of SEEDS) for (const level of ruleFloors(seed)) seen.add(String(matchRuleFor(seed, TRIPLES_FROM, level, 'normal', descentLengthFor(TRIPLES_FROM))));
+        expect(seen.has('triples')).toBe(true);
+        const { board } = dealt();
+        const layered = { ...board, matchRule: undefined, tripleKeys: undefined, beneath: [board.tiles[0]!] };
+        expect(dealMatchRule(layered, 'triples', 91).matchRule).toBe('opposites');
     });
 });

@@ -4,7 +4,7 @@ import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
-import { tilesMatchOnBoard } from './match-rule-rules';
+import { isTripleKey, pendingTripleKey, tilesMatchOnBoard } from './match-rule-rules';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
@@ -46,10 +46,13 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             return run;
         }
 
+        // Two of a three up (`match-rule-rules.ts`): the turn goes on to its third card.
+        const tripleWaiting = pendingTripleKey(board) != null;
         const allowThird =
-            run.gambitAvailableThisFloor &&
-            !run.gambitThirdFlipUsed &&
-            currentFlippedTileIds.length === 2;
+            tripleWaiting ||
+            (run.gambitAvailableThisFloor &&
+                !run.gambitThirdFlipUsed &&
+                currentFlippedTileIds.length === 2);
         const maxFlips = allowThird ? 3 : 2;
         if (currentFlippedTileIds.length >= maxFlips) {
             return run;
@@ -100,14 +103,21 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
         const firstFlippedTile = firstFlippedId
             ? board.tiles.find((candidate) => candidate.id === firstFlippedId) ?? null
             : null;
+        // Triples: two of a three wait for the third, face up; the third card resolves at once whatever it is.
+        const opensThree = flippedTileIds.length === 2 && firstFlippedTile !== null && firstFlippedTile.pairKey === tile.pairKey && isTripleKey(board, tile.pairKey);
         const resolvesMatchImmediately =
             flippedTileIds.length === 2 &&
+            !opensThree &&
             firstFlippedTile !== null &&
             // Element pairs (`match-rule-rules.ts`): two plain cards of one element are a pair on that floor.
             tilesMatchOnBoard(board, firstFlippedTile, tile, tilesArePairMatch);
 
         let resolveRemainingMs = runAfterFlashClear.timerState.resolveRemainingMs;
-        if (flippedTileIds.length === 2) {
+        if (opensThree) {
+            resolveRemainingMs = 0;
+        } else if (flippedTileIds.length === 3 && tripleWaiting) {
+            resolveRemainingMs = tilesArePairMatch(firstFlippedTile!, tile) ? 0 : MATCH_DELAY_MS * runAfterFlashClear.resolveDelayMultiplier;
+        } else if (flippedTileIds.length === 2) {
             resolveRemainingMs = resolvesMatchImmediately
                 ? 0
                 : computeFlipResolveDelayMs(runAfterFlashClear, flippedTileIds, {
@@ -123,7 +133,7 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
         return {
             ...(turned ? unmaskOnFlip(runAfterFlashClear, turned) : runAfterFlashClear),
             peekRevealedTileIds,
-            status: flippedTileIds.length >= 2 ? 'resolving' : 'playing',
+            status: flippedTileIds.length >= 2 && !opensThree ? 'resolving' : 'playing',
             board: {
                 ...board,
                 tiles: board.tiles.map((candidate) =>

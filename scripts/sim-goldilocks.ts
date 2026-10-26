@@ -31,6 +31,7 @@
  *
  * `yarn sim:goldilocks [--from 25] [--to 60] [--seeds 12] [--check]`
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState, type Tile } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { filterMutatorsByContentLock } from '../src/shared/content-lock-state';
@@ -147,8 +148,11 @@ export const playMemoryFloor = (start: RunState, seed: number, memorySize: numbe
             }
         }
         if (!flipped) break;
-        const before = cellOf(flipped);
-        run = resolveBoardTurn(flipped);
+        // Triples (`match-rule-rules.ts`): two of a three up, it turns the third it remembers, or guesses.
+        const thirded = turnTripleThird(flipped, flipTile, (tile) => memory.includes(tile.id), rng);
+        for (const id of thirded.board?.flippedTileIds ?? []) remember(id);
+        const before = cellOf(thirded);
+        run = resolveBoardTurn(thirded);
         turns += 1;
         if (!run.board) break;
         // A card it knew that moved is a card it no longer knows - unless it watched it go: a one-cell slide

@@ -36,6 +36,7 @@
  * that a change to the pop reach, the pair curve or the par cannot quietly flatten or spike a floor
  * again - the thing this repository has done twice (Gen 191, Gen 148).
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
@@ -147,7 +148,7 @@ export const simulateDifficultyCurve = ({
                 if (stuck != null && run.board!.tiles[stuck]?.id === first.id) {
                     [first, second] = [second, first];
                 }
-                run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
+                run = resolveBoardTurn(turnTripleThird(flipTile(flipTile(run, first.id), second.id), flipTile));
                 turns += 1;
             }
             const row = gathered.get(floor) ?? { turns: [], suits: [], popped: [], pars: [] };

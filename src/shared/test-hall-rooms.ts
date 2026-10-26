@@ -47,7 +47,7 @@ import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from
 import { gateOmensToldOn } from './run-signature-rules';
 import { dealMasks } from './mask-rules';
 import { dealSleepers } from './sleeper-rules';
-import { dealMatchRule, dealOpposites } from './match-rule-rules';
+import { dealMatchRule, dealOpposites, pendingTripleKey } from './match-rule-rules';
 import { playerVisibleTile } from './player-visible-board';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
@@ -124,6 +124,7 @@ export type TestHallRoomId =
     | 'gate-omens-remembered'
     | 'match-rule-opposites'
     | 'match-rule-element-pairs'
+    | 'match-rule-triples'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -266,6 +267,8 @@ export type TestHallStep =
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
     /** Turn two named cards and resolve, whatever they make (`match-rule-rules.ts`: on Element pairs two pictures can pair). */
     | { readonly do: 'turn'; readonly a: string; readonly b: string }
+    /** Triples (`match-rule-rules.ts`): turn two of the board's first three, then its third - or, with `miss`, another card. */
+    | { readonly do: 'three'; readonly miss?: boolean }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
@@ -1503,6 +1506,41 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return r.stats.mismatches === b.stats.mismatches && turned.every((t) => t.state !== 'hidden') && left.length === 2 && left[0]!.pairKey === left[1]!.pairKey && finishable(r) === null
                         ? null
                         : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, turned ${turned.map((t) => t.state).join('/')}, left ${left.map((t) => t.pairKey).join('/')}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'match-rule-triples',
+        title: 'Triples: the third claims the three',
+        mechanic: 'From rules 96 a floor’s match rule may be Triples: three plain pairs are dealt as two threes, each card of a three wearing three pips on its back. Two of a three wait face up and the turn goes on: the third claims all three as one match; any other card is a miss and all three turn back.',
+        graphMechanicIds: ['board.match_rule'],
+        tryThis: 'Find the cards with three pips. Turn two of one picture: they stay up. Turn a wrong card and all three go down, a miss; turn the third and the three is claimed.',
+        build: () => {
+            const base = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 9, misses: 4 });
+            return { ...base, board: dealMatchRule(base.board!, 'triples', base.runSeed) };
+        },
+        script: [
+            {
+                step: { do: 'three', miss: true },
+                says: 'two of a three wait for the third; a wrong third is one miss, and all three turn back',
+                expect: (r, b) => {
+                    const key = r.board!.tripleKeys?.[0];
+                    const three = r.board!.tiles.filter((t) => t.pairKey === key);
+                    return r.board!.matchRule === 'triples' && r.stats.mismatches === b.stats.mismatches + 1 && three.length === 3 && three.every((t) => t.state === 'hidden' && t.three) && finishable(r) === null
+                        ? null
+                        : `rule ${String(r.board!.matchRule)}, misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}`;
+                }
+            },
+            {
+                step: { do: 'three' },
+                says: 'the third card claims all three as one match, with no miss',
+                expect: (r, b) => {
+                    const key = r.board!.tripleKeys?.[0];
+                    const three = r.board!.tiles.filter((t) => t.pairKey === key);
+                    return r.stats.mismatches === b.stats.mismatches && three.every((t) => t.state !== 'hidden') && r.board!.matchedPairs >= b.board!.matchedPairs + 1 && (r.triplesClaimedThisFloor ?? 0) === 1 && finishable(r) === null
+                        ? null
+                        : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}, sets ${b.board!.matchedPairs} -> ${r.board!.matchedPairs}`;
                 }
             }
         ]
@@ -3517,6 +3555,17 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'miss':
         case 'turn':
             return resolveBoardTurn(flipTile(flipTile(run, step.a), step.b));
+        case 'three': {
+            const key = run.board?.tripleKeys?.[0];
+            const three = run.board?.tiles.filter((tile) => tile.pairKey === key && tile.state === 'hidden') ?? [];
+            if (three.length !== 3) return null;
+            const two = flipTile(flipTile(run, three[0]!.id), three[1]!.id);
+            // Two of a three must wait face up for the third: a turn that resolved at two is not the rule.
+            if (two.status !== 'playing' || pendingTripleKey(two.board) !== key) return null;
+            const other = run.board!.tiles.find((tile) => tile.pairKey !== key && tile.state === 'hidden');
+            const third = step.miss ? other : three[2];
+            return third ? resolveBoardTurn(flipTile(two, third.id)) : null;
+        }
         case 'flip':
             return flipTile(run, step.tileId);
         case 'bomb': {

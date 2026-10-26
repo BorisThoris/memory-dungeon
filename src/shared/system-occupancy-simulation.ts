@@ -1,3 +1,4 @@
+import { turnTripleThird } from './match-rule-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
@@ -599,7 +600,7 @@ const playFloorFrom = (
                 continue;
             }
         }
-        step(resolveBoardTurn(flipped));
+        step(resolveBoardTurn(turnTripleThird(flipped, flipTile)));
         turns += 1;
         if (setup && wantsMiss && run.status === 'playing') {
             // The pin and the flash have a reason only once a miss has happened: two cards were

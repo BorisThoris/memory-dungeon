@@ -60,7 +60,8 @@ const hiddenRealTiles = (run: Pick<RunState, 'board'>): Tile[] =>
 const hiddenPairCount = (run: Pick<RunState, 'board'>): number => {
     const halves = new Map<string, number>();
     for (const tile of hiddenRealTiles(run)) halves.set(tile.pairKey, (halves.get(tile.pairKey) ?? 0) + 1);
-    return [...halves.values()].filter((count) => count === 2).length;
+    // A Triples floor's three (`match-rule-rules.ts`) is no pair the Zone can play.
+    return [...halves.entries()].filter(([key, count]) => count === 2 && !(run.board?.tripleKeys ?? []).includes(key)).length;
 };
 
 export const isZoneActive = (run: Pick<RunState, 'zone'>): boolean => run.zone != null && runNonNegativeInteger(run.zone.pairs) > 0;
@@ -146,8 +147,8 @@ const faceDown = (run: RunState, ids: readonly string[]): RunState => ({
  * cards were turned inside the Zone, so weather that took hold of them while earlier turns replayed
  * (a vine, the frost) does not stop them being played: they were already in the player's hand.
  */
-const playTurn = (run: RunState, first: string, second: string): RunState =>
-    resolveBoardTurn(flipTile(flipTile(releaseHolds(run, [first, second]), first), second));
+const playTurn = (run: RunState, ...ids: string[]): RunState =>
+    resolveBoardTurn(ids.reduce((state, id) => flipTile(state, id), releaseHolds(run, ids)));
 
 const releaseHolds = (run: RunState, ids: readonly string[]): RunState =>
     run.board && run.board.tiles.some((tile) => ids.includes(tile.id) && isTileFlipBlocked(tile))
@@ -177,12 +178,13 @@ export const resolveZone = (run: RunState): RunState => {
         const tile = run.board.tiles.find((candidate) => candidate.id === id);
         if (tile) byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), id]);
     }
-    const matches: Array<[string, string]> = [];
+    const matches: string[][] = [];
     const leftovers: string[] = [];
-    for (const ids of byPair.values()) {
-        if (ids.length >= 2) matches.push([ids[0]!, ids[1]!]);
-        for (const id of ids.slice(2)) leftovers.push(id);
-        if (ids.length === 1) leftovers.push(ids[0]!);
+    for (const [pairKey, ids] of byPair) {
+        // A Triples floor's three (`match-rule-rules.ts`) is a match only with all three seen.
+        const size = (run.board.tripleKeys ?? []).includes(pairKey) ? 3 : 2;
+        if (ids.length >= size) matches.push(ids.slice(0, size));
+        leftovers.push(...(ids.length >= size ? ids.slice(size) : ids));
     }
     // Everything goes down, and the Zone closes, before the turns replay what was seen.
     let next: RunState = { ...faceDown(run, up), zone: null };
@@ -191,10 +193,10 @@ export const resolveZone = (run: RunState): RunState => {
     const stillHidden = (state: RunState, id: string): boolean => state.board?.tiles.find((tile) => tile.id === id)?.state === 'hidden';
     let matched = 0;
     let missed = 0;
-    for (const [first, second] of matches) {
+    for (const ids of matches) {
         if (next.status !== 'playing') break;
-        if (!stillHidden(next, first) || !stillHidden(next, second)) continue;
-        next = playTurn(next, first, second);
+        if (!ids.every((id) => stillHidden(next, id))) continue;
+        next = playTurn(next, ...ids);
         matched += 1;
     }
     let pending: string | null = null;

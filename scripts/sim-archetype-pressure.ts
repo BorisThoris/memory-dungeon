@@ -41,6 +41,7 @@
  * noise of one another and saying otherwise would be inventing a structure the game does not have;
  * what it bands is the one claim the schedule makes out loud and can be held to.
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type BoardState, type FloorArchetypeId, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
@@ -110,7 +111,7 @@ const playFloor = (board: BoardState, seed: number, tag: string): number => {
             const group = groups[pickRngIndex(rng, groups.length)]!;
             [first, second] = [group[0]!, group[1]!];
         }
-        run = resolveBoardTurn(flipLockedLast(run, first, second));
+        run = resolveBoardTurn(turnTripleThird(flipLockedLast(run, first, second), flipTile));
         turns += 1;
     }
     return turns;

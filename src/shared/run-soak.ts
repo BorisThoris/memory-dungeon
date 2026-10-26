@@ -42,7 +42,7 @@ import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
 import { elementWouldLand, tileCharge } from './element-alchemy-rules';
 import { isStreakPrimed, runElementStreak } from './element-resonance-rules';
 import { chooseRealmDoor, REALM_DOOR_COUNT } from './realm-rules';
-import { isElementPairable } from './match-rule-rules';
+import { isElementPairable, pendingTripleKey, turnTripleThird } from './match-rule-rules';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -321,9 +321,10 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     },
     'tile ids are unique': (_b, run) =>
         run.board && new Set(run.board.tiles.map((tile) => tile.id)).size !== run.board.tiles.length ? 'duplicate tile id' : null,
+    // A Triples floor's threes are three (`match-rule-rules.ts`).
     'every real pair has exactly two halves': (_b, run) => {
         if (!run.board) return null;
-        for (const [key, halves] of pairsOf(run.board)) if (halves.length !== 2) return `pair ${key} has ${halves.length} halves`;
+        for (const [key, halves] of pairsOf(run.board)) if (halves.length !== ((run.board.tripleKeys ?? []).includes(key) ? 3 : 2)) return `pair ${key} has ${halves.length} halves`;
         return null;
     },
     'a pair leaves the board whole': (_b, run) => {
@@ -664,6 +665,17 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         for (const tile of allBoardCards(run.board)) if (!isSingletonUtilityPairKey(tile.pairKey)) counts.set(tile.pairKey, (counts.get(tile.pairKey) ?? 0) + 1);
         const broken = [...counts].find(([, n]) => n !== 2);
         return broken ? `pair ${broken[0]} holds ${broken[1]} cards` : null;
+    },
+    // Triples (`match-rule-rules.ts`): a three is claimed whole or not at all, and is always three cards.
+    'on Triples a three goes whole': (_before, run, action) => {
+        if (action !== 'resolve' || run.board?.matchRule !== 'triples') return null;
+        for (const key of run.board.tripleKeys ?? []) {
+            const three = run.board.tiles.filter((tile) => tile.pairKey === key);
+            const gone = three.filter((tile) => tile.state === 'matched' || tile.state === 'removed').length;
+            if (three.length !== 3) return `three ${key} holds ${three.length} cards`;
+            if (gone !== 0 && gone !== 3) return `three ${key} has ${gone} of 3 claimed`;
+        }
+        return null;
     },
     'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {
         if (!run.board || !spiralHolds(run, run.board)) return null;
@@ -1162,6 +1174,8 @@ export const soakRun = ({
         const second = partner && (others.length === 0 || rng() >= player.missRate) ? partner : others.length > 0 ? pick(others) : partner;
         if (!second) break;
         act('flip', flipTile(run, second.id));
+        // Triples (`match-rule-rules.ts`): two of a three up, it turns the third - or, as it misses, another card.
+        if (pendingTripleKey(run.board) != null) act('flip', turnTripleThird(run, flipTile, () => rng() >= player.missRate, rng));
         turns += 1;
         act('resolve', resolveBoardTurn(run));
     }

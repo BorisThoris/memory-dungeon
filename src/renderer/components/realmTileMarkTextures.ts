@@ -81,7 +81,7 @@ export function* realmTileMarkWarmupSteps(tiles: readonly Tile[], upload?: (text
             const frosts = Array.from({ length: base.frost + 1 }, (_, index) => index);
             for (const hourglass of sands) for (const fuse of fuses) for (const turncoat of suits) for (const frost of frosts) {
                 const variant: RealmTileMark = { ...base, frost, fuse, hourglass, ...(turncoat ? { turncoat } : {}) };
-                if (!variant.frost && !variant.snowed && !variant.fuse && !variant.vined && !variant.rime && !variant.seeded && !variant.openingLocked && !variant.turncoat && !variant.hourglass) continue;
+                if (!variant.frost && !variant.snowed && !variant.fuse && !variant.vined && !variant.rime && !variant.seeded && !variant.openingLocked && !variant.turncoat && !variant.hourglass && !variant.three) continue;
                 for (const faceUp of [true, false]) {
                     const key = `${realmTileMarkKey(variant)}:${faceUp ? 'front' : 'back'}`;
                     if (seen.has(key)) continue;

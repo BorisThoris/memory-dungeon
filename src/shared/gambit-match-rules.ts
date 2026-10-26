@@ -8,7 +8,7 @@ export interface GambitMatchedPairSelection {
 }
 
 export const selectGambitMatchedPair = (
-    board: Pick<BoardState, 'flippedTileIds' | 'tiles'>
+    board: Pick<BoardState, 'flippedTileIds' | 'tiles' | 'tripleKeys'>
 ): GambitMatchedPairSelection | null => {
     if (!Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 3) {
         return null;
@@ -20,13 +20,15 @@ export const selectGambitMatchedPair = (
     if (!ta || !tb || !tc) {
         return null;
     }
-    if (tilesArePairMatch(ta, tb)) {
+    // Two of a Triples floor's three are never a pair on their own (`match-rule-rules.ts`): the three goes whole.
+    const pair = (x: typeof ta, y: typeof ta) => tilesArePairMatch(x, y) && !(board.tripleKeys ?? []).includes(x.pairKey) && !(board.tripleKeys ?? []).includes(y.pairKey);
+    if (pair(ta, tb)) {
         return { firstTileId: aId, secondTileId: bId, thirdTileId: cId };
     }
-    if (tilesArePairMatch(ta, tc)) {
+    if (pair(ta, tc)) {
         return { firstTileId: aId, secondTileId: cId, thirdTileId: bId };
     }
-    if (tilesArePairMatch(tb, tc)) {
+    if (pair(tb, tc)) {
         return { firstTileId: bId, secondTileId: cId, thirdTileId: aId };
     }
     return null;

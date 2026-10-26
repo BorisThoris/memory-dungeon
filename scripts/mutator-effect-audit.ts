@@ -16,6 +16,7 @@
  * The channels are deliberately what a player could notice rather than what the rule writes, so a
  * mutator cannot pass by moving a field nobody reads.
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import {
     GAME_RULES_VERSION,
     MUTATOR_IDS,
@@ -137,7 +138,7 @@ export const playMutatorFloor = (seed: number, floor: number, mutators: MutatorI
             const group = groups[pickRngIndex(rng, groups.length)]!;
             [first, second] = [group[0]!, group[1]!];
         }
-        run = resolveBoardTurn(flipLockedLast(run, first, second));
+        run = resolveBoardTurn(turnTripleThird(flipLockedLast(run, first, second), flipTile));
         /*
          * A lock counts only where it lands on a face-down card. Sticky fingers used to lock the
          * matched card itself, which no one can open, and this channel - reading "an index is set"

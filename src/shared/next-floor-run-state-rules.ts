@@ -98,6 +98,7 @@ export const createNextFloorRunState = (
         repriseUsedThisFloor: false,
         wardenDealsAgainThisFloor: 0,
         elementPairsRekeyedThisFloor: 0,
+        triplesClaimedThisFloor: 0,
         turncoatTurnsThisFloor: 0,
         hourglassesSpentThisFloor: 0,
         colossusHitsThisFloor: 0,

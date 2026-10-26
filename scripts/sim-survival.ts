@@ -16,6 +16,7 @@
  * they would act, and melt the first card turned with the Crucible when it can. It answers what the
  * items do to a run's length; without it the table is the one the miss bank was tuned against.
  */
+import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
 import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
@@ -120,7 +121,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
                     continue;
                 }
             }
-            run = resolveBoardTurn(flipLockedLast(run, first, second));
+            run = resolveBoardTurn(turnTripleThird(flipLockedLast(run, first, second), flipTile));
             tally.comboEarned += comboMissesEarned(before.stats.currentStreak, run.stats.currentStreak);
             turns += 1;
         }

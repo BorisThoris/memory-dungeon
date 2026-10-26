@@ -17,6 +17,8 @@ export interface RealmTileMark {
     hourglass?: number;
     /** The Wanderers' trail (`wanderer-rules.ts`): a Wanderer stepped out of this card's cell last turn. */
     footprint?: boolean;
+    /** Triples (`match-rule-rules.ts`): one of a three. */
+    three?: boolean;
 }
 
 export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark | null => {
@@ -32,9 +34,10 @@ export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark
         openingLocked,
         ...(tile.turncoat != null ? { turncoat: tile.turncoat } : {}),
         ...(tile.hourglass != null ? { hourglass: runNonNegativeInteger(tile.hourglass) } : {}),
-        ...(tile.footprint ? { footprint: true } : {})
+        ...(tile.footprint ? { footprint: true } : {}),
+        ...(tile.three ? { three: true } : {})
     };
-    return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded || openingLocked || mark.turncoat || mark.hourglass || mark.footprint ? mark : null;
+    return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded || openingLocked || mark.turncoat || mark.hourglass || mark.footprint || mark.three ? mark : null;
 };
 
 export const cardStatusBlocksTurning = (mark: RealmTileMark | null): boolean =>
@@ -42,4 +45,4 @@ export const cardStatusBlocksTurning = (mark: RealmTileMark | null): boolean =>
 
 /** The cache key for a mark's painted texture: two cards with the same marks share one canvas. */
 export const realmTileMarkKey = (mark: RealmTileMark): string =>
-    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.turncoat ? ':turn-' + mark.turncoat : ''}${mark.hourglass ? ':sand' + mark.hourglass : ''}${mark.footprint ? ':step' : ''}${mark.openingLocked ? ':locked' : ''}`;
+    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.turncoat ? ':turn-' + mark.turncoat : ''}${mark.hourglass ? ':sand' + mark.hourglass : ''}${mark.footprint ? ':step' : ''}${mark.three ? ':three' : ''}${mark.openingLocked ? ':locked' : ''}`;

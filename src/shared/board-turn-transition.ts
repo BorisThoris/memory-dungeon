@@ -51,7 +51,7 @@ import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
 import { applyWandererTurn } from './wanderer-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
-import { rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
+import { pendingTripleKey, rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -110,6 +110,8 @@ interface ResolvedMatchInput {
     firstTile: Tile;
     secondTile: Tile;
     thirdTileId?: string;
+    /** Triples (`match-rule-rules.ts`): the third card is the three's third, claimed with the other two. */
+    claimThird?: boolean;
     encorePairKeys: string[];
     /** Suffix on the command ids the turn issues, so a gambit match and a plain match never collide. */
     commandTag: 'gambit' | 'match';
@@ -136,6 +138,7 @@ export const createResolveBoardTurnTransition = ({
         firstTile,
         secondTile,
         thirdTileId,
+        claimThird,
         encorePairKeys,
         commandTag,
         execution
@@ -167,7 +170,8 @@ export const createResolveBoardTurnTransition = ({
             board: sourceBoard,
             firstTileId: firstTile.id,
             secondTileId: secondTile.id,
-            thirdTileId
+            thirdTileId,
+            claimThird
         });
         /*
          * A findable that went with the chunk is paid the way a matched findable is paid, through
@@ -469,6 +473,48 @@ export const createResolveBoardTurnTransition = ({
         };
     };
 
+    /**
+     * Triples (`match-rule-rules.ts`): the third card of a turn whose first two were one three. The three's
+     * third (or the joker, standing in for it) claims all three as one match; any other card is a miss, and all
+     * three turn back.
+     */
+    const resolveTripleThird = (
+        run: RunState,
+        encorePairKeys: string[],
+        execution?: BoardTurnExecutionContext
+    ): RunState => {
+        const [aId, bId, cId] = flippedTileIdsForRun(run) ?? [];
+        const ta = run.board?.tiles.find((t) => t.id === aId);
+        const tb = run.board?.tiles.find((t) => t.id === bId);
+        const tc = run.board?.tiles.find((t) => t.id === cId);
+        if (!run.board || !ta || !tb || !tc) {
+            return run;
+        }
+        if (tilesArePairMatch(ta, tc)) {
+            const counted = { ...run, triplesClaimedThisFloor: runNonNegativeInteger(run.triplesClaimedThisFloor) + 1 };
+            // A joker third is the pair's second card, so the joker's own rules see it, and stands in for the one left.
+            const [first, second, third] = tc.pairKey === WILD_PAIR_KEY ? [ta, tc, tb] : [ta, tb, tc];
+            return resolveMatchedPair({
+                run: counted,
+                board: run.board,
+                firstTile: first,
+                secondTile: second,
+                thirdTileId: third.id,
+                claimThird: true,
+                encorePairKeys,
+                commandTag: 'match',
+                execution
+            });
+        }
+        return resolveMismatchTurnTransition({
+            run,
+            board: run.board,
+            tileIds: [aId!, bId!, cId!],
+            sourceTiles: [ta, tb, tc],
+            triesDelta: 1,
+        });
+    };
+
     const resolveTwoFlippedTiles = (
         run: RunState,
         encorePairKeys: string[],
@@ -484,6 +530,17 @@ export const createResolveBoardTurnTransition = ({
 
         if (!firstTile || !secondTile) {
             return run;
+        }
+
+        // Triples: two of a three resolved with no third turned (the Zone's replay, a turn cut short) go back down, a miss.
+        if (pendingTripleKey(run.board) != null) {
+            return resolveMismatchTurnTransition({
+                run,
+                board: run.board,
+                tileIds: [firstId!, secondId!],
+                sourceTiles: [firstTile, secondTile],
+                triesDelta: 1,
+            });
         }
 
         // Element pairs (`match-rule-rules.ts`): two plain cards of one element, of different pairs, are made one
@@ -538,7 +595,10 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
         if (flippedTileIds.length === 3) {
-            return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveGambitThree(run, encorePairKeys, execution))))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
+            // A third card after two of a three is the three's turn, not the Gambit's.
+            const three = pendingTripleKey({ ...run.board, flippedTileIds: flippedTileIds.slice(0, 2) }) != null;
+            const resolved = three ? resolveTripleThird(run, encorePairKeys, execution) : resolveGambitThree(run, encorePairKeys, execution);
+            return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolved)))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
         }
         if (flippedTileIds.length !== 2) {
             return run;

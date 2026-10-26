@@ -165,6 +165,13 @@ export const paintCardStatus = (
         sole(W / 2 - 34, H / 2 + 46, -0.18);
         sole(W / 2 + 34, H / 2 - 20, 0.18);
     }
+    if (mark.three) {
+        // Triples: three gold pips across the top of the back, in a dark band. A count, not a colour.
+        rect(ctx, W / 2 - 78, 14, 156, 52, 26); outlined(ctx, INK, 6);
+        for (const dx of [-48, 0, 48]) {
+            ctx.beginPath(); ctx.arc(W / 2 + dx, 40, 15, 0, Math.PI * 2); outlined(ctx, '#ffd766', 5);
+        }
+    }
     if (mark.hourglass) {
         // The Hourglass: two gold triangles tip to tip and the turns of sand left, low on the left.
         const x = 54; const y = H - 62;

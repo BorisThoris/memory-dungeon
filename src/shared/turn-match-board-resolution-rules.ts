@@ -17,6 +17,8 @@ export interface TurnMatchBoardResolutionInput {
     firstTileId: string;
     secondTileId: string;
     thirdTileId?: string;
+    /** Triples (`match-rule-rules.ts`): the third card is claimed too. */
+    claimThird?: boolean;
 }
 
 /** The board after a match: the pair claimed, the gambit third tile hidden again, and the chunk break run. */
@@ -25,13 +27,15 @@ export const resolveTurnMatchBoardResolution = ({
     board,
     firstTileId,
     secondTileId,
-    thirdTileId
+    thirdTileId,
+    claimThird
 }: TurnMatchBoardResolutionInput): TurnMatchBoardResolutionResult => {
     const claimedBoard = createMatchedPairClaimBoard({
         board,
         firstTileId,
         secondTileId,
-        thirdTileId
+        thirdTileId,
+        claimThird
     });
     // The chain this match completes is the chain that buys the break: the streak the run holds
     // plus this match.
@@ -44,7 +48,7 @@ export const resolveTurnMatchBoardResolution = ({
     const chunkBreak = resolveChunkBreak({
         board: claimedBoard,
         run,
-        matchedTileIds: [firstTileId, secondTileId],
+        matchedTileIds: claimThird && thirdTileId != null ? [firstTileId, secondTileId, thirdTileId] : [firstTileId, secondTileId],
         chain: chainMomentum(runLadderChain({ ...run, stats: normalizeSessionStats(run.stats) }) + 1, runChainMomentumPairs(run)),
         // The Hold (`hold-rules.ts`): a held match keeps its pop for the release.
         spec: run.holding ? null : elementPopSpec(run, matchedSuit)

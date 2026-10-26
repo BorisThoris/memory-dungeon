@@ -1,4 +1,4 @@
-import type { BoardState, FloorTag, Tile, TileSuit } from './contracts';
+import type { BoardState, FloorTag, RunState, Tile, TileSuit } from './contracts';
 import { descentActForLevel, actLevelsFor, pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -21,7 +21,7 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  */
 export const MATCH_RULES_FROM = 94;
 
-export type MatchRuleId = 'opposites' | 'element_pairs';
+export type MatchRuleId = 'opposites' | 'element_pairs' | 'triples';
 export const MATCH_RULES: readonly MatchRuleId[] = ['opposites'];
 
 /**
@@ -32,7 +32,57 @@ export const MATCH_RULES: readonly MatchRuleId[] = ['opposites'];
  * their pair keys trade with their old partners' (`rekeyElementPair`), so every rule still sees whole pairs.
  */
 export const ELEMENT_PAIRS_FROM = 95;
-const matchRulesFor = (rulesVersion: number): readonly MatchRuleId[] => (rulesVersion >= ELEMENT_PAIRS_FROM ? ['opposites', 'element_pairs'] : MATCH_RULES);
+/**
+ * **Triples** (rules 96): on its floor some pictures come in threes. Two of a three turned up stay face up and
+ * the turn goes on to a third card: the third of the picture claims all three as one match; any other card is a
+ * miss, and all three turn back. Three plain pairs are dealt as two threes - one pair's two cards take the other
+ * two pictures - so the floor keeps its cards and its count of sets drops by one for every three dealt
+ * (`board.pairCount`). A three is a plain picture only: no card that carries something of its own is dealt into one.
+ */
+export const TRIPLES_FROM = 96;
+
+/** How many cards a pair key holds on this board: three on a Triples floor's threes, two everywhere else. */
+export const setSizeFor = (board: Pick<BoardState, 'tripleKeys'>, pairKey: string): number =>
+    (board.tripleKeys ?? []).includes(pairKey) ? 3 : 2;
+
+export const isTripleKey = (board: Pick<BoardState, 'tripleKeys'>, pairKey: string): boolean => setSizeFor(board, pairKey) === 3;
+
+/** Deals Triples: about half of the floor's plain pairs, three at a time, made two threes. */
+export const dealTriples = (board: BoardState, runSeed: number): BoardState => {
+    const rng = createMulberry32(hashStringToSeed(`triples:${runSeed}:${board.level}`));
+    const halves = new Map<string, number[]>();
+    board.tiles.forEach((tile, index) => {
+        // Nothing the realm holds or marks either: a frozen or vined cohort is whole pairs (`realm-hold-policy.ts`).
+        const marked = Boolean(tile.frost || tile.vined || tile.snowed || tile.fuse || tile.rime || tile.seeded);
+        if (tile.state === 'hidden' && tile.tileTraitKind == null && !marked && isElementPairable(board, tile)) halves.set(tile.pairKey, [...(halves.get(tile.pairKey) ?? []), index]);
+    });
+    const pool = [...halves.entries()].filter(([key, indices]) => indices.length === 2 && board.tiles.filter((tile) => tile.pairKey === key).length === 2);
+    // Shuffled from the seed, then dealt three pairs at a time.
+    for (let i = pool.length - 1; i > 0; i -= 1) {
+        const j = pickRngIndex(rng, i + 1);
+        [pool[i], pool[j]] = [pool[j]!, pool[i]!];
+    }
+    const groups = Math.max(pool.length >= 3 ? 1 : 0, Math.floor(pool.length / 6));
+    if (groups === 0) return board;
+    const tiles = [...board.tiles];
+    const tripleKeys: string[] = [];
+    for (let g = 0; g < groups; g += 1) {
+        const [[keyA, a], [keyB, b], [, given]] = pool.slice(g * 3, g * 3 + 3) as [string, number[]][];
+        const takeLook = (index: number, from: number) => {
+            const source = tiles[from]!;
+            tiles[index] = { ...tiles[index]!, pairKey: source.pairKey, symbol: source.symbol, label: source.label, suit: source.suit, edition: source.edition, atomicVariant: source.atomicVariant };
+        };
+        takeLook(given![0]!, a![0]!);
+        takeLook(given![1]!, b![0]!);
+        tripleKeys.push(keyA!, keyB!);
+    }
+    // Every card of a three wears its mark on its back (`Tile.three`): a player knows a three is there, not its picture.
+    const marked = tiles.map((tile) => (tripleKeys.includes(tile.pairKey) ? { ...tile, three: true } : tile));
+    return { ...board, tiles: marked, tripleKeys, pairCount: board.pairCount - groups, matchRule: 'triples' };
+};
+
+const matchRulesFor = (rulesVersion: number): readonly MatchRuleId[] =>
+    rulesVersion >= TRIPLES_FROM ? ['opposites', 'element_pairs', 'triples'] : rulesVersion >= ELEMENT_PAIRS_FROM ? ['opposites', 'element_pairs'] : MATCH_RULES;
 
 export const OPPOSITE_SUIT: Readonly<Record<TileSuit, TileSuit>> = { ember: 'tide', tide: 'ember', moss: 'bone', bone: 'moss' };
 
@@ -86,13 +136,17 @@ export const dealOpposites = (board: BoardState, runSeed: number): BoardState =>
 };
 
 /** Deals a floor's match rule onto its board. Element pairs changes no card: the floor's rule is the deal. */
-export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSeed: number): BoardState =>
+export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSeed: number): BoardState => {
+    if (rule == null) return board;
     // A floor dealt two decks deep (`board-layers-rules.ts`) keeps a partner beneath: it takes Opposites instead.
-    rule === 'opposites' || (rule === 'element_pairs' && (board.beneath ?? []).some((card) => card != null))
-        ? dealOpposites(board, runSeed)
-        : rule === 'element_pairs'
-          ? { ...board, matchRule: 'element_pairs' }
-          : board;
+    if (rule === 'opposites' || (board.beneath ?? []).some((card) => card != null)) return dealOpposites(board, runSeed);
+    if (rule === 'triples') {
+        // A floor with too few plain pairs for a three takes Opposites as well.
+        const dealt = dealTriples(board, runSeed);
+        return dealt === board ? dealOpposites(board, runSeed) : dealt;
+    }
+    return { ...board, matchRule: 'element_pairs' };
+};
 
 /** A card an Element pairs floor may pair by its element: a plain card, carrying nothing of its own. */
 export const isElementPairable = (board: Pick<BoardState, 'cursedPairKey' | 'wardPairKey' | 'bountyPairKey'>, tile: Tile): boolean =>
@@ -137,4 +191,27 @@ export const rekeyElementPair = (board: BoardState, aId: string, bId: string): B
         ...board,
         tiles: board.tiles.map((tile) => (tile.id === b.id ? { ...tile, pairKey: keyA } : tile.id === aPartner.id ? { ...tile, pairKey: keyB } : tile))
     };
+};
+
+/** The three a turn is waiting on: two face-up cards of one Triples key, the third still to turn. */
+export const pendingTripleKey = (board: Pick<BoardState, 'tripleKeys' | 'tiles' | 'flippedTileIds'> | null | undefined): string | null => {
+    if (!board || !Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 2) return null;
+    const [a, b] = board.flippedTileIds.map((id) => board.tiles.find((tile) => tile.id === id));
+    return a && b && a.pairKey === b.pairKey && isTripleKey(board, a.pairKey) ? a.pairKey : null;
+};
+
+/**
+ * For a simulated player (the soak, the survival and balance sims): turns the third card of a three the turn
+ * is waiting on. It turns the three's own third when it `knows` where that is (always, given no `knows`);
+ * otherwise (given an `rng`) a hidden card it picks, which may be the third by luck. A turn not waiting on a three is
+ * handed back as it was.
+ */
+export const turnTripleThird = (run: RunState, flip: (run: RunState, tileId: string) => RunState, knows?: (tile: Tile) => boolean, rng?: () => number): RunState => {
+    const key = pendingTripleKey(run.board);
+    if (key == null || !run.board) return run;
+    const hidden = run.board.tiles.filter((tile) => tile.state === 'hidden' && !isSingletonUtilityPairKey(tile.pairKey));
+    const third = hidden.find((tile) => tile.pairKey === key);
+    const guess = knows && rng && third && !knows(third) && hidden.length > 0;
+    const card = guess ? hidden[pickRngIndex(rng, hidden.length)] : third;
+    return card ? flip(run, card.id) : run;
 };
