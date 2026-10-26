@@ -51,6 +51,7 @@ import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
 import { applyWandererTurn } from './wanderer-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
+import { rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -485,6 +486,21 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
 
+        // Element pairs (`match-rule-rules.ts`): two plain cards of one element, of different pairs, are made one
+        // pair first - their old partners take the key left over - and then match as any pair does.
+        if (!tilesArePairMatch(firstTile, secondTile) && tilesMatchOnBoard(run.board, firstTile, secondTile, tilesArePairMatch)) {
+            const board = rekeyElementPair(run.board, firstTile.id, secondTile.id);
+            const rekeyed = { ...run, board, elementPairsRekeyedThisFloor: runNonNegativeInteger(run.elementPairsRekeyedThisFloor) + 1 };
+            return resolveMatchedPair({
+                run: rekeyed,
+                board,
+                firstTile: board.tiles.find((tile) => tile.id === firstTile.id)!,
+                secondTile: board.tiles.find((tile) => tile.id === secondTile.id)!,
+                encorePairKeys,
+                commandTag: 'match',
+                execution
+            });
+        }
         if (tilesArePairMatch(firstTile, secondTile)) {
             return resolveMatchedPair({
                 run,

@@ -21,8 +21,18 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  */
 export const MATCH_RULES_FROM = 94;
 
-export type MatchRuleId = 'opposites';
+export type MatchRuleId = 'opposites' | 'element_pairs';
 export const MATCH_RULES: readonly MatchRuleId[] = ['opposites'];
+
+/**
+ * **Element pairs** (rules 95): on its floor any two plain cards of one element are a pair - the picture does
+ * not matter, and the backs keep their element to themselves, so a player remembers colours seen face up
+ * rather than pictures. A card that carries something of its own (a Wanderer, a mask, a Sleeper, an odd card,
+ * the cursed, warded or bounty pair) keeps its own partner. When two plain cards of different pairs meet,
+ * their pair keys trade with their old partners' (`rekeyElementPair`), so every rule still sees whole pairs.
+ */
+export const ELEMENT_PAIRS_FROM = 95;
+const matchRulesFor = (rulesVersion: number): readonly MatchRuleId[] => (rulesVersion >= ELEMENT_PAIRS_FROM ? ['opposites', 'element_pairs'] : MATCH_RULES);
 
 export const OPPOSITE_SUIT: Readonly<Record<TileSuit, TileSuit>> = { ember: 'tide', tide: 'ember', moss: 'bone', bone: 'moss' };
 
@@ -49,7 +59,8 @@ export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: 
 export const matchRuleFor = (runSeed: number, rulesVersion: number, level: number, floorTag: FloorTag | null | undefined, descentLength: number): MatchRuleId | null => {
     if (rulesVersion < MATCH_RULES_FROM || level > descentLength || floorTag === 'boss' || floorTag === 'breather') return null;
     if (matchRuleFloorFor(runSeed, rulesVersion, level) !== level) return null;
-    return MATCH_RULES[pickRngIndex(createMulberry32(hashStringToSeed(`matchRule:${runSeed}:${level}`)), MATCH_RULES.length)]!;
+    const pool = matchRulesFor(rulesVersion);
+    return pool[pickRngIndex(createMulberry32(hashStringToSeed(`matchRule:${runSeed}:${level}`)), pool.length)]!;
 };
 
 const isOppositeCandidate = (tile: Tile): tile is Tile & { suit: TileSuit } =>
@@ -74,6 +85,56 @@ export const dealOpposites = (board: BoardState, runSeed: number): BoardState =>
     return dealt === 0 ? board : { ...board, tiles, matchRule: 'opposites' };
 };
 
-/** Deals a floor's match rule onto its board. */
+/** Deals a floor's match rule onto its board. Element pairs changes no card: the floor's rule is the deal. */
 export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSeed: number): BoardState =>
-    rule === 'opposites' ? dealOpposites(board, runSeed) : board;
+    // A floor dealt two decks deep (`board-layers-rules.ts`) keeps a partner beneath: it takes Opposites instead.
+    rule === 'opposites' || (rule === 'element_pairs' && (board.beneath ?? []).some((card) => card != null))
+        ? dealOpposites(board, runSeed)
+        : rule === 'element_pairs'
+          ? { ...board, matchRule: 'element_pairs' }
+          : board;
+
+/** A card an Element pairs floor may pair by its element: a plain card, carrying nothing of its own. */
+export const isElementPairable = (board: Pick<BoardState, 'cursedPairKey' | 'wardPairKey' | 'bountyPairKey'>, tile: Tile): boolean =>
+    tile.suit != null &&
+    !isSingletonUtilityPairKey(tile.pairKey) &&
+    tile.mask == null &&
+    tile.shownSuit == null &&
+    tile.turncoat == null &&
+    tile.hourglass == null &&
+    !tile.wanderer &&
+    !tile.sleeper &&
+    tile.findableKind == null &&
+    tile.pairKey !== board.cursedPairKey &&
+    tile.pairKey !== board.wardPairKey &&
+    tile.pairKey !== board.bountyPairKey;
+
+/** Whether two face-up cards are a pair on this board: the plain rule, or two plain cards of one element on Element pairs. */
+export const tilesMatchOnBoard = (board: BoardState, a: Tile, b: Tile, plainMatch: (a: Tile, b: Tile) => boolean): boolean =>
+    plainMatch(a, b) ||
+    (board.matchRule === 'element_pairs' &&
+        a.id !== b.id &&
+        a.suit === b.suit &&
+        isElementPairable(board, a) &&
+        isElementPairable(board, b) &&
+        // Both old partners on the board, face down and plain too: the two left behind must be able to become a
+        // pair, and a mark on a partner (a mask is on one card of its pair) must not travel to another pair.
+        [a, b].every((card) => board.tiles.some((tile) => tile.pairKey === card.pairKey && tile.id !== card.id && tile.state === 'hidden' && isElementPairable(board, tile))));
+
+/**
+ * Two plain cards of one element, of different pairs, made one pair: `b` takes `a`'s key and `a`'s old partner
+ * takes `b`'s, so the two left behind are a pair of the same element too. A board where they already share a
+ * key, or where either partner is missing, is handed back as it was.
+ */
+export const rekeyElementPair = (board: BoardState, aId: string, bId: string): BoardState => {
+    const a = board.tiles.find((tile) => tile.id === aId);
+    const b = board.tiles.find((tile) => tile.id === bId);
+    if (!a || !b || a.pairKey === b.pairKey) return board;
+    const aPartner = board.tiles.find((tile) => tile.pairKey === a.pairKey && tile.id !== a.id);
+    if (!aPartner) return board;
+    const [keyA, keyB] = [a.pairKey, b.pairKey];
+    return {
+        ...board,
+        tiles: board.tiles.map((tile) => (tile.id === b.id ? { ...tile, pairKey: keyA } : tile.id === aPartner.id ? { ...tile, pairKey: keyB } : tile))
+    };
+};

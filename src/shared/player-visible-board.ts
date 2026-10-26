@@ -51,8 +51,11 @@ export const playerVisibleTile = (tile: Tile): Tile => {
  */
 export const playerVisibleBoard = (board: BoardState, { chartBeneath = false }: { chartBeneath?: boolean } = {}): BoardState => {
     let changed = false;
+    // Element pairs (`match-rule-rules.ts`): a back keeps its element to itself - the colour is what a player remembers.
+    const elementPairs = board.matchRule === 'element_pairs';
     const tiles = board.tiles.map((tile) => {
-        const visible = playerVisibleTile(tile);
+        const seen = playerVisibleTile(tile);
+        const visible = elementPairs && seen.state === 'hidden' && seen.suit != null ? (({ suit: _suit, ...rest }) => rest)(seen) : seen;
         if (visible !== tile) changed = true;
         return visible;
     });

@@ -3,6 +3,7 @@ import { HOLD_METER_SEGMENTS } from '../../shared/hold-rules';
 import { REPRISE_TURNS } from '../../shared/reprise-rules';
 import type { StaircaseVerb } from '../../shared/verb-staircase-rules';
 import type { GateOmen } from '../../shared/run-signature-rules';
+import type { MatchRuleId } from '../../shared/match-rule-rules';
 
 /** The verb staircase (`verb-staircase-rules.ts`): the line on the board crown on the floor a verb arrives. */
 export const VERB_ARRIVAL_COPY = {
@@ -35,6 +36,9 @@ export const GATE_OMEN_COPY = {
 
 /** A floor's match rule (`match-rule-rules.ts`): told on the board crown for the whole floor. */
 export const MATCH_RULE_COPY = {
-    kicker: 'Opposites',
-    line: 'Every pair is one picture in two opposite elements: ember with tide, moss with bone. A card’s partner wears the other colour.'
+    kicker: (rule: MatchRuleId): string => (rule === 'opposites' ? 'Opposites' : 'Element pairs'),
+    line: (rule: MatchRuleId): string =>
+        rule === 'opposites'
+            ? 'Every pair is one picture in two opposite elements: ember with tide, moss with bone. A card’s partner wears the other colour.'
+            : 'Any two cards of one element are a pair, whatever the picture. The backs keep their element hidden: remember the colours you turn. Marked cards keep their own partner.'
 } as const;

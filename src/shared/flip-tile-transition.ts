@@ -4,6 +4,7 @@ import { MATCH_DELAY_MS, type BoardState, type RunState } from './contracts';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
+import { tilesMatchOnBoard } from './match-rule-rules';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
@@ -102,7 +103,8 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
         const resolvesMatchImmediately =
             flippedTileIds.length === 2 &&
             firstFlippedTile !== null &&
-            tilesArePairMatch(firstFlippedTile, tile);
+            // Element pairs (`match-rule-rules.ts`): two plain cards of one element are a pair on that floor.
+            tilesMatchOnBoard(board, firstFlippedTile, tile, tilesArePairMatch);
 
         let resolveRemainingMs = runAfterFlashClear.timerState.resolveRemainingMs;
         if (flippedTileIds.length === 2) {

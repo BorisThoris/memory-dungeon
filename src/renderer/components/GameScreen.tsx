@@ -2272,7 +2272,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ) : null}
                                 {matchRuleTold ? (
                                     <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold}>
-                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker}</span> {MATCH_RULE_COPY.line}
+                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {MATCH_RULE_COPY.line(matchRuleTold)}
                                     </p>
                                 ) : null}
                                 {omensTold.length > 0 ? (

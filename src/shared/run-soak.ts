@@ -42,6 +42,7 @@ import { boardHasTurnablePair, isTileFlipBlocked } from './realm-weather-rules';
 import { elementWouldLand, tileCharge } from './element-alchemy-rules';
 import { isStreakPrimed, runElementStreak } from './element-resonance-rules';
 import { chooseRealmDoor, REALM_DOOR_COUNT } from './realm-rules';
+import { isElementPairable } from './match-rule-rules';
 
 /**
  * The run soak: whole runs, played by seeded random players, with the run's invariants checked after
@@ -656,6 +657,14 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (masks > allowed.mask + told.mask && !hasEvolution(run, 'unmasking_glass')) return `${masks} masks, past ${allowed.mask} + ${told.mask}`;
         return null;
     },
+    // Element pairs (`match-rule-rules.ts`): two cards of different pairs matched by element leave every pair whole.
+    'on Element pairs every pair is still two cards': (_before, run, action) => {
+        if (action !== 'resolve' || run.board?.matchRule !== 'element_pairs') return null;
+        const counts = new Map<string, number>();
+        for (const tile of allBoardCards(run.board)) if (!isSingletonUtilityPairKey(tile.pairKey)) counts.set(tile.pairKey, (counts.get(tile.pairKey) ?? 0) + 1);
+        const broken = [...counts].find(([, n]) => n !== 2);
+        return broken ? `pair ${broken[0]} holds ${broken[1]} cards` : null;
+    },
     'a Spiral never runs past par, and nothing is dealt into a sealed cell': (_before, run) => {
         if (!run.board || !spiralHolds(run, run.board)) return null;
         if (run.status === 'playing' && runNonNegativeInteger(run.turnsThisFloor) > parTurnsForRun(run)) return `a Spiral at turn ${run.turnsThisFloor}, past par ${parTurnsForRun(run)}`;
@@ -1144,8 +1153,12 @@ export const soakRun = ({
             }
         }
         const rest = hiddenReal(run);
-        const partner = rest.find((tile) => tile.pairKey === first.pairKey);
-        const others = rest.filter((tile) => tile.pairKey !== first.pairKey);
+        // Element pairs (`match-rule-rules.ts`): a player pairs by element half the time, its own partner the rest.
+        const board = run.board!;
+        const byElement = board.matchRule === 'element_pairs' && isElementPairable(board, first);
+        const elementPartner = byElement ? rest.find((tile) => tile.pairKey !== first.pairKey && tile.suit === first.suit && isElementPairable(board, tile)) : undefined;
+        const partner = elementPartner && rng() < 0.5 ? elementPartner : rest.find((tile) => tile.pairKey === first.pairKey);
+        const others = rest.filter((tile) => tile.pairKey !== first.pairKey && !(byElement && tile.suit === first.suit && isElementPairable(board, tile)));
         const second = partner && (others.length === 0 || rng() >= player.missRate) ? partner : others.length > 0 ? pick(others) : partner;
         if (!second) break;
         act('flip', flipTile(run, second.id));

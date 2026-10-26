@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 125 as const;
+export const ENCYCLOPEDIA_VERSION = 126 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -671,7 +671,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_match_rules',
         title: 'Match rules',
         description:
-            'One plain floor of every act changes **what makes a pair**, and the crown says so before your first flip. On **Opposites** every pair is one picture in two **opposite elements** - ember with tide, moss with bone: one card of each pair wears its opposite on its back and its face, so a card’s partner wears the other colour. Each card is still its true element to everything it does: what it casts, what it pops, how it reacts.'
+            'One plain floor of every act changes **what makes a pair**, and the crown says so before your first flip. On **Opposites** every pair is one picture in two **opposite elements** - ember with tide, moss with bone: one card of each pair wears its opposite on its back and its face, so a card’s partner wears the other colour. Each card is still its true element to everything it does: what it casts, what it pops, how it reacts. On **Element pairs** any two plain cards of **one element** are a pair, whatever the picture, and the backs keep their element hidden: remember the colours you turn. A marked card - a Wanderer, a mask, a Sleeper, an odd card - keeps its own partner, and the two cards left behind by an element match become a pair of their own.'
     },
     {
         id: 'sys_hold',

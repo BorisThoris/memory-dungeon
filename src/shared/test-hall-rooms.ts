@@ -47,7 +47,7 @@ import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from
 import { gateOmensToldOn } from './run-signature-rules';
 import { dealMasks } from './mask-rules';
 import { dealSleepers } from './sleeper-rules';
-import { dealOpposites } from './match-rule-rules';
+import { dealMatchRule, dealOpposites } from './match-rule-rules';
 import { playerVisibleTile } from './player-visible-board';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
@@ -123,6 +123,7 @@ export type TestHallRoomId =
     | 'gate-omen'
     | 'gate-omens-remembered'
     | 'match-rule-opposites'
+    | 'match-rule-element-pairs'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -263,6 +264,8 @@ export type TestHallStep =
     | { readonly do: 'greet' }
     | { readonly do: 'match'; readonly pairKey: string }
     | { readonly do: 'miss'; readonly a: string; readonly b: string }
+    /** Turn two named cards and resolve, whatever they make (`match-rule-rules.ts`: on Element pairs two pictures can pair). */
+    | { readonly do: 'turn'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
@@ -1476,6 +1479,30 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     return r.board!.matchRule === 'opposites' && shown.length === pairs && a[0] !== a[1] && r.board!.tiles.filter((t) => t.pairKey === 'a').every((t) => t.state !== 'hidden') && finishable(r) === null
                         ? null
                         : `rule ${String(r.board!.matchRule)}, shown ${shown.length} of ${pairs}, a shows ${a.join('/')}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'match-rule-element-pairs',
+        title: 'Element pairs: any two of one colour',
+        mechanic: 'From rules 95 a floor’s match rule may be Element pairs: any two plain cards of one element are a pair, whatever the picture, and the backs keep their element hidden. The two cards left behind become one pair, so every pair stays whole.',
+        graphMechanicIds: ['board.match_rule'],
+        tryThis: 'Turn the ember cards of pairs a and e together: two pictures, one element, one pair. Their partners are a pair now too.',
+        build: () => {
+            const base = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 9, misses: 4 });
+            return { ...base, board: dealMatchRule(base.board!, 'element_pairs', base.runSeed) };
+        },
+        script: [
+            {
+                step: { do: 'turn', a: 'a-1', b: 'e-1' },
+                says: 'two pictures of one element are a pair: no miss, and the cards left behind pair with each other',
+                expect: (r, b) => {
+                    const turned = r.board!.tiles.filter((t) => t.id === 'a-1' || t.id === 'e-1');
+                    const left = r.board!.tiles.filter((t) => t.id === 'a-2' || t.id === 'e-2');
+                    return r.stats.mismatches === b.stats.mismatches && turned.every((t) => t.state !== 'hidden') && left.length === 2 && left[0]!.pairKey === left[1]!.pairKey && finishable(r) === null
+                        ? null
+                        : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, turned ${turned.map((t) => t.state).join('/')}, left ${left.map((t) => t.pairKey).join('/')}`;
                 }
             }
         ]
@@ -3488,6 +3515,7 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
             return resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
         }
         case 'miss':
+        case 'turn':
             return resolveBoardTurn(flipTile(flipTile(run, step.a), step.b));
         case 'flip':
             return flipTile(run, step.tileId);
