@@ -48,5 +48,5 @@ export const MATCH_RULE_COPY = {
     /** Said while two of a three wait face up for their third. */
     waiting: 'Two of three: turn the third.',
     /** Said while a Sequences one and two wait for their three. */
-    waitingInOrder: 'One, two: now its three.'
+    waitingInOrder: 'One, two: now the three.'
 } as const;
