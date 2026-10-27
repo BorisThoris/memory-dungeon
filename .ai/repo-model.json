@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 15382,
-      "sha256": "9cdcc17fdfe47a88e4a6fe405b3778719288e9a6f37e10eed982fa99774cce5a"
+      "bytes": 15904,
+      "sha256": "f32dd1e242801feb55ae9d3e325e2455c5b900f0e08a5b112bcd26a80dd5bae8"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4611,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71825,
-      "sha256": "237ba7e0f8be03e8f11c2fe8914b4c79cf43e4f45ba2f8c53f2c61c8af9534bd"
+      "bytes": 72017,
+      "sha256": "d48ef7696cab791294c625e4678788eb58683e8f64ee13d649529d4b4d7d92ec"
     },
     {
       "path": "public/site.webmanifest",
