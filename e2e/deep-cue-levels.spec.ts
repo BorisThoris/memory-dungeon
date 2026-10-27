@@ -1,9 +1,10 @@
 /**
- * The deep game's cues at their measured levels (DGE-030, 2026-10-24). Each cue is the game's own
- * code, rendered into an OfflineAudioContext behind the shared context's seam, its delayed notes run
- * at their scheduled times. Its loudest 50 ms is held to a band set against a match, a flip and a
- * shuffle rendered the same way: the boss cues in their band, the frequent ones under it but heard,
- * and nothing clipping when every cue lands on one turn.
+ * The deep game's cues at their measured levels (DGE-030, 2026-10-24; re-measured on the samples
+ * 2026-10-27). Each cue is the game's own code, rendered into an OfflineAudioContext behind the shared
+ * context's seam, its delayed notes run at their scheduled times, with the recorded samples loaded as a
+ * run plays them. Its loudest 50 ms is held to a band set against the flip, the sound a player hears on
+ * every tile: the boss cues level with it, the frequent ones under it but heard, and nothing clipping
+ * when every cue lands on one turn.
  */
 import { expect, test } from '@playwright/test';
 
@@ -21,16 +22,21 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
         const sfx = await import('/src/renderer/audio/gameSfx.ts');
         const ctxMod = await import('/src/renderer/audio/webAudioContext.ts');
         const game = await import('/src/shared/game.ts');
-        // The match and the floor clear play decoded samples once they are loaded, and a quieter synth tone
-        // until then: measure them as a run plays them, after the boot preload (a cold dev server lost the race).
-        // The bands were measured on the synthesized cues (DGE-030), and a match plays its recorded sample instead
-        // once the samples are loaded - about ten decibels quieter - so the test measured whichever path the boot
-        // preload had reached: green on a warm server, red on a cold one. Let any boot load settle, then clear the
-        // samples: nothing below starts a load again (only resuming the context on a gesture does), so every cue
-        // is measured on the path the bands describe.
+        // The flip, the match and the rest play their recorded samples once loaded and a synth tone until then,
+        // and the two paths differ by ten decibels for a plain match (DGE-030 measured the synth one by
+        // accident). Measure the samples, as a run plays them: on a cold dev server the loader's per-file
+        // timeout drops takes, so load again until the ones the bands read are there, and fail rather than
+        // measure the synth fallback. The buffers outlive the real context each render closes.
         const sampled = await import('/src/renderer/audio/sampledSfx.ts');
-        await sampled.preloadSampledSfx();
-        sampled.resetSampledSfxForTests();
+        const needed = ['flip', 'match-tier-low', 'match-tier-mid', 'shuffle-full'] as const;
+        let loaded = false;
+        for (let attempt = 0; attempt < 5 && !loaded; attempt += 1) {
+            if (attempt > 0) sampled.resetSampledSfxForTests();
+            await sampled.preloadSampledSfx();
+            loaded = needed.every((key) => sampled.tryPlaySampled(key, 0.002));
+            sampled.silenceAllSampleVoices();
+        }
+        if (!loaded) throw new Error('the samples the bands read never loaded');
         const rate = 48_000;
         const realSetTimeout = globalThis.setTimeout;
         const realAudioContext = window.AudioContext;
@@ -104,28 +110,35 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
         return out;
     });
     const level = (name: string): Level => rows[name] as Level;
-    const match = level('(baseline) match').loudestRmsDb;
     // Rendered the same way, the baselines are where the band is: a cue that drifts is a cue that moved.
-    expect(match).toBeGreaterThan(-26);
-    expect(match).toBeLessThan(-18);
+    // Measured 2026-10-27 on the samples: flip -24.1, shuffle -23.5, a match at chain 8 -21.6, at chain 12
+    // -27.5, and a plain match (chain 1 to 5, `match-tier-low.ogg`) -32.7, eight decibels under the flip
+    // before it. That take is the outlier of the mix, so the bands read the flip, which is within half a
+    // decibel on either path; the plain match keeps its own row so a change to its take is seen.
+    const flip = level('(baseline) flip').loudestRmsDb;
+    expect(flip).toBeGreaterThan(-28);
+    expect(flip).toBeLessThan(-20);
+    const plainMatch = level('(baseline) match').loudestRmsDb;
+    expect(plainMatch).toBeGreaterThan(-36);
+    expect(plainMatch).toBeLessThan(-29);
     const bands: Record<string, [number, number]> = {
-        // The Hold's payoff: level with a match, give or take.
-        'hold_release (24 held)': [-4, 3],
-        // The boss and Dread cues: in the match's band.
-        warden_redeal: [-7, 2],
-        keeper_swap: [-7, 2],
-        cartographer_turn: [-8, 2],
-        spiral_seal: [-7, 2],
-        dread_tier: [-7, 2],
-        // Every few turns: under it, and still heard.
-        sleeper_wake: [-10, -3],
-        mask_drop: [-15, -8],
-        wanderer_step: [-18, -10]
+        // The Hold's payoff: level with a flip, give or take (+0.9 measured).
+        'hold_release (24 held)': [-2, 5],
+        // The boss and Dread cues: in the flip's band (-3.9 to +0.1 measured).
+        warden_redeal: [-5, 4],
+        keeper_swap: [-5, 4],
+        cartographer_turn: [-6, 4],
+        spiral_seal: [-5, 4],
+        dread_tier: [-5, 4],
+        // Every few turns: under it, and still heard (-4.9, -10.2 and -13.2 measured).
+        sleeper_wake: [-8, -1],
+        mask_drop: [-13, -6],
+        wanderer_step: [-16, -8]
     };
     for (const [name, [low, high]] of Object.entries(bands)) {
-        const offset = level(name).loudestRmsDb - match;
-        expect(offset, `${name} at ${offset.toFixed(1)} dB from a match`).toBeGreaterThanOrEqual(low);
-        expect(offset, `${name} at ${offset.toFixed(1)} dB from a match`).toBeLessThanOrEqual(high);
+        const offset = level(name).loudestRmsDb - flip;
+        expect(offset, `${name} at ${offset.toFixed(1)} dB from a flip`).toBeGreaterThanOrEqual(low);
+        expect(offset, `${name} at ${offset.toFixed(1)} dB from a flip`).toBeLessThanOrEqual(high);
     }
     for (const [name, row] of Object.entries(rows)) expect((row as Level).clipped, name).toBe(0);
     expect(level('all eight at once').peakDb).toBeLessThan(-6);

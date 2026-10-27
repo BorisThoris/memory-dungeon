@@ -3951,8 +3951,8 @@
     {
       "path": "e2e/deep-cue-levels.spec.ts",
       "category": "test",
-      "bytes": 7794,
-      "sha256": "bee13233417705bebe26a1741d0ab191c49dec9101a1dea326bdfdf29a0568d7"
+      "bytes": 8608,
+      "sha256": "974292f4dd91c4f708aadedc8634f48d722c73fea56dcba0fc9378a33d8515f9"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -4611,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71756,
-      "sha256": "75c3b306f8bb1fac1b4077b4b62ffde775db70368749afc143fa2ad5f827b5a3"
+      "bytes": 71821,
+      "sha256": "7ed961acef1a6e2ca0b29ad32f6dd3aaaf30cf853efc061ac363a9b95d339eee"
     },
     {
       "path": "public/site.webmanifest",
@@ -10185,8 +10185,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 64906,
-      "sha256": "73e57a5442babc1be0bd331e4fed8d6a4844c37c0a8ac7ad1ea23328676d8777"
+      "bytes": 63884,
+      "sha256": "2544e8af9258c9a14fad7fb866bfd976f5e1a264aef30244819fe91257fa1c53"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -17919,8 +17919,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 34623,
-      "sha256": "17a509873bf2054bfcd6e63be61e07e5638ec6365ea0bfe3dceb14723f65385b"
+      "bytes": 35455,
+      "sha256": "a75db8108e56907ab0892cac6ca5d33b96828b0d182f02f849f36250722dda2e"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -21807,7 +21807,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1451,
+      "lineCount": 1455,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -47908,8 +47908,8 @@
       "name": "playDeepGameSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1436,
-      "endLine": 1437
+      "line": 1440,
+      "endLine": 1441
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
