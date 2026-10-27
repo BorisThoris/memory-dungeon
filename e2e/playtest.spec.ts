@@ -179,6 +179,15 @@ const playRun = async (
             await page.waitForTimeout(600);
             continue;
         }
+        // Triples (`match-rule-rules.ts`): two of a three wait face up in play; a player turns the third.
+        if (s.flipped.length === 2 && s.flipped[0]!.k === s.flipped[1]!.k) {
+            const third = s.hidden.find((tile) => tile.k === s.flipped[0]!.k);
+            const any = s.hidden[Math.floor(rand() * s.hidden.length)];
+            const pick = rand() < missRate ? any : third ?? any;
+            if (pick) await press([pick.id]);
+            await page.waitForTimeout(600);
+            continue;
+        }
         if (s.flipped.length > 0) {
             await page.waitForTimeout(300);
             continue;
