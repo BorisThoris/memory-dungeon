@@ -17,8 +17,8 @@ export interface MissBankGrant {
     floor: number;
     misses: number;
 }
-/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). 84: Sleepers (`sleeper-rules.ts`). 85: the Spiral (`spiral-rules.ts`). 86: the dungeon learns you (`learned-rule-rules.ts`). 87: the Dread spends on the families (`dread-composition-rules.ts`) and the Fold's rooms keep their weather (`realm-weather-rules.ts`). 88: a meteor on a Fold floor keeps to its room (`meteor-rules.ts`). 89: Hold, Carve and Reprise climb the Gate (`verb-staircase-rules.ts`). 90: a run's own Gate, its rooms' order and its omen (`run-signature-rules.ts`). 91: a Hold release always breaks (`hold-rules.ts`). 92: the Gate's omens grow with the runs played (`run-signature-rules.ts`). 93: the Descent is forty floors (`descent-length-rules.ts`). 94: match rules, Opposites first (`match-rule-rules.ts`). 95: Element pairs (`match-rule-rules.ts`). 96: Triples (`match-rule-rules.ts`). */
-export const GAME_RULES_VERSION = 96;
+/** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). 84: Sleepers (`sleeper-rules.ts`). 85: the Spiral (`spiral-rules.ts`). 86: the dungeon learns you (`learned-rule-rules.ts`). 87: the Dread spends on the families (`dread-composition-rules.ts`) and the Fold's rooms keep their weather (`realm-weather-rules.ts`). 88: a meteor on a Fold floor keeps to its room (`meteor-rules.ts`). 89: Hold, Carve and Reprise climb the Gate (`verb-staircase-rules.ts`). 90: a run's own Gate, its rooms' order and its omen (`run-signature-rules.ts`). 91: a Hold release always breaks (`hold-rules.ts`). 92: the Gate's omens grow with the runs played (`run-signature-rules.ts`). 93: the Descent is forty floors (`descent-length-rules.ts`). 94: match rules, Opposites first (`match-rule-rules.ts`). 95: Element pairs (`match-rule-rules.ts`). 96: Triples (`match-rule-rules.ts`). 97: Sequences (`match-rule-rules.ts`). */
+export const GAME_RULES_VERSION = 97;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -445,6 +445,8 @@ export interface Tile {
     hourglass?: number;
     /** Triples (`match-rule-rules.ts`, rules 96): this card is one of a three. Its back says so, not which picture. */
     three?: boolean;
+    /** Sequences (`match-rule-rules.ts`, rules 97): where this card stands in its three's order, shown as pips on its back. */
+    seq?: 1 | 2 | 3;
     /** A Wanderer (`wanderer-rules.ts`): every third turn it steps a cell. On its face only (`player-visible-board.ts`). */
     wanderer?: boolean;
     /**
@@ -550,7 +552,7 @@ export interface BoardState {
      */
     descentFloor?: number;
     /** The floor's match rule (`match-rule-rules.ts`, rules 94): what makes a pair here, if not the plain rule. */
-    matchRule?: 'opposites' | 'element_pairs' | 'triples';
+    matchRule?: 'opposites' | 'element_pairs' | 'triples' | 'sequences';
     /** Triples (`match-rule-rules.ts`, rules 96): the pair keys dealt as three cards. Every other key is two. */
     tripleKeys?: string[];
     /** The Spiral (`spiral-rules.ts`): the rings sealed so far, outside in. */

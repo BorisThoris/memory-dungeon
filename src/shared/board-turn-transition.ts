@@ -51,7 +51,7 @@ import { applyOddCardTurnToRun, resolveOddCardTurn } from './odd-card-rules';
 import { applyWandererTurn } from './wanderer-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
-import { pendingTripleKey, rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
+import { isTripleKey, pendingTripleKey, rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -532,8 +532,9 @@ export const createResolveBoardTurnTransition = ({
             return run;
         }
 
-        // Triples: two of a three resolved with no third turned (the Zone's replay, a turn cut short) go back down, a miss.
-        if (pendingTripleKey(run.board) != null) {
+        // Triples: two of a three resolved with no third turned (the Zone's replay, a turn cut short) go back down, a
+        // miss - and so do two of a Sequences three turned out of order.
+        if (pendingTripleKey(run.board) != null || (firstTile.pairKey === secondTile.pairKey && isTripleKey(run.board, firstTile.pairKey))) {
             return resolveMismatchTurnTransition({
                 run,
                 board: run.board,

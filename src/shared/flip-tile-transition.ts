@@ -104,10 +104,12 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             ? board.tiles.find((candidate) => candidate.id === firstFlippedId) ?? null
             : null;
         // Triples: two of a three wait for the third, face up; the third card resolves at once whatever it is.
-        const opensThree = flippedTileIds.length === 2 && firstFlippedTile !== null && firstFlippedTile.pairKey === tile.pairKey && isTripleKey(board, tile.pairKey);
+        // Sequences: only a one then a two wait; two of a three out of order are a miss.
+        const opensThree = flippedTileIds.length === 2 && pendingTripleKey({ ...board, flippedTileIds }) != null;
         const resolvesMatchImmediately =
             flippedTileIds.length === 2 &&
             !opensThree &&
+            !isTripleKey(board, tile.pairKey) &&
             firstFlippedTile !== null &&
             // Element pairs (`match-rule-rules.ts`): two plain cards of one element are a pair on that floor.
             tilesMatchOnBoard(board, firstFlippedTile, tile, tilesArePairMatch);

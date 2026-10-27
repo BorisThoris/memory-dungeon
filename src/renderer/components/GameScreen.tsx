@@ -2275,7 +2275,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ) : null}
                                 {matchRuleTold ? (
                                     <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold} data-waiting={tripleWaiting ? 'third' : undefined}>
-                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {tripleWaiting ? MATCH_RULE_COPY.waiting : MATCH_RULE_COPY.line(matchRuleTold)}
+                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {tripleWaiting ? (matchRuleTold === 'sequences' ? MATCH_RULE_COPY.waitingInOrder : MATCH_RULE_COPY.waiting) : MATCH_RULE_COPY.line(matchRuleTold)}
                                     </p>
                                 ) : null}
                                 {omensTold.length > 0 ? (

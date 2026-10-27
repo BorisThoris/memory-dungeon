@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { buildBoard } from './board-generation';
 import { inspectBoardFairness } from './board-inspection';
 import { descentLengthFor } from './descent-length-rules';
-import { pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
+import { descentActForLevel, pickFloorScheduleEntry } from './floor-mutator-schedule';
+import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, inSequenceOrder, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, SEQUENCES_FROM, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { tilesArePairMatch } from './scoring-rules';
 import { playerVisibleBoard } from './player-visible-board';
@@ -167,5 +167,56 @@ describe('Triples (rules 96)', () => {
         const { board } = dealt();
         const layered = { ...board, matchRule: undefined, tripleKeys: undefined, beneath: [board.tiles[0]!] };
         expect(dealMatchRule(layered, 'triples', 91).matchRule).toBe('opposites');
+    });
+});
+
+describe('Sequences (rules 97)', () => {
+    const dealt = () => {
+        const run = finishMemorizePhase(createNewRun(0, { runSeed: 91 }));
+        const board = dealMatchRule({ ...run.board!, flippedTileIds: [] }, 'sequences', 91);
+        return { run: { ...run, board, status: 'playing' as const }, board };
+    };
+
+    it('deals Triples whose cards each take one place, one to three, in their three', () => {
+        const { board } = dealt();
+        expect(board.matchRule).toBe('sequences');
+        for (const key of board.tripleKeys!) {
+            expect(board.tiles.filter((tile) => tile.pairKey === key).map((tile) => tile.seq).sort().join(''), key).toBe('123');
+        }
+        expect(board.tiles.filter((tile) => tile.seq != null)).toHaveLength(board.tripleKeys!.length * 3);
+        expect(inspectBoardFairness(board).issues).toEqual([]);
+    });
+
+    it('one, two, three claim the three; the two before the one is a miss at once', () => {
+        const { run, board } = dealt();
+        const key = board.tripleKeys![0]!;
+        const [one, two, three] = inSequenceOrder(board.tiles.filter((tile) => tile.pairKey === key));
+        const waiting = flipTile(flipTile(run, one!.id), two!.id);
+        expect(waiting.status).toBe('playing');
+        expect(pendingTripleKey(waiting.board)).toBe(key);
+        const claimed = resolveBoardTurn(flipTile(waiting, three!.id));
+        expect(claimed.stats.mismatches).toBe(0);
+        expect(claimed.board!.tiles.filter((tile) => tile.pairKey === key).every((tile) => tile.state !== 'hidden')).toBe(true);
+        const backwards = flipTile(flipTile(run, two!.id), one!.id);
+        expect(backwards.status).toBe('resolving');
+        expect(pendingTripleKey(backwards.board)).toBeNull();
+        const missed = resolveBoardTurn(backwards);
+        expect(missed.stats.mismatches).toBe(1);
+        expect(missed.board!.tiles.filter((tile) => tile.pairKey === key).every((tile) => tile.state === 'hidden')).toBe(true);
+        const skipped = resolveBoardTurn(flipTile(flipTile(run, one!.id), three!.id));
+        expect(skipped.stats.mismatches).toBe(1);
+    });
+
+    it('is in the pool from rules 97 past the Gate, never in it', () => {
+        const seen = new Map<string, Set<string>>();
+        for (const seed of SEEDS) {
+            for (const level of ruleFloors(seed)) {
+                const act = descentActForLevel(level, SEQUENCES_FROM).id;
+                const rule = String(matchRuleFor(seed, SEQUENCES_FROM, level, 'normal', descentLengthFor(SEQUENCES_FROM)));
+                seen.set(act, (seen.get(act) ?? new Set()).add(rule));
+            }
+        }
+        expect(seen.get('gate')?.has('sequences') ?? false).toBe(false);
+        expect([...seen.entries()].some(([act, rules]) => act !== 'gate' && rules.has('sequences'))).toBe(true);
     });
 });

@@ -47,7 +47,7 @@ import { dealWanderers, WANDERER_STEP_EVERY_TURNS, wandererFootprintCells } from
 import { gateOmensToldOn } from './run-signature-rules';
 import { dealMasks } from './mask-rules';
 import { dealSleepers } from './sleeper-rules';
-import { dealMatchRule, dealOpposites, pendingTripleKey } from './match-rule-rules';
+import { dealMatchRule, dealOpposites, inSequenceOrder, pendingTripleKey } from './match-rule-rules';
 import { playerVisibleTile } from './player-visible-board';
 import type { BoardFold } from './board-fold-rules';
 import { layerKeyOf } from './board-layers-rules';
@@ -125,6 +125,7 @@ export type TestHallRoomId =
     | 'match-rule-opposites'
     | 'match-rule-element-pairs'
     | 'match-rule-triples'
+    | 'match-rule-sequences'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -269,6 +270,8 @@ export type TestHallStep =
     | { readonly do: 'turn'; readonly a: string; readonly b: string }
     /** Triples (`match-rule-rules.ts`): turn two of the board's first three, then its third - or, with `miss`, another card. */
     | { readonly do: 'three'; readonly miss?: boolean }
+    /** Sequences (`match-rule-rules.ts`): the board's first three's two before its one - a miss at once, with no third. */
+    | { readonly do: 'three-out-of-order' }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
@@ -1539,6 +1542,42 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     const key = r.board!.tripleKeys?.[0];
                     const three = r.board!.tiles.filter((t) => t.pairKey === key);
                     return r.stats.mismatches === b.stats.mismatches && three.every((t) => t.state !== 'hidden') && r.board!.matchedPairs >= b.board!.matchedPairs + 1 && (r.triplesClaimedThisFloor ?? 0) === 1 && finishable(r) === null
+                        ? null
+                        : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}, sets ${b.board!.matchedPairs} -> ${r.board!.matchedPairs}`;
+                }
+            }
+        ]
+    },
+    {
+        id: 'match-rule-sequences',
+        title: 'Sequences: one, two, three in order',
+        mechanic: 'From rules 97 a floor past the Gate may take Sequences: Triples whose cards wear one, two or three pips on their backs, their place in the three. Only a one then a two wait face up for the three; two of a three turned out of order are a miss at once, and the three claims all three.',
+        graphMechanicIds: ['board.match_rule'],
+        tryThis: 'Find the cards with pips. Turn a two before its one: both go down, a miss. Turn the one, then the two, then the three of one picture: the three is claimed.',
+        build: () => {
+            const base = room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], { level: 14, misses: 4 });
+            return { ...base, board: dealMatchRule(base.board!, 'sequences', base.runSeed) };
+        },
+        script: [
+            {
+                step: { do: 'three-out-of-order' },
+                says: 'a two turned before its one waits for nothing: a miss at once, and both go back down',
+                expect: (r, b) => {
+                    const key = r.board!.tripleKeys?.[0];
+                    const three = r.board!.tiles.filter((t) => t.pairKey === key);
+                    const places = three.map((t) => t.seq).sort().join('');
+                    return r.board!.matchRule === 'sequences' && places === '123' && r.stats.mismatches === b.stats.mismatches + 1 && three.every((t) => t.state === 'hidden') && finishable(r) === null
+                        ? null
+                        : `rule ${String(r.board!.matchRule)}, places ${places}, misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}`;
+                }
+            },
+            {
+                step: { do: 'three' },
+                says: 'one, two, three of one picture claim all three as one match, with no miss',
+                expect: (r, b) => {
+                    const key = r.board!.tripleKeys?.[0];
+                    const three = r.board!.tiles.filter((t) => t.pairKey === key);
+                    return r.stats.mismatches === b.stats.mismatches && three.every((t) => t.state !== 'hidden') && r.board!.matchedPairs === b.board!.matchedPairs + 1 && (r.triplesClaimedThisFloor ?? 0) === 1 && finishable(r) === null
                         ? null
                         : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}, sets ${b.board!.matchedPairs} -> ${r.board!.matchedPairs}`;
                 }
@@ -3555,9 +3594,19 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'miss':
         case 'turn':
             return resolveBoardTurn(flipTile(flipTile(run, step.a), step.b));
+        case 'three-out-of-order': {
+            const key = run.board?.tripleKeys?.[0];
+            const three = inSequenceOrder(run.board?.tiles.filter((tile) => tile.pairKey === key && tile.state === 'hidden') ?? []);
+            if (three.length !== 3 || three[0]!.seq !== 1) return null;
+            const two = flipTile(flipTile(run, three[1]!.id), three[0]!.id);
+            // Out of order waits for nothing: the turn resolves at two.
+            if (two.status !== 'resolving' || pendingTripleKey(two.board) != null) return null;
+            return resolveBoardTurn(two);
+        }
         case 'three': {
             const key = run.board?.tripleKeys?.[0];
-            const three = run.board?.tiles.filter((tile) => tile.pairKey === key && tile.state === 'hidden') ?? [];
+            // On Sequences they are turned one, two, three (`inSequenceOrder`); on Triples as dealt.
+            const three = inSequenceOrder(run.board?.tiles.filter((tile) => tile.pairKey === key && tile.state === 'hidden') ?? []);
             if (three.length !== 3) return null;
             const two = flipTile(flipTile(run, three[0]!.id), three[1]!.id);
             // Two of a three must wait face up for the third: a turn that resolved at two is not the rule.

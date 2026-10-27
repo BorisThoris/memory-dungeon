@@ -1,4 +1,5 @@
 import type { BoardState, RunState, Tile } from './contracts';
+import { inSequenceOrder } from './match-rule-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type PlaythroughSolverStopReason =
@@ -33,7 +34,9 @@ export const getUnresolvedPlayablePairGroups = (board: BoardState): Tile[][] => 
         group.push(tile);
         groups.set(tile.pairKey, group);
     }
+    // A Sequences three (`match-rule-rules.ts`) in its order, so a player who knows it turns one, two, three.
     return [...groups.values()]
+        .map((group) => inSequenceOrder(group))
         .filter((group) => group.length >= 2)
         .sort((left, right) => {
             const leftHasExposed = left.some((tile) => tile.state !== 'hidden') ? 0 : 1;

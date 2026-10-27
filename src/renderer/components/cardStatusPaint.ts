@@ -167,10 +167,13 @@ export const paintCardStatus = (
     }
     if (mark.three) {
         // Triples: three gold pips across the top of the back, in a dark band. A count, not a colour.
+        // Sequences: as many pips as the card's place - one, two or three - the rest left as empty rings.
         rect(ctx, W / 2 - 78, 14, 156, 52, 26); outlined(ctx, INK, 6);
-        for (const dx of [-48, 0, 48]) {
-            ctx.beginPath(); ctx.arc(W / 2 + dx, 40, 15, 0, Math.PI * 2); outlined(ctx, '#ffd766', 5);
-        }
+        [-48, 0, 48].forEach((dx, i) => {
+            ctx.beginPath(); ctx.arc(W / 2 + dx, 40, 15, 0, Math.PI * 2);
+            if (mark.seq == null || i < mark.seq) outlined(ctx, '#ffd766', 5);
+            else { ctx.strokeStyle = '#ffd766'; ctx.lineWidth = 3; ctx.stroke(); }
+        });
     }
     if (mark.hourglass) {
         // The Hourglass: two gold triangles tip to tip and the turns of sand left, low on the left.
