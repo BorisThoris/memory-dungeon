@@ -46,6 +46,8 @@ interface RunTimerController {
     scheduleResolveTimer: (duration: number) => void;
     /** Ends the study period early on the player's word. True when a phase was actually ended. */
     skipMemorizePhase: () => boolean;
+    /** Ends the study of `run` with no skip reward: a Flurry's wrong tap (`flurry-rules.ts`). */
+    endMemorizePhase: (run: RunState) => boolean;
 }
 
 export const createRunTimerController = ({
@@ -269,6 +271,20 @@ export const createRunTimerController = ({
      * knows what is left, and the floor's configured window is the denominator, not whatever a
      * resumed timer happened to be scheduled with - otherwise a pause would buy momentum for free.
      */
+    const endMemorizePhase = (run: RunState): boolean => {
+        if (run.status !== 'memorize') {
+            return false;
+        }
+        const ended = completeMemorizePhase(run, 0);
+        if (ended === run) {
+            return false;
+        }
+        clearMemorizeTimer();
+        pendingMemorizeBoardKey = null;
+        setRun(ended);
+        return true;
+    };
+
     const skipMemorizePhase = (): boolean => {
         const { run, view } = getState();
         if (!run || view !== 'playing' || run.status !== 'memorize') {
@@ -319,6 +335,7 @@ export const createRunTimerController = ({
         resumeRunWithTimers,
         scheduleDebugRevealTimer,
         scheduleResolveTimer,
-        skipMemorizePhase
+        skipMemorizePhase,
+        endMemorizePhase
     };
 };

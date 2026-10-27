@@ -24,6 +24,7 @@ import { CHAOS_MUTATORS, pickFloorScheduleEntry } from './floor-mutator-schedule
 import { FLOOR_CURIOS, MIN_CURIO_MEMORIZE_MS } from './floor-curio-rules';
 import { greetFloorCurio } from './floor-curio-greeting-rules';
 import { advanceToNextLevel, createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { FLURRY_FROM, flurryPress } from './flurry-rules';
 import { canAimMeteor, callMeteor } from './meteor-rules';
 import { applyMissBudget, missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
 import { canReprise, reprise } from './reprise-rules';
@@ -126,6 +127,7 @@ export type TestHallRoomId =
     | 'match-rule-element-pairs'
     | 'match-rule-triples'
     | 'match-rule-sequences'
+    | 'flurry-study'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -272,6 +274,8 @@ export type TestHallStep =
     | { readonly do: 'three'; readonly miss?: boolean }
     /** Sequences (`match-rule-rules.ts`): the board's first three's two before its one - a miss at once, with no third. */
     | { readonly do: 'three-out-of-order' }
+    /** The Flurry (`flurry-rules.ts`): tap two named cards in the study - a grab when they are a pair, the study's end when not. */
+    | { readonly do: 'flurry'; readonly a: string; readonly b: string }
     | { readonly do: 'flip'; readonly tileId: string }
     | { readonly do: 'bomb' }
     | { readonly do: 'crucible' }
@@ -1581,6 +1585,37 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                         ? null
                         : `misses ${b.stats.mismatches} -> ${r.stats.mismatches}, three ${three.map((t) => t.state).join('/')}, sets ${b.board!.matchedPairs} -> ${r.board!.matchedPairs}`;
                 }
+            }
+        ]
+    },
+    {
+        id: 'flurry-study',
+        title: 'The Flurry: grab pairs while the faces are up',
+        mechanic: 'From rules 99 the study of every plain floor past the Gate is a Flurry: two cards of a pair tapped while the faces are shown are claimed at once, through the floor’s own turn; two that are not a pair end the study, with no miss. It stops when half the floor’s pairs are gone.',
+        graphMechanicIds: ['board.flurry'],
+        tryThis: 'While the faces are up, tap both cards of one picture: they are yours, the study goes on. Then tap two different pictures: the faces go down, no miss, and the floor is memory again.',
+        build: () =>
+            room(['a:e b:t c:m d:b', 'e:e f:t g:m h:b', 'a:e b:t c:m d:b', 'e:e f:t g:m h:b'], {
+                level: 14,
+                misses: 4,
+                run: { runRulesVersion: FLURRY_FROM, status: 'memorize', timerState: { ...createNewRun(0).timerState, memorizeRemainingMs: 20000 } }
+            }),
+        script: [
+            {
+                step: { do: 'flurry', a: 'a-1', b: 'a-2' },
+                says: 'both cards of a pair, tapped in the study, are claimed at once: matched, no miss, the study still running',
+                expect: (r, b) =>
+                    r.status === 'memorize' && r.stats.mismatches === b.stats.mismatches && r.board!.tiles.filter((t) => t.pairKey === 'a').every((t) => t.state === 'matched') && (r.flurryGrabsThisFloor ?? 0) === 1
+                        ? null
+                        : `status ${r.status}, misses ${b.stats.mismatches} -> ${r.stats.mismatches}, a ${r.board!.tiles.filter((t) => t.pairKey === 'a').map((t) => t.state).join('/')}, grabs ${r.flurryGrabsThisFloor ?? 0}`
+            },
+            {
+                step: { do: 'flurry', a: 'b-1', b: 'c-1' },
+                says: 'two that are not a pair end the study: both go back down, and no miss is charged',
+                expect: (r, b) =>
+                    r.status === 'playing' && r.stats.mismatches === b.stats.mismatches && r.board!.flippedTileIds.length === 0 && r.board!.tiles.filter((t) => t.state === 'hidden').length === b.board!.tiles.filter((t) => t.state === 'hidden').length && finishable(r) === null
+                        ? null
+                        : `status ${r.status}, misses ${b.stats.mismatches} -> ${r.stats.mismatches}, hidden ${b.board!.tiles.filter((t) => t.state === 'hidden').length} -> ${r.board!.tiles.filter((t) => t.state === 'hidden').length}`
             }
         ]
     },
@@ -3594,6 +3629,11 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         case 'miss':
         case 'turn':
             return resolveBoardTurn(flipTile(flipTile(run, step.a), step.b));
+        case 'flurry': {
+            const held = flurryPress(run, step.a);
+            if (held === run) return null;
+            return flurryPress(held, step.b);
+        }
         case 'three-out-of-order': {
             const key = run.board?.tripleKeys?.[0];
             const three = inSequenceOrder(run.board?.tiles.filter((tile) => tile.pairKey === key && tile.state === 'hidden') ?? []);

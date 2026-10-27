@@ -13,6 +13,7 @@ import { awaitsWardenChoice, descendIntoEndless } from '../../shared/warden-rule
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canStartHold, releaseHold as releaseHoldRule, startHold as startHoldRule } from '../../shared/hold-rules';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
+import { canFlurryGrab, flurryPress, returnFlurryHeld } from '../../shared/flurry-rules';
 import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStillBellCommand, createGameplayStormGlassCommand, createGameplayTakeRelicCommand } from '../../shared/gameplay-core-contracts';
 import { canTakeMisersPurse } from '../../shared/misers-purse-rules';
 import { canRingStillBell } from '../../shared/still-bell-rules';
@@ -492,6 +493,20 @@ export const useAppStore = create<AppState>((set, get) => ({
             if (result.resolveDelayMs !== null) {
                 scheduleResolveTimer(result.resolveDelayMs);
             }
+            return;
+        }
+
+        // The Flurry: in a deep floor's study, two cards of a pair are grabbed at once; two that are not end the study.
+        if (canFlurryGrab(run)) {
+            const next = flurryPress(run, tileId);
+            if (next === run) return;
+            void resumeAudioContext();
+            playFlipSfx(sfxGainFromStore(), comboMeterFromStore());
+            if (next.status === 'playing') {
+                runTimerController.endMemorizePhase(returnFlurryHeld(run));
+                return;
+            }
+            set({ run: next });
             return;
         }
 

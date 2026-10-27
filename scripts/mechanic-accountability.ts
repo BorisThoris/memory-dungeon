@@ -66,6 +66,7 @@ export const MECHANIC_DEEP_CENSUS_COUNTERS: Record<string, readonly string[]> = 
     // who presses the verbs, the deep census reaches the rest of the pack.
     'board.fold': ['deep.foldFloors'],
     'board.match_rule': ['deep.matchRuleFloors'],
+    'board.flurry': ['deep.flurryGrabs'],
     'board.layers': ['deep.layerFloors'],
     'progression.dread': ['deep.dreadAwake'],
     'board.learned_rule': ['deep.learnedRules'],

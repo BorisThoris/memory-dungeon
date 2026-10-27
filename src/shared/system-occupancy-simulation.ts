@@ -17,6 +17,7 @@ import { togglePinnedTile } from './board-power-state';
 import { createWildRun } from './run-creation-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { studyWithFlurry } from './flurry-rules';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from './playthrough-solver-rules';
 import { orthogonalNeighbours } from './chunk-break-rules';
@@ -821,7 +822,7 @@ export const simulateRunOccupancy = ({
                     ended = 'the floor did not advance';
                     break;
                 }
-                run = { ...finishMemorizePhase(next), missBank: undefined };
+                run = { ...studyWithFlurry(next, createMulberry32(hashStringToSeed(`occupancy-flurry:${seed}:${floor}:${missRate}`)), missRate), missBank: undefined };
                 floor += 1;
             }
             if (pass === 'reference') endReasons[ended] = (endReasons[ended] ?? 0) + 1;

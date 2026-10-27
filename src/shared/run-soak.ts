@@ -28,6 +28,7 @@ import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS 
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness, allBoardCards } from './board-inspection';
 import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { studyWithFlurry } from './flurry-rules';
 import { applyMissBudget, missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';
 import { hasMutator } from './mutators';
@@ -135,6 +136,8 @@ export interface SoakRunReport {
     wardenTests: number;
     wardensFelled: number;
     wardenDealsAgain: number;
+    /** The Flurry (`flurry-rules.ts`): pairs grabbed in deep floors' studies. */
+    flurryGrabs: number;
     /** Carve (`carve-rules.ts`): carves set, and carves a pop spent. */
     carves: number;
     carvesSpent: number;
@@ -382,6 +385,8 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         // A Zone replays several turns in one action, and the combo its matches build lights the
         // later ones: the heat carried into the action is not the heat the last turn resolved on.
         if (action === 'zone-flip' || action === 'zone-resolve') return null;
+        // So does a sim's study with Flurry grabs in it (`studyWithFlurry`): a player's grabs are one press each.
+        if (action === 'study' && runNonNegativeInteger(run.flurryGrabsThisFloor) > runNonNegativeInteger(before.flurryGrabsThisFloor)) return null;
         // What this action lit: light carried over unchanged (a Candle since given up, a no-op flip) is not the afterglow's.
         const wasLit = new Set(before.lanternLitTileIds ?? []);
         const nowLit = run.lanternLitTileIds ?? [];
@@ -620,6 +625,12 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         const pinnedCells = (run.pinnedTileIds ?? []).map((id) => before.board!.tiles.findIndex((tile) => tile.id === id)).filter((cell) => cell >= 0);
         const held = pinnedCells.find((cell) => run.board!.tiles[cell]?.id === before.board!.tiles[cell]?.id && (run.board!.beneath?.[cell]?.id ?? null) !== (before.board!.beneath?.[cell]?.id ?? null));
         return held != null ? `the card under pinned cell ${held} moved` : null;
+    },
+    'a Flurry’s study never charges a miss, and leaves no card face up outside the turn': (before, run) => {
+        if (!before?.board || !run.board || runNonNegativeInteger(run.flurryGrabsThisFloor) <= runNonNegativeInteger(before.flurryGrabsThisFloor)) return null;
+        if (run.board.level !== before.board.level) return null;
+        if (run.stats.mismatches !== before.stats.mismatches) return 'a Flurry grab charged a miss';
+        return run.board.tiles.some((tile) => tile.state === 'flipped' && !run.board!.flippedTileIds.includes(tile.id)) ? 'a Flurry left a card face up outside the turn' : null;
     },
     'the Keeper\u2019s swap keeps every card and holds every pinned cell': (before, run) => {
         if (!before?.board || !run.board || runNonNegativeInteger(run.keeperSwapsThisFloor) <= runNonNegativeInteger(before.keeperSwapsThisFloor)) return null;
@@ -863,6 +874,7 @@ export const soakRun = ({
     let dreadBuys = 0;
     let keeperFloors = 0;
     let keeperSwaps = 0;
+    let flurryGrabs = 0;
     let cartographerFloors = 0;
     let cartographerTurns = 0;
     let reprises = 0;
@@ -954,6 +966,7 @@ export const soakRun = ({
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        if (next.board?.level === run.board?.level) flurryGrabs += Math.max(0, (next.flurryGrabsThisFloor ?? 0) - (run.flurryGrabsThisFloor ?? 0));
         if (firstEvolutionFloor === null && (next.evolutions ?? []).length > 0) firstEvolutionFloor = next.board?.level ?? null;
         if (next.board?.level === run.board?.level) layerCardsRisen += Math.max(0, (next.layerCardsRisenThisFloor ?? 0) - (run.layerCardsRisenThisFloor ?? 0));
         if (next.board?.level === run.board?.level) wandererSteps += Math.max(0, (next.wandererStepsThisFloor ?? 0) - (run.wandererStepsThisFloor ?? 0));
@@ -996,7 +1009,7 @@ export const soakRun = ({
         run = next;
     };
 
-    act('study', finishMemorizePhase(run));
+    act('study', studyWithFlurry(run, rng, player.missRate));
     while (step < maxActions && violations.length === 0) {
         if (run.status === 'gameOver') {
             if (run.board && wardenTestHolds(run)) {
@@ -1035,7 +1048,7 @@ export const soakRun = ({
             // A soak that runs past the Warden goes on into Endless (DGE-006), where the rent is charged.
             if (awaitsWardenChoice(run)) act('endless', descendIntoEndless(run));
             act('descend', advanceToNextLevel(run));
-            if ((run as RunState).status === 'memorize') act('study', finishMemorizePhase(run));
+            if ((run as RunState).status === 'memorize') act('study', studyWithFlurry(run, rng, player.missRate));
             continue;
         }
         if (run.status === 'resolving') {
@@ -1043,7 +1056,7 @@ export const soakRun = ({
             continue;
         }
         if (run.status !== 'playing') {
-            act('study', finishMemorizePhase(run));
+            act('study', studyWithFlurry(run, rng, player.missRate));
             continue;
         }
         const hidden = hiddenReal(run);
@@ -1202,6 +1215,7 @@ export const soakRun = ({
         wardenTests,
         wardensFelled,
         wardenDealsAgain,
+        flurryGrabs,
         carves,
         carvesSpent,
         masksDealt,

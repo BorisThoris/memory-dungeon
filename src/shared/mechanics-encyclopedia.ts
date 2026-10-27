@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 129 as const;
+export const ENCYCLOPEDIA_VERSION = 130 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -666,6 +666,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Carve',
         description:
             `From floor ${floorOf(VERB_STAIRCASE_FIRST_FLOORS.carve)}, **Carve** spends ${CARVE_LINKS} links of the Hold meter to aim your next pop: up, right, down or left, drawn on the board until it is used. A realm's reaction takes the pairs on that side first and ${CARVE_BURST_EXTRA_PAIRS} more of each element; a plain pop takes that side first and reaches one card further along it. A held match pops nothing, so a carve set while holding shapes the **release**. A carve with nothing on its side is spent by the next pop all the same. It never costs a turn or a miss, and the floor's end takes it.`
+    },
+    {
+        id: 'sys_flurry',
+        title: 'The Flurry',
+        description:
+            'Past the Gate the study is a **Flurry**. While the faces are up and the clock runs, tap both cards of a pair and they are yours at once - matched, scored, the chain climbing - and the study goes on. Tap two that are not a pair and the study ends there: the faces go down, no miss is charged, and the floor is memory again. Every pair you grab is one you need not remember, and a wrong tap throws away the study you were using to remember the rest. A Flurry stops when half the floor’s pairs are gone; a three, a boss floor and the Spiral keep their quiet study.'
     },
     {
         id: 'sys_match_rules',

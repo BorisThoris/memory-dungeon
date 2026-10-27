@@ -50,3 +50,10 @@ export const MATCH_RULE_COPY = {
     /** Said while a Sequences one and two wait for their three. */
     waitingInOrder: 'One, two: now the three.'
 } as const;
+
+/** The Flurry (`flurry-rules.ts`): told through a deep floor's study, while it can still grab. */
+export const FLURRY_COPY = {
+    kicker: 'Flurry',
+    line: 'Tap both cards of a pair while the faces are up and they are yours now. Two that are not a pair end the study.',
+    grabbed: (count: number): string => (count === 1 ? 'One pair grabbed. Keep going, or stop and study.' : `${count} pairs grabbed. Keep going, or stop and study.`)
+} as const;

@@ -3,8 +3,9 @@ import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
 import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
-import { GATE_OMEN_COPY, MATCH_RULE_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
+import { GATE_OMEN_COPY, MATCH_RULE_COPY, FLURRY_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
 import { pendingTripleKey } from '../../shared/match-rule-rules';
+import { canFlurryGrab } from '../../shared/flurry-rules';
 import { gateOmensToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
@@ -1685,7 +1686,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // Triples: while two of a three wait face up, the crown says what the turn wants.
     const tripleWaiting = pendingTripleKey(run.board) != null;
     const boardCrownShown =
-        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || liveCarve(run) != null);
+        !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || canFlurryGrab(run) || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
     useLayoutEffect(() => {
@@ -2273,6 +2274,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
                                     </p>
                                 ) : null}
+                                {canFlurryGrab(run) ? (
+                                    <p className={styles.wardenRules} data-testid="flurry" data-grabs={run.flurryGrabsThisFloor ?? 0}>
+                                        <span className={styles.wardenRulesName}>{FLURRY_COPY.kicker}</span> {(run.flurryGrabsThisFloor ?? 0) > 0 ? FLURRY_COPY.grabbed(run.flurryGrabsThisFloor ?? 0) : FLURRY_COPY.line}
+                                    </p>
+                                ) : null}
                                 {matchRuleTold ? (
                                     <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold} data-waiting={tripleWaiting ? 'third' : undefined}>
                                         <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {tripleWaiting ? (matchRuleTold === 'sequences' ? MATCH_RULE_COPY.waitingInOrder : MATCH_RULE_COPY.waiting) : MATCH_RULE_COPY.line(matchRuleTold)}
@@ -2395,7 +2401,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     elements: { realmId: run.realmId, elementStreak: run.elementStreak, elementResonance: run.elementResonance, realmAttunement: run.realmAttunement }
                                 }}
                                 recoveryContext={boardRecoveryContext}
-                                interactive={run.status === 'playing' || gambitThirdPickActive || resolvingPairTappable}
+                                interactive={run.status === 'playing' || gambitThirdPickActive || resolvingPairTappable || canFlurryGrab(run)}
                                 mobileCameraMode={cameraViewportMode}
                                 nBackAnchorPairKey={run.nBackAnchorPairKey}
                                 nBackMutatorActive={nBackMutatorActive}

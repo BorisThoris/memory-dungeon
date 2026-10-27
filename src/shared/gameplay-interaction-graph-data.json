@@ -3121,6 +3121,34 @@
             ]
         },
         {
+            "id": "board.flurry",
+            "label": "The Flurry",
+            "kind": "board",
+            "role": "past_the_gate_the_study_is_a_grab_two_cards_of_a_pair_tapped_while_the_faces_are_up_are_claimed_at_once_and_two_that_are_not_end_the_study",
+            "evidence": [
+                "src/shared/flurry-rules.ts",
+                "src/renderer/store/useAppStore.ts",
+                "src/renderer/components/GameScreen.tsx"
+            ],
+            "reads": [
+                "tileStates"
+            ],
+            "writes": [
+                "tileStates"
+            ],
+            "enables": [],
+            "blocks": [],
+            "softlockGuards": [
+                "a-wrong-tap-never-costs-a-miss",
+                "half-the-floor-is-left-to-memory"
+            ],
+            "tests": [
+                "src/shared/flurry-rules.test.ts",
+                "src/shared/test-hall-rooms.test.ts",
+                "src/shared/run-soak.test.ts"
+            ]
+        },
+        {
             "id": "board.wanderers",
             "label": "Wanderers",
             "kind": "board",
@@ -3360,6 +3388,12 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the crown tells the floor's match rule, and an Opposites card shows its opposite element"
+        },
+        {
+            "source": "board.flurry",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "the crown tells the Flurry through the study and counts the pairs grabbed"
         },
         {
             "source": "trait.echo",

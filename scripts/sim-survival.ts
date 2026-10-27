@@ -23,6 +23,7 @@ import { countFindablePairs } from '../src/shared/board-tile-generation-rules';
 import { filterMutatorsByContentLock } from '../src/shared/content-lock-state';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '../src/shared/game';
+import { studyWithFlurry } from '../src/shared/flurry-rules';
 import { comboMissesEarned, MISS_BANK_FLOOR_GRANT, missesLeft } from '../src/shared/miss-bank';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
 import { getUnresolvedPlayablePairGroups } from '../src/shared/playthrough-solver-rules';
@@ -136,7 +137,7 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         const delta = leftAfter - leftBefore;
         tally.clearEarned += MISS_BANK_FLOOR_GRANT;
         tally.expired += Math.max(0, MISS_BANK_FLOOR_GRANT - delta);
-        run = finishMemorizePhase(next);
+        run = studyWithFlurry(next, createMulberry32(hashStringToSeed(`flurry:${seed}:${floor}:${missRate}`)), missRate);
     }
     return tally;
 };
