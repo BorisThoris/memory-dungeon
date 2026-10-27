@@ -3,7 +3,7 @@ import { buildBoard } from './board-generation';
 import { inspectBoardFairness } from './board-inspection';
 import { descentLengthFor } from './descent-length-rules';
 import { descentActForLevel, pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, inSequenceOrder, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, SEQUENCES_FROM, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
+import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, inSequenceOrder, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFloorsFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, RULE_FLOORS_GROW_FROM, SEQUENCES_FROM, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { tilesArePairMatch } from './scoring-rules';
 import { playerVisibleBoard } from './player-visible-board';
@@ -218,5 +218,38 @@ describe('Sequences (rules 97)', () => {
         }
         expect(seen.get('gate')?.has('sequences') ?? false).toBe(false);
         expect([...seen.entries()].some(([act, rules]) => act !== 'gate' && rules.has('sequences'))).toBe(true);
+    });
+});
+
+describe('rule floors grow with depth (rules 98)', () => {
+    const floorsByAct = (seed: number, rules: number): Map<string, number[]> => {
+        const length = descentLengthFor(rules);
+        const byAct = new Map<string, number[]>();
+        for (let level = 1; level <= length; level += 1) {
+            if (matchRuleFor(seed, rules, level, pickFloorScheduleEntry(seed, rules, level, 'endless').floorTag, length) == null) continue;
+            const act = descentActForLevel(level, rules).id;
+            byAct.set(act, [...(byAct.get(act) ?? []), level]);
+        }
+        return byAct;
+    };
+
+    it('the Gate keeps one rule floor, the Living Dungeon takes two, the Deep three and the Abyss its plain floors', () => {
+        for (const seed of SEEDS) {
+            const byAct = floorsByAct(seed, RULE_FLOORS_GROW_FROM);
+            const counts = ['gate', 'living_dungeon', 'deep', 'abyss'].map((act) => byAct.get(act)?.length ?? 0);
+            expect(counts.slice(0, 3), `seed ${seed}`).toEqual([1, 2, 3]);
+            expect(counts[3], `seed ${seed}`).toBeGreaterThanOrEqual(3);
+            expect([4, 5], `seed ${seed}`).toContain(byAct.get('gate')![0]);
+            for (const floors of byAct.values()) {
+                for (const level of floors) expect(pickFloorScheduleEntry(seed, RULE_FLOORS_GROW_FROM, level, 'endless').floorTag).toBe('normal');
+            }
+        }
+    });
+
+    it('leaves a rules 97 run one rule floor an act, on the floors it had', () => {
+        for (const seed of SEEDS.slice(0, 40)) {
+            for (const floors of floorsByAct(seed, RULE_FLOORS_GROW_FROM - 1).values()) expect(floors).toHaveLength(1);
+            expect(matchRuleFloorsFor(seed, RULE_FLOORS_GROW_FROM - 1, 4)).toEqual([matchRuleFloorFor(seed, RULE_FLOORS_GROW_FROM - 1, 4)]);
+        }
     });
 });

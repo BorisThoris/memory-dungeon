@@ -49,6 +49,20 @@ export const TRIPLES_FROM = 96;
  */
 export const SEQUENCES_FROM = 97;
 
+/**
+ * **Rule floors grow with depth** (rules 98): one rule floor an act left nine floors in ten plain pairs however deep
+ * a run went. From 98 the Gate keeps its one, the Living Dungeon takes two, the Deep three, and the Abyss every one of
+ * its plain floors but its first, so the deeper a run goes the more of its floors change what a match is.
+ */
+export const RULE_FLOORS_GROW_FROM = 98;
+const RULE_FLOORS_PER_ACT: Readonly<Record<string, number>> = { gate: 1, living_dungeon: 2, deep: 3 };
+
+/** How many of an act's plain floors take a match rule, given how many it has. */
+export const ruleFloorCountFor = (actId: string, rulesVersion: number, candidates: number): number => {
+    if (rulesVersion < RULE_FLOORS_GROW_FROM) return Math.min(1, candidates);
+    return Math.min(candidates, RULE_FLOORS_PER_ACT[actId] ?? candidates);
+};
+
 /** How many cards a pair key holds on this board: three on a Triples floor's threes, two everywhere else. */
 export const setSizeFor = (board: Pick<BoardState, 'tripleKeys'>, pairKey: string): number =>
     (board.tripleKeys ?? []).includes(pairKey) ? 3 : 2;
@@ -120,9 +134,9 @@ export const OPPOSITE_SUIT: Readonly<Record<TileSuit, TileSuit>> = { ember: 'tid
 /** The first Gate floor a match rule may take: after the three authored floors. */
 export const MATCH_RULE_GATE_FLOORS: readonly number[] = [4, 5];
 
-/** Which plain floor of its act a run's match rule takes: one per act, from the run's seed. */
-export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: number): number | null => {
-    if (rulesVersion < MATCH_RULES_FROM) return null;
+/** Which plain floors of its act take a match rule, from the run's seed: one an act before rules 98, more the deeper from it. */
+export const matchRuleFloorsFor = (runSeed: number, rulesVersion: number, level: number): readonly number[] => {
+    if (rulesVersion < MATCH_RULES_FROM) return [];
     const act = descentActForLevel(level, rulesVersion);
     const { firstLevel, lastLevel } = actLevelsFor(act, rulesVersion);
     // The Gate's from its fourth floor; every other act's from its second, short of its boss.
@@ -132,14 +146,27 @@ export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: 
         const entry = pickFloorScheduleEntry(runSeed, rulesVersion, floor, 'endless');
         return entry.floorTag === 'normal' && entry.floorArchetypeId !== 'spiral_hall';
     });
-    if (candidates.length === 0) return null;
-    return candidates[pickRngIndex(createMulberry32(hashStringToSeed(`matchRuleFloor:${runSeed}:${act.id}`)), candidates.length)]!;
+    if (candidates.length === 0) return [];
+    if (rulesVersion < RULE_FLOORS_GROW_FROM) {
+        return [candidates[pickRngIndex(createMulberry32(hashStringToSeed(`matchRuleFloor:${runSeed}:${act.id}`)), candidates.length)]!];
+    }
+    const rng = createMulberry32(hashStringToSeed(`matchRuleFloors:${runSeed}:${act.id}`));
+    const order = [...candidates];
+    for (let i = order.length - 1; i > 0; i -= 1) {
+        const j = pickRngIndex(rng, i + 1);
+        [order[i], order[j]] = [order[j]!, order[i]!];
+    }
+    return order.slice(0, ruleFloorCountFor(act.id, rulesVersion, candidates.length)).sort((a, b) => a - b);
 };
+
+/** The first of an act's rule floors: its only one before rules 98. */
+export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: number): number | null =>
+    matchRuleFloorsFor(runSeed, rulesVersion, level)[0] ?? null;
 
 /** The match rule a floor is dealt with, if any: never a boss floor, a breather or past the Descent. */
 export const matchRuleFor = (runSeed: number, rulesVersion: number, level: number, floorTag: FloorTag | null | undefined, descentLength: number): MatchRuleId | null => {
     if (rulesVersion < MATCH_RULES_FROM || level > descentLength || floorTag === 'boss' || floorTag === 'breather') return null;
-    if (matchRuleFloorFor(runSeed, rulesVersion, level) !== level) return null;
+    if (!matchRuleFloorsFor(runSeed, rulesVersion, level).includes(level)) return null;
     // Sequences waits past the Gate: a run meets Triples before it meets them in order.
     const pool = matchRulesFor(rulesVersion, descentActForLevel(level, rulesVersion).id);
     return pool[pickRngIndex(createMulberry32(hashStringToSeed(`matchRule:${runSeed}:${level}`)), pool.length)]!;
