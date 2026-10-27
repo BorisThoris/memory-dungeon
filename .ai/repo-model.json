@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3389,
+    "trackedFileCount": 3388,
     "codeFileCount": 1314,
     "exportedSymbolCount": 4287,
     "contentItemCount": 16,
@@ -4339,12 +4339,6 @@
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
     },
     {
-      "path": "e2e/zz-seq-shot.spec.ts",
-      "category": "test",
-      "bytes": 2445,
-      "sha256": "f0826806ad042b82314266b05ea776de53d9f6ecd7d44b49dd265d5a3db8c282"
-    },
-    {
       "path": "eslint.config.mjs",
       "category": "configuration",
       "bytes": 5117,
@@ -4617,8 +4611,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 72017,
-      "sha256": "d48ef7696cab791294c625e4678788eb58683e8f64ee13d649529d4b4d7d92ec"
+      "bytes": 71756,
+      "sha256": "75c3b306f8bb1fac1b4077b4b62ffde775db70368749afc143fa2ad5f827b5a3"
     },
     {
       "path": "public/site.webmanifest",
@@ -13552,7 +13546,7 @@
       "path": "src/renderer/copy/verbArrivalCopy.ts",
       "category": "source",
       "bytes": 3642,
-      "sha256": "e1695e7b46fb2b73e2c623c2ddd19cac7f3ee512b7368b4080210aad284fb5c8"
+      "sha256": "479253c85f026b6fe904a526f5120351db4d4fa82ca5c8c98fc89c1cb92b8125"
     },
     {
       "path": "src/renderer/copy/voidSpewCopy.ts",
