@@ -159,10 +159,6 @@ export const matchRuleFloorsFor = (runSeed: number, rulesVersion: number, level:
     return order.slice(0, ruleFloorCountFor(act.id, rulesVersion, candidates.length)).sort((a, b) => a - b);
 };
 
-/** The first of an act's rule floors: its only one before rules 98. */
-export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: number): number | null =>
-    matchRuleFloorsFor(runSeed, rulesVersion, level)[0] ?? null;
-
 /** The match rule a floor is dealt with, if any: never a boss floor, a breather or past the Descent. */
 export const matchRuleFor = (runSeed: number, rulesVersion: number, level: number, floorTag: FloorTag | null | undefined, descentLength: number): MatchRuleId | null => {
     if (rulesVersion < MATCH_RULES_FROM || level > descentLength || floorTag === 'boss' || floorTag === 'breather') return null;

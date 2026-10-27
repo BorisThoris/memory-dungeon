@@ -3,7 +3,7 @@ import { buildBoard } from './board-generation';
 import { inspectBoardFairness } from './board-inspection';
 import { descentLengthFor } from './descent-length-rules';
 import { descentActForLevel, pickFloorScheduleEntry } from './floor-mutator-schedule';
-import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, inSequenceOrder, isElementPairable, MATCH_RULES_FROM, matchRuleFloorFor, matchRuleFloorsFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, RULE_FLOORS_GROW_FROM, SEQUENCES_FROM, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
+import { dealMatchRule, dealOpposites, ELEMENT_PAIRS_FROM, inSequenceOrder, isElementPairable, MATCH_RULES_FROM, matchRuleFloorsFor, matchRuleFor, OPPOSITE_SUIT, pendingTripleKey, rekeyElementPair, RULE_FLOORS_GROW_FROM, SEQUENCES_FROM, setSizeFor, tilesMatchOnBoard, TRIPLES_FROM } from './match-rule-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { tilesArePairMatch } from './scoring-rules';
 import { playerVisibleBoard } from './player-visible-board';
@@ -27,7 +27,7 @@ describe('match rules (rules 94)', () => {
         }
         // The runs differ: the floors are the seed's.
         expect(new Set(SEEDS.map((seed) => ruleFloors(seed).join())).size).toBeGreaterThan(40);
-        expect(matchRuleFloorFor(1, RULES - 1, 4)).toBeNull();
+        expect(matchRuleFloorsFor(1, RULES - 1, 4)).toEqual([]);
     });
 
     it('deals Opposites on one card of every pair, its true element kept, and the screen shows the opposite face up and down', () => {
@@ -249,7 +249,7 @@ describe('rule floors grow with depth (rules 98)', () => {
     it('leaves a rules 97 run one rule floor an act, on the floors it had', () => {
         for (const seed of SEEDS.slice(0, 40)) {
             for (const floors of floorsByAct(seed, RULE_FLOORS_GROW_FROM - 1).values()) expect(floors).toHaveLength(1);
-            expect(matchRuleFloorsFor(seed, RULE_FLOORS_GROW_FROM - 1, 4)).toEqual([matchRuleFloorFor(seed, RULE_FLOORS_GROW_FROM - 1, 4)]);
+            expect(matchRuleFloorsFor(seed, RULE_FLOORS_GROW_FROM - 1, 4)).toHaveLength(1);
         }
     });
 });
