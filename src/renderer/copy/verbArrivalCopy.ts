@@ -36,13 +36,17 @@ export const GATE_OMEN_COPY = {
 
 /** A floor's match rule (`match-rule-rules.ts`): told on the board crown for the whole floor. */
 export const MATCH_RULE_COPY = {
-    kicker: (rule: MatchRuleId): string => (rule === 'opposites' ? 'Opposites' : rule === 'triples' ? 'Triples' : 'Element pairs'),
+    kicker: (rule: MatchRuleId): string => (rule === 'opposites' ? 'Opposites' : rule === 'triples' ? 'Triples' : rule === 'sequences' ? 'Sequences' : 'Element pairs'),
     line: (rule: MatchRuleId): string =>
         rule === 'opposites'
             ? 'Every pair is one picture in two opposite elements: ember with tide, moss with bone. A card’s partner wears the other colour.'
             : rule === 'triples'
               ? 'Cards with three pips on the back come in threes. Turn two of a three and they wait face up: the third claims all three, any other card is a miss.'
+              : rule === 'sequences'
+                ? 'Some pictures come in threes, numbered by the pips on their backs. Turn one, two, three of one picture, in that order, to claim them; out of order is a miss.'
               : 'Any two cards of one element are a pair, whatever the picture. The backs keep their element hidden: remember the colours you turn. Marked cards keep their own partner.',
     /** Said while two of a three wait face up for their third. */
-    waiting: 'Two of three: turn the third.'
+    waiting: 'Two of three: turn the third.',
+    /** Said while a Sequences one and two wait for their three. */
+    waitingInOrder: 'One, two: now its three.'
 } as const;

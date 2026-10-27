@@ -21,7 +21,7 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  */
 export const MATCH_RULES_FROM = 94;
 
-export type MatchRuleId = 'opposites' | 'element_pairs' | 'triples';
+export type MatchRuleId = 'opposites' | 'element_pairs' | 'triples' | 'sequences';
 export const MATCH_RULES: readonly MatchRuleId[] = ['opposites'];
 
 /**
@@ -40,6 +40,14 @@ export const ELEMENT_PAIRS_FROM = 95;
  * (`board.pairCount`). A three is a plain picture only: no card that carries something of its own is dealt into one.
  */
 export const TRIPLES_FROM = 96;
+
+/**
+ * **Sequences** (rules 97): Triples in order, past the Gate. Each card of a three wears one, two or three pips on
+ * its back - its place in the three - and the three is claimed only turned one, two, three. A two turned before
+ * the one, or a three before the two, is a miss at once. The back says where a card stands, never its picture:
+ * a player turns a one, and must remember which two wears that picture.
+ */
+export const SEQUENCES_FROM = 97;
 
 /** How many cards a pair key holds on this board: three on a Triples floor's threes, two everywhere else. */
 export const setSizeFor = (board: Pick<BoardState, 'tripleKeys'>, pairKey: string): number =>
@@ -81,8 +89,31 @@ export const dealTriples = (board: BoardState, runSeed: number): BoardState => {
     return { ...board, tiles: marked, tripleKeys, pairCount: board.pairCount - groups, matchRule: 'triples' };
 };
 
-const matchRulesFor = (rulesVersion: number): readonly MatchRuleId[] =>
-    rulesVersion >= TRIPLES_FROM ? ['opposites', 'element_pairs', 'triples'] : rulesVersion >= ELEMENT_PAIRS_FROM ? ['opposites', 'element_pairs'] : MATCH_RULES;
+/** Deals Sequences: Triples' threes, each card given its place in the three's order from the seed. */
+export const dealSequences = (board: BoardState, runSeed: number): BoardState => {
+    const dealt = dealTriples(board, runSeed);
+    if (dealt === board) return board;
+    const rng = createMulberry32(hashStringToSeed(`sequences:${runSeed}:${board.level}`));
+    const places = new Map<string, (1 | 2 | 3)[]>();
+    for (const key of dealt.tripleKeys ?? []) {
+        const order: (1 | 2 | 3)[] = [1, 2, 3];
+        for (let i = order.length - 1; i > 0; i -= 1) {
+            const j = pickRngIndex(rng, i + 1);
+            [order[i], order[j]] = [order[j]!, order[i]!];
+        }
+        places.set(key, order);
+    }
+    const tiles = dealt.tiles.map((tile) => {
+        const order = places.get(tile.pairKey);
+        return order ? { ...tile, seq: order.shift()! } : tile;
+    });
+    return { ...dealt, tiles, matchRule: 'sequences' };
+};
+
+const matchRulesFor = (rulesVersion: number, actId?: string): readonly MatchRuleId[] =>
+    rulesVersion >= SEQUENCES_FROM && actId !== 'gate'
+        ? ['opposites', 'element_pairs', 'triples', 'sequences']
+        : rulesVersion >= TRIPLES_FROM ? ['opposites', 'element_pairs', 'triples'] : rulesVersion >= ELEMENT_PAIRS_FROM ? ['opposites', 'element_pairs'] : MATCH_RULES;
 
 export const OPPOSITE_SUIT: Readonly<Record<TileSuit, TileSuit>> = { ember: 'tide', tide: 'ember', moss: 'bone', bone: 'moss' };
 
@@ -109,7 +140,8 @@ export const matchRuleFloorFor = (runSeed: number, rulesVersion: number, level: 
 export const matchRuleFor = (runSeed: number, rulesVersion: number, level: number, floorTag: FloorTag | null | undefined, descentLength: number): MatchRuleId | null => {
     if (rulesVersion < MATCH_RULES_FROM || level > descentLength || floorTag === 'boss' || floorTag === 'breather') return null;
     if (matchRuleFloorFor(runSeed, rulesVersion, level) !== level) return null;
-    const pool = matchRulesFor(rulesVersion);
+    // Sequences waits past the Gate: a run meets Triples before it meets them in order.
+    const pool = matchRulesFor(rulesVersion, descentActForLevel(level, rulesVersion).id);
     return pool[pickRngIndex(createMulberry32(hashStringToSeed(`matchRule:${runSeed}:${level}`)), pool.length)]!;
 };
 
@@ -140,9 +172,9 @@ export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSe
     if (rule == null) return board;
     // A floor dealt two decks deep (`board-layers-rules.ts`) keeps a partner beneath: it takes Opposites instead.
     if (rule === 'opposites' || (board.beneath ?? []).some((card) => card != null)) return dealOpposites(board, runSeed);
-    if (rule === 'triples') {
+    if (rule === 'triples' || rule === 'sequences') {
         // A floor with too few plain pairs for a three takes Opposites as well.
-        const dealt = dealTriples(board, runSeed);
+        const dealt = rule === 'sequences' ? dealSequences(board, runSeed) : dealTriples(board, runSeed);
         return dealt === board ? dealOpposites(board, runSeed) : dealt;
     }
     return { ...board, matchRule: 'element_pairs' };
@@ -193,12 +225,19 @@ export const rekeyElementPair = (board: BoardState, aId: string, bId: string): B
     };
 };
 
-/** The three a turn is waiting on: two face-up cards of one Triples key, the third still to turn. */
+/**
+ * The three a turn is waiting on: two face-up cards of one Triples key, the third still to turn. On Sequences only
+ * a one then a two wait; two of a three turned out of order wait for nothing - the turn is a miss.
+ */
 export const pendingTripleKey = (board: Pick<BoardState, 'tripleKeys' | 'tiles' | 'flippedTileIds'> | null | undefined): string | null => {
     if (!board || !Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 2) return null;
     const [a, b] = board.flippedTileIds.map((id) => board.tiles.find((tile) => tile.id === id));
-    return a && b && a.pairKey === b.pairKey && isTripleKey(board, a.pairKey) ? a.pairKey : null;
+    if (!a || !b || a.pairKey !== b.pairKey || !isTripleKey(board, a.pairKey)) return null;
+    return a.seq == null || (a.seq === 1 && b.seq === 2) ? a.pairKey : null;
 };
+
+/** A three's cards in the order they claim: by their place on Sequences, as given on Triples. */
+export const inSequenceOrder = <T extends Pick<Tile, 'seq'>>(cards: readonly T[]): T[] => [...cards].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
 
 /**
  * For a simulated player (the soak, the survival and balance sims): turns the third card of a three the turn

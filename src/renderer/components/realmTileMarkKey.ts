@@ -19,6 +19,8 @@ export interface RealmTileMark {
     footprint?: boolean;
     /** Triples (`match-rule-rules.ts`): one of a three. */
     three?: boolean;
+    /** Sequences: its place in the three, as pips. */
+    seq?: 1 | 2 | 3;
 }
 
 export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark | null => {
@@ -35,7 +37,8 @@ export const cardStatusMark = (tile: Tile, openingLocked = false): RealmTileMark
         ...(tile.turncoat != null ? { turncoat: tile.turncoat } : {}),
         ...(tile.hourglass != null ? { hourglass: runNonNegativeInteger(tile.hourglass) } : {}),
         ...(tile.footprint ? { footprint: true } : {}),
-        ...(tile.three ? { three: true } : {})
+        ...(tile.three ? { three: true } : {}),
+        ...(tile.seq ? { seq: tile.seq } : {})
     };
     return mark.frost || mark.snowed || mark.fuse || mark.vined || mark.rime || mark.seeded || openingLocked || mark.turncoat || mark.hourglass || mark.footprint || mark.three ? mark : null;
 };
@@ -45,4 +48,4 @@ export const cardStatusBlocksTurning = (mark: RealmTileMark | null): boolean =>
 
 /** The cache key for a mark's painted texture: two cards with the same marks share one canvas. */
 export const realmTileMarkKey = (mark: RealmTileMark): string =>
-    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.turncoat ? ':turn-' + mark.turncoat : ''}${mark.hourglass ? ':sand' + mark.hourglass : ''}${mark.footprint ? ':step' : ''}${mark.three ? ':three' : ''}${mark.openingLocked ? ':locked' : ''}`;
+    `f${mark.frost}:s${mark.snowed ? 1 : 0}:b${mark.fuse}:v${mark.vined ? 1 : 0}${mark.bloom ? 'B' : ''}${mark.rime ? ':r' : ''}${mark.seeded ? ':seed' + mark.seeded : ''}${mark.turncoat ? ':turn-' + mark.turncoat : ''}${mark.hourglass ? ':sand' + mark.hourglass : ''}${mark.footprint ? ':step' : ''}${mark.three ? ':three' : ''}${mark.seq ? ':seq' + mark.seq : ''}${mark.openingLocked ? ':locked' : ''}`;

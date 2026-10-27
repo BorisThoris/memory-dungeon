@@ -30,7 +30,8 @@ interface Snapshot {
     status: string | null;
     level: number;
     flipped: { id: string; k: string }[];
-    hidden: { id: string; k: string }[];
+    /** `q`: a Sequences card's place in its three (`match-rule-rules.ts`). */
+    hidden: { id: string; k: string; q?: number }[];
     /** The one tile a Stasis lock says cannot open a turn, if any. */
     blocked: string | null;
 }
@@ -50,7 +51,7 @@ const snapshot = (page: Page): Promise<Snapshot> =>
             hidden: (run?.board?.tiles ?? [])
                 // A frozen or vined card cannot be turned (`realm-weather-rules.ts`); a player passes it over.
                 .filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__') && !((tile.frost ?? 0) > 0) && tile.vined !== true)
-                .map((tile) => ({ id: tile.id, k: tile.pairKey }))
+                .map((tile) => ({ id: tile.id, k: tile.pairKey, q: tile.seq }))
         };
     });
 
@@ -220,12 +221,14 @@ const playRun = async (
         }
         // A Stasis lock keeps one tile from opening a turn; a player opens elsewhere.
         const openers = s.hidden.filter((tile) => tile.id !== s.blocked);
-        const first = openers[Math.floor(rand() * openers.length)];
+        const picked = openers[Math.floor(rand() * openers.length)];
+        // Sequences: a player who knows a three opens it with its one, then turns its two.
+        const first = picked?.q != null ? openers.find((tile) => tile.k === picked.k && tile.q === 1) ?? picked : picked;
         if (!first) {
             await page.waitForTimeout(300);
             continue;
         }
-        const partner = s.hidden.find((tile) => tile.k === first.k && tile.id !== first.id);
+        const partner = s.hidden.find((tile) => tile.k === first.k && tile.id !== first.id && (first.q == null || tile.q === first.q + 1));
         const others = s.hidden.filter((tile) => tile.k !== first.k);
         const second = rand() < missRate && others.length > 0 ? others[Math.floor(rand() * others.length)] : partner;
         if (!second) continue;

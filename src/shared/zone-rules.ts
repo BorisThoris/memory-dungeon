@@ -1,3 +1,4 @@
+import { inSequenceOrder } from './match-rule-rules';
 import { dropMask, unmaskOnFlip } from './mask-rules';
 import type { RunState, Tile, ZoneResult, ZoneState } from './contracts';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
@@ -183,7 +184,9 @@ export const resolveZone = (run: RunState): RunState => {
     for (const [pairKey, ids] of byPair) {
         // A Triples floor's three (`match-rule-rules.ts`) is a match only with all three seen.
         const size = (run.board.tripleKeys ?? []).includes(pairKey) ? 3 : 2;
-        if (ids.length >= size) matches.push(ids.slice(0, size));
+        // On Sequences the replay turns them one, two, three.
+        const ordered = inSequenceOrder(ids.map((id) => run.board!.tiles.find((tile) => tile.id === id)!)).map((tile) => tile.id);
+        if (ids.length >= size) matches.push(size === 3 ? ordered.slice(0, size) : ids.slice(0, size));
         leftovers.push(...(ids.length >= size ? ids.slice(size) : ids));
     }
     // Everything goes down, and the Zone closes, before the turns replay what was seen.
