@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3391,
+    "trackedFileCount": 3390,
     "codeFileCount": 1316,
     "exportedSymbolCount": 4298,
     "contentItemCount": 16,
@@ -4337,12 +4337,6 @@
       "category": "test",
       "bytes": 1041,
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
-    },
-    {
-      "path": "e2e/zz-flurry-shot.spec.ts",
-      "category": "test",
-      "bytes": 1873,
-      "sha256": "424dc97ec02c8009768e148aa02fe315dd01e66f7f9b27e8b48ab3c66c21a03b"
     },
     {
       "path": "eslint.config.mjs",
