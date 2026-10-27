@@ -1367,8 +1367,8 @@ export const deepGameCues = (before: RunState | null | undefined, after: RunStat
 
 /** The Hold's release: a swell, then a run of bells up the cascade's own scale, one per doubling held. */
 const playHoldReleaseSfx = (rawGain: number, held: number): void => {
-    // Measured offline (2026-10-24): at unity it sat 8 dB under a plain match, the payoff quieter than
-    // the matches it was saved from. This lifts it level with a match.
+    // Measured offline (2026-10-24): at unity it sat 8 dB under the synth match, the payoff quieter than
+    // the matches it was saved from. This lifts it level with a flip (+0.9 dB on the samples, 2026-10-27).
     const gain = rawGain * HOLD_RELEASE_LIFT;
     const notes = Math.min(CHUNK_BREAK_MAX_NOTES, 2 + Math.floor(Math.log2(Math.max(1, held))));
     playNoise({ durationSec: 0.5, gain: gain * 0.35, filter: 'lowpass', from: 200, peak: 2600, to: 900, attackSec: 0.35 });
@@ -1385,6 +1385,10 @@ const playHoldReleaseSfx = (rawGain: number, held: number): void => {
  * The deep cues' levels, set by measurement (2026-10-24): each rendered offline and its loudest 50 ms
  * compared with a match, a flip and a shuffle (-22 to -24 dB at full volume). The boss cues sit in that
  * band; the cues that come every few turns (a Sleeper, a mask, a Wanderer) sit 8 to 14 dB under it.
+ * That match was the synth fallback. Re-measured on the recorded samples (2026-10-27) the band holds:
+ * flip -24.1, shuffle -23.5, a chain-8 match -21.6, and the boss cues -3.9 to +0.1 dB from the flip, the
+ * frequent ones 5 to 13 under it. Only a plain match (`match-tier-low.ogg`, -32.7) sits below them all,
+ * the take's own level, so the gains stay (`e2e/deep-cue-levels.spec.ts`).
  */
 const HOLD_RELEASE_LIFT = 2.4;
 
