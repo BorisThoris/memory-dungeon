@@ -1,4 +1,5 @@
 import { turnTripleThird } from './match-rule-rules';
+import { automaticCampReward } from './automatic-camp-rules';
 import type { BoardState, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
@@ -817,7 +818,7 @@ export const simulateRunOccupancy = ({
                 }
                 // The game's own transition, so the run census cannot drift from the run a player
                 // is handed: the charges it does not refill are the charges the player does not get.
-                const next = advanceToNextLevel({ ...run, status: 'levelComplete' });
+                const next = advanceToNextLevel(automaticCampReward({ ...run, status: 'levelComplete' }).run);
                 if (!next.board || next.board.level === floor) {
                     ended = 'the floor did not advance';
                     break;

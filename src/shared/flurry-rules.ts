@@ -91,7 +91,7 @@ export const flurryPress = (run: RunState, tileId: string): RunState => {
     // A card that is other than it looked (a mask dropped, a Turncoat turned) makes the two no pair after all:
     // that is a wrong tap, and a Flurry's wrong tap never costs a miss.
     if (resolved.stats.mismatches !== run.stats.mismatches || resolved.status === 'gameOver') return endStudy(run);
-    const grabbed = { ...resolved, flurryGrabsThisFloor: runNonNegativeInteger(run.flurryGrabsThisFloor) + 1 };
+    const grabbed = { ...resolved, flurryGrabsThisFloor: runNonNegativeInteger(run.flurryGrabsThisFloor) + 1, flurryGrabsThisRun: runNonNegativeInteger(run.flurryGrabsThisRun) + 1 };
     // The floor's turn has run: a grab that cleared the floor (it cannot, but a pop may) stands as it is.
     return grabbed.status === 'playing' ? { ...grabbed, status: 'memorize', timerState: run.timerState } : grabbed;
 };

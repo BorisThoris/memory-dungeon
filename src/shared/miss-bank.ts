@@ -1,4 +1,5 @@
 import { DEPTH_OPENING_MISSES, depthHas } from './depth-rules';
+import { snowballBankCapDelta } from './snowball-relic-rules';
 import { misersVaultCatches, MISERS_VAULT_GOLD } from './relic-evolution-rules';
 import { pairsForFloor } from './pair-curve';
 import type { MissBankGrant, RunState } from './contracts';
@@ -84,7 +85,7 @@ export const missBankFloorGrant = (run: Partial<Pick<RunState, 'board' | 'runRul
 /** The cap this run is held to: four, from rules 73 one more for every six pairs on the floor, plus the Deep Pockets rank (`run-relic-rules.ts`). */
 export const missBankCap = (run: Pick<RunState, 'relics'> & Partial<Pick<RunState, 'storePurchases' | 'runRulesVersion' | 'board' | 'depth'>>): number =>
     // The Miser's Purse (`run-relic-rules.ts`) takes one slot back for the gold it doubles; Depth 5 (`depth-rules.ts`) one more.
-    MISS_BANK_CAP + Math.floor(boardPairs(run) / MISS_BANK_CAP_PAIRS) + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0) - (depthHas(run, 'bank_cap_down') ? 1 : 0);
+    MISS_BANK_CAP + Math.floor(boardPairs(run) / MISS_BANK_CAP_PAIRS) + relicRank(run, 'deep_pockets') - ((run.relics ?? []).includes('misers_purse') ? 1 : 0) - (depthHas(run, 'bank_cap_down') ? 1 : 0) + snowballBankCapDelta(run);
 
 export type { MissBankGrant };
 

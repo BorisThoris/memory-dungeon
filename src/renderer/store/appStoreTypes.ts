@@ -1,4 +1,5 @@
 import type { CarveDirection } from '../../shared/contracts';
+import type { BlueprintId } from '../../shared/boss-reward-rules';
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { ClassicRunSetup } from '../../shared/classic-run-setup';
 import type {
@@ -77,6 +78,8 @@ export interface AppState {
     openInventoryFromPlaying: () => void;
     /** The store stop's purchase: buys one item into the live run, or does nothing the sheet would refuse. */
     buyStoreItem: (id: StoreItemId) => void;
+    /** At the stop (rules 100): evolve two rank-3 relics by a boss's blueprint (`relic-evolution-rules.ts`). */
+    evolveAtStop: (id: BlueprintId) => void;
     /** Walks through a travel door at a floor clear (`realm-rules.ts`) and builds the next floor there. */
     travelThroughRealmDoor: (index: number) => void;
     /** The Warden's clear (DGE-006): the same run goes on into Endless instead of ending as the win. */

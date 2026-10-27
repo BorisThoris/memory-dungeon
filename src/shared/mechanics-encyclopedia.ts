@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 130 as const;
+export const ENCYCLOPEDIA_VERSION = 131 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -438,15 +438,14 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
     },
     {
         id: 'store',
-        title: 'Gold and camp upgrades',
+        title: 'Gold, the stop and relics',
         description:
-            'Choose automatic spending in Classic setup: **Survive** prioritizes misses, capacity and bombs; **Study** prioritizes study time and peeks; **Score** prioritizes combo gold. The default keeps the balanced policy. Each preference falls back to the balanced policy when its priority is unavailable. Shared keys and rematches retain the preference. ' +
             'Clear floors and build combos to earn **gold**. A clear pays two gold, plus one per chain rung and up to three for turns under par. Arena difficulty can increase the payout. ' +
-            'After every third floor, **camp automatically spends gold** on one useful reward. It restores a miss first when only one remains; otherwise it chooses the lowest-rank affordable upgrade, then a missing supply. There is no shop screen. **Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. ' +
-            '**Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). **Tallow Candle** lights the cards beside the first one, two or three matches of every floor (8, 14, 20 gold). Each upgrade has three ranks and lasts this run. ' +
-            'When an upgrade is not affordable, camp can restore a miss for 4 gold, a missing peek for 3 or a missing bomb for 4. Each repeat costs 2 more for misses and bombs, or 1 more for peeks. New runs start with one bomb; the last pair must be matched. ' +
-            'A run carries **four relics** at most: camp never buys a fifth, and a relic found beyond the four asks which one to give up, its ranks with it. ' +
-            'Unspent gold carries between floors. Gold and upgrades reset when the run ends. The next arena is chosen for you, except on the clear before an act boss, which offers three doors.'
+            'Every third floor the **stop** opens: misses, a peek and a bomb, and **three relics** drawn for this run out of twelve. Buy what you like with your gold, then **Descend**. The shelf is new at every stop, so no two runs build alike. ' +
+            '**Long Look** adds one second of study per rank (8, 14, 20 gold). **Deep Pockets** adds one miss slot and restores one miss per rank (8, 14, 20 gold), up to seven slots. **Gilded Chain** pays 2, 3 or 4 gold every five matches in a row (6, 11, 16 gold). **Tallow Candle** lights the cards beside the first one, two or three matches of every floor (8, 14, 20 gold). Each has three ranks. ' +
+            'Eight relics **grow** as the run goes, and multiply the score of every match: the four **Hearts** add 3% for every match of their element this run; **Minted Halo** 2% for every gold you hold, up to ×3; **Frenzy Dial** 5% for every pair grabbed in a Flurry; **Glass Crown** 25% for every floor in a row cleared without a miss, and the bank holds one fewer while you wear it. **Interest Coin** pays a gold for every five you hold at each stop, up to five. Relics multiply each other: a Heart at ×2 beside a Halo at ×1.5 makes every match ×3. ' +
+            'A run carries **four relics** at most: a fifth needs a free slot, and a relic found beyond the four asks which one to give up, its ranks with it. A miss costs 4 gold at the stop, a peek 3 and a bomb 4, each repeat a little more. New runs start with one bomb; the last pair must be matched. ' +
+            'Unspent gold carries between floors. Gold and relics reset when the run ends. The next arena is chosen for you, except on the clear before an act boss, which offers three doors.'
     },
     {
         id: 'miss_budget',
@@ -593,7 +592,7 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         id: 'sys_relic_evolutions',
         title: 'Relic evolutions',
         description:
-            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next camp **evolve** them, once, for ${EVOLUTION_PRICE} gold - camp buys it before anything else, and one it cannot pay for is gone for the run. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** (Long Look and Deep Pockets): **Reprise** replays five turns, not three.`
+            `A **blueprint** from a boss met behind the raging door, and two relics at **rank 3** beside it, let the next stop **evolve** them, once, for ${EVOLUTION_PRICE} gold - an evolution waits at every stop until you buy it. The evolution takes its first relic's slot and keeps both relics working. **Lantern of Recall** (Long Look and Tallow Candle): what a match lights stays lit for the floor. **Miser's Vault** (Deep Pockets and Gilded Chain): once a floor, a miss on an empty bank costs ${MISERS_VAULT_GOLD} gold instead of the run. **Cartographer's Thread** (Long Look and Gilded Chain): the Wanderers' footprints last three turns. **Keystone Heart** (Deep Pockets and Tallow Candle): a Hold released at ten pairs or more refills a miss. **Unmasking Glass** (Tallow Candle and Gilded Chain): every **mask** drops as a floor is dealt. **Echo Chamber** (Long Look and Deep Pockets): **Reprise** replays five turns, not three.`
     },
     {
         id: 'sys_boss_rewards',
@@ -899,7 +898,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'realm_travel',
         title: 'Travel',
         description:
-            'The next arena is selected **randomly** when a floor clears. Floors continue automatically, including every third clear when camp supplies are applied. A shared seed repeats the same journey. A run opens somewhere calm. ' +
+            'The next arena is selected **randomly** when a floor clears. Floors continue on their own, except every third clear, which opens the stop. A shared seed repeats the same journey. A run opens somewhere calm. ' +
             'A **Calm** arena pays normal clear gold, **Wild** pays a quarter more and **Raging** pays half again. Only raging arenas have a regular weather clock; the others react to your matches and misses. ' +
             'From the fourth floor a wild arena can be a **confluence**: two realms at once. Both affect the floor and the clear pays **double**. Matching an omen settles the floor on its realm alone. ' +
             'What you leave behind follows you. Every fire that **burnt out** leaves **smoke**: the next floor\u2019s study is 12% shorter for each, up to three. A floor that froze four cards or more sends a **chill**: two cards on the next floor start frozen. Clear a realm floor **clean** by that realm\u2019s measure - nothing frozen in the frost, no fire burnt out in the ember, within par in the tide or the storm, two vines cut in the grove - and you go deeper twice as fast. Every clear in a realm takes you a level **deeper** into it, and every other realm fades by one; there is no limit. Each level is a quarter more gold on that realm\u2019s clears up to three and a twentieth after, one more pair of the floor made of the realm\u2019s element (up to half the floor), and more resonance from it. But a deep realm bites: it strikes back at a miss on a **wild** floor from depth three, and even a **calm** one from depth six, and its raging weather reaches further. The arena HUD shows your current realm.'

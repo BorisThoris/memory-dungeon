@@ -1,4 +1,5 @@
 import { runBlueprints } from './boss-reward-rules';
+import { isSnowballRelicId, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import type { RunState } from './contracts';
 import { isPassAndPlayRun } from './pass-and-play-rules';
 import { campUpgradeIdsFor, relicRank } from './run-relic-rules';
@@ -48,6 +49,8 @@ export function automaticCampReward(start: RunState): CampReward {
     let reward: StoreOfferRow | undefined = preferred.map(find).find(Boolean);
     reward ??= (missesLeft(run) ?? Infinity) <= 1 ? find('miss') : undefined;
     reward ??= upgrades.map(find).find(Boolean);
+    // From rules 100 the shelf is drawn from the seed (`snowball-relic-rules.ts`); the sims' camp takes a relic that grows when it has no rank to buy.
+    reward ??= (run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM ? available.find((row) => isSnowballRelicId(row.id)) : undefined;
     reward ??= find('miss');
     reward ??= (run.bombCharges ?? 0) < 1 ? find('bomb') : undefined;
     reward ??= run.peekCharges < 1 ? find('peek') : undefined;

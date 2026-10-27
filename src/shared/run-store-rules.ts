@@ -8,6 +8,7 @@ import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 import { essenceOf, focusOf, FOCUS_EFFECTS, FOCUS_ESSENCE_COST, PRIME_ESSENCE_COST, isElementalStoreId, storeElement, usesElementalLoot, type ElementalStoreId } from './elemental-loot-rules';
 import { TILE_SUITS } from './tile-suit-rules';
 import { ELEMENT_NAMES } from './element-alchemy-rules';
+import { SNOWBALL_RELICS, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 
 /** Every third clear is a camp reward point. Rules 61 fund one reward automatically.
  * Legacy stores remain deterministic for older replay rules. Shared tables skip the stop. */
@@ -112,6 +113,16 @@ export const campItemsFor = (rulesVersion: number | undefined): readonly StoreIt
     (rulesVersion ?? 0) >= CANDLE_RANKS_FROM ? [...CAMP_ITEMS.slice(0, 3), CANDLE_CAMP_ITEM, ...CAMP_ITEMS.slice(3)] : CAMP_ITEMS;
 const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
 
+/** The relics that grow (`snowball-relic-rules.ts`), on the stop's shelf from rules 100: bought once, each. */
+const SNOWBALL_STORE_ITEMS: readonly StoreItemDefinition[] = SNOWBALL_RELICS.map((relic) => ({ id: relic.id, title: relic.title, body: relic.body, basePrice: relic.price, priceStep: 0, kind: 'relic' as const }));
+/** How many relics a stop puts on its shelf from rules 100, drawn from the seed. */
+export const STOP_RELIC_OFFER = 3;
+const onStopChoice = (rulesVersion: number | undefined): boolean => (rulesVersion ?? 0) >= SNOWBALL_RELICS_FROM;
+
+/** Everything a camp-rules stop can sell: from rules 100 the relics that grow too. */
+const campShelfFor = (rulesVersion: number | undefined): readonly StoreItemDefinition[] =>
+    onStopChoice(rulesVersion) ? [...campItemsFor(rulesVersion), ...SNOWBALL_STORE_ITEMS] : campItemsFor(rulesVersion);
+
 export type StoreRun = Pick<
     RunState,
     'gold' | 'storePurchases' | 'missBank' | 'board' | 'peekCharges' | 'shuffleCharges' | 'bombCharges' | 'relics' | 'storeStock'
@@ -131,6 +142,13 @@ export type StoreRun = Pick<
  * Older rules retain their seeded stock; current camp rewards use the fixed upgrade stock.
  */
 export const rollStoreStock = (runSeed: number, floor: number, owned: readonly RelicId[], rulesVersion = 54): StoreItemId[] => {
+    if (onStopChoice(rulesVersion)) {
+        // Rules 100: misses, peeks and a bomb always; and three relics of the twelve, from the seed - the four that rank up,
+        // and the eight that grow and are not yet held. Each stop draws again, so no two runs build alike.
+        const rng = createMulberry32(hashStringToSeed(`store-choice:${Math.floor(runSeed)}:${Math.floor(floor)}`));
+        const relics = [...campItemsFor(rulesVersion).filter((item) => item.kind === 'relic').map((item) => item.id), ...SNOWBALL_RELICS.map((relic) => relic.id).filter((id) => !owned.includes(id))];
+        return ['miss', 'peek', 'bomb', ...shuffleWithRng(rng, relics).slice(0, STOP_RELIC_OFFER)];
+    }
     if (usesCampUpgrades({ runRulesVersion: rulesVersion })) return campItemsFor(rulesVersion).map(item => item.id);
     if (usesElementalLoot({ runRulesVersion: rulesVersion })) return ELEMENTAL_STORE_ITEMS.map(item => item.id);
     const rng = createMulberry32(hashStringToSeed(`store-stock:${Math.floor(runSeed)}:${Math.floor(floor)}`));
@@ -153,7 +171,7 @@ export const storePurchaseCount = (run: Pick<RunState, 'storePurchases'>, id: St
     runNonNegativeInteger(run.storePurchases?.[id] ?? 0);
 
 export const storePrice = (run: Pick<RunState, 'storePurchases'> & Partial<Pick<RunState, 'runRulesVersion' | 'depth'>>, id: StoreItemId): number => {
-    const item = (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
+    const item = (usesCampUpgrades(run) ? campShelfFor(run.runRulesVersion) : ALL_STORE_ITEMS).find((candidate) => candidate.id === id)!;
     const price = item.basePrice + item.priceStep * storePurchaseCount(run, id);
     // Depth 6 (`depth-rules.ts`): a quarter more, rounded up.
     return depthHas(run, 'dearer_store') ? Math.ceil(price * DEPTH_STORE_PRICE_SHARE) : price;
@@ -175,7 +193,7 @@ export interface StoreOfferRow {
 
 /** The sheet's rows, priced for this run and marked with why each cannot be bought, if it cannot. */
 export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
-    (usesCampUpgrades(run) ? campItemsFor(run.runRulesVersion) : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS)
+    (usesCampUpgrades(run) ? campShelfFor(run.runRulesVersion) : usesElementalLoot(run) ? ELEMENTAL_STORE_ITEMS : STORE_ITEMS)
         .filter((item) => isStocked(run, item.id))
         // Depth 2 (`depth-rules.ts`): the store sells no misses.
         .filter((item) => !(item.id === 'miss' && depthHas(run, 'no_misses_sold')))
@@ -242,11 +260,16 @@ export const buyStoreItem = <R extends StoreRun>(run: R, id: StoreItemId): R | n
             return { ...paid, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + 1 };
         case 'bomb':
             return { ...paid, bombCharges: runNonNegativeInteger(run.bombCharges) + 1 };
-        default:
-            return {
+        default: {
+            const held: R = {
                 ...paid, relics: [...new Set([...(run.relics ?? []), id])],
                 ...(usesCampUpgrades(run) && id === 'deep_pockets'
                     ? { missBank: grantMisses(run.missBank ?? [], run.board?.level ?? 1, 1, 4 + (row.rank ?? 0) + 1) } : {})
             };
+            // A relic that takes a miss from the bank's cap (the Glass Crown, `snowball-relic-rules.ts`) takes one it holds, too.
+            return id === 'glass_crown' && held.missBank != null
+                ? { ...held, missBank: grantMisses(held.missBank, held.board?.level ?? 1, 0, missBankCap(held)) }
+                : held;
+        }
     }
 };

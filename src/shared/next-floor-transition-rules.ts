@@ -33,7 +33,8 @@ import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 import { runGateOmens } from './run-signature-rules';
 import { dealMatchRule, matchRuleFor, THREES_KEEP_RECIPES_FROM } from './match-rule-rules';
-import { featuredRecipePairKeys } from './secondary-objective-rules';
+import { SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { featuredRecipeElementPairKeys } from './secondary-objective-rules';
 import { descentLengthFor } from './descent-length-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
@@ -57,7 +58,8 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         nextCycleFloor = entry.cycleFloor;
     }
 
-    const transitionRun = automaticCampReward(run).run;
+    // From rules 100 the stop is the player's (`snowball-relic-rules.ts`): they buy at it, and nothing buys for them here.
+    const transitionRun = (run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM ? run : automaticCampReward(run).run;
 
     const builtBoard = buildBoard(nextLevelNum, {
         runSeed: run.runSeed,
@@ -104,8 +106,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     );
     const layered = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     // The floor's match rule (`match-rule-rules.ts`, rules 94): dealt last, on the pairs the others left plain.
-    // From rules 99 a three leaves the floor's featured recipe whole: its pairs are the goal the floor was dealt for.
-    const recipeKept = run.runRulesVersion >= THREES_KEEP_RECIPES_FROM ? featuredRecipePairKeys(layered) : new Set<string>();
+    // From rules 99 a three leaves the floor's featured recipe whole: its pairs are the goal the floor was dealt for. The recipe
+    // is read off the board by element (`featuredRecipePairKeys`), so a three keeps off every pair of the recipe's elements.
+    const recipeKept = run.runRulesVersion >= THREES_KEEP_RECIPES_FROM ? featuredRecipeElementPairKeys(layered) : new Set<string>();
     const nextBoard = dealMatchRule(layered, matchRuleFor(run.runSeed, run.runRulesVersion, layered.level, layered.floorTag, descentLengthFor(run.runRulesVersion)), run.runSeed, recipeKept);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);

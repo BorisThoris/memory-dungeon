@@ -6,6 +6,9 @@ import { DREAD_BOUGHT_COPY } from '../copy/dreadBoughtCopy';
 import { GATE_OMEN_COPY, MATCH_RULE_COPY, FLURRY_COPY, VERB_ARRIVAL_COPY } from '../copy/verbArrivalCopy';
 import { pendingTripleKey } from '../../shared/match-rule-rules';
 import { canFlurryGrab } from '../../shared/flurry-rules';
+import { SNOWBALL_RELICS_FROM } from '../../shared/snowball-relic-rules';
+import { isStoreStopFloor } from '../../shared/run-store-rules';
+import StoreVault from './StoreVault';
 import { gateOmensToldOn } from '../../shared/run-signature-rules';
 import { verbArrivingOn } from '../../shared/verb-staircase-rules';
 import { spiralHolds } from '../../shared/spiral-rules';
@@ -522,6 +525,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             greetFloorResident: state.greetFloorResident,
             continueToNextLevel: state.continueToNextLevel,
             travelThroughRealmDoor: state.travelThroughRealmDoor,
+            buyStoreItem: state.buyStoreItem,
+            evolveAtStop: state.evolveAtStop,
             descendIntoEndlessAction: state.descendIntoEndless,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
@@ -837,6 +842,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         greetFloorResident,
         continueToNextLevel,
         travelThroughRealmDoor,
+        buyStoreItem,
+        evolveAtStop,
         descendIntoEndlessAction,
         dismissPowersFtue,
         goToMenu,
@@ -1323,6 +1330,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
     const [travelKey, setTravelKey] = useState<string | null>(null);
+    // The stop (rules 100, `snowball-relic-rules.ts`): the floor-clear key it opened on.
+    const [storeKey, setStoreKey] = useState<string | null>(null);
     const [purseReplaceOpen, setPurseReplaceOpen] = useState(false);
     // Carve's direction picker (`carve-rules.ts`): open from the dock, the arrow keys or a swipe pick a way.
     const [carvePickerOpen, setCarvePickerOpen] = useState(false);
@@ -1383,8 +1392,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // The doors before an act boss (DGE-026): after the beat the player picks the way in, and the boss pays by it.
     const travelDue = run.status === 'levelComplete' && (run.realmDoors?.length ?? 0) > 0 && !run.nextRealm && !isPassAndPlayRun(run.passAndPlay);
     const travelOpen = travelDue && travelKey === floorClearKey;
+    // Every third floor from rules 100 the beat gives way to the stop; Descend there goes on, through the doors if they are due.
+    const storeDue = run.status === 'levelComplete' && (run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM && isStoreStopFloor(run.lastLevelResult?.level) && !isPassAndPlayRun(run.passAndPlay) && !wardenChoiceOpen;
+    const storeOpen = storeDue && storeKey === floorClearKey && travelKey !== floorClearKey;
+    const leaveStore = (): void => {
+        if (travelDue) setTravelKey(floorClearKey);
+        else continueToNextLevel();
+    };
     useEffect(() => {
-        if (!floorClearBeatShown || abandonRunConfirmOpen || wardenChoiceOpen || travelKey === floorClearKey) {
+        if (!floorClearBeatShown || abandonRunConfirmOpen || wardenChoiceOpen || travelKey === floorClearKey || storeKey === floorClearKey) {
             return undefined;
         }
         // The beat is given its time in *rendered* frames, not on the wall clock. A phone building
@@ -1395,7 +1411,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         let elapsed = 0;
         let last: number | null = null;
         let frame = 0;
-        const afterBeat = travelDue ? () => setTravelKey(floorClearKey) : continueToNextLevel;
+        const afterBeat = storeDue ? () => setStoreKey(floorClearKey) : travelDue ? () => setTravelKey(floorClearKey) : continueToNextLevel;
         // Dev only: the fit contract holds the beat to measure it, rather than racing its 1.6s.
         const held = (): boolean =>
             import.meta.env.DEV && (window as Window & { __e2eHoldFloorClearBeat?: boolean }).__e2eHoldFloorClearBeat === true;
@@ -1439,7 +1455,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             window.cancelAnimationFrame(frame);
             window.clearTimeout(safety);
         };
-    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, wardenChoiceOpen, travelDue, travelKey]);
+    }, [floorClearBeatShown, floorClearKey, abandonRunConfirmOpen, continueToNextLevel, wardenChoiceOpen, travelDue, travelKey, storeDue, storeKey]);
 
     /*
      * The stamp's exit. The beat used to vanish in one frame as the next board arrived (recorded
@@ -2735,6 +2751,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ) : null}
 
                 {/* The doors before an act boss (DGE-026): the way in is the boss's reward. */}
+                {!suppressStatusOverlays && storeOpen ? (
+                    <StoreVault
+                        floor={run.lastLevelResult?.level ?? 0}
+                        onDescend={leaveStore}
+                        onEvolve={(id) => {
+                            playMenuOpen();
+                            evolveAtStop(id);
+                        }}
+                        onBuy={(id) => {
+                            const before = useAppStore.getState().run;
+                            playMenuOpen();
+                            buyStoreItem(id);
+                            return useAppStore.getState().run !== before;
+                        }}
+                        run={run}
+                    />
+                ) : null}
+
                 {!suppressStatusOverlays && travelOpen && run.realmDoors ? (
                     <RealmTravel
                         attunement={run.realmAttunement ?? {}}

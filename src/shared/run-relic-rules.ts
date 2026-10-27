@@ -1,4 +1,5 @@
 import type { RelicId, RunState } from './contracts';
+import { SNOWBALL_RELICS } from './snowball-relic-rules';
 
 /**
  * Relics, back - bought, not drafted.
@@ -105,13 +106,14 @@ export const CURIO_RELIC_IDS: readonly RelicId[] = ['misers_purse'];
 export const misersPurseGold = (run: Pick<RunState, 'relics'>, gold: number): number =>
     (run.relics ?? []).includes('misers_purse') ? gold * MISERS_PURSE_GOLD_MULTIPLIER : gold;
 
-export const RELIC_IDS: readonly RelicId[] = RELICS.map((relic) => relic.id);
+// The relics that grow (rules 100) are relics too: held, slotted and given up the same way. The legacy shelves never see them.
+export const RELIC_IDS: readonly RelicId[] = [...RELICS.map((relic) => relic.id), ...SNOWBALL_RELICS.map((relic) => relic.id)];
 
 export const isRelicId = (value: unknown): value is RelicId => RELIC_IDS.includes(value as RelicId);
 
 export const hasRelic = (run: Pick<RunState, 'relics'>, id: RelicId): boolean => (run.relics ?? []).includes(id);
 
-export const relicDefinition = (id: RelicId): RelicDefinition => RELICS.find((relic) => relic.id === id)!;
+export const relicDefinition = (id: RelicId): RelicDefinition => RELICS.find((relic) => relic.id === id) ?? SNOWBALL_RELICS.find((relic) => relic.id === id)!;
 
 /** Rules 58: camp upgrades have three ranks, bought with gold and kept for this run. */
 export const CAMP_RULES_VERSION = 58;

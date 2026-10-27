@@ -16,6 +16,7 @@
  * they would act, and melt the first card turned with the Crucible when it can. It answers what the
  * items do to a run's length; without it the table is the one the miss bank was tuned against.
  */
+import { automaticCampReward } from '../src/shared/automatic-camp-rules';
 import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
@@ -130,7 +131,8 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         if (run.status === 'gameOver') break;
         if (run.status !== 'levelComplete' && run.status !== 'playing') break;
         const leftBefore = missesLeft(run) ?? 0;
-        const next = advanceToNextLevel({ ...run, status: 'levelComplete' });
+        // From rules 100 nothing buys at the stop but the player: this one buys the way the camp did.
+        const next = advanceToNextLevel(automaticCampReward({ ...run, status: 'levelComplete' }).run);
         if (!next.board || next.board.level === floor) break;
         const leftAfter = missesLeft(next) ?? 0;
         // What the clear paid in, less what the shelf and the cap took away.

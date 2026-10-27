@@ -1,4 +1,5 @@
 import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
+import { relicScoreFactors, SNOWBALL_RELIC_IDS } from '../../shared/snowball-relic-rules';
 import { runBlueprints } from '../../shared/boss-reward-rules';
 import { blueprintLine, EVOLUTION_LINES } from '../copy/relicEvolutionCopy';
 import { EvolutionGlyph } from './EvolutionGlyph';
@@ -162,7 +163,15 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 {CURIO_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
                     <strong>{relicDefinition(id).title}</strong>
                     <span>{relicDefinition(id).body}</span>
-                </li>)}</ul>
+                </li>)}
+                {/* The relics that grow (`snowball-relic-rules.ts`): what each multiplies every match by, now. */}
+                {SNOWBALL_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => {
+                    const factor = relicScoreFactors(run).find((entry) => entry.id === id)?.factor ?? 1;
+                    return <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
+                        <strong>{relicDefinition(id).title}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
+                        <span>{relicDefinition(id).body}</span>
+                    </li>;
+                })}</ul>
             </section>
         </Panel>
     ) : null;

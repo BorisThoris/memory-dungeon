@@ -9,9 +9,11 @@ import { createPassAndPlayState } from './pass-and-play-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import type { RunState } from './contracts';
+import { SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 
 const clearedCamp = (): RunState => {
-    const run=createNewRun(0,{runSeed:17,gameMode:'endless'});
+    // The last rules the camp bought by itself: from rules 100 the stop is the player's (`snowball-relic-rules.ts`).
+    const run={...createNewRun(0,{runSeed:17,gameMode:'endless'}),runRulesVersion:SNOWBALL_RELICS_FROM-1};
     const board={...run.board!,level:3,matchedPairs:run.board!.pairCount,
         tiles:run.board!.tiles.map(tile=>({...tile,state:'matched' as const}))};
     return {...finalizeLevel({...run,board},board),gold:20,missBank:[{floor:3,misses:4}]};

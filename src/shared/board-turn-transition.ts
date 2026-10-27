@@ -1,4 +1,5 @@
 import { applySpiralTurn } from './spiral-rules';
+import { countElementMatch } from './snowball-relic-rules';
 import { applySleeperTurn } from './sleeper-rules';
 import { recordRepriseTurn } from './reprise-rules';
 import { applyCartographerTurn } from './cartographer-rules';
@@ -368,6 +369,8 @@ export const createResolveBoardTurnTransition = ({
             nBackAnchorPairKey: anchor ? anchor.anchorPairKey : null,
             anchorClaimsThisFloor: runNonNegativeInteger(run.anchorClaimsThisFloor) + (anchor?.anchorMatched ? 1 : 0),
             matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
+            // The Hearts' count (`snowball-relic-rules.ts`): every match of an element this run, held or not.
+            ...countElementMatch({ relics: run.relics, runRulesVersion: run.runRulesVersion, elementMatchesThisRun: run.elementMatchesThisRun }, firstTile.suit),
             pinnedTileIds: boardCleanup.pinnedTileIds,
             recallFocus: boardCleanup.recallFocus,
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,

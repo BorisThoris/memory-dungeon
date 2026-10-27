@@ -1,4 +1,5 @@
 import type { BoardState, RunState } from './contracts';
+import { relicScoreMultiplier } from './snowball-relic-rules';
 import { calculateRecallMatchBonus } from './recall-rules';
 import { getPresentationMutatorMatchPenalty } from './scoring-rules';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -46,7 +47,7 @@ export const resolveTurnMatchScoringSummary = ({
     const spotlightDelta = shiftingSpotlightMatchDelta(sourceBoard, encoreKey);
     const presentationPenalty = getPresentationMutatorMatchPenalty(run);
     const recallBonus = calculateRecallMatchBonus(run);
-    const matchScore = calculateResolvedMatchScore({
+    const base = calculateResolvedMatchScore({
         level: resolvedBoard.level,
         currentStreak,
         matchScoreMultiplier: run.matchScoreMultiplier,
@@ -57,6 +58,9 @@ export const resolveTurnMatchScoringSummary = ({
         spotlightDelta,
         presentationPenalty
     });
+    // The relics that grow (`snowball-relic-rules.ts`, rules 100): every one held multiplies the match.
+    const relicMultiplier = relicScoreMultiplier(run);
+    const matchScore = relicMultiplier > 1 ? Math.floor(base * relicMultiplier) : base;
     const totalScore = stats.totalScore + matchScore;
     const currentLevelScore = stats.currentLevelScore + matchScore;
     const bestScore = Math.max(stats.bestScore, totalScore);

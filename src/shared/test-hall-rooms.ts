@@ -28,7 +28,8 @@ import { FLURRY_FROM, flurryPress } from './flurry-rules';
 import { canAimMeteor, callMeteor } from './meteor-rules';
 import { applyMissBudget, missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
 import { canReprise, reprise } from './reprise-rules';
-import { buyStoreItem, isStoreStopFloor, runGold, type StoreItemId } from './run-store-rules';
+import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
+import { isSnowballRelicId, relicScoreMultiplier, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -128,6 +129,7 @@ export type TestHallRoomId =
     | 'match-rule-triples'
     | 'match-rule-sequences'
     | 'flurry-study'
+    | 'build-stop'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -295,6 +297,8 @@ export type TestHallStep =
     | { readonly do: 'gambit'; readonly a: string; readonly b: string; readonly third: string }
     | { readonly do: 'wild'; readonly tileId: string }
     | { readonly do: 'buy'; readonly item: StoreItemId }
+    /** The stop (rules 100): buy the first relic its shelf can sell, one that grows if it has one. */
+    | { readonly do: 'buy-shelf-relic' }
     /** The Zone: ignite it, turn a card inside it, or end it early. */
     | { readonly do: 'ignite' }
     | { readonly do: 'zoneFlip'; readonly tileId: string }
@@ -1970,6 +1974,31 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         script: [
             { step: { do: 'clear' }, says: 'floor 3 clears and prepares an automatic reward', expect: (r) => (r.status === 'levelComplete' && isStoreStopFloor(r.lastLevelResult?.level) ? null : `status ${r.status}`) },
             { step: { do: 'advance' }, says: 'floor 4 starts with Long Look funded automatically', expect: (r, b) => (r.board?.level === 4 && r.storePurchases?.long_look === 1 && runGold(b) - runGold(r) === 8 ? null : 'automatic camp reward differs from its description') }
+        ]
+    },
+    {
+        id: 'build-stop',
+        title: 'The stop: build your run',
+        mechanic: 'From rules 100 the third-floor stop is the player’s: misses, peeks and a bomb, and three relics drawn from the run’s seed out of twelve - the four that rank up and eight that grow with what the run does. Nothing buys at it but the player.',
+        graphMechanicIds: ['progression.store_stop', 'inventory.relics'],
+        tryThis: 'Clear floor 3. The stop opens: read the three relics, buy one, and descend. Floor 4 begins with only what you bought.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 40, runRulesVersion: SNOWBALL_RELICS_FROM } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'floor 3 clears and its shelf holds misses, peeks, a bomb and three relics',
+                expect: (r) => (r.status === 'levelComplete' && r.storeStock?.length === 6 && r.storeStock.slice(0, 3).join() === 'miss,peek,bomb' ? null : `status ${r.status}, shelf ${(r.storeStock ?? []).join('/')}`)
+            },
+            {
+                step: { do: 'buy-shelf-relic' },
+                says: 'the player buys a relic from the shelf, and pays its price',
+                expect: (r, b) => ((r.relics ?? []).length === (b.relics ?? []).length + 1 && runGold(r) < runGold(b) ? null : `relics ${(r.relics ?? []).join('/')}, gold ${runGold(b)} -> ${runGold(r)}`)
+            },
+            {
+                step: { do: 'advance' },
+                says: 'floor 4 begins, and nothing was bought for the player on the way',
+                expect: (r, b) => (r.board?.level === 4 && runGold(r) === runGold(b) && (r.relics ?? []).join() === (b.relics ?? []).join() && relicScoreMultiplier(r) >= 1 ? null : `floor ${r.board?.level}, gold ${runGold(b)} -> ${runGold(r)}`)
+            }
         ]
     },
     {
@@ -3728,6 +3757,11 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'buy':
             return buyStoreItem(run, step.item);
+        case 'buy-shelf-relic': {
+            const relics = storeOffer(run).filter((row) => row.kind === 'relic' && row.blocked === null);
+            const pick = relics.find((row) => isSnowballRelicId(row.id)) ?? relics[0];
+            return pick ? buyStoreItem(run, pick.id) : null;
+        }
         case 'clear': {
             // Real pairs only: a joker left standing is the Wild run's to carry, not a pair to clear.
             let next = run;

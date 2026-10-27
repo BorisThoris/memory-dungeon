@@ -1,4 +1,5 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
+import { isSnowballRelicId, relicScoreMultiplier } from './snowball-relic-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
 import { MASK_MIN_PAIRS, maskCountFor } from './mask-rules';
 import { gateOmenCount, runGateOmens } from './run-signature-rules';
@@ -138,6 +139,9 @@ export interface SoakRunReport {
     wardenDealsAgain: number;
     /** The Flurry (`flurry-rules.ts`): pairs grabbed in deep floors' studies. */
     flurryGrabs: number;
+    /** The relics that grow (`snowball-relic-rules.ts`): bought at the stop, and the largest multiplier a run's build reached. */
+    growingRelics: number;
+    peakRelicMultiplier: number;
     /** Carve (`carve-rules.ts`): carves set, and carves a pop spent. */
     carves: number;
     carvesSpent: number;
@@ -875,6 +879,8 @@ export const soakRun = ({
     let keeperFloors = 0;
     let keeperSwaps = 0;
     let flurryGrabs = 0;
+    let growingRelics = 0;
+    let peakRelicMultiplier = 1;
     let cartographerFloors = 0;
     let cartographerTurns = 0;
     let reprises = 0;
@@ -966,6 +972,7 @@ export const soakRun = ({
             if (next.board.tiles.some((tile) => tile.hourglass != null)) hourglassFloors += 1;
         }
         turncoatTurns += Math.max(0, (next.turncoatTurnsThisFloor ?? 0) - (run.turncoatTurnsThisFloor ?? 0));
+        peakRelicMultiplier = Math.max(peakRelicMultiplier, relicScoreMultiplier(next));
         if (next.board?.level === run.board?.level) flurryGrabs += Math.max(0, (next.flurryGrabsThisFloor ?? 0) - (run.flurryGrabsThisFloor ?? 0));
         if (firstEvolutionFloor === null && (next.evolutions ?? []).length > 0) firstEvolutionFloor = next.board?.level ?? null;
         if (next.board?.level === run.board?.level) layerCardsRisen += Math.max(0, (next.layerCardsRisenThisFloor ?? 0) - (run.layerCardsRisenThisFloor ?? 0));
@@ -1035,6 +1042,7 @@ export const soakRun = ({
                     const bought = buyStoreItem(run, row.id);
                     if (!bought) break;
                     purchases += 1;
+                    if (isSnowballRelicId(row.id)) growingRelics += 1;
                     act(`buy:${row.id}`, bought);
                 }
             }
@@ -1216,6 +1224,8 @@ export const soakRun = ({
         wardensFelled,
         wardenDealsAgain,
         flurryGrabs,
+        growingRelics,
+        peakRelicMultiplier,
         carves,
         carvesSpent,
         masksDealt,

@@ -29,6 +29,14 @@ export const weatherGuardedRecipeTileIds = (board: BoardState, rulesVersion: num
     return keys.size === 0 ? [] : board.tiles.filter((tile) => keys.has(tile.pairKey)).map((tile) => tile.id);
 };
 
+/** Every pair of the featured recipe's two elements: what a deal that reshapes pairs must leave alone (`match-rule-rules.ts`). */
+export const featuredRecipeElementPairKeys = (board: BoardState): Set<string> => {
+    const id = board.featuredObjectiveId;
+    if (id !== 'amplified_reaction' && id !== 'calm_reaction') return new Set();
+    const suits = id === 'calm_reaction' ? ['tide', 'bone'] : ['ember', 'tide'];
+    return new Set(board.tiles.filter((tile) => tile.suit != null && suits.includes(tile.suit)).map((tile) => tile.pairKey));
+};
+
 export const featuredRecipePairKeys = (board: BoardState): Set<string> => {
     const id = board.featuredObjectiveId;
     if (id !== 'amplified_reaction' && id !== 'calm_reaction') return new Set();
