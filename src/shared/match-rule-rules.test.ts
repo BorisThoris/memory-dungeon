@@ -170,6 +170,18 @@ describe('Triples (rules 96)', () => {
     });
 });
 
+describe('threes keep the floor’s recipe (rules 99)', () => {
+    it('a three never takes a pair it is told to keep', () => {
+        const board = finishMemorizePhase(createNewRun(0, { runSeed: 91 })).board!;
+        const dealt = dealMatchRule(board, 'triples', 91);
+        const taken = new Set(dealt.tripleKeys ?? []);
+        expect(taken.size).toBeGreaterThan(0);
+        const kept = dealMatchRule(board, 'triples', 91, taken);
+        expect((kept.tripleKeys ?? []).some((key) => taken.has(key))).toBe(false);
+        for (const key of taken) expect(kept.tiles.filter((tile) => tile.pairKey === key)).toHaveLength(2);
+    });
+});
+
 describe('Sequences (rules 97)', () => {
     const dealt = () => {
         const run = finishMemorizePhase(createNewRun(0, { runSeed: 91 }));

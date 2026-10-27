@@ -70,7 +70,10 @@ export const setSizeFor = (board: Pick<BoardState, 'tripleKeys'>, pairKey: strin
 export const isTripleKey = (board: Pick<BoardState, 'tripleKeys'>, pairKey: string): boolean => setSizeFor(board, pairKey) === 3;
 
 /** Deals Triples: about half of the floor's plain pairs, three at a time, made two threes. */
-export const dealTriples = (board: BoardState, runSeed: number): BoardState => {
+/** From rules 99 a three never takes a pair the floor keeps for itself - its featured recipe (`featuredRecipePairKeys`). */
+export const THREES_KEEP_RECIPES_FROM = 99;
+
+export const dealTriples = (board: BoardState, runSeed: number, keep: ReadonlySet<string> = new Set()): BoardState => {
     const rng = createMulberry32(hashStringToSeed(`triples:${runSeed}:${board.level}`));
     const halves = new Map<string, number[]>();
     board.tiles.forEach((tile, index) => {
@@ -78,7 +81,7 @@ export const dealTriples = (board: BoardState, runSeed: number): BoardState => {
         const marked = Boolean(tile.frost || tile.vined || tile.snowed || tile.fuse || tile.rime || tile.seeded);
         if (tile.state === 'hidden' && tile.tileTraitKind == null && !marked && isElementPairable(board, tile)) halves.set(tile.pairKey, [...(halves.get(tile.pairKey) ?? []), index]);
     });
-    const pool = [...halves.entries()].filter(([key, indices]) => indices.length === 2 && board.tiles.filter((tile) => tile.pairKey === key).length === 2);
+    const pool = [...halves.entries()].filter(([key, indices]) => !keep.has(key) && indices.length === 2 && board.tiles.filter((tile) => tile.pairKey === key).length === 2);
     // Shuffled from the seed, then dealt three pairs at a time.
     for (let i = pool.length - 1; i > 0; i -= 1) {
         const j = pickRngIndex(rng, i + 1);
@@ -104,8 +107,8 @@ export const dealTriples = (board: BoardState, runSeed: number): BoardState => {
 };
 
 /** Deals Sequences: Triples' threes, each card given its place in the three's order from the seed. */
-export const dealSequences = (board: BoardState, runSeed: number): BoardState => {
-    const dealt = dealTriples(board, runSeed);
+export const dealSequences = (board: BoardState, runSeed: number, keep: ReadonlySet<string> = new Set()): BoardState => {
+    const dealt = dealTriples(board, runSeed, keep);
     if (dealt === board) return board;
     const rng = createMulberry32(hashStringToSeed(`sequences:${runSeed}:${board.level}`));
     const places = new Map<string, (1 | 2 | 3)[]>();
@@ -191,13 +194,13 @@ export const dealOpposites = (board: BoardState, runSeed: number): BoardState =>
 };
 
 /** Deals a floor's match rule onto its board. Element pairs changes no card: the floor's rule is the deal. */
-export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSeed: number): BoardState => {
+export const dealMatchRule = (board: BoardState, rule: MatchRuleId | null, runSeed: number, keep: ReadonlySet<string> = new Set()): BoardState => {
     if (rule == null) return board;
     // A floor dealt two decks deep (`board-layers-rules.ts`) keeps a partner beneath: it takes Opposites instead.
     if (rule === 'opposites' || (board.beneath ?? []).some((card) => card != null)) return dealOpposites(board, runSeed);
     if (rule === 'triples' || rule === 'sequences') {
         // A floor with too few plain pairs for a three takes Opposites as well.
-        const dealt = rule === 'sequences' ? dealSequences(board, runSeed) : dealTriples(board, runSeed);
+        const dealt = rule === 'sequences' ? dealSequences(board, runSeed, keep) : dealTriples(board, runSeed, keep);
         return dealt === board ? dealOpposites(board, runSeed) : dealt;
     }
     return { ...board, matchRule: 'element_pairs' };

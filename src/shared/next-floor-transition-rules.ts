@@ -32,7 +32,8 @@ import { dealWanderers, wandererCountFor } from './wanderer-rules';
 import { foldBoard } from './board-fold-rules';
 import { nextDescentLevel, settleDescentJump } from './descent-pace-rules';
 import { runGateOmens } from './run-signature-rules';
-import { dealMatchRule, matchRuleFor } from './match-rule-rules';
+import { dealMatchRule, matchRuleFor, THREES_KEEP_RECIPES_FROM } from './match-rule-rules';
+import { featuredRecipePairKeys } from './secondary-objective-rules';
 import { descentLengthFor } from './descent-length-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
@@ -103,7 +104,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     );
     const layered = dealLayers(hasEvolution(run, 'unmasking_glass') ? unmaskBoard(masked) : masked, seeded);
     // The floor's match rule (`match-rule-rules.ts`, rules 94): dealt last, on the pairs the others left plain.
-    const nextBoard = dealMatchRule(layered, matchRuleFor(run.runSeed, run.runRulesVersion, layered.level, layered.floorTag, descentLengthFor(run.runRulesVersion)), run.runSeed);
+    // From rules 99 a three leaves the floor's featured recipe whole: its pairs are the goal the floor was dealt for.
+    const recipeKept = run.runRulesVersion >= THREES_KEEP_RECIPES_FROM ? featuredRecipePairKeys(layered) : new Set<string>();
+    const nextBoard = dealMatchRule(layered, matchRuleFor(run.runSeed, run.runRulesVersion, layered.level, layered.floorTag, descentLengthFor(run.runRulesVersion)), run.runSeed, recipeKept);
     const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
 
