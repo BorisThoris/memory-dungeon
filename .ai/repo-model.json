@@ -4629,8 +4629,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71823,
-      "sha256": "b12c18ad05a51a97ed19b128c87ff7c9eaa9a329238387cea1413a7e17ff916d"
+      "bytes": 71586,
+      "sha256": "d201ad6d8b49574f483e8d62dbacf7642a26a7eb910385891320ae6c2018494d"
     },
     {
       "path": "public/site.webmanifest",
@@ -10983,8 +10983,8 @@
     {
       "path": "src/renderer/components/CrawlTokens.tsx",
       "category": "source",
-      "bytes": 8029,
-      "sha256": "f5195a736073b3f41b8d89d04292cdf71da164294ad8d39ea66b0cca50096201"
+      "bytes": 10955,
+      "sha256": "0c5f849a5869a86c2fa7bdaf578325f84134898ec4585bb2448a2a02c8dd16cc"
     },
     {
       "path": "src/renderer/components/distantCardPage.test.ts",
@@ -11895,8 +11895,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 66696,
-      "sha256": "7016bc43f4f05979cd36c1adf254227249833f6f7759d6e55ead41ad637b9294"
+      "bytes": 67253,
+      "sha256": "df98303182a029e2c4f2533add3cff8f546bbcfdf590e1f96163d580ef91da58"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11907,8 +11907,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 59947,
-      "sha256": "1173dcc19063cc40dececb8f36d2dd0221f62e4477561497065642a6eb8246de"
+      "bytes": 60101,
+      "sha256": "80e0c738ebb7fad00b4ac0a5e8044880b70d2cc214d4338382d31556a6cf26b9"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -15471,8 +15471,8 @@
     {
       "path": "src/shared/crawl-rules.ts",
       "category": "source",
-      "bytes": 10741,
-      "sha256": "1d9f3d4628630ebcaae4e419d6abde61b4068b8565f4adc0f3896ea2ad8c5215"
+      "bytes": 11076,
+      "sha256": "a42a2e3abf49247409b50caf0c6b8d0aa425121d15ea0be2645ceb2eb463003d"
     },
     {
       "path": "src/shared/crucible-rules.test.ts",
@@ -24149,7 +24149,7 @@
       "path": "src/renderer/components/CrawlTokens.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 176,
+      "lineCount": 229,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -26712,7 +26712,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1015,
+      "lineCount": 1016,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -37441,7 +37441,7 @@
       "path": "src/shared/crawl-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 210,
+      "lineCount": 216,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/realm-weather-rules.ts",
@@ -51066,8 +51066,8 @@
       "name": "CrawlTokens",
       "kind": "function",
       "file": "src/renderer/components/CrawlTokens.tsx",
-      "line": 127,
-      "endLine": 175
+      "line": 174,
+      "endLine": 228
     },
     {
       "id": "symbol:src/renderer/components/distantCardPage.ts#createDistantCardPage",
@@ -53522,8 +53522,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1014,
-      "endLine": 1014
+      "line": 1015,
+      "endLine": 1015
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -67154,8 +67154,8 @@
       "name": "applyCrawlTurn",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 140,
-      "endLine": 192
+      "line": 144,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_EMBER_BURN",
@@ -67202,8 +67202,8 @@
       "name": "crawlBlocksFirstFlip",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 131,
-      "endLine": 132
+      "line": 135,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlFloor",
@@ -67211,15 +67211,15 @@
       "kind": "interface",
       "file": "src/shared/crawl-rules.ts",
       "line": 40,
-      "endLine": 49
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlGround",
       "name": "crawlGround",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 93,
-      "endLine": 108
+      "line": 97,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlMonster",
@@ -67234,8 +67234,8 @@
       "name": "crawlMonsterCountFor",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 58,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlMonsterKind",
@@ -67250,48 +67250,48 @@
       "name": "crawlNextFloor",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 199,
-      "endLine": 202
+      "line": 205,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlNextStrikeLine",
       "name": "crawlNextStrikeLine",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 205,
-      "endLine": 209
+      "line": 211,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlReachableCells",
       "name": "crawlReachableCells",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 114,
-      "endLine": 128
+      "line": 118,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#dealCrawl",
       "name": "dealCrawl",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 66,
-      "endLine": 88
+      "line": 70,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#isCrawlRun",
       "name": "isCrawlRun",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#withCrawl",
       "name": "withCrawl",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 195,
-      "endLine": 196
+      "line": 201,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#applyCrucible",
