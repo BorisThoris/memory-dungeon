@@ -1,5 +1,5 @@
 import { runBlueprints } from './boss-reward-rules';
-import { isSnowballRelicId, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { applyFusion, availableFusions, FUSION_PRICE, isSnowballRelicId, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import type { RunState } from './contracts';
 import { isPassAndPlayRun } from './pass-and-play-rules';
 import { campUpgradeIdsFor, relicRank } from './run-relic-rules';
@@ -36,6 +36,10 @@ export function automaticCampReward(start: RunState): CampReward {
         if (evolved) return { run: evolved, receipt: `Camp: ${recipe.title} evolved · ${EVOLUTION_PRICE} gold used automatically.` };
         run = declineEvolution(run, recipe.id);
     }
+    // A fusion on offer (rules 102) is the sims' first buy when the gold is there.
+    const fusion = availableFusions(run)[0];
+    const fused = fusion ? applyFusion(run, fusion.id) : null;
+    if (fusion && fused) return { run: fused, receipt: `Camp: ${fusion.title} fused · ${FUSION_PRICE} gold used automatically.` };
     const available = storeOffer(run).filter((row) => row.blocked === null);
     const find = (id: string) => available.find((row) => row.id === id);
     const upgrades = [...campUpgradeIdsFor(run)].sort((a, b) => relicRank(run, a) - relicRank(run, b));

@@ -1,5 +1,5 @@
 import { applySpiralTurn } from './spiral-rules';
-import { countElementMatch } from './snowball-relic-rules';
+import { countElementMatch, heartGoldFor } from './snowball-relic-rules';
 import { applySleeperTurn } from './sleeper-rules';
 import { recordRepriseTurn } from './reprise-rules';
 import { applyCartographerTurn } from './cartographer-rules';
@@ -391,6 +391,10 @@ export const createResolveBoardTurnTransition = ({
             },
             timerState: clearResolveState(run)
         };
+
+        // The Gilded Heart (`snowball-relic-rules.ts`, rules 102): a match of a held Heart's element pays gold.
+        const heartGold = heartGoldFor(run, firstTile.suit);
+        if (heartGold > 0) nextRun.gold = runNonNegativeInteger(nextRun.gold) + heartGold;
 
         Object.assign(nextRun, applyRealmTurnToRun(nextRun, realmTurn));
         /*

@@ -1,6 +1,6 @@
 import { earnedFeats, FEATS, type FeatId } from './feat-unlocks';
 import { canCarve, carve } from './carve-rules';
-import type { CarveDirection } from './contracts';
+import type { CarveDirection, FusionId } from './contracts';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
 import { takeMisersPurse } from './misers-purse-rules';
 import { applyStormGlass, canBreakStormGlass } from './storm-glass-rules';
@@ -29,7 +29,7 @@ import { canAimMeteor, callMeteor } from './meteor-rules';
 import { applyMissBudget, missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
 import { canReprise, reprise } from './reprise-rules';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
-import { isSnowballRelicId, relicScoreMultiplier, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { applyFusion, FUSION_PRICE, FUSIONS_FROM, isSnowballRelicId, relicScoreMultiplier, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -130,6 +130,7 @@ export type TestHallRoomId =
     | 'match-rule-sequences'
     | 'flurry-study'
     | 'build-stop'
+    | 'fuse-stop'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -299,6 +300,8 @@ export type TestHallStep =
     | { readonly do: 'buy'; readonly item: StoreItemId }
     /** The stop (rules 100): buy the first relic its shelf can sell, one that grows if it has one. */
     | { readonly do: 'buy-shelf-relic' }
+    /** The stop (rules 102): fuse two relics that grow into one power. */
+    | { readonly do: 'fuse'; readonly fusion: FusionId }
     /** The Zone: ignite it, turn a card inside it, or end it early. */
     | { readonly do: 'ignite' }
     | { readonly do: 'zoneFlip'; readonly tileId: string }
@@ -1998,6 +2001,29 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                 step: { do: 'advance' },
                 says: 'floor 4 begins, and nothing was bought for the player on the way',
                 expect: (r, b) => (r.board?.level === 4 && runGold(r) === runGold(b) && (r.relics ?? []).join() === (b.relics ?? []).join() && relicScoreMultiplier(r) >= 1 ? null : `floor ${r.board?.level}, gold ${runGold(b)} -> ${runGold(r)}`)
+            }
+        ]
+    },
+    {
+        id: 'fuse-stop',
+        title: 'The stop: fuse two relics',
+        mechanic: 'From rules 102 two relics that grow, held together, are offered at the stop as one power for twenty gold. Twin Hearts makes every held Heart count both elements: two Hearts at ×1.30 each become two at ×1.60.',
+        graphMechanicIds: ['progression.store_stop', 'inventory.relics'],
+        tryThis: 'You hold the Cinder and Tide Hearts, ten matches of each. Clear floor 3, fuse Twin Hearts at the stop, and read the build line climb.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 3, run: { gold: 40, relics: ['cinder_heart', 'tide_heart'], elementMatchesThisRun: { ember: 10, tide: 10 }, runRulesVersion: FUSIONS_FROM } }),
+        script: [
+            {
+                step: { do: 'clear' },
+                says: 'floor 3 clears and the stop opens',
+                expect: (r) => (r.status === 'levelComplete' ? null : `status ${r.status}`)
+            },
+            {
+                step: { do: 'fuse', fusion: 'twin_hearts' },
+                says: 'Twin Hearts is fused for its price, and both Hearts now count both elements',
+                expect: (r, b) =>
+                    (r.fusions ?? []).includes('twin_hearts') && runGold(r) === runGold(b) - FUSION_PRICE && relicScoreMultiplier(r) > relicScoreMultiplier(b) * 1.4
+                        ? null
+                        : `fusions ${(r.fusions ?? []).join('/')}, gold ${runGold(b)} -> ${runGold(r)}, build ×${relicScoreMultiplier(b).toFixed(2)} -> ×${relicScoreMultiplier(r).toFixed(2)}`
             }
         ]
     },
@@ -3757,6 +3783,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'buy':
             return buyStoreItem(run, step.item);
+        case 'fuse':
+            return applyFusion(run, step.fusion);
         case 'buy-shelf-relic': {
             const relics = storeOffer(run).filter((row) => row.kind === 'relic' && row.blocked === null);
             const pick = relics.find((row) => isSnowballRelicId(row.id)) ?? relics[0];

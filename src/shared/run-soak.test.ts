@@ -71,6 +71,7 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.turncoatFloors > 0 && report.turncoatTurns > 0), 'no Turncoat was ever dealt and turned').toBe(true);
         expect(reports.some((report) => report.flurryGrabs > 0), 'no pair was ever grabbed in a Flurry').toBe(true);
         expect(reports.some((report) => report.growingRelics > 0 && report.peakRelicMultiplier > 1), 'no relic that grows was ever bought and grew').toBe(true);
+        expect(reports.some((report) => report.fusions > 0), 'no fusion was ever bought').toBe(true);
         expect(reports.some((report) => report.hourglassFloors > 0), 'no Hourglass was ever dealt').toBe(true);
         expect(reports.some((report) => report.hourglassesCaught > 0), 'no Hourglass prize was ever caught').toBe(true);
         expect(reports.some((report) => report.hourglassesSpent > 0), 'no Hourglass ever ran out').toBe(true);

@@ -1,4 +1,4 @@
-import type { RelicId, RunState, TileSuit } from './contracts';
+import type { FusionId, RelicId, RunState, TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -64,7 +64,7 @@ export const SNOWBALL_RELIC_IDS: readonly SnowballRelicId[] = SNOWBALL_RELICS.ma
 
 export const isSnowballRelicId = (id: string): id is SnowballRelicId => (SNOWBALL_RELIC_IDS as readonly string[]).includes(id);
 
-type SnowballRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion' | 'gold' | 'elementMatchesThisRun' | 'flurryGrabsThisRun' | 'cleanFloorStreak'>>;
+type SnowballRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion' | 'gold' | 'elementMatchesThisRun' | 'flurryGrabsThisRun' | 'cleanFloorStreak' | 'fusions'>>;
 
 const holds = (run: SnowballRun, id: SnowballRelicId): boolean => (run.relics ?? []).includes(id);
 const onSnowball = (run: Partial<Pick<RunState, 'runRulesVersion'>>): boolean => (run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM;
@@ -78,8 +78,10 @@ export interface RelicScoreFactor {
 export const relicScoreFactors = (run: SnowballRun): RelicScoreFactor[] => {
     if (!onSnowball(run)) return [];
     const factors: RelicScoreFactor[] = [];
+    // Twin Hearts (rules 102): every held Heart counts the matches of every held Heart's element.
+    const twinned = hasFusion(run, 'twin_hearts') ? heldHeartSuits(run).reduce((sum, suit) => sum + runNonNegativeInteger(run.elementMatchesThisRun?.[suit]), 0) : null;
     for (const [id, suit] of Object.entries(HEART_SUIT) as [SnowballRelicId, TileSuit][]) {
-        if (holds(run, id)) factors.push({ id, factor: 1 + HEART_STEP * runNonNegativeInteger(run.elementMatchesThisRun?.[suit]) });
+        if (holds(run, id)) factors.push({ id, factor: 1 + HEART_STEP * (twinned ?? runNonNegativeInteger(run.elementMatchesThisRun?.[suit])) });
     }
     if (holds(run, 'minted_halo')) factors.push({ id: 'minted_halo', factor: 1 + Math.min(HALO_CAP, HALO_STEP * runNonNegativeInteger(run.gold)) });
     if (holds(run, 'frenzy_dial')) factors.push({ id: 'frenzy_dial', factor: 1 + DIAL_STEP * runNonNegativeInteger(run.flurryGrabsThisRun) });
@@ -101,8 +103,11 @@ export const nextCleanFloorStreak = (run: SnowballRun, clean: boolean): number =
     clean ? runNonNegativeInteger(run.cleanFloorStreak) + 1 : 0;
 
 /** What the Interest Coin pays at a stop, on the gold the run holds as it opens. */
-export const interestFor = (run: SnowballRun): number =>
-    onSnowball(run) && holds(run, 'interest_coin') ? Math.min(INTEREST_CAP, Math.floor(runNonNegativeInteger(run.gold) / INTEREST_PER)) : 0;
+export const interestFor = (run: SnowballRun): number => {
+    if (!onSnowball(run) || !holds(run, 'interest_coin')) return 0;
+    const compound = hasFusion(run, 'compound_coin');
+    return Math.min(compound ? COMPOUND_INTEREST_CAP : INTEREST_CAP, Math.floor(runNonNegativeInteger(run.gold) / (compound ? COMPOUND_INTEREST_PER : INTEREST_PER)));
+};
 
 /**
  * **The build pays** (rules 101, 2026-10-28). Through rules 100 the multiplier fell on score alone, and in the
@@ -118,4 +123,63 @@ export const buildPaidGold = (run: SnowballRun, gold: number): number =>
     (run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? Math.floor(runNonNegativeInteger(gold) * relicScoreMultiplier(run)) : gold;
 
 /** The Glass Crown's price, taken from the miss bank's cap. */
-export const snowballBankCapDelta = (run: SnowballRun): number => (onSnowball(run) && holds(run, 'glass_crown') ? -1 : 0);
+export const snowballBankCapDelta = (run: SnowballRun): number =>
+    onSnowball(run) && holds(run, 'glass_crown') && !hasFusion(run, 'storm_crown') ? -1 : 0;
+
+/**
+ * **Fusions** (rules 102, 2026-10-28): two relics that grow, held together, are offered as one power at the
+ * stop for `FUSION_PRICE` gold. The owner, shown the relics that grow and the build that pays: keep
+ * building on it. A fusion takes no slot and keeps both relics; each is bought once a run.
+ *
+ * - **Twin Hearts** (two Hearts): every held Heart counts the matches of every held Heart's element.
+ * - **Gilded Heart** (a Heart and the Minted Halo): every match of a held Heart's element pays `GILDED_HEART_GOLD` gold.
+ * - **Storm Crown** (the Glass Crown and the Frenzy Dial): a floor of one miss keeps the Crown's streak, and the bank has its slot back.
+ * - **Compound Coin** (the Interest Coin and the Minted Halo): a gold for every `COMPOUND_INTEREST_PER` held, up to `COMPOUND_INTEREST_CAP`.
+ */
+export const FUSIONS_FROM = 102;
+export const FUSION_PRICE = 20;
+export const GILDED_HEART_GOLD = 1;
+export const COMPOUND_INTEREST_PER = 4;
+export const COMPOUND_INTEREST_CAP = 15;
+
+const HEART_IDS = Object.keys(HEART_SUIT) as Extract<SnowballRelicId, `${string}_heart`>[];
+const heldHeartSuits = (run: SnowballRun): TileSuit[] => HEART_IDS.filter((id) => holds(run, id)).map((id) => HEART_SUIT[id]);
+
+export interface FusionDefinition {
+    id: FusionId;
+    title: string;
+    body: string;
+    /** What it is made of, in words for the stop. */
+    from: string;
+    ready: (run: SnowballRun) => boolean;
+}
+
+export const FUSIONS: readonly FusionDefinition[] = [
+    { id: 'twin_hearts', title: 'Twin Hearts', from: 'Two Hearts', body: 'Every Heart you hold counts the matches of every Heart’s element.', ready: (run) => heldHeartSuits(run).length >= 2 },
+    { id: 'gilded_heart', title: 'Gilded Heart', from: 'A Heart and the Minted Halo', body: `Every match of a held Heart’s element pays ${GILDED_HEART_GOLD} gold.`, ready: (run) => heldHeartSuits(run).length >= 1 && holds(run, 'minted_halo') },
+    { id: 'storm_crown', title: 'Storm Crown', from: 'The Glass Crown and the Frenzy Dial', body: 'A floor of one miss keeps the Crown’s streak, and the miss bank has its slot back.', ready: (run) => holds(run, 'glass_crown') && holds(run, 'frenzy_dial') },
+    { id: 'compound_coin', title: 'Compound Coin', from: 'The Interest Coin and the Minted Halo', body: `At every stop, 1 gold for every ${COMPOUND_INTEREST_PER} you hold, up to ${COMPOUND_INTEREST_CAP}.`, ready: (run) => holds(run, 'interest_coin') && holds(run, 'minted_halo') }
+];
+
+export const fusionDefinition = (id: FusionId): FusionDefinition => FUSIONS.find((fusion) => fusion.id === id)!;
+
+export const hasFusion = (run: Partial<Pick<RunState, 'fusions' | 'runRulesVersion'>>, id: FusionId): boolean =>
+    (run.runRulesVersion ?? 0) >= FUSIONS_FROM && (run.fusions ?? []).includes(id);
+
+/** The fusions the stop offers: both parts held, not yet fused. */
+export const availableFusions = (run: SnowballRun): FusionDefinition[] =>
+    (run.runRulesVersion ?? 0) < FUSIONS_FROM ? [] : FUSIONS.filter((fusion) => !(run.fusions ?? []).includes(fusion.id) && fusion.ready(run));
+
+/** The run with a fusion bought, or null when it is not on offer or not affordable. */
+export const applyFusion = <R extends SnowballRun>(run: R, id: FusionId): R | null => {
+    const gold = runNonNegativeInteger(run.gold);
+    if (!availableFusions(run).some((fusion) => fusion.id === id) || gold < FUSION_PRICE) return null;
+    return { ...run, gold: gold - FUSION_PRICE, fusions: [...(run.fusions ?? []), id] };
+};
+
+/** What the Gilded Heart pays for a match of `suit`. */
+export const heartGoldFor = (run: SnowballRun, suit: TileSuit | null | undefined): number =>
+    suit != null && hasFusion(run, 'gilded_heart') && heldHeartSuits(run).includes(suit) ? GILDED_HEART_GOLD : 0;
+
+/** Whether a floor cleared with `tries` spent keeps the Glass Crown's streak: none, or one with the Storm Crown. */
+export const floorKeepsCrown = (run: SnowballRun, tries: number): boolean => tries === 0 || (tries <= 1 && hasFusion(run, 'storm_crown'));

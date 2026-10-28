@@ -1,5 +1,5 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
-import { isSnowballRelicId, relicScoreMultiplier } from './snowball-relic-rules';
+import { applyFusion, availableFusions, isSnowballRelicId, relicScoreMultiplier } from './snowball-relic-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
 import { MASK_MIN_PAIRS, maskCountFor } from './mask-rules';
 import { gateOmenCount, runGateOmens } from './run-signature-rules';
@@ -168,6 +168,8 @@ export interface SoakRunReport {
     reprises: number;
     /** Relic evolutions bought, and by which floor the first came (`relic-evolution-rules.ts`). */
     evolutions: number;
+    /** Fusions bought at the stop (`snowball-relic-rules.ts`, rules 102). */
+    fusions: number;
     firstEvolutionFloor: number | null;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
@@ -702,7 +704,9 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         if (!before || !run.board) return null;
         if (run.status === 'levelComplete' && (run.sleepingPairs ?? []).length > 0) return 'a floor cleared with a Sleeper asleep';
         if (run.board.level !== before.board?.level || runNonNegativeInteger(run.sleepersWokenThisFloor) <= runNonNegativeInteger(before.sleepersWokenThisFloor)) return null;
-        const woken = new Set((before.sleepingPairs ?? []).map((pair) => pair.pairKey).filter((key) => !(run.sleepingPairs ?? []).some((pair) => pair.pairKey === key)));
+        // A Sleeper a Spiral sealed leaves the list kept down, not woken (`wakeSleeper`): only the others came back.
+        const sealedPairs = new Set(run.board.tiles.filter((tile) => tile.sealed).map((tile) => tile.pairKey));
+        const woken = new Set((before.sleepingPairs ?? []).map((pair) => pair.pairKey).filter((key) => !sealedPairs.has(key) && !(run.sleepingPairs ?? []).some((pair) => pair.pairKey === key)));
         const up = run.board.tiles.find((tile) => woken.has(tile.pairKey) && tile.state !== 'hidden' && tile.state !== 'flipped' && tile.state !== 'matched');
         return up ? `woken ${up.id} came back ${up.state}` : null;
     },
@@ -1034,6 +1038,11 @@ export const soakRun = ({
             }
             if (floorsCleared >= maxFloors) break;
             if (isStoreStopFloor(run.lastLevelResult?.level)) {
+                // A fusion on offer first (rules 102): two relics that grow, made one power.
+                for (const fusion of availableFusions(run)) {
+                    const fused = applyFusion(run, fusion.id);
+                    if (fused) act(`fuse:${fusion.id}`, fused);
+                }
                 // Shop like a player with a plan: buy what can be bought until the purse says no.
                 for (let tries = 0; tries < 6; tries += 1) {
                     const affordable = storeOffer(run).filter((row) => row.blocked === null);
@@ -1218,6 +1227,7 @@ export const soakRun = ({
         largestRelease,
         blueprints: runBlueprints(run).length,
         evolutions: (run.evolutions ?? []).length,
+        fusions: (run.fusions ?? []).length,
         firstEvolutionFloor,
         bossDoorsTaken,
         wardenTests,

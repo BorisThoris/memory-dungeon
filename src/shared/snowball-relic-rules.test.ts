@@ -4,6 +4,13 @@ import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '.
 import { missBankCap } from './miss-bank';
 import { buyStoreItem, rollStoreStock, STOP_RELIC_OFFER, storeOffer } from './run-store-rules';
 import {
+    applyFusion,
+    availableFusions,
+    COMPOUND_INTEREST_CAP,
+    floorKeepsCrown,
+    FUSION_PRICE,
+    FUSIONS_FROM,
+    heartGoldFor,
     BUILD_PAYS_FROM,
     buildPaidGold,
     CROWN_STEP,
@@ -69,6 +76,52 @@ describe('the build pays (rules 101)', () => {
         expect(buildPaidGold(run, 7)).toBe(Math.floor(7 * (1 + HEART_STEP * 50)));
         expect(buildPaidGold({ ...run, relics: [] }, 7)).toBe(7);
         expect(buildPaidGold({ ...run, runRulesVersion: BUILD_PAYS_FROM - 1 }, 7)).toBe(7);
+    });
+});
+
+describe('fusions (rules 102)', () => {
+    const fusing = (extra: Partial<RunState> = {}): RunState => playing({ runRulesVersion: FUSIONS_FROM, gold: 40, ...extra });
+
+    it('is offered when both parts are held, bought once for its price, and keeps both relics', () => {
+        expect(availableFusions(fusing({ relics: ['cinder_heart'] })).map((f) => f.id)).toEqual([]);
+        const run = fusing({ relics: ['cinder_heart', 'tide_heart', 'minted_halo'] });
+        expect(availableFusions(run).map((f) => f.id)).toEqual(['twin_hearts', 'gilded_heart']);
+        const fused = applyFusion(run, 'twin_hearts')!;
+        expect(fused.gold).toBe(40 - FUSION_PRICE);
+        expect(fused.relics).toEqual(run.relics);
+        expect(availableFusions(fused).map((f) => f.id)).toEqual(['gilded_heart']);
+        expect(applyFusion({ ...run, gold: FUSION_PRICE - 1 }, 'twin_hearts')).toBeNull();
+        expect(availableFusions({ ...run, runRulesVersion: FUSIONS_FROM - 1 })).toEqual([]);
+    });
+
+    it('Twin Hearts: every held Heart counts both elements', () => {
+        const run = fusing({ relics: ['cinder_heart', 'tide_heart'], elementMatchesThisRun: { ember: 10, tide: 20, moss: 99 } });
+        expect(relicScoreFactors({ ...run, fusions: ['twin_hearts'] }).map((f) => f.factor)).toEqual([1 + HEART_STEP * 30, 1 + HEART_STEP * 30]);
+        expect(relicScoreFactors(run).map((f) => f.factor)).toEqual([1 + HEART_STEP * 10, 1 + HEART_STEP * 20]);
+    });
+
+    it('Gilded Heart: a match of a held Heart’s element pays gold, in play', () => {
+        const run = fusing({ relics: ['cinder_heart', 'tide_heart', 'moss_heart', 'bone_heart', 'minted_halo'], fusions: ['gilded_heart'] });
+        expect(heartGoldFor(run, 'ember')).toBe(1);
+        expect(heartGoldFor({ ...run, fusions: [] }, 'ember')).toBe(0);
+        const a = run.board!.tiles.find((tile) => tile.state === 'hidden' && tile.suit != null)!;
+        const b = run.board!.tiles.find((tile) => tile.id !== a.id && tile.pairKey === a.pairKey)!;
+        expect(resolveBoardTurn(flipTile(flipTile(run, a.id), b.id)).gold).toBe(41);
+    });
+
+    it('Storm Crown: a floor of one miss keeps the streak, and the bank has its slot back', () => {
+        const crowned = fusing({ relics: ['glass_crown', 'frenzy_dial'] });
+        expect(floorKeepsCrown(crowned, 1)).toBe(false);
+        const storm = { ...crowned, fusions: ['storm_crown' as const] };
+        expect(floorKeepsCrown(storm, 1)).toBe(true);
+        expect(floorKeepsCrown(storm, 2)).toBe(false);
+        expect(missBankCap(storm)).toBe(missBankCap(playing()));
+    });
+
+    it('Compound Coin: interest on every four held, up to fifteen', () => {
+        const run = fusing({ relics: ['interest_coin', 'minted_halo'], fusions: ['compound_coin'], gold: 400 });
+        expect(interestFor(run)).toBe(COMPOUND_INTEREST_CAP);
+        expect(interestFor({ ...run, gold: 14 })).toBe(3);
     });
 });
 

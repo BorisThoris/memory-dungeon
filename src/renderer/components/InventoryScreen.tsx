@@ -1,5 +1,5 @@
 import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
-import { relicScoreFactors, SNOWBALL_RELIC_IDS } from '../../shared/snowball-relic-rules';
+import { fusionDefinition, relicScoreFactors, SNOWBALL_RELIC_IDS } from '../../shared/snowball-relic-rules';
 import { runBlueprints } from '../../shared/boss-reward-rules';
 import { blueprintLine, EVOLUTION_LINES } from '../copy/relicEvolutionCopy';
 import { EvolutionGlyph } from './EvolutionGlyph';
@@ -171,7 +171,12 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                         <strong>{relicDefinition(id).title}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
                         <span>{relicDefinition(id).body}</span>
                     </li>;
-                })}</ul>
+                })}
+                {/* Fusions (rules 102): two relics that grow, made one power at the stop. */}
+                {(run.fusions ?? []).map((id) => <li className={styles.chip} data-testid={`inventory-fusion-${id}`} key={`fusion-${id}`}>
+                    <strong>{fusionDefinition(id).title} · Fused</strong>
+                    <span>{fusionDefinition(id).body}</span>
+                </li>)}</ul>
             </section>
         </Panel>
     ) : null;

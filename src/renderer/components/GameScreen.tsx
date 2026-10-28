@@ -527,6 +527,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             travelThroughRealmDoor: state.travelThroughRealmDoor,
             buyStoreItem: state.buyStoreItem,
             evolveAtStop: state.evolveAtStop,
+            fuseAtStop: state.fuseAtStop,
             descendIntoEndlessAction: state.descendIntoEndless,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
@@ -844,6 +845,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         travelThroughRealmDoor,
         buyStoreItem,
         evolveAtStop,
+        fuseAtStop,
         descendIntoEndlessAction,
         dismissPowersFtue,
         goToMenu,
@@ -2758,6 +2760,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         onEvolve={(id) => {
                             playMenuOpen();
                             evolveAtStop(id);
+                        }}
+                        onFuse={(id) => {
+                            playMenuOpen();
+                            fuseAtStop(id);
                         }}
                         onBuy={(id) => {
                             const before = useAppStore.getState().run;

@@ -1,5 +1,6 @@
 import { applyMissBudget } from '../../shared/miss-bank';
 import { applyEvolution } from '../../shared/relic-evolution-rules';
+import { applyFusion } from '../../shared/snowball-relic-rules';
 import { canReprise, reprise as repriseRule } from '../../shared/reprise-rules';
 import { canCarve, carve as carveRule } from '../../shared/carve-rules';
 import { reflowRunBoard } from '../../shared/board-layout-rules';
@@ -639,6 +640,17 @@ export const useAppStore = create<AppState>((set, get) => ({
         const evolved = applyEvolution(run, id);
         if (evolved) {
             set({ run: evolved });
+        }
+    },
+
+    fuseAtStop: (id) => {
+        const { run } = get();
+        if (!run || run.status !== 'levelComplete' || !isStoreStopFloor(run.lastLevelResult?.level)) {
+            return;
+        }
+        const fused = applyFusion(run, id);
+        if (fused) {
+            set({ run: fused });
         }
     },
 

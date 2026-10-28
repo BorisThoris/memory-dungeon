@@ -1,5 +1,5 @@
 import { depthHas } from './depth-rules';
-import { buildPaidGold, interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { buildPaidGold, floorKeepsCrown, interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { sealSpiralRings, spiralHolds } from './spiral-rules';
 import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
@@ -192,7 +192,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
         // The Interest Coin (`snowball-relic-rules.ts`) pays at a stop, on the gold held as it opens.
         gold: runGold(run) + goldEarned + (isStoreStopFloor(board.level) ? interestFor(run) : 0),
         // The Glass Crown's count: floors in a row cleared without a try spent.
-        ...((run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM ? { cleanFloorStreak: nextCleanFloorStreak(run, perfect) } : {}),
+        ...((run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM ? { cleanFloorStreak: nextCleanFloorStreak(run, floorKeepsCrown(run, tries)) } : {}),
         ...(usesElementalLoot(run) ? { elementalEssence: addEssence(run.elementalEssence, elementalDrops) } : {}),
         // Select the destination once at clear; legacy rules retain their door choices, and from rules 75 the
         // clear before an act boss offers its doors again: the door taken is what the boss pays (`boss-reward-rules.ts`).

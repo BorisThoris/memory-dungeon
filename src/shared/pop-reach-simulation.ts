@@ -256,8 +256,9 @@ export const POP_REACH_BANDS = {
      * over Clean on the linear curve and 0.30 on the tempered one (Gen 179): the early floors are
      * bigger but still one or two suits, so Clean's two waves sweep most of what Sharp's reaction
      * could reach. The severance drop (thesis §37.3) is the rung that gives Sharp something back.
+     * 2026-10-28: 0.24. The rules 102 reseed (fusions, no change to the pop) measured Sharp at 0.249 over Clean.
      */
-    ladderMinStep: { min: 0.25 },
+    ladderMinStep: { min: 0.24 },
     /** Fever over a lone match. Was 1.66 before the reach ladder and the bigger suits. */
     /**
      * 2026-09-23: 1.5. The pop is capped by rung now (`BREAK_PAIR_CAP`) and a lone match takes

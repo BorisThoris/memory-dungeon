@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactElement } from 'react';
-import type { RunState } from '../../shared/contracts';
+import type { FusionId, RunState } from '../../shared/contracts';
 import { runGold, storeOffer, type StoreItemId, type StoreOfferRow } from '../../shared/run-store-rules';
 import { useFocusLossRecovery } from '../a11y/focusLossRecovery';
 import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
@@ -7,7 +7,7 @@ import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './Camp.module.css';
-import { BUILD_PAYS_FROM, relicScoreFactors, relicScoreMultiplier } from '../../shared/snowball-relic-rules';
+import { availableFusions, BUILD_PAYS_FROM, FUSION_PRICE, relicScoreFactors, relicScoreMultiplier } from '../../shared/snowball-relic-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { availableEvolutions, EVOLUTION_PRICE } from '../../shared/relic-evolution-rules';
 import type { BlueprintId } from '../../shared/boss-reward-rules';
@@ -22,6 +22,8 @@ interface StoreVaultProps {
     onDescend: () => void;
     /** Evolves two rank-3 relics by a blueprint (`relic-evolution-rules.ts`). */
     onEvolve: (id: BlueprintId) => void;
+    /** Fuses two relics that grow into one power (`snowball-relic-rules.ts`, rules 102). */
+    onFuse: (id: FusionId) => void;
 }
 
 /**
@@ -29,7 +31,7 @@ interface StoreVaultProps {
  * run's seed, misses and tools, bought with the run's gold; Descend goes on. What the run's growing relics
  * multiply by now is read at the top, so a build is something the player watches climb.
  */
-const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve }: StoreVaultProps): ReactElement => {
+const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVaultProps): ReactElement => {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const spotsRef = useRef<HTMLDivElement | null>(null);
     const descendRef = useRef<HTMLButtonElement | null>(null);
@@ -40,6 +42,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve }: StoreVaultProps)
     const gold = runGold(run);
     const build = relicScoreFactors(run);
     const evolutions = availableEvolutions(run);
+    const fusions = availableFusions(run);
 
     useModalFocusTrap({
         containerRef: rootRef,
@@ -79,6 +82,19 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve }: StoreVaultProps)
                         {(run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? ` · every match and every clear’s gold ×${relicScoreMultiplier(run).toFixed(2)}` : null}
                     </p>
                 ) : null}
+                {fusions.length > 0 ? <section className={styles.section} aria-label="Fusions">
+                    <div className={styles.sectionHead}><h3>Fuse</h3><span>Two relics that grow, made one power · Both kept · No slot taken</span></div>
+                    <div className={styles.grid}>{fusions.map((fusion) =>
+                        <article className={styles.card} key={fusion.id} data-testid={`store-fuse-${fusion.id}`}>
+                            <div className={styles.cardHead}><h4>{fusion.title}</h4></div>
+                            <p>{fusion.body}</p>
+                            <span className={styles.blocked}>{gold < FUSION_PRICE ? `Need ${FUSION_PRICE - gold} more gold` : fusion.from}</span>
+                            <button data-testid={`store-fuse-buy-${fusion.id}`} disabled={gold < FUSION_PRICE} type="button" onClick={() => onFuse(fusion.id)}>
+                                {`Fuse · ${FUSION_PRICE} gold`}
+                            </button>
+                        </article>
+                    )}</div>
+                </section> : null}
                 {evolutions.length > 0 ? <section className={styles.section} aria-label="Evolutions">
                     <div className={styles.sectionHead}><h3>Evolve</h3><span>Two relics at rank 3 and a boss's blueprint · Kept to the end of the run</span></div>
                     <div className={styles.grid}>{evolutions.map((recipe) =>
