@@ -29,7 +29,7 @@ import { canAimMeteor, callMeteor } from './meteor-rules';
 import { applyMissBudget, missBankCap, missesLeft, missBankFloorGrant } from './miss-bank';
 import { canReprise, reprise } from './reprise-rules';
 import { buyStoreItem, isStoreStopFloor, runGold, storeOffer, type StoreItemId } from './run-store-rules';
-import { applyFusion, FUSION_PRICE, FUSIONS_FROM, isSnowballRelicId, relicScoreMultiplier, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { applyFusion, AWAKENING_FROM, FUSION_PRICE, FUSIONS_FROM, HEART_AWAKENS_AT, isAwake, isSnowballRelicId, relicScoreMultiplier, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -131,6 +131,7 @@ export type TestHallRoomId =
     | 'flurry-study'
     | 'build-stop'
     | 'fuse-stop'
+    | 'relic-awakens'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -2024,6 +2025,29 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     (r.fusions ?? []).includes('twin_hearts') && runGold(r) === runGold(b) - FUSION_PRICE && relicScoreMultiplier(r) > relicScoreMultiplier(b) * 1.4
                         ? null
                         : `fusions ${(r.fusions ?? []).join('/')}, gold ${runGold(b)} -> ${runGold(r)}, build ×${relicScoreMultiplier(b).toFixed(2)} -> ×${relicScoreMultiplier(r).toFixed(2)}`
+            }
+        ]
+    },
+    {
+        id: 'relic-awakens',
+        title: 'A relic that grows awakens',
+        mechanic: 'From rules 103 a relic that grows awakens on the clear where its own count reaches its mark: the Cinder Heart becomes the Inferno Heart at 24 Ember matches, and every Ember match counts double toward it from then on.',
+        graphMechanicIds: ['inventory.relics'],
+        tryThis: 'You hold the Cinder Heart and 23 Ember matches. Match the Ember pair, clear the floor, and read the clear: Awakened, the Inferno Heart.',
+        build: () => room(['a:e b:t', 'b:t a:e'], { level: 2, run: { relics: ['cinder_heart'], elementMatchesThisRun: { ember: HEART_AWAKENS_AT - 1 }, runRulesVersion: AWAKENING_FROM } }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the Ember match reaches the mark, and the Heart waits for the clear to awaken',
+                expect: (r) => (r.elementMatchesThisRun?.ember === HEART_AWAKENS_AT && !isAwake(r, 'cinder_heart') ? null : `ember ${r.elementMatchesThisRun?.ember}, awake ${isAwake(r, 'cinder_heart')}`)
+            },
+            {
+                step: { do: 'clear' },
+                says: 'the clear awakens the Inferno Heart, says so, and every Ember match now counts double: x1.72 becomes x2.44',
+                expect: (r, b) =>
+                    r.status === 'levelComplete' && isAwake(r, 'cinder_heart') && (r.lastLevelResult?.awakened ?? []).includes('cinder_heart') && relicScoreMultiplier(r) > relicScoreMultiplier(b) * 1.35
+                        ? null
+                        : `status ${r.status}, awake ${isAwake(r, 'cinder_heart')}, said ${(r.lastLevelResult?.awakened ?? []).join('/')}, build x${relicScoreMultiplier(b).toFixed(2)} -> x${relicScoreMultiplier(r).toFixed(2)}`
             }
         ]
     },

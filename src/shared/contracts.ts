@@ -18,7 +18,7 @@ export interface MissBankGrant {
     misses: number;
 }
 /** Bump when generation or player-visible gameplay rules change. 65: Wild runs follow the floor schedule, chaos set on top. 70: the Wanderers are dealt from floor 13 (`wanderer-rules.ts`). 71: the Fold (`board-fold-rules.ts`). 72: Layers (`board-layers-rules.ts`). 73: the miss bank grows with the floor (`miss-bank.ts`). 74: Layers off the restless hall (`board-layers-rules.ts`). 75: doors before act bosses, rewards by the door (`boss-reward-rules.ts`). 76: four relic slots (`run-relic-rules.ts`). 77: a ranked Tallow Candle and relic evolutions (`relic-evolution-rules.ts`). 78: the complete Warden (`warden-rules.ts`). 79: Carve (`carve-rules.ts`). 80: Masks (`mask-rules.ts`). 81: the Keeper of Halls (`keeper-rules.ts`). 82: the Cartographer (`cartographer-rules.ts`). 83: Reprise (`reprise-rules.ts`). 84: Sleepers (`sleeper-rules.ts`). 85: the Spiral (`spiral-rules.ts`). 86: the dungeon learns you (`learned-rule-rules.ts`). 87: the Dread spends on the families (`dread-composition-rules.ts`) and the Fold's rooms keep their weather (`realm-weather-rules.ts`). 88: a meteor on a Fold floor keeps to its room (`meteor-rules.ts`). 89: Hold, Carve and Reprise climb the Gate (`verb-staircase-rules.ts`). 90: a run's own Gate, its rooms' order and its omen (`run-signature-rules.ts`). 91: a Hold release always breaks (`hold-rules.ts`). 92: the Gate's omens grow with the runs played (`run-signature-rules.ts`). 93: the Descent is forty floors (`descent-length-rules.ts`). 94: match rules, Opposites first (`match-rule-rules.ts`). 95: Element pairs (`match-rule-rules.ts`). 96: Triples (`match-rule-rules.ts`). 97: Sequences (`match-rule-rules.ts`). 98: rule floors grow with depth (`match-rule-rules.ts`). 99: the Flurry (`flurry-rules.ts`). 100: the stop is yours again, and relics that grow (`snowball-relic-rules.ts`). */
-export const GAME_RULES_VERSION = 102;
+export const GAME_RULES_VERSION = 103;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MATCH_DELAY_MS = 850;
 export const FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP = 10;
@@ -703,6 +703,8 @@ export interface LevelResult {
     goldEarned?: number;
     /** True when the Miser's Purse doubled it (`run-relic-rules.ts`). */
     goldDoubled?: boolean;
+    /** The relics that grow which awakened on this clear (`snowball-relic-rules.ts`, rules 103). */
+    awakened?: RelicId[];
     elementalDrops?: ElementalPouch;
     /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
     chainMomentumAtClear?: number;
@@ -1115,6 +1117,8 @@ export interface RunState {
     cleanFloorStreak?: number;
     /** Fusions bought at the stop (`snowball-relic-rules.ts`, rules 102): two relics that grow, made one power. */
     fusions?: FusionId[];
+    /** Relics that grow which have awakened (`snowball-relic-rules.ts`, rules 103): each grew past its mark, kept for the run. */
+    awakened?: RelicId[];
     /** Element pairs (`match-rule-rules.ts`): matches this floor made of two cards of different pairs. */
     elementPairsRekeyedThisFloor?: number;
     /** Triples (`match-rule-rules.ts`): threes this floor claimed whole. */

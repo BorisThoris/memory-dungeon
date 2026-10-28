@@ -64,7 +64,7 @@ export const SNOWBALL_RELIC_IDS: readonly SnowballRelicId[] = SNOWBALL_RELICS.ma
 
 export const isSnowballRelicId = (id: string): id is SnowballRelicId => (SNOWBALL_RELIC_IDS as readonly string[]).includes(id);
 
-type SnowballRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion' | 'gold' | 'elementMatchesThisRun' | 'flurryGrabsThisRun' | 'cleanFloorStreak' | 'fusions'>>;
+type SnowballRun = Pick<RunState, 'relics'> & Partial<Pick<RunState, 'runRulesVersion' | 'gold' | 'elementMatchesThisRun' | 'flurryGrabsThisRun' | 'cleanFloorStreak' | 'fusions' | 'awakened'>>;
 
 const holds = (run: SnowballRun, id: SnowballRelicId): boolean => (run.relics ?? []).includes(id);
 const onSnowball = (run: Partial<Pick<RunState, 'runRulesVersion'>>): boolean => (run.runRulesVersion ?? 0) >= SNOWBALL_RELICS_FROM;
@@ -81,10 +81,10 @@ export const relicScoreFactors = (run: SnowballRun): RelicScoreFactor[] => {
     // Twin Hearts (rules 102): every held Heart counts the matches of every held Heart's element.
     const twinned = hasFusion(run, 'twin_hearts') ? heldHeartSuits(run).reduce((sum, suit) => sum + runNonNegativeInteger(run.elementMatchesThisRun?.[suit]), 0) : null;
     for (const [id, suit] of Object.entries(HEART_SUIT) as [SnowballRelicId, TileSuit][]) {
-        if (holds(run, id)) factors.push({ id, factor: 1 + HEART_STEP * (twinned ?? runNonNegativeInteger(run.elementMatchesThisRun?.[suit])) });
+        if (holds(run, id)) factors.push({ id, factor: 1 + HEART_STEP * awakeTimes(run, id) * (twinned ?? runNonNegativeInteger(run.elementMatchesThisRun?.[suit])) });
     }
-    if (holds(run, 'minted_halo')) factors.push({ id: 'minted_halo', factor: 1 + Math.min(HALO_CAP, HALO_STEP * runNonNegativeInteger(run.gold)) });
-    if (holds(run, 'frenzy_dial')) factors.push({ id: 'frenzy_dial', factor: 1 + DIAL_STEP * runNonNegativeInteger(run.flurryGrabsThisRun) });
+    if (holds(run, 'minted_halo')) factors.push({ id: 'minted_halo', factor: 1 + Math.min(isAwake(run, 'minted_halo') ? AWAKENED_HALO_CAP : HALO_CAP, HALO_STEP * runNonNegativeInteger(run.gold)) });
+    if (holds(run, 'frenzy_dial')) factors.push({ id: 'frenzy_dial', factor: 1 + DIAL_STEP * awakeTimes(run, 'frenzy_dial') * runNonNegativeInteger(run.flurryGrabsThisRun) });
     if (holds(run, 'glass_crown')) factors.push({ id: 'glass_crown', factor: 1 + CROWN_STEP * runNonNegativeInteger(run.cleanFloorStreak) });
     return factors.filter((entry) => entry.factor > 1);
 };
@@ -100,13 +100,13 @@ export const countElementMatch = <R extends SnowballRun>(run: R, suit: TileSuit 
 
 /** The Glass Crown's count after a floor clear: one more for a clean floor, nothing after one that was not. */
 export const nextCleanFloorStreak = (run: SnowballRun, clean: boolean): number =>
-    clean ? runNonNegativeInteger(run.cleanFloorStreak) + 1 : 0;
+    clean ? runNonNegativeInteger(run.cleanFloorStreak) + 1 : isAwake(run, 'glass_crown') ? Math.floor(runNonNegativeInteger(run.cleanFloorStreak) / 2) : 0;
 
 /** What the Interest Coin pays at a stop, on the gold the run holds as it opens. */
 export const interestFor = (run: SnowballRun): number => {
     if (!onSnowball(run) || !holds(run, 'interest_coin')) return 0;
     const compound = hasFusion(run, 'compound_coin');
-    return Math.min(compound ? COMPOUND_INTEREST_CAP : INTEREST_CAP, Math.floor(runNonNegativeInteger(run.gold) / (compound ? COMPOUND_INTEREST_PER : INTEREST_PER)));
+    return Math.min((compound ? COMPOUND_INTEREST_CAP : INTEREST_CAP) + (isAwake(run, 'interest_coin') ? AWAKENED_INTEREST_BONUS : 0), Math.floor(runNonNegativeInteger(run.gold) / (compound ? COMPOUND_INTEREST_PER : INTEREST_PER)));
 };
 
 /**
@@ -183,3 +183,76 @@ export const heartGoldFor = (run: SnowballRun, suit: TileSuit | null | undefined
 
 /** Whether a floor cleared with `tries` spent keeps the Glass Crown's streak: none, or one with the Storm Crown. */
 export const floorKeepsCrown = (run: SnowballRun, tries: number): boolean => tries === 0 || (tries <= 1 && hasFusion(run, 'storm_crown'));
+
+/**
+ * **Relics that grow awaken** (rules 103, 2026-10-28). The owner, shown fusions: keep building on it - "let
+ * the new relics evolve". (Evolve already names the camp relics' blueprint recipes, `relic-evolution-rules.ts`,
+ * so these awaken.) A relic that grows, held, awakens on the floor clear where its own count reaches its mark,
+ * takes a new name and keeps a stronger rule to the end of the run. The clear says so; the stop and the
+ * inventory name it. Each mark is the relic's own count, read after the clear has paid: a Heart its own
+ * element's matches (not the twinned sum), the Halo and the Coin the gold held as the clear ends.
+ */
+export const AWAKENING_FROM = 103;
+export const HEART_AWAKENS_AT = 24;
+export const HALO_AWAKENS_AT = 30;
+export const DIAL_AWAKENS_AT = 12;
+export const CROWN_AWAKENS_AT = 3;
+export const COIN_AWAKENS_AT = 25;
+export const AWAKENED_HALO_CAP = 4;
+export const AWAKENED_INTEREST_BONUS = 5;
+
+export interface AwakeningDefinition {
+    id: SnowballRelicId;
+    title: string;
+    /** What the relic awakens at, said before it does. */
+    mark: string;
+    body: string;
+    reached: (run: SnowballRun) => boolean;
+}
+
+const heartAwakening = (id: Extract<SnowballRelicId, `${string}_heart`>, title: string, element: string): AwakeningDefinition => ({
+    id,
+    title,
+    mark: `Awakens at ${HEART_AWAKENS_AT} ${element} matches.`,
+    body: `Every ${element} match adds ${pct(HEART_STEP * 2)} to the score of every match.`,
+    reached: (run) => runNonNegativeInteger(run.elementMatchesThisRun?.[HEART_SUIT[id]]) >= HEART_AWAKENS_AT
+});
+
+export const AWAKENINGS: readonly AwakeningDefinition[] = [
+    heartAwakening('cinder_heart', 'Inferno Heart', 'Ember'),
+    heartAwakening('tide_heart', 'Deluge Heart', 'Tide'),
+    heartAwakening('moss_heart', 'Wildwood Heart', 'Moss'),
+    heartAwakening('bone_heart', 'Ossuary Heart', 'Bone'),
+    { id: 'minted_halo', title: 'Sovereign Halo', mark: `Awakens holding ${HALO_AWAKENS_AT} gold.`, body: `Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + AWAKENED_HALO_CAP}.`, reached: (run) => runNonNegativeInteger(run.gold) >= HALO_AWAKENS_AT },
+    { id: 'frenzy_dial', title: 'Riot Dial', mark: `Awakens at ${DIAL_AWAKENS_AT} Flurry grabs.`, body: `Every pair grabbed in a Flurry adds ${pct(DIAL_STEP * 2)} to the score of every match.`, reached: (run) => runNonNegativeInteger(run.flurryGrabsThisRun) >= DIAL_AWAKENS_AT },
+    { id: 'glass_crown', title: 'Diamond Crown', mark: `Awakens at ${CROWN_AWAKENS_AT} clean floors in a row.`, body: `A floor with a miss halves the streak instead of breaking it.`, reached: (run) => runNonNegativeInteger(run.cleanFloorStreak) >= CROWN_AWAKENS_AT },
+    { id: 'interest_coin', title: 'Treasury Coin', mark: `Awakens holding ${COIN_AWAKENS_AT} gold.`, body: `Interest pays up to ${AWAKENED_INTEREST_BONUS} gold more at every stop.`, reached: (run) => runNonNegativeInteger(run.gold) >= COIN_AWAKENS_AT }
+];
+
+export const awakeningDefinition = (id: SnowballRelicId): AwakeningDefinition => AWAKENINGS.find((entry) => entry.id === id)!;
+
+/** True once the held relic has awakened. */
+export const isAwake = (run: Partial<Pick<RunState, 'awakened' | 'runRulesVersion'>>, id: SnowballRelicId): boolean =>
+    (run.runRulesVersion ?? 0) >= AWAKENING_FROM && (run.awakened ?? []).includes(id);
+
+/** A doubled step once awake. */
+const awakeTimes = (run: SnowballRun, id: SnowballRelicId): number => (isAwake(run, id) ? 2 : 1);
+
+/** The relic's name as the run holds it: its awakened name once it has awakened. */
+export const snowballRelicTitle = (run: SnowballRun, id: SnowballRelicId, title: string): string =>
+    isAwake(run, id) ? awakeningDefinition(id).title : title;
+
+/**
+ * Awaken every held relic whose mark the run has reached, on the run as the clear leaves it; the clear's
+ * result names the ones that awoke on it.
+ */
+export const awakenGrownRelics = <R extends SnowballRun & { lastLevelResult?: RunState['lastLevelResult'] }>(run: R): R => {
+    if ((run.runRulesVersion ?? 0) < AWAKENING_FROM) return run;
+    const woke = AWAKENINGS.filter((entry) => holds(run, entry.id) && !isAwake(run, entry.id) && entry.reached(run)).map((entry) => entry.id);
+    if (woke.length === 0) return run;
+    return {
+        ...run,
+        awakened: [...(run.awakened ?? []), ...woke],
+        ...(run.lastLevelResult ? { lastLevelResult: { ...run.lastLevelResult, awakened: woke } } : {})
+    };
+};

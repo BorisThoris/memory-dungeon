@@ -1,5 +1,5 @@
 import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
-import { fusionDefinition, relicScoreFactors, SNOWBALL_RELIC_IDS } from '../../shared/snowball-relic-rules';
+import { AWAKENING_FROM, awakeningDefinition, fusionDefinition, isAwake, relicScoreFactors, SNOWBALL_RELIC_IDS, snowballRelicTitle } from '../../shared/snowball-relic-rules';
 import { runBlueprints } from '../../shared/boss-reward-rules';
 import { blueprintLine, EVOLUTION_LINES } from '../copy/relicEvolutionCopy';
 import { EvolutionGlyph } from './EvolutionGlyph';
@@ -168,8 +168,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 {SNOWBALL_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => {
                     const factor = relicScoreFactors(run).find((entry) => entry.id === id)?.factor ?? 1;
                     return <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
-                        <strong>{relicDefinition(id).title}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
-                        <span>{relicDefinition(id).body}</span>
+                        <strong>{snowballRelicTitle(run, id, relicDefinition(id).title)}{isAwake(run, id) ? ' · Awakened' : ''}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
+                        <span>{isAwake(run, id) ? awakeningDefinition(id).body : (run.runRulesVersion ?? 0) >= AWAKENING_FROM ? `${relicDefinition(id).body} ${awakeningDefinition(id).mark}` : relicDefinition(id).body}</span>
                     </li>;
                 })}
                 {/* Fusions (rules 102): two relics that grow, made one power at the stop. */}

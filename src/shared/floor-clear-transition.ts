@@ -1,5 +1,5 @@
 import { depthHas } from './depth-rules';
-import { buildPaidGold, floorKeepsCrown, interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { awakenGrownRelics, buildPaidGold, floorKeepsCrown, interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { sealSpiralRings, spiralHolds } from './spiral-rules';
 import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
@@ -160,7 +160,7 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const bossDoors = offersBossDoors(run);
     // Endless's rent (`endless-rent-rules.ts`): a clear that paid less than it owed ends the run here.
     // An act boss's reward first, for the severity it was met at (`boss-reward-rules.ts`).
-    return settleEndlessRent(applyBossReward({
+    return settleEndlessRent(applyBossReward(awakenGrownRelics({
         ...run,
         clearedTurnsRelativeToPar: (run.clearedTurnsRelativeToPar ?? 0) + turnsTaken - parTurns,
         status: 'levelComplete',
@@ -226,5 +226,5 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
                   }
                 : {})
         }
-    }, board.level, realmId ? runRealmSeverity(run) : null), scoreGained);
+    }), board.level, realmId ? runRealmSeverity(run) : null), scoreGained);
 };

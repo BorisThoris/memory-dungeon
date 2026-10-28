@@ -1,5 +1,6 @@
 import type { LevelResult } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { awakeningDefinition, isSnowballRelicId } from '../../shared/snowball-relic-rules';
 
 /**
  * The floor-clear beat's lines (thesis §41.4): what the floor was, how it went against par, what
@@ -29,6 +30,9 @@ export const FLOOR_CLEAR_COPY = {
         const floors = `${words[count] ?? count.toLocaleString()} ${count === 1 ? 'floor' : 'floors'}`;
         return `${floors} to ${name.replace(/^The /u, 'the ')}`;
     },
+    /** `Awakened: Inferno Heart`: the relics that grow which passed their mark on this clear (rules 103). */
+    awakenedLine: (ids: readonly string[]): string =>
+        `Awakened: ${ids.filter(isSnowballRelicId).map((id) => awakeningDefinition(id).title).join(' · ')}`,
     /** `+1,234`: what the floor paid, bonus included. */
     scoreLine: (scoreGained: number): string => `+${runNonNegativeInteger(scoreGained).toLocaleString()}`,
     runTotalLine: (totalScore: number): string => `Run total ${runNonNegativeInteger(totalScore).toLocaleString()}`,

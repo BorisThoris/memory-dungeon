@@ -170,6 +170,8 @@ export interface SoakRunReport {
     evolutions: number;
     /** Fusions bought at the stop (`snowball-relic-rules.ts`, rules 102). */
     fusions: number;
+    /** Relics that grew awake (rules 103). */
+    awakened: number;
     firstEvolutionFloor: number | null;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
@@ -1228,6 +1230,7 @@ export const soakRun = ({
         blueprints: runBlueprints(run).length,
         evolutions: (run.evolutions ?? []).length,
         fusions: (run.fusions ?? []).length,
+        awakened: (run.awakened ?? []).length,
         firstEvolutionFloor,
         bossDoorsTaken,
         wardenTests,

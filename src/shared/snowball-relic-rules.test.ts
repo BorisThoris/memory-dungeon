@@ -5,6 +5,18 @@ import { missBankCap } from './miss-bank';
 import { buyStoreItem, rollStoreStock, STOP_RELIC_OFFER, storeOffer } from './run-store-rules';
 import {
     applyFusion,
+    AWAKENED_HALO_CAP,
+    AWAKENED_INTEREST_BONUS,
+    AWAKENING_FROM,
+    awakenGrownRelics,
+    COIN_AWAKENS_AT,
+    CROWN_AWAKENS_AT,
+    DIAL_AWAKENS_AT,
+    DIAL_STEP,
+    HALO_AWAKENS_AT,
+    HEART_AWAKENS_AT,
+    isAwake,
+    snowballRelicTitle,
     availableFusions,
     COMPOUND_INTEREST_CAP,
     floorKeepsCrown,
@@ -144,5 +156,53 @@ describe('the stop is the player’s (rules 100)', () => {
         const bought = buyStoreItem(run, id)!;
         expect(bought.relics).toContain(id);
         expect(storeOffer(bought).find((row) => row.id === id)?.blocked).toBe('owned');
+    });
+});
+
+describe('relics that grow awaken (rules 103)', () => {
+    const at = (extra: Partial<RunState> = {}): RunState => playing({ runRulesVersion: AWAKENING_FROM, ...extra });
+
+    it('a held relic awakens on the run its mark is reached on, says so on the clear, and stays awake', () => {
+        const run = at({ relics: ['cinder_heart', 'tide_heart'], elementMatchesThisRun: { ember: HEART_AWAKENS_AT, tide: HEART_AWAKENS_AT - 1 }, lastLevelResult: { level: 2 } as RunState['lastLevelResult'] });
+        const woke = awakenGrownRelics(run);
+        expect(woke.awakened).toEqual(['cinder_heart']);
+        expect(woke.lastLevelResult?.awakened).toEqual(['cinder_heart']);
+        expect(snowballRelicTitle(woke, 'cinder_heart', 'Cinder Heart')).toBe('Inferno Heart');
+        expect(relicScoreFactors(woke).find((entry) => entry.id === 'cinder_heart')!.factor).toBeCloseTo(1 + HEART_STEP * 2 * HEART_AWAKENS_AT);
+        // Awake for the run: nothing awakens twice, and a clear that wakes nothing says nothing.
+        expect(awakenGrownRelics(woke)).toBe(woke);
+        // Not held, or before rules 103: no awakening.
+        expect(awakenGrownRelics({ ...run, relics: [] })).toEqual({ ...run, relics: [] });
+        expect(awakenGrownRelics({ ...run, runRulesVersion: AWAKENING_FROM - 1 }).awakened).toBeUndefined();
+    });
+
+    it('the Halo, the Dial, the Crown and the Coin each awaken stronger', () => {
+        const all = at({ relics: ['minted_halo', 'frenzy_dial', 'glass_crown', 'interest_coin'], gold: HALO_AWAKENS_AT, flurryGrabsThisRun: DIAL_AWAKENS_AT, cleanFloorStreak: CROWN_AWAKENS_AT });
+        expect(COIN_AWAKENS_AT).toBeLessThanOrEqual(HALO_AWAKENS_AT);
+        const woke = awakenGrownRelics(all);
+        expect(woke.awakened).toEqual(['minted_halo', 'frenzy_dial', 'glass_crown', 'interest_coin']);
+        expect(relicScoreFactors({ ...woke, gold: 9_999 }).find((entry) => entry.id === 'minted_halo')!.factor).toBe(1 + AWAKENED_HALO_CAP);
+        expect(relicScoreFactors(woke).find((entry) => entry.id === 'frenzy_dial')!.factor).toBeCloseTo(1 + DIAL_STEP * 2 * DIAL_AWAKENS_AT);
+        // The Diamond Crown halves a broken streak instead of losing it.
+        expect(nextCleanFloorStreak({ ...woke, cleanFloorStreak: 5 }, false)).toBe(2);
+        expect(nextCleanFloorStreak({ ...all, cleanFloorStreak: 5 }, false)).toBe(0);
+        // The Treasury Coin's cap is five higher, Compound Coin's too.
+        expect(interestFor({ ...woke, gold: 9_999 })).toBe(INTEREST_CAP + AWAKENED_INTEREST_BONUS);
+        expect(interestFor({ ...woke, gold: 9_999, fusions: ['compound_coin'] })).toBe(COMPOUND_INTEREST_CAP + AWAKENED_INTEREST_BONUS);
+        expect(isAwake(all, 'minted_halo')).toBe(false);
+    });
+
+    it('a real floor clear awakens a relic whose mark the floor reached', () => {
+        const run = at({ relics: ['cinder_heart'], elementMatchesThisRun: { ember: HEART_AWAKENS_AT + 5 } });
+        let cleared: RunState = run;
+        for (const pair of new Set(run.board!.tiles.map((tile) => tile.pairKey))) {
+            const [a, b] = cleared.board!.tiles.filter((tile) => tile.pairKey === pair && tile.state === 'hidden');
+            if (!a || !b) continue;
+            cleared = resolveBoardTurn(flipTile(flipTile(cleared, a.id), b.id));
+            if (cleared.status !== 'playing') break;
+        }
+        expect(cleared.status).toBe('levelComplete');
+        expect(isAwake(cleared, 'cinder_heart')).toBe(true);
+        expect(cleared.lastLevelResult?.awakened).toEqual(['cinder_heart']);
     });
 });

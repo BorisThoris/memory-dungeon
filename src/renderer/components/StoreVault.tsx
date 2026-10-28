@@ -7,7 +7,7 @@ import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './Camp.module.css';
-import { availableFusions, BUILD_PAYS_FROM, FUSION_PRICE, relicScoreFactors, relicScoreMultiplier } from '../../shared/snowball-relic-rules';
+import { AWAKENING_FROM, availableFusions, awakeningDefinition, BUILD_PAYS_FROM, FUSION_PRICE, isSnowballRelicId, relicScoreFactors, relicScoreMultiplier, snowballRelicTitle } from '../../shared/snowball-relic-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { availableEvolutions, EVOLUTION_PRICE } from '../../shared/relic-evolution-rules';
 import type { BlueprintId } from '../../shared/boss-reward-rules';
@@ -78,7 +78,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVau
             <div className={styles.scroll} ref={spotsRef} data-testid="store-rows">
                 {build.length > 0 ? (
                     <p className={styles.subtitle} data-testid="store-build">
-                        Your build: {build.map((entry) => `${relicDefinition(entry.id).title} ×${entry.factor.toFixed(2)}`).join(' · ')}
+                        Your build: {build.map((entry) => `${snowballRelicTitle(run, entry.id, relicDefinition(entry.id).title)} ×${entry.factor.toFixed(2)}`).join(' · ')}
                         {(run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? ` · every match and every clear’s gold ×${relicScoreMultiplier(run).toFixed(2)}` : null}
                     </p>
                 ) : null}
@@ -120,7 +120,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVau
                                     {[1, 2, 3].map(rank => <i key={rank} data-filled={rank <= row.rank!} />)}<span>{row.rank}/3</span>
                                 </span> : null}
                             </div>
-                            <p id={`${titleId}-${row.id}`}>{row.body}</p>
+                            <p id={`${titleId}-${row.id}`}>{row.body}{(run.runRulesVersion ?? 0) >= AWAKENING_FROM && isSnowballRelicId(row.id) ? ` ${awakeningDefinition(row.id).mark}` : null}</p>
                             <span className={styles.blocked}>
                                 {row.blocked === 'gold' ? `Need ${row.goldShortfall} more gold` : row.blocked === 'full' ? 'Your miss bank is full' : row.blocked === 'max_rank' ? 'Fully upgraded for this run' : row.blocked === 'no_bank' ? 'This mode has no miss bank' : row.blocked === 'owned' ? 'Already owned' : row.blocked === 'slots' ? 'Your four slots are full' : '\u00a0'}
                             </span>

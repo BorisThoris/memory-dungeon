@@ -80,6 +80,11 @@ const FloorClearBeat = ({ bossNote = null, countUp = false, leaving = false, mil
                     {FLOOR_CLEAR_COPY.onwardLine(nextPlace)}
                 </p>
             ) : null}
+            {result.awakened && result.awakened.length > 0 ? (
+                <p className={styles.personalBest} data-testid="floor-clear-awakened">
+                    {FLOOR_CLEAR_COPY.awakenedLine(result.awakened)}
+                </p>
+            ) : null}
             {bossNote ? (
                 <p className={styles.milestone} data-testid="floor-clear-boss-reward">
                     {bossNote}
