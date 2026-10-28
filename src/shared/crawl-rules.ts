@@ -44,6 +44,10 @@ export interface CrawlFloor {
     slain: number;
     /** The last turn's blows, for the board and the HUD to show: who struck, who was hurt, who died. */
     lastStrikes?: number;
+    /** The cells of the monsters that struck on the last turn. */
+    lastStrikers?: number[];
+    /** Turns the crawl has counted this floor: the board keys each turn's blows by it. */
+    turn?: number;
     lastHits?: number[];
     lastKills?: number[];
 }
@@ -167,12 +171,14 @@ export const applyCrawlTurn = (before: RunState, after: RunState): RunState => {
 
     // The survivors count down; the clearing turn ends the floor before they can strike.
     let strikes = 0;
+    const strikers: number[] = [];
     let damageTaken = 0;
     if (after.status === 'playing') {
         monsters = monsters.map((monster) => {
             const clock = monster.clock - 1;
             if (clock > 0) return { ...monster, clock };
             strikes += 1;
+            strikers.push(monster.cell);
             damageTaken += monster.damage;
             return { ...monster, clock: monster.every };
         });
@@ -183,7 +189,7 @@ export const applyCrawlTurn = (before: RunState, after: RunState): RunState => {
         ...after,
         crawlHealth: health,
         gold: runNonNegativeInteger(after.gold) + kills.length * CRAWL_KILL_GOLD,
-        board: { ...after.board, crawl: { hero, monsters, slain: crawl.slain + kills.length, lastStrikes: strikes, lastHits: hits, lastKills: kills } }
+        board: { ...after.board, crawl: { hero, monsters, slain: crawl.slain + kills.length, lastStrikes: strikes, lastStrikers: strikers, lastHits: hits, lastKills: kills, turn: (crawl.turn ?? 0) + 1 } }
     };
     if (health === 0 && next.status === 'playing') {
         return { ...next, status: 'gameOver', runEndReason: 'slain', board: { ...next.board!, flippedTileIds: [] } };

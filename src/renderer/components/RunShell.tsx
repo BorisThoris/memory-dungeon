@@ -658,7 +658,8 @@ const RunShell = ({
                                 <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
                                 {/* The crawl (`crawl-rules.ts`, `?crawl=1`): the hero's health, and the next monster's strike under it. */}
                                 {run.board?.crawl ? (
-                                    <span className={styles.crawlHealth} data-testid="hud-health" data-low={(run.crawlHealth ?? 0) <= 2 ? 'true' : undefined}>
+                                    <span className={styles.crawlHealth} data-testid="hud-health" data-low={(run.crawlHealth ?? 0) <= 2 ? 'true' : undefined}
+                                        data-struck={(run.board.crawl.lastStrikes ?? 0) > 0 ? 'true' : undefined} key={`hp-${run.board.crawl.turn ?? 0}`}>
                                         <span className={styles.lifeCount}>{run.crawlHealth ?? 0}</span>
                                         <span className={styles.lifeLabel}>health</span>
                                     </span>

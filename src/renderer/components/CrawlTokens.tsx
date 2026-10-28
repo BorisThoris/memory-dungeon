@@ -93,15 +93,28 @@ const cellPosition = (board: Pick<BoardState, 'tiles' | 'columns' | 'rows'>, cel
     return [transform.baseX + transform.layoutJitterX, transform.baseY + transform.layoutJitterY];
 };
 
-const MonsterToken = ({ monster, x, y, time, reduceMotion }: { monster: CrawlMonster; x: number; y: number; time: MutableRefObject<number>; reduceMotion: boolean }): ReactElement | null => {
+/** Seconds a blow's motion lasts on the board. */
+const BLOW_SECONDS = 0.55;
+
+const MonsterToken = ({ monster, x, y, time, reduceMotion, struck, hit, turn }: { monster: CrawlMonster; x: number; y: number; time: MutableRefObject<number>; reduceMotion: boolean; struck: boolean; hit: boolean; turn: number }): ReactElement | null => {
     const texture = useMemo(() => monsterTexture(monster), [monster]);
     const ref = useRef<Group>(null);
+    // When this turn's blow began, read off the shared clock the first frame after it lands.
+    const blowAt = useRef<{ turn: number; at: number | null }>({ turn: -1, at: null });
     useEffect(() => () => texture?.dispose(), [texture]);
     useFrame(() => {
         if (!ref.current) return;
+        if (blowAt.current.turn !== turn) blowAt.current = { turn, at: struck || hit ? time.current : null };
+        const since = blowAt.current.at == null ? Infinity : time.current - blowAt.current.at;
+        const u = reduceMotion || since >= BLOW_SECONDS ? 1 : since / BLOW_SECONDS;
+        const fade = (1 - u) * (1 - u);
         const urgent = monster.clock <= 1 && !reduceMotion;
-        const s = urgent ? 1 + 0.08 * Math.sin(time.current * 9) : 1;
+        // A strike lunges out at the player; a wound shudders sideways.
+        const lunge = struck ? 0.55 * fade : 0;
+        const s = 1 + lunge + (urgent ? 0.08 * Math.sin(time.current * 9) : 0);
         ref.current.scale.set(s, s, 1);
+        ref.current.position.x = x + CARD_PLANE_WIDTH * 0.2 + (hit ? 0.06 * fade * Math.sin(since * 60) : 0);
+        ref.current.position.z = 0.16 + lunge * 0.4;
     });
     if (!texture) return null;
     const size = CARD_PLANE_WIDTH * 0.62;
@@ -124,6 +137,40 @@ const reachTexture = (): CanvasTexture | null =>
         ctx.strokeRect(14, 14, SIZE - 28, SIZE - 28);
     });
 
+const burstTexture = (): CanvasTexture | null =>
+    paint((ctx) => {
+        const c = SIZE / 2;
+        ctx.strokeStyle = '#ff6a4d';
+        ctx.lineWidth = 16;
+        ctx.shadowColor = '#ffb35a';
+        ctx.shadowBlur = 24;
+        ctx.beginPath();
+        ctx.arc(c, c, c * 0.78, 0, Math.PI * 2);
+        ctx.stroke();
+    });
+
+const KillBurst = ({ x, y, time, turn, map }: { x: number; y: number; time: MutableRefObject<number>; turn: number; map: CanvasTexture }): ReactElement => {
+    const ref = useRef<Group>(null);
+    const start = useRef<{ turn: number; at: number | null }>({ turn: -1, at: null });
+    const material = useRef<{ opacity: number } | null>(null);
+    useFrame(() => {
+        if (!ref.current) return;
+        if (start.current.turn !== turn) start.current = { turn, at: time.current };
+        const u = Math.min(1, (time.current - (start.current.at ?? time.current)) / 0.7);
+        const s = 0.6 + 1.4 * u;
+        ref.current.scale.set(s, s, 1);
+        if (material.current) material.current.opacity = 1 - u;
+    });
+    return (
+        <group ref={ref} position={[x, y, 0.2]}>
+            <mesh raycast={noopMeshRaycast} renderOrder={42}>
+                <planeGeometry args={[CARD_PLANE_WIDTH, CARD_PLANE_WIDTH]} />
+                <meshBasicMaterial ref={material as never} depthTest={false} depthWrite={false} map={map} toneMapped={false} transparent />
+            </mesh>
+        </group>
+    );
+};
+
 export function CrawlTokens({ board, compact, reduceMotion, showReach = true, stickyCell = null, time }: {
     board: Pick<BoardState, 'tiles' | 'columns' | 'rows' | 'crawl' | 'fold' | 'flippedTileIds'>;
     showReach?: boolean;
@@ -134,6 +181,7 @@ export function CrawlTokens({ board, compact, reduceMotion, showReach = true, st
 }): ReactElement | null {
     const heroMap = useMemo(() => heroTexture(), []);
     const reachMap = useMemo(() => reachTexture(), []);
+    const burstMap = useMemo(() => burstTexture(), []);
     // Before a turn's first card: the cards the hero can open, outlined in gold.
     const reach = useMemo(() => (showReach && board.crawl && board.flippedTileIds.length === 0 ? [...crawlReachableCells(board, stickyCell)] : []), [board, showReach, stickyCell]);
     const hero = useRef<Group>(null);
@@ -162,8 +210,13 @@ export function CrawlTokens({ board, compact, reduceMotion, showReach = true, st
             }) : null}
             {crawl.monsters.map((monster) => {
                 const [x, y] = cellPosition(board, monster.cell, compact, reduceMotion);
-                return <MonsterToken key={`${monster.cell}-${monster.kind}`} monster={monster} x={x} y={y} time={time} reduceMotion={reduceMotion} />;
+                return <MonsterToken key={`${monster.cell}-${monster.kind}`} monster={monster} x={x} y={y} time={time} reduceMotion={reduceMotion}
+                    struck={(crawl.lastStrikers ?? []).includes(monster.cell)} hit={(crawl.lastHits ?? []).includes(monster.cell)} turn={crawl.turn ?? 0} />;
             })}
+            {burstMap && !reduceMotion ? (crawl.lastKills ?? []).map((cell) => {
+                const [x, y] = cellPosition(board, cell, compact, reduceMotion);
+                return <KillBurst key={`kill-${crawl.turn ?? 0}-${cell}`} x={x} y={y} time={time} turn={crawl.turn ?? 0} map={burstMap} />;
+            }) : null}
             <group ref={hero} position={[target[0], target[1], 0.18]}>
                 <mesh raycast={noopMeshRaycast} renderOrder={41}>
                     <planeGeometry args={[heroSize, heroSize]} />
