@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3395,
     "codeFileCount": 1320,
-    "exportedSymbolCount": 4324,
+    "exportedSymbolCount": 4326,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12171
+    "relationshipCount": 12173
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 125879,
-      "sha256": "dfd086f7af985c17f3b4a234601859699b020f5bf8132303726ac636616a9fd8"
+      "bytes": 127034,
+      "sha256": "1f350dcef29393eb8e39096ff87ae6a4a9388e9f995e112b2ca8a75c6ae2ade0"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10620,
-      "sha256": "a501e1f03dc2846175cf65964ccc6879dffbb2409373a9b03f9996ddf317f304"
+      "sha256": "459ad2cbe8da2df17dc977a123f15d2e50c780f68d4727bd72cfa4692eb84d9a"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "664f120d06d71892fe7bc2442711ff56e039fb21bfa3e4d5256804f680d0b342"
+      "sha256": "7ab4ad329c1ca77ad689f8e93bb0f27c4d6ea2e8468183c97f07b1e26aa7c566"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -12183,8 +12183,8 @@
     {
       "path": "src/renderer/components/StoreVault.tsx",
       "category": "source",
-      "bytes": 8420,
-      "sha256": "8691194283d0c4f7baa601b065655720f06199b89036b356bd83c566b43f4a99"
+      "bytes": 8625,
+      "sha256": "30065f43c373eb7db9dd49f0eaaacdcb580310d4d17951d9402e10eb91fa4815"
     },
     {
       "path": "src/renderer/components/storeWareGlyphs.tsx",
@@ -14805,8 +14805,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 126293,
-      "sha256": "ad604c1fadc591c03591a628e1f84c07b56c781be09390057751e55319122697"
+      "bytes": 127448,
+      "sha256": "c113dd68bc7990edd59000d6aaade63564c53274d1f2ac8431fae214bb997e1c"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15376,7 +15376,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 67171,
-      "sha256": "1cb43cb4659cd1143c6ae15ed88105d362bcf461e89b01923bd7f8fb7d169e64"
+      "sha256": "ed22ef1738ca58d736b7d6933b2731ecfcaddc338439ee86879bed865d3daaf3"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15825,8 +15825,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 13264,
-      "sha256": "daea663e5f22d91475002ed35d83be13bdd40d3a352cfd9e4f3b432018095bbf"
+      "bytes": 13394,
+      "sha256": "64f1d1c6207617c718212d1ab59ace6d2884dff0223a9f8dd099c5e120dfd2c1"
     },
     {
       "path": "src/shared/floor-curio-greeting-rules.test.ts",
@@ -16425,8 +16425,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 78115,
-      "sha256": "f66bea56c9ffbcb94b3cb255ece274da8118cf5845acd0ae0400c7f45aeb9dde"
+      "bytes": 78230,
+      "sha256": "b592372cd0771054cd41e982b2400bb83f478feaacf206b5be899a0457caeca4"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17445,14 +17445,14 @@
     {
       "path": "src/shared/snowball-relic-rules.test.ts",
       "category": "test",
-      "bytes": 4578,
-      "sha256": "f3ea37575832a1ddbe4873ce506fe5149caf4783bb8130479bdac3eaf06db64f"
+      "bytes": 5147,
+      "sha256": "73608beebfe720a201925bf9dadfe766f544fdb1f40766e8e4b07707e74896b3"
     },
     {
       "path": "src/shared/snowball-relic-rules.ts",
       "category": "source",
-      "bytes": 6887,
-      "sha256": "2dc27294e8dce8064e41f79d66a279d23b19d577d962409b4d7ccddad2d763a9"
+      "bytes": 7772,
+      "sha256": "854ab6f51b8d02a1bd11b6a3ca534e3663747d285a6a1f19909e2fcb5b614d70"
     },
     {
       "path": "src/shared/social-play-scope.test.ts",
@@ -17571,8 +17571,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 150129,
-      "sha256": "b8439787a6df599570ee2a74dc4372a5763d200ce4fd4069cf712ff2c67f1f0b"
+      "bytes": 151284,
+      "sha256": "b93337889813f6b786d880e079d19c48c7fc14c19950e19f340a00c28aae20ac"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17866,7 +17866,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7364,
-      "sha256": "214d4a138b9112592ff6dc9eca76f949dd773200eb99dc0a6eb2ea03948b2c83"
+      "sha256": "9bf730ed055cd003ea37d549e540bc2df8f87c44ef0cb09a06975cb7851c6cac"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17961,8 +17961,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 37390,
-      "sha256": "95902d28344cfcc97c0bb4765eb323f0c3726d02fa79178e242050312ccfb663"
+      "bytes": 38106,
+      "sha256": "81caedf755102d6f8d75e78ad92ff8f604faeb96f8506c5fa3e4646d45969567"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -27544,7 +27544,7 @@
       "path": "src/renderer/components/StoreVault.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 132,
+      "lineCount": 133,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -38710,7 +38710,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 230,
+      "lineCount": 231,
       "imports": [
         "file:src/shared/boss-reward-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -44756,7 +44756,7 @@
       "path": "src/shared/snowball-relic-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 85,
+      "lineCount": 96,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -44772,12 +44772,14 @@
       "path": "src/shared/snowball-relic-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 109,
+      "lineCount": 122,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
+        "symbol:src/shared/snowball-relic-rules.ts#BUILD_PAYS_FROM",
+        "symbol:src/shared/snowball-relic-rules.ts#buildPaidGold",
         "symbol:src/shared/snowball-relic-rules.ts#countElementMatch",
         "symbol:src/shared/snowball-relic-rules.ts#CROWN_STEP",
         "symbol:src/shared/snowball-relic-rules.ts#DIAL_STEP",
@@ -54597,8 +54599,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/StoreVault.tsx",
-      "line": 131,
-      "endLine": 131
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph",
@@ -68830,7 +68832,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 31,
-      "endLine": 229
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
@@ -78353,6 +78355,22 @@
       "endLine": 105
     },
     {
+      "id": "symbol:src/shared/snowball-relic-rules.ts#BUILD_PAYS_FROM",
+      "name": "BUILD_PAYS_FROM",
+      "kind": "value",
+      "file": "src/shared/snowball-relic-rules.ts",
+      "line": 114,
+      "endLine": 114
+    },
+    {
+      "id": "symbol:src/shared/snowball-relic-rules.ts#buildPaidGold",
+      "name": "buildPaidGold",
+      "kind": "value",
+      "file": "src/shared/snowball-relic-rules.ts",
+      "line": 117,
+      "endLine": 118
+    },
+    {
       "id": "symbol:src/shared/snowball-relic-rules.ts#countElementMatch",
       "name": "countElementMatch",
       "kind": "value",
@@ -78501,8 +78519,8 @@
       "name": "snowballBankCapDelta",
       "kind": "value",
       "file": "src/shared/snowball-relic-rules.ts",
-      "line": 108,
-      "endLine": 108
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/shared/snowball-relic-rules.ts#SnowballRelicDefinition",
@@ -112393,6 +112411,18 @@
       "id": "exports:src/shared/sleeper-rules.ts->symbol:src/shared/sleeper-rules.ts#wakeSleeper",
       "source": "file:src/shared/sleeper-rules.ts",
       "target": "symbol:src/shared/sleeper-rules.ts#wakeSleeper",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/snowball-relic-rules.ts->symbol:src/shared/snowball-relic-rules.ts#BUILD_PAYS_FROM",
+      "source": "file:src/shared/snowball-relic-rules.ts",
+      "target": "symbol:src/shared/snowball-relic-rules.ts#BUILD_PAYS_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/snowball-relic-rules.ts->symbol:src/shared/snowball-relic-rules.ts#buildPaidGold",
+      "source": "file:src/shared/snowball-relic-rules.ts",
+      "target": "symbol:src/shared/snowball-relic-rules.ts#buildPaidGold",
       "kind": "exports"
     },
     {
