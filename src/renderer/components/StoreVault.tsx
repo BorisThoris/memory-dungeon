@@ -7,7 +7,7 @@ import { STORE_SHEET_COPY } from '../copy/storeSheet';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { storeWareGlyph } from './storeWareGlyphs';
 import styles from './Camp.module.css';
-import { relicScoreFactors } from '../../shared/snowball-relic-rules';
+import { BUILD_PAYS_FROM, relicScoreFactors, relicScoreMultiplier } from '../../shared/snowball-relic-rules';
 import { relicDefinition } from '../../shared/run-relic-rules';
 import { availableEvolutions, EVOLUTION_PRICE } from '../../shared/relic-evolution-rules';
 import type { BlueprintId } from '../../shared/boss-reward-rules';
@@ -76,6 +76,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve }: StoreVaultProps)
                 {build.length > 0 ? (
                     <p className={styles.subtitle} data-testid="store-build">
                         Your build: {build.map((entry) => `${relicDefinition(entry.id).title} ×${entry.factor.toFixed(2)}`).join(' · ')}
+                        {(run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? ` · every match and every clear’s gold ×${relicScoreMultiplier(run).toFixed(2)}` : null}
                     </p>
                 ) : null}
                 {evolutions.length > 0 ? <section className={styles.section} aria-label="Evolutions">

@@ -4,6 +4,8 @@ import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from '.
 import { missBankCap } from './miss-bank';
 import { buyStoreItem, rollStoreStock, STOP_RELIC_OFFER, storeOffer } from './run-store-rules';
 import {
+    BUILD_PAYS_FROM,
+    buildPaidGold,
     CROWN_STEP,
     HALO_CAP,
     HEART_STEP,
@@ -58,6 +60,15 @@ describe('relics that grow (rules 100)', () => {
         expect(interestFor(playing({ relics: ['interest_coin'], gold: 14 }))).toBe(2);
         expect(interestFor(playing({ relics: ['interest_coin'], gold: 400 }))).toBe(INTEREST_CAP);
         expect(interestFor(playing({ gold: 400 }))).toBe(0);
+    });
+});
+
+describe('the build pays (rules 101)', () => {
+    it('a clear’s gold is multiplied by the build, rounded down, from rules 101 only', () => {
+        const run = playing({ runRulesVersion: BUILD_PAYS_FROM, relics: ['cinder_heart'], elementMatchesThisRun: { ember: 50 } });
+        expect(buildPaidGold(run, 7)).toBe(Math.floor(7 * (1 + HEART_STEP * 50)));
+        expect(buildPaidGold({ ...run, relics: [] }, 7)).toBe(7);
+        expect(buildPaidGold({ ...run, runRulesVersion: BUILD_PAYS_FROM - 1 }, 7)).toBe(7);
     });
 });
 

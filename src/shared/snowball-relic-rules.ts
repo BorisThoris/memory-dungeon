@@ -104,5 +104,18 @@ export const nextCleanFloorStreak = (run: SnowballRun, clean: boolean): number =
 export const interestFor = (run: SnowballRun): number =>
     onSnowball(run) && holds(run, 'interest_coin') ? Math.min(INTEREST_CAP, Math.floor(runNonNegativeInteger(run.gold) / INTEREST_PER)) : 0;
 
+/**
+ * **The build pays** (rules 101, 2026-10-28). Through rules 100 the multiplier fell on score alone, and in the
+ * Descent score buys nothing: gold comes from the clear (`floorClearGold`), so a Heart at ×3 changed the
+ * number on the HUD and not one thing the run could do. From rules 101 a floor clear's gold is multiplied by
+ * the build too, rounded down: the build buys the next stop's misses and relics, and the next stop grows the
+ * build. Read on the base clear, before a realm's weather and the Miser's Purse multiply it again.
+ */
+export const BUILD_PAYS_FROM = 101;
+
+/** A clear's gold through the build: the base times every held relic's factor, from rules 101. */
+export const buildPaidGold = (run: SnowballRun, gold: number): number =>
+    (run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? Math.floor(runNonNegativeInteger(gold) * relicScoreMultiplier(run)) : gold;
+
 /** The Glass Crown's price, taken from the miss bank's cap. */
 export const snowballBankCapDelta = (run: SnowballRun): number => (onSnowball(run) && holds(run, 'glass_crown') ? -1 : 0);

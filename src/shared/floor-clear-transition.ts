@@ -1,5 +1,5 @@
 import { depthHas } from './depth-rules';
-import { interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
+import { buildPaidGold, interestFor, nextCleanFloorStreak, SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { sealSpiralRings, spiralHolds } from './spiral-rules';
 import { SLEEPER_RULES_FROM, wakeAllSleepers } from './sleeper-rules';
 import { applyBossReward, offersBossDoors } from './boss-reward-rules';
@@ -128,7 +128,8 @@ export const finalizeLevel = (run: RunState, clearedBoard: BoardState): RunState
     const goldEarned = misersPurseGold(
         run,
         realmClearGold(
-            floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar }),
+            // The build pays (rules 101): the clear's gold through every held relic's factor.
+            buildPaidGold(run, floorClearGold({ tier: momentumBonus.tier, turnsUnderPar: floorBonus.turnsUnderPar })),
             realmId ? runRealmSeverity(run) : null,
             runRealmSecondaryId(run) != null,
             realmAttunementLevel(run, realmId)
