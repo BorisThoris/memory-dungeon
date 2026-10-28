@@ -15,7 +15,9 @@ export const RUN_END_VERDICT: Record<RunEndReason, string> = {
     // The Warden cleared (DGE-005): the Descent's one win, never read as a death.
     warden_cleared: 'THE WARDEN FALLS',
     // Endless's rent (DGE-006): the floor paid less than it owed.
-    rent_unpaid: 'THE DEPTHS COLLECT'
+    rent_unpaid: 'THE DEPTHS COLLECT',
+    // The crawl (`crawl-rules.ts`): the hero's health ran out.
+    slain: 'SLAIN'
 };
 
 /** A summary from before the reason was recorded gets the old title, as a stamp. */

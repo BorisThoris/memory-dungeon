@@ -79,7 +79,7 @@ export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
  * `turn_ceiling` is kept for summaries written while the ceiling existed (Gen 183 to 2026-09-23);
  * a run ends that way no more. `miss_budget` is the miss bank (`miss-bank.ts`) running dry.
  */
-export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor' | 'warden_cleared' | 'rent_unpaid';
+export type RunEndReason = 'turn_ceiling' | 'miss_budget' | 'quit' | 'contract' | 'pass_and_play_final_floor' | 'warden_cleared' | 'rent_unpaid' | 'slain';
 /**
  * The realms (`realm-rules.ts`): the environment a floor is played in. Each has weather that
  * changes the board while it is played, on a clock the player winds, and the player picks the next
@@ -571,6 +571,8 @@ export interface BoardState {
     elementalGround?: (TileSuit | null)[];
     /** Actual cast contacts, retained independently of weather for the board's impact animation. */
     elementCast?: ElementCastImpact;
+    /** The crawl (`crawl-rules.ts`, prototype behind `?crawl=1`): the hero's cell and the monsters on the board. */
+    crawl?: import('./crawl-rules').CrawlFloor;
     flippedTileIds: string[];
     matchedPairs: number;
     /** GP-O02: optional pair key that grants a bonus if matched last among real pairs. */
@@ -1072,6 +1074,9 @@ export interface RunState {
     wardenRedealsThisFloor?: number;
     /** The test pace (`descent-pace-rules.ts`): the run jumps down the Descent's ladder and counts toward no record. */
     descentPace?: 'fast' | null;
+    /** The crawl (`crawl-rules.ts`, prototype behind `?crawl=1`): the hero walks the board and monsters strike its health. */
+    crawl?: boolean | null;
+    crawlHealth?: number;
     /** Endless (DGE-006): the run chose to go on past the Warden, and its clears no longer end it. */
     /** The Hold (`hold-rules.ts`, DGE-008): links toward arming it, whether it is held, and the held pairs' tile ids. */
     holdLinks?: number;

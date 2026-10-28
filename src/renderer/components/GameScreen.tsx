@@ -1,4 +1,5 @@
 import { depthRung } from '../../shared/depth-rules';
+import { crawlReachableCells } from '../../shared/crawl-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
 import { carveSwipeDirection } from '../input/carveSwipe';
@@ -1102,7 +1103,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         strength: 1
     });
     const focusDimmedTileIds = useMemo(() => {
-        const dimmed = computeFocusDimmedTileIds(run.board, run.status, settingsTileFocusAssist) ?? new Set<string>();
+        const dimmed = new Set<string>(computeFocusDimmedTileIds(run.board, run.status, settingsTileFocusAssist) ?? []);
+        // The crawl (`crawl-rules.ts`): before a turn's first card, the cards the hero cannot reach are dimmed.
+        if (run.board?.crawl && run.status === 'playing' && run.board.flippedTileIds.length === 0) {
+            const reach = crawlReachableCells(run.board, run.stickyBlockIndex);
+            run.board.tiles.forEach((tile, index) => { if (tile.state === 'hidden' && !reach.has(index)) dimmed.add(tile.id); });
+        }
         if (
             onboardingBoardTargetIds.length === 0 ||
             !run.board ||
@@ -1113,7 +1119,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const targetSet = new Set(onboardingBoardTargetIds);
         const guidedDimmed = run.board.tiles.map((tile) => tile.id).filter((tileId) => !targetSet.has(tileId));
         return new Set([...dimmed, ...guidedDimmed]);
-    }, [onboardingBoardTargetIds, run.board, run.status, settingsTileFocusAssist]);
+    }, [onboardingBoardTargetIds, run.board, run.status, run.stickyBlockIndex, settingsTileFocusAssist]);
     const stickyBlockedTileId = useMemo((): string | null => {
         const board = run.board;
         if (!board || run.status !== 'playing') {

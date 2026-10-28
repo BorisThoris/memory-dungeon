@@ -1924,3 +1924,9 @@
 
 /* A paid rent reads as done. */
 .milestone[data-rent-paid='true'] .milestoneFraction { color: #b8e6b0; }
+/* The crawl (`crawl-rules.ts`, `?crawl=1`): the hero's health, in red, beside the lives. */
+.crawlHealth { display: inline-flex; gap: 0.3rem; align-items: baseline; margin-left: 0.55rem; padding-left: 0.55rem; border-left: 1px solid #ae824766; color: #ff9b84; }
+.crawlHealth[data-low='true'] { color: #fff; text-shadow: 0 0 9px #ed384f; }
+.shell[data-layout^='phone'] .crawlHealth { margin-left: 0.25rem; padding-left: 0.3rem; }
+.shell[data-layout^='phone'] .crawlHealth .lifeCount { font-size: 1.25rem; }
+.shell[data-layout^='phone'] .crawlHealth .lifeLabel { display: none; }

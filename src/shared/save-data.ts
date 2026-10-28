@@ -55,7 +55,7 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 /** Every way a run can end (`RunEndReason`); anything else in a save reads as unknown. */
-const RUN_END_REASONS: readonly RunEndReason[] = ['turn_ceiling', 'miss_budget', 'quit', 'contract', 'pass_and_play_final_floor', 'warden_cleared', 'rent_unpaid'];
+const RUN_END_REASONS: readonly RunEndReason[] = ['turn_ceiling', 'miss_budget', 'quit', 'contract', 'pass_and_play_final_floor', 'warden_cleared', 'rent_unpaid', 'slain'];
 const isRunEndReason = (value: unknown): value is RunEndReason => RUN_END_REASONS.includes(value as RunEndReason);
 
 const DISPLAY_MODE_VALUES = ['windowed', 'fullscreen'] as const satisfies readonly Settings['displayMode'][];

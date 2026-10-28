@@ -36,6 +36,7 @@ import { dealMatchRule, matchRuleFor, THREES_KEEP_RECIPES_FROM } from './match-r
 import { SNOWBALL_RELICS_FROM } from './snowball-relic-rules';
 import { featuredRecipeElementPairKeys } from './secondary-objective-rules';
 import { descentLengthFor } from './descent-length-rules';
+import { crawlNextFloor } from './crawl-rules';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -125,5 +126,5 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         memorizeRemainingMs: baseMemorizeMs
     });
     // A jump keeps the miss bank's shelf and Dread's counts in floors played, not floor numbers.
-    return settleDescentJump(run, next);
+    return crawlNextFloor(settleDescentJump(run, next));
 };
