@@ -78,7 +78,7 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             return run;
         }
         // The crawl (`crawl-rules.ts`): a turn's first card is turned on the hero's ground or beside it.
-        if (currentFlippedTileIds.length === 0 && crawlBlocksFirstFlip(board, tileIndex, run.stickyBlockIndex)) {
+        if (currentFlippedTileIds.length === 0 && crawlBlocksFirstFlip(run, board, tileIndex)) {
             return run;
         }
 

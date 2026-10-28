@@ -17,6 +17,7 @@
  * items do to a run's length; without it the table is the one the miss bank was tuned against.
  */
 import { automaticCampReward } from '../src/shared/automatic-camp-rules';
+import { crawlFirstCards, crawlOrderPair, withCrawl } from '../src/shared/crawl-rules';
 import { turnTripleThird } from '../src/shared/match-rule-rules';
 import { GAME_RULES_VERSION, type RunState } from '../src/shared/contracts';
 import { buildBoard } from '../src/shared/board-generation';
@@ -81,13 +82,14 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
         featuredObjectiveId: entry.featuredObjectiveId,
         cycleFloor: entry.cycleFloor
     });
-    let run: RunState = {
+    // The crawl (`crawl-rules.ts`, rules 104): the first board swapped in here is dealt its hero and monsters.
+    let run: RunState = withCrawl({
         ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, realm: null, depth })),
         activeMutators: mutators,
         board,
         status: 'playing',
         findablesTotalThisFloor: countFindablePairs(board.tiles)
-    };
+    });
     const tally: SurvivalRun = { floorReached: 1, comboEarned: 0, clearEarned: 0, expired: 0, warden: null };
     for (let floor = 1; floor <= floorCap; floor += 1) {
         tally.floorReached = floor;
@@ -103,14 +105,19 @@ export const simulateSurvivalRun = (seed: number, missRate: number, floorCap = S
             const wantsMiss = rng() < missRate && hidden.length >= 3;
             let first;
             let second;
-            if (wantsMiss) {
-                first = hidden[pickRngIndex(rng, hidden.length)]!;
+            // Under the crawl a turn opens on a card the hero can reach.
+            const openers = crawlFirstCards(run, hidden);
+            if (wantsMiss && openers.length > 0) {
+                first = openers[pickRngIndex(rng, openers.length)]!;
                 const others = hidden.filter((tile) => tile.pairKey !== first!.pairKey);
                 if (others.length === 0) break;
                 second = others[pickRngIndex(rng, others.length)]!;
             } else {
                 const group = groups[pickRngIndex(rng, groups.length)]!;
-                [first, second] = [group[0]!, group[1]!];
+                // Under the crawl: a pair the hero can open, one that hurts a monster first.
+                const ordered = crawlOrderPair(run, [group, ...groups]);
+                if (!ordered) break;
+                [first, second] = ordered;
             }
             const before = run;
             if (useItems && (run.crucibleCharges ?? 0) > 0) {

@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 134 as const;
+export const ENCYCLOPEDIA_VERSION = 135 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -429,6 +429,12 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         title: 'Pairs and matching',
         description:
             'Flip two hidden tiles; a match clears the pair for score. Wild and contract rules can change what counts as a match.'
+    },
+    {
+        id: 'crawl',
+        title: 'The hero and the monsters',
+        description:
+            'Your hero stands on the board, the sword at the bottom-left. A turn’s first card must be on or beside the hero’s ground, the open floor joined to where it stands; the gold outline shows which. The second card can be anywhere. A match moves the hero to where the partner lay. Monsters stand on cards, their health in the red badge and their count to the next blow in pips: when the pips run out they strike your health. Turning a monster’s card stabs it, a match hurts every monster beside it (Ember burns for two), and matching its own card kills it. A kill pays 4 gold and a point of health, and a kill on a match wins a miss back. Health heals 3 each floor, up to 8; at none, the run ends. Misses still spend the bank.'
     },
     {
         id: 'memorize',

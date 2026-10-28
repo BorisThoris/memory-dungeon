@@ -1,4 +1,5 @@
 import { inSequenceOrder } from './match-rule-rules';
+import { crawlCarryHeroTo } from './crawl-rules';
 import { dropMask, unmaskOnFlip } from './mask-rules';
 import type { RunState, Tile, ZoneResult, ZoneState } from './contracts';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
@@ -149,7 +150,8 @@ const faceDown = (run: RunState, ids: readonly string[]): RunState => ({
  * (a vine, the frost) does not stop them being played: they were already in the player's hand.
  */
 const playTurn = (run: RunState, ...ids: string[]): RunState =>
-    resolveBoardTurn(ids.reduce((state, id) => flipTile(state, id), releaseHolds(run, ids)));
+    // The crawl (`crawl-rules.ts`): the Zone carries the hero to the turn's first card, so it can be turned.
+    resolveBoardTurn(ids.reduce((state, id) => flipTile(state, id), crawlCarryHeroTo(releaseHolds(run, ids), ids[0] ?? '')));
 
 const releaseHolds = (run: RunState, ids: readonly string[]): RunState =>
     run.board && run.board.tiles.some((tile) => ids.includes(tile.id) && isTileFlipBlocked(tile))

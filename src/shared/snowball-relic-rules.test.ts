@@ -118,7 +118,8 @@ describe('fusions (rules 102)', () => {
         expect(heartGoldFor({ ...run, fusions: [] }, 'ember')).toBe(0);
         const a = run.board!.tiles.find((tile) => tile.state === 'hidden' && tile.suit != null)!;
         const b = run.board!.tiles.find((tile) => tile.id !== a.id && tile.pairKey === a.pairKey)!;
-        expect(resolveBoardTurn(flipTile(flipTile(run, a.id), b.id)).gold).toBe(41);
+        const plain = { ...run, fusions: [] };
+        expect(resolveBoardTurn(flipTile(flipTile(run, a.id), b.id)).gold).toBe((resolveBoardTurn(flipTile(flipTile(plain, a.id), b.id)).gold ?? 0) + 1);
     });
 
     it('Storm Crown: a floor of one miss keeps the streak, and the bank has its slot back', () => {

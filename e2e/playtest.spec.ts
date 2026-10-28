@@ -34,14 +34,26 @@ interface Snapshot {
     hidden: { id: string; k: string; q?: number }[];
     /** The one tile a Stasis lock says cannot open a turn, if any. */
     blocked: string | null;
+    /** The crawl (`crawl-rules.ts`): the cards a turn may open on, or null off the crawl. */
+    reach: string[] | null;
+    /** The pair a player who knows the board plays under the crawl: one the hero can open, a monster's first. */
+    hunt: [string, string] | null;
 }
 
 const snapshot = (page: Page): Promise<Snapshot> =>
     page.evaluate(async () => {
         const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+        const { crawlOrderPair, crawlReachableCells, isCrawlRun } = await import('/src/shared/crawl-rules.ts');
         const { view, run } = useAppStore.getState();
+        const crawling = run?.board?.crawl && isCrawlRun(run) ? run : null;
+        const reachCells = crawling ? crawlReachableCells(crawling.board!, crawling.stickyBlockIndex) : null;
+        const plain = (run?.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__') && tile.seq == null);
+        const groups = [...new Set(plain.map((tile) => tile.pairKey))].map((key) => plain.filter((tile) => tile.pairKey === key)).filter((group) => group.length === 2);
+        const hunted = crawling ? crawlOrderPair(crawling, groups) : null;
         return {
             view,
+            reach: reachCells ? (run?.board?.tiles ?? []).filter((_tile, index) => reachCells.has(index)).map((tile) => tile.id) : null,
+            hunt: hunted ? [hunted[0].id, hunted[1].id] : null,
             status: run?.status ?? null,
             level: run?.board?.level ?? 0,
             flipped: (run?.board?.tiles ?? [])
@@ -220,7 +232,13 @@ const playRun = async (
             }
         }
         // A Stasis lock keeps one tile from opening a turn; a player opens elsewhere.
-        const openers = s.hidden.filter((tile) => tile.id !== s.blocked);
+        // Under the crawl a turn opens on a card the hero can reach; a player who knows the board hunts the monsters.
+        if (s.hunt && rand() >= missRate) {
+            await press(s.hunt);
+            await page.waitForTimeout(600);
+            continue;
+        }
+        const openers = s.hidden.filter((tile) => tile.id !== s.blocked && (!s.reach || s.reach.includes(tile.id)));
         const picked = openers[Math.floor(rand() * openers.length)];
         // Sequences: a player who knows a three opens it with its one, then turns its two.
         const first = picked?.q != null ? openers.find((tile) => tile.k === picked.k && tile.q === 1) ?? picked : picked;
@@ -246,12 +264,13 @@ test.describe('Playtest', () => {
         expect(result.ended === 'depth' || result.level >= 3, `a careful player died on floor ${result.level}`).toBe(true);
     });
 
-    test('a sloppy player runs out of misses and the results screen says so', async ({ page }) => {
+    test('a sloppy player runs out of misses or is slain, and the results screen says so', async ({ page }) => {
         test.setTimeout(900_000);
         const result = await playRun(page, { missRate: 0.45, maxFloor: 12, label: 'sloppy' });
         expect(result.errors).toEqual([]);
         expect(result.ended).toBe('gameOver');
-        await expect(page.getByTestId('game-over-end-reason')).toHaveText(/ran out of misses/);
+        // From rules 104 a monster's blow can end it first (`crawl-rules.ts`).
+        await expect(page.getByTestId('game-over-end-reason')).toHaveText(/ran out of misses|brought you down/);
     });
 
     /*

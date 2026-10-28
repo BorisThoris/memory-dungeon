@@ -15,7 +15,6 @@ import { withFastDescent } from '../../shared/descent-pace-rules';
 import { fastDescentRequested } from '../testPace';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 import { withCrawl } from '../../shared/crawl-rules';
-import { crawlRequested } from '../crawlMode';
 
 export type RunStartTelemetryExtra = Record<string, boolean | number | string | undefined>;
 
@@ -118,8 +117,8 @@ export const createRunStartPlan = ({
 
     // The test pace (`testPace.ts`): a solo run jumps down the Descent; a shared table never does.
     const fastRun = request.kind !== 'passAndPlay' && fastDescentRequested() ? withFastDescent(run) : run;
-    // The crawl prototype (`crawlMode.ts`): `?crawl=1` puts a hero and monsters on the board.
-    const pacedRun = request.kind !== 'passAndPlay' && crawlRequested() ? withCrawl(fastRun) : fastRun;
+    // From rules 104 every solo run is a crawl (`crawl-rules.ts`): the hero and the first floor's monsters.
+    const pacedRun = request.kind !== 'passAndPlay' ? withCrawl(fastRun) : fastRun;
     const patchedRun = applyRunSettings(pacedRun, settings);
     return {
         patch: createRunStartStatePatch(patchedRun, saveData),
@@ -132,7 +131,7 @@ export const createRunStartPlan = ({
 export const createRestartRun = (previousRun: RunState | null, saveData: SaveData): RunState => {
     const run = restartRunFor(previousRun, saveData);
     const paced = previousRun?.descentPace === 'fast' ? withFastDescent(run) : run;
-    return previousRun?.crawl ? withCrawl(paced) : paced;
+    return previousRun?.passAndPlay ? paced : withCrawl(paced);
 };
 
 const restartRunFor = (previousRun: RunState | null, saveData: SaveData): RunState => {

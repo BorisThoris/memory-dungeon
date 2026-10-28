@@ -1,4 +1,5 @@
 import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
+import { crawlReachableCells } from '../../shared/crawl-rules';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import { isTileFlipBlocked } from '../../shared/realm-weather-rules';
 import { MISS_DECISION_HOLD_MS } from '../../shared/scoring-rules';
@@ -91,7 +92,13 @@ const normalPairGroups = (board: BoardState): Tile[][] => {
         group.push(tile);
         groups.set(tile.pairKey, group);
     }
-    return [...groups.values()].filter((group) => group.length === 2);
+    // The crawl (`crawl-rules.ts`): pairs the hero can open come first, the card it can reach first in each.
+    const reach = board.crawl ? crawlReachableCells(board) : null;
+    const reachable = (tile: Tile): boolean => !reach || reach.has(board.tiles.indexOf(tile));
+    return [...groups.values()]
+        .filter((group) => group.length === 2)
+        .map((group) => (reachable(group[0]!) || !reachable(group[1]!) ? group : [group[1]!, group[0]!]))
+        .sort((a, b) => Number(reachable(b[0]!)) - Number(reachable(a[0]!)));
 };
 
 const installPlayablePathFixture = (id: PlayablePathFixtureId): void => {
@@ -540,7 +547,9 @@ describe('useAppStore timers', () => {
         if (matchedRun?.status === 'playing') {
             // Which of the two other pairs the pop took depends on the deal, so press whatever is
             // still face down rather than a pair chosen before the match resolved.
-            const stillHidden = matchedBoard.tiles.find((tile) => tile.state === 'hidden');
+            // Under the crawl (crawl-rules.ts) the card pressed must be one the hero can reach.
+            const reach = matchedBoard.crawl ? crawlReachableCells(matchedBoard, matchedRun.stickyBlockIndex) : null;
+            const stillHidden = matchedBoard.tiles.find((tile, index) => tile.state === 'hidden' && (!reach || reach.has(index)));
             expect(stillHidden).toBeDefined();
             useAppStore.getState().pressTile(stillHidden!.id);
             const runAfterNextPress = useAppStore.getState().run;
@@ -865,11 +874,16 @@ describe('useAppStore timers', () => {
             // Every matched pair casts its element (`element-group-rules.ts`): Frost or Grove can
             // hold a card, so take the next pair whose two halves can both be turned, not a fixed order.
             for (let guard = 0; guard < 64 && useAppStore.getState().run?.status === 'playing'; guard += 1) {
-                const tiles = useAppStore.getState().run!.board!.tiles;
-                const ids = [...pairGroups.values()].find(
-                    (group) => group.length === 2 && group.every((id) => { const t = tiles.find((tile) => tile.id === id); return t?.state === 'hidden' && !isTileFlipBlocked(t); })
+                const live = useAppStore.getState().run!;
+                const tiles = live.board!.tiles;
+                // The crawl (`crawl-rules.ts`): a turn opens on a card the hero can reach.
+                const reach = crawlReachableCells(live.board!, live.stickyBlockIndex);
+                const found = [...pairGroups.values()].find(
+                    (group) => group.length === 2 && group.every((id) => { const t = tiles.find((tile) => tile.id === id); return t?.state === 'hidden' && !isTileFlipBlocked(t); }) &&
+                        group.some((id) => !live.board!.crawl || reach.has(tiles.findIndex((tile) => tile.id === id)))
                 );
-                if (!ids) break;
+                if (!found) break;
+                const ids = live.board!.crawl && !reach.has(tiles.findIndex((tile) => tile.id === found[0])) ? [found[1]!, found[0]!] : found;
                 useAppStore.getState().pressTile(ids[0]!);
                 useAppStore.getState().pressTile(ids[1]!);
                 // A new run holds the Gambit, so a miss waits out the decision hold (`MISS_DECISION_HOLD_MS`).

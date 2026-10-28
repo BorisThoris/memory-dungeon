@@ -1,4 +1,5 @@
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
+import { grantMisses, missBankCap } from './miss-bank';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isTileFlipBlocked } from './realm-weather-rules';
@@ -18,11 +19,17 @@ import { orthogonalNeighbourIndices } from './skittish-cards-rules';
  *   Ember match burns for two); matching a monster's own card kills it. A kill pays gold.
  * - Health is not the miss bank: misses still spend the bank, and a hero at no health is slain.
  */
-export const CRAWL_HEALTH = 6;
-export const CRAWL_HEAL_PER_FLOOR = 2;
-export const CRAWL_STRIKE_EVERY = 3;
-export const CRAWL_KILL_GOLD = 2;
+export const CRAWL_HEALTH = 8;
+export const CRAWL_HEAL_PER_FLOOR = 3;
+export const CRAWL_STRIKE_EVERY = 5;
+export const CRAWL_HEAL_PER_KILL = 1;
+/** A kill also wins back a miss, good for the miss bank's three floors (`miss-bank.ts`). */
+export const CRAWL_MISSES_PER_KILL = 1;
+export const CRAWL_PAIRS_PER_MONSTER = 8;
+export const CRAWL_MAX_MONSTERS = 4;
+export const CRAWL_KILL_GOLD = 4;
 export const CRAWL_EMBER_BURN = 2;
+export const CRAWL_BRUTES_FROM_FLOOR = 8;
 
 export type CrawlMonsterKind = 'ghoul' | 'wisp' | 'brute';
 
@@ -52,10 +59,18 @@ export interface CrawlFloor {
     lastKills?: number[];
 }
 
-export const isCrawlRun = (run: Pick<RunState, 'crawl'>): boolean => run.crawl === true;
+/**
+ * **The crawl is the game** (rules 104, 2026-10-28). The owner played the prototype behind `?crawl=1` and said:
+ * make it the game. From rules 104 every solo run is a crawl; a run on older rules (a saved run, a test pinned
+ * to its rules) never is, whatever its fields say.
+ */
+export const CRAWL_FROM = 104;
 
-/** Monsters a floor deals: one more every third floor, at most six. */
-export const crawlMonsterCountFor = (level: number): number => Math.min(6, 1 + Math.floor(Math.max(0, level - 1) / 3));
+export const isCrawlRun = (run: Pick<RunState, 'crawl'> & Partial<Pick<RunState, 'runRulesVersion'>>): boolean =>
+    run.crawl === true && (run.runRulesVersion ?? 0) >= CRAWL_FROM;
+
+/** Monsters a floor deals: one, and one more for every `CRAWL_PAIRS_PER_MONSTER` pairs it holds, at most `CRAWL_MAX_MONSTERS`. */
+export const crawlMonsterCountFor = (pairs: number): number => Math.min(CRAWL_MAX_MONSTERS, 1 + Math.floor(Math.max(0, pairs) / CRAWL_PAIRS_PER_MONSTER));
 
 const monsterFor = (kind: CrawlMonsterKind, level: number, cell: number, stagger: number): CrawlMonster => {
     const depth = Math.floor(Math.max(0, level - 1) / 8);
@@ -80,12 +95,12 @@ export const dealCrawl = (board: BoardState, runSeed: number): BoardState => {
         .filter(({ tile, index }) => tile.state === 'hidden' && Math.abs(Math.floor(index / columns) - heroRow) + Math.abs((index % columns) - heroCol) > 2)
         .map(({ index }) => index);
     const monsters: CrawlMonster[] = [];
-    const count = Math.min(crawlMonsterCountFor(board.level), open.length);
+    const count = Math.min(crawlMonsterCountFor(board.pairCount), open.length);
     for (let i = 0; i < count; i += 1) {
         const pick = pickRngIndex(rng, open.length);
         const cell = open.splice(pick, 1)[0]!;
         const roll = pickRngIndex(rng, 6);
-        const kind: CrawlMonsterKind = board.level >= 4 && roll === 0 ? 'brute' : roll <= 2 ? 'wisp' : 'ghoul';
+        const kind: CrawlMonsterKind = board.level >= CRAWL_BRUTES_FROM_FLOOR && roll === 0 ? 'brute' : roll <= 2 ? 'wisp' : 'ghoul';
         monsters.push(monsterFor(kind, board.level, cell, i % 2));
     }
     return { ...board, crawl: { hero, monsters, slain: 0 } };
@@ -132,8 +147,8 @@ export const crawlReachableCells = (board: Pick<BoardState, 'tiles' | 'columns' 
 };
 
 /** True when a turn's first card may not be turned here. */
-export const crawlBlocksFirstFlip = (board: BoardState, tileIndex: number, stickyCell: number | null = null): boolean =>
-    board.crawl != null && !crawlReachableCells(board, stickyCell).has(tileIndex);
+export const crawlBlocksFirstFlip = (run: Pick<RunState, 'crawl' | 'runRulesVersion' | 'stickyBlockIndex'>, board: BoardState, tileIndex: number): boolean =>
+    isCrawlRun(run) && board.crawl != null && !crawlReachableCells(board, run.stickyBlockIndex).has(tileIndex);
 
 const SUIT_BURN: Partial<Record<TileSuit, number>> = { ember: CRAWL_EMBER_BURN };
 
@@ -183,23 +198,29 @@ export const applyCrawlTurn = (before: RunState, after: RunState): RunState => {
             return { ...monster, clock: monster.every };
         });
     }
-    const health = Math.max(0, runNonNegativeInteger(after.crawlHealth ?? CRAWL_HEALTH) - damageTaken);
+    // A kill heals: hunting the monsters is how the hero stays up.
+    const health = Math.min(CRAWL_HEALTH, Math.max(0, runNonNegativeInteger(after.crawlHealth ?? CRAWL_HEALTH) - damageTaken + kills.length * CRAWL_HEAL_PER_KILL));
     const hero = matched ? cells[cells.length - 1]! : crawl.hero;
     const next: RunState = {
         ...after,
         crawlHealth: health,
         gold: runNonNegativeInteger(after.gold) + kills.length * CRAWL_KILL_GOLD,
+        // A kill on a match wins a miss back; one that a miss struck does not pay for the miss.
+        ...(matched && kills.length > 0 && after.missBank ? { missBank: grantMisses(after.missBank, after.board.level, kills.length * CRAWL_MISSES_PER_KILL, missBankCap(after)) } : {}),
         board: { ...after.board, crawl: { hero, monsters, slain: crawl.slain + kills.length, lastStrikes: strikes, lastStrikers: strikers, lastHits: hits, lastKills: kills, turn: (crawl.turn ?? 0) + 1 } }
     };
     if (health === 0 && next.status === 'playing') {
-        return { ...next, status: 'gameOver', runEndReason: 'slain', board: { ...next.board!, flippedTileIds: [] } };
+        // The run ends on this turn: the Wanderers' footprints go with the floor, as on any ending.
+        const tiles = next.board!.tiles.map((tile) => (tile.footprint ? { ...tile, footprint: undefined } : tile));
+        return { ...next, status: 'gameOver', runEndReason: 'slain', board: { ...next.board!, tiles, flippedTileIds: [] } };
     }
     return next;
 };
 
 /** A crawl run: the flag, full health, and the first floor dealt. */
 export const withCrawl = (run: RunState): RunState =>
-    run.passAndPlay ? run : { ...run, crawl: true, crawlHealth: CRAWL_HEALTH, achievementsEnabled: false, board: run.board ? dealCrawl(run.board, run.runSeed) : run.board };
+    run.passAndPlay || (run.runRulesVersion ?? 0) < CRAWL_FROM ? run : { ...run, crawl: true, crawlHealth: CRAWL_HEALTH, board: run.board ? dealCrawl(run.board, run.runSeed) : run.board };
+
 
 /** The next floor of a crawl run: dealt, and the hero healed a little. */
 export const crawlNextFloor = (run: RunState): RunState =>
@@ -212,4 +233,43 @@ export const crawlNextStrikeLine = (monsters: readonly CrawlMonster[]): string =
     const next = monsters.reduce((soonest, monster) => (monster.clock < soonest.clock ? monster : soonest), monsters[0]!);
     const together = monsters.filter((monster) => monster.clock === next.clock).reduce((sum, monster) => sum + monster.damage, 0);
     return next.clock <= 1 ? `−${together} next turn` : `−${together} in ${next.clock}`;
+};
+
+/**
+ * A player who knows the board, under the crawl: of the pairs it would match, one with a card the hero can reach,
+ * that card first - and a pair that hurts a monster before any other. Off the crawl, the first pair as given.
+ */
+export const crawlOrderPair = <T extends { id: string }>(run: RunState, groups: readonly (readonly T[])[]): [T, T] | null => {
+    const board = run.board;
+    if (!board || !isCrawlRun(run) || !board.crawl) return groups[0] ? [groups[0][0]!, groups[0][1]!] : null;
+    const reach = crawlReachableCells(board, run.stickyBlockIndex);
+    const cellOf = (tile: T): number => board.tiles.findIndex((candidate) => candidate.id === tile.id);
+    const monsterCells = new Set(board.crawl.monsters.map((monster) => monster.cell));
+    const near = (cell: number): boolean => monsterCells.has(cell) || orthogonalNeighbourIndices(cell, board.columns, board.tiles.length, board.fold).some((next) => monsterCells.has(next));
+    let best: [T, T] | null = null;
+    for (const group of groups) {
+        const [a, b] = [group[0], group[1]];
+        if (!a || !b) continue;
+        const ordered: [T, T] | null = reach.has(cellOf(a)) ? [a, b] : reach.has(cellOf(b)) ? [b, a] : null;
+        if (!ordered) continue;
+        if (near(cellOf(ordered[0])) || near(cellOf(ordered[1]))) return ordered;
+        best ??= ordered;
+    }
+    return best;
+};
+
+/** Of a list of face-down cards, the ones a turn may open with: all of them off the crawl. */
+export const crawlFirstCards = <T extends { id: string }>(run: RunState, cards: readonly T[]): T[] => {
+    const board = run.board;
+    if (!board || !isCrawlRun(run) || !board.crawl) return [...cards];
+    const reach = crawlReachableCells(board, run.stickyBlockIndex);
+    return cards.filter((card) => reach.has(board.tiles.findIndex((tile) => tile.id === card.id)));
+};
+
+/** The Zone (`zone-rules.ts`) carries the hero: a turn it replays opens where the Zone's first card lies. */
+export const crawlCarryHeroTo = (run: RunState, tileId: string): RunState => {
+    const board = run.board;
+    if (!isCrawlRun(run) || !board?.crawl) return run;
+    const cell = board.tiles.findIndex((tile) => tile.id === tileId);
+    return cell < 0 ? run : { ...run, board: { ...board, crawl: { ...board.crawl, hero: cell } } };
 };
