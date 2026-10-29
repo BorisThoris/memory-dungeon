@@ -47,7 +47,7 @@ const snapshot = (page: Page): Promise<Snapshot> =>
         const { view, run } = useAppStore.getState();
         const crawling = run?.board?.crawl && isCrawlRun(run) ? run : null;
         const reachCells = crawling ? crawlReachableCells(crawling.board!, crawling.stickyBlockIndex) : null;
-        const plain = (run?.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__') && tile.seq == null);
+        const plain = (run?.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__') && tile.seq == null && !((tile.frost ?? 0) > 0) && tile.vined !== true);
         const groups = [...new Set(plain.map((tile) => tile.pairKey))].map((key) => plain.filter((tile) => tile.pairKey === key)).filter((group) => group.length === 2);
         const hunted = crawling ? crawlOrderPair(crawling, groups) : null;
         return {
@@ -126,6 +126,15 @@ const playRun = async (
             if (level > maxFloor) return { ended: 'depth' as const, level, errors };
         }
         stepsOnFloor += 1;
+        if (stepsOnFloor >= 249) {
+            const why = await page.evaluate(async () => {
+                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
+                const run = useAppStore.getState().run!;
+                const b = run.board!;
+                return JSON.stringify({ crawl: b.crawl, flipped: b.flippedTileIds, sticky: run.stickyBlockIndex, cols: b.columns, tiles: b.tiles.map((x, i) => `${i}:${x.id}:${x.state}:${x.pairKey}${x.frost ? ':f' + x.frost : ''}${x.vined ? ':v' : ''}${x.seq != null ? ':q' + x.seq : ''}`) });
+            });
+            console.log('STALL ' + JSON.stringify(s) + ' ' + why);
+        }
         expect(stepsOnFloor, `floor ${level} stalled in ${s.status}`).toBeLessThan(250);
         if (s.status === 'levelComplete') {
             // The Warden's clear asks (DGE-006): the player takes the win, or descends into Endless.
@@ -233,7 +242,9 @@ const playRun = async (
         }
         // A Stasis lock keeps one tile from opening a turn; a player opens elsewhere.
         // Under the crawl a turn opens on a card the hero can reach; a player who knows the board hunts the monsters.
-        if (s.hunt && rand() >= missRate) {
+        // One draw decides the turn, so the hunt does not halve the player's miss rate.
+        const misses = rand() < missRate;
+        if (s.hunt && !misses) {
             await press(s.hunt);
             await page.waitForTimeout(600);
             continue;
@@ -248,7 +259,7 @@ const playRun = async (
         }
         const partner = s.hidden.find((tile) => tile.k === first.k && tile.id !== first.id && (first.q == null || tile.q === first.q + 1));
         const others = s.hidden.filter((tile) => tile.k !== first.k);
-        const second = rand() < missRate && others.length > 0 ? others[Math.floor(rand() * others.length)] : partner;
+        const second = misses && others.length > 0 ? others[Math.floor(rand() * others.length)] : partner;
         if (!second) continue;
         await press([first.id, second.id]);
         await page.waitForTimeout(600);

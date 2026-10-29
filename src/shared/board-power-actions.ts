@@ -1,4 +1,5 @@
 import { promoteRunBeneath } from './board-layers-rules';
+import { crawlFirstCards } from './crawl-rules';
 import type {
     BoardState,
     RunState
@@ -317,7 +318,8 @@ export const bombSelectableTileIds = (run: RunState): string[] => {
         hiddenPairs.set(tile.pairKey, ids);
     }
     const pairs = [...hiddenPairs.values()].filter((ids) => ids.length === 2);
-    return pairs.length > 1 ? pairs.flat() : [];
+    // The crawl (`crawl-rules.ts`): the bomb is aimed by turning a card, so it reaches what the hero reaches.
+    return pairs.length > 1 ? crawlFirstCards(run, pairs.flat().map((id) => ({ id }))).map((card) => card.id) : [];
 };
 
 export const bombTargetTileId = (run: RunState): string | null => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { bombSelectableTileIds } from './board-power-actions';
 import type { RunState } from './contracts';
 import { CRAWL_HEALTH, crawlReachableCells, crawlNextStrikeLine, withCrawl } from './crawl-rules';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
@@ -49,5 +50,15 @@ describe('the crawl (prototype, ?crawl=1)', () => {
         expect(after.crawlHealth).toBe(0);
         expect(after.status).toBe('gameOver');
         expect(after.runEndReason).toBe('slain');
+    });
+
+    it('aims a bomb only at cards the hero can reach, since a bomb is aimed by turning a card', () => {
+        const run = { ...crawlRun(), bombCharges: 1 };
+        const board = run.board!;
+        const reach = crawlReachableCells(board);
+        const choices = bombSelectableTileIds(run);
+        expect(choices.length).toBeGreaterThan(0);
+        expect(choices.every((id) => reach.has(board.tiles.findIndex((tile) => tile.id === id)))).toBe(true);
+        expect(bombSelectableTileIds({ ...run, crawl: false }).length).toBeGreaterThan(choices.length);
     });
 });
