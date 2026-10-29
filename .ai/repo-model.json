@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3402,
-    "codeFileCount": 1324,
-    "exportedSymbolCount": 4374,
+    "trackedFileCount": 3401,
+    "codeFileCount": 1323,
+    "exportedSymbolCount": 4382,
     "contentItemCount": 16,
-    "mechanicCount": 91,
-    "stateFieldCount": 166,
-    "relationshipCount": 12247
+    "mechanicCount": 92,
+    "stateFieldCount": 168,
+    "relationshipCount": 12286
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 129377,
-      "sha256": "5685fbbaceb2050f32ef1cfc044ca7cf95730c922dea9e67a54c08570f91f59e"
+      "bytes": 131236,
+      "sha256": "13d0702d6c152a6058b486bf431fb01af710ce157578625a4b9d26f1cc0e6ca1"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10620,
-      "sha256": "82c9529dc7559f96ced3585576e57ed6ee95df28edecd64e21601c970b4bd34e"
+      "sha256": "7cb9c2d9d01fb88b9717be2a3d71ab9f72d4542955ba0cd80e3c6a6c67d278bf"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "bcd86525391363d0aedafa8439688e2d9a8ca4ce6aeb98fafc7aa8eae1835598"
+      "sha256": "609ec117ae27d25adf96d29fb76c2b49b2d563616a203928024658416e7c418e"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -2793,50 +2793,50 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 189885,
+      "sha256": "8ddb9d1c6f5658194014dba442056e5c69e3ff5fced36cc54e8cc70452a9e8f3"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 273780,
-      "sha256": "acb362ee599ec6a4e260590b39b43ee468338508abb32ab74f5d83f9dc881327"
+      "bytes": 261266,
+      "sha256": "664d0a7f98aa869d93fcfb3012beccd2907bfcaf168cd6b3d8b38872c73b90dd"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 395039,
-      "sha256": "ac887a0e9694c599087d28ff16d70d9cfd54e688f140dc4ef6c48e7b5867d82f"
+      "bytes": 383306,
+      "sha256": "8842be96ba3957b876448aae524e95e55dbcd994e61d6bc6f2997d19a06b797e"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 74007,
-      "sha256": "3eabf179bf382347a7445da634d73149ba2dc8890d88000132b0a102643f9191"
+      "bytes": 69843,
+      "sha256": "22c69b0b2823d674204d4045942453e602b1dc663f0c53882c828b6e00c4a39f"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 47216,
-      "sha256": "4c032a5733b91994b498388a8d1e8948eed505ac15f88319df6aa42adb2652a1"
+      "bytes": 51604,
+      "sha256": "ba1b4c763b0715c8f6fa4d92ee139d5a4078701f82f842cd8487ffbe1145c2e9"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 89413,
-      "sha256": "9b3edd8e3cab22fba036da587e684bc4f7b09d937f3d97717f2e1fc3c3e0a1c4"
+      "bytes": 81206,
+      "sha256": "93f512bf2899d10577a6c70f37502877ab49a4f49ef887b6c50934b37c7e17cc"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 58618,
-      "sha256": "c8abccdd42a029e320af9788adbd1c51cbe4a2ef3c28bd4200607ea6ce508060"
+      "bytes": 57386,
+      "sha256": "ee83d1a429e328caf9591c6b54555104b4d076f42a5d7df8d11f72bd139f34b0"
     },
     {
       "path": "docs/ui-design-reference/390x844/01f-profile.png",
       "category": "documentation",
-      "bytes": 84953,
-      "sha256": "ee533678b6f1c4ea27498a083e4a69183932fcdd8d23b790caf88ef62b9eec2e"
+      "bytes": 81362,
+      "sha256": "c85baf594c0ac0bc170e82922eb3bcc081b1cd42cab11ddfcd7dd432c0c5ee78"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -3393,8 +3393,8 @@
     {
       "path": "docs/visual-capture/portfolio-smoke/README.md",
       "category": "documentation",
-      "bytes": 601,
-      "sha256": "cfefa26baf6671b2312dcdac29a398b10727e11a174179c80e2e3c6b447f2952"
+      "bytes": 240,
+      "sha256": "a843a846568107b9f22f1d13c7b0f25ac5e0ab92f2938a88405a22c94acc96b4"
     },
     {
       "path": "docs/visual-capture/README.md",
@@ -3873,8 +3873,8 @@
     {
       "path": "e2e/asset-streaming.spec.ts",
       "category": "test",
-      "bytes": 4124,
-      "sha256": "a34f58d717c4fa8ce7c315315693af4f45c3c2e01f1b57489d5d5eaee30cb4a5"
+      "bytes": 4464,
+      "sha256": "b59597a0c8c5ff00b1fa88b0fcc790e7ffc9f7d857f2b357aeb1baeb8db227fe"
     },
     {
       "path": "e2e/blueprint-explorer.spec.ts",
@@ -3969,8 +3969,8 @@
     {
       "path": "e2e/elemental-goals-camp.spec.ts",
       "category": "test",
-      "bytes": 4628,
-      "sha256": "0f2257ce91584d33a77c61e08d0a4ae0ff0c76634939860d3117b8cbd1bfc126"
+      "bytes": 4975,
+      "sha256": "1d2399f9850615547ee7d32f1452ec64be1577bbedab13136ef5161decabc666"
     },
     {
       "path": "e2e/fixtures/tile-card-face-illustration-contact-sheet.png",
@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 16270,
-      "sha256": "5184e430077bdb68bfe5046cbbe24ac481c581951c977a413ea6afc55635b96c"
+      "bytes": 18680,
+      "sha256": "919b55a050b08154a2ce564a91b778d8635ef84b5f32ae92cbaa1a69324ded2f"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -4221,8 +4221,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 27310,
-      "sha256": "8f6e3ea8ade63f7efa005fe8a2aacdbe7ce82caa592c6b722cab0c5150638ba1"
+      "bytes": 27951,
+      "sha256": "0d3d2bf432d4bc12ace7ca0af5feedd2738ea0eab6d5ee2e3db13f194f98b4e0"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -4629,8 +4629,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71586,
-      "sha256": "d201ad6d8b49574f483e8d62dbacf7642a26a7eb910385891320ae6c2018494d"
+      "bytes": 71843,
+      "sha256": "3c36ae7604e2bb269c16a513eacd5c1d632bd0b2a7454e36abb228bb2eaf3817"
     },
     {
       "path": "public/site.webmanifest",
@@ -5427,8 +5427,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 24940,
-      "sha256": "755fb6c4cfa979fa64ea8163bded608522161a0fd9b9e2497b7254a4099215dd"
+      "bytes": 25364,
+      "sha256": "74a50372ba64e89c52df9e37aeca7dd00c2be89469d043f9cb1ba2db78f40391"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -5883,14 +5883,14 @@
     {
       "path": "scripts/sim-survival.ts",
       "category": "script",
-      "bytes": 13041,
-      "sha256": "48462628749d5270cb5f3bc2e4edc921ec140dce9a0b93a1a9917f76d94f5664"
+      "bytes": 13597,
+      "sha256": "f5ed3160cf90d0c45f1ce423a2698f5672a829ddce82c967a977b6887e0e1248"
     },
     {
       "path": "scripts/soak-runs.ts",
       "category": "script",
-      "bytes": 6621,
-      "sha256": "3fbc5d6e5cf61ded3d92da563e27ba330d905a887e61fe883e314fe263f76f09"
+      "bytes": 6761,
+      "sha256": "acd2252124938a186575d15175ca483c3961f50c7ef019379bf8e4105032ffc0"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -13603,12 +13603,6 @@
       "sha256": "e9d640b3594aa7899b04330e0304c1b9b7ff06c04cc3b553d0943dc23940a752"
     },
     {
-      "path": "src/renderer/crawlMode.ts",
-      "category": "source",
-      "bytes": 371,
-      "sha256": "28c7613d7ae0321814c7fd13b6b4aa276a5f502e4b55e657f7e9eb089c4750ba"
-    },
-    {
       "path": "src/renderer/desktop-client.test.ts",
       "category": "test",
       "bytes": 2482,
@@ -14457,8 +14451,8 @@
     {
       "path": "src/renderer/store/runStartState.ts",
       "category": "source",
-      "bytes": 7564,
-      "sha256": "5e66e56d9b9c03ffd7add5410d840e8c67bb1c8959dc76b3755f0b94dac54c5c"
+      "bytes": 7517,
+      "sha256": "90d5adc49d72277b25265633b4c9e3cdb9d550e84a81f6e5f275fd51f38dbf27"
     },
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -14559,8 +14553,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 40878,
-      "sha256": "3222c3d7d0519be1a44a4f679e10edbeffc00838d54b1930c04cd3d1ea3aa5b6"
+      "bytes": 42143,
+      "sha256": "a1878f61904211f83f8bf4a180a29319ee8abcedb22d226e4117d5eecf81a557"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -14835,8 +14829,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 129791,
-      "sha256": "fb0793a6ee971c6849175691681625e5f1be20773c04cae96ffd6f0360e5df98"
+      "bytes": 131652,
+      "sha256": "fb8ce29f839cade053ffb711dabcdf5b15ab4a9583b74f04bbd590060f147beb"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15033,8 +15027,8 @@
     {
       "path": "src/shared/board-power-actions.ts",
       "category": "source",
-      "bytes": 15036,
-      "sha256": "d9e0900c350aad22d917bd92ef54f0077b214ca21063020c96969cd258284c13"
+      "bytes": 15263,
+      "sha256": "687044b3e7db640719b9346dc841a9d28a0b3321092bd69d4889f046a66eaacd"
     },
     {
       "path": "src/shared/board-power-availability.test.ts",
@@ -15406,7 +15400,7 @@
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 68122,
-      "sha256": "fa0a6931251341c6b9b6174ea81445fb4062a01c39438ccc80158e15e7192102"
+      "sha256": "15b8ac5cfdea4f90799c9b3bf0380a77070ab987ebe69095295fb82f61888688"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -15465,14 +15459,14 @@
     {
       "path": "src/shared/crawl-rules.test.ts",
       "category": "test",
-      "bytes": 3156,
-      "sha256": "5edcc48cc3c7d05c83f229693cdfd393330dba7fdf9cb635628a5ac7bf3fad9a"
+      "bytes": 3788,
+      "sha256": "58822338afb0a024fcada0165060d3d77c9092756a819b17e97356bb6dc4fb99"
     },
     {
       "path": "src/shared/crawl-rules.ts",
       "category": "source",
-      "bytes": 11076,
-      "sha256": "a42a2e3abf49247409b50caf0c6b8d0aa425121d15ea0be2645ceb2eb463003d"
+      "bytes": 14962,
+      "sha256": "b18ce160b528367d70a2267c12b07e8be6f78ad859a7af736dea4d6417901f7d"
     },
     {
       "path": "src/shared/crucible-rules.test.ts",
@@ -15849,8 +15843,8 @@
     {
       "path": "src/shared/flip-tile-transition.ts",
       "category": "source",
-      "bytes": 7681,
-      "sha256": "2052a3c39931a1c7a8daa8e41e6ce24e624ec58c1d2c5e00ae00c3f266d69df8"
+      "bytes": 7664,
+      "sha256": "24e071af352841941621a426360125ce69bc7f2ab68f93f7b4ac6f0fca90f5ae"
     },
     {
       "path": "src/shared/floor-clear-momentum-bonus-rules.test.ts",
@@ -16101,8 +16095,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 165549,
-      "sha256": "6e49a24ed1ae1654a7c8fb5e3d21cd844e907aba2e8a259ba3948905903832d1"
+      "bytes": 167647,
+      "sha256": "44f16d11036749601016037aea2b332d4caba265dc9be68ce0a7c70d5dcf242d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -16431,8 +16425,8 @@
     {
       "path": "src/shared/mechanic-accountability.test.ts",
       "category": "test",
-      "bytes": 6475,
-      "sha256": "9c19769e1fd9de8c87c79359f04f6b5d08ffe8f05100351ad20d613569c3c3b8"
+      "bytes": 6590,
+      "sha256": "e56c4b103e02f1714da6694278eb5a170c6557e083b833a64334cb5f304dcff2"
     },
     {
       "path": "src/shared/mechanic-feedback.test.ts",
@@ -16467,8 +16461,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 79280,
-      "sha256": "39c0e1394ba31bb55a121478903245e692cc9bf4c50d29e9bc0a59ba6b75fa2f"
+      "bytes": 80120,
+      "sha256": "13b5084c5a3b76e265cdcb27a4ae3d3ecb2bb9a129070c1cd011e539747bcf6c"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17277,14 +17271,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 12150,
-      "sha256": "6f200d276ee7311f37af1ca6e9512bb9d19aff7c958ea1a735d06edabfe2e901"
+      "bytes": 12360,
+      "sha256": "a83eb2db67f5b2e510604770e58dbf688d540a929e65213dc51ded97d5494972"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 83595,
-      "sha256": "6b7d786ae46f3b7ca2f7df00e94917f3dbb2358e0b71273af3f0448b764e824d"
+      "bytes": 85859,
+      "sha256": "abdb740f32c5da38d4bfe07ad38d0c612689edc6db3787488c1ddf28acaa7ac7"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -17487,8 +17481,8 @@
     {
       "path": "src/shared/snowball-relic-rules.test.ts",
       "category": "test",
-      "bytes": 12001,
-      "sha256": "3398164d41a37da01abcef8dd3152556d84c67ef67754d74542064d4bc4a1dfd"
+      "bytes": 12117,
+      "sha256": "b75e5c2069e4dd38ff4fd03cdb557115e2cf034aa6ecf8d01df83ccca751c634"
     },
     {
       "path": "src/shared/snowball-relic-rules.ts",
@@ -17613,8 +17607,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 153754,
-      "sha256": "aa7070b447db091d637fc042334a10455956f60c2c94fd4e2409a5ac555d8ede"
+      "bytes": 155830,
+      "sha256": "b234509a784d99ecdc7456b39232218f118ad31598fb9bbcc3dea01559b4c14f"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17637,8 +17631,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 259584,
-      "sha256": "22f292ebc5750af90f78d3d6adde3323c331a7b0544172ab66258a717e1ec466"
+      "bytes": 263187,
+      "sha256": "5548d43f78f5a68f6c283c63dd79f85e9c69851c3e3e323bd549ee1562fca2ec"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17908,7 +17902,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7364,
-      "sha256": "551ec6478de8d5632d2140ec8a417d24e5876360c0582aa4599123018c6fc0b2"
+      "sha256": "c5f1716029f3886855f293e1b22d79b9683b06d464681de24f215e66356e97b0"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17961,8 +17955,8 @@
     {
       "path": "src/shared/zone-rules.ts",
       "category": "source",
-      "bytes": 11731,
-      "sha256": "3d5efc1ed12e00746b3addb3b81cd764e817ef1bd0087cd0ddd10150f5e1bf6b"
+      "bytes": 11923,
+      "sha256": "2723cb667d49193e45176ddb22abedd1c2a4e59533dd64437883ff71bace89ff"
     },
     {
       "path": "src/test/installCanvas2dMock.ts",
@@ -18003,8 +17997,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 40003,
-      "sha256": "ef928eef97279e81ab751c52119d85912233cdd1b00050f162326840827bcd64"
+      "bytes": 40872,
+      "sha256": "ac54dc1dd813f3da9db6f3000dcef319acd800237f276c9bab8736590f8a61e7"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -31759,18 +31753,6 @@
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/crawlMode.ts",
-      "path": "src/renderer/crawlMode.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 12,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/crawlMode.ts#crawlRequested"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/renderer/desktop-client.test.ts",
       "path": "src/renderer/desktop-client.test.ts",
       "layer": "renderer",
@@ -33981,9 +33963,8 @@
       "path": "src/renderer/store/runStartState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 190,
+      "lineCount": 189,
       "imports": [
-        "file:src/renderer/crawlMode.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/renderer/testPace.ts",
         "file:src/shared/classic-run-setup.ts",
@@ -34311,7 +34292,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 984,
+      "lineCount": 998,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -34319,6 +34300,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crawl-rules.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/memorize-skip-reward-rules.ts",
         "file:src/shared/playable-path-fixtures.ts",
@@ -35560,11 +35542,12 @@
       "path": "src/shared/board-power-actions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 400,
+      "lineCount": 402,
       "imports": [
         "file:src/shared/board-layers-rules.ts",
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crawl-rules.ts",
         "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/recall-rules.ts",
         "file:src/shared/rng.ts",
@@ -35589,6 +35572,7 @@
       "testedBy": [
         "file:src/shared/board-power-actions.test.ts",
         "file:src/shared/bomb-power.test.ts",
+        "file:src/shared/crawl-rules.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
         "file:src/shared/playable-onboarding.test.ts",
@@ -37427,8 +37411,9 @@
       "path": "src/shared/crawl-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 65,
       "imports": [
+        "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/crawl-rules.ts",
         "file:src/shared/game.ts"
@@ -37441,9 +37426,10 @@
       "path": "src/shared/crawl-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 216,
+      "lineCount": 276,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/miss-bank.ts",
         "file:src/shared/realm-weather-rules.ts",
         "file:src/shared/rng.ts",
         "file:src/shared/run-number-guards.ts",
@@ -37451,12 +37437,20 @@
       ],
       "exports": [
         "symbol:src/shared/crawl-rules.ts#applyCrawlTurn",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_BRUTES_FROM_FLOOR",
         "symbol:src/shared/crawl-rules.ts#CRAWL_EMBER_BURN",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_FROM",
         "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_FLOOR",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_KILL",
         "symbol:src/shared/crawl-rules.ts#CRAWL_HEALTH",
         "symbol:src/shared/crawl-rules.ts#CRAWL_KILL_GOLD",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_MAX_MONSTERS",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_MISSES_PER_KILL",
+        "symbol:src/shared/crawl-rules.ts#CRAWL_PAIRS_PER_MONSTER",
         "symbol:src/shared/crawl-rules.ts#CRAWL_STRIKE_EVERY",
         "symbol:src/shared/crawl-rules.ts#crawlBlocksFirstFlip",
+        "symbol:src/shared/crawl-rules.ts#crawlCarryHeroTo",
+        "symbol:src/shared/crawl-rules.ts#crawlFirstCards",
         "symbol:src/shared/crawl-rules.ts#CrawlFloor",
         "symbol:src/shared/crawl-rules.ts#crawlGround",
         "symbol:src/shared/crawl-rules.ts#CrawlMonster",
@@ -37464,12 +37458,14 @@
         "symbol:src/shared/crawl-rules.ts#CrawlMonsterKind",
         "symbol:src/shared/crawl-rules.ts#crawlNextFloor",
         "symbol:src/shared/crawl-rules.ts#crawlNextStrikeLine",
+        "symbol:src/shared/crawl-rules.ts#crawlOrderPair",
         "symbol:src/shared/crawl-rules.ts#crawlReachableCells",
         "symbol:src/shared/crawl-rules.ts#dealCrawl",
         "symbol:src/shared/crawl-rules.ts#isCrawlRun",
         "symbol:src/shared/crawl-rules.ts#withCrawl"
       ],
       "testedBy": [
+        "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/crawl-rules.test.ts"
       ]
     },
@@ -40061,7 +40057,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 4740,
+      "lineCount": 4794,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -41089,7 +41085,7 @@
       "path": "src/shared/mechanic-accountability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 109,
+      "lineCount": 110,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts",
         "file:src/shared/system-occupancy-simulation.ts"
@@ -41193,7 +41189,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 990,
+      "lineCount": 996,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -44054,7 +44050,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 142,
+      "lineCount": 144,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -44067,7 +44063,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1307,
+      "lineCount": 1339,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -44079,6 +44075,7 @@
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crawl-rules.ts",
         "file:src/shared/crucible-rules.ts",
         "file:src/shared/dread-composition-rules.ts",
         "file:src/shared/dread-rules.ts",
@@ -44892,7 +44889,7 @@
       "path": "src/shared/snowball-relic-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 209,
+      "lineCount": 210,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -45388,7 +45385,7 @@
       "path": "src/shared/system-refinement-ledger.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 866,
+      "lineCount": 873,
       "imports": [
         "file:src/shared/gameplay-interaction-graph.ts"
       ],
@@ -45460,7 +45457,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3923,
+      "lineCount": 3981,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -45473,6 +45470,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crawl-rules.ts",
         "file:src/shared/crucible-rules.ts",
         "file:src/shared/descent-length-rules.ts",
         "file:src/shared/dread-rules.ts",
@@ -46721,10 +46719,11 @@
       "path": "src/shared/zone-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 232,
+      "lineCount": 234,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crawl-rules.ts",
         "file:src/shared/game.ts",
         "file:src/shared/mask-rules.ts",
         "file:src/shared/match-rule-rules.ts",
@@ -59726,14 +59725,6 @@
       "endLine": 17
     },
     {
-      "id": "symbol:src/renderer/crawlMode.ts#crawlRequested",
-      "name": "crawlRequested",
-      "kind": "value",
-      "file": "src/renderer/crawlMode.ts",
-      "line": 5,
-      "endLine": 11
-    },
-    {
       "id": "symbol:src/renderer/desktop-client.ts#desktopClient",
       "name": "desktopClient",
       "kind": "value",
@@ -61698,56 +61689,56 @@
       "name": "createRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 132,
-      "endLine": 136
+      "line": 131,
+      "endLine": 135
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartPlan",
       "name": "createRunStartPlan",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 69,
-      "endLine": 129
+      "line": 68,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartStatePatch",
       "name": "createRunStartStatePatch",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 29,
-      "endLine": 35
+      "line": 28,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartTelemetryPayload",
       "name": "createRunStartTelemetryPayload",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 37,
-      "endLine": 46
+      "line": 36,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartRequest",
       "name": "RunStartRequest",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 58,
-      "endLine": 61
+      "line": 57,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartStatePatch",
       "name": "RunStartStatePatch",
       "kind": "interface",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 22,
-      "endLine": 27
+      "line": 21,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartTelemetryExtra",
       "name": "RunStartTelemetryExtra",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
@@ -63754,72 +63745,72 @@
       "name": "applyBomb",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 347,
-      "endLine": 373
+      "line": 349,
+      "endLine": 375
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyFlashPair",
       "name": "applyFlashPair",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 233,
-      "endLine": 273
+      "line": 234,
+      "endLine": 274
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyPeek",
       "name": "applyPeek",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 275,
-      "endLine": 295
+      "line": 276,
+      "endLine": 296
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyRegionShuffle",
       "name": "applyRegionShuffle",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 230,
-      "endLine": 230
+      "line": 231,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyShuffle",
       "name": "applyShuffle",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 229,
-      "endLine": 229
+      "line": 230,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyTileSwap",
       "name": "applyTileSwap",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 231,
-      "endLine": 231
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#bombSelectableTileIds",
       "name": "bombSelectableTileIds",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 307,
-      "endLine": 321
+      "line": 308,
+      "endLine": 323
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#bombTargetTileId",
       "name": "bombTargetTileId",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 323,
-      "endLine": 345
+      "line": 325,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#cancelResolvingWithUndo",
       "name": "cancelResolvingWithUndo",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 375,
-      "endLine": 399
+      "line": 377,
+      "endLine": 401
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canPeekAtBoard",
@@ -67154,144 +67145,216 @@
       "name": "applyCrawlTurn",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 144,
-      "endLine": 198
+      "line": 159,
+      "endLine": 218
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_BRUTES_FROM_FLOOR",
+      "name": "CRAWL_BRUTES_FROM_FLOOR",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_EMBER_BURN",
       "name": "CRAWL_EMBER_BURN",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 31,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_FROM",
+      "name": "CRAWL_FROM",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_FLOOR",
       "name": "CRAWL_HEAL_PER_FLOOR",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_KILL",
+      "name": "CRAWL_HEAL_PER_KILL",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_HEALTH",
       "name": "CRAWL_HEALTH",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_KILL_GOLD",
       "name": "CRAWL_KILL_GOLD",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_MAX_MONSTERS",
+      "name": "CRAWL_MAX_MONSTERS",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_MISSES_PER_KILL",
+      "name": "CRAWL_MISSES_PER_KILL",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 27,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#CRAWL_PAIRS_PER_MONSTER",
+      "name": "CRAWL_PAIRS_PER_MONSTER",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CRAWL_STRIKE_EVERY",
       "name": "CRAWL_STRIKE_EVERY",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlBlocksFirstFlip",
       "name": "crawlBlocksFirstFlip",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 135,
-      "endLine": 136
+      "line": 150,
+      "endLine": 151
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#crawlCarryHeroTo",
+      "name": "crawlCarryHeroTo",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 270,
+      "endLine": 275
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#crawlFirstCards",
+      "name": "crawlFirstCards",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 262,
+      "endLine": 267
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlFloor",
       "name": "CrawlFloor",
       "kind": "interface",
       "file": "src/shared/crawl-rules.ts",
-      "line": 40,
-      "endLine": 53
+      "line": 47,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlGround",
       "name": "crawlGround",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 97,
-      "endLine": 112
+      "line": 112,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlMonster",
       "name": "CrawlMonster",
       "kind": "interface",
       "file": "src/shared/crawl-rules.ts",
-      "line": 29,
-      "endLine": 38
+      "line": 36,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlMonsterCountFor",
       "name": "crawlMonsterCountFor",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#CrawlMonsterKind",
       "name": "CrawlMonsterKind",
       "kind": "type",
       "file": "src/shared/crawl-rules.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlNextFloor",
       "name": "crawlNextFloor",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 205,
-      "endLine": 208
+      "line": 226,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlNextStrikeLine",
       "name": "crawlNextStrikeLine",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 211,
-      "endLine": 215
+      "line": 232,
+      "endLine": 236
+    },
+    {
+      "id": "symbol:src/shared/crawl-rules.ts#crawlOrderPair",
+      "name": "crawlOrderPair",
+      "kind": "value",
+      "file": "src/shared/crawl-rules.ts",
+      "line": 242,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#crawlReachableCells",
       "name": "crawlReachableCells",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 118,
-      "endLine": 132
+      "line": 133,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#dealCrawl",
       "name": "dealCrawl",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 70,
-      "endLine": 92
+      "line": 85,
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#isCrawlRun",
       "name": "isCrawlRun",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 55,
-      "endLine": 55
+      "line": 69,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/crawl-rules.ts#withCrawl",
       "name": "withCrawl",
       "kind": "value",
       "file": "src/shared/crawl-rules.ts",
-      "line": 201,
-      "endLine": 202
+      "line": 221,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/crucible-rules.ts#applyCrucible",
@@ -72963,7 +73026,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 426,
-      "endLine": 474
+      "endLine": 480
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
@@ -72978,48 +73041,48 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 950,
-      "endLine": 968
+      "line": 956,
+      "endLine": 974
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 971,
-      "endLine": 989
+      "line": 977,
+      "endLine": 995
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 812,
-      "endLine": 947
+      "line": 818,
+      "endLine": 953
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 477,
-      "endLine": 538
+      "line": 483,
+      "endLine": 544
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 543,
-      "endLine": 760
+      "line": 549,
+      "endLine": 766
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 765,
-      "endLine": 809
+      "line": 771,
+      "endLine": 815
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -77482,48 +77545,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 262,
-      "endLine": 820
+      "line": 267,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 88,
-      "endLine": 100
+      "line": 89,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 63,
-      "endLine": 86
+      "line": 64,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 832,
-      "endLine": 1306
+      "line": 852,
+      "endLine": 1338
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 111,
-      "endLine": 245
+      "line": 112,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 102,
-      "endLine": 109
+      "line": 103,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -79594,16 +79657,16 @@
       "name": "staleLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 862,
-      "endLine": 865
+      "line": 869,
+      "endLine": 872
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#strandedLedgerIds",
       "name": "strandedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 842,
-      "endLine": 847
+      "line": 849,
+      "endLine": 854
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_LEDGER",
@@ -79611,7 +79674,7 @@
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
       "line": 92,
-      "endLine": 830
+      "endLine": 837
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SYSTEM_REFINEMENT_SWEEP_GENERATION",
@@ -79634,8 +79697,8 @@
       "name": "systemRefinementLedgerById",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 832,
-      "endLine": 833
+      "line": 839,
+      "endLine": 840
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#SystemRefinementVerdict",
@@ -79650,16 +79713,16 @@
       "name": "unevidencedLedgerIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 856,
-      "endLine": 859
+      "line": 863,
+      "endLine": 866
     },
     {
       "id": "symbol:src/shared/system-refinement-ledger.ts#unexaminedSystemIds",
       "name": "unexaminedSystemIds",
       "kind": "value",
       "file": "src/shared/system-refinement-ledger.ts",
-      "line": 836,
-      "endLine": 839
+      "line": 843,
+      "endLine": 846
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -79746,112 +79809,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3880,
-      "endLine": 3880
+      "line": 3938,
+      "endLine": 3938
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3697,
-      "endLine": 3857
+      "line": 3755,
+      "endLine": 3915
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3886,
-      "endLine": 3893
+      "line": 3944,
+      "endLine": 3951
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3870,
-      "endLine": 3870
+      "line": 3928,
+      "endLine": 3928
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3685,
-      "endLine": 3685
+      "line": 3743,
+      "endLine": 3743
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3896,
-      "endLine": 3902
+      "line": 3954,
+      "endLine": 3960
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3922,
-      "endLine": 3922
+      "line": 3980,
+      "endLine": 3980
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 336,
-      "endLine": 353
+      "line": 339,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 77,
-      "endLine": 269
+      "line": 78,
+      "endLine": 272
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3859,
-      "endLine": 3862
+      "line": 3917,
+      "endLine": 3920
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 329,
-      "endLine": 334
+      "line": 332,
+      "endLine": 337
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 271,
-      "endLine": 327
+      "line": 274,
+      "endLine": 330
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3873,
-      "endLine": 3877
+      "line": 3931,
+      "endLine": 3935
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3904,
-      "endLine": 3920
+      "line": 3962,
+      "endLine": 3978
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -81642,120 +81705,120 @@
       "name": "canIgniteZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 80,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#igniteZone",
       "name": "igniteZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 82,
-      "endLine": 97
+      "line": 83,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#isZoneActive",
       "name": "isZoneActive",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 68,
-      "endLine": 68
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#resolveZone",
       "name": "resolveZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 173,
-      "endLine": 231
+      "line": 175,
+      "endLine": 233
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_BONUS_PER_PAIR_SQUARED",
       "name": "ZONE_BONUS_PER_PAIR_SQUARED",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_AT_INFERNO",
       "name": "ZONE_PAIRS_AT_INFERNO",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_AT_LEGENDARY",
       "name": "ZONE_PAIRS_AT_LEGENDARY",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_CAP",
       "name": "ZONE_PAIRS_CAP",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_STAGE_FROM",
       "name": "ZONE_STAGE_FROM",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zoneFlipsLeft",
       "name": "zoneFlipsLeft",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 100,
-      "endLine": 101
+      "line": 101,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zoneFlipTile",
       "name": "zoneFlipTile",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 107,
-      "endLine": 133
+      "line": 108,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zonePairsAvailable",
       "name": "zonePairsAvailable",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 71,
-      "endLine": 76
+      "line": 72,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zonePairsForCombo",
       "name": "zonePairsForCombo",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 51,
-      "endLine": 56
+      "line": 52,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "ExportSpecifier",
       "file": "src/shared/zone-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZoneState",
       "name": "ZoneState",
       "kind": "ExportSpecifier",
       "file": "src/shared/zone-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/test/installCanvas2dMock.ts#installCanvas2dMock",
@@ -82111,7 +82174,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 79
+          "line": 81
         }
       ],
       "enables": [
@@ -82122,6 +82185,60 @@
         "heat-carried-into-the-turn",
         "no-perk-touches-the-miss-bank",
         "afterglow-capped-at-the-lantern"
+      ]
+    },
+    {
+      "id": "mechanic:board.crawl",
+      "mechanicId": "board.crawl",
+      "label": "The crawl",
+      "kind": "board",
+      "role": "from_rules_104_a_hero_walks_the_board_opening_turns_beside_its_ground_and_monsters_on_cards_strike_its_health_on_a_count_matches_hurt_and_kill_them",
+      "evidence": [
+        {
+          "path": "src/shared/crawl-rules.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/flip-tile-transition.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/board-turn-transition.ts",
+          "line": 56
+        },
+        {
+          "path": "src/shared/next-floor-transition-rules.ts",
+          "line": 39
+        },
+        {
+          "path": "src/renderer/components/CrawlTokens.tsx",
+          "line": 5
+        },
+        {
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/crawl-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/test-hall-rooms.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/run-soak.test.ts",
+          "line": 76
+        }
+      ],
+      "enables": [],
+      "blocks": [],
+      "softlockGuards": [
+        "reach-never-empty-while-a-card-can-be-turned",
+        "frost-vines-and-the-sticky-lock-never-wall-the-hero-in",
+        "the-zone-carries-the-hero-to-the-cards-it-replays"
       ]
     },
     {
@@ -82721,7 +82838,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 84
+          "line": 86
         }
       ],
       "enables": [
@@ -82772,7 +82889,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 84
+          "line": 86
         }
       ],
       "enables": [
@@ -83222,7 +83339,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 33
+          "line": 34
         }
       ],
       "tests": [
@@ -83274,7 +83391,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 84
+          "line": 86
         }
       ],
       "enables": [
@@ -83442,7 +83559,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 30
+          "line": 31
         },
         {
           "path": "src/renderer/components/cardStatusPaint.ts",
@@ -84046,7 +84163,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
@@ -84147,7 +84264,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 30
+          "line": 31
         }
       ],
       "tests": [
@@ -84371,7 +84488,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 22
+          "line": 23
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -84501,7 +84618,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -84951,7 +85068,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 298
+          "line": 299
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -85041,7 +85158,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 30
+          "line": 31
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -85124,7 +85241,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 3
+          "line": 4
         }
       ],
       "enables": [
@@ -85193,7 +85310,7 @@
       "evidence": [
         {
           "path": "src/shared/zone-rules.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
@@ -85223,7 +85340,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 81
+          "line": 83
         }
       ],
       "enables": [
@@ -85246,7 +85363,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 20
+          "line": 21
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -85342,7 +85459,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -85487,7 +85604,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 16
+          "line": 17
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -85538,7 +85655,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 25
+          "line": 26
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -86455,6 +86572,26 @@
       ]
     },
     {
+      "id": "state:crawlHealth",
+      "name": "crawlHealth",
+      "readBy": [
+        "mechanic:board.crawl"
+      ],
+      "writtenBy": [
+        "mechanic:board.crawl"
+      ]
+    },
+    {
+      "id": "state:crawlMonsters",
+      "name": "crawlMonsters",
+      "readBy": [
+        "mechanic:board.crawl"
+      ],
+      "writtenBy": [
+        "mechanic:board.crawl"
+      ]
+    },
+    {
       "id": "state:crucibleCharges",
       "name": "crucibleCharges",
       "readBy": [
@@ -86881,6 +87018,7 @@
         "mechanic:progression.store_stop"
       ],
       "writtenBy": [
+        "mechanic:board.crawl",
         "mechanic:board.element_alchemy",
         "mechanic:board.element_resonance",
         "mechanic:economy.gold",
@@ -87186,6 +87324,7 @@
         "mechanic:hazard.warden"
       ],
       "writtenBy": [
+        "mechanic:board.crawl",
         "mechanic:economy.miss_bank",
         "mechanic:hazard.warden",
         "mechanic:progression.store_stop"
@@ -87267,6 +87406,7 @@
       "id": "state:pairCount",
       "name": "pairCount",
       "readBy": [
+        "mechanic:board.crawl",
         "mechanic:board.fold",
         "mechanic:board.layers",
         "mechanic:board.turncoat_pair",
@@ -87659,6 +87799,7 @@
       "name": "runSeed",
       "readBy": [
         "mechanic:board.chain_chunk_fever",
+        "mechanic:board.crawl",
         "mechanic:board.fold",
         "mechanic:board.lantern_light",
         "mechanic:board.layers",
@@ -87691,6 +87832,7 @@
         "mechanic:power.undo_resolve"
       ],
       "writtenBy": [
+        "mechanic:board.crawl",
         "mechanic:hazard.endless_rent",
         "mechanic:hazard.warden",
         "mechanic:phase.memorize",
@@ -87832,7 +87974,8 @@
       "id": "state:stickyBlockIndex",
       "name": "stickyBlockIndex",
       "readBy": [
-        "mechanic:board.cleanup"
+        "mechanic:board.cleanup",
+        "mechanic:board.crawl"
       ],
       "writtenBy": [
         "mechanic:board.cleanup",
@@ -87887,6 +88030,7 @@
         "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
         "mechanic:board.combo_heat_perks",
+        "mechanic:board.crawl",
         "mechanic:board.element_alchemy",
         "mechanic:board.element_groups",
         "mechanic:board.element_resonance",
@@ -88057,6 +88201,7 @@
       "id": "state:turnsThisFloor",
       "name": "turnsThisFloor",
       "readBy": [
+        "mechanic:board.crawl",
         "mechanic:board.realm_weather",
         "mechanic:board.spiral",
         "mechanic:board.wanderers",
@@ -88474,6 +88619,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "the rail names the perks under the combo; lit faces show on the board"
+    },
+    {
+      "id": "displays:mechanic:board.crawl->mechanic:feedback.gameplay_hud:the hero, the gold outline on the cards it can open, each monster with its health and its count, and the health beside the lives",
+      "source": "mechanic:board.crawl",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "the hero, the gold outline on the cards it can open, each monster with its health and its count, and the health beside the lives"
     },
     {
       "id": "displays:mechanic:board.dread_composition->mechanic:feedback.gameplay_hud:what the Dread bought on the board crown, from the study window on",
@@ -98867,12 +99019,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/crawlMode.ts->symbol:src/renderer/crawlMode.ts#crawlRequested",
-      "source": "file:src/renderer/crawlMode.ts",
-      "target": "symbol:src/renderer/crawlMode.ts#crawlRequested",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#desktopClient",
       "source": "file:src/renderer/desktop-client.ts",
       "target": "symbol:src/renderer/desktop-client.ts#desktopClient",
@@ -104441,15 +104587,33 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_BRUTES_FROM_FLOOR",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_BRUTES_FROM_FLOOR",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_EMBER_BURN",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "symbol:src/shared/crawl-rules.ts#CRAWL_EMBER_BURN",
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_FROM",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_FROM",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_FLOOR",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_FLOOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_KILL",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_HEAL_PER_KILL",
       "kind": "exports"
     },
     {
@@ -104465,6 +104629,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_MAX_MONSTERS",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_MAX_MONSTERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_MISSES_PER_KILL",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_MISSES_PER_KILL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_PAIRS_PER_MONSTER",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#CRAWL_PAIRS_PER_MONSTER",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#CRAWL_STRIKE_EVERY",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "symbol:src/shared/crawl-rules.ts#CRAWL_STRIKE_EVERY",
@@ -104474,6 +104656,18 @@
       "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#crawlBlocksFirstFlip",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "symbol:src/shared/crawl-rules.ts#crawlBlocksFirstFlip",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#crawlCarryHeroTo",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#crawlCarryHeroTo",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#crawlFirstCards",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#crawlFirstCards",
       "kind": "exports"
     },
     {
@@ -104516,6 +104710,12 @@
       "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#crawlNextStrikeLine",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "symbol:src/shared/crawl-rules.ts#crawlNextStrikeLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crawl-rules.ts->symbol:src/shared/crawl-rules.ts#crawlOrderPair",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "symbol:src/shared/crawl-rules.ts#crawlOrderPair",
       "kind": "exports"
     },
     {
@@ -115672,6 +115872,42 @@
       "id": "implemented_by:mechanic:board.combo_heat_perks->file:src/shared/combo-heat-perks.ts",
       "source": "mechanic:board.combo_heat_perks",
       "target": "file:src/shared/combo-heat-perks.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/renderer/components/CrawlTokens.tsx",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/renderer/components/CrawlTokens.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/shared/board-turn-transition.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/board-turn-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/shared/crawl-rules.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/crawl-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/shared/flip-tile-transition.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/flip-tile-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.crawl->file:src/shared/next-floor-transition-rules.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -131509,12 +131745,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/runStartState.ts->src/renderer/crawlMode.ts",
-      "source": "file:src/renderer/store/runStartState.ts",
-      "target": "file:src/renderer/crawlMode.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/runStartState.ts->src/renderer/store/runSurfaceState.ts",
       "source": "file:src/renderer/store/runStartState.ts",
       "target": "file:src/renderer/store/runSurfaceState.ts",
@@ -131968,6 +132198,12 @@
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/crawl-rules.ts",
+      "source": "file:src/renderer/store/useAppStore.test.ts",
+      "target": "file:src/shared/crawl-rules.ts",
       "kind": "imports"
     },
     {
@@ -133408,6 +133644,12 @@
       "id": "imports:src/shared/board-power-actions.ts->src/shared/contracts.ts",
       "source": "file:src/shared/board-power-actions.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/board-power-actions.ts->src/shared/crawl-rules.ts",
+      "source": "file:src/shared/board-power-actions.ts",
+      "target": "file:src/shared/crawl-rules.ts",
       "kind": "imports"
     },
     {
@@ -135055,6 +135297,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/crawl-rules.test.ts->src/shared/board-power-actions.ts",
+      "source": "file:src/shared/crawl-rules.test.ts",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/crawl-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/crawl-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -135076,6 +135324,12 @@
       "id": "imports:src/shared/crawl-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/crawl-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crawl-rules.ts->src/shared/miss-bank.ts",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "file:src/shared/miss-bank.ts",
       "kind": "imports"
     },
     {
@@ -142333,6 +142587,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/crawl-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/crawl-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/crucible-rules.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/crucible-rules.ts",
@@ -144103,6 +144363,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/crawl-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/crawl-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/crucible-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/crucible-rules.ts",
@@ -145561,6 +145827,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/zone-rules.ts->src/shared/crawl-rules.ts",
+      "source": "file:src/shared/zone-rules.ts",
+      "target": "file:src/shared/crawl-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/zone-rules.ts->src/shared/game.ts",
       "source": "file:src/shared/zone-rules.ts",
       "target": "file:src/shared/game.ts",
@@ -146005,6 +146277,48 @@
       "id": "reads:mechanic:board.combo_heat_perks->state:tileStates",
       "source": "mechanic:board.combo_heat_perks",
       "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:crawlHealth",
+      "source": "mechanic:board.crawl",
+      "target": "state:crawlHealth",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:crawlMonsters",
+      "source": "mechanic:board.crawl",
+      "target": "state:crawlMonsters",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:pairCount",
+      "source": "mechanic:board.crawl",
+      "target": "state:pairCount",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:runSeed",
+      "source": "mechanic:board.crawl",
+      "target": "state:runSeed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:stickyBlockIndex",
+      "source": "mechanic:board.crawl",
+      "target": "state:stickyBlockIndex",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:tileStates",
+      "source": "mechanic:board.crawl",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.crawl->state:turnsThisFloor",
+      "source": "mechanic:board.crawl",
+      "target": "state:turnsThisFloor",
       "kind": "reads"
     },
     {
@@ -148206,6 +148520,13 @@
       "label": "lock pulse"
     },
     {
+      "id": "synergy:mechanic:board.crawl->mechanic:economy.miss_bank:a kill on a match wins a miss back for the bank's three floors",
+      "source": "mechanic:board.crawl",
+      "target": "mechanic:economy.miss_bank",
+      "kind": "synergy",
+      "label": "a kill on a match wins a miss back for the bank's three floors"
+    },
+    {
       "id": "synergy:mechanic:board.turncoat_pair->mechanic:hazard.colossus:a Turncoat matched while it is the Colossus's element is a hit: the one pair that can be held for the element the fight needs",
       "source": "mechanic:board.turncoat_pair",
       "target": "mechanic:hazard.colossus",
@@ -148322,6 +148643,24 @@
     {
       "id": "tested_by:mechanic:board.combo_heat_perks->file:src/shared/test-hall-rooms.test.ts",
       "source": "mechanic:board.combo_heat_perks",
+      "target": "file:src/shared/test-hall-rooms.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.crawl->file:src/shared/crawl-rules.test.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/crawl-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.crawl->file:src/shared/run-soak.test.ts",
+      "source": "mechanic:board.crawl",
+      "target": "file:src/shared/run-soak.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.crawl->file:src/shared/test-hall-rooms.test.ts",
+      "source": "mechanic:board.crawl",
       "target": "file:src/shared/test-hall-rooms.test.ts",
       "kind": "tested_by"
     },
@@ -153228,6 +153567,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/board-power-actions.ts->file:src/shared/crawl-rules.test.ts",
+      "source": "file:src/shared/board-power-actions.ts",
+      "target": "file:src/shared/crawl-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/board-power-actions.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/board-power-actions.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -155085,6 +155430,12 @@
       "id": "tested_by:src/shared/crash-report-summary.ts->file:src/shared/crash-report-summary.test.ts",
       "source": "file:src/shared/crash-report-summary.ts",
       "target": "file:src/shared/crash-report-summary.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/crawl-rules.ts->file:src/renderer/store/useAppStore.test.ts",
+      "source": "file:src/shared/crawl-rules.ts",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
       "kind": "tested_by"
     },
     {
@@ -160222,6 +160573,36 @@
       "id": "writes:mechanic:board.combo_heat_perks->state:lanternLitTileIds",
       "source": "mechanic:board.combo_heat_perks",
       "target": "state:lanternLitTileIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.crawl->state:crawlHealth",
+      "source": "mechanic:board.crawl",
+      "target": "state:crawlHealth",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.crawl->state:crawlMonsters",
+      "source": "mechanic:board.crawl",
+      "target": "state:crawlMonsters",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.crawl->state:gold",
+      "source": "mechanic:board.crawl",
+      "target": "state:gold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.crawl->state:missBank",
+      "source": "mechanic:board.crawl",
+      "target": "state:missBank",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.crawl->state:runStatus",
+      "source": "mechanic:board.crawl",
+      "target": "state:runStatus",
       "kind": "writes"
     },
     {
