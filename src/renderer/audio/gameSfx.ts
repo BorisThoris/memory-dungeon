@@ -1387,8 +1387,9 @@ const playHoldReleaseSfx = (rawGain: number, held: number): void => {
  * band; the cues that come every few turns (a Sleeper, a mask, a Wanderer) sit 8 to 14 dB under it.
  * That match was the synth fallback. Re-measured on the recorded samples (2026-10-27) the band holds:
  * flip -24.1, shuffle -23.5, a chain-8 match -21.6, and the boss cues -3.9 to +0.1 dB from the flip, the
- * frequent ones 5 to 13 under it. Only a plain match (`match-tier-low.ogg`, -32.7) sits below them all,
- * the take's own level, so the gains stay (`e2e/deep-cue-levels.spec.ts`).
+ * frequent ones 5 to 13 under it, so the gains stay. The plain match take sat below them all (-32.7), and
+ * its level was fixed in the take (a trimmed lead-in and a manifest gain, 2026-10-30), not here
+ * (`e2e/deep-cue-levels.spec.ts`).
  */
 const HOLD_RELEASE_LIFT = 2.4;
 

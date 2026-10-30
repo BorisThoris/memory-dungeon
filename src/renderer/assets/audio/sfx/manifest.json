@@ -3,9 +3,9 @@
     "entries": {
         "flip": { "file": "flip.ogg", "category": "flip" },
         "gambitCommit": { "file": "gambit-commit.ogg", "category": "flip" },
-        "match-tier-low": { "file": "match-tier-low.ogg", "category": "match" },
+        "match-tier-low": { "file": "match-tier-low.ogg", "category": "match", "gain": 2 },
         "match-tier-mid": { "file": "match-tier-mid.ogg", "category": "match" },
-        "match-tier-high": { "file": "match-tier-high.ogg", "category": "match" },
+        "match-tier-high": { "file": "match-tier-high.ogg", "category": "match", "gain": 2.1 },
         "mismatch": { "file": "mismatch.ogg", "category": "mismatch" },
         "power-arm": { "file": "power-arm.ogg", "category": "power" },
         "peek-power": { "file": "peek-power.ogg", "category": "power" },
