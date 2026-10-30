@@ -3326,48 +3326,6 @@
                 "src/shared/test-hall-rooms.test.ts",
                 "src/shared/run-soak.test.ts"
             ]
-        },
-        {
-            "id": "board.crawl",
-            "label": "The crawl",
-            "kind": "board",
-            "role": "from_rules_104_a_hero_walks_the_board_opening_turns_beside_its_ground_and_monsters_on_cards_strike_its_health_on_a_count_matches_hurt_and_kill_them",
-            "evidence": [
-                "src/shared/crawl-rules.ts",
-                "src/shared/flip-tile-transition.ts",
-                "src/shared/board-turn-transition.ts",
-                "src/shared/next-floor-transition-rules.ts",
-                "src/renderer/components/CrawlTokens.tsx",
-                "src/renderer/components/RunShell.tsx"
-            ],
-            "reads": [
-                "tileStates",
-                "pairCount",
-                "runSeed",
-                "turnsThisFloor",
-                "stickyBlockIndex",
-                "crawlHealth",
-                "crawlMonsters"
-            ],
-            "writes": [
-                "crawlHealth",
-                "crawlMonsters",
-                "gold",
-                "missBank",
-                "runStatus"
-            ],
-            "enables": [],
-            "blocks": [],
-            "softlockGuards": [
-                "reach-never-empty-while-a-card-can-be-turned",
-                "frost-vines-and-the-sticky-lock-never-wall-the-hero-in",
-                "the-zone-carries-the-hero-to-the-cards-it-replays"
-            ],
-            "tests": [
-                "src/shared/crawl-rules.test.ts",
-                "src/shared/test-hall-rooms.test.ts",
-                "src/shared/run-soak.test.ts"
-            ]
         }
     ],
     "edges": [
@@ -4756,18 +4714,6 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "the bell tool and count, the ring over the freed cards, the answer, and the bell"
-        },
-        {
-            "source": "board.crawl",
-            "target": "feedback.gameplay_hud",
-            "kind": "displays",
-            "label": "the hero, the gold outline on the cards it can open, each monster with its health and its count, and the health beside the lives"
-        },
-        {
-            "source": "board.crawl",
-            "target": "economy.miss_bank",
-            "kind": "synergy",
-            "label": "a kill on a match wins a miss back for the bank's three floors"
         }
     ],
     "coverage": {

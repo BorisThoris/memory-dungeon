@@ -53,7 +53,6 @@ import { applyWandererTurn } from './wanderer-rules';
 import { swaySuitOf } from './realm-sway-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { isTripleKey, pendingTripleKey, rekeyElementPair, tilesMatchOnBoard } from './match-rule-rules';
-import { applyCrawlTurn } from './crawl-rules';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -607,12 +606,12 @@ export const createResolveBoardTurnTransition = ({
             // A third card after two of a three is the three's turn, not the Gambit's.
             const three = pendingTripleKey({ ...run.board, flippedTileIds: flippedTileIds.slice(0, 2) }) != null;
             const resolved = three ? resolveTripleThird(run, encorePairKeys, execution) : resolveGambitThree(run, encorePairKeys, execution);
-            return applyCrawlTurn(run, applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolved)))))))))), (survived) => finalizeLevel(survived, survived.board!, execution)));
+            return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolved)))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
         }
         if (flippedTileIds.length !== 2) {
             return run;
         }
-        return applyCrawlTurn(run, applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))))))))), (survived) => finalizeLevel(survived, survived.board!, execution)));
+        return applySpiralTurn(run, recordRepriseTurn(run, spendCarveOnPop(run, applyWardenTurn(run, applyLayerTurn(run, applyWandererTurn(run, applyCartographerTurn(run, applyKeeperTurn(run, applySleeperTurn(run, applyHoldTurn(run, applyMissBudget(run, resolveTwoFlippedTiles(run, encorePairKeys, execution))))))))))), (survived) => finalizeLevel(survived, survived.board!, execution));
     };
     return resolveBoardTurn;
 };

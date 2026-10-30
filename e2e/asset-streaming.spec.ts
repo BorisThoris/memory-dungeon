@@ -48,14 +48,11 @@ test('a run plays from memory: no asset is requested and no card texture drawn a
     for (let turn = 0; turn < 6; turn += 1) {
         await page.evaluate(async (turnIndex) => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-            const { crawlReachableCells } = await import('/src/shared/crawl-rules.ts');
             const store = useAppStore.getState();
             const board = store.run?.board;
             if (!board || store.run?.status !== 'playing') return;
             const hidden = board.tiles.filter((tile) => tile.state === 'hidden' && !tile.pairKey.startsWith('__'));
-            // The crawl (`crawl-rules.ts`): a turn opens on a card the hero can reach.
-            const reach = board.crawl ? crawlReachableCells(board, store.run!.stickyBlockIndex) : null;
-            const first = hidden.find((tile) => !reach || reach.has(board.tiles.indexOf(tile)));
+            const first = hidden[0];
             const partner = hidden.find((tile) => tile.pairKey === first?.pairKey && tile.id !== first?.id);
             // A miss on even turns and a match on odd ones, so both sounds and both floaters play.
             const second = turnIndex % 2 === 0 ? hidden.find((tile) => tile.pairKey !== first?.pairKey) : partner;

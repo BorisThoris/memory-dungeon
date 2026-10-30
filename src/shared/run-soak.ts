@@ -1,5 +1,4 @@
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
-import { CRAWL_HEALTH, crawlFirstCards, crawlReachableCells, isCrawlRun, withCrawl } from './crawl-rules';
 import { applyFusion, availableFusions, isSnowballRelicId, relicScoreMultiplier } from './snowball-relic-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
 import { MASK_MIN_PAIRS, maskCountFor } from './mask-rules';
@@ -173,10 +172,6 @@ export interface SoakRunReport {
     fusions: number;
     /** Relics that grew awake (rules 103). */
     awakened: number;
-    /** The crawl (rules 104): monsters killed, blows struck at the hero, and whether the run ended slain. */
-    crawlKills: number;
-    crawlStrikes: number;
-    slain: boolean;
     firstEvolutionFloor: number | null;
     /** The deepest Dread tier the run reached (`dread-rules.ts`), as its index in `DREAD_TIERS`. */
     dreadTierPeak: number;
@@ -520,21 +515,6 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
     },
     'a floor ends only when both decks are cleared': (_before, run) =>
         run.status === 'levelComplete' && run.board?.beneath?.some(Boolean) ? 'the floor cleared with cards still beneath it' : null,
-    'the crawl keeps its hero on the board, its monsters apart, its health within bounds, and a card to open': (_before, run) => {
-        const board = run.board;
-        if (!isCrawlRun(run) || !board?.crawl) return null;
-        const { hero, monsters } = board.crawl;
-        if (hero < 0 || hero >= board.tiles.length) return `hero on cell ${hero} of ${board.tiles.length}`;
-        const cells = monsters.map((monster) => monster.cell);
-        if (new Set(cells).size !== cells.length || cells.some((cell) => cell < 0 || cell >= board.tiles.length)) return `monsters on ${cells.join(',')}`;
-        if (monsters.some((monster) => monster.hp <= 0)) return 'a dead monster still stands';
-        const health = run.crawlHealth ?? 0;
-        if (health < 0 || health > CRAWL_HEALTH) return `health ${health}`;
-        if (run.status === 'playing' && health === 0) return 'a hero at no health still plays';
-        const turnable = board.tiles.some((tile, index) => tile.state === 'hidden' && !isTileFlipBlocked(tile) && index !== run.stickyBlockIndex);
-        if (run.status === 'playing' && board.flippedTileIds.length === 0 && turnable && crawlReachableCells(board, run.stickyBlockIndex).size === 0) return 'no card the hero can open';
-        return null;
-    },
     'a run never holds more relics than its slots': (_before, run) =>
         (run.runRulesVersion ?? 0) >= RELIC_SLOTS_FROM && heldRelicIds(run).length > RELIC_SLOTS ? `${heldRelicIds(run).length} relics: ${heldRelicIds(run).join(',')}` : null,
     'an evolution is bought only with its blueprint, and two never share a first ingredient': (_before, run) => {
@@ -875,17 +855,14 @@ export const soakRun = ({
     const violations: SoakViolation[] = [];
     // Profiles of every age (`run-signature-rules.ts`, rules 92): 0 to 11 finished runs, so the Gate deals every omen and both draws.
     const runsFinished = seed % 12;
-    // Every solo run is a crawl from rules 104 (`crawl-rules.ts`), as the game starts them.
-    let run: RunState = withCrawl(player.wild
+    let run: RunState = player.wild
         ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished })
-        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished }));
+        : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished });
     let step = 0;
     let turns = 0;
     let purchases = 0;
     let bombsUsed = 0;
     let cruciblesUsed = 0;
-    let crawlKills = 0;
-    let crawlStrikes = 0;
     let stormGlassesBroken = 0;
     let stillBellsRung = 0;
     let holdsReleased = 0;
@@ -964,10 +941,6 @@ export const soakRun = ({
 
     const act = (action: string, next: RunState): void => {
         step += 1;
-        if (action === 'resolve' && next.board?.crawl && next.board.crawl.turn !== run.board?.crawl?.turn) {
-            crawlKills += next.board.crawl.lastKills?.length ?? 0;
-            crawlStrikes += next.board.crawl.lastStrikes ?? 0;
-        }
         if (action === 'descend') masksDealt += (next.board?.tiles ?? []).filter((tile) => tile.mask != null).length;
         if (next.status === 'levelComplete' && run.status !== 'levelComplete' && next.spiralSurvived) spiralFloors += 1;
         if (next.board?.level === run.board?.level) spiralRings += Math.max(0, runNonNegativeInteger(next.spiralRingsSealedThisFloor) - runNonNegativeInteger(run.spiralRingsSealedThisFloor));
@@ -1132,7 +1105,7 @@ export const soakRun = ({
             if (next !== run) act('shuffle', next);
         }
         // The joker, played the way a player with a wild in hand plays it: early, on any card.
-        const joker = crawlFirstCards(run, (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden' && isWildPairKey(tile.pairKey)))[0];
+        const joker = (run.board?.tiles ?? []).find((tile) => tile.state === 'hidden' && isWildPairKey(tile.pairKey));
         if (joker && (run.wildMatchesRemaining ?? 0) > 0 && rng() < 0.5) {
             act('flip', flipTile(run, joker.id));
             act('flip', flipTile(run, pick(hiddenReal(run)).id));
@@ -1140,9 +1113,7 @@ export const soakRun = ({
             act('resolve', resolveBoardTurn(run));
             continue;
         }
-        // Under the crawl a turn opens on a card the hero can reach (`crawl-rules.ts`).
-        const reachable = crawlFirstCards(run, hiddenReal(run));
-        const pool = reachable.length > 0 ? reachable : hiddenReal(run);
+        const pool = hiddenReal(run);
         // Playing the elements: the element in hand again until it is primed, then another.
         const inHand = runElementStreak(run);
         const wanted = inHand && rng() < player.elementRate ? pool.filter((tile) => (tile.suit === inHand.suit) !== isStreakPrimed(inHand)) : [];
@@ -1260,9 +1231,6 @@ export const soakRun = ({
         evolutions: (run.evolutions ?? []).length,
         fusions: (run.fusions ?? []).length,
         awakened: (run.awakened ?? []).length,
-        crawlKills,
-        crawlStrikes,
-        slain: run.runEndReason === 'slain',
         firstEvolutionFloor,
         bossDoorsTaken,
         wardenTests,

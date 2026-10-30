@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
-import { crawlNextStrikeLine } from '../../shared/crawl-rules';
 import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
@@ -642,7 +641,7 @@ const RunShell = ({
                             <span className={styles.lives} data-testid="hud-misses-left"
                                 data-low={missesRemaining <= 1 ? 'true' : undefined}
                                 data-miss-earned={missesEarned > 0 ? 'true' : undefined}
-                                role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left${run.board?.crawl ? `, ${run.crawlHealth ?? 0} health` : ''}`}
+                                role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left`}
                                 title={MISS_BANK_TITLE}>
                                 <svg aria-hidden="true" viewBox="0 0 32 36" data-life-icon="relic-heart">
                                     <path d="m16 33-12-13-2-10 5-6 5-1 4 5 4-5 5 1 5 6-2 10Z" fill="#2b1c20" stroke="#ae8247" strokeWidth="1.5" strokeLinejoin="round" />
@@ -656,17 +655,6 @@ const RunShell = ({
                                 </svg>
                                 <span className={styles.lifeCount}>{missesRemaining}</span>
                                 <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
-                                {/* The crawl (`crawl-rules.ts`, `?crawl=1`): the hero's health, and the next monster's strike under it. */}
-                                {run.board?.crawl ? (
-                                    <span className={styles.crawlHealth} data-testid="hud-health" data-low={(run.crawlHealth ?? 0) <= 2 ? 'true' : undefined}
-                                        data-struck={(run.board.crawl.lastStrikes ?? 0) > 0 ? 'true' : undefined} key={`hp-${run.board.crawl.turn ?? 0}`}>
-                                        <span className={styles.lifeCount}>{run.crawlHealth ?? 0}</span>
-                                        <span className={styles.lifeLabel}>health</span>
-                                    </span>
-                                ) : null}
-                                {run.board?.crawl && run.board.crawl.monsters.length > 0 && missesEarned === 0 ? (
-                                    <span className={styles.parEarned} data-testid="hud-next-strike">{crawlNextStrikeLine(run.board.crawl.monsters)}</span>
-                                ) : null}
                                 {missesEarned > 0 ? <span className={styles.parEarned} data-testid="hud-miss-earned">{RUN_SHELL_PAR_COPY.earned(missesEarned)}</span> : null}
                             </span>
                         ) : null}

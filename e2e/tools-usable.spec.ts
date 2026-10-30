@@ -147,21 +147,14 @@ for (const display of [
             } else {
                 expect({ width: painting.width, height: painting.height }).toEqual({ width: 1376, height: 768 });
             }
-            const target = await page.evaluate(async () => {
+            const target = await page.evaluate(() => {
                 const w = window as unknown as {
                     __e2eGetTileClientRectAtGrid1: (r: number, c: number) => { left: number; top: number; width: number; height: number } | null;
                     __e2eGetTileIdAtGrid1: (r: number, c: number) => string | null;
                 };
-                // The crawl (`crawl-rules.ts`): the bomb takes a card the hero can reach, so aim at the first of those.
-                const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
-                const { bombSelectableTileIds } = await import('/src/shared/board-power-actions.ts');
-                const run = useAppStore.getState().run!;
-                const index = run.board!.tiles.findIndex((tile) => bombSelectableTileIds(run).includes(tile.id));
-                const row = Math.floor(index / run.board!.columns) + 1;
-                const col = (index % run.board!.columns) + 1;
-                const rect = w.__e2eGetTileClientRectAtGrid1(row, col);
-                if (!rect) throw new Error('No card the bomb can take was rendered');
-                return { ...rect, id: w.__e2eGetTileIdAtGrid1(row, col)! };
+                const rect = w.__e2eGetTileClientRectAtGrid1(1, 1);
+                if (!rect) throw new Error('The first card was not rendered');
+                return { ...rect, id: w.__e2eGetTileIdAtGrid1(1, 1)! };
             });
             // A real mouse click exercises the canvas raycast, not an injected power inventory.
             await page.mouse.click(target.left + target.width / 2, target.top + target.height / 2);

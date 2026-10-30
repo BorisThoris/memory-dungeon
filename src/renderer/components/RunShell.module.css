@@ -1924,13 +1924,3 @@
 
 /* A paid rent reads as done. */
 .milestone[data-rent-paid='true'] .milestoneFraction { color: #b8e6b0; }
-/* The crawl (`crawl-rules.ts`, `?crawl=1`): the hero's health, in red, beside the lives. */
-.crawlHealth { display: inline-flex; gap: 0.3rem; align-items: baseline; margin-left: 0.55rem; padding-left: 0.55rem; border-left: 1px solid #ae824766; color: #ff9b84; }
-.crawlHealth[data-low='true'] { color: #fff; text-shadow: 0 0 9px #ed384f; }
-.shell[data-layout^='phone'] .crawlHealth { margin-left: 0.25rem; padding-left: 0.3rem; }
-.shell[data-layout^='phone'] .crawlHealth .lifeCount { font-size: 1.25rem; }
-.shell[data-layout^='phone'] .crawlHealth .lifeLabel { display: none; }
-/* A monster struck: the health counter jolts and flares red, once per blow (keyed by the crawl's turn). */
-@keyframes crawlStruck { 0% { transform: translateX(0) scale(1.35); color: #fff; text-shadow: 0 0 14px #ff2a2a; } 20% { transform: translateX(-5px) scale(1.25); } 40% { transform: translateX(5px) scale(1.15); } 60% { transform: translateX(-3px); } 100% { transform: none; } }
-.crawlHealth[data-struck='true'] { animation: crawlStruck 0.6s ease-out; }
-@media (prefers-reduced-motion: reduce) { .crawlHealth[data-struck='true'] { animation: none; } }

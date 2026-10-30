@@ -16,7 +16,7 @@ export const RUN_END_VERDICT: Record<RunEndReason, string> = {
     warden_cleared: 'THE WARDEN FALLS',
     // Endless's rent (DGE-006): the floor paid less than it owed.
     rent_unpaid: 'THE DEPTHS COLLECT',
-    // The crawl (`crawl-rules.ts`): the hero's health ran out.
+    // The crawl (rules 104, retired in 105): the hero's health ran out.
     slain: 'SLAIN'
 };
 

@@ -1,5 +1,4 @@
 import { earnedFeats, FEATS, type FeatId } from './feat-unlocks';
-import { CRAWL_FROM, CRAWL_KILL_GOLD, type CrawlMonster } from './crawl-rules';
 import { canCarve, carve } from './carve-rules';
 import type { CarveDirection, FusionId } from './contracts';
 import { applyStillBell, canRingStillBell } from './still-bell-rules';
@@ -133,8 +132,6 @@ export type TestHallRoomId =
     | 'build-stop'
     | 'fuse-stop'
     | 'relic-awakens'
-    | 'crawl-walk'
-    | 'crawl-slain'
     | 'learned-rule'
     | 'feat-held-twelve'
     | 'feat-warden-felled'
@@ -413,8 +410,6 @@ const room = (
         bountyPairKey: null,
         featuredObjectiveId: null,
         tiles: laid,
-        // A room is plain unless it deals its own crawl (`crawl-rules.ts`).
-        crawl: undefined,
         ...boardExtra
     };
     return {
@@ -2030,59 +2025,6 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                     (r.fusions ?? []).includes('twin_hearts') && runGold(r) === runGold(b) - FUSION_PRICE && relicScoreMultiplier(r) > relicScoreMultiplier(b) * 1.4
                         ? null
                         : `fusions ${(r.fusions ?? []).join('/')}, gold ${runGold(b)} -> ${runGold(r)}, build ×${relicScoreMultiplier(b).toFixed(2)} -> ×${relicScoreMultiplier(r).toFixed(2)}`
-            }
-        ]
-    },
-    {
-        id: 'crawl-walk',
-        title: 'The crawl: the hero walks, the monster falls',
-        mechanic: 'From rules 104 a turn opens on a card on or beside the hero’s ground, and a match moves the hero to the partner. A match hurts a monster beside it; matching the monster’s own card kills it, for gold.',
-        graphMechanicIds: ['board.crawl'],
-        tryThis: 'The hero stands bottom-left. Try the far corner first: it will not turn. Match the Tide pair from beside the hero, then the Moss pair under the monster.',
-        build: () => room(['a:e b:t c:m', 'c:m b:t a:e'], {
-            level: 2,
-            run: { crawl: true, crawlHealth: 8, runRulesVersion: CRAWL_FROM, gold: 0 },
-            board: { crawl: { hero: 3, slain: 0, monsters: [{ cell: 2, kind: 'ghoul', hp: 9, maxHp: 9, clock: 9, every: 9, damage: 1 } satisfies CrawlMonster] } }
-        }),
-        script: [
-            {
-                step: { do: 'turn', a: 'b-2', b: 'b-1' },
-                says: 'the far corner would not turn; the Tide pair beside the hero matches, the hero walks to its partner, and the monster beside it is hurt',
-                expect: (r, b) => {
-                    const refused = flipTile(b, 'a-2') === b;
-                    const monster = r.board?.crawl?.monsters[0];
-                    return refused && r.board?.crawl?.hero === 1 && monster?.hp === 8 ? null : `refused ${refused}, hero ${r.board?.crawl?.hero}, monster hp ${monster?.hp}`;
-                }
-            },
-            {
-                step: { do: 'turn', a: 'c-1', b: 'c-2' },
-                says: 'the Moss pair under the monster matches, and the monster dies for its gold',
-                expect: (r, b) =>
-                    (r.board?.crawl?.monsters.length ?? 1) === 0 && runGold(r) === runGold(b) + CRAWL_KILL_GOLD && r.board?.crawl?.slain === 1
-                        ? null
-                        : `monsters ${r.board?.crawl?.monsters.length}, gold ${runGold(b)} -> ${runGold(r)}, slain ${r.board?.crawl?.slain}`
-            }
-        ]
-    },
-    {
-        id: 'crawl-slain',
-        title: 'The crawl: a monster strikes',
-        mechanic: 'Each monster strikes the hero’s health when its count runs out. At no health the hero is slain and the run ends, whatever the miss bank holds.',
-        graphMechanicIds: ['board.crawl'],
-        tryThis: 'One health left, and the monster’s last pip. Turn any two cards that do not match, and read the run’s end.',
-        build: () => room(['a:e b:t', 'b:t a:e'], {
-            level: 2,
-            run: { crawl: true, crawlHealth: 1, runRulesVersion: CRAWL_FROM },
-            board: { crawl: { hero: 2, slain: 0, monsters: [{ cell: 1, kind: 'ghoul', hp: 9, maxHp: 9, clock: 1, every: 4, damage: 1 } satisfies CrawlMonster] } }
-        }),
-        script: [
-            {
-                step: { do: 'miss', a: 'a-2', b: 'b-1' },
-                says: 'the miss stabs the monster, its count runs out, it strikes, and the hero at no health is slain',
-                expect: (r) =>
-                    r.status === 'gameOver' && r.runEndReason === 'slain' && r.crawlHealth === 0 && r.board?.crawl?.monsters[0]?.hp === 8
-                        ? null
-                        : `status ${r.status}, end ${r.runEndReason}, health ${r.crawlHealth}, monster ${r.board?.crawl?.monsters[0]?.hp}`
             }
         ]
     },

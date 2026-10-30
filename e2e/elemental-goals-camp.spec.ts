@@ -12,14 +12,11 @@ test('exact-seed rematch preserves its preference and compares the previous atte
         await expect.poll(async () => page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
             const { run, pressTile } = useAppStore.getState();
-            const { crawlReachableCells } = await import('/src/shared/crawl-rules.ts');
             if (run?.status === 'gameOver') return true;
             const flipped = run?.board?.flippedTileIds ?? [];
             if (flipped.length === 2) { pressTile(flipped[0]!); return false; }
             const hidden = run?.board?.tiles.filter(tile => tile.state === 'hidden') ?? [];
-            // The crawl (`crawl-rules.ts`): a turn opens on a card the hero can reach.
-            const reach = run?.board?.crawl ? crawlReachableCells(run.board, run.stickyBlockIndex) : null;
-            const first = hidden.find(tile => !reach || reach.has(run!.board!.tiles.indexOf(tile)));
+            const first = hidden[0];
             const second = hidden.find(tile => tile.pairKey !== first?.pairKey);
             if (first && second && flipped.length === 0) { pressTile(first.id); pressTile(second.id); }
             return false;

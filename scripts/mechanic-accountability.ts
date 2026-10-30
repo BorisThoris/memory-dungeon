@@ -254,10 +254,6 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
         generation: 264,
         reason: 'The Zone is ignited by the player at Inferno or better, and the census players never spend a combo on anything. The whole-run soak ignites it on half the turns it may, walks its flips and requires a Zone to open and to match a pair; the zone room walks the burn, the free flips, the resolve, the miss and the bonus.'
     },
-    'board.crawl': {
-        generation: 294,
-        reason: 'The crawl is dealt by the game’s own run start, and the census players play the plain rules. The whole-run soak plays every run as a crawl, holds the hero, the monsters, the health and the reach to their invariants and requires a kill and a blow; the Warden gate measures its survival, and its rooms walk the reach, the walk, the strike and the kill.'
-    },
     'inventory.relics': {
         generation: 262,
         reason: 'Relics are only bought at the store and the census players never shop. The whole-run soak requires a relic to be bought, and the Deep Pockets and Long Look rooms walk their effects.'

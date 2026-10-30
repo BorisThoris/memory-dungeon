@@ -5,7 +5,6 @@ import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { runFilteredStringArrayOrNull } from './run-array-guards';
 import { isTileFlipBlocked, shedSnow } from './realm-weather-rules';
 import { isTripleKey, pendingTripleKey, tilesMatchOnBoard } from './match-rule-rules';
-import { crawlBlocksFirstFlip } from './crawl-rules';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
@@ -75,10 +74,6 @@ export const createFlipTileTransition = (_deps: FlipTileTransitionDeps) =>
             run.stickyBlockIndex !== null &&
             tileIndex === run.stickyBlockIndex
         ) {
-            return run;
-        }
-        // The crawl (`crawl-rules.ts`): a turn's first card is turned on the hero's ground or beside it.
-        if (currentFlippedTileIds.length === 0 && crawlBlocksFirstFlip(run, board, tileIndex)) {
             return run;
         }
 

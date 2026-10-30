@@ -7,7 +7,6 @@ import { ColossusStone } from './ColossusStone';
 import { FoldWall } from './FoldWall';
 import { LayerEdges } from './LayerEdges';
 import { SpiralSeals } from './SpiralSeals';
-import { CrawlTokens } from './CrawlTokens';
 import { HoldSeeds } from './HoldSeeds';
 import type { ComboHeatThemeId } from '../../shared/combo-heat-rules';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
@@ -116,8 +115,6 @@ export const TileBoardSceneBoardGroup = ({
         {/* The Spiral: a slab of stone on every sealed cell (`SpiralSeals.tsx`). */}
         {board.spiralRingsSealed ? <SpiralSeals board={board} compact={compact} reduceMotion={reduceMotion} time={visualTime} /> : null}
         {/* The Hold: a gold seed where each held pair left the board (`HoldSeeds.tsx`). */}
-        {/* The crawl (`crawl-rules.ts`, `?crawl=1`): the hero and the monsters, in front of the cards. */}
-        {board.crawl ? <CrawlTokens board={board} compact={compact} reduceMotion={reduceMotion} showReach={runStatus === 'playing'} time={visualTime} /> : null}
         {heldSeedIds && heldSeedIds.length > 0 ? <HoldSeeds board={board} heldSeedIds={heldSeedIds} compact={compact} reduceMotion={reduceMotion} time={visualTime} /> : null}
         {board.colossus?.form === 'fixed' && <ColossusStone key={board.level} board={board} compact={compact} reduceMotion={reduceMotion} rows={boardRows} time={visualTime} />}
         <TileBoardParticles board={board} compact={compact} graphicsQuality={graphicsQuality}
