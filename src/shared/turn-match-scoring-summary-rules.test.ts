@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './run-creation-rules';
+import { comboMultiplierFor } from './combo-pay-rules';
 import { calculateMatchScore } from './scoring-rules';
 import {
     ENCORE_BONUS_SCORE,
@@ -16,6 +17,10 @@ const firstPair = (board: BoardState): [Tile, Tile] => {
     }
     throw new Error('Expected generated board to contain at least one pair');
 };
+
+/** A match's own pay from rules 106 (`combo-pay-rules.ts`): the base at the ladder's multiplier for the streak it makes. */
+const paidAt = (run: RunState, streak: number): number =>
+    calculateMatchScore(run.board!.level, 0, run.matchScoreMultiplier * comboMultiplierFor(streak, run.board!.pairCount));
 
 describe('resolveTurnMatchScoringSummary', () => {
     it('computes streak, encore bonus, score totals, and best score', () => {
@@ -44,7 +49,7 @@ describe('resolveTurnMatchScoringSummary', () => {
         });
 
         const expectedMatchScore =
-            calculateMatchScore(run.board!.level, 2, run.matchScoreMultiplier) + ENCORE_BONUS_SCORE + 2 + 7;
+            paidAt(run, 2) + ENCORE_BONUS_SCORE + 2 + 7;
 
         expect(result.currentStreak).toBe(2);
         expect(result.encoreKey).toBe(first.pairKey);
@@ -80,7 +85,7 @@ describe('resolveTurnMatchScoringSummary', () => {
             chunkScore: 3.8
         });
 
-        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier) + 3;
+        const expectedMatchScore = paidAt(run, 1) + 3;
         expect(result.currentStreak).toBe(1);
         expect(result.matchScore).toBe(expectedMatchScore);
         expect(result.totalScore).toBe(expectedMatchScore);
@@ -107,7 +112,7 @@ describe('resolveTurnMatchScoringSummary', () => {
             chunkScore: 0
         });
 
-        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier);
+        const expectedMatchScore = paidAt(run, 1);
         expect(result.currentStreak).toBe(1);
         expect(result.totalScore).toBe(expectedMatchScore);
         expect(result.currentLevelScore).toBe(expectedMatchScore);

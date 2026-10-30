@@ -1,3 +1,5 @@
+import { chainMomentum, runChainMomentumPairs } from './chain-tier-rules';
+import { comboMultiplierFor, comboPays } from './combo-pay-rules';
 import type { BoardState, RunState } from './contracts';
 import { relicScoreMultiplier } from './snowball-relic-rules';
 import { calculateRecallMatchBonus } from './recall-rules';
@@ -47,10 +49,12 @@ export const resolveTurnMatchScoringSummary = ({
     const spotlightDelta = shiftingSpotlightMatchDelta(sourceBoard, encoreKey);
     const presentationPenalty = getPresentationMutatorMatchPenalty(run);
     const recallBonus = calculateRecallMatchBonus(run);
+    // The combo pays (`combo-pay-rules.ts`, rules 106): the match at the ladder's multiplier, in place of ten a link.
+    const comboMultiplier = comboPays(run) ? comboMultiplierFor(chainMomentum(currentStreak, runChainMomentumPairs(run)), resolvedBoard.pairCount) : 1;
     const base = calculateResolvedMatchScore({
         level: resolvedBoard.level,
-        currentStreak,
-        matchScoreMultiplier: run.matchScoreMultiplier,
+        currentStreak: comboPays(run) ? 0 : currentStreak,
+        matchScoreMultiplier: run.matchScoreMultiplier * comboMultiplier,
         recallBonus,
         encoreBonus,
         findableScoreBonus,

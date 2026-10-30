@@ -624,6 +624,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const traitTexts = matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts);
         if (boardFloaterPayload.kind === 'match') {
             return [
+                boardFloaterPayload.comboPayText,
                 boardFloaterPayload.pickupRewardText,
                 boardFloaterPayload.routeRewardText,
                 ...traitTexts

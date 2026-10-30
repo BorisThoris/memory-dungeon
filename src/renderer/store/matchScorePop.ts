@@ -26,6 +26,8 @@ export type MatchScorePop = {
     payoffLaneMap?: MatchScorePopPayoffLaneMapEntry[];
     pickupRewardText?: string;
     routeRewardText?: string;
+    /** The combo pays (rules 106): the multiplier and the coin a rung dropped, when it dropped one. */
+    comboPayText?: string;
     traitInteractionTexts?: string[];
     tileIdA: string;
     tileIdB: string;
@@ -667,6 +669,9 @@ export function buildMatchScorePopPayload(
         ? `${getFindableKindLabel(turnEvent.matchedFindableKind)} ${getFindableRewardCopy(turnEvent.matchedFindableKind)}`
         : undefined;
     const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
+    // The combo pays (`combo-pay-rules.ts`, rules 106): a rung reached says what it pays now, and the coin it dropped.
+    const comboGoldPaid = runNonNegativeInteger(turnEvent.comboGoldPaid);
+    const comboPayText = comboGoldPaid > 0 ? `×${runNonNegativeInteger(turnEvent.comboMultiplierAfter)} · +${comboGoldPaid} gold` : undefined;
     const chainDepth = matchScoreChainDepth(facts.currentStreakAfter);
     const chainMilestone = getMatchScorePopChainMilestone(facts.chainTierBefore, facts.chainTierAfter);
     // The break's own score, term by term. Read from the facts the rules stamped, and rebuilt with
@@ -759,6 +764,9 @@ export function buildMatchScorePopPayload(
     }
     if (routeRewardText) {
         payload.routeRewardText = routeRewardText;
+    }
+    if (comboPayText) {
+        payload.comboPayText = comboPayText;
     }
     if (pickupRewardText) {
         payload.pickupRewardText = pickupRewardText;

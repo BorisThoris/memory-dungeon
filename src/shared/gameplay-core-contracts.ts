@@ -604,6 +604,9 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             matchesBefore: z.number().int().nonnegative(),
             matchesAfter: z.number().int().nonnegative(),
             currentStreakAfter: z.number().int().nonnegative().default(0),
+            // The combo pays (`combo-pay-rules.ts`, rules 106): the multiplier the match was paid at and the gold its rung dropped.
+            comboMultiplierAfter: z.number().int().positive().default(1),
+            comboGoldPaid: z.number().int().nonnegative().default(0),
             findablesClaimedBefore: z.number().int().nonnegative().default(0),
             findablesClaimedAfter: z.number().int().nonnegative().default(0),
             findablesTotalBefore: z.number().int().nonnegative().default(0),

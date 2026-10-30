@@ -4,7 +4,8 @@ import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import { comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
+import { COMBO_HEAT_THEMES, comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
+import { comboPays, runComboMultiplier } from '../../shared/combo-pay-rules';
 import { PlasmaRail } from './PlasmaRail';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
@@ -345,6 +346,11 @@ const RunShell = ({
     // HUD escalating past Fever - flames up the rail, an aura on the number, a hotter palette.
     const heat = comboHeatLevels(chain);
     const temper = comboHeatThemeForRun(run);
+    // The combo pays (`combo-pay-rules.ts`, rules 106): the number beside the combo is what a match is paid at.
+    const paysMatch = comboPays(run);
+    const matchMultiplier = paysMatch ? runComboMultiplier(run) : chainRungScoreMultiplier(tier);
+    // One set of words for the stages on the HUD, whatever the temper: its colours are the run's, its words were noise.
+    const stageWords = paysMatch ? COMBO_HEAT_THEMES[0]!.labels : temper.labels;
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -851,7 +857,7 @@ const RunShell = ({
                                 </span>
                                 <span className={styles.comboLabel}>
                                     <span data-testid="hud-combo-stage">
-                                        {temper.labels[heat.stage] ? `Combo · ${comboStageLabel(temper.labels, chain)}` : 'Combo'}
+                                        {stageWords[heat.stage] ? `Combo · ${comboStageLabel(stageWords, chain)}` : 'Combo'}
                                     </span>
                                     {isZoneActive(run) ? (
                                         <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-zone">
@@ -862,14 +868,19 @@ const RunShell = ({
                             </span>
                             <span className={styles.tierRow}>
                                 <span
-                                    aria-label={CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}
+                                    aria-label={
+                                        paysMatch
+                                            ? `Your matches pay ×${matchMultiplier}. ${CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}`
+                                            : CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)
+                                    }
                                     className={styles.rungValue}
                                     data-chain-tier={tier}
+                                    data-match-multiplier={matchMultiplier}
                                     data-rung-multiplier={chainRungScoreMultiplier(tier)}
                                     data-testid="hud-chain-rung-value"
                                     role="img"
                                 >
-                                    {`×${chainRungScoreMultiplier(tier)}`}
+                                    {`×${matchMultiplier}`}
                                 </span>
                             </span>
                         </div>

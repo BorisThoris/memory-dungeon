@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 136 as const;
+export const ENCYCLOPEDIA_VERSION = 137 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -819,7 +819,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'A pop only ever takes what it is touching - a pair goes when the wave holds **both** halves, and nothing is ever taken across a gap - and it is capped by the rung: up to one extra pair at Clean, two at Sharp, four at Fever, nearest first. These are extra pairs beyond the pair you matched, and the layout decides how many are in reach. A **breather** allows one extra pair at every rung, including before Clean. ' +
             'Sharp, a little over half the floor\'s pairs of momentum and four at least, runs the reaction one wave on from where the pop stopped. ' +
             'Fever, three quarters and seven at least, runs it three waves and lets it **bridge** into the one clump its cards were touching, whatever that suit is. Every pair a break takes adds to the chain\'s momentum. ' +
-            'Treasure inside a break spills and pays as if you had matched it. Each popped pair starts at **60% of a base match\'s score**, then the break multiplies by its tier (Clean ×2, Sharp ×4, Fever ×8) and ripple (×1.75 for a second wave, up to ×6). Those multipliers apply to popped pairs, not the pair you remembered. Broken pairs give no recall credit - memory still pays best - but they ' +
+            'Treasure inside a break spills and pays as if you had matched it. Each popped pair starts at **60% of a base match\'s score**, then the break multiplies by its tier (Clean ×2, Sharp ×4, Fever ×8) and ripple (×1.75 for a second wave, up to ×6). **The combo pays:** the pair you matched is paid at the same multiplier, so the ×N beside the combo is what every match is worth - ×1 Lone, ×2 Clean, ×4 Sharp, ×8 Fever, and past Fever one more for every three links, without end. Each step the multiplier climbs drops a coin into the purse, so a long streak buys the store’s items. A miss drops it all back to ×1. Broken pairs give no recall credit - memory still pays best - but they ' +
             'clear the floor faster, and a longer ripple pays more. A miss ends the chain and puts the fire out. ' +
             'A suit that can no longer pop - no two of its pairs within reach of each other - loses its last pair on its own: that is the drop, and it happens at any chain, so the last pair of a suit is never a pair you have to grind out. ' +
             'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a long clump, a bridge into the suit next door, a treasure spill, a clean sweep of a suit. ' +

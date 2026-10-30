@@ -108,7 +108,8 @@ describe('RunShell', () => {
         expect(rungAt()).toHaveAttribute('data-chain-tier', 'none');
         expect(rungAt()).toHaveAttribute('data-rung-multiplier', '1');
         expect(rungAt()).toHaveTextContent('×1');
-        expect(rungAt()).toHaveAccessibleName('Your match clears its pair. Reach Clean to start popping nearby pairs.');
+        expect(rungAt()).toHaveAccessibleName('Your matches pay ×1. Your match clears its pair. Reach Clean to start popping nearby pairs.');
+        expect(rungAt()).toHaveAttribute('data-match-multiplier', '1');
 
         // Twelve pairs: Sharp from 5, Fever from 7. A Fever break is scored at eight times a pop.
         const hot: RunState = { ...cold, stats: { ...cold.stats, currentStreak: 9 } };

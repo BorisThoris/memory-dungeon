@@ -177,6 +177,8 @@ export interface SoakRunReport {
     dreadTierPeak: number;
     /** Every rise in the purse, summed: gold paid at floor clears. */
     goldEarned: number;
+    /** The gold the combo's rungs paid (`combo-pay-rules.ts`, rules 106). */
+    comboGoldPaid: number;
     /** Every rise in misses left, summed: floor grants, chain grants and bought misses. */
     missesGranted: number;
     relicsBought: number;
@@ -260,6 +262,17 @@ const nonNegativeInteger = (value: unknown): boolean => typeof value === 'number
 
 /** Every invariant, in the order a failure is most useful to read. */
 export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
+    // The combo pays (`combo-pay-rules.ts`, rules 106): its gold comes only from a streak that grew.
+    'the combo pays gold only on a turn its streak grew, or that a miss then reset': (before, run) => {
+        if (!before) return null;
+        const paid = runNonNegativeInteger(run.comboRungGold) - runNonNegativeInteger(before.comboRungGold);
+        if (paid <= 0) return null;
+        // An action that plays several turns (the Zone) can match, climb and then miss: the miss resets the streak it paid on.
+        const missed = runNonNegativeInteger(run.stats.mismatches) > runNonNegativeInteger(before.stats.mismatches);
+        return missed || runNonNegativeInteger(run.stats.currentStreak) > runNonNegativeInteger(before.stats.currentStreak)
+            ? null
+            : `the combo paid ${paid} gold while the streak went ${before.stats.currentStreak} -> ${run.stats.currentStreak}`;
+    },
     'featured reaction progress cannot be lost on a turn of the same floor': (before, run) => {
         if (!before || before.board?.level !== run.board?.level) return null;
         return (before.amplifiedGoalThisFloor && !run.amplifiedGoalThisFloor) || (before.calmGoalThisFloor && !run.calmGoalThisFloor) ? 'secured elemental goal was lost' : null;
@@ -892,6 +905,7 @@ export const soakRun = ({
     let reprises = 0;
     let firstEvolutionFloor: number | null = null;
     let goldEarned = 0;
+    let comboGoldPaid = 0;
     let missesGranted = 0;
     let relicsBought = 0;
     let focusesForged = 0;
@@ -961,6 +975,7 @@ export const soakRun = ({
             violations.push({ seed, player: playerName, floor: run.board?.level ?? 0, step, action, invariant });
         }
         goldEarned += Math.max(0, runGold(next) - runGold(run));
+        comboGoldPaid += Math.max(0, runNonNegativeInteger(next.comboRungGold) - runNonNegativeInteger(run.comboRungGold));
         missesGranted += Math.max(0, (missesLeft(next) ?? 0) - (missesLeft(run) ?? 0));
         relicsBought += Math.max(0, (next.relics ?? []).length - (run.relics ?? []).length);
         focusesForged += TILE_SUITS.reduce((sum, suit) => sum + Math.max(0, focusOf(next, suit) - focusOf(run, suit)), 0);
@@ -1256,6 +1271,7 @@ export const soakRun = ({
         reprises,
         dreadTierPeak: dreadTier(dreadForRun(run)).index,
         goldEarned,
+        comboGoldPaid,
         missesGranted,
         relicsBought,
         focusesForged,

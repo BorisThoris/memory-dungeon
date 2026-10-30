@@ -19,6 +19,7 @@ import {
 } from './contracts';
 import { chunkBreakMomentumPairs } from './chunk-break-rules';
 import { higherChainTier, runChainTier } from './chain-tier-rules';
+import { comboRungGold } from './combo-pay-rules';
 import { isBoardComplete } from './board-inspection';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
@@ -395,6 +396,12 @@ export const createResolveBoardTurnTransition = ({
         // The Gilded Heart (`snowball-relic-rules.ts`, rules 102): a match of a held Heart's element pays gold.
         const heartGold = heartGoldFor(run, firstTile.suit);
         if (heartGold > 0) nextRun.gold = runNonNegativeInteger(nextRun.gold) + heartGold;
+        // The combo pays (`combo-pay-rules.ts`, rules 106): a step of the multiplier reached is gold.
+        const rungGold = comboRungGold(run, nextRun);
+        if (rungGold > 0) {
+            nextRun.gold = runNonNegativeInteger(nextRun.gold) + rungGold;
+            nextRun.comboRungGold = runNonNegativeInteger(run.comboRungGold) + rungGold;
+        }
 
         Object.assign(nextRun, applyRealmTurnToRun(nextRun, realmTurn));
         /*

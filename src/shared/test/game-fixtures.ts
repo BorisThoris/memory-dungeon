@@ -1,5 +1,6 @@
 import type { BoardState, RunState, Tile } from '../contracts';
 import { countFindablePairs } from '../board-generation';
+import { COMBO_PAYS_FROM } from '../combo-pay-rules';
 import { createNewRun, finishMemorizePhase } from '../game-core';
 import { isSingletonUtilityPairKey } from '../tile-identity';
 import { flipTile, resolveBoardTurn } from '../turn-resolution';
@@ -43,6 +44,8 @@ export const makeBoard = (tiles: Tile[], overrides: Partial<BoardState> = {}): B
  */
 export const makeRun = (tiles: Tile[], overrides: Partial<RunState> = {}): RunState => ({
     ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, realm: null })),
+    // A fixture's score sums are written in the pay before the combo paid (rules 106, `combo-pay-rules.test.ts` holds that rule).
+    runRulesVersion: COMBO_PAYS_FROM - 1,
     activeMutators: [],
     recallFocus: 0,
     board: makeBoard(tiles),

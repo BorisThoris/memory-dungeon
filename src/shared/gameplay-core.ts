@@ -1,5 +1,6 @@
 import { applyStillBell, STILL_BELL_SOURCE_ID, stillBellFeedbackLine } from './still-bell-rules';
 import { missBankCap as purseBankCap, missesLeft as purseMissesLeft } from './miss-bank';
+import { runComboMultiplier } from './combo-pay-rules';
 import { MISERS_PURSE_SOURCE_ID, takeMisersPurse } from './misers-purse-rules';
 import { runRealmId } from './realm-rules';
 import { applyStormGlass, STORM_GLASS_SOURCE_ID, stormGlassFeedbackLine } from './storm-glass-rules';
@@ -830,6 +831,8 @@ const applyBoardTurnResolveCommand = (
         matchesBefore: statsBefore.matchesFound,
         matchesAfter: statsAfter.matchesFound,
         currentStreakAfter: statsAfter.currentStreak,
+        comboMultiplierAfter: runComboMultiplier(nextRun),
+        comboGoldPaid: Math.max(0, runNonNegativeInteger(nextRun.comboRungGold) - runNonNegativeInteger(run.comboRungGold)),
         findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),

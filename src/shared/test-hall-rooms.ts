@@ -35,6 +35,7 @@ import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { runChainTier } from './chain-tier-rules';
+import { COMBO_PAYS_FROM, COMBO_RUNG_GOLD, runComboMultiplier } from './combo-pay-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
@@ -78,6 +79,7 @@ export type TestHallRoomId =
     | 'resident-greeting'
     | 'pairs'
     | 'combo-carries'
+    | 'combo-pays'
     | 'combo-ends-on-miss'
     | 'miss-bank-edge'
     | 'chain-earns-miss'
@@ -744,6 +746,31 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
                           : runChainTier(r) !== runChainTier(b)
                             ? `tier ${runChainTier(b)} -> ${runChainTier(r)}`
                             : null)
+            }
+        ]
+    },
+    {
+        id: 'combo-pays',
+        title: 'The combo pays',
+        mechanic: 'A match is paid at the ladder\u2019s multiplier - x1 Lone, x2 Clean, x4 Sharp, x8 Fever - and every step the multiplier climbs drops a coin.',
+        graphMechanicIds: ['board.chain_chunk_fever', 'feedback.gameplay_hud'],
+        tryThis: 'Your combo stands at two. Match a: Clean, paid double, and a coin. Match b: Sharp, paid four times, and another coin. Then miss.',
+        build: () => room(['a:e b:t c:m d:b', 'd:b c:m b:t a:e'], { streak: 2, run: { runRulesVersion: COMBO_PAYS_FROM, gold: 0 } }),
+        script: [
+            {
+                step: { do: 'match', pairKey: 'a' },
+                says: 'the third link reaches Clean: the match is paid at x2 and a coin drops',
+                expect: expectAll(isGone('a'), goldIs(COMBO_RUNG_GOLD), (r) => (runComboMultiplier(r) === 2 ? null : `multiplier x${runComboMultiplier(r)}`))
+            },
+            {
+                step: { do: 'match', pairKey: 'b' },
+                says: 'the fourth reaches Sharp on four pairs: x4, and another coin',
+                expect: expectAll(isGone('b'), goldIs(2 * COMBO_RUNG_GOLD), (r) => (runComboMultiplier(r) === 4 ? null : `multiplier x${runComboMultiplier(r)}`))
+            },
+            {
+                step: { do: 'miss', a: 'c-1', b: 'd-1' },
+                says: 'the miss drops the multiplier back to x1 and pays nothing',
+                expect: expectAll(goldIs(2 * COMBO_RUNG_GOLD), (r) => (runComboMultiplier(r) === 1 ? null : `multiplier x${runComboMultiplier(r)}`))
             }
         ]
     },

@@ -57,6 +57,7 @@ describe('the run soak', () => {
         /* The five run-economy mechanics have no row in the floor census (the reference player never
            shops), so this is where `scripts/mechanic-accountability.ts` points for proof they happen. */
         expect(reports.some((report) => report.goldEarned > 0), 'no run ever earned gold').toBe(true);
+        expect(reports.some((report) => report.comboGoldPaid > 0), 'no combo ever paid gold').toBe(true);
         expect(reports.some((report) => report.missesGranted > 0), 'no run ever had a miss granted').toBe(true);
         expect(reports.some((report) => report.relicsBought > 0), 'no run bought a camp upgrade').toBe(true);
         expect(reports.every((report) => report.focusesForged === 0 && report.essenceFound === 0), 'removed elemental economy is still active').toBe(true);
