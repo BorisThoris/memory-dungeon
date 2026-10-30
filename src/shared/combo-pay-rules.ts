@@ -1,4 +1,4 @@
-import { chainMomentum, chainTierRungs, getChainTier, runChainMomentumPairs, runLadderChain, type ChainMomentumRun } from './chain-tier-rules';
+import { chainMomentum, chainTierRungs, getChainTier, runChainMomentumPairs, runChainTier, runLadderChain, type ChainMomentumRun } from './chain-tier-rules';
 import { chainRungScoreMultiplier } from './chain-rung-value-rules';
 import type { RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -63,3 +63,19 @@ export const comboRungGold = (
     const to = comboStep(comboMultiplierFor(chainMomentum(runLadderChain(after), runChainMomentumPairs(after)), pairs));
     return Math.max(0, to - from) * COMBO_RUNG_GOLD;
 };
+
+/**
+ * The systems answer the combo (rules 107, 2026-10-30; dogma 8 in `tasks/back-to-the-base/00-dogmas.md`).
+ *
+ * The bosses ran alone: a Colossus took one blow a turn whether the player had built a Fever streak
+ * or had just come back from a miss. The combo is the system the player builds, so the boss reads
+ * it: **a blow landed at Fever lands twice** (`resolveColossusTurn`'s `blows`). The element a match
+ * casts already grows with the combo (`elementCastPower`), so the Colossus was the one left deaf.
+ */
+export const COMBO_STRIKES_FROM = 107;
+/** Blows a Colossus hit lands with the combo at Fever. */
+export const COMBO_FEVER_BLOWS = 2;
+
+/** The blows a Colossus hit lands with, read off the run after the match: two at Fever, one below it. */
+export const comboColossusBlows = (run: Pick<RunState, 'stats' | 'board' | 'runRulesVersion'> & ChainMomentumRun): number =>
+    runNonNegativeInteger(run.runRulesVersion) >= COMBO_STRIKES_FROM && runChainTier(run) === 'fever' ? COMBO_FEVER_BLOWS : 1;

@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import type { BoardState, RunState } from '../../shared/contracts';
 import { TILE_SUITS } from '../../shared/tile-suit-rules';
-import RunShell, { type RunShellTool } from './RunShell';
+import RunShell, { COMBO_LOST_MS, type RunShellTool } from './RunShell';
+import { COMBO_PAYS_FROM } from '../../shared/combo-pay-rules';
 import { TOOL_FRESH_MS } from './runShellFreshTools';
 import { CURIO_HINT_COPY, curioItemHint } from '../copy/boardPowerCopy';
 import { DAILY_MUSIC_COPY } from '../copy/realmCopy';
@@ -254,6 +255,34 @@ describe('RunShell', () => {
                 vi.advanceTimersByTime(800);
             });
             expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('data-meter-drop', 'false');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('says what a miss broke - the links and the multiplier they paid - then lets it fall away', () => {
+        vi.useFakeTimers();
+        try {
+            const base = playingRun();
+            const chained: RunState = {
+                ...base,
+                runRulesVersion: COMBO_PAYS_FROM,
+                board: { ...base.board!, pairCount: 8 },
+                stats: { ...base.stats, currentStreak: 5 }
+            };
+            const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={chained} tools={[]} />);
+            const paid = screen.getByTestId('hud-chain-rung-value').getAttribute('data-match-multiplier');
+            expect(Number(paid)).toBeGreaterThan(1);
+            expect(screen.queryByTestId('hud-combo-lost')).toBeNull();
+            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...chained, stats: { ...chained.stats, currentStreak: 0 } }} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(1);
+            });
+            expect(screen.getByTestId('hud-combo-lost')).toHaveTextContent(`Lost 5 · ×${paid}`);
+            act(() => {
+                vi.advanceTimersByTime(COMBO_LOST_MS);
+            });
+            expect(screen.queryByTestId('hud-combo-lost')).toBeNull();
         } finally {
             vi.useRealTimers();
         }

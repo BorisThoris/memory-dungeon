@@ -35,7 +35,7 @@ import { anchorMarkedTileId } from './n-back-anchor-rules';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { runChainTier } from './chain-tier-rules';
-import { COMBO_PAYS_FROM, COMBO_RUNG_GOLD, runComboMultiplier } from './combo-pay-rules';
+import { COMBO_PAYS_FROM, COMBO_RUNG_GOLD, COMBO_STRIKES_FROM, runComboMultiplier } from './combo-pay-rules';
 import { igniteZone, resolveZone, zoneFlipTile } from './zone-rules';
 import { chooseRealmDoor } from './realm-rules';
 import { isTileFlipBlocked } from './realm-weather-rules';
@@ -265,6 +265,7 @@ export type TestHallRoomId =
     | 'element-frostbloom'
     | 'realm-depth'
     | 'colossus'
+    | 'colossus-fever'
     | 'colossus-split'
     | 'turncoat'
     | 'hourglass'
@@ -3559,6 +3560,23 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
             { step: { do: 'miss', a: 'c-1', b: 'd-1' }, says: 'a miss lands nothing either', expect: expectAll(colossusEventIs('turn'), colossusIs({ hits: 1, turnsLeft: 3, showing: 'ember' })) },
             { step: { do: 'match', pairKey: 'c' }, says: 'the second fire pair fells it, and it pays score and gold for both hits', expect: expectAll(colossusEventIs('felled'), colossusIs({ hits: 0, status: 'felled' }), (r, before) => (runGold(r) - runGold(before) >= 4 ? null : `gold rose by ${runGold(r) - runGold(before)}, expected its 4`), (r) => (r.colossiFelledThisRun === 1 ? null : `felled counted ${r.colossiFelledThisRun}`)) },
             { step: { do: 'match', pairKey: 'd' }, says: 'felled, it is out of the fight: a match is only a match', expect: expectAll(colossusIs({ status: 'felled' }), colossusEventIs('felled')) },
+            { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
+        id: 'colossus-fever',
+        title: 'Colossus: the combo strikes it',
+        mechanic: 'The boss reads the combo: a hit landed while the combo is at Fever lands twice. Below Fever a hit is one blow, as ever.',
+        graphMechanicIds: ['hazard.colossus', 'board.chain_chunk_fever'],
+        tryThis: 'Your combo stands at eight, one short of Fever on this floor, and the fire Colossus takes three hits. Match fire (a): Fever, two blows (the Fever pop takes the other fire pairs with it). Then miss, and clear the floor.',
+        build: () => {
+            const base = room(COLOSSUS_FLOOR, { level: 7, streak: 8, board: { floorTag: 'boss' }, run: { runRulesVersion: COMBO_STRIKES_FROM } });
+            const raised = raiseColossus(base.board!, { runSeed: base.runSeed, rulesVersion: base.runRulesVersion });
+            return { ...base, board: { ...raised, colossus: { ...raised.colossus!, cycle: ['ember'], hits: 3, hitsMax: 3, turnsLeft: 8, turnsMax: 8 } } };
+        },
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the ninth link reaches Fever, and the fire hit lands twice', expect: expectAll(colossusEventIs('hit'), colossusIs({ hits: 1, status: 'standing' }), (r) => (r.colossusHitsThisFloor === 2 ? null : `hits counted ${r.colossusHitsThisFloor}`)) },
+            { step: { do: 'miss', a: 'd-1', b: 'f-1' }, says: 'the miss breaks the combo; the Colossus stands with one hit in it', expect: expectAll(colossusIs({ hits: 1, status: 'standing' }), (r) => (r.stats.currentStreak === 0 ? null : `streak ${r.stats.currentStreak}`)) },
             { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
         ]
     },

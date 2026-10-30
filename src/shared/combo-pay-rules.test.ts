@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { chainTierRungs } from './chain-tier-rules';
-import { COMBO_PAST_FEVER_STEP, COMBO_PAYS_FROM, COMBO_RUNG_GOLD, comboMultiplierFor, comboRungGold, runComboMultiplier } from './combo-pay-rules';
+import { COMBO_FEVER_BLOWS, COMBO_PAST_FEVER_STEP, COMBO_PAYS_FROM, COMBO_RUNG_GOLD, COMBO_STRIKES_FROM, comboColossusBlows, comboMultiplierFor, comboRungGold, runComboMultiplier } from './combo-pay-rules';
 import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 
@@ -55,5 +55,17 @@ describe('the combo pays (rules 106)', () => {
         const oldGold = old.gold ?? 0;
         old = matchOnce(old);
         expect((old.gold ?? 0) - oldGold).toBe(0);
+    });
+});
+
+describe('the systems answer the combo (rules 107)', () => {
+    it('lands a Colossus hit twice at Fever, once below it, and once before rules 107', () => {
+        const base = playing(COMBO_STRIKES_FROM);
+        const pairs = base.board!.pairCount;
+        const at = (streak: number, version = COMBO_STRIKES_FROM): RunState => ({ ...base, runRulesVersion: version, stats: { ...base.stats, currentStreak: streak } });
+        const fever = chainTierRungs(pairs).fever;
+        expect(comboColossusBlows(at(fever))).toBe(COMBO_FEVER_BLOWS);
+        expect(comboColossusBlows(at(fever - 1))).toBe(1);
+        expect(comboColossusBlows(at(fever, COMBO_STRIKES_FROM - 1))).toBe(1);
     });
 });

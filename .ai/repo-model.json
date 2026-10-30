@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3401,
     "codeFileCount": 1322,
-    "exportedSymbolCount": 4361,
+    "exportedSymbolCount": 4365,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12231
+    "relationshipCount": 12237
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 131457,
-      "sha256": "a5168568cd3a61ae92dc3ce16de7a153d15feaa134e5c262426a36331482c35d"
+      "bytes": 131597,
+      "sha256": "48565f7254ca9ccceff4cdb0ca5a099b82ea3f6445447657e510b2b4beb71821"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2482,13 +2482,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10620,
-      "sha256": "a83bfdfff017bb99a8dd78da009f3d8d22b9d17ca521fb75e58048ee23db3e29"
+      "sha256": "d70e85fdf381e433498ff6d64d2a394d89222ddd71936aa70b8e66fbf82f084c"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "f10de640a48dfaa84cac000d41b0cbced52a7ed423001768accc5b248101675b"
+      "sha256": "9d34d6ae47524929c65e3c2c619c42ded5846a838c688397316c8ff84725d9fd"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11889,20 +11889,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 66117,
-      "sha256": "408000f9a73bbd6136c0827769ff58f23a6a502ca3142f623dd0fe9663e96b0e"
+      "bytes": 67039,
+      "sha256": "83c1d96842a2df1e72769af3de2a3a70fd006b2a26d7bf846adce0af6fe8a734"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 42948,
-      "sha256": "26bab422cb12a2c095112e72f510f19a02b96eb43563cd38fc30eb433da890e7"
+      "bytes": 44394,
+      "sha256": "37ca1c7d0e674672a7da98d205aaa08f4f5d7274b0aa9edb697e178009060254"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 59763,
-      "sha256": "23a6a130930e82f96b18df943cabb9b6f085a99516b29fb15a9280c31320ecc8"
+      "bytes": 61667,
+      "sha256": "c929ec904f6dd6e4da9859df31b0adb26ba9d227515ea5986fc8db8f155c4e88"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -13509,8 +13509,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 9967,
-      "sha256": "16c770f42c782805e85591539216aa81266a7c5c71bf7762beaaf85428f52a43"
+      "bytes": 10218,
+      "sha256": "75690375097d1235832bd7853943ccb5f00d7d5366bf2818a96e48ec8024ce62"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -14823,8 +14823,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 131871,
-      "sha256": "ebc34e833bd99b3f3675951f5d86125029e4ef37d3fec49e2b1028f75346bf62"
+      "bytes": 132013,
+      "sha256": "575abe03a609c806094940f62650ede5194b118e2513db70bb21d04feda72b05"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15105,8 +15105,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 30753,
-      "sha256": "6a8630831ffb520987b34dc287085009242e951a1357254094dd5078ee5a2926"
+      "bytes": 30875,
+      "sha256": "0a0b73e95792c53b30a11adf73b3c9f98c844c33d2c13cb717181f16f170064b"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -15327,8 +15327,8 @@
     {
       "path": "src/shared/colossus-rules.ts",
       "category": "source",
-      "bytes": 16595,
-      "sha256": "4e1489cb48564df98341701c8ae11a129c8964709e9b1543d92ac0cc74322a4e"
+      "bytes": 16771,
+      "sha256": "006698a78f025719261c47de6706d65e2c9d9fb38173484a5ddb2e59cbfbf42a"
     },
     {
       "path": "src/shared/combo-heat-perks.test.ts",
@@ -15363,14 +15363,14 @@
     {
       "path": "src/shared/combo-pay-rules.test.ts",
       "category": "test",
-      "bytes": 3449,
-      "sha256": "f31580a17f90a6f460bc3f3229385a3d1a8263c9dc7e8f7decdf141a8c7e78ec"
+      "bytes": 4202,
+      "sha256": "e78f7db4c00166015a303f87c7198d56cef1e242ecb42377cd6657216a63fdcc"
     },
     {
       "path": "src/shared/combo-pay-rules.ts",
       "category": "source",
-      "bytes": 4002,
-      "sha256": "d5b3170106b8f9280934bd6c302e3ea3e94ed62db00e277a34002a3425fc1840"
+      "bytes": 5028,
+      "sha256": "1bc40a2949866e25dca60584de4f4b007e4d35efce58073609b32057f545d464"
     },
     {
       "path": "src/shared/content-lock-state.ts",
@@ -15405,8 +15405,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 68165,
-      "sha256": "bd363232bf1d72cae1140158a1bb457c7cf2054aa016889c0ca1329df346534a"
+      "bytes": 68230,
+      "sha256": "3f6a863cd927d5752c0bcb03655e73e33fa1d1de0187cc79a7eb579eb2fac797"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16455,8 +16455,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 79582,
-      "sha256": "37ac492cb0e2c6d9c7433685694945ab074d2c148af97d8ca56dea10c83ae82f"
+      "bytes": 79659,
+      "sha256": "be548ed9bfb7c952d2728228b3bddb3deebd50876ecf7464d7670ad489a4af69"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17601,8 +17601,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 156007,
-      "sha256": "bad45c39d4d3fed12cae639e385b30d5c471b88079cbcd7739e26d3de223da2f"
+      "bytes": 157408,
+      "sha256": "f1b9bbd16d70a6259cd55043ea9ce8327068853e0dd0c7a9d6363d37e125686b"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17625,8 +17625,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 261302,
-      "sha256": "6e3ee54f53947cfdf07e60234753402291fbdd6206d247f1a5222b80f8039e01"
+      "bytes": 263050,
+      "sha256": "87e10cce917ff943c736bff7ef4c2455be7a94bed20c28faf7f810b4a2bd6b53"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17896,7 +17896,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7364,
-      "sha256": "e60570b883551027569a3544a8e165039ce9138ae4cf247ca090c83217574a5d"
+      "sha256": "865ff5ca7fbc2c9619ed2052313d11cb2020ed0a29db22938b1e73547ae8fe3f"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -17973,8 +17973,8 @@
     {
       "path": "tasks/back-to-the-base/00-dogmas.md",
       "category": "other",
-      "bytes": 7395,
-      "sha256": "975a95f856f463b5a6ef02de46c82d0e55d204ce10c0195944422406a8609468"
+      "bytes": 7828,
+      "sha256": "cb68c48b14644aee3c694a2e21d41090979d0b3e5a6e865215e9096df46f1c88"
     },
     {
       "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
@@ -17997,8 +17997,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 41586,
-      "sha256": "1727009ce5d53795caa7d9a1ee0b65ff3572a2b5949a74e846d8ac71ba239686"
+      "bytes": 42051,
+      "sha256": "91d32f268909724a825a5e99a6ae7cbd1443f1944f8df93bdb03c5fd37c6ceff"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -26668,13 +26668,14 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 775,
+      "lineCount": 804,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
         "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/realmCopy.ts",
         "file:src/renderer/store/memorizeClock.ts",
+        "file:src/shared/combo-pay-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/tile-suit-rules.ts"
@@ -26687,7 +26688,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1015,
+      "lineCount": 1053,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -26732,6 +26733,7 @@
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/RunShell.tsx#COMBO_LOST_MS",
         "symbol:src/renderer/components/RunShell.tsx#default",
         "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
         "symbol:src/renderer/components/RunShell.tsx#RunShellTool"
@@ -31485,7 +31487,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 189,
+      "lineCount": 192,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -36637,7 +36639,7 @@
       "path": "src/shared/colossus-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 322,
+      "lineCount": 325,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/contracts.ts",
@@ -36787,7 +36789,7 @@
       "path": "src/shared/combo-pay-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 60,
+      "lineCount": 72,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/combo-pay-rules.ts",
@@ -36802,7 +36804,7 @@
       "path": "src/shared/combo-pay-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 66,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -36810,15 +36812,19 @@
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
+        "symbol:src/shared/combo-pay-rules.ts#COMBO_FEVER_BLOWS",
         "symbol:src/shared/combo-pay-rules.ts#COMBO_PAST_FEVER_STEP",
         "symbol:src/shared/combo-pay-rules.ts#COMBO_PAYS_FROM",
         "symbol:src/shared/combo-pay-rules.ts#COMBO_RUNG_GOLD",
+        "symbol:src/shared/combo-pay-rules.ts#COMBO_STRIKES_FROM",
+        "symbol:src/shared/combo-pay-rules.ts#comboColossusBlows",
         "symbol:src/shared/combo-pay-rules.ts#comboMultiplierFor",
         "symbol:src/shared/combo-pay-rules.ts#comboPays",
         "symbol:src/shared/combo-pay-rules.ts#comboRungGold",
         "symbol:src/shared/combo-pay-rules.ts#runComboMultiplier"
       ],
       "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx",
         "file:src/shared/combo-pay-rules.test.ts",
         "file:src/shared/turn-match-scoring-summary-rules.test.ts"
       ]
@@ -45410,7 +45416,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3950,
+      "lineCount": 3968,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -53465,12 +53471,20 @@
       "endLine": 75
     },
     {
+      "id": "symbol:src/renderer/components/RunShell.tsx#COMBO_LOST_MS",
+      "name": "COMBO_LOST_MS",
+      "kind": "value",
+      "file": "src/renderer/components/RunShell.tsx",
+      "line": 164,
+      "endLine": 164
+    },
+    {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1014,
-      "endLine": 1014
+      "line": 1052,
+      "endLine": 1052
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -59253,8 +59267,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 182,
-      "endLine": 188
+      "line": 185,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -59269,16 +59283,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 165,
-      "endLine": 168
+      "line": 168,
+      "endLine": 171
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 181,
-      "endLine": 181
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -59293,8 +59307,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 174,
-      "endLine": 178
+      "line": 177,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -59310,15 +59324,15 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 70,
-      "endLine": 81
+      "endLine": 84
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 123,
-      "endLine": 155
+      "line": 126,
+      "endLine": 158
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -59333,8 +59347,8 @@
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 90,
-      "endLine": 108
+      "line": 93,
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -59349,8 +59363,8 @@
       "name": "WARDEN_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 116,
-      "endLine": 121
+      "line": 119,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
@@ -65373,8 +65387,8 @@
       "name": "applyColossusTurnToRun",
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
-      "line": 297,
-      "endLine": 321
+      "line": 300,
+      "endLine": 324
     },
     {
       "id": "symbol:src/shared/colossus-rules.ts#COLOSSUS_BREAK_PAIRS",
@@ -65502,7 +65516,7 @@
       "kind": "value",
       "file": "src/shared/colossus-rules.ts",
       "line": 226,
-      "endLine": 294
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
@@ -65761,6 +65775,14 @@
       "endLine": 80
     },
     {
+      "id": "symbol:src/shared/combo-pay-rules.ts#COMBO_FEVER_BLOWS",
+      "name": "COMBO_FEVER_BLOWS",
+      "kind": "value",
+      "file": "src/shared/combo-pay-rules.ts",
+      "line": 77,
+      "endLine": 77
+    },
+    {
       "id": "symbol:src/shared/combo-pay-rules.ts#COMBO_PAST_FEVER_STEP",
       "name": "COMBO_PAST_FEVER_STEP",
       "kind": "value",
@@ -65783,6 +65805,22 @@
       "file": "src/shared/combo-pay-rules.ts",
       "line": 29,
       "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/combo-pay-rules.ts#COMBO_STRIKES_FROM",
+      "name": "COMBO_STRIKES_FROM",
+      "kind": "value",
+      "file": "src/shared/combo-pay-rules.ts",
+      "line": 75,
+      "endLine": 75
+    },
+    {
+      "id": "symbol:src/shared/combo-pay-rules.ts#comboColossusBlows",
+      "name": "comboColossusBlows",
+      "kind": "value",
+      "file": "src/shared/combo-pay-rules.ts",
+      "line": 80,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/combo-pay-rules.ts#comboMultiplierFor",
@@ -79597,64 +79635,64 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3907,
-      "endLine": 3907
+      "line": 3925,
+      "endLine": 3925
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3724,
-      "endLine": 3884
+      "line": 3742,
+      "endLine": 3902
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3913,
-      "endLine": 3920
+      "line": 3931,
+      "endLine": 3938
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3897,
-      "endLine": 3897
+      "line": 3915,
+      "endLine": 3915
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3712,
-      "endLine": 3712
+      "line": 3730,
+      "endLine": 3730
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3923,
-      "endLine": 3929
+      "line": 3941,
+      "endLine": 3947
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3949,
-      "endLine": 3949
+      "line": 3967,
+      "endLine": 3967
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 338,
-      "endLine": 355
+      "line": 339,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
@@ -79662,47 +79700,47 @@
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
       "line": 78,
-      "endLine": 271
+      "endLine": 272
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3886,
-      "endLine": 3889
+      "line": 3904,
+      "endLine": 3907
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 331,
-      "endLine": 336
+      "line": 332,
+      "endLine": 337
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 273,
-      "endLine": 329
+      "line": 274,
+      "endLine": 330
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3900,
-      "endLine": 3904
+      "line": 3918,
+      "endLine": 3922
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3931,
-      "endLine": 3947
+      "line": 3949,
+      "endLine": 3965
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -81863,7 +81901,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 114
+          "line": 115
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -83202,7 +83240,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 29
+          "line": 30
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -83481,7 +83519,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 51
+          "line": 22
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -85614,7 +85652,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 291
+          "line": 320
         }
       ],
       "enables": [],
@@ -85948,7 +85986,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 437
+          "line": 465
         }
       ],
       "tests": [
@@ -85987,7 +86025,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 437
+          "line": 465
         }
       ],
       "tests": [
@@ -86021,7 +86059,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 437
+          "line": 465
         }
       ],
       "tests": [
@@ -86055,7 +86093,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 437
+          "line": 465
         }
       ],
       "tests": [
@@ -94053,6 +94091,12 @@
       "id": "exports:src/renderer/components/RunLoadingScreen.tsx->symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
       "source": "file:src/renderer/components/RunLoadingScreen.tsx",
       "target": "symbol:src/renderer/components/RunLoadingScreen.tsx#RunLoadingScreen",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#COMBO_LOST_MS",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "symbol:src/renderer/components/RunShell.tsx#COMBO_LOST_MS",
       "kind": "exports"
     },
     {
@@ -103278,6 +103322,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-pay-rules.ts->symbol:src/shared/combo-pay-rules.ts#COMBO_FEVER_BLOWS",
+      "source": "file:src/shared/combo-pay-rules.ts",
+      "target": "symbol:src/shared/combo-pay-rules.ts#COMBO_FEVER_BLOWS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/combo-pay-rules.ts->symbol:src/shared/combo-pay-rules.ts#COMBO_PAST_FEVER_STEP",
       "source": "file:src/shared/combo-pay-rules.ts",
       "target": "symbol:src/shared/combo-pay-rules.ts#COMBO_PAST_FEVER_STEP",
@@ -103293,6 +103343,18 @@
       "id": "exports:src/shared/combo-pay-rules.ts->symbol:src/shared/combo-pay-rules.ts#COMBO_RUNG_GOLD",
       "source": "file:src/shared/combo-pay-rules.ts",
       "target": "symbol:src/shared/combo-pay-rules.ts#COMBO_RUNG_GOLD",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-pay-rules.ts->symbol:src/shared/combo-pay-rules.ts#COMBO_STRIKES_FROM",
+      "source": "file:src/shared/combo-pay-rules.ts",
+      "target": "symbol:src/shared/combo-pay-rules.ts#COMBO_STRIKES_FROM",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-pay-rules.ts->symbol:src/shared/combo-pay-rules.ts#comboColossusBlows",
+      "source": "file:src/shared/combo-pay-rules.ts",
+      "target": "symbol:src/shared/combo-pay-rules.ts#comboColossusBlows",
       "kind": "exports"
     },
     {
@@ -124469,6 +124531,12 @@
       "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/store/memorizeClock.ts",
       "source": "file:src/renderer/components/RunShell.test.tsx",
       "target": "file:src/renderer/store/memorizeClock.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/shared/combo-pay-rules.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/shared/combo-pay-rules.ts",
       "kind": "imports"
     },
     {
@@ -153424,6 +153492,12 @@
       "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/shared/zone-rules.test.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/shared/zone-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-pay-rules.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/shared/combo-pay-rules.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {

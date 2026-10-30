@@ -160,6 +160,33 @@ const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
     return dropping;
 };
 
+/** How long the HUD holds what a broken combo cost before it fades. */
+export const COMBO_LOST_MS = 1800;
+
+/**
+ * What a miss broke (dogma 6, `tasks/back-to-the-base/00-dogmas.md`): a stake the player cannot see
+ * is not felt, so when a combo of three or more breaks the HUD says what went - the links and the
+ * multiplier they were paying - and lets it fall away. Timer-set like the drop.
+ */
+const useComboLost = (chain: number, multiplier: number): { links: number; multiplier: number } | null => {
+    const [lost, setLost] = useState<{ links: number; multiplier: number } | null>(null);
+    const previousRef = useRef({ chain, multiplier });
+    useEffect(() => {
+        const previous = previousRef.current;
+        previousRef.current = { chain, multiplier };
+        if (!(previous.chain >= 3 && chain < previous.chain)) {
+            return undefined;
+        }
+        const start = window.setTimeout(() => setLost({ links: previous.chain, multiplier: previous.multiplier }), 0);
+        const end = window.setTimeout(() => setLost(null), COMBO_LOST_MS);
+        return () => {
+            window.clearTimeout(start);
+            window.clearTimeout(end);
+        };
+    }, [chain, multiplier]);
+    return lost;
+};
+
 /**
  * The arrival at Fever on the ladder.
  *
@@ -351,6 +378,7 @@ const RunShell = ({
     const matchMultiplier = paysMatch ? runComboMultiplier(run) : chainRungScoreMultiplier(tier);
     // One set of words for the stages on the HUD, whatever the temper: its colours are the run's, its words were noise.
     const stageWords = paysMatch ? COMBO_HEAT_THEMES[0]!.labels : temper.labels;
+    const comboLost = useComboLost(chain, matchMultiplier);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -882,6 +910,16 @@ const RunShell = ({
                                 >
                                     {`×${matchMultiplier}`}
                                 </span>
+                                {comboLost ? (
+                                    <span
+                                        aria-live="polite"
+                                        className={styles.comboLost}
+                                        data-reduce-motion={reduceMotion ? 'true' : undefined}
+                                        data-testid="hud-combo-lost"
+                                    >
+                                        {RUN_SHELL_LABELS.comboLost(comboLost.links, comboLost.multiplier)}
+                                    </span>
+                                ) : null}
                             </span>
                         </div>
                     </div>

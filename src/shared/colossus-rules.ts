@@ -227,11 +227,14 @@ export const resolveColossusTurn = ({
     board,
     outcome,
     pairsBySuit,
-    turnsThisFloor
+    turnsThisFloor,
+    blows = 1
 }: {
     board: BoardState;
     outcome: 'match' | 'miss';
     pairsBySuit?: Partial<Record<TileSuit, number>>;
+    /** Blows a hit lands with: two with the combo at Fever from rules 107 (`comboColossusBlows`), else one. */
+    blows?: number;
     /** The floor's turn count after this turn: the event's identity. */
     turnsThisFloor: number;
 }): ColossusTurn => {
@@ -254,7 +257,7 @@ export const resolveColossusTurn = ({
         // the turn it stood up (the soak: 351 raised, 351 felled) and the clock never mattered.
         chipped = on > 0 || all === 0 || colossus.form === 'fixed' ? 0 : 1;
         chips += chipped;
-        landed = Math.min(hits, (on > 0 ? 1 : 0) + Math.floor(chips / COLOSSUS_CHIPS_PER_HIT));
+        landed = Math.min(hits, (on > 0 ? Math.max(1, Math.floor(blows)) : 0) + Math.floor(chips / COLOSSUS_CHIPS_PER_HIT));
         chips %= COLOSSUS_CHIPS_PER_HIT;
         hits -= landed;
     }

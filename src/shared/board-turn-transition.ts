@@ -19,7 +19,7 @@ import {
 } from './contracts';
 import { chunkBreakMomentumPairs } from './chunk-break-rules';
 import { higherChainTier, runChainTier } from './chain-tier-rules';
-import { comboRungGold } from './combo-pay-rules';
+import { comboColossusBlows, comboRungGold } from './combo-pay-rules';
 import { isBoardComplete } from './board-inspection';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './scoring-rules';
@@ -407,12 +407,12 @@ export const createResolveBoardTurnTransition = ({
         /*
          * The Colossus takes the turn last (`colossus-rules.ts`), on the board everything else has
          * finished with: a hit for a pair of the element it was showing, a chip for any other, and
-         * its clock.
+         * its clock. From rules 107 a hit at Fever lands twice (`comboColossusBlows`).
          */
         if (nextRun.board) {
             Object.assign(
                 nextRun,
-                applyColossusTurnToRun(nextRun, resolveColossusTurn({ board: nextRun.board, outcome: 'match', pairsBySuit, turnsThisFloor: progress.turnsThisFloor }))
+                applyColossusTurnToRun(nextRun, resolveColossusTurn({ board: nextRun.board, outcome: 'match', pairsBySuit, turnsThisFloor: progress.turnsThisFloor, blows: comboColossusBlows(nextRun) }))
             );
             // The odd cards after it: a Turncoat matched this turn counted as what it was (`odd-card-rules.ts`).
             Object.assign(nextRun, applyOddCardTurnToRun(nextRun, resolveOddCardTurn({ board: nextRun.board!, turnsThisFloor: progress.turnsThisFloor })));

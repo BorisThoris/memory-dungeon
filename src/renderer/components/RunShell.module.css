@@ -777,6 +777,34 @@
     gap: 0.5rem;
 }
 
+/* What a miss broke (dogma 6): the lost combo and its multiplier, struck through, falling away. */
+.comboLost {
+    font-family: var(--heading-font);
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #ff6a5a;
+    font-variant-numeric: lining-nums tabular-nums;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--ink) 90%, transparent);
+    white-space: nowrap;
+    animation: comboLostFall 1.8s ease-in forwards;
+}
+
+.comboLost[data-reduce-motion='true'] {
+    animation: none;
+}
+
+@keyframes comboLostFall {
+    0% { opacity: 0; transform: translateY(-0.4em) scale(1.5); }
+    10% { opacity: 1; transform: translateY(0) scale(1.15); }
+    25% { transform: translateX(-3px) scale(1); }
+    32% { transform: translateX(3px); }
+    40% { transform: translateX(0); }
+    75% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(0.9em); }
+}
+
 /* Fever: the ladder itself breathes. */
 .chain[data-meter-full='true'] .ladderFill,
 .chain[data-meter-full='true'] .ladderMarker {

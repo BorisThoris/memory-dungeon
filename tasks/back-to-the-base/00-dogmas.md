@@ -59,8 +59,12 @@ on how existing systems read. None adds a system.
    gold. A rules bump (106). `calculateMatchScore` also feeds Endless's rent
    (`endless-rent-rules.ts`), so re-measure the rent with it, and the Warden gate and the store prices.
    **The owner picks the shape first**: matches paid at the multiplier, the combo pays gold, or both.
-4. **The streak is felt** (6, 7): a loud break with what was lost; a rising note per link.
-5. **The systems answer the combo** (8): the Colossus hit at Fever and the element cast by rung.
+4. **The streak is felt** (6, 7): a loud break with what was lost; a rising note per link. Done: the HUD
+   holds "Lost 13 · ×11", struck through, as a miss breaks a combo of three or more (`hud-combo-lost`);
+   the rising note was already there (`comboVoicing.ts` steps each link up the cascade scale).
+5. **The systems answer the combo** (8): the Colossus hit at Fever and the element cast by rung. Done
+   in rules 107: a Colossus hit at Fever lands twice (`comboColossusBlows`, hall room `colossus-fever`);
+   the element cast already grew with the combo (`elementCastPower`: reach every 3 links, targets every 6).
    A rules bump (107) with the full checklist (graph, census, hall room, soak).
 
 Each step ships on its own, and each gets a look at the playtest screenshots before the next one.

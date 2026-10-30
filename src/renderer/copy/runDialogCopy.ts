@@ -69,6 +69,9 @@ export const RUN_SHELL_PAR_COPY = {
 /** Spoken by screen readers over the run shell's pause control. */
 export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
+    /** What a miss broke, held on the HUD for a moment (dogma 6): the links and the multiplier they paid. */
+    comboLost: (links: number, multiplier: number): string =>
+        multiplier > 1 ? `Lost ${links} · ×${multiplier}` : `Lost ${links}`,
     /** The purse on the head, and what it is for on hover. */
     gold: 'gold',
     goldTitle: 'Gold funds automatic upgrades every 3 floors.',
