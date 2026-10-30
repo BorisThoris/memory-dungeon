@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T13:56:16.968Z",
+  "generatedAt": "2026-10-30T16:27:59.871Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -322,46 +322,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 89301,
+        "bytes": 88638,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-10-30T13:54:58.784Z"
+        "capturedAt": "2026-10-30T16:26:29.924Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 83756,
+        "bytes": 82766,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-30T13:55:17.696Z"
+        "capturedAt": "2026-10-30T16:26:52.432Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 72300,
+        "bytes": 71546,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-10-30T13:55:54.576Z"
+        "capturedAt": "2026-10-30T16:27:35.152Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 43050,
+        "bytes": 42864,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-10-30T13:55:35.468Z"
+        "capturedAt": "2026-10-30T16:27:13.972Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 71855,
+        "bytes": 71854,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-10-30T13:56:13.660Z"
+        "capturedAt": "2026-10-30T16:27:55.444Z"
       },
       {
         "profile": "reel-cover-break-the-chain",
@@ -370,7 +370,7 @@
         "bytes": 139355,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-30T13:49:15.148Z"
+        "capturedAt": "2026-10-30T16:23:10.144Z"
       },
       {
         "profile": "reel-cover-gameplay",
@@ -379,7 +379,7 @@
         "bytes": 149787,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-30T13:49:15.148Z"
+        "capturedAt": "2026-10-30T16:23:10.144Z"
       },
       {
         "profile": "reel-cover-remember-this",
@@ -388,7 +388,7 @@
         "bytes": 322090,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-30T13:49:15.148Z"
+        "capturedAt": "2026-10-30T16:23:10.148Z"
       },
       {
         "profile": "reel-end-card",
@@ -397,7 +397,7 @@
         "bytes": 1192916,
         "width": 1080,
         "height": 1920,
-        "capturedAt": "2026-10-30T13:49:15.156Z"
+        "capturedAt": "2026-10-30T16:23:10.152Z"
       }
     ],
     "trailers": [
@@ -524,13 +524,13 @@
     "devDependencyCount": 47
   },
   "metrics": {
-    "sourceFiles": 1566,
-    "testFiles": 677,
-    "sourceLines": 240670,
+    "sourceFiles": 1563,
+    "testFiles": 676,
+    "sourceLines": 239875,
     "largestDirectories": [
       {
         "directory": "src",
-        "files": 1364
+        "files": 1361
       },
       {
         "directory": "scripts",
@@ -565,10 +565,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "main",
-    "head": "5af8fa57",
-    "lastCommitDate": "2026-10-30T15:22:11+02:00",
-    "lastCommitSubject": "Bring the match takes in line with the mix",
-    "commitCount": 2675,
+    "head": "685121d2",
+    "lastCommitDate": "2026-10-30T17:40:31+02:00",
+    "lastCommitSubject": "Refresh the repo model",
+    "commitCount": 2680,
     "remote": "https://github.com/BorisThoris/memory-dungeon"
   },
   "readme": {
