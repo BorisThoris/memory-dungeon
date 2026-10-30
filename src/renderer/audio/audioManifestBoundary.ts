@@ -7,7 +7,9 @@ const manifestEntrySchema = <Category extends z.ZodType>(categorySchema: Categor
             file: nonEmptyStringSchema,
             category: categorySchema,
             /** `natural`: play the recording at level and fade only its end (recorded impacts have tails). */
-            envelope: z.enum(['natural']).optional()
+            envelope: z.enum(['natural']).optional(),
+            /** A take's level against its neighbours, applied at playback (a file at full scale cannot be raised). */
+            gain: z.number().positive().max(4).optional()
         })
         .strict();
 

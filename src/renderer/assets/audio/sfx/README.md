@@ -48,6 +48,8 @@
 
 Match streak depth maps to low / mid / high in `manifest.json`.
 
+An entry may carry `gain` (0 to 4), a level trim applied at playback for a take that is out of line with its neighbours but already at full scale in the file. `match-tier-low` (2) and `match-tier-high` (2.1) carry one, so each tier's first rung measures level with the flip (`e2e/deep-cue-levels.spec.ts`). The `match-tier-low` master also had its first 165 ms of near-silence cut (2026-10-30): the sampler's envelope decays from the first sample, so a late onset plays quieter and later. Reinstalling the take from ACE-Step output undoes that cut.
+
 ## UI and menu SFX
 
 Focused UI/menu one-shots live in [`../ui/`](../ui/README.md): click, confirm, back, counter, menu-open, run-start, intro-sting, pause-open, pause-resume, game-over-open, and ui-copy.

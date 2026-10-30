@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3401,
+    "trackedFileCount": 3396,
     "codeFileCount": 1323,
     "exportedSymbolCount": 4382,
     "contentItemCount": 16,
@@ -2793,50 +2793,44 @@
     {
       "path": "docs/ui-design-reference/390x844/00-startup-intro.png",
       "category": "documentation",
-      "bytes": 189885,
-      "sha256": "8ddb9d1c6f5658194014dba442056e5c69e3ff5fced36cc54e8cc70452a9e8f3"
+      "bytes": 334349,
+      "sha256": "a792698b11bb3a2a5a5107dccd7ea54eadb476ddd4b8c9acc81a5a8d4d27a17d"
     },
     {
       "path": "docs/ui-design-reference/390x844/01-main-menu.png",
       "category": "documentation",
-      "bytes": 261266,
-      "sha256": "664d0a7f98aa869d93fcfb3012beccd2907bfcaf168cd6b3d8b38872c73b90dd"
+      "bytes": 326270,
+      "sha256": "3b0b4b86bd4a9ab242354905ce19a29b90f2198b4cff2991ed7970c025ecf3aa"
     },
     {
       "path": "docs/ui-design-reference/390x844/01a-choose-your-path.png",
       "category": "documentation",
-      "bytes": 383306,
-      "sha256": "8842be96ba3957b876448aae524e95e55dbcd994e61d6bc6f2997d19a06b797e"
+      "bytes": 351103,
+      "sha256": "6e776b9b21298c77177d4caa82673a73ba706623774854255e4e0e5609f3c4cb"
     },
     {
       "path": "docs/ui-design-reference/390x844/01b-collection.png",
       "category": "documentation",
-      "bytes": 69843,
-      "sha256": "22c69b0b2823d674204d4045942453e602b1dc663f0c53882c828b6e00c4a39f"
+      "bytes": 262999,
+      "sha256": "44696a0d6105055e6c6be9cf480f602a98c99e0915317a3b3e1842130a18dab8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01c-inventory-empty.png",
       "category": "documentation",
-      "bytes": 51604,
-      "sha256": "ba1b4c763b0715c8f6fa4d92ee139d5a4078701f82f842cd8487ffbe1145c2e9"
+      "bytes": 160622,
+      "sha256": "73cf4e9da5332b331f0e9c77bb42cfa0023edc3a7c3ef07299706fa9179aa4f8"
     },
     {
       "path": "docs/ui-design-reference/390x844/01d-inventory-active.png",
       "category": "documentation",
-      "bytes": 81206,
-      "sha256": "93f512bf2899d10577a6c70f37502877ab49a4f49ef887b6c50934b37c7e17cc"
+      "bytes": 263076,
+      "sha256": "bfb43acea090ac8558fcbe1026088fa4e4ea35c08cb79f7809c3b0ee5d9ef3d1"
     },
     {
       "path": "docs/ui-design-reference/390x844/01e-codex.png",
       "category": "documentation",
-      "bytes": 57386,
-      "sha256": "ee83d1a429e328caf9591c6b54555104b4d076f42a5d7df8d11f72bd139f34b0"
-    },
-    {
-      "path": "docs/ui-design-reference/390x844/01f-profile.png",
-      "category": "documentation",
-      "bytes": 81362,
-      "sha256": "c85baf594c0ac0bc170e82922eb3bcc081b1cd42cab11ddfcd7dd432c0c5ee78"
+      "bytes": 241706,
+      "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
     },
     {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
@@ -3393,8 +3387,8 @@
     {
       "path": "docs/visual-capture/portfolio-smoke/README.md",
       "category": "documentation",
-      "bytes": 240,
-      "sha256": "a843a846568107b9f22f1d13c7b0f25ac5e0ab92f2938a88405a22c94acc96b4"
+      "bytes": 601,
+      "sha256": "cfefa26baf6671b2312dcdac29a398b10727e11a174179c80e2e3c6b447f2952"
     },
     {
       "path": "docs/visual-capture/README.md",
@@ -3951,8 +3945,8 @@
     {
       "path": "e2e/deep-cue-levels.spec.ts",
       "category": "test",
-      "bytes": 8608,
-      "sha256": "974292f4dd91c4f708aadedc8634f48d722c73fea56dcba0fc9378a33d8515f9"
+      "bytes": 9107,
+      "sha256": "a092cb6bc00d647a9db14d63dd9824d90fbae6ed5b35d3b87dff7c7646d51013"
     },
     {
       "path": "e2e/demo-readiness.spec.ts",
@@ -4337,24 +4331,6 @@
       "category": "test",
       "bytes": 1041,
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
-    },
-    {
-      "path": "e2e/zz-awaken-shot.spec.ts",
-      "category": "test",
-      "bytes": 1419,
-      "sha256": "7b9d0ec25f3ea5bd731b870a9de14b5dcfada7c299bea2c25c48f4da9e0fed7e"
-    },
-    {
-      "path": "e2e/zz-crawl-shot.spec.ts",
-      "category": "test",
-      "bytes": 2590,
-      "sha256": "651a95bb8096041327642bfd5027180c27b6b1da8ef58608b48f73ca96ce3c55"
-    },
-    {
-      "path": "e2e/zz-fuse-shot.spec.ts",
-      "category": "test",
-      "bytes": 1599,
-      "sha256": "0d5c0ad2a48e21adafc40875534b5ec0c0855c92298108a2e1686f6741f98a4d"
     },
     {
       "path": "eslint.config.mjs",
@@ -5229,8 +5205,8 @@
     {
       "path": "scripts/card-pipeline/steam-achievement-icons.py",
       "category": "script",
-      "bytes": 3997,
-      "sha256": "ed6d600e81ba753fafcc30aa89a7a8d2be0b3dfda86b9c3e661bf600eb6fc78e"
+      "bytes": 3919,
+      "sha256": "87eafbd6f54560e7aa556ec0015858a555855558634146dab1ef53c38161b290"
     },
     {
       "path": "scripts/card-pipeline/steam-achievements.zimage.manifest.json",
@@ -6657,8 +6633,8 @@
     {
       "path": "src/renderer/assets/audio/sfx/manifest.json",
       "category": "source",
-      "bytes": 3787,
-      "sha256": "63c3578f8d03163e91b334bcf87b503a7cdf7bd00a1c569f9ba6e507dd65e555"
+      "bytes": 3811,
+      "sha256": "d1dcf5b6a61ca829dea8eb9b0d391187fe0adaf2f8fd0e14ff94c40e3f200ca8"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-high.ogg",
@@ -6675,14 +6651,14 @@
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-low.ogg",
       "category": "source",
-      "bytes": 81856,
-      "sha256": "fb71a29175a3e754b1ddd88cbae639b4961f65bceea86b8779739632177ce3a6"
+      "bytes": 79816,
+      "sha256": "5c3eea45b7a7c6e951699110711ff6f3128e70f227fe74d442726df6a6cec60e"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-low.wav",
       "category": "source",
-      "bytes": 944718,
-      "sha256": "6d17d2ae2d4a75d83462e6bdc01f23007af193ea19ee1d79073580c20fbc0fe3"
+      "bytes": 913038,
+      "sha256": "c6fa140c0873cfba3768ff1aa486da8e42be6da5126e2b49a4b0bc998378a9be"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-mid.ogg",
@@ -6735,8 +6711,8 @@
     {
       "path": "src/renderer/assets/audio/sfx/README.md",
       "category": "source",
-      "bytes": 4253,
-      "sha256": "3469aa6cef1f8316ed505606879b99414563bccbd0c66c082d50c7bd2c4984cd"
+      "bytes": 4803,
+      "sha256": "25974417a0e5d2a6481d25c48951185b1e5e7d92a681a949c759d69327b9a817"
     },
     {
       "path": "src/renderer/assets/audio/sfx/realm-burnout.ogg",
@@ -9441,8 +9417,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-l.png",
@@ -9531,8 +9507,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 2024,
-      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
+      "bytes": 1931,
+      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9573,8 +9549,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 887,
-      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
+      "bytes": 842,
+      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9591,14 +9567,14 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 354,
-      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
+      "bytes": 333,
+      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9627,8 +9603,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 622,
-      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
+      "bytes": 589,
+      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9657,14 +9633,14 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 629,
-      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+      "bytes": 596,
+      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -10053,8 +10029,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 267,
-      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+      "bytes": 248,
+      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -10101,14 +10077,14 @@
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
       "category": "test",
-      "bytes": 1520,
-      "sha256": "87568fa0b720120026d0a7b08d7565d9e86d100a3a9b64f2dab869af1a9eb159"
+      "bytes": 1957,
+      "sha256": "bbc0c7936dc20a7d08c6088e44ae8de781520408bedc97f02187f5c945de03f6"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.ts",
       "category": "source",
-      "bytes": 1493,
-      "sha256": "38fee0f7bfee7ac5d1f7fbdf5b8d9c4416c8377ca43b5327fe1b0be15a238258"
+      "bytes": 1671,
+      "sha256": "fee8023bfaa3040bfdfde40d3121f80228c5d3537a1d6c354adbff63e91db716"
     },
     {
       "path": "src/renderer/audio/audioMixDuckingPolicy.test.ts",
@@ -10203,8 +10179,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 63884,
-      "sha256": "2544e8af9258c9a14fad7fb866bfd976f5e1a264aef30244819fe91257fa1c53"
+      "bytes": 63943,
+      "sha256": "7f6a748980df3de38cf1ee0dd03c28ccc18888a9b198d1ae473962fdaeac76f8"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -10269,8 +10245,8 @@
     {
       "path": "src/renderer/audio/sampledSfx.ts",
       "category": "source",
-      "bytes": 9858,
-      "sha256": "46cad176a71c89253fce02836f953f904e31131b49246e2a7390afc064073217"
+      "bytes": 9896,
+      "sha256": "b732e77de958a23703ea887a3bd8990cf262d01e52b1b92024ec6521a6b7b531"
     },
     {
       "path": "src/renderer/audio/uiSfx.test.ts",
@@ -17997,8 +17973,8 @@
     {
       "path": "tasks/deep-game-epic/03-execution-ledger.md",
       "category": "other",
-      "bytes": 40872,
-      "sha256": "ac54dc1dd813f3da9db6f3000dcef319acd800237f276c9bab8736590f8a61e7"
+      "bytes": 41507,
+      "sha256": "1322220c63fac7e8cbd3c415caf83e2c6fd46a1698cc872d30f65de59ce0e3b0"
     },
     {
       "path": "tasks/deep-game-epic/04-mechanic-checklist.md",
@@ -20411,12 +20387,6 @@
       "category": "other",
       "bytes": 316232,
       "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
-    },
-    {
-      "path": "zz-pw.config.ts",
-      "category": "configuration",
-      "bytes": 952,
-      "sha256": "de54841dc6d5bc1a85f9f47d6f25e0221a13dcb093d8d4ca588c054c9aa6c206"
     }
   ],
   "files": [
@@ -21595,7 +21565,7 @@
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 38,
+      "lineCount": 49,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/assets/audio/ui/manifest.json",
@@ -21609,7 +21579,7 @@
       "path": "src/renderer/audio/audioManifestBoundary.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 43,
       "imports": [],
       "exports": [
         "symbol:src/renderer/audio/audioManifestBoundary.ts#sfxManifestSchema",
@@ -21885,7 +21855,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1455,
+      "lineCount": 1456,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -22102,7 +22072,7 @@
       "path": "src/renderer/audio/sampledSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 334,
+      "lineCount": 335,
       "imports": [
         "file:src/renderer/assets/audio/sfx/manifest.json",
         "file:src/renderer/audio/audioGlobUrlMap.ts",
@@ -47889,16 +47859,16 @@
       "name": "sfxManifestSchema",
       "kind": "value",
       "file": "src/renderer/audio/audioManifestBoundary.ts",
-      "line": 21,
-      "endLine": 33
+      "line": 23,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/audio/audioManifestBoundary.ts#uiSfxManifestSchema",
       "name": "uiSfxManifestSchema",
       "kind": "value",
       "file": "src/renderer/audio/audioManifestBoundary.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 37,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/audio/audioMixDuckingPolicy.ts#getReg114DuckRow",
@@ -48289,8 +48259,8 @@
       "name": "playDeepGameSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1440,
-      "endLine": 1441
+      "line": 1441,
+      "endLine": 1442
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
@@ -48601,24 +48571,24 @@
       "name": "maybePreloadSampledSfx",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 309,
-      "endLine": 317
+      "line": 310,
+      "endLine": 318
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#preloadSampledSfx",
       "name": "preloadSampledSfx",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 273,
-      "endLine": 284
+      "line": 274,
+      "endLine": 285
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#resetSampledSfxForTests",
       "name": "resetSampledSfxForTests",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 328,
-      "endLine": 333
+      "line": 329,
+      "endLine": 334
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#resolveMatchTierSampleKey",
@@ -48657,8 +48627,8 @@
       "name": "silenceAllSampleVoices",
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
-      "line": 319,
-      "endLine": 326
+      "line": 320,
+      "endLine": 327
     },
     {
       "id": "symbol:src/renderer/audio/sampledSfx.ts#tryPlaySampled",
@@ -48666,7 +48636,7 @@
       "kind": "function",
       "file": "src/renderer/audio/sampledSfx.ts",
       "line": 187,
-      "endLine": 264
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/audio/uiSfx.ts#__resetUiSfxEngineForTests",

@@ -33,5 +33,16 @@ describe('audio manifest boundaries', () => {
         ).toBe(false);
         expect(uiSfxManifestSchema.safeParse({ ...uiSfxManifest, undocumentedBus: 'music' }).success).toBe(false);
     });
+
+    it('takes a level trim per take, within reason', () => {
+        const withGain = (gain: number) =>
+            sfxManifestSchema.safeParse({
+                ...sfxManifest,
+                entries: { ...sfxManifest.entries, flip: { file: 'flip.ogg', category: 'flip', gain } }
+            }).success;
+        expect(withGain(2)).toBe(true);
+        expect(withGain(0)).toBe(false);
+        expect(withGain(8)).toBe(false);
+    });
 });
 

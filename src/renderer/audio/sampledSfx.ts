@@ -217,12 +217,13 @@ export function tryPlaySampled(key: SfxSampleKey, gain: number, voicing?: Sample
     // silenced before it finishes.
     const dur = buf.duration / rate;
     const t0 = ctx.currentTime;
+    const level = gain * 0.35 * (meta.gain ?? 1);
 
     g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(gain * 0.35, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(level, t0 + 0.012);
     if (meta.envelope === 'natural') {
         // A recording carries its own decay: hold it at level and fade only the last moment.
-        g.gain.setValueAtTime(gain * 0.35, Math.max(t0 + 0.012, t0 + dur - 0.12));
+        g.gain.setValueAtTime(level, Math.max(t0 + 0.012, t0 + dur - 0.12));
     }
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 

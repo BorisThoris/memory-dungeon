@@ -28,7 +28,7 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
         // timeout drops takes, so load again until the ones the bands read are there, and fail rather than
         // measure the synth fallback. The buffers outlive the real context each render closes.
         const sampled = await import('/src/renderer/audio/sampledSfx.ts');
-        const needed = ['flip', 'match-tier-low', 'match-tier-mid', 'shuffle-full'] as const;
+        const needed = ['flip', 'match-tier-low', 'match-tier-mid', 'match-tier-high', 'shuffle-full'] as const;
         let loaded = false;
         for (let attempt = 0; attempt < 5 && !loaded; attempt += 1) {
             if (attempt > 0) sampled.resetSampledSfxForTests();
@@ -100,7 +100,9 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
             'all eight at once': () => sfx.playDeepGameSfx(run, { ...run, holdsReleasedThisFloor: 1, wardenRedealsThisFloor: 1, keeperSwapsThisFloor: 1, cartographerTurnsThisFloor: 1, spiralRingsSealedThisFloor: 1, sleepersWokenThisFloor: 1, masksDroppedThisFloor: 1, wandererStepsThisFloor: 1 }, 1),
             '(baseline) flip': () => sfx.playFlipSfx(1),
             '(baseline) match': () => sfx.playMatchSfx(1, 1),
+            '(baseline) match, chain 6': () => sfx.playMatchSfx(1, 6),
             '(baseline) match, chain 8': () => sfx.playMatchSfx(1, 8),
+            '(baseline) match, chain 11': () => sfx.playMatchSfx(1, 11),
             '(baseline) shuffle': () => sfx.playShuffleSfx(1),
             '(baseline) floor clear': () => sfx.playFloorClearSfx(1),
             '(baseline) power arm': () => sfx.playPowerArmSfx(1)
@@ -111,16 +113,19 @@ test('the deep game cues sit in their measured bands', async ({ page }) => {
     });
     const level = (name: string): Level => rows[name] as Level;
     // Rendered the same way, the baselines are where the band is: a cue that drifts is a cue that moved.
-    // Measured 2026-10-27 on the samples: flip -24.1, shuffle -23.5, a match at chain 8 -21.6, at chain 12
-    // -27.5, and a plain match (chain 1 to 5, `match-tier-low.ogg`) -32.7, eight decibels under the flip
-    // before it. That take is the outlier of the mix, so the bands read the flip, which is within half a
-    // decibel on either path; the plain match keeps its own row so a change to its take is seen.
+    // The bands read the flip, the sound on every tile, within half a decibel on either path. Measured on the
+    // samples (2026-10-30): flip -24.1, shuffle -23.5. The match takes were out of line with it (2026-10-27):
+    // a plain match -32.7 and chain 11 -27.5, so a run's first matches were quieter than the flips that led to
+    // them and the ladder fell at chain 11. With the plain take's lead-in trimmed and both given a manifest
+    // gain, the first rung of each take (chains 1, 6 and 11) measures -24.4, -21.1 and -22.4.
     const flip = level('(baseline) flip').loudestRmsDb;
     expect(flip).toBeGreaterThan(-28);
     expect(flip).toBeLessThan(-20);
-    const plainMatch = level('(baseline) match').loudestRmsDb;
-    expect(plainMatch).toBeGreaterThan(-36);
-    expect(plainMatch).toBeLessThan(-29);
+    for (const rung of ['(baseline) match', '(baseline) match, chain 6', '(baseline) match, chain 11']) {
+        const offset = level(rung).loudestRmsDb - flip;
+        expect(offset, `${rung} at ${offset.toFixed(1)} dB from a flip`).toBeGreaterThanOrEqual(-3);
+        expect(offset, `${rung} at ${offset.toFixed(1)} dB from a flip`).toBeLessThanOrEqual(5);
+    }
     const bands: Record<string, [number, number]> = {
         // The Hold's payoff: level with a flip, give or take (+0.9 measured).
         'hold_release (24 held)': [-2, 5],
