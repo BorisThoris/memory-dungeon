@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3401,
+    "trackedFileCount": 3408,
     "codeFileCount": 1322,
     "exportedSymbolCount": 4365,
     "contentItemCount": 16,
@@ -865,6 +865,12 @@
       "sha256": "04e0d99d77fc50344b0732ffb3620e1a786b43bb4cdcf76ceb1b76e059210052"
     },
     {
+      "path": "docs/GOOGLE_PLAY.md",
+      "category": "documentation",
+      "bytes": 3165,
+      "sha256": "2f4b0fcb22331af44e162f290f7fcf7745c9a829a02caf10e9d2a1f648e6051b"
+    },
+    {
       "path": "docs/HOOK_AND_DEPTH_TASKS.md",
       "category": "documentation",
       "bytes": 7562,
@@ -909,8 +915,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 19959,
-      "sha256": "8ac01b8216f4a12b965f74b14c2a86f905b336780f124f3d3f54730362b8e82a"
+      "bytes": 20103,
+      "sha256": "cb44b994785db23cbb525ed5c6b9bde98fdb6ea266174a2f474888a414854542"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -4357,6 +4363,18 @@
       "sha256": "0d5c0ad2a48e21adafc40875534b5ec0c0855c92298108a2e1686f6741f98a4d"
     },
     {
+      "path": "e2e/zz-lost-shot.spec.ts",
+      "category": "test",
+      "bytes": 5000,
+      "sha256": "ab3fb41fa3c4045b0d456f2cb95b62b7af2e0a50117d3a2059ccd4904da8996c"
+    },
+    {
+      "path": "e2e/zz-store-shot.spec.ts",
+      "category": "test",
+      "bytes": 3442,
+      "sha256": "27ebdf08aa8265542a642af2e512411b66c4eff090f3c5835e4c63a928ef51f2"
+    },
+    {
       "path": "eslint.config.mjs",
       "category": "configuration",
       "bytes": 5117,
@@ -4567,6 +4585,12 @@
       "sha256": "c3ff84887038fbc2d0d857c9466b3779f77cee024d690252c61185377bf5020c"
     },
     {
+      "path": "public/.well-known/assetlinks.json",
+      "category": "configuration",
+      "bytes": 444,
+      "sha256": "2c310b455412c0d26503ab7c5ffcf8347be5ca9399a5b34c8e51e6893b800e8f"
+    },
+    {
       "path": "public/apple-touch-icon.png",
       "category": "asset",
       "bytes": 1637,
@@ -4629,8 +4653,14 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71771,
-      "sha256": "15c2e7b9da799573cdbc4ae5dadf5432c4b13cf6b3a30bd4288cedd70304d8d1"
+      "bytes": 71983,
+      "sha256": "175647b5163ebaa58e29df62f1ce19221e09836b3f9318c933bef2541733d634"
+    },
+    {
+      "path": "public/privacy.html",
+      "category": "other",
+      "bytes": 4032,
+      "sha256": "65b87cd3c96077c196bbb3d9080537372798ab779a042d1c1fc76a24522dda3a"
     },
     {
       "path": "public/site.webmanifest",
@@ -5447,6 +5477,18 @@
       "category": "script",
       "bytes": 11460,
       "sha256": "ed5d80c3b3e1ec691480302440d72e317d5553ac8a3f06d52276dd253890a3c1"
+    },
+    {
+      "path": "scripts/play/build-aab.ps1",
+      "category": "script",
+      "bytes": 1766,
+      "sha256": "8a18c1c0808353c47f42c2ff86946cd981827e9dc2bfeb38088644849726e5b3"
+    },
+    {
+      "path": "scripts/play/generate-twa.mjs",
+      "category": "script",
+      "bytes": 3505,
+      "sha256": "596d9ada03de907534f193934f6349638743fd29b0fab3285629e60525756900"
     },
     {
       "path": "scripts/postinstall.cjs",
@@ -11889,20 +11931,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 67039,
-      "sha256": "83c1d96842a2df1e72769af3de2a3a70fd006b2a26d7bf846adce0af6fe8a734"
+      "bytes": 67373,
+      "sha256": "847779aa0787ecb21d2592b236ab8867aa0653bdb516c67588b1bf274cc03ec6"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 44394,
-      "sha256": "37ca1c7d0e674672a7da98d205aaa08f4f5d7274b0aa9edb697e178009060254"
+      "bytes": 44754,
+      "sha256": "bf011c60caacce5fba8e9c3da61ba016e19eb3efef7d7a7bf6d7086dc6bef4c8"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 61667,
-      "sha256": "c929ec904f6dd6e4da9859df31b0adb26ba9d227515ea5986fc8db8f155c4e88"
+      "bytes": 61792,
+      "sha256": "6bcad67aa14be1eaffaf9336b6f51d69d655a2613b5fe576ae0ee6d32f18ec34"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -26668,7 +26710,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 804,
+      "lineCount": 807,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -26688,7 +26730,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1053,
+      "lineCount": 1054,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -53483,8 +53525,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1052,
-      "endLine": 1052
+      "line": 1053,
+      "endLine": 1053
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -85652,7 +85694,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 320
+          "line": 323
         }
       ],
       "enables": [],
