@@ -842,7 +842,8 @@ const RunShell = ({
                         player never planned around. */}
                     <div
                         className={styles.chain}
-                        data-chain-active={chain > 0 || isZoneActive(run) ? 'true' : 'false'}
+                        // A phone folds the row away at no combo; it stays up while it says what a miss broke.
+                        data-chain-active={chain > 0 || isZoneActive(run) || comboLost ? 'true' : 'false'}
                         data-chain-tier={tier}
                         data-meter-arrive={chainMeterArriving ? 'true' : 'false'}
                         data-meter-drop={chainMeterDropping ? 'true' : 'false'}

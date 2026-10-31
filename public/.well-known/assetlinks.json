@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.boristhoris.memorydungeon",
+      "sha256_cert_fingerprints": [
+        "E6:C3:8B:2C:12:A2:AE:A4:4B:DE:04:C9:CC:DB:7A:CA:A5:0B:4F:BF:FA:73:66:62:52:1E:8C:A2:2D:7C:B8:EF",
+        "45:63:88:D3:C0:C4:C2:94:40:5B:4C:C6:57:0E:97:46:10:0E:38:F5:21:5C:75:84:F2:EA:7B:FA:FC:2A:B4:DB"
+      ]
+    }
+  }
+]

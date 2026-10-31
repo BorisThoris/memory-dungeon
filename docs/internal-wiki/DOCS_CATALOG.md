@@ -22,6 +22,7 @@
 | [BALANCE_NOTES.md](../BALANCE_NOTES.md) | Numeric balance notes |
 | [BLUEPRINT_FRAMEWORK.md](../BLUEPRINT_FRAMEWORK.md) | Dev import graph + glossary blueprint codegen (`yarn graph:project`, `yarn blueprint:codegen`) |
 | [COLLECTIBLE_SYSTEM.md](../COLLECTIBLE_SYSTEM.md) | Collectibles design |
+| [GOOGLE_PLAY.md](../GOOGLE_PLAY.md) | Google Play: the TWA shell, its ids, the upload key, the AAB build and what a personal account allows |
 | [DOC_CHECKBOX_INVENTORY.md](../DOC_CHECKBOX_INVENTORY.md) | Doc checkbox audit counts (maintenance) |
 | [FINDABLES.md](../FINDABLES.md) | Findables mechanic |
 | [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) | **Desktop** systems map: who owns what |

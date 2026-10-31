@@ -1948,6 +1948,9 @@
 .milestoneBar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 1px; background: #ffffff1a; }
 .milestoneBar::after { content: ''; position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--milestone-fill, 0)); background: var(--gold, #e1ad66); transition: transform 600ms ease-out; }
 .shell .milestone { grid-area: 1 / 3; justify-self: start; }
+/* A phone gives cell 1 / 3 to the score, and the two printed over each other ("2 of 8" under "593"): the
+   milestone takes the far end of the combo's row instead, which the combo's words never reach. */
+.shell[data-layout^='phone'] .milestone { grid-area: 2 / 1 / auto / -1; justify-self: end; align-self: center; max-width: 45%; }
 @media (prefers-reduced-motion: reduce) { .milestoneBar::after { transition: none; } }
 
 /* A paid rent reads as done. */

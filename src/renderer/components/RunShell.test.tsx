@@ -279,10 +279,13 @@ describe('RunShell', () => {
                 vi.advanceTimersByTime(1);
             });
             expect(screen.getByTestId('hud-combo-lost')).toHaveTextContent(`Lost 5 · ×${paid}`);
+            // The phone hides the row at no combo; it stays up while it says what went.
+            expect(screen.getByTestId('hud-chain-meter').closest('[data-chain-active]')).toHaveAttribute('data-chain-active', 'true');
             act(() => {
                 vi.advanceTimersByTime(COMBO_LOST_MS);
             });
             expect(screen.queryByTestId('hud-combo-lost')).toBeNull();
+            expect(screen.getByTestId('hud-chain-meter').closest('[data-chain-active]')).toHaveAttribute('data-chain-active', 'false');
         } finally {
             vi.useRealTimers();
         }
