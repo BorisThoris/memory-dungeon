@@ -867,8 +867,8 @@
     {
       "path": "docs/GOOGLE_PLAY.md",
       "category": "documentation",
-      "bytes": 3165,
-      "sha256": "2f4b0fcb22331af44e162f290f7fcf7745c9a829a02caf10e9d2a1f648e6051b"
+      "bytes": 3938,
+      "sha256": "b3059eacb774728917e87756a8583ed1676798229221c0507c0b1d0446a94a1f"
     },
     {
       "path": "docs/HOOK_AND_DEPTH_TASKS.md",
@@ -4653,8 +4653,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71983,
-      "sha256": "175647b5163ebaa58e29df62f1ce19221e09836b3f9318c933bef2541733d634"
+      "bytes": 71741,
+      "sha256": "79608b123e552cd1be254a8dbb58a527493c79650072fad6c120c80593f7959e"
     },
     {
       "path": "public/privacy.html",
