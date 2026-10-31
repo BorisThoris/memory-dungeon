@@ -340,8 +340,34 @@ every run says what its weather is the first time the combo warms.
   read off the combo prop's rising edge in `TileBoardScene.tsx`.
 - The HUD, cards, room and vignette: see [epic-board-rendering-assists.md](./epic-board-rendering-assists.md).
 
+## The last three rungs (2026-10-31)
+
+The three beats this list carried as "next" are built, all presentation: no rule reads them, so
+no rules version, census or soak changes. Each climbs with every link through `comboDepth` and
+`comboSoftCap`, and each is off under reduced motion.
+
+- **The instrument burns** (`flipFlameTrail.ts`, emitted from the flip cue in
+  `TileBoardParticles.tsx`): from Blazing, the card a player turns trails embers across its face
+  in the temper's colour, three at Blazing and more with each link toward twelve, bigger with the
+  surge. Counted on the board canvas as `data-particle-flip-flames`.
+- **The big shot** (`legendaryPushIn.ts`, read in `TileBoardScene.tsx`): a match that takes more
+  than its own pair at Legendary pushes the board in (4.5% at 25 links, toward 9.5%) and holds
+  0.9 s, then settles back. It is a target on the board's own damped scale with a slower damping
+  (`tileBoardViewportMotionState.ts`), so the move in and out is the camera's ease and not a
+  keyframe. Counted as `data-board-push-ins`.
+- **The best combo, replayed** (`runEndComboReplay` in `runEndStamp.ts`, the `replay` phase of
+  `RunEndCinematic.tsx`): after the verdict, the stamps the run's best combo earned (Hot up, in
+  the temper's words, then its ascensions) are slammed again one every 300 ms over "Best combo ×N",
+  with a dot per stamp. A long combo shows its first ascensions and its last, six stamps at most.
+  The replay names the heat, so after it only NEW RECORD keeps a flourish. Each replayed stamp
+  plays the rank sting at its stage's pitch (`onReplayStamp` -> `playComboStageSfx` in
+  `GameOverScreen.tsx`), so the climb is heard again as well as seen.
+
+Checked in a real board (isolated headless Chrome on the GPU, reduced motion off): every flip at
+Legendary lit, the first Legendary break pushed in, and a game over with a best of 73 replayed
+BLAZING through LEGENDARY II.
+
 ## Next on the ladder (not built)
 
-- A slow push-in of the camera on a Legendary break, the tables' "big shot" beat.
-- A flame trail on the card as it flips from Blazing up - the instrument burning, not the room.
-- A run-end card that replays the best combo's stamps.
+- Nothing queued. A new beat here answers the owner's test first: does it change what a player
+  decides on a turn, or only how the turn feels? The three above are the second kind on purpose.

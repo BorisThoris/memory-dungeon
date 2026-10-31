@@ -47,21 +47,27 @@ export interface TileBoardViewportMotionTarget {
 export const computeTileBoardViewportMotionState = ({
     boardViewport,
     interactionSuppressed,
+    push = 1,
+    pushDamping = null,
     reduceMotion,
     shake = BOARD_SHAKE_AT_REST
 }: {
     boardViewport: Pick<TileBoardViewportState, 'fitZoom' | 'panX' | 'panY' | 'zoom'>;
     interactionSuppressed: boolean;
+    /** The Legendary push-in (`legendaryPushIn.ts`): a factor on the fitted scale, 1 at rest. */
+    push?: number;
+    /** Its scale damping while it moves, or null for the board's own. */
+    pushDamping?: number | null;
     reduceMotion: boolean;
     shake?: BoardShakeSample;
 }): TileBoardViewportMotionState => ({
     instant: reduceMotion,
     shake: reduceMotion ? BOARD_SHAKE_AT_REST : shake,
     panDamping: interactionSuppressed ? BOARD_VIEWPORT_ACTIVE_DAMPING : BOARD_VIEWPORT_IDLE_DAMPING,
-    scaleDamping: interactionSuppressed ? BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING : BOARD_VIEWPORT_IDLE_SCALE_DAMPING,
+    scaleDamping: interactionSuppressed ? BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING : (pushDamping ?? BOARD_VIEWPORT_IDLE_SCALE_DAMPING),
     targetPanX: boardViewport.panX,
     targetPanY: boardViewport.panY,
-    targetScale: boardViewport.fitZoom * boardViewport.zoom
+    targetScale: boardViewport.fitZoom * boardViewport.zoom * (reduceMotion ? 1 : push)
 });
 
 export const computeInitialTileBoardViewportMotionState = ({

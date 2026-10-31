@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3408,
-    "codeFileCount": 1322,
-    "exportedSymbolCount": 4365,
+    "trackedFileCount": 3412,
+    "codeFileCount": 1326,
+    "exportedSymbolCount": 4386,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12237
+    "relationshipCount": 12274
   },
   "inventory": [
     {
@@ -717,8 +717,8 @@
     {
       "path": "docs/gameplay/combo-feedback-reference.md",
       "category": "documentation",
-      "bytes": 26200,
-      "sha256": "7cc517e7e346acdb8713d8e4462f62d1b6c3725e588a142b05fdcd71765afb13"
+      "bytes": 28079,
+      "sha256": "691ecc3f1998cd956f73ea84e656b9501f59b130d0693f14ee06cc8ea6a91cfe"
     },
     {
       "path": "docs/gameplay/element-agency-review.md",
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "9d34d6ae47524929c65e3c2c619c42ded5846a838c688397316c8ff84725d9fd"
+      "sha256": "b2efa9ca40b10294e40f875634cd56c26432fd8fe51ca38a26a9ab2bd0197fd3"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11179,6 +11179,18 @@
       "sha256": "821b27a930c24c4f7ec5e73f45075b19e3e1678ead4f8852b536488d193ba427"
     },
     {
+      "path": "src/renderer/components/flipFlameTrail.test.ts",
+      "category": "test",
+      "bytes": 1710,
+      "sha256": "f6256e2d1ccb7f9281d21985ca9bb07f9eda056ade9019b6febb2e5795d202de"
+    },
+    {
+      "path": "src/renderer/components/flipFlameTrail.ts",
+      "category": "source",
+      "bytes": 2718,
+      "sha256": "a9e9c1b92128bfa0d6d6c4a9f74df4158625a4c5c3858db8179e33188fa44838"
+    },
+    {
       "path": "src/renderer/components/FloorClearBeat.module.css",
       "category": "source",
       "bytes": 3932,
@@ -11253,8 +11265,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 26981,
-      "sha256": "e94ef8e3e3368b815aeafb537618afb75b5e523964ddcf250ef7a02bab8b9f67"
+      "bytes": 27192,
+      "sha256": "74015c34abca81a5af6c29fc530b0b66f3f8bafba0a184d11e3b330c19a73c6b"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -11483,6 +11495,18 @@
       "category": "source",
       "bytes": 3602,
       "sha256": "ee9ef315aacd7e3af0a35ced05f6dd6328651e7764cba91b52243adb296bb4fa"
+    },
+    {
+      "path": "src/renderer/components/legendaryPushIn.test.ts",
+      "category": "test",
+      "bytes": 1756,
+      "sha256": "f4c0c1045f1ca5c25e7aa53f51cc031a8517cfafead6092439ef371dee890dcb"
+    },
+    {
+      "path": "src/renderer/components/legendaryPushIn.ts",
+      "category": "source",
+      "bytes": 2537,
+      "sha256": "a2d09920713438d11accda0d29c02e761aa2ee70e8c200cbd23a01649839b5af"
     },
     {
       "path": "src/renderer/components/MainMenu.module.css",
@@ -11877,20 +11901,20 @@
     {
       "path": "src/renderer/components/RunEndCinematic.module.css",
       "category": "source",
-      "bytes": 11764,
-      "sha256": "8b8b45cd5fcab08a5eb840f6657fd28a740ecdaa2be67ccad425993cde0ef52d"
+      "bytes": 12676,
+      "sha256": "ebda17d90a65a539588564f8c3fdb98b56429b9c15c2721d3d43b504e648baae"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
       "category": "test",
-      "bytes": 3828,
-      "sha256": "45b4f8965f63f610579b5ca8c82e13b2ae3d8ddf940a09b8e71d6992b0bdb457"
+      "bytes": 6613,
+      "sha256": "f6f68c28fcbb10f11ffc25bf86fd3a0940244230953a3238834f5b20e1f9de40"
     },
     {
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "category": "source",
-      "bytes": 6314,
-      "sha256": "c985c233028c4d6ff6c54fc7c8768357db50b38a54f2cf5e87feed7bcf2a2429"
+      "bytes": 9120,
+      "sha256": "e1df28e79cf0b840dcdeea0d571a2d3e6c74a0e2703ae4e6a4c9211d3c9408a0"
     },
     {
       "path": "src/renderer/components/RunEndStamp.module.css",
@@ -12645,8 +12669,8 @@
     {
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "category": "source",
-      "bytes": 30576,
-      "sha256": "b44bc209f0a12ddfa12cbb396106863a2f01b3860c2c2d9a097f30f199e9302b"
+      "bytes": 31965,
+      "sha256": "c055adfdd183071e8cae45f4729627483a18cf2977c42f1bf469e8b86038bbd9"
     },
     {
       "path": "src/renderer/components/tileBoardPick.test.ts",
@@ -12795,8 +12819,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 35370,
-      "sha256": "e41b0df2af42c5da6f9f6f4c65a106f482f2a84ce85814b269a52714aef5419b"
+      "bytes": 36377,
+      "sha256": "de85be4fceaef38f1b682d778aae30e1f5ff34278dcaf05f16079e9536558bfa"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -12813,8 +12837,8 @@
     {
       "path": "src/renderer/components/tileBoardSceneFrame.ts",
       "category": "source",
-      "bytes": 3847,
-      "sha256": "0fc2f466f0f00b81d1a5f0d33584807826673e34d65d8eee0e7b44046d51ad4a"
+      "bytes": 4053,
+      "sha256": "0e17622f9b5c7918e537002153f3fe952be27335e7297498054365a21c64b2ea"
     },
     {
       "path": "src/renderer/components/tileBoardSceneLighting.test.ts",
@@ -12975,8 +12999,8 @@
     {
       "path": "src/renderer/components/tileBoardViewportMotionState.ts",
       "category": "source",
-      "bytes": 4391,
-      "sha256": "dde76f0f0e9642ac544ffecaf3857fa731b493af8d1484625467554df9db7445"
+      "bytes": 4698,
+      "sha256": "bd4622e7fe8478b04e0f170a7472b3b389c5eb068a829c62177fe4aa7dbdcfaa"
     },
     {
       "path": "src/renderer/components/tileBoardVisualTiers.test.ts",
@@ -13557,8 +13581,8 @@
     {
       "path": "src/renderer/copy/runEndStamp.ts",
       "category": "source",
-      "bytes": 2575,
-      "sha256": "56895806c92d35eb17a0453f04f4c780c262e433fac19a1b99874e59bda3da64"
+      "bytes": 4218,
+      "sha256": "bcc2442f323f0527736ab3740469f63de143cfe9415029d3ee24bb7f6d93c28e"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -24604,6 +24628,41 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/flipFlameTrail.test.ts",
+      "path": "src/renderer/components/flipFlameTrail.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 37,
+      "imports": [
+        "file:src/renderer/components/flipFlameTrail.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/flipFlameTrail.ts",
+      "path": "src/renderer/components/flipFlameTrail.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 59,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
+        "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_CEILING",
+        "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_SPAN",
+        "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameCount",
+        "symbol:src/renderer/components/flipFlameTrail.ts#FlipFlameEmber",
+        "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameTrail"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/flipFlameTrail.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "path": "src/renderer/components/FloorClearBeat.test.tsx",
       "layer": "renderer",
@@ -24741,8 +24800,9 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 513,
+      "lineCount": 515,
       "imports": [
+        "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
         "file:src/renderer/components/GlobalRecord.tsx",
@@ -25560,6 +25620,43 @@
         "symbol:src/renderer/components/LayerEdges.tsx#LayerEdges"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/legendaryPushIn.test.ts",
+      "path": "src/renderer/components/legendaryPushIn.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 35,
+      "imports": [
+        "file:src/renderer/components/legendaryPushIn.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/legendaryPushIn.ts",
+      "path": "src/renderer/components/legendaryPushIn.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 43,
+      "imports": [
+        "file:src/shared/combo-heat-rules.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/legendaryPushIn.ts#isLegendaryBreak",
+        "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_BASE",
+        "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_CEILING",
+        "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_DAMPING",
+        "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_HOLD_SECONDS",
+        "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_SETTLE_SECONDS",
+        "symbol:src/renderer/components/legendaryPushIn.ts#pushInDamping",
+        "symbol:src/renderer/components/legendaryPushIn.ts#pushInDepth",
+        "symbol:src/renderer/components/legendaryPushIn.ts#pushInTarget"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/legendaryPushIn.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/MainMenu.test.tsx",
@@ -26607,10 +26704,12 @@
       "path": "src/renderer/components/RunEndCinematic.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 62,
+      "lineCount": 101,
       "imports": [
         "file:src/renderer/components/RunEndCinematic.tsx",
-        "file:src/renderer/components/RunEndStamp.tsx"
+        "file:src/renderer/components/RunEndStamp.tsx",
+        "file:src/renderer/copy/runEndStamp.ts",
+        "file:src/shared/combo-heat-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -26620,7 +26719,7 @@
       "path": "src/renderer/components/RunEndCinematic.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 120,
+      "lineCount": 161,
       "imports": [
         "file:src/renderer/components/RunEndStamp.tsx",
         "file:src/renderer/copy/runEndStamp.ts",
@@ -26629,6 +26728,8 @@
       ],
       "exports": [
         "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_HOLD_MS",
+        "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_STEP_MS",
         "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
         "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
         "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
@@ -28877,7 +28978,7 @@
       "path": "src/renderer/components/TileBoardParticles.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 426,
+      "lineCount": 445,
       "imports": [
         "file:src/renderer/components/boardGroupArcs.ts",
         "file:src/renderer/components/boardMatchImpact.ts",
@@ -28891,6 +28992,7 @@
         "file:src/renderer/components/cardShardSystem.ts",
         "file:src/renderer/components/elementCastParticles.ts",
         "file:src/renderer/components/elementReactionParticles.ts",
+        "file:src/renderer/components/flipFlameTrail.ts",
         "file:src/renderer/components/itemEffects.ts",
         "file:src/renderer/components/realmAmbience.ts",
         "file:src/renderer/components/realmParticles.ts",
@@ -29362,7 +29464,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 744,
+      "lineCount": 759,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -29375,6 +29477,7 @@
         "file:src/renderer/components/ElementCardBack.tsx",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/itemEffects.ts",
+        "file:src/renderer/components/legendaryPushIn.ts",
         "file:src/renderer/components/meteorImpactMotion.ts",
         "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/components/pairProximityBadges.ts",
@@ -29466,7 +29569,7 @@
       "path": "src/renderer/components/tileBoardSceneFrame.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 130,
+      "lineCount": 137,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -29914,7 +30017,7 @@
       "path": "src/renderer/components/tileBoardViewportMotionState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 125,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/tileBoardViewport.ts"
@@ -31554,20 +31657,25 @@
       "path": "src/renderer/copy/runEndStamp.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 56,
+      "lineCount": 87,
       "imports": [
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
         "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
         "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
         "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+        "symbol:src/renderer/copy/runEndStamp.ts#runEndComboLine",
+        "symbol:src/renderer/copy/runEndStamp.ts#runEndComboReplay",
+        "symbol:src/renderer/copy/runEndStamp.ts#RunEndComboStamp",
         "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
         "symbol:src/renderer/copy/runEndStamp.ts#runEndScoreLine",
         "symbol:src/renderer/copy/runEndStamp.ts#runEndVerdict"
       ],
       "testedBy": [
+        "file:src/renderer/components/RunEndCinematic.test.tsx",
         "file:src/renderer/components/RunEndStamp.test.tsx"
       ]
     },
@@ -36806,6 +36914,7 @@
       "testedBy": [
         "file:src/renderer/components/gameplaySceneFrame.test.ts",
         "file:src/renderer/components/realmRoomArt.test.ts",
+        "file:src/renderer/components/RunEndCinematic.test.tsx",
         "file:src/renderer/components/sceneMood.test.ts",
         "file:src/renderer/components/screenCallouts.test.ts",
         "file:src/shared/combo-heat-perks.test.ts",
@@ -51337,6 +51446,54 @@
       "endLine": 23
     },
     {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
+      "name": "FLIP_FLAME_BASE",
+      "kind": "value",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_CEILING",
+      "name": "FLIP_FLAME_CEILING",
+      "kind": "value",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_SPAN",
+      "name": "FLIP_FLAME_SPAN",
+      "kind": "value",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameCount",
+      "name": "flipFlameCount",
+      "kind": "value",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 30,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#FlipFlameEmber",
+      "name": "FlipFlameEmber",
+      "kind": "interface",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 20,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameTrail",
+      "name": "flipFlameTrail",
+      "kind": "value",
+      "file": "src/renderer/components/flipFlameTrail.ts",
+      "line": 41,
+      "endLine": 58
+    },
+    {
       "id": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -51397,8 +51554,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 512,
-      "endLine": 512
+      "line": 514,
+      "endLine": 514
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -52183,6 +52340,78 @@
       "file": "src/renderer/components/LayerEdges.tsx",
       "line": 21,
       "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#isLegendaryBreak",
+      "name": "isLegendaryBreak",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 19,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_BASE",
+      "name": "PUSH_IN_BASE",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_CEILING",
+      "name": "PUSH_IN_CEILING",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_DAMPING",
+      "name": "PUSH_IN_DAMPING",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 36,
+      "endLine": 36
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_HOLD_SECONDS",
+      "name": "PUSH_IN_HOLD_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_SETTLE_SECONDS",
+      "name": "PUSH_IN_SETTLE_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 38,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#pushInDamping",
+      "name": "pushInDamping",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 41,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#pushInDepth",
+      "name": "pushInDepth",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 23,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/legendaryPushIn.ts#pushInTarget",
+      "name": "pushInTarget",
+      "kind": "value",
+      "file": "src/renderer/components/legendaryPushIn.ts",
+      "line": 30,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/components/MainMenu.tsx#default",
@@ -53437,40 +53666,56 @@
       "name": "RUN_END_FLOURISH_MS",
       "kind": "value",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 23,
-      "endLine": 23
+      "line": 25,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_HOLD_MS",
+      "name": "RUN_END_REPLAY_HOLD_MS",
+      "kind": "value",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_STEP_MS",
+      "name": "RUN_END_REPLAY_STEP_MS",
+      "kind": "value",
+      "file": "src/renderer/components/RunEndCinematic.tsx",
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_VERDICT_MS",
       "name": "RUN_END_VERDICT_MS",
       "kind": "value",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 22,
-      "endLine": 22
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematic",
       "name": "RunEndCinematic",
       "kind": "function",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 35,
-      "endLine": 119
+      "line": 43,
+      "endLine": 160
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicPhase",
       "name": "RunEndCinematicPhase",
       "kind": "type",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 20,
-      "endLine": 20
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/RunEndCinematic.tsx#RunEndCinematicProps",
       "name": "RunEndCinematicProps",
       "kind": "interface",
       "file": "src/renderer/components/RunEndCinematic.tsx",
-      "line": 25,
-      "endLine": 33
+      "line": 31,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/components/RunEndStamp.tsx#RunEndStamp",
@@ -56149,8 +56394,8 @@
       "name": "TileBoardParticles",
       "kind": "value",
       "file": "src/renderer/components/TileBoardParticles.tsx",
-      "line": 36,
-      "endLine": 425
+      "line": 37,
+      "endLine": 444
     },
     {
       "id": "symbol:src/renderer/components/tileBoardPick.ts#isTilePickable",
@@ -56773,24 +57018,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 743,
-      "endLine": 743
+      "line": 758,
+      "endLine": 758
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 179,
-      "endLine": 179
+      "line": 180,
+      "endLine": 180
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 96,
-      "endLine": 96
+      "line": 97,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -56806,7 +57051,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardSceneFrame.ts",
       "line": 30,
-      "endLine": 129
+      "endLine": 136
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneLighting.ts#getTileBoardSceneLightProps",
@@ -57253,16 +57498,16 @@
       "name": "applyInitialTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 77,
-      "endLine": 88
+      "line": 83,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#applyTileBoardViewportMotionState",
       "name": "applyTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 90,
-      "endLine": 118
+      "line": 96,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#BOARD_VIEWPORT_ACTIVE_DAMPING",
@@ -57301,8 +57546,8 @@
       "name": "computeInitialTileBoardViewportMotionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
-      "line": 67,
-      "endLine": 75
+      "line": 73,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#computeTileBoardViewportMotionState",
@@ -57310,7 +57555,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardViewportMotionState.ts",
       "line": 47,
-      "endLine": 65
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/tileBoardViewportMotionState.ts#TileBoardPanState",
@@ -59409,12 +59654,20 @@
       "endLine": 124
     },
     {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
+      "name": "RUN_END_REPLAY_MAX_STAMPS",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 60,
+      "endLine": 60
+    },
+    {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
       "name": "RUN_END_STAMP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runEndStamp.ts",
-      "line": 48,
-      "endLine": 55
+      "line": 79,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT",
@@ -59431,6 +59684,30 @@
       "file": "src/renderer/copy/runEndStamp.ts",
       "line": 24,
       "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndComboLine",
+      "name": "runEndComboLine",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 77,
+      "endLine": 77
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndComboReplay",
+      "name": "runEndComboReplay",
+      "kind": "value",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 62,
+      "endLine": 74
+    },
+    {
+      "id": "symbol:src/renderer/copy/runEndStamp.ts#RunEndComboStamp",
+      "name": "RunEndComboStamp",
+      "kind": "interface",
+      "file": "src/renderer/copy/runEndStamp.ts",
+      "line": 54,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#runEndFlourish",
@@ -82638,7 +82915,7 @@
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
-          "line": 29
+          "line": 30
         }
       ],
       "tests": [
@@ -85676,7 +85953,7 @@
         },
         {
           "path": "src/renderer/components/GameOverScreen.tsx",
-          "line": 33
+          "line": 34
         }
       ],
       "tests": [
@@ -92504,6 +92781,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_CEILING",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_CEILING",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_SPAN",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_SPAN",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#flipFlameCount",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FlipFlameEmber",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#FlipFlameEmber",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#flipFlameTrail",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "symbol:src/renderer/components/flipFlameTrail.ts#flipFlameTrail",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/FloorClearBeat.tsx->symbol:src/renderer/components/FloorClearBeat.tsx#default",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "symbol:src/renderer/components/FloorClearBeat.tsx#default",
@@ -93137,6 +93450,60 @@
       "id": "exports:src/renderer/components/LayerEdges.tsx->symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
       "source": "file:src/renderer/components/LayerEdges.tsx",
       "target": "symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#isLegendaryBreak",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#isLegendaryBreak",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_BASE",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_BASE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_CEILING",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_CEILING",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_DAMPING",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_DAMPING",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_HOLD_SECONDS",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_HOLD_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_SETTLE_SECONDS",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#PUSH_IN_SETTLE_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#pushInDamping",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#pushInDamping",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#pushInDepth",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#pushInDepth",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/legendaryPushIn.ts->symbol:src/renderer/components/legendaryPushIn.ts#pushInTarget",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "symbol:src/renderer/components/legendaryPushIn.ts#pushInTarget",
       "kind": "exports"
     },
     {
@@ -94079,6 +94446,18 @@
       "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
       "source": "file:src/renderer/components/RunEndCinematic.tsx",
       "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_FLOURISH_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_HOLD_MS",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_HOLD_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunEndCinematic.tsx->symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_STEP_MS",
+      "source": "file:src/renderer/components/RunEndCinematic.tsx",
+      "target": "symbol:src/renderer/components/RunEndCinematic.tsx#RUN_END_REPLAY_STEP_MS",
       "kind": "exports"
     },
     {
@@ -98558,6 +98937,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
       "source": "file:src/renderer/copy/runEndStamp.ts",
       "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_STAMP_COPY",
@@ -98573,6 +98958,24 @@
       "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
       "source": "file:src/renderer/copy/runEndStamp.ts",
       "target": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_VERDICT_UNKNOWN",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#runEndComboLine",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#runEndComboLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#runEndComboReplay",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#runEndComboReplay",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runEndStamp.ts->symbol:src/renderer/copy/runEndStamp.ts#RunEndComboStamp",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "symbol:src/renderer/copy/runEndStamp.ts#RunEndComboStamp",
       "kind": "exports"
     },
     {
@@ -121408,6 +121811,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/flipFlameTrail.test.ts->src/renderer/components/flipFlameTrail.ts",
+      "source": "file:src/renderer/components/flipFlameTrail.test.ts",
+      "target": "file:src/renderer/components/flipFlameTrail.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/flipFlameTrail.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/flipFlameTrail.ts->src/shared/rng.ts",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/flipFlameTrail.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/FloorClearBeat.test.tsx->src/renderer/components/FloorClearBeat.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.test.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.tsx",
@@ -121573,6 +122000,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/audio/gameSfx.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/audio/gameSfx.ts",
       "kind": "imports"
     },
     {
@@ -123370,6 +123803,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/legendaryPushIn.test.ts->src/renderer/components/legendaryPushIn.ts",
+      "source": "file:src/renderer/components/legendaryPushIn.test.ts",
+      "target": "file:src/renderer/components/legendaryPushIn.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/legendaryPushIn.ts->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "file:src/shared/combo-heat-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/legendaryPushIn.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MainMenu.test.tsx->src/renderer/components/MainMenu.tsx",
       "source": "file:src/renderer/components/MainMenu.test.tsx",
       "target": "file:src/renderer/components/MainMenu.tsx",
@@ -124453,6 +124904,18 @@
       "id": "imports:src/renderer/components/RunEndCinematic.test.tsx->src/renderer/components/RunEndStamp.tsx",
       "source": "file:src/renderer/components/RunEndCinematic.test.tsx",
       "target": "file:src/renderer/components/RunEndStamp.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.test.tsx->src/renderer/copy/runEndStamp.ts",
+      "source": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "target": "file:src/renderer/copy/runEndStamp.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunEndCinematic.test.tsx->src/shared/combo-heat-rules.ts",
+      "source": "file:src/renderer/components/RunEndCinematic.test.tsx",
+      "target": "file:src/shared/combo-heat-rules.ts",
       "kind": "imports"
     },
     {
@@ -127216,6 +127679,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/flipFlameTrail.ts",
+      "source": "file:src/renderer/components/TileBoardParticles.tsx",
+      "target": "file:src/renderer/components/flipFlameTrail.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBoardParticles.tsx->src/renderer/components/itemEffects.ts",
       "source": "file:src/renderer/components/TileBoardParticles.tsx",
       "target": "file:src/renderer/components/itemEffects.ts",
@@ -127783,6 +128252,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/itemEffects.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/itemEffects.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/legendaryPushIn.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/legendaryPushIn.ts",
       "kind": "imports"
     },
     {
@@ -150621,6 +151096,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/flipFlameTrail.ts->file:src/renderer/components/flipFlameTrail.test.ts",
+      "source": "file:src/renderer/components/flipFlameTrail.ts",
+      "target": "file:src/renderer/components/flipFlameTrail.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/FloorClearBeat.tsx->file:src/renderer/components/FloorClearBeat.test.tsx",
       "source": "file:src/renderer/components/FloorClearBeat.tsx",
       "target": "file:src/renderer/components/FloorClearBeat.test.tsx",
@@ -150816,6 +151297,12 @@
       "id": "tested_by:src/renderer/components/itemEffects.ts->file:src/renderer/components/meteorImpactMotion.test.ts",
       "source": "file:src/renderer/components/itemEffects.ts",
       "target": "file:src/renderer/components/meteorImpactMotion.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/legendaryPushIn.ts->file:src/renderer/components/legendaryPushIn.test.ts",
+      "source": "file:src/renderer/components/legendaryPushIn.ts",
+      "target": "file:src/renderer/components/legendaryPushIn.test.ts",
       "kind": "tested_by"
     },
     {
@@ -151968,6 +152455,12 @@
       "id": "tested_by:src/renderer/copy/realmCopy.ts->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/renderer/copy/realmCopy.ts",
       "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/runEndStamp.ts->file:src/renderer/components/RunEndCinematic.test.tsx",
+      "source": "file:src/renderer/copy/runEndStamp.ts",
+      "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -153498,6 +153991,12 @@
       "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/realmRoomArt.test.ts",
       "source": "file:src/shared/combo-heat-rules.ts",
       "target": "file:src/renderer/components/realmRoomArt.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/combo-heat-rules.ts->file:src/renderer/components/RunEndCinematic.test.tsx",
+      "source": "file:src/shared/combo-heat-rules.ts",
+      "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
       "kind": "tested_by"
     },
     {

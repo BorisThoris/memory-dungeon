@@ -166,6 +166,45 @@
     animation: runEndRise 800ms ease-out 1200ms both;
 }
 
+/* The best combo, replayed: each stamp it earned slammed again in the stage's colour, quicker than the verdict. */
+.replay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.replayKicker {
+    font-family: var(--margin-heading-font, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.2rem, 3vi, 2rem);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--margin-gold, #e1ad66);
+    font-variant-numeric: lining-nums tabular-nums;
+}
+
+.replay .verdict {
+    --stamp: var(--replay-color, var(--temper-hot));
+    animation-duration: 300ms;
+}
+
+.replayTrail {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.replayTrail li {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--replay-color);
+    box-shadow: 0 0 12px var(--replay-color);
+}
+
 /* The verdict held small above the choices, with the score and how it ended. */
 .held {
     margin: 0 0 0.4rem;

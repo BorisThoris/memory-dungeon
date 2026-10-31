@@ -9,6 +9,7 @@ import { getSteamStorePageUrl } from '../steamStorePage';
 import type { MutatorId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
+import { playComboStageSfx, sfxGainFromSettings } from '../audio/gameSfx';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { achievementsNote, gameOverScreenCopy, runEndReasonLine, wardenEndLine, descentEndLine, descentFirstsLine } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
@@ -253,6 +254,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     ]}
                     personalBest={personalBest}
                     reason={summary.runEndReason}
+                    onReplayStamp={(stage) => playComboStageSfx(sfxGainFromSettings(settings.masterVolume, settings.sfxVolume), stage)}
                     reduceMotion={settings.reduceMotion}
                     runSeed={run.runSeed}
                     summary={summary}

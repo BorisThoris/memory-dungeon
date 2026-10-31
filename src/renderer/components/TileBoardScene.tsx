@@ -62,6 +62,7 @@ import {
     TRAUMA_STAGE_UP
 } from './boardTrauma';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
+import { isLegendaryBreak, pushInDamping, pushInTarget } from './legendaryPushIn';
 import { setBoardRuneFieldPalette } from './boardRuneFieldMaterial';
 import {
     applyInitialTileBoardViewportMotionState,
@@ -381,6 +382,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
      * in the frame below, where the clock this game slows and holds on a Fever break already lives.
      */
     const boardTraumaReading = useMemo(() => readBoardTrauma(board, runStatus), [board, runStatus]);
+    // The big shot (`legendaryPushIn.ts`): a break at Legendary pushes the camera in and lets it settle.
+    const pushRemovedRef = useRef<number | null>(null);
+    const pushStartRef = useRef<number | null>(null);
+    const pushCountRef = useRef(0);
     const boardTraumaRef = useRef(0);
     const boardTraumaMemoryRef = useRef<BoardTraumaMemory>(BOARD_TRAUMA_AT_START);
     /*
@@ -646,6 +651,14 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         const perfOn = boardWebglPerfSampleEnabled() || boardWebglPerfSampleVerboseEnabled();
         const pulse = traumaPulseRef.current;
         traumaPulseRef.current = 0;
+        const removedNow = boardTraumaReading.removedCount;
+        if (pushRemovedRef.current !== null && isLegendaryBreak(pushRemovedRef.current, removedNow, combo) && !reduceMotion) {
+            pushStartRef.current = visualTime.current;
+            pushCountRef.current += 1;
+            gl.domElement.setAttribute('data-board-push-ins', String(pushCountRef.current));
+        }
+        pushRemovedRef.current = removedNow;
+        const pushSeconds = pushStartRef.current === null ? null : visualTime.current - pushStartRef.current;
         const advancedTrauma = advanceBoardTrauma({
             delta,
             heat: comboHeatNow.heat,
@@ -671,6 +684,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             now: () => performance.now(),
             pan: boardPanRef.current,
             perfOn,
+            push: pushInTarget(pushSeconds, combo, reduceMotion),
+            pushDamping: pushInDamping(pushSeconds, reduceMotion),
             reduceMotion,
             shake: sampleTraumaShake({ seconds: state.clock.elapsedTime, trauma: boardTraumaRef.current }),
             runeFieldUniforms: (boardRuneFieldMatRef.current?.uniforms as TileBoardRuneFieldUniformTarget | undefined) ?? null,

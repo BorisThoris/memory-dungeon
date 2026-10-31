@@ -22,10 +22,11 @@ import { createCardDepartureWorld } from './cardDepartureWorld';
 import type { DepartureSource } from './cardDepartureGrouping';
 import { emitRoomSpill } from './roomSpill';
 import { Vector3 } from 'three';
-import { CARD_PLANE_HEIGHT } from './tileShatter';
+import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { collectElementReactionParticles } from './elementReactionParticles';
 import { useDevOptions } from '../dev/useDevOptions';
 import { comboHeatLevels, heatThemeById, type ComboHeatThemeId } from '../../shared/combo-heat-rules';
+import { flipFlameTrail } from './flipFlameTrail';
 import { useRealmAmbience, useRealmEventPulse, useRealmSwayLean } from './realmAmbience';
 import { ELEMENT_MOTE_SIZE, REALM_AMBIENT_MOTE, realmEventMote, REALM_MOTE_SIZE, elementCardMote, elementMoteCards, realmMoteInterval, realmStatusMotes, ELEMENT_CARD_MOTE, type RealmMote } from './realmParticles';
 
@@ -90,6 +91,7 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
     const reactionBursts = useRef(0);
     const departureBursts = useRef(0);
     const unmaskBursts = useRef(0);
+    const flipFlames = useRef(0);
     useEffect(() => () => system.dispose(), [system]);
     useEffect(() => () => shards.dispose(), [shards]);
     useEffect(() => () => departureWorld.dispose(), [departureWorld]);
@@ -159,6 +161,23 @@ export const TileBoardParticles = ({ board, compact, graphicsQuality, reduceMoti
                 tint: cue.kind === 'match' ? cardDepartureSparkTint(tile.suit) : undefined
             });
             if (emitted > 0) totals.current[cue.kind] += 1;
+            // From Blazing, the card a player turns trails flame across its face (`flipFlameTrail.ts`).
+            if (cue.kind === 'flip' && !reduceMotion) {
+                const palette = themeOf(comboTheme);
+                const stage = comboHeatLevels(combo).stageIndex;
+                let lit = 0;
+                for (const ember of flipFlameTrail(combo, hashStringToSeed(`${tile.id}:flame:${occurrence}`), CARD_PLANE_WIDTH / 2)) {
+                    lit += system.emit({ kind: 'ember', x: (anchor?.x ?? transform.baseX + transform.layoutJitterX) + ember.dx,
+                        y: (anchor?.y ?? transform.baseY + transform.layoutJitterY) + ember.dy, z: (anchor?.z ?? 0.04) + 0.05,
+                        time: time.current, delay: cue.delay + ember.delay, seed: hashStringToSeed(`${tile.id}:flame:${occurrence}:${ember.delay}`),
+                        reduceMotion, quality: graphicsQuality, energy: 1, tint: palette.colors[stage], emberMode: palette.emberMode,
+                        sizeScale: ember.sizeScale, priority: 'event' });
+                }
+                if (lit > 0) {
+                    flipFlames.current += 1;
+                    gl.domElement.setAttribute('data-particle-flip-flames', String(flipFlames.current));
+                }
+            }
             // ...and as it leaves, it breaks: its pieces thrown off to fall and bounce on the floor under the board.
             if (cue.kind !== 'flip' && !reduceMotion) {
                 const sourceKey = `${departureInstance}:${tile.id}:${occurrence}:${time.current.toFixed(3)}`;

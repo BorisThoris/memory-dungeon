@@ -41,6 +41,8 @@ export const runTileBoardSceneFrame = ({
     now,
     pan,
     perfOn,
+    push,
+    pushDamping,
     reduceMotion,
     runeFieldUniforms,
     sceneRenderQuality,
@@ -61,6 +63,9 @@ export const runTileBoardSceneFrame = ({
     /** The damped pan, owned by the caller so the shake can sit on top of it without feeding back. */
     pan?: TileBoardPanState;
     perfOn: boolean;
+    /** The Legendary push-in's scale factor and damping (`legendaryPushIn.ts`). */
+    push?: number;
+    pushDamping?: number | null;
     reduceMotion: boolean;
     runeFieldUniforms: TileBoardRuneFieldUniformTarget | null;
     sceneRenderQuality: GameplayRenderQualityProfile;
@@ -95,6 +100,8 @@ export const runTileBoardSceneFrame = ({
         const viewportMotion = computeTileBoardViewportMotionState({
             boardViewport,
             interactionSuppressed,
+            push,
+            pushDamping,
             reduceMotion,
             shake
         });

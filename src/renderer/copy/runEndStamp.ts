@@ -1,5 +1,5 @@
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
-import { COMBO_HEAT_STAGE_FROM } from '../../shared/combo-heat-rules';
+import { COMBO_HEAT_STAGE_FROM, comboAscension, comboAscensionCallout, comboHeatStageIndex, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 
 /**
  * The run's end as a stamp (`RunEndStamp.tsx`): the verdict word slammed over the results, in the
@@ -44,6 +44,37 @@ export const runEndFlourish = (
     if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.blazing) return { text: 'BLAZING RUN', tone: 'blazing' };
     return null;
 };
+
+/**
+ * The best combo, replayed (combo reference, "Next on the ladder"): the stamps the run's best combo
+ * earned on the way up, flicked through again in the run's own words, then its number. Only a combo
+ * that earned a stamp gets one (Hot and up). A combo that ascended many times shows its first
+ * ascensions and its last, so the replay stays a beat and not a list.
+ */
+export interface RunEndComboStamp {
+    text: string;
+    /** The stage colour index (`ComboHeatTheme.colors`), cold 0 through legendary 5. */
+    stage: number;
+}
+
+export const RUN_END_REPLAY_MAX_STAMPS = 6;
+
+export const runEndComboReplay = (bestStreak: number, temper: Pick<ComboHeatTheme, 'callouts'>): RunEndComboStamp[] => {
+    const stamps: RunEndComboStamp[] = [];
+    for (const stage of ['hot', 'blazing', 'inferno', 'legendary'] as const) {
+        if (bestStreak >= COMBO_HEAT_STAGE_FROM[stage]) stamps.push({ text: temper.callouts[stage], stage: comboHeatStageIndex(stage) });
+    }
+    const ascensions: RunEndComboStamp[] = [];
+    for (let ascension = 2; ascension <= comboAscension(bestStreak); ascension += 1) {
+        ascensions.push({ text: comboAscensionCallout(temper.callouts.legendary, ascension), stage: 5 });
+    }
+    const room = RUN_END_REPLAY_MAX_STAMPS - stamps.length;
+    if (ascensions.length <= room) return [...stamps, ...ascensions];
+    return [...stamps, ...ascensions.slice(0, room - 1), ascensions.at(-1)!];
+};
+
+/** The line the replay lands on. */
+export const runEndComboLine = (bestStreak: number): string => `Best combo ×${bestStreak}`;
 
 export const RUN_END_STAMP_COPY = {
     kicker: 'Expedition over',

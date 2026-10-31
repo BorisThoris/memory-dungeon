@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
 import { comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
-import { RUN_END_STAMP_COPY, runEndFlourish, runEndScoreLine, runEndVerdict } from '../copy/runEndStamp';
+import { RUN_END_STAMP_COPY, runEndComboLine, runEndComboReplay, runEndFlourish, runEndScoreLine, runEndVerdict } from '../copy/runEndStamp';
 import type { RunEndStampAction } from './RunEndStamp';
 import styles from './RunEndCinematic.module.css';
 
@@ -13,14 +13,20 @@ import styles from './RunEndCinematic.module.css';
  * run) gets its own beat between the two. Nothing else is on the screen until the player
  * chooses; the ledger of numbers is one of the choices.
  *
- * Phases: `verdict` -> (`flourish`) -> `choices`. A press or a key during the first two skips
+ * Phases: `verdict` -> (`replay`) -> (`flourish`) -> `choices`. The replay flicks the best combo's
+ * stamps through again (`runEndComboReplay`) when it earned any; it names the heat itself, so after
+ * it only a new record still gets a flourish. A press or a key during the first two skips
  * to the choices, so nobody waits on a cut-scene twice. Reduced motion opens on the choices
  * with the verdict held small above them.
  */
-export type RunEndCinematicPhase = 'verdict' | 'flourish' | 'choices';
+export type RunEndCinematicPhase = 'verdict' | 'replay' | 'flourish' | 'choices';
 
 export const RUN_END_VERDICT_MS = 2300;
 export const RUN_END_FLOURISH_MS = 1400;
+/** Each of the best combo's stamps, replayed. */
+export const RUN_END_REPLAY_STEP_MS = 300;
+/** The replay's last stamp is held this long with the combo's number. */
+export const RUN_END_REPLAY_HOLD_MS = 900;
 
 export interface RunEndCinematicProps {
     comparison?: string | null;
@@ -30,19 +36,35 @@ export interface RunEndCinematicProps {
     personalBest: 'beaten' | 'matched' | null;
     actions: readonly RunEndStampAction[];
     reduceMotion: boolean;
+    /** Each replayed stamp as it lands, with its stage (cold 0 through legendary 5): where its sting plays. */
+    onReplayStamp?: (stage: number) => void;
 }
 
-export function RunEndCinematic({ summary, reason, runSeed, personalBest, actions, reduceMotion, comparison }: RunEndCinematicProps) {
+export function RunEndCinematic({ summary, reason, runSeed, personalBest, actions, reduceMotion, comparison, onReplayStamp }: RunEndCinematicProps) {
     const temper = comboHeatThemeForSeed(runSeed);
     const verdict = runEndVerdict(reason);
-    const flourish = runEndFlourish(summary, personalBest);
+    const replay = runEndComboReplay(summary.bestStreak, temper);
+    const heatFlourish = runEndFlourish(summary, personalBest);
+    const flourish = replay.length > 0 && heatFlourish?.tone !== 'gold' ? null : heatFlourish;
     const [phase, setPhase] = useState<RunEndCinematicPhase>(reduceMotion ? 'choices' : 'verdict');
+    const [replayStep, setReplayStep] = useState(0);
     useEffect(() => {
         if (phase === 'choices') return undefined;
-        const next: RunEndCinematicPhase = phase === 'verdict' && flourish ? 'flourish' : 'choices';
-        const timer = window.setTimeout(() => setPhase(next), phase === 'verdict' ? RUN_END_VERDICT_MS : RUN_END_FLOURISH_MS);
+        if (phase === 'replay' && replayStep < replay.length - 1) {
+            const step = window.setTimeout(() => setReplayStep((index) => index + 1), RUN_END_REPLAY_STEP_MS);
+            return () => window.clearTimeout(step);
+        }
+        const afterReplay: RunEndCinematicPhase = flourish ? 'flourish' : 'choices';
+        const next: RunEndCinematicPhase = phase === 'verdict' ? (replay.length > 0 ? 'replay' : afterReplay) : phase === 'replay' ? afterReplay : 'choices';
+        const wait = phase === 'verdict' ? RUN_END_VERDICT_MS : phase === 'replay' ? RUN_END_REPLAY_HOLD_MS : RUN_END_FLOURISH_MS;
+        const timer = window.setTimeout(() => setPhase(next), wait);
         return () => window.clearTimeout(timer);
-    }, [phase, flourish]);
+    }, [phase, flourish, replay.length, replayStep]);
+    const replayStamp = replay[Math.min(replayStep, replay.length - 1)];
+    const replayStage = phase === 'replay' ? replayStamp?.stage ?? null : null;
+    useEffect(() => {
+        if (replayStage !== null) onReplayStamp?.(replayStage);
+    }, [replayStep, replayStage]); // eslint-disable-line react-hooks/exhaustive-deps -- one sting per stamp, not per new callback identity
     const skip = useCallback(() => setPhase('choices'), []);
     useEffect(() => {
         if (phase === 'choices') return undefined;
@@ -95,6 +117,25 @@ export function RunEndCinematic({ summary, reason, runSeed, personalBest, action
                         ))}
                     </div>
                 </>
+            ) : phase === 'replay' && replayStamp ? (
+                <div className={styles.replay} data-testid="run-end-cinematic-replay">
+                    <span className={styles.replayKicker}>{runEndComboLine(summary.bestStreak)}</span>
+                    <h1
+                        className={styles.verdict}
+                        data-replay-step={replayStep}
+                        key={`replay:${replayStep}`}
+                        style={{ '--replay-color': temper.colors[replayStamp.stage] } as CSSProperties}
+                    >
+                        <span className={styles.stampText} data-text={replayStamp.text}>
+                            {replayStamp.text}
+                        </span>
+                    </h1>
+                    <ol aria-hidden="true" className={styles.replayTrail}>
+                        {replay.slice(0, replayStep + 1).map((stamp, index) => (
+                            <li key={index} style={{ '--replay-color': temper.colors[stamp.stage] } as CSSProperties} />
+                        ))}
+                    </ol>
+                </div>
             ) : phase === 'flourish' && flourish ? (
                 <h1 className={styles.verdict} data-flourish-tone={flourish.tone} data-testid="run-end-cinematic-flourish" key="flourish">
                     <span className={styles.stampText} data-text={flourish.text}>
