@@ -13,7 +13,17 @@ deploy (`yarn deploy:pages`) updates what the app plays.
 | Closed testing  | track "Closed testing - Alpha" (`4699539823287937491`), tester list "Ringer 3D team"             |
 | Upload key      | `D:\agent-work\memory-dungeon\play-secrets\upload.jks` + `keystore.properties` (outside the repository; back it up) |
 | App signing     | Play App Signing; its SHA-256 and the upload key's are in `public/.well-known/assetlinks.json`   |
-| Privacy policy  | `public/privacy.html`, served at `/privacy.html`                                                  |
+| Privacy policy  | `public/privacy.html`, served at `https://memory-dungeon-git.pages.dev/privacy` (Pages drops the `.html`) |
+| Status          | Release 1 (1.0.0), the store listing and every declaration sent for review 2026-10-31; 178 countries; rated Everyone / 3+ with "Users Interact" |
+
+## Console automation
+
+The Play Console steps that set this up (create app, declarations, content rating, data safety, listing,
+track, submit) are Playwright step files in `D:\agent-work\memory-dungeon\2026-10-31-play\console\`, run
+headless on the signed-in launcher profile through `run-when-free.ps1`. Data safety is easiest through
+**Export to CSV**, editing the response column and **Import from CSV** (it asks twice before overwriting).
+The store graphics (icon, 1024x500 feature graphic, five 1080x1920 phone screenshots) are in
+`D:\agent-work\memory-dungeon\2026-10-31-play\store\upload\`.
 
 ## Build
 
