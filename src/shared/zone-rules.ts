@@ -1,3 +1,4 @@
+import { bankComboPot, comboCashInActive } from './combo-cash-in-rules';
 import { inSequenceOrder } from './match-rule-rules';
 import { dropMask, unmaskOnFlip } from './mask-rules';
 import type { RunState, Tile, ZoneResult, ZoneState } from './contracts';
@@ -79,9 +80,11 @@ export const zonePairsAvailable = (run: Pick<RunState, 'status' | 'board' | 'sta
 export const canIgniteZone = (run: Pick<RunState, 'status' | 'board' | 'stats' | 'zone' | 'holding'>): boolean => !run.holding && zonePairsAvailable(run) > 0;
 
 /** Open the Zone: the combo burns, time stops. Unchanged when it cannot open. */
-export const igniteZone = (run: RunState): RunState => {
-    const pairs = zonePairsAvailable(run);
-    if (pairs === 0) return run;
+export const igniteZone = (before: RunState): RunState => {
+    const pairs = zonePairsAvailable(before);
+    if (pairs === 0) return before;
+    // Ignite ends the combo by choice, so under cash-in it banks the pot first (`combo-cash-in-rules.ts`).
+    const run = comboCashInActive(before) ? bankComboPot(before) : before;
     const stats = normalizeSessionStats(run.stats);
     return {
         ...run,

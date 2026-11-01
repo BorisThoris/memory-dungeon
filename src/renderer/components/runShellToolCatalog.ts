@@ -26,6 +26,7 @@ export type RunShellToolId =
     | 'misers_purse'
     | 'still_bell'
     | 'ignite'
+    | 'cash_in'
     | 'hold'
     | 'carve'
     | 'reprise'
@@ -78,6 +79,8 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
     // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
     { conditional: true, id: 'ignite', label: 'Ignite', spends: null },
+    // Cash in (`combo-cash-in-rules.ts`, `?combo2=1` only): banks the combo's pot and ends the combo.
+    { conditional: true, id: 'cash_in', label: 'Bank', spends: null },
     // The Hold (`hold-rules.ts`): on the dock from floor 13; reads Release while held. Its meter is the chain.
     { conditional: true, id: 'hold', label: 'Hold', spends: null },
     // Carve (`carve-rules.ts`): on the dock from floor 25; it spends two links of the Hold's meter, not a charge.

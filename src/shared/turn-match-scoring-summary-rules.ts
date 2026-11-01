@@ -12,6 +12,8 @@ export const ENCORE_BONUS_SCORE = 18;
 
 export interface TurnMatchScoringSummaryResult {
     currentStreak: number;
+    /** The ladder multiplier the match was paid at (`combo-pay-rules.ts`), 1 before rules 106. */
+    comboMultiplier: number;
     encoreKey: string;
     cursedMatchedEarly: boolean;
     recallBonus: number;
@@ -71,6 +73,7 @@ export const resolveTurnMatchScoringSummary = ({
 
     return {
         currentStreak,
+        comboMultiplier,
         encoreKey,
         cursedMatchedEarly,
         recallBonus,

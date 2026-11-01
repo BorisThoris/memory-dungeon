@@ -6,6 +6,7 @@ import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { COMBO_HEAT_THEMES, comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
 import { comboPays, runComboMultiplier } from '../../shared/combo-pay-rules';
+import { comboCashInActive, comboPotHasValue, runComboPot } from '../../shared/combo-cash-in-rules';
 import { PlasmaRail } from './PlasmaRail';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
@@ -168,22 +169,26 @@ export const COMBO_LOST_MS = 1800;
  * is not felt, so when a combo of three or more breaks the HUD says what went - the links and the
  * multiplier they were paying - and lets it fall away. Timer-set like the drop.
  */
-const useComboLost = (chain: number, multiplier: number): { links: number; multiplier: number } | null => {
-    const [lost, setLost] = useState<{ links: number; multiplier: number } | null>(null);
-    const previousRef = useRef({ chain, multiplier });
+/*
+ * Under cash-in (`combo-cash-in-rules.ts`, `?combo2=1`) a cash-in also ends the combo, and that is a
+ * win, not a loss: it is skipped. A miss there takes the pot too, so the line says so.
+ */
+const useComboLost = (chain: number, multiplier: number, cashIns = 0, pot = 0): { links: number; multiplier: number; pot: number } | null => {
+    const [lost, setLost] = useState<{ links: number; multiplier: number; pot: number } | null>(null);
+    const previousRef = useRef({ chain, multiplier, cashIns, pot });
     useEffect(() => {
         const previous = previousRef.current;
-        previousRef.current = { chain, multiplier };
-        if (!(previous.chain >= 3 && chain < previous.chain)) {
+        previousRef.current = { chain, multiplier, cashIns, pot };
+        if (!(previous.chain >= 3 && chain < previous.chain) || cashIns > previous.cashIns) {
             return undefined;
         }
-        const start = window.setTimeout(() => setLost({ links: previous.chain, multiplier: previous.multiplier }), 0);
+        const start = window.setTimeout(() => setLost({ links: previous.chain, multiplier: previous.multiplier, pot: previous.pot }), 0);
         const end = window.setTimeout(() => setLost(null), COMBO_LOST_MS);
         return () => {
             window.clearTimeout(start);
             window.clearTimeout(end);
         };
-    }, [chain, multiplier]);
+    }, [chain, multiplier, cashIns, pot]);
     return lost;
 };
 
@@ -378,7 +383,10 @@ const RunShell = ({
     const matchMultiplier = paysMatch ? runComboMultiplier(run) : chainRungScoreMultiplier(tier);
     // One set of words for the stages on the HUD, whatever the temper: its colours are the run's, its words were noise.
     const stageWords = paysMatch ? COMBO_HEAT_THEMES[0]!.labels : temper.labels;
-    const comboLost = useComboLost(chain, matchMultiplier);
+    // Cash in (`combo-cash-in-rules.ts`, `?combo2=1` only): what the streak has paid into the pot, unbanked.
+    const cashIn = comboCashInActive(run);
+    const pot = runComboPot(run);
+    const comboLost = useComboLost(chain, matchMultiplier, runNonNegativeInteger(run.comboCashIns), pot.score);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -918,7 +926,12 @@ const RunShell = ({
                                         data-reduce-motion={reduceMotion ? 'true' : undefined}
                                         data-testid="hud-combo-lost"
                                     >
-                                        {RUN_SHELL_LABELS.comboLost(comboLost.links, comboLost.multiplier)}
+                                        {RUN_SHELL_LABELS.comboLost(comboLost.links, comboLost.multiplier, comboLost.pot)}
+                                    </span>
+                                ) : null}
+                                {cashIn && comboPotHasValue(pot) ? (
+                                    <span className={styles.comboPot} data-testid="hud-combo-pot" title={RUN_SHELL_LABELS.comboPotTitle}>
+                                        {RUN_SHELL_LABELS.comboPot(pot.score, pot.gold)}
                                     </span>
                                 ) : null}
                             </span>

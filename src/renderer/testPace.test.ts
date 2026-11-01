@@ -4,7 +4,7 @@ import { withFastDescent } from '../shared/descent-pace-rules';
 import { describeRunShareKey } from '../shared/run-share-key';
 import { createDefaultSaveData } from '../shared/save-data';
 import { createRestartRun } from './store/runStartState';
-import { fastDescentRequested } from './testPace';
+import { comboCashInRequested, fastDescentRequested } from './testPace';
 
 describe('the test pace switch', () => {
     it('is on for the test deployment and for ?pace=fast, and off everywhere else', () => {
@@ -24,5 +24,16 @@ describe('the test pace switch', () => {
         expect(createRestartRun(createNewRun(0, { runSeed: 5150 }), createDefaultSaveData()).descentPace ?? null).toBeNull();
         expect('refusal' in describeRunShareKey(fast)).toBe(true);
         expect('key' in describeRunShareKey(createNewRun(0, { runSeed: 5150 }))).toBe(true);
+    });
+});
+
+describe('the cash-in prototype switch', () => {
+    it('is on only for ?combo2=1, and a restart keeps it', () => {
+        expect(comboCashInRequested({ search: '?combo2=1' })).toBe(true);
+        expect(comboCashInRequested({ search: '?pace=fast&combo2=1' })).toBe(true);
+        expect(comboCashInRequested({ search: '' })).toBe(false);
+        expect(comboCashInRequested({ search: '?combo2=0' })).toBe(false);
+        expect(createRestartRun({ ...createNewRun(0, { runSeed: 5150 }), comboCashIn: true }, createDefaultSaveData()).comboCashIn).toBe(true);
+        expect(createRestartRun(createNewRun(0, { runSeed: 5150 }), createDefaultSaveData()).comboCashIn ?? null).toBeNull();
     });
 });

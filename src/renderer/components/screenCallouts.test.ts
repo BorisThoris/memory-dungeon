@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
-import { derivePurchaseCallouts, deriveTurnCallouts, deriveRealmCallouts, type RealmCalloutSnapshot } from './screenCallouts';
+import { deriveCashInCallouts, derivePurchaseCallouts, deriveTurnCallouts, deriveRealmCallouts, type RealmCalloutSnapshot } from './screenCallouts';
+import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 
 const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventFixture>[0]> & { before: number; after: number }): BoardTurnResolvedEvent =>
     createBoardTurnResolvedEventFixture({
@@ -84,5 +85,25 @@ describe('the screen stamps a turn earns', () => {
         expect(bought[2]?.sub).toMatch(/^Relic/);
         // Nothing new: nothing stamped.
         expect(derivePurchaseCallouts({ miss: 3 }, { miss: 3 })).toEqual([]);
+    });
+});
+
+describe('cash in stamps (?combo2=1)', () => {
+    it('stamps a bank and a lost pot once each, and nothing on the first read', () => {
+        const banked = { score: 1667, gold: 5, key: 'cash-in:1', combo: 9 };
+        const lost = { score: 45, gold: 1, key: 'pot-lost:1' };
+        expect(deriveCashInCallouts(undefined, {})).toEqual([]);
+        const first = deriveCashInCallouts({}, { lastComboCashIn: banked });
+        expect(first).toMatchObject([{ kind: 'cashin', title: 'CASHED IN!', sub: '+1,667 · +5 gold · combo ×9 banked' }]);
+        expect(deriveCashInCallouts({ lastComboCashIn: banked }, { lastComboCashIn: banked })).toEqual([]);
+        expect(deriveCashInCallouts({ lastComboCashIn: banked }, { lastComboCashIn: banked, lastComboPotLoss: lost })).toMatchObject([
+            { kind: 'potlost', title: 'POT LOST', sub: '45 and 1 gold gone with the combo' }
+        ]);
+    });
+
+    it('says the pot a miss took on the HUD, and nothing extra without one', () => {
+        expect(RUN_SHELL_LABELS.comboLost(9, 4, 1667)).toBe('Lost 9 · ×4 · pot 1,667');
+        expect(RUN_SHELL_LABELS.comboLost(9, 4)).toBe('Lost 9 · ×4');
+        expect(RUN_SHELL_LABELS.comboPot(1667, 5)).toBe('Pot 1,667 · 5 gold');
     });
 });

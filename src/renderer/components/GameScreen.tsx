@@ -163,7 +163,7 @@ import { comboDepth, comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun,
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
-import { derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
+import { deriveCashInCallouts, derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { nextFloorRealmDoor, REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { dailyMusicCreditLine } from '../audio/dailyMusic';
 import { BOSS_ROOM_BY_ACT, realmRoomPlateUrls } from './realmRoomArt';
@@ -178,11 +178,12 @@ import { ColossusCard } from './ColossusCard';
 import { OddCardLegend } from './OddCardLegend';
 import { FOLD_LEGEND_ENTRY, LAYERS_LEGEND_ENTRY, hourglassAnnouncement, hourglassCalloutSub, ODD_CARD_COPY, oddCardLegend } from '../copy/oddCardBeat';
 import { canIgniteZone, isZoneActive, zoneFlipsLeft, zonePairsAvailable } from '../../shared/zone-rules';
+import { canCashIn, comboCashInActive, comboPotHasValue, runComboPot } from '../../shared/combo-cash-in-rules';
 import { canReleaseHold, canStartHold, heldPairCount, holdMeter, holdSegmentsFor, isHoldUnlocked } from '../../shared/hold-rules';
 import { HOLD_TOOL_COPY } from '../copy/holdToolCopy';
 import { CARVE_ARROW, CARVE_TOOL_COPY } from '../copy/carveToolCopy';
 import { CARVE_DIRECTIONS, canCarve, carveLinksFor, isCarveUnlocked, liveCarve } from '../../shared/carve-rules';
-import { ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
+import { CASH_IN_TOOL_COPY, ZONE_TOOL_COPY } from '../copy/zoneToolCopy';
 import { GameplayScene } from './GameplayScene';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
@@ -334,6 +335,19 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = { zonesThisRun, lastZone };
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
+/** Cash in's stamps (`?combo2=1`): the bank and the pot a miss took; the first read is the baseline. */
+const useCashInCallouts = (run: RunState): ScreenCallout[] => {
+    const previous = useRef<Pick<RunState, 'lastComboCashIn' | 'lastComboPotLoss'>>({ lastComboCashIn: run.lastComboCashIn, lastComboPotLoss: run.lastComboPotLoss });
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    const { lastComboCashIn, lastComboPotLoss } = run;
+    useEffect(() => {
+        const fresh = deriveCashInCallouts(previous.current, { lastComboCashIn, lastComboPotLoss });
+        previous.current = { lastComboCashIn, lastComboPotLoss };
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [lastComboCashIn, lastComboPotLoss]);
     return callouts;
 };
 
@@ -534,6 +548,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openCodexFromPlaying: state.openCodexFromPlaying,
             useBomb: state.useBomb,
             igniteZone: state.igniteZone,
+            cashInCombo: state.cashInCombo,
             startHold: state.startHold,
             carve: state.carve,
             reprise: state.reprise,
@@ -852,6 +867,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         goToMenu,
         useBomb: spendBomb,
         igniteZone,
+        cashInCombo,
         startHold,
         carve: carveAction,
         reprise: repriseAction,
@@ -1218,6 +1234,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
+    const cashInCallouts = useCashInCallouts(run);
     const realmCallouts = useRealmCallouts(run);
     const voidCallouts = useVoidCallouts(run);
     const colossusCallouts = useColossusCallouts(run);
@@ -1277,6 +1294,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 : []),
             ...purchaseCallouts,
             ...zoneCallouts,
+            ...cashInCallouts,
             ...realmCallouts,
             ...voidCallouts,
             ...colossusCallouts,
@@ -1284,7 +1302,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, cashInCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
     );
     // What the player got (a pickup, a prize, a purchase) is an item drop (`itemDropFeed.ts`), not a stamp.
     const stampCallouts = useMemo(() => screenCallouts.filter((callout) => !callout.drop), [screenCallouts]);
@@ -2035,6 +2053,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                               if (isZoneActive(run)) resolveZone();
                               else igniteZone();
                           }
+                      }
+                  ]
+                : []),
+            // Cash in (`combo-cash-in-rules.ts`, `?combo2=1` only): Bank, while the pot holds something; its badge is the gold in it.
+            ...(comboCashInActive(run) && comboPotHasValue(runComboPot(run))
+                ? [
+                      {
+                          ...toolSpec('cash_in'),
+                          glyph: RUN_SHELL_GLYPHS.cash_in,
+                          charges: runComboPot(run).gold || undefined,
+                          disabled: !canCashIn(run),
+                          title: canCashIn(run)
+                              ? CASH_IN_TOOL_COPY.ready(runComboPot(run).score, runComboPot(run).gold)
+                              : CASH_IN_TOOL_COPY.pendingFlip,
+                          onClick: () => cashInCombo()
                       }
                   ]
                 : []),

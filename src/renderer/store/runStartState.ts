@@ -12,7 +12,7 @@ import {
 import type { RunShareKey } from '../../shared/run-share-key';
 import { applyRunSettings } from '../../shared/run-settings-rules';
 import { withFastDescent } from '../../shared/descent-pace-rules';
-import { fastDescentRequested } from '../testPace';
+import { comboCashInRequested, fastDescentRequested } from '../testPace';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
 export type RunStartTelemetryExtra = Record<string, boolean | number | string | undefined>;
@@ -115,7 +115,9 @@ export const createRunStartPlan = ({
     }
 
     // The test pace (`testPace.ts`): a solo run jumps down the Descent; a shared table never does.
-    const pacedRun = request.kind !== 'passAndPlay' && fastDescentRequested() ? withFastDescent(run) : run;
+    const fastRun = request.kind !== 'passAndPlay' && fastDescentRequested() ? withFastDescent(run) : run;
+    // Cash in (`combo-cash-in-rules.ts`): a solo run started from `?combo2=1` holds its combo's pay in a pot.
+    const pacedRun = request.kind !== 'passAndPlay' && comboCashInRequested() ? { ...fastRun, comboCashIn: true } : fastRun;
     const patchedRun = applyRunSettings(pacedRun, settings);
     return {
         patch: createRunStartStatePatch(patchedRun, saveData),
@@ -127,7 +129,8 @@ export const createRunStartPlan = ({
 /** Play again: the same kind of run, at the same pace. */
 export const createRestartRun = (previousRun: RunState | null, saveData: SaveData): RunState => {
     const run = restartRunFor(previousRun, saveData);
-    return previousRun?.descentPace === 'fast' ? withFastDescent(run) : run;
+    const paced = previousRun?.descentPace === 'fast' ? withFastDescent(run) : run;
+    return previousRun?.comboCashIn ? { ...paced, comboCashIn: true } : paced;
 };
 
 const restartRunFor = (previousRun: RunState | null, saveData: SaveData): RunState => {

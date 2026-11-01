@@ -777,6 +777,17 @@
     gap: 0.5rem;
 }
 
+/* Cash in (`?combo2=1`): the unbanked pot, gold and plain - it is a stake, not a reward yet. */
+.comboPot {
+    font-family: var(--heading-font);
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--gold, #e1ad66);
+    font-variant-numeric: lining-nums tabular-nums;
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--ink) 90%, transparent);
+    white-space: nowrap;
+}
+
 /* What a miss broke (dogma 6): the lost combo and its multiplier, struck through, falling away. */
 .comboLost {
     font-family: var(--heading-font);

@@ -101,6 +101,8 @@ export interface AppState {
     useMeteor: (tileId: string) => void;
     /** Opens the Zone (`igniteZone`): the combo burns, time stops. Does nothing when it cannot open. */
     igniteZone: () => void;
+    /** Cash in (`combo-cash-in-rules.ts`, `?combo2=1`): bank the combo's pot and end the combo. */
+    cashInCombo: () => void;
     /** The Hold (`hold-rules.ts`): start holding, or release every held pair's break at once. */
     startHold: () => void;
     /** Carve (`carve-rules.ts`): aim the next pop. */

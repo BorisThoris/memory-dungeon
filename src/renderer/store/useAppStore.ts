@@ -14,6 +14,7 @@ import { chooseRealmDoor } from '../../shared/realm-rules';
 import { awaitsWardenChoice, descendIntoEndless } from '../../shared/warden-rules';
 import { bombTargetTileId } from '../../shared/board-power-actions';
 import { canStartHold, releaseHold as releaseHoldRule, startHold as startHoldRule } from '../../shared/hold-rules';
+import { canCashIn, cashInCombo as cashInComboRule } from '../../shared/combo-cash-in-rules';
 import { canIgniteZone, igniteZone as igniteZoneRule, isZoneActive, resolveZone as resolveZoneRule, zoneFlipTile } from '../../shared/zone-rules';
 import { canFlurryGrab, flurryPress, returnFlurryHeld } from '../../shared/flurry-rules';
 import { createGameplayBombCommand, createGameplayCrucibleCommand, createGameplayStillBellCommand, createGameplayStormGlassCommand, createGameplayTakeRelicCommand } from '../../shared/gameplay-core-contracts';
@@ -765,6 +766,14 @@ export const useAppStore = create<AppState>((set, get) => ({
         void resumeAudioContext();
         playPowerArmSfx(sfxGainFromStore());
         set({ run: igniteZoneRule(run) });
+    },
+
+    cashInCombo: () => {
+        const { run, view } = get();
+        if (!run || view !== 'playing' || !canCashIn(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
+        set({ run: cashInComboRule(run) });
     },
 
     startHold: () => {

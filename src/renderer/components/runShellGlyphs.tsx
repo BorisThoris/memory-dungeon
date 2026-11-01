@@ -28,6 +28,7 @@ export const RUN_SHELL_GLYPHS = {
     misers_purse: <GameplayPurseIcon />,
     still_bell: <GameplayBellIcon />,
     ignite: <GameplayIgniteIcon />,
+    cash_in: <GameplayPurseIcon />,
     hold: <GameplayHoldIcon />,
     carve: <GameplayCarveIcon />,
     reprise: <GameplayRepriseIcon />,

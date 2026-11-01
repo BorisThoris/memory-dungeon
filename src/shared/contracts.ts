@@ -1074,6 +1074,16 @@ export interface RunState {
     descentPace?: 'fast' | null;
     /** The combo pays (`combo-pay-rules.ts`, rules 106): the gold the run's rungs have paid, for the census and the results. */
     comboRungGold?: number;
+    /** Cash in (`combo-cash-in-rules.ts`, prototype behind `?combo2=1`): the run holds its combo's pay in a pot. */
+    comboCashIn?: boolean | null;
+    /** The pot: what the combo's multiplier and rungs have paid since the last cash-in, lost on a miss. */
+    comboPot?: { score: number; gold: number } | null;
+    /** Cash-ins this run, and the last one, for the stamp. */
+    comboCashIns?: number;
+    lastComboCashIn?: { score: number; gold: number; key: string; combo: number } | null;
+    /** Pots a miss took this run, and the last one, for the stamp. */
+    comboPotsLost?: number;
+    lastComboPotLoss?: { score: number; gold: number; key: string } | null;
     /** Endless (DGE-006): the run chose to go on past the Warden, and its clears no longer end it. */
     /** The Hold (`hold-rules.ts`, DGE-008): links toward arming it, whether it is held, and the held pairs' tile ids. */
     holdLinks?: number;

@@ -70,8 +70,11 @@ export const RUN_SHELL_PAR_COPY = {
 export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu',
     /** What a miss broke, held on the HUD for a moment (dogma 6): the links and the multiplier they paid. */
-    comboLost: (links: number, multiplier: number): string =>
-        multiplier > 1 ? `Lost ${links} · ×${multiplier}` : `Lost ${links}`,
+    comboLost: (links: number, multiplier: number, pot = 0): string =>
+        `${multiplier > 1 ? `Lost ${links} · ×${multiplier}` : `Lost ${links}`}${pot > 0 ? ` · pot ${pot.toLocaleString()}` : ''}`,
+    /** Cash in (`?combo2=1`): the unbanked pot under the combo, and what it is on hover. */
+    comboPot: (score: number, gold: number): string => `Pot ${score.toLocaleString()}${gold > 0 ? ` · ${gold} gold` : ''}`,
+    comboPotTitle: 'Unbanked: Bank it with the Bank button, or a miss takes it all.',
     /** The purse on the head, and what it is for on hover. */
     gold: 'gold',
     goldTitle: 'Gold funds automatic upgrades every 3 floors.',

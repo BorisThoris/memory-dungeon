@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3412,
-    "codeFileCount": 1326,
-    "exportedSymbolCount": 4386,
+    "trackedFileCount": 3415,
+    "codeFileCount": 1328,
+    "exportedSymbolCount": 4401,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12274
+    "relationshipCount": 12311
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "b2efa9ca40b10294e40f875634cd56c26432fd8fe51ca38a26a9ab2bd0197fd3"
+      "sha256": "d74af77ee8cb4d131e640e953ad42f2955f3cd19e2860379b719b3d3042aa199"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11337,8 +11337,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 152130,
-      "sha256": "d13c97ce9c1ac2af6641b5af5cb3050d3d3d09f7add55e54960e952340fd732a"
+      "bytes": 154078,
+      "sha256": "d034d4a0aff1a63781835679a2ee298011f57ffb6b1be883e2c28914fcdf6fa1"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11955,8 +11955,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 67373,
-      "sha256": "847779aa0787ecb21d2592b236ab8867aa0653bdb516c67588b1bf274cc03ec6"
+      "bytes": 67751,
+      "sha256": "36276c418a35e7e11906b8fc576dcbb069d17760912a45cef1f085a6267fba87"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11967,8 +11967,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 61792,
-      "sha256": "6bcad67aa14be1eaffaf9336b6f51d69d655a2613b5fe576ae0ee6d32f18ec34"
+      "bytes": 62865,
+      "sha256": "ed8040cd23bfa3cf5a302c6740687ace09f4da66fab1da8b5091fc930f45b973"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11985,8 +11985,8 @@
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "category": "source",
-      "bytes": 1080,
-      "sha256": "ce2df60f9a260d28dde0d65021ffdcbdb57e45991c5518aa0a8a125ec56df7b9"
+      "bytes": 1116,
+      "sha256": "a60cf4efc99597e5a27039f39b83e65852ede271bcbb22c86a6c216da2aa3b11"
     },
     {
       "path": "src/renderer/components/RunShellItemTray.test.tsx",
@@ -11997,14 +11997,14 @@
     {
       "path": "src/renderer/components/runShellToolCatalog.test.ts",
       "category": "test",
-      "bytes": 3114,
-      "sha256": "c816be4d04491759b23fdf7fa166a4b23ea30147e1232ed7203388e384aa3ae5"
+      "bytes": 3168,
+      "sha256": "24ef3abec74ad8143bc08e3603b991bdc868a4b745b640cef592888edd37eb85"
     },
     {
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "category": "source",
-      "bytes": 5179,
-      "sha256": "83ac1703ca5348743604d6f058a7459ba29db1b05249dab1d74498086b8768e6"
+      "bytes": 5369,
+      "sha256": "d3853b9735908c376b2566354d7a952c958728cbd149640a2107271ad34c9236"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -12147,14 +12147,14 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 6556,
-      "sha256": "07222ea3bbd8590dc54745f12642eec285459b0a8634c215a462f8a10118e046"
+      "bytes": 7878,
+      "sha256": "b4c2a34de521453d8d5acf6bb8eb6b2b70d76baf3734209f6513d033e17fc621"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 18030,
-      "sha256": "dbfbac505bc5b312c52e51bde0d18264dd83de30aa3a61febe6c1684bfb9a0c8"
+      "bytes": 19260,
+      "sha256": "bd7ffc95c09856be5143fb9720a48d9ffa5b5d60f36f7afcccd10c7e1f8e16e1"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -13575,8 +13575,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 10218,
-      "sha256": "75690375097d1235832bd7853943ccb5f00d7d5366bf2818a96e48ec8024ce62"
+      "bytes": 10587,
+      "sha256": "bedf149d783a868c768c0b0385d34d17e7b0382f827ec130177dd97ea2709f55"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -13659,8 +13659,8 @@
     {
       "path": "src/renderer/copy/zoneToolCopy.ts",
       "category": "source",
-      "bytes": 898,
-      "sha256": "e9d640b3594aa7899b04330e0304c1b9b7ff06c04cc3b553d0943dc23940a752"
+      "bytes": 1263,
+      "sha256": "7b55b7c16981c202641bdb7fc78f1969816542ff8f7669cda547e2266aefa898"
     },
     {
       "path": "src/renderer/desktop-client.test.ts",
@@ -14271,8 +14271,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 6813,
-      "sha256": "9477a6c82932947a2434fad4e366baca96d8bee06e64505130c2dfe2baa588df"
+      "bytes": 6942,
+      "sha256": "a3c3c3369b4d5f2c8bbc967fa36b224e4c34c6fd830c4b0c62dfcd64f29ab41a"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14511,8 +14511,8 @@
     {
       "path": "src/renderer/store/runStartState.ts",
       "category": "source",
-      "bytes": 7200,
-      "sha256": "96d132ca8383d2373cf2f6fdb2e10999ffa9ad45b334d0580ba182a7dab05ca8"
+      "bytes": 7543,
+      "sha256": "a42673705834bb73ee9d9254eb26ec0d9ac9dc5f46bb229a6a9d60a6eade849c"
     },
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -14619,8 +14619,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 34355,
-      "sha256": "f152a40cf4998c5c5aa038b5c9b01981849f3069a6f50857eb010da3f2c59449"
+      "bytes": 34710,
+      "sha256": "83feb7df5036fddc52ed65a593e850e4784397510c165bdb6079382cf4c8b6a4"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -14667,14 +14667,14 @@
     {
       "path": "src/renderer/testPace.test.ts",
       "category": "test",
-      "bytes": 1769,
-      "sha256": "fb8ca7157d7d2794d01074fdee7dd446ffc8aa404dd3fe1f0aaeae3b59a0c724"
+      "bytes": 2489,
+      "sha256": "fb3f6d9c6e6eade8651311645aea992778cf6175d1a2e584e41b6b068ef484fa"
     },
     {
       "path": "src/renderer/testPace.ts",
       "category": "source",
-      "bytes": 626,
-      "sha256": "497ddc55db24b38be5fbd5f52922b391c513dafc656464c8780e30827b1a1cf2"
+      "bytes": 1012,
+      "sha256": "6cc427bc5f625354704eb6700ddb85e8120724a7c5cff2ac88bf4b154aa0490e"
     },
     {
       "path": "src/renderer/ui/AccentBanner.module.css",
@@ -15171,8 +15171,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 30875,
-      "sha256": "0a0b73e95792c53b30a11adf73b3c9f98c844c33d2c13cb717181f16f170064b"
+      "bytes": 31206,
+      "sha256": "fd2602933c45b95b733677c8ab1405dd7d257d33e573761f4b7e9676667c4dce"
     },
     {
       "path": "src/shared/bomb-power.test.ts",
@@ -15397,6 +15397,18 @@
       "sha256": "006698a78f025719261c47de6706d65e2c9d9fb38173484a5ddb2e59cbfbf42a"
     },
     {
+      "path": "src/shared/combo-cash-in-rules.test.ts",
+      "category": "test",
+      "bytes": 5068,
+      "sha256": "8d3ee753bf160949e975d0bbd9ec380ba2313eda8eeaa8139371fc1975e63d0c"
+    },
+    {
+      "path": "src/shared/combo-cash-in-rules.ts",
+      "category": "source",
+      "bytes": 5701,
+      "sha256": "f420827877646e25efe78c5ef1436487e37fb81348830b37647138a483c1df9f"
+    },
+    {
       "path": "src/shared/combo-heat-perks.test.ts",
       "category": "test",
       "bytes": 3278,
@@ -15471,8 +15483,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 68230,
-      "sha256": "3f6a863cd927d5752c0bcb03655e73e33fa1d1de0187cc79a7eb579eb2fac797"
+      "bytes": 68899,
+      "sha256": "2baf0ee04d7b46b62b389ca4139761604d521c040b97f3ebc9e062fdecc7ebf4"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -17901,8 +17913,8 @@
     {
       "path": "src/shared/turn-match-scoring-summary-rules.ts",
       "category": "source",
-      "bytes": 3275,
-      "sha256": "d795c55f254262a781fa1443638ea568b025d1ec1952af5c87c0310f74598592"
+      "bytes": 3428,
+      "sha256": "eeab5e51f1ddc645b14d2d9a5cae36e9d852e7fc27368f46a0b4074d27905b95"
     },
     {
       "path": "src/shared/turn-mismatch-rules.test.ts",
@@ -17913,8 +17925,8 @@
     {
       "path": "src/shared/turn-mismatch-rules.ts",
       "category": "source",
-      "bytes": 9676,
-      "sha256": "5ac70e70d834f0a858686090c1ac0f89fdcd9052015a4a671ca3b389f4a31f0d"
+      "bytes": 9967,
+      "sha256": "cd5f8d49b4e979965321062398e1b2929e6ed2fbfcf86239f7c5f1fa027dde05"
     },
     {
       "path": "src/shared/turn-resolution.ts",
@@ -18003,8 +18015,8 @@
     {
       "path": "src/shared/warden-rules.ts",
       "category": "source",
-      "bytes": 8931,
-      "sha256": "392cd91369d5d4f49038251c54c4ae462fe9fb15a2e02adeed997d4fdf91f208"
+      "bytes": 9158,
+      "sha256": "aea5530225c0ce9fe24cb43f08bb6d347914e1d436acc05a43e478710b3e0cea"
     },
     {
       "path": "src/shared/zone-rules.test.ts",
@@ -18015,8 +18027,8 @@
     {
       "path": "src/shared/zone-rules.ts",
       "category": "source",
-      "bytes": 11731,
-      "sha256": "3d5efc1ed12e00746b3addb3b81cd764e817ef1bd0087cd0ddd10150f5e1bf6b"
+      "bytes": 11996,
+      "sha256": "80d2017c52af242984ce7dd100edb064b04fa88ff6c161300d0efbb8da5fd914"
     },
     {
       "path": "src/test/installCanvas2dMock.ts",
@@ -18041,6 +18053,12 @@
       "category": "other",
       "bytes": 7828,
       "sha256": "cb68c48b14644aee3c694a2e21d41090979d0b3e5a6e865215e9096df46f1c88"
+    },
+    {
+      "path": "tasks/back-to-the-base/01-cash-in.md",
+      "category": "other",
+      "bytes": 3261,
+      "sha256": "c77b97e1f674f64861b07d7edb9be1099f2566de4df772fcf5273bdf91b8832a"
     },
     {
       "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
@@ -25067,7 +25085,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2847,
+      "lineCount": 2880,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25157,6 +25175,7 @@
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/colossus-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/crucible-rules.ts",
@@ -26831,7 +26850,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1054,
+      "lineCount": 1067,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -26853,6 +26872,7 @@
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/combo-pay-rules.ts",
         "file:src/shared/contracts.ts",
@@ -26924,7 +26944,7 @@
       "path": "src/renderer/components/runShellGlyphs.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 40,
       "imports": [
         "file:src/renderer/ui/gameplayIcons.tsx"
       ],
@@ -26964,7 +26984,7 @@
       "path": "src/renderer/components/runShellToolCatalog.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 105,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -27380,9 +27400,10 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 89,
+      "lineCount": 110,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
+        "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/test/gameplay-event-fixtures.ts"
@@ -27395,7 +27416,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 296,
+      "lineCount": 318,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -27407,6 +27428,7 @@
         "file:src/shared/run-store-rules.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/screenCallouts.ts#deriveCashInCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -31632,7 +31654,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 192,
+      "lineCount": 195,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -31650,7 +31672,9 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#WARDEN_CHOICE_COPY"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/screenCallouts.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/copy/runEndStamp.ts",
@@ -31876,9 +31900,10 @@
       "path": "src/renderer/copy/zoneToolCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 18,
+      "lineCount": 25,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/copy/zoneToolCopy.ts#CASH_IN_TOOL_COPY",
         "symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
         "symbol:src/renderer/copy/zoneToolCopy.ts#zoneRailLine"
       ],
@@ -33343,7 +33368,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 142,
+      "lineCount": 144,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -34095,7 +34120,7 @@
       "path": "src/renderer/store/runStartState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 185,
+      "lineCount": 188,
       "imports": [
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/renderer/testPace.ts",
@@ -34448,7 +34473,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 936,
+      "lineCount": 945,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -34482,6 +34507,7 @@
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/crucible-rules.ts",
         "file:src/shared/flurry-rules.ts",
@@ -34584,7 +34610,7 @@
       "path": "src/renderer/testPace.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 29,
+      "lineCount": 40,
       "imports": [
         "file:src/renderer/store/runStartState.ts",
         "file:src/renderer/testPace.ts",
@@ -34601,9 +34627,10 @@
       "path": "src/renderer/testPace.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 11,
+      "lineCount": 18,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/testPace.ts#comboCashInRequested",
         "symbol:src/renderer/testPace.ts#fastDescentRequested"
       ],
       "testedBy": [
@@ -35953,7 +35980,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 625,
+      "lineCount": 628,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-layers-rules.ts",
@@ -35962,6 +35989,7 @@
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/colossus-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/combo-pay-rules.ts",
         "file:src/shared/contracts.ts",
@@ -36824,6 +36852,51 @@
       ]
     },
     {
+      "id": "file:src/shared/combo-cash-in-rules.test.ts",
+      "path": "src/shared/combo-cash-in-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 103,
+      "imports": [
+        "file:src/shared/combo-cash-in-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/realm-weather-rules.ts",
+        "file:src/shared/zone-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/combo-cash-in-rules.ts",
+      "path": "src/shared/combo-cash-in-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 126,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/session-stats-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/combo-cash-in-rules.ts#bankComboPot",
+        "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
+        "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+        "symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
+        "symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
+        "symbol:src/shared/combo-cash-in-rules.ts#comboPotHasValue",
+        "symbol:src/shared/combo-cash-in-rules.ts#ComboPotLoss",
+        "symbol:src/shared/combo-cash-in-rules.ts#comboPotShare",
+        "symbol:src/shared/combo-cash-in-rules.ts#EMPTY_COMBO_POT",
+        "symbol:src/shared/combo-cash-in-rules.ts#forfeitPotOnBreak",
+        "symbol:src/shared/combo-cash-in-rules.ts#potMatch",
+        "symbol:src/shared/combo-cash-in-rules.ts#runComboPot"
+      ],
+      "testedBy": [
+        "file:src/shared/combo-cash-in-rules.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/combo-heat-perks.test.ts",
       "path": "src/shared/combo-heat-perks.test.ts",
       "layer": "shared",
@@ -37089,7 +37162,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1390,
+      "lineCount": 1400,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/elemental-loot-rules.ts"
@@ -37312,6 +37385,7 @@
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/clump-read-rules.test.ts",
         "file:src/shared/colossus-rules.test.ts",
+        "file:src/shared/combo-cash-in-rules.test.ts",
         "file:src/shared/combo-pay-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/crucible-rules.test.ts",
@@ -39672,6 +39746,7 @@
         "file:src/shared/cascade-clump-fixture.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/colossus-rules.test.ts",
+        "file:src/shared/combo-cash-in-rules.test.ts",
         "file:src/shared/combo-pay-rules.test.ts",
         "file:src/shared/crucible-rules.test.ts",
         "file:src/shared/curio-rules.test.ts",
@@ -43068,6 +43143,7 @@
         "file:src/renderer/components/realmTileMarkKey.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/bad-floor-is-quiet.test.ts",
+        "file:src/shared/combo-cash-in-rules.test.ts",
         "file:src/shared/element-alchemy-rules.test.ts",
         "file:src/shared/element-coatings.test.ts",
         "file:src/shared/element-every-match.test.ts",
@@ -46381,7 +46457,7 @@
       "path": "src/shared/turn-match-scoring-summary-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 83,
+      "lineCount": 86,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/combo-pay-rules.ts",
@@ -46422,9 +46498,10 @@
       "path": "src/shared/turn-mismatch-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 194,
+      "lineCount": 199,
       "imports": [
         "file:src/shared/colossus-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/magpie-rules.ts",
         "file:src/shared/mutators.ts",
@@ -46775,9 +46852,10 @@
       "path": "src/shared/warden-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 147,
+      "lineCount": 153,
       "imports": [
         "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/depth-rules.ts",
         "file:src/shared/floor-par.ts",
@@ -46833,8 +46911,9 @@
       "path": "src/shared/zone-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 232,
+      "lineCount": 235,
       "imports": [
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -46864,6 +46943,7 @@
         "symbol:src/shared/zone-rules.ts#ZoneState"
       ],
       "testedBy": [
+        "file:src/shared/combo-cash-in-rules.test.ts",
         "file:src/shared/zone-rules.test.ts"
       ]
     },
@@ -51754,40 +51834,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2846,
-      "endLine": 2846
+      "line": 2879,
+      "endLine": 2879
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 303,
-      "endLine": 303
+      "line": 304,
+      "endLine": 304
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 301,
-      "endLine": 301
+      "line": 302,
+      "endLine": 302
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 305,
-      "endLine": 305
+      "line": 306,
+      "endLine": 306
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 295,
-      "endLine": 295
+      "line": 296,
+      "endLine": 296
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -53762,32 +53842,32 @@
       "name": "COMBO_LOST_MS",
       "kind": "value",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 164,
-      "endLine": 164
+      "line": 165,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1053,
-      "endLine": 1053
+      "line": 1066,
+      "endLine": 1066
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 92,
-      "endLine": 127
+      "line": 93,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 79,
-      "endLine": 90
+      "line": 80,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -53827,31 +53907,31 @@
       "kind": "value",
       "file": "src/renderer/components/runShellGlyphs.tsx",
       "line": 21,
-      "endLine": 38
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
       "name": "chargeFieldsWithATool",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 99,
-      "endLine": 101
+      "line": 102,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
       "name": "RUN_SHELL_TOOL_CATALOG",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 60,
-      "endLine": 94
+      "line": 61,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
       "name": "RunPowerChargeField",
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 37,
-      "endLine": 49
+      "line": 38,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
@@ -53859,23 +53939,23 @@
       "kind": "type",
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 16,
-      "endLine": 34
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
       "name": "runShellToolIds",
       "kind": "value",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 96,
-      "endLine": 96
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "name": "RunShellToolSpec",
       "kind": "interface",
       "file": "src/renderer/components/runShellToolCatalog.ts",
-      "line": 51,
-      "endLine": 58
+      "line": 52,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
@@ -54606,12 +54686,20 @@
       "endLine": 29
     },
     {
+      "id": "symbol:src/renderer/components/screenCallouts.ts#deriveCashInCallouts",
+      "name": "deriveCashInCallouts",
+      "kind": "value",
+      "file": "src/renderer/components/screenCallouts.ts",
+      "line": 248,
+      "endLine": 264
+    },
+    {
       "id": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 269,
-      "endLine": 290
+      "line": 291,
+      "endLine": 312
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
@@ -54634,8 +54722,8 @@
       "name": "deriveZoneCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 244,
-      "endLine": 267
+      "line": 266,
+      "endLine": 289
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#RealmCalloutSnapshot",
@@ -54690,8 +54778,8 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 293,
-      "endLine": 293
+      "line": 315,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -59554,8 +59642,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 185,
-      "endLine": 191
+      "line": 188,
+      "endLine": 194
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -59570,16 +59658,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 168,
-      "endLine": 171
+      "line": 171,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 184,
-      "endLine": 184
+      "line": 187,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -59594,8 +59682,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 177,
-      "endLine": 181
+      "line": 180,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -59611,15 +59699,15 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 70,
-      "endLine": 84
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 126,
-      "endLine": 158
+      "line": 129,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -59634,8 +59722,8 @@
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 93,
-      "endLine": 111
+      "line": 96,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -59650,8 +59738,8 @@
       "name": "WARDEN_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 119,
-      "endLine": 124
+      "line": 122,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
@@ -59988,6 +60076,14 @@
       "file": "src/renderer/copy/voidSpewCopy.ts",
       "line": 2,
       "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/copy/zoneToolCopy.ts#CASH_IN_TOOL_COPY",
+      "name": "CASH_IN_TOOL_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/zoneToolCopy.ts",
+      "line": 20,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
@@ -61195,7 +61291,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 141
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -61970,8 +62066,8 @@
       "name": "createRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 128,
-      "endLine": 131
+      "line": 130,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartPlan",
@@ -61979,7 +62075,7 @@
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
       "line": 67,
-      "endLine": 125
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartStatePatch",
@@ -62338,8 +62434,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 253,
-      "endLine": 923
+      "line": 254,
+      "endLine": 932
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -62382,12 +62478,20 @@
       "endLine": 436
     },
     {
+      "id": "symbol:src/renderer/testPace.ts#comboCashInRequested",
+      "name": "comboCashInRequested",
+      "kind": "value",
+      "file": "src/renderer/testPace.ts",
+      "line": 10,
+      "endLine": 11
+    },
+    {
       "id": "symbol:src/renderer/testPace.ts#fastDescentRequested",
       "name": "fastDescentRequested",
       "kind": "value",
       "file": "src/renderer/testPace.ts",
-      "line": 6,
-      "endLine": 10
+      "line": 13,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/ui/AccentBanner.tsx#default",
@@ -64362,40 +64466,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 94,
-      "endLine": 104
+      "line": 95,
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 60,
-      "endLine": 65
+      "line": 61,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 73,
-      "endLine": 92
+      "line": 74,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 67,
-      "endLine": 71
+      "line": 68,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 128,
-      "endLine": 624
+      "line": 129,
+      "endLine": 627
     },
     {
       "id": "symbol:src/shared/boss-encounters.ts#BOSS_ENCOUNTER_IDENTITY",
@@ -65838,6 +65942,102 @@
       "endLine": 297
     },
     {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#bankComboPot",
+      "name": "bankComboPot",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 95,
+      "endLine": 113
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
+      "name": "canCashIn",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 87,
+      "endLine": 92
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+      "name": "cashInCombo",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 115,
+      "endLine": 125
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
+      "name": "comboCashInActive",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 35,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
+      "name": "ComboPot",
+      "kind": "interface",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 23,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#comboPotHasValue",
+      "name": "comboPotHasValue",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 42,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#ComboPotLoss",
+      "name": "ComboPotLoss",
+      "kind": "interface",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 29,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#comboPotShare",
+      "name": "comboPotShare",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 45,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#EMPTY_COMBO_POT",
+      "name": "EMPTY_COMBO_POT",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 33,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#forfeitPotOnBreak",
+      "name": "forfeitPotOnBreak",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 77,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#potMatch",
+      "name": "potMatch",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 55,
+      "endLine": 74
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#runComboPot",
+      "name": "runComboPot",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 37,
+      "endLine": 40
+    },
+    {
       "id": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
       "name": "COMBO_HEAT_PERKS",
       "kind": "value",
@@ -66410,16 +66610,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1248,
-      "endLine": 1248
+      "line": 1258,
+      "endLine": 1258
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1337,
-      "endLine": 1339
+      "line": 1347,
+      "endLine": 1349
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -66514,8 +66714,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1345,
-      "endLine": 1350
+      "line": 1355,
+      "endLine": 1360
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -66546,16 +66746,16 @@
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1251,
-      "endLine": 1260
+      "line": 1261,
+      "endLine": 1270
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1363,
-      "endLine": 1389
+      "line": 1373,
+      "endLine": 1399
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -66906,8 +67106,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1262,
-      "endLine": 1277
+      "line": 1272,
+      "endLine": 1287
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
@@ -67018,16 +67218,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1353,
-      "endLine": 1353
+      "line": 1363,
+      "endLine": 1363
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1356,
-      "endLine": 1361
+      "line": 1366,
+      "endLine": 1371
     },
     {
       "id": "symbol:src/shared/contracts.ts#RepriseTurn",
@@ -67058,16 +67258,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1330,
-      "endLine": 1334
+      "line": 1340,
+      "endLine": 1344
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1328,
-      "endLine": 1328
+      "line": 1338,
+      "endLine": 1338
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
@@ -67082,8 +67282,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1284,
-      "endLine": 1301
+      "line": 1294,
+      "endLine": 1311
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
@@ -67091,7 +67291,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 844,
-      "endLine": 1246
+      "endLine": 1256
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -67130,8 +67330,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1303,
-      "endLine": 1322
+      "line": 1313,
+      "endLine": 1332
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -81106,16 +81306,16 @@
       "name": "resolveTurnMatchScoringSummary",
       "kind": "value",
       "file": "src/shared/turn-match-scoring-summary-rules.ts",
-      "line": 34,
-      "endLine": 82
+      "line": 36,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/turn-match-scoring-summary-rules.ts#TurnMatchScoringSummaryInput",
       "name": "TurnMatchScoringSummaryInput",
       "kind": "interface",
       "file": "src/shared/turn-match-scoring-summary-rules.ts",
-      "line": 24,
-      "endLine": 32
+      "line": 26,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/turn-match-scoring-summary-rules.ts#TurnMatchScoringSummaryResult",
@@ -81123,47 +81323,47 @@
       "kind": "interface",
       "file": "src/shared/turn-match-scoring-summary-rules.ts",
       "line": 13,
-      "endLine": 22
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#calculateMismatchPenalty",
       "name": "calculateMismatchPenalty",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 43,
-      "endLine": 52
+      "line": 44,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#createHiddenMismatchBoard",
       "name": "createHiddenMismatchBoard",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 31,
-      "endLine": 41
+      "line": 32,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#MismatchPenalty",
       "name": "MismatchPenalty",
       "kind": "interface",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 25,
-      "endLine": 29
+      "line": 26,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#MismatchTurnTransitionInput",
       "name": "MismatchTurnTransitionInput",
       "kind": "interface",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 54,
-      "endLine": 60
+      "line": 55,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/turn-mismatch-rules.ts#resolveMismatchTurnTransition",
       "name": "resolveMismatchTurnTransition",
       "kind": "value",
       "file": "src/shared/turn-mismatch-rules.ts",
-      "line": 62,
-      "endLine": 193
+      "line": 64,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/turn-resolution.ts#calculateMatchScore",
@@ -81730,240 +81930,240 @@
       "name": "applyWardenTurn",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 106,
-      "endLine": 135
+      "line": 107,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#awaitsWardenChoice",
       "name": "awaitsWardenChoice",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 142,
-      "endLine": 143
+      "line": 148,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#descendIntoEndless",
       "name": "descendIntoEndless",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 152,
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#endRunAfterWardenClear",
       "name": "endRunAfterWardenClear",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 138,
-      "endLine": 139
+      "line": 142,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#isWardenFloor",
       "name": "isWardenFloor",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 77,
-      "endLine": 78
+      "line": 78,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#isWardenRedealTurn",
       "name": "isWardenRedealTurn",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 84,
-      "endLine": 87
+      "line": 85,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#WARDEN_DEAL_AGAIN_PAIRS",
       "name": "WARDEN_DEAL_AGAIN_PAIRS",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#WARDEN_FELL_PAIRS",
       "name": "WARDEN_FELL_PAIRS",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#WARDEN_REDEAL_EVERY_TURNS",
       "name": "WARDEN_REDEAL_EVERY_TURNS",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#WARDEN_TEST_FROM",
       "name": "WARDEN_TEST_FROM",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#wardenDealsAgain",
       "name": "wardenDealsAgain",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 55,
-      "endLine": 75
+      "line": 56,
+      "endLine": 76
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#wardenFellsTo",
       "name": "wardenFellsTo",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 51,
-      "endLine": 52
+      "line": 52,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#wardenRedeal",
       "name": "wardenRedeal",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 90,
-      "endLine": 100
+      "line": 91,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#wardenRedealEvery",
       "name": "wardenRedealEvery",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 83,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/warden-rules.ts#wardenTestHolds",
       "name": "wardenTestHolds",
       "kind": "value",
       "file": "src/shared/warden-rules.ts",
-      "line": 44,
-      "endLine": 48
+      "line": 45,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#canIgniteZone",
       "name": "canIgniteZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 79,
-      "endLine": 79
+      "line": 80,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#igniteZone",
       "name": "igniteZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 82,
-      "endLine": 97
+      "line": 83,
+      "endLine": 100
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#isZoneActive",
       "name": "isZoneActive",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 68,
-      "endLine": 68
+      "line": 69,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#resolveZone",
       "name": "resolveZone",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 173,
-      "endLine": 231
+      "line": 176,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_BONUS_PER_PAIR_SQUARED",
       "name": "ZONE_BONUS_PER_PAIR_SQUARED",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_AT_INFERNO",
       "name": "ZONE_PAIRS_AT_INFERNO",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_AT_LEGENDARY",
       "name": "ZONE_PAIRS_AT_LEGENDARY",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_PAIRS_CAP",
       "name": "ZONE_PAIRS_CAP",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZONE_STAGE_FROM",
       "name": "ZONE_STAGE_FROM",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zoneFlipsLeft",
       "name": "zoneFlipsLeft",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 100,
-      "endLine": 101
+      "line": 103,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zoneFlipTile",
       "name": "zoneFlipTile",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 107,
-      "endLine": 133
+      "line": 110,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zonePairsAvailable",
       "name": "zonePairsAvailable",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 71,
-      "endLine": 76
+      "line": 72,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#zonePairsForCombo",
       "name": "zonePairsForCombo",
       "kind": "value",
       "file": "src/shared/zone-rules.ts",
-      "line": 51,
-      "endLine": 56
+      "line": 52,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "ExportSpecifier",
       "file": "src/shared/zone-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/zone-rules.ts#ZoneState",
       "name": "ZoneState",
       "kind": "ExportSpecifier",
       "file": "src/shared/zone-rules.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/test/installCanvas2dMock.ts#installCanvas2dMock",
@@ -82194,7 +82394,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 132
+          "line": 133
         }
       ],
       "tests": [
@@ -82536,7 +82736,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -82737,7 +82937,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1693
+          "line": 1711
         }
       ],
       "tests": [
@@ -82911,7 +83111,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 54
+          "line": 55
         },
         {
           "path": "src/renderer/components/TileBoardParticles.tsx",
@@ -82958,7 +83158,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/renderer/components/RealmTileMarks.tsx",
@@ -83112,7 +83312,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 93
+          "line": 98
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -83537,7 +83737,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -83642,7 +83842,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 93
+          "line": 98
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -83842,7 +84042,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 5
+          "line": 6
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -83899,7 +84099,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 24
+          "line": 25
         }
       ],
       "tests": [
@@ -84023,7 +84223,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
@@ -84069,7 +84269,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/shared/floor-mutator-schedule.ts",
@@ -84111,7 +84311,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/copy/skittishCardsBeat.ts",
@@ -84149,7 +84349,7 @@
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/renderer/components/sceneMood.ts",
@@ -84192,7 +84392,7 @@
       "evidence": [
         {
           "path": "src/shared/warden-rules.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/board-turn-transition.ts",
@@ -84494,7 +84694,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -85401,15 +85601,15 @@
       "evidence": [
         {
           "path": "src/shared/zone-rules.ts",
-          "line": 3
+          "line": 4
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 17
+          "line": 18
         },
         {
           "path": "src/renderer/components/runShellToolCatalog.ts",
-          "line": 78
+          "line": 79
         },
         {
           "path": "src/renderer/copy/zoneToolCopy.ts",
@@ -85758,7 +85958,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 17
+          "line": 18
         }
       ],
       "tests": [
@@ -85911,7 +86111,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1695
+          "line": 1713
         }
       ],
       "tests": [
@@ -85949,7 +86149,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 21
+          "line": 22
         },
         {
           "path": "src/renderer/components/GameOverScreen.tsx",
@@ -86305,7 +86505,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 465
+          "line": 473
         }
       ],
       "tests": [
@@ -86344,7 +86544,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 465
+          "line": 473
         }
       ],
       "tests": [
@@ -86378,7 +86578,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 465
+          "line": 473
         }
       ],
       "tests": [
@@ -86412,7 +86612,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 465
+          "line": 473
         }
       ],
       "tests": [
@@ -95151,6 +95351,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/screenCallouts.ts->symbol:src/renderer/components/screenCallouts.ts#deriveCashInCallouts",
+      "source": "file:src/renderer/components/screenCallouts.ts",
+      "target": "symbol:src/renderer/components/screenCallouts.ts#deriveCashInCallouts",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/screenCallouts.ts->symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
       "source": "file:src/renderer/components/screenCallouts.ts",
       "target": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
@@ -99189,6 +99395,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/zoneToolCopy.ts->symbol:src/renderer/copy/zoneToolCopy.ts#CASH_IN_TOOL_COPY",
+      "source": "file:src/renderer/copy/zoneToolCopy.ts",
+      "target": "symbol:src/renderer/copy/zoneToolCopy.ts#CASH_IN_TOOL_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/zoneToolCopy.ts->symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
       "source": "file:src/renderer/copy/zoneToolCopy.ts",
       "target": "symbol:src/renderer/copy/zoneToolCopy.ts#ZONE_TOOL_COPY",
@@ -100980,6 +101192,12 @@
       "id": "exports:src/renderer/styles/theme.ts->symbol:src/renderer/styles/theme.ts#RendererThemeVars",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "symbol:src/renderer/styles/theme.ts#RendererThemeVars",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/testPace.ts->symbol:src/renderer/testPace.ts#comboCashInRequested",
+      "source": "file:src/renderer/testPace.ts",
+      "target": "symbol:src/renderer/testPace.ts#comboCashInRequested",
       "kind": "exports"
     },
     {
@@ -103572,6 +103790,78 @@
       "id": "exports:src/shared/colossus-rules.ts->symbol:src/shared/colossus-rules.ts#resolveColossusTurn",
       "source": "file:src/shared/colossus-rules.ts",
       "target": "symbol:src/shared/colossus-rules.ts#resolveColossusTurn",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#bankComboPot",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#bankComboPot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#comboPotHasValue",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#comboPotHasValue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#ComboPotLoss",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#ComboPotLoss",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#comboPotShare",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#comboPotShare",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#EMPTY_COMBO_POT",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#EMPTY_COMBO_POT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#forfeitPotOnBreak",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#forfeitPotOnBreak",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#potMatch",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#potMatch",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#runComboPot",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#runComboPot",
       "kind": "exports"
     },
     {
@@ -123149,6 +123439,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/combo-heat-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/combo-heat-rules.ts",
@@ -125183,6 +125479,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/combo-heat-rules.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/combo-heat-rules.ts",
@@ -125606,6 +125908,12 @@
       "id": "imports:src/renderer/components/screenCallouts.test.ts->src/renderer/components/screenCallouts.ts",
       "source": "file:src/renderer/components/screenCallouts.test.ts",
       "target": "file:src/renderer/components/screenCallouts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/screenCallouts.test.ts->src/renderer/copy/runDialogCopy.ts",
+      "source": "file:src/renderer/components/screenCallouts.test.ts",
+      "target": "file:src/renderer/copy/runDialogCopy.ts",
       "kind": "imports"
     },
     {
@@ -132515,6 +132823,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/contracts.ts",
@@ -134051,6 +134365,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/combo-heat-perks.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/combo-heat-perks.ts",
@@ -135152,6 +135472,54 @@
       "id": "imports:src/shared/colossus-rules.ts->src/shared/tile-symbol-catalog.ts",
       "source": "file:src/shared/colossus-rules.ts",
       "target": "file:src/shared/tile-symbol-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.test.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/combo-cash-in-rules.test.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/combo-cash-in-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/combo-cash-in-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.test.ts->src/shared/realm-weather-rules.ts",
+      "source": "file:src/shared/combo-cash-in-rules.test.ts",
+      "target": "file:src/shared/realm-weather-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.test.ts->src/shared/zone-rules.ts",
+      "source": "file:src/shared/combo-cash-in-rules.test.ts",
+      "target": "file:src/shared/zone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/combo-cash-in-rules.ts->src/shared/session-stats-rules.ts",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "file:src/shared/session-stats-rules.ts",
       "kind": "imports"
     },
     {
@@ -145325,6 +145693,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/turn-mismatch-rules.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/turn-mismatch-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/turn-mismatch-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/turn-mismatch-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -145787,6 +146161,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/warden-rules.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/warden-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/warden-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/warden-rules.ts",
       "target": "file:src/shared/contracts.ts",
@@ -145874,6 +146254,12 @@
       "id": "imports:src/shared/zone-rules.test.ts->src/shared/zone-rules.ts",
       "source": "file:src/shared/zone-rules.test.ts",
       "target": "file:src/shared/zone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/zone-rules.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/zone-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
       "kind": "imports"
     },
     {
@@ -152458,6 +152844,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/copy/runDialogCopy.ts->file:src/renderer/components/screenCallouts.test.ts",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "file:src/renderer/components/screenCallouts.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/copy/runEndStamp.ts->file:src/renderer/components/RunEndCinematic.test.tsx",
       "source": "file:src/renderer/copy/runEndStamp.ts",
       "target": "file:src/renderer/components/RunEndCinematic.test.tsx",
@@ -153976,6 +154368,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/combo-cash-in-rules.ts->file:src/shared/combo-cash-in-rules.test.ts",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/combo-heat-perks.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/shared/combo-heat-perks.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
@@ -154723,6 +155121,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/colossus-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/colossus-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/combo-cash-in-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/combo-cash-in-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -156760,6 +157164,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/combo-cash-in-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/combo-cash-in-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/combo-pay-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/combo-pay-rules.test.ts",
@@ -158287,6 +158697,12 @@
       "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/bad-floor-is-quiet.test.ts",
       "source": "file:src/shared/realm-weather-rules.ts",
       "target": "file:src/shared/bad-floor-is-quiet.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/realm-weather-rules.ts->file:src/shared/combo-cash-in-rules.test.ts",
+      "source": "file:src/shared/realm-weather-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -160309,6 +160725,12 @@
       "id": "tested_by:src/shared/warden-rules.ts->file:src/shared/warden-rules.test.ts",
       "source": "file:src/shared/warden-rules.ts",
       "target": "file:src/shared/warden-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/zone-rules.ts->file:src/shared/combo-cash-in-rules.test.ts",
+      "source": "file:src/shared/zone-rules.ts",
+      "target": "file:src/shared/combo-cash-in-rules.test.ts",
       "kind": "tested_by"
     },
     {

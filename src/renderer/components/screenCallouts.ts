@@ -37,7 +37,7 @@ import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } fro
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, only the first fresh stamp in this priority order is shown. New events replace it.
  */
-export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'realm';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'realm' | 'cashin' | 'potlost';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -61,7 +61,7 @@ export interface ScreenCallout {
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['realm', 'ignite', 'zone', 'milestone', 'rank', 'temper', 'broken', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['realm', 'ignite', 'zone', 'cashin', 'milestone', 'rank', 'temper', 'broken', 'potlost', 'last', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
@@ -237,6 +237,28 @@ export const deriveRealmCallouts = (previous: RealmCalloutSnapshot, next: RealmC
     }
     if (next.castEvent && next.castEvent.key !== previous.castEvent?.key && next.castEvent.key !== next.event?.key) {
         callouts.push(realmEventCallout(next.castEvent, REALMS[next.realm].color));
+    }
+    return callouts;
+};
+
+/**
+ * Cash in (`combo-cash-in-rules.ts`, `?combo2=1`): the bank stamped like a rank, the pot a miss took
+ * stamped like the break it rode on. Read off the last cash-in and the last loss, each keyed once.
+ */
+export const deriveCashInCallouts = (
+    previous: Pick<RunState, 'lastComboCashIn' | 'lastComboPotLoss'> | undefined,
+    next: Pick<RunState, 'lastComboCashIn' | 'lastComboPotLoss'>
+): ScreenCallout[] => {
+    const callouts: ScreenCallout[] = [];
+    const banked = next.lastComboCashIn;
+    if (banked && banked.key !== previous?.lastComboCashIn?.key) {
+        callouts.push({ key: banked.key, kind: 'cashin', size: 'major', tone: 'gold', title: 'CASHED IN!',
+            sub: `+${banked.score.toLocaleString()}${banked.gold > 0 ? ` · +${banked.gold} gold` : ''} · combo ×${banked.combo} banked` });
+    }
+    const lost = next.lastComboPotLoss;
+    if (lost && lost.key !== previous?.lastComboPotLoss?.key) {
+        callouts.push({ key: lost.key, kind: 'potlost', size: 'minor', tone: 'miss', title: 'POT LOST',
+            sub: `${lost.score.toLocaleString()}${lost.gold > 0 ? ` and ${lost.gold} gold` : ''} gone with the combo` });
     }
     return callouts;
 };

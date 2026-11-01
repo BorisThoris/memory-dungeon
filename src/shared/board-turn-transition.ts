@@ -36,6 +36,7 @@ import { applyRealmTurnToRun, resolveRealmTurn } from './realm-weather-rules';
 import { deriveMatchClaimContext } from './match-claim-rules';
 import { selectGambitMatchedPair } from './gambit-match-rules';
 import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
+import { comboCashInActive, potMatch } from './combo-cash-in-rules';
 import { applyMissBudget } from './miss-bank';
 import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
 import { resolveTurnMatchBoardCleanup, selectStickyFingersBlockIndex } from './turn-match-board-cleanup-rules';
@@ -402,6 +403,8 @@ export const createResolveBoardTurnTransition = ({
             nextRun.gold = runNonNegativeInteger(nextRun.gold) + rungGold;
             nextRun.comboRungGold = runNonNegativeInteger(run.comboRungGold) + rungGold;
         }
+        // Cash in (`combo-cash-in-rules.ts`, `?combo2=1` only): the multiplier's share and the rung gold wait in the pot.
+        if (comboCashInActive(run)) Object.assign(nextRun, potMatch(run, nextRun, scoring.matchScore, scoring.comboMultiplier, rungGold));
 
         Object.assign(nextRun, applyRealmTurnToRun(nextRun, realmTurn));
         /*

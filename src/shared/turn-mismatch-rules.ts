@@ -1,3 +1,4 @@
+import { forfeitPotOnBreak } from './combo-cash-in-rules';
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
 import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
 import { applyRestlessDrift, resolveRestlessDrift } from './restless-floor-rules';
@@ -59,7 +60,11 @@ export interface MismatchTurnTransitionInput {
     triesDelta: number;
 }
 
-export const resolveMismatchTurnTransition = ({
+/** A miss. Under cash-in (`combo-cash-in-rules.ts`) the combo it breaks takes its pot with it. */
+export const resolveMismatchTurnTransition = (input: MismatchTurnTransitionInput): RunState =>
+    forfeitPotOnBreak(input.run, resolveMissTurn(input));
+
+const resolveMissTurn = ({
     run,
     board,
     tileIds,

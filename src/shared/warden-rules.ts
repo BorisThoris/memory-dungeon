@@ -1,3 +1,4 @@
+import { bankComboPot, comboCashInActive } from './combo-cash-in-rules';
 import { DEPTH_WARDEN_REDEAL_EVERY, depthHas } from './depth-rules';
 import type { BoardState, RunState } from './contracts';
 import { parTurnsForRun } from './floor-par';
@@ -134,9 +135,14 @@ export const applyWardenTurn = (before: RunState, after: RunState): RunState => 
     return run.status === 'gameOver' ? { ...run, wardenOutcome: 'fell' } : run;
 };
 
-/** A cleared Warden ends the run as a win: the store calls this where a shared game's last floor ends it. */
+/**
+ * A cleared Warden ends the run as a win: the store calls this where a shared game's last floor ends it.
+ * Under cash-in (`combo-cash-in-rules.ts`) a win banks the pot: only a miss loses it.
+ */
 export const endRunAfterWardenClear = (run: RunState): RunState =>
-    run.status === 'levelComplete' && run.wardenOutcome === 'cleared' && !run.endless ? { ...run, status: 'gameOver', runEndReason: 'warden_cleared' } : run;
+    run.status === 'levelComplete' && run.wardenOutcome === 'cleared' && !run.endless
+        ? { ...(comboCashInActive(run) ? bankComboPot(run) : run), status: 'gameOver', runEndReason: 'warden_cleared' }
+        : run;
 
 /** Whether the cleared floor is the Warden's and the player still has to choose: take the win, or go on into Endless. */
 export const awaitsWardenChoice = (run: Pick<RunState, 'status' | 'wardenOutcome' | 'endless'>): boolean =>
