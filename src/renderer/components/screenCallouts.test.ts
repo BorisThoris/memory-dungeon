@@ -94,7 +94,7 @@ describe('cash in stamps (?combo2=1)', () => {
         const lost = { score: 45, gold: 1, key: 'pot-lost:1' };
         expect(deriveCashInCallouts(undefined, {})).toEqual([]);
         const first = deriveCashInCallouts({}, { lastComboCashIn: banked });
-        expect(first).toMatchObject([{ kind: 'cashin', title: 'CASHED IN!', sub: '+1,667 · +5 gold · combo ×9 banked' }]);
+        expect(first).toMatchObject([{ kind: 'cashin', title: 'CASHED IN!', sub: '+1,667 · +5 gold · combo 9 → 4' }]);
         expect(deriveCashInCallouts({ lastComboCashIn: banked }, { lastComboCashIn: banked })).toEqual([]);
         expect(deriveCashInCallouts({ lastComboCashIn: banked }, { lastComboCashIn: banked, lastComboPotLoss: lost })).toMatchObject([
             { kind: 'potlost', title: 'POT LOST', sub: '45 and 1 gold gone with the combo' }

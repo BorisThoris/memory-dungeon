@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3415,
     "codeFileCount": 1328,
-    "exportedSymbolCount": 4401,
+    "exportedSymbolCount": 4403,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12311
+    "relationshipCount": 12314
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "d74af77ee8cb4d131e640e953ad42f2955f3cd19e2860379b719b3d3042aa199"
+      "sha256": "6f3ca25746fd8b3bba4ae60b25cf93af41e83493c652c888b7ef6da26676955b"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -12147,14 +12147,14 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 7878,
-      "sha256": "b4c2a34de521453d8d5acf6bb8eb6b2b70d76baf3734209f6513d033e17fc621"
+      "bytes": 7875,
+      "sha256": "b6d34c3c793ec1e43e85df87f102db835e7e4cd0d3fd87b4d4bb0d7d8e3461a5"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 19260,
-      "sha256": "bd7ffc95c09856be5143fb9720a48d9ffa5b5d60f36f7afcccd10c7e1f8e16e1"
+      "bytes": 19344,
+      "sha256": "269f24e284f11893f22cb721b50752a66e574082e1e52ade002b3263e5343269"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -13575,8 +13575,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 10587,
-      "sha256": "bedf149d783a868c768c0b0385d34d17e7b0382f827ec130177dd97ea2709f55"
+      "bytes": 10589,
+      "sha256": "64588596e73d69a5b9d37f6bbd8197a50d1f8995ea09cce6815d5df5e6a02f9c"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -13659,8 +13659,8 @@
     {
       "path": "src/renderer/copy/zoneToolCopy.ts",
       "category": "source",
-      "bytes": 1263,
-      "sha256": "7b55b7c16981c202641bdb7fc78f1969816542ff8f7669cda547e2266aefa898"
+      "bytes": 1257,
+      "sha256": "de5489206686aa630934691624b07134e9c5a6b4fe0c4353e58dc99511824b61"
     },
     {
       "path": "src/renderer/desktop-client.test.ts",
@@ -15399,14 +15399,14 @@
     {
       "path": "src/shared/combo-cash-in-rules.test.ts",
       "category": "test",
-      "bytes": 5068,
-      "sha256": "8d3ee753bf160949e975d0bbd9ec380ba2313eda8eeaa8139371fc1975e63d0c"
+      "bytes": 5136,
+      "sha256": "386ab7eeaceb2a147a6ea3679eb3067f17fce57871f6646c25a39a6ec908ca7c"
     },
     {
       "path": "src/shared/combo-cash-in-rules.ts",
       "category": "source",
-      "bytes": 5701,
-      "sha256": "f420827877646e25efe78c5ef1436487e37fb81348830b37647138a483c1df9f"
+      "bytes": 6771,
+      "sha256": "c3101018911e4d816ecc1891c42fa7d16bddfe5fd9a67490ecbf311372a67365"
     },
     {
       "path": "src/shared/combo-heat-perks.test.ts",
@@ -18057,8 +18057,8 @@
     {
       "path": "tasks/back-to-the-base/01-cash-in.md",
       "category": "other",
-      "bytes": 3261,
-      "sha256": "c77b97e1f674f64861b07d7edb9be1099f2566de4df772fcf5273bdf91b8832a"
+      "bytes": 4765,
+      "sha256": "36628c056558965baea53195ec9faea02c6f9d5d1cb06c319554c93cebb2e27b"
     },
     {
       "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
@@ -27416,10 +27416,11 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 318,
+      "lineCount": 319,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -36872,7 +36873,7 @@
       "path": "src/shared/combo-cash-in-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 126,
+      "lineCount": 140,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -36880,8 +36881,10 @@
       ],
       "exports": [
         "symbol:src/shared/combo-cash-in-rules.ts#bankComboPot",
+        "symbol:src/shared/combo-cash-in-rules.ts#bankKeeps",
         "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
         "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+        "symbol:src/shared/combo-cash-in-rules.ts#COMBO_BANK_KEEPS",
         "symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
         "symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
         "symbol:src/shared/combo-cash-in-rules.ts#comboPotHasValue",
@@ -54690,96 +54693,96 @@
       "name": "deriveCashInCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 248,
-      "endLine": 264
+      "line": 249,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 291,
-      "endLine": 312
+      "line": 292,
+      "endLine": 313
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
       "name": "deriveRealmCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 228,
-      "endLine": 242
+      "line": 229,
+      "endLine": 243
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
       "name": "deriveTurnCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 69,
-      "endLine": 116
+      "line": 70,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveZoneCallouts",
       "name": "deriveZoneCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 266,
-      "endLine": 289
+      "line": 267,
+      "endLine": 290
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#RealmCalloutSnapshot",
       "name": "RealmCalloutSnapshot",
       "kind": "interface",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 213,
-      "endLine": 222
+      "line": 214,
+      "endLine": 223
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#realmEntryCallout",
       "name": "realmEntryCallout",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 193,
-      "endLine": 210
+      "line": 194,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#realmEventCallout",
       "name": "realmEventCallout",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 164,
-      "endLine": 190
+      "line": 165,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCallout",
       "name": "ScreenCallout",
       "kind": "interface",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 43,
-      "endLine": 60
+      "line": 44,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutKind",
       "name": "ScreenCalloutKind",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#ScreenCalloutTone",
       "name": "ScreenCalloutTone",
       "kind": "type",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#stageTone",
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 315,
-      "endLine": 315
+      "line": 316,
+      "endLine": 316
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -65946,32 +65949,48 @@
       "name": "bankComboPot",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 95,
-      "endLine": 113
+      "line": 108,
+      "endLine": 126
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#bankKeeps",
+      "name": "bankKeeps",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
       "name": "canCashIn",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 87,
-      "endLine": 92
+      "line": 100,
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
       "name": "cashInCombo",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 115,
-      "endLine": 125
+      "line": 128,
+      "endLine": 139
+    },
+    {
+      "id": "symbol:src/shared/combo-cash-in-rules.ts#COMBO_BANK_KEEPS",
+      "name": "COMBO_BANK_KEEPS",
+      "kind": "value",
+      "file": "src/shared/combo-cash-in-rules.ts",
+      "line": 43,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#comboCashInActive",
       "name": "comboCashInActive",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 48,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#ComboPot",
@@ -65986,8 +66005,8 @@
       "name": "comboPotHasValue",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 42,
-      "endLine": 42
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#ComboPotLoss",
@@ -66002,8 +66021,8 @@
       "name": "comboPotShare",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 45,
-      "endLine": 49
+      "line": 58,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#EMPTY_COMBO_POT",
@@ -66018,24 +66037,24 @@
       "name": "forfeitPotOnBreak",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 77,
-      "endLine": 84
+      "line": 90,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#potMatch",
       "name": "potMatch",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 55,
-      "endLine": 74
+      "line": 68,
+      "endLine": 87
     },
     {
       "id": "symbol:src/shared/combo-cash-in-rules.ts#runComboPot",
       "name": "runComboPot",
       "kind": "value",
       "file": "src/shared/combo-cash-in-rules.ts",
-      "line": 37,
-      "endLine": 40
+      "line": 50,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/combo-heat-perks.ts#COMBO_HEAT_PERKS",
@@ -82650,7 +82669,7 @@
         },
         {
           "path": "src/renderer/components/screenCallouts.ts",
-          "line": 16
+          "line": 17
         }
       ],
       "tests": [
@@ -83166,7 +83185,7 @@
         },
         {
           "path": "src/renderer/components/screenCallouts.ts",
-          "line": 18
+          "line": 19
         }
       ],
       "tests": [
@@ -85617,7 +85636,7 @@
         },
         {
           "path": "src/renderer/components/screenCallouts.ts",
-          "line": 40
+          "line": 41
         }
       ],
       "tests": [
@@ -103799,6 +103818,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#bankKeeps",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#bankKeeps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
       "source": "file:src/shared/combo-cash-in-rules.ts",
       "target": "symbol:src/shared/combo-cash-in-rules.ts#canCashIn",
@@ -103808,6 +103833,12 @@
       "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
       "source": "file:src/shared/combo-cash-in-rules.ts",
       "target": "symbol:src/shared/combo-cash-in-rules.ts#cashInCombo",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/combo-cash-in-rules.ts->symbol:src/shared/combo-cash-in-rules.ts#COMBO_BANK_KEEPS",
+      "source": "file:src/shared/combo-cash-in-rules.ts",
+      "target": "symbol:src/shared/combo-cash-in-rules.ts#COMBO_BANK_KEEPS",
       "kind": "exports"
     },
     {
@@ -125944,6 +125975,12 @@
       "id": "imports:src/renderer/components/screenCallouts.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
       "source": "file:src/renderer/components/screenCallouts.ts",
       "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/screenCallouts.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/renderer/components/screenCallouts.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
       "kind": "imports"
     },
     {

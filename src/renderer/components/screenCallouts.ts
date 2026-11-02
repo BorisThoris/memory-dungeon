@@ -1,3 +1,4 @@
+import { bankKeeps } from '../../shared/combo-cash-in-rules';
 import type { RunState } from '../../shared/contracts';
 import { comboMissesEarned } from '../../shared/miss-bank';
 import {
@@ -253,7 +254,7 @@ export const deriveCashInCallouts = (
     const banked = next.lastComboCashIn;
     if (banked && banked.key !== previous?.lastComboCashIn?.key) {
         callouts.push({ key: banked.key, kind: 'cashin', size: 'major', tone: 'gold', title: 'CASHED IN!',
-            sub: `+${banked.score.toLocaleString()}${banked.gold > 0 ? ` · +${banked.gold} gold` : ''} · combo ×${banked.combo} banked` });
+            sub: `+${banked.score.toLocaleString()}${banked.gold > 0 ? ` · +${banked.gold} gold` : ''} · combo ${banked.combo} → ${bankKeeps(banked.combo)}` });
     }
     const lost = next.lastComboPotLoss;
     if (lost && lost.key !== previous?.lastComboPotLoss?.key) {

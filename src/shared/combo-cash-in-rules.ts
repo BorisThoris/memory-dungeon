@@ -12,8 +12,8 @@ import { normalizeSessionStats } from './session-stats-rules';
  *
  *   - A match banks what it would have paid at x1. What the multiplier adds on top of that, and
  *     the gold a rung pays, go into the **pot** (`run.comboPot`), shown under the combo.
- *   - Between turns, **Cash in** banks the pot (score and gold) and the combo goes back to zero:
- *     the ladder is climbed again from Lone.
+ *   - Between turns, **Cash in** banks the pot (score and gold) and the combo **halves**
+ *     (`COMBO_BANK_KEEPS`): the ladder drops a way, not to the floor.
  *   - A miss that breaks the combo **loses the pot**. So every hot turn asks the player one thing:
  *     do I trust my memory once more?
  *
@@ -31,6 +31,19 @@ export interface ComboPotLoss extends ComboPot {
 }
 
 export const EMPTY_COMBO_POT: ComboPot = { score: 0, gold: 0 };
+
+/**
+ * The share of the combo a bank keeps. Measured 2026-11-02 against a player who knows when they are
+ * unsure (sure turns miss 3%, unsure 45%): with a bank that zeroed the combo, banking cost the whole
+ * multiplier, so the best play was a fixed count and banking when unsure was the worst policy. Kept
+ * at a half, banking when unsure with a pot past ~500 is the best policy at 15% and 20% misses
+ * (37,211 against 33,719 for the best count at 15%): the bank answers the player's memory, which
+ * is what the owner asked the combo to do (`tasks/back-to-the-base/01-cash-in.md`).
+ */
+export const COMBO_BANK_KEEPS = 0.5;
+
+/** What a bank leaves of a count: the combo, its cascaded pairs, its skip momentum. */
+export const bankKeeps = (value: number | null | undefined): number => Math.floor(runNonNegativeInteger(value) * COMBO_BANK_KEEPS);
 
 export const comboCashInActive = (run: Pick<RunState, 'comboCashIn'>): boolean => run.comboCashIn === true;
 
@@ -91,7 +104,7 @@ export const canCashIn = (run: RunState): boolean =>
     (run.board?.flippedTileIds.length ?? 0) === 0 &&
     comboPotHasValue(runComboPot(run));
 
-/** Bank the pot and end the combo: the ladder is climbed again from Lone. */
+/** Bank the pot. The combo is left as it was: `cashInCombo` is what halves it. */
 export const bankComboPot = (run: RunState): RunState => {
     const pot = runComboPot(run);
     if (!comboPotHasValue(pot)) return { ...run, comboPot: null };
@@ -115,11 +128,12 @@ export const bankComboPot = (run: RunState): RunState => {
 export const cashInCombo = (run: RunState): RunState => {
     if (!canCashIn(run)) return run;
     const banked = bankComboPot(run);
+    const combo = bankKeeps(banked.stats.currentStreak);
     return {
         ...banked,
-        chunkPairsThisChain: 0,
-        skipMomentumThisChain: 0,
-        comboLinksCarried: 0,
-        stats: { ...banked.stats, currentStreak: 0 }
+        chunkPairsThisChain: bankKeeps(banked.chunkPairsThisChain),
+        skipMomentumThisChain: bankKeeps(banked.skipMomentumThisChain),
+        comboLinksCarried: Math.min(combo, runNonNegativeInteger(banked.comboLinksCarried)),
+        stats: { ...banked.stats, currentStreak: combo }
     };
 };

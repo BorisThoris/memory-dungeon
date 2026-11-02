@@ -19,6 +19,6 @@ export const zoneRailLine = (up: number, cap: number): string => `Zone · ${up} 
 /** Cash in's dock button (`combo-cash-in-rules.ts`, `?combo2=1`): Bank while the pot holds something. */
 export const CASH_IN_TOOL_COPY = {
     ready: (score: number, gold: number): string =>
-        `Bank the pot: +${score.toLocaleString()} score and +${gold} gold, and the combo starts again`,
+        `Bank the pot: +${score.toLocaleString()} score and +${gold} gold, and the combo halves`,
     pendingFlip: 'Bank between turns, with no card up'
 } as const;

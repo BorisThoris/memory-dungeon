@@ -53,15 +53,15 @@ describe('cash in (prototype, ?combo2=1)', () => {
         expect((held.gold ?? 0) + pot.gold).toBe(plain.gold ?? 0);
     });
 
-    it('banks the pot on Cash in and climbs the ladder again from zero', () => {
+    it('banks the pot on Cash in and halves the combo', () => {
         const held = hotRun(true);
         const pot = runComboPot(held);
         expect(canCashIn(held)).toBe(true);
         const banked = cashInCombo(held);
         expect(banked.stats.totalScore).toBe(held.stats.totalScore + pot.score);
         expect(banked.gold).toBe((held.gold ?? 0) + pot.gold);
-        expect(banked.stats.currentStreak).toBe(0);
-        expect(banked.chunkPairsThisChain).toBe(0);
+        expect(banked.stats.currentStreak).toBe(Math.floor(held.stats.currentStreak / 2));
+        expect(banked.chunkPairsThisChain).toBe(Math.floor((held.chunkPairsThisChain ?? 0) / 2));
         expect(runComboPot(banked)).toEqual({ score: 0, gold: 0 });
         expect(banked.lastComboCashIn).toMatchObject({ score: pot.score, gold: pot.gold, combo: held.stats.currentStreak });
         expect(canCashIn(banked)).toBe(false);
