@@ -1,5 +1,6 @@
 {
     "ignores": [
+        "@bubblewrap/core",
         "@fontsource/cinzel",
         "@fontsource/cormorant-garamond",
         "@fontsource/lora",
