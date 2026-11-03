@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { openRunMenuItem } from './playablePathHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
-import { mainMenuPlayButton } from './visualScreenHelpers';
+import { mainMenuPlayButton, startClassicRunFromModeSelect } from './visualScreenHelpers';
 
 const blockingConsoleTypes = new Set(['error']);
 
@@ -97,8 +97,10 @@ async function expectMainMenu(page: Page) {
     await expect(mainMenuPlayButton(page)).toBeVisible();
 }
 
+/** Play opens Choose Your Path, a first run included; the Classic Run is the demo's run. */
 async function startPortfolioRun(page: Page) {
     await mainMenuPlayButton(page).click();
+    await startClassicRunFromModeSelect(page);
 }
 
 async function expectInteractiveBoard(page: Page) {

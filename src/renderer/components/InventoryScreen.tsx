@@ -49,8 +49,10 @@ const CHARGE_ROWS: readonly { id: string; label: string }[] = [
  * the two columns asked about 380 each, so the body scrolled and the fit contract failed it. There
  * the run's Inventory is tabs, one section to a page, charges first - the actions a player opens it
  * for mid-run. A window this short or narrow gets them; everything else keeps the two columns.
+ * Narrow means wherever the stylesheet stacks the columns (860px): a tablet held upright stacked
+ * them too and the Mutators fell under the body's edge (2026-11-03, the fit contract at 834x1112).
  */
-const INVENTORY_TABS_MAX_WIDTH = 600;
+const INVENTORY_TABS_MAX_WIDTH = 860;
 const INVENTORY_TABS_MAX_HEIGHT = 560;
 type InventoryTab = 'charges' | 'upgrades' | 'mutators';
 const INVENTORY_TAB_LABEL: Readonly<Record<InventoryTab, string>> = {

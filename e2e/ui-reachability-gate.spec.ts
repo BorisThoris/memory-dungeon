@@ -214,6 +214,14 @@ test.describe('every control a screen shows can be clicked', () => {
                 // A tool with nothing to spend is not expected to answer; it is not silent either.
                 continue;
             }
+            /*
+             * Say hello sits inside the floor resident's conversation, a closed <details> until the
+             * player opens it: open it the way a player does, by its summary, then press.
+             */
+            const closedSummary = page.locator('details:not([open])', { has: page.getByTestId(tool.id) }).locator('summary');
+            if ((await closedSummary.count()) > 0) {
+                await closedSummary.first().click();
+            }
             await page.getByTestId(tool.id).click({ force: true });
             await page.waitForTimeout(600);
             const after = await readBoard();
@@ -227,6 +235,10 @@ test.describe('every control a screen shows can be clicked', () => {
             const spent = now === undefined || now.text !== was.text;
             const said = after.line !== before.line;
             (armed || spent || said ? answered : silent).push(tool.id);
+            const openResident = page.locator('details[open][data-testid="floor-resident"]');
+            if ((await openResident.count()) > 0) {
+                await openResident.getByRole('button', { name: 'Back to cards' }).click();
+            }
 
             /*
              * Disarm by pressing the same tool again, not with Escape. Escape opens the run menu,
@@ -270,7 +282,16 @@ test.describe('every control a screen shows can be clicked', () => {
                     await page.waitForTimeout(1500);
                     await openPlayablePathFixture(page, fixture);
                 }
-                await page.waitForTimeout(800);
+                /*
+                 * The floor clear continues by itself: a fixed 800ms wait sometimes landed on the
+                 * next floor's deal instead, whose board hit-tested as covered while it dealt (one
+                 * run in three, 2026-11-03). Measure the floor-clear screen while it is up.
+                 */
+                if (fixture === 'floorClearWithRouteChoices') {
+                    await page.getByTestId('floor-clear-title').waitFor({ state: 'visible', timeout: 15_000 });
+                } else {
+                    await page.waitForTimeout(800);
+                }
                 expect(await findUnreachableControls(page), `${fixture} @ ${viewport.id}`).toEqual([]);
                 expect(await findAmbiguousControls(page), `${fixture} reads twice @ ${viewport.id}`).toEqual([]);
 

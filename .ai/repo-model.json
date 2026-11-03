@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3410,
+    "trackedFileCount": 3408,
     "codeFileCount": 1328,
     "exportedSymbolCount": 4403,
     "contentItemCount": 16,
@@ -2839,12 +2839,6 @@
       "sha256": "a8f2e5fb611f9ae972fbb42552d78edfd3fcd912997df11879733fb537d3a776"
     },
     {
-      "path": "docs/ui-design-reference/390x844/01f-profile.png",
-      "category": "documentation",
-      "bytes": 81362,
-      "sha256": "c85baf594c0ac0bc170e82922eb3bcc081b1cd42cab11ddfcd7dd432c0c5ee78"
-    },
-    {
       "path": "docs/ui-design-reference/390x844/02-main-menu-howto.png",
       "category": "documentation",
       "bytes": 326295,
@@ -3963,8 +3957,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 6610,
-      "sha256": "a30131420acbf9f9636237da9cfab9e0bf56d8dff761720eacbd68fdcee58a8d"
+      "bytes": 6781,
+      "sha256": "1b2d23d01e5733ce42d862ff576c7ceb7531168dab069732ec9b3ad5699ec182"
     },
     {
       "path": "e2e/element-resonance.spec.ts",
@@ -3993,8 +3987,8 @@
     {
       "path": "e2e/gameplay-chrome-clearance.spec.ts",
       "category": "test",
-      "bytes": 13604,
-      "sha256": "b4af6b140dd93e6102ca5712650c56b4f1f3f3440a165194282836890b6aeb63"
+      "bytes": 14363,
+      "sha256": "bfb1f37f52e24cd778bd19610fc9b7f477c7f4e7abed3c103587b4dec83a9cd5"
     },
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
@@ -4203,8 +4197,8 @@
     {
       "path": "e2e/tile-card-face-illustration-regression.spec.ts",
       "category": "test",
-      "bytes": 12643,
-      "sha256": "eb52dd8ff19813a26240f3005a317921d86aaa6dd60029c5a55969f0a9df8414"
+      "bytes": 13092,
+      "sha256": "364837464eaf9fa63ff2cb035041ae18f343ab2458e4d5c79529ab14a553724b"
     },
     {
       "path": "e2e/tile-card-face-overlay-regression.spec.ts",
@@ -4245,8 +4239,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 14526,
-      "sha256": "d74b10c896c7305732c33a7ba0b13b8d93fc761b1df1c3bd28c7c9e635a4e172"
+      "bytes": 15800,
+      "sha256": "47741f0b8185cd469a6d5096f922cf895b58417e3fd338c255d3d34a75f4409a"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -4551,8 +4545,8 @@
     {
       "path": "playwright.config.ts",
       "category": "configuration",
-      "bytes": 2937,
-      "sha256": "c3ff84887038fbc2d0d857c9466b3779f77cee024d690252c61185377bf5020c"
+      "bytes": 3905,
+      "sha256": "c71eb1d9e3eb30bd66e2100e3809649d3557a956758326edf1ca47a2f1a36f2b"
     },
     {
       "path": "public/.well-known/assetlinks.json",
@@ -4623,8 +4617,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71707,
-      "sha256": "5cbd8ae23eb69823643ddb36113cee6b9dfee6062de60cb794b859730e831d91"
+      "bytes": 71863,
+      "sha256": "abc8c9ca2263ddc7c3c70c1f95975f730c78eee0349aee4a60e69b4ef0d02162"
     },
     {
       "path": "public/privacy.html",
@@ -5277,8 +5271,8 @@
     {
       "path": "scripts/check-renderer-bundle-budget.mjs",
       "category": "script",
-      "bytes": 4644,
-      "sha256": "65c3470b2e82eb9caea72cc1283852644c8c9e31a79d30add049e30a928b412f"
+      "bytes": 5477,
+      "sha256": "04fc39a12441a98a9fa1c12e725966c7c4be5d8f40d029a4b8251fc1f4bf0616"
     },
     {
       "path": "scripts/check-test-file-extensions.mjs",
@@ -11409,8 +11403,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 16424,
-      "sha256": "7efa152b5b7a8d04deffa1e2fcf703eae80b9800b457c252874f5eb18ef48880"
+      "bytes": 16622,
+      "sha256": "135547927d2283386bc0d7c83161100c781629ec09bafa8e23f0072dc49638c1"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -17043,8 +17037,8 @@
     {
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
       "category": "test",
-      "bytes": 3166,
-      "sha256": "1e2b69ff91e0751d3f5496e5c5c0508693f56a9e942522a0b677f3d30a697ddf"
+      "bytes": 3544,
+      "sha256": "01cb206594a5f2b147b2c7ba875307f66e0025573383bc043a59f217c8ddd8be"
     },
     {
       "path": "src/shared/renderer-error-report.test.ts",
@@ -20465,12 +20459,6 @@
       "category": "other",
       "bytes": 298946,
       "sha256": "6776ef471f73ba109456bca3ec4448b7d5b2153557139f3c50b75ad66615f6bf"
-    },
-    {
-      "path": "zz-pw.config.ts",
-      "category": "configuration",
-      "bytes": 952,
-      "sha256": "de54841dc6d5bc1a85f9f47d6f25e0221a13dcb093d8d4ca588c054c9aa6c206"
     }
   ],
   "files": [
@@ -25419,7 +25407,7 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 302,
+      "lineCount": 304,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/EvolutionGlyph.tsx",
@@ -43304,7 +43292,7 @@
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 99,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -52176,8 +52164,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 301,
-      "endLine": 301
+      "line": 303,
+      "endLine": 303
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",

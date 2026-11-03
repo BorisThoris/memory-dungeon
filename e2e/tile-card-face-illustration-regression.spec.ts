@@ -253,7 +253,14 @@ test.describe('Procedural illustration regression', () => {
         expect(result.overlayCacheIdentityStable).toBe(true);
         expect(result.overlayCacheContainsRegressionKey).toBe(true);
         expect(result.warmHashes.warm).toBe(result.warmHashes.cold);
-        expect(result.matrixIllustrationDebugState.entryCount).toBe(PAIR_KEYS.length * 3);
+        /*
+         * Every draw in the matrix was cached. Since the caches were bounded (2026-10-10) the
+         * oldest panels leave once the cache holds its pixel budget, so the matrix's 72 do not all
+         * stay: what is missing was evicted by that bound, and the bound held.
+         */
+        const matrixCache = result.matrixIllustrationDebugState;
+        expect(matrixCache.entryCount + matrixCache.evictedCount).toBe(PAIR_KEYS.length * 3);
+        expect(matrixCache.pixelCount).toBeLessThanOrEqual(matrixCache.maxPixels);
 
         const nextFixture: IllustrationHashFixture = {
             hashes: sortRecord(result.hashes),

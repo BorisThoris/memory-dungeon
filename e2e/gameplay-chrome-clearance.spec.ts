@@ -187,7 +187,20 @@ test.describe('the in-run chrome clearance', () => {
          * nothing at the rest - which is what this test did on its first run, reporting `surfaces
          * missing` at 1.0 and 1.05. Gen 239 recorded the same artefact on the same screen.
          */
+        /*
+         * Up to three arrivals per scale: on a loaded machine the beat could come and go inside the
+         * 400ms settle, and one scale in three read `surfaces missing` at random while every scale
+         * that was measured cleared by 258px or more (2026-11-03). The scale can also fail to take
+         * when the beat moves on under it; that arrival is tried again too.
+         */
         const overlapAtScale = async (uiScale: number): Promise<{ titleGap: number; boxSpill: number } | null> => {
+            for (let arrival = 0; arrival < 3; arrival += 1) {
+                const measured = await measureAtScale(uiScale).catch(() => null);
+                if (measured) return measured;
+            }
+            return null;
+        };
+        const measureAtScale = async (uiScale: number): Promise<{ titleGap: number; boxSpill: number } | null> => {
             await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
             await forceScale(page, uiScale);
             await page.waitForTimeout(400);

@@ -12,13 +12,19 @@ const mib = 1024 * kib;
 
 // Uncompressed production-output regression ceilings. Keep these close to the
 // checked-in renderer baseline so feature growth must make its bundle cost explicit.
+//
+// 2026-11-03, release pass: total 17 → 32 MiB and main 1450 → 1650 KiB, written down here. The
+// 17 MiB predates the painted realms, their light passes, the realm ambiences and the composed
+// music, all of which the run preloads at boot by rule (nothing streams in play); measured 30.97
+// MiB without the portfolio media below. main grew to 1.56 MiB with the combo, Zone and curio
+// rules. Lower these when a pass shrinks the output; raising them again needs a line here.
 const budgets = {
-    totalBytes: 17 * mib,
+    totalBytes: 32 * mib,
     totalJsBytes: 3900 * kib,
     totalCssBytes: 1300 * kib,
     maxAssetBytes: 2000 * kib,
     maxJsChunkBytes: {
-        main: 1450 * kib,
+        main: 1650 * kib,
         GameScreen: 700 * kib,
         'vendor-three': 780 * kib,
         'vendor-pixi': 880 * kib,
@@ -64,6 +70,12 @@ if (!fs.existsSync(outDir)) {
     process.exit(1);
 }
 
+/**
+ * The portfolio's trailer and artwork (`scripts/project-meta.config.mjs`) are published next to the
+ * game so the portfolio can link them; the game itself never requests them, so they are not its cost.
+ */
+const PORTFOLIO_MEDIA_DIRS = ['trailers/', 'artwork/'];
+
 const files = walkFiles(outDir).map((absolute) => {
     const rel = path.relative(outDir, absolute).replace(/\\/g, '/');
     const size = fs.statSync(absolute).size;
@@ -74,7 +86,7 @@ const files = walkFiles(outDir).map((absolute) => {
         ext: path.extname(absolute).toLowerCase(),
         size
     };
-});
+}).filter((file) => !PORTFOLIO_MEDIA_DIRS.some((dir) => file.rel.startsWith(dir)));
 
 const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
 const jsFiles = files.filter((file) => file.ext === '.js');

@@ -49,7 +49,7 @@ describe('renderer bundle budget script', () => {
 
     it('fails oversized named JavaScript chunks', () => {
         const outDir = makeOutputDir();
-        writeSizedFile(path.join(outDir, 'assets', 'main-oversized.js'), 1451 * 1024);
+        writeSizedFile(path.join(outDir, 'assets', 'main-oversized.js'), 1651 * 1024);
 
         const result = runBudgetResult(outDir);
 
@@ -59,7 +59,7 @@ describe('renderer bundle budget script', () => {
 
     it('fails oversized total output', () => {
         const outDir = makeOutputDir();
-        writeSizedFile(path.join(outDir, 'assets', 'payload.bin'), 21 * 1024 * 1024);
+        writeSizedFile(path.join(outDir, 'assets', 'payload.bin'), 33 * 1024 * 1024);
 
         const result = runBudgetResult(outDir);
 
@@ -75,6 +75,14 @@ describe('renderer bundle budget script', () => {
 
         expect(result.status).toBe(1);
         expect(result.stderr).toContain('exceeds individual asset budget');
+    });
+
+    it('leaves the portfolio trailer and artwork out: the game never loads them', () => {
+        const outDir = makeOutputDir();
+        fs.mkdirSync(path.join(outDir, 'trailers'), { recursive: true });
+        writeSizedFile(path.join(outDir, 'trailers', 'reel.mp4'), 40 * 1024 * 1024);
+
+        expect(runBudget(outDir)).toContain('Renderer bundle budget passed.');
     });
 
     it('fails leaked design-reference WIP assets', () => {
