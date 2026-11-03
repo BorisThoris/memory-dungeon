@@ -1,6 +1,5 @@
 import type { RunEndReason, RunState, RunSummary } from '../../shared/contracts';
 import type { DescentRunSummary } from '../../shared/descent-run-summary';
-import { DESCENT_FLOOR_COUNT } from '../../shared/floor-mutator-schedule';
 import { WARDEN_FELL_PAIRS } from '../../shared/warden-rules';
 import { descentLengthFor } from '../../shared/descent-length-rules';
 

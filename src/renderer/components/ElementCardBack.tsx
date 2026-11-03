@@ -126,6 +126,7 @@ export const prewarmElementCardTextures = (upload?: (texture: CanvasTexture) => 
  * The stand-in is kept: disposing it would release the very program it compiled.
  */
 let warmBack: Scene | null = null;
+// eslint-disable-next-line react-refresh/only-export-components -- the floor's warm-up compiles the very program the backs below use.
 export const prewarmCardBackShaders = (compile: (scene: Scene) => void): void => {
     if (!warmBack) {
         const material = new MeshBasicMaterial({

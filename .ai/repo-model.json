@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3415,
+    "trackedFileCount": 3410,
     "codeFileCount": 1328,
     "exportedSymbolCount": 4403,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12316
+    "relationshipCount": 12315
   },
   "inventory": [
     {
@@ -2391,8 +2391,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 8692,
-      "sha256": "00144693a3506ecd9401f95c5227b6d3f29341006d488421ffb1b1860e32e4c2"
+      "bytes": 8827,
+      "sha256": "f2c32330d05087f39919694af8733afb3504d051f2f347e1543cf86cf68e94b1"
     },
     {
       "path": "docs/REMOVED_DECOY.md",
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "d537769f8524faec23baa8b5b789d15c5b809bc9324b702239dd2affbff36416"
+      "sha256": "2c640a5790bc36bdec5ad2535eb4465382f1a6478e69a3a9f8b4568f3dd1549f"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4345,40 +4345,10 @@
       "sha256": "3e6d3c744e60a5106c4e21d11fd7e0fbd109a946ee61257c2b4fdc00331ee9f5"
     },
     {
-      "path": "e2e/zz-awaken-shot.spec.ts",
-      "category": "test",
-      "bytes": 1419,
-      "sha256": "7b9d0ec25f3ea5bd731b870a9de14b5dcfada7c299bea2c25c48f4da9e0fed7e"
-    },
-    {
-      "path": "e2e/zz-base-shot.spec.ts",
-      "category": "test",
-      "bytes": 3159,
-      "sha256": "5de940eae08ae2920563b8749424f3a30eda9ddaba813beba0cfe9132fd28739"
-    },
-    {
-      "path": "e2e/zz-fuse-shot.spec.ts",
-      "category": "test",
-      "bytes": 1599,
-      "sha256": "0d5c0ad2a48e21adafc40875534b5ec0c0855c92298108a2e1686f6741f98a4d"
-    },
-    {
-      "path": "e2e/zz-lost-shot.spec.ts",
-      "category": "test",
-      "bytes": 5000,
-      "sha256": "ab3fb41fa3c4045b0d456f2cb95b62b7af2e0a50117d3a2059ccd4904da8996c"
-    },
-    {
-      "path": "e2e/zz-store-shot.spec.ts",
-      "category": "test",
-      "bytes": 3442,
-      "sha256": "27ebdf08aa8265542a642af2e512411b66c4eff090f3c5835e4c63a928ef51f2"
-    },
-    {
       "path": "eslint.config.mjs",
       "category": "configuration",
-      "bytes": 5117,
-      "sha256": "5b8b7a2909f5d2990a44cc99262f8b74f1dbd3083d7b5defd44553420322f898"
+      "bytes": 5254,
+      "sha256": "8ea9c5173fb6073aeae9c5d63ff456eda226f022a6b938ca0c4870d1a5b4158f"
     },
     {
       "path": "index.html",
@@ -4473,8 +4443,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 34316,
-      "sha256": "5c94e3114601f6f81610762cc3e18856d80c3b486142c608626184958d387654"
+      "bytes": 34317,
+      "sha256": "73d0d49b7dead1192f8cf261214d5b4d17848a4d650ef057cd06610d2dc608fb"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5031,8 +5001,8 @@
     {
       "path": "scripts/audit-summary.mjs",
       "category": "script",
-      "bytes": 7648,
-      "sha256": "7de39361b687ad7c2a8a5ab05205b37dd1f4725072bc152eb61ef87d4161fda9"
+      "bytes": 8690,
+      "sha256": "88d46191c72e92b35261d45c7dd02b02d6f24fa204d27db4f69f894c29103c3f"
     },
     {
       "path": "scripts/bake-procedural-illustration-set-options.ts",
@@ -11049,8 +11019,8 @@
     {
       "path": "src/renderer/components/ElementCardBack.tsx",
       "category": "source",
-      "bytes": 8762,
-      "sha256": "691eae5a2872a8e477bc2bd8cafc5aebf6d3f02313f81feccadb387431f51b09"
+      "bytes": 8897,
+      "sha256": "f88d6bbbd81ee9b1b6c7a32e659a05f805d252ac6deb788b1b4ec97a2f7850e1"
     },
     {
       "path": "src/renderer/components/ElementCardMaterial.tsx",
@@ -12309,8 +12279,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148231,
-      "sha256": "32d4ba7cac09a2297cb14c7c3d43e95580fbc14b52842402e3de01059954762b"
+      "bytes": 148433,
+      "sha256": "28a6fd87d37353118bb2dcc9fbadf15d37b4e025a516376a2465dd3d568c5368"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -13389,8 +13359,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 11482,
-      "sha256": "cce17bccc242010b46fc03580f82ec522f7a56c69c49def06d4454ad21cee24f"
+      "bytes": 11407,
+      "sha256": "46115896097d2fb1c13d588bc706d82c30dd787952b4f803404bf87826190d46"
     },
     {
       "path": "src/renderer/copy/gameOverWardenLine.test.ts",
@@ -16533,8 +16503,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 79659,
-      "sha256": "be548ed9bfb7c952d2728228b3bddb3deebd50876ecf7464d7670ad489a4af69"
+      "bytes": 79638,
+      "sha256": "ec4b90011b45a116ad61560c09e2d7770e8e8d918456cf8ffc40123ae7c6378b"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -17049,8 +17019,8 @@
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 17130,
-      "sha256": "9a1573dbfe37cb596dc87b5d7658e10121ba91da4e339f36e90a95b1bd4dfd63"
+      "bytes": 17265,
+      "sha256": "04dbc4a2a14c22e92906f53df172121d274356b77192de8396a2565458fc38ba"
     },
     {
       "path": "src/shared/relic-evolution-rules.test.ts",
@@ -17349,8 +17319,8 @@
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 87423,
-      "sha256": "17024cdf59b272499ac381c2c20301f76d84f169d22a780d369b0918791545c2"
+      "bytes": 87402,
+      "sha256": "b411655b67586e62004001c658127b76e27abedf18132972bbe1b87629ab7400"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -20493,8 +20463,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 316232,
-      "sha256": "1d0d7988868565886027e31cc079c32e6d0e5686cb411bd98864bd6bbf5529c6"
+      "bytes": 298946,
+      "sha256": "7f7fadfdc1ae0545e29a75ba2d1e360899d0be6cc939d128ab9a288aecc3dd9d"
     },
     {
       "path": "zz-pw.config.ts",
@@ -24292,7 +24262,7 @@
       "path": "src/renderer/components/ElementCardBack.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 211,
+      "lineCount": 212,
       "imports": [
         "file:src/renderer/components/cardBackInk.ts",
         "file:src/renderer/components/tileBoardPick.ts",
@@ -27884,7 +27854,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3334,
+      "lineCount": 3335,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -31158,12 +31128,11 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 212,
+      "lineCount": 211,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/descent-length-rules.ts",
         "file:src/shared/descent-run-summary.ts",
-        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/warden-rules.ts"
       ],
       "exports": [
@@ -51295,8 +51264,8 @@
       "name": "ElementCardBack",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 174,
-      "endLine": 210
+      "line": 175,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#elementTexture",
@@ -51311,8 +51280,8 @@
       "name": "prewarmCardBackShaders",
       "kind": "value",
       "file": "src/renderer/components/ElementCardBack.tsx",
-      "line": 129,
-      "endLine": 146
+      "line": 130,
+      "endLine": 147
     },
     {
       "id": "symbol:src/renderer/components/ElementCardBack.tsx#prewarmElementCardTextures",
@@ -55167,8 +55136,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3333,
-      "endLine": 3333
+      "line": 3334,
+      "endLine": 3334
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -59103,48 +59072,48 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 185,
-      "endLine": 211
+      "line": 184,
+      "endLine": 210
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
       "name": "descentEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 166,
-      "endLine": 171
+      "line": 165,
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
       "name": "descentFirstsLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 174,
-      "endLine": 175
+      "line": 173,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "name": "gameOverScreenCopy",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 10,
-      "endLine": 142
+      "line": 9,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 177,
-      "endLine": 178
+      "line": 176,
+      "endLine": 177
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#wardenEndLine",
       "name": "wardenEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 152,
-      "endLine": 163
+      "line": 151,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -130081,12 +130050,6 @@
       "id": "imports:src/renderer/copy/gameOverScreen.ts->src/shared/descent-run-summary.ts",
       "source": "file:src/renderer/copy/gameOverScreen.ts",
       "target": "file:src/shared/descent-run-summary.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/gameOverScreen.ts->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/renderer/copy/gameOverScreen.ts",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {

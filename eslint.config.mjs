@@ -33,7 +33,9 @@ export default tseslint.config(
             'third_party/**',
             'scripts/**/*.mjs',
             'scripts/**/*.cjs',
-            'leaderboard/.wrangler/**'
+            'leaderboard/.wrangler/**',
+            // The per-checkout Vite dependency cache (vite.config.mts cacheDir): generated, never source.
+            '.vite-cache/**'
         ]
     },
     js.configs.recommended,

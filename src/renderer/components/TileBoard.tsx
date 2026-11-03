@@ -892,7 +892,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardEntranceKey = useMemo(
         () =>
             // A two-deck floor keys on every id it was dealt (`board-layers-rules.ts`): a card rising into a cleared cell is not a new deal.
-            boardDealKey(board),
+            // Only the fields it reads, so a new board object with the same deal keeps its key.
+            boardDealKey({ columns: board.columns, layerKey: board.layerKey, level: board.level, rows: board.rows, tiles: board.tiles }),
         [board.columns, board.layerKey, board.level, board.rows, board.tiles]
     );
     const prevBoardEntranceKeyRef = useRef<string | null>(null);

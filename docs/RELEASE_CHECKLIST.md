@@ -91,4 +91,4 @@ achievement on the Partner site or shoot a trailer.
 |---|---|---|---|
 | Which languages, if any | **undecided** | a decision | Every player-facing sentence is already in a copy module, so this is purely a question of budget. |
 | Whether crash reports should ever leave the machine | **undecided** | a decision | Today they stay on disk. Sending them needs a backend and a consent flow. |
-| Whether to move Electron past 41 | **undecided** | a decision | A release-sized change on its own; the current line is patched and clean. |
+| Whether to move Electron past 41 | **undecided** | a decision | A release-sized change on its own. Electron 41.10.7 is the newest 41, and eight advisories in it are fixed only from 42: they reach the desktop build, not the web or Play builds (`scripts/audit-summary.mjs`). |

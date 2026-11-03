@@ -112,8 +112,21 @@ export const partitionAdvisoriesByReach = (advisories, runtimeDependencyNames) =
  * path-specific pins that CAN be written are already here and took. Each is a
  * denial-of-service on crafted input, in a tool that runs on a developer's machine and never in a
  * shipped build. Bump minimatch at those three parents and the number should fall to zero.
+ *
+ * 2026-11-03, release pass: 81 → 10, and 9 → 10 written down here. New advisories had overtaken the
+ * pins again, and zod (shipped) had one of its own. Bumped: zod 4.6.7, vite 6.4.5, vitest 4.1.12,
+ * electron-builder 26.18.1, eslint 9.39.5, eslint-plugin-react-hooks 7.1.1, concurrently, wait-on,
+ * knip, happy-dom 21 (test-only; the renderer suite passes on it); re-resolved the leaves the lock
+ * held below their own ranges; raised the stale pins (fast-uri, follow-redirects, joi, vitest's
+ * vite, smol-toml, shell-quote). Nothing reaches the web build. The ten that remain:
+ *
+ *   - eight in **Electron 41.10.7**, the newest 41; each is fixed only from 42. They count as
+ *     build-only because Electron is a devDependency, but they DO ship in the desktop build (not
+ *     the web or Play builds). Moving past 41 is the open decision on the release checklist.
+ *   - minimatch < 11 under eslint 9 and depcheck, which both need the 3.x line.
+ *   - glob <= 14.0.1 under rimraf 6.1.3, the newest rimraf (it needs glob 13).
  */
-export const BUILD_ONLY_ADVISORY_BASELINE = 9;
+export const BUILD_ONLY_ADVISORY_BASELINE = 10;
 
 export const evaluateAuditRisk = ({ advisories }, runtimeDependencyNames, baseline = BUILD_ONLY_ADVISORY_BASELINE) => {
   const { buildOnly, runtime } = partitionAdvisoriesByReach(advisories, runtimeDependencyNames);

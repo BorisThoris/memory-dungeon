@@ -19,7 +19,7 @@ import {
     type GameMode,
     type MutatorId
 } from './contracts';
-import { DESCENT_ACTS, DESCENT_FLOOR_COUNT } from './floor-mutator-schedule';
+import { DESCENT_ACTS } from './floor-mutator-schedule';
 import { DREAD_RAGING_MULTIPLIER, DREAD_TIERS, DREAD_WILD_MULTIPLIER } from './dread-rules';
 import { WARDEN_DEAL_AGAIN_PAIRS, WARDEN_FELL_PAIRS, WARDEN_REDEAL_EVERY_TURNS } from './warden-rules';
 import { HOLD_METER_SEGMENTS } from './hold-rules';

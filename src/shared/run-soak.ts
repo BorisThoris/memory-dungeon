@@ -29,7 +29,7 @@ import { applyBomb, applyPeek, applyShuffle, bombTargetTileId } from './board-po
 import { COLOSSUS_BREAK_PAIRS, COLOSSUS_CHIPS_PER_HIT, COLOSSUS_MAX_SPLIT_PAIRS } from './colossus-rules';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { inspectBoardFairness, allBoardCards } from './board-inspection';
-import { advanceToNextLevel, createNewRun, createWildRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
+import { advanceToNextLevel, createNewRun, createWildRun, flipTile, resolveBoardTurn } from './game';
 import { studyWithFlurry } from './flurry-rules';
 import { applyMissBudget, missBankCap, missBankGrantLastFloor, missesLeft } from './miss-bank';
 import { runComboHeatPerks } from './combo-heat-perks';

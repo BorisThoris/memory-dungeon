@@ -390,7 +390,7 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     {
         id: 'electron-major',
         label: 'Whether to move Electron past 41',
-        note: 'A release-sized change on its own; the current line is patched and clean.',
+        note: 'A release-sized change on its own. Electron 41.10.7 is the newest 41, and eight advisories in it are fixed only from 42: they reach the desktop build, not the web or Play builds (`scripts/audit-summary.mjs`).',
         owner: 'decision',
         section: 'Open decisions'
     }
