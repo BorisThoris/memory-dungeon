@@ -26,6 +26,22 @@ const resolveSystemChromium = (): string | null => {
 
 const systemChromiumPath = resolveSystemChromium();
 
+/**
+ * WebGL on the GPU. Headless Chromium otherwise renders WebGL in SwiftShader on the CPU: on the
+ * owner's RTX 3090, inside the isolated test window station, a 1080p shader frame took 216 ms in
+ * SwiftShader and 0.75 ms on D3D11. 2D canvas stays on the CPU so canvas hashes do not change.
+ * Windows only (other hosts keep Playwright's defaults); PLAYWRIGHT_GPU=0 turns it off.
+ */
+const gpuWebglArgs =
+    process.platform === 'win32' && !systemChromiumPath && process.env.PLAYWRIGHT_GPU !== '0'
+        ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--disable-accelerated-2d-canvas']
+        : [];
+
+/** PLAYWRIGHT_PORT lets parallel agent sessions each run the suite on their own dev server. */
+const parsedPort = Number.parseInt(process.env.PLAYWRIGHT_PORT ?? '', 10);
+const port = Number.isFinite(parsedPort) && parsedPort > 0 ? parsedPort : 5173;
+const baseURL = `http://127.0.0.1:${port}`;
+
 
 const parsedWorkers = Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '', 10);
 const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWorkers : 1;
@@ -44,9 +60,10 @@ const config: PlaywrightTestConfig = {
     reporter: 'list',
     use: {
         headless: true,
-        baseURL: 'http://127.0.0.1:5173',
+        baseURL,
         /** Point at a system Chromium when the pinned browser build is not installed (remote runners). */
         ...(systemChromiumPath ? { launchOptions: { executablePath: systemChromiumPath } } : {}),
+        ...(gpuWebglArgs.length ? { launchOptions: { args: gpuWebglArgs } } : {}),
         serviceWorkers: 'block',
         /** Keeps CI artifacts smaller than `trace: 'on'` while preserving traces for flaky retries. */
         trace: 'retain-on-failure',
@@ -64,8 +81,8 @@ const config: PlaywrightTestConfig = {
         }
     ],
     webServer: {
-        command: 'cross-env E2E_DISABLE_HMR=1 yarn vite --host 127.0.0.1 --port 5173 --strictPort',
-        url: 'http://127.0.0.1:5173',
+        command: `cross-env E2E_DISABLE_HMR=1 yarn vite --host 127.0.0.1 --port ${port} --strictPort`,
+        url: baseURL,
         reuseExistingServer: !process.env.CI,
         /** Cold caches / busy agents: avoid false failures while Vite prebundles (default 60s is tight). */
         timeout: 180_000
