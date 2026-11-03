@@ -78,7 +78,9 @@ describe('gate:changed selector', () => {
         expect(payload.gates.find((gate) => gate.id === 'simHealth')?.command).toBe('yarn gate:sim-health');
         expect(payload.gates.find((gate) => gate.id === 'longRun')?.command).toBe('yarn gate:long-run');
         expect(payload.reasons.some((reason) => reason.file === 'docs/system-diagrams/actions.json')).toBe(true);
-    });
+        // The file's first spawn of the selector pays its cold start: 36.8s on a loaded machine
+        // against the default 30s, which failed `yarn ci` (2026-11-03). Same budget as ai-repo-model.
+    }, 120_000);
 
     it('selects the long-run soak gate for pacing and balance changes', () => {
         const payload = runGateChanged(
