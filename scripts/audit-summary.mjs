@@ -115,7 +115,7 @@ export const partitionAdvisoriesByReach = (advisories, runtimeDependencyNames) =
  *
  * 2026-11-03, release pass: 81 → 10, and 9 → 10 written down here. New advisories had overtaken the
  * pins again, and zod (shipped) had one of its own. Bumped: zod 4.6.7, vite 6.4.5, vitest 4.1.12,
- * electron-builder 26.18.1, eslint 9.39.5, eslint-plugin-react-hooks 7.1.1, concurrently, wait-on,
+ * electron-builder 26.18.1, eslint 9.39.5, concurrently, wait-on,
  * knip, happy-dom 21 (test-only; the renderer suite passes on it); re-resolved the leaves the lock
  * held below their own ranges; raised the stale pins (fast-uri, follow-redirects, joi, vitest's
  * vite, smol-toml, shell-quote). Nothing reaches the web build. The ten that remain:

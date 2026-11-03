@@ -4444,7 +4444,7 @@
       "path": "package.json",
       "category": "configuration",
       "bytes": 34317,
-      "sha256": "73d0d49b7dead1192f8cf261214d5b4d17848a4d650ef057cd06610d2dc608fb"
+      "sha256": "74d7a092c29b3f447002a2e2d19f183b3d66e4be787b603c8f57d422bc25ebb9"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5001,8 +5001,8 @@
     {
       "path": "scripts/audit-summary.mjs",
       "category": "script",
-      "bytes": 8690,
-      "sha256": "88d46191c72e92b35261d45c7dd02b02d6f24fa204d27db4f69f894c29103c3f"
+      "bytes": 8657,
+      "sha256": "d7d48eac4c6ae70e8f2b89439e4ac33600b5cd1685e1f5c3d40ef810c62e2487"
     },
     {
       "path": "scripts/bake-procedural-illustration-set-options.ts",
@@ -20464,7 +20464,7 @@
       "path": "yarn.lock",
       "category": "other",
       "bytes": 298946,
-      "sha256": "7f7fadfdc1ae0545e29a75ba2d1e360899d0be6cc939d128ab9a288aecc3dd9d"
+      "sha256": "6776ef471f73ba109456bca3ec4448b7d5b2153557139f3c50b75ad66615f6bf"
     },
     {
       "path": "zz-pw.config.ts",
