@@ -27,8 +27,8 @@
     {
       "path": ".depcheckrc.json",
       "category": "configuration",
-      "bytes": 202,
-      "sha256": "baebde1fedcbfdddd9b90771e58cb6f1bc8909596fd73efa92639ca94e7bdf4f"
+      "bytes": 230,
+      "sha256": "3f82068384571bac3295d28af904243b4ea58da128cc8c07263b2df1020965f0"
     },
     {
       "path": ".gitattributes",
@@ -4359,8 +4359,8 @@
     {
       "path": "knip.json",
       "category": "configuration",
-      "bytes": 2056,
-      "sha256": "6881477ab45083623a11bdd11f762e6d096e7d8020fdc9774f92ae89073894e0"
+      "bytes": 2076,
+      "sha256": "a6b83f4e37b7ad82333a07193c4abae5dacb2c7d8b9e996aaf110d94514d6f3a"
     },
     {
       "path": "leaderboard/check-api.mjs",
