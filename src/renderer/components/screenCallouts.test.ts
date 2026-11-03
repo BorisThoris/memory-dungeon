@@ -105,5 +105,6 @@ describe('cash in stamps (?combo2=1)', () => {
         expect(RUN_SHELL_LABELS.comboLost(9, 4, 1667)).toBe('Lost 9 · ×4 · pot 1,667');
         expect(RUN_SHELL_LABELS.comboLost(9, 4)).toBe('Lost 9 · ×4');
         expect(RUN_SHELL_LABELS.comboPot(1667, 5)).toBe('Pot 1,667 · 5 gold');
+        expect(RUN_SHELL_LABELS.comboBanked(491, 7, 3)).toBe('Banked +491 · 7 → 3');
     });
 });

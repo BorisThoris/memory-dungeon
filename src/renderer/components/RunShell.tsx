@@ -6,7 +6,7 @@ import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { COMBO_HEAT_THEMES, comboHeatLevels, comboHeatThemeForRun, comboStageLabel } from '../../shared/combo-heat-rules';
 import { comboPays, runComboMultiplier } from '../../shared/combo-pay-rules';
-import { comboCashInActive, comboPotHasValue, runComboPot } from '../../shared/combo-cash-in-rules';
+import { bankKeeps, comboCashInActive, comboPotHasValue, runComboPot } from '../../shared/combo-cash-in-rules';
 import { PlasmaRail } from './PlasmaRail';
 import { isZoneActive } from '../../shared/zone-rules';
 import { parTurnsForRun, turnsTakenThisFloor } from '../../shared/floor-par';
@@ -190,6 +190,27 @@ const useComboLost = (chain: number, multiplier: number, cashIns = 0, pot = 0): 
         };
     }, [chain, multiplier, cashIns, pot]);
     return lost;
+};
+
+/**
+ * What a bank paid (cash in, `?combo2=1`): the stamp is a word, so the HUD says the rest - the pot
+ * and the combo's drop - for the same moment the lost line holds. Read off the last cash-in's key,
+ * so a mount never replays one.
+ */
+const useComboBanked = (last: RunState['lastComboCashIn']): NonNullable<RunState['lastComboCashIn']> | null => {
+    const [shown, setShown] = useState<NonNullable<RunState['lastComboCashIn']> | null>(null);
+    const seenRef = useRef(last?.key ?? null);
+    useEffect(() => {
+        if (!last || last.key === seenRef.current) return undefined;
+        seenRef.current = last.key;
+        const start = window.setTimeout(() => setShown(last), 0);
+        const end = window.setTimeout(() => setShown(null), COMBO_LOST_MS);
+        return () => {
+            window.clearTimeout(start);
+            window.clearTimeout(end);
+        };
+    }, [last]);
+    return shown;
 };
 
 /**
@@ -387,6 +408,7 @@ const RunShell = ({
     const cashIn = comboCashInActive(run);
     const pot = runComboPot(run);
     const comboLost = useComboLost(chain, matchMultiplier, runNonNegativeInteger(run.comboCashIns), pot.score);
+    const comboBanked = useComboBanked(run.lastComboCashIn);
     const rungs = chainTierRungs(run.board?.pairCount ?? null);
     // One rule for what the chain is climbing toward, so the ladder, the goal copy and the lean-in
     // below can never disagree about which rung is next or how far off it is.
@@ -927,6 +949,16 @@ const RunShell = ({
                                         data-testid="hud-combo-lost"
                                     >
                                         {RUN_SHELL_LABELS.comboLost(comboLost.links, comboLost.multiplier, comboLost.pot)}
+                                    </span>
+                                ) : null}
+                                {comboBanked ? (
+                                    <span
+                                        aria-live="polite"
+                                        className={styles.comboBanked}
+                                        data-reduce-motion={reduceMotion ? 'true' : undefined}
+                                        data-testid="hud-combo-banked"
+                                    >
+                                        {RUN_SHELL_LABELS.comboBanked(comboBanked.score, comboBanked.combo, bankKeeps(comboBanked.combo))}
                                     </span>
                                 ) : null}
                                 {cashIn && comboPotHasValue(pot) ? (

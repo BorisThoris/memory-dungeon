@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12314
+    "relationshipCount": 12316
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "6f3ca25746fd8b3bba4ae60b25cf93af41e83493c652c888b7ef6da26676955b"
+      "sha256": "d537769f8524faec23baa8b5b789d15c5b809bc9324b702239dd2affbff36416"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11955,8 +11955,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 67751,
-      "sha256": "36276c418a35e7e11906b8fc576dcbb069d17760912a45cef1f085a6267fba87"
+      "bytes": 68527,
+      "sha256": "fe6abdf60c50d29a71b2783c011dae929e7abace2016fa70453ac4e71c8a6c36"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -11967,8 +11967,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 62865,
-      "sha256": "ed8040cd23bfa3cf5a302c6740687ace09f4da66fab1da8b5091fc930f45b973"
+      "bytes": 64502,
+      "sha256": "729bfdf22b224b2095bcb146ec21654da0e7316f10e1d79d9b44215d63859da0"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12147,8 +12147,8 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 7875,
-      "sha256": "b6d34c3c793ec1e43e85df87f102db835e7e4cd0d3fd87b4d4bb0d7d8e3461a5"
+      "bytes": 7963,
+      "sha256": "48813a871334ee2229fc535e2ab98052998181d097560fdc0f7223ca48b75804"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
@@ -13575,8 +13575,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 10589,
-      "sha256": "64588596e73d69a5b9d37f6bbd8197a50d1f8995ea09cce6815d5df5e6a02f9c"
+      "bytes": 10806,
+      "sha256": "c98798203346c502e6c96003b08d23c86d87dc67ac7c57c0fd8f54f21d66dfd2"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -17343,14 +17343,14 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 12256,
-      "sha256": "cb7a8b20a226270f7f8d0bdbfbae0442c2b77204cdee5e78b3ca7f1684f76697"
+      "bytes": 13012,
+      "sha256": "ff4b210ec90f049631e9953ad96e04bf73f44dea390b2f6ef6ad738dd2e2cb06"
     },
     {
       "path": "src/shared/run-soak.ts",
       "category": "source",
-      "bytes": 84781,
-      "sha256": "223c44040c39cfc9e640bc21b74be276869dda06b36f0e7bf1af06ad7896d9a7"
+      "bytes": 87423,
+      "sha256": "17024cdf59b272499ac381c2c20301f76d84f169d22a780d369b0918791545c2"
     },
     {
       "path": "src/shared/run-store-rules.test.ts",
@@ -17703,8 +17703,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 263050,
-      "sha256": "87e10cce917ff943c736bff7ef4c2455be7a94bed20c28faf7f810b4a2bd6b53"
+      "bytes": 266322,
+      "sha256": "df06ced75397601a83a3045b6b08f95104cc3f3060b095bf50c8a652f27bd42f"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -18057,8 +18057,8 @@
     {
       "path": "tasks/back-to-the-base/01-cash-in.md",
       "category": "other",
-      "bytes": 4765,
-      "sha256": "36628c056558965baea53195ec9faea02c6f9d5d1cb06c319554c93cebb2e27b"
+      "bytes": 5852,
+      "sha256": "1d5433a7248174d8301ab16cad4ea317f0afc0f3806fee2ef95476d0583f3776"
     },
     {
       "path": "tasks/deep-game-epic/00-the-plateau-measured.md",
@@ -26850,7 +26850,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1067,
+      "lineCount": 1099,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -27400,7 +27400,7 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 110,
+      "lineCount": 111,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -31655,7 +31655,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 195,
+      "lineCount": 197,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -44240,7 +44240,7 @@
       "path": "src/shared/run-soak.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 143,
+      "lineCount": 154,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/run-soak.ts"
@@ -44253,7 +44253,7 @@
       "path": "src/shared/run-soak.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1323,
+      "lineCount": 1358,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -44263,6 +44263,7 @@
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/colossus-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-heat-perks.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/crucible-rules.ts",
@@ -45646,7 +45647,7 @@
       "path": "src/shared/test-hall-rooms.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 3968,
+      "lineCount": 4004,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -45658,6 +45659,7 @@
         "file:src/shared/carve-rules.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/colossus-rules.ts",
+        "file:src/shared/combo-cash-in-rules.ts",
         "file:src/shared/combo-pay-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/crucible-rules.ts",
@@ -53853,8 +53855,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1066,
-      "endLine": 1066
+      "line": 1098,
+      "endLine": 1098
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -59645,8 +59647,8 @@
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 188,
-      "endLine": 194
+      "line": 190,
+      "endLine": 196
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
@@ -59661,16 +59663,16 @@
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 171,
-      "endLine": 174
+      "line": 173,
+      "endLine": 176
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 187,
-      "endLine": 187
+      "line": 189,
+      "endLine": 189
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -59685,8 +59687,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 180,
-      "endLine": 184
+      "line": 182,
+      "endLine": 186
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -59702,15 +59704,15 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 70,
-      "endLine": 87
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 129,
-      "endLine": 161
+      "line": 131,
+      "endLine": 163
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
@@ -59725,8 +59727,8 @@
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 96,
-      "endLine": 114
+      "line": 98,
+      "endLine": 116
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -59741,8 +59743,8 @@
       "name": "WARDEN_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 122,
-      "endLine": 127
+      "line": 124,
+      "endLine": 129
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
@@ -77909,48 +77911,48 @@
       "name": "SOAK_INVARIANTS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 264,
-      "endLine": 833
+      "line": 275,
+      "endLine": 856
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SOAK_PLAYERS",
       "name": "SOAK_PLAYERS",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 88,
-      "endLine": 100
+      "line": 94,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakPlayer",
       "name": "SoakPlayer",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 63,
-      "endLine": 86
+      "line": 64,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/run-soak.ts#soakRun",
       "name": "soakRun",
       "kind": "value",
       "file": "src/shared/run-soak.ts",
-      "line": 845,
-      "endLine": 1322
+      "line": 868,
+      "endLine": 1357
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakRunReport",
       "name": "SoakRunReport",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 111,
-      "endLine": 247
+      "line": 119,
+      "endLine": 258
     },
     {
       "id": "symbol:src/shared/run-soak.ts#SoakViolation",
       "name": "SoakViolation",
       "kind": "interface",
       "file": "src/shared/run-soak.ts",
-      "line": 102,
-      "endLine": 109
+      "line": 110,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/run-store-rules.ts#buyStoreItem",
@@ -80173,112 +80175,112 @@
       "name": "MIN_TEST_HALL_CHECKS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3925,
-      "endLine": 3925
+      "line": 3961,
+      "endLine": 3961
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#playTestHallStep",
       "name": "playTestHallStep",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3742,
-      "endLine": 3902
+      "line": 3776,
+      "endLine": 3938
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_CHECKED_ELSEWHERE",
       "name": "TEST_HALL_CHECKED_ELSEWHERE",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3931,
-      "endLine": 3938
+      "line": 3967,
+      "endLine": 3974
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_RESEEDS",
       "name": "TEST_HALL_RESEEDS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3915,
-      "endLine": 3915
+      "line": 3951,
+      "endLine": 3951
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TEST_HALL_ROOMS",
       "name": "TEST_HALL_ROOMS",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3730,
-      "endLine": 3730
+      "line": 3764,
+      "endLine": 3764
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallChecksByMechanic",
       "name": "testHallChecksByMechanic",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3941,
-      "endLine": 3947
+      "line": 3977,
+      "endLine": 3983
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallRoom",
       "name": "testHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3967,
-      "endLine": 3967
+      "line": 4003,
+      "endLine": 4003
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoom",
       "name": "TestHallRoom",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 339,
-      "endLine": 356
+      "line": 343,
+      "endLine": 360
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomId",
       "name": "TestHallRoomId",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 78,
-      "endLine": 272
+      "line": 79,
+      "endLine": 274
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallRoomReport",
       "name": "TestHallRoomReport",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3904,
-      "endLine": 3907
+      "line": 3940,
+      "endLine": 3943
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallScriptLine",
       "name": "TestHallScriptLine",
       "kind": "interface",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 332,
-      "endLine": 337
+      "line": 336,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#TestHallStep",
       "name": "TestHallStep",
       "kind": "type",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 274,
-      "endLine": 330
+      "line": 276,
+      "endLine": 334
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#testHallWalks",
       "name": "testHallWalks",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3918,
-      "endLine": 3922
+      "line": 3954,
+      "endLine": 3958
     },
     {
       "id": "symbol:src/shared/test-hall-rooms.ts#walkTestHallRoom",
       "name": "walkTestHallRoom",
       "kind": "value",
       "file": "src/shared/test-hall-rooms.ts",
-      "line": 3949,
-      "endLine": 3965
+      "line": 3985,
+      "endLine": 4001
     },
     {
       "id": "symbol:src/shared/test/game-fixtures.ts#makeBoard",
@@ -82538,7 +82540,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 80
+          "line": 91
         }
       ],
       "enables": [
@@ -82590,7 +82592,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 52
+          "line": 63
         }
       ],
       "enables": [],
@@ -82636,7 +82638,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 74
         }
       ],
       "enables": [
@@ -82683,7 +82685,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 74
         }
       ],
       "enables": [
@@ -82730,7 +82732,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 63
+          "line": 74
         }
       ],
       "enables": [
@@ -82773,7 +82775,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 73
+          "line": 84
         }
       ],
       "enables": [],
@@ -82822,7 +82824,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 55
+          "line": 66
         }
       ],
       "enables": [],
@@ -83066,7 +83068,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 40
+          "line": 51
         }
       ],
       "enables": [],
@@ -83148,7 +83150,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 85
+          "line": 96
         }
       ],
       "enables": [
@@ -83199,7 +83201,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 85
+          "line": 96
         }
       ],
       "enables": [
@@ -83361,7 +83363,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 64
+          "line": 75
         }
       ],
       "enables": [
@@ -83409,7 +83411,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 54
+          "line": 65
         }
       ],
       "enables": [],
@@ -83623,7 +83625,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 59
+          "line": 70
         }
       ],
       "enables": [
@@ -83649,7 +83651,7 @@
         },
         {
           "path": "src/shared/run-soak.ts",
-          "line": 33
+          "line": 1
         }
       ],
       "tests": [
@@ -83659,7 +83661,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 61
+          "line": 36
         },
         {
           "path": "src/shared/test-hall-rooms.test.ts",
@@ -83701,7 +83703,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 85
+          "line": 96
         }
       ],
       "enables": [
@@ -83895,7 +83897,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 64
+          "line": 75
         }
       ],
       "enables": [],
@@ -84087,7 +84089,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 43
+          "line": 54
         }
       ],
       "enables": [
@@ -84390,7 +84392,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 40
+          "line": 51
         }
       ],
       "enables": [
@@ -84544,7 +84546,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 48
+          "line": 59
         }
       ],
       "enables": [
@@ -84878,7 +84880,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 62
+          "line": 73
         }
       ],
       "enables": [],
@@ -84994,7 +84996,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 51
+          "line": 62
         }
       ],
       "enables": [
@@ -85042,7 +85044,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 49
+          "line": 60
         }
       ],
       "enables": [
@@ -85600,7 +85602,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 40
+          "line": 42
         }
       ],
       "enables": [],
@@ -85650,7 +85652,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 82
+          "line": 93
         }
       ],
       "enables": [
@@ -86186,7 +86188,7 @@
         },
         {
           "path": "src/shared/run-soak.test.ts",
-          "line": 52
+          "line": 63
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
@@ -86524,7 +86526,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 495
         }
       ],
       "tests": [
@@ -86563,7 +86565,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 495
         }
       ],
       "tests": [
@@ -86597,7 +86599,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 495
         }
       ],
       "tests": [
@@ -86631,7 +86633,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 473
+          "line": 495
         }
       ],
       "tests": [
@@ -143024,6 +143026,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-soak.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/run-soak.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-soak.ts->src/shared/combo-heat-perks.ts",
       "source": "file:src/shared/run-soak.ts",
       "target": "file:src/shared/combo-heat-perks.ts",
@@ -144797,6 +144805,12 @@
       "id": "imports:src/shared/test-hall-rooms.ts->src/shared/colossus-rules.ts",
       "source": "file:src/shared/test-hall-rooms.ts",
       "target": "file:src/shared/colossus-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/test-hall-rooms.ts->src/shared/combo-cash-in-rules.ts",
+      "source": "file:src/shared/test-hall-rooms.ts",
+      "target": "file:src/shared/combo-cash-in-rules.ts",
       "kind": "imports"
     },
     {

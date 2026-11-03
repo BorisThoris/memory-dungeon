@@ -1,3 +1,4 @@
+import { canCashIn, cashInCombo, runComboPot, type ComboPot } from './combo-cash-in-rules';
 import { earnedFeats, FEATS, type FeatId } from './feat-unlocks';
 import { canCarve, carve } from './carve-rules';
 import type { CarveDirection, FusionId } from './contracts';
@@ -269,7 +270,8 @@ export type TestHallRoomId =
     | 'colossus-split'
     | 'turncoat'
     | 'hourglass'
-    | 'hourglass-runs-out';
+    | 'hourglass-runs-out'
+    | 'cash-in';
 
 export type TestHallStep =
     | { readonly do: 'greet' }
@@ -289,6 +291,8 @@ export type TestHallStep =
     | { readonly do: 'stormGlass' }
     | { readonly do: 'takePurse' }
     | { readonly do: 'stillBell' }
+    /** Cash in (`combo-cash-in-rules.ts`, `?combo2=1`): bank the combo's pot between turns. */
+    | { readonly do: 'cashIn' }
     | { readonly do: 'meteor'; readonly tileId: string }
     | { readonly do: 'peek'; readonly tileId: string }
     | { readonly do: 'shuffle' }
@@ -436,6 +440,8 @@ const room = (
 
 /** A boss floor of two elements in a checkerboard (nothing pops), four pairs each, with its Colossus raised: fire first, then water. */
 const COLOSSUS_FLOOR = ['a:e b:t c:e d:t', 'b:t a:e d:t c:e', 'e:e f:t g:e h:t', 'f:t e:e h:t g:e'] as const;
+/** Cash in's floor: twelve pairs over four elements, so a pop leaves enough on the board to play on. */
+const CASH_IN_FLOOR = ['a:e b:t c:m d:b', 'b:t a:e d:b c:m', 'e:e f:t g:m h:b', 'f:t e:e h:b g:m', 'i:e j:t k:m l:b', 'j:t i:e l:b k:m'] as const;
 const colossusRoom = (edit: (colossus: ColossusState) => ColossusState = (c) => c): RunState => {
     const base = room(COLOSSUS_FLOOR, { level: 7, board: { floorTag: 'boss' } });
     const raised = raiseColossus(base.board!, { runSeed: base.runSeed, rulesVersion: base.runRulesVersion });
@@ -541,6 +547,9 @@ const expectAll =
 const isGone = (pairKey: string) => (run: RunState) => (gone(run, pairKey) ? null : `pair ${pairKey} is still on the board`);
 const isStanding = (pairKey: string) => (run: RunState) => (standing(run, pairKey) ? null : `pair ${pairKey} left the board`);
 const missesAre = (n: number) => (run: RunState) => (missesLeft(run) === n ? null : `misses left ${missesLeft(run)}, expected ${n}`);
+/** Cash in's pot (`combo-cash-in-rules.ts`), read as the HUD reads it. */
+const potIs = (holds: (pot: ComboPot) => boolean) => (run: RunState) => (holds(runComboPot(run)) ? null : `pot ${JSON.stringify(runComboPot(run))}`);
+const comboIs = (combo: number) => (run: RunState) => (run.stats.currentStreak === combo ? null : `combo ${run.stats.currentStreak}, expected ${combo}`);
 const statusIs = (status: RunState['status']) => (run: RunState) => (run.status === status ? null : `status ${run.status}, expected ${status}`);
 const order = (run: RunState): string => (run.board?.tiles ?? []).map((t) => t.id).join(',');
 const positionOf = (run: RunState, tileId: string): number => (run.board?.tiles ?? []).findIndex((t) => t.id === tileId);
@@ -3564,6 +3573,31 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
         ]
     },
     {
+        id: 'cash-in',
+        title: 'Cash in: the combo as push your luck (prototype)',
+        mechanic: 'Behind ?combo2=1 only. A match banks what it would pay at x1; what the combo multiplier adds, and the gold a rung pays, wait in a pot under the combo. Bank pays the pot and halves the combo. A miss that breaks the combo loses the pot.',
+        graphMechanicIds: ['board.chain_chunk_fever'],
+        tryThis: 'Your combo stands at two. Match a: Clean, and the pot fills. Match b: it grows (the pop takes the tide and fire pairs). Bank: the pot pays and the combo halves to two. Match d, then miss on two moss cards: the new pot goes with the combo.',
+        // Rules 107: the combo pays from 106, and the hall's own rules version predates it.
+        build: () => room(CASH_IN_FLOOR, { level: 4, streak: 2, run: { comboCashIn: true, runRulesVersion: COMBO_STRIKES_FROM } }),
+        script: [
+            { step: { do: 'match', pairKey: 'a' }, says: 'the third link reaches Clean: what the multiplier adds goes into the pot, not the score', expect: expectAll(potIs((pot) => pot.score > 0 && pot.gold > 0), comboIs(3)) },
+            { step: { do: 'match', pairKey: 'b' }, says: 'the fourth: the pot grows', expect: expectAll(potIs((pot) => pot.score > 60), comboIs(4)) },
+            {
+                step: { do: 'cashIn' },
+                says: 'Bank: the pot pays into the score and the combo halves to two',
+                expect: expectAll(potIs((pot) => pot.score === 0 && pot.gold === 0), comboIs(2), (r) => (r.lastComboCashIn && r.lastComboCashIn.score > 0 && r.lastComboCashIn.combo === 4 ? null : `last cash-in ${JSON.stringify(r.lastComboCashIn)}`))
+            },
+            { step: { do: 'match', pairKey: 'd' }, says: 'the third link again: a new pot', expect: expectAll(potIs((pot) => pot.score > 0), comboIs(3)) },
+            {
+                step: { do: 'miss', a: 'c-1', b: 'g-1' },
+                says: 'the miss breaks the combo and takes the pot with it',
+                expect: expectAll(potIs((pot) => pot.score === 0), comboIs(0), (r) => (r.comboPotsLost === 1 && (r.lastComboPotLoss?.score ?? 0) > 0 ? null : `pots lost ${r.comboPotsLost}`))
+            },
+            { step: { do: 'clear' }, says: 'the floor clears', expect: statusIs('levelComplete') }
+        ]
+    },
+    {
         id: 'colossus-fever',
         title: 'Colossus: the combo strikes it',
         mechanic: 'The boss reads the combo: a hit landed while the combo is at Fever lands twice. Below Fever a hit is one blow, as ever.',
@@ -3787,6 +3821,8 @@ export const playTestHallStep = (run: RunState, step: TestHallStep): RunState | 
         }
         case 'stillBell':
             return applyStillBell(run)?.run ?? null;
+        case 'cashIn':
+            return canCashIn(run) ? cashInCombo(run) : null;
         case 'takePurse':
             return takeMisersPurse(run);
         case 'stormGlass':

@@ -11,7 +11,8 @@ so it can be played before it ships: **`?combo2=1`** on any deployment, for exam
   gold a rung pays, go into the **pot**, shown under the combo ("Pot 406 · 3 gold").
 - **Bank** (a dock button, between turns, while the pot holds something) pays the pot into score
   and gold and **halves the combo** (`COMBO_BANK_KEEPS`; it zeroed it until 2026-11-02, see below).
-  Stamp: CASHED IN! with "combo 9 → 4".
+  Stamp: CASHED IN!, and the HUD holds "Banked +488 · 7 → 3" under the combo for a moment (the
+  stamps show their title only, so the line says what the bank did).
 - A **miss** that breaks the combo **loses the pot**. The HUD's lost line names it
   ("Lost 9 · ×4 · pot 1,667") and a POT LOST stamp follows COMBO BROKEN.
 - Ignite (the Zone) ends the combo by choice, so it banks the pot first. Clearing the Warden banks
@@ -69,7 +70,21 @@ Ignite banks. In an isolated headless browser on a real run with `?combo2=1`: th
 and 3 gold by combo 6, Bank paid exactly that and dropped the combo to 0 (the zeroing bank of that day), and a miss on a
 second pot took it.
 
+Since (2026-11-03):
+
+- **Hall room `cash-in`** (`/?hallRoom=cash-in`): a twelve-pair floor entered at combo 2. Match a
+  (Clean, the pot fills), match b (it grows), Bank (it pays, the combo halves to 2), match d (a new
+  pot), miss (the pot goes). Walked at its seed and every reseed. Writing it found that hall rooms
+  pin rules 92, before the combo paid at all, so the room names rules 107.
+- **Soak player `banker`** (average, 15% misses, banks half the times its pot holds 500) and three
+  invariants checked on every action of every soak run: a run without the flag never holds a pot;
+  a pot is held only by a live combo; a bank pays exactly its pot. The combo-falls invariant allows
+  a bank to halve it. 150 seeds clean; `run-soak.test.ts` requires banks and lost pots.
+- **The halving bank in the browser**: combo 7 → 3, score +488 and gold +3 (the whole pot), and the
+  "Banked +488 · 7 → 3" line on the HUD.
+
 ## Not done until the owner's verdict
 
-The full mechanic checklist (graph node, census counter, ledger entry, hall room, soak invariant
-and a soak player who banks, Codex text, rules version) is paid only if the owner keeps it.
+Shipping it to every run: the graph node, census counter, ledger entry, Codex text, a rules version
+for the default-on change, and the HUD's first-run explanation. The hall room and the soak player
+above are already in place.

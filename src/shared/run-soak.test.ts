@@ -33,6 +33,17 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.masksDropped > 0), 'no run ever dropped a mask').toBe(true);
     });
 
+    it('plays the banker as it banks: pots paid in and pots lost (the ?combo2=1 prototype)', () => {
+        const reports = Array.from({ length: SOAK_SEEDS }, (_unused, index) =>
+            soakRun({ seed: 13_007 + index * 7_919, player: SOAK_PLAYERS.banker, playerName: 'banker' })
+        );
+        expect(reports.reduce((sum, report) => sum + report.cashIns, 0), 'the banker never banked').toBeGreaterThan(0);
+        expect(reports.reduce((sum, report) => sum + report.potsLost, 0), 'no miss ever took a pot').toBeGreaterThan(0);
+        // Only the banker's runs hold a pot.
+        const careful = soakRun({ seed: 13_007, player: SOAK_PLAYERS.careful, playerName: 'careful' });
+        expect(careful.cashIns + careful.potsLost).toBe(0);
+    });
+
     it('exercises the systems it exists to watch', () => {
         const reports = Array.from({ length: SOAK_SEEDS }, (_unused, index) =>
             soakRun({ seed: 9_001 + index * 7_919, player: SOAK_PLAYERS.careful, playerName: 'careful' })

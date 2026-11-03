@@ -74,6 +74,8 @@ export const RUN_SHELL_LABELS = {
         `${multiplier > 1 ? `Lost ${links} · ×${multiplier}` : `Lost ${links}`}${pot > 0 ? ` · pot ${pot.toLocaleString()}` : ''}`,
     /** Cash in (`?combo2=1`): the unbanked pot under the combo, and what it is on hover. */
     comboPot: (score: number, gold: number): string => `Pot ${score.toLocaleString()}${gold > 0 ? ` · ${gold} gold` : ''}`,
+    /** What a bank paid, held on the HUD for a moment: the pot and the combo's drop. */
+    comboBanked: (score: number, from: number, to: number): string => `Banked +${score.toLocaleString()} · ${from} → ${to}`,
     comboPotTitle: 'Unbanked: Bank pays it and halves the combo; a miss takes it all.',
     /** The purse on the head, and what it is for on hover. */
     gold: 'gold',

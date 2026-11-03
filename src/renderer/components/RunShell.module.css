@@ -788,6 +788,30 @@
     white-space: nowrap;
 }
 
+/* What a bank paid (`?combo2=1`): the lost line's twin, in gold and rising instead of falling. */
+.comboBanked {
+    font-family: var(--heading-font);
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--gold, #e1ad66);
+    font-variant-numeric: lining-nums tabular-nums;
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--ink) 90%, transparent);
+    white-space: nowrap;
+    animation: comboBankedRise 1.8s ease-out forwards;
+}
+
+.comboBanked[data-reduce-motion='true'] {
+    animation: none;
+}
+
+@keyframes comboBankedRise {
+    0% { opacity: 0; transform: translateY(0.4em) scale(1.4); }
+    12% { opacity: 1; transform: translateY(0) scale(1.1); }
+    30% { transform: scale(1); }
+    75% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-0.8em); }
+}
+
 /* What a miss broke (dogma 6): the lost combo and its multiplier, struck through, falling away. */
 .comboLost {
     font-family: var(--heading-font);

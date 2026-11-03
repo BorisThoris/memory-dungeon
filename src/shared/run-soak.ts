@@ -1,3 +1,4 @@
+import { bankKeeps, canCashIn, cashInCombo, comboCashInActive, comboPotHasValue, runComboPot } from './combo-cash-in-rules';
 import { LEARNED_RULE_TABLE, mostMatchedSuit } from './learned-rule-rules';
 import { applyFusion, availableFusions, isSnowballRelicId, relicScoreMultiplier } from './snowball-relic-rules';
 import { dreadComposes, dreadPurchase, NO_DREAD_PURCHASE } from './dread-composition-rules';
@@ -83,9 +84,14 @@ export interface SoakPlayer {
     readonly holdRelease?: number;
     /** Share of turns the player carves when it can (`carve-rules.ts`); never when unset. */
     readonly carveRate?: number;
+    /**
+     * Cash in (`combo-cash-in-rules.ts`, the `?combo2=1` prototype): the run holds its combo's pay in a
+     * pot, and the player banks half the times the pot holds at least this much score. Off when unset.
+     */
+    readonly cashInPot?: number;
 }
 
-export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild' | 'planned', SoakPlayer>> = {
+export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'wild' | 'planned' | 'banker', SoakPlayer>> = {
     careful: { missRate: 0.05, bombRate: 0.5, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.9 },
     average: { missRate: 0.18, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6 },
     sloppy: { missRate: 0.4, bombRate: 0.25, peekRate: 0.2, shuffleRate: 0.08, zoneRate: 0.5, elementRate: 0.2 },
@@ -96,7 +102,9 @@ export const SOAK_PLAYERS: Readonly<Record<'careful' | 'average' | 'sloppy' | 'w
      * stacks a player who waits would build. The plan also had it take raging doors; current runs
      * travel to a seeded realm with no door to choose, so there is nothing for it to take.
      */
-    planned: { missRate: 0.1, bombRate: 0.4, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.8, holdRelease: 5, carveRate: 0.15 }
+    planned: { missRate: 0.1, bombRate: 0.4, peekRate: 0.1, shuffleRate: 0.02, zoneRate: 0.5, elementRate: 0.8, holdRelease: 5, carveRate: 0.15 },
+    // The cash-in prototype's player: average, banking past a pot of 500 (the measured best, `tasks/back-to-the-base/01-cash-in.md`).
+    banker: { missRate: 0.15, bombRate: 0.35, peekRate: 0.15, shuffleRate: 0.05, zoneRate: 0.5, elementRate: 0.6, cashInPot: 500 }
 };
 
 export interface SoakViolation {
@@ -212,6 +220,9 @@ export interface SoakRunReport {
     /** Zones ignited, and pairs matched inside them. */
     zones: number;
     zonePairs: number;
+    /** Cash in (`?combo2=1`): banks made, and pots a miss took. Only the banker plays it. */
+    cashIns: number;
+    potsLost: number;
     /** The realms (`realm-rules.ts`): weather events, reactions (the sway tipping a floor), fires doused and burnt out, vines cut, cards frozen, doors walked through. */
     realmWeather: number;
     realmReactions: number;
@@ -429,12 +440,24 @@ export const SOAK_INVARIANTS: Readonly<Record<string, Check>> = {
         (run.runEndReason == null) === (run.status !== 'gameOver') ? null : `status ${run.status}, reason ${String(run.runEndReason)}`,
     'the score never goes down': (before, run) =>
         before && run.stats.totalScore < before.stats.totalScore ? `score ${before.stats.totalScore} -> ${run.stats.totalScore}` : null,
-    'the combo falls only on a miss or an ignition, and then to nothing': (before, run, action) => {
+    'the combo falls only on a miss, an ignition or a bank, and then to nothing or by half': (before, run, action) => {
         if (!before || run.stats.currentStreak >= before.stats.currentStreak) return null;
         // The Zone burns the combo to open (`zone-rules.ts`): the one fall that is not a miss.
         if (action === 'ignite') return run.stats.currentStreak === 0 && run.zone != null ? null : `ignition left a combo of ${run.stats.currentStreak}`;
+        // Cash in (`combo-cash-in-rules.ts`): a bank halves the combo.
+        if (action === 'cash in') return run.stats.currentStreak === bankKeeps(before.stats.currentStreak) ? null : `a bank left ${run.stats.currentStreak} of ${before.stats.currentStreak}`;
         if (run.stats.mismatches <= before.stats.mismatches) return `combo ${before.stats.currentStreak} -> ${run.stats.currentStreak} without a miss`;
         return run.stats.currentStreak === 0 ? null : `a miss left a combo of ${run.stats.currentStreak}`;
+    },
+    'a run without cash-in never holds a pot': (_b, run) =>
+        comboCashInActive(run) || !comboPotHasValue(runComboPot(run)) ? null : `a pot of ${JSON.stringify(runComboPot(run))} on a run without cash-in`,
+    'a pot is held only by a live combo': (_b, run) =>
+        run.stats.currentStreak > 0 || !comboPotHasValue(runComboPot(run)) ? null : `a pot of ${JSON.stringify(runComboPot(run))} with no combo`,
+    'a bank pays exactly its pot': (before, run, action) => {
+        if (action !== 'cash in' || !before) return null;
+        const pot = runComboPot(before);
+        const paid = run.stats.totalScore - before.stats.totalScore === pot.score && (run.gold ?? 0) - (before.gold ?? 0) === pot.gold;
+        return paid && !comboPotHasValue(runComboPot(run)) ? null : `banked ${JSON.stringify(pot)}: score +${run.stats.totalScore - before.stats.totalScore}, gold +${(run.gold ?? 0) - (before.gold ?? 0)}`;
     },
     'the ladder crosses the stairs whole': (before, run) => {
         if (!before?.board || !run.board || run.board.level !== before.board.level + 1) return null;
@@ -868,9 +891,10 @@ export const soakRun = ({
     const violations: SoakViolation[] = [];
     // Profiles of every age (`run-signature-rules.ts`, rules 92): 0 to 11 finished runs, so the Gate deals every omen and both draws.
     const runsFinished = seed % 12;
-    let run: RunState = player.wild
+    const created: RunState = player.wild
         ? createWildRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished })
         : createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed, campPreference, depth, runsFinished });
+    let run: RunState = player.cashInPot != null ? { ...created, comboCashIn: true } : created;
     let step = 0;
     let turns = 0;
     let purchases = 0;
@@ -928,6 +952,8 @@ export const soakRun = ({
     let wildMatches = 0;
     let heatPerkTurns = 0;
     let zones = 0;
+    let cashIns = 0;
+    let potsLost = 0;
     let zonePairs = 0;
     let floorsCleared = 0;
     let realmWeather = 0;
@@ -1003,6 +1029,8 @@ export const soakRun = ({
         wildMatches += Math.max(0, (run.wildMatchesRemaining ?? 0) - (next.wildMatchesRemaining ?? 0));
         heatPerkTurns += Math.max(0, (next.heatPerkTurnsThisFloor ?? 0) - (run.heatPerkTurnsThisFloor ?? 0));
         zones += Math.max(0, (next.zonesThisRun ?? 0) - (run.zonesThisRun ?? 0));
+        cashIns += Math.max(0, (next.comboCashIns ?? 0) - (run.comboCashIns ?? 0));
+        potsLost += Math.max(0, (next.comboPotsLost ?? 0) - (run.comboPotsLost ?? 0));
         zonePairs += Math.max(0, (next.zonePairsThisRun ?? 0) - (run.zonePairsThisRun ?? 0));
         // Per-floor realm counters reset on the stairs; a rise within a floor is what happened.
         if (next.board?.level === run.board?.level) {
@@ -1095,6 +1123,11 @@ export const soakRun = ({
         }
         const hidden = hiddenReal(run);
         if (hidden.length === 0) break;
+        // Cash in, between turns: half the times the pot holds what the player waits for.
+        if (player.cashInPot != null && canCashIn(run) && runComboPot(run).score >= player.cashInPot && rng() < 0.5) {
+            act('cash in', cashInCombo(run));
+            continue;
+        }
         // The Zone, when the fire allows it: ignite, turn cards until it closes on its own or the
         // player closes it early, half the time each. The Zone's flips are turns of a kind.
         if (canIgniteZone(run) && rng() < player.zoneRate) {
@@ -1295,6 +1328,8 @@ export const soakRun = ({
         heatPerkTurns,
         zones,
         zonePairs,
+        cashIns,
+        potsLost,
         realmWeather,
         realmReactions,
         realmDoused,
