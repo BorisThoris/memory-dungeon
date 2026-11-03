@@ -1725,21 +1725,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardCrownShown =
         !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || canFlurryGrab(run) || liveCarve(run) != null);
     const boardCrownRef = useRef<HTMLDivElement | null>(null);
-    // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that.
+    // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that, and
+    // under the memorize heading while it shows: that heading hangs below the HUD's own box, and a
+    // floor's notices sat over "Memorize · 3" (2026-11-03, the playtest's floor 5).
+    const memorizeHeadShown = run.status === 'memorize';
     useLayoutEffect(() => {
         const crown = boardCrownRef.current;
         const hud = shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]');
         if (!boardCrownShown || !crown || !hud) return undefined;
         const place = (): void => {
             const parent = (crown.offsetParent as HTMLElement | null)?.getBoundingClientRect();
-            crown.style.top = `${Math.max(0, Math.round(hud.getBoundingClientRect().bottom - (parent?.top ?? 0) + 4))}px`;
+            const memorizeHead = memorizeHeadShown ? shellRef.current?.querySelector('[data-testid="hud-memorize"]') : null;
+            const bottom = Math.max(hud.getBoundingClientRect().bottom, memorizeHead?.getBoundingClientRect().bottom ?? 0);
+            crown.style.top = `${Math.max(0, Math.round(bottom - (parent?.top ?? 0) + 4))}px`;
         };
         place();
         if (typeof ResizeObserver === 'undefined') return undefined;
         const observer = new ResizeObserver(place);
         observer.observe(hud);
         return () => observer.disconnect();
-    }, [boardCrownShown]);
+    }, [boardCrownShown, memorizeHeadShown]);
 
     const showForgivenessHint = Boolean(
         run.board &&
@@ -2435,6 +2440,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 allowGambitThirdFlip={allowGambitThirdFlip}
                                 zoneFlipCapacity={zoneFlipCapacity}
                                 board={visibleBoard ?? run.board}
+                                crownShown={boardCrownShown}
                                 handoffSeatLabel={run.passAndPlay?.handoffPending === true ? activeSeatLabel : null}
                                 cursedPairKey={run.board.cursedPairKey ?? null}
                                 wardPairKey={run.board.wardPairKey ?? null}

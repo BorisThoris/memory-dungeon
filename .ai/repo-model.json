@@ -3987,8 +3987,8 @@
     {
       "path": "e2e/gameplay-chrome-clearance.spec.ts",
       "category": "test",
-      "bytes": 14363,
-      "sha256": "bfb1f37f52e24cd778bd19610fc9b7f477c7f4e7abed3c103587b4dec83a9cd5"
+      "bytes": 14768,
+      "sha256": "11305b6bf02db5e91705218f56fa00b90e8065e6b12cbf7b16f34ac21e0531ef"
     },
     {
       "path": "e2e/gameplay-hud-layout.spec.ts",
@@ -11301,8 +11301,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 154078,
-      "sha256": "d034d4a0aff1a63781835679a2ee298011f57ffb6b1be883e2c28914fcdf6fa1"
+      "bytes": 154626,
+      "sha256": "307f38f4e817b0f0348d0f780d7117d7fc3974028a6f90637db38d5c86e8dc89"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -12273,8 +12273,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148433,
-      "sha256": "28a6fd87d37353118bb2dcc9fbadf15d37b4e025a516376a2465dd3d568c5368"
+      "bytes": 148803,
+      "sha256": "bc9c35328dcea4ab15a25784e3a66e4006fee91aa26e89e11e582ac68886344c"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -25043,7 +25043,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2880,
+      "lineCount": 2886,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -27842,7 +27842,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3335,
+      "lineCount": 3342,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -51796,8 +51796,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2879,
-      "endLine": 2879
+      "line": 2885,
+      "endLine": 2885
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -55124,8 +55124,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3334,
-      "endLine": 3334
+      "line": 3341,
+      "endLine": 3341
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",

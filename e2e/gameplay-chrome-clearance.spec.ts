@@ -204,7 +204,16 @@ test.describe('the in-run chrome clearance', () => {
             await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
             await forceScale(page, uiScale);
             await page.waitForTimeout(400);
-            return page.evaluate(() => {
+            // Look again through the beat, not once: under load it can arrive later than 400ms.
+            for (let look = 0; look < 20; look += 1) {
+                const seen = await readBeat();
+                if (seen) return seen;
+                await page.waitForTimeout(150);
+            }
+            return null;
+        };
+        const readBeat = (): Promise<{ titleGap: number; boxSpill: number } | null> =>
+            page.evaluate(() => {
                 const shell = document.querySelector('[data-testid="run-shell"]');
                 const zoom = shell ? shell.getBoundingClientRect().width / Math.max(1, shell.clientWidth) : 1;
                 const chain = document.querySelector('[data-testid="hud-chain"]');
@@ -229,7 +238,6 @@ test.describe('the in-run chrome clearance', () => {
                  */
                 return { titleGap: titleBox.left - readBox.right, boxSpill: chainBox.right - readBox.right };
             });
-        };
 
         for (const uiScale of PROBE_SCALES) {
             const measured = await overlapAtScale(uiScale);

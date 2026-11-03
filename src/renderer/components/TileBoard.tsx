@@ -319,6 +319,11 @@ export type TileBoardHandle = {
 interface TileBoardProps {
     board: BoardState;
     /**
+     * Whether the game screen hangs its crown over the board (a verb arriving, a match rule, an
+     * omen, the Colossus...). The fit measures the crown again whenever this changes.
+     */
+    crownShown?: boolean;
+    /**
      * The seat the device has just passed to, or null when it has not. Drawn over the board because
      * the person it is addressed to is not the person who was looking at the HUD.
      */
@@ -614,6 +619,7 @@ const parseCountAttribute = (value: string): Map<string, number> => {
 const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard(
     {
         board,
+        crownShown = false,
         handoffSeatLabel = null,
         debugPeekActive,
         interactive,
@@ -743,7 +749,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [stageWorldViewport, setStageWorldViewport] = useState<StageWorldViewport>({ height: 0, width: 0 });
     const [fitFrame, setFitFrame] = useState({ heightFraction: 1, centerYFraction: 0, widthFraction: 1, centerXFraction: 0 });
     // Whether anything hangs over the board, so the fit is measured again when it comes and goes.
-    const boardCrowned = board.colossus != null || board.tiles.some((tile) => (tile.turncoat != null || tile.hourglass != null) && tile.state !== 'matched' && tile.state !== 'removed');
+    // The game screen's word counts too: a crown of notices alone sat over the top row (2026-11-03).
+    const boardCrowned = crownShown || board.colossus != null || board.tiles.some((tile) => (tile.turncoat != null || tile.hourglass != null) && tile.state !== 'matched' && tile.state !== 'removed');
     useEffect(() => {
         const stage = stageRef.current;
         const shell = stage?.closest('[data-testid="game-shell"]');
