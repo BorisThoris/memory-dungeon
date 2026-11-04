@@ -3,12 +3,12 @@
     --colossus-hue: #e0713c;
     display: flex;
     align-items: stretch;
-    gap: 0.6rem;
+    gap: 0.5rem;
     flex: 0 0 auto;
     align-self: center;
-    width: min(100%, 30rem);
+    width: min(100%, 28rem);
     margin: 0 0 0.3rem;
-    padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+    padding: 0.3rem 0.55rem 0.3rem 0.3rem;
     position: relative;
     z-index: 6;
     border-radius: var(--ui-radius-lg, 14px);
@@ -35,8 +35,8 @@
     flex: 0 0 auto;
     display: grid;
     place-items: center;
-    width: 3.4rem;
-    min-height: 4.4rem;
+    width: 2.8rem;
+    min-height: 3.4rem;
     border-radius: calc(var(--ui-radius-md, 10px) + 1px);
     border: 2px solid color-mix(in srgb, var(--colossus-hue) 80%, #fff 20%);
     background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--colossus-hue) 70%, #000) 0%, #0d0f15 82%);
@@ -265,23 +265,23 @@
     }
 }
 
-/* Room to spare: the face stands taller than any card on the board. */
+/*
+ * Room to spare: a little more face, never more height. The plate used to grow a 7rem face here,
+ * and under the Warden's notices it left the board a strip (2026-11-04): the cards are the fight.
+ */
 @media (min-width: 900px) and (min-height: 720px) {
     .card {
-        width: min(100%, 34rem);
+        width: min(100%, 30rem);
     }
     .face {
-        width: 5.2rem;
-        min-height: 7rem;
+        width: 3rem;
+        min-height: 3.6rem;
     }
     .rune {
-        font-size: 3.1rem;
+        font-size: 1.8rem;
     }
     .showing {
-        font-size: 1.2rem;
-    }
-    .line {
-        font-size: 0.8rem;
+        font-size: 1.1rem;
     }
 }
 

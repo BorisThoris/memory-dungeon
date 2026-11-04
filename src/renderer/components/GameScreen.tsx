@@ -53,7 +53,7 @@ import {
     canRegionShuffleRow,
     canShuffleBoard
 } from '../../shared/board-powers';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -141,7 +141,7 @@ import FloorClearBeat, { FLOOR_CLEAR_BEAT_EXIT_MS } from './FloorClearBeat';
 import OverlayModal, { OVERLAY_MODAL_EXIT_MS } from './OverlayModal';
 import { Presence } from './Presence';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
-import TileBoard, { type TileBoardHandle } from './TileBoard';
+import TileBoard, { BOARD_CROWN_PLACED_EVENT, type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
 import {
@@ -490,6 +490,19 @@ const getMismatchFloaterHeat = (payload: MismatchScorePop): MismatchFloaterHeat 
     }
     return 'recover';
 };
+
+/**
+ * One of the crown's notices (the Warden's rules, the Dread's buys, a verb arriving...). It is a chip
+ * that names itself, and its sentence opens over the board on hover, focus or a tap: a floor with
+ * five of them stacked their sentences over the top rows, and on the Warden's floor left the board
+ * a strip (2026-11-04). `open` writes the sentence out under the name instead, for what a player
+ * must be taught before the first flip. The sentence stays in the page either way, so it is read out.
+ */
+const CrownNotice = ({ kicker, open = false, children, ...rest }: { kicker: ReactNode; open?: boolean; children: ReactNode } & HTMLAttributes<HTMLParagraphElement>) => (
+    <p className={styles.wardenRules} data-open={open ? 'true' : undefined} tabIndex={open ? undefined : 0} {...rest}>
+        <span className={styles.wardenRulesName}>{kicker}</span> <span className={styles.wardenRulesLine}>{children}</span>
+    </p>
+);
 
 const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
@@ -1724,27 +1737,35 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const tripleWaiting = pendingTripleKey(run.board) != null;
     const boardCrownShown =
         !suppressStatusOverlays && run.status !== 'levelComplete' && (colossus !== null || oddCardEntries.length > 0 || wardenRulesShown || keeperRulesShown || cartographerRulesShown || spiralRulesShown || learnedRule != null || depthShown != null || dreadBought != null || verbArriving != null || omensTold.length > 0 || matchRuleTold != null || canFlurryGrab(run) || liveCarve(run) != null);
-    const boardCrownRef = useRef<HTMLDivElement | null>(null);
+    // A callback ref, so a crown the screen mounts anew is placed too, not only the first one.
+    const [boardCrown, setBoardCrown] = useState<HTMLDivElement | null>(null);
     // The crown hangs from the HUD's lower edge, wherever the HUD's own layout has put that, and
     // under the memorize heading while it shows: that heading hangs below the HUD's own box, and a
     // floor's notices sat over "Memorize · 3" (2026-11-03, the playtest's floor 5).
     const memorizeHeadShown = run.status === 'memorize';
     useLayoutEffect(() => {
-        const crown = boardCrownRef.current;
+        const crown = boardCrown;
         const hud = shellRef.current?.querySelector<HTMLElement>('[data-testid="game-hud"]');
         if (!boardCrownShown || !crown || !hud) return undefined;
         const place = (): void => {
             const parent = (crown.offsetParent as HTMLElement | null)?.getBoundingClientRect();
             const memorizeHead = memorizeHeadShown ? shellRef.current?.querySelector('[data-testid="hud-memorize"]') : null;
             const bottom = Math.max(hud.getBoundingClientRect().bottom, memorizeHead?.getBoundingClientRect().bottom ?? 0);
-            crown.style.top = `${Math.max(0, Math.round(bottom - (parent?.top ?? 0) + 4))}px`;
+            const top = `${Math.max(0, Math.round(bottom - (parent?.top ?? 0) + 4))}px`;
+            if (crown.style.top === top) return;
+            crown.style.top = top;
+            // A move is not a resize: the board's fit hears it here, or it keeps the crown's old place
+            // and the notices sit over the top row (2026-11-03, the playtest's floors 9 and 17).
+            crown.dispatchEvent(new Event(BOARD_CROWN_PLACED_EVENT, { bubbles: true }));
         };
         place();
         if (typeof ResizeObserver === 'undefined') return undefined;
         const observer = new ResizeObserver(place);
         observer.observe(hud);
+        const memorizeHead = memorizeHeadShown ? shellRef.current?.querySelector('[data-testid="hud-memorize"]') : null;
+        if (memorizeHead) observer.observe(memorizeHead);
         return () => observer.disconnect();
-    }, [boardCrownShown, memorizeHeadShown]);
+    }, [boardCrown, boardCrownShown, memorizeHeadShown]);
 
     const showForgivenessHint = Boolean(
         run.board &&
@@ -1912,7 +1933,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 charges: run.shuffleCharges,
                 disabled: shuffleDisabled,
                 title: shuffleTitle,
-                onClick: shuffleBoard
+                // Through the board's own animation: the staggered deal and the riffle. Called
+                // straight, a shuffle swapped the cards in place without a sound (2026-11-04).
+                onClick: () => (tileBoardRef.current ? tileBoardRef.current.runShuffleAnimation(shuffleBoard) : shuffleBoard())
             },
             {
                 ...toolSpec('swap'),
@@ -2320,70 +2343,68 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         {/* The board's crown: the Colossus and the odd cards' key, hung under the HUD. The board
                             fits itself below whatever is here (`TileBoard` reads `data-board-crown`). */}
                         {boardCrownShown ? (
-                            <div ref={boardCrownRef} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                            <div ref={setBoardCrown} className={styles.boardCrown} data-board-crown="true" data-memorize={run.status === 'memorize' ? 'true' : undefined} data-testid="board-crown">
+                                <div className={styles.crownNotices}>
                                 {depthShown ? (
-                                    <p className={styles.wardenRules} data-testid="depth-rule">
-                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.depthKicker(depthShown.depth)}</span> {depthShown.line}
-                                    </p>
+                                    <CrownNotice data-testid="depth-rule" kicker={RUN_SHELL_LINE_COPY.depthKicker(depthShown.depth)}>
+                                        {depthShown.line}
+                                    </CrownNotice>
                                 ) : null}
                                 {verbArriving ? (
-                                    <p className={styles.wardenRules} data-testid="verb-arrival" data-verb={verbArriving}>
-                                        <span className={styles.wardenRulesName}>{VERB_ARRIVAL_COPY.kicker(verbArriving)}</span> {VERB_ARRIVAL_COPY.line(verbArriving)}
-                                    </p>
+                                    <CrownNotice data-testid="verb-arrival" data-verb={verbArriving} kicker={VERB_ARRIVAL_COPY.kicker(verbArriving)} open={run.status === 'memorize'}>
+                                        {VERB_ARRIVAL_COPY.line(verbArriving)}
+                                    </CrownNotice>
                                 ) : null}
                                 {canFlurryGrab(run) ? (
-                                    <p className={styles.wardenRules} data-testid="flurry" data-grabs={run.flurryGrabsThisFloor ?? 0}>
-                                        <span className={styles.wardenRulesName}>{FLURRY_COPY.kicker}</span> {(run.flurryGrabsThisFloor ?? 0) > 0 ? FLURRY_COPY.grabbed(run.flurryGrabsThisFloor ?? 0) : FLURRY_COPY.line}
-                                    </p>
+                                    <CrownNotice data-testid="flurry" data-grabs={run.flurryGrabsThisFloor ?? 0} kicker={FLURRY_COPY.kicker}>
+                                        {(run.flurryGrabsThisFloor ?? 0) > 0 ? FLURRY_COPY.grabbed(run.flurryGrabsThisFloor ?? 0) : FLURRY_COPY.line}
+                                    </CrownNotice>
                                 ) : null}
                                 {matchRuleTold ? (
-                                    <p className={styles.wardenRules} data-testid="match-rule" data-rule={matchRuleTold} data-waiting={tripleWaiting ? 'third' : undefined}>
-                                        <span className={styles.wardenRulesName}>{MATCH_RULE_COPY.kicker(matchRuleTold)}</span> {tripleWaiting ? (matchRuleTold === 'sequences' ? MATCH_RULE_COPY.waitingInOrder : MATCH_RULE_COPY.waiting) : MATCH_RULE_COPY.line(matchRuleTold)}
-                                    </p>
+                                    <CrownNotice data-testid="match-rule" data-rule={matchRuleTold} data-waiting={tripleWaiting ? 'third' : undefined} kicker={MATCH_RULE_COPY.kicker(matchRuleTold)} open={tripleWaiting}>
+                                        {tripleWaiting ? (matchRuleTold === 'sequences' ? MATCH_RULE_COPY.waitingInOrder : MATCH_RULE_COPY.waiting) : MATCH_RULE_COPY.line(matchRuleTold)}
+                                    </CrownNotice>
                                 ) : null}
                                 {omensTold.length > 0 ? (
-                                    <p className={styles.wardenRules} data-testid="gate-omen" data-omen={omensTold.join(' ')}>
-                                        <span className={styles.wardenRulesName}>{GATE_OMEN_COPY.kicker(omensTold.length)}</span> {omensTold.map(GATE_OMEN_COPY.line).join(' ')}
-                                    </p>
+                                    <CrownNotice data-testid="gate-omen" data-omen={omensTold.join(' ')} kicker={GATE_OMEN_COPY.kicker(omensTold.length)}>
+                                        {omensTold.map(GATE_OMEN_COPY.line).join(' ')}
+                                    </CrownNotice>
                                 ) : null}
                                 {dreadBought ? (
-                                    <p className={styles.wardenRules} data-testid="dread-bought">
-                                        <span className={styles.wardenRulesName}>{DREAD_BOUGHT_COPY.kicker}</span> {DREAD_BOUGHT_COPY.line(dreadBought)}
-                                    </p>
+                                    <CrownNotice data-testid="dread-bought" kicker={DREAD_BOUGHT_COPY.kicker}>
+                                        {DREAD_BOUGHT_COPY.line(dreadBought)}
+                                    </CrownNotice>
                                 ) : null}
                                 {learnedRule ? (
-                                    <p className={styles.wardenRules} data-rule={learnedRule.id} data-testid="learned-rule">
-                                        <span className={styles.wardenRulesName}>{LEARNED_RULE_COPY.kicker}</span> {LEARNED_RULE_COPY.line(learnedRule)}
-                                    </p>
+                                    <CrownNotice data-rule={learnedRule.id} data-testid="learned-rule" kicker={LEARNED_RULE_COPY.kicker}>
+                                        {LEARNED_RULE_COPY.line(learnedRule)}
+                                    </CrownNotice>
                                 ) : null}
                                 {spiralRulesShown ? (
-                                    <p className={styles.wardenRules} data-testid="spiral-rules">
-                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.spiralKicker}</span>{' '}
+                                    <CrownNotice data-testid="spiral-rules" kicker={RUN_SHELL_LINE_COPY.spiralKicker}>
                                         {RUN_SHELL_LINE_COPY.spiralRules(parTurnsForRun(run), run.turnsThisFloor)}
-                                    </p>
+                                    </CrownNotice>
                                 ) : null}
                                 {cartographerRulesShown ? (
-                                    <p className={styles.wardenRules} data-testid="cartographer-rules">
-                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.cartographerKicker}</span>{' '}
+                                    <CrownNotice data-testid="cartographer-rules" kicker={RUN_SHELL_LINE_COPY.cartographerKicker}>
                                         {RUN_SHELL_LINE_COPY.cartographerRules(
                                             cartographerTurnEvery(run),
                                             cartographerTurnEvery(run) - (run.matchResolutionsThisFloor % cartographerTurnEvery(run))
                                         )}
-                                    </p>
+                                    </CrownNotice>
                                 ) : null}
                                 {keeperRulesShown ? (
-                                    <p className={styles.wardenRules} data-testid="keeper-rules">
-                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.keeperKicker}</span>{' '}
+                                    <CrownNotice data-testid="keeper-rules" kicker={RUN_SHELL_LINE_COPY.keeperKicker}>
                                         {RUN_SHELL_LINE_COPY.keeperRules(keeperSwapEvery(run), keeperSwapEvery(run) - (run.turnsThisFloor % keeperSwapEvery(run)))}
-                                    </p>
+                                    </CrownNotice>
                                 ) : null}
                                 {wardenRulesShown ? (
-                                    <p className={styles.wardenRules} data-testid="warden-rules">
-                                        <span className={styles.wardenRulesName}>{RUN_SHELL_LINE_COPY.wardenKicker}</span>{' '}
+                                    <CrownNotice data-testid="warden-rules" kicker={RUN_SHELL_LINE_COPY.wardenKicker}>
                                         {RUN_SHELL_LINE_COPY.wardenRules(wardenRedealEvery(run))}
                                         {wardenTestHolds(run) ? <> {RUN_SHELL_LINE_COPY.wardenTest(WARDEN_FELL_PAIRS, run.wardenDealsAgainThisFloor ?? 0)}</> : null}
-                                    </p>
+                                    </CrownNotice>
                                 ) : null}
+                                </div>
                                 {liveCarve(run) ? (
                                     <p className={styles.carveArrow} data-direction={liveCarve(run)!} data-testid="carve-arrow">
                                         <span aria-hidden="true" className={styles.carveArrowGlyph}>{CARVE_ARROW[liveCarve(run)!]}</span> {CARVE_TOOL_COPY.arrow(liveCarve(run)!)}

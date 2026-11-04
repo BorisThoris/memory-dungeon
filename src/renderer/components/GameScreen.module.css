@@ -1684,18 +1684,42 @@ where that rule
     font-weight: 700;
 }
 
+/*
+ * The crown's notices: one row of chips that name themselves, each sentence opening below its chip
+ * over the board on hover, focus or a tap. Written out they stacked five deep over the top rows
+ * (2026-11-04); a chip costs the board one strip however many there are.
+ */
+.crownNotices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem 0.35rem;
+    max-width: min(100%, 44rem);
+    margin: 0 0 0.3rem;
+}
+
+.crownNotices:empty {
+    display: none;
+}
+
 .wardenRules {
-    align-self: center;
-    max-width: min(100%, 36rem);
-    margin: 0 0 0.35rem;
-    padding: 0.35rem 0.8rem;
+    position: relative;
+    margin: 0;
+    padding: 0.18rem 0.6rem;
     border: 1px solid color-mix(in srgb, #c84432 55%, transparent);
-    border-radius: 6px;
+    border-radius: 999px;
     background: #140d10e6;
     color: #f2dccb;
-    font-size: 0.82rem;
-    line-height: 1.35;
+    font-size: 0.72rem;
+    line-height: 1.3;
     text-align: center;
+    pointer-events: auto;
+    cursor: help;
+    outline: none;
+}
+
+.wardenRules:focus-visible {
+    box-shadow: 0 0 0 2px #f2b2a4;
 }
 
 .wardenRulesName {
@@ -1703,4 +1727,59 @@ where that rule
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+
+.wardenRulesLine {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 50%;
+    z-index: 9;
+    width: max-content;
+    max-width: min(24rem, 86vw);
+    padding: 0.4rem 0.7rem;
+    border: 1px solid color-mix(in srgb, #c84432 55%, transparent);
+    border-radius: 6px;
+    background: #140d10f2;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 50%);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    text-align: left;
+    opacity: 0;
+    transform: translate(-50%, -0.2rem);
+    transition: opacity 140ms ease, transform 140ms ease;
+    pointer-events: none;
+}
+
+.wardenRules:hover .wardenRulesLine,
+.wardenRules:focus .wardenRulesLine {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* What a player must be taught before the first flip, or what the turn waits on: written out. */
+.wardenRules[data-open='true'] {
+    flex-basis: 100%;
+    max-width: min(100%, 36rem);
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    cursor: default;
+}
+
+.wardenRules[data-open='true'] .wardenRulesLine {
+    position: static;
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    font-size: inherit;
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wardenRulesLine {
+        transition: none;
+    }
 }

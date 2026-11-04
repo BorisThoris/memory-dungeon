@@ -5,7 +5,9 @@ import styles from './OddCardLegend.module.css';
 
 /**
  * The key to the floor's odd cards (`odd-card-rules.ts`), beside the board while one stands: the
- * same mark the card wears and the one sentence that says what it means. Gone when they are.
+ * same mark the card wears and its name, with the one sentence that says what it means opening over
+ * the board on hover, focus or a tap (three stacked sentences sat over the top row, 2026-11-04).
+ * Gone when they are.
  */
 export function OddCardLegend({ entries }: { entries: readonly OddCardLegendEntry[] }) {
     if (entries.length === 0) return null;
@@ -17,6 +19,7 @@ export function OddCardLegend({ entries }: { entries: readonly OddCardLegendEntr
                     className={styles.entry}
                     data-odd-card={entry.id}
                     data-testid={`odd-card-${entry.id}`}
+                    tabIndex={0}
                     style={entry.suit ? ({ '--odd-hue': TILE_SUIT_CATALOG[entry.suit].hue } as CSSProperties) : undefined}
                 >
                     <span aria-hidden="true" className={styles.mark}>
