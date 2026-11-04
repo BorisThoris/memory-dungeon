@@ -4617,8 +4617,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71863,
-      "sha256": "abc8c9ca2263ddc7c3c70c1f95975f730c78eee0349aee4a60e69b4ef0d02162"
+      "bytes": 71884,
+      "sha256": "e9926cbdea84b35610adb3a2a6cb7c5f961c41278de1d11898b2bce692c96f72"
     },
     {
       "path": "public/privacy.html",
@@ -11290,7 +11290,7 @@
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
       "bytes": 58427,
-      "sha256": "2aa0d076c580e93803bc69a2be15b2428f8e19e887a0963c3dd558935e041812"
+      "sha256": "8ff8326cd3fcd97d772ae215b7b707f58ebbbd4b4950a2cd86abef5b9ec95648"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
