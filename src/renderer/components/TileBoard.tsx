@@ -301,6 +301,9 @@ const boardPayoffStackCrescendoAudioCue = (tier: string): 'cashout-pop' | 'prime
     return 'prime-pop';
 };
 
+/** Fired on the board crown when the game screen moves it, so the fit measures it again. */
+export const BOARD_CROWN_PLACED_EVENT = 'board-crown-placed';
+
 export type TileBoardClientRect = {
     bottom: number;
     height: number;
@@ -757,24 +760,35 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const hud = shell?.querySelector('[data-testid="game-hud"]');
         const dock = shell?.querySelector('[data-testid="game-action-dock"]');
         const rail = shell?.querySelector('[data-testid="hud-chain"]');
-        // The Colossus and the odd cards' key hang under the HUD: the cards fit below them too.
-        const crown = shell?.querySelector('[data-board-crown]');
-        if (!stage || !hud || !dock || typeof ResizeObserver === 'undefined') return;
+        if (!stage || !shell || !hud || !dock || typeof ResizeObserver === 'undefined') return;
+        // The Colossus and the odd cards' key hang under the HUD: the cards fit below them too. The
+        // crown is looked up on every measure: the game screen can mount a new one while this stays
+        // set up, and the old one measured nothing (2026-11-03, the playtest's floors 8, 9, 16, 17).
+        let crown: Element | null = null;
         // Fit keeps cards clear of the chrome. The canvas and zoom/pan bounds still fill the screen.
         const measure = (): void => {
+            const shown = shell.querySelector('[data-board-crown]');
+            if (shown !== crown) {
+                if (crown) observer.unobserve(crown);
+                crown = shown;
+                if (crown) observer.observe(crown);
+            }
             const rect = stage.getBoundingClientRect();
             if (rect.height <= 0) return;
             const next = boardFitFrame(rect, Math.max(hud.getBoundingClientRect().bottom, crown?.getBoundingClientRect().bottom ?? 0), dock.getBoundingClientRect().top, rail?.getBoundingClientRect());
             setFitFrame(current => Object.keys(next).every(key => Math.abs(current[key as keyof typeof current] - next[key as keyof typeof next]) < 0.001) ? current : next);
         };
-        measure();
         const observer = new ResizeObserver(measure);
         observer.observe(stage);
         observer.observe(hud);
         observer.observe(dock);
         if (rail) observer.observe(rail);
-        if (crown) observer.observe(crown);
-        return () => observer.disconnect();
+        measure();
+        shell.addEventListener(BOARD_CROWN_PLACED_EVENT, measure);
+        return () => {
+            observer.disconnect();
+            shell.removeEventListener(BOARD_CROWN_PLACED_EVENT, measure);
+        };
     }, [boardGraphicsOk, boardCrowned]);
     const [viewportState, setViewportState] = useState<TileBoardViewportState>(() => createFittedBoardViewport(1));
     const viewportStateRef = useRef<TileBoardViewportState>(viewportState);
@@ -2461,7 +2475,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const geometry = `${board.level}:${board.columns}:${board.rows}:${stageWorldViewport.width}:${stageWorldViewport.height}`;
         const resetRequested = viewportResetToken !== viewportResetTokenRef.current || geometry !== fittedGeometryRef.current;
         fittedGeometryRef.current = geometry;
-        const previousViewport = viewportStateRef.current;
         const previousMetrics = viewportMetricsRef.current;
         const nextMetrics: TileBoardViewportMetrics = {
             fitPanY,
@@ -2488,18 +2501,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return;
         }
 
-        const nextViewport =
-            resetRequested || !previousMetrics
-                ? createFittedBoardViewport(fitZoom, fitPanY, fitPanX)
-                : carryBoardViewportForward({
-                      nextMetrics,
-                      previousMetrics,
-                      previousViewport
-                  });
-
-        viewportStateRef.current = nextViewport;
+        /*
+         * The carry starts from the state React holds, not from viewportStateRef: the ref is written
+         * back from the last render's viewport after this runs, so a fit that changed twice in a row
+         * (a new floor, then its crown growing) carried a stale pan, the board was never "at rest"
+         * again and sat under the crown for the whole floor (2026-11-04, the playtest's floors 33, 40).
+         */
         viewportMetricsRef.current = nextMetrics;
-        setViewportState(nextViewport);
+        setViewportState((current) => {
+            const nextViewport =
+                resetRequested || !previousMetrics
+                    ? createFittedBoardViewport(fitZoom, fitPanY, fitPanX)
+                    : carryBoardViewportForward({
+                          nextMetrics,
+                          previousMetrics,
+                          previousViewport: current
+                      });
+            viewportStateRef.current = nextViewport;
+            return nextViewport;
+        });
         clearTouchGestureState(true);
     }, [
         board.columns,
