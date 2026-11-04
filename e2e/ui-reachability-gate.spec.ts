@@ -276,23 +276,36 @@ test.describe('every control a screen shows can be clicked', () => {
                 test.setTimeout(180_000);
                 await page.setViewportSize({ width: viewport.width, height: viewport.height });
                 // The dev-only fixture hook can miss a beat right after a navigation.
-                try {
-                    await openPlayablePathFixture(page, fixture);
-                } catch {
-                    await page.waitForTimeout(1500);
-                    await openPlayablePathFixture(page, fixture);
-                }
+                const open = async (): Promise<void> => {
+                    try {
+                        await openPlayablePathFixture(page, fixture);
+                    } catch {
+                        await page.waitForTimeout(1500);
+                        await openPlayablePathFixture(page, fixture);
+                    }
+                };
+                await open();
                 /*
-                 * The floor clear continues by itself: a fixed 800ms wait sometimes landed on the
-                 * next floor's deal instead, whose board hit-tested as covered while it dealt (one
-                 * run in three, 2026-11-03). Measure the floor-clear screen while it is up.
+                 * The floor clear continues by itself, into a deal whose board hit-tests as covered
+                 * while it deals. Waiting for its title was not enough: on a loaded machine the beat
+                 * ended between that wait and the reading (2026-11-04). A reading counts only if the
+                 * screen is still up after it was taken.
                  */
+                let unreachable: string[] = [];
                 if (fixture === 'floorClearWithRouteChoices') {
-                    await page.getByTestId('floor-clear-title').waitFor({ state: 'visible', timeout: 15_000 });
+                    const title = page.getByTestId('floor-clear-title');
+                    for (let attempt = 0, measured = false; !measured; attempt += 1) {
+                        if (attempt > 0) await open();
+                        await title.waitFor({ state: 'visible', timeout: 15_000 });
+                        unreachable = await findUnreachableControls(page);
+                        measured = await title.isVisible();
+                        expect(measured || attempt < 3, 'the floor clear outlasted a reading').toBe(true);
+                    }
                 } else {
                     await page.waitForTimeout(800);
+                    unreachable = await findUnreachableControls(page);
                 }
-                expect(await findUnreachableControls(page), `${fixture} @ ${viewport.id}`).toEqual([]);
+                expect(unreachable, `${fixture} @ ${viewport.id}`).toEqual([]);
                 expect(await findAmbiguousControls(page), `${fixture} reads twice @ ${viewport.id}`).toEqual([]);
 
             });

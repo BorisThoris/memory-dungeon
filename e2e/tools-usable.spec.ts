@@ -255,9 +255,10 @@ test.describe('Every tool can be used from the dock', () => {
         const before = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore);
         const bursts = await itemBursts(page);
         await page.getByTestId('tool-reprise').click();
+        // First: a stamp holds for a moment, and the polls below can outlast it.
+        await expect(page.locator('[data-callout-kind="reprise"]')).toBeAttached();
         await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore)).toBeGreaterThan(before);
         await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
-        await expect(page.locator('[data-callout-kind="reprise"]')).toBeAttached();
         await expect(page.getByTestId('tool-reprise')).toBeDisabled();
     });
 

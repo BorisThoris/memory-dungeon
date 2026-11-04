@@ -4221,8 +4221,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 29460,
-      "sha256": "2945d5661c8c3b24b63cdf2a55fe5a46d97fed6090627da248fb5ce0c161a160"
+      "bytes": 29542,
+      "sha256": "bb01fd62deb0d966ee3ae6c0ec840c1c53d8723b868938e6eedd07d3d75378f5"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -4239,8 +4239,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 15800,
-      "sha256": "47741f0b8185cd469a6d5096f922cf895b58417e3fd338c255d3d34a75f4409a"
+      "bytes": 16548,
+      "sha256": "f66b028b19d154fba317f9ff77d3c6b834fa437a5ab8235bc8ac1e909776c56f"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
