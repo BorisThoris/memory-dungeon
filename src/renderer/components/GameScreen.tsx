@@ -2299,7 +2299,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             {ambienceRealm && ambienceSecondary && ambienceSecondary !== ambienceRealm ? (
                 <RealmScreenOverlay realm={ambienceSecondary} reduceMotion={reduceMotion} seed={run.runSeed + 1} strength={ambienceStrength * 0.7} />
             ) : null}
-            <div className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}>
+            <div
+                className={`${styles.gameForeground} ${cameraViewportMode ? styles.mobileCameraForeground : ''}`}
+                data-sheet-open={!suppressStatusOverlays && (storeOpen || travelOpen) ? 'true' : undefined}
+            >
                 <div
                     aria-hidden={gameplayShellInert ? true : undefined}
                     className={styles.gameplayInertScope}

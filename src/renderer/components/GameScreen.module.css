@@ -1097,6 +1097,15 @@ subdued cool palette. */
     padding: 0;
 }
 
+/*
+ * The store and the doors live in the foreground, which sits under the room's glass: the ice sheet,
+ * the realm overlay and the pickup pill. Those belong to play. While a sheet is up it comes in front
+ * of them, or frost cracks run across the prices and a pill lands on a Buy button.
+ */
+.gameForeground[data-sheet-open='true'] {
+    z-index: 10;
+}
+
 .shell:not([data-mobile-camera-mode='true']) .hudRow {
     box-sizing: border-box;
 }

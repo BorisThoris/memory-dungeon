@@ -247,6 +247,13 @@
 .door[data-realm='ember'] .arch { background: repeating-conic-gradient(from 165deg at 50% 160%, #ee602e24 0deg 7deg, transparent 8deg 15deg), #27120e; }
 .travel[data-reduce-motion='true'], .travel[data-reduce-motion='true'] .door { animation: none; transition: none; }
 .travel[data-reduce-motion='true'] .door:hover, .travel[data-reduce-motion='true'] .door:focus-visible { transform: none; }
+/* A laptop's height: the longest door (a confluence, its depth and its warning) has to fit with the
+   heading, or focusing that door scrolls the heading off the top of the sheet. */
+@media (max-height: 800px) and (min-width: 641px) {
+    .travel { gap: 0.6rem; }
+    .arch { height: 3.4rem; }
+    .door { padding: 0.8rem; gap: 0.25rem; }
+}
 @media (max-height: 600px) and (min-width: 641px) {
     .travel { justify-content: flex-start; }
     .arch { height: 3rem; }

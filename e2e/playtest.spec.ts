@@ -36,6 +36,19 @@ interface Snapshot {
     blocked: string | null;
 }
 
+/** A sheet stands in front of the room's glass and the pickup pill, and fits the screen without scrolling. */
+const expectSheetClear = async (page: Page, testId: string): Promise<void> => {
+    const sheet = await page.getByTestId(testId).evaluate((element) => {
+        const foreground = element.closest<HTMLElement>('[data-sheet-open="true"]');
+        return {
+            zIndex: foreground ? Number(getComputedStyle(foreground).zIndex) : 0,
+            overflow: element.scrollHeight - element.clientHeight
+        };
+    });
+    expect(sheet.zIndex, `${testId} in front of the glass`).toBeGreaterThan(9);
+    expect(sheet.overflow, `${testId} fits the screen`).toBeLessThanOrEqual(1);
+};
+
 const snapshot = (page: Page): Promise<Snapshot> =>
     page.evaluate(async () => {
         const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
@@ -129,6 +142,7 @@ const playRun = async (
             const descend = page.getByRole('button', { name: /descend/i }).first();
             if (await descend.isVisible().catch(() => false)) {
                 await shot(`store-after-${level}`);
+                await expectSheetClear(page, 'store-sheet');
                 await descend.click();
             }
             // The travel doors (`realm-rules.ts`): pick one, the way a player picks where to go. Before the
@@ -153,6 +167,7 @@ const playRun = async (
             const door = wardenNext && (await wantedDoor.isVisible().catch(() => false)) ? wantedDoor : page.getByTestId(`realm-door-${Math.floor(rand() * 3)}`);
             if (await door.isVisible().catch(() => false)) {
                 await shot(`travel-after-${level}`);
+                await expectSheetClear(page, 'realm-travel');
                 await door.click();
             }
             await page.waitForTimeout(600);

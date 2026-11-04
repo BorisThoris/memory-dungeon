@@ -67,8 +67,9 @@ const GLYPH_PATHS: Readonly<Record<ItemDropGlyph, ReactElement>> = {
 
 /**
  * True when the drop is what the player sees: laid out, and nothing (the loading screen between
- * floors, a menu) drawn over it. The balloon takes no pointer, so the hit test looks through it to
- * whatever is under it; that has to be the game screen itself, not a panel over it.
+ * floors, a menu, the store or the doors) drawn over it. The balloon takes no pointer, so the hit
+ * test looks through it to whatever is under it; that has to be the game screen itself, not a panel
+ * over it. The store and the doors are inside the game screen, so they are asked for by name.
  */
 const isFrontmost = (element: HTMLElement): boolean => {
     // A test DOM has no layout to ask; there the drop counts as seen.
@@ -77,7 +78,7 @@ const isFrontmost = (element: HTMLElement): boolean => {
     if (box.width === 0 || box.height === 0) return false;
     const top = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
     const screen = element.closest<HTMLElement>('[data-testid="game-shell"]') ?? element.parentElement?.parentElement ?? null;
-    return top !== null && screen !== null && screen.contains(top);
+    return top !== null && screen !== null && screen.contains(top) && top.closest('[data-sheet-open="true"]') === null;
 };
 
 /** How often the hold checks that the drop is on screen. */

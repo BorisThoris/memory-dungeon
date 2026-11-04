@@ -385,7 +385,8 @@ const App = () => {
      *   24: Settings shell modal — SettingsScreen.module.css (in-run modal portaled to `document.body`).
      *
      * In-game column (GameScreen.module.css — SIDE-010 / safe-area QA):
-     *   `.gameForeground` 1 — frames the scrollport; children establish sub-stacks.
+     *   `.gameForeground` 1 — frames the scrollport; children establish sub-stacks. 10 while the store or the
+     *       doors are up (`data-sheet-open`), in front of the ice sheet 8, the realm overlay 6 and the item drop 9.
      *   `gamePlayLayout` row: `.mainGameColumn` 0; `.leftToolbar` 3 (`.mobileCameraLeftToolbar` 8 on phones so the rail
      *       stays above the main column / HUD stack).
      *   Within `.mainGameColumn`: `.hudRow` 2; `.boardStage` 1; board tiles `.boardStage > :global(*)` 1;

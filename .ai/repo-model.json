@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/playtest.spec.ts",
       "category": "test",
-      "bytes": 16270,
-      "sha256": "5184e430077bdb68bfe5046cbbe24ac481c581951c977a413ea6afc55635b96c"
+      "bytes": 17090,
+      "sha256": "368b86686ef4d92445621adcd7e69b12b68ba97c75b74c83df224cbcd097568f"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -6225,8 +6225,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 28030,
-      "sha256": "e397778f482455962a0b0d5a0d3c239094bbe6c8c1694fcd9340f6ebc89a840a"
+      "bytes": 28173,
+      "sha256": "6e2bf09e3d692e89f3b377b57631cecfd42bcf25e0ba84fe607849e5f0fd97bf"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -11289,8 +11289,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 58427,
-      "sha256": "8ff8326cd3fcd97d772ae215b7b707f58ebbbd4b4950a2cd86abef5b9ec95648"
+      "bytes": 58783,
+      "sha256": "767b2acef51d41b5315615732095def179e3f270ab64f634bd36dba1ed6d9d45"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -11301,8 +11301,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 156974,
-      "sha256": "0b2ce325a51c5b434211c1a285d4de43b305f0a663cbc0f3cffed9afb814f135"
+      "bytes": 157111,
+      "sha256": "2fea2e81cef003fb6e433e31a7cae33e3fd80a7d6897baa289c322a740fde1cd"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11433,8 +11433,8 @@
     {
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "category": "source",
-      "bytes": 7729,
-      "sha256": "49a0356dcdee9491a6488b59749bde58ae8d663a7d4faacffbb0d5c58e1da4fc"
+      "bytes": 7891,
+      "sha256": "07d870df747e4287c8ba6b1ff99d42d998f55d622f630b5530b320470763d1e6"
     },
     {
       "path": "src/renderer/components/itemDrops.ts",
@@ -11835,8 +11835,8 @@
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 7184,
-      "sha256": "7658126b995169201aea487e73b6ebcfd73147b64cc2ce140b35c2506bdb2b49"
+      "bytes": 7526,
+      "sha256": "41bdbcdc437998378922823b395a1c230fe336ec5cea16e1192b8cf03d6fb66f"
     },
     {
       "path": "src/renderer/components/RealmTravel.test.tsx",
@@ -21152,7 +21152,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 559,
+      "lineCount": 560,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -25043,7 +25043,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2927,
+      "lineCount": 2930,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25489,7 +25489,7 @@
       "path": "src/renderer/components/ItemDropPopup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 155,
+      "lineCount": 156,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/copy/itemDropCopy.ts",
@@ -47559,8 +47559,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 558,
-      "endLine": 558
+      "line": 559,
+      "endLine": 559
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -51807,8 +51807,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2926,
-      "endLine": 2926
+      "line": 2929,
+      "endLine": 2929
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -52199,32 +52199,32 @@
       "name": "ITEM_DROP_LEAVE_MS",
       "kind": "value",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 86,
-      "endLine": 86
+      "line": 87,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ITEM_DROP_TICK_MS",
       "name": "ITEM_DROP_TICK_MS",
       "kind": "value",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 84,
-      "endLine": 84
+      "line": 85,
+      "endLine": 85
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopup",
       "name": "ItemDropPopup",
       "kind": "function",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 100,
-      "endLine": 154
+      "line": 101,
+      "endLine": 155
     },
     {
       "id": "symbol:src/renderer/components/ItemDropPopup.tsx#ItemDropPopupProps",
       "name": "ItemDropPopupProps",
       "kind": "interface",
       "file": "src/renderer/components/ItemDropPopup.tsx",
-      "line": 88,
-      "endLine": 92
+      "line": 89,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_HOLD_MS",
